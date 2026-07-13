@@ -15,6 +15,7 @@
     :data-playback-running="playbackRunning ? 'true' : 'false'"
     :data-playback-rate="playbackRate"
     :data-playback-range-mode="playbackRangeMode"
+    :data-controlled-actor-id="controlledActorAtCursor?.actorId ?? ''"
     data-testid="workbench-timeline-grid-preview"
   >
     <div class="panel-title">
@@ -154,6 +155,14 @@
           {{ timelineCursor.frameIndex }}F ·
           {{ formatFrameTime(timelineCursor.timeMs) }}
         </output>
+        <output
+          class="controlled-actor-readout"
+          :data-actor-id="controlledActorAtCursor?.actorId ?? ''"
+          :data-character-id="controlledActorAtCursor?.characterId ?? ''"
+          data-testid="workbench-controlled-actor-readout"
+        >
+          前台 · {{ controlledActorAtCursor?.actorName ?? '未配置' }}
+        </output>
         <button
           class="icon-control"
           type="button"
@@ -196,91 +205,6 @@
           <span>显示</span>
         </summary>
         <div class="timeline-view-options-menu">
-          <div
-            v-if="candidateSeriesToggles.length"
-            class="candidate-toggle-group"
-            data-testid="workbench-candidate-value-toggle-group"
-          >
-            <label
-              v-for="toggle in candidateSeriesToggles"
-              :key="toggle.key"
-              class="candidate-toggle"
-              :data-series-key="toggle.key"
-            >
-              <input
-                type="checkbox"
-                :checked="isCandidateSeriesVisible(toggle.key)"
-                :data-series-key="toggle.key"
-                data-testid="workbench-candidate-value-toggle"
-                @change="
-                  setCandidateSeriesVisible(toggle.key, $event.target.checked)
-                "
-              />
-              <i :style="{ background: toggle.color }" />
-              <span>{{ toggle.shortLabel }}</span>
-            </label>
-          </div>
-          <div
-            v-if="candidateSeriesToggles.length"
-            class="candidate-scope-group"
-            data-testid="workbench-candidate-value-scope-group"
-          >
-            <button
-              v-for="scope in CANDIDATE_DISPLAY_SCOPE_OPTIONS"
-              :key="scope.key"
-              class="candidate-scope"
-              :class="{ active: candidateDisplayScope === scope.key }"
-              type="button"
-              :disabled="
-                scope.key === 'selected-frame' && !selectedCandidateFrameGroupId
-              "
-              :data-scope-key="scope.key"
-              data-testid="workbench-candidate-value-scope-option"
-              @click="setCandidateDisplayScope(scope.key)"
-            >
-              {{ scope.label }}
-            </button>
-          </div>
-          <div
-            v-if="candidateSeriesToggles.length"
-            class="candidate-filter-group"
-            data-testid="workbench-candidate-value-filter-group"
-          >
-            <label class="candidate-filter">
-              <span>角色</span>
-              <select
-                :value="candidateActorFilter"
-                data-testid="workbench-candidate-value-actor-filter"
-                @change="setCandidateActorFilter($event.target.value)"
-              >
-                <option value="all">全部</option>
-                <option
-                  v-for="actor in candidateActorOptions"
-                  :key="actor.id"
-                  :value="actor.id"
-                >
-                  {{ actor.label }}
-                </option>
-              </select>
-            </label>
-            <label class="candidate-filter">
-              <span>动作</span>
-              <select
-                :value="candidateActionFilter"
-                data-testid="workbench-candidate-value-action-filter"
-                @change="setCandidateActionFilter($event.target.value)"
-              >
-                <option value="all">全部</option>
-                <option
-                  v-for="action in candidateActionOptions"
-                  :key="action.id"
-                  :value="action.id"
-                >
-                  {{ action.label }}
-                </option>
-              </select>
-            </label>
-          </div>
           <div
             v-if="stateCurveTimelineLayerOptions.length"
             class="state-layer-toggle-group"
@@ -374,12 +298,16 @@
             curve: lane.type === 'curve',
             identity: isIdentityLane(lane),
             active: isActiveIdentityLane(lane),
+            'controlled-actor': isControlledActorLane(lane),
           }"
           :style="[laneRowStyle(lane), laneIdentityStyle(lane)]"
           :data-lane-id="lane.id"
           :data-lane-kind="lane.kind"
           :data-actor-id="lane.actorId || ''"
           :data-character-id="lane.identity?.characterId || ''"
+          :data-controlled-actor="
+            isControlledActorLane(lane) ? 'true' : 'false'
+          "
           :role="isIdentityLane(lane) ? 'button' : undefined"
           :tabindex="isIdentityLane(lane) ? 0 : undefined"
           :title="
@@ -579,6 +507,17 @@
             @dragleave="handleTimelineEntryDragLeave($event, lane)"
             @drop="handleTimelineEntryDrop($event, lane)"
           >
+            <div
+              v-for="interval in controlledIntervalsForLane(lane)"
+              :key="interval.intervalId"
+              class="controlled-actor-interval"
+              :style="controlledActorIntervalStyle(interval, lane)"
+              :data-interval-id="interval.intervalId"
+              :data-actor-id="interval.actorId"
+              :data-start-frame-index="interval.startFrameIndex"
+              :data-end-frame-index="interval.endFrameIndex"
+              data-testid="workbench-controlled-actor-interval"
+            />
             <div
               v-if="lane.curve"
               class="timeline-state-curve"
@@ -840,97 +779,6 @@
             </button>
 
             <div
-              v-if="lane.candidateValueCurves.length"
-              class="candidate-value-curve-track"
-              :style="timelineDataLayerStyle(lane)"
-              data-testid="workbench-timeline-candidate-value-curve-track"
-              :data-lane-id="lane.id"
-            >
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polyline
-                  v-for="curve in lane.candidateValueCurves"
-                  :key="curve.seriesKey"
-                  class="candidate-value-curve-line"
-                  :class="[
-                    `candidate-${curve.seriesKey}`,
-                    {
-                      'track-focused': isCandidateSeriesInStateTrackFocus(
-                        curve.seriesKey
-                      ),
-                    },
-                  ]"
-                  :points="curve.polylinePoints"
-                  vector-effect="non-scaling-stroke"
-                  data-testid="workbench-timeline-candidate-value-curve"
-                  :data-series-key="curve.seriesKey"
-                  :data-point-count="curve.pointCount"
-                  :data-track-focused="
-                    isCandidateSeriesInStateTrackFocus(curve.seriesKey)
-                      ? 'true'
-                      : 'false'
-                  "
-                />
-              </svg>
-            </div>
-
-            <div
-              v-for="group in lane.candidateValueFrameGroups"
-              :key="group.id"
-              class="candidate-value-frame-hotspot"
-              :class="{
-                selected: group.id === selectedCandidateFrameGroup?.id,
-              }"
-              :style="candidateValueFrameHotspotStyle(group, lane)"
-              :title="group.title"
-              :aria-label="group.title"
-              :data-action-id="group.actionId"
-              :data-lane-id="lane.id"
-              :data-hit-index="group.hitIndex"
-              :data-frame-label="group.frameLabel"
-              :data-marker-title="group.title"
-              data-testid="workbench-timeline-candidate-value-frame-hotspot"
-              role="button"
-              tabindex="0"
-              @click="selectCandidateFrameGroup(group)"
-              @keydown.enter.prevent="selectCandidateFrameGroup(group)"
-              @keydown.space.prevent="selectCandidateFrameGroup(group)"
-            />
-
-            <div
-              v-for="marker in lane.candidateValueMarkers"
-              :key="marker.id"
-              class="candidate-value-marker"
-              :class="[
-                `candidate-${marker.seriesKey}`,
-                {
-                  selected:
-                    marker.frameGroupId === selectedCandidateFrameGroup?.id,
-                  'track-focused': isCandidateMarkerInStateTrackFocus(marker),
-                },
-              ]"
-              :style="candidateValueMarkerStyle(marker, lane)"
-              :title="formatCandidateValueMarkerTitle(marker)"
-              :aria-label="formatCandidateValueMarkerTitle(marker)"
-              :data-action-id="marker.actionId"
-              :data-lane-id="lane.id"
-              :data-series-key="marker.seriesKey"
-              :data-hit-index="marker.hitIndex"
-              :data-frame-label="marker.frameLabel"
-              :data-value="marker.value"
-              :data-state-track-key="getCandidateSeriesStateTrackKey(marker)"
-              :data-track-focused="
-                isCandidateMarkerInStateTrackFocus(marker) ? 'true' : 'false'
-              "
-              :data-marker-title="formatCandidateValueMarkerTitle(marker)"
-              data-testid="workbench-timeline-candidate-value-marker"
-              role="button"
-              tabindex="0"
-              @click="selectCandidateFrameGroupByMarker(marker)"
-              @keydown.enter.prevent="selectCandidateFrameGroupByMarker(marker)"
-              @keydown.space.prevent="selectCandidateFrameGroupByMarker(marker)"
-            />
-
-            <div
               v-for="marker in lane.stateCurveMarkers"
               :key="marker.id"
               class="state-curve-marker"
@@ -968,87 +816,6 @@
               @keydown.space.prevent="selectStateCurveMarker(marker)"
             />
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-if="selectedCandidateFrameGroup"
-      class="candidate-frame-summary"
-      data-testid="workbench-candidate-value-frame-summary"
-      :data-hit-index="selectedCandidateFrameGroup.hitIndex"
-      :data-frame-label="selectedCandidateFrameGroup.frameLabel"
-    >
-      <span>
-        {{ selectedCandidateFrameGroup.frameLabel }} · hit{{
-          selectedCandidateFrameGroup.hitIndex
-        }}
-      </span>
-      <strong data-testid="workbench-candidate-value-frame-summary-values">
-        {{ formatCandidateFrameGroupValues(selectedCandidateFrameGroup) }}
-      </strong>
-      <small data-testid="workbench-candidate-value-frame-summary-source">
-        {{ formatCandidateFrameGroupSource(selectedCandidateFrameGroup) }}
-      </small>
-      <div
-        class="candidate-frame-details"
-        data-testid="workbench-candidate-value-frame-details"
-      >
-        <div
-          v-for="value in selectedCandidateFrameGroup.values"
-          :key="`${value.seriesKey}-${value.hitIndex}`"
-          class="candidate-frame-detail-row"
-          :class="{
-            'track-focused': isCandidateFrameValueInStateTrackFocus(value),
-          }"
-          :data-series-key="value.seriesKey"
-          :data-state-track-key="getCandidateSeriesStateTrackKey(value)"
-          :data-track-focused="
-            isCandidateFrameValueInStateTrackFocus(value) ? 'true' : 'false'
-          "
-          :data-candidate-count="value.candidateCount"
-          :data-source-frame-index="value.sourceFrameIndex"
-          :data-element-detail-count="value.elementDetails?.length ?? 0"
-          data-testid="workbench-candidate-value-frame-detail-row"
-        >
-          <b>{{ value.seriesLabel }}</b>
-          <span>{{ formatCandidateFrameDetailValue(value) }}</span>
-          <small>{{ formatCandidateFrameDetailSamples(value) }}</small>
-          <small>{{ formatCandidateFrameDetailFrames(value) }}</small>
-          <small>{{ formatCandidateFrameDetailElements(value) }}</small>
-        </div>
-      </div>
-      <div
-        v-if="selectedCandidateElementComparisonRows.length"
-        class="candidate-element-comparison"
-        data-testid="workbench-candidate-element-comparison"
-      >
-        <div class="candidate-element-comparison-head">
-          <span>element</span>
-          <span>HP参数</span>
-          <span>函数</span>
-          <span>槽位</span>
-          <span>削韧</span>
-          <span>能量</span>
-          <span>状态</span>
-        </div>
-        <div
-          v-for="row in selectedCandidateElementComparisonRows"
-          :key="row.id"
-          class="candidate-element-comparison-row"
-          :data-element-config-id="row.elementConfigId"
-          :data-path-id="row.pathId"
-          :data-status="row.statusText"
-          :title="row.tooltip"
-          data-testid="workbench-candidate-element-comparison-row"
-        >
-          <b>{{ row.elementConfigId }}</b>
-          <span>{{ row.hpText }}</span>
-          <span>{{ row.functionText }}</span>
-          <span>{{ row.slotText }}</span>
-          <span>{{ row.toughnessText }}</span>
-          <span>{{ row.energyText }}</span>
-          <small>{{ row.statusText }}</small>
         </div>
       </div>
     </div>
@@ -1092,10 +859,7 @@ import {
   msToFrame,
   snapMsToFrame,
 } from '../../domain/timebase';
-import {
-  createStateCurveFrameGroupKey,
-  createStateCurvePointId,
-} from './stateCurvePointIdentity';
+import { createStateCurvePointId } from './stateCurvePointIdentity';
 import { createWorkbenchMainFlowActionSurface } from './workbenchMainFlowActions';
 import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 import {
@@ -1123,8 +887,6 @@ const TIMELINE_EFFECT_SECTION_GAP_PX = 3;
 const TIMELINE_LANE_GAP_PX = 4;
 const TIMELINE_DATA_GAP_PX = 2;
 const RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT = 2.25;
-const CANDIDATE_VALUE_CURVE_TOP = 52;
-const CANDIDATE_VALUE_CURVE_HEIGHT = 26;
 const ACTION_ICON_COMPONENTS = Object.freeze({
   skill: Lightning,
   kiboEvent: StarFilled,
@@ -1168,43 +930,6 @@ const STATE_CURVE_TRACK_MARKER_TOP = {
   enemyToughnessDamage: 99,
   selfEnergyChange: 106,
 };
-const STATE_TRACK_TO_CANDIDATE_SERIES_KEY = {
-  enemyHpDamage: 'hpDamageFormulaParamCandidate',
-  enemyToughnessDamage: 'toughnessDamageCandidate',
-  selfEnergyChange: 'selfEnergyCandidate',
-};
-const CANDIDATE_SERIES_TO_STATE_TRACK_KEY = {
-  hpDamageFormulaParamCandidate: 'enemyHpDamage',
-  toughnessDamageCandidate: 'enemyToughnessDamage',
-  selfEnergyCandidate: 'selfEnergyChange',
-};
-const CANDIDATE_VALUE_SERIES_META = {
-  hpDamageFormulaParamCandidate: {
-    order: 0,
-    shortLabel: 'HP',
-    color: '#f2b366',
-  },
-  toughnessDamageCandidate: {
-    order: 1,
-    shortLabel: '韧性',
-    color: '#79c7b9',
-  },
-  selfEnergyCandidate: {
-    order: 2,
-    shortLabel: '能量',
-    color: '#a6b7ff',
-  },
-};
-const CANDIDATE_DISPLAY_SCOPE_OPTIONS = [
-  {
-    key: 'all',
-    label: '全部',
-  },
-  {
-    key: 'selected-frame',
-    label: '选中帧',
-  },
-];
 
 const props = defineProps({
   actors: {
@@ -1247,15 +972,6 @@ const props = defineProps({
     type: [Number, String],
     default: '',
   },
-  candidateValueChart: {
-    type: Object,
-    default: () => ({
-      series: [],
-      summary: {
-        pointCount: 0,
-      },
-    }),
-  },
   threeValueCurveFramework: {
     type: Object,
     default: () => ({
@@ -1269,6 +985,15 @@ const props = defineProps({
     default: () => ({
       enemy: { points: [] },
       resources: { curvesByActor: [], curvesByKibo: [] },
+    }),
+  },
+  controlledActorTimeline: {
+    type: Object,
+    default: () => ({
+      initialActor: null,
+      finalActor: null,
+      transitions: [],
+      intervals: [],
     }),
   },
   runtimeStatePointContexts: {
@@ -1438,11 +1163,6 @@ const cycleBoundaryDragState = ref(null);
 const timelineCursorDragState = ref(null);
 const suppressClickActionId = ref('');
 const timelineZoom = ref(1);
-const candidateSeriesVisibility = ref({});
-const selectedCandidateFrameGroupId = ref(null);
-const candidateDisplayScope = ref('all');
-const candidateActorFilter = ref('all');
-const candidateActionFilter = ref('all');
 const mainFlowActionSurface = computed(() =>
   createWorkbenchMainFlowActionSurface({
     mainFlowCommandSurface: props.mainFlowCommandSurface,
@@ -1477,6 +1197,22 @@ const timelineCursor = computed(() => {
 const timelineCursorStyle = computed(() => ({
   left: `${timelineCursor.value.xPercent}%`,
 }));
+const controlledActorAtCursor = computed(() => {
+  const timeMs = timelineCursor.value.timeMs;
+  const intervals = props.controlledActorTimeline?.intervals ?? [];
+  const interval = intervals.find(
+    (item, index) =>
+      timeMs >= numberOrZero(item.startMs) &&
+      (timeMs < numberOrZero(item.endMs) ||
+        (index === intervals.length - 1 && timeMs === numberOrZero(item.endMs)))
+  );
+  return (
+    interval?.actor ??
+    props.controlledActorTimeline?.initialActor ??
+    props.controlledActorTimeline?.finalActor ??
+    null
+  );
+});
 
 const dragInitialLaneId = computed(
   () => dragState.value?.initialLaneId ?? null
@@ -1594,25 +1330,6 @@ const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
   '--timeline-mobile-min-width': `${900 * timelineZoom.value}px`,
 }));
-const candidateSeriesToggles = computed(() =>
-  (props.candidateValueChart?.series ?? [])
-    .filter(series => series.pointCount > 0)
-    .map(series => {
-      const meta = getCandidateSeriesMeta(series.key);
-      return {
-        key: series.key,
-        label: series.label,
-        order: meta.order,
-        shortLabel: meta.shortLabel,
-        color: meta.color,
-      };
-    })
-    .sort(
-      (left, right) =>
-        left.order - right.order ||
-        String(left.label).localeCompare(String(right.label))
-    )
-);
 const actionsById = computed(
   () => new Map(props.actions.map(action => [action.id, action]))
 );
@@ -1644,40 +1361,6 @@ const kiboLaneIdByActorId = computed(
         group.kiboLane?.laneId,
       ])
     )
-);
-const candidateActionIds = computed(
-  () =>
-    new Set(
-      (props.candidateValueChart?.series ?? [])
-        .flatMap(series => (series.points ?? []).map(point => point.actionId))
-        .filter(Boolean)
-    )
-);
-const candidateActorOptions = computed(() => {
-  const actorIds = new Set(
-    [...candidateActionIds.value]
-      .map(actionId => actionsById.value.get(actionId))
-      .filter(Boolean)
-      .map(action => resolveActionLaneId(action))
-      .filter(actorId => actorLaneIds.value.has(actorId))
-  );
-  return props.actors
-    .filter(actor => actorIds.has(actor.id))
-    .map(actor => ({
-      id: actor.id,
-      label: actor.name,
-    }));
-});
-const candidateActionOptions = computed(() =>
-  [...candidateActionIds.value]
-    .filter(actionId => actionsById.value.has(actionId))
-    .map(actionId => {
-      const action = actionsById.value.get(actionId);
-      return {
-        id: actionId,
-        label: action?.name ?? actionId,
-      };
-    })
 );
 const flowSelection = computed(
   () => props.flowModel?.mainFlowSelection ?? null
@@ -1823,12 +1506,6 @@ const timelineLanes = computed(() => {
     lane.runtimeEventMarkers.push(event);
   });
 
-  createCandidateValueTimelineMarkers().forEach(marker => {
-    const lane =
-      lanesById.get(resolveCandidateValueLaneId(marker)) ?? systemLane;
-    lane.candidateValueMarkers.push(marker);
-  });
-
   createStateCurveTimelineMarkers().forEach(marker => {
     const lane =
       allLanesById.get(resolveStateCurveLaneId(marker, actorGroups)) ??
@@ -1842,18 +1519,11 @@ const timelineLanes = computed(() => {
     );
     lane.runtimeEventMarkers = runtimeEventLayout.markers;
     lane.runtimeEventSlotCount = runtimeEventLayout.slotCount;
-    lane.candidateValueCurves = createCandidateValueTimelineCurves(
-      lane.candidateValueMarkers
-    );
-    lane.candidateValueFrameGroups = createCandidateValueFrameGroups(
-      lane.candidateValueMarkers
-    );
   });
 
   const visibleLanes = allLanes.filter(lane => lane !== systemLane);
   return systemLane.actions.length > 0 ||
     systemLane.runtimeEventMarkers.length > 0 ||
-    systemLane.candidateValueMarkers.length > 0 ||
     systemLane.stateCurveMarkers.length > 0 ||
     systemLane.effectIntervals.length > 0
     ? [...visibleLanes, systemLane]
@@ -1996,6 +1666,34 @@ function isActiveIdentityLane(lane) {
   );
 }
 
+function isControlledActorLane(lane) {
+  return (
+    lane?.kind === 'actor-action' &&
+    lane.actorId === controlledActorAtCursor.value?.actorId
+  );
+}
+
+function controlledIntervalsForLane(lane) {
+  if (lane?.kind !== 'actor-action') return [];
+  return (props.controlledActorTimeline?.intervals ?? []).filter(
+    interval => interval.actorId === lane.actorId
+  );
+}
+
+function controlledActorIntervalStyle(interval, lane) {
+  const startPercent = clampPercent(
+    (numberOrZero(interval.startMs) / props.durationMs) * 100
+  );
+  const endPercent = clampPercent(
+    (numberOrZero(interval.endMs) / props.durationMs) * 100
+  );
+  return {
+    left: `${startPercent}%`,
+    width: `${Math.max(0, endPercent - startPercent)}%`,
+    '--controlled-actor-accent': lane?.identity?.accentColor ?? '#79c7b9',
+  };
+}
+
 function laneIdentityStyle(lane) {
   return {
     '--lane-accent': lane?.identity?.accentColor ?? '#79c7b9',
@@ -2110,9 +1808,6 @@ function createEmptyTimelineLane({
     actions: [],
     runtimeEventMarkers: [],
     runtimeEventSlotCount: 0,
-    candidateValueMarkers: [],
-    candidateValueCurves: [],
-    candidateValueFrameGroups: [],
     stateCurveMarkers: [],
     cooldownWindows: [],
     effectIntervals: [...effectIntervals],
@@ -2316,51 +2011,6 @@ function strictNumberOrNull(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
-const allCandidateFrameGroups = computed(() =>
-  timelineLanes.value.flatMap(lane =>
-    lane.candidateValueFrameGroups.map(group => ({
-      ...group,
-      laneId: lane.id,
-    }))
-  )
-);
-const selectedCandidateFrameGroup = computed(
-  () =>
-    allCandidateFrameGroups.value.find(
-      group => group.id === selectedCandidateFrameGroupId.value
-    ) ?? null
-);
-const selectedCandidateElementComparisonRows = computed(() =>
-  selectedCandidateFrameGroup.value
-    ? createCandidateElementComparisonRows(selectedCandidateFrameGroup.value)
-    : []
-);
-const selectedStateCurvePoint = computed(() =>
-  findStateCurvePointById(flowSelectedStateCurvePointId.value)
-);
-const selectedCandidateFocusSeriesKey = computed(() =>
-  selectedStateCurvePoint.value?.layerKey === 'candidate'
-    ? (STATE_TRACK_TO_CANDIDATE_SERIES_KEY[
-        selectedStateCurvePoint.value.trackKey
-      ] ?? '')
-    : ''
-);
-
-watch(
-  [
-    () => props.stateCurveFocusMode,
-    () => flowSelectedStateCurvePointId.value,
-    () => props.threeValueCurveFramework,
-    () => props.stateCurveLayerFilters,
-    () => props.stateCurveTrackFilters,
-    () => candidateSeriesVisibility.value,
-    () => candidateActorFilter.value,
-    () => candidateActionFilter.value,
-  ],
-  syncCandidateDisplayScopeFromStateFocus,
-  { deep: true }
-);
-
 function isActionInSelectedBatch(action) {
   return Boolean(
     selectedBatchId.value &&
@@ -2577,12 +2227,6 @@ function runtimeEventMarkerStyle(event, lane) {
   };
 }
 
-function timelineDataLayerStyle(lane) {
-  return {
-    top: `${getTimelineCandidateCurveTop(lane)}px`,
-  };
-}
-
 function laneRowStyle(lane) {
   const height = getTimelineLaneHeight(lane);
   return {
@@ -2591,30 +2235,11 @@ function laneRowStyle(lane) {
   };
 }
 
-function candidateValueMarkerStyle(marker, lane) {
-  const left = clampPercent((marker.timeMs / props.durationMs) * 100);
-  const top =
-    getTimelineCandidateCurveTop(lane) +
-    (clampPercent(marker.yPercent) / 100) * CANDIDATE_VALUE_CURVE_HEIGHT;
-  return {
-    left: `${left}%`,
-    top: `${top}px`,
-  };
-}
-
 function stateCurveMarkerStyle(marker, lane) {
   const left = clampPercent((marker.timeMs / props.durationMs) * 100);
   return {
     left: `${left}%`,
     top: `${getTimelineStateCurveMarkerTop(marker, lane)}px`,
-  };
-}
-
-function candidateValueFrameHotspotStyle(group, lane) {
-  const left = clampPercent((group.timeMs / props.durationMs) * 100);
-  return {
-    left: `${left}%`,
-    top: `${getTimelineCandidateCurveTop(lane)}px`,
   };
 }
 
@@ -2652,10 +2277,6 @@ function getTimelineDataTop(lane) {
   );
 }
 
-function getTimelineCandidateCurveTop(lane) {
-  return getTimelineDataTop(lane) + (CANDIDATE_VALUE_CURVE_TOP - 54);
-}
-
 function getTimelineStateCurveMarkerTop(marker, lane) {
   if (lane.type === 'curve') return 17;
   return getTimelineDataTop(lane) + (marker.top - 54);
@@ -2664,16 +2285,12 @@ function getTimelineStateCurveMarkerTop(marker, lane) {
 function getTimelineLaneHeight(lane) {
   if (lane.type === 'curve') return 34;
   if (lane.type === 'kibo' && lane.actions.length === 0) return 32;
-  const hasCandidateData =
-    lane.candidateValueMarkers.length > 0 ||
-    lane.candidateValueCurves.length > 0 ||
-    lane.candidateValueFrameGroups.length > 0;
   const runtimeEventBottom = lane.runtimeEventSlotCount
     ? getTimelineDataTop(lane) + lane.runtimeEventSlotCount * 20 + 2
     : 0;
   return Math.max(
     TIMELINE_LANE_MIN_HEIGHT_PX,
-    getTimelineDataTop(lane) + (hasCandidateData ? 48 : 12),
+    getTimelineDataTop(lane) + 12,
     runtimeEventBottom
   );
 }
@@ -2748,7 +2365,8 @@ function createRuntimeEventLayout(markers) {
   const laidOutMarkers = [...markers]
     .sort(
       (left, right) =>
-        left.frameIndex - right.frameIndex || left.title.localeCompare(right.title)
+        left.frameIndex - right.frameIndex ||
+        left.title.localeCompare(right.title)
     )
     .map(marker => {
       const markerPercent = clampPercent(
@@ -2848,11 +2466,6 @@ function resolveActionLaneId(action) {
   );
 }
 
-function resolveCandidateValueLaneId(marker) {
-  const action = actionsById.value.get(marker.actionId);
-  return action ? resolveActionLaneId(action) : 'system';
-}
-
 function resolveStateCurveLaneId(marker, actorGroups = []) {
   if (marker.trackKey === 'enemyHpDamage') return 'enemy-hp-curve';
   if (marker.trackKey === 'enemyToughnessDamage') {
@@ -2865,65 +2478,6 @@ function resolveStateCurveLaneId(marker, actorGroups = []) {
       ?.energyCurveLane.id;
   }
   return 'system';
-}
-
-function createCandidateValueTimelineMarkers() {
-  return (props.candidateValueChart?.series ?? [])
-    .filter(series => isCandidateSeriesVisible(series.key))
-    .flatMap(series => {
-      const meta = getCandidateSeriesMeta(series.key);
-      return (series.points ?? [])
-        .map((point, index) => {
-          const timeMs = point.displayTimeMs ?? point.sourceTimeMs ?? 0;
-          const frameLabel = point.displayFrameLabel ?? formatFrameTime(timeMs);
-          const frameGroupId = `${point.actionId}-${point.hitIndex}-${frameLabel}`;
-          return {
-            id: `${series.key}-${point.actionId}-${point.hitIndex}-${index}`,
-            frameGroupId,
-            seriesKey: series.key,
-            seriesLabel: series.label,
-            shortLabel: meta.shortLabel,
-            color: meta.color,
-            valueKind: series.valueKind,
-            unit: series.unit,
-            actionId: point.actionId,
-            actionName: point.actionName,
-            skillId: point.skillId,
-            hitSkillId: point.hitSkillId,
-            hitIndex: point.hitIndex,
-            timeMs,
-            frameLabel,
-            value: point.value,
-            valueMin: point.valueMin,
-            valueMax: point.valueMax,
-            valueSamples: point.valueSamples ?? [],
-            candidateCount: point.candidateCount,
-            xPercent: point.xPercent,
-            yPercent: point.yPercent,
-            sourceFrameIndex: point.sourceFrameIndex,
-            displayFrameIndex: point.displayFrameIndex,
-            localFrameIndex: point.localFrameIndex,
-            chainStartFrame: point.chainStartFrame,
-            absoluteFrameIndex: point.absoluteFrameIndex,
-            sourceTimeMs: point.sourceTimeMs,
-            displayTimeMs: point.displayTimeMs,
-            elementConfigIds: point.elementConfigIds ?? [],
-            elementDetails: point.elementDetails ?? [],
-            summonTargetEvidenceSummary:
-              point.summonTargetEvidenceSummary ?? null,
-            triggerTimingStatus: point.triggerTimingStatus ?? null,
-            sourceStatus: point.sourceStatus,
-            timeAdjustmentStatus: point.timeAdjustmentStatus,
-            seriesOrder: meta.order,
-          };
-        })
-        .filter(
-          marker =>
-            isCandidateMarkerInActorFilter(marker) &&
-            isCandidateMarkerInActionFilter(marker) &&
-            isCandidateMarkerInDisplayScope(marker)
-        );
-    });
 }
 
 function createStateCurveTimelineMarkers() {
@@ -3011,99 +2565,6 @@ function createStateCurveTimelineMarker({
   };
 }
 
-function createCandidateValueTimelineCurves(markers) {
-  const bySeries = new Map();
-  for (const marker of markers) {
-    if (!bySeries.has(marker.seriesKey)) {
-      bySeries.set(marker.seriesKey, {
-        seriesKey: marker.seriesKey,
-        seriesLabel: marker.seriesLabel,
-        seriesOrder: marker.seriesOrder,
-        points: [],
-      });
-    }
-    bySeries.get(marker.seriesKey).points.push(marker);
-  }
-
-  return [...bySeries.values()]
-    .map(curve => {
-      const points = curve.points
-        .slice()
-        .sort(
-          (left, right) =>
-            left.timeMs - right.timeMs ||
-            left.hitIndex - right.hitIndex ||
-            left.seriesOrder - right.seriesOrder
-        );
-      return {
-        ...curve,
-        pointCount: points.length,
-        polylinePoints: points
-          .map(
-            point =>
-              `${clampPercent(point.xPercent)},${clampPercent(point.yPercent)}`
-          )
-          .join(' '),
-        points,
-      };
-    })
-    .sort(
-      (left, right) =>
-        left.seriesOrder - right.seriesOrder ||
-        String(left.seriesLabel).localeCompare(String(right.seriesLabel))
-    );
-}
-
-function createCandidateValueFrameGroups(markers) {
-  const byFrame = new Map();
-  for (const marker of markers) {
-    const key = marker.frameGroupId;
-    if (!byFrame.has(key)) {
-      byFrame.set(key, {
-        id: key,
-        actionId: marker.actionId,
-        hitIndex: marker.hitIndex,
-        frameLabel: marker.frameLabel,
-        displayFrameIndex: marker.displayFrameIndex,
-        sourceFrameIndex: marker.sourceFrameIndex,
-        timeMs: marker.timeMs,
-        values: [],
-      });
-    }
-    byFrame.get(key).values.push(marker);
-  }
-
-  return [...byFrame.values()]
-    .map(group => {
-      const values = group.values
-        .slice()
-        .sort(
-          (left, right) =>
-            left.seriesOrder - right.seriesOrder ||
-            String(left.seriesLabel).localeCompare(String(right.seriesLabel))
-        );
-      return {
-        ...group,
-        values,
-        title: `${group.frameLabel} hit${group.hitIndex}: ${values
-          .map(
-            value =>
-              `${value.seriesLabel} ${formatTimelineNumber(value.value)} ${value.unit}`
-          )
-          .join(' / ')}`,
-      };
-    })
-    .sort(
-      (left, right) =>
-        left.timeMs - right.timeMs ||
-        Number(left.hitIndex) - Number(right.hitIndex)
-    );
-}
-
-function formatCandidateValueMarkerTitle(marker) {
-  return `${marker.seriesLabel} ${marker.frameLabel} hit${marker.hitIndex}: ${formatTimelineNumber(marker.value)} ${marker.unit}`;
-}
-
 function formatStateCurveMarkerTitle(marker) {
   const sourceParts = [];
   const actionText = marker.actionName || marker.actionId;
@@ -3170,124 +2631,6 @@ function formatStateCurveMarkerSpRange(marker) {
     return '';
   }
   return `SP ${formatStateCurveTimelineNumber(marker.spBefore)}->${formatStateCurveTimelineNumber(marker.spAfter)}`;
-}
-
-function getCandidateSeriesMeta(seriesKey) {
-  return (
-    CANDIDATE_VALUE_SERIES_META[seriesKey] ?? {
-      order: 99,
-      shortLabel: '候选',
-      color: '#b8c0c7',
-    }
-  );
-}
-
-function getCandidateSeriesStateTrackKey(item) {
-  return CANDIDATE_SERIES_TO_STATE_TRACK_KEY[item?.seriesKey] ?? '';
-}
-
-function isCandidateSeriesVisible(seriesKey) {
-  return candidateSeriesVisibility.value[seriesKey] !== false;
-}
-
-function setCandidateSeriesVisible(seriesKey, visible) {
-  candidateSeriesVisibility.value = {
-    ...candidateSeriesVisibility.value,
-    [seriesKey]: Boolean(visible),
-  };
-}
-
-function setCandidateDisplayScope(scope) {
-  if (scope === 'selected-frame' && !selectedCandidateFrameGroup.value) {
-    return;
-  }
-  candidateDisplayScope.value = scope;
-  if (scope === 'selected-frame') {
-    const selected = selectStateCurvePointForCandidateFrame(
-      selectedCandidateFrameGroup.value
-    );
-    if (selected) {
-      emit('update-state-curve-focus-mode', 'selected');
-    }
-    return;
-  }
-  emit('update-state-curve-focus-mode', 'all');
-}
-
-function setCandidateActorFilter(actorId) {
-  candidateActorFilter.value = actorId || 'all';
-}
-
-function setCandidateActionFilter(actionId) {
-  candidateActionFilter.value = actionId || 'all';
-}
-
-function isCandidateMarkerInActorFilter(marker) {
-  return (
-    candidateActorFilter.value === 'all' ||
-    resolveCandidateValueLaneId(marker) === candidateActorFilter.value
-  );
-}
-
-function isCandidateMarkerInActionFilter(marker) {
-  return (
-    candidateActionFilter.value === 'all' ||
-    marker.actionId === candidateActionFilter.value
-  );
-}
-
-function isCandidateMarkerInDisplayScope(marker) {
-  if (candidateDisplayScope.value === 'selected-frame') {
-    return (
-      !selectedCandidateFrameGroupId.value ||
-      marker.frameGroupId === selectedCandidateFrameGroupId.value
-    );
-  }
-  return true;
-}
-
-function isCandidateSeriesInStateTrackFocus(seriesKey) {
-  return (
-    Boolean(selectedCandidateFocusSeriesKey.value) &&
-    seriesKey === selectedCandidateFocusSeriesKey.value
-  );
-}
-
-function isCandidateMarkerInStateTrackFocus(marker) {
-  return (
-    marker.frameGroupId === selectedCandidateFrameGroup.value?.id &&
-    isCandidateSeriesInStateTrackFocus(marker.seriesKey)
-  );
-}
-
-function isCandidateFrameValueInStateTrackFocus(value) {
-  return isCandidateSeriesInStateTrackFocus(value.seriesKey);
-}
-
-function selectCandidateFrameGroup(group) {
-  selectedCandidateFrameGroupId.value = group.id;
-  if (isStateCurveSelectedFocusActive.value) {
-    candidateDisplayScope.value = 'selected-frame';
-  }
-  emitTimelineFrame({
-    frameIndex: group.displayFrameIndex ?? group.sourceFrameIndex,
-    timeMs: group.timeMs,
-    source: 'timeline-candidate-frame',
-  });
-  selectStateCurvePointForCandidateFrame(group);
-}
-
-function selectCandidateFrameGroupByMarker(marker) {
-  selectedCandidateFrameGroupId.value = marker.frameGroupId;
-  if (isStateCurveSelectedFocusActive.value) {
-    candidateDisplayScope.value = 'selected-frame';
-  }
-  emitTimelineFrame({
-    frameIndex: marker.displayFrameIndex ?? marker.sourceFrameIndex,
-    timeMs: marker.timeMs,
-    source: 'timeline-candidate-frame',
-  });
-  selectStateCurvePointForCandidateFrame(marker);
 }
 
 function selectStateCurveMarker(marker) {
@@ -3362,162 +2705,6 @@ function isRuntimeStateCurveMarker(marker) {
   return marker?.layerKey === 'applied';
 }
 
-function selectStateCurvePointForCandidateFrame(frame) {
-  const point = findCandidateStateCurvePointForFrame(frame);
-  if (point) {
-    emit('select-state-curve-point', point.statePointId);
-    return true;
-  }
-  return false;
-}
-
-function findCandidateStateCurvePointForFrame(frame) {
-  const frameGroupKey = createStateCurveFrameGroupKey({
-    actionId: frame.actionId,
-    frameIndex: frame.displayFrameIndex ?? frame.sourceFrameIndex,
-    timeMs: frame.timeMs,
-    frameLabel: frame.frameLabel,
-    hitIndex: frame.hitIndex,
-  });
-
-  for (const track of props.threeValueCurveFramework?.stateCurves?.tracks ??
-    []) {
-    if (!isStateCurveTrackVisible(track.trackKey)) {
-      continue;
-    }
-    const candidateLayer = (track.layers ?? []).find(
-      layer =>
-        layer.key === 'candidate' &&
-        isStateCurveTimelineLayerVisible(layer.key) &&
-        (layer.pointCount ?? 0) > 0
-    );
-    if (!candidateLayer) {
-      continue;
-    }
-    const pointIndex = (candidateLayer.points ?? []).findIndex(
-      point => createStateCurveFrameGroupKey(point) === frameGroupKey
-    );
-    if (pointIndex >= 0) {
-      return {
-        statePointId: createStateCurvePointId({
-          trackKey: track.trackKey,
-          layerKey: candidateLayer.key,
-          point: candidateLayer.points[pointIndex],
-          pointIndex,
-        }),
-      };
-    }
-  }
-
-  return null;
-}
-
-function syncCandidateDisplayScopeFromStateFocus() {
-  if (!isStateCurveSelectedFocusActive.value) {
-    if (candidateDisplayScope.value === 'selected-frame') {
-      candidateDisplayScope.value = 'all';
-    }
-    return;
-  }
-
-  const selectedPoint = findStateCurvePointById(
-    flowSelectedStateCurvePointId.value
-  );
-  if (!selectedPoint || selectedPoint.layerKey !== 'candidate') {
-    if (candidateDisplayScope.value === 'selected-frame') {
-      candidateDisplayScope.value = 'all';
-    }
-    return;
-  }
-
-  const frameGroupId =
-    findCandidateFrameGroupIdForStateCurvePoint(selectedPoint);
-  if (!frameGroupId) {
-    if (candidateDisplayScope.value === 'selected-frame') {
-      candidateDisplayScope.value = 'all';
-    }
-    return;
-  }
-
-  selectedCandidateFrameGroupId.value = frameGroupId;
-  candidateDisplayScope.value = 'selected-frame';
-}
-
-function findStateCurvePointById(pointId) {
-  if (!pointId) {
-    return null;
-  }
-
-  for (const track of props.threeValueCurveFramework?.stateCurves?.tracks ??
-    []) {
-    if (!isStateCurveTrackVisible(track.trackKey)) {
-      continue;
-    }
-    for (const layer of track.layers ?? []) {
-      const points = layer.points ?? [];
-      if (!isStateCurveTimelineLayerVisible(layer.key) || points.length <= 0) {
-        continue;
-      }
-      for (let pointIndex = 0; pointIndex < points.length; pointIndex += 1) {
-        const point = points[pointIndex];
-        const statePointId = createStateCurvePointId({
-          trackKey: track.trackKey,
-          layerKey: layer.key,
-          point,
-          pointIndex,
-        });
-        if (statePointId !== pointId) {
-          continue;
-        }
-        return {
-          ...point,
-          trackKey: track.trackKey,
-          layerKey: layer.key,
-          pointIndex,
-        };
-      }
-    }
-  }
-
-  return null;
-}
-
-function findCandidateFrameGroupIdForStateCurvePoint(point) {
-  const targetFrameGroupKey = createStateCurveFrameGroupKey(point);
-
-  for (const series of props.candidateValueChart?.series ?? []) {
-    if (!isCandidateSeriesVisible(series.key)) {
-      continue;
-    }
-    for (const candidatePoint of series.points ?? []) {
-      if (
-        !isCandidateMarkerInActorFilter(candidatePoint) ||
-        !isCandidateMarkerInActionFilter(candidatePoint)
-      ) {
-        continue;
-      }
-
-      const timeMs =
-        candidatePoint.displayTimeMs ?? candidatePoint.sourceTimeMs ?? 0;
-      const frameLabel =
-        candidatePoint.displayFrameLabel ?? formatFrameTime(timeMs);
-      const frameGroupKey = createStateCurveFrameGroupKey({
-        actionId: candidatePoint.actionId,
-        frameIndex:
-          candidatePoint.displayFrameIndex ?? candidatePoint.sourceFrameIndex,
-        timeMs,
-        frameLabel,
-        hitIndex: candidatePoint.hitIndex,
-      });
-      if (frameGroupKey === targetFrameGroupKey) {
-        return `${candidatePoint.actionId}-${candidatePoint.hitIndex}-${frameLabel}`;
-      }
-    }
-  }
-
-  return null;
-}
-
 function isStateCurveTimelineLayerVisible(layerKey) {
   return Boolean(effectiveStateCurveLayerFilters.value[layerKey]);
 }
@@ -3551,418 +2738,6 @@ function isStateCurveMarkerInFocus(marker) {
     !isStateCurveSelectedFocusActive.value ||
     marker.statePointId === flowSelectedStateCurvePointId.value
   );
-}
-
-function formatCandidateFrameGroupValues(group) {
-  return group.values
-    .map(
-      value =>
-        `${value.shortLabel} ${formatTimelineNumber(value.value)} ${value.unit}`
-    )
-    .join(' / ');
-}
-
-function formatCandidateFrameGroupSource(group) {
-  const firstValue = group.values[0] ?? {};
-  const hitSkillText = firstValue.hitSkillId
-    ? `hitSkill ${firstValue.hitSkillId}`
-    : 'hitSkill 未知';
-  const elementText = formatCompactList(
-    group.values.flatMap(value => value.elementConfigIds ?? []),
-    'element 未展开'
-  );
-  const sourceText = formatCompactList(
-    group.values.map(value => value.sourceStatus),
-    '来源候选字段'
-  );
-  const timingText = formatCompactList(
-    group.values.map(value => value.timeAdjustmentStatus),
-    '时序候选'
-  );
-  const summonTargetText = formatCandidateFrameGroupSummonTarget(group);
-  return `${group.actionId} · ${hitSkillText} · ${elementText} · ${sourceText} · ${timingText}${summonTargetText} · 未应用候选`;
-}
-
-function formatCandidateFrameGroupSummonTarget(group) {
-  const summaries = (group.values ?? [])
-    .map(value => value.summonTargetEvidenceSummary)
-    .filter(Boolean);
-  if (summaries.length === 0) {
-    return '';
-  }
-
-  const unitText = formatCompactList(
-    summaries.flatMap(summary => summary.summonUnitIds ?? []),
-    '召唤目标'
-  );
-  const skillText = formatCompactList(
-    summaries.flatMap(summary => summary.targetSkillIds ?? []),
-    '目标skill'
-  );
-  return ` · 召唤目标 ${unitText}->${skillText} · ${formatSummonTargetTriggerText(summaries)}`;
-}
-
-function formatCandidateFrameDetailValue(value) {
-  return `${formatTimelineNumber(value.value)} ${value.unit}`;
-}
-
-function formatCandidateFrameDetailSamples(value) {
-  const sampleText = formatCompactList(
-    value.valueSamples?.map(sample => formatTimelineNumber(sample)) ?? [],
-    formatTimelineNumber(value.value)
-  );
-  const candidateCount = Number(value.candidateCount) || 0;
-  return `样本 ${sampleText} · 候选 ${candidateCount}`;
-}
-
-function formatCandidateFrameDetailFrames(value) {
-  const frameParts = [
-    createFramePart('src', value.sourceFrameIndex),
-    createFramePart('disp', value.displayFrameIndex),
-    createFramePart('local', value.localFrameIndex),
-    createFramePart('chain', value.chainStartFrame),
-    createFramePart('abs', value.absoluteFrameIndex),
-  ].filter(Boolean);
-  return `帧 ${frameParts.join(' / ')}`;
-}
-
-function formatCandidateFrameDetailElements(value) {
-  const elementDetails = (value.elementDetails ?? [])
-    .map(formatCandidateElementDetail)
-    .filter(Boolean);
-  const elementText = elementDetails.length
-    ? elementDetails.join(' ; ')
-    : formatCompactList(value.elementConfigIds ?? [], 'element 未展开');
-  return `element ${elementText}`;
-}
-
-function formatCandidateElementDetail(element) {
-  const elementId = element.elementConfigId ?? '未知';
-  const parts = [
-    formatCandidateElementSourceDetail(element),
-    formatCandidateElementHpDetail(element.hpDamage),
-    formatCandidateElementFormulaFunctionDetail(element.hpDamage),
-    formatCandidateElementSlotAlignmentDetail(
-      element.skillLevelBridge?.formulaSlotAlignment
-    ),
-    formatCandidateElementToughnessDetail(element.toughnessDamage),
-    formatCandidateElementEnergyDetail(element.selfEnergyChange),
-  ].filter(Boolean);
-  return parts.length ? `${elementId} ${parts.join(' ')}` : `${elementId}`;
-}
-
-function formatCandidateElementSourceDetail(element) {
-  const target = element.summonTarget;
-  if (!target) {
-    return null;
-  }
-
-  const unit = target.summonUnitId ?? '未知召唤';
-  const skill = target.targetSkillId ?? '目标skill';
-  const triggerText = formatSummonTargetTriggerText([target]);
-  return `召唤目标${unit}->${skill} ${triggerText}`;
-}
-
-function formatCandidateElementHpDetail(hpDamage) {
-  const values = formatCandidateElementHpValues(hpDamage);
-  return values ? `HP${values}` : null;
-}
-
-function formatCandidateElementHpValues(hpDamage) {
-  if (!hpDamage) {
-    return null;
-  }
-  return formatCompactList(
-    hpDamage.rawFormulaParamValues?.map(value => formatTimelineNumber(value)) ??
-      [],
-    null
-  );
-}
-
-function formatCandidateElementFormulaFunctionDetail(hpDamage) {
-  const refs = formatCandidateFormulaFunctionRefs(hpDamage);
-  return refs ? `函数${refs}` : null;
-}
-
-function formatCandidateFormulaFunctionRefs(hpDamage) {
-  const refs = hpDamage?.formulaFunctionRefs ?? [];
-  return refs.length
-    ? refs.map(formatCandidateFormulaFunctionRef).join('/')
-    : null;
-}
-
-function formatCandidateFormulaFunctionRef(ref) {
-  const label =
-    ref.field === 'function_1'
-      ? 'f1'
-      : ref.field === 'function_2'
-        ? 'f2'
-        : (ref.field ?? `f${ref.functionId ?? '?'}`);
-  return `${label}:${trimFormulaParentheses(
-    ref.functionOutput ?? `#${ref.functionId ?? '?'}`
-  )}`;
-}
-
-function formatCandidateElementSlotAlignmentDetail(alignment) {
-  const summaries = formatCandidateElementSlotSummaries(alignment);
-  return summaries ? `槽${summaries}` : null;
-}
-
-function formatCandidateElementSlotSummaries(alignment) {
-  const summaries = alignment?.parameterSummaries ?? [];
-  return summaries.length
-    ? summaries.map(formatCandidateElementSlotSummary).join('/')
-    : null;
-}
-
-function formatCandidateElementSlotSummary(summary) {
-  const variable = summary.variable || `#${summary.id}`;
-  if (summary.relationStatus === 'level-scaling-override-candidate') {
-    return `${variable}覆盖${formatTimelineNumber(
-      summary.firstLevelValue
-    )}-${formatTimelineNumber(summary.lastLevelValue)}`;
-  }
-  if (summary.relationStatus === 'constant-direct-slot-match') {
-    return `${variable}直连${formatTimelineNumber(summary.formulaParamValue)}`;
-  }
-  return `${variable}${summary.relationStatus ?? '未确认'}`;
-}
-
-function trimFormulaParentheses(value) {
-  const text = String(value ?? '').trim();
-  const parenthesizedNumerator = text.match(/^\(([^()]+)\)(\/.+)$/);
-  if (parenthesizedNumerator) {
-    return `${parenthesizedNumerator[1]}${parenthesizedNumerator[2]}`;
-  }
-  if (text.startsWith('(') && text.endsWith(')')) {
-    return text.slice(1, -1);
-  }
-  return text;
-}
-
-function formatCandidateElementToughnessDetail(toughnessDamage) {
-  const value = formatCandidateElementToughnessValue(toughnessDamage);
-  return value ? `韧性${value}` : null;
-}
-
-function formatCandidateElementToughnessValue(toughnessDamage) {
-  const value = toughnessDamage?.weakBreakDamageRate;
-  return Number.isFinite(Number(value)) ? formatTimelineNumber(value) : null;
-}
-
-function formatCandidateElementEnergyDetail(selfEnergyChange) {
-  return formatCandidateElementEnergyParts(selfEnergyChange);
-}
-
-function formatCandidateElementEnergyParts(selfEnergyChange) {
-  if (!selfEnergyChange) {
-    return null;
-  }
-  const parts = [
-    createElementNumberPart('能量', selfEnergyChange.recoverSP),
-    createElementNumberPart('宠物', selfEnergyChange.petRecoverSP),
-    createElementNumberPart('间隔', selfEnergyChange.recoverInterval),
-  ].filter(Boolean);
-  return parts.length ? parts.join('/') : null;
-}
-
-function createCandidateElementComparisonRows(group) {
-  const rowsByElement = new Map();
-  for (const value of group.values ?? []) {
-    for (const element of value.elementDetails ?? []) {
-      const elementId = element.elementConfigId ?? '未知';
-      const key = `${elementId}:${element.pathId ?? ''}`;
-      if (!rowsByElement.has(key)) {
-        rowsByElement.set(key, {
-          id: key,
-          elementConfigId: elementId,
-          pathId: element.pathId ?? null,
-          elementName: element.elementName ?? null,
-          hpDamage: null,
-          toughnessDamage: null,
-          selfEnergyChange: null,
-          skillLevelBridge: null,
-          sourceKinds: [],
-          summonTargets: [],
-          summonTriggerFrameCandidates: [],
-        });
-      }
-
-      const row = rowsByElement.get(key);
-      row.sourceKinds = uniqueDisplayValues([
-        ...row.sourceKinds,
-        element.sourceKind,
-      ]);
-      row.summonTargets = uniqueDisplayValues([
-        ...row.summonTargets,
-        formatElementSummonTargetKey(element.summonTarget),
-      ]);
-      row.summonTriggerFrameCandidates = uniqueDisplayValues([
-        ...row.summonTriggerFrameCandidates,
-        ...(element.summonTarget?.triggerFrameCandidates ?? []),
-        ...(element.summonTarget?.triggerFrameCandidateSummary
-          ?.candidateStartFrames ??
-          [] ??
-          []),
-      ]);
-      row.hpDamage = mergeElementCandidateObject(
-        row.hpDamage,
-        element.hpDamage
-      );
-      row.toughnessDamage = mergeElementCandidateObject(
-        row.toughnessDamage,
-        element.toughnessDamage
-      );
-      row.selfEnergyChange = mergeElementCandidateObject(
-        row.selfEnergyChange,
-        element.selfEnergyChange
-      );
-      row.skillLevelBridge = mergeElementCandidateObject(
-        row.skillLevelBridge,
-        element.skillLevelBridge
-      );
-    }
-  }
-
-  return [...rowsByElement.values()]
-    .map(row => {
-      const displayRow = {
-        ...row,
-        hpText: formatCandidateElementHpValues(row.hpDamage) ?? '未展开',
-        functionText:
-          formatCandidateFormulaFunctionRefs(row.hpDamage) ?? '未确认',
-        slotText:
-          formatCandidateElementSlotSummaries(
-            row.skillLevelBridge?.formulaSlotAlignment
-          ) ?? '未桥接',
-        toughnessText:
-          formatCandidateElementToughnessValue(row.toughnessDamage) ?? '未展开',
-        energyText:
-          formatCandidateElementEnergyParts(row.selfEnergyChange) ?? '未展开',
-      };
-      displayRow.statusText =
-        formatCandidateElementComparisonStatus(displayRow);
-      displayRow.tooltip = formatCandidateElementComparisonTooltip(displayRow);
-      return displayRow;
-    })
-    .sort(
-      (left, right) =>
-        Number(left.elementConfigId) - Number(right.elementConfigId) ||
-        String(left.pathId ?? '').localeCompare(String(right.pathId ?? ''))
-    );
-}
-
-function mergeElementCandidateObject(current, incoming) {
-  if (!incoming) {
-    return current;
-  }
-  if (!current) {
-    return incoming;
-  }
-  return {
-    ...current,
-    ...incoming,
-  };
-}
-
-function formatCandidateElementComparisonStatus(row) {
-  const parts = ['未应用'];
-  if (row.sourceKinds.includes('azpr-summon-target-damage-element-candidate')) {
-    parts.push(
-      row.summonTriggerFrameCandidates?.length
-        ? '召唤触发候选待确认'
-        : '召唤触发待确认'
-    );
-  }
-  if (row.functionText !== '未确认') {
-    parts.push('function组合待验证');
-  }
-  const overrideIds =
-    row.skillLevelBridge?.formulaSlotAlignment?.overrideCandidateParamIds ?? [];
-  if (overrideIds.length > 0) {
-    parts.push(`等级覆盖待验证:${overrideIds.join('/')}`);
-  }
-  if (row.hpText !== '未展开') {
-    parts.push('每hit倍率待分配');
-  }
-  return parts.join(' · ');
-}
-
-function formatCandidateElementComparisonTooltip(row) {
-  return [
-    `element ${row.elementConfigId}`,
-    `HP ${row.hpText}`,
-    `函数 ${row.functionText}`,
-    `槽位 ${row.slotText}`,
-    `削韧 ${row.toughnessText}`,
-    `能量 ${row.energyText}`,
-    row.summonTargets.length ? `召唤目标 ${row.summonTargets.join(',')}` : '',
-    row.summonTriggerFrameCandidates?.length
-      ? `召唤候选帧 ${row.summonTriggerFrameCandidates.join('/')}`
-      : '',
-    row.statusText,
-  ]
-    .filter(Boolean)
-    .join(' / ');
-}
-
-function formatElementSummonTargetKey(target) {
-  if (!target) {
-    return null;
-  }
-  const unit = target.summonUnitId ?? '?';
-  const skill = target.targetSkillId ?? '?';
-  return `${unit}->${skill}`;
-}
-
-function formatSummonTargetTriggerText(summaries) {
-  const frames = uniqueDisplayValues(
-    (summaries ?? []).flatMap(summary => [
-      ...(summary.triggerFrameCandidates ?? []),
-      ...((summary.triggerFrameCandidateSummaries ?? []).flatMap(
-        item => item.candidateStartFrames ?? []
-      ) ?? []),
-      ...(summary.triggerFrameCandidateSummary?.candidateStartFrames ??
-        [] ??
-        []),
-    ])
-  );
-  return frames.length ? `触发候选帧 ${frames.join('/')}` : '触发帧未确认';
-}
-
-function createElementNumberPart(label, value) {
-  return Number.isFinite(Number(value))
-    ? `${label}${formatTimelineNumber(value)}`
-    : null;
-}
-
-function createFramePart(label, value) {
-  if (value === null || value === undefined || value === '') {
-    return null;
-  }
-  const number = Number(value);
-  return Number.isFinite(number) ? `${label}${number}` : null;
-}
-
-function formatCompactList(values, fallback) {
-  const uniqueValues = [
-    ...new Set(
-      values
-        .map(value => String(value ?? '').trim())
-        .filter(value => value.length > 0)
-    ),
-  ];
-  return uniqueValues.length ? uniqueValues.join('/') : fallback;
-}
-
-function uniqueDisplayValues(values) {
-  return [
-    ...new Set(
-      values
-        .map(value => String(value ?? '').trim())
-        .filter(value => value.length > 0)
-    ),
-  ];
 }
 
 function formatTimelineNumber(value) {
@@ -4220,7 +2995,7 @@ function selectTimelineFrameFromPointer(event) {
   if (
     props.boxSelectionMode ||
     event.target?.closest?.(
-      '.action-block, .action-relation-hit, .cycle-boundary, .effect-interval, .candidate-value-marker, .candidate-value-frame-hotspot, .state-curve-marker, .timeline-frame-cursor, [data-testid="workbench-timeline-state-curve-breakpoint"]'
+      '.action-block, .action-relation-hit, .cycle-boundary, .effect-interval, .state-curve-marker, .timeline-frame-cursor, [data-testid="workbench-timeline-state-curve-breakpoint"]'
     )
   ) {
     return;
@@ -4888,6 +3663,19 @@ h2 {
   white-space: nowrap;
 }
 
+.controlled-actor-readout {
+  min-width: 118px;
+  padding: 5px 8px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: #182521;
+  color: #d9f5ef;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .timeline-playback-controls,
 .playback-range-mode {
   display: inline-flex;
@@ -5018,45 +3806,6 @@ h2 {
   background: #a6b7ff;
 }
 
-.candidate-toggle-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.candidate-toggle {
-  display: inline-flex;
-  min-height: 26px;
-  align-items: center;
-  gap: 5px;
-  padding: 0 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  background: #151b20;
-  color: #b8c0c7;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.candidate-toggle input {
-  width: 13px;
-  height: 13px;
-  margin: 0;
-  accent-color: #79c7b9;
-}
-
-.candidate-toggle i {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-}
-
-.candidate-toggle span {
-  white-space: nowrap;
-}
-
 .state-layer-toggle-group,
 .state-track-toggle-group {
   display: flex;
@@ -5096,69 +3845,6 @@ h2 {
 .state-layer-toggle span,
 .state-track-toggle span {
   white-space: nowrap;
-}
-
-.candidate-scope-group {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  background: #151b20;
-}
-
-.candidate-scope {
-  display: inline-flex;
-  min-width: 52px;
-  min-height: 22px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 3px;
-  background: transparent;
-  color: #8f9aa3;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.candidate-scope.active {
-  background: rgba(121, 199, 185, 0.18);
-  color: #dff6f1;
-}
-
-.candidate-scope:disabled {
-  cursor: not-allowed;
-  opacity: 0.42;
-}
-
-.candidate-filter-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.candidate-filter {
-  display: inline-flex;
-  min-height: 26px;
-  align-items: center;
-  gap: 6px;
-  padding: 0 6px 0 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  background: #151b20;
-  color: #8f9aa3;
-  font-size: 11px;
-}
-
-.candidate-filter select {
-  min-width: 78px;
-  border: 0;
-  background: transparent;
-  color: #dff6f1;
-  font-size: 11px;
-  outline: none;
 }
 
 .icon-control {
@@ -5261,130 +3947,6 @@ h2 {
   grid-template-columns: 188px minmax(0, 1fr);
   gap: 0;
   margin: 7px 10px 10px;
-}
-
-.candidate-frame-summary {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 6px 12px;
-  margin: 0 18px 12px 140px;
-  padding: 8px 10px;
-  border: 1px solid rgba(121, 199, 185, 0.2);
-  border-radius: 4px;
-  background: rgba(121, 199, 185, 0.07);
-}
-
-.candidate-frame-summary span {
-  color: #9ce0d2;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.candidate-frame-summary strong {
-  min-width: 0;
-  color: #ffffff;
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-
-.candidate-frame-summary small {
-  grid-column: 1 / -1;
-  color: #8f9aa3;
-  font-size: 11px;
-  overflow-wrap: anywhere;
-}
-
-.candidate-frame-details {
-  display: grid;
-  grid-column: 1 / -1;
-  gap: 6px;
-}
-
-.candidate-frame-detail-row {
-  display: grid;
-  grid-template-columns: 92px minmax(86px, 0.7fr) repeat(3, minmax(0, 1fr));
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  background: rgba(10, 13, 16, 0.22);
-}
-
-.candidate-frame-detail-row.track-focused {
-  border-color: rgba(121, 199, 185, 0.62);
-  background: rgba(121, 199, 185, 0.12);
-  box-shadow: inset 3px 0 0 rgba(121, 199, 185, 0.82);
-}
-
-.candidate-frame-detail-row b {
-  color: #dff6f1;
-  font-size: 11px;
-  overflow-wrap: anywhere;
-}
-
-.candidate-frame-detail-row span {
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 700;
-  overflow-wrap: anywhere;
-}
-
-.candidate-frame-detail-row small {
-  grid-column: auto;
-  color: #8f9aa3;
-  font-size: 10px;
-  overflow-wrap: anywhere;
-}
-
-.candidate-element-comparison {
-  display: grid;
-  gap: 4px;
-  grid-column: 1 / -1;
-  margin-top: 4px;
-}
-
-.candidate-element-comparison-head,
-.candidate-element-comparison-row {
-  display: grid;
-  grid-template-columns:
-    minmax(82px, 0.8fr) minmax(110px, 1fr) minmax(148px, 1.25fr)
-    minmax(128px, 1.1fr) minmax(70px, 0.7fr) minmax(112px, 1fr)
-    minmax(168px, 1.4fr);
-  gap: 6px;
-  align-items: center;
-}
-
-.candidate-element-comparison-head {
-  color: #6f7b84;
-  font-size: 10px;
-  text-transform: uppercase;
-}
-
-.candidate-element-comparison-row {
-  min-height: 30px;
-  padding: 6px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.03);
-  color: #cfd8df;
-  font-size: 11px;
-}
-
-.candidate-element-comparison-row b {
-  color: #e5f4f1;
-  font-weight: 700;
-}
-
-.candidate-element-comparison-row span,
-.candidate-element-comparison-row small {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.candidate-element-comparison-row small {
-  color: #8f9aa3;
 }
 
 .lane-labels,
@@ -5578,6 +4140,12 @@ h2 {
   outline: none;
 }
 
+.lane-label.identity.controlled-actor {
+  border-color: color-mix(in srgb, var(--lane-accent) 82%, white 18%);
+  box-shadow: inset 3px 0 0 var(--lane-accent);
+  background: color-mix(in srgb, var(--lane-accent) 16%, #151b20 84%);
+}
+
 .lane-avatar {
   position: relative;
   display: grid;
@@ -5710,6 +4278,20 @@ h2 {
 .lane-row.drop-target {
   border-color: rgba(121, 199, 185, 0.78);
   box-shadow: inset 0 0 0 1px rgba(121, 199, 185, 0.28);
+}
+
+.controlled-actor-interval {
+  position: absolute;
+  inset-block: 0;
+  z-index: 0;
+  min-width: 1px;
+  border-top: 2px solid var(--controlled-actor-accent);
+  background: color-mix(
+    in srgb,
+    var(--controlled-actor-accent) 13%,
+    transparent
+  );
+  pointer-events: none;
 }
 
 .lane-row[data-lane-kind='actor-kibo'] {
@@ -6187,117 +4769,6 @@ h2 {
   outline-offset: 1px;
 }
 
-.candidate-value-curve-track {
-  position: absolute;
-  top: 68px;
-  right: 0;
-  left: 0;
-  height: 34px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 15px,
-      rgba(255, 255, 255, 0.05) 15px,
-      rgba(255, 255, 255, 0.05) 16px
-    );
-  pointer-events: none;
-}
-
-.candidate-value-curve-track svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.candidate-value-curve-line {
-  fill: none;
-  stroke: #f2b366;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.82;
-}
-
-.candidate-value-curve-line.track-focused {
-  stroke-width: 3.4;
-  opacity: 1;
-}
-
-.candidate-value-curve-line.candidate-toughnessDamageCandidate {
-  stroke: #79c7b9;
-}
-
-.candidate-value-curve-line.candidate-selfEnergyCandidate {
-  stroke: #a6b7ff;
-}
-
-.candidate-value-frame-hotspot {
-  position: absolute;
-  z-index: 1;
-  top: 68px;
-  width: 18px;
-  height: 34px;
-  border: 0;
-  background: transparent;
-  cursor: help;
-  transform: translateX(-50%);
-}
-
-.candidate-value-frame-hotspot:focus,
-.candidate-value-frame-hotspot.selected {
-  outline: 1px solid rgba(121, 199, 185, 0.72);
-  outline-offset: -1px;
-}
-
-.candidate-value-marker {
-  position: absolute;
-  z-index: 2;
-  width: 9px;
-  height: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 50%;
-  background: #f2b366;
-  box-shadow: 0 0 14px rgba(242, 179, 102, 0.48);
-  transform: translateX(-50%);
-}
-
-.candidate-value-marker:focus,
-.candidate-value-marker.selected {
-  outline: 2px solid rgba(255, 255, 255, 0.86);
-  outline-offset: 2px;
-}
-
-.candidate-value-marker.candidate-toughnessDamageCandidate {
-  border-radius: 2px;
-  background: #79c7b9;
-  box-shadow: 0 0 14px rgba(121, 199, 185, 0.48);
-}
-
-.candidate-value-marker.candidate-selfEnergyCandidate {
-  background: #a6b7ff;
-  box-shadow: 0 0 14px rgba(166, 183, 255, 0.48);
-  transform: translateX(-50%) rotate(45deg);
-}
-
-.candidate-value-marker.candidate-selfEnergyCandidate:focus,
-.candidate-value-marker.candidate-selfEnergyCandidate.selected {
-  outline-offset: 3px;
-}
-
-.candidate-value-marker.track-focused {
-  width: 12px;
-  height: 12px;
-  border-color: rgba(255, 255, 255, 0.94);
-  box-shadow:
-    0 0 0 3px rgba(121, 199, 185, 0.2),
-    0 0 18px rgba(121, 199, 185, 0.64);
-}
-
 .state-curve-marker {
   position: absolute;
   z-index: 3;
@@ -6369,15 +4840,6 @@ h2 {
 
 .legend-damage {
   background: #e6a23c;
-}
-
-.legend-candidate {
-  background: linear-gradient(
-    90deg,
-    #f2b366 0 33%,
-    #79c7b9 33% 66%,
-    #a6b7ff 66% 100%
-  );
 }
 
 .legend-state {
@@ -6453,44 +4915,6 @@ h2 {
   .scale-track,
   .timeline-lane {
     min-width: var(--timeline-mobile-min-width);
-  }
-
-  .candidate-frame-summary {
-    grid-template-columns: 1fr;
-    margin: 0 18px 12px;
-  }
-
-  .candidate-scope-group {
-    width: 100%;
-  }
-
-  .candidate-scope {
-    flex: 1;
-  }
-
-  .candidate-filter-group {
-    width: 100%;
-  }
-
-  .candidate-filter {
-    flex: 1;
-  }
-
-  .candidate-filter select {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .candidate-frame-detail-row {
-    grid-template-columns: 1fr;
-  }
-
-  .candidate-element-comparison-head {
-    display: none;
-  }
-
-  .candidate-element-comparison-row {
-    grid-template-columns: 1fr;
   }
 
   .lane-label {

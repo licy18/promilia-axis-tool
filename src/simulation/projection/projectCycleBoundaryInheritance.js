@@ -1,4 +1,5 @@
 import { normalizeInitialRuntimeState } from '../../domain/initialRuntimeState';
+import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
 export const CYCLE_BOUNDARY_INHERITANCE_PROJECTION_CONTRACT_NAME =
   'AzPrCycleBoundaryInheritanceProjection';
@@ -82,6 +83,8 @@ export function projectCycleBoundaryInheritance({
       shiftedBoundaryCount: cycleBoundaries.length,
       inheritedEnergyActorCount:
         initialRuntimeState?.selfEnergyByActor?.length ?? 0,
+      inheritedControlledActorId:
+        initialRuntimeState?.controlledActor?.actorId ?? null,
       inheritedEffectCount: initialRuntimeState?.activeEffects?.length ?? 0,
       clearedRuntimeSampleCaptureCount:
         draft.runtimeSampleCaptures?.length ?? 0,
@@ -98,6 +101,11 @@ export function createInitialRuntimeStateAtBoundary({
 } = {}) {
   const boundaryTimeMs = nonNegativeNumber(boundary?.timeMs);
   const stateSnapshots = runtimeOutputs?.stateSnapshots ?? {};
+  const controlledActor = resolveControlledActorAt(
+    runtimeOutputs?.controlledActorTimeline,
+    boundaryTimeMs,
+    { strictlyBefore: true }
+  );
   const enemyBaseline = stateSnapshots.baseline?.enemy ?? {};
   const enemyState = {
     hp: createInitialMetricFromBaseline(enemyBaseline.hp),
@@ -143,6 +151,7 @@ export function createInitialRuntimeStateAtBoundary({
       boundaryId: boundary?.id,
       boundaryTimeMs,
     },
+    controlledActor,
     enemy: {
       enemyId: scenario?.enemy?.id ?? null,
       hp: enemyState.hp,

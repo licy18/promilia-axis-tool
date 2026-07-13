@@ -7,6 +7,7 @@ import {
   createActionExecutionPlan,
   createActionExecutionPlanIndex,
 } from './actionExecutionPlan';
+import { createControlledActorTimeline } from '../runtime/controlledActorTimeline';
 
 export function simulateScenario(
   scenario,
@@ -32,6 +33,16 @@ export function simulateScenario(
   });
   const executionPlanByActionId =
     createActionExecutionPlanIndex(actionExecutionPlan);
+  const controlledActorTimeline = createControlledActorTimeline({
+    scenario,
+    actionExecutionPlan,
+  });
+  const controlledTransitionByActionId = new Map(
+    controlledActorTimeline.transitions.map(transition => [
+      transition.actionId,
+      transition,
+    ])
+  );
 
   for (const action of scenario.actions) {
     const executionEntry = executionPlanByActionId.get(action.id);
@@ -48,7 +59,10 @@ export function simulateScenario(
       continue;
     }
 
-    const nonCombatEvent = createNonCombatEvent(action);
+    const nonCombatEvent = createNonCombatEvent(
+      action,
+      controlledTransitionByActionId.get(action.id)
+    );
     if (nonCombatEvent) {
       eventLog.push(nonCombatEvent);
       continue;
@@ -142,6 +156,7 @@ export function simulateScenario(
     effectTimeline,
     actionRuleDiagnostics,
     actionExecutionPlan,
+    controlledActorTimeline,
     threeValueMechanicsAdapterRegistry,
   });
 }
@@ -153,7 +168,7 @@ function resolveActionCooldownMs(action) {
   return Number.isFinite(cooldownMs) && cooldownMs > 0 ? cooldownMs : 0;
 }
 
-function createNonCombatEvent(action) {
+function createNonCombatEvent(action, controlledActorTransition = null) {
   if (action.type === ACTION_TYPES.WAIT) {
     return {
       type: 'WAIT',
@@ -175,9 +190,23 @@ function createNonCombatEvent(action) {
       actorId: action.actorId,
       payload: {
         actionName: action.name,
-        fromActorName: action.actor?.name,
+        sourceActorId: action.actorId,
+        sourceActorName: action.actor?.name,
+        fromActorId:
+          controlledActorTransition?.beforeActor?.actorId ?? action.actorId,
+        fromActorName:
+          controlledActorTransition?.beforeActor?.actorName ??
+          action.actor?.name,
         targetActorId: action.targetActorId,
         targetActorName: action.targetActor?.name,
+        afterActorId:
+          controlledActorTransition?.afterActor?.actorId ??
+          action.targetActorId,
+        afterActorName:
+          controlledActorTransition?.afterActor?.actorName ??
+          action.targetActor?.name,
+        transitionStatus: controlledActorTransition?.status ?? '',
+        transitionApplied: controlledActorTransition?.applied === true,
         durationMs: action.durationMs,
         note: action.note,
       },

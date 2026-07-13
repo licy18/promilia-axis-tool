@@ -10,6 +10,7 @@ const REQUIRED_CAPABILITIES = [
   'action-skill-compatibility-gate',
   'applied-source-binding-guard',
   'stage-9a-timeline-topology',
+  'controlled-actor-timeline',
   'stage-9b-runtime-step-curves',
   'm1a-timeline-identity',
   'm1b-team-kibo-energy',

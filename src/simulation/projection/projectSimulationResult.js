@@ -1445,6 +1445,7 @@ export function projectSimulationResult({
   effectTimeline,
   actionRuleDiagnostics,
   actionExecutionPlan,
+  controlledActorTimeline,
   threeValueMechanicsAdapterRegistry = null,
 }) {
   const runtimeSampleContext = createRecoverSpRuntimeSampleContext(
@@ -1483,6 +1484,7 @@ export function projectSimulationResult({
     threeValueMechanicsAdapterRegistry,
     effectTimeline,
     actionExecutionPlan,
+    controlledActorTimeline,
   });
   const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
   const damageTimeline = damageEvents.map(event => ({
@@ -1560,6 +1562,7 @@ export function projectSimulationResult({
     damageTimeline,
     resourceTimeline,
     effectTimeline: runtimeOutputs.effectTimeline,
+    controlledActorTimeline: runtimeOutputs.controlledActorTimeline,
     actionRuleDiagnostics,
     actionReadinessTimeline: actionRuleDiagnostics.readinessTimeline,
     actionExecutionPlan,
@@ -1584,6 +1587,8 @@ export function projectSimulationResult({
       threeValueRuntimeProjectionSummary: runtimeOutputs.summary,
       runtimeOutputsSummary: runtimeOutputs.outputSummary,
       effectRuntimeTimelineSummary: runtimeOutputs.effectTimeline.summary,
+      controlledActorTimelineSummary:
+        runtimeOutputs.controlledActorTimeline.summary,
       actionRuleDiagnosticsSummary: actionRuleDiagnostics.summary,
       actionReadinessTimelineSummary:
         actionRuleDiagnostics.readinessTimeline.summary,

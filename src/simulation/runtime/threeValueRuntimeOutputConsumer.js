@@ -5,6 +5,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
   resourceCurves = null,
   hitTransactions = null,
   effectTimeline = null,
+  controlledActorTimeline = null,
   summary = {},
   outputConsistency = null,
 } = {}) {
@@ -18,6 +19,16 @@ export function createThreeValueRuntimeOutputConsumerContract({
   const effectEventRows = Array.isArray(effectTimeline?.events)
     ? effectTimeline.events
     : [];
+  const controlledActorTransitions = Array.isArray(
+    controlledActorTimeline?.transitions
+  )
+    ? controlledActorTimeline.transitions
+    : [];
+  const controlledActorIntervals = Array.isArray(
+    controlledActorTimeline?.intervals
+  )
+    ? controlledActorTimeline.intervals
+    : [];
   const contractSummary = outputContract?.summary ?? {};
   const contractOutputs = outputContract?.outputs ?? {};
   const outputConsistencyStatus =
@@ -27,11 +38,13 @@ export function createThreeValueRuntimeOutputConsumerContract({
     : ['simLog', 'stateCurves', 'resourceCurves', 'summary'];
 
   return {
-    schemaVersion: canonicalOutputNames.includes('effectTimeline')
-      ? 3
-      : canonicalOutputNames.includes('hitTransactions')
-        ? 2
-        : 1,
+    schemaVersion: controlledActorTimeline
+      ? 4
+      : canonicalOutputNames.includes('effectTimeline')
+        ? 3
+        : canonicalOutputNames.includes('hitTransactions')
+          ? 2
+          : 1,
     sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
     status:
       outputContract?.status === 'runtime-output-contract-ready'
@@ -43,6 +56,9 @@ export function createThreeValueRuntimeOutputConsumerContract({
     aliases: {
       resources: 'resourceCurves',
     },
+    supplementalOutputNames: controlledActorTimeline
+      ? ['controlledActorTimeline']
+      : [],
     outputs: {
       simLog: {
         outputName: 'simLog',
@@ -104,6 +120,18 @@ export function createThreeValueRuntimeOutputConsumerContract({
           'eventId',
           'runtimeSequenceIndex',
         ],
+      },
+      controlledActorTimeline: {
+        outputName: 'controlledActorTimeline',
+        dataPath: 'runtimeOutputs.controlledActorTimeline',
+        sourceKind: controlledActorTimeline?.sourceKind ?? '',
+        status: controlledActorTimeline?.status ?? '',
+        contractName: controlledActorTimeline?.contractName ?? '',
+        transitionCount: controlledActorTransitions.length,
+        intervalCount: controlledActorIntervals.length,
+        keyFields: ['transitionId', 'intervalId'],
+        identityFields: ['actorId', 'characterId'],
+        timeFields: ['timeMs', 'frameIndex', 'startMs', 'endMs'],
       },
       stateCurves: {
         outputName: 'stateCurves',
@@ -215,6 +243,8 @@ export function createThreeValueRuntimeOutputConsumerContract({
           summary.activeEffectCount ??
           contractSummary.activeEffectCount
       ),
+      controlledActorTransitionCount: controlledActorTransitions.length,
+      controlledActorIntervalCount: controlledActorIntervals.length,
       runtimeCalculatorInvocationCount: numberOrZero(
         stateSnapshots?.summary?.runtimeCalculatorInvocationCount ??
           summary.runtimeCalculatorInvocationCount ??

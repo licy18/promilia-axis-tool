@@ -10,6 +10,11 @@ describe('initial runtime state', () => {
         boundaryId: 'cycle-boundary-0001',
         boundaryTimeMs: 1000,
       },
+      controlledActor: {
+        actorId: 'actor-1',
+        characterId: 101,
+        actorName: '末音',
+      },
       enemy: {
         enemyId: 'enemy-1',
         hp: { currentValue: 850, maxValue: 1000 },
@@ -41,13 +46,19 @@ describe('initial runtime state', () => {
     });
 
     expect(state).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       contractName: 'AzPrInitialRuntimeState',
       status: 'initial-runtime-state-inherited',
       source: {
         sourceScenarioId: 'scenario-0001',
         boundaryId: 'cycle-boundary-0001',
         boundaryTimeMs: 1000,
+      },
+      controlledActor: {
+        actorId: 'actor-1',
+        characterId: 101,
+        actorName: '末音',
+        baselineStatus: 'baseline-inherited-from-cycle-boundary',
       },
       enemy: {
         hp: {
@@ -69,6 +80,30 @@ describe('initial runtime state', () => {
         },
       ],
       applied: true,
+    });
+  });
+
+  it('creates an explicit project initial controlled actor without three-value state', () => {
+    expect(
+      normalizeInitialRuntimeState(null, {
+        controlledActor: {
+          actorId: 'actor-2',
+          characterId: 102,
+          actorName: '寒悠悠',
+        },
+      })
+    ).toMatchObject({
+      schemaVersion: 2,
+      status: 'initial-runtime-state-ready',
+      controlledActor: {
+        actorId: 'actor-2',
+        characterId: 102,
+        actorName: '寒悠悠',
+        baselineStatus: 'baseline-project-initial-controlled-actor',
+      },
+      enemy: null,
+      selfEnergyByActor: [],
+      activeEffects: [],
     });
   });
 

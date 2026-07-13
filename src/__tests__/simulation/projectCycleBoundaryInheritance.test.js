@@ -23,6 +23,7 @@ describe('cycle boundary inheritance projection', () => {
         retainedRelationCount: 1,
         shiftedBoundaryCount: 1,
         inheritedEnergyActorCount: 1,
+        inheritedControlledActorId: 'actor-2',
         inheritedEffectCount: 1,
         clearedRuntimeSampleCaptureCount: 1,
       },
@@ -52,6 +53,7 @@ describe('cycle boundary inheritance projection', () => {
         toughness: { currentValue: 80, maxValue: 100 },
       },
       selfEnergyByActor: [{ actorId: 'actor-1', currentValue: 25 }],
+      controlledActor: { actorId: 'actor-2', characterId: 102 },
       activeEffects: [
         {
           effectId: 'focus',
@@ -129,7 +131,10 @@ function createScenario() {
   return {
     time: { durationMs: 5000, fps: 60 },
     enemy: { id: 'enemy-1' },
-    actors: [{ id: 'actor-1', characterId: 101, name: '末音' }],
+    actors: [
+      { id: 'actor-1', characterId: 101, name: '末音' },
+      { id: 'actor-2', characterId: 102, name: '寒悠悠' },
+    ],
     cycleBoundaries: [
       { id: 'boundary-1', timeMs: 1000 },
       { id: 'boundary-2', timeMs: 2500 },
@@ -166,6 +171,26 @@ function createRuntimeOutputs() {
     expiresAtMs: 2000,
   };
   return {
+    controlledActorTimeline: {
+      initialActor: {
+        actorId: 'actor-1',
+        characterId: 101,
+        actorName: '末音',
+      },
+      transitions: [
+        {
+          transitionId: 'controlled-actor-transition-switch-1',
+          actionId: 'switch-1',
+          timeMs: 750,
+          applied: true,
+          afterActor: {
+            actorId: 'actor-2',
+            characterId: 102,
+            actorName: '寒悠悠',
+          },
+        },
+      ],
+    },
     stateSnapshots: {
       baseline: {
         enemy: {

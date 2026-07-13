@@ -984,7 +984,10 @@ function formatPayload(event) {
     return `${event.payload.durationMs}ms / ${event.payload.note}`;
   }
   if (event.type === 'SWITCH') {
-    return `${event.payload.fromActorName ?? '前台'} -> ${event.payload.targetActorName ?? event.payload.targetActorId}`;
+    const transition = `${event.payload.fromActorName ?? '前台'} -> ${event.payload.afterActorName ?? event.payload.targetActorName ?? event.payload.targetActorId}`;
+    return event.payload.transitionApplied === false
+      ? `${transition}（未切换）`
+      : transition;
   }
   if (event.type === 'ANNOTATION') {
     return event.payload.note;

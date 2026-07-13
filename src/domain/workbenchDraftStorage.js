@@ -322,7 +322,12 @@ export function createWorkbenchScenarioDraftSnapshot({
       normalizedActions
     ),
     cycleBoundaries: normalizeWorkbenchCycleBoundaries(cycleBoundaries),
-    initialRuntimeState: normalizeInitialRuntimeState(initialRuntimeState),
+    initialRuntimeState: normalizeInitialRuntimeState(initialRuntimeState, {
+      controlledActor: {
+        actorId: `actor-${normalizedTeamSlots[0].characterId}`,
+        characterId: normalizedTeamSlots[0].characterId,
+      },
+    }),
     runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
       runtimeSampleCaptures
     ),

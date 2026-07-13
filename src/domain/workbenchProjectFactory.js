@@ -39,6 +39,7 @@ import {
   WORKBENCH_TEAM_SLOT_COUNT,
   createWorkbenchTimelineTopology,
 } from './workbenchTimelineTopology';
+import { normalizeInitialRuntimeState } from './initialRuntimeState';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -528,7 +529,16 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     ),
     actionRelations,
     cycleBoundaries,
-    initialRuntimeState: actionPatch.initialRuntimeState,
+    initialRuntimeState: normalizeInitialRuntimeState(
+      actionPatch.initialRuntimeState,
+      {
+        controlledActor: {
+          actorId: actors[0].id,
+          characterId: actors[0].characterId,
+          actorName: actors[0].name,
+        },
+      }
+    ),
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',

@@ -32,6 +32,22 @@
           </option>
         </select>
       </label>
+      <label class="team-slot-control controlled-actor-control">
+        <span>初始前台</span>
+        <select
+          :value="controlledActorCharacterId"
+          data-testid="workbench-initial-controlled-actor-select"
+          @change="emitInitialControlledActor($event.target.value)"
+        >
+          <option
+            v-for="actor in actors"
+            :key="actor.id"
+            :value="actor.characterId"
+          >
+            {{ actor.name }}
+          </option>
+        </select>
+      </label>
     </div>
 
     <div class="config-scope" data-testid="workbench-config-scope">
@@ -179,9 +195,17 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  controlledActorCharacterId: {
+    type: [Number, String],
+    default: '',
+  },
 });
 
-const emit = defineEmits(['update-team-slot', 'update-actor-config']);
+const emit = defineEmits([
+  'update-team-slot',
+  'update-actor-config',
+  'update-initial-controlled-actor',
+]);
 const equipmentSlots = Object.freeze([
   { key: 'weapon', label: '武器' },
   { key: 'top', label: '上装' },
@@ -200,6 +224,10 @@ function emitTeamSlotPatch(slotId, value) {
     slotId,
     characterId: Number(value),
   });
+}
+
+function emitInitialControlledActor(value) {
+  emit('update-initial-controlled-actor', Number(value));
 }
 
 function teamSlotTestId(index) {

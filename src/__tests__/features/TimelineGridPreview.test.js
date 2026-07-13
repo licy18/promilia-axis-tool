@@ -101,68 +101,6 @@ describe('TimelineGridPreview', () => {
     ).toContain('selected');
   });
 
-  it('filters candidate value curves by actor, action, and visible series', async () => {
-    const wrapper = mount(TimelineGridPreview, {
-      props: createTimelineProps(),
-    });
-
-    expect(findCandidateMarkers(wrapper)).toHaveLength(6);
-    expect(
-      Array.from(
-        wrapper.find('[data-testid="workbench-candidate-value-actor-filter"]')
-          .element.options
-      ).map(option => option.value)
-    ).toEqual(['all', 'actor-a', 'actor-b']);
-    expect(
-      Array.from(
-        wrapper.find('[data-testid="workbench-candidate-value-action-filter"]')
-          .element.options
-      ).map(option => option.value)
-    ).toEqual(['all', 'action-a', 'action-b']);
-
-    await wrapper
-      .find('[data-testid="workbench-candidate-value-actor-filter"]')
-      .setValue('actor-b');
-    await nextTick();
-    expect(findCandidateMarkers(wrapper)).toHaveLength(3);
-    expect(
-      findCandidateMarkers(wrapper).map(marker =>
-        marker.attributes('data-action-id')
-      )
-    ).toEqual(['action-b', 'action-b', 'action-b']);
-
-    await wrapper
-      .find('[data-testid="workbench-candidate-value-action-filter"]')
-      .setValue('action-a');
-    await nextTick();
-    expect(findCandidateMarkers(wrapper)).toHaveLength(0);
-
-    await wrapper
-      .find('[data-testid="workbench-candidate-value-actor-filter"]')
-      .setValue('all');
-    await nextTick();
-    expect(findCandidateMarkers(wrapper)).toHaveLength(3);
-    expect(
-      findCandidateMarkers(wrapper).map(marker =>
-        marker.attributes('data-action-id')
-      )
-    ).toEqual(['action-a', 'action-a', 'action-a']);
-
-    await wrapper
-      .find(
-        '[data-testid="workbench-candidate-value-toggle"][data-series-key="hpDamageFormulaParamCandidate"]'
-      )
-      .setValue(false);
-    await nextTick();
-
-    expect(findCandidateMarkers(wrapper)).toHaveLength(2);
-    expect(
-      findCandidateMarkers(wrapper).map(marker =>
-        marker.attributes('data-series-key')
-      )
-    ).toEqual(['toughnessDamageCandidate', 'selfEnergyCandidate']);
-  });
-
   it('uses an injected main flow command surface for runtime state markers', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
@@ -312,10 +250,12 @@ describe('TimelineGridPreview', () => {
 
     await markers[1].trigger('click');
     await markers[0].trigger('click');
-    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject({
-      frameIndex: 0,
-      statePointId: 'state-frame-0',
-    });
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject(
+      {
+        frameIndex: 0,
+        statePointId: 'state-frame-0',
+      }
+    );
     expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
       statePointId: 'state-frame-0',
     });
@@ -580,6 +520,73 @@ describe('TimelineGridPreview', () => {
         )
         .attributes('points')
     ).toBe('0,100 100,100');
+  });
+
+  it('renders controlled actor intervals and follows the exact-frame cursor state', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        cursorFrameIndex: 59,
+        controlledActorTimeline: {
+          initialActor: { actorId: 'actor-a', actorName: '末音' },
+          finalActor: { actorId: 'actor-b', actorName: '寒悠悠' },
+          transitions: [
+            {
+              transitionId: 'controlled-actor-transition-switch-b',
+              actionId: 'switch-b',
+              timeMs: 1000,
+              frameIndex: 60,
+              applied: true,
+            },
+          ],
+          intervals: [
+            {
+              intervalId: 'controlled-actor-interval-a',
+              actorId: 'actor-a',
+              actor: { actorId: 'actor-a', actorName: '末音' },
+              startMs: 0,
+              endMs: 1000,
+              startFrameIndex: 0,
+              endFrameIndex: 60,
+            },
+            {
+              intervalId: 'controlled-actor-interval-b',
+              actorId: 'actor-b',
+              actor: { actorId: 'actor-b', actorName: '寒悠悠' },
+              startMs: 1000,
+              endMs: 3000,
+              startFrameIndex: 60,
+              endFrameIndex: 180,
+            },
+          ],
+        },
+      }),
+    });
+
+    expect(
+      wrapper.findAll('[data-testid="workbench-controlled-actor-interval"]')
+    ).toHaveLength(2);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-lane-label"][data-lane-id="actor-a"]'
+        )
+        .attributes('data-controlled-actor')
+    ).toBe('true');
+    expect(
+      wrapper.get('[data-testid="workbench-controlled-actor-readout"]').text()
+    ).toContain('末音');
+
+    await wrapper.setProps({ cursorFrameIndex: 60 });
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-lane-label"][data-lane-id="actor-b"]'
+        )
+        .attributes('data-controlled-actor')
+    ).toBe('true');
+    expect(
+      wrapper.get('[data-testid="workbench-controlled-actor-readout"]').text()
+    ).toContain('寒悠悠');
   });
 
   it('renders character identity on actor lanes and opens the matching inspector', async () => {
@@ -1144,12 +1151,6 @@ describe('TimelineGridPreview', () => {
   });
 });
 
-function findCandidateMarkers(wrapper) {
-  return wrapper.findAll(
-    '[data-testid="workbench-timeline-candidate-value-marker"]'
-  );
-}
-
 function createTimelineProps(overrides = {}) {
   const actions = [
     createAction({
@@ -1184,34 +1185,6 @@ function createTimelineProps(overrides = {}) {
     threeValueCurveFramework: {
       stateCurves: {
         tracks: [],
-      },
-    },
-    candidateValueChart: {
-      series: [
-        createCandidateSeries({
-          key: 'hpDamageFormulaParamCandidate',
-          label: 'HP参数候选',
-          valueKind: 'hp',
-          unit: 'raw-param',
-          yPercent: 18,
-        }),
-        createCandidateSeries({
-          key: 'toughnessDamageCandidate',
-          label: '削韧候选',
-          valueKind: 'toughness',
-          unit: 'raw-field',
-          yPercent: 50,
-        }),
-        createCandidateSeries({
-          key: 'selfEnergyCandidate',
-          label: '能量候选',
-          valueKind: 'energy',
-          unit: 'raw-field',
-          yPercent: 82,
-        }),
-      ],
-      summary: {
-        pointCount: 6,
       },
     },
     durationMs: 3000,
@@ -1430,78 +1403,6 @@ function createAction({ id, name, actorId, startMs }) {
     },
     startMs,
     durationMs: 900,
-  };
-}
-
-function createCandidateSeries({ key, label, valueKind, unit, yPercent }) {
-  const points = [
-    createCandidatePoint({
-      actionId: 'action-a',
-      actionName: '普通攻击',
-      hitIndex: 1,
-      displayTimeMs: 500,
-      displayFrameIndex: 30,
-      displayFrameLabel: '0s30f',
-      value: 1000,
-      xPercent: 16,
-      yPercent,
-    }),
-    createCandidatePoint({
-      actionId: 'action-b',
-      actionName: '重击',
-      hitIndex: 1,
-      displayTimeMs: 1500,
-      displayFrameIndex: 90,
-      displayFrameLabel: '1s30f',
-      value: 2000,
-      xPercent: 50,
-      yPercent,
-    }),
-  ];
-
-  return {
-    key,
-    label,
-    valueKind,
-    unit,
-    pointCount: points.length,
-    points,
-    applied: false,
-  };
-}
-
-function createCandidatePoint({
-  actionId,
-  actionName,
-  hitIndex,
-  displayTimeMs,
-  displayFrameIndex,
-  displayFrameLabel,
-  value,
-  xPercent,
-  yPercent,
-}) {
-  return {
-    actionId,
-    actionName,
-    hitIndex,
-    sourceTimeMs: displayTimeMs,
-    displayTimeMs,
-    sourceFrameIndex: displayFrameIndex,
-    displayFrameIndex,
-    displayFrameLabel,
-    value,
-    valueMin: value,
-    valueMax: value,
-    valueSamples: [value],
-    candidateCount: 1,
-    xPercent,
-    yPercent,
-    elementConfigIds: [109001081],
-    elementDetails: [],
-    sourceStatus: 'fixture',
-    timeAdjustmentStatus: 'fixture',
-    applied: false,
   };
 }
 

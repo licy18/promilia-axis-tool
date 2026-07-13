@@ -80,6 +80,7 @@
       "src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js",
       "src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js",
       "src/__tests__/simulation/actionRuleDiagnostics.test.js",
+      "src/__tests__/simulation/controlledActorTimeline.test.js",
       "src/__tests__/simulation/effectRuntimeTimeline.test.js",
       "src/__tests__/simulation/firstVerticalSliceSimulation.test.js",
       "src/__tests__/simulation/projectCycleBoundaryInheritance.test.js",
@@ -100,8 +101,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 125,
-    "productionReachableCount": 121,
+    "sourceCodeFileCount": 126,
+    "productionReachableCount": 122,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -119,7 +120,7 @@
       "src/simulation/generation": 4,
       "src/simulation/mechanics": 10,
       "src/simulation/projection": 6,
-      "src/simulation/runtime": 10,
+      "src/simulation/runtime": 11,
       "src/store": 1,
       "src/utils": 2,
       "src/views": 4
@@ -237,6 +238,7 @@
     "src/simulation/projection/workbenchSkillDiagnosticsLoader.js",
     "src/simulation/runtime/actionHitThreeValueRuntimeInput.js",
     "src/simulation/runtime/actionRuleDiagnostics.js",
+    "src/simulation/runtime/controlledActorTimeline.js",
     "src/simulation/runtime/effectRuntimeTimeline.js",
     "src/simulation/runtime/kiboEnergyRuntimeCurves.js",
     "src/simulation/runtime/threeValueRuntimeCalculatorInvocation.js",

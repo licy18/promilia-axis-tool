@@ -990,51 +990,6 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
     ).toHaveLength(0);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
-        )
-        .classes()
-    ).toContain('active');
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-marker"]'
-      )
-    ).toHaveLength(3);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
-      )
-    ).toHaveLength(1);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
-        )
-        .attributes('data-series-key')
-    ).toBe('hpDamageFormulaParamCandidate');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
-        )
-        .attributes('data-state-track-key')
-    ).toBe('enemyHpDamage');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-marker"][data-track-focused="true"]'
-        )
-        .attributes('data-series-key')
-    ).toBe('hpDamageFormulaParamCandidate');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
-        )
-        .attributes('data-track-focused')
-    ).toBe('true');
     const frameGroupOptions = wrapper.findAll(
       '[data-testid="workbench-state-curve-frame-group-option"]'
     );
@@ -1059,34 +1014,6 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curve-point"]')
         .attributes('data-track-key')
     ).toBe('enemyToughnessDamage');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
-        )
-        .attributes('data-series-key')
-    ).toBe('toughnessDamageCandidate');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-marker"][data-track-focused="true"]'
-        )
-        .attributes('data-series-key')
-    ).toBe('toughnessDamageCandidate');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="toughnessDamageCandidate"]'
-        )
-        .attributes('data-track-focused')
-    ).toBe('true');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
-        )
-        .attributes('data-track-focused')
-    ).toBe('false');
     expect(toughnessFrameGroupOption.text()).toContain('韧性');
     const hpFrameGroupOption = wrapper
       .findAll('[data-testid="workbench-state-curve-frame-group-option"]')
@@ -1117,20 +1044,6 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
     ).toHaveLength(1);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
-        )
-        .classes()
-    ).toContain('active');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
-        )
-        .exists()
-    ).toBe(false);
     await focusAllButton.trigger('click');
     await nextTick();
     expect(
@@ -1264,321 +1177,14 @@ describe('Workbench view', () => {
       )
       .setValue(true);
     await nextTick();
-    const candidateMarkers = wrapper.findAll(
-      '[data-testid="workbench-timeline-candidate-value-marker"]'
-    );
-    expect(candidateMarkers).toHaveLength(15);
     expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-curve-track"]'
-      )
-    ).toHaveLength(1);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-curve"]'
-      )
+      wrapper.findAll('[data-testid="workbench-candidate-value-chart-row"]')
     ).toHaveLength(3);
     expect(
       wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
-      )
-    ).toHaveLength(5);
-    const candidateToggles = wrapper.findAll(
-      '[data-testid="workbench-candidate-value-toggle"]'
-    );
-    expect(candidateToggles).toHaveLength(3);
-    expect(
-      candidateToggles.map(toggle => toggle.attributes('data-series-key'))
-    ).toEqual([
-      'hpDamageFormulaParamCandidate',
-      'toughnessDamageCandidate',
-      'selfEnergyCandidate',
-    ]);
-    const candidateScopeOptions = wrapper.findAll(
-      '[data-testid="workbench-candidate-value-scope-option"]'
-    );
-    expect(candidateScopeOptions).toHaveLength(2);
-    expect(
-      candidateScopeOptions.map(option => option.attributes('data-scope-key'))
-    ).toEqual(['all', 'selected-frame']);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
-        )
-        .classes()
-    ).toContain('active');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
-        )
-        .attributes('disabled')
-    ).toBeUndefined();
-    const actorFilter = wrapper.find(
-      '[data-testid="workbench-candidate-value-actor-filter"]'
-    );
-    expect(actorFilter.element.value).toBe('all');
-    expect(actorFilter.text()).toContain('末音');
-    expect(actorFilter.text()).not.toContain('寒悠悠');
-    await actorFilter.setValue('actor-109001');
-    await nextTick();
-    expect(
-      wrapper.findAll(
         '[data-testid="workbench-timeline-candidate-value-marker"]'
       )
-    ).toHaveLength(15);
-    const actionFilter = wrapper.find(
-      '[data-testid="workbench-candidate-value-action-filter"]'
-    );
-    expect(actionFilter.element.value).toBe('all');
-    expect(actionFilter.text()).toContain('普通攻击');
-    await actionFilter.setValue('action-0001');
-    await nextTick();
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-marker"]'
-      )
-    ).toHaveLength(15);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
-        )
-        .attributes('data-point-count')
-    ).toBe('5');
-    expect(
-      candidateMarkers.every(
-        marker => marker.attributes('data-lane-id') === 'actor-109001'
-      )
-    ).toBe(true);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="1"]'
-        )
-        .attributes('data-frame-label')
-    ).toBe('0s12f');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="1"]'
-        )
-        .attributes('data-marker-title')
-    ).toBe('HP参数候选 0s12f hit1: 2,500 raw-param');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="1"]'
-        )
-        .attributes('data-marker-title')
-    ).toBe(
-      '0s12f hit1: HP参数候选 2,500 raw-param / 削韧候选 7,000 raw-field / 能量候选 2,700 raw-field'
-    );
-    await wrapper
-      .find(
-        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="1"]'
-      )
-      .trigger('click');
-    await nextTick();
-    expect(
-      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
-    ).toBe('2/16');
-    expect(
-      wrapper
-        .find(
-          `[data-testid="workbench-state-curve-point"][data-state-point-id="${firstCandidateStatePointId}"]`
-        )
-        .classes()
-    ).toContain('selected');
-    expect(
-      wrapper
-        .find(
-          `[data-testid="workbench-state-curve-frame-group-option"][data-state-point-id="${firstCandidateStatePointId}"]`
-        )
-        .classes()
-    ).toContain('active');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-candidate-value-frame-summary"]')
-        .attributes('data-hit-index')
-    ).toBe('1');
-    const selectedFrameValues = wrapper
-      .find('[data-testid="workbench-candidate-value-frame-summary-values"]')
-      .text();
-    expect(selectedFrameValues).toContain('HP 2,500 raw-param');
-    expect(selectedFrameValues).toContain('韧性 7,000 raw-field');
-    expect(selectedFrameValues).toContain('能量 2,700 raw-field');
-    const selectedFrameSource = wrapper
-      .find('[data-testid="workbench-candidate-value-frame-summary-source"]')
-      .text();
-    expect(selectedFrameSource).toContain('hitSkill 10900101');
-    expect(selectedFrameSource).toContain('109001081');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
-        )
-        .attributes('disabled')
-    ).toBeUndefined();
-    const selectedFrameDetailRows = wrapper.findAll(
-      '[data-testid="workbench-candidate-value-frame-detail-row"]'
-    );
-    expect(selectedFrameDetailRows).toHaveLength(3);
-    const hpFrameDetail = wrapper.find(
-      '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
-    );
-    expect(hpFrameDetail.attributes('data-candidate-count')).toBe('4');
-    expect(hpFrameDetail.attributes('data-source-frame-index')).toBe('12');
-    expect(hpFrameDetail.text()).toContain('HP参数候选');
-    expect(hpFrameDetail.text()).toContain('2,500 raw-param');
-    expect(hpFrameDetail.text()).toContain(
-      '样本 1,000/1,800/1,900/2,500 · 候选 4'
-    );
-    expect(hpFrameDetail.text()).toContain(
-      '帧 src12 / disp12 / local12 / chain0 / abs12'
-    );
-    expect(hpFrameDetail.attributes('data-element-detail-count')).toBe('2');
-    expect(hpFrameDetail.text()).toContain(
-      '109001306 HP1,000/1,800/2,500 函数f1:G/10000/f2:self.ATK[0]*A/10000 槽A覆盖1,600-3,360/G直连10,000 韧性7,000 能量2,700/宠物10,399/间隔9,999'
-    );
-    expect(hpFrameDetail.text()).toContain(
-      '109001081 HP1,000/1,900/2,500 函数f1:G/10000/f2:self.ATK[0]*A/10000 槽A覆盖1,600-3,360/G直连10,000 韧性7,000 能量2,700/宠物10,399/间隔9,999'
-    );
-    const elementComparison = wrapper.find(
-      '[data-testid="workbench-candidate-element-comparison"]'
-    );
-    expect(elementComparison.exists()).toBe(true);
-    const elementComparisonRows = wrapper.findAll(
-      '[data-testid="workbench-candidate-element-comparison-row"]'
-    );
-    expect(elementComparisonRows).toHaveLength(2);
-    const element109001306Row = elementComparisonRows.find(
-      row => row.attributes('data-element-config-id') === '109001306'
-    );
-    expect(element109001306Row).toBeTruthy();
-    expect(element109001306Row.text()).toContain('109001306');
-    expect(element109001306Row.text()).toContain('1,000/1,800/2,500');
-    expect(element109001306Row.text()).toContain(
-      'f1:G/10000/f2:self.ATK[0]*A/10000'
-    );
-    expect(element109001306Row.text()).toContain(
-      'A覆盖1,600-3,360/G直连10,000'
-    );
-    expect(element109001306Row.text()).toContain('7,000');
-    expect(element109001306Row.text()).toContain(
-      '能量2,700/宠物10,399/间隔9,999'
-    );
-    expect(element109001306Row.text()).toContain('function组合待验证');
-    expect(element109001306Row.text()).toContain('等级覆盖待验证:1');
-    expect(element109001306Row.text()).toContain('每hit倍率待分配');
-    expect(element109001306Row.attributes('title')).toContain(
-      '函数 f1:G/10000/f2:self.ATK[0]*A/10000'
-    );
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="5"]'
-        )
-        .attributes('data-frame-label')
-    ).toBe('3s4f');
-    await wrapper
-      .find(
-        '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
-      )
-      .trigger('click');
-    await nextTick();
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
-        )
-        .classes()
-    ).toContain('active');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-state-curve-focus-selected"]')
-        .classes()
-    ).toContain('active');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-state-curves"] .source-heading strong')
-        .text()
-    ).toBe('1');
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-marker"]'
-      )
-    ).toHaveLength(3);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-curve"]'
-      )
-    ).toHaveLength(3);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
-      )
-    ).toHaveLength(1);
-    await wrapper
-      .find(
-        '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
-      )
-      .trigger('click');
-    await nextTick();
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-marker"]'
-      )
-    ).toHaveLength(15);
-    expect(
-      wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
-    ).toContain('active');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-state-curves"] .source-heading strong')
-        .text()
-    ).toBe('16');
-    await wrapper
-      .find(
-        '[data-testid="workbench-candidate-value-toggle"][data-series-key="hpDamageFormulaParamCandidate"]'
-      )
-      .setValue(false);
-    await nextTick();
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-marker"]'
-      )
-    ).toHaveLength(10);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-candidate-value-curve"]'
-      )
-    ).toHaveLength(2);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
-        )
-        .exists()
-    ).toBe(false);
-    expect(
-      wrapper
-        .find('[data-testid="workbench-candidate-value-frame-summary-values"]')
-        .text()
-    ).not.toContain('HP');
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-candidate-value-frame-detail-row"]'
-      )
-    ).toHaveLength(2);
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
-        )
-        .exists()
-    ).toBe(false);
+    ).toHaveLength(0);
     await wrapper
       .find(
         '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="generation"]'
@@ -7406,7 +7012,7 @@ describe('Workbench view', () => {
     expect(placeholderPoints[0].text()).toContain('action-result-placeholder');
   });
 
-  it('shows Hanyouyou summon target candidates in per-hit workbench evidence', async () => {
+  it('keeps Hanyouyou summon target candidates in secondary analysis evidence', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -7435,47 +7041,13 @@ describe('Workbench view', () => {
     expect(text).toContain('状态曲线');
     expect(text).toContain('候选 4点 Δ6,400-18,000 Σ44,300');
     expect(
+      wrapper.findAll('[data-testid="workbench-candidate-value-chart-row"]')
+    ).toHaveLength(3);
+    expect(
       wrapper.findAll(
         '[data-testid="workbench-timeline-candidate-value-marker"]'
       )
-    ).toHaveLength(12);
-
-    const hit4Hotspot = wrapper.find(
-      '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="4"]'
-    );
-    expect(hit4Hotspot.exists()).toBe(true);
-    await hit4Hotspot.trigger('click');
-    await nextTick();
-
-    expect(
-      wrapper
-        .find('[data-testid="workbench-candidate-value-frame-summary-source"]')
-        .text()
-    ).toContain('召唤目标 480059->48005901 · 触发候选帧 0/1/4/25/34/43');
-    const hpFrameDetail = wrapper.find(
-      '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
-    );
-    expect(hpFrameDetail.text()).toContain(
-      '101003156 召唤目标480059->48005901'
-    );
-    expect(hpFrameDetail.text()).toContain(
-      '101003182 召唤目标480059->48005901'
-    );
-
-    const comparisonRows = wrapper.findAll(
-      '[data-testid="workbench-candidate-element-comparison-row"]'
-    );
-    const summonRow = comparisonRows.find(
-      row => row.attributes('data-element-config-id') === '101003156'
-    );
-    expect(summonRow).toBeTruthy();
-    expect(summonRow.text()).toContain('召唤触发候选待确认');
-    expect(summonRow.attributes('title')).toContain(
-      '召唤目标 480059->48005901'
-    );
-    expect(summonRow.attributes('title')).toContain(
-      '召唤候选帧 0/1/4/25/34/43'
-    );
+    ).toHaveLength(0);
   });
 
   it('shows the selected actor current-rank attribute panel', async () => {
@@ -8648,6 +8220,39 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('SWITCH');
     expect(wrapper.text()).toContain('末音 -> 寒悠悠');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+    const controlledActorTimeline = () =>
+      wrapper
+        .getComponent(TimelineGridPreview)
+        .props('controlledActorTimeline');
+    const switchBlock = () =>
+      wrapper.get(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+      );
+    expect(controlledActorTimeline()).toMatchObject({
+      initialActor: { characterId: 109001 },
+      finalActor: { characterId: 101003 },
+      summary: { transitionCount: 1, intervalCount: 2 },
+    });
+    const initialSwitchFrame =
+      controlledActorTimeline().transitions[0].frameIndex;
+
+    await switchBlock().trigger('keydown', { key: 'ArrowRight' });
+    await nextTick();
+    expect(controlledActorTimeline().transitions[0].frameIndex).toBe(
+      initialSwitchFrame + 1
+    );
+
+    await switchBlock().trigger('keydown', { key: 'Delete' });
+    await nextTick();
+    expect(controlledActorTimeline().summary).toMatchObject({
+      transitionCount: 0,
+      intervalCount: 1,
+    });
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(controlledActorTimeline().transitions[0].frameIndex).toBe(
+      initialSwitchFrame + 1
+    );
 
     const nextSecondary = workbenchSeed.gameData.characters.find(
       character =>
@@ -8663,6 +8268,26 @@ describe('Workbench view', () => {
         .value
     ).toBe(String(nextSecondary.id));
     expect(wrapper.text()).toContain(`末音 -> ${nextSecondary.name}`);
+
+    const tertiaryCharacterId = Number(
+      wrapper.find('[data-testid="workbench-tertiary-character-select"]')
+        .element.value
+    );
+    await wrapper
+      .find('[data-testid="workbench-initial-controlled-actor-select"]')
+      .setValue(String(tertiaryCharacterId));
+    await nextTick();
+    expect(controlledActorTimeline().initialActor.characterId).toBe(
+      tertiaryCharacterId
+    );
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(controlledActorTimeline().initialActor.characterId).toBe(109001);
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    await nextTick();
+    expect(controlledActorTimeline().initialActor.characterId).toBe(
+      tertiaryCharacterId
+    );
   });
 
   it('renders the fixed team topology and keeps annotations on a system lane', async () => {

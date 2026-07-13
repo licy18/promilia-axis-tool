@@ -426,11 +426,13 @@
           :timeline-entry-catalog="timelineEntryCatalog"
           :timeline-entry-default-actor-id="actionLibraryActor.id"
           :active-actor-character-id="actionLibraryCharacterId"
-          :candidate-value-chart="simulationResult.candidateValueSeries.chart"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "
           :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"
+          :controlled-actor-timeline="
+            simulationResult.runtimeOutputs.controlledActorTimeline
+          "
           :runtime-state-point-contexts="runtimeStatePointContexts"
           :duration-ms="scenario.time.durationMs"
           :cursor-frame-index="timelineCursorFrameIndex"
@@ -790,8 +792,10 @@
                 ? selectedTimelineIdentity.characterId
                 : null
             "
+            :controlled-actor-character-id="controlledActorCharacterId"
             @update-team-slot="updateTeamSlot"
             @update-actor-config="updateActorConfig"
+            @update-initial-controlled-actor="updateInitialControlledActor"
           />
         </div>
 
@@ -899,9 +903,11 @@
         :timeline-topology="project.metadata.timelineTopology"
         :kibos="loadoutOptions.kibos"
         :actions="scenario.actions"
-        :candidate-value-chart="simulationResult.candidateValueSeries.chart"
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"
+        :controlled-actor-timeline="
+          simulationResult.runtimeOutputs.controlledActorTimeline
+        "
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
@@ -1004,6 +1010,7 @@ import {
   normalizeWorkbenchTeamSlots,
 } from '../domain/workbenchProjectFactory';
 import { ACTION_TYPES } from '../domain/projectSchema';
+import { normalizeInitialRuntimeState } from '../domain/initialRuntimeState';
 import {
   createWorkbenchTimelineBatchLaneMovePlan,
   createWorkbenchTimelineEntry,
@@ -1358,6 +1365,12 @@ const activeWorkbenchScenario = computed(() =>
   getActiveWorkbenchScenario(scenarioWorkspace.value)
 );
 const runtimeOutputs = computed(() => simulationResult.value.runtimeOutputs);
+const controlledActorCharacterId = computed(
+  () =>
+    initialRuntimeState.value?.controlledActor?.characterId ??
+    teamSlots.value[0]?.characterId ??
+    ''
+);
 const runtimeStatePointContexts = computed(() =>
   createRuntimeStatePointContexts(runtimeOutputs.value)
 );
@@ -2238,6 +2251,7 @@ function updateSelection(patch, options = {}) {
     previousTeamSlots,
     teamSlots.value
   );
+  remapInitialControlledActor(teamSlotCharacterRemap);
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     actorConfigs.value,
     nextSelection,
@@ -2287,6 +2301,49 @@ function updateSelection(patch, options = {}) {
   }
 
   markDraftDirty();
+}
+
+function updateInitialControlledActor(characterId) {
+  const actor = scenario.value.actors.find(
+    item => Number(item.characterId) === Number(characterId)
+  );
+  if (
+    !actor ||
+    actor.id === initialRuntimeState.value?.controlledActor?.actorId
+  ) {
+    return;
+  }
+  clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
+  initialRuntimeState.value = normalizeInitialRuntimeState({
+    ...(initialRuntimeState.value ?? {}),
+    controlledActor: {
+      actorId: actor.id,
+      characterId: actor.characterId,
+      actorName: actor.name,
+    },
+  });
+  actionLibraryCharacterId.value = Number(actor.characterId);
+  markDraftDirty();
+}
+
+function remapInitialControlledActor(characterRemap) {
+  const controlledActor = initialRuntimeState.value?.controlledActor;
+  const nextCharacterId = characterRemap.get(
+    Number(controlledActor?.characterId)
+  );
+  if (nextCharacterId == null) return;
+  const character = workbenchSeed.gameData.characters.find(
+    item => Number(item.id) === Number(nextCharacterId)
+  );
+  initialRuntimeState.value = normalizeInitialRuntimeState({
+    ...initialRuntimeState.value,
+    controlledActor: {
+      actorId: `actor-${nextCharacterId}`,
+      characterId: nextCharacterId,
+      actorName: character?.name ?? null,
+    },
+  });
 }
 
 function updateAction(patch) {

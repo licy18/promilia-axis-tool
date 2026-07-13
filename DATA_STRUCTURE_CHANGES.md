@@ -27353,3 +27353,37 @@ selectedActionId = ""          # 空方案无选中动作
 `createWorkbenchProject()` 接受 `actions: []`，compiler 与 runtime 输出零动作、零事件以及完整初始状态曲线。删除单个动作、多选动作或整个生成批次都可以产生空列表；无选中动作时，新增入口从当前动作库角色与方案选择推导首个动作的默认上下文。
 
 本地草稿、JSON、分享链接和 PNG 继续使用现有字段，因此无需迁移。3 条角色能量轴、3 条奇波能量轴与敌人 HP/韧性在空方案中均保持全长初始平线；奇波能量仍为 `tracking-only / unapplied`。
+
+## 425. Controlled actor state and runtime timeline
+
+`AzPrInitialRuntimeState` 从 v1 升级为 v2，新增显式初始前台；旧草稿或导入项目缺失该字段时，由固定队伍槽位 1 合成兼容值：
+
+```text
+initialRuntimeState.controlledActor
+  actorId
+  characterId
+  actorName
+  baselineStatus = baseline-project-initial-controlled-actor
+                 | baseline-inherited-from-cycle-boundary
+```
+
+运行时新增补充合同 `AzPrControlledActorTimeline` v1：
+
+```text
+controlledActorTimeline
+  initialActor / finalActor
+  transitions[]
+    actionId
+    frameIndex / timeMs
+    sourceActor / beforeActor / targetActor / afterActor
+    status
+    applied
+  intervals[]
+    actorId / characterId
+    startFrameIndex / endFrameIndex
+    sourceTransitionId
+```
+
+`AzPrThreeValueRuntimeOutputs` 从 v3 升级为 v4，并通过 `supplementalOutputNames = [controlledActorTimeline]` 暴露该时间状态；既有六项 canonical output、三值 delta、6 条能量轴和 output count 均不改变。切人只更新控制身份，不写入 HP、韧性或能量轨道。
+
+循环边界使用 `strictlyBefore` 读取边界前一刻的受控角色，避免把恰好位于边界的切人同时应用到上下游。方案复制、本地草稿、JSON、分享链接和 PNG 继续序列化现有 `initialRuntimeState` 与 action draft，旧载体由 normalization 自动迁移，无需新增项目 schema 版本。

@@ -5142,9 +5142,31 @@ describe('first vertical slice simulation', () => {
       payload: {
         fromActorName: '末音',
         targetActorName: '寒悠悠',
+        afterActorName: '寒悠悠',
+        transitionStatus: 'controlled-actor-switch-applied',
+        transitionApplied: true,
         note: '切换至寒悠悠',
       },
     });
+    expect(result.runtimeOutputs.controlledActorTimeline).toMatchObject({
+      initialActor: { characterId: 109001, actorName: '末音' },
+      finalActor: { characterId: 101003, actorName: '寒悠悠' },
+      summary: {
+        transitionCount: 1,
+        appliedTransitionCount: 1,
+        intervalCount: 2,
+      },
+    });
+    expect(
+      result.runtimeOutputs.controlledActorTimeline.intervals.map(interval => [
+        interval.characterId,
+        interval.startFrameIndex,
+        interval.endFrameIndex,
+      ])
+    ).toEqual([
+      [109001, 0, 96],
+      [101003, 96, 1800],
+    ]);
     expect(result.eventLog.map(event => event.type)).not.toContain(
       'DAMAGE_SKIPPED'
     );

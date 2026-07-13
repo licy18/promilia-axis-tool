@@ -10,6 +10,7 @@ import {
 } from './threeValueRuntimeHitTransactions';
 import { createEffectRuntimeTimeline } from './effectRuntimeTimeline';
 import { createKiboEnergyRuntimeCurves } from './kiboEnergyRuntimeCurves';
+import { createControlledActorTimeline } from './controlledActorTimeline';
 import {
   createThreeValueRuntimeEnemyBaseline,
   createThreeValueRuntimeSelfEnergyBaseline,
@@ -26,7 +27,11 @@ export function createThreeValueRuntimeProjection({
   threeValueMechanicsAdapterRegistry,
   effectTimeline,
   actionExecutionPlan,
+  controlledActorTimeline,
 }) {
+  const runtimeControlledActorTimeline =
+    controlledActorTimeline ??
+    createControlledActorTimeline({ scenario, actionExecutionPlan });
   const runtimeInput = createThreeValueRuntimeInput({
     generationOutputs,
     runtimeInputSource,
@@ -96,6 +101,7 @@ export function createThreeValueRuntimeProjection({
     hitTransactions,
     effectTimeline: runtimeEffectTimeline,
     actionExecutionPlan,
+    controlledActorTimeline: runtimeControlledActorTimeline,
   });
   const outputContract = createThreeValueRuntimeOutputContract({
     runtimeInput,
@@ -124,6 +130,7 @@ export function createThreeValueRuntimeProjection({
     hitTransactions,
     effectTimeline: runtimeEffectTimeline,
     actionExecutionPlan,
+    controlledActorTimeline: runtimeControlledActorTimeline,
   });
 
   return {
@@ -151,6 +158,7 @@ export function createThreeValueRuntimeProjection({
     hitTransactions,
     effectTimeline: runtimeEffectTimeline,
     actionExecutionPlan,
+    controlledActorTimeline: runtimeControlledActorTimeline,
     enemyStateCurve,
     selfEnergyCurveByActor,
     kiboEnergyCurveBySlot,
@@ -170,6 +178,7 @@ function createThreeValueRuntimeOutputs({
   hitTransactions,
   effectTimeline,
   actionExecutionPlan,
+  controlledActorTimeline,
 }) {
   const outputConsistency = createRuntimeOutputConsistency({
     outputContract,
@@ -188,11 +197,12 @@ function createThreeValueRuntimeOutputs({
     resourceCurves,
     hitTransactions,
     effectTimeline,
+    controlledActorTimeline,
     summary,
     outputConsistency,
   });
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     sourceKind: 'azpr-three-value-runtime-outputs',
     status:
       outputContract.status === 'runtime-output-contract-ready'
@@ -206,6 +216,7 @@ function createThreeValueRuntimeOutputs({
       resources: 'resourceCurves',
       stateSnapshots: 'stateCurves.snapshots',
     },
+    supplementalOutputNames: ['controlledActorTimeline'],
     outputContract,
     outputConsumerContract,
     consumerContract: outputConsumerContract,
@@ -217,6 +228,7 @@ function createThreeValueRuntimeOutputs({
     hitTransactions,
     effectTimeline,
     actionExecutionPlan,
+    controlledActorTimeline,
     summary,
     outputConsistency,
     outputs: {
@@ -225,6 +237,7 @@ function createThreeValueRuntimeOutputs({
       resourceCurves,
       hitTransactions,
       effectTimeline,
+      controlledActorTimeline,
       resources: resourceCurves,
       summary,
     },
@@ -241,6 +254,10 @@ function createThreeValueRuntimeOutputs({
         outputContract.summary.executionPlanExecutedActionCount,
       executionPlanSkippedActionCount:
         outputContract.summary.executionPlanSkippedActionCount,
+      controlledActorTransitionCount:
+        controlledActorTimeline?.summary?.transitionCount ?? 0,
+      controlledActorIntervalCount:
+        controlledActorTimeline?.summary?.intervalCount ?? 0,
       runtimeCalculatorInvocationCount:
         outputContract.summary.runtimeCalculatorInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
@@ -408,9 +425,7 @@ function createRuntimeOutputConsistency({
     ...(resourceCurves?.curvesByActor ?? []).flatMap(
       actor => actor.points ?? []
     ),
-    ...(resourceCurves?.curvesByKibo ?? []).flatMap(
-      kibo => kibo.points ?? []
-    ),
+    ...(resourceCurves?.curvesByKibo ?? []).flatMap(kibo => kibo.points ?? []),
   ];
   const checks = {
     summarySimLogCount: summary.simLogCount === simLogCount,

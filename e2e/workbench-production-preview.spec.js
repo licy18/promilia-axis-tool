@@ -110,6 +110,110 @@ test('[stage-9a-timeline-topology] renders three actor groups and eight state cu
   await timeline.screenshot({ path: 'reports/stage-9a-timeline-narrow.png' });
 });
 
+test('[controlled-actor-timeline] edits, reviews, and restores the active character at exact frames', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const controlledActorReadout = page.getByTestId(
+    'workbench-controlled-actor-readout'
+  );
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+    )
+  ).toHaveCount(3);
+
+  await openActorInspector(page, 109001);
+  const initialActorSelect = page.getByTestId(
+    'workbench-initial-controlled-actor-select'
+  );
+  await expect(initialActorSelect).toHaveValue('109001');
+  await initialActorSelect.selectOption('101007');
+  await expect(controlledActorReadout).toHaveAttribute(
+    'data-character-id',
+    '101007'
+  );
+  await closeInspectorIfVisible(page);
+
+  await page.getByTestId('workbench-add-switch-action').click();
+  const switchAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await expect(switchAction).toBeVisible();
+  await switchAction.click();
+  await page.getByTestId('workbench-start-frame-input').fill('120');
+  await switchAction.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '120');
+  await expect(controlledActorReadout).toHaveAttribute(
+    'data-character-id',
+    '109001'
+  );
+  await expect(
+    timeline.getByTestId('workbench-controlled-actor-interval')
+  ).toHaveCount(2);
+
+  await switchAction.press('ArrowRight');
+  await switchAction.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '121');
+  await switchAction.press('Delete');
+  await expect(switchAction).toHaveCount(0);
+  await expect(controlledActorReadout).toHaveAttribute(
+    'data-character-id',
+    '101007'
+  );
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(switchAction).toBeVisible();
+  await switchAction.click();
+  await expect(controlledActorReadout).toHaveAttribute(
+    'data-character-id',
+    '109001'
+  );
+  await page.getByTestId('workbench-save-draft').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已保存草稿'
+  );
+
+  await page.reload();
+  await expect(timeline).toBeVisible();
+  await expect(switchAction).toBeVisible();
+  await switchAction.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '121');
+  await expect(controlledActorReadout).toHaveAttribute(
+    'data-character-id',
+    '109001'
+  );
+  await page.screenshot({
+    path: 'reports/controlled-actor-timeline-desktop.png',
+    fullPage: true,
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(timeline).toBeVisible();
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await page.screenshot({
+    path: 'reports/controlled-actor-timeline-narrow.png',
+    fullPage: true,
+  });
+});
+
 test('[stage-9b-runtime-step-curves] keeps actor resources and enemy states aligned through edit operations', async ({
   page,
 }) => {
@@ -1215,12 +1319,12 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   const insertedSkillAction = page.locator(
     '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
   );
-  await insertedSkillAction.dragTo(secondActorLane, {
-    targetPosition: { x: 760, y: 28 },
-  });
   if (await palette.isVisible()) {
     await paletteToggle.click();
   }
+  await insertedSkillAction.dragTo(secondActorLane, {
+    targetPosition: { x: 760, y: 28 },
+  });
   await expect(insertedSkillAction).toHaveAttribute(
     'data-lane-id',
     'actor-101003'

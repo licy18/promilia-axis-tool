@@ -1,17 +1,30 @@
-export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 1;
+export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 2;
 export const INITIAL_RUNTIME_STATE_CONTRACT_NAME = 'AzPrInitialRuntimeState';
 
-export function normalizeInitialRuntimeState(value) {
-  if (!value || typeof value !== 'object') {
+export function normalizeInitialRuntimeState(value, defaults = {}) {
+  if ((!value || typeof value !== 'object') && !defaults.controlledActor) {
     return null;
   }
 
-  const enemy = normalizeInitialEnemyState(value.enemy);
-  const selfEnergyByActor = normalizeInitialSelfEnergyStates(
-    value.selfEnergyByActor
+  const sourceValue = value && typeof value === 'object' ? value : {};
+  const source = normalizeInitialRuntimeSource(sourceValue.source);
+  const controlledActor = normalizeInitialControlledActor(
+    sourceValue.controlledActor ?? defaults.controlledActor,
+    Boolean(source.boundaryId)
   );
-  const activeEffects = normalizeInitialActiveEffects(value.activeEffects);
-  if (!enemy && selfEnergyByActor.length === 0 && activeEffects.length === 0) {
+  const enemy = normalizeInitialEnemyState(sourceValue.enemy);
+  const selfEnergyByActor = normalizeInitialSelfEnergyStates(
+    sourceValue.selfEnergyByActor
+  );
+  const activeEffects = normalizeInitialActiveEffects(
+    sourceValue.activeEffects
+  );
+  if (
+    !controlledActor &&
+    !enemy &&
+    selfEnergyByActor.length === 0 &&
+    activeEffects.length === 0
+  ) {
     return null;
   }
 
@@ -19,17 +32,44 @@ export function normalizeInitialRuntimeState(value) {
     schemaVersion: INITIAL_RUNTIME_STATE_SCHEMA_VERSION,
     sourceKind: 'azpr-initial-runtime-state',
     contractName: INITIAL_RUNTIME_STATE_CONTRACT_NAME,
-    status: 'initial-runtime-state-inherited',
-    source: {
-      sourceScenarioId: optionalText(value.source?.sourceScenarioId),
-      sourceScenarioName: optionalText(value.source?.sourceScenarioName),
-      boundaryId: optionalText(value.source?.boundaryId),
-      boundaryTimeMs: nonNegativeNumberOrNull(value.source?.boundaryTimeMs),
-    },
+    status: source.boundaryId
+      ? 'initial-runtime-state-inherited'
+      : 'initial-runtime-state-ready',
+    source,
+    controlledActor,
     enemy,
     selfEnergyByActor,
     activeEffects,
     applied: true,
+  };
+}
+
+export function createInitialControlledActorState(actor) {
+  return normalizeInitialControlledActor(actor, false);
+}
+
+function normalizeInitialRuntimeSource(value) {
+  return {
+    sourceScenarioId: optionalText(value?.sourceScenarioId),
+    sourceScenarioName: optionalText(value?.sourceScenarioName),
+    boundaryId: optionalText(value?.boundaryId),
+    boundaryTimeMs: nonNegativeNumberOrNull(value?.boundaryTimeMs),
+  };
+}
+
+function normalizeInitialControlledActor(value, inherited) {
+  const actorId = optionalText(value?.actorId);
+  const characterId = numberOrNull(value?.characterId);
+  if (!actorId && characterId == null) {
+    return null;
+  }
+  return {
+    actorId: actorId ?? `actor-${characterId}`,
+    characterId,
+    actorName: optionalText(value?.actorName),
+    baselineStatus: inherited
+      ? 'baseline-inherited-from-cycle-boundary'
+      : 'baseline-project-initial-controlled-actor',
   };
 }
 

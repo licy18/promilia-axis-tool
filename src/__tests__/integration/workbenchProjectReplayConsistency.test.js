@@ -227,6 +227,19 @@ describe('Workbench project replay consistency', () => {
         appliedToCalculators: false,
       }),
     ]);
+    expect(baseline.runtimeOutputs.controlledActorTimeline).toMatchObject({
+      initialActor: {
+        characterId: sourceState.teamSlots[0].characterId,
+      },
+      finalActor: {
+        characterId: sourceState.teamSlots[1].characterId,
+      },
+      summary: {
+        transitionCount: 1,
+        appliedTransitionCount: 1,
+        intervalCount: 2,
+      },
+    });
     expect(baseline.mechanicsProfileSelection).toMatchObject({
       sourceKind: 'project-persisted-mechanics-profile-selection',
       requestedProfileId: 'azpr-replay-equivalent-v1',
@@ -297,6 +310,15 @@ function createReplaySourceState() {
     timingSource: 'azpr-unity-skill-control-root',
     needsTimingData: false,
     note: 'replay-kibo-event',
+  });
+  state.actionDrafts.push({
+    id: 'action-switch',
+    type: 'switch',
+    actorCharacterId: state.teamSlots[0].characterId,
+    targetCharacterId: state.teamSlots[1].characterId,
+    startMs: 2500,
+    durationMs: 600,
+    note: 'replay-controlled-actor-switch',
   });
   state.actionRelations = [
     {
