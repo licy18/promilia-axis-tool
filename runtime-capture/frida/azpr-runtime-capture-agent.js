@@ -41,6 +41,9 @@ rpc.exports = {
     emittedEventCount = 0;
 
     installRecoverSpHooks();
+    if (captureConfig.slotId && Number(captureConfig.kiboId) > 0) {
+      installKiboEnergyHooks();
+    }
     installToughnessHooks();
     sendStatus('capture-agent-started', {
       moduleName: captureModule.name,
@@ -87,6 +90,60 @@ rpc.exports = {
     return stopCapture();
   },
 };
+
+function installKiboEnergyHooks() {
+  attachMethod('PetEntity.PetUltimateCdTime', {
+    onEnter(args) {
+      const petData = readNativePointerField(args[0], 'PetEntity.data');
+      const observedKiboId = readS32Field(
+        petData,
+        'BaseData.<configId>k__BackingField'
+      );
+      if (observedKiboId !== Number(captureConfig.kiboId)) {
+        this.kiboObservation = null;
+        return;
+      }
+      this.kiboObservation = {
+        petEntityPointer: args[0].toString(),
+        petEntityId: readS32Field(
+          petData,
+          'BaseData.<entityId>k__BackingField'
+        ),
+        observedKiboId,
+        totalTimePointer: args[1],
+      };
+    },
+    onLeave() {
+      const observation = this.kiboObservation;
+      if (!observation) {
+        return;
+      }
+      const cdTime = readXmmFloat(this.context, 'xmm0');
+      const totalTime = safeRead(
+        () => roundNumber(observation.totalTimePointer.readFloat()),
+        null
+      );
+      emitRecord({
+        recordType: 'event',
+        captureSessionId: captureConfig.captureSessionId,
+        eventType: 'pet-ultimate-cooldown-observed',
+        timeMs: elapsedTimeMs(),
+        actionId: captureConfig.actionId,
+        actorId: captureConfig.actorId,
+        targetId: captureConfig.targetId,
+        slotId: captureConfig.slotId,
+        kiboId: observation.observedKiboId,
+        petEntityPointer: observation.petEntityPointer,
+        petEntityId: observation.petEntityId,
+        api: 'PetUltimateCdTime',
+        cdTime,
+        totalTime,
+        ready: cdTime != null ? cdTime <= 0 : null,
+        threadId: Process.getCurrentThreadId(),
+      });
+    },
+  });
+}
 
 function installRecoverSpHooks() {
   attachMethod('DamageElement.RecoverSP', {
@@ -538,6 +595,13 @@ function readPointerField(objectPointer, key) {
   return safeRead(
     () => objectPointer.add(requireOffset(key)).readPointer().toString(),
     null
+  );
+}
+
+function readNativePointerField(objectPointer, key) {
+  return safeRead(
+    () => objectPointer.add(requireOffset(key)).readPointer(),
+    ptr(0)
   );
 }
 

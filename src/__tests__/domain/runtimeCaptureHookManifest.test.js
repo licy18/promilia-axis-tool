@@ -7,7 +7,7 @@ describe('runtime capture hook manifest', () => {
       schemaVersion: 1,
       game: 'azur-promilia',
       kind: 'runtime-capture-hook-manifest',
-      manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v1',
+      manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
       source: {
         kind: 'il2cpp-dump-cs',
         size: 97428254,
@@ -23,9 +23,9 @@ describe('runtime capture hook manifest', () => {
         },
       },
       summary: {
-        methodCount: 9,
-        fieldCount: 27,
-        energyMethodCount: 6,
+        methodCount: 10,
+        fieldCount: 30,
+        energyMethodCount: 7,
         toughnessMethodCount: 3,
         realRuntimeCaptureAvailable: false,
       },
@@ -51,6 +51,7 @@ describe('runtime capture hook manifest', () => {
       'DamageElement.RecoverSP': '0x138EEE0',
       'SPSystem.OnTransmit': '0x14837F0',
       'SPSystem.RecoverSP': '0x1483F40',
+      'PetEntity.PetUltimateCdTime': '0x152D9F0',
       'FormulaUtility.GetOutputWeaknessDamage': '0x1885FF0',
       'FormulaUtility.WeaknessPointChange': '0x188A6B0',
     });
@@ -82,6 +83,9 @@ describe('runtime capture hook manifest', () => {
       'BaseElement.<elementId>k__BackingField': '0x120',
       'BaseElement.<skillId>k__BackingField': '0x12C',
       'BaseElement.p_sourceID': '0x38',
+      'PetEntity.data': '0x1C0',
+      'BaseData.<entityId>k__BackingField': '0x128',
+      'BaseData.<configId>k__BackingField': '0x140',
     });
   });
 });

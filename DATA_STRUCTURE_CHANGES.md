@@ -27412,3 +27412,20 @@ AzPrActionEffectRelationGraph v1
 `AzPrThreeValueRuntimeOutputs` 与 consumer schema 从 v4 升级为 v5，并把 `actionEffectRelationGraph` 加入 `supplementalOutputNames`；既有 canonical outputs、项目载体和 calculator 输入不变。效果事件携带 `relationId / relationKind`，时间轴、效果复盘和日志因此可以共享同一选择身份。
 
 关系图是从现有项目字段确定性派生的，不作为第二份持久化真相。本地草稿、JSON、分享链接和 PNG 恢复后会重建同一 sequence/trigger/refresh/consume 图；旧关系缺失 `kind` 时继续按 `sequence` 兼容。3 条角色能量曲线和 3 条奇波能量曲线仍分别位于 `resourceCurves.curvesByActor / curvesByKibo`，总计 6 条，关系图不会写入任何能量、HP 或韧性轨道。
+
+## 427. Kibo readiness runtime observations
+
+`AzPrKiboEnergyRuntimeCurves` 从 v2 升级为 v3。项目 schema 与持久化字段不变；既有 `metadata.runtimeSampleCaptures[].events[]` 可新增以下观测事件：
+
+```text
+eventType = pet-ultimate-cooldown-observed
+slotId / actorId / kiboId
+petEntityId / petEntityPointer
+api = PetUltimateCdTime
+frameIndex? / timeMs?
+cdTime / totalTime / ready
+```
+
+运行时只接受与当前 `timelineTopology.actorGroups[]` 完全匹配、具有实际 PetEntity 身份且冷却值自洽的事件；同一帧保留最后一次观测。曲线点使用 `trackKey = kiboEnergyChange`，保存原始冷却，并通过 `stateSnapshot.after.kiboEnergy.currentValue = totalTime - clamp(cdTime, 0, totalTime)` 给时间轴提供绝对状态。观测只应用于 tracking 曲线，`appliedToCalculators = false`；`RecoverSPArgs.petDelta` 不会被转换为奇波曲线点。
+
+受控 hook manifest 从 v1 升级为 v2，新增 `PetEntity.PetUltimateCdTime`、`PetEntity.data`、`BaseData.configId/entityId`。旧 runtime capture 仍可导入；没有新事件时三条奇波曲线保持原有零值 tracking baseline。

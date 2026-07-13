@@ -1464,6 +1464,16 @@ Workbench 现为全部 122 只奇波提供 3 个可编排动作，共 366 个动
 
 下一阶段目标：P3 六资源所有者机制输入检查点。盘点角色 SP 与奇波终极技能就绪进度中已有稳定 AzPr runtime 来源的事件，只把确认输入绑定到对应角色或奇波能量轴；没有稳定来源的奇波能量继续 `tracking-only / unapplied`，不猜测 `totalTime`、倍率或平衡数值。
 
+### P3 六资源所有者机制输入检查点（2026-07-14）
+
+角色 SP 的正式输入保持为已验证 `recover-sp-applied`。奇波侧确认 `PetUltimateCdTime()` 读取 `PetUltraBlink(205)` 与 `PetUltra(206)` 技能槽冷却，而 `RecoverSPArgs.petDelta` 只在 `SPSystem.OnTransmit(0x12F)` 中向奇波实体转发恢复量；两者不能直接等同。受控采集 manifest 已升级为 v2，新增 `PetEntity.PetUltimateCdTime` hook，并读取实际 `PetEntity.data -> BaseData.configId/entityId`。只有实际奇波实体、固定槽位、角色和奇波 ID 全部匹配且 `cdTime/totalTime/ready` 自洽的观测，才写入对应奇波轴。
+
+奇波曲线合同升级为 v3：以 `totalTime - clamp(cdTime, 0, totalTime)` 展示已观测的终极技就绪值，保留原始冷却、总时长、实体和采样身份。该曲线仍为 `tracking-only` 且不进入 calculator；未观测区间、测试期倍率与 `petDelta` 均不伪造状态变化。现有角色 SP、敌人 HP 和韧性结果未改变。
+
+阶段验收为 89 个测试文件、488 条单元/组件测试与 39/39 项 production Playwright；生产引用、Workbench 数据投影和 applied source 审计通过，applied source 仍为 3 条、0 drift、0 compatible-unbound。四个项目/分析二级入口合并为按需 `workbench-project-tools` 块后，Workbench 主块为 333,512B gzip，总 JavaScript 为 738,369B gzip，低于 370,000B/740,000B 发布硬门槛。
+
+下一阶段目标：P3 六资源观测回放一致性。验证方案复制、本地草稿、JSON、分享链接和 PNG 恢复相同角色 SP/奇波就绪所有者、准确帧和曲线结果，并拒绝所有者漂移或不完整生产采样；不新增公式、倍率、校准或碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

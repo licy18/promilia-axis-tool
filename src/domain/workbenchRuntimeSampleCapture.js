@@ -14,6 +14,7 @@ const RECOVER_SP_REQUIRED_EVENT_TYPES = [
   'recover-sp-share-rebroadcast',
 ];
 const TOUGHNESS_REQUIRED_EVENT_TYPES = ['toughness-damage-applied'];
+const KIBO_ENERGY_REQUIRED_EVENT_TYPES = ['pet-ultimate-cooldown-observed'];
 const NON_PRODUCTION_SOURCE_PATTERN =
   /(?:fixture|synthetic|template|mock|example|manual|self[-_ ]?test)/iu;
 
@@ -502,9 +503,13 @@ function createProductionCaptureAudit(capture) {
   const hasToughnessEvents = eventTypes.some(eventType =>
     eventType.startsWith('toughness-')
   );
+  const hasKiboEnergyEvents = eventTypes.some(eventType =>
+    eventType.startsWith('pet-ultimate-')
+  );
   const requiredEventTypes = [
     ...(hasRecoverSpEvents ? RECOVER_SP_REQUIRED_EVENT_TYPES : []),
     ...(hasToughnessEvents ? TOUGHNESS_REQUIRED_EVENT_TYPES : []),
+    ...(hasKiboEnergyEvents ? KIBO_ENERGY_REQUIRED_EVENT_TYPES : []),
   ];
   const missingEventTypes = requiredEventTypes.filter(
     eventType => !eventTypes.includes(eventType)
@@ -520,11 +525,37 @@ function createProductionCaptureAudit(capture) {
       numberOrNull(event.frameIndex) != null ||
       numberOrNull(event.timeMs) != null
   );
-  const sourceIdentityComplete = capture.events.every(
-    event =>
+  const sourceIdentityComplete = capture.events.every(event => {
+    if (event.eventType === 'pet-ultimate-cooldown-observed') {
+      return Boolean(
+        stringOrNull(event.slotId) &&
+        stringOrNull(event.actorId) &&
+        positiveIntegerOrNull(event.kiboId) &&
+        positiveIntegerOrNull(event.petEntityId) &&
+        stringOrNull(event.petEntityPointer)
+      );
+    }
+    return Boolean(
       numberOrNull(event.sourceElementConfigId ?? event.elementConfigId) !=
         null || stringOrNull(event.pathId) != null
-  );
+    );
+  });
+  const eventValuesComplete = capture.events.every(event => {
+    if (event.eventType !== 'pet-ultimate-cooldown-observed') {
+      return true;
+    }
+    const cdTime = numberOrNull(event.cdTime);
+    const totalTime = numberOrNull(event.totalTime);
+    return Boolean(
+      event.api === 'PetUltimateCdTime' &&
+      cdTime != null &&
+      cdTime >= 0 &&
+      totalTime != null &&
+      totalTime > 0 &&
+      typeof event.ready === 'boolean' &&
+      event.ready === (cdTime <= 0)
+    );
+  });
   const captureToolComplete = Boolean(
     stringOrNull(captureTool.name) &&
     stringOrNull(captureTool.version) &&
@@ -556,6 +587,7 @@ function createProductionCaptureAudit(capture) {
       recoverSpSequenceOrdered,
     eventTimingComplete: timingComplete,
     eventSourceIdentityComplete: sourceIdentityComplete,
+    eventValuesComplete,
   };
   const productionEligible = Object.values(checks).every(Boolean);
 
@@ -613,6 +645,11 @@ function numberOrNull(value) {
 function positiveIntegerOrDefault(value, fallback) {
   const numeric = Number(value);
   return Number.isInteger(numeric) && numeric > 0 ? numeric : fallback;
+}
+
+function positiveIntegerOrNull(value) {
+  const numeric = numberOrNull(value);
+  return Number.isInteger(numeric) && numeric > 0 ? numeric : null;
 }
 
 function uniqueStrings(values) {

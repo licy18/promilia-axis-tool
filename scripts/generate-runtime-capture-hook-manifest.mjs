@@ -73,6 +73,13 @@ const TARGET_METHODS = [
     eventTypes: ['recover-sp-applied'],
   },
   {
+    key: 'PetEntity.PetUltimateCdTime',
+    className: 'PetEntity',
+    methodName: 'PetUltimateCdTime',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['pet-ultimate-cooldown-observed'],
+  },
+  {
     key: 'FormulaUtility.GetOutputWeaknessDamage',
     className: 'FormulaUtility',
     methodName: 'GetOutputWeaknessDamage',
@@ -89,6 +96,14 @@ const TARGET_METHODS = [
 ];
 
 const TARGET_FIELDS = [
+  {
+    className: 'BaseData',
+    fieldNames: ['<entityId>k__BackingField', '<configId>k__BackingField'],
+  },
+  {
+    className: 'PetEntity',
+    fieldNames: ['data'],
+  },
   {
     className: 'BaseElement',
     fieldNames: [
@@ -299,7 +314,7 @@ function createManifest({
     schemaVersion: 1,
     game: 'azur-promilia',
     kind: 'runtime-capture-hook-manifest',
-    manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v1',
+    manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
     generatedAt,
     source: {
       kind: 'il2cpp-dump-cs',
@@ -322,7 +337,11 @@ function createManifest({
       methodCount: extracted.methods.length,
       fieldCount: extracted.fields.length,
       energyMethodCount: extracted.methods.filter(method =>
-        method.eventTypes.some(eventType => eventType.startsWith('recover-sp-'))
+        method.eventTypes.some(
+          eventType =>
+            eventType.startsWith('recover-sp-') ||
+            eventType.startsWith('pet-ultimate-')
+        )
       ).length,
       toughnessMethodCount: extracted.methods.filter(method =>
         method.eventTypes.some(eventType => eventType.startsWith('toughness-'))
@@ -350,6 +369,13 @@ function createManifest({
           'SPSystem.OnTransmit',
           'SPSystem.RecoverSP',
         ],
+      },
+      {
+        key: 'pet-ultimate-readiness-observation',
+        requiredEventTypes: ['pet-ultimate-cooldown-observed'],
+        hookTargets: ['PetEntity.PetUltimateCdTime'],
+        ownerIdentityFields: ['slotId', 'actorId', 'kiboId', 'petEntityId'],
+        observedValueFields: ['cdTime', 'totalTime', 'ready'],
       },
       {
         key: 'toughness-runtime-sequence',

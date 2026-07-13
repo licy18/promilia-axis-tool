@@ -50,6 +50,8 @@ npm run runtime-capture:capture -- `
   --action-id action-0001 `
   --actor-id actor-109001 `
   --target-id enemy-300032 `
+  --slot-id team-slot-1 `
+  --kibo-id 500001 `
   --duration 30 `
   --confirm-controlled-session
 ```
@@ -62,7 +64,10 @@ npm run runtime-capture:capture -- `
 - `SPGETUP(105)` / `SPGETUP_ATK(228)` 的 MyFloat 返回值。
 - `RecoverSPArgs` 构造值、`OnTransmit(0x12F)`、`SPSystem.RecoverSP`。
 - `AliveProperty.SetSp` 的 `spBefore/spAfter`。
+- 可选的 `PetEntity.PetUltimateCdTime` 观测；只有同时传入 `--slot-id` 与 `--kibo-id` 时安装，并通过 `PetEntity.data -> BaseData.configId/entityId` 核对实际奇波实体后记录 `cdTime/totalTime/ready`。
 - `FormulaUtility.WeaknessPointChange` 与 `AliveProperty.SetWeaknessPoint` 的韧性前后值。
+
+`RecoverSPArgs.petDelta` 仍只作为 SP 分享链的来源/诊断字段，不能直接等同于奇波终极技就绪进度。奇波曲线只消费 `pet-ultimate-cooldown-observed`，并要求 `slotId / actorId / kiboId / petEntityId` 与当前项目拓扑完全一致；不提供奇波参数时，现有角色 SP/韧性采集行为不变。
 
 ## JSONL 会话
 
@@ -78,7 +83,7 @@ npm run runtime-capture:capture -- `
   "captureTool": {
     "name": "controlled-il2cpp-capture",
     "version": "1.0.0",
-    "hookManifestId": "azpr-tc-20260709-three-value-runtime-capture-v1"
+    "hookManifestId": "azpr-tc-20260709-three-value-runtime-capture-v2"
   }
 }
 ```
@@ -112,6 +117,8 @@ recover-sp-share-rebroadcast
 
 削韧采样必须包含 `toughness-damage-applied`，并满足 `toughnessBefore - toughnessAfter = toughnessDeltaApplied`。
 
+奇波就绪采样必须包含 `pet-ultimate-cooldown-observed`，并同时记录实际 `petEntityId`、`petEntityPointer`、`kiboId`、`slotId`、`actorId`、`cdTime` 与 `totalTime`。运行时以 `totalTime - clamp(cdTime, 0, totalTime)` 作为同轴就绪展示值；这只是对已观测冷却的显示变换，不进入 calculator，也不推断未观测区间。
+
 ## 规范化
 
 ```powershell
@@ -136,4 +143,4 @@ production audit 要求：
 
 ## 下一步
 
-在获准的受控客户端会话中按 manifest 实施采集，生成第一份非 fixture JSONL。只有该文件通过 `--require-production`、P7-A adapter 和 Workbench 曲线/日志验证后，P7-C 才算完成。
+在获准的受控客户端会话中按 manifest 实施采集，生成第一份包含角色 SP、奇波就绪或韧性的非 fixture JSONL。只有该文件通过 `--require-production`、所有者核对和 Workbench 曲线/日志验证后，生产采样闭环才算完成。

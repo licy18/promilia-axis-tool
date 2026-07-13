@@ -112,7 +112,7 @@ describe('workbench runtime sample capture', () => {
       captureTool: {
         name: 'controlled-il2cpp-capture',
         version: '1.0.0',
-        hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v1',
+        hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
       },
       events: fixture.events.map(event => ({
         ...event,
@@ -138,6 +138,7 @@ describe('workbench runtime sample capture', () => {
             eventSequenceComplete: true,
             eventTimingComplete: true,
             eventSourceIdentityComplete: true,
+            eventValuesComplete: true,
           },
         }),
       ],
@@ -160,6 +161,72 @@ describe('workbench runtime sample capture', () => {
           recoverSpSequenceOrdered: false,
           checks: { eventSequenceComplete: false },
         },
+      ],
+    });
+  });
+
+  it('accepts an exactly owned kibo readiness observation as a production capture', () => {
+    const capture = {
+      schemaVersion: 1,
+      captureSessionId: 'controlled-kibo-session-1',
+      source: 'source-game-runtime-frida-controlled-session',
+      clientRegion: 'TW',
+      clientBuild: 'controlled-build-20260714',
+      captureTool: {
+        name: 'promilia-axis-controlled-frida-capture',
+        version: '1.0.0',
+        hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
+      },
+      events: [
+        {
+          captureSessionId: 'controlled-kibo-session-1',
+          eventType: 'pet-ultimate-cooldown-observed',
+          timeMs: 100,
+          actorId: 'actor-109001',
+          slotId: 'team-slot-1',
+          kiboId: 500001,
+          petEntityId: 70001,
+          petEntityPointer: '0x12345678',
+          api: 'PetUltimateCdTime',
+          cdTime: 12,
+          totalTime: 20,
+          ready: false,
+        },
+      ],
+    };
+
+    expect(createRuntimeSampleCaptureProductionAudit([capture])).toMatchObject({
+      status: 'production-runtime-captures-ready',
+      realCaptureClaimAllowed: true,
+      captureAudits: [
+        expect.objectContaining({
+          requiredEventTypes: ['pet-ultimate-cooldown-observed'],
+          missingEventTypes: [],
+          productionEligible: true,
+        }),
+      ],
+    });
+
+    delete capture.events[0].slotId;
+    expect(createRuntimeSampleCaptureProductionAudit([capture])).toMatchObject({
+      realCaptureClaimAllowed: false,
+      captureAudits: [
+        expect.objectContaining({
+          checks: expect.objectContaining({
+            eventSourceIdentityComplete: false,
+          }),
+        }),
+      ],
+    });
+
+    capture.events[0].slotId = 'team-slot-1';
+    capture.events[0].ready = true;
+    expect(createRuntimeSampleCaptureProductionAudit([capture])).toMatchObject({
+      realCaptureClaimAllowed: false,
+      captureAudits: [
+        expect.objectContaining({
+          checks: expect.objectContaining({ eventValuesComplete: false }),
+        }),
       ],
     });
   });

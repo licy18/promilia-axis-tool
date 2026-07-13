@@ -64,6 +64,92 @@ describe('three value runtime projection', () => {
     });
   });
 
+  it('projects exact-owner kibo readiness observations through runtime outputs', () => {
+    const scenario = {
+      time: { durationMs: 30000 },
+      sourceProject: {
+        metadata: {
+          timelineTopology: {
+            actorGroups: [
+              {
+                slotId: 'team-slot-1',
+                position: 0,
+                actorId: 'actor-001',
+                characterId: 109001,
+                kiboLane: { kiboId: 500001, kiboName: '测试奇波' },
+              },
+            ],
+          },
+        },
+      },
+      enemy: { stats: { maxHp: 1000 }, hpMultiplier: 1 },
+      actors: [
+        {
+          id: 'actor-001',
+          name: '末音',
+          characterId: 109001,
+          loadout: { kiboId: 500001 },
+          stats: { maxSp: 100 },
+        },
+      ],
+      runtimeSampleCaptures: [
+        {
+          captureSessionId: 'controlled-kibo-session-1',
+          events: [
+            {
+              captureSessionId: 'controlled-kibo-session-1',
+              eventType: 'pet-ultimate-cooldown-observed',
+              actorId: 'actor-001',
+              slotId: 'team-slot-1',
+              kiboId: 500001,
+              petEntityId: 70001,
+              petEntityPointer: '0x12345678',
+              api: 'PetUltimateCdTime',
+              frameIndex: 30,
+              timeMs: 500,
+              cdTime: 10,
+              totalTime: 20,
+              ready: false,
+            },
+          ],
+        },
+      ],
+    };
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario,
+      threeValueGenerationLayer: {
+        contract: { name: 'Action -> Hit -> ThreeValueDelta' },
+        deltas: [],
+      },
+    });
+
+    expect(runtimeProjection.kiboEnergyCurveBySlot[0]).toMatchObject({
+      slotId: 'team-slot-1',
+      actorId: 'actor-001',
+      kiboId: 500001,
+      pointCount: 1,
+      applied: true,
+      stateMetric: {
+        initialValue: 0,
+        currentValue: 10,
+        maxValue: 20,
+      },
+    });
+    expect(
+      runtimeProjection.runtimeOutputs.resourceCurves.curvesByKibo[0].points[0]
+    ).toMatchObject({
+      trackKey: 'kiboEnergyChange',
+      frameIndex: 30,
+      stateSnapshot: {
+        after: { kiboEnergy: { currentValue: 10, maxValue: 20 } },
+      },
+    });
+    expect(runtimeProjection.summary).toMatchObject({
+      resourceCurveKiboPointCount: 1,
+      resourceCurvePointCount: 1,
+    });
+  });
+
   it('consumes only applied generation deltas and outputs curves, sim log, and summary', () => {
     const runtimeProjection = createThreeValueRuntimeProjection({
       scenario: {
@@ -761,15 +847,9 @@ describe('three value runtime projection', () => {
           status: 'observable-contract-confirmed-values-unresolved',
           observation: {
             api: 'PetUltimateCdTime',
-            remainingValue: 'cdTime',
-            totalValue: 'totalTime',
-            readyWhen: 'cdTime <= 0',
-            uiFillExpression: 'cdTime / totalTime',
             valueUnit: 'seconds',
           },
-          initialValueSourceStatus: 'unresolved',
-          totalValueSourceStatus: 'unresolved',
-          eventValueSourceStatus: 'unresolved',
+          valueSourceStatus: 'unresolved',
           trackingOnly: true,
           appliedToCalculators: false,
         }),

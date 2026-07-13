@@ -68,6 +68,8 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--action-id")
     parser.add_argument("--actor-id")
     parser.add_argument("--target-id")
+    parser.add_argument("--slot-id")
+    parser.add_argument("--kibo-id", type=int)
     parser.add_argument("--source-element-config-id", type=int)
     parser.add_argument("--duration", type=float, default=30.0)
     parser.add_argument("--overwrite", action="store_true")
@@ -141,6 +143,8 @@ def run_game_capture(options: argparse.Namespace) -> int:
                 "actionId": options.action_id,
                 "actorId": options.actor_id,
                 "targetId": options.target_id,
+                "slotId": options.slot_id,
+                "kiboId": options.kibo_id,
                 "sourceElementConfigId": options.source_element_config_id,
             }
         )

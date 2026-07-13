@@ -16,6 +16,16 @@ export default defineConfig({
         onlyExplicitManualChunks: true,
         manualChunks(id) {
           if (
+            [
+              'WorkbenchAnalysisReportDialog.vue',
+              'WorkbenchConfigurationLibraryPanel.vue',
+              'WorkbenchPresetLibraryDialog.vue',
+              'WorkbenchScenarioComparisonDialog.vue',
+            ].some(fileName => id.includes(`/features/workbench/${fileName}`))
+          ) {
+            return 'workbench-project-tools';
+          }
+          if (
             id.endsWith('/threeValueMechanicsProfile.js') ||
             id.endsWith('/threeValueMechanicsAdapter.js') ||
             id.endsWith('/threeValueAppliedSourceBinding.js') ||

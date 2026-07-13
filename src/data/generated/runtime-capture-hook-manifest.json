@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "game": "azur-promilia",
   "kind": "runtime-capture-hook-manifest",
-  "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v1",
-  "generatedAt": "2026-07-10T12:07:14.248Z",
+  "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v2",
+  "generatedAt": "2026-07-13T21:33:53.716Z",
   "source": {
     "kind": "il2cpp-dump-cs",
     "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
@@ -22,9 +22,9 @@
     }
   },
   "summary": {
-    "methodCount": 9,
-    "fieldCount": 27,
-    "energyMethodCount": 6,
+    "methodCount": 10,
+    "fieldCount": 30,
+    "energyMethodCount": 7,
     "toughnessMethodCount": 3,
     "realRuntimeCaptureAvailable": false,
     "status": "source-backed-hook-targets-ready-awaiting-controlled-capture"
@@ -134,6 +134,22 @@
       "signature": "private void RecoverSP(TSpElementParams.ERecoverTagType recoverTagType, float baseDelta, float delta) { }"
     },
     {
+      "key": "PetEntity.PetUltimateCdTime",
+      "className": "PetEntity",
+      "methodName": "PetUltimateCdTime",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "pet-ultimate-cooldown-observed"
+      ],
+      "rva": "0x152D9F0",
+      "offset": "0x152C1F0",
+      "va": "0x18152D9F0",
+      "signature": "public float PetUltimateCdTime(out float totalTime) { }"
+    },
+    {
       "key": "SnapshotPropertyManager.GetBattlePropertyCurrentValue",
       "className": "SnapshotPropertyManager",
       "methodName": "GetBattlePropertyCurrentValue",
@@ -190,6 +206,22 @@
     }
   ],
   "fields": [
+    {
+      "key": "BaseData.<entityId>k__BackingField",
+      "className": "BaseData",
+      "fieldName": "<entityId>k__BackingField",
+      "fieldType": "int",
+      "offset": "0x128",
+      "declaration": "private int <entityId>k__BackingField;"
+    },
+    {
+      "key": "BaseData.<configId>k__BackingField",
+      "className": "BaseData",
+      "fieldName": "<configId>k__BackingField",
+      "fieldType": "int",
+      "offset": "0x140",
+      "declaration": "private int <configId>k__BackingField;"
+    },
     {
       "key": "RecoverSPArgs.id",
       "className": "RecoverSPArgs",
@@ -405,6 +437,14 @@
       "fieldType": "Dictionary<int, double>",
       "offset": "0x20",
       "declaration": "private Dictionary<int, double> m_recoverTimerMap;"
+    },
+    {
+      "key": "PetEntity.data",
+      "className": "PetEntity",
+      "fieldName": "data",
+      "fieldType": "PetData",
+      "offset": "0x1C0",
+      "declaration": "public PetData data;"
     }
   ],
   "eventContracts": [
@@ -424,6 +464,26 @@
         "DamageElement.RecoverSP",
         "SPSystem.OnTransmit",
         "SPSystem.RecoverSP"
+      ]
+    },
+    {
+      "key": "pet-ultimate-readiness-observation",
+      "requiredEventTypes": [
+        "pet-ultimate-cooldown-observed"
+      ],
+      "hookTargets": [
+        "PetEntity.PetUltimateCdTime"
+      ],
+      "ownerIdentityFields": [
+        "slotId",
+        "actorId",
+        "kiboId",
+        "petEntityId"
+      ],
+      "observedValueFields": [
+        "cdTime",
+        "totalTime",
+        "ready"
       ]
     },
     {
