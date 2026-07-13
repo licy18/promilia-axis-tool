@@ -2922,6 +2922,11 @@ test('[m1-runtime-event-review] links source events, exact frames, three-value d
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.getByTestId('workbench-scenario-name')).toHaveText(
+    '示例方案 · 预览数据'
+  );
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   const actorEnergyRows = timeline.locator(
@@ -2957,6 +2962,21 @@ test('[m1-runtime-event-review] links source events, exact frames, three-value d
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-three-value-row')
   ).toHaveCount(3);
+
+  const secondRuntimeEvent = timeline.getByRole('button', {
+    name: '普通攻击 · 命中 · 36F',
+    exact: true,
+  });
+  await secondRuntimeEvent.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '36');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-frame')
+  ).toContainText('0s36f');
+  await runtimeEvent.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '0');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-frame')
+  ).toContainText('0s0f');
   await page.screenshot({
     path: 'reports/m1-runtime-event-review-desktop.png',
   });

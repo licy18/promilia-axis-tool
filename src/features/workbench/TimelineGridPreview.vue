@@ -1122,6 +1122,7 @@ const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
 const TIMELINE_EFFECT_SECTION_GAP_PX = 3;
 const TIMELINE_LANE_GAP_PX = 4;
 const TIMELINE_DATA_GAP_PX = 2;
+const RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT = 2.25;
 const CANDIDATE_VALUE_CURVE_TOP = 52;
 const CANDIDATE_VALUE_CURVE_HEIGHT = 26;
 const ACTION_ICON_COMPONENTS = Object.freeze({
@@ -2741,16 +2742,28 @@ function createTimelineEffectLayout(intervals) {
 }
 
 function createRuntimeEventLayout(markers) {
-  const countByFrame = new Map();
-  let slotCount = 0;
-  const laidOutMarkers = [...markers].map(marker => {
-    const frameKey = String(marker.frameIndex);
-    const timelineEventSlot = countByFrame.get(frameKey) ?? 0;
-    countByFrame.set(frameKey, timelineEventSlot + 1);
-    slotCount = Math.max(slotCount, timelineEventSlot + 1);
-    return { ...marker, timelineEventSlot };
-  });
-  return { markers: laidOutMarkers, slotCount };
+  const lastPercentBySlot = [];
+  const minimumGapPercent =
+    RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT / timelineZoom.value;
+  const laidOutMarkers = [...markers]
+    .sort(
+      (left, right) =>
+        left.frameIndex - right.frameIndex || left.title.localeCompare(right.title)
+    )
+    .map(marker => {
+      const markerPercent = clampPercent(
+        (frameToMs(marker.frameIndex) / props.durationMs) * 100
+      );
+      let timelineEventSlot = lastPercentBySlot.findIndex(
+        lastPercent => markerPercent - lastPercent >= minimumGapPercent
+      );
+      if (timelineEventSlot === -1) {
+        timelineEventSlot = lastPercentBySlot.length;
+      }
+      lastPercentBySlot[timelineEventSlot] = markerPercent;
+      return { ...marker, timelineEventSlot };
+    });
+  return { markers: laidOutMarkers, slotCount: lastPercentBySlot.length };
 }
 
 function getTimelineActionLayoutDurationMs(action) {

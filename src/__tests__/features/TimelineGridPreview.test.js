@@ -274,6 +274,53 @@ describe('TimelineGridPreview', () => {
     expect(selectedMarker.classes()).toContain('selected');
   });
 
+  it('stacks nearby runtime events so each exact frame remains clickable', async () => {
+    const surface = createInjectedMainFlowCommandSurface();
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        durationMs: 30000,
+        runtimeStatePointContexts: [
+          createRuntimeEventContext({
+            sourceDeltaId: 'delta-frame-0',
+            statePointId: 'state-frame-0',
+            actionId: 'action-a',
+            trackKey: 'enemyHpDamage',
+            frameIndex: 0,
+            timeMs: 0,
+            hpDelta: 100,
+          }),
+          createRuntimeEventContext({
+            sourceDeltaId: 'delta-frame-36',
+            statePointId: 'state-frame-36',
+            actionId: 'action-a',
+            trackKey: 'enemyToughnessDamage',
+            frameIndex: 36,
+            timeMs: 600,
+            toughnessDelta: 20,
+          }),
+        ],
+        mainFlowCommandSurface: surface,
+      }),
+    });
+
+    const markers = wrapper.findAll(
+      '[data-testid="workbench-timeline-runtime-event-marker"]'
+    );
+    expect(markers).toHaveLength(2);
+    expect(markers[0].attributes('style')).toContain('top: 42px');
+    expect(markers[1].attributes('style')).toContain('top: 62px');
+
+    await markers[1].trigger('click');
+    await markers[0].trigger('click');
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject({
+      frameIndex: 0,
+      statePointId: 'state-frame-0',
+    });
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      statePointId: 'state-frame-0',
+    });
+  });
+
   it('renders action readiness and legal skill cooldown windows on the timeline', () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

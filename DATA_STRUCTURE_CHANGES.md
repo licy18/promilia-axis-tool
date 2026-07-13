@@ -27315,3 +27315,9 @@ RuntimeTimelineEventMarker (derived, not persisted)
 同一动作、同一准确帧的 HP、韧性与能量 state point 按 `actionId + frameIndex` 聚合为一个命中节点；独立资源 state point 继续按自身 identity 形成资源节点。点击节点复用既有 `select-runtime-state-point` 主流程，统一驱动帧游标、曲线断点选中和检查器详情，不引入第二套选择状态或帧归一化。
 
 `AnalysisPanel` 不再显示重复的逐段 `damageTimeline` 原始列表，但 simulation 仍保留该输出供兼容 consumer 和 summary 使用。`runtimeOutputs.resourceCurves` 的 3 条角色能量曲线与 3 条奇波能量曲线均未变化；本阶段没有新增 mechanics、calculator 或 applied delta。
+
+## 421. Runtime event collision layout
+
+`RuntimeTimelineEventMarker` 仍是非持久化投影，字段和 runtime contract 均未变化。仅布局阶段由“同帧计数”改为按准确帧百分比与当前 `timelineZoom` 分配最低可用层级：默认缩放下像素可能重叠的相邻事件进入不同 `timelineEventSlot`，放大后间距足够则复用同一层级。
+
+该布局只影响事件按钮的 `top` 与轨道所需显示高度，不改变 `frameIndex`、`statePointIds`、曲线点、日志、项目交换或 6 条能量轴。点击仍通过既有 `select-runtime-state-point` 合同选择准确 state point。
