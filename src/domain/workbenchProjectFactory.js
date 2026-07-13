@@ -156,6 +156,9 @@ export function createWorkbenchActionDraft({
   change = 50,
   reason = 'manual-axis-resource',
   eventType = 'phase',
+  name = '',
+  timingSource = null,
+  needsTimingData = true,
   note = '',
   insertion = null,
   generationBatch = null,
@@ -186,6 +189,13 @@ export function createWorkbenchActionDraft({
     change: Number(change) || 0,
     reason,
     eventType,
+    ...(type === ACTION_TYPES.KIBO_EVENT
+      ? {
+          name: String(name ?? '').trim(),
+          timingSource: timingSource ? String(timingSource).trim() : null,
+          needsTimingData: Boolean(needsTimingData),
+        }
+      : {}),
     note,
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
@@ -687,6 +697,9 @@ export function normalizeWorkbenchActionDrafts(
           change: draft.change,
           reason: draft.reason,
           eventType: draft.eventType,
+          name: draft.name,
+          timingSource: draft.timingSource,
+          needsTimingData: draft.needsTimingData,
           note: draft.note,
           insertion: draft.insertion,
           generationBatch: draft.generationBatch,
@@ -817,13 +830,18 @@ function createProjectActionFromDraft(
 
   if (draft.type === ACTION_TYPES.KIBO_EVENT) {
     const kiboId = positiveIntegerOrNull(sourceActor?.loadout?.kiboId);
+    const kibo = findById(WORKBENCH_KIBOS, kiboId);
     return createKiboEventAction({
       id: draft.id,
       actorId: sourceActor.id,
       kiboId,
+      skillId: draft.timingSource ? draft.skillId : null,
+      name: draft.name || `${kibo?.name ?? '奇波'}事件`,
       startMs: draft.startMs,
       durationMs: draft.durationMs,
-      eventType: draft.eventType || 'activation',
+      eventType: draft.eventType ?? 'activation',
+      timingSource: draft.timingSource,
+      needsTimingData: draft.needsTimingData,
       note: draft.note || '奇波事件标记',
       insertion: draft.insertion,
       effectCommands,

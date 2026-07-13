@@ -85,12 +85,12 @@
         class="icon-button"
         data-testid="workbench-add-kibo-event-action"
         type="button"
-        :data-drag-enabled="Boolean(activeKibo)"
+        :data-drag-enabled="Boolean(defaultKiboTimelineEntry)"
         data-entry-type="kiboEvent"
         @pointerdown="
           beginQuickTimelineEntryDrag($event, ACTION_TYPES.KIBO_EVENT)
         "
-        @click="$emit('add-kibo-event-action')"
+        @click="$emit('add-kibo-event-action', defaultKiboTimelineEntry)"
       >
         + {{ activeKibo?.name ?? '奇波' }}
       </button>
@@ -143,6 +143,35 @@
           <span class="skill-entry-name">{{ entry.label }}</span>
           <span class="skill-entry-meta">{{
             formatActionEntryMeta(entry)
+          }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div
+      v-if="kiboTimelineEntries.length"
+      class="skill-entry-list kibo-entry-list"
+    >
+      <div
+        v-for="entry in kiboTimelineEntries"
+        :key="entry.skillId"
+        class="skill-entry-row"
+      >
+        <button
+          class="skill-entry kibo-skill-entry"
+          type="button"
+          data-testid="workbench-kibo-action-entry"
+          :data-kibo-id="activeKibo.id"
+          :data-skill-id="entry.skillId"
+          :data-action-kind="entry.eventType"
+          data-entry-type="kiboEvent"
+          data-drag-enabled="true"
+          @pointerdown="beginKiboTimelineEntryDrag($event, entry)"
+          @click="$emit('add-kibo-event-action', entry)"
+        >
+          <span class="skill-entry-name">{{ entry.label }}</span>
+          <span class="skill-entry-meta">{{
+            formatKiboActionMeta(entry)
           }}</span>
         </button>
       </div>
@@ -512,6 +541,23 @@ const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
 const defaultTimelineSkillEntry = computed(
   () => actionEntries.value[0] ?? null
 );
+const kiboTimelineEntries = computed(() =>
+  (activeKibo.value?.actions ?? []).map(action =>
+    createWorkbenchTimelineEntry({
+      type: ACTION_TYPES.KIBO_EVENT,
+      skillId: action.skillId,
+      eventType: action.kind,
+      label: action.name,
+      durationMs: frameToMs(action.durationFrames),
+      timingSource: 'azpr-unity-skill-control-root',
+      needsTimingData: false,
+      note: 'Skill Control 时长已确认；效果未接入 calculator。',
+    })
+  )
+);
+const defaultKiboTimelineEntry = computed(
+  () => kiboTimelineEntries.value[0] ?? null
+);
 
 function beginDefaultSkillDrag(event) {
   beginSkillTimelineEntryDrag(event, defaultTimelineSkillEntry.value);
@@ -524,6 +570,10 @@ function beginSkillTimelineEntryDrag(event, actionEntry) {
   });
 }
 
+function beginKiboTimelineEntryDrag(event, entry) {
+  beginActionLibraryTimelineEntryDrag(event, entry);
+}
+
 function beginQuickTimelineEntryDrag(event, type) {
   const quickEntryByType = {
     [ACTION_TYPES.SWITCH]: {
@@ -534,13 +584,7 @@ function beginQuickTimelineEntryDrag(event, type) {
       type,
       label: '资源',
     },
-    [ACTION_TYPES.KIBO_EVENT]: activeKibo.value
-      ? {
-          type,
-          eventType: 'activation',
-          label: activeKibo.value.name,
-        }
-      : null,
+    [ACTION_TYPES.KIBO_EVENT]: defaultKiboTimelineEntry.value,
     [ACTION_TYPES.ENEMY_EVENT]: {
       type,
       eventType: 'phase',
@@ -854,6 +898,15 @@ function formatActionEntryMeta(entry) {
       ? `${entry.sourceLabel} / `
       : '';
   return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}`;
+}
+
+function formatKiboActionMeta(entry) {
+  const kindLabels = {
+    signature: '特性技',
+    active: '主动技',
+    break: '合击技',
+  };
+  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}`;
 }
 
 function resolveBatchSkillName(batch, action) {

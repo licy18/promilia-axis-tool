@@ -465,6 +465,10 @@ function compileAction(
       source: {
         kind: 'configured-kibo-tracking-event',
         kiboId: action.kiboId ?? actor?.loadout?.kiboId ?? null,
+        ...(action.skillId ? { skillId: action.skillId } : {}),
+        ...(action.timing?.source
+          ? { timingSource: action.timing.source }
+          : {}),
         appliedToCalculators: false,
       },
       gameDataReference,

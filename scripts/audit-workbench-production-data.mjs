@@ -45,6 +45,7 @@ const files = await loadGeneratedFiles([
   'skills.json',
   'soulessences.json',
   'value-param-index.json',
+  'workbench-kibo-action-catalog.json',
   'workbench-seed.json',
   'workbench-skill-core.json',
   'workbench-skill-diagnostics.json',
@@ -73,6 +74,7 @@ const skillDiagnosticsProjectionMatches = deepEqual(
   expectedSkillDiagnosticsProjection
 );
 const seedAudit = auditWorkbenchSeed(files);
+const kiboActionCatalogMatches = auditKiboActionCatalog(files);
 const manifestAudit = {
   workbenchSeedRegistered:
     files['manifest.json'].data.files?.workbenchSeed === 'workbench-seed.json',
@@ -82,6 +84,9 @@ const manifestAudit = {
   workbenchSkillDiagnosticsRegistered:
     files['manifest.json'].data.files?.workbenchSkillDiagnostics ===
     'workbench-skill-diagnostics.json',
+  workbenchKiboActionCatalogRegistered:
+    files['manifest.json'].data.files?.workbenchKiboActionCatalog ===
+    'workbench-kibo-action-catalog.json',
 };
 const fullGameCatalogBytes = sumFileBytes(files, [
   'characters.json',
@@ -100,6 +105,7 @@ const fullSkillRuntimeBytes = sumFileBytes(files, [
 ]);
 const status = {
   seedProjectionMatches: Object.values(seedAudit.checks).every(Boolean),
+  kiboActionCatalogMatches,
   skillCoreProjectionMatches,
   skillDiagnosticsProjectionMatches,
   manifestMatches: Object.values(manifestAudit).every(Boolean),
@@ -130,7 +136,8 @@ const report = {
   manifestAudit,
   gameCatalogSize: createSizeSummary(
     fullGameCatalogBytes,
-    files['workbench-seed.json'].bytes
+    files['workbench-seed.json'].bytes +
+      files['workbench-kibo-action-catalog.json'].bytes
   ),
 };
 
@@ -218,7 +225,7 @@ function auditWorkbenchSeed(loadedFiles) {
 
   return {
     checks: {
-      schemaVersionCurrent: seed.schemaVersion === 2,
+      schemaVersionCurrent: seed.schemaVersion === 3,
       countsMatch: deepEqual(seed.counts, counts),
       characterIdsMatch: deepEqual(
         seed.gameData.characters.map(item => item.id),
@@ -239,6 +246,27 @@ function auditWorkbenchSeed(loadedFiles) {
     },
     counts,
   };
+}
+
+function auditKiboActionCatalog(loadedFiles) {
+  const catalog = loadedFiles['workbench-kibo-action-catalog.json'].data;
+  const kibos = loadedFiles['kibos.json'].data.items ?? [];
+  const expected = {
+    schemaVersion: 1,
+    kind: 'workbench-kibo-action-catalog',
+    generatedAt: catalog.generatedAt,
+    source: 'pet-table-and-azpr-unity-skill-control-root',
+    items: kibos.map(kibo => ({
+      kiboId: kibo.id,
+      actions: (kibo.skills ?? []).map(skill => ({
+        skillId: skill.skillId,
+        kind: skill.kind,
+        name: skill.name,
+        durationFrames: skill.durationFrames,
+      })),
+    })),
+  };
+  return deepEqual(catalog, expected);
 }
 
 async function loadGeneratedFiles(fileNames) {

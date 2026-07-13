@@ -76,7 +76,7 @@ describe('generated AzPr data', () => {
       'DARK_DEFENSE',
     ]);
 
-    expect(seed.schemaVersion).toBe(2);
+    expect(seed.schemaVersion).toBe(3);
     expect(skillCore).toMatchObject({
       schemaVersion: 3,
       kind: 'workbench-skill-core-projection',
@@ -156,6 +156,22 @@ describe('generated AzPr data', () => {
         stage,
       }))
     );
+    expect(seed.catalogs.kiboActions).toBe(
+      'workbench-kibo-action-catalog.json'
+    );
+    expect(
+      kibos
+        .flatMap(kibo => kibo.skills)
+        .every(
+          skill =>
+            skill.needsTimingData === false &&
+            skill.timingSource === 'azpr-unity-skill-control-root' &&
+            skill.durationFrames > 0 &&
+            skill.sourceFps > 0 &&
+            skill.sourceFrameCount > 0 &&
+            skill.appliedToCalculators === false
+        )
+    ).toBe(true);
     expect(seed.gameData.soulessences).toEqual(
       soulessences.map(({ id, name, rarity }) => ({ id, name, rarity }))
     );
@@ -272,7 +288,7 @@ describe('generated AzPr data', () => {
         currentSkillsMissingExtractedSkillControl: 4,
         uniqueSkillBytesPaths: 682,
         existingSkillBytesPathsInAzPrAssets: 0,
-        extractedSkillControlDirectories: 4134,
+        extractedSkillControlDirectories: 4136,
         effectLaneCandidateSkills: {
           hpDamage: 7,
           toughnessDamage: 7,

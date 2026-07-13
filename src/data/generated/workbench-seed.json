@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "generatedAt": "2026-07-08T03:35:51.289Z",
   "source": "generated-from-local-azpr-data",
   "purpose": "workbench-production-data-projection",
@@ -11,6 +11,9 @@
     "equipment": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\local-accessory-forms\\all.local-accessory-forms.json",
     "kibos": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\local-kibo-forms\\all.local-kibo-forms.json",
     "soulessences": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\local-soulessence-forms\\all.local-soulessence-forms.json"
+  },
+  "catalogs": {
+    "kiboActions": "workbench-kibo-action-catalog.json"
   },
   "defaults": {
     "characterId": 109001,

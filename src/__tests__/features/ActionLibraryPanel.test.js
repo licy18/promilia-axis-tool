@@ -24,8 +24,10 @@ describe('ActionLibraryPanel', () => {
         selector: '[data-testid="workbench-add-kibo-event-action"]',
         expected: {
           type: 'kiboEvent',
-          eventType: 'activation',
-          label: '迅狼',
+          skillId: 50000102,
+          eventType: 'signature',
+          label: '迅风刃',
+          durationMs: 1416.666667,
         },
       },
       {
@@ -54,6 +56,41 @@ describe('ActionLibraryPanel', () => {
         clientY: 24,
       });
     }
+  });
+
+  it('exposes all confirmed actions for the bound kibo', async () => {
+    const wrapper = mount(ActionLibraryPanel, {
+      props: createActionLibraryProps(),
+    });
+    const entries = wrapper.findAll(
+      '[data-testid="workbench-kibo-action-entry"]'
+    );
+
+    expect(
+      entries.map(entry => ({
+        skillId: Number(entry.attributes('data-skill-id')),
+        kind: entry.attributes('data-action-kind'),
+      }))
+    ).toEqual([
+      { skillId: 50000102, kind: 'signature' },
+      { skillId: 504004, kind: 'active' },
+      { skillId: 50000112, kind: 'break' },
+    ]);
+    expect(entries.map(entry => entry.text())).toEqual([
+      expect.stringContaining('迅风刃'),
+      expect.stringContaining('狂风冲击'),
+      expect.stringContaining('迅狼-合击'),
+    ]);
+
+    await entries[1].trigger('click');
+    expect(wrapper.emitted('add-kibo-event-action')?.at(-1)?.[0]).toMatchObject(
+      {
+        type: 'kiboEvent',
+        skillId: 504004,
+        eventType: 'active',
+        durationMs: 3666.666667,
+      }
+    );
   });
 
   it('keeps an unbound kibo entry out of the pointer drag flow', async () => {
@@ -89,7 +126,32 @@ function createActionLibraryProps() {
   return {
     actor,
     actors: [actor],
-    kibos: [{ id: 500001, name: '迅狼' }],
+    kibos: [
+      {
+        id: 500001,
+        name: '迅狼',
+        actions: [
+          {
+            skillId: 50000102,
+            kind: 'signature',
+            name: '迅风刃',
+            durationFrames: 85,
+          },
+          {
+            skillId: 504004,
+            kind: 'active',
+            name: '狂风冲击',
+            durationFrames: 220,
+          },
+          {
+            skillId: 50000112,
+            kind: 'break',
+            name: '迅狼-合击',
+            durationFrames: 90,
+          },
+        ],
+      },
+    ],
     activeActorCharacterId: 109001,
     actions: [],
     skills: [

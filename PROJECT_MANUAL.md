@@ -1362,6 +1362,16 @@ Workbench 桌面现把动作库与多轨时间轴并排显示。用户可从当�
 
 下一阶段目标：优先补齐奇波动作库的数据完整性，把 `pet.json` 的 signature/break/fixed skill 与已导出的 Skill Control 时长、行为节点稳定映射到可编排动作；奇波资源变化只有在找到可复现的 `totalTime` 或正式 runtime 输入后才接入，继续禁止猜测冷却数值。
 
+### M1 奇波动作库真实数据收口（2026-07-14）
+
+Workbench 现为全部 122 只奇波提供 3 个可编排动作，共 366 个动作槽、306 个唯一展示技能：特性技来自 `signatureSkillList`，主动技来自展示用 `skillList`，合击技来自 `breakSkillList`；内部 `fixedSkillList` 只保留为来源追踪，不冒充用户动作。动作库显示真实技能 ID、名称与经源帧率换算到 Workbench 60fps 时间坐标的持续帧数，并可直接拖入所属奇波轨。
+
+完整来源与时序保存在 `kibos.json`；生产 Workbench 按需加载精简的 `workbench-kibo-action-catalog.json`。真实奇波动作进入项目后会在动作块、compiler、sim log 和五载体回放中保留 `skillId / name / eventType / duration / timingSource`。效果边界不变：所有奇波动作仍为 `tracking-only / unapplied`，3 条奇波能量轴保持独立零值平线，不会误写 3 条角色能量轴或敌人 HP/韧性。
+
+阶段验收为 83 个测试文件、465 条单元/组件测试和 34/34 项 production preview 全部通过；生产引用审计为 124 个源码、120 个生产可达、4 个允许 test-only、0 个孤立，生产数据与 applied source 审计通过。Workbench 主块为 357,654B gzip，总 JavaScript 为 739,470B gzip，仍低于 370,000B/740,000B 发布硬门槛，但仅余 530B；新增奇波目录作为静态资源按需读取，没有进入主 JS 包。桌面与窄屏证据为 `reports/m1c-library-runtime-desktop.png` 与 `reports/m1c-library-runtime-narrow.png`。
+
+下一阶段目标：M1 核心动作身份可视化。把角色与奇波动作的真实图标、动作类型、名称和已确认时长统一贯通动作库、时间轴块、检查器与项目回放，让 3 人/3 奇波编排在首屏更接近 Endaxis 的可读层级；继续保持 6 条能量轴独立，不接入未确认奇波效果、冷却值或测试期公式。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

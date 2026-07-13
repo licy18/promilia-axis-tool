@@ -1,0 +1,2814 @@
+{
+  "schemaVersion": 1,
+  "kind": "workbench-kibo-action-catalog",
+  "generatedAt": "2026-07-08T03:35:51.289Z",
+  "source": "pet-table-and-azpr-unity-skill-control-root",
+  "items": [
+    {
+      "kiboId": 500001,
+      "actions": [
+        {
+          "skillId": 50000102,
+          "kind": "signature",
+          "name": "迅风刃",
+          "durationFrames": 85
+        },
+        {
+          "skillId": 504004,
+          "kind": "active",
+          "name": "狂风冲击",
+          "durationFrames": 220
+        },
+        {
+          "skillId": 50000112,
+          "kind": "break",
+          "name": "迅狼-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500002,
+      "actions": [
+        {
+          "skillId": 50000202,
+          "kind": "signature",
+          "name": "水灵涟漪",
+          "durationFrames": 88
+        },
+        {
+          "skillId": 502015,
+          "kind": "active",
+          "name": "水弹连射",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50000203,
+          "kind": "break",
+          "name": "水灵仔-合击",
+          "durationFrames": 93
+        }
+      ]
+    },
+    {
+      "kiboId": 500003,
+      "actions": [
+        {
+          "skillId": 50000302,
+          "kind": "signature",
+          "name": "灵偶涟漪",
+          "durationFrames": 93
+        },
+        {
+          "skillId": 502019,
+          "kind": "active",
+          "name": "漂浮水泡",
+          "durationFrames": 73
+        },
+        {
+          "skillId": 50000303,
+          "kind": "break",
+          "name": "水灵偶-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500004,
+      "actions": [
+        {
+          "skillId": 50000404,
+          "kind": "signature",
+          "name": "潮汐涟漪",
+          "durationFrames": 98
+        },
+        {
+          "skillId": 502016,
+          "kind": "active",
+          "name": "大海浪",
+          "durationFrames": 55
+        },
+        {
+          "skillId": 50000417,
+          "kind": "break",
+          "name": "汐灵偶-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500005,
+      "actions": [
+        {
+          "skillId": 50000502,
+          "kind": "signature",
+          "name": "火环",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 501014,
+          "kind": "active",
+          "name": "火球连射",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50000504,
+          "kind": "break",
+          "name": "火灵仔-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500006,
+      "actions": [
+        {
+          "skillId": 50000602,
+          "kind": "signature",
+          "name": "灵偶火环",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 501017,
+          "kind": "active",
+          "name": "空降之焰",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50000604,
+          "kind": "break",
+          "name": "火灵偶-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500007,
+      "actions": [
+        {
+          "skillId": 50000702,
+          "kind": "signature",
+          "name": "灼焰火环",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 501016,
+          "kind": "active",
+          "name": "分裂之焰",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50000715,
+          "kind": "break",
+          "name": "焰灵偶-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500020,
+      "actions": [
+        {
+          "skillId": 50002001,
+          "kind": "signature",
+          "name": "雪横扫",
+          "durationFrames": 85
+        },
+        {
+          "skillId": 503001,
+          "kind": "active",
+          "name": "冰锥",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50002004,
+          "kind": "break",
+          "name": "小雪狼-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500021,
+      "actions": [
+        {
+          "skillId": 50002102,
+          "kind": "signature",
+          "name": "冰速横扫",
+          "durationFrames": 135
+        },
+        {
+          "skillId": 503006,
+          "kind": "active",
+          "name": "寒冰碎片",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50002104,
+          "kind": "break",
+          "name": "冰速狼-合击",
+          "durationFrames": 135
+        }
+      ]
+    },
+    {
+      "kiboId": 500022,
+      "actions": [
+        {
+          "skillId": 50002201,
+          "kind": "signature",
+          "name": "霜刃横扫",
+          "durationFrames": 135
+        },
+        {
+          "skillId": 503004,
+          "kind": "active",
+          "name": "冰矛连射",
+          "durationFrames": 235
+        },
+        {
+          "skillId": 50002204,
+          "kind": "break",
+          "name": "霜刃狼-合击",
+          "durationFrames": 130
+        }
+      ]
+    },
+    {
+      "kiboId": 500023,
+      "actions": [
+        {
+          "skillId": 50002304,
+          "kind": "signature",
+          "name": "扑通变菜",
+          "durationFrames": 176
+        },
+        {
+          "skillId": 505013,
+          "kind": "active",
+          "name": "种子飞弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50002305,
+          "kind": "break",
+          "name": "苗鸡-合击",
+          "durationFrames": 74
+        }
+      ]
+    },
+    {
+      "kiboId": 500024,
+      "actions": [
+        {
+          "skillId": 50002404,
+          "kind": "signature",
+          "name": "鸡飞叶跳",
+          "durationFrames": 178
+        },
+        {
+          "skillId": 505006,
+          "kind": "active",
+          "name": "灵木繁星",
+          "durationFrames": 255
+        },
+        {
+          "skillId": 50002415,
+          "kind": "break",
+          "name": "菜鸡-合击",
+          "durationFrames": 144
+        }
+      ]
+    },
+    {
+      "kiboId": 500025,
+      "actions": [
+        {
+          "skillId": 50002504,
+          "kind": "signature",
+          "name": "拉加冲锋",
+          "durationFrames": 190
+        },
+        {
+          "skillId": 507003,
+          "kind": "active",
+          "name": "落雷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50002515,
+          "kind": "break",
+          "name": "拉加野猪-合击",
+          "durationFrames": 85
+        }
+      ]
+    },
+    {
+      "kiboId": 500026,
+      "actions": [
+        {
+          "skillId": 50002616,
+          "kind": "signature",
+          "name": "碧灵激流",
+          "durationFrames": 234
+        },
+        {
+          "skillId": 505006,
+          "kind": "active",
+          "name": "灵木繁星",
+          "durationFrames": 255
+        },
+        {
+          "skillId": 50002612,
+          "kind": "break",
+          "name": "碧羽灵龙-合击",
+          "durationFrames": 116
+        }
+      ]
+    },
+    {
+      "kiboId": 500035,
+      "actions": [
+        {
+          "skillId": 50003503,
+          "kind": "signature",
+          "name": "治愈守护",
+          "durationFrames": 105
+        },
+        {
+          "skillId": 505004,
+          "kind": "active",
+          "name": "株连灵木",
+          "durationFrames": 235
+        },
+        {
+          "skillId": 50003501,
+          "kind": "break",
+          "name": "叶冠驼-合击",
+          "durationFrames": 119
+        }
+      ]
+    },
+    {
+      "kiboId": 500037,
+      "actions": [
+        {
+          "skillId": 50003701,
+          "kind": "signature",
+          "name": "火苗踏击",
+          "durationFrames": 80
+        },
+        {
+          "skillId": 501001,
+          "kind": "active",
+          "name": "火球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50003704,
+          "kind": "break",
+          "name": "焰羊羊-合击",
+          "durationFrames": 75
+        }
+      ]
+    },
+    {
+      "kiboId": 500038,
+      "actions": [
+        {
+          "skillId": 50003801,
+          "kind": "signature",
+          "name": "火焰踏击",
+          "durationFrames": 114
+        },
+        {
+          "skillId": 501003,
+          "kind": "active",
+          "name": "烈焰弹",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50003804,
+          "kind": "break",
+          "name": "尾火羊-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500039,
+      "actions": [
+        {
+          "skillId": 50003901,
+          "kind": "signature",
+          "name": "爆炎踏击",
+          "durationFrames": 114
+        },
+        {
+          "skillId": 501003,
+          "kind": "active",
+          "name": "烈焰弹",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50003904,
+          "kind": "break",
+          "name": "炎灼角羊-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500040,
+      "actions": [
+        {
+          "skillId": 50004002,
+          "kind": "signature",
+          "name": "尾锤击",
+          "durationFrames": 118
+        },
+        {
+          "skillId": 506001,
+          "kind": "active",
+          "name": "岩锥",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50004004,
+          "kind": "break",
+          "name": "铁球蜥-合击",
+          "durationFrames": 85
+        }
+      ]
+    },
+    {
+      "kiboId": 500041,
+      "actions": [
+        {
+          "skillId": 50004102,
+          "kind": "signature",
+          "name": "砸地锤击",
+          "durationFrames": 174
+        },
+        {
+          "skillId": 506001,
+          "kind": "active",
+          "name": "岩锥",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50004104,
+          "kind": "break",
+          "name": "三角蜥-合击",
+          "durationFrames": 131
+        }
+      ]
+    },
+    {
+      "kiboId": 500042,
+      "actions": [
+        {
+          "skillId": 50004202,
+          "kind": "signature",
+          "name": "角斗重锤",
+          "durationFrames": 233
+        },
+        {
+          "skillId": 506006,
+          "kind": "active",
+          "name": "裂地岩突",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50004204,
+          "kind": "break",
+          "name": "角斗蜥-合击",
+          "durationFrames": 179
+        }
+      ]
+    },
+    {
+      "kiboId": 500043,
+      "actions": [
+        {
+          "skillId": 50004302,
+          "kind": "signature",
+          "name": "蝶磷粉",
+          "durationFrames": 70
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50004305,
+          "kind": "break",
+          "name": "小浮蝶-合击",
+          "durationFrames": 70
+        }
+      ]
+    },
+    {
+      "kiboId": 500044,
+      "actions": [
+        {
+          "skillId": 50004401,
+          "kind": "signature",
+          "name": "浮蝶磷粉",
+          "durationFrames": 80
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50004404,
+          "kind": "break",
+          "name": "浮蝶-合击",
+          "durationFrames": 104
+        }
+      ]
+    },
+    {
+      "kiboId": 500045,
+      "actions": [
+        {
+          "skillId": 50004501,
+          "kind": "signature",
+          "name": "幻蝶磷粉",
+          "durationFrames": 115
+        },
+        {
+          "skillId": 504020,
+          "kind": "active",
+          "name": "旋风回旋镖",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50004504,
+          "kind": "break",
+          "name": "幻蝶-合击",
+          "durationFrames": 91
+        }
+      ]
+    },
+    {
+      "kiboId": 500046,
+      "actions": [
+        {
+          "skillId": 50004604,
+          "kind": "signature",
+          "name": "木苞生长",
+          "durationFrames": 104
+        },
+        {
+          "skillId": 505013,
+          "kind": "active",
+          "name": "种子飞弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50004602,
+          "kind": "break",
+          "name": "木灵苞-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500047,
+      "actions": [
+        {
+          "skillId": 50004705,
+          "kind": "signature",
+          "name": "灵朵绽放",
+          "durationFrames": 136
+        },
+        {
+          "skillId": 505014,
+          "kind": "active",
+          "name": "花绽飞弹",
+          "durationFrames": 90
+        },
+        {
+          "skillId": 50004703,
+          "kind": "break",
+          "name": "木灵朵-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500048,
+      "actions": [
+        {
+          "skillId": 50004805,
+          "kind": "signature",
+          "name": "蔓音回响",
+          "durationFrames": 97
+        },
+        {
+          "skillId": 505018,
+          "kind": "active",
+          "name": "种子风暴",
+          "durationFrames": 95
+        },
+        {
+          "skillId": 50004804,
+          "kind": "break",
+          "name": "蔓音花-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500051,
+      "actions": [
+        {
+          "skillId": 50005102,
+          "kind": "signature",
+          "name": "岩甲突击",
+          "durationFrames": 80
+        },
+        {
+          "skillId": 506001,
+          "kind": "active",
+          "name": "岩锥",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50005104,
+          "kind": "break",
+          "name": "岩甲蜥-合击",
+          "durationFrames": 71
+        }
+      ]
+    },
+    {
+      "kiboId": 500052,
+      "actions": [
+        {
+          "skillId": 50005202,
+          "kind": "signature",
+          "name": "穿甲突击",
+          "durationFrames": 70
+        },
+        {
+          "skillId": 506008,
+          "kind": "active",
+          "name": "岩固之盾",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50005204,
+          "kind": "break",
+          "name": "穿甲蜥-合击",
+          "durationFrames": 140
+        }
+      ]
+    },
+    {
+      "kiboId": 500053,
+      "actions": [
+        {
+          "skillId": 50005302,
+          "kind": "signature",
+          "name": "钻山猛击",
+          "durationFrames": 248
+        },
+        {
+          "skillId": 506008,
+          "kind": "active",
+          "name": "岩固之盾",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50005304,
+          "kind": "break",
+          "name": "钻山蜥-合击",
+          "durationFrames": 104
+        }
+      ]
+    },
+    {
+      "kiboId": 500057,
+      "actions": [
+        {
+          "skillId": 50005701,
+          "kind": "signature",
+          "name": "猪突猛进",
+          "durationFrames": 160
+        },
+        {
+          "skillId": 507001,
+          "kind": "active",
+          "name": "雷球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50005704,
+          "kind": "break",
+          "name": "猪古力-合击",
+          "durationFrames": 87
+        }
+      ]
+    },
+    {
+      "kiboId": 500058,
+      "actions": [
+        {
+          "skillId": 50005801,
+          "kind": "signature",
+          "name": "焰翎利箭",
+          "durationFrames": 53
+        },
+        {
+          "skillId": 501002,
+          "kind": "active",
+          "name": "炽焰冲锋",
+          "durationFrames": 210
+        },
+        {
+          "skillId": 50005804,
+          "kind": "break",
+          "name": "焰翎龙-合击",
+          "durationFrames": 70
+        }
+      ]
+    },
+    {
+      "kiboId": 500064,
+      "actions": [
+        {
+          "skillId": 50006401,
+          "kind": "signature",
+          "name": "柔风飞刃",
+          "durationFrames": 95
+        },
+        {
+          "skillId": 504001,
+          "kind": "active",
+          "name": "风刃",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50006404,
+          "kind": "break",
+          "name": "柔风鹰-合击",
+          "durationFrames": 133
+        }
+      ]
+    },
+    {
+      "kiboId": 500065,
+      "actions": [
+        {
+          "skillId": 50006501,
+          "kind": "signature",
+          "name": "风锐翼展",
+          "durationFrames": 115
+        },
+        {
+          "skillId": 504002,
+          "kind": "active",
+          "name": "凛风斩",
+          "durationFrames": 160
+        },
+        {
+          "skillId": 50006504,
+          "kind": "break",
+          "name": "风剪鹰-合击",
+          "durationFrames": 99
+        }
+      ]
+    },
+    {
+      "kiboId": 500066,
+      "actions": [
+        {
+          "skillId": 50006601,
+          "kind": "signature",
+          "name": "水流射击",
+          "durationFrames": 161
+        },
+        {
+          "skillId": 502004,
+          "kind": "active",
+          "name": "毒液弹",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50006604,
+          "kind": "break",
+          "name": "兔耳鳐-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500067,
+      "actions": [
+        {
+          "skillId": 50006701,
+          "kind": "signature",
+          "name": "分裂水流",
+          "durationFrames": 134
+        },
+        {
+          "skillId": 502006,
+          "kind": "active",
+          "name": "水弹散射",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50006704,
+          "kind": "break",
+          "name": "飞鳐-合击",
+          "durationFrames": 94
+        }
+      ]
+    },
+    {
+      "kiboId": 500068,
+      "actions": [
+        {
+          "skillId": 50006801,
+          "kind": "signature",
+          "name": "水流激涌",
+          "durationFrames": 171
+        },
+        {
+          "skillId": 502003,
+          "kind": "active",
+          "name": "爆裂水球",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50006804,
+          "kind": "break",
+          "name": "星鳐-合击",
+          "durationFrames": 110
+        }
+      ]
+    },
+    {
+      "kiboId": 500072,
+      "actions": [
+        {
+          "skillId": 50007201,
+          "kind": "signature",
+          "name": "极寒冲刺",
+          "durationFrames": 175
+        },
+        {
+          "skillId": 503004,
+          "kind": "active",
+          "name": "冰矛连射",
+          "durationFrames": 235
+        },
+        {
+          "skillId": 50007204,
+          "kind": "break",
+          "name": "乌尔-合击",
+          "durationFrames": 130
+        }
+      ]
+    },
+    {
+      "kiboId": 500081,
+      "actions": [
+        {
+          "skillId": 50008102,
+          "kind": "signature",
+          "name": "碎冰寒矛",
+          "durationFrames": 68
+        },
+        {
+          "skillId": 503007,
+          "kind": "active",
+          "name": "凛冬矛击",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50008104,
+          "kind": "break",
+          "name": "碎冰兔-合击",
+          "durationFrames": 120
+        }
+      ]
+    },
+    {
+      "kiboId": 500082,
+      "actions": [
+        {
+          "skillId": 50008201,
+          "kind": "signature",
+          "name": "雷冠之力",
+          "durationFrames": 110
+        },
+        {
+          "skillId": 507008,
+          "kind": "active",
+          "name": "滚滚落雷",
+          "durationFrames": 250
+        },
+        {
+          "skillId": 50008204,
+          "kind": "break",
+          "name": "雷冠牦-合击",
+          "durationFrames": 92
+        }
+      ]
+    },
+    {
+      "kiboId": 500083,
+      "actions": [
+        {
+          "skillId": 50008303,
+          "kind": "signature",
+          "name": "火热跃击",
+          "durationFrames": 117
+        },
+        {
+          "skillId": 501001,
+          "kind": "active",
+          "name": "火球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50008304,
+          "kind": "break",
+          "name": "滚地犰-合击",
+          "durationFrames": 80
+        }
+      ]
+    },
+    {
+      "kiboId": 500084,
+      "actions": [
+        {
+          "skillId": 50008403,
+          "kind": "signature",
+          "name": "炎火跃击",
+          "durationFrames": 114
+        },
+        {
+          "skillId": 506004,
+          "kind": "active",
+          "name": "岩石滚撞",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50008404,
+          "kind": "break",
+          "name": "覆甲犰-合击",
+          "durationFrames": 85
+        }
+      ]
+    },
+    {
+      "kiboId": 500085,
+      "actions": [
+        {
+          "skillId": 50008503,
+          "kind": "signature",
+          "name": "炽火陨星",
+          "durationFrames": 144
+        },
+        {
+          "skillId": 506006,
+          "kind": "active",
+          "name": "裂地岩突",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50008504,
+          "kind": "break",
+          "name": "熔岩犰-合击",
+          "durationFrames": 130
+        }
+      ]
+    },
+    {
+      "kiboId": 500093,
+      "actions": [
+        {
+          "skillId": 50009305,
+          "kind": "signature",
+          "name": "紧急治疗",
+          "durationFrames": 86
+        },
+        {
+          "skillId": 508004,
+          "kind": "active",
+          "name": "辉光倾至",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50009304,
+          "kind": "break",
+          "name": "目绒兔-合击",
+          "durationFrames": 70
+        }
+      ]
+    },
+    {
+      "kiboId": 500095,
+      "actions": [
+        {
+          "skillId": 50009501,
+          "kind": "signature",
+          "name": "烟雾毒舌",
+          "durationFrames": 153
+        },
+        {
+          "skillId": 509001,
+          "kind": "active",
+          "name": "暗魂影",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50009504,
+          "kind": "break",
+          "name": "雾粘蛙-合击",
+          "durationFrames": 125
+        }
+      ]
+    },
+    {
+      "kiboId": 500096,
+      "actions": [
+        {
+          "skillId": 50009601,
+          "kind": "signature",
+          "name": "雾球毒舌",
+          "durationFrames": 282
+        },
+        {
+          "skillId": 509002,
+          "kind": "active",
+          "name": "暗魂影爆阵",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50009604,
+          "kind": "break",
+          "name": "雾球蛙-合击",
+          "durationFrames": 73
+        }
+      ]
+    },
+    {
+      "kiboId": 500097,
+      "actions": [
+        {
+          "skillId": 50009701,
+          "kind": "signature",
+          "name": "水波冲击",
+          "durationFrames": 105
+        },
+        {
+          "skillId": 502010,
+          "kind": "active",
+          "name": "唤潮",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50009704,
+          "kind": "break",
+          "name": "水岩灵-合击",
+          "durationFrames": 85
+        }
+      ]
+    },
+    {
+      "kiboId": 500098,
+      "actions": [
+        {
+          "skillId": 50009801,
+          "kind": "signature",
+          "name": "水波奔涌",
+          "durationFrames": 130
+        },
+        {
+          "skillId": 502010,
+          "kind": "active",
+          "name": "唤潮",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50009804,
+          "kind": "break",
+          "name": "水岩卫-合击",
+          "durationFrames": 107
+        }
+      ]
+    },
+    {
+      "kiboId": 500110,
+      "actions": [
+        {
+          "skillId": 50011001,
+          "kind": "signature",
+          "name": "灵龙漩水",
+          "durationFrames": 109
+        },
+        {
+          "skillId": 505001,
+          "kind": "active",
+          "name": "灵木弹",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50011004,
+          "kind": "break",
+          "name": "宝蓝雏龙-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500114,
+      "actions": [
+        {
+          "skillId": 50011402,
+          "kind": "signature",
+          "name": "寒气",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 503009,
+          "kind": "active",
+          "name": "冰晶弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50011404,
+          "kind": "break",
+          "name": "冰灵仔-合击",
+          "durationFrames": 120
+        }
+      ]
+    },
+    {
+      "kiboId": 500115,
+      "actions": [
+        {
+          "skillId": 50011502,
+          "kind": "signature",
+          "name": "冰灵寒气",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 503010,
+          "kind": "active",
+          "name": "冰晶散射",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50011504,
+          "kind": "break",
+          "name": "冰灵偶-合击",
+          "durationFrames": 120
+        }
+      ]
+    },
+    {
+      "kiboId": 500116,
+      "actions": [
+        {
+          "skillId": 50011602,
+          "kind": "signature",
+          "name": "霜灵寒域",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 503018,
+          "kind": "active",
+          "name": "寒冰之罚",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50011604,
+          "kind": "break",
+          "name": "霜灵偶-合击",
+          "durationFrames": 120
+        }
+      ]
+    },
+    {
+      "kiboId": 500120,
+      "actions": [
+        {
+          "skillId": 50012002,
+          "kind": "signature",
+          "name": "哈加冲锋",
+          "durationFrames": 145
+        },
+        {
+          "skillId": 504001,
+          "kind": "active",
+          "name": "风刃",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50012004,
+          "kind": "break",
+          "name": "哈加-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500123,
+      "actions": [
+        {
+          "skillId": 50012302,
+          "kind": "signature",
+          "name": "飞绒风苞",
+          "durationFrames": 86
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50012304,
+          "kind": "break",
+          "name": "风灵苞-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500124,
+      "actions": [
+        {
+          "skillId": 50012402,
+          "kind": "signature",
+          "name": "飞绒风域",
+          "durationFrames": 99
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50012404,
+          "kind": "break",
+          "name": "风灵朵-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500125,
+      "actions": [
+        {
+          "skillId": 50012502,
+          "kind": "signature",
+          "name": "飞绒漫舞",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 504014,
+          "kind": "active",
+          "name": "风刃扩张",
+          "durationFrames": 55
+        },
+        {
+          "skillId": 50012504,
+          "kind": "break",
+          "name": "岚音花-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500126,
+      "actions": [
+        {
+          "skillId": 50012602,
+          "kind": "signature",
+          "name": "烈风",
+          "durationFrames": 70
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50012604,
+          "kind": "break",
+          "name": "风灵仔-合击",
+          "durationFrames": 88
+        }
+      ]
+    },
+    {
+      "kiboId": 500127,
+      "actions": [
+        {
+          "skillId": 50012702,
+          "kind": "signature",
+          "name": "灵偶烈风",
+          "durationFrames": 75
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50012704,
+          "kind": "break",
+          "name": "风灵偶-合击",
+          "durationFrames": 93
+        }
+      ]
+    },
+    {
+      "kiboId": 500128,
+      "actions": [
+        {
+          "skillId": 50012802,
+          "kind": "signature",
+          "name": "激岚烈风",
+          "durationFrames": 80
+        },
+        {
+          "skillId": 504014,
+          "kind": "active",
+          "name": "风刃扩张",
+          "durationFrames": 55
+        },
+        {
+          "skillId": 50012804,
+          "kind": "break",
+          "name": "岚灵偶-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500129,
+      "actions": [
+        {
+          "skillId": 50012901,
+          "kind": "signature",
+          "name": "稚猴抓",
+          "durationFrames": 79
+        },
+        {
+          "skillId": 507001,
+          "kind": "active",
+          "name": "雷球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50012903,
+          "kind": "break",
+          "name": "呼姆猴-合击",
+          "durationFrames": 85
+        }
+      ]
+    },
+    {
+      "kiboId": 500130,
+      "actions": [
+        {
+          "skillId": 50013001,
+          "kind": "signature",
+          "name": "连抓带扫",
+          "durationFrames": 194
+        },
+        {
+          "skillId": 507003,
+          "kind": "active",
+          "name": "落雷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50013003,
+          "kind": "break",
+          "name": "环尾猴-合击",
+          "durationFrames": 156
+        }
+      ]
+    },
+    {
+      "kiboId": 500131,
+      "actions": [
+        {
+          "skillId": 50013101,
+          "kind": "signature",
+          "name": "环影连击",
+          "durationFrames": 230
+        },
+        {
+          "skillId": 507003,
+          "kind": "active",
+          "name": "落雷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50013103,
+          "kind": "break",
+          "name": "环影猴-合击",
+          "durationFrames": 69
+        }
+      ]
+    },
+    {
+      "kiboId": 500132,
+      "actions": [
+        {
+          "skillId": 50013202,
+          "kind": "signature",
+          "name": "一地嘟噜毛",
+          "durationFrames": 80
+        },
+        {
+          "skillId": 506004,
+          "kind": "active",
+          "name": "岩石滚撞",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50013204,
+          "kind": "break",
+          "name": "嘟噜-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500133,
+      "actions": [
+        {
+          "skillId": 50013302,
+          "kind": "signature",
+          "name": "援护之助",
+          "durationFrames": 95
+        },
+        {
+          "skillId": 506001,
+          "kind": "active",
+          "name": "岩锥",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50013304,
+          "kind": "break",
+          "name": "加多利-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500134,
+      "actions": [
+        {
+          "skillId": 50013402,
+          "kind": "signature",
+          "name": "援护之域",
+          "durationFrames": 95
+        },
+        {
+          "skillId": 506006,
+          "kind": "active",
+          "name": "裂地岩突",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50013404,
+          "kind": "break",
+          "name": "加杜-合击",
+          "durationFrames": 110
+        }
+      ]
+    },
+    {
+      "kiboId": 500138,
+      "actions": [
+        {
+          "skillId": 50013801,
+          "kind": "signature",
+          "name": "宝石飞射",
+          "durationFrames": 105
+        },
+        {
+          "skillId": 501001,
+          "kind": "active",
+          "name": "火球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50013804,
+          "kind": "break",
+          "name": "红宝虫-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500139,
+      "actions": [
+        {
+          "skillId": 50013901,
+          "kind": "signature",
+          "name": "赤晶飞射",
+          "durationFrames": 105
+        },
+        {
+          "skillId": 506005,
+          "kind": "active",
+          "name": "巨石投掷",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50013904,
+          "kind": "break",
+          "name": "赤晶甲-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500140,
+      "actions": [
+        {
+          "skillId": 50014001,
+          "kind": "signature",
+          "name": "炎晶爆袭",
+          "durationFrames": 115
+        },
+        {
+          "skillId": 506005,
+          "kind": "active",
+          "name": "巨石投掷",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50014004,
+          "kind": "break",
+          "name": "炎晶甲-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500147,
+      "actions": [
+        {
+          "skillId": 50014701,
+          "kind": "signature",
+          "name": "枝蔓",
+          "durationFrames": 135
+        },
+        {
+          "skillId": 505013,
+          "kind": "active",
+          "name": "种子飞弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50014704,
+          "kind": "break",
+          "name": "木灵仔-合击",
+          "durationFrames": 101
+        }
+      ]
+    },
+    {
+      "kiboId": 500148,
+      "actions": [
+        {
+          "skillId": 50014801,
+          "kind": "signature",
+          "name": "突袭枝蔓",
+          "durationFrames": 145
+        },
+        {
+          "skillId": 505014,
+          "kind": "active",
+          "name": "花绽飞弹",
+          "durationFrames": 90
+        },
+        {
+          "skillId": 50014804,
+          "kind": "break",
+          "name": "木灵偶-合击",
+          "durationFrames": 101
+        }
+      ]
+    },
+    {
+      "kiboId": 500149,
+      "actions": [
+        {
+          "skillId": 50014901,
+          "kind": "signature",
+          "name": "繁生枝蔓",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 505017,
+          "kind": "active",
+          "name": "地蔓突击",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50014904,
+          "kind": "break",
+          "name": "蔓灵偶-合击",
+          "durationFrames": 101
+        }
+      ]
+    },
+    {
+      "kiboId": 500156,
+      "actions": [
+        {
+          "skillId": 50015602,
+          "kind": "signature",
+          "name": "火花旋风",
+          "durationFrames": 210
+        },
+        {
+          "skillId": 501001,
+          "kind": "active",
+          "name": "火球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50015604,
+          "kind": "break",
+          "name": "火花雀-合击",
+          "durationFrames": 88
+        }
+      ]
+    },
+    {
+      "kiboId": 500157,
+      "actions": [
+        {
+          "skillId": 50015702,
+          "kind": "signature",
+          "name": "焰火旋风",
+          "durationFrames": 227
+        },
+        {
+          "skillId": 501005,
+          "kind": "active",
+          "name": "焰弹连发",
+          "durationFrames": 270
+        },
+        {
+          "skillId": 50015704,
+          "kind": "break",
+          "name": "焰火雀-合击",
+          "durationFrames": 88
+        }
+      ]
+    },
+    {
+      "kiboId": 500158,
+      "actions": [
+        {
+          "skillId": 50015802,
+          "kind": "signature",
+          "name": "烈火龙卷",
+          "durationFrames": 240
+        },
+        {
+          "skillId": 501005,
+          "kind": "active",
+          "name": "焰弹连发",
+          "durationFrames": 270
+        },
+        {
+          "skillId": 50015804,
+          "kind": "break",
+          "name": "火烈鹰-合击",
+          "durationFrames": 111
+        }
+      ]
+    },
+    {
+      "kiboId": 500164,
+      "actions": [
+        {
+          "skillId": 50016402,
+          "kind": "signature",
+          "name": "雷灵旋律",
+          "durationFrames": 111
+        },
+        {
+          "skillId": 507012,
+          "kind": "active",
+          "name": "电能子弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50016404,
+          "kind": "break",
+          "name": "雷灵苞-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500165,
+      "actions": [
+        {
+          "skillId": 50016502,
+          "kind": "signature",
+          "name": "雷鸣协奏",
+          "durationFrames": 119
+        },
+        {
+          "skillId": 507020,
+          "kind": "active",
+          "name": "连锁雷暴",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50016504,
+          "kind": "break",
+          "name": "雷灵朵-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500166,
+      "actions": [
+        {
+          "skillId": 50016602,
+          "kind": "signature",
+          "name": "雷音乐章",
+          "durationFrames": 110
+        },
+        {
+          "skillId": 507019,
+          "kind": "active",
+          "name": "雷电惩戒",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50016604,
+          "kind": "break",
+          "name": "电音花-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500173,
+      "actions": [
+        {
+          "skillId": 50017302,
+          "kind": "signature",
+          "name": "雷环",
+          "durationFrames": 205
+        },
+        {
+          "skillId": 507012,
+          "kind": "active",
+          "name": "电能子弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50017304,
+          "kind": "break",
+          "name": "雷灵仔-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500174,
+      "actions": [
+        {
+          "skillId": 50017402,
+          "kind": "signature",
+          "name": "灵偶雷环",
+          "durationFrames": 240
+        },
+        {
+          "skillId": 507020,
+          "kind": "active",
+          "name": "连锁雷暴",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50017404,
+          "kind": "break",
+          "name": "雷灵偶-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500175,
+      "actions": [
+        {
+          "skillId": 50017502,
+          "kind": "signature",
+          "name": "惊骇雷环",
+          "durationFrames": 240
+        },
+        {
+          "skillId": 507013,
+          "kind": "active",
+          "name": "镭射",
+          "durationFrames": 88
+        },
+        {
+          "skillId": 50017504,
+          "kind": "break",
+          "name": "电灵偶-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500179,
+      "actions": [
+        {
+          "skillId": 50017901,
+          "kind": "signature",
+          "name": "音波",
+          "durationFrames": 115
+        },
+        {
+          "skillId": 509001,
+          "kind": "active",
+          "name": "暗魂影",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50017904,
+          "kind": "break",
+          "name": "竖耳蝠-合击",
+          "durationFrames": 103
+        }
+      ]
+    },
+    {
+      "kiboId": 500180,
+      "actions": [
+        {
+          "skillId": 50018001,
+          "kind": "signature",
+          "name": "喧哗音波",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 509002,
+          "kind": "active",
+          "name": "暗魂影爆阵",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50018004,
+          "kind": "break",
+          "name": "嘻哈蝠-合击",
+          "durationFrames": 103
+        }
+      ]
+    },
+    {
+      "kiboId": 500181,
+      "actions": [
+        {
+          "skillId": 50018101,
+          "kind": "signature",
+          "name": "汹涌音波",
+          "durationFrames": 190
+        },
+        {
+          "skillId": 509002,
+          "kind": "active",
+          "name": "暗魂影爆阵",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50018104,
+          "kind": "break",
+          "name": "笑面蝠-合击",
+          "durationFrames": 103
+        }
+      ]
+    },
+    {
+      "kiboId": 500185,
+      "actions": [
+        {
+          "skillId": 50018502,
+          "kind": "signature",
+          "name": "幻惑之风",
+          "durationFrames": 168
+        },
+        {
+          "skillId": 504009,
+          "kind": "active",
+          "name": "旋风涡流",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50018504,
+          "kind": "break",
+          "name": "森彩灵蝶-合击",
+          "durationFrames": 113
+        }
+      ]
+    },
+    {
+      "kiboId": 500186,
+      "actions": [
+        {
+          "skillId": 50018602,
+          "kind": "signature",
+          "name": "激浪旋冲",
+          "durationFrames": 138
+        },
+        {
+          "skillId": 502001,
+          "kind": "active",
+          "name": "水弹",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50018604,
+          "kind": "break",
+          "name": "布鲁达-合击",
+          "durationFrames": 80
+        }
+      ]
+    },
+    {
+      "kiboId": 500187,
+      "actions": [
+        {
+          "skillId": 50018702,
+          "kind": "signature",
+          "name": "羽舞旋击",
+          "durationFrames": 230
+        },
+        {
+          "skillId": 502007,
+          "kind": "active",
+          "name": "泡泡攻击",
+          "durationFrames": 175
+        },
+        {
+          "skillId": 50018704,
+          "kind": "break",
+          "name": "蓝羽西格尼-合击",
+          "durationFrames": 99
+        }
+      ]
+    },
+    {
+      "kiboId": 500206,
+      "actions": [
+        {
+          "skillId": 50020601,
+          "kind": "signature",
+          "name": "震地回响",
+          "durationFrames": 80
+        },
+        {
+          "skillId": 508002,
+          "kind": "active",
+          "name": "辉光熠熠",
+          "durationFrames": 260
+        },
+        {
+          "skillId": 50020604,
+          "kind": "break",
+          "name": "驮驮龙-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500209,
+      "actions": [
+        {
+          "skillId": 50020901,
+          "kind": "signature",
+          "name": "森境束缚",
+          "durationFrames": 95
+        },
+        {
+          "skillId": 505002,
+          "kind": "active",
+          "name": "飘叶散射",
+          "durationFrames": 230
+        },
+        {
+          "skillId": 50020904,
+          "kind": "break",
+          "name": "森境鹿-合击",
+          "durationFrames": 99
+        }
+      ]
+    },
+    {
+      "kiboId": 500213,
+      "actions": [
+        {
+          "skillId": 50021301,
+          "kind": "signature",
+          "name": "菇噜噜噜",
+          "durationFrames": 75
+        },
+        {
+          "skillId": 509001,
+          "kind": "active",
+          "name": "暗魂影",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50021304,
+          "kind": "break",
+          "name": "菇噜噜-合击",
+          "durationFrames": 80
+        }
+      ]
+    },
+    {
+      "kiboId": 500216,
+      "actions": [
+        {
+          "skillId": 50021601,
+          "kind": "signature",
+          "name": "爆破爪",
+          "durationFrames": 78
+        },
+        {
+          "skillId": 501009,
+          "kind": "active",
+          "name": "烈焰斩",
+          "durationFrames": 160
+        },
+        {
+          "skillId": 50021604,
+          "kind": "break",
+          "name": "烈豹-合击",
+          "durationFrames": 89
+        }
+      ]
+    },
+    {
+      "kiboId": 500220,
+      "actions": [
+        {
+          "skillId": 50022001,
+          "kind": "signature",
+          "name": "星云连射",
+          "durationFrames": 227
+        },
+        {
+          "skillId": 509010,
+          "kind": "active",
+          "name": "暗影连袭",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50022004,
+          "kind": "break",
+          "name": "星云伊欧-合击",
+          "durationFrames": 103
+        }
+      ]
+    },
+    {
+      "kiboId": 500231,
+      "actions": [
+        {
+          "skillId": 50023101,
+          "kind": "signature",
+          "name": "霸主奔袭",
+          "durationFrames": 195
+        },
+        {
+          "skillId": 507003,
+          "kind": "active",
+          "name": "落雷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50023104,
+          "kind": "break",
+          "name": "铁鬃霸主-合击",
+          "durationFrames": 85
+        }
+      ]
+    },
+    {
+      "kiboId": 500244,
+      "actions": [
+        {
+          "skillId": 50024401,
+          "kind": "signature",
+          "name": "哞哞拳",
+          "durationFrames": 90
+        },
+        {
+          "skillId": 501001,
+          "kind": "active",
+          "name": "火球",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50024404,
+          "kind": "break",
+          "name": "焰哞哞-合击",
+          "durationFrames": 100
+        }
+      ]
+    },
+    {
+      "kiboId": 500245,
+      "actions": [
+        {
+          "skillId": 50024501,
+          "kind": "signature",
+          "name": "焰牛冲拳",
+          "durationFrames": 140
+        },
+        {
+          "skillId": 501010,
+          "kind": "active",
+          "name": "火焰冲撞",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50024504,
+          "kind": "break",
+          "name": "焰牛牛-合击",
+          "durationFrames": 125
+        }
+      ]
+    },
+    {
+      "kiboId": 500246,
+      "actions": [
+        {
+          "skillId": 50024601,
+          "kind": "signature",
+          "name": "烈焰冲拳",
+          "durationFrames": 178
+        },
+        {
+          "skillId": 501010,
+          "kind": "active",
+          "name": "火焰冲撞",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50024604,
+          "kind": "break",
+          "name": "烈焰角牛-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500258,
+      "actions": [
+        {
+          "skillId": 50025801,
+          "kind": "signature",
+          "name": "芽之息",
+          "durationFrames": 106
+        },
+        {
+          "skillId": 505001,
+          "kind": "active",
+          "name": "灵木弹",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50025804,
+          "kind": "break",
+          "name": "小芽狐-合击",
+          "durationFrames": 125
+        }
+      ]
+    },
+    {
+      "kiboId": 500259,
+      "actions": [
+        {
+          "skillId": 50025901,
+          "kind": "signature",
+          "name": "蓬尾之息",
+          "durationFrames": 108
+        },
+        {
+          "skillId": 505002,
+          "kind": "active",
+          "name": "飘叶散射",
+          "durationFrames": 230
+        },
+        {
+          "skillId": 50025904,
+          "kind": "break",
+          "name": "蓬尾狐-合击",
+          "durationFrames": 168
+        }
+      ]
+    },
+    {
+      "kiboId": 500260,
+      "actions": [
+        {
+          "skillId": 50026001,
+          "kind": "signature",
+          "name": "萝冠之息",
+          "durationFrames": 170
+        },
+        {
+          "skillId": 505002,
+          "kind": "active",
+          "name": "飘叶散射",
+          "durationFrames": 230
+        },
+        {
+          "skillId": 50026004,
+          "kind": "break",
+          "name": "萝冠灵狐-合击",
+          "durationFrames": 165
+        }
+      ]
+    },
+    {
+      "kiboId": 500261,
+      "actions": [
+        {
+          "skillId": 50026102,
+          "kind": "signature",
+          "name": "狸仔击",
+          "durationFrames": 216
+        },
+        {
+          "skillId": 502001,
+          "kind": "active",
+          "name": "水弹",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50026104,
+          "kind": "break",
+          "name": "河狸仔-合击",
+          "durationFrames": 79
+        }
+      ]
+    },
+    {
+      "kiboId": 500262,
+      "actions": [
+        {
+          "skillId": 50026202,
+          "kind": "signature",
+          "name": "波波狸击",
+          "durationFrames": 290
+        },
+        {
+          "skillId": 502001,
+          "kind": "active",
+          "name": "水弹",
+          "durationFrames": 185
+        },
+        {
+          "skillId": 50026204,
+          "kind": "break",
+          "name": "波河狸-合击",
+          "durationFrames": 181
+        }
+      ]
+    },
+    {
+      "kiboId": 500263,
+      "actions": [
+        {
+          "skillId": 50026302,
+          "kind": "signature",
+          "name": "大师狸击",
+          "durationFrames": 327
+        },
+        {
+          "skillId": 502005,
+          "kind": "active",
+          "name": "浪袭",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50026304,
+          "kind": "break",
+          "name": "河狸大师-合击",
+          "durationFrames": 125
+        }
+      ]
+    },
+    {
+      "kiboId": 500296,
+      "actions": [
+        {
+          "skillId": 50029601,
+          "kind": "signature",
+          "name": "雷霆穿梭",
+          "durationFrames": 115
+        },
+        {
+          "skillId": 504002,
+          "kind": "active",
+          "name": "凛风斩",
+          "durationFrames": 160
+        },
+        {
+          "skillId": 50029604,
+          "kind": "break",
+          "name": "帕莫拉-合击",
+          "durationFrames": 115
+        }
+      ]
+    },
+    {
+      "kiboId": 500304,
+      "actions": [
+        {
+          "skillId": 50030401,
+          "kind": "signature",
+          "name": "风旋",
+          "durationFrames": 260
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50030404,
+          "kind": "break",
+          "name": "库库-合击",
+          "durationFrames": 133
+        }
+      ]
+    },
+    {
+      "kiboId": 500305,
+      "actions": [
+        {
+          "skillId": 50030501,
+          "kind": "signature",
+          "name": "大风旋",
+          "durationFrames": 527
+        },
+        {
+          "skillId": 504020,
+          "kind": "active",
+          "name": "旋风回旋镖",
+          "durationFrames": 60
+        },
+        {
+          "skillId": 50030504,
+          "kind": "break",
+          "name": "库库尔-合击",
+          "durationFrames": 95
+        }
+      ]
+    },
+    {
+      "kiboId": 500306,
+      "actions": [
+        {
+          "skillId": 50030601,
+          "kind": "signature",
+          "name": "与风共舞",
+          "durationFrames": 640
+        },
+        {
+          "skillId": 504006,
+          "kind": "active",
+          "name": "风龙卷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50030604,
+          "kind": "break",
+          "name": "库库尔克-合击",
+          "durationFrames": 80
+        }
+      ]
+    },
+    {
+      "kiboId": 500313,
+      "actions": [
+        {
+          "skillId": 50031302,
+          "kind": "signature",
+          "name": "绒心炸弹",
+          "durationFrames": 241
+        },
+        {
+          "skillId": 501016,
+          "kind": "active",
+          "name": "分裂之焰",
+          "durationFrames": 150
+        },
+        {
+          "skillId": 50031304,
+          "kind": "break",
+          "name": "绒心布里尼-合击",
+          "durationFrames": 105
+        }
+      ]
+    },
+    {
+      "kiboId": 500322,
+      "actions": [
+        {
+          "skillId": 50032201,
+          "kind": "signature",
+          "name": "卷风呼啸",
+          "durationFrames": 218
+        },
+        {
+          "skillId": 504001,
+          "kind": "active",
+          "name": "风刃",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50032204,
+          "kind": "break",
+          "name": "赛可洛-合击",
+          "durationFrames": 97
+        }
+      ]
+    },
+    {
+      "kiboId": 500323,
+      "actions": [
+        {
+          "skillId": 50032301,
+          "kind": "signature",
+          "name": "龙卷风暴",
+          "durationFrames": 282
+        },
+        {
+          "skillId": 504008,
+          "kind": "active",
+          "name": "召风凝场",
+          "durationFrames": 345
+        },
+        {
+          "skillId": 50032304,
+          "kind": "break",
+          "name": "托纳缇欧-合击",
+          "durationFrames": 98
+        }
+      ]
+    },
+    {
+      "kiboId": 500324,
+      "actions": [
+        {
+          "skillId": 50032401,
+          "kind": "signature",
+          "name": "暴风旋引",
+          "durationFrames": 359
+        },
+        {
+          "skillId": 504006,
+          "kind": "active",
+          "name": "风龙卷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50032404,
+          "kind": "break",
+          "name": "伊欧利安-合击",
+          "durationFrames": 132
+        }
+      ]
+    },
+    {
+      "kiboId": 500354,
+      "actions": [
+        {
+          "skillId": 50035401,
+          "kind": "signature",
+          "name": "下压",
+          "durationFrames": 296
+        },
+        {
+          "skillId": 509001,
+          "kind": "active",
+          "name": "暗魂影",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50035404,
+          "kind": "break",
+          "name": "小暮鸮-合击",
+          "durationFrames": 75
+        }
+      ]
+    },
+    {
+      "kiboId": 500355,
+      "actions": [
+        {
+          "skillId": 50035501,
+          "kind": "signature",
+          "name": "暗影下压",
+          "durationFrames": 289
+        },
+        {
+          "skillId": 509002,
+          "kind": "active",
+          "name": "暗魂影爆阵",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50035504,
+          "kind": "break",
+          "name": "夜猫鸮-合击",
+          "durationFrames": 75
+        }
+      ]
+    },
+    {
+      "kiboId": 500357,
+      "actions": [
+        {
+          "skillId": 50035701,
+          "kind": "signature",
+          "name": "迅愈之风",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50035704,
+          "kind": "break",
+          "name": "啵啵丁-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500358,
+      "actions": [
+        {
+          "skillId": 50035801,
+          "kind": "signature",
+          "name": "复苏季风",
+          "durationFrames": 316
+        },
+        {
+          "skillId": 505011,
+          "kind": "active",
+          "name": "森之守护",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50035804,
+          "kind": "break",
+          "name": "绒绒云-合击",
+          "durationFrames": 115
+        }
+      ]
+    },
+    {
+      "kiboId": 500360,
+      "actions": [
+        {
+          "skillId": 50036001,
+          "kind": "signature",
+          "name": "血噬暗影",
+          "durationFrames": 492
+        },
+        {
+          "skillId": 509002,
+          "kind": "active",
+          "name": "暗魂影爆阵",
+          "durationFrames": 200
+        },
+        {
+          "skillId": 50036003,
+          "kind": "break",
+          "name": "怯影之翼-合击",
+          "durationFrames": 639
+        }
+      ]
+    },
+    {
+      "kiboId": 500368,
+      "actions": [
+        {
+          "skillId": 50036801,
+          "kind": "signature",
+          "name": "符之乐声",
+          "durationFrames": 234
+        },
+        {
+          "skillId": 504012,
+          "kind": "active",
+          "name": "小风弹",
+          "durationFrames": 50
+        },
+        {
+          "skillId": 50036803,
+          "kind": "break",
+          "name": "小音浮-合击",
+          "durationFrames": 88
+        }
+      ]
+    },
+    {
+      "kiboId": 500369,
+      "actions": [
+        {
+          "skillId": 50036901,
+          "kind": "signature",
+          "name": "呱乐演奏",
+          "durationFrames": 475
+        },
+        {
+          "skillId": 507003,
+          "kind": "active",
+          "name": "落雷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50036903,
+          "kind": "break",
+          "name": "乐乐蛙-合击",
+          "durationFrames": 88
+        }
+      ]
+    },
+    {
+      "kiboId": 500370,
+      "actions": [
+        {
+          "skillId": 50037001,
+          "kind": "signature",
+          "name": "风暴音域",
+          "durationFrames": 410
+        },
+        {
+          "skillId": 507003,
+          "kind": "active",
+          "name": "落雷",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50037003,
+          "kind": "break",
+          "name": "音霸蛙-合击",
+          "durationFrames": 84
+        }
+      ]
+    },
+    {
+      "kiboId": 500399,
+      "actions": [
+        {
+          "skillId": 50039901,
+          "kind": "signature",
+          "name": "绽源之云",
+          "durationFrames": 721
+        },
+        {
+          "skillId": 502007,
+          "kind": "active",
+          "name": "泡泡攻击",
+          "durationFrames": 175
+        },
+        {
+          "skillId": 50039903,
+          "kind": "break",
+          "name": "浮云-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500467,
+      "actions": [
+        {
+          "skillId": 50046701,
+          "kind": "signature",
+          "name": "震踪踏击",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 506001,
+          "kind": "active",
+          "name": "岩锥",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50046704,
+          "kind": "break",
+          "name": "小岩蹄-合击",
+          "durationFrames": 80
+        }
+      ]
+    },
+    {
+      "kiboId": 500468,
+      "actions": [
+        {
+          "skillId": 50046801,
+          "kind": "signature",
+          "name": "震袭连踏",
+          "durationFrames": 100
+        },
+        {
+          "skillId": 506006,
+          "kind": "active",
+          "name": "裂地岩突",
+          "durationFrames": 165
+        },
+        {
+          "skillId": 50046804,
+          "kind": "break",
+          "name": "重岩蹄-合击",
+          "durationFrames": 90
+        }
+      ]
+    },
+    {
+      "kiboId": 500469,
+      "actions": [
+        {
+          "skillId": 50046903,
+          "kind": "signature",
+          "name": "旋转镰刃",
+          "durationFrames": 345
+        },
+        {
+          "skillId": 506002,
+          "kind": "active",
+          "name": "岩韧斩",
+          "durationFrames": 160
+        },
+        {
+          "skillId": 50046907,
+          "kind": "break",
+          "name": "跳跳稻草人-合击",
+          "durationFrames": 82
+        }
+      ]
+    },
+    {
+      "kiboId": 500470,
+      "actions": [
+        {
+          "skillId": 50047001,
+          "kind": "signature",
+          "name": "镰舞风暴",
+          "durationFrames": 280
+        },
+        {
+          "skillId": 506002,
+          "kind": "active",
+          "name": "岩韧斩",
+          "durationFrames": 160
+        },
+        {
+          "skillId": 50047007,
+          "kind": "break",
+          "name": "秋日守望者-合击",
+          "durationFrames": 88
+        }
+      ]
+    }
+  ]
+}

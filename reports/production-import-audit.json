@@ -98,15 +98,15 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 123,
-    "productionReachableCount": 119,
+    "sourceCodeFileCount": 124,
+    "productionReachableCount": 120,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
     "unreferencedCount": 0,
     "productionReachableByArea": {
       "src": 2,
-      "src/data": 1,
+      "src/data": 2,
       "src/domain": 27,
       "src/features/workbench": 46,
       "src/i18n": 1,
@@ -132,6 +132,7 @@
   "productionReachableFiles": [
     "src/App.vue",
     "src/data/azprGenerated.js",
+    "src/data/workbenchKiboActionCatalog.js",
     "src/domain/contractValues.js",
     "src/domain/initialRuntimeState.js",
     "src/domain/projectSchema.js",

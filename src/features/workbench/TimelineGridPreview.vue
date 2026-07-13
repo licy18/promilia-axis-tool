@@ -670,7 +670,9 @@
               :style="actionStyle(action)"
               :data-action-id="action.id"
               :data-action-type="action.type"
+              :data-skill-id="action.skillId ?? ''"
               :data-start-ms="action.startMs"
+              :data-duration-ms="action.durationMs"
               :data-cursor-active="
                 isActionActiveAtTimelineCursor(action) ? 'true' : 'false'
               "

@@ -288,10 +288,14 @@ function createReplaySourceState() {
   state.actionDrafts.push({
     id: 'action-kibo',
     type: 'kiboEvent',
+    skillId: 50000102,
     actorCharacterId: state.selection.characterId,
     startMs: 1800,
-    durationMs: 600,
-    eventType: 'activation',
+    durationMs: 1416.666667,
+    eventType: 'signature',
+    name: '迅风刃',
+    timingSource: 'azpr-unity-skill-control-root',
+    needsTimingData: false,
     note: 'replay-kibo-event',
   });
   state.actionRelations = [
@@ -375,6 +379,7 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
       type: action.type,
       actorId: action.actorId ?? null,
       kiboId: action.kiboId ?? null,
+      skillId: action.skillId ?? null,
       startMs: action.startMs,
       durationMs: action.durationMs,
     })),
@@ -385,7 +390,10 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
         actionId: action.id,
         actorId: action.actorId,
         kiboId: action.kiboId,
+        skillId: action.skillId,
+        name: action.name,
         eventType: action.eventType,
+        timing: action.timing,
         appliedToCalculators: action.appliedToCalculators,
       })),
     kiboSimLog: result.eventLog

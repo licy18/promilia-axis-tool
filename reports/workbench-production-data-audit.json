@@ -3,6 +3,7 @@
   "kind": "workbench-production-data-audit",
   "status": {
     "seedProjectionMatches": true,
+    "kiboActionCatalogMatches": true,
     "skillCoreProjectionMatches": true,
     "skillDiagnosticsProjectionMatches": true,
     "manifestMatches": true
@@ -44,23 +45,24 @@
       "summonTargetCount": 2
     },
     "size": {
-      "fullBytes": 6587315,
-      "projectionBytes": 3504273,
-      "savedBytes": 3083042,
-      "reductionPercent": 46.8
+      "fullBytes": 6391041,
+      "projectionBytes": 3405014,
+      "savedBytes": 2986027,
+      "reductionPercent": 46.72
     },
-    "coreBytes": 955754,
-    "diagnosticsBytes": 2548519
+    "coreBytes": 921175,
+    "diagnosticsBytes": 2483839
   },
   "manifestAudit": {
     "workbenchSeedRegistered": true,
     "workbenchSkillCoreRegistered": true,
-    "workbenchSkillDiagnosticsRegistered": true
+    "workbenchSkillDiagnosticsRegistered": true,
+    "workbenchKiboActionCatalogRegistered": true
   },
   "gameCatalogSize": {
-    "fullBytes": 4952147,
-    "projectionBytes": 1132826,
-    "savedBytes": 3819321,
-    "reductionPercent": 77.12
+    "fullBytes": 4993015,
+    "projectionBytes": 1154448,
+    "savedBytes": 3838567,
+    "reductionPercent": 76.88
   }
 }

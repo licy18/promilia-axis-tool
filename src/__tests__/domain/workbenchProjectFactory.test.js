@@ -36,7 +36,7 @@ describe('workbench project actor configuration', () => {
     const loadoutOptions = getWorkbenchLoadoutOptions();
 
     expect(seed).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       purpose: 'workbench-production-data-projection',
       counts: {
         characters: 20,

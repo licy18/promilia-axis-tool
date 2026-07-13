@@ -351,7 +351,7 @@
       <ActionLibraryPanel
         :actor="actionLibraryActor"
         :actors="scenario.actors"
-        :kibos="loadoutOptions.kibos"
+        :kibos="actionLibraryKibos"
         :active-actor-character-id="actionLibraryCharacterId"
         :actions="scenario.actions"
         :main-flow-command-surface="mainFlowCommandSurface"
@@ -927,6 +927,7 @@ import {
   ref,
   watch,
 } from 'vue';
+import { loadWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import {
   Aim,
   ArrowDown,
@@ -1157,6 +1158,13 @@ const TeamLoadoutPanel = defineAsyncComponent(
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const loadoutOptions = getWorkbenchLoadoutOptions();
+const kiboActionsById = ref(new Map());
+const actionLibraryKibos = computed(() =>
+  loadoutOptions.kibos.map(kibo => ({
+    ...kibo,
+    actions: kiboActionsById.value.get(Number(kibo.id)) ?? [],
+  }))
+);
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
 const WORKBENCH_HISTORY_LIMIT = 50;
 const DEFAULT_WORKBENCH_LEFT_PANEL_WIDTH = 260;
@@ -2100,6 +2108,13 @@ function resolveActionLibraryEntryDropTime(laneId, clientX) {
 }
 
 onMounted(() => {
+  void loadWorkbenchKiboActionCatalog()
+    .then(catalog => {
+      kiboActionsById.value = new Map(
+        catalog.items.map(item => [Number(item.kiboId), item.actions ?? []])
+      );
+    })
+    .catch(() => {});
   void getWorkbenchLayoutApi().then(layoutApi => {
     workbenchLayout.value =
       layoutApi.loadWorkbenchLayoutState(getLocalStorage());
@@ -2716,17 +2731,20 @@ function addResourceAction() {
   });
 }
 
-function addKiboEventAction() {
+function addKiboEventAction(entry = null) {
   clearSegmentSplitPreview();
   addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.KIBO_EVENT,
-    skillId: selectedDraft.value.skillId,
+    skillId: entry?.skillId ?? selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
-    durationMs: 600,
+    durationMs: entry?.durationMs ?? 600,
     level: selectedDraft.value.level,
-    eventType: 'activation',
-    note: '奇波事件标记；效果未接入 calculator。',
+    eventType: entry?.eventType ?? 'activation',
+    name: entry?.label ?? '',
+    timingSource: entry?.timingSource ?? null,
+    needsTimingData: entry?.needsTimingData ?? true,
+    note: entry?.note ?? '奇波事件标记；效果未接入 calculator。',
   });
 }
 
@@ -2773,7 +2791,7 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
   const commonDraft = {
     id: createNextActionId(),
     type: entry.type,
-    skillId: selectedDraft.value.skillId,
+    skillId: entry.skillId ?? selectedDraft.value.skillId,
     actorCharacterId,
     durationMs: entry.durationMs ?? 600,
     level: selectedDraft.value.level,
@@ -2793,7 +2811,10 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
   } else if (entry.type === ACTION_TYPES.KIBO_EVENT) {
     Object.assign(commonDraft, {
       eventType: entry.eventType ?? 'activation',
-      note: '奇波事件标记；效果未接入 calculator。',
+      name: entry.label ?? '',
+      timingSource: entry.timingSource ?? null,
+      needsTimingData: entry.needsTimingData ?? true,
+      note: entry.note ?? '奇波事件标记；效果未接入 calculator。',
     });
   } else if (entry.type === ACTION_TYPES.ENEMY_EVENT) {
     Object.assign(commonDraft, {

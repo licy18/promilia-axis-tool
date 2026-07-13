@@ -407,9 +407,13 @@ export function createKiboEventAction({
   id,
   actorId = null,
   kiboId = null,
+  skillId = null,
+  name = '奇波事件',
   startMs = 0,
   durationMs = 600,
   eventType = 'activation',
+  timingSource = null,
+  needsTimingData = true,
   note = '奇波事件标记',
   insertion = null,
   effectCommands = [],
@@ -419,10 +423,25 @@ export function createKiboEventAction({
     type: ACTION_TYPES.KIBO_EVENT,
     actorId,
     kiboId,
-    name: '奇波事件',
+    skillId:
+      Number.isInteger(Number(skillId)) && Number(skillId) > 0
+        ? Number(skillId)
+        : null,
+    name: String(name ?? '').trim() || '奇波事件',
     startMs,
     durationMs,
     eventType,
+    ...(timingSource
+      ? {
+          timing: {
+            needsTimingData: Boolean(needsTimingData),
+            source: String(timingSource).trim(),
+            animationTimeMs: durationMs,
+            damageTicks: [],
+            cancelWindows: [],
+          },
+        }
+      : {}),
     note,
     insertion,
     appliedToCalculators: false,

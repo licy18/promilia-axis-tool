@@ -483,19 +483,36 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   );
   await closeInspectorIfVisible(page);
 
+  const kiboActionEntries = page.getByTestId('workbench-kibo-action-entry');
+  await expect(kiboActionEntries).toHaveCount(3);
+  await expect(kiboActionEntries).toContainText([
+    '水灵涟漪',
+    '水弹连射',
+    '水灵仔-合击',
+  ]);
   await dragLocatorTo(
     page,
-    page.getByTestId('workbench-add-kibo-event-action'),
+    page.locator(
+      '[data-testid="workbench-kibo-action-entry"][data-skill-id="502015"]'
+    ),
     timeline.locator(
       '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
     ),
     { targetPosition: { x: 680, y: 18 } }
   );
-  await expect(
-    timeline.locator(
-      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
-    )
-  ).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+  const kiboTimelineAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+  );
+  await expect(kiboTimelineAction).toHaveAttribute(
+    'data-lane-id',
+    'kibo-team-slot-2'
+  );
+  await expect(kiboTimelineAction).toHaveAttribute('data-skill-id', '502015');
+  await expect(kiboTimelineAction).toHaveAttribute(
+    'data-duration-ms',
+    '833.333333'
+  );
+  await expect(kiboTimelineAction).toContainText('水弹连射');
   await expect(kiboEnergyCurve).toHaveAttribute('data-point-count', '0');
   await expect(
     kiboEnergyCurve.getByTestId('workbench-timeline-state-curve-line')
@@ -647,7 +664,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     timeline.locator(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
     )
-  ).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+  ).toHaveAttribute('data-skill-id', '502015');
   await expect(kiboEnergyCurve).toHaveAttribute('data-point-count', '0');
 
   await closeInspectorIfVisible(page);
@@ -3285,8 +3302,23 @@ async function dragLocatorTo(
   target,
   { sourcePosition = null, targetPosition = null } = {}
 ) {
-  await source.scrollIntoViewIfNeeded();
   await target.scrollIntoViewIfNeeded();
+  const scrolledWithinLibrary = await source.evaluate(element => {
+    const scrollContainer = element.closest('.action-library');
+    if (!scrollContainer) {
+      return false;
+    }
+    const sourceRect = element.getBoundingClientRect();
+    const containerRect = scrollContainer.getBoundingClientRect();
+    scrollContainer.scrollTop +=
+      sourceRect.top -
+      containerRect.top -
+      Math.max(0, (containerRect.height - sourceRect.height) / 2);
+    return true;
+  });
+  if (!scrolledWithinLibrary) {
+    await source.scrollIntoViewIfNeeded();
+  }
   const sourceBox = await source.boundingBox();
   const targetBox = await target.boundingBox();
   if (!sourceBox || !targetBox) {

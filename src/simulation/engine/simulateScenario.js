@@ -221,7 +221,11 @@ function createNonCombatEvent(action) {
         actionName: action.name,
         actorName: action.actor?.name,
         kiboId: action.kiboId ?? action.actor?.loadout?.kiboId ?? null,
+        ...(action.skillId ? { skillId: action.skillId } : {}),
         eventType: action.eventType,
+        ...(action.timing?.source
+          ? { timingSource: action.timing.source }
+          : {}),
         note: action.note,
         appliedToCalculators: false,
       },

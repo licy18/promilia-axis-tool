@@ -37,6 +37,8 @@ export function createWorkbenchTimelineEntry(source = {}) {
     durationMs: positiveNumberOrNull(source.durationMs),
     eventType: textOrNull(source.eventType),
     label: textOrNull(source.label),
+    timingSource: textOrNull(source.timingSource),
+    needsTimingData: Boolean(source.needsTimingData),
     rawValue: source.rawValue ?? null,
     note: textOrNull(source.note),
   };

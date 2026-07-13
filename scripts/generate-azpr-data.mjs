@@ -801,7 +801,9 @@ const enemies = mapEnemies(
   unitProperties,
   templateValues
 );
-const kibos = mapKibos(kiboForms);
+const kiboSkillControlTimings =
+  await buildKiboSkillControlTimingIndex(petTable);
+const kibos = mapKibos(kiboForms, petTable, kiboSkillControlTimings);
 const equipment = mapEquipment(equipmentForms);
 const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
@@ -882,6 +884,7 @@ const workbenchSeed = buildWorkbenchSeedData({
   soulessences,
   characterAttributePanelByCharacterId,
 });
+const workbenchKiboActionCatalog = buildWorkbenchKiboActionCatalog(kibos);
 const workbenchSkillCore = createWorkbenchSkillCoreProjection({
   generatedAt,
   skillLogicIndex,
@@ -937,6 +940,7 @@ await Promise.all([
   writeJson('character-attribute-panels.json', characterAttributePanels),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
+  writeJson('workbench-kibo-action-catalog.json', workbenchKiboActionCatalog),
   writeJson('workbench-skill-core.json', workbenchSkillCore),
   writeJson('workbench-skill-diagnostics.json', workbenchSkillDiagnostics),
   writeJson('validation-report.json', validationReport),
@@ -1008,6 +1012,7 @@ function buildManifest(validationReport) {
       characterAttributePanels: 'character-attribute-panels.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
+      workbenchKiboActionCatalog: 'workbench-kibo-action-catalog.json',
       workbenchSkillCore: 'workbench-skill-core.json',
       workbenchSkillDiagnostics: 'workbench-skill-diagnostics.json',
       validationReport: 'validation-report.json',
@@ -1080,7 +1085,7 @@ function buildWorkbenchSeedData({
   const compactSoulessences = soulessences.map(compactSoulessence);
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     generatedAt,
     source: 'generated-from-local-azpr-data',
     purpose: 'workbench-production-data-projection',
@@ -1092,6 +1097,9 @@ function buildWorkbenchSeedData({
       equipment: sourceFiles.equipment,
       kibos: sourceFiles.kibos,
       soulessences: sourceFiles.soulessences,
+    },
+    catalogs: {
+      kiboActions: 'workbench-kibo-action-catalog.json',
     },
     defaults: {
       characterId: 109001,
@@ -1207,6 +1215,24 @@ function compactKibo(kibo) {
     name: kibo.name,
     element: kibo.element,
     stage: kibo.stage,
+  };
+}
+
+function buildWorkbenchKiboActionCatalog(kibos) {
+  return {
+    schemaVersion: 1,
+    kind: 'workbench-kibo-action-catalog',
+    generatedAt,
+    source: 'pet-table-and-azpr-unity-skill-control-root',
+    items: kibos.map(kibo => ({
+      kiboId: kibo.id,
+      actions: (kibo.skills ?? []).map(skill => ({
+        skillId: skill.skillId,
+        kind: skill.kind,
+        name: skill.name,
+        durationFrames: skill.durationFrames,
+      })),
+    })),
   };
 }
 
@@ -3152,10 +3178,9 @@ async function buildSummonTargetSkillControlDirectorySummary(skillId) {
     behaviorEvidence.startFrames,
     behaviorEvidence.endFrames
   );
-  const startFrameCandidates = uniqueNumbers(behaviorEvidence.startFrames).slice(
-    0,
-    16
-  );
+  const startFrameCandidates = uniqueNumbers(
+    behaviorEvidence.startFrames
+  ).slice(0, 16);
 
   return compactObject({
     status:
@@ -3175,8 +3200,7 @@ async function buildSummonTargetSkillControlDirectorySummary(skillId) {
     timelineControlSampleCount: behaviorEvidence.timelineControlCount,
     behaviorNodeSampleCount: behaviorEvidence.behaviorNodeCount,
     frameCandidateSampleCount: behaviorEvidence.frameCandidateCount,
-    elementListCandidateSampleCount:
-      behaviorEvidence.elementListCandidateCount,
+    elementListCandidateSampleCount: behaviorEvidence.elementListCandidateCount,
     frameRange,
     startFrameCandidates,
     triggerFrameCandidateSummary: compactObject({
@@ -3193,8 +3217,7 @@ async function buildSummonTargetSkillControlDirectorySummary(skillId) {
     }),
     effectLaneCandidateSummary: behaviorEvidence.laneCandidateSummary,
     behaviorReferenceSummary: behaviorEvidence.behaviorReferenceSummary,
-    hpBehaviorChainCount:
-      behaviorEvidence.behaviorChainsByLane.hpDamage.length,
+    hpBehaviorChainCount: behaviorEvidence.behaviorChainsByLane.hpDamage.length,
     hpBehaviorChains: behaviorEvidence.behaviorChainsByLane.hpDamage.slice(
       0,
       SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
@@ -7914,12 +7937,23 @@ function mapEnemies(
     .sort(compareById);
 }
 
-function mapKibos(kiboForms) {
+function mapKibos(kiboForms, petTable, skillControlTimings = new Map()) {
+  const petRowsById = new Map(
+    (petTable.rows ?? []).map(row => [Number(row.id), row])
+  );
   return kiboForms.forms
     .map(form => {
       const fields = fieldsToMap(form.main?.fields);
+      const id = numberOrNull(fields.get('id') ?? form.main?.localId);
+      const petRow = petRowsById.get(Number(id));
+      const actionSpecs = createKiboActionSpecs(petRow);
+      const formSkills = [
+        mapFormSkill(fields, '固定技能'),
+        mapFormSkill(fields, '技能1'),
+        mapFormSkill(fields, '合击技能'),
+      ];
       return {
-        id: numberOrNull(fields.get('id') ?? form.main?.localId),
+        id,
         name: fields.get('名称') ?? form.title,
         element: fields.get('元素') ?? '',
         race: fields.get('种族') ?? '',
@@ -7935,11 +7969,24 @@ function mapKibos(kiboForms) {
             description: cleanMarkup(fields.get(`特性${index}描述`)),
           }))
           .filter(trait => trait.name || trait.description),
-        skills: [
-          mapFormSkill(fields, '固定技能'),
-          mapFormSkill(fields, '技能1'),
-          mapFormSkill(fields, '合击技能'),
-        ].filter(Boolean),
+        skills: actionSpecs
+          .map((spec, index) =>
+            attachKiboActionIdentity(
+              formSkills[index],
+              spec,
+              skillControlTimings.get(Number(spec?.skillId))
+            )
+          )
+          .filter(Boolean),
+        sourceSkills: {
+          signatureSkillId: actionSpecs[0]?.skillId ?? null,
+          activeSkillId: actionSpecs[1]?.skillId ?? null,
+          breakSkillId: actionSpecs[2]?.skillId ?? null,
+          fixedSkillIds: parseSkillSlotList(
+            petRow?.fixedSkillList,
+            'fixed'
+          ).map(item => item.skillId),
+        },
         evolution: {
           series: fields.get('进化系列') ?? '',
           next: fields.get('进化下级') ?? '',
@@ -7949,6 +7996,124 @@ function mapKibos(kiboForms) {
       };
     })
     .sort(compareById);
+}
+
+async function buildKiboSkillControlTimingIndex(petTable) {
+  const skillIds = uniqueNumbers(
+    (petTable.rows ?? []).flatMap(row =>
+      createKiboActionSpecs(row)
+        .filter(Boolean)
+        .map(item => item.skillId)
+    )
+  );
+  const entries = await Promise.all(
+    skillIds.map(async skillId => [
+      skillId,
+      await readKiboSkillControlTiming(skillId),
+    ])
+  );
+  return new Map(entries);
+}
+
+function createKiboActionSpecs(petRow = {}) {
+  const signature = parseSkillSlotList(
+    petRow?.signatureSkillList,
+    'signature'
+  )[0];
+  const active = parseSkillSlotList(petRow?.skillList, 'active').at(-1);
+  const breakSkill = parseSkillSlotList(petRow?.breakSkillList, 'break')[0];
+  return [signature, active, breakSkill];
+}
+
+async function readKiboSkillControlTiming(skillId) {
+  const monoBehaviourRoot = path.join(
+    extractorSkillListRoot,
+    `skill_control_${skillId}.asset`,
+    'MonoBehaviour'
+  );
+  if (!(await pathExists(monoBehaviourRoot))) {
+    return createMissingKiboSkillTiming('skill-control-directory-missing');
+  }
+
+  const rootFilePrefix = `skill_control_${skillId}__`;
+  const fileNames = (await listJsonFileNames(monoBehaviourRoot)).filter(
+    fileName => fileName.startsWith(rootFilePrefix)
+  );
+  for (const fileName of fileNames) {
+    try {
+      const payload = await readJson(path.join(monoBehaviourRoot, fileName));
+      const skillControlData = payload?.skillControlData;
+      if (!skillControlData) {
+        continue;
+      }
+      const sourceFps = Number(skillControlData.framePerSecond);
+      const sourceFrameCount = Math.max(
+        0,
+        ...(skillControlData.skillPlayers ?? []).flatMap(player =>
+          (player.frameCountDict ?? [])
+            .map(item => Number(item.frameCount))
+            .filter(Number.isFinite)
+        )
+      );
+      if (!(sourceFps > 0) || !(sourceFrameCount > 0)) {
+        continue;
+      }
+      const sourceDurationMs = (sourceFrameCount / sourceFps) * 1000;
+      const durationFrames = Math.max(
+        1,
+        Math.round((sourceDurationMs / 1000) * 60)
+      );
+      return {
+        sourceFrameCount,
+        durationFrames,
+        sourceFps,
+        sourceDurationMs: Number(sourceDurationMs.toFixed(6)),
+        durationMs: Number(((durationFrames / 60) * 1000).toFixed(6)),
+        needsTimingData: false,
+        timingSource: 'azpr-unity-skill-control-root',
+        sourceFile: normalizePath(path.join(monoBehaviourRoot, fileName)),
+      };
+    } catch {
+      // Keep searching duplicated root candidates from earlier exports.
+    }
+  }
+
+  return createMissingKiboSkillTiming('skill-control-root-unreadable');
+}
+
+function createMissingKiboSkillTiming(timingSource) {
+  return {
+    sourceFrameCount: null,
+    durationFrames: null,
+    sourceFps: null,
+    sourceDurationMs: null,
+    durationMs: null,
+    needsTimingData: true,
+    timingSource,
+    sourceFile: null,
+  };
+}
+
+function attachKiboActionIdentity(skill, spec, timing) {
+  if (!skill || !spec?.skillId) {
+    return null;
+  }
+  const resolvedTiming =
+    timing ?? createMissingKiboSkillTiming('skill-control-root-unreadable');
+  return {
+    ...skill,
+    skillId: spec.skillId,
+    kind: spec.group,
+    sourceFrameCount: resolvedTiming.sourceFrameCount,
+    durationFrames: resolvedTiming.durationFrames,
+    sourceFps: resolvedTiming.sourceFps,
+    sourceDurationMs: resolvedTiming.sourceDurationMs,
+    durationMs: resolvedTiming.durationMs,
+    needsTimingData: resolvedTiming.needsTimingData,
+    timingSource: resolvedTiming.timingSource,
+    timingSourceFile: resolvedTiming.sourceFile,
+    appliedToCalculators: false,
+  };
 }
 
 function mapEquipment(equipmentForms) {

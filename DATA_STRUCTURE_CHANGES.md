@@ -27250,3 +27250,29 @@ curvesByKibo[]
 ```
 
 时间轴拓扑的 `kiboEnergyCurve` 同步记录 `semanticResource` 与 `valueSourceStatus`，但不持久化新的战斗数值。旧项目重建拓扑和 runtime 时会自动获得这些字段，无需迁移；在真实 `totalTime` 与事件来源接入前，奇波轴仍保持 0 基线、0 点和平线。
+
+## 418. Workbench kibo action catalog v1
+
+生成层从 `pet.json` 与 AzPr Extractor 导出的 Skill Control root 建立完整奇波动作映射。`kibos.json` 保留来源审计所需的原始技能集合、源帧数、源帧率、源时长、60fps 规范时长和提取文件；生产 Workbench 使用独立静态目录，避免把完整审计字段打进主 JS：
+
+```text
+workbench-seed.json schema v3
+  catalogs.kiboActions = workbench-kibo-action-catalog.json
+
+workbench-kibo-action-catalog.json v1
+  kind = workbench-kibo-action-catalog
+  items[]
+    kiboId
+    actions[3]
+      skillId
+      kind = signature | active | break
+      name
+      durationFrames  # normalized to Workbench 60fps
+
+WorkbenchActionDraft v16-compatible optional fields
+  name
+  timingSource
+  needsTimingData
+```
+
+Workbench 项目 schema 仍为 v16；新增动作字段均为可选字段，旧项目缺失时继续按原奇波事件回退。新目录只负责动作身份与已确认时长，不提供能量或战斗效果；`createKiboEventAction`、compiler 和 sim log 只有在存在 `timingSource` 时才携带真实 `skillId`。因此目录加载失败不会把未知时序伪装成已确认数据，奇波动作仍保持 `appliedToCalculators = false`，六条能量轴结果不变。

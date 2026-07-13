@@ -46,6 +46,38 @@ vi.mock('../../domain/workbenchDraftStorage', async importOriginal => {
   };
 });
 
+vi.mock('../../data/workbenchKiboActionCatalog', () => ({
+  loadWorkbenchKiboActionCatalog: async () => ({
+    schemaVersion: 1,
+    kind: 'workbench-kibo-action-catalog',
+    items: [
+      {
+        kiboId: 500001,
+        actions: [
+          {
+            skillId: 50000102,
+            kind: 'signature',
+            name: '迅风刃',
+            durationFrames: 85,
+          },
+          {
+            skillId: 504004,
+            kind: 'active',
+            name: '狂风冲击',
+            durationFrames: 220,
+          },
+          {
+            skillId: 50000112,
+            kind: 'break',
+            name: '迅狼-合击',
+            durationFrames: 90,
+          },
+        ],
+      },
+    ],
+  }),
+}));
+
 beforeAll(() => {
   installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
 });
@@ -3755,7 +3787,6 @@ describe('Workbench view', () => {
         },
       },
     });
-
     await wrapper
       .find('[data-testid="workbench-add-resource-action"]')
       .trigger('click');
@@ -9293,6 +9324,13 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
+    await wrapper
+      .find(
+        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+      )
+      .setValue('500001');
+    await nextTick();
 
     await wrapper
       .find('[data-testid="workbench-add-kibo-event-action"]')
@@ -9307,6 +9345,13 @@ describe('Workbench view', () => {
         )
         .attributes('data-lane-id')
     ).toBe('kibo-team-slot-1');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .text()
+    ).toContain('迅风刃');
 
     await wrapper
       .find('[data-testid="workbench-enemy-event-type-input"]')
@@ -9335,7 +9380,12 @@ describe('Workbench view', () => {
     ).toMatchObject({
       type: 'kiboEvent',
       actorCharacterId: 101003,
+      skillId: 50000102,
+      durationMs: 1416.666667,
       eventType: 'awakening',
+      name: '迅风刃',
+      timingSource: 'azpr-unity-skill-control-root',
+      needsTimingData: false,
     });
   });
 
