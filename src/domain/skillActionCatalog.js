@@ -54,6 +54,7 @@ export function getSkillActionCatalog(skills = [], level = 1) {
       entries.push({
         id: `${skill.id}:${variant.index}`,
         kind,
+        icon: skill.icon ?? null,
         label: AZPR_ACTION_KIND_LABELS[kind],
         sortIndex: AZPR_ACTION_KIND_ORDER.indexOf(kind),
         skillId: Number(skill.id),
@@ -109,7 +110,9 @@ export function inferCatalogActionKind(variant, skill = {}) {
   if (candidates.includes('极限反击')) {
     return 'limit-counter';
   }
-  if (candidates.some(item => ['完美招架', '精准防御', '集中闪避'].includes(item))) {
+  if (
+    candidates.some(item => ['完美招架', '精准防御', '集中闪避'].includes(item))
+  ) {
     return 'perfect-parry';
   }
 

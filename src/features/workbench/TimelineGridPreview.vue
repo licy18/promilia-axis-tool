@@ -705,7 +705,15 @@
               @keydown.backspace.prevent="deleteActionSelection(action)"
               @pointerdown.stop="beginDrag($event, action)"
             >
+              <img
+                v-if="resolveWorkbenchActionVisualIdentity(action).iconUrl"
+                class="action-kind-icon action-image-icon"
+                :src="resolveWorkbenchActionVisualIdentity(action).iconUrl"
+                alt=""
+                aria-hidden="true"
+              />
               <component
+                v-else
                 :is="actionIconComponent(action)"
                 class="action-kind-icon"
                 aria-hidden="true"
@@ -1110,6 +1118,7 @@ import {
   resolveWorkbenchTimelineLaneKind,
   serializeWorkbenchTimelineEntry,
 } from '../../domain/workbenchTimelineEntry';
+import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -2721,21 +2730,19 @@ function actionLabel(action) {
   if (action.type === 'switch') {
     return `${action.name} -> ${action.targetActor?.name ?? '目标'}`;
   }
-  return action.name;
+  return resolveWorkbenchActionVisualIdentity(action).name;
 }
 
 function actionDetail(action) {
-  if (action.type === 'skill') {
-    return `角色动作 · ${formatFrameTime(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)}`;
+  if (action.type === 'skill' || action.type === 'kiboEvent') {
+    const identity = resolveWorkbenchActionVisualIdentity(action);
+    return `${identity.typeLabel} · ${identity.durationFrames}F`;
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
   }
   if (action.type === 'enemyEvent') {
     return `${action.eventType ?? '事件'} · ${formatFrameTime(action.durationMs ?? 0)}`;
-  }
-  if (action.type === 'kiboEvent') {
-    return `奇波 · ${formatFrameTime(action.durationMs ?? 0)}`;
   }
   if (action.type === 'switch') {
     return formatFrameTime(action.durationMs ?? 0);
@@ -5717,7 +5724,7 @@ h2 {
   box-sizing: border-box;
   height: 36px;
   min-width: 0;
-  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-columns: 26px minmax(0, 1fr);
   align-items: center;
   gap: 6px;
   padding: 4px clamp(24px, 18%, 54px) 4px 7px;
@@ -5899,6 +5906,14 @@ h2 {
   width: 16px;
   height: 16px;
   color: #baf1e6;
+}
+
+.action-image-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(4, 10, 14, 0.46);
 }
 
 .action-block-copy {

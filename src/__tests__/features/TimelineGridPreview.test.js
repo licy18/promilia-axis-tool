@@ -4,6 +4,31 @@ import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vu
 import { serializeWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
 
 describe('TimelineGridPreview', () => {
+  it('renders the official icon, action kind, and frame duration on action blocks', () => {
+    const action = {
+      ...createAction({
+        id: 'action-a',
+        name: '普通攻击',
+        actorId: 'actor-a',
+        startMs: 0,
+      }),
+      actionKind: 'normal-attack',
+      durationMs: 1000,
+      icon: 'tex_icon_skill_109001_00.png',
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({ actions: [action] }),
+    });
+    const block = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-a"]'
+    );
+
+    expect(block.get('img.action-image-icon').attributes('src')).toBe(
+      '/assets/actions/tex_icon_skill_109001_00.png'
+    );
+    expect(block.text()).toContain('普通攻击 · 60F');
+  });
+
   it('accepts action-library entries from the standard text drag payload', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps(),

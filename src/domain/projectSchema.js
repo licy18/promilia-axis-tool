@@ -1,6 +1,7 @@
 import { createSkillDamageModel } from './skillDamageSegments';
 import { createSkillLogicModel } from './skillLogicModel';
 import { normalizeInitialRuntimeState } from './initialRuntimeState';
+import { inferCatalogActionKind } from './skillActionCatalog';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -254,6 +255,8 @@ export function createSkillAction({
     type: ACTION_TYPES.SKILL,
     actorId,
     skillId: skill.id,
+    icon: skill.icon ?? null,
+    actionKind: inferCatalogActionKind(selectedActionVariant, skill),
     name:
       selectedActionVariant?.displayLabel ??
       selectedActionVariant?.label ??
@@ -408,6 +411,7 @@ export function createKiboEventAction({
   actorId = null,
   kiboId = null,
   skillId = null,
+  icon = null,
   name = '奇波事件',
   startMs = 0,
   durationMs = 600,
@@ -427,6 +431,7 @@ export function createKiboEventAction({
       Number.isInteger(Number(skillId)) && Number(skillId) > 0
         ? Number(skillId)
         : null,
+    icon: String(icon ?? '').trim() || null,
     name: String(name ?? '').trim() || '奇波事件',
     startMs,
     durationMs,

@@ -427,6 +427,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   );
 
   const directSkillSource = page.getByTestId('workbench-skill-entry').first();
+  await expectImageLoaded(directSkillSource.locator('img'));
   await dragLocatorTo(page, directSkillSource, actorTwoLane, {
     targetPosition: { x: 280, y: 26 },
   });
@@ -434,6 +435,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
   );
   await expect(skillAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expectImageLoaded(skillAction.locator('img.action-image-icon'));
   await expect
     .poll(async () => Number(await hpCurve.getAttribute('data-point-count')))
     .toBeGreaterThan(hpPointCountBefore);
@@ -485,6 +487,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
 
   const kiboActionEntries = page.getByTestId('workbench-kibo-action-entry');
   await expect(kiboActionEntries).toHaveCount(3);
+  await expect(kiboActionEntries.locator('img')).toHaveCount(3);
   await expect(kiboActionEntries).toContainText([
     '水灵涟漪',
     '水弹连射',
@@ -513,6 +516,11 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     '833.333333'
   );
   await expect(kiboTimelineAction).toContainText('水弹连射');
+  await expectImageLoaded(kiboTimelineAction.locator('img.action-image-icon'));
+  const kiboActionIdentity = page.getByTestId('workbench-action-identity');
+  await expect(kiboActionIdentity).toContainText('水弹连射');
+  await expect(kiboActionIdentity).toContainText('主动技 · 50F');
+  await expectImageLoaded(kiboActionIdentity.locator('img'));
   await expect(kiboEnergyCurve).toHaveAttribute('data-point-count', '0');
   await expect(
     kiboEnergyCurve.getByTestId('workbench-timeline-state-curve-line')
@@ -665,6 +673,11 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
       '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
     )
   ).toHaveAttribute('data-skill-id', '502015');
+  await expectImageLoaded(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"] img.action-image-icon'
+    )
+  );
   await expect(kiboEnergyCurve).toHaveAttribute('data-point-count', '0');
 
   await closeInspectorIfVisible(page);
@@ -674,6 +687,15 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m1c-library-runtime-narrow.png' });
 });
+
+async function expectImageLoaded(locator) {
+  await expect(locator).toBeVisible();
+  await expect
+    .poll(() =>
+      locator.evaluate(image => image.complete && image.naturalWidth > 0)
+    )
+    .toBe(true);
+}
 
 test('[m1d-demo-milestone] replays the visible three-person demo through every project carrier', async ({
   page,

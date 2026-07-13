@@ -261,6 +261,7 @@ function auditKiboActionCatalog(loadedFiles) {
       actions: (kibo.skills ?? []).map(skill => ({
         skillId: skill.skillId,
         kind: skill.kind,
+        icon: skill.icon,
         name: skill.name,
         durationFrames: skill.durationFrames,
       })),

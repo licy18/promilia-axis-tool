@@ -13,6 +13,7 @@
       "e2e/workbench-long-axis.spec.js",
       "e2e/workbench-production-preview.spec.js",
       "src/__tests__/data/azprGenerated.test.js",
+      "src/__tests__/data/workbenchActionAssets.test.js",
       "src/__tests__/domain/initialRuntimeState.test.js",
       "src/__tests__/domain/projectSchema.test.js",
       "src/__tests__/domain/runtimeCaptureHookManifest.test.js",
@@ -20,6 +21,7 @@
       "src/__tests__/domain/skillLogicModel.test.js",
       "src/__tests__/domain/workbenchActionClipboard.test.js",
       "src/__tests__/domain/workbenchActionRelations.test.js",
+      "src/__tests__/domain/workbenchActionVisualIdentity.test.js",
       "src/__tests__/domain/workbenchAnalysisReport.test.js",
       "src/__tests__/domain/workbenchAnalysisReportPng.test.js",
       "src/__tests__/domain/workbenchConfigurationLibrary.test.js",
@@ -98,8 +100,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 124,
-    "productionReachableCount": 120,
+    "sourceCodeFileCount": 125,
+    "productionReachableCount": 121,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -107,7 +109,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 2,
-      "src/domain": 27,
+      "src/domain": 28,
       "src/features/workbench": 46,
       "src/i18n": 1,
       "src/router": 1,
@@ -143,6 +145,7 @@
     "src/domain/timebase.js",
     "src/domain/workbenchActionClipboard.js",
     "src/domain/workbenchActionRelations.js",
+    "src/domain/workbenchActionVisualIdentity.js",
     "src/domain/workbenchAnalysisReport.js",
     "src/domain/workbenchAnalysisReportPng.js",
     "src/domain/workbenchConfigurationLibrary.js",

@@ -2742,6 +2742,7 @@ function addKiboEventAction(entry = null) {
     level: selectedDraft.value.level,
     eventType: entry?.eventType ?? 'activation',
     name: entry?.label ?? '',
+    icon: entry?.icon ?? null,
     timingSource: entry?.timingSource ?? null,
     needsTimingData: entry?.needsTimingData ?? true,
     note: entry?.note ?? '奇波事件标记；效果未接入 calculator。',
@@ -2812,6 +2813,7 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
     Object.assign(commonDraft, {
       eventType: entry.eventType ?? 'activation',
       name: entry.label ?? '',
+      icon: entry.icon ?? null,
       timingSource: entry.timingSource ?? null,
       needsTimingData: entry.needsTimingData ?? true,
       note: entry.note ?? '奇波事件标记；效果未接入 calculator。',

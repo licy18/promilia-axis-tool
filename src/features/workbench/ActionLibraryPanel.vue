@@ -140,10 +140,19 @@
           @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
           @click="$emit('add-skill-action', entry)"
         >
-          <span class="skill-entry-name">{{ entry.label }}</span>
-          <span class="skill-entry-meta">{{
-            formatActionEntryMeta(entry)
-          }}</span>
+          <img
+            v-if="actionEntryIconUrl(entry)"
+            class="skill-entry-icon"
+            :src="actionEntryIconUrl(entry)"
+            alt=""
+            aria-hidden="true"
+          />
+          <span class="skill-entry-copy">
+            <span class="skill-entry-name">{{ entry.label }}</span>
+            <span class="skill-entry-meta">{{
+              formatActionEntryMeta(entry)
+            }}</span>
+          </span>
         </button>
       </div>
     </div>
@@ -169,10 +178,19 @@
           @pointerdown="beginKiboTimelineEntryDrag($event, entry)"
           @click="$emit('add-kibo-event-action', entry)"
         >
-          <span class="skill-entry-name">{{ entry.label }}</span>
-          <span class="skill-entry-meta">{{
-            formatKiboActionMeta(entry)
-          }}</span>
+          <img
+            v-if="actionEntryIconUrl(entry)"
+            class="skill-entry-icon"
+            :src="actionEntryIconUrl(entry)"
+            alt=""
+            aria-hidden="true"
+          />
+          <span class="skill-entry-copy">
+            <span class="skill-entry-name">{{ entry.label }}</span>
+            <span class="skill-entry-meta">{{
+              formatKiboActionMeta(entry)
+            }}</span>
+          </span>
         </button>
       </div>
     </div>
@@ -448,6 +466,7 @@ import { Collection, EditPen } from '@element-plus/icons-vue';
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
+import { resolveWorkbenchActionIconUrl } from '../../domain/workbenchActionVisualIdentity';
 import { formatFrameTime, frameToMs, msToFrame } from '../../domain/timebase';
 const props = defineProps({
   actor: {
@@ -546,6 +565,7 @@ const kiboTimelineEntries = computed(() =>
     createWorkbenchTimelineEntry({
       type: ACTION_TYPES.KIBO_EVENT,
       skillId: action.skillId,
+      icon: action.icon,
       eventType: action.kind,
       label: action.name,
       durationMs: frameToMs(action.durationFrames),
@@ -907,6 +927,10 @@ function formatKiboActionMeta(entry) {
     break: '合击技',
   };
   return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}`;
+}
+
+function actionEntryIconUrl(entry) {
+  return resolveWorkbenchActionIconUrl(entry.icon);
 }
 
 function resolveBatchSkillName(batch, action) {
@@ -1308,7 +1332,7 @@ h2 {
 
 .skill-entry {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 32px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   min-width: 0;
@@ -1320,6 +1344,20 @@ h2 {
   cursor: pointer;
   font: inherit;
   text-align: left;
+}
+
+.skill-entry-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(4, 10, 14, 0.45);
+}
+
+.skill-entry-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
 }
 
 .icon-button[data-drag-enabled='true'],
@@ -1359,8 +1397,10 @@ h2 {
 }
 
 .skill-entry-meta {
+  overflow: hidden;
   color: #8f9aa3;
   font-size: 11px;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

@@ -13,6 +13,7 @@ describe('ActionLibraryPanel', () => {
           type: 'skill',
           skillId: 10900101,
           actionVariantIndex: 0,
+          icon: 'tex_icon_skill_109001_00.png',
           label: '普通攻击',
         },
       },
@@ -26,6 +27,7 @@ describe('ActionLibraryPanel', () => {
           type: 'kiboEvent',
           skillId: 50000102,
           eventType: 'signature',
+          icon: 'tex_icon_petskill_500001_02.png',
           label: '迅风刃',
           durationMs: 1416.666667,
         },
@@ -65,6 +67,9 @@ describe('ActionLibraryPanel', () => {
     const entries = wrapper.findAll(
       '[data-testid="workbench-kibo-action-entry"]'
     );
+    expect(
+      wrapper.get('[data-testid="workbench-skill-entry"] img').attributes('src')
+    ).toBe('/assets/actions/tex_icon_skill_109001_00.png');
 
     expect(
       entries.map(entry => ({
@@ -80,6 +85,11 @@ describe('ActionLibraryPanel', () => {
       expect.stringContaining('迅风刃'),
       expect.stringContaining('狂风冲击'),
       expect.stringContaining('迅狼-合击'),
+    ]);
+    expect(entries.map(entry => entry.find('img').attributes('src'))).toEqual([
+      '/assets/actions/tex_icon_petskill_500001_02.png',
+      '/assets/actions/tex_icon_petskill_504004.png',
+      '/assets/actions/tex_icon_skill_petbreakatk.png',
     ]);
 
     await entries[1].trigger('click');
@@ -134,18 +144,21 @@ function createActionLibraryProps() {
           {
             skillId: 50000102,
             kind: 'signature',
+            icon: 'tex_icon_petskill_500001_02.png',
             name: '迅风刃',
             durationFrames: 85,
           },
           {
             skillId: 504004,
             kind: 'active',
+            icon: 'tex_icon_petskill_504004.png',
             name: '狂风冲击',
             durationFrames: 220,
           },
           {
             skillId: 50000112,
             kind: 'break',
+            icon: 'tex_icon_skill_petbreakatk.png',
             name: '迅狼-合击',
             durationFrames: 90,
           },
@@ -160,6 +173,7 @@ function createActionLibraryProps() {
         characterId: 109001,
         name: '普通攻击',
         displayName: '普通攻击',
+        icon: 'tex_icon_skill_109001_00.png',
         source: { heroModule: 'fixture/109001.js' },
         level: {
           labels: ['普攻'],

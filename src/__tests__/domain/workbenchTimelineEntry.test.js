@@ -40,6 +40,7 @@ describe('workbench timeline entry contract', () => {
         skillId: '10900101',
         actionVariantIndex: 2,
         durationMs: 1000,
+        icon: 'tex_icon_skill_109001_00.png',
         label: '普通攻击',
       })
     ).toMatchObject({
@@ -47,6 +48,7 @@ describe('workbench timeline entry contract', () => {
       skillId: 10900101,
       actionVariantIndex: 2,
       durationMs: 1000,
+      icon: 'tex_icon_skill_109001_00.png',
       label: '普通攻击',
     });
     expect(

@@ -5,6 +5,28 @@
       <h2>属性</h2>
     </div>
 
+    <div class="action-identity" data-testid="workbench-action-identity">
+      <img
+        v-if="selectedActionIdentity.iconUrl"
+        class="action-identity-icon"
+        :src="selectedActionIdentity.iconUrl"
+        alt=""
+        aria-hidden="true"
+      />
+      <Operation
+        v-else
+        class="action-identity-icon fallback"
+        aria-hidden="true"
+      />
+      <span class="action-identity-copy">
+        <strong>{{ selectedActionIdentity.name }}</strong>
+        <small
+          >{{ selectedActionIdentity.typeLabel }} ·
+          {{ selectedActionIdentity.durationFrames }}F</small
+        >
+      </span>
+    </div>
+
     <div class="control-grid">
       <label
         data-testid="workbench-action-edit-control"
@@ -712,6 +734,7 @@ import {
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
 import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
+import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 
 const props = defineProps({
   selection: {
@@ -759,6 +782,10 @@ const props = defineProps({
     default: null,
   },
 });
+
+const selectedActionIdentity = computed(() =>
+  resolveWorkbenchActionVisualIdentity(props.selectedAction)
+);
 
 const emit = defineEmits([
   'update-selection',
@@ -1416,6 +1443,52 @@ function resolveCharacterName(characterId) {
 h2 {
   margin: 0;
   font-size: 15px;
+}
+
+.action-identity {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 14px 0;
+}
+
+.action-identity-icon {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(4, 10, 14, 0.48);
+}
+
+.action-identity-icon.fallback {
+  box-sizing: border-box;
+  padding: 9px;
+  color: #79c7b9;
+}
+
+.action-identity-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.action-identity-copy strong,
+.action-identity-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-identity-copy strong {
+  color: #f4f7f8;
+  font-size: 13px;
+}
+
+.action-identity-copy small {
+  color: #9aa6ae;
+  font-size: 11px;
 }
 
 .control-grid,

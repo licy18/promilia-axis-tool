@@ -157,6 +157,7 @@ export function createWorkbenchActionDraft({
   reason = 'manual-axis-resource',
   eventType = 'phase',
   name = '',
+  icon = null,
   timingSource = null,
   needsTimingData = true,
   note = '',
@@ -192,6 +193,7 @@ export function createWorkbenchActionDraft({
     ...(type === ACTION_TYPES.KIBO_EVENT
       ? {
           name: String(name ?? '').trim(),
+          icon: String(icon ?? '').trim() || null,
           timingSource: timingSource ? String(timingSource).trim() : null,
           needsTimingData: Boolean(needsTimingData),
         }
@@ -698,6 +700,7 @@ export function normalizeWorkbenchActionDrafts(
           reason: draft.reason,
           eventType: draft.eventType,
           name: draft.name,
+          icon: draft.icon,
           timingSource: draft.timingSource,
           needsTimingData: draft.needsTimingData,
           note: draft.note,
@@ -836,6 +839,7 @@ function createProjectActionFromDraft(
       actorId: sourceActor.id,
       kiboId,
       skillId: draft.timingSource ? draft.skillId : null,
+      icon: draft.icon,
       name: draft.name || `${kibo?.name ?? '奇波'}事件`,
       startMs: draft.startMs,
       durationMs: draft.durationMs,

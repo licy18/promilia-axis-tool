@@ -82,6 +82,20 @@ describe('workbench draft storage project files', () => {
               durationMs: 900,
               level: 2,
             },
+            {
+              id: 'action-0003',
+              type: 'kiboEvent',
+              skillId: 50000102,
+              actorCharacterId: 109001,
+              startMs: 2400,
+              durationMs: 1416.666667,
+              level: 1,
+              eventType: 'signature',
+              name: '迅风刃',
+              icon: 'tex_icon_petskill_500001_02.png',
+              timingSource: 'azpr-unity-skill-control-root',
+              needsTimingData: false,
+            },
           ],
           actionRelations: [
             {
@@ -266,7 +280,13 @@ describe('workbench draft storage project files', () => {
       ],
     });
     expect(shared.initialRuntimeState).toEqual(imported.initialRuntimeState);
-    expect(imported.actionDrafts).toHaveLength(2);
+    expect(imported.actionDrafts).toHaveLength(3);
+    expect(imported.actionDrafts[2]).toMatchObject({
+      type: 'kiboEvent',
+      name: '迅风刃',
+      icon: 'tex_icon_petskill_500001_02.png',
+    });
+    expect(shared.actionDrafts[2]).toMatchObject(imported.actionDrafts[2]);
   });
 
   it('round-trips every scenario while keeping the active root draft synchronized', () => {

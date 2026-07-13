@@ -27276,3 +27276,25 @@ WorkbenchActionDraft v16-compatible optional fields
 ```
 
 Workbench 项目 schema 仍为 v16；新增动作字段均为可选字段，旧项目缺失时继续按原奇波事件回退。新目录只负责动作身份与已确认时长，不提供能量或战斗效果；`createKiboEventAction`、compiler 和 sim log 只有在存在 `timingSource` 时才携带真实 `skillId`。因此目录加载失败不会把未知时序伪装成已确认数据，奇波动作仍保持 `appliedToCalculators = false`，六条能量轴结果不变。
+
+## 419. Unified Workbench action visual identity
+
+动作目录与运行时动作新增可选视觉身份字段，项目仍为 Workbench v16，无 schema migration：
+
+```text
+workbench-kibo-action-catalog.json v1
+  items[].actions[]
+    icon  # official Texture2D filename
+
+WorkbenchActionDraft / RuntimeSkillAction / WorkbenchTimelineEntry
+  icon?       # kibo drafts persist this field; role actions derive it from skill data
+  actionKind? # role action semantic kind
+
+WorkbenchActionVisualIdentity (derived, not persisted as a second model)
+  name
+  typeLabel
+  durationFrames
+  iconUrl = /assets/actions/{icon}
+```
+
+`scripts/sync-workbench-action-icons.mjs` 从 AzPr Extractor 的官方 `SkillIcon` 目录把生成数据实际引用的文件复制到 `public/assets/actions/`；文件名必须是不含路径分隔符的 `.png`，避免项目载体写入任意资源路径。奇波动作在复制、本地草稿、JSON、分享链接和 PNG 中保留可选 `icon`，旧载体缺失时使用通用动作图标；角色动作从正式技能目录按 `skillId` 重新获得图标和类型。该合同只影响展示身份，不进入 compiler/calculator，不改变六条能量轴、敌人 HP/韧性或 applied/unapplied 结果。

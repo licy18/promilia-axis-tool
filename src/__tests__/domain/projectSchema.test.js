@@ -29,6 +29,10 @@ describe('project domain schema', () => {
     expect(project.actors).toHaveLength(1);
     expect(project.actions).toHaveLength(1);
     expect(project).not.toHaveProperty('skillBlocks');
+    expect(project.actions[0]).toMatchObject({
+      icon: getAzprSkillById(FIRST_SLICE_SKILL_ID)?.icon,
+      actionKind: expect.any(String),
+    });
 
     expect(getAzprCharacterById(FIRST_SLICE_CHARACTER_ID)?.name).toBe('末音');
     expect(getAzprSkillById(FIRST_SLICE_SKILL_ID)?.characterId).toBe(

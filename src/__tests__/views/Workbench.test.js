@@ -57,18 +57,21 @@ vi.mock('../../data/workbenchKiboActionCatalog', () => ({
           {
             skillId: 50000102,
             kind: 'signature',
+            icon: 'tex_icon_petskill_500001_02.png',
             name: '迅风刃',
             durationFrames: 85,
           },
           {
             skillId: 504004,
             kind: 'active',
+            icon: 'tex_icon_petskill_504004.png',
             name: '狂风冲击',
             durationFrames: 220,
           },
           {
             skillId: 50000112,
             kind: 'break',
+            icon: 'tex_icon_skill_petbreakatk.png',
             name: '迅狼-合击',
             durationFrames: 90,
           },
@@ -123,6 +126,12 @@ describe('Workbench view', () => {
     expect(text).toContain('末音');
     expect(text).toContain('迅狼');
     expect(text).toContain('哈库茵剑舞');
+    const actionIdentity = wrapper.get(
+      '[data-testid="workbench-action-identity"]'
+    );
+    expect(actionIdentity.get('img').attributes('src')).toMatch(
+      /^\/assets\/actions\/tex_icon_skill_/
+    );
     expect(text).toContain('DAMAGE_PROJECTED');
     expect(text).toContain('stage5-damage-layer-breakdown-v1');
     expect(text).toContain('攻击 1,920 × 倍率 649%');
