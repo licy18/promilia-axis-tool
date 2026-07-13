@@ -451,6 +451,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   const timelineTopology = createWorkbenchTimelineTopology({
     teamSlots,
     actorConfigs,
+    kibos: WORKBENCH_KIBOS,
     enemyId: normalized.enemyId,
   });
 

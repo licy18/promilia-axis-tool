@@ -95,8 +95,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 122,
-    "productionReachableCount": 118,
+    "sourceCodeFileCount": 123,
+    "productionReachableCount": 119,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -114,7 +114,7 @@
       "src/simulation/generation": 4,
       "src/simulation/mechanics": 10,
       "src/simulation/projection": 6,
-      "src/simulation/runtime": 9,
+      "src/simulation/runtime": 10,
       "src/store": 1,
       "src/utils": 2,
       "src/views": 4
@@ -231,6 +231,7 @@
     "src/simulation/runtime/actionHitThreeValueRuntimeInput.js",
     "src/simulation/runtime/actionRuleDiagnostics.js",
     "src/simulation/runtime/effectRuntimeTimeline.js",
+    "src/simulation/runtime/kiboEnergyRuntimeCurves.js",
     "src/simulation/runtime/threeValueRuntimeCalculatorInvocation.js",
     "src/simulation/runtime/threeValueRuntimeHitTransactions.js",
     "src/simulation/runtime/threeValueRuntimeInput.js",

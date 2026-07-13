@@ -345,6 +345,7 @@
       <ActionLibraryPanel
         :actor="actionLibraryActor"
         :actors="scenario.actors"
+        :kibos="loadoutOptions.kibos"
         :active-actor-character-id="actionLibraryCharacterId"
         :actions="scenario.actions"
         :main-flow-command-surface="mainFlowCommandSurface"
@@ -755,6 +756,9 @@
           <EnemyPanel
             :enemy="scenario.enemy"
             :enemy-config="enemyConfig"
+            :enemies="gameData.enemies"
+            :enemy-id="selection.enemyId"
+            @select-enemy="updateSelection({ enemyId: $event })"
             @update-enemy-config="updateEnemyConfig"
           />
         </div>
@@ -773,6 +777,11 @@
             :kibos="loadoutOptions.kibos"
             :equipment="loadoutOptions.equipment"
             :soulessences="loadoutOptions.soulessences"
+            :focused-character-id="
+              selectedTimelineIdentity?.kind === 'actor'
+                ? selectedTimelineIdentity.characterId
+                : null
+            "
             @update-team-slot="updateTeamSlot"
             @update-actor-config="updateActorConfig"
           />
@@ -1546,7 +1555,10 @@ const mainFlowWorkspaceView = computed(() =>
   })
 );
 const sideInspectorPanelOrders = computed(() =>
-  createSideInspectorPanelOrders(mainFlowWorkspaceView.value.inspector.mode)
+  createSideInspectorPanelOrders(
+    mainFlowWorkspaceView.value.inspector.mode,
+    selectedTimelineIdentity.value?.kind
+  )
 );
 const mainFlowCommandSurface = computed(() =>
   createWorkbenchMainFlowCommandSurface({
@@ -1645,23 +1657,24 @@ const selectedDraft = computed(() => {
   );
 });
 const sideInspectorSelectionKey = computed(() => {
-  if (selectedActionId.value) return `action:${selectedActionId.value}`;
   if (selectedStateCurvePointId.value) {
     return `runtime:${selectedStateCurvePointId.value}`;
   }
+  if (selectedActionId.value) return `action:${selectedActionId.value}`;
   return selectedTimelineIdentity.value?.key ?? '';
 });
 const sideInspectorTitle = computed(() => {
+  if (selectedStateCurvePointId.value) return '运行结果';
   if (selectedActionId.value) {
     return selectedAction.value?.name ?? '动作详情';
   }
-  if (selectedStateCurvePointId.value) return '运行结果';
   return selectedTimelineIdentity.value?.label ?? '队伍配置';
 });
 const sideInspectorVisible = computed(
   () =>
     Boolean(sideInspectorSelectionKey.value) &&
-    dismissedSideInspectorKey.value !== sideInspectorSelectionKey.value
+    (workbenchLayout.value.mode === 'review' ||
+      dismissedSideInspectorKey.value !== sideInspectorSelectionKey.value)
 );
 const workbenchHistoryView = computed(() => ({
   canUndo: undoHistoryStack.value.length > 0,
@@ -1826,6 +1839,7 @@ async function setWorkbenchLayoutMode(mode) {
     workbenchLayout.value,
     mode
   );
+  if (mode === 'review') dismissedSideInspectorKey.value = '';
   await persistWorkbenchLayout();
 }
 
@@ -6263,6 +6277,9 @@ function selectTimelineIdentity(identity = {}) {
       (kind === 'enemy'
         ? scenario.value.enemy.name
         : resolveActionEditCharacterName(identity.characterId)),
+    characterId: kind === 'actor' ? Number(identity.characterId) : null,
+    enemyId: kind === 'enemy' ? Number(identity.enemyId) : null,
+    kiboId: kind === 'actor' ? Number(identity.kiboId) || null : null,
   };
   if (kind === 'actor') {
     setActionLibraryCharacterId(identity.characterId);
@@ -6429,7 +6446,7 @@ function clampNumber(value, min, max) {
   return Math.min(max, Math.max(min, number));
 }
 
-function createSideInspectorPanelOrders(inspectorMode) {
+function createSideInspectorPanelOrders(inspectorMode, identityKind = '') {
   if (inspectorMode === 'runtime-detail') {
     return {
       runtimeDetail: 0,
@@ -6437,6 +6454,30 @@ function createSideInspectorPanelOrders(inspectorMode) {
       properties: 2,
       configuration: 3,
       enemy: 4,
+      teamLoadout: 5,
+      analysis: 6,
+    };
+  }
+
+  if (identityKind === 'actor') {
+    return {
+      teamLoadout: 0,
+      properties: 1,
+      configuration: 2,
+      actionRules: 3,
+      runtimeDetail: 4,
+      enemy: 5,
+      analysis: 6,
+    };
+  }
+
+  if (identityKind === 'enemy') {
+    return {
+      enemy: 0,
+      properties: 1,
+      configuration: 2,
+      actionRules: 3,
+      runtimeDetail: 4,
       teamLoadout: 5,
       analysis: 6,
     };

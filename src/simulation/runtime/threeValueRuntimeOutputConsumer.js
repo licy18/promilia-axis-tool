@@ -144,6 +144,14 @@ export function createThreeValueRuntimeOutputConsumerContract({
           resourceCurveSummary.actorCount ??
             contractSummary.resourceCurveActorCount
         ),
+        kiboCount: numberOrZero(
+          resourceCurveSummary.kiboCount ??
+            contractSummary.resourceCurveKiboCount
+        ),
+        energyCurveCount: numberOrZero(
+          resourceCurveSummary.energyCurveCount ??
+            contractSummary.resourceEnergyCurveCount
+        ),
         pointCount: numberOrZero(
           resourceCurveSummary.pointCount ??
             contractSummary.resourceCurvePointCount
@@ -151,6 +159,8 @@ export function createThreeValueRuntimeOutputConsumerContract({
         curveCollectionField:
           contractOutputs.resourceCurves?.curveCollectionField ??
           'curvesByActor',
+        curveCollectionFields: contractOutputs.resourceCurves
+          ?.curveCollectionFields ?? ['curvesByActor', 'curvesByKibo'],
       },
       summary: {
         outputName: 'summary',
@@ -274,6 +284,16 @@ export function createThreeValueRuntimeOutputConsumerContract({
           contractSummary.resourceCurveActorCount ??
           summary.resourceCurveActorCount
       ),
+      resourceCurveKiboCount: numberOrZero(
+        resourceCurveSummary.kiboCount ??
+          contractSummary.resourceCurveKiboCount ??
+          summary.resourceCurveKiboCount
+      ),
+      resourceEnergyCurveCount: numberOrZero(
+        resourceCurveSummary.energyCurveCount ??
+          contractSummary.resourceEnergyCurveCount ??
+          summary.resourceEnergyCurveCount
+      ),
       resourceCurvePointCount: numberOrZero(
         resourceCurveSummary.pointCount ??
           contractSummary.resourceCurvePointCount ??
@@ -386,6 +406,9 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
   const resourceCurveRows = Array.isArray(resourceCurves?.curvesByActor)
     ? resourceCurves.curvesByActor
     : (runtimeOutputSource?.selfEnergyCurveByActor ?? []);
+  const kiboResourceCurveRows = Array.isArray(resourceCurves?.curvesByKibo)
+    ? resourceCurves.curvesByKibo
+    : (runtimeOutputSource?.kiboEnergyCurveBySlot ?? []);
 
   return {
     schemaVersion: 1,
@@ -410,6 +433,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
     resources: resourceCurves,
     enemyStateCurve,
     resourceCurveRows,
+    kiboResourceCurveRows,
     summary: {
       outputCount: numberOrZero(outputSummary.outputCount),
       simLogCount: getThreeValueRuntimeSimLogCount(runtimeOutputSource),
@@ -441,6 +465,13 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       ),
       resourceCurveActorCount: numberOrZero(
         outputSummary.resourceCurveActorCount
+      ),
+      resourceCurveKiboCount: numberOrZero(
+        outputSummary.resourceCurveKiboCount ?? kiboResourceCurveRows.length
+      ),
+      resourceEnergyCurveCount: numberOrZero(
+        outputSummary.resourceEnergyCurveCount ??
+          resourceCurveRows.length + kiboResourceCurveRows.length
       ),
       outputConsumerContractStatus: outputConsumerContract?.status ?? '',
       outputConsumerBoundaryStatus: outputConsumerBoundary.status,

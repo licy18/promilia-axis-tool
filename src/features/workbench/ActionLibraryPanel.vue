@@ -76,7 +76,7 @@
         type="button"
         @click="$emit('add-kibo-event-action')"
       >
-        + 奇波
+        + {{ activeKibo?.name ?? '奇波' }}
       </button>
       <button
         class="icon-button"
@@ -89,7 +89,15 @@
     </div>
 
     <div class="actor-block">
-      <span class="actor-name">{{ actor.name }}</span>
+      <span>
+        <strong class="actor-name">{{ actor.name }}</strong>
+        <small
+          class="actor-kibo"
+          data-testid="workbench-action-library-kibo"
+          :data-kibo-id="activeKibo?.id ?? ''"
+          >奇波 · {{ activeKibo?.name ?? '未绑定' }}</small
+        >
+      </span>
       <span class="actor-role">{{ actor.role || '角色轨' }}</span>
     </div>
 
@@ -395,6 +403,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  kibos: {
+    type: Array,
+    default: () => [],
+  },
   activeActorCharacterId: {
     type: Number,
     required: true,
@@ -462,6 +474,11 @@ const readinessByActionId = computed(
         action,
       ])
     )
+);
+const activeKibo = computed(() =>
+  props.kibos.find(
+    item => Number(item.id) === Number(props.actor.loadout?.kiboId)
+  )
 );
 
 const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
@@ -710,7 +727,10 @@ function actionDetailValue(action) {
     return action.eventType ?? 'phase';
   }
   if (action.type === 'kiboEvent') {
-    const kibo = action.kiboId ? `奇波 ${action.kiboId}` : '未配置奇波';
+    const kibo = action.kiboId
+      ? (props.kibos.find(item => Number(item.id) === Number(action.kiboId))
+          ?.name ?? `奇波 ${action.kiboId}`)
+      : '未配置奇波';
     return `${kibo} / ${action.eventType ?? 'activation'}`;
   }
   if (action.type === 'switch') {
@@ -1128,6 +1148,13 @@ h2 {
 .actor-role {
   color: #8f9aa3;
   font-size: 12px;
+}
+
+.actor-kibo {
+  display: block;
+  margin-top: 3px;
+  color: #70d6b7;
+  font-size: 11px;
 }
 
 .skill-entry-list {

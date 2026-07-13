@@ -51,8 +51,9 @@
       class="actor-loadout"
       :data-character-id="actor.characterId"
       :data-team-slot-id="teamSlots[index]?.slotId"
+      :data-focused="isActorFocused(actor, index) ? 'true' : 'false'"
       data-testid="workbench-actor-loadout"
-      :open="index === 0"
+      :open="isActorFocused(actor, index)"
     >
       <summary>
         <span>{{ actor.name }}</span>
@@ -149,7 +150,7 @@
 <script setup>
 import { User } from '@element-plus/icons-vue';
 
-defineProps({
+const props = defineProps({
   actors: {
     type: Array,
     required: true,
@@ -174,6 +175,10 @@ defineProps({
     type: Array,
     required: true,
   },
+  focusedCharacterId: {
+    type: Number,
+    default: null,
+  },
 });
 
 const emit = defineEmits(['update-team-slot', 'update-actor-config']);
@@ -184,6 +189,11 @@ const equipmentSlots = Object.freeze([
   { key: 'earring', label: '耳环' },
   { key: 'ring', label: '戒指' },
 ]);
+
+function isActorFocused(actor, index) {
+  if (props.focusedCharacterId == null) return index === 0;
+  return Number(actor.characterId) === Number(props.focusedCharacterId);
+}
 
 function emitTeamSlotPatch(slotId, value) {
   emit('update-team-slot', {
@@ -336,6 +346,10 @@ h2 {
 
 .actor-loadout + .actor-loadout {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.actor-loadout[data-focused='true'] {
+  box-shadow: inset 3px 0 #79c7b9;
 }
 
 summary {

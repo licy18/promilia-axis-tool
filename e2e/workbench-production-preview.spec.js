@@ -48,7 +48,7 @@ test('[routes-and-assets] serves production routes and hashed assets', async ({
   expect(productionAssets.filter(asset => !asset.ok)).toEqual([]);
 });
 
-test('[stage-9a-timeline-topology] renders three actor groups and five state curves on desktop and narrow screens', async ({
+test('[stage-9a-timeline-topology] renders three actor groups and eight state curves on desktop and narrow screens', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -73,10 +73,10 @@ test('[stage-9a-timeline-topology] renders three actor groups and five state cur
   ).toHaveCount(1);
   await expect(
     timeline.getByTestId('workbench-timeline-state-curve')
-  ).toHaveCount(5);
+  ).toHaveCount(8);
   await expect(
     timeline.locator('[data-testid="workbench-timeline-state-curve-line"]')
-  ).toHaveCount(5);
+  ).toHaveCount(8);
   await expect(
     timeline.locator(
       '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
@@ -95,7 +95,7 @@ test('[stage-9a-timeline-topology] renders three actor groups and five state cur
   await expectTimelineRowsAligned(timeline);
   await expect(
     timeline.getByTestId('workbench-timeline-state-curve')
-  ).toHaveCount(5);
+  ).toHaveCount(8);
   await timeline.screenshot({ path: 'reports/stage-9a-timeline-narrow.png' });
 });
 
@@ -168,11 +168,13 @@ test('[stage-9b-runtime-step-curves] keeps actor resources and enemy states alig
     .getByTestId('workbench-timeline-grid-preview')
     .screenshot({ path: 'reports/stage-9b-step-curves-narrow.png' });
 
+  await closeInspectorIfVisible(page);
   await page
     .locator('.action-item[data-action-id="action-0003"]')
     .getByTestId('workbench-delete-action')
     .click();
   await expect(breakpoints('energy-actor-101003')).toHaveCount(1);
+  await closeInspectorIfVisible(page);
   await page
     .locator('.action-item[data-action-id="action-0002"]')
     .getByTestId('workbench-delete-action')
@@ -212,7 +214,7 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
   await expect(actorIdentities.locator('img')).toHaveCount(3);
 
   const desktopLayout = await readTimelineFirstLayout(page);
-  expect(desktopLayout.laneCount).toBe(12);
+  expect(desktopLayout.laneCount).toBe(15);
   expect(desktopLayout.timeline.width).toBeGreaterThanOrEqual(1390);
   expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(900);
   expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(900);
@@ -251,13 +253,13 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
   await expect(inspector).toBeHidden();
   const narrowLayout = await readM1ANarrowLayout(page);
   expect(narrowLayout).toMatchObject({
-    laneCount: 12,
+    laneCount: 15,
     actorIdentityCount: 3,
     rowsSeparated: true,
     labelsAligned: true,
   });
   expect(narrowLayout.timelineWidth).toBeLessThanOrEqual(390);
-  expect(narrowLayout.labelWidths).toEqual(Array(12).fill(132));
+  expect(narrowLayout.labelWidths).toEqual(Array(15).fill(132));
   expect(narrowLayout.timelineScrollWidth).toBeGreaterThan(
     narrowLayout.timelineClientWidth
   );
@@ -267,17 +269,121 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
   await page.screenshot({ path: 'reports/m1a-workbench-narrow.png' });
 });
 
+test('[m1b-team-kibo-energy] keeps three actor and three kibo energy owners synchronized with configuration', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+  );
+  const kiboEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+  );
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve')
+  ).toHaveCount(8);
+
+  const bindings = [
+    { characterId: 109001, kiboId: '500001', kiboName: '迅狼' },
+    { characterId: 101003, kiboId: '500002', kiboName: '水灵仔' },
+    { characterId: 101007, kiboId: '500003', kiboName: '水灵偶' },
+  ];
+  for (const binding of bindings) {
+    await page
+      .locator(
+        `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${binding.characterId}"]`
+      )
+      .click();
+    const inspector = page.getByTestId('workbench-side-inspector');
+    await expect(inspector).toBeVisible();
+    await expect(
+      inspector.locator('[data-inspector-panel-key="team-loadout"]')
+    ).toHaveAttribute('data-inspector-panel-order', '0');
+    await expect(
+      inspector.locator(
+        `[data-testid="workbench-actor-loadout"][data-character-id="${binding.characterId}"]`
+      )
+    ).toHaveAttribute('data-focused', 'true');
+    await inspector
+      .locator(
+        `[data-testid="workbench-actor-kibo-select"][data-character-id="${binding.characterId}"]`
+      )
+      .selectOption(binding.kiboId);
+    await expect(page.getByTestId('workbench-action-library-kibo')).toHaveText(
+      `奇波 · ${binding.kiboName}`
+    );
+  }
+
+  for (const [index, binding] of bindings.entries()) {
+    const row = timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="kibo-energy-team-slot-${index + 1}"]`
+    );
+    await expect(
+      timeline.locator(
+        `[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-${index + 1}"]`
+      )
+    ).toContainText(binding.kiboName);
+    await expect(
+      row.getByTestId('workbench-timeline-state-curve')
+    ).toHaveAttribute('data-point-count', '0');
+    await expect(
+      row.getByTestId('workbench-timeline-state-curve-line')
+    ).toHaveAttribute('points', '0,100 100,100');
+  }
+
+  await timeline
+    .locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-event"]'
+    )
+    .click();
+  const inspector = page.getByTestId('workbench-side-inspector');
+  await expect(
+    inspector.locator('[data-inspector-panel-key="enemy"]')
+  ).toHaveAttribute('data-inspector-panel-order', '0');
+  await inspector
+    .getByTestId('workbench-enemy-config-select')
+    .selectOption('300071');
+  await expect(inspector.getByTestId('workbench-enemy-name')).toHaveText(
+    '菜鸡'
+  );
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-event"]'
+    )
+  ).toContainText('菜鸡');
+
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await expect(inspector).toBeHidden();
+  await expectTimelineRowsAligned(timeline);
+  const desktopLayout = await readTimelineFirstLayout(page);
+  expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(900);
+  await page.screenshot({ path: 'reports/m1b-six-energy-desktop.png' });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1b-six-energy-narrow.png' });
+});
+
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/#/workbench');
 
+  await openActorInspector(page);
   await page
     .locator(
       '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
     )
     .selectOption('500001');
+  await closeInspectorIfVisible(page);
   const palette = page.getByTestId('workbench-timeline-entry-palette');
   const paletteToggle = page.getByTestId(
     'workbench-timeline-entry-palette-toggle'
@@ -295,8 +401,11 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
     '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
   );
   await kiboSource.dragTo(firstKiboLane, {
-    targetPosition: { x: 950, y: 18 },
+    targetPosition: { x: 260, y: 18 },
   });
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
 
   const kiboAction = page.locator(
     '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
@@ -320,8 +429,11 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
     '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
   );
   await enemySource.dragTo(enemyLane, {
-    targetPosition: { x: 1000, y: 24 },
+    targetPosition: { x: 300, y: 24 },
   });
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
   await expect(
     page.locator(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0003"]'
@@ -336,8 +448,11 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
   );
   await skillSource.dragTo(secondActorLane, {
-    targetPosition: { x: 900, y: 28 },
+    targetPosition: { x: 340, y: 28 },
   });
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
   await expect(
     page.locator(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
@@ -374,7 +489,7 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   await expect(copiedKiboAction).toHaveCount(0);
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const exported = JSON.parse(
     await readFile(await (await downloadPromise).path(), 'utf8')
   );
@@ -424,11 +539,13 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/#/workbench');
 
+  await openActorInspector(page);
   await page
     .locator(
       '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
     )
     .selectOption('500001');
+  await closeInspectorIfVisible(page);
   const palette = page.getByTestId('workbench-timeline-entry-palette');
   const paletteToggle = page.getByTestId(
     'workbench-timeline-entry-palette-toggle'
@@ -447,8 +564,11 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
       page.locator(
         '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
       ),
-      { targetPosition: { x: 560, y: 18 } }
+      { targetPosition: { x: 260, y: 18 } }
     );
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
 
   const workbench = page.locator('main.workbench');
   const firstAction = page.locator(
@@ -516,8 +636,11 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
       page.locator(
         '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
       ),
-      { targetPosition: { x: 920, y: 24 } }
+      { targetPosition: { x: 300, y: 24 } }
     );
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
   await boxSelectTimelineActions(page, [
     'action-0001',
     'action-0002',
@@ -605,7 +728,7 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const exported = JSON.parse(
     await readFile(await (await downloadPromise).path(), 'utf8')
   );
@@ -653,7 +776,7 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
   await page.screenshot({ path: 'reports/stage-10b-batch-narrow.png' });
 });
 
-test('[stage-10c-frame-cursor-review] links timeline frames, five curve states, actions, and runtime logs', async ({
+test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states, actions, and runtime logs', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -667,7 +790,7 @@ test('[stage-10c-frame-cursor-review] links timeline frames, five curve states, 
   await expect(timeline).toHaveAttribute('data-cursor-frame-index', '0');
   await expect(
     page.getByTestId('workbench-timeline-state-curve-cursor')
-  ).toHaveCount(5);
+  ).toHaveCount(8);
   await expect(
     page.locator(
       '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
@@ -1152,7 +1275,7 @@ test('[stage-11b-window-comparison] compares one cycle and opens the baseline co
   await page.getByTestId('workbench-resource-change-input').fill('80');
   await page.getByTestId('workbench-resource-change-input').press('Tab');
 
-  await page.getByTestId('workbench-open-comparison').click();
+  await clickProjectMenuCommand(page, 'workbench-open-comparison');
   await page
     .getByTestId('workbench-comparison-workspace-scenario')
     .selectOption('scenario-0001');
@@ -1235,7 +1358,7 @@ test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysi
   await page.getByTestId('workbench-resource-change-input').fill('80');
   await page.getByTestId('workbench-resource-change-input').press('Tab');
 
-  await page.getByTestId('workbench-open-comparison').click();
+  await clickProjectMenuCommand(page, 'workbench-open-comparison');
   await page
     .getByTestId('workbench-comparison-workspace-scenario')
     .selectOption('scenario-0001');
@@ -1569,7 +1692,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
@@ -1589,7 +1712,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   });
   expect(project.actionDrafts).toHaveLength(2);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '1 action'
   );
@@ -1614,7 +1737,7 @@ test('[profile-compatibility-gate] rejects an unavailable profile without replac
   await page.getByTestId('workbench-add-action').click();
   await page.getByTestId('workbench-enemy-level-input').fill('91');
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   const unavailableSelection = {
@@ -1653,7 +1776,7 @@ test('[game-data-compatibility-gate] rejects an unavailable AzPr config referenc
   await page.getByTestId('workbench-add-action').click();
   await page.getByTestId('workbench-enemy-level-input').fill('91');
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   project.actorConfigs[0].loadout.kiboId = 999999999;
@@ -1683,7 +1806,7 @@ test('[action-skill-compatibility-gate] rejects an unavailable skill before acti
   await page.getByTestId('workbench-add-action').click();
   await page.getByTestId('workbench-enemy-level-input').fill('91');
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   project.actionDrafts[0].skillId = 999999999;
@@ -1710,6 +1833,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
   page,
 }) => {
   await page.goto('/#/workbench');
+  await openActorInspector(page);
   await expect(
     page.getByTestId('workbench-configuration-library-panel')
   ).toBeVisible();
@@ -1755,7 +1879,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(project).toMatchObject({
@@ -1797,7 +1921,7 @@ test('[png-project-exchange] restores production PNG metadata and lazy exporter 
   await page.getByTestId('workbench-enemy-level-input').fill('93');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project-png').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project-png');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
@@ -1809,7 +1933,7 @@ test('[png-project-exchange] restores production PNG metadata and lazy exporter 
   await expect.poll(() => snapdomResponses.length).toBe(1);
   expect(snapdomResponses).toEqual([200]);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
@@ -1833,13 +1957,13 @@ test('[project-drop-recovery] restores a production project without replacing it
   await page.getByTestId('workbench-enemy-level-input').fill('95');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const projectBuffer = await readFile(downloadPath);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await dragWorkbenchFile(page, {
     name: 'production-axis.promilia-workbench.json',
     mimeType: 'application/json',
@@ -1927,7 +2051,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
@@ -1945,7 +2069,7 @@ test('[timeline-relations] preserves action relations through project exchange',
     }),
   ]);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
@@ -1963,6 +2087,7 @@ test('[effect-interval-review] reviews an effect interval and refreshes it from 
   page,
 }) => {
   await page.goto('/#/workbench');
+  await openActionInspector(page);
   await page.getByTestId('workbench-effect-add').click();
   await page.getByTestId('workbench-effect-name-input').fill('生产增益');
   await page.getByTestId('workbench-effect-name-input').press('Tab');
@@ -2002,12 +2127,12 @@ test('[scenario-comparison] compares an edited axis with a snapshot and returns 
 }) => {
   await page.goto('/#/workbench');
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const baselineDownload = await downloadPromise;
   const baselinePath = await baselineDownload.path();
   expect(baselinePath).toBeTruthy();
 
-  await page.getByTestId('workbench-open-comparison').click();
+  await clickProjectMenuCommand(page, 'workbench-open-comparison');
   const comparison = page.getByTestId('workbench-scenario-comparison');
   await expect(comparison).toBeVisible();
   await page.getByTestId('workbench-comparison-capture-current').click();
@@ -2016,9 +2141,10 @@ test('[scenario-comparison] compares an edited axis with a snapshot and returns 
   ).toContainText('当前快照');
   await page.getByTestId('workbench-comparison-close').click();
 
+  await openActionInspector(page);
   await page.getByTestId('workbench-start-frame-input').fill('36');
   await page.getByTestId('workbench-start-frame-input').press('Tab');
-  await page.getByTestId('workbench-open-comparison').click();
+  await clickProjectMenuCommand(page, 'workbench-open-comparison');
   const changedAction = page.locator(
     '[data-testid="workbench-comparison-action-row"][data-current-action-id="action-0001"]'
   );
@@ -2096,7 +2222,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   ).toHaveAttribute('data-edit-focus-source', 'contribution-window');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -2107,7 +2233,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
       timeMs: expect.any(Number),
     }),
   ]);
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
@@ -2165,7 +2291,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -2199,7 +2325,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
     },
   });
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
@@ -2225,7 +2351,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   await expect(page.locator('.action-item')).toHaveCount(2);
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -2238,7 +2364,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
     ],
   });
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
@@ -2256,7 +2382,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
       '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0002"]'
     )
     .click();
-  await page.getByTestId('workbench-open-comparison').click();
+  await clickProjectMenuCommand(page, 'workbench-open-comparison');
   await page
     .getByTestId('workbench-comparison-workspace-scenario')
     .selectOption('scenario-0001');
@@ -2406,11 +2532,54 @@ async function expectTimelineRowsAligned(timeline) {
     };
   });
   expect(alignment).toEqual({
-    rowCount: 12,
-    labelCount: 12,
+    rowCount: 15,
+    labelCount: 15,
     rowsSeparated: true,
     labelsAligned: true,
   });
+}
+
+async function openProjectMenu(page) {
+  const menu = page.getByTestId('workbench-project-menu');
+  if (!(await menu.evaluate(element => element.open))) {
+    await menu.locator('summary').click();
+  }
+  return menu;
+}
+
+async function clickProjectMenuCommand(page, testId) {
+  const menu = await openProjectMenu(page);
+  await menu.getByTestId(testId).click();
+  if (await menu.evaluate(element => element.open)) {
+    await menu.evaluate(element => {
+      element.open = false;
+    });
+  }
+}
+
+async function openActorInspector(page, characterId = 109001) {
+  await page
+    .locator(
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+    )
+    .click();
+  await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
+}
+
+async function openActionInspector(page, actionId = 'action-0001') {
+  await page
+    .locator(
+      `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+    )
+    .click();
+  await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
+}
+
+async function closeInspectorIfVisible(page) {
+  const inspector = page.getByTestId('workbench-side-inspector');
+  if (await inspector.isVisible()) {
+    await page.getByTestId('workbench-close-side-inspector').click();
+  }
 }
 
 async function readTimelineFirstLayout(page) {

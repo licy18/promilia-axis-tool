@@ -428,7 +428,10 @@
             <i class="lane-curve-mark" aria-hidden="true" />
             <span class="lane-subtrack-copy">
               <strong>{{ lane.name }}</strong>
-              <small>{{ formatTopologyCurveCursorValue(lane.curve) }}</small>
+              <small>
+                {{ lane.detail }} ·
+                {{ formatTopologyCurveCursorValue(lane.curve) }}
+              </small>
             </span>
           </template>
           <template v-else>
@@ -1104,9 +1107,9 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
-const TIMELINE_LANE_MIN_HEIGHT_PX = 68;
-const TIMELINE_ACTION_TOP_PX = 5;
-const TIMELINE_ACTION_HEIGHT_PX = 40;
+const TIMELINE_LANE_MIN_HEIGHT_PX = 54;
+const TIMELINE_ACTION_TOP_PX = 4;
+const TIMELINE_ACTION_HEIGHT_PX = 36;
 const TIMELINE_ACTION_SLOT_GAP_PX = 4;
 const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 16;
 const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
@@ -1258,7 +1261,7 @@ const props = defineProps({
     type: Object,
     default: () => ({
       enemy: { points: [] },
-      resources: { curvesByActor: [] },
+      resources: { curvesByActor: [], curvesByKibo: [] },
     }),
   },
   runtimeStatePointContexts: {
@@ -1754,8 +1757,9 @@ const timelineLanes = computed(() => {
   const allLanes = [
     ...actorGroups.flatMap(group => [
       group.actionLane,
-      group.kiboLane,
       group.energyCurveLane,
+      group.kiboLane,
+      group.kiboEnergyCurveLane,
     ]),
     enemyGroup.eventLane,
     enemyGroup.hpCurveLane,
@@ -1852,6 +1856,12 @@ function createTimelineActorGroups() {
         actionLane: { laneId: actor.id },
         kiboLane: { laneId: `kibo-fallback-${index + 1}`, kiboId: null },
         energyCurve: { laneId: `energy-${actor.id}`, actorId: actor.id },
+        kiboEnergyCurve: {
+          laneId: `kibo-energy-team-slot-${index + 1}`,
+          slotId: `team-slot-${index + 1}`,
+          actorId: actor.id,
+          kiboId: null,
+        },
       };
     const kibo = props.kibos.find(
       item => Number(item.id) === Number(topology.kiboLane?.kiboId)
@@ -1886,7 +1896,7 @@ function createTimelineActorGroups() {
         kind: 'actor-energy-curve',
         type: 'curve',
         actorId: actor.id,
-        name: '能量',
+        name: '角色能量',
         detail: actor.name,
         editable: false,
         identity,
@@ -1895,6 +1905,33 @@ function createTimelineActorGroups() {
           actorId: actor.id,
           fallbackInitialValue: actor.initialSp ?? actor.stats?.initialSp ?? 0,
           fallbackMaxValue: actor.stats?.maxSp,
+        }),
+      }),
+      kiboEnergyCurveLane: createEmptyTimelineLane({
+        id:
+          topology.kiboEnergyCurve?.laneId ??
+          `kibo-energy-team-slot-${index + 1}`,
+        kind: 'kibo-energy-curve',
+        type: 'curve',
+        actorId: actor.id,
+        name: '奇波能量',
+        detail: kibo?.name ?? `槽位 ${index + 1}`,
+        editable: false,
+        identity: {
+          ...identity,
+          kind: 'kibo',
+          slotId: topology.kiboEnergyCurve?.slotId ?? `team-slot-${index + 1}`,
+          kiboId: kibo?.id ?? null,
+          kiboName: kibo?.name ?? '待绑定奇波',
+          accentColor: '#70d6b7',
+        },
+        curve: createTimelineStateCurve({
+          trackKey: 'kiboEnergyChange',
+          actorId: actor.id,
+          slotId: topology.kiboEnergyCurve?.slotId ?? `team-slot-${index + 1}`,
+          kiboId: kibo?.id ?? null,
+          fallbackInitialValue: 0,
+          fallbackMaxValue: null,
         }),
       }),
     };
@@ -1925,7 +1962,15 @@ function resolveCharacterAvatarUrl(characterId) {
 }
 
 function isIdentityLane(lane) {
-  return lane?.kind === 'actor-action' || lane?.kind === 'enemy-event';
+  return [
+    'actor-action',
+    'actor-kibo',
+    'actor-energy-curve',
+    'kibo-energy-curve',
+    'enemy-event',
+    'enemy-hp-curve',
+    'enemy-toughness-curve',
+  ].includes(lane?.kind);
 }
 
 function isActiveIdentityLane(lane) {
@@ -1943,12 +1988,18 @@ function laneIdentityStyle(lane) {
 
 function selectTimelineLaneIdentity(lane) {
   if (!isIdentityLane(lane)) return;
+  const isEnemy = lane.kind.startsWith('enemy-');
+  const isKibo =
+    lane.kind === 'actor-kibo' || lane.kind === 'kibo-energy-curve';
   emit('select-identity', {
-    kind: lane.kind === 'enemy-event' ? 'enemy' : 'actor',
+    kind: isEnemy ? 'enemy' : 'actor',
     actorId: lane.identity?.actorId ?? lane.actorId ?? '',
     characterId: lane.identity?.characterId ?? '',
     enemyId: lane.identity?.enemyId ?? '',
-    label: lane.identity?.label ?? lane.name,
+    kiboId: lane.identity?.kiboId ?? '',
+    label: isKibo
+      ? (lane.identity?.kiboName ?? lane.detail ?? lane.name)
+      : (lane.identity?.label ?? lane.name),
   });
 }
 
@@ -2060,10 +2111,16 @@ function formatTopologyCurveCursorValue(curve) {
 function createTimelineStateCurve({
   trackKey,
   actorId = '',
+  slotId = '',
+  kiboId = null,
   fallbackInitialValue = 0,
   fallbackMaxValue = null,
 }) {
-  const runtimeCurve = resolveRuntimeStateCurve(trackKey, actorId);
+  const runtimeCurve = resolveRuntimeStateCurve(trackKey, {
+    actorId,
+    slotId,
+    kiboId,
+  });
   const stateMetric = runtimeCurve?.stateMetric ?? null;
   const initialValue = numberOrZero(
     stateMetric?.initialValue ?? fallbackInitialValue
@@ -2071,7 +2128,10 @@ function createTimelineStateCurve({
   const maxValue = strictNumberOrNull(
     stateMetric?.maxValue ?? fallbackMaxValue
   );
-  const direction = trackKey === 'selfEnergyChange' ? 'increase' : 'decrease';
+  const direction =
+    trackKey === 'selfEnergyChange' || trackKey === 'kiboEnergyChange'
+      ? 'increase'
+      : 'decrease';
   let currentValue = initialValue;
   const values = [initialValue];
   const breakpoints = [...(runtimeCurve?.points ?? [])]
@@ -2090,7 +2150,9 @@ function createTimelineStateCurve({
           : currentValue + delta);
       values.push(currentValue);
       return {
-        id: point.sourceDeltaId ?? `${trackKey}-${actorId}-${index}`,
+        id:
+          point.sourceDeltaId ??
+          `${trackKey}-${actorId || slotId || kiboId}-${index}`,
         sourceDeltaId: point.sourceDeltaId ?? '',
         statePointId:
           runtimeStatePointContextByDeltaId.value.get(point.sourceDeltaId)
@@ -2128,6 +2190,8 @@ function createTimelineStateCurve({
   return {
     trackKey,
     actorId,
+    slotId,
+    kiboId,
     initialValue,
     currentValue,
     cursorValue,
@@ -2139,12 +2203,20 @@ function createTimelineStateCurve({
   };
 }
 
-function resolveRuntimeStateCurve(trackKey, actorId) {
+function resolveRuntimeStateCurve(trackKey, { actorId, slotId, kiboId }) {
   if (trackKey === 'selfEnergyChange') {
     return (
       props.runtimeStateCurves?.resources?.curvesByActor?.find(
         curve => curve.actorId === actorId
       ) ?? null
+    );
+  }
+  if (trackKey === 'kiboEnergyChange') {
+    return (
+      props.runtimeStateCurves?.resources?.curvesByKibo?.find(curve => {
+        if (slotId && curve.slotId === slotId) return true;
+        return kiboId != null && Number(curve.kiboId) === Number(kiboId);
+      }) ?? null
     );
   }
   const metricKey = trackKey === 'enemyHpDamage' ? 'hp' : 'toughness';
@@ -2157,6 +2229,7 @@ function resolveRuntimeStateCurve(trackKey, actorId) {
 function getRuntimeCurveMetricKey(trackKey) {
   if (trackKey === 'enemyHpDamage') return 'enemyHp';
   if (trackKey === 'enemyToughnessDamage') return 'enemyToughness';
+  if (trackKey === 'kiboEnergyChange') return 'kiboEnergy';
   return 'selfEnergy';
 }
 
@@ -2526,20 +2599,20 @@ function getTimelineCandidateCurveTop(lane) {
 }
 
 function getTimelineStateCurveMarkerTop(marker, lane) {
-  if (lane.type === 'curve') return 22;
+  if (lane.type === 'curve') return 17;
   return getTimelineDataTop(lane) + (marker.top - 54);
 }
 
 function getTimelineLaneHeight(lane) {
-  if (lane.type === 'curve') return 44;
-  if (lane.type === 'kibo' && lane.actions.length === 0) return 38;
+  if (lane.type === 'curve') return 34;
+  if (lane.type === 'kibo' && lane.actions.length === 0) return 32;
   const hasCandidateData =
     lane.candidateValueMarkers.length > 0 ||
     lane.candidateValueCurves.length > 0 ||
     lane.candidateValueFrameGroups.length > 0;
   return Math.max(
     TIMELINE_LANE_MIN_HEIGHT_PX,
-    getTimelineDataTop(lane) + (hasCandidateData ? 48 : 18)
+    getTimelineDataTop(lane) + (hasCandidateData ? 48 : 12)
   );
 }
 
@@ -5566,7 +5639,7 @@ h2 {
 
 .timeline-state-curve {
   position: absolute;
-  inset: 7px 0;
+  inset: 5px 0;
   color: #a6b7ff;
 }
 
@@ -5619,12 +5692,16 @@ h2 {
   color: #e8c36a;
 }
 
+.timeline-state-curve.curve-kiboEnergyChange {
+  color: #70d6b7;
+}
+
 .action-block {
   position: absolute;
-  top: 5px;
+  top: 4px;
   display: grid;
   box-sizing: border-box;
-  height: 40px;
+  height: 36px;
   min-width: 0;
   grid-template-columns: 18px minmax(0, 1fr);
   align-items: center;

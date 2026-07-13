@@ -8610,7 +8610,7 @@ describe('Workbench view', () => {
       wrapper.findAll(
         '[data-testid="workbench-timeline-row"][data-lane-kind$="curve"]'
       )
-    ).toHaveLength(5);
+    ).toHaveLength(8);
     expect(
       wrapper
         .find(

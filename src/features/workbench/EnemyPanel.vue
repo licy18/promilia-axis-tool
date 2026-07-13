@@ -6,10 +6,19 @@
     </div>
 
     <div class="enemy-summary">
-      <div>
+      <label>
         <span>目标</span>
+        <select
+          data-testid="workbench-enemy-config-select"
+          :value="enemyId"
+          @change="$emit('select-enemy', Number($event.target.value))"
+        >
+          <option v-for="item in enemies" :key="item.id" :value="item.id">
+            {{ item.name }}
+          </option>
+        </select>
         <strong data-testid="workbench-enemy-name">{{ enemy.name }}</strong>
-      </div>
+      </label>
       <div>
         <span>等级</span>
         <strong data-testid="workbench-enemy-level"
@@ -164,9 +173,17 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  enemies: {
+    type: Array,
+    default: () => [],
+  },
+  enemyId: {
+    type: Number,
+    required: true,
+  },
 });
 
-const emit = defineEmits(['update-enemy-config']);
+const emit = defineEmits(['select-enemy', 'update-enemy-config']);
 
 function emitNumberPatch(key, value) {
   const number = Number(value);
@@ -364,7 +381,8 @@ strong {
   font-size: 14px;
 }
 
-input {
+input,
+select {
   width: 100%;
   min-width: 0;
   padding: 8px 9px;
@@ -375,7 +393,8 @@ input {
   font: inherit;
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
   border-color: #79c7b9;
   box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.14);

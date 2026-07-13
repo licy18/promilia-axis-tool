@@ -9,6 +9,7 @@ import {
   createThreeValueRuntimeHitTransactions,
 } from './threeValueRuntimeHitTransactions';
 import { createEffectRuntimeTimeline } from './effectRuntimeTimeline';
+import { createKiboEnergyRuntimeCurves } from './kiboEnergyRuntimeCurves';
 import {
   createThreeValueRuntimeEnemyBaseline,
   createThreeValueRuntimeSelfEnergyBaseline,
@@ -68,14 +69,16 @@ export function createThreeValueRuntimeProjection({
     stateSnapshotByDeltaId,
     hitTransactionByDeltaId,
   });
+  const kiboEnergyCurveBySlot = createKiboEnergyRuntimeCurves({ scenario });
   const simLog = createThreeValueRuntimeSimLog(
     appliedDeltas,
     stateSnapshotByDeltaId,
     hitTransactionByDeltaId
   );
-  const resourceCurves = createThreeValueRuntimeResourceCurves(
-    selfEnergyCurveByActor
-  );
+  const resourceCurves = createThreeValueRuntimeResourceCurves({
+    selfEnergyCurveByActor,
+    kiboEnergyCurveBySlot,
+  });
   const stateCurves = createThreeValueRuntimeStateCurves({
     enemyStateCurve,
     resourceCurves,
@@ -86,6 +89,7 @@ export function createThreeValueRuntimeProjection({
     appliedDeltas,
     enemyStateCurve,
     selfEnergyCurveByActor,
+    kiboEnergyCurveBySlot,
     resourceCurves,
     simLog,
     runtimeStateSnapshots,
@@ -149,6 +153,7 @@ export function createThreeValueRuntimeProjection({
     actionExecutionPlan,
     enemyStateCurve,
     selfEnergyCurveByActor,
+    kiboEnergyCurveBySlot,
     simLog,
     summary,
     applied: true,
@@ -245,6 +250,8 @@ function createThreeValueRuntimeOutputs({
       enemyStatePointCount: outputContract.summary.enemyStatePointCount,
       stateCurvePointCount: outputContract.summary.stateCurvePointCount,
       resourceCurveActorCount: outputContract.summary.resourceCurveActorCount,
+      resourceCurveKiboCount: outputContract.summary.resourceCurveKiboCount,
+      resourceEnergyCurveCount: outputContract.summary.resourceEnergyCurveCount,
       resourceCurvePointCount: outputContract.summary.resourceCurvePointCount,
       enemyHpDelta: outputContract.summary.enemyHpDelta,
       enemyToughnessDelta: outputContract.summary.enemyToughnessDelta,
@@ -607,6 +614,8 @@ function createThreeValueRuntimeOutputContract({
       enemyStatePointCount: enemyStateCurve.pointCount,
       stateCurvePointCount: stateCurves.summary.stateCurvePointCount,
       resourceCurveActorCount: resourceCurves.summary.actorCount,
+      resourceCurveKiboCount: resourceCurves.summary.kiboCount,
+      resourceEnergyCurveCount: resourceCurves.summary.energyCurveCount,
       resourceCurvePointCount: resourceCurves.summary.pointCount,
       enemyHpDelta: summary.enemyHpDelta,
       enemyToughnessDelta: summary.enemyToughnessDelta,
@@ -753,6 +762,8 @@ function createRuntimeStateCurvesOutputContract({
       sourceKind: resourceCurves.sourceKind,
       status: resourceCurves.status,
       actorCount: resourceCurves.summary.actorCount,
+      kiboCount: resourceCurves.summary.kiboCount,
+      energyCurveCount: resourceCurves.summary.energyCurveCount,
       pointCount: resourceCurves.summary.pointCount,
       resourceKind: resourceCurves.resourceKind,
       valueFields: ['energyDelta'],
@@ -790,10 +801,14 @@ function createRuntimeResourceCurvesOutputContract(resourceCurves) {
     status: resourceCurves.status,
     resourceKind: resourceCurves.resourceKind,
     curveCollectionField: 'curvesByActor',
+    curveCollectionFields: ['curvesByActor', 'curvesByKibo'],
     actorCount: resourceCurves.summary.actorCount,
+    kiboCount: resourceCurves.summary.kiboCount,
+    energyCurveCount: resourceCurves.summary.energyCurveCount,
     activeActorCount: resourceCurves.summary.activeActorCount,
+    activeKiboCount: resourceCurves.summary.activeKiboCount,
     pointCount: resourceCurves.summary.pointCount,
-    curveKeyFields: ['actorId'],
+    curveKeyFields: ['actorId', 'slotId', 'kiboId'],
     pointKeyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
     valueFields: ['delta', 'energyDelta'],
     stateMetricField: 'stateMetric',
@@ -824,6 +839,8 @@ function createRuntimeSummaryOutputContract(summary) {
       'stateCurvePointCount',
       'selfEnergyPointCount',
       'resourceCurveActorCount',
+      'resourceCurveKiboCount',
+      'resourceEnergyCurveCount',
       'resourceCurvePointCount',
       'simLogCount',
       'stateSnapshotCount',
@@ -1174,7 +1191,10 @@ function createThreeValueRuntimeStateCurves({
         enemyStateCurve.pointCount + resourceCurves.summary.pointCount
       ),
       resourceActorCount: resourceCurves.summary.actorCount,
+      resourceKiboCount: resourceCurves.summary.kiboCount,
+      resourceEnergyCurveCount: resourceCurves.summary.energyCurveCount,
       activeResourceActorCount: resourceCurves.summary.activeActorCount,
+      activeResourceKiboCount: resourceCurves.summary.activeKiboCount,
       resourcePointCount: resourceCurves.summary.pointCount,
       selfEnergyDelta: resourceCurves.summary.selfEnergyDelta,
       stateSnapshotCount: runtimeStateSnapshots.summary.snapshotCount,
@@ -1194,11 +1214,19 @@ function createThreeValueRuntimeStateCurves({
   };
 }
 
-function createThreeValueRuntimeResourceCurves(selfEnergyCurveByActor) {
-  const pointCount = selfEnergyCurveByActor.reduce(
+function createThreeValueRuntimeResourceCurves({
+  selfEnergyCurveByActor,
+  kiboEnergyCurveBySlot,
+}) {
+  const actorPointCount = selfEnergyCurveByActor.reduce(
     (sum, actor) => sum + actor.pointCount,
     0
   );
+  const kiboPointCount = kiboEnergyCurveBySlot.reduce(
+    (sum, kibo) => sum + kibo.pointCount,
+    0
+  );
+  const pointCount = actorPointCount + kiboPointCount;
   return {
     sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
     status:
@@ -1207,11 +1235,19 @@ function createThreeValueRuntimeResourceCurves(selfEnergyCurveByActor) {
         : 'resource-curves-ready-no-applied-resource-deltas',
     resourceKind: 'selfEnergy',
     curvesByActor: selfEnergyCurveByActor,
+    curvesByKibo: kiboEnergyCurveBySlot,
     summary: {
       actorCount: selfEnergyCurveByActor.length,
+      kiboCount: kiboEnergyCurveBySlot.length,
+      energyCurveCount:
+        selfEnergyCurveByActor.length + kiboEnergyCurveBySlot.length,
       activeActorCount: selfEnergyCurveByActor.filter(
         actor => actor.pointCount > 0
       ).length,
+      activeKiboCount: kiboEnergyCurveBySlot.filter(kibo => kibo.pointCount > 0)
+        .length,
+      actorPointCount,
+      kiboPointCount,
       pointCount,
       selfEnergyDelta: roundCurveValue(
         selfEnergyCurveByActor.reduce(
@@ -1290,7 +1326,10 @@ function summarizeThreeValueRuntimeProjection({
     ),
     selfEnergyPointCount,
     resourceCurveActorCount: resourceCurves.summary.actorCount,
+    resourceCurveKiboCount: resourceCurves.summary.kiboCount,
+    resourceEnergyCurveCount: resourceCurves.summary.energyCurveCount,
     activeResourceCurveActorCount: resourceCurves.summary.activeActorCount,
+    activeResourceCurveKiboCount: resourceCurves.summary.activeKiboCount,
     resourceCurvePointCount: resourceCurves.summary.pointCount,
     stateSnapshotCount: runtimeStateSnapshots.summary.snapshotCount,
     stateSnapshotReadyCount: runtimeStateSnapshots.summary.readySnapshotCount,

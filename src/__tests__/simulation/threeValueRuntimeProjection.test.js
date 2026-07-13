@@ -740,6 +740,31 @@ describe('three value runtime projection', () => {
     expect(runtimeProjection.resourceCurves.curvesByActor).toEqual(
       runtimeProjection.selfEnergyCurveByActor
     );
+    expect(runtimeProjection.resourceCurves.curvesByKibo).toEqual(
+      runtimeProjection.kiboEnergyCurveBySlot
+    );
+    expect(runtimeProjection.kiboEnergyCurveBySlot).toEqual([
+      expect.objectContaining({
+        resourceOwnerKind: 'kibo',
+        slotId: 'team-slot-1',
+        actorId: 'actor-001',
+        pointCount: 0,
+        trackingOnly: true,
+        appliedToCalculators: false,
+        stateMetric: expect.objectContaining({
+          key: 'kiboEnergy',
+          initialValue: 0,
+          currentValue: 0,
+        }),
+      }),
+    ]);
+    expect(runtimeProjection.resourceCurves.summary).toMatchObject({
+      actorCount: 1,
+      kiboCount: 1,
+      energyCurveCount: 2,
+      activeKiboCount: 0,
+      kiboPointCount: 0,
+    });
     expect(
       createSelfEnergyDeltaSummaryByActor(
         runtimeProjection.selfEnergyCurveByActor
@@ -1699,21 +1724,22 @@ describe('three value runtime projection', () => {
         contract: { name: 'Action -> Hit -> ThreeValueDelta' },
         deltas: [generationDelta],
       },
-      threeValueMechanicsAdapterRegistry: createThreeValueMechanicsAdapterRegistry({
-        enemyHpDamage: {
-          key: 'unit-test-state-aware-hp-adapter',
-          version: 7,
-          calculate(input) {
-            return {
-              delta:
-                input.stateBefore.enemyHp.currentValue === 1000
-                  ? input.generatedDelta.delta * 2
-                  : input.generatedDelta.delta,
-              status: 'unit-test-runtime-hp-replaced',
-            };
+      threeValueMechanicsAdapterRegistry:
+        createThreeValueMechanicsAdapterRegistry({
+          enemyHpDamage: {
+            key: 'unit-test-state-aware-hp-adapter',
+            version: 7,
+            calculate(input) {
+              return {
+                delta:
+                  input.stateBefore.enemyHp.currentValue === 1000
+                    ? input.generatedDelta.delta * 2
+                    : input.generatedDelta.delta,
+                status: 'unit-test-runtime-hp-replaced',
+              };
+            },
           },
-        },
-      }),
+        }),
     });
 
     expect(runtimeProjection.runtimeInput.appliedDeltas[0]).toMatchObject({

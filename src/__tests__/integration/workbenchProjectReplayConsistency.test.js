@@ -188,6 +188,45 @@ describe('Workbench project replay consistency', () => {
         toActionId: 'action-kibo',
       }),
     ]);
+    expect(baseline.timelineTopology.summary).toMatchObject({
+      actorEnergyCurveCount: 3,
+      kiboEnergyCurveCount: 3,
+      energyCurveCount: 6,
+      stateCurveCount: 8,
+    });
+    expect(
+      baseline.timelineTopology.actorGroups.map(group => [
+        group.characterId,
+        group.kiboEnergyCurve.kiboId,
+      ])
+    ).toEqual([
+      [sourceState.teamSlots[0].characterId, 500001],
+      [sourceState.teamSlots[1].characterId, 500002],
+      [sourceState.teamSlots[2].characterId, 500003],
+    ]);
+    expect(baseline.runtimeOutputs.resources.curvesByKibo).toEqual([
+      expect.objectContaining({
+        slotId: 'team-slot-1',
+        kiboId: 500001,
+        pointCount: 0,
+        trackingOnly: true,
+        appliedToCalculators: false,
+      }),
+      expect.objectContaining({
+        slotId: 'team-slot-2',
+        kiboId: 500002,
+        pointCount: 0,
+        trackingOnly: true,
+        appliedToCalculators: false,
+      }),
+      expect.objectContaining({
+        slotId: 'team-slot-3',
+        kiboId: 500003,
+        pointCount: 0,
+        trackingOnly: true,
+        appliedToCalculators: false,
+      }),
+    ]);
     expect(baseline.mechanicsProfileSelection).toMatchObject({
       sourceKind: 'project-persisted-mechanics-profile-selection',
       requestedProfileId: 'azpr-replay-equivalent-v1',
@@ -225,6 +264,8 @@ function createReplaySourceState() {
   state.actorConfigs[0].initialSp = 0.35;
   state.actorConfigs[0].loadout.kiboId = 500001;
   state.actorConfigs[1].initialSp = 0.6;
+  state.actorConfigs[1].loadout.kiboId = 500002;
+  state.actorConfigs[2].loadout.kiboId = 500003;
   state.enemyConfig = {
     ...state.enemyConfig,
     level: 95,

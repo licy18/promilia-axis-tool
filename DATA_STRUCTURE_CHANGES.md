@@ -27144,3 +27144,32 @@ AzPrWorkbenchAnalysisReportReproducibilityAudit v1
 ```
 
 审计先重新验证 `WorkbenchAnalysisReport v1`，再对每个来源执行 profile/game-data exact 门禁和标准 compile/runtime。贡献报告重建相同 `windowId` 的 `ContributionWindow`；方案比较重建双方同一比较窗口。仅比较冻结 `analysis`、`appliedSourceBindings` 与派生 `summary`，完全一致为 `exact`；可重放但字段不同为 `drift`，记录完整差异计数并最多返回 12 条最小路径；来源、profile、游戏数据或窗口无法精确解析时为 `incompatible`，不接受 fallback 结果。审计对象不进入项目载体、runtime state 或 calculator 输入。
+
+## 413. Workbench timeline topology v2 / six independent energy owners
+
+M1-B 将派生的 `AzPrWorkbenchTimelineTopology` 升级到 v2。Workbench 项目继续使用 v16；角色、奇波和敌人选择仍由既有 `teamSlots / actorConfigs / selection` 持久化，拓扑在项目构建时重建，因此旧项目不需要迁移。
+
+```text
+timelineTopology.actorGroups[]
+  actionLane
+  energyCurve
+    trackKey = selfEnergyChange
+    actorId
+  kiboLane
+    kiboId / kiboName
+  kiboEnergyCurve
+    trackKey = kiboEnergyChange
+    slotId / actorId / characterId
+    kiboId / kiboName
+    trackingOnly = true
+    appliedToCalculators = false
+
+runtimeOutputs.resources
+  curvesByActor[]  # 3 role energy owners
+  curvesByKibo[]   # 3 kibo energy owners
+  summary
+    actorCount / kiboCount
+    energyCurveCount = 6
+```
+
+`curvesByKibo` 当前由 `AzPrKiboEnergyRuntimeCurves v1` 生成独立零值基线。未确认奇波机制不会生成 applied point，也不会进入三值 calculator、state snapshot 或 sim log；时间轴仍绘制从 0 到轴末的完整平线。敌人 HP 与韧性沿用既有独立曲线，因此 Workbench 当前总状态曲线数为 8。五载体回放测试比较同一 topology、奇波所有者和 runtime resource curves。

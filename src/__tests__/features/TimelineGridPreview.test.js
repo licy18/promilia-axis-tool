@@ -296,7 +296,7 @@ describe('TimelineGridPreview', () => {
     });
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-row"]')
-    ).toHaveLength(9);
+    ).toHaveLength(11);
     expect(
       wrapper
         .get(
@@ -317,7 +317,7 @@ describe('TimelineGridPreview', () => {
     });
   });
 
-  it('renders the fixed three-actor topology and five full-length state curves', () => {
+  it('renders the fixed three-actor topology and eight full-length state curves', () => {
     const actors = [
       { id: 'actor-a', name: '末音', initialSp: 0.1 },
       { id: 'actor-b', name: '寒悠悠', initialSp: 0.2 },
@@ -331,6 +331,12 @@ describe('TimelineGridPreview', () => {
         kiboId: index === 0 ? 500001 : null,
       },
       energyCurve: { laneId: `energy-${actor.id}`, actorId: actor.id },
+      kiboEnergyCurve: {
+        laneId: `kibo-energy-team-slot-${index + 1}`,
+        slotId: `team-slot-${index + 1}`,
+        actorId: actor.id,
+        kiboId: index === 0 ? 500001 : null,
+      },
     }));
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
@@ -357,10 +363,13 @@ describe('TimelineGridPreview', () => {
     expect(
       wrapper.findAll('[data-lane-kind="actor-energy-curve"]')
     ).toHaveLength(6);
+    expect(
+      wrapper.findAll('[data-lane-kind="kibo-energy-curve"]')
+    ).toHaveLength(6);
     expect(wrapper.findAll('[data-lane-kind="enemy-event"]')).toHaveLength(2);
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-state-curve"]')
-    ).toHaveLength(5);
+    ).toHaveLength(8);
     expect(
       wrapper
         .get(
@@ -375,6 +384,13 @@ describe('TimelineGridPreview', () => {
         )
         .attributes('data-editable')
     ).toBe('false');
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-row"][data-lane-id="kibo-energy-team-slot-1"] [data-testid="workbench-timeline-state-curve-line"]'
+        )
+        .attributes('points')
+    ).toBe('0,100 100,100');
   });
 
   it('renders character identity on actor lanes and opens the matching inspector', async () => {
@@ -403,10 +419,19 @@ describe('TimelineGridPreview', () => {
             {
               actorId: 'actor-a',
               actionLane: { laneId: 'actor-a' },
-              kiboLane: { laneId: 'kibo-team-slot-1' },
+              kiboLane: {
+                laneId: 'kibo-team-slot-1',
+                kiboId: 500001,
+              },
               energyCurve: {
                 laneId: 'energy-actor-a',
                 actorId: 'actor-a',
+              },
+              kiboEnergyCurve: {
+                laneId: 'kibo-energy-team-slot-1',
+                slotId: 'team-slot-1',
+                actorId: 'actor-a',
+                kiboId: 500001,
               },
             },
           ],
@@ -416,6 +441,7 @@ describe('TimelineGridPreview', () => {
             toughnessCurve: { laneId: 'enemy-toughness-curve' },
           },
         },
+        kibos: [{ id: 500001, name: '测试奇波' }],
       }),
     });
 
@@ -436,7 +462,22 @@ describe('TimelineGridPreview', () => {
       actorId: 'actor-a',
       characterId: 109001,
       enemyId: '',
+      kiboId: '',
       label: '末音',
+    });
+
+    await wrapper
+      .get(
+        '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-1"]'
+      )
+      .trigger('click');
+    expect(wrapper.emitted('select-identity')?.at(-1)?.[0]).toEqual({
+      kind: 'actor',
+      actorId: 'actor-a',
+      characterId: 109001,
+      enemyId: '',
+      kiboId: 500001,
+      label: '测试奇波',
     });
   });
 
@@ -610,7 +651,7 @@ describe('TimelineGridPreview', () => {
     ).toBe('0,100 100,100');
   });
 
-  it('scrubs one 60fps cursor through actions, five curves, and runtime points', async () => {
+  it('scrubs one 60fps cursor through actions, eight curves, and runtime points', async () => {
     const runtimeStateCurves = createRuntimeTimelineStateCurves();
     const wrapper = mount(TimelineGridPreview, {
       attachTo: document.body,
@@ -1062,6 +1103,15 @@ function createRuntimeTimelineStateCurves() {
     stateMetric: { initialValue: 0, currentValue, maxValue: 1 },
     points,
   });
+  const kiboCurve = (slotId, actorId, kiboId) => ({
+    slotId,
+    actorId,
+    kiboId,
+    stateMetric: { initialValue: 0, currentValue: 0, maxValue: null },
+    points: [],
+    trackingOnly: true,
+    appliedToCalculators: false,
+  });
   return {
     enemy: {
       stateMetrics: {
@@ -1112,6 +1162,11 @@ function createRuntimeTimelineStateCurves() {
           0.5
         ),
         actorCurve('actor-c'),
+      ],
+      curvesByKibo: [
+        kiboCurve('team-slot-1', 'actor-a', 500001),
+        kiboCurve('team-slot-2', 'actor-b', 500002),
+        kiboCurve('team-slot-3', 'actor-c', 500003),
       ],
     },
   };
