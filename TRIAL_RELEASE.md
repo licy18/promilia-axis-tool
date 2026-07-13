@@ -42,7 +42,7 @@ npm run preview -- --host 127.0.0.1 --port 4173
 
 ### 3. 六资源采样批次导入与回放
 
-1. 复制 `runtime-capture/six-resource-plan.example.json`，替换当前三人队、奇波、敌人、来源动作和输出身份；使用 `npm run runtime-capture:plan -- --plan <PATH> --pid <PID>` 预检 3 个角色 SP owner 与 3 个奇波能量 owner，并逐条执行输出的受控命令。不要使用旧 `all` 范围采集正式六资源批次。
+1. 从当前 Workbench 导出项目 JSON，使用 `runtime-capture:plan -- --from-project <PROJECT> --write-plan <PLAN> --capture-directory <DIR> --plan-id <ID> --pid <PID>` 自动生成并预检 3 个角色 SP owner 与 3 个奇波能量 owner；动作有歧义时按命令输出追加 `--role-action` 或 `--kibo-action SLOT=ACTION_ID`。逐条执行计划输出的受控命令，不要使用旧 `all` 范围采集正式六资源批次。
 2. 使用同一条命令把六份 JSON/JSONL 按顺序打包：
 
 ```powershell

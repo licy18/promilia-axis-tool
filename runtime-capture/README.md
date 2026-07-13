@@ -77,7 +77,27 @@ npm run runtime-capture:capture -- `
 
 ## 六资源采样计划与预检
 
-不要手写六组容易串 owner 的命令。先复制 `runtime-capture/six-resource-plan.example.json`，把 `template` 改为 `false`，并按当前 Workbench 方案填写敌人、三个槽位的角色/奇波、来源动作和输出目录。计划必须同时包含：
+优先从已配置好的 Workbench 项目 JSON 生成计划，避免重复填写敌人、角色和奇波身份。项目中每个槽位需要至少一个角色技能（没有技能时可使用资源动作）和一个所属奇波动作：
+
+```powershell
+npm run runtime-capture:plan -- `
+  --from-project C:\path\team.promilia-workbench.json `
+  --write-plan C:\path\six-resource-plan.json `
+  --capture-directory C:\path\captures `
+  --plan-id controlled-team-001 `
+  --pid 12345
+```
+
+生成器从项目 v1-v16 直接锁定三个 `teamSlots`、对应 `actorConfigs[].loadout.kiboId`、敌人和动作 owner。若同槽存在多个角色技能或多个奇波动作，生成器不会按顺序猜测，而会列出候选；使用可重复的显式覆盖后再生成：
+
+```powershell
+  --role-action 'team-slot-1=action-role-1' `
+  --kibo-action 'team-slot-1=action-kibo-1'
+```
+
+生成文件的 `projectBinding` 保留项目类型、schema、保存时间以及选中的 3 个角色、3 只奇波和敌人身份。缺少奇波、重复角色/奇波、动作 owner 不兼容或项目 schema 超出当前支持范围时不会写出计划。`--write-plan` 不覆盖已有文件，重新生成前必须显式选择新的输出路径或人工处理旧计划。
+
+没有项目 JSON 时，也可以复制 `runtime-capture/six-resource-plan.example.json`，把 `template` 改为 `false`，并按当前 Workbench 方案填写敌人、三个槽位的角色/奇波、来源动作和输出目录。计划必须同时包含：
 
 - `team-slot-1/2/3` 各一份 `role-sp`；
 - 同三个槽位各一份 `kibo-energy`；

@@ -1522,6 +1522,16 @@ JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整
 
 下一阶段目标：P3 首份非 fixture 六资源受控采样验收。操作者启动获准客户端后，先采集同一槽位的一份角色 SP 与一份奇波就绪会话，完成 production audit、owner binding 和 Workbench 回放；通过后再按同一计划扩展到完整 3+3，不推断未知公式或倍率。
 
+### P3 Workbench 项目到六资源计划桥接（2026-07-14）
+
+`runtime-capture:plan --from-project` 现可从 Workbench project/draft v1-v16 自动生成同一 `six-resource-runtime-capture-plan`：三个固定槽位、角色 owner、绑定奇波、敌人和六个来源动作直接来自项目 JSON，计划同时记录 `projectBinding`。角色侧优先选择 skill、无 skill 时选择 resource；奇波侧只接受所属 `kiboEvent`。唯一候选自动锁定，多候选必须使用按槽 action override，缺奇波或 owner/kibo 不兼容则在写计划前拒绝。
+
+该桥接不启动客户端、不附加进程、不修改 Workbench 项目或六轴结果。生成后的计划继续走已有文件 production audit、六 owner binding 和批次 normalizer，不存在第二套采样格式。
+
+阶段验收为 91 个测试文件、502 条测试和 40/40 项 production preview 全部通过；生产引用、Workbench 数据、applied source 与包体审计通过，Frida self-test 捕获 4 个事件。Workbench 主块保持 334,371B gzip，总 JavaScript 保持 739,228B gzip。当前仍无客户端进程，因此没有生成或声称真实 capture。
+
+下一阶段目标：P3 首份非 fixture 六资源受控采样验收。操作者启动获准客户端后，从生成计划执行同槽的一份角色 SP 与一份奇波就绪会话，完成 production audit、Workbench 导入和六轴定位，再扩展完整 3+3；不推断未知公式或倍率。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

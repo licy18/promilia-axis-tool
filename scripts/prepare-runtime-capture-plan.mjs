@@ -1,11 +1,14 @@
 import { spawnSync } from 'node:child_process';
-import { mkdir, readFile } from 'node:fs/promises';
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, extname, isAbsolute, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   createRuntimeSampleCaptureProductionAudit,
   parseWorkbenchRuntimeSampleCaptureFile,
 } from '../src/domain/workbenchRuntimeSampleCapture.js';
+import { createSixResourceCapturePlanFromWorkbenchProject } from './lib/workbench-project-capture-plan.mjs';
+
+export { createSixResourceCapturePlanFromWorkbenchProject } from './lib/workbench-project-capture-plan.mjs';
 
 export const SIX_RESOURCE_CAPTURE_PLAN_SCHEMA_VERSION = 1;
 export const SIX_RESOURCE_CAPTURE_PLAN_TYPE =
@@ -475,11 +478,44 @@ function normalizePath(value) {
 }
 
 function parseArguments(args) {
-  const options = { normalize: false };
+  const options = {
+    normalize: false,
+    roleActionIdsBySlot: {},
+    kiboActionIdsBySlot: {},
+  };
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
     if (argument === '--plan') {
       options.plan = args[index + 1];
+      index += 1;
+    } else if (argument === '--from-project') {
+      options.fromProject = args[index + 1];
+      index += 1;
+    } else if (argument === '--write-plan') {
+      options.writePlan = args[index + 1];
+      index += 1;
+    } else if (argument === '--capture-directory') {
+      options.captureDirectory = args[index + 1];
+      index += 1;
+    } else if (argument === '--plan-id') {
+      options.planId = args[index + 1];
+      index += 1;
+    } else if (argument === '--duration') {
+      options.durationSeconds = Number(args[index + 1]);
+      index += 1;
+    } else if (argument === '--role-action') {
+      assignSlotActionSelector(
+        options.roleActionIdsBySlot,
+        args[index + 1],
+        '--role-action'
+      );
+      index += 1;
+    } else if (argument === '--kibo-action') {
+      assignSlotActionSelector(
+        options.kiboActionIdsBySlot,
+        args[index + 1],
+        '--kibo-action'
+      );
       index += 1;
     } else if (argument === '--pid') {
       options.pid = Number(args[index + 1]);
@@ -493,15 +529,40 @@ function parseArguments(args) {
       options.requireComplete = true;
     } else if (argument === '--help') {
       process.stdout.write(
-        'Usage: node scripts/prepare-runtime-capture-plan.mjs --plan PATH [--pid PID] [--require-complete] [--normalize --output PATH]\n'
+        [
+          'Usage:',
+          '  node scripts/prepare-runtime-capture-plan.mjs --plan PATH [--pid PID] [--require-complete] [--normalize --output PATH]',
+          '  node scripts/prepare-runtime-capture-plan.mjs --from-project PROJECT --write-plan PATH --capture-directory PATH --plan-id ID [--duration SECONDS] [--role-action SLOT=ACTION_ID] [--kibo-action SLOT=ACTION_ID] [--pid PID]',
+          '',
+        ].join('\n')
       );
       process.exit(0);
     } else {
       throw new Error(`Unknown argument: ${argument}`);
     }
   }
-  if (!options.plan) {
-    throw new Error('--plan is required');
+  const createsPlan = Boolean(options.fromProject);
+  if (createsPlan && options.plan) {
+    throw new Error('--from-project cannot be combined with --plan');
+  }
+  if (createsPlan) {
+    const missing = [
+      ['--write-plan', options.writePlan],
+      ['--capture-directory', options.captureDirectory],
+      ['--plan-id', options.planId],
+    ]
+      .filter(([, value]) => !value)
+      .map(([name]) => name);
+    if (missing.length > 0) {
+      throw new Error(`--from-project requires ${missing.join(', ')}`);
+    }
+    if (options.normalize || options.output || options.requireComplete) {
+      throw new Error(
+        '--from-project cannot be combined with normalize or completion options'
+      );
+    }
+  } else if (!options.plan) {
+    throw new Error('--plan or --from-project is required');
   }
   if (
     options.pid != null &&
@@ -512,11 +573,70 @@ function parseArguments(args) {
   if (options.normalize && !options.output) {
     throw new Error('--normalize requires --output');
   }
+  if (
+    options.durationSeconds != null &&
+    (!Number.isFinite(options.durationSeconds) || options.durationSeconds < 0)
+  ) {
+    throw new Error('--duration must be zero or positive');
+  }
   return options;
+}
+
+function assignSlotActionSelector(target, rawSelector, optionName) {
+  const selector = typeof rawSelector === 'string' ? rawSelector.trim() : '';
+  const separatorIndex = selector.indexOf('=');
+  const slotId = selector.slice(0, separatorIndex).trim();
+  const actionId = selector.slice(separatorIndex + 1).trim();
+  if (separatorIndex <= 0 || !REQUIRED_SLOT_IDS.includes(slotId) || !actionId) {
+    throw new Error(`${optionName} must use team-slot-N=ACTION_ID`);
+  }
+  if (target[slotId]) {
+    throw new Error(`${optionName} repeats ${slotId}`);
+  }
+  target[slotId] = actionId;
 }
 
 async function main() {
   const options = parseArguments(process.argv.slice(2));
+  if (options.fromProject) {
+    const projectPath = resolve(options.fromProject);
+    const planPath = resolve(options.writePlan);
+    const sourcePlan = createSixResourceCapturePlanFromWorkbenchProject(
+      await readFile(projectPath, 'utf8'),
+      {
+        planId: options.planId,
+        outputDirectory: options.captureDirectory,
+        durationSeconds: options.durationSeconds ?? 30,
+        roleActionIdsBySlot: options.roleActionIdsBySlot,
+        kiboActionIdsBySlot: options.kiboActionIdsBySlot,
+      }
+    );
+    await assertFileDoesNotExist(planPath, 'Capture plan output');
+    await mkdir(dirname(planPath), { recursive: true });
+    await writeFile(
+      planPath,
+      `${JSON.stringify(sourcePlan, null, 2)}\n`,
+      'utf8'
+    );
+    const plan = parseSixResourceCapturePlan(sourcePlan, planPath);
+    const inspection = await inspectSixResourceCapturePlan(plan, {
+      pid: options.pid,
+    });
+    process.stdout.write(
+      `${JSON.stringify(
+        {
+          status: 'six-resource-capture-plan-created-from-project',
+          projectPath: normalizePath(projectPath),
+          planPath: normalizePath(planPath),
+          projectBinding: sourcePlan.projectBinding,
+          inspection,
+        },
+        null,
+        2
+      )}\n`
+    );
+    return;
+  }
   const planPath = resolve(options.plan);
   const plan = parseSixResourceCapturePlan(
     await readFile(planPath, 'utf8'),
@@ -578,6 +698,18 @@ async function main() {
   ) {
     process.exitCode = 2;
   }
+}
+
+async function assertFileDoesNotExist(path, label) {
+  try {
+    await access(path);
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      return;
+    }
+    throw error;
+  }
+  throw new Error(`${label} already exists: ${path}`);
 }
 
 const isDirectRun =

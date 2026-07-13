@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
+  createSixResourceCapturePlanFromWorkbenchProject,
   inspectSixResourceCapturePlan,
   parseSixResourceCapturePlan,
 } from '../../../scripts/prepare-runtime-capture-plan.mjs';
@@ -73,6 +74,37 @@ describe('six-resource runtime capture plan', () => {
     expect(() =>
       parseSixResourceCapturePlan(placeholder, 'capture-plan.json')
     ).toThrow('Non-template capture plan still contains a template marker');
+
+    const missingKibo = createWorkbenchProject();
+    missingKibo.actorConfigs[2].loadout.kiboId = null;
+    expect(() =>
+      createSixResourceCapturePlanFromWorkbenchProject(missingKibo, {
+        planId: 'controlled-missing-kibo',
+        outputDirectory: './captures',
+      })
+    ).toThrow('team-slot-3 does not have a bound kibo');
+
+    const mismatchedKiboAction = createWorkbenchProject();
+    mismatchedKiboAction.actionDrafts.find(
+      action => action.id === 'kibo-action-2'
+    ).kiboId = 500099;
+    expect(() =>
+      createSixResourceCapturePlanFromWorkbenchProject(mismatchedKiboAction, {
+        planId: 'controlled-kibo-action-mismatch',
+        outputDirectory: './captures',
+      })
+    ).toThrow(
+      'team-slot-2 kibo-energy requires exactly one compatible action; candidates=none'
+    );
+
+    const futureProject = createWorkbenchProject();
+    futureProject.schemaVersion = 17;
+    expect(() =>
+      createSixResourceCapturePlanFromWorkbenchProject(futureProject, {
+        planId: 'controlled-future-project',
+        outputDirectory: './captures',
+      })
+    ).toThrow('Workbench project identity is invalid or unsupported');
   });
 
   it('accepts six production captures and normalizes them as one guarded batch', async () => {
@@ -143,6 +175,108 @@ describe('six-resource runtime capture plan', () => {
     expect(normalized.summary.captureCount).toBe(6);
     expect(normalized.provenanceAudit.realCaptureClaimAllowed).toBe(true);
   });
+
+  it('creates a six-owner plan from a Workbench project and requires explicit ambiguous actions', async () => {
+    const directory = await createTemporaryDirectory();
+    const projectPath = join(directory, 'workbench-project.json');
+    const planPath = join(directory, 'capture-plan.json');
+    const project = createWorkbenchProject();
+    project.actionDrafts.push({
+      id: 'role-action-1-later',
+      type: 'skill',
+      skillId: 10900102,
+      actorCharacterId: 109001,
+      startMs: 9000,
+    });
+    await writeFile(projectPath, JSON.stringify(project), 'utf8');
+
+    const scriptPath = resolve('scripts/prepare-runtime-capture-plan.mjs');
+    const baseArguments = [
+      scriptPath,
+      '--from-project',
+      projectPath,
+      '--write-plan',
+      planPath,
+      '--capture-directory',
+      './controlled-captures',
+      '--plan-id',
+      'controlled-project-six-resource',
+      '--pid',
+      '4321',
+    ];
+    const ambiguousRun = spawnSync(process.execPath, baseArguments, {
+      encoding: 'utf8',
+    });
+    expect(ambiguousRun.status).toBe(1);
+    expect(ambiguousRun.stderr).toContain(
+      'team-slot-1 role-sp requires exactly one compatible action'
+    );
+    expect(ambiguousRun.stderr).toContain(
+      '--role-action team-slot-1=ACTION_ID'
+    );
+
+    const createdRun = spawnSync(
+      process.execPath,
+      [...baseArguments, '--role-action', 'team-slot-1=role-action-1-later'],
+      { encoding: 'utf8' }
+    );
+    expect(createdRun.status).toBe(0);
+    expect(JSON.parse(createdRun.stdout)).toMatchObject({
+      status: 'six-resource-capture-plan-created-from-project',
+      projectBinding: {
+        selectedCharacterIds: [109001, 101003, 101007],
+        selectedKiboIds: [500001, 500002, 500003],
+        selectedEnemyId: 300032,
+      },
+      inspection: {
+        status: 'six-resource-capture-plan-ready',
+        topology: { energyOwnerCount: 6 },
+        summary: { pendingCount: 6 },
+      },
+    });
+    const plan = JSON.parse(await readFile(planPath, 'utf8'));
+    expect(plan).toMatchObject({
+      type: 'six-resource-runtime-capture-plan',
+      template: false,
+      targetId: 'enemy-300032',
+      sessions: expect.arrayContaining([
+        expect.objectContaining({
+          captureKind: 'role-sp',
+          slotId: 'team-slot-1',
+          actionId: 'role-action-1-later',
+          actorId: 'actor-109001',
+        }),
+        expect.objectContaining({
+          captureKind: 'role-sp',
+          slotId: 'team-slot-2',
+        }),
+        expect.objectContaining({
+          captureKind: 'role-sp',
+          slotId: 'team-slot-3',
+        }),
+        expect.objectContaining({
+          captureKind: 'kibo-energy',
+          slotId: 'team-slot-1',
+          actorId: 'actor-109001',
+          kiboId: 500001,
+        }),
+      ]),
+    });
+    expect(plan.sessions).toHaveLength(6);
+    expect(
+      JSON.parse(createdRun.stdout).inspection.commands.every(command =>
+        command.includes('--pid 4321')
+      )
+    ).toBe(true);
+
+    const overwriteRun = spawnSync(
+      process.execPath,
+      [...baseArguments, '--role-action', 'team-slot-1=role-action-1-later'],
+      { encoding: 'utf8' }
+    );
+    expect(overwriteRun.status).toBe(1);
+    expect(overwriteRun.stderr).toContain('Capture plan output already exists');
+  });
 });
 
 async function createTemporaryDirectory() {
@@ -183,6 +317,47 @@ function createPlan() {
         outputFile: `kibo-slot-${index + 1}.jsonl`,
       })),
     ],
+  };
+}
+
+function createWorkbenchProject() {
+  const characters = [109001, 101003, 101007];
+  return {
+    schemaVersion: 16,
+    game: 'azur-promilia',
+    type: 'workbench-project',
+    exportedAt: '2026-07-14T00:00:00.000Z',
+    selection: {
+      characterId: characters[0],
+      secondaryCharacterId: characters[1],
+      enemyId: 300032,
+      skillId: 10900101,
+    },
+    teamSlots: characters.map((characterId, index) => ({
+      slotId: `team-slot-${index + 1}`,
+      position: index,
+      characterId,
+    })),
+    actorConfigs: characters.map((characterId, index) => ({
+      characterId,
+      loadout: { kiboId: 500001 + index },
+    })),
+    actionDrafts: characters.flatMap((characterId, index) => [
+      {
+        id: `role-action-${index + 1}`,
+        type: 'skill',
+        skillId: Number(`${characterId}01`),
+        actorCharacterId: characterId,
+        startMs: index * 1000,
+      },
+      {
+        id: `kibo-action-${index + 1}`,
+        type: 'kiboEvent',
+        actorCharacterId: characterId,
+        startMs: 5000 + index * 1000,
+        kiboId: 500001 + index,
+      },
+    ]),
   };
 }
 

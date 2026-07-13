@@ -27458,6 +27458,9 @@ Production provenance audit 新增 `captureScopeDeclared / captureScopeMatchesEv
 six-resource-runtime-capture-plan v1
   planId / targetId / durationSeconds / outputDirectory
   template
+  projectBinding?
+    projectType / projectSchemaVersion / savedAt
+    selectedCharacterIds[3] / selectedKiboIds[3] / selectedEnemyId
   sessions[6]
     captureSessionId
     captureKind = role-sp | kibo-energy
@@ -27469,3 +27472,5 @@ six-resource-runtime-capture-plan v1
 计划固定每个槽位恰好一份 `role-sp` 与一份 `kibo-energy`，同槽双方必须使用同一 `actorId`；会话、动作、输出文件和奇波身份不得重复。`outputFile` 只能是单层 `.jsonl` 文件名，防止计划越过指定输出目录。计划只生成命令并检查已有 capture，不持久化到项目、不进入 runtime/calculator，也不改变六条能量轴结果。
 
 已有文件只有在单会话解析、production provenance、`captureKind` 以及 `binding.actionId / actorId / targetId / slotId / kiboId / sourceElementConfigId` 全部匹配时才标记为完成。六份完成后，计划 CLI 调用既有 normalizer v2 与 `--require-production` 生成批次；任一 owner drift 或来源缺口都会阻断，不覆盖原采样文件。
+
+`--from-project` 接受当前支持的 Workbench project/draft v1-v16，从 `teamSlots`、`actorConfigs[].loadout.kiboId`、`selection.enemyId` 和 `actionDrafts` 生成同一计划格式。角色会话优先使用 skill，只有没有 skill 时才使用 resource；奇波会话只使用同角色且 `kiboId` 兼容的 `kiboEvent`。候选不是唯一时必须通过 `--role-action / --kibo-action team-slot-N=ACTION_ID` 显式选择，不能按数组顺序静默绑定。该桥接只复制项目身份，不读取模拟结果或改变项目 schema。
