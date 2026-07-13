@@ -1,6 +1,6 @@
 # promilia-axis-tool 当前架构
 
-最后更新：2026-07-11
+最后更新：2026-07-14
 
 ## 1. 架构目标
 
@@ -10,7 +10,7 @@
 
 - UI 不直接读取原始游戏表，也不成为战斗机制事实标准。
 - 每个排轴动作统一进入 `Action -> Hit -> ThreeValueDelta` 生成入口。
-- 敌人 HP、敌人韧性和每名角色自身能量是三条独立状态链。
+- 标准三值写入分别作用于敌人 HP、敌人韧性和所属角色能量；3 个角色与 3 只奇波各有独立能量轴，共 6 条能量轴。奇波能量当前只追踪终极技能就绪状态，不进入 calculator。
 - 公式、实测样本、候选证据和占位结果必须保留来源与状态，不能互相冒充。
 - 项目文件、预设库、采样文件和生成数据都必须版本化并可验证迁移。
 
@@ -60,7 +60,7 @@ C:\PC2\Codex\AzPr
 - `initialRuntimeState.js`：循环边界继承的敌人三值、角色能量和活动效果起始状态合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v15 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v16 草稿、项目 JSON 和分享链接，并兼容迁移 v1-v15。
 - `workbenchConfigurationLibrary.js`：角色/敌人配置实例库、方案选择、旧项目迁移和活动配置解析。
 - `workbenchGameDataCatalog.js`：角色、技能、敌人、装备、奇波和灵子的受信任目录、项目数据版本绑定、引用解析与兼容性报告。
 - `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
@@ -135,9 +135,9 @@ Action
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v15
+### WorkbenchProjectFile v16
 
-根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、mechanicsProfileSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary`、`scenarioWorkspace` 与 `gameDataBinding`。每条方案持久化纯数据 mechanics profile 选择，根级绑定 AzPr catalog ID、catalog 版本和生成数据版本；JSON、分享链接、PNG 元数据和预设库复用同一合同。v1-v14 项目在引用仍可解析时迁移到当前数据绑定。
+根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、mechanicsProfileSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary`、`scenarioWorkspace` 与 `gameDataBinding`。每条方案持久化纯数据 mechanics profile 选择，根级绑定 AzPr catalog ID、catalog 版本和生成数据版本；JSON、分享链接、PNG 元数据和预设库复用同一合同。v16 允许 tracking-only `kiboEvent` 动作；v1-v15 项目在引用仍可解析时迁移到当前数据绑定。
 
 ### ConfigurationLibrary / ConfigurationSelection v1
 
@@ -219,7 +219,7 @@ HP 的 `hp-raw-preview-product` operands 必须携带 `AzPrHpOperandSourceBindin
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v15`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v16`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 工作区布局：`promilia-axis-tool:workbench-layout:v1`，独立于项目和草稿。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
@@ -257,4 +257,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十五项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将当前 37 项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。

@@ -138,6 +138,7 @@ e2e/                     Workbench 浏览器主流程
 - `DATA_STRUCTURE_CHANGES.md`：版本化结构与迁移记录。
 - `TIMELINE_FEATURES.md`：时间轴能力和交互约定。
 - `TRIAL_RELEASE.md`：M1 试用候选的启动、主流程、边界和反馈清单。
+- `M1_COMPLETION_AUDIT.md`：M1 完成证据、Endaxis 功能差距和后续优先级。
 
 ## 许可
 
