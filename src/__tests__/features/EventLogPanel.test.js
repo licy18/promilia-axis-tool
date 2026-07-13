@@ -246,6 +246,35 @@ describe('EventLogPanel', () => {
         .attributes('data-cursor-current')
     ).toBe('false');
   });
+
+  it('keeps effect relation identity and operation visible in the event log', () => {
+    const wrapper = mount(EventLogPanel, {
+      props: {
+        eventLog: [
+          {
+            type: 'EFFECT_REMOVED',
+            timeMs: 1250,
+            actionId: 'action-b',
+            relationId: 'effect-relation:remove-focus',
+            relationKind: 'effect-consume',
+            effectId: 'focus',
+            effectName: '专注',
+            targetId: 'actor-a',
+            stackBefore: 1,
+            stackAfter: 0,
+            payload: { effectName: '专注', targetId: 'actor-a' },
+          },
+        ],
+      },
+    });
+
+    const row = wrapper.get('.event-list > li');
+    expect(row.attributes()).toMatchObject({
+      'data-effect-relation-id': 'effect-relation:remove-focus',
+      'data-effect-relation-kind': 'effect-consume',
+    });
+    expect(row.text()).toContain('消耗 专注 -> actor-a / 1 层');
+  });
 });
 
 function createRuntimeLogRow({

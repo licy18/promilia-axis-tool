@@ -34,6 +34,7 @@ const REQUIRED_CAPABILITIES = [
   'multi-action-editing',
   'timeline-relations',
   'effect-interval-review',
+  'action-effect-relations',
   'scenario-comparison',
   'cycle-sections',
   'cycle-inheritance',

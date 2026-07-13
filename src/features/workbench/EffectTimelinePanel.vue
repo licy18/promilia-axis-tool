@@ -15,6 +15,40 @@
     </div>
 
     <div
+      v-if="effectRelations.length"
+      class="effect-relations"
+      data-testid="workbench-effect-relations"
+    >
+      <div class="effect-section-heading">
+        <span>动作 / 效果关系</span>
+        <strong>{{ effectRelations.length }}</strong>
+      </div>
+      <ol class="effect-event-list effect-relation-list">
+        <li v-for="relation in effectRelations" :key="relation.edgeId">
+          <button
+            type="button"
+            :class="[`kind-${relation.kind}`, `status-${relation.status}`]"
+            :aria-pressed="selectedEffectRelation?.edgeId === relation.edgeId"
+            :data-relation-id="relation.edgeId"
+            :data-relation-kind="relation.kind"
+            :data-relation-status="relation.status"
+            :data-selected="selectedEffectRelation?.edgeId === relation.edgeId"
+            data-testid="workbench-effect-relation-row"
+            @click="selectEffectRelation(relation.edgeId)"
+          >
+            <span class="effect-event-time">{{
+              formatRelationKind(relation.kind)
+            }}</span>
+            <span class="effect-event-main">
+              <strong>{{ formatRelationTitle(relation) }}</strong>
+              <small>{{ formatRelationDetail(relation) }}</small>
+            </span>
+          </button>
+        </li>
+      </ol>
+    </div>
+
+    <div
       v-if="selectedEffectInterval"
       class="effect-interval-review"
       :data-interval-id="selectedEffectInterval.intervalId"
@@ -165,9 +199,21 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionEffectRelationGraph: {
+    type: Object,
+    default: null,
+  },
+  selectedEffectRelation: {
+    type: Object,
+    default: null,
+  },
 });
 
-const emit = defineEmits(['edit-source-action', 'select-effect-event']);
+const emit = defineEmits([
+  'edit-source-action',
+  'select-effect-event',
+  'select-effect-relation',
+]);
 const internalSelectedEffectEventId = ref('');
 const effectiveSelectedEffectEventId = computed(() =>
   props.selectedEffectEventId == null
@@ -190,8 +236,22 @@ const effectReview = computed(() =>
     selectedEventId: effectiveSelectedEffectEventId.value,
   })
 );
+const effectRelations = computed(() =>
+  (props.actionEffectRelationGraph?.edges ?? []).filter(
+    relation => relation.kind !== 'sequence'
+  )
+);
+const relationActionLabelById = computed(
+  () =>
+    new Map(
+      (props.actionEffectRelationGraph?.nodes ?? [])
+        .filter(node => node.endpointKind === 'action')
+        .map(node => [node.actionId, node.label || node.actionId])
+    )
+);
 const selectedEffectSourceActionId = computed(
   () =>
+    props.selectedEffectRelation?.commandActionId ||
     effectReview.value.selectedEvent?.actionId ||
     props.selectedEffectInterval?.sourceActionId ||
     ''
@@ -221,6 +281,10 @@ watch(
 function selectEffectEvent(eventId) {
   internalSelectedEffectEventId.value = eventId;
   emit('select-effect-event', eventId);
+}
+
+function selectEffectRelation(relationId) {
+  emit('select-effect-relation', relationId);
 }
 
 function editSelectedSourceAction() {
@@ -269,6 +333,40 @@ function formatEventOperation(type) {
     return '到期';
   }
   return type;
+}
+
+function formatRelationKind(kind) {
+  if (kind === 'effect-trigger') return '触发';
+  if (kind === 'effect-refresh') return '刷新';
+  if (kind === 'effect-consume') return '消耗';
+  return kind;
+}
+
+function formatRelationTitle(relation) {
+  const actionLabel =
+    relationActionLabelById.value.get(relation.commandActionId) ||
+    relation.commandActionId ||
+    '未知动作';
+  const effectLabel = relation.effectName || relation.effectId || '未知效果';
+  return relation.kind === 'effect-consume'
+    ? `${effectLabel} -> ${actionLabel}`
+    : `${actionLabel} -> ${effectLabel}`;
+}
+
+function formatRelationDetail(relation) {
+  const frame = Number.isFinite(Number(relation.frameIndex))
+    ? `${relation.frameIndex}F`
+    : '未进入运行时';
+  const target = relation.targetId || '目标未绑定';
+  return `${frame} · ${target} · ${formatRelationStatus(relation.status)}`;
+}
+
+function formatRelationStatus(status) {
+  if (status === 'satisfied') return '已满足';
+  if (status === 'unsatisfied') return '前置缺失';
+  if (status === 'blocked') return '动作阻断';
+  if (status === 'invalid') return '输入无效';
+  return status;
 }
 
 function formatEffectExpiry(effect) {
@@ -344,6 +442,15 @@ function formatLifecycleStack(event) {
   padding: 14px;
   color: #8f9aa3;
   font-size: 12px;
+}
+
+.effect-relations {
+  padding: 10px 14px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.effect-relation-list {
+  max-height: 180px;
 }
 
 .effect-interval-review {

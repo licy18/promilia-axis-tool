@@ -6,6 +6,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
   hitTransactions = null,
   effectTimeline = null,
   controlledActorTimeline = null,
+  actionEffectRelationGraph = null,
   summary = {},
   outputConsistency = null,
 } = {}) {
@@ -38,13 +39,15 @@ export function createThreeValueRuntimeOutputConsumerContract({
     : ['simLog', 'stateCurves', 'resourceCurves', 'summary'];
 
   return {
-    schemaVersion: controlledActorTimeline
-      ? 4
-      : canonicalOutputNames.includes('effectTimeline')
-        ? 3
-        : canonicalOutputNames.includes('hitTransactions')
-          ? 2
-          : 1,
+    schemaVersion: actionEffectRelationGraph
+      ? 5
+      : controlledActorTimeline
+        ? 4
+        : canonicalOutputNames.includes('effectTimeline')
+          ? 3
+          : canonicalOutputNames.includes('hitTransactions')
+            ? 2
+            : 1,
     sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
     status:
       outputContract?.status === 'runtime-output-contract-ready'
@@ -56,9 +59,10 @@ export function createThreeValueRuntimeOutputConsumerContract({
     aliases: {
       resources: 'resourceCurves',
     },
-    supplementalOutputNames: controlledActorTimeline
-      ? ['controlledActorTimeline']
-      : [],
+    supplementalOutputNames: [
+      ...(controlledActorTimeline ? ['controlledActorTimeline'] : []),
+      ...(actionEffectRelationGraph ? ['actionEffectRelationGraph'] : []),
+    ],
     outputs: {
       simLog: {
         outputName: 'simLog',
@@ -132,6 +136,15 @@ export function createThreeValueRuntimeOutputConsumerContract({
         keyFields: ['transitionId', 'intervalId'],
         identityFields: ['actorId', 'characterId'],
         timeFields: ['timeMs', 'frameIndex', 'startMs', 'endMs'],
+      },
+      actionEffectRelationGraph: {
+        outputName: 'actionEffectRelationGraph',
+        dataPath: 'runtimeOutputs.actionEffectRelationGraph',
+        sourceKind: actionEffectRelationGraph?.sourceKind ?? '',
+        status: actionEffectRelationGraph?.status ?? '',
+        contractName: actionEffectRelationGraph?.contractName ?? '',
+        edgeCount: actionEffectRelationGraph?.edges?.length ?? 0,
+        keyFields: ['nodeId', 'edgeId'],
       },
       stateCurves: {
         outputName: 'stateCurves',

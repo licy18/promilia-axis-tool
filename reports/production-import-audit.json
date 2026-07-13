@@ -39,6 +39,7 @@
       "src/__tests__/domain/workbenchTimelineTopology.test.js",
       "src/__tests__/features/ActionLibraryPanel.test.js",
       "src/__tests__/features/ActionRuleDiagnosticsPanel.test.js",
+      "src/__tests__/features/EffectTimelinePanel.test.js",
       "src/__tests__/features/EventLogPanel.test.js",
       "src/__tests__/features/RuntimeSelectedDetailPanel.test.js",
       "src/__tests__/features/TimelineGridPreview.test.js",
@@ -76,6 +77,7 @@
       "src/__tests__/integration/workbenchProjectReplayConsistency.test.js",
       "src/__tests__/scripts/runtimeCaptureFridaHost.test.js",
       "src/__tests__/scripts/runtimeCaptureNormalizeCli.test.js",
+      "src/__tests__/simulation/actionEffectRelationGraph.test.js",
       "src/__tests__/simulation/actionExecutionPlan.test.js",
       "src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js",
       "src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js",
@@ -101,8 +103,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 126,
-    "productionReachableCount": 122,
+    "sourceCodeFileCount": 127,
+    "productionReachableCount": 123,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -120,7 +122,7 @@
       "src/simulation/generation": 4,
       "src/simulation/mechanics": 10,
       "src/simulation/projection": 6,
-      "src/simulation/runtime": 11,
+      "src/simulation/runtime": 12,
       "src/store": 1,
       "src/utils": 2,
       "src/views": 4
@@ -236,6 +238,7 @@
     "src/simulation/projection/projectScenarioComparison.js",
     "src/simulation/projection/projectSimulationResult.js",
     "src/simulation/projection/workbenchSkillDiagnosticsLoader.js",
+    "src/simulation/runtime/actionEffectRelationGraph.js",
     "src/simulation/runtime/actionHitThreeValueRuntimeInput.js",
     "src/simulation/runtime/actionRuleDiagnostics.js",
     "src/simulation/runtime/controlledActorTimeline.js",

@@ -11,6 +11,7 @@ import {
 import { createEffectRuntimeTimeline } from './effectRuntimeTimeline';
 import { createKiboEnergyRuntimeCurves } from './kiboEnergyRuntimeCurves';
 import { createControlledActorTimeline } from './controlledActorTimeline';
+import { createActionEffectRelationGraph } from './actionEffectRelationGraph';
 import {
   createThreeValueRuntimeEnemyBaseline,
   createThreeValueRuntimeSelfEnergyBaseline,
@@ -28,6 +29,7 @@ export function createThreeValueRuntimeProjection({
   effectTimeline,
   actionExecutionPlan,
   controlledActorTimeline,
+  actionEffectRelationGraph,
 }) {
   const runtimeControlledActorTimeline =
     controlledActorTimeline ??
@@ -60,6 +62,13 @@ export function createThreeValueRuntimeProjection({
   const runtimeEffectTimeline =
     effectTimeline ??
     createEffectRuntimeTimeline({ scenario, actionExecutionPlan });
+  const runtimeActionEffectRelationGraph =
+    actionEffectRelationGraph ??
+    createActionEffectRelationGraph({
+      scenario,
+      effectTimeline: runtimeEffectTimeline,
+      actionExecutionPlan,
+    });
   const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
     scenario,
     appliedDeltas,
@@ -131,6 +140,7 @@ export function createThreeValueRuntimeProjection({
     effectTimeline: runtimeEffectTimeline,
     actionExecutionPlan,
     controlledActorTimeline: runtimeControlledActorTimeline,
+    actionEffectRelationGraph: runtimeActionEffectRelationGraph,
   });
 
   return {
@@ -179,6 +189,7 @@ function createThreeValueRuntimeOutputs({
   effectTimeline,
   actionExecutionPlan,
   controlledActorTimeline,
+  actionEffectRelationGraph,
 }) {
   const outputConsistency = createRuntimeOutputConsistency({
     outputContract,
@@ -198,11 +209,12 @@ function createThreeValueRuntimeOutputs({
     hitTransactions,
     effectTimeline,
     controlledActorTimeline,
+    actionEffectRelationGraph,
     summary,
     outputConsistency,
   });
   return {
-    schemaVersion: 4,
+    schemaVersion: 5,
     sourceKind: 'azpr-three-value-runtime-outputs',
     status:
       outputContract.status === 'runtime-output-contract-ready'
@@ -216,7 +228,10 @@ function createThreeValueRuntimeOutputs({
       resources: 'resourceCurves',
       stateSnapshots: 'stateCurves.snapshots',
     },
-    supplementalOutputNames: ['controlledActorTimeline'],
+    supplementalOutputNames: [
+      'controlledActorTimeline',
+      'actionEffectRelationGraph',
+    ],
     outputContract,
     outputConsumerContract,
     consumerContract: outputConsumerContract,
@@ -229,6 +244,7 @@ function createThreeValueRuntimeOutputs({
     effectTimeline,
     actionExecutionPlan,
     controlledActorTimeline,
+    actionEffectRelationGraph,
     summary,
     outputConsistency,
     outputs: {
@@ -238,6 +254,7 @@ function createThreeValueRuntimeOutputs({
       hitTransactions,
       effectTimeline,
       controlledActorTimeline,
+      actionEffectRelationGraph,
       resources: resourceCurves,
       summary,
     },

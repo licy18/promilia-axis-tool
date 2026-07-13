@@ -1556,6 +1556,58 @@ describe('Workbench view', () => {
       'data-source-action-id': 'action-0001',
       'data-lifecycle-event-count': '2',
     });
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+      )
+    ).toHaveLength(3);
+    const effectRelation = wrapper.get(
+      '[data-testid="workbench-effect-relation-row"]'
+    );
+    expect(effectRelation.attributes()).toMatchObject({
+      'data-relation-kind': 'effect-trigger',
+      'data-relation-status': 'satisfied',
+    });
+    expect(
+      wrapper.get(
+        '[data-testid="workbench-action-relation"][data-relation-kind="effect-trigger"]'
+      )
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .get('.event-list > li[data-effect-relation-kind="effect-trigger"]')
+        .text()
+    ).toContain('触发');
+
+    await effectRelation.trigger('click');
+    await nextTick();
+    const selectedEffectRelationId =
+      effectRelation.attributes('data-relation-id');
+    expect(effectRelation.attributes('data-selected')).toBe('true');
+    expect(wrapper.find('main.workbench').attributes()).toMatchObject({
+      'data-energy-curve-count': '6',
+    });
+    await wrapper
+      .find('[data-testid="workbench-start-frame-input"]')
+      .setValue('30');
+    await nextTick();
+    expect(
+      wrapper
+        .get(
+          `[data-testid="workbench-effect-relation-row"][data-relation-id="${selectedEffectRelationId}"]`
+        )
+        .text()
+    ).toContain('30F');
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-cursor-frame-index')
+    ).toBe('30');
 
     await wrapper
       .find('[data-testid="workbench-effect-name-input"]')
@@ -1613,14 +1665,14 @@ describe('Workbench view', () => {
       '[data-testid="workbench-timeline-effect-interval"]'
     );
     expect(Number(refreshedInterval.attributes('data-end-ms'))).toBeCloseTo(
-      frameToMs(180),
+      frameToMs(210),
       4
     );
     await refreshedInterval.trigger('click');
     await nextTick();
     expect(
       wrapper.find('[data-testid="workbench-effect-selected-interval"]').text()
-    ).toContain('0F-180F');
+    ).toContain('30F-210F');
   });
 
   it('locates and fixes a confirmed skill cooldown rule violation', async () => {

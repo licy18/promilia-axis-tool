@@ -188,6 +188,27 @@ describe('Workbench project replay consistency', () => {
         toActionId: 'action-kibo',
       }),
     ]);
+    expect(baseline.runtimeOutputs.actionEffectRelationGraph).toMatchObject({
+      contractName: 'AzPrActionEffectRelationGraph',
+      summary: {
+        sequenceEdgeCount: 1,
+        triggerEdgeCount: 1,
+        consumeEdgeCount: 1,
+        satisfiedEdgeCount: 3,
+      },
+      edges: expect.arrayContaining([
+        expect.objectContaining({
+          edgeId: 'effect-relation:replay-effect-apply',
+          kind: 'effect-trigger',
+          status: 'satisfied',
+        }),
+        expect.objectContaining({
+          edgeId: 'effect-relation:replay-effect-remove',
+          kind: 'effect-consume',
+          status: 'satisfied',
+        }),
+      ]),
+    });
     expect(baseline.timelineTopology.summary).toMatchObject({
       actorEnergyCurveCount: 3,
       kiboEnergyCurveCount: 3,
@@ -274,6 +295,22 @@ describe('Workbench project replay consistency', () => {
 
 function createReplaySourceState() {
   const state = createDefaultWorkbenchDraftState();
+  const replayEffectTargetId = `enemy-${state.selection.enemyId}`;
+  state.actionDrafts[0].effectCommands = [
+    {
+      id: 'replay-effect-apply',
+      effectId: 'replay-mark',
+      effectName: '回放标记',
+      operation: 'apply',
+      targetKind: 'enemy',
+      targetId: replayEffectTargetId,
+      offsetMs: 0,
+      durationMs: 5000,
+      stackMode: 'stack',
+      stackDelta: 1,
+      maxStacks: 1,
+    },
+  ];
   state.actorConfigs[0].initialSp = 0.35;
   state.actorConfigs[0].loadout.kiboId = 500001;
   state.actorConfigs[1].initialSp = 0.6;
@@ -310,6 +347,21 @@ function createReplaySourceState() {
     timingSource: 'azpr-unity-skill-control-root',
     needsTimingData: false,
     note: 'replay-kibo-event',
+    effectCommands: [
+      {
+        id: 'replay-effect-remove',
+        effectId: 'replay-mark',
+        effectName: '回放标记',
+        operation: 'remove',
+        targetKind: 'enemy',
+        targetId: replayEffectTargetId,
+        offsetMs: 0,
+        durationMs: null,
+        stackMode: 'refresh',
+        stackDelta: 1,
+        maxStacks: 1,
+      },
+    ],
   });
   state.actionDrafts.push({
     id: 'action-switch',

@@ -2991,6 +2991,69 @@ test('[effect-interval-review] reviews an effect interval and refreshes it from 
   );
 });
 
+test('[action-effect-relations] keeps action, effect, log, and six energy tracks in one relation flow', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await openActionInspector(page);
+  await page.getByTestId('workbench-effect-add').click();
+  await page.getByTestId('workbench-effect-name-input').fill('关系测试增益');
+  await page.getByTestId('workbench-effect-name-input').press('Tab');
+
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute('data-energy-curve-count', '6');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+    )
+  ).toHaveCount(3);
+
+  const relationRow = page.getByTestId('workbench-effect-relation-row');
+  await expect(relationRow).toHaveCount(1);
+  await expect(relationRow).toHaveAttribute(
+    'data-relation-kind',
+    'effect-trigger'
+  );
+  await expect(relationRow).toHaveAttribute(
+    'data-relation-status',
+    'satisfied'
+  );
+  const relationId = await relationRow.getAttribute('data-relation-id');
+  expect(relationId).toBeTruthy();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-relation"][data-relation-kind="effect-trigger"]'
+    )
+  ).toHaveCount(1);
+  await expect(
+    page.locator('.event-list > li[data-effect-relation-kind="effect-trigger"]')
+  ).toContainText('触发 关系测试增益');
+
+  await relationRow.click();
+  await expect(relationRow).toHaveAttribute('data-selected', 'true');
+  await page.getByTestId('workbench-start-frame-input').fill('30');
+  await page.getByTestId('workbench-start-frame-input').press('Tab');
+  await expect(relationRow).toContainText('30F');
+  await expect(
+    page.getByTestId('workbench-timeline-grid-preview')
+  ).toHaveAttribute('data-cursor-frame-index', '30');
+
+  await page.getByTestId('workbench-effect-delete').click();
+  await expect(page.getByTestId('workbench-effect-relation-row')).toHaveCount(
+    0
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(page.getByTestId('workbench-effect-relation-row')).toHaveCount(
+    1
+  );
+  await expect(workbench).toHaveAttribute('data-energy-curve-count', '6');
+});
+
 test('[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action', async ({
   page,
 }) => {

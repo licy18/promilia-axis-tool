@@ -31,8 +31,10 @@ export default defineConfig({
           if (
             [
               'ActionRuleDiagnosticsPanel.vue',
+              'AnalysisPanel.vue',
               'EffectTimelinePanel.vue',
               'EnemyPanel.vue',
+              'PropertiesPanel.vue',
               'TeamLoadoutPanel.vue',
               'WorkbenchCycleSectionPanel.vue',
               'WorkbenchLayoutBar.vue',

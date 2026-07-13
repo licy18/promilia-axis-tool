@@ -27387,3 +27387,28 @@ controlledActorTimeline
 `AzPrThreeValueRuntimeOutputs` 从 v3 升级为 v4，并通过 `supplementalOutputNames = [controlledActorTimeline]` 暴露该时间状态；既有六项 canonical output、三值 delta、6 条能量轴和 output count 均不改变。切人只更新控制身份，不写入 HP、韧性或能量轨道。
 
 循环边界使用 `strictlyBefore` 读取边界前一刻的受控角色，避免把恰好位于边界的切人同时应用到上下游。方案复制、本地草稿、JSON、分享链接和 PNG 继续序列化现有 `initialRuntimeState` 与 action draft，旧载体由 normalization 自动迁移，无需新增项目 schema 版本。
+
+## 426. Action/effect relation graph v1
+
+Workbench 项目仍为 v16；没有新增持久化关系字段。compiler 现把既有 `project.actionRelations` 带入 scenario，运行时再把它与 `actions[].effectCommands`、效果时间线和动作执行计划组合为统一补充输出：
+
+```text
+AzPrActionEffectRelationGraph v1
+  nodes[]
+    endpointKind = action | effect
+    actionId? / instanceKey? / effectId? / targetKind? / targetId?
+  edges[]
+    edgeId
+    kind = sequence | effect-trigger | effect-refresh | effect-consume
+    sourceEndpoint / targetEndpoint
+    commandActionId? / effectCommandId? / runtimeEventId?
+    sourceActionIds[]
+    sourceTimeMs / targetTimeMs
+    status = satisfied | unsatisfied | blocked | invalid
+    diagnosticCode
+    appliedToCalculators = false
+```
+
+`AzPrThreeValueRuntimeOutputs` 与 consumer schema 从 v4 升级为 v5，并把 `actionEffectRelationGraph` 加入 `supplementalOutputNames`；既有 canonical outputs、项目载体和 calculator 输入不变。效果事件携带 `relationId / relationKind`，时间轴、效果复盘和日志因此可以共享同一选择身份。
+
+关系图是从现有项目字段确定性派生的，不作为第二份持久化真相。本地草稿、JSON、分享链接和 PNG 恢复后会重建同一 sequence/trigger/refresh/consume 图；旧关系缺失 `kind` 时继续按 `sequence` 兼容。3 条角色能量曲线和 3 条奇波能量曲线仍分别位于 `resourceCurves.curvesByActor / curvesByKibo`，总计 6 条，关系图不会写入任何能量、HP 或韧性轨道。

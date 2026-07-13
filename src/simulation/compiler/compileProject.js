@@ -192,6 +192,9 @@ export function compileProject(
     gameDataCatalog,
     gameDataCompatibility,
     actions,
+    actionRelations: (project.actionRelations ?? []).map(relation => ({
+      ...relation,
+    })),
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,
     })),

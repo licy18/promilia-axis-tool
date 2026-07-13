@@ -8,6 +8,7 @@ import {
   createActionExecutionPlanIndex,
 } from './actionExecutionPlan';
 import { createControlledActorTimeline } from '../runtime/controlledActorTimeline';
+import { createActionEffectRelationGraph } from '../runtime/actionEffectRelationGraph';
 
 export function simulateScenario(
   scenario,
@@ -133,6 +134,11 @@ export function simulateScenario(
     scenario,
     actionExecutionPlan,
   });
+  const actionEffectRelationGraph = createActionEffectRelationGraph({
+    scenario,
+    effectTimeline,
+    actionExecutionPlan,
+  });
   eventLog.push(...effectTimeline.events);
 
   eventLog.push({
@@ -157,6 +163,7 @@ export function simulateScenario(
     actionRuleDiagnostics,
     actionExecutionPlan,
     controlledActorTimeline,
+    actionEffectRelationGraph,
     threeValueMechanicsAdapterRegistry,
   });
 }

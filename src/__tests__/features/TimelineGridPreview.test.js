@@ -333,6 +333,26 @@ describe('TimelineGridPreview', () => {
             gapMs: 100,
           },
         ],
+        actionEffectRelationGraph: {
+          edges: [
+            {
+              edgeId: 'relation-0001',
+              kind: 'sequence',
+              status: 'satisfied',
+              gapMs: 100,
+              sourceEndpoint: {
+                endpointKind: 'action',
+                actionId: 'action-a',
+                anchor: 'end',
+              },
+              targetEndpoint: {
+                endpointKind: 'action',
+                actionId: 'action-b',
+                anchor: 'start',
+              },
+            },
+          ],
+        },
       }),
     });
 
@@ -444,6 +464,81 @@ describe('TimelineGridPreview', () => {
       actionId: 'action-a',
       timeMs: 2500,
     });
+  });
+
+  it('draws and selects trigger and consume relations on effect lifecycle nodes', async () => {
+    const effectInterval = createEffectInterval({
+      instanceKey: 'actor|actor-a|focus',
+      effectId: 'focus',
+      effectName: '专注',
+      startMs: 250,
+      endMs: 1250,
+      lifecycleEventIds: ['focus-apply', 'focus-remove'],
+      lifecycleEvents: [
+        { eventId: 'focus-apply', type: 'EFFECT_APPLIED', timeMs: 250 },
+        { eventId: 'focus-remove', type: 'EFFECT_REMOVED', timeMs: 1250 },
+      ],
+    });
+    const graph = {
+      summary: { edgeCount: 2 },
+      edges: [
+        createEffectRelation({
+          edgeId: 'effect-relation:apply-focus',
+          kind: 'effect-trigger',
+          sourceEndpoint: {
+            endpointKind: 'action',
+            actionId: 'action-a',
+            anchor: 'start',
+          },
+          targetEndpoint: {
+            endpointKind: 'effect',
+            instanceKey: effectInterval.instanceKey,
+          },
+          runtimeEventId: 'focus-apply',
+          targetTimeMs: 250,
+        }),
+        createEffectRelation({
+          edgeId: 'effect-relation:remove-focus',
+          kind: 'effect-consume',
+          sourceEndpoint: {
+            endpointKind: 'effect',
+            instanceKey: effectInterval.instanceKey,
+          },
+          targetEndpoint: {
+            endpointKind: 'action',
+            actionId: 'action-b',
+            anchor: 'start',
+          },
+          runtimeEventId: 'focus-remove',
+          targetTimeMs: 1250,
+        }),
+      ],
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        effectIntervals: [effectInterval],
+        actionEffectRelationGraph: graph,
+        selectedActionEffectRelationId: 'effect-relation:remove-focus',
+      }),
+    });
+
+    const relations = wrapper.findAll(
+      '[data-testid="workbench-action-relation"]'
+    );
+    expect(relations).toHaveLength(2);
+    expect(
+      relations.map(relation => relation.attributes('data-relation-kind'))
+    ).toEqual(['effect-trigger', 'effect-consume']);
+    expect(relations[1].element.parentElement.classList).toContain('selected');
+
+    await relations[0].trigger('click');
+    expect(wrapper.emitted('select-action-effect-relation')?.at(-1)?.[0]).toBe(
+      'effect-relation:apply-focus'
+    );
+    await relations[0].trigger('contextmenu', { clientX: 120, clientY: 80 });
+    expect(
+      wrapper.emitted('open-action-relation-context-menu')
+    ).toBeUndefined();
   });
 
   it('renders the fixed three-actor topology and eight full-length state curves', () => {
@@ -1226,6 +1321,18 @@ function createEffectInterval(overrides) {
     maxStacks: 1,
     refreshCount: 0,
     appliedToCalculators: false,
+    ...overrides,
+  };
+}
+
+function createEffectRelation(overrides) {
+  return {
+    status: 'satisfied',
+    effectId: 'focus',
+    effectName: '专注',
+    sourceTimeMs: 0,
+    targetTimeMs: 0,
+    runtimeEventId: '',
     ...overrides,
   };
 }

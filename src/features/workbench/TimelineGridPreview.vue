@@ -421,7 +421,11 @@
               v-for="relation in actionRelationGeometry"
               :key="relation.id"
               class="action-relation"
-              :class="{ selected: relation.id === selectedActionRelationId }"
+              :class="[
+                `kind-${relation.kind}`,
+                `status-${relation.status}`,
+                { selected: isRelationSelected(relation) },
+              ]"
             >
               <path
                 class="action-relation-path"
@@ -440,11 +444,12 @@
                 :d="relation.path"
                 vector-effect="non-scaling-stroke"
                 :data-relation-id="relation.id"
+                :data-relation-kind="relation.kind"
                 data-testid="workbench-action-relation"
                 @pointerdown.stop
-                @click.stop="selectActionRelation(relation.id)"
+                @click.stop="selectTimelineRelation(relation)"
                 @contextmenu.prevent.stop="
-                  openActionRelationContextMenu($event, relation.id)
+                  openTimelineRelationContextMenu($event, relation)
                 "
               >
                 <title>{{ relation.title }}</title>
@@ -1052,6 +1057,14 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  actionEffectRelationGraph: {
+    type: Object,
+    default: null,
+  },
+  selectedActionEffectRelationId: {
+    type: String,
+    default: '',
+  },
   effectIntervals: {
     type: Array,
     default: () => [],
@@ -1131,6 +1144,7 @@ const emit = defineEmits([
   'open-action-context-menu',
   'select-action-group',
   'select-action-relation',
+  'select-action-effect-relation',
   'select-effect-interval',
   'open-action-relation-context-menu',
   'select-cycle-boundary',
@@ -1253,6 +1267,31 @@ const actionRelationLayoutByActionId = computed(() => {
   }
   return layoutByActionId;
 });
+const effectRelationLayoutByInstanceKey = computed(() => {
+  const layoutByInstanceKey = new Map();
+  let laneTop = 0;
+  for (const lane of timelineLanes.value) {
+    for (const interval of lane.effectIntervals) {
+      const layout = {
+        interval,
+        startX: timeToTimelinePercent(interval.startMs),
+        endX: timeToTimelinePercent(interval.endMs),
+        y:
+          laneTop +
+          getTimelineEffectTop(lane) +
+          Math.max(0, Number(interval.timelineSlot) || 0) *
+            (TIMELINE_EFFECT_INTERVAL_HEIGHT_PX +
+              TIMELINE_EFFECT_INTERVAL_GAP_PX) +
+          TIMELINE_EFFECT_INTERVAL_HEIGHT_PX / 2,
+      };
+      const layouts = layoutByInstanceKey.get(interval.instanceKey) ?? [];
+      layouts.push(layout);
+      layoutByInstanceKey.set(interval.instanceKey, layouts);
+    }
+    laneTop += getTimelineLaneHeight(lane) + TIMELINE_LANE_GAP_PX;
+  }
+  return layoutByInstanceKey;
+});
 const actionRelationLayerHeight = computed(() =>
   Math.max(
     1,
@@ -1268,20 +1307,20 @@ const actionRelationLayerHeight = computed(() =>
 const actionRelationViewBox = computed(
   () => `0 0 100 ${actionRelationLayerHeight.value}`
 );
-const actionRelationGeometry = computed(() =>
-  props.actionRelations.flatMap(relation => {
-    const source = actionRelationLayoutByActionId.value.get(
-      relation.fromActionId
+const actionRelationGeometry = computed(() => {
+  return (props.actionEffectRelationGraph?.edges ?? []).flatMap(relation => {
+    const source = resolveRelationEndpointLayout(
+      relation.sourceEndpoint,
+      relation
     );
-    const target = actionRelationLayoutByActionId.value.get(
-      relation.toActionId
+    const target = resolveRelationEndpointLayout(
+      relation.targetEndpoint,
+      relation
     );
-    if (!source || !target) {
-      return [];
-    }
-    const sourceX = source.endX;
+    if (!source || !target) return [];
+    const sourceX = source.x;
     const sourceY = source.y;
-    const targetX = target.startX;
+    const targetX = target.x;
     const targetY = target.y;
     const horizontalDistance = Math.abs(targetX - sourceX);
     const controlDistance = Math.max(4, horizontalDistance * 0.45);
@@ -1295,14 +1334,61 @@ const actionRelationGeometry = computed(() =>
     return [
       {
         ...relation,
+        id: relation.edgeId ?? relation.id,
         path,
         targetX,
         targetY,
-        title: `后续关系 · ${formatSignedFrameGap(relation.gapMs)}`,
+        title: formatTimelineRelationTitle(relation),
       },
     ];
-  })
-);
+  });
+});
+
+function resolveRelationEndpointLayout(endpoint, relation) {
+  if (endpoint?.endpointKind === 'action') {
+    const layout = actionRelationLayoutByActionId.value.get(endpoint.actionId);
+    if (!layout) return null;
+    return {
+      x: endpoint.anchor === 'end' ? layout.endX : layout.startX,
+      y: layout.y,
+    };
+  }
+  if (endpoint?.endpointKind !== 'effect') return null;
+  const layouts =
+    effectRelationLayoutByInstanceKey.value.get(endpoint.instanceKey) ?? [];
+  const runtimeLayout = relation.runtimeEventId
+    ? layouts.find(layout =>
+        layout.interval.lifecycleEventIds?.includes(relation.runtimeEventId)
+      )
+    : null;
+  const relationTimeMs = Number(relation.targetTimeMs ?? relation.sourceTimeMs);
+  const timeLayout = Number.isFinite(relationTimeMs)
+    ? layouts.find(
+        layout =>
+          relationTimeMs >= Number(layout.interval.startMs) &&
+          relationTimeMs <= Number(layout.interval.endMs)
+      )
+    : null;
+  const layout = runtimeLayout ?? timeLayout ?? layouts[0];
+  if (!layout) return null;
+  return {
+    x: Number.isFinite(relationTimeMs)
+      ? timeToTimelinePercent(relationTimeMs)
+      : layout.startX,
+    y: layout.y,
+  };
+}
+
+function timeToTimelinePercent(timeMs) {
+  return clampPercent(((Number(timeMs) || 0) / props.durationMs) * 100);
+}
+
+function formatTimelineRelationTitle(relation) {
+  if (relation.kind === 'sequence') {
+    return `后续关系 · ${formatSignedFrameGap(relation.gapMs)}`;
+  }
+  return `${relation.effectName || relation.effectId} · ${relation.status}`;
+}
 const boxSelectionStyle = computed(() => {
   const state = boxSelectionState.value;
   return state
@@ -3213,6 +3299,26 @@ function selectActionRelation(relationId) {
   emit('select-action-relation', { relationId });
 }
 
+function isRelationSelected(relation) {
+  return relation.kind === 'sequence'
+    ? relation.id === props.selectedActionRelationId
+    : relation.id === props.selectedActionEffectRelationId;
+}
+
+function selectTimelineRelation(relation) {
+  if (relation.kind === 'sequence') {
+    selectActionRelation(relation.id);
+    return;
+  }
+  emit('select-action-effect-relation', relation.id);
+}
+
+function openTimelineRelationContextMenu(event, relation) {
+  if (relation.kind === 'sequence') {
+    openActionRelationContextMenu(event, relation.id);
+  }
+}
+
 function openActionRelationContextMenu(event, relationId) {
   emit('open-action-relation-context-menu', {
     relationId,
@@ -4048,6 +4154,34 @@ h2 {
   stroke-width: 10;
   pointer-events: stroke;
   cursor: pointer;
+}
+
+.action-relation[class*='kind-effect-'] {
+  color: #7eb0ff;
+}
+
+.action-relation.kind-effect-consume {
+  color: #ff8792;
+}
+
+.action-relation[class*='kind-effect-'] .action-relation-path {
+  stroke: currentColor;
+}
+
+.action-relation[class*='kind-effect-'] .action-relation-endpoint {
+  fill: currentColor;
+}
+
+.action-relation.kind-effect-refresh .action-relation-path,
+.action-relation.kind-effect-consume .action-relation-path {
+  stroke-dasharray: 4 2;
+}
+
+.action-relation.status-unsatisfied .action-relation-path,
+.action-relation.status-blocked .action-relation-path,
+.action-relation.status-invalid .action-relation-path {
+  opacity: 0.55;
+  stroke-dasharray: 2 3;
 }
 
 .action-relation.selected .action-relation-path {

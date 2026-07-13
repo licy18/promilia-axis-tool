@@ -29,6 +29,8 @@
         :class="{ 'cursor-current': isEventAtCursor(event) }"
         :data-cursor-current="isEventAtCursor(event) ? 'true' : 'false'"
         :data-frame-index="msToFrame(event.timeMs)"
+        :data-effect-relation-id="event.relationId ?? ''"
+        :data-effect-relation-kind="event.relationKind ?? ''"
       >
         <span class="time">{{ event.timeMs }}ms</span>
         <span class="type" :class="event.type.toLowerCase()">{{
@@ -966,6 +968,19 @@ watch(
 );
 
 function formatPayload(event) {
+  if (event.relationKind?.startsWith('effect-')) {
+    const operation =
+      event.relationKind === 'effect-trigger'
+        ? '触发'
+        : event.relationKind === 'effect-refresh'
+          ? '刷新'
+          : '消耗';
+    const effectName =
+      event.effectName || event.payload?.effectName || event.effectId || '效果';
+    const targetName =
+      event.targetName || event.payload?.targetId || event.targetId || '目标';
+    return `${operation} ${effectName} -> ${targetName} / ${Math.max(Number(event.stackBefore) || 0, Number(event.stackAfter) || 0)} 层`;
+  }
   if (event.type === 'DAMAGE_PROJECTED') {
     return `${event.payload.skillName} / ${event.payload.segment.label} / ${event.payload.rawDamage}`;
   }

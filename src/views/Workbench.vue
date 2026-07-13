@@ -13,6 +13,9 @@
     :data-selected-action-count="selectedActionIds.length"
     :data-action-relation-count="actionRelations.length"
     :data-selected-action-relation-id="selectedActionRelationId"
+    :data-energy-curve-count="
+      project.metadata.timelineTopology?.summary?.energyCurveCount ?? 0
+    "
     :data-cycle-boundary-count="cycleBoundaries.length"
     :data-selected-cycle-boundary-id="selectedCycleBoundaryId"
     :data-selected-cycle-section-id="selectedCycleSection?.sectionId || ''"
@@ -444,6 +447,10 @@
           :selected-action-ids="selectedActionIds"
           :action-relations="actionRelations"
           :selected-action-relation-id="selectedActionRelationId"
+          :action-effect-relation-graph="
+            runtimeOutputs.actionEffectRelationGraph
+          "
+          :selected-action-effect-relation-id="selectedActionEffectRelationId"
           :cycle-boundaries="cycleBoundaries"
           :selected-cycle-boundary-id="selectedCycleBoundaryId"
           :selected-cycle-section="selectedCycleSection"
@@ -465,6 +472,7 @@
           @select-identity="selectTimelineIdentity"
           @select-action-group="selectActionGroup"
           @select-action-relation="selectActionRelation"
+          @select-action-effect-relation="selectActionEffectRelation"
           @select-effect-interval="selectEffectInterval"
           @open-action-context-menu="openActionContextMenu"
           @open-action-relation-context-menu="openActionRelationContextMenu"
@@ -653,7 +661,12 @@
               :runtime-selected-detail="runtimeSelectedDetail"
               :selected-effect-event-id="selectedEffectEventId"
               :selected-effect-interval="selectedEffectInterval"
+              :action-effect-relation-graph="
+                runtimeOutputs.actionEffectRelationGraph
+              "
+              :selected-effect-relation="selectedActionEffectRelation"
               @select-effect-event="selectEffectEvent"
+              @select-effect-relation="selectActionEffectRelation"
               @edit-source-action="editEffectSourceAction"
             />
           </div>
@@ -912,6 +925,7 @@
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
         :action-relations="actionRelations"
+        :action-effect-relation-graph="runtimeOutputs.actionEffectRelationGraph"
         :cycle-boundaries="cycleBoundaries"
         :effect-intervals="effectIntervalProjection.intervals"
         :timeline-diagnostics="timelineDiagnostics"
@@ -1221,6 +1235,7 @@ const selectedActionIds = ref(
 );
 const actionSelectionAnchorId = ref(initialDraft.selectedActionId);
 const selectedActionRelationId = ref('');
+const selectedActionEffectRelationId = ref('');
 const selectedCycleBoundaryId = ref('');
 const selectedCycleSectionId = ref('');
 const selectedEffectIntervalId = ref('');
@@ -1535,6 +1550,12 @@ const selectedEffectInterval = computed(
       interval => interval.intervalId === selectedEffectIntervalId.value
     ) ?? null
 );
+const selectedActionEffectRelation = computed(
+  () =>
+    runtimeOutputs.value.actionEffectRelationGraph.edges.find(
+      edge => edge.edgeId === selectedActionEffectRelationId.value
+    ) ?? null
+);
 const runtimeSelectedDetail = computed(() =>
   createRuntimeSelectedDetail({
     runtimeProjection: runtimeOutputs.value,
@@ -1776,11 +1797,38 @@ watch(
 );
 
 watch(
+  () => runtimeOutputs.value.actionEffectRelationGraph.edges,
+  edges => {
+    if (!selectedActionEffectRelationId.value) {
+      return;
+    }
+    const relation = edges.find(
+      edge => edge.edgeId === selectedActionEffectRelationId.value
+    );
+    if (!relation) {
+      selectedActionEffectRelationId.value = '';
+      return;
+    }
+    const interval = effectIntervalProjection.value.intervals.find(item =>
+      item.lifecycleEventIds.includes(relation.runtimeEventId)
+    );
+    selectedEffectIntervalId.value = interval?.intervalId ?? '';
+    selectedEffectEventId.value = relation.runtimeEventId ?? '';
+    selectTimelineFrame({
+      timeMs: relation.targetTimeMs,
+      source: 'action-effect-relation-refresh',
+    });
+  },
+  { flush: 'sync' }
+);
+
+watch(
   () => runtimeSelectedDetail.value?.statePointId ?? '',
   (statePointId, previousStatePointId) => {
     if (statePointId !== previousStatePointId) {
       selectedEffectIntervalId.value = '';
       selectedEffectEventId.value = '';
+      selectedActionEffectRelationId.value = '';
     }
   }
 );
@@ -4448,6 +4496,7 @@ function clearWorkbenchProjectTransientState() {
   runtimeLogFocus.value = { source: '', statePointId: '', sequence: 0 };
   workbenchFlowDispatchState.value = createEmptyWorkbenchFlowDispatchState();
   selectedActionRelationId.value = '';
+  selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   selectedCycleSectionId.value = '';
   selectedEffectIntervalId.value = '';
@@ -4527,6 +4576,8 @@ function handleWorkbenchKeyboardShortcut(event) {
         deleteCycleBoundary(selectedCycleBoundaryId.value);
       } else if (selectedActionRelationId.value) {
         deleteActionRelation(selectedActionRelationId.value);
+      } else if (selectedActionEffectRelationId.value) {
+        return;
       } else {
         deleteSelectedActions();
       }
@@ -4678,6 +4729,7 @@ function createWorkbenchHistorySnapshot() {
     selectedActionIds: selectedActionIds.value,
     actionSelectionAnchorId: actionSelectionAnchorId.value,
     selectedActionRelationId: selectedActionRelationId.value,
+    selectedActionEffectRelationId: selectedActionEffectRelationId.value,
     selectedCycleBoundaryId: selectedCycleBoundaryId.value,
     selectedCycleSectionId: selectedCycleSectionId.value,
     boxSelectionMode: boxSelectionMode.value,
@@ -4762,6 +4814,12 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   )
     ? snapshot.selectedActionRelationId
     : '';
+  selectedActionEffectRelationId.value =
+    runtimeOutputs.value.actionEffectRelationGraph.edges.some(
+      edge => edge.edgeId === snapshot.selectedActionEffectRelationId
+    )
+      ? snapshot.selectedActionEffectRelationId
+      : '';
   selectedCycleBoundaryId.value = cycleBoundaries.value.some(
     boundary => boundary.id === snapshot.selectedCycleBoundaryId
   )
@@ -4940,6 +4998,7 @@ function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
   dismissedSideInspectorKey.value = '';
   selectedActionRelationId.value = '';
+  selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   selectedEffectIntervalId.value = '';
   selectedEffectEventId.value = '';
@@ -4999,6 +5058,7 @@ function selectActionGroup({
     { anchorActionId: primaryActionId }
   );
   selectedActionRelationId.value = '';
+  selectedActionEffectRelationId.value = '';
   const draft = findActionDraftById(normalized.primaryActionId);
   selectTimelineFrame({
     timeMs: draft?.startMs,
@@ -5044,6 +5104,7 @@ function selectActionRelation(relationRequest) {
   }
 
   selectedActionRelationId.value = relation.id;
+  selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   selectedEffectIntervalId.value = '';
   selectedEffectEventId.value = '';
@@ -5059,6 +5120,43 @@ function selectActionRelation(relationRequest) {
   return true;
 }
 
+function selectActionEffectRelation(relationRequest) {
+  const relationId =
+    typeof relationRequest === 'object'
+      ? relationRequest?.relationId
+      : relationRequest;
+  const relation = runtimeOutputs.value.actionEffectRelationGraph.edges.find(
+    edge => edge.edgeId === relationId
+  );
+  if (!relation || relation.kind === 'sequence') {
+    return false;
+  }
+
+  selectedActionRelationId.value = '';
+  selectedCycleBoundaryId.value = '';
+  boxSelectionMode.value = false;
+
+  const interval = effectIntervalProjection.value.intervals.find(item =>
+    item.lifecycleEventIds.includes(relation.runtimeEventId)
+  );
+
+  const actionId = relation.commandActionId;
+  if (actionId && findActionDraftById(actionId)) {
+    setWorkbenchActionSelection([actionId], actionId, {
+      anchorActionId: actionId,
+    });
+    syncActionLibraryCharacterIdFromDraft(findActionDraftById(actionId));
+  }
+  selectTimelineFrame({
+    timeMs: relation.targetTimeMs,
+    source: 'action-effect-relation',
+  });
+  selectedEffectIntervalId.value = interval?.intervalId ?? '';
+  selectedEffectEventId.value = relation.runtimeEventId ?? '';
+  selectedActionEffectRelationId.value = relation.edgeId;
+  return true;
+}
+
 function selectEffectInterval({ intervalId = '', eventId = '' } = {}) {
   const interval = effectIntervalProjection.value.intervals.find(
     item => item.intervalId === intervalId
@@ -5067,6 +5165,7 @@ function selectEffectInterval({ intervalId = '', eventId = '' } = {}) {
     return false;
   }
   selectedActionRelationId.value = '';
+  selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   boxSelectionMode.value = false;
   selectedEffectIntervalId.value = interval.intervalId;
@@ -5087,6 +5186,7 @@ function selectEffectEvent(eventId) {
   selectedEffectIntervalId.value = interval.intervalId;
   selectedEffectEventId.value = eventId;
   selectedActionRelationId.value = '';
+  selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   return true;
 }

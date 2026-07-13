@@ -3,6 +3,10 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import {
+  createActionEffectRelationId,
+  resolveActionEffectRelationKind,
+} from './actionEffectRelationGraph';
 
 export const ACTION_EFFECT_COMMAND_CONTRACT_NAME = 'AzPrActionEffectCommand';
 export const EFFECT_RUNTIME_TIMELINE_CONTRACT_NAME =
@@ -556,6 +560,12 @@ function createEffectRuntimeEvent({
     effectName: state?.effectName ?? command?.effectName ?? null,
     instanceKey,
     commandId: command?.commandId ?? null,
+    relationId: command?.commandId
+      ? createActionEffectRelationId(command.commandId)
+      : null,
+    relationKind: command?.operation
+      ? resolveActionEffectRelationKind(command.operation)
+      : null,
     operation:
       command?.operation ??
       (type === EFFECT_RUNTIME_EVENT_TYPES.INHERITED ? 'inherit' : 'expire'),
