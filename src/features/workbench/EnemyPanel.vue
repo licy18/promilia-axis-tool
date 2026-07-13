@@ -6,6 +6,13 @@
     </div>
 
     <div class="enemy-summary">
+      <img
+        v-if="enemy.icon"
+        class="enemy-icon"
+        :src="`/assets/loadout/${enemy.icon}`"
+        alt=""
+        @error="$event.currentTarget.remove()"
+      />
       <label>
         <span>目标</span>
         <select
@@ -289,8 +296,14 @@ h2 {
 }
 
 .enemy-summary {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.enemy-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .stat-grid {

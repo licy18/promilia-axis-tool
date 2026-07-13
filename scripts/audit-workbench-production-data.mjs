@@ -6,6 +6,7 @@ import {
   createWorkbenchSkillCoreProjection,
   createWorkbenchSkillDiagnosticsProjection,
 } from './lib/workbench-skill-runtime-projection.mjs';
+import { createWorkbenchLoadoutDetailProjection } from './lib/workbench-loadout-detail-projection.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, '..');
@@ -46,6 +47,7 @@ const files = await loadGeneratedFiles([
   'soulessences.json',
   'value-param-index.json',
   'workbench-kibo-action-catalog.json',
+  'workbench-loadout-detail-catalog.json',
   'workbench-seed.json',
   'workbench-skill-core.json',
   'workbench-skill-diagnostics.json',
@@ -75,6 +77,7 @@ const skillDiagnosticsProjectionMatches = deepEqual(
 );
 const seedAudit = auditWorkbenchSeed(files);
 const kiboActionCatalogMatches = auditKiboActionCatalog(files);
+const loadoutDetailCatalogMatches = auditLoadoutDetailCatalog(files);
 const manifestAudit = {
   workbenchSeedRegistered:
     files['manifest.json'].data.files?.workbenchSeed === 'workbench-seed.json',
@@ -87,6 +90,9 @@ const manifestAudit = {
   workbenchKiboActionCatalogRegistered:
     files['manifest.json'].data.files?.workbenchKiboActionCatalog ===
     'workbench-kibo-action-catalog.json',
+  workbenchLoadoutDetailCatalogRegistered:
+    files['manifest.json'].data.files?.workbenchLoadoutDetailCatalog ===
+    'workbench-loadout-detail-catalog.json',
 };
 const fullGameCatalogBytes = sumFileBytes(files, [
   'characters.json',
@@ -106,6 +112,7 @@ const fullSkillRuntimeBytes = sumFileBytes(files, [
 const status = {
   seedProjectionMatches: Object.values(seedAudit.checks).every(Boolean),
   kiboActionCatalogMatches,
+  loadoutDetailCatalogMatches,
   skillCoreProjectionMatches,
   skillDiagnosticsProjectionMatches,
   manifestMatches: Object.values(manifestAudit).every(Boolean),
@@ -268,6 +275,20 @@ function auditKiboActionCatalog(loadedFiles) {
     })),
   };
   return deepEqual(catalog, expected);
+}
+
+function auditLoadoutDetailCatalog(loadedFiles) {
+  const catalog = loadedFiles['workbench-loadout-detail-catalog.json'].data;
+  return deepEqual(
+    catalog,
+    createWorkbenchLoadoutDetailProjection({
+      generatedAt: catalog.generatedAt,
+      sources: catalog.sources,
+      equipment: loadedFiles['equipment.json'].data.items ?? [],
+      kibos: loadedFiles['kibos.json'].data.items ?? [],
+      soulessences: loadedFiles['soulessences.json'].data.items ?? [],
+    })
+  );
 }
 
 async function loadGeneratedFiles(fileNames) {

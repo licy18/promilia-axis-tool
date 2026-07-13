@@ -1,0 +1,2670 @@
+{
+  "schemaVersion": 1,
+  "kind": "workbench-loadout-detail-catalog",
+  "generatedAt": "2026-07-08T03:35:51.289Z",
+  "sources": {
+    "equipment": "C:/PC2/Codex/AzPr/BWiki/data/local-accessory-forms/all.local-accessory-forms.json",
+    "kibos": "C:/PC2/Codex/AzPr/BWiki/data/local-kibo-forms/all.local-kibo-forms.json",
+    "soulessences": "C:/PC2/Codex/AzPr/BWiki/data/local-soulessence-forms/all.local-soulessence-forms.json"
+  },
+  "policy": {
+    "loadoutEffectsAppliedToCalculators": false,
+    "displayValuesAreSourceRecords": true
+  },
+  "counts": {
+    "equipment": 137,
+    "kibos": 122,
+    "soulessences": 62
+  },
+  "equipment": [
+    {
+      "id": 1010111,
+      "name": "木制棍棒",
+      "type": "武器",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_1.png",
+      "set": "",
+      "summary": "攻击 74 / 攻击 25"
+    },
+    {
+      "id": 1010211,
+      "name": "木制小刀",
+      "type": "武器",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_8.png",
+      "set": "",
+      "summary": "攻击 74 / 攻击 25"
+    },
+    {
+      "id": 1010311,
+      "name": "木制短弓",
+      "type": "武器",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_2.png",
+      "set": "",
+      "summary": "攻击 74 / 攻击 25"
+    },
+    {
+      "id": 1010411,
+      "name": "狼灵法杖",
+      "type": "武器",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_3.png",
+      "set": "",
+      "summary": "攻击 74 / 生命 149"
+    },
+    {
+      "id": 1010511,
+      "name": "兔灵祷杖",
+      "type": "武器",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_9.png",
+      "set": "",
+      "summary": "生命 446 / 生命 149"
+    },
+    {
+      "id": 1010611,
+      "name": "木制长弓",
+      "type": "武器",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_sanjian206.png",
+      "set": "",
+      "summary": "攻击 74 / 攻击 25"
+    },
+    {
+      "id": 1020111,
+      "name": "木制轻甲",
+      "type": "上装",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_4.png",
+      "set": "",
+      "summary": "物理防御 53 / 攻击 25"
+    },
+    {
+      "id": 1020211,
+      "name": "新叶斗篷",
+      "type": "上装",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit2_4.png",
+      "set": "",
+      "summary": "物理防御 53 / 攻击 25"
+    },
+    {
+      "id": 1020311,
+      "name": "陈旧上衣",
+      "type": "上装",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_sanjian208.png",
+      "set": "",
+      "summary": "物理防御 53 / 生命 149"
+    },
+    {
+      "id": 1030111,
+      "name": "木制下装",
+      "type": "下装",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_5.png",
+      "set": "",
+      "summary": "魔法防御 53 / 攻击 25"
+    },
+    {
+      "id": 1030211,
+      "name": "新叶短裤",
+      "type": "下装",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit2_5.png",
+      "set": "",
+      "summary": "魔法防御 53 / 攻击 25"
+    },
+    {
+      "id": 1030311,
+      "name": "陈旧下装",
+      "type": "下装",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_sanjian210.png",
+      "set": "",
+      "summary": "魔法防御 53 / 生命 149"
+    },
+    {
+      "id": 1040111,
+      "name": "草编耳饰",
+      "type": "耳环",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_6.png",
+      "set": "",
+      "summary": "物理防御 53 / 攻击 25"
+    },
+    {
+      "id": 1040211,
+      "name": "新叶耳饰",
+      "type": "耳环",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit2_6.png",
+      "set": "",
+      "summary": "魔法防御 53 / 生命 149"
+    },
+    {
+      "id": 1040311,
+      "name": "陈旧耳饰",
+      "type": "耳环",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_sanjian214.png",
+      "set": "",
+      "summary": "生命 446 / 攻击 25"
+    },
+    {
+      "id": 1050111,
+      "name": "草编戒指",
+      "type": "戒指",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit1_7.png",
+      "set": "",
+      "summary": "攻击 74 / 生命 149"
+    },
+    {
+      "id": 1050211,
+      "name": "新叶戒指",
+      "type": "戒指",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_suit2_7.png",
+      "set": "",
+      "summary": "攻击 74 / 攻击 25"
+    },
+    {
+      "id": 1050311,
+      "name": "陈旧戒指",
+      "type": "戒指",
+      "rarity": "1星",
+      "icon": "tex_icon_equipment_item_sanjian212.png",
+      "set": "",
+      "summary": "生命 446 / 攻击 25"
+    },
+    {
+      "id": 1110111,
+      "name": "风铜直剑",
+      "type": "武器",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_1.png",
+      "set": "",
+      "summary": "攻击 214,230 / 攻击 2.1%,3.6% / 攻击 37 / 生命 2.2%"
+    },
+    {
+      "id": 1110211,
+      "name": "风铜短刃",
+      "type": "武器",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_8.png",
+      "set": "",
+      "summary": "攻击 214,230 / 攻击 2.1%,3.6% / 攻击 37 / 生命 2.2%"
+    },
+    {
+      "id": 1110311,
+      "name": "风铜短弓",
+      "type": "武器",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_2.png",
+      "set": "",
+      "summary": "攻击 214,230 / 攻击 2.1%,3.6% / 攻击 37 / 攻击 2.2%"
+    },
+    {
+      "id": 1110411,
+      "name": "风铜法杖",
+      "type": "武器",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_3.png",
+      "set": "",
+      "summary": "攻击 214,230 / 攻击 2.1%,3.6% / 生命 223 / 攻击 2.2%"
+    },
+    {
+      "id": 1110511,
+      "name": "风铜祷杖",
+      "type": "武器",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_9.png",
+      "set": "",
+      "summary": "生命 1283,1380 / 生命 2.1%,3.6% / 生命 223 / 伤害减免 0.9%"
+    },
+    {
+      "id": 1110611,
+      "name": "铜制长弓",
+      "type": "武器",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_sanjian207.png",
+      "set": "",
+      "summary": "攻击 214,230 / 攻击 2.1%,3.6% / 攻击 37 / 攻击 2.2%"
+    },
+    {
+      "id": 1120111,
+      "name": "风铜皮甲",
+      "type": "上装",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_4.png",
+      "set": "",
+      "summary": "物理防御 152,163 / 物理防御 2.8%,5.0% / 攻击 37 / 物理防御 3.0%"
+    },
+    {
+      "id": 1120211,
+      "name": "风叶斗篷",
+      "type": "上装",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit4_4.png",
+      "set": "",
+      "summary": "物理防御 152,163 / 魔法防御 2.8%,5.0% / 攻击 37 / 魔法防御 3.0%"
+    },
+    {
+      "id": 1120311,
+      "name": "亚麻上衣",
+      "type": "上装",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_sanjian209.png",
+      "set": "",
+      "summary": "物理防御 152,163 / 生命 2.1%,3.6% / 生命 223 / 物理防御 3.0%"
+    },
+    {
+      "id": 1130111,
+      "name": "风铜腿甲",
+      "type": "下装",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_5.png",
+      "set": "",
+      "summary": "魔法防御 152,163 / 物理防御 2.8%,5.0% / 攻击 37 / 魔法防御 3.0%"
+    },
+    {
+      "id": 1130211,
+      "name": "风叶短裤",
+      "type": "下装",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit4_5.png",
+      "set": "",
+      "summary": "魔法防御 152,163 / 魔法防御 2.8%,5.0% / 攻击 37 / 物理防御 3.0%"
+    },
+    {
+      "id": 1130311,
+      "name": "亚麻下装",
+      "type": "下装",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_sanjian211.png",
+      "set": "",
+      "summary": "魔法防御 152,163 / 生命 2.1%,3.6% / 生命 223 / 魔法防御 3.0%"
+    },
+    {
+      "id": 1140111,
+      "name": "风铜耳坠",
+      "type": "耳环",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_6.png",
+      "set": "",
+      "summary": "物理防御 152,163 / 暴击率 1.5%,2.7% / 攻击 37 / 生命 2.2%"
+    },
+    {
+      "id": 1140211,
+      "name": "风叶耳饰",
+      "type": "耳环",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit4_6.png",
+      "set": "",
+      "summary": "魔法防御 152,163 / 攻击 2.1%,3.6% / 生命 223 / 攻击 2.2%"
+    },
+    {
+      "id": 1140311,
+      "name": "微澜耳饰",
+      "type": "耳环",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_sanjian215.png",
+      "set": "",
+      "summary": "生命 1283,1380 / 生命 2.1%,3.6% / 攻击 37 / 生命 2.2%"
+    },
+    {
+      "id": 1150111,
+      "name": "风铜指环",
+      "type": "戒指",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit3_7.png",
+      "set": "",
+      "summary": "攻击 214,230 / 攻击 2.1%,3.6% / 生命 223 / 攻击 2.2%"
+    },
+    {
+      "id": 1150211,
+      "name": "风叶指环",
+      "type": "戒指",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_suit4_7.png",
+      "set": "",
+      "summary": "攻击 214,230 / 暴击伤害 3.1%,5.4% / 攻击 37 / 生命 2.2%"
+    },
+    {
+      "id": 1150311,
+      "name": "微澜戒指",
+      "type": "戒指",
+      "rarity": "2星",
+      "icon": "tex_icon_equipment_item_sanjian213.png",
+      "set": "",
+      "summary": "生命 1283,1380 / 生命 2.1%,3.6% / 攻击 37 / 生命 2.2%"
+    },
+    {
+      "id": 1210011,
+      "name": "青木之弓",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_single01.png",
+      "set": "",
+      "summary": "攻击 307,353 / 攻击 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 暴击率 1.9%"
+    },
+    {
+      "id": 1210111,
+      "name": "青铜直剑",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_1.png",
+      "set": "",
+      "summary": "攻击 307,353 / 攻击 3.1%,7.8% / 攻击 2.6% / 生命 2.6% / 攻击 2.6%"
+    },
+    {
+      "id": 1210121,
+      "name": "野鬃重剑",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit9_1.png",
+      "set": "野鬃逐猎",
+      "summary": "攻击 307,353 / 雷属性伤害增幅 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 伤害增幅 1.9%"
+    },
+    {
+      "id": 1210211,
+      "name": "青铜短刃",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_8.png",
+      "set": "",
+      "summary": "攻击 307,353 / 攻击 3.1%,7.8% / 攻击 2.6% / 生命 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1210221,
+      "name": "蛮角刺剑",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit10_8.png",
+      "set": "蛮角破空",
+      "summary": "攻击 307,353 / 地属性伤害增幅 3.1%,7.8% / 攻击 2.6% / 生命 2.6% / 攻击 2.6%"
+    },
+    {
+      "id": 1210311,
+      "name": "青铜短弓",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_2.png",
+      "set": "",
+      "summary": "攻击 307,353 / 攻击 3.1%,7.8% / 攻击 2.6% / 攻击 2.6% / 暴击率 1.9%"
+    },
+    {
+      "id": 1210321,
+      "name": "冰翼刺弓",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit8_2.png",
+      "set": "冰翼挽歌",
+      "summary": "攻击 307,353 / 暴击伤害 4.6%,11.6% / 暴击伤害 3.9% / 生命 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1210411,
+      "name": "青铜法杖",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_3.png",
+      "set": "",
+      "summary": "攻击 307,353 / 攻击 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1210421,
+      "name": "蝶语法杖",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit7_3.png",
+      "set": "蝶语迷梦",
+      "summary": "攻击 307,353 / 风属性伤害增幅 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 伤害增幅 1.9%"
+    },
+    {
+      "id": 1210511,
+      "name": "青铜牧杖",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_9.png",
+      "set": "",
+      "summary": "生命 1841,2118 / 生命 3.1%,7.8% / 生命 2.6% / 伤害减免 1.0% / 物理防御 3.5%"
+    },
+    {
+      "id": 1210521,
+      "name": "雷息狂力",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit24_1.png",
+      "set": "雷冠牦",
+      "summary": "生命 1841,2118 / 生命 3.1%,7.8% / 生命 2.6% / 魔法防御 3.5% / 生命 2.6%"
+    },
+    {
+      "id": 1210611,
+      "name": "柔影弓",
+      "type": "武器",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit18_1.png",
+      "set": "怯影之翼",
+      "summary": "攻击 307,353 / 暴击率 2.3%,5.8% / 暴击率 1.9% / 生命 2.6% / 暴击率 1.9%"
+    },
+    {
+      "id": 1220011,
+      "name": "月雾外袍",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_single02.png",
+      "set": "",
+      "summary": "物理防御 218,250 / 物理防御 4.3%,10.6% / 物理防御 3.5% / 生命 2.6% / 暴击率 1.9%"
+    },
+    {
+      "id": 1220111,
+      "name": "青铜护甲",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_4.png",
+      "set": "",
+      "summary": "物理防御 218,250 / 物理防御 4.3%,10.6% / 攻击 2.6% / 物理防御 3.5% / 生命 2.6%"
+    },
+    {
+      "id": 1220121,
+      "name": "野鬃重甲",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit9_4.png",
+      "set": "野鬃逐猎",
+      "summary": "物理防御 218,250 / 生命 3.1%,7.8% / 攻击 2.6% / 生命 2.6% / 雷属性伤害减免 1.5%"
+    },
+    {
+      "id": 1220131,
+      "name": "蛮角战甲",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit10_4.png",
+      "set": "蛮角破空",
+      "summary": "生命 1841,2118 / 物理防御 4.3%,10.6% / 攻击 2.6% / 地属性伤害减免 1.5% / 暴击率 1.9%"
+    },
+    {
+      "id": 1220211,
+      "name": "月麻斗篷",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit6_4.png",
+      "set": "",
+      "summary": "物理防御 218,250 / 魔法防御 4.3%,10.6% / 攻击 2.6% / 魔法防御 3.5% / 生命 2.6%"
+    },
+    {
+      "id": 1220221,
+      "name": "蝶语斗篷",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit7_4.png",
+      "set": "蝶语迷梦",
+      "summary": "生命 1841,2118 / 魔法防御 4.3%,10.6% / 生命 2.6% / 风属性伤害减免 1.5% / 攻击 2.6%"
+    },
+    {
+      "id": 1220231,
+      "name": "冰翼披风",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit8_4.png",
+      "set": "冰翼挽歌",
+      "summary": "物理防御 218,250 / 生命 3.1%,7.8% / 暴击伤害 3.9% / 冰属性伤害减免 1.5% / 生命 2.6%"
+    },
+    {
+      "id": 1220311,
+      "name": "雷息披甲",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit24_2.png",
+      "set": "雷冠牦",
+      "summary": "物理防御 218,250 / 生命 3.1%,7.8% / 物理防御 3.5% / 雷属性伤害减免 1.5% / 生命 2.6%"
+    },
+    {
+      "id": 1220321,
+      "name": "柔影之束",
+      "type": "上装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit18_2.png",
+      "set": "怯影之翼",
+      "summary": "物理防御 218,250 / 生命 3.1%,7.8% / 攻击 2.6% / 暗属性伤害减免 1.5% / 攻击 2.6%"
+    },
+    {
+      "id": 1230011,
+      "name": "漫步下装",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_single03.png",
+      "set": "",
+      "summary": "魔法防御 218,250 / 魔法防御 4.3%,10.6% / 魔法防御 3.5% / 生命 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1230111,
+      "name": "青铜裙甲",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_5.png",
+      "set": "",
+      "summary": "魔法防御 218,250 / 物理防御 4.3%,10.6% / 魔法防御 3.5% / 攻击 2.6% / 生命 2.6%"
+    },
+    {
+      "id": 1230121,
+      "name": "野鬃护甲",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit9_5.png",
+      "set": "野鬃逐猎",
+      "summary": "魔法防御 218,250 / 生命 3.1%,7.8% / 生命 2.6% / 雷属性伤害减免 1.5% / 伤害增幅 1.9%"
+    },
+    {
+      "id": 1230131,
+      "name": "蛮角短甲",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit10_5.png",
+      "set": "蛮角破空",
+      "summary": "生命 1841,2118 / 魔法防御 4.3%,10.6% / 攻击 2.6% / 地属性伤害减免 1.5% / 暴击率 1.9%"
+    },
+    {
+      "id": 1230211,
+      "name": "月麻下衣",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit6_5.png",
+      "set": "",
+      "summary": "魔法防御 218,250 / 魔法防御 4.3%,10.6% / 攻击 2.6% / 物理防御 3.5% / 生命 2.6%"
+    },
+    {
+      "id": 1230221,
+      "name": "蝶语护腿",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit7_5.png",
+      "set": "蝶语迷梦",
+      "summary": "生命 1841,2118 / 魔法防御 4.3%,10.6% / 生命 2.6% / 风属性伤害减免 1.5% / 攻击 2.6%"
+    },
+    {
+      "id": 1230231,
+      "name": "冰翼护腿",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit8_5.png",
+      "set": "冰翼挽歌",
+      "summary": "魔法防御 218,250 / 生命 3.1%,7.8% / 暴击伤害 3.9% / 冰属性伤害减免 1.5% / 攻击 2.6%"
+    },
+    {
+      "id": 1230311,
+      "name": "雷息束甲",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit24_3.png",
+      "set": "雷冠牦",
+      "summary": "魔法防御 218,250 / 生命 3.1%,7.8% / 魔法防御 3.5% / 雷属性伤害减免 1.5% / 生命 2.6%"
+    },
+    {
+      "id": 1230321,
+      "name": "柔影幽行",
+      "type": "下装",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit18_3.png",
+      "set": "怯影之翼",
+      "summary": "魔法防御 218,250 / 生命 3.1%,7.8% / 攻击 2.6% / 暗属性伤害减免 1.5% / 攻击 2.6%"
+    },
+    {
+      "id": 1240011,
+      "name": "轻扬耳坠",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_single05.png",
+      "set": "",
+      "summary": "攻击 307,353 / 暴击率 2.3%,5.8% / 生命 2.6% / 攻击 2.6% / 物理防御 3.5%"
+    },
+    {
+      "id": 1240111,
+      "name": "青铜耳坠",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_6.png",
+      "set": "",
+      "summary": "物理防御 218,250 / 暴击率 2.3%,5.8% / 攻击 2.6% / 生命 2.6% / 暴击率 1.9%"
+    },
+    {
+      "id": 1240121,
+      "name": "野鬃耳坠",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit9_6.png",
+      "set": "野鬃逐猎",
+      "summary": "生命 1841,2118 / 生命 3.1%,7.8% / 攻击 2.6% / 暴击率 1.9% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1240131,
+      "name": "蛮角耳环",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit10_6.png",
+      "set": "蛮角破空",
+      "summary": "生命 1841,2118 / 攻击 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 伤害增幅 1.9%"
+    },
+    {
+      "id": 1240211,
+      "name": "蔓叶耳挂",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit6_6.png",
+      "set": "",
+      "summary": "魔法防御 218,250 / 攻击 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1240221,
+      "name": "蝶语耳饰",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit7_6.png",
+      "set": "蝶语迷梦",
+      "summary": "生命 1841,2118 / 调谐强度 24,60 / 生命 2.6% / 能量回复增幅 12.5% / 生命 2.6%"
+    },
+    {
+      "id": 1240231,
+      "name": "冰翼耳坠",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit8_6.png",
+      "set": "冰翼挽歌",
+      "summary": "生命 1841,2118 / 暴击率 2.3%,5.8% / 攻击 2.6% / 生命 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1240311,
+      "name": "雷息降声",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit24_5.png",
+      "set": "雷冠牦",
+      "summary": "生命 1841,2118 / 生命 3.1%,7.8% / 治疗加成 3.6% / 生命 2.6% / 物理防御 3.5%"
+    },
+    {
+      "id": 1240321,
+      "name": "柔影飞翼",
+      "type": "耳环",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit18_4.png",
+      "set": "怯影之翼",
+      "summary": "生命 1841,2118 / 暴击伤害 4.6%,11.6% / 魔法防御 3.5% / 架势条破坏效率 7.8% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1250011,
+      "name": "风羽指环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_single04.png",
+      "set": "",
+      "summary": "生命 1841,2118 / 暴击伤害 4.6%,11.6% / 生命 2.6% / 攻击 2.6% / 魔法防御 3.5%"
+    },
+    {
+      "id": 1250111,
+      "name": "青铜指环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit5_7.png",
+      "set": "",
+      "summary": "攻击 307,353 / 攻击 3.1%,7.8% / 生命 2.6% / 攻击 2.6% / 暴击率 1.9%"
+    },
+    {
+      "id": 1250121,
+      "name": "野鬃指环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit9_7.png",
+      "set": "野鬃逐猎",
+      "summary": "攻击 307,353 / 暴击伤害 4.6%,11.6% / 生命 2.6% / 暴击率 1.9% / 生命 2.6%"
+    },
+    {
+      "id": 1250131,
+      "name": "蛮角戒指",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit10_7.png",
+      "set": "蛮角破空",
+      "summary": "攻击 307,353 / 暴击率 2.3%,5.8% / 生命 2.6% / 攻击 2.6% / 攻击 2.6%"
+    },
+    {
+      "id": 1250211,
+      "name": "蔓叶指环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit6_7.png",
+      "set": "",
+      "summary": "攻击 307,353 / 暴击伤害 4.6%,11.6% / 攻击 2.6% / 生命 2.6% / 暴击伤害 3.9%"
+    },
+    {
+      "id": 1250221,
+      "name": "蝶语指环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit7_7.png",
+      "set": "蝶语迷梦",
+      "summary": "攻击 307,353 / 能量回复增幅 15.0%,37.4% / 魔法防御 3.5% / 攻击 2.6% / 调谐强度 20"
+    },
+    {
+      "id": 1250231,
+      "name": "冰翼指环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit8_7.png",
+      "set": "冰翼挽歌",
+      "summary": "攻击 307,353 / 暴击伤害 4.6%,11.6% / 暴击率 1.9% / 生命 2.6% / 攻击 2.6%"
+    },
+    {
+      "id": 1250311,
+      "name": "雷息之环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit24_4.png",
+      "set": "雷冠牦",
+      "summary": "生命 1841,2118 / 治疗加成 4.3%,10.7% / 魔法防御 3.5% / 能量回复增幅 12.5% / 物理防御 3.5%"
+    },
+    {
+      "id": 1250321,
+      "name": "柔影辉环",
+      "type": "戒指",
+      "rarity": "3星",
+      "icon": "tex_icon_equipment_item_suit18_5.png",
+      "set": "怯影之翼",
+      "summary": "生命 1841,2118 / 架势条破坏效率 9.4%,23.4% / 物理防御 3.5% / 架势条破坏效率 7.8% / 攻击 2.6%"
+    },
+    {
+      "id": 1310011,
+      "name": "明辉长剑",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_single06.png",
+      "set": "",
+      "summary": "攻击 353,433 / 攻击 4.7%,15.2% / 生命 3.3% / 暴击率 2.5% / 暴击伤害 5.0% / 攻击 3.3%"
+    },
+    {
+      "id": 1310111,
+      "name": "镜铁长剑",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_1.png",
+      "set": "",
+      "summary": "攻击 353,433 / 攻击 4.7%,15.2% / 攻击 3.3% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4%"
+    },
+    {
+      "id": 1310112,
+      "name": "锻钢阔剑",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit12_1.png",
+      "set": "",
+      "summary": "攻击 353,433 / 攻击 4.7%,15.2% / 生命 3.3% / 暴击率 2.5% / 暴击伤害 5.0% / 攻击 3.3%"
+    },
+    {
+      "id": 1310121,
+      "name": "狂鬃重剑",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit29_5.png",
+      "set": "野鬃逐猎",
+      "summary": "攻击 353,433 / 雷属性伤害增幅 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4% / 雷属性伤害增幅 3.3%"
+    },
+    {
+      "id": 1310211,
+      "name": "镜铁刺刃",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_8.png",
+      "set": "",
+      "summary": "攻击 353,433 / 水属性伤害增幅 4.7%,15.2% / 攻击 3.3% / 生命 3.3% / 伤害增幅 2.4% / 水属性伤害增幅 3.3%"
+    },
+    {
+      "id": 1310212,
+      "name": "锻钢短刃",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit12_8.png",
+      "set": "",
+      "summary": "攻击 353,433 / 火属性伤害增幅 4.7%,15.2% / 攻击 3.3% / 生命 3.3% / 伤害增幅 2.4% / 火属性伤害增幅 3.3%"
+    },
+    {
+      "id": 1310221,
+      "name": "荒角刺剑",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit15_1.png",
+      "set": "蛮角破空",
+      "summary": "攻击 353,433 / 地属性伤害增幅 4.7%,15.2% / 攻击 3.3% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4%"
+    },
+    {
+      "id": 1310311,
+      "name": "镜铁长弓",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_2.png",
+      "set": "",
+      "summary": "攻击 353,433 / 暴击率 3.5%,11.3% / 暴击伤害 5.0% / 物理防御 4.6% / 暴击伤害 5.0% / 暴击率 2.5%"
+    },
+    {
+      "id": 1310312,
+      "name": "锻钢长弓",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit12_2.png",
+      "set": "",
+      "summary": "攻击 353,433 / 暴击伤害 6.9%,22.5% / 暴击率 2.5% / 魔法防御 4.6% / 暴击率 2.5% / 暴击伤害 5.0%"
+    },
+    {
+      "id": 1310321,
+      "name": "寒翼刺弓",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit16_1.png",
+      "set": "冰翼挽歌",
+      "summary": "攻击 353,433 / 暴击伤害 6.9%,22.5% / 暴击伤害 5.0% / 生命 3.3% / 暴击伤害 5.0% / 暴击伤害 5.0%"
+    },
+    {
+      "id": 1310411,
+      "name": "镜铁咒杖",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_3.png",
+      "set": "",
+      "summary": "攻击 353,433 / 木属性伤害增幅 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4% / 木属性伤害增幅 3.3%"
+    },
+    {
+      "id": 1310412,
+      "name": "锻钢咒杖",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit12_3.png",
+      "set": "",
+      "summary": "攻击 353,433 / 光属性伤害增幅 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4% / 光属性伤害增幅 3.3%"
+    },
+    {
+      "id": 1310421,
+      "name": "蝶影法杖",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit17_1.png",
+      "set": "蝶语迷梦",
+      "summary": "攻击 353,433 / 风属性伤害增幅 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4% / 风属性伤害增幅 3.3%"
+    },
+    {
+      "id": 1310511,
+      "name": "镜铁祷杖",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_9.png",
+      "set": "",
+      "summary": "生命 2120,2597 / 生命 4.7%,15.2% / 生命 3.3% / 伤害减免 1.3% / 物理防御 4.6% / 魔法防御 4.6%"
+    },
+    {
+      "id": 1310512,
+      "name": "锻钢祷杖",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit12_9.png",
+      "set": "",
+      "summary": "生命 2120,2597 / 生命 4.7%,15.2% / 暴击率 2.5% / 生命 3.3% / 暴击伤害 5.0% / 生命 3.3%"
+    },
+    {
+      "id": 1310521,
+      "name": "雷闪狂力",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit25_1.png",
+      "set": "雷冠牦",
+      "summary": "生命 2120,2597 / 生命 4.7%,15.2% / 生命 3.3% / 魔法防御 4.6% / 生命 3.3% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1310611,
+      "name": "泣影弓",
+      "type": "武器",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit19_1.png",
+      "set": "怯影之翼",
+      "summary": "攻击 353,433 / 暴击率 3.5%,11.3% / 暴击率 2.5% / 生命 3.3% / 暴击率 2.5% / 暴击率 2.5%"
+    },
+    {
+      "id": 1320011,
+      "name": "尘间上装",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_single07.png",
+      "set": "",
+      "summary": "物理防御 251,307 / 物理防御 6.4%,20.7% / 攻击 3.3% / 物理防御 4.6% / 攻击 3.3% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1320111,
+      "name": "镜铁战铠",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_4.png",
+      "set": "",
+      "summary": "物理防御 251,307 / 物理防御 6.4%,20.7% / 攻击 3.3% / 物理防御 4.6% / 生命 3.3% / 物理防御 4.6%"
+    },
+    {
+      "id": 1320121,
+      "name": "狂鬃重甲",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit29_1.png",
+      "set": "野鬃逐猎",
+      "summary": "物理防御 251,307 / 生命 4.7%,15.2% / 攻击 3.3% / 生命 3.3% / 雷属性伤害减免 2.0% / 生命 3.3%"
+    },
+    {
+      "id": 1320131,
+      "name": "荒角战甲",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit15_2.png",
+      "set": "蛮角破空",
+      "summary": "生命 2120,2597 / 物理防御 6.4%,20.7% / 攻击 3.3% / 地属性伤害减免 2.0% / 暴击率 2.5% / 地属性伤害减免 2.0%"
+    },
+    {
+      "id": 1320211,
+      "name": "云棉披风",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit23_1.png",
+      "set": "",
+      "summary": "物理防御 251,307 / 魔法防御 6.4%,20.7% / 攻击 3.3% / 魔法防御 4.6% / 生命 3.3% / 魔法防御 4.6%"
+    },
+    {
+      "id": 1320221,
+      "name": "蝶影斗篷",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit17_2.png",
+      "set": "蝶语迷梦",
+      "summary": "生命 2120,2597 / 魔法防御 6.4%,20.7% / 生命 3.3% / 风属性伤害减免 2.0% / 攻击 3.3% / 风属性伤害减免 2.0%"
+    },
+    {
+      "id": 1320231,
+      "name": "寒翼披风",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit16_2.png",
+      "set": "冰翼挽歌",
+      "summary": "物理防御 251,307 / 生命 4.7%,15.2% / 暴击伤害 5.0% / 冰属性伤害减免 2.0% / 生命 3.3% / 冰属性伤害减免 2.0%"
+    },
+    {
+      "id": 1320311,
+      "name": "雷闪披甲",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit25_2.png",
+      "set": "雷冠牦",
+      "summary": "物理防御 251,307 / 生命 4.7%,15.2% / 物理防御 4.6% / 雷属性伤害减免 2.0% / 生命 3.3% / 雷属性伤害减免 2.0%"
+    },
+    {
+      "id": 1320321,
+      "name": "泣影之束",
+      "type": "上装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit19_2.png",
+      "set": "怯影之翼",
+      "summary": "物理防御 251,307 / 生命 4.7%,15.2% / 攻击 3.3% / 暗属性伤害减免 2.0% / 攻击 3.3% / 暗属性伤害减免 2.0%"
+    },
+    {
+      "id": 1330011,
+      "name": "暮时下装",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_single08.png",
+      "set": "",
+      "summary": "魔法防御 251,307 / 魔法防御 6.4%,20.7% / 攻击 3.3% / 魔法防御 4.6% / 攻击 3.3% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1330111,
+      "name": "镜铁裤甲",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_5.png",
+      "set": "",
+      "summary": "魔法防御 251,307 / 物理防御 6.4%,20.7% / 魔法防御 4.6% / 攻击 3.3% / 生命 3.3% / 物理防御 4.6%"
+    },
+    {
+      "id": 1330121,
+      "name": "狂鬃护甲",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit29_2.png",
+      "set": "野鬃逐猎",
+      "summary": "魔法防御 251,307 / 生命 4.7%,15.2% / 生命 3.3% / 雷属性伤害减免 2.0% / 伤害增幅 2.4% / 生命 3.3%"
+    },
+    {
+      "id": 1330131,
+      "name": "荒角短甲",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit15_3.png",
+      "set": "蛮角破空",
+      "summary": "生命 2120,2597 / 魔法防御 6.4%,20.7% / 攻击 3.3% / 地属性伤害减免 2.0% / 暴击率 2.5% / 生命 3.3%"
+    },
+    {
+      "id": 1330211,
+      "name": "云棉下装",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit23_2.png",
+      "set": "",
+      "summary": "魔法防御 251,307 / 魔法防御 6.4%,20.7% / 攻击 3.3% / 物理防御 4.6% / 生命 3.3% / 魔法防御 4.6%"
+    },
+    {
+      "id": 1330221,
+      "name": "蝶影护腿",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit17_3.png",
+      "set": "蝶语迷梦",
+      "summary": "生命 2120,2597 / 魔法防御 6.4%,20.7% / 生命 3.3% / 风属性伤害减免 2.0% / 攻击 3.3% / 生命 3.3%"
+    },
+    {
+      "id": 1330231,
+      "name": "寒翼护腿",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit16_3.png",
+      "set": "冰翼挽歌",
+      "summary": "魔法防御 251,307 / 生命 4.7%,15.2% / 暴击伤害 5.0% / 冰属性伤害减免 2.0% / 攻击 3.3% / 生命 3.3%"
+    },
+    {
+      "id": 1330311,
+      "name": "雷闪束甲",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit25_3.png",
+      "set": "雷冠牦",
+      "summary": "魔法防御 251,307 / 生命 4.7%,15.2% / 魔法防御 4.6% / 雷属性伤害减免 2.0% / 生命 3.3% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1330321,
+      "name": "泣影幽行",
+      "type": "下装",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit19_3.png",
+      "set": "怯影之翼",
+      "summary": "魔法防御 251,307 / 生命 4.7%,15.2% / 攻击 3.3% / 暗属性伤害减免 2.0% / 攻击 3.3% / 魔法防御 4.6%"
+    },
+    {
+      "id": 1340011,
+      "name": "晶坠耳饰",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_single10.png",
+      "set": "",
+      "summary": "攻击 353,433 / 暴击率 3.5%,11.3% / 物理防御 4.6% / 暴击率 2.5% / 生命 3.3% / 攻击 3.3%"
+    },
+    {
+      "id": 1340111,
+      "name": "镜铁耳坠",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_6.png",
+      "set": "",
+      "summary": "物理防御 251,307 / 暴击率 3.5%,11.3% / 攻击 3.3% / 生命 3.3% / 暴击率 2.5% / 生命 3.3%"
+    },
+    {
+      "id": 1340121,
+      "name": "狂鬃耳坠",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit29_3.png",
+      "set": "野鬃逐猎",
+      "summary": "生命 2120,2597 / 生命 4.7%,15.2% / 攻击 3.3% / 暴击率 2.5% / 暴击伤害 5.0% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1340131,
+      "name": "荒角耳环",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit15_4.png",
+      "set": "蛮角破空",
+      "summary": "生命 2120,2597 / 攻击 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 伤害增幅 2.4% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1340211,
+      "name": "蔓花耳挂",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit13_6.png",
+      "set": "",
+      "summary": "魔法防御 251,307 / 攻击 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 暴击伤害 5.0% / 生命 3.3%"
+    },
+    {
+      "id": 1340221,
+      "name": "蝶影耳饰",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit17_4.png",
+      "set": "蝶语迷梦",
+      "summary": "生命 2120,2597 / 调谐强度 36,117 / 生命 3.3% / 能量回复增幅 16.0% / 生命 3.3% / 攻击 3.3%"
+    },
+    {
+      "id": 1340231,
+      "name": "寒翼耳坠",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit16_4.png",
+      "set": "冰翼挽歌",
+      "summary": "生命 2120,2597 / 暴击率 3.5%,11.3% / 攻击 3.3% / 生命 3.3% / 暴击伤害 5.0% / 生命 3.3%"
+    },
+    {
+      "id": 1340311,
+      "name": "雷闪降声",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit25_5.png",
+      "set": "雷冠牦",
+      "summary": "生命 2120,2597 / 生命 4.7%,15.2% / 治疗加成 4.6% / 生命 3.3% / 物理防御 4.6% / 魔法防御 4.6%"
+    },
+    {
+      "id": 1340321,
+      "name": "泣影飞翼",
+      "type": "耳环",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit19_5.png",
+      "set": "怯影之翼",
+      "summary": "生命 2120,2597 / 暴击伤害 6.9%,22.5% / 魔法防御 4.6% / 架势条破坏效率 10.0% / 暴击伤害 5.0% / 生命 3.3%"
+    },
+    {
+      "id": 1350011,
+      "name": "霜影指环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_single09.png",
+      "set": "",
+      "summary": "生命 2120,2597 / 暴击伤害 6.9%,22.5% / 魔法防御 4.6% / 暴击伤害 5.0% / 生命 3.3% / 攻击 3.3%"
+    },
+    {
+      "id": 1350111,
+      "name": "镜铁指环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit11_7.png",
+      "set": "",
+      "summary": "攻击 353,433 / 攻击 4.7%,15.2% / 生命 3.3% / 攻击 3.3% / 暴击率 2.5% / 生命 3.3%"
+    },
+    {
+      "id": 1350121,
+      "name": "狂鬃指环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit29_4.png",
+      "set": "野鬃逐猎",
+      "summary": "攻击 353,433 / 暴击伤害 6.9%,22.5% / 生命 3.3% / 暴击率 2.5% / 生命 3.3% / 伤害减免 1.3%"
+    },
+    {
+      "id": 1350131,
+      "name": "荒角戒指",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit15_5.png",
+      "set": "蛮角破空",
+      "summary": "攻击 353,433 / 暴击率 3.5%,11.3% / 生命 3.3% / 攻击 3.3% / 攻击 3.3% / 伤害增幅 2.4%"
+    },
+    {
+      "id": 1350211,
+      "name": "蔓花指环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit13_7.png",
+      "set": "",
+      "summary": "攻击 353,433 / 暴击伤害 6.9%,22.5% / 攻击 3.3% / 生命 3.3% / 暴击伤害 5.0% / 生命 3.3%"
+    },
+    {
+      "id": 1350221,
+      "name": "蝶影指环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit17_5.png",
+      "set": "蝶语迷梦",
+      "summary": "攻击 353,433 / 能量回复增幅 22.4%,72.9% / 魔法防御 4.6% / 攻击 3.3% / 调谐强度 26 / 能量回复增幅 16.0%"
+    },
+    {
+      "id": 1350231,
+      "name": "寒翼指环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit16_5.png",
+      "set": "冰翼挽歌",
+      "summary": "攻击 353,433 / 暴击伤害 6.9%,22.5% / 暴击率 2.5% / 生命 3.3% / 攻击 3.3% / 暴击伤害 5.0%"
+    },
+    {
+      "id": 1350311,
+      "name": "雷闪之环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit25_4.png",
+      "set": "雷冠牦",
+      "summary": "生命 2120,2597 / 治疗加成 6.4%,20.9% / 魔法防御 4.6% / 能量回复增幅 16.0% / 物理防御 4.6% / 生命 3.3%"
+    },
+    {
+      "id": 1350321,
+      "name": "泣影辉环",
+      "type": "戒指",
+      "rarity": "4星",
+      "icon": "tex_icon_equipment_item_suit19_4.png",
+      "set": "怯影之翼",
+      "summary": "生命 2120,2597 / 架势条破坏效率 14.0%,45.6% / 物理防御 4.6% / 架势条破坏效率 10.0% / 攻击 3.3% / 伤害增幅 2.4%"
+    }
+  ],
+  "kibos": [
+    {
+      "id": 500001,
+      "name": "迅狼",
+      "icon": "tex_icon_pet_500001.png",
+      "fallbackIcon": "tex_icon_petskill_500001_02.png",
+      "summary": "风 · 成熟期 · 独猎 · 迅风刃 · 狂风冲击 · 迅狼-合击"
+    },
+    {
+      "id": 500002,
+      "name": "水灵仔",
+      "icon": "tex_icon_pet_500002.png",
+      "fallbackIcon": "tex_icon_petskill_500004_02.png",
+      "summary": "水 · 幼年期 · 缓冲 · 水灵涟漪 · 水弹连射 · 水灵仔-合击"
+    },
+    {
+      "id": 500003,
+      "name": "水灵偶",
+      "icon": "tex_icon_pet_500003.png",
+      "fallbackIcon": "tex_icon_petskill_500004_02.png",
+      "summary": "水 · 成长期 · 缓冲 · 灵偶涟漪 · 漂浮水泡 · 水灵偶-合击"
+    },
+    {
+      "id": 500004,
+      "name": "汐灵偶",
+      "icon": "tex_icon_pet_500004.png",
+      "fallbackIcon": "tex_icon_petskill_500004_02.png",
+      "summary": "水 · 成熟期 · 缓冲 · 潮汐涟漪 · 大海浪 · 汐灵偶-合击"
+    },
+    {
+      "id": 500005,
+      "name": "火灵仔",
+      "icon": "tex_icon_pet_500005.png",
+      "fallbackIcon": "tex_icon_petskill_500007_01.png",
+      "summary": "火 · 幼年期 · 协同 · 火环 · 火球连射 · 火灵仔-合击"
+    },
+    {
+      "id": 500006,
+      "name": "火灵偶",
+      "icon": "tex_icon_pet_500006.png",
+      "fallbackIcon": "tex_icon_petskill_500007_01.png",
+      "summary": "火 · 成长期 · 协同 · 灵偶火环 · 空降之焰 · 火灵偶-合击"
+    },
+    {
+      "id": 500007,
+      "name": "焰灵偶",
+      "icon": "tex_icon_pet_500007.png",
+      "fallbackIcon": "tex_icon_petskill_500007_01.png",
+      "summary": "火 · 成熟期 · 协同 · 灼焰火环 · 分裂之焰 · 焰灵偶-合击"
+    },
+    {
+      "id": 500020,
+      "name": "小雪狼",
+      "icon": "tex_icon_pet_500020.png",
+      "fallbackIcon": "tex_icon_petskill_500021_02.png",
+      "summary": "冰 · 幼年期 · 独猎 · 雪横扫 · 冰锥 · 小雪狼-合击"
+    },
+    {
+      "id": 500021,
+      "name": "冰速狼",
+      "icon": "tex_icon_pet_500021.png",
+      "fallbackIcon": "tex_icon_petskill_500021_02.png",
+      "summary": "冰 · 成长期 · 变换 · 冰速横扫 · 寒冰碎片 · 冰速狼-合击"
+    },
+    {
+      "id": 500022,
+      "name": "霜刃狼",
+      "icon": "tex_icon_pet_500022.png",
+      "fallbackIcon": "tex_icon_petskill_500021_02.png",
+      "summary": "冰 · 成熟期 · 变换 · 霜刃横扫 · 冰矛连射 · 霜刃狼-合击"
+    },
+    {
+      "id": 500023,
+      "name": "苗鸡",
+      "icon": "tex_icon_pet_500023.png",
+      "fallbackIcon": "tex_icon_petskill_500024_01.png",
+      "summary": "木 · 幼年期 · 变换 · 扑通变菜 · 种子飞弹 · 苗鸡-合击"
+    },
+    {
+      "id": 500024,
+      "name": "菜鸡",
+      "icon": "tex_icon_pet_500024.png",
+      "fallbackIcon": "tex_icon_petskill_500024_01.png",
+      "summary": "木 · 成熟期 · 独猎 · 鸡飞叶跳 · 灵木繁星 · 菜鸡-合击"
+    },
+    {
+      "id": 500025,
+      "name": "拉加野猪",
+      "icon": "tex_icon_pet_500025.png",
+      "fallbackIcon": "tex_icon_petskill_500025_01.png",
+      "summary": "雷、地 · 成熟期 · 独猎 · 拉加冲锋 · 落雷 · 拉加野猪-合击"
+    },
+    {
+      "id": 500026,
+      "name": "碧羽灵龙",
+      "icon": "tex_icon_pet_500026.png",
+      "fallbackIcon": "tex_icon_petskill_500026_02.png",
+      "summary": "水、木 · 成熟期 · 猛袭 · 碧灵激流 · 灵木繁星 · 碧羽灵龙-合击"
+    },
+    {
+      "id": 500035,
+      "name": "叶冠驼",
+      "icon": "tex_icon_pet_500035.png",
+      "fallbackIcon": "tex_icon_petskill_500035_01.png",
+      "summary": "木 · 成熟期 · 侵扰 · 治愈守护 · 株连灵木 · 叶冠驼-合击"
+    },
+    {
+      "id": 500037,
+      "name": "焰羊羊",
+      "icon": "tex_icon_pet_500037.png",
+      "fallbackIcon": "tex_icon_petskill_500039_01.png",
+      "summary": "火 · 幼年期 · 独猎 · 火苗踏击 · 火球 · 焰羊羊-合击"
+    },
+    {
+      "id": 500038,
+      "name": "尾火羊",
+      "icon": "tex_icon_pet_500038.png",
+      "fallbackIcon": "tex_icon_petskill_500039_01.png",
+      "summary": "火 · 成长期 · 独猎 · 火焰踏击 · 烈焰弹 · 尾火羊-合击"
+    },
+    {
+      "id": 500039,
+      "name": "炎灼角羊",
+      "icon": "tex_icon_pet_500039.png",
+      "fallbackIcon": "tex_icon_petskill_500039_01.png",
+      "summary": "火 · 成熟期 · 独猎 · 爆炎踏击 · 烈焰弹 · 炎灼角羊-合击"
+    },
+    {
+      "id": 500040,
+      "name": "铁球蜥",
+      "icon": "tex_icon_pet_500040.png",
+      "fallbackIcon": "tex_icon_petskill_500042_02.png",
+      "summary": "地 · 幼年期 · 侵扰 · 尾锤击 · 岩锥 · 铁球蜥-合击"
+    },
+    {
+      "id": 500041,
+      "name": "三角蜥",
+      "icon": "tex_icon_pet_500041.png",
+      "fallbackIcon": "tex_icon_petskill_500042_02.png",
+      "summary": "地 · 成熟期 · 侵扰 · 砸地锤击 · 岩锥 · 三角蜥-合击"
+    },
+    {
+      "id": 500042,
+      "name": "角斗蜥",
+      "icon": "tex_icon_pet_500042.png",
+      "fallbackIcon": "tex_icon_petskill_500042_02.png",
+      "summary": "地 · 超限体 · 侵扰 · 角斗重锤 · 裂地岩突 · 角斗蜥-合击"
+    },
+    {
+      "id": 500043,
+      "name": "小浮蝶",
+      "icon": "tex_icon_pet_500043.png",
+      "fallbackIcon": "tex_icon_petskill_500045_01.png",
+      "summary": "风、光 · 幼年期 · 侵扰 · 蝶磷粉 · 小风弹 · 小浮蝶-合击"
+    },
+    {
+      "id": 500044,
+      "name": "浮蝶",
+      "icon": "tex_icon_pet_500044.png",
+      "fallbackIcon": "tex_icon_petskill_500045_01.png",
+      "summary": "风、光 · 成长期 · 侵扰 · 浮蝶磷粉 · 小风弹 · 浮蝶-合击"
+    },
+    {
+      "id": 500045,
+      "name": "幻蝶",
+      "icon": "tex_icon_pet_500045.png",
+      "fallbackIcon": "tex_icon_petskill_500045_01.png",
+      "summary": "风、光 · 成熟期 · 侵扰 · 幻蝶磷粉 · 旋风回旋镖 · 幻蝶-合击"
+    },
+    {
+      "id": 500046,
+      "name": "木灵苞",
+      "icon": "tex_icon_pet_500046.png",
+      "fallbackIcon": "tex_icon_petskill_500048_02.png",
+      "summary": "木 · 幼年期 · 恢复 · 木苞生长 · 种子飞弹 · 木灵苞-合击"
+    },
+    {
+      "id": 500047,
+      "name": "木灵朵",
+      "icon": "tex_icon_pet_500047.png",
+      "fallbackIcon": "tex_icon_petskill_500048_02.png",
+      "summary": "木 · 成长期 · 缓冲 · 灵朵绽放 · 花绽飞弹 · 木灵朵-合击"
+    },
+    {
+      "id": 500048,
+      "name": "蔓音花",
+      "icon": "tex_icon_pet_500048.png",
+      "fallbackIcon": "tex_icon_petskill_500048_02.png",
+      "summary": "木 · 成熟期 · 缓冲 · 蔓音回响 · 种子风暴 · 蔓音花-合击"
+    },
+    {
+      "id": 500051,
+      "name": "岩甲蜥",
+      "icon": "tex_icon_pet_500051.png",
+      "fallbackIcon": "tex_icon_petskill_500053_02.png",
+      "summary": "地 · 幼年期 · 缓冲 · 岩甲突击 · 岩锥 · 岩甲蜥-合击"
+    },
+    {
+      "id": 500052,
+      "name": "穿甲蜥",
+      "icon": "tex_icon_pet_500052.png",
+      "fallbackIcon": "tex_icon_petskill_500053_02.png",
+      "summary": "地 · 成长期 · 防护 · 穿甲突击 · 岩固之盾 · 穿甲蜥-合击"
+    },
+    {
+      "id": 500053,
+      "name": "钻山蜥",
+      "icon": "tex_icon_pet_500053.png",
+      "fallbackIcon": "tex_icon_petskill_500053_02.png",
+      "summary": "地 · 成熟期 · 防护 · 钻山猛击 · 岩固之盾 · 钻山蜥-合击"
+    },
+    {
+      "id": 500057,
+      "name": "猪古力",
+      "icon": "tex_icon_pet_500057.png",
+      "fallbackIcon": "tex_icon_petskill_500025_01.png",
+      "summary": "雷、地 · 幼年期 · 侵扰 · 猪突猛进 · 雷球 · 猪古力-合击"
+    },
+    {
+      "id": 500058,
+      "name": "焰翎龙",
+      "icon": "tex_icon_pet_500058.png",
+      "fallbackIcon": "tex_icon_petskill_500058_01.png",
+      "summary": "火 · 成熟期 · 猛袭 · 焰翎利箭 · 炽焰冲锋 · 焰翎龙-合击"
+    },
+    {
+      "id": 500064,
+      "name": "柔风鹰",
+      "icon": "tex_icon_pet_500064.png",
+      "fallbackIcon": "tex_icon_petskill_500065_01.png",
+      "summary": "风 · 幼年期 · 侵扰 · 柔风飞刃 · 风刃 · 柔风鹰-合击"
+    },
+    {
+      "id": 500065,
+      "name": "风剪鹰",
+      "icon": "tex_icon_pet_500065.png",
+      "fallbackIcon": "tex_icon_petskill_500065_01.png",
+      "summary": "风 · 成熟期 · 侵扰 · 风锐翼展 · 凛风斩 · 风剪鹰-合击"
+    },
+    {
+      "id": 500066,
+      "name": "兔耳鳐",
+      "icon": "tex_icon_pet_500066.png",
+      "fallbackIcon": "tex_icon_petskill_500068_01.png",
+      "summary": "水 · 幼年期 · 独猎 · 水流射击 · 毒液弹 · 兔耳鳐-合击"
+    },
+    {
+      "id": 500067,
+      "name": "飞鳐",
+      "icon": "tex_icon_pet_500067.png",
+      "fallbackIcon": "tex_icon_petskill_500068_01.png",
+      "summary": "水 · 成长期 · 独猎 · 分裂水流 · 水弹散射 · 飞鳐-合击"
+    },
+    {
+      "id": 500068,
+      "name": "星鳐",
+      "icon": "tex_icon_pet_500068.png",
+      "fallbackIcon": "tex_icon_petskill_500068_01.png",
+      "summary": "水 · 成熟期 · 独猎 · 水流激涌 · 爆裂水球 · 星鳐-合击"
+    },
+    {
+      "id": 500072,
+      "name": "乌尔",
+      "icon": "tex_icon_pet_500072.png",
+      "fallbackIcon": "tex_icon_petskill_500072_01.png",
+      "summary": "冰 · 成熟期 · 侵扰 · 极寒冲刺 · 冰矛连射 · 乌尔-合击"
+    },
+    {
+      "id": 500081,
+      "name": "碎冰兔",
+      "icon": "tex_icon_pet_500081.png",
+      "fallbackIcon": "tex_icon_petskill_500081_01.png",
+      "summary": "冰 · 成熟期 · 变换 · 碎冰寒矛 · 凛冬矛击 · 碎冰兔-合击"
+    },
+    {
+      "id": 500082,
+      "name": "雷冠牦",
+      "icon": "tex_icon_pet_500082.png",
+      "fallbackIcon": "tex_icon_petskill_500082_01.png",
+      "summary": "雷、地 · 超限体 · 侵扰 · 雷冠之力 · 滚滚落雷 · 雷冠牦-合击"
+    },
+    {
+      "id": 500083,
+      "name": "滚地犰",
+      "icon": "tex_icon_pet_500083.png",
+      "fallbackIcon": "tex_icon_petskill_500083_02.png",
+      "summary": "火、地 · 幼年期 · 防护 · 火热跃击 · 火球 · 滚地犰-合击"
+    },
+    {
+      "id": 500084,
+      "name": "覆甲犰",
+      "icon": "tex_icon_pet_500084.png",
+      "fallbackIcon": "tex_icon_petskill_500083_02.png",
+      "summary": "火、地 · 成长期 · 防护 · 炎火跃击 · 岩石滚撞 · 覆甲犰-合击"
+    },
+    {
+      "id": 500085,
+      "name": "熔岩犰",
+      "icon": "tex_icon_pet_500085.png",
+      "fallbackIcon": "tex_icon_petskill_500083_02.png",
+      "summary": "火、地 · 成熟期 · 防护 · 炽火陨星 · 裂地岩突 · 熔岩犰-合击"
+    },
+    {
+      "id": 500093,
+      "name": "目绒兔",
+      "icon": "tex_icon_pet_500093.png",
+      "fallbackIcon": "tex_icon_petskill_500093_02.png",
+      "summary": "光 · 成熟期 · 缓冲 · 紧急治疗 · 辉光倾至 · 目绒兔-合击"
+    },
+    {
+      "id": 500095,
+      "name": "雾粘蛙",
+      "icon": "tex_icon_pet_500095.png",
+      "fallbackIcon": "tex_icon_petskill_500096_01.png",
+      "summary": "暗 · 幼年期 · 变换 · 烟雾毒舌 · 暗魂影 · 雾粘蛙-合击"
+    },
+    {
+      "id": 500096,
+      "name": "雾球蛙",
+      "icon": "tex_icon_pet_500096.png",
+      "fallbackIcon": "tex_icon_petskill_500096_01.png",
+      "summary": "暗 · 成熟期 · 变换 · 雾球毒舌 · 暗魂影爆阵 · 雾球蛙-合击"
+    },
+    {
+      "id": 500097,
+      "name": "水岩灵",
+      "icon": "tex_icon_pet_500097.png",
+      "fallbackIcon": "tex_icon_petskill_500098_01.png",
+      "summary": "水 · 幼年期 · 防护 · 水波冲击 · 唤潮 · 水岩灵-合击"
+    },
+    {
+      "id": 500098,
+      "name": "水岩卫",
+      "icon": "tex_icon_pet_500098.png",
+      "fallbackIcon": "tex_icon_petskill_500098_01.png",
+      "summary": "水 · 成熟期 · 防护 · 水波奔涌 · 唤潮 · 水岩卫-合击"
+    },
+    {
+      "id": 500110,
+      "name": "宝蓝雏龙",
+      "icon": "tex_icon_pet_500110.png",
+      "fallbackIcon": "tex_icon_petskill_500026_02.png",
+      "summary": "水、木 · 幼年期 · 猛袭 · 灵龙漩水 · 灵木弹 · 宝蓝雏龙-合击"
+    },
+    {
+      "id": 500114,
+      "name": "冰灵仔",
+      "icon": "tex_icon_pet_500114.png",
+      "fallbackIcon": "tex_icon_petskill_500116_02.png",
+      "summary": "冰 · 幼年期 · 变换 · 寒气 · 冰晶弹 · 冰灵仔-合击"
+    },
+    {
+      "id": 500115,
+      "name": "冰灵偶",
+      "icon": "tex_icon_pet_500115.png",
+      "fallbackIcon": "tex_icon_petskill_500116_02.png",
+      "summary": "冰 · 成长期 · 变换 · 冰灵寒气 · 冰晶散射 · 冰灵偶-合击"
+    },
+    {
+      "id": 500116,
+      "name": "霜灵偶",
+      "icon": "tex_icon_pet_500116.png",
+      "fallbackIcon": "tex_icon_petskill_500116_02.png",
+      "summary": "冰 · 成熟期 · 变换 · 霜灵寒域 · 寒冰之罚 · 霜灵偶-合击"
+    },
+    {
+      "id": 500120,
+      "name": "哈加",
+      "icon": "tex_icon_pet_500120.png",
+      "fallbackIcon": "tex_icon_petskill_500120_02.png",
+      "summary": "风 · 成熟期 · 独猎 · 哈加冲锋 · 风刃 · 哈加-合击"
+    },
+    {
+      "id": 500123,
+      "name": "风灵苞",
+      "icon": "tex_icon_pet_500123.png",
+      "fallbackIcon": "tex_icon_petskill_500125_01.png",
+      "summary": "风 · 幼年期 · 协同 · 飞绒风苞 · 小风弹 · 风灵苞-合击"
+    },
+    {
+      "id": 500124,
+      "name": "风灵朵",
+      "icon": "tex_icon_pet_500124.png",
+      "fallbackIcon": "tex_icon_petskill_500125_01.png",
+      "summary": "风 · 成长期 · 协同 · 飞绒风域 · 小风弹 · 风灵朵-合击"
+    },
+    {
+      "id": 500125,
+      "name": "岚音花",
+      "icon": "tex_icon_pet_500125.png",
+      "fallbackIcon": "tex_icon_petskill_500125_01.png",
+      "summary": "风 · 成熟期 · 协同 · 飞绒漫舞 · 风刃扩张 · 岚音花-合击"
+    },
+    {
+      "id": 500126,
+      "name": "风灵仔",
+      "icon": "tex_icon_pet_500126.png",
+      "fallbackIcon": "tex_icon_petskill_500128_02.png",
+      "summary": "风 · 幼年期 · 侵扰 · 烈风 · 小风弹 · 风灵仔-合击"
+    },
+    {
+      "id": 500127,
+      "name": "风灵偶",
+      "icon": "tex_icon_pet_500127.png",
+      "fallbackIcon": "tex_icon_petskill_500128_02.png",
+      "summary": "风 · 成长期 · 侵扰 · 灵偶烈风 · 小风弹 · 风灵偶-合击"
+    },
+    {
+      "id": 500128,
+      "name": "岚灵偶",
+      "icon": "tex_icon_pet_500128.png",
+      "fallbackIcon": "tex_icon_petskill_500128_02.png",
+      "summary": "风 · 成熟期 · 侵扰 · 激岚烈风 · 风刃扩张 · 岚灵偶-合击"
+    },
+    {
+      "id": 500129,
+      "name": "呼姆猴",
+      "icon": "tex_icon_pet_500129.png",
+      "fallbackIcon": "tex_icon_petskill_500131_01.png",
+      "summary": "雷 · 幼年期 · 独猎 · 稚猴抓 · 雷球 · 呼姆猴-合击"
+    },
+    {
+      "id": 500130,
+      "name": "环尾猴",
+      "icon": "tex_icon_pet_500130.png",
+      "fallbackIcon": "tex_icon_petskill_500131_01.png",
+      "summary": "雷 · 成长期 · 独猎 · 连抓带扫 · 落雷 · 环尾猴-合击"
+    },
+    {
+      "id": 500131,
+      "name": "环影猴",
+      "icon": "tex_icon_pet_500131.png",
+      "fallbackIcon": "tex_icon_petskill_500131_01.png",
+      "summary": "雷 · 成熟期 · 独猎 · 环影连击 · 落雷 · 环影猴-合击"
+    },
+    {
+      "id": 500132,
+      "name": "嘟噜",
+      "icon": "tex_icon_pet_500132.png",
+      "fallbackIcon": "tex_icon_petskill_500132_02.png",
+      "summary": "地 · 成熟期 · 侵扰 · 一地嘟噜毛 · 岩石滚撞 · 嘟噜-合击"
+    },
+    {
+      "id": 500133,
+      "name": "加多利",
+      "icon": "tex_icon_pet_500133.png",
+      "fallbackIcon": "tex_icon_petskill_500134_02.png",
+      "summary": "地 · 幼年期 · 防护 · 援护之助 · 岩锥 · 加多利-合击"
+    },
+    {
+      "id": 500134,
+      "name": "加杜",
+      "icon": "tex_icon_pet_500134.png",
+      "fallbackIcon": "tex_icon_petskill_500134_02.png",
+      "summary": "地 · 成熟期 · 防护 · 援护之域 · 裂地岩突 · 加杜-合击"
+    },
+    {
+      "id": 500138,
+      "name": "红宝虫",
+      "icon": "tex_icon_pet_500138.png",
+      "fallbackIcon": "tex_icon_petskill_500140_01.png",
+      "summary": "火、地 · 幼年期 · 侵扰 · 宝石飞射 · 火球 · 红宝虫-合击"
+    },
+    {
+      "id": 500139,
+      "name": "赤晶甲",
+      "icon": "tex_icon_pet_500139.png",
+      "fallbackIcon": "tex_icon_petskill_500140_01.png",
+      "summary": "火、地 · 成长期 · 侵扰 · 赤晶飞射 · 巨石投掷 · 赤晶甲-合击"
+    },
+    {
+      "id": 500140,
+      "name": "炎晶甲",
+      "icon": "tex_icon_pet_500140.png",
+      "fallbackIcon": "tex_icon_petskill_500140_01.png",
+      "summary": "火、地 · 成熟期 · 侵扰 · 炎晶爆袭 · 巨石投掷 · 炎晶甲-合击"
+    },
+    {
+      "id": 500147,
+      "name": "木灵仔",
+      "icon": "tex_icon_pet_500147.png",
+      "fallbackIcon": "tex_icon_petskill_500149_01.png",
+      "summary": "木 · 幼年期 · 侵扰 · 枝蔓 · 种子飞弹 · 木灵仔-合击"
+    },
+    {
+      "id": 500148,
+      "name": "木灵偶",
+      "icon": "tex_icon_pet_500148.png",
+      "fallbackIcon": "tex_icon_petskill_500149_01.png",
+      "summary": "木 · 成长期 · 侵扰 · 突袭枝蔓 · 花绽飞弹 · 木灵偶-合击"
+    },
+    {
+      "id": 500149,
+      "name": "蔓灵偶",
+      "icon": "tex_icon_pet_500149.png",
+      "fallbackIcon": "tex_icon_petskill_500149_01.png",
+      "summary": "木 · 成熟期 · 侵扰 · 繁生枝蔓 · 地蔓突击 · 蔓灵偶-合击"
+    },
+    {
+      "id": 500156,
+      "name": "火花雀",
+      "icon": "tex_icon_pet_500156.png",
+      "fallbackIcon": "tex_icon_petskill_500158_02.png",
+      "summary": "火 · 幼年期 · 猛袭 · 火花旋风 · 火球 · 火花雀-合击"
+    },
+    {
+      "id": 500157,
+      "name": "焰火雀",
+      "icon": "tex_icon_pet_500157.png",
+      "fallbackIcon": "tex_icon_petskill_500158_02.png",
+      "summary": "火 · 成长期 · 猛袭 · 焰火旋风 · 焰弹连发 · 焰火雀-合击"
+    },
+    {
+      "id": 500158,
+      "name": "火烈鹰",
+      "icon": "tex_icon_pet_500158.png",
+      "fallbackIcon": "tex_icon_petskill_500158_02.png",
+      "summary": "火 · 成熟期 · 猛袭 · 烈火龙卷 · 焰弹连发 · 火烈鹰-合击"
+    },
+    {
+      "id": 500164,
+      "name": "雷灵苞",
+      "icon": "tex_icon_pet_500164.png",
+      "fallbackIcon": "tex_icon_petskill_500166_01.png",
+      "summary": "雷 · 幼年期 · 侵扰 · 雷灵旋律 · 电能子弹 · 雷灵苞-合击"
+    },
+    {
+      "id": 500165,
+      "name": "雷灵朵",
+      "icon": "tex_icon_pet_500165.png",
+      "fallbackIcon": "tex_icon_petskill_500166_01.png",
+      "summary": "雷 · 成长期 · 侵扰 · 雷鸣协奏 · 连锁雷暴 · 雷灵朵-合击"
+    },
+    {
+      "id": 500166,
+      "name": "电音花",
+      "icon": "tex_icon_pet_500166.png",
+      "fallbackIcon": "tex_icon_petskill_500166_01.png",
+      "summary": "雷 · 成熟期 · 侵扰 · 雷音乐章 · 雷电惩戒 · 电音花-合击"
+    },
+    {
+      "id": 500173,
+      "name": "雷灵仔",
+      "icon": "tex_icon_pet_500173.png",
+      "fallbackIcon": "tex_icon_petskill_500175_01.png",
+      "summary": "雷 · 幼年期 · 独猎 · 雷环 · 电能子弹 · 雷灵仔-合击"
+    },
+    {
+      "id": 500174,
+      "name": "雷灵偶",
+      "icon": "tex_icon_pet_500174.png",
+      "fallbackIcon": "tex_icon_petskill_500175_01.png",
+      "summary": "雷 · 成长期 · 独猎 · 灵偶雷环 · 连锁雷暴 · 雷灵偶-合击"
+    },
+    {
+      "id": 500175,
+      "name": "电灵偶",
+      "icon": "tex_icon_pet_500175.png",
+      "fallbackIcon": "tex_icon_petskill_500175_01.png",
+      "summary": "雷 · 成熟期 · 独猎 · 惊骇雷环 · 镭射 · 电灵偶-合击"
+    },
+    {
+      "id": 500179,
+      "name": "竖耳蝠",
+      "icon": "tex_icon_pet_500179.png",
+      "fallbackIcon": "tex_icon_petskill_500181_01.png",
+      "summary": "暗 · 幼年期 · 变换 · 音波 · 暗魂影 · 竖耳蝠-合击"
+    },
+    {
+      "id": 500180,
+      "name": "嘻哈蝠",
+      "icon": "tex_icon_pet_500180.png",
+      "fallbackIcon": "tex_icon_petskill_500181_01.png",
+      "summary": "暗 · 成长期 · 变换 · 喧哗音波 · 暗魂影爆阵 · 嘻哈蝠-合击"
+    },
+    {
+      "id": 500181,
+      "name": "笑面蝠",
+      "icon": "tex_icon_pet_500181.png",
+      "fallbackIcon": "tex_icon_petskill_500181_01.png",
+      "summary": "暗 · 成熟期 · 变换 · 汹涌音波 · 暗魂影爆阵 · 笑面蝠-合击"
+    },
+    {
+      "id": 500185,
+      "name": "森彩灵蝶",
+      "icon": "tex_icon_pet_500185.png",
+      "fallbackIcon": "tex_icon_petskill_500185_02.png",
+      "summary": "风、光 · 超限体 · 侵扰 · 幻惑之风 · 旋风涡流 · 森彩灵蝶-合击"
+    },
+    {
+      "id": 500186,
+      "name": "布鲁达",
+      "icon": "tex_icon_pet_500186.png",
+      "fallbackIcon": "tex_icon_petskill_500186_02.png",
+      "summary": "水 · 幼年期 · 协同 · 激浪旋冲 · 水弹 · 布鲁达-合击"
+    },
+    {
+      "id": 500187,
+      "name": "蓝羽西格尼",
+      "icon": "tex_icon_pet_500187.png",
+      "fallbackIcon": "tex_icon_petskill_500186_02.png",
+      "summary": "水 · 成熟期 · 协同 · 羽舞旋击 · 泡泡攻击 · 蓝羽西格尼-合击"
+    },
+    {
+      "id": 500206,
+      "name": "驮驮龙",
+      "icon": "tex_icon_pet_500206.png",
+      "fallbackIcon": "tex_icon_petskill_500206_01.png",
+      "summary": "光 · 成长期 · 侵扰 · 震地回响 · 辉光熠熠 · 驮驮龙-合击"
+    },
+    {
+      "id": 500209,
+      "name": "森境鹿",
+      "icon": "tex_icon_pet_500209.png",
+      "fallbackIcon": "tex_icon_petskill_500209_01.png",
+      "summary": "木 · 成熟期 · 侵扰 · 森境束缚 · 飘叶散射 · 森境鹿-合击"
+    },
+    {
+      "id": 500213,
+      "name": "菇噜噜",
+      "icon": "tex_icon_pet_500213.png",
+      "fallbackIcon": "tex_icon_petskill_500213_01.png",
+      "summary": "暗 · 成熟期 · 变换 · 菇噜噜噜 · 暗魂影 · 菇噜噜-合击"
+    },
+    {
+      "id": 500216,
+      "name": "烈豹",
+      "icon": "tex_icon_pet_500216.png",
+      "fallbackIcon": "tex_icon_petskill_500216_01.png",
+      "summary": "火 · 成熟期 · 变换 · 爆破爪 · 烈焰斩 · 烈豹-合击"
+    },
+    {
+      "id": 500220,
+      "name": "星云伊欧",
+      "icon": "tex_icon_pet_500220.png",
+      "fallbackIcon": "tex_icon_petskill_500220_01.png",
+      "summary": "暗、雷 · 成熟期 · 猛袭 · 星云连射 · 暗影连袭 · 星云伊欧-合击"
+    },
+    {
+      "id": 500231,
+      "name": "铁鬃霸主",
+      "icon": "tex_icon_pet_500231.png",
+      "fallbackIcon": "tex_icon_petskill_500025_01.png",
+      "summary": "雷、地 · 超限体 · 侵扰 · 霸主奔袭 · 落雷 · 铁鬃霸主-合击"
+    },
+    {
+      "id": 500244,
+      "name": "焰哞哞",
+      "icon": "tex_icon_pet_500244.png",
+      "fallbackIcon": "tex_icon_petskill_500246_01.png",
+      "summary": "火 · 幼年期 · 独猎 · 哞哞拳 · 火球 · 焰哞哞-合击"
+    },
+    {
+      "id": 500245,
+      "name": "焰牛牛",
+      "icon": "tex_icon_pet_500245.png",
+      "fallbackIcon": "tex_icon_petskill_500246_01.png",
+      "summary": "火 · 成长期 · 独猎 · 焰牛冲拳 · 火焰冲撞 · 焰牛牛-合击"
+    },
+    {
+      "id": 500246,
+      "name": "烈焰角牛",
+      "icon": "tex_icon_pet_500246.png",
+      "fallbackIcon": "tex_icon_petskill_500246_01.png",
+      "summary": "火 · 成熟期 · 独猎 · 烈焰冲拳 · 火焰冲撞 · 烈焰角牛-合击"
+    },
+    {
+      "id": 500258,
+      "name": "小芽狐",
+      "icon": "tex_icon_pet_500258.png",
+      "fallbackIcon": "tex_icon_petskill_500260_01.png",
+      "summary": "木 · 幼年期 · 侵扰 · 芽之息 · 灵木弹 · 小芽狐-合击"
+    },
+    {
+      "id": 500259,
+      "name": "蓬尾狐",
+      "icon": "tex_icon_pet_500259.png",
+      "fallbackIcon": "tex_icon_petskill_500260_01.png",
+      "summary": "木 · 成长期 · 侵扰 · 蓬尾之息 · 飘叶散射 · 蓬尾狐-合击"
+    },
+    {
+      "id": 500260,
+      "name": "萝冠灵狐",
+      "icon": "tex_icon_pet_500260.png",
+      "fallbackIcon": "tex_icon_petskill_500260_01.png",
+      "summary": "木 · 成熟期 · 侵扰 · 萝冠之息 · 飘叶散射 · 萝冠灵狐-合击"
+    },
+    {
+      "id": 500261,
+      "name": "河狸仔",
+      "icon": "tex_icon_pet_500261.png",
+      "fallbackIcon": "tex_icon_petskill_500263_02.png",
+      "summary": "水 · 幼年期 · 侵扰 · 狸仔击 · 水弹 · 河狸仔-合击"
+    },
+    {
+      "id": 500262,
+      "name": "波河狸",
+      "icon": "tex_icon_pet_500262.png",
+      "fallbackIcon": "tex_icon_petskill_500263_02.png",
+      "summary": "水 · 成长期 · 侵扰 · 波波狸击 · 水弹 · 波河狸-合击"
+    },
+    {
+      "id": 500263,
+      "name": "河狸大师",
+      "icon": "tex_icon_pet_500263.png",
+      "fallbackIcon": "tex_icon_petskill_500263_02.png",
+      "summary": "水 · 成熟期 · 侵扰 · 大师狸击 · 浪袭 · 河狸大师-合击"
+    },
+    {
+      "id": 500296,
+      "name": "帕莫拉",
+      "icon": "tex_icon_pet_500296.png",
+      "fallbackIcon": "tex_icon_petskill_500296_01.png",
+      "summary": "雷、风 · 成熟期 · 猛袭 · 雷霆穿梭 · 凛风斩 · 帕莫拉-合击"
+    },
+    {
+      "id": 500304,
+      "name": "库库",
+      "icon": "tex_icon_pet_500304.png",
+      "fallbackIcon": "tex_icon_petskill_500306_02.png",
+      "summary": "风、水 · 幼年期 · 侵扰 · 风旋 · 小风弹 · 库库-合击"
+    },
+    {
+      "id": 500305,
+      "name": "库库尔",
+      "icon": "tex_icon_pet_500305.png",
+      "fallbackIcon": "tex_icon_petskill_500306_02.png",
+      "summary": "风、水 · 成长期 · 侵扰 · 大风旋 · 旋风回旋镖 · 库库尔-合击"
+    },
+    {
+      "id": 500306,
+      "name": "库库尔克",
+      "icon": "tex_icon_pet_500306.png",
+      "fallbackIcon": "tex_icon_petskill_500306_02.png",
+      "summary": "风、水 · 成熟期 · 侵扰 · 与风共舞 · 风龙卷 · 库库尔克-合击"
+    },
+    {
+      "id": 500313,
+      "name": "绒心布里尼",
+      "icon": "tex_icon_pet_500313.png",
+      "fallbackIcon": "tex_icon_petskill_500313_01.png",
+      "summary": "光、火 · 成熟期 · 侵扰 · 绒心炸弹 · 分裂之焰 · 绒心布里尼-合击"
+    },
+    {
+      "id": 500322,
+      "name": "赛可洛",
+      "icon": "tex_icon_pet_500322.png",
+      "fallbackIcon": "tex_icon_petskill_500323_02.png",
+      "summary": "风 · 幼年期 · 侵扰 · 卷风呼啸 · 风刃 · 赛可洛-合击"
+    },
+    {
+      "id": 500323,
+      "name": "托纳缇欧",
+      "icon": "tex_icon_pet_500323.png",
+      "fallbackIcon": "tex_icon_petskill_500323_02.png",
+      "summary": "风 · 成熟期 · 侵扰 · 龙卷风暴 · 召风凝场 · 托纳缇欧-合击"
+    },
+    {
+      "id": 500324,
+      "name": "伊欧利安",
+      "icon": "tex_icon_pet_500324.png",
+      "fallbackIcon": "tex_icon_petskill_500323_02.png",
+      "summary": "风 · 超限体 · 侵扰 · 暴风旋引 · 风龙卷 · 伊欧利安-合击"
+    },
+    {
+      "id": 500354,
+      "name": "小暮鸮",
+      "icon": "tex_icon_pet_500354.png",
+      "fallbackIcon": "tex_icon_petskill_500355_01.png",
+      "summary": "暗 · 幼年期 · 侵扰 · 下压 · 暗魂影 · 小暮鸮-合击"
+    },
+    {
+      "id": 500355,
+      "name": "夜猫鸮",
+      "icon": "tex_icon_pet_500355.png",
+      "fallbackIcon": "tex_icon_petskill_500355_01.png",
+      "summary": "暗 · 成熟期 · 侵扰 · 暗影下压 · 暗魂影爆阵 · 夜猫鸮-合击"
+    },
+    {
+      "id": 500357,
+      "name": "啵啵丁",
+      "icon": "tex_icon_pet_500357.png",
+      "fallbackIcon": "tex_icon_petskill_500358_01.png",
+      "summary": "风、木 · 幼年期 · 缓冲 · 迅愈之风 · 小风弹 · 啵啵丁-合击"
+    },
+    {
+      "id": 500358,
+      "name": "绒绒云",
+      "icon": "tex_icon_pet_500358.png",
+      "fallbackIcon": "tex_icon_petskill_500358_01.png",
+      "summary": "风、木 · 成熟期 · 缓冲 · 复苏季风 · 森之守护 · 绒绒云-合击"
+    },
+    {
+      "id": 500360,
+      "name": "怯影之翼",
+      "icon": "tex_icon_pet_500360.png",
+      "fallbackIcon": "tex_icon_petskill_500360_01.png",
+      "summary": "暗、风 · 超限体 · 独猎 · 血噬暗影 · 暗魂影爆阵 · 怯影之翼-合击"
+    },
+    {
+      "id": 500368,
+      "name": "小音浮",
+      "icon": "tex_icon_pet_500368.png",
+      "fallbackIcon": "tex_icon_petskill_500370_01.png",
+      "summary": "风、雷 · 幼年期 · 侵扰 · 符之乐声 · 小风弹 · 小音浮-合击"
+    },
+    {
+      "id": 500369,
+      "name": "乐乐蛙",
+      "icon": "tex_icon_pet_500369.png",
+      "fallbackIcon": "tex_icon_petskill_500370_01.png",
+      "summary": "风、雷 · 成长期 · 侵扰 · 呱乐演奏 · 落雷 · 乐乐蛙-合击"
+    },
+    {
+      "id": 500370,
+      "name": "音霸蛙",
+      "icon": "tex_icon_pet_500370.png",
+      "fallbackIcon": "tex_icon_petskill_500370_01.png",
+      "summary": "风、雷 · 成熟期 · 侵扰 · 风暴音域 · 落雷 · 音霸蛙-合击"
+    },
+    {
+      "id": 500399,
+      "name": "浮云",
+      "icon": "tex_icon_pet_500399.png",
+      "fallbackIcon": "tex_icon_petskill_500399_01.png",
+      "summary": "水 · 成熟期 · 缓冲 · 绽源之云 · 泡泡攻击 · 浮云-合击"
+    },
+    {
+      "id": 500467,
+      "name": "小岩蹄",
+      "icon": "tex_icon_pet_500467.png",
+      "fallbackIcon": "tex_icon_petskill_500468_01.png",
+      "summary": "地 · 幼年期 · 侵扰 · 震踪踏击 · 岩锥 · 小岩蹄-合击"
+    },
+    {
+      "id": 500468,
+      "name": "重岩蹄",
+      "icon": "tex_icon_pet_500468.png",
+      "fallbackIcon": "tex_icon_petskill_500468_01.png",
+      "summary": "地 · 成熟期 · 侵扰 · 震袭连踏 · 裂地岩突 · 重岩蹄-合击"
+    },
+    {
+      "id": 500469,
+      "name": "跳跳稻草人",
+      "icon": "tex_icon_pet_500469.png",
+      "fallbackIcon": "tex_icon_petskill_500470_01.png",
+      "summary": "风、地 · 幼年期 · 猛袭 · 旋转镰刃 · 岩韧斩 · 跳跳稻草人-合击"
+    },
+    {
+      "id": 500470,
+      "name": "秋日守望者",
+      "icon": "tex_icon_pet_500470.png",
+      "fallbackIcon": "tex_icon_petskill_500470_01.png",
+      "summary": "风、地 · 成熟期 · 猛袭 · 镰舞风暴 · 岩韧斩 · 秋日守望者-合击"
+    }
+  ],
+  "soulessences": [
+    {
+      "id": 10001,
+      "name": "汁石就是力量",
+      "icons": {
+        "large": "tex_icon_soulessenceb_199003_001.png",
+        "small": "tex_icon_soulessences_199003_001.png"
+      },
+      "summary": "SR · 破坏 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10002,
+      "name": "家书",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107001_002.png",
+        "small": "tex_icon_soulessences_107001_002.png"
+      },
+      "summary": "SR · 爆发 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10008,
+      "name": "可以吃吗",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107003_008.png",
+        "small": "tex_icon_soulessences_107003_008.png"
+      },
+      "summary": "SR · 破坏 · 暴击率 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10011,
+      "name": "功夫是这样的！",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101007_011.png",
+        "small": "tex_icon_soulessences_101007_011.png"
+      },
+      "summary": "SR · 爆发 · 攻击 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 28.6%"
+    },
+    {
+      "id": 10018,
+      "name": "飞行试验",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108003_018.png",
+        "small": "tex_icon_soulessences_108003_018.png"
+      },
+      "summary": "SR · 增幅 · 调谐强度 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10032,
+      "name": "唤灵",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108002_032.png",
+        "small": "tex_icon_soulessences_108002_032.png"
+      },
+      "summary": "SSR · 赋予 · 治疗加成 · 基础生命 10249 · 基础攻击 1709 · 基础物理防御 352 · 基础魔法防御 352 · 治疗加成 47.2%"
+    },
+    {
+      "id": 10033,
+      "name": "咕嘟咕嘟",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108002_033.png",
+        "small": "tex_icon_soulessences_108002_033.png"
+      },
+      "summary": "SR · 赋予 · 治疗加成 · 基础生命 8360 · 基础攻击 1551 · 基础物理防御 352 · 基础魔法防御 352 · 治疗加成 39.4%"
+    },
+    {
+      "id": 10034,
+      "name": "五谷丰登",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_034.png",
+        "small": "tex_icon_soulessences_0_034.png"
+      },
+      "summary": "R · 攻击 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 22.8%"
+    },
+    {
+      "id": 10037,
+      "name": "厨房的秘密",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109001_037.png",
+        "small": "tex_icon_soulessences_109001_037.png"
+      },
+      "summary": "SSR · 猛攻 · 雷属性伤害增幅 · 基础生命 10249 · 基础攻击 1865 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10043,
+      "name": "宣告黎明之花",
+      "icons": {
+        "large": "tex_icon_soulessenceb_102001_043.png",
+        "small": "tex_icon_soulessences_102001_043.png"
+      },
+      "summary": "SR · 增幅 · 物理防御 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10044,
+      "name": "狩猎姿态",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108001_044.png",
+        "small": "tex_icon_soulessences_108001_044.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 28.6%"
+    },
+    {
+      "id": 10047,
+      "name": "传承",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_047.png",
+        "small": "tex_icon_soulessences_0_047.png"
+      },
+      "summary": "R · 魔法防御 · 基础生命 7415 · 基础攻击 1078 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10048,
+      "name": "璇枢",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_048.png",
+        "small": "tex_icon_soulessences_0_048.png"
+      },
+      "summary": "R · 生命 · 基础生命 8360 · 基础攻击 1236 · 基础物理防御 185 · 基础魔法防御 185 · 生命 22.8%"
+    },
+    {
+      "id": 10050,
+      "name": "魂引",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_050.png",
+        "small": "tex_icon_soulessences_0_050.png"
+      },
+      "summary": "R · 攻击 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 22.8%"
+    },
+    {
+      "id": 10052,
+      "name": "小小木雕",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_052.png",
+        "small": "tex_icon_soulessences_0_052.png"
+      },
+      "summary": "R · 物理防御 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240"
+    },
+    {
+      "id": 10055,
+      "name": "远古秘钥",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_055.png",
+        "small": "tex_icon_soulessences_0_055.png"
+      },
+      "summary": "R · 魔法防御 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240"
+    },
+    {
+      "id": 10056,
+      "name": "淳朴之音",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_056.png",
+        "small": "tex_icon_soulessences_0_056.png"
+      },
+      "summary": "R · 生命 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240 · 生命 22.8%"
+    },
+    {
+      "id": 10057,
+      "name": "命土",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_057.png",
+        "small": "tex_icon_soulessences_0_057.png"
+      },
+      "summary": "R · 攻击 · 基础生命 6471 · 基础攻击 1393 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 22.8%"
+    },
+    {
+      "id": 10058,
+      "name": "往事",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_058.png",
+        "small": "tex_icon_soulessences_0_058.png"
+      },
+      "summary": "R · 物理防御 · 基础生命 7415 · 基础攻击 1078 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10059,
+      "name": "禁呪",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_059.png",
+        "small": "tex_icon_soulessences_0_059.png"
+      },
+      "summary": "R · 魔法防御 · 基础生命 7415 · 基础攻击 1078 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10060,
+      "name": "宵祝",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_060.png",
+        "small": "tex_icon_soulessences_0_060.png"
+      },
+      "summary": "R · 生命 · 基础生命 8360 · 基础攻击 1078 · 基础物理防御 240 · 基础魔法防御 240 · 生命 22.8%"
+    },
+    {
+      "id": 10061,
+      "name": "残局",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_061.png",
+        "small": "tex_icon_soulessences_0_061.png"
+      },
+      "summary": "R · 攻击 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 22.8%"
+    },
+    {
+      "id": 10062,
+      "name": "分道扬镳",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_062.png",
+        "small": "tex_icon_soulessences_0_062.png"
+      },
+      "summary": "R · 物理防御 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240"
+    },
+    {
+      "id": 10063,
+      "name": "屋嘟娃娃",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_063.png",
+        "small": "tex_icon_soulessences_0_063.png"
+      },
+      "summary": "R · 魔法防御 · 基础生命 7415 · 基础攻击 1236 · 基础物理防御 240 · 基础魔法防御 240"
+    },
+    {
+      "id": 10071,
+      "name": "羽夜的思念",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109002_071.png",
+        "small": "tex_icon_soulessences_109002_071.png"
+      },
+      "summary": "SSR · 爆发 · 暴击率 · 基础生命 9305 · 基础攻击 1865 · 基础物理防御 352 · 基础魔法防御 352"
+    },
+    {
+      "id": 10076,
+      "name": "碧空之下",
+      "icons": {
+        "large": "tex_icon_soulessenceb_111001_076.png",
+        "small": "tex_icon_soulessences_111001_076.png"
+      },
+      "summary": "SSR · 破坏 · 风属性伤害增幅 · 基础生命 10249 · 基础攻击 1865 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10078,
+      "name": "星晚的追忆",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109001_078.png",
+        "small": "tex_icon_soulessences_109001_078.png"
+      },
+      "summary": "SR · 猛攻 · 调谐强度 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240"
+    },
+    {
+      "id": 10084,
+      "name": "风语之愿",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107001_084.png",
+        "small": "tex_icon_soulessences_107001_084.png"
+      },
+      "summary": "SR · 爆发 · 攻击 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10093,
+      "name": "无法思考",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101003_093.png",
+        "small": "tex_icon_soulessences_101003_093.png"
+      },
+      "summary": "SR · 增幅 · 调谐强度 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240"
+    },
+    {
+      "id": 10094,
+      "name": "陪伴",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109002_094.png",
+        "small": "tex_icon_soulessences_109002_094.png"
+      },
+      "summary": "SR · 爆发 · 暴击率 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10095,
+      "name": "甜点时光",
+      "icons": {
+        "large": "tex_icon_soulessenceb_102001_095.png",
+        "small": "tex_icon_soulessences_102001_095.png"
+      },
+      "summary": "SR · 增幅 · 攻击 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10097,
+      "name": "玫瑰色午后",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109001_097.png",
+        "small": "tex_icon_soulessences_109001_097.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10098,
+      "name": "此身为枪",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109002_098.png",
+        "small": "tex_icon_soulessences_109002_098.png"
+      },
+      "summary": "SR · 爆发 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10101,
+      "name": "归来",
+      "icons": {
+        "large": "tex_icon_soulessenceb_111001_101.png",
+        "small": "tex_icon_soulessences_111001_101.png"
+      },
+      "summary": "SR · 破坏 · 攻击 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 28.6%"
+    },
+    {
+      "id": 10107,
+      "name": "药草大丰收",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108002_107.png",
+        "small": "tex_icon_soulessences_108002_107.png"
+      },
+      "summary": "SR · 赋予 · 治疗加成 · 基础生命 10249 · 基础攻击 1551 · 基础物理防御 240 · 基础魔法防御 240 · 治疗加成 39.4%"
+    },
+    {
+      "id": 10121,
+      "name": "折纸寄情",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101010_121.png",
+        "small": "tex_icon_soulessences_101010_121.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240 · 攻击 28.6%"
+    },
+    {
+      "id": 10122,
+      "name": "花之舞",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101010_122.png",
+        "small": "tex_icon_soulessences_101010_122.png"
+      },
+      "summary": "SSR · 猛攻 · 风属性伤害增幅 · 基础生命 10249 · 基础攻击 1865 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10123,
+      "name": "桃芳春笺",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101010_123.png",
+        "small": "tex_icon_soulessences_101010_123.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10124,
+      "name": "夕阳下的约定",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108003_124.png",
+        "small": "tex_icon_soulessences_108003_124.png"
+      },
+      "summary": "SR · 增幅 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10125,
+      "name": "高手在此！",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101007_125.png",
+        "small": "tex_icon_soulessences_101007_125.png"
+      },
+      "summary": "SR · 爆发 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10130,
+      "name": "女仆的疗养日",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112001_130.png",
+        "small": "tex_icon_soulessences_112001_130.png"
+      },
+      "summary": "SR · 破坏 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10131,
+      "name": "节日佳肴",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112001_131.png",
+        "small": "tex_icon_soulessences_112001_131.png"
+      },
+      "summary": "SR · 破坏 · 暴击率 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10132,
+      "name": "暗中观察",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107002_132.png",
+        "small": "tex_icon_soulessences_107002_132.png"
+      },
+      "summary": "SR · 赋予 · 生命 · 基础生命 10249 · 基础攻击 1393 · 基础物理防御 296 · 基础魔法防御 296 · 生命 28.6%"
+    },
+    {
+      "id": 10133,
+      "name": "「森林女神」来访",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107002_133.png",
+        "small": "tex_icon_soulessences_107002_133.png"
+      },
+      "summary": "SR · 赋予 · 生命 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 生命 28.6%"
+    },
+    {
+      "id": 10136,
+      "name": "林间野餐",
+      "icons": {
+        "large": "tex_icon_soulessenceb_111001_136.png",
+        "small": "tex_icon_soulessences_111001_136.png"
+      },
+      "summary": "SR · 破坏 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10146,
+      "name": "新生",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107002_146.png",
+        "small": "tex_icon_soulessences_107002_146.png"
+      },
+      "summary": "SSR · 赋予 · 生命 · 基础生命 11194 · 基础攻击 1551 · 基础物理防御 352 · 基础魔法防御 352 · 生命 34.3%"
+    },
+    {
+      "id": 10147,
+      "name": "充能时间",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107003_147.png",
+        "small": "tex_icon_soulessences_107003_147.png"
+      },
+      "summary": "SSR · 破坏 · 暴击率 · 基础生命 10249 · 基础攻击 1865 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10149,
+      "name": "失控飞行",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101003_149.png",
+        "small": "tex_icon_soulessences_101003_149.png"
+      },
+      "summary": "SR · 增幅 · 调谐强度 · 基础生命 8360 · 基础攻击 1709 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10150,
+      "name": "狼少女的心意",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108001_150.png",
+        "small": "tex_icon_soulessences_108001_150.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10151,
+      "name": "非常规钓鱼",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107003_151.png",
+        "small": "tex_icon_soulessences_107003_151.png"
+      },
+      "summary": "SR · 破坏 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10152,
+      "name": "真正的宝藏",
+      "icons": {
+        "large": "tex_icon_soulessenceb_199003_152.png",
+        "small": "tex_icon_soulessences_199003_152.png"
+      },
+      "summary": "SR · 破坏 · 生命 · 基础生命 10249 · 基础攻击 1551 · 基础物理防御 240 · 基础魔法防御 240 · 生命 28.6%"
+    },
+    {
+      "id": 10154,
+      "name": "月下秘仪",
+      "icons": {
+        "large": "tex_icon_soulessenceb_103002_154.png",
+        "small": "tex_icon_soulessences_103002_154.png"
+      },
+      "summary": "SSR · 猛攻 · 攻击 · 基础生命 10249 · 基础攻击 1865 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 34.3%"
+    },
+    {
+      "id": 10155,
+      "name": "恶作剧前奏",
+      "icons": {
+        "large": "tex_icon_soulessenceb_103002_155.png",
+        "small": "tex_icon_soulessences_103002_155.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10156,
+      "name": "在勒布上空",
+      "icons": {
+        "large": "tex_icon_soulessenceb_103002_156.png",
+        "small": "tex_icon_soulessences_103002_156.png"
+      },
+      "summary": "SR · 猛攻 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10169,
+      "name": "软软棉花肉",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108005_169.png",
+        "small": "tex_icon_soulessences_108005_169.png"
+      },
+      "summary": "SR · 增幅 · 物理防御 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296"
+    },
+    {
+      "id": 10170,
+      "name": "攀高的幼崽",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108005_170.png",
+        "small": "tex_icon_soulessences_108005_170.png"
+      },
+      "summary": "SR · 增幅 · 物理防御 · 基础生命 9305 · 基础攻击 1236 · 基础物理防御 408 · 基础魔法防御 408"
+    },
+    {
+      "id": 10175,
+      "name": "一点都不痛",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112002_175.png",
+        "small": "tex_icon_soulessences_112002_175.png"
+      },
+      "summary": "SR · 赋予 · 治疗加成 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 治疗加成 39.4%"
+    },
+    {
+      "id": 10176,
+      "name": "温柔的照护",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112002_176.png",
+        "small": "tex_icon_soulessences_112002_176.png"
+      },
+      "summary": "SR · 赋予 · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10196,
+      "name": "热火朝天",
+      "icons": {
+        "large": "tex_icon_soulessenceb_1_196.png",
+        "small": "tex_icon_soulessences_1_196.png"
+      },
+      "summary": "SSR · 攻击 · 基础生命 10249 · 基础攻击 1865 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 34.3%"
+    },
+    {
+      "id": 10197,
+      "name": "安睡吧，宝贝",
+      "icons": {
+        "large": "tex_icon_soulessenceb_1_197.png",
+        "small": "tex_icon_soulessences_1_197.png"
+      },
+      "summary": "SR · 攻击 · 基础生命 9305 · 基础攻击 1551 · 基础物理防御 296 · 基础魔法防御 296 · 攻击 28.6%"
+    },
+    {
+      "id": 10198,
+      "name": "星之种",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_198.png",
+        "small": "tex_icon_soulessences_0_198.png"
+      },
+      "summary": "SR · 生命 · 基础生命 9305 · 基础攻击 1393 · 基础物理防御 352 · 基础魔法防御 352 · 生命 28.6%"
+    },
+    {
+      "id": 10216,
+      "name": "耕种之时",
+      "icons": {
+        "large": "tex_icon_soulessenceb_1_216.png",
+        "small": "tex_icon_soulessences_1_216.png"
+      },
+      "summary": "SR · 生命 · 基础生命 10249 · 基础攻击 1393 · 基础物理防御 296 · 基础魔法防御 296 · 生命 28.6%"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import {
   createWorkbenchSkillCoreProjection,
   createWorkbenchSkillDiagnosticsProjection,
 } from './lib/workbench-skill-runtime-projection.mjs';
+import { createWorkbenchLoadoutDetailProjection } from './lib/workbench-loadout-detail-projection.mjs';
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -885,6 +886,17 @@ const workbenchSeed = buildWorkbenchSeedData({
   characterAttributePanelByCharacterId,
 });
 const workbenchKiboActionCatalog = buildWorkbenchKiboActionCatalog(kibos);
+const workbenchLoadoutDetailCatalog = createWorkbenchLoadoutDetailProjection({
+  generatedAt,
+  sources: {
+    equipment: normalizePath(sourceFiles.equipment),
+    kibos: normalizePath(sourceFiles.kibos),
+    soulessences: normalizePath(sourceFiles.soulessences),
+  },
+  equipment,
+  kibos,
+  soulessences,
+});
 const workbenchSkillCore = createWorkbenchSkillCoreProjection({
   generatedAt,
   skillLogicIndex,
@@ -941,6 +953,10 @@ await Promise.all([
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
   writeJson('workbench-kibo-action-catalog.json', workbenchKiboActionCatalog),
+  writeJson(
+    'workbench-loadout-detail-catalog.json',
+    workbenchLoadoutDetailCatalog
+  ),
   writeJson('workbench-skill-core.json', workbenchSkillCore),
   writeJson('workbench-skill-diagnostics.json', workbenchSkillDiagnostics),
   writeJson('validation-report.json', validationReport),
@@ -1013,6 +1029,7 @@ function buildManifest(validationReport) {
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
       workbenchKiboActionCatalog: 'workbench-kibo-action-catalog.json',
+      workbenchLoadoutDetailCatalog: 'workbench-loadout-detail-catalog.json',
       workbenchSkillCore: 'workbench-skill-core.json',
       workbenchSkillDiagnostics: 'workbench-skill-diagnostics.json',
       validationReport: 'validation-report.json',

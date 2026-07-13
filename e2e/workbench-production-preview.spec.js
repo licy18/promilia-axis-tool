@@ -11,6 +11,41 @@ import {
 import { createSixResourceCaptureBatchFixture } from './helpers/six-resource-capture-fixture';
 
 const execFileAsync = promisify(execFile);
+const M2_LOADOUT_CONFIGS = [
+  {
+    kiboId: '500001',
+    soulessenceId: '10001',
+    equipment: {
+      weapon: '1010111',
+      top: '1020111',
+      bottom: '1030111',
+      earring: '1040111',
+      ring: '1050111',
+    },
+  },
+  {
+    kiboId: '500002',
+    soulessenceId: '10002',
+    equipment: {
+      weapon: '1010211',
+      top: '1020211',
+      bottom: '1030211',
+      earring: '1040211',
+      ring: '1050211',
+    },
+  },
+  {
+    kiboId: '500003',
+    soulessenceId: '10008',
+    equipment: {
+      weapon: '1010311',
+      top: '1020311',
+      bottom: '1030311',
+      earring: '1040311',
+      ring: '1050311',
+    },
+  },
+];
 
 test.beforeEach(async ({ page }, testInfo) => {
   if (testInfo.title.includes('[m1d-demo-milestone]')) {
@@ -795,6 +830,91 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m1c-library-runtime-narrow.png' });
+});
+
+test('[m2-team-configuration] configures and reloads source-backed loadouts from demo and empty scenarios', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorIds = [109001, 101003, 101007];
+  await configureM2Team(page, actorIds);
+  await page
+    .getByTestId('workbench-enemy-config-select')
+    .selectOption('300071');
+  await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
+  await expectLoadedImage(page.locator('.enemy-icon'));
+
+  await closeInspectorIfVisible(page);
+  const demoActionCount = await timeline
+    .getByTestId('workbench-timeline-action')
+    .count();
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-skill-entry').first(),
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="actor-${actorIds[2]}"]`
+    ),
+    { targetPosition: { x: 760, y: 24 } }
+  );
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    demoActionCount + 1
+  );
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expectM2Team(page, actorIds);
+  await page.screenshot({ path: 'reports/m2-team-configuration-desktop.png' });
+
+  await page.getByTestId('workbench-scenario-add').click();
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    0
+  );
+  await configureM2Team(page, actorIds);
+  await closeInspectorIfVisible(page);
+  await openActorInspector(page, actorIds[1]);
+  await closeInspectorIfVisible(page);
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-skill-entry').first(),
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="actor-${actorIds[1]}"]`
+    ),
+    { targetPosition: { x: 420, y: 24 } }
+  );
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    1
+  );
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expectM2Team(page, actorIds);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve')
+  ).toHaveCount(8);
+
+  await closeInspectorIfVisible(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({ path: 'reports/m2-team-configuration-narrow.png' });
 });
 
 test('[six-resource-capture-import] packages, imports, and replays six owner-specific resource captures', async ({
@@ -3730,6 +3850,80 @@ async function openActorInspector(page, characterId = 109001) {
     )
     .click();
   await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
+}
+
+async function configureM2Team(page, actorIds) {
+  for (const [index, characterId] of actorIds.entries()) {
+    await openActorInspector(page, characterId);
+    const config = M2_LOADOUT_CONFIGS[index];
+    const actorPanel = page.locator(
+      `[data-testid="workbench-actor-loadout"][data-character-id="${characterId}"]`
+    );
+    await actorPanel
+      .getByTestId('workbench-actor-kibo-select')
+      .selectOption(config.kiboId);
+    for (const [slotKey, equipmentId] of Object.entries(config.equipment)) {
+      await actorPanel
+        .locator(
+          `[data-testid="workbench-actor-equipment-select"][data-loadout-key="${slotKey}"]`
+        )
+        .selectOption(equipmentId);
+    }
+    await actorPanel
+      .getByTestId('workbench-actor-soulessence-select')
+      .selectOption(config.soulessenceId);
+    await expectM2ActorLoadout(actorPanel, config);
+  }
+}
+
+async function expectM2Team(page, actorIds) {
+  for (const [index, characterId] of actorIds.entries()) {
+    await openActorInspector(page, characterId);
+    const actorPanel = page.locator(
+      `[data-testid="workbench-actor-loadout"][data-character-id="${characterId}"]`
+    );
+    await expectM2ActorLoadout(actorPanel, M2_LOADOUT_CONFIGS[index]);
+  }
+}
+
+async function expectM2ActorLoadout(actorPanel, config) {
+  await expect(
+    actorPanel.getByTestId('workbench-actor-kibo-select')
+  ).toHaveValue(config.kiboId);
+  for (const [slotKey, equipmentId] of Object.entries(config.equipment)) {
+    await expect(
+      actorPanel.locator(
+        `[data-testid="workbench-actor-equipment-select"][data-loadout-key="${slotKey}"]`
+      )
+    ).toHaveValue(equipmentId);
+  }
+  await expect(
+    actorPanel.getByTestId('workbench-actor-soulessence-select')
+  ).toHaveValue(config.soulessenceId);
+  const detail = actorPanel.getByTestId('workbench-actor-loadout-detail');
+  await expect(detail).toBeVisible();
+  await expect(detail.locator('[data-loadout-detail-kind="kibo"]')).toHaveCount(
+    1
+  );
+  await expect(
+    detail.locator('[data-loadout-detail-kind="equipment"]')
+  ).toHaveCount(5);
+  await expect(
+    detail.locator('[data-loadout-detail-kind="soulessence"]')
+  ).toHaveCount(1);
+  await expectLoadedImage(actorPanel.locator('.actor-avatar'));
+  for (const image of await detail.locator('img').all()) {
+    await expectLoadedImage(image);
+  }
+}
+
+async function expectLoadedImage(image) {
+  await expect(image).toBeVisible();
+  await expect
+    .poll(() =>
+      image.evaluate(element => element.complete && element.naturalWidth > 0)
+    )
+    .toBe(true);
 }
 
 async function openActionInspector(page, actionId = 'action-0001') {

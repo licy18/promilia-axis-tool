@@ -236,6 +236,11 @@ describe('Workbench project replay consistency', () => {
       stateCurveCount: 8,
     });
     expect(
+      baseline.configurationSourceContract.actors.map(
+        source => source.resolvedConfig.loadout
+      )
+    ).toEqual(sourceState.actorConfigs.map(config => config.loadout));
+    expect(
       baseline.timelineTopology.actorGroups.map(group => [
         group.characterId,
         group.kiboEnergyCurve.kiboId,
@@ -383,6 +388,33 @@ function createReplaySourceState() {
   state.actorConfigs[1].initialSp = 0.6;
   state.actorConfigs[1].loadout.kiboId = 500002;
   state.actorConfigs[2].loadout.kiboId = 500003;
+  const equipmentByActor = [
+    {
+      weapon: 1010111,
+      top: 1020111,
+      bottom: 1030111,
+      earring: 1040111,
+      ring: 1050111,
+    },
+    {
+      weapon: 1010211,
+      top: 1020211,
+      bottom: 1030211,
+      earring: 1040211,
+      ring: 1050211,
+    },
+    {
+      weapon: 1010311,
+      top: 1020311,
+      bottom: 1030311,
+      earring: 1040311,
+      ring: 1050311,
+    },
+  ];
+  state.actorConfigs.forEach((config, index) => {
+    config.loadout.equipment = equipmentByActor[index];
+    config.loadout.soulessenceId = [10001, 10002, 10008][index];
+  });
   state.enemyConfig = {
     ...state.enemyConfig,
     level: 95,

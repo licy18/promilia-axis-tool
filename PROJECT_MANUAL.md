@@ -1532,6 +1532,12 @@ JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整
 
 下一阶段目标：P3 首份非 fixture 六资源受控采样验收。操作者启动获准客户端后，从生成计划执行同槽的一份角色 SP 与一份奇波就绪会话，完成 production audit、Workbench 导入和六轴定位，再扩展完整 3+3；不推断未知公式或倍率。
 
+### M2 三人队配置可用性收口（2026-07-14）
+
+Workbench 现在可在时间轴主流程中配置 3 个唯一角色、每人绑定的奇波、5 件装备、灵子与敌人，并展示本地 AzPr 数据源提供的真实名称、图标和静态属性摘要。培养详情由独立 JSON 目录按需加载，不进入首屏主包；装备、奇波、灵子效果、属性叠加和战斗公式继续保持 `unapplied`。默认示例和空方案都已实测“配置三人及培养项 -> 回到时间轴拖入动作 -> 保存并恢复”，动作库、轨道身份、3 条角色能量轴、3 条奇波能量轴和敌人双曲线保持一致，项目复制、本地草稿、JSON、分享链接和 PNG 回放恢复同一配置。
+
+阶段验收为 92 个测试文件、504 条测试和 41/41 项 production preview 全部通过，acceptance 为 `trial-ready`；生产引用、Workbench 数据、applied source 与 `git diff --check` 均通过。Workbench 主块为 334,380B gzip，总 JavaScript 为 739,967B gzip，低于 370,000B/740,000B 硬门槛但仅余 33B；桌面与窄屏验收图分别为 `reports/m2-team-configuration-desktop.png`（1440x900）和 `reports/m2-team-configuration-narrow.png`（390x900）。M2 至此停止，等待用户验收；P3 非 fixture 真实采样继续暂停。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

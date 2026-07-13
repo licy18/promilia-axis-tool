@@ -14,6 +14,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-9b-runtime-step-curves',
   'm1a-timeline-identity',
   'm1b-team-kibo-energy',
+  'm2-team-configuration',
   'm1c-library-to-runtime',
   'six-resource-capture-import',
   'm1d-demo-milestone',

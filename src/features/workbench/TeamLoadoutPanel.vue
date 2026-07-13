@@ -57,7 +57,7 @@
       </div>
       <div data-config-status="project-config-only">
         <span>项目记录</span>
-        <strong>奇波 / 装备 / 魂灵（待接公式）</strong>
+        <strong>奇波 / 装备 / 灵子（待接公式）</strong>
       </div>
     </div>
 
@@ -72,6 +72,11 @@
       :open="isActorFocused(actor, index)"
     >
       <summary>
+        <img
+          class="actor-avatar"
+          :src="characterIconUrl(actor.characterId)"
+          alt=""
+        />
         <span>{{ actor.name }}</span>
         <small>槽位 {{ index + 1 }} · Lv.{{ actor.level }}</small>
       </summary>
@@ -138,7 +143,7 @@
         </label>
 
         <label>
-          <span>魂灵</span>
+          <span>灵子</span>
           <select
             :data-character-id="actor.characterId"
             data-loadout-key="soulessenceId"
@@ -159,12 +164,71 @@
           </select>
         </label>
       </div>
+
+      <div
+        v-if="hasSelectedLoadout(actor)"
+        class="loadout-detail"
+        data-testid="workbench-actor-loadout-detail"
+      >
+        <div class="loadout-detail-heading">
+          <strong>已选培养资料</strong>
+        </div>
+        <template v-if="loadoutDetailCatalog">
+          <div
+            v-if="selectedKibo(actor)"
+            class="loadout-source-row"
+            data-loadout-detail-kind="kibo"
+          >
+            <img
+              class="loadout-icon"
+              :src="loadoutIconUrl(selectedKibo(actor).icon)"
+              alt=""
+              @error="handleKiboIconError($event, selectedKibo(actor))"
+            />
+            <span>奇波</span>
+            <strong>{{ selectedKibo(actor).name }}</strong>
+            <small>{{ selectedKibo(actor).summary }}</small>
+          </div>
+
+          <div
+            v-for="entry in selectedEquipment(actor)"
+            :key="entry.slotKey"
+            class="loadout-source-row"
+            data-loadout-detail-kind="equipment"
+          >
+            <img
+              class="loadout-icon"
+              :src="loadoutIconUrl(entry.item.icon)"
+              alt=""
+            />
+            <span>{{ entry.slotLabel }}</span>
+            <strong>{{ entry.item.name }}</strong>
+            <small>{{ entry.item.summary }}</small>
+          </div>
+
+          <div
+            v-if="selectedSoulessence(actor)"
+            class="loadout-source-row"
+            data-loadout-detail-kind="soulessence"
+          >
+            <img
+              class="loadout-icon"
+              :src="loadoutIconUrl(selectedSoulessence(actor).icons?.small)"
+              alt=""
+            />
+            <span>灵子</span>
+            <strong>{{ selectedSoulessence(actor).name }}</strong>
+            <small>{{ selectedSoulessence(actor).summary }}</small>
+          </div>
+        </template>
+      </div>
     </details>
   </section>
 </template>
 
 <script setup>
 import { User } from '@element-plus/icons-vue';
+import { ref } from 'vue';
 
 const props = defineProps({
   actors: {
@@ -213,6 +277,18 @@ const equipmentSlots = Object.freeze([
   { key: 'earring', label: '耳环' },
   { key: 'ring', label: '戒指' },
 ]);
+const loadoutDetailCatalog = ref(null);
+fetch(
+  new URL(
+    '../../data/generated/workbench-loadout-detail-catalog.json',
+    import.meta.url
+  )
+)
+  .then(response => response.json())
+  .then(catalog => {
+    loadoutDetailCatalog.value = catalog;
+  })
+  .catch(() => {});
 
 function isActorFocused(actor, index) {
   if (props.focusedCharacterId == null) return index === 0;
@@ -297,6 +373,55 @@ function formatEquipmentOption(item) {
 function formatSoulessenceOption(item) {
   return [item.rarity, item.name].filter(Boolean).join(' · ');
 }
+
+function hasSelectedLoadout(actor) {
+  const loadout = actor.loadout ?? {};
+  return Boolean(
+    loadout.kiboId ||
+    loadout.soulessenceId ||
+    Object.values(loadout.equipment ?? {}).some(Boolean)
+  );
+}
+
+function selectedKibo(actor) {
+  return loadoutDetailCatalog.value?.kibos?.find(
+    item => Number(item.id) === Number(actor.loadout?.kiboId)
+  );
+}
+
+function selectedEquipment(actor) {
+  return equipmentSlots.flatMap(slot => {
+    const item = loadoutDetailCatalog.value?.equipment?.find(
+      candidate =>
+        Number(candidate.id) === Number(actor.loadout?.equipment?.[slot.key])
+    );
+    return item ? [{ slotKey: slot.key, slotLabel: slot.label, item }] : [];
+  });
+}
+
+function selectedSoulessence(actor) {
+  return loadoutDetailCatalog.value?.soulessences?.find(
+    item => Number(item.id) === Number(actor.loadout?.soulessenceId)
+  );
+}
+
+function characterIconUrl(characterId) {
+  return `/assets/characters/${Number(characterId)}.png`;
+}
+
+function loadoutIconUrl(icon) {
+  return icon ? `/assets/loadout/${icon}` : '';
+}
+
+function handleKiboIconError(event, kibo) {
+  const fallbackIcon = kibo?.fallbackIcon;
+  if (!fallbackIcon || event.currentTarget.dataset.fallbackApplied === 'true') {
+    event.currentTarget.hidden = true;
+    return;
+  }
+  event.currentTarget.dataset.fallbackApplied = 'true';
+  event.currentTarget.src = `/assets/actions/${fallbackIcon}`;
+}
 </script>
 
 <style scoped>
@@ -380,9 +505,9 @@ h2 {
   box-shadow: inset 3px 0 #79c7b9;
 }
 
-summary {
+.actor-loadout > summary {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
@@ -390,7 +515,7 @@ summary {
   list-style-position: inside;
 }
 
-summary span {
+.actor-loadout > summary span {
   min-width: 0;
   overflow: hidden;
   color: #ffffff;
@@ -400,7 +525,7 @@ summary span {
   white-space: nowrap;
 }
 
-summary small {
+.actor-loadout > summary small {
   color: #8dd8c9;
   font-size: 11px;
   white-space: nowrap;
@@ -411,6 +536,60 @@ summary small {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   padding: 0 14px 14px;
+}
+
+.loadout-detail {
+  display: grid;
+  gap: 0;
+  margin: 0 14px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.loadout-detail-heading,
+.loadout-source-row {
+  display: grid;
+  grid-template-columns: 30px 48px minmax(0, 1fr);
+  gap: 3px 8px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.loadout-detail-heading {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.loadout-detail-heading strong,
+.loadout-source-row strong {
+  min-width: 0;
+  color: #e8efed;
+  font-size: 12px;
+}
+
+.loadout-source-row small,
+.loadout-source-row > span {
+  color: #8f9aa3;
+  font-size: 10px;
+}
+
+.loadout-source-row > small {
+  grid-column: 3;
+  overflow-wrap: anywhere;
+}
+
+.actor-avatar,
+.loadout-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.actor-avatar {
+  border-radius: 4px;
+  background: #11161b;
+}
+
+.loadout-icon {
+  grid-row: 1 / span 2;
 }
 
 label {

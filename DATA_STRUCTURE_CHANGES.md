@@ -27474,3 +27474,9 @@ six-resource-runtime-capture-plan v1
 已有文件只有在单会话解析、production provenance、`captureKind` 以及 `binding.actionId / actorId / targetId / slotId / kiboId / sourceElementConfigId` 全部匹配时才标记为完成。六份完成后，计划 CLI 调用既有 normalizer v2 与 `--require-production` 生成批次；任一 owner drift 或来源缺口都会阻断，不覆盖原采样文件。
 
 `--from-project` 接受当前支持的 Workbench project/draft v1-v16，从 `teamSlots`、`actorConfigs[].loadout.kiboId`、`selection.enemyId` 和 `actionDrafts` 生成同一计划格式。角色会话优先使用 skill，只有没有 skill 时才使用 resource；奇波会话只使用同角色且 `kiboId` 兼容的 `kiboEvent`。候选不是唯一时必须通过 `--role-action / --kibo-action team-slot-N=ACTION_ID` 显式选择，不能按数组顺序静默绑定。该桥接只复制项目身份，不读取模拟结果或改变项目 schema。
+
+## 432. Workbench loadout detail catalog v1
+
+新增独立生成文件 `workbench-loadout-detail-catalog.json`，`kind = workbench-loadout-detail-catalog`、`schemaVersion = 1`。它按设备、奇波和灵子 ID 提供真实名称、静态图标文件名及数据源可直接支持的展示摘要，并固定声明 `loadoutEffectsAppliedToCalculators = false`、`displayValuesAreSourceRecords = true`。Workbench 通过独立静态资源按需读取该目录；它不并入 `workbench-seed.json`，不改变 calculator、runtime 或六条能量轴合同。
+
+项目敌人实例可选新增 `enemy.icon`，值直接来自既有敌人目录，用于配置面板显示真实身份图。旧项目缺少该字段时继续兼容，重新按敌人 ID 构建项目即可恢复；Workbench project/draft schemaVersion 不升级。角色、奇波、五件装备与灵子仍使用既有 `teamSlots` 和 `actorConfigs[].loadout` 持久化字段，因此本地草稿、JSON、分享链接和 PNG 无需迁移即可恢复 M2 配置。

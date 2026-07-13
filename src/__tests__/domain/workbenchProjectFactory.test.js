@@ -39,6 +39,11 @@ describe('workbench project actor configuration', () => {
     const result = simulateScenario(scenario);
 
     expect(project.name).toContain('空方案');
+    expect(project.enemy.icon).toBe(
+      getWorkbenchGameData().enemies.find(
+        enemy => enemy.id === DEFAULT_WORKBENCH_SELECTION.enemyId
+      )?.icon
+    );
     expect(project.actions).toEqual([]);
     expect(validation.valid).toBe(true);
     expect(result.scenario.actionCount).toBe(0);

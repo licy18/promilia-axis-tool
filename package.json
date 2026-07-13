@@ -21,6 +21,7 @@
     "benchmark:long-axis:comparison": "playwright test e2e/workbench-long-axis-comparison.spec.js -g @workbench-comparison-long-axis",
     "data:generate": "node scripts/generate-azpr-data.mjs",
     "data:sync-action-icons": "node scripts/sync-workbench-action-icons.mjs",
+    "data:sync-loadout-icons": "node scripts/sync-workbench-loadout-icons.mjs",
     "data:generate-runtime-capture-manifest": "node scripts/generate-runtime-capture-hook-manifest.mjs",
     "runtime-capture:capture": "python scripts/capture-azpr-runtime.py",
     "runtime-capture:plan": "node scripts/prepare-runtime-capture-plan.mjs",

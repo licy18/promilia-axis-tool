@@ -185,6 +185,7 @@ export function createEnemyFromData(enemy, options = {}) {
     id: options.enemyInstanceId ?? `enemy-${enemy.id}`,
     enemyId: enemy.id,
     name: enemy.name,
+    icon: enemy.icon ?? null,
     level: options.level ?? 80,
     elementIds: enemy.elementIds ?? [],
     propertyId: enemy.property?.id ?? null,
