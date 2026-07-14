@@ -330,6 +330,9 @@ function createSkillCooldownEvaluation(actions) {
       endMs: readyAtMs,
       durationMs: cooldown.cooldownMs,
       source: cooldown.source,
+      sourceIdentity: cooldown.sourceIdentity,
+      confidence: cooldown.confidence,
+      trackingStatus: 'applied-to-readiness',
       appliedToSimulationResults: false,
     };
     cooldownWindows.push(window);
@@ -397,6 +400,9 @@ function createCooldownReadinessSnapshot({
     chargesAfter,
     windowId,
     source: cooldown.source,
+    sourceIdentity: cooldown.sourceIdentity,
+    confidence: cooldown.confidence,
+    trackingStatus: 'applied-to-readiness',
     appliedToSimulationResults: false,
   };
 }
@@ -465,6 +471,34 @@ function createSkillSpPreconditionDiagnostics(actions, actors) {
 }
 
 function createSkillCooldownRequirement(action) {
+  const generatedCooldown = action.statusGeneration?.cooldown;
+  const generatedDurationMs = Number(generatedCooldown?.durationMs);
+  if (
+    generatedCooldown?.status === 'confirmed-cooldown' &&
+    Number.isFinite(generatedDurationMs) &&
+    generatedDurationMs > 0
+  ) {
+    const cooldownCount = Math.max(
+      1,
+      Math.trunc(Number(generatedCooldown.chargeCount) || 1)
+    );
+    return {
+      cooldownMs: generatedDurationMs,
+      cooldownCount,
+      source: {
+        sourceKind:
+          generatedCooldown.sourceIdentity?.sourceKind ??
+          'azpr-action-status-generation',
+        sourceStatus: generatedCooldown.status,
+        fieldPath: generatedCooldown.sourceIdentity?.durationFieldPath ?? null,
+        cooldownCount,
+        subSkillId:
+          generatedCooldown.sourceIdentity?.subSkillId ?? action.skillId,
+      },
+      sourceIdentity: generatedCooldown.sourceIdentity ?? null,
+      confidence: 'confirmed-structured-data',
+    };
+  }
   const logic = action.logicModel?.logic;
   const cooldownMs = Number(logic?.cooldownMs);
   if (!Number.isFinite(cooldownMs) || cooldownMs <= 0) {
@@ -480,6 +514,14 @@ function createSkillCooldownRequirement(action) {
       cooldownCount: Math.max(1, Math.trunc(Number(logic.cooldownCount) || 1)),
       subSkillId: logic.subSkillId ?? action.skillId,
     },
+    sourceIdentity: {
+      sourceKind: logic.sourceKind ?? 'azpr-newtable-skill-logic-index',
+      sourceStatus: action.logicModel?.status ?? 'mapped',
+      subSkillId: logic.subSkillId ?? action.skillId,
+      durationFieldPath: logic.fieldPaths?.cooldownMs ?? null,
+      chargeCountFieldPath: logic.fieldPaths?.cooldownCount ?? null,
+    },
+    confidence: 'confirmed-structured-data',
   };
 }
 

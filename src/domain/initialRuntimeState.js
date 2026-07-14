@@ -157,6 +157,13 @@ function normalizeInitialActiveEffects(values) {
         targetKind: optionalText(value?.targetKind),
         targetId,
         targetName: optionalText(value?.targetName),
+        icon: optionalText(value?.icon),
+        confidence: optionalText(value?.confidence),
+        trackingStatus: optionalText(value?.trackingStatus),
+        sourceIdentity: cloneObject(value?.sourceIdentity),
+        originSourceStatus: optionalText(
+          value?.originSourceStatus ?? value?.sourceStatus
+        ),
         remainingDurationMs,
         stacks: positiveInteger(value?.stacks, 1),
         maxStacks: positiveInteger(value?.maxStacks, 1),
@@ -176,6 +183,12 @@ function cloneObjectRows(values) {
   return (Array.isArray(values) ? values : [])
     .filter(value => value && typeof value === 'object')
     .map(value => ({ ...value }));
+}
+
+function cloneObject(value) {
+  return value && typeof value === 'object'
+    ? JSON.parse(JSON.stringify(value))
+    : null;
 }
 
 function uniqueTextValues(values) {

@@ -40,6 +40,12 @@ import {
   createWorkbenchTimelineTopology,
 } from './workbenchTimelineTopology';
 import { normalizeInitialRuntimeState } from './initialRuntimeState';
+import {
+  createKiboActionStatusGeneration,
+  createSkillActionStatusGeneration,
+  mergeGeneratedActionStatusEffectCommands,
+  stripGeneratedActionStatusEffectCommands,
+} from './actionStatusGeneration';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -166,12 +172,38 @@ export function createWorkbenchActionDraft({
   generationBatch = null,
   effectCommands = [],
 } = {}) {
+  const actionId = String(id ?? '').trim() || DEFAULT_WORKBENCH_ACTION_ID;
   const normalizedActionVariantIndex = Math.max(
     0,
     Number(actionVariantIndex ?? damageSegmentIndex) || 0
   );
+  const skill = findById(workbenchSeed.gameData.skills, skillId);
+  const statusGeneration =
+    type === ACTION_TYPES.SKILL && skill
+      ? createSkillActionStatusGeneration({
+          actionId,
+          skill,
+          level,
+          actionVariantIndex: normalizedActionVariantIndex,
+        })
+      : null;
+  const resolvedEffectCommands =
+    type === ACTION_TYPES.SKILL
+      ? mergeGeneratedActionStatusEffectCommands(
+          effectCommands,
+          statusGeneration?.effectCommands
+        )
+      : stripGeneratedActionStatusEffectCommands(effectCommands);
+  const kiboStatusGeneration =
+    type === ACTION_TYPES.KIBO_EVENT
+      ? createKiboActionStatusGeneration({
+          actionId,
+          skillId,
+          timingSource,
+        })
+      : null;
   return {
-    id,
+    id: actionId,
     type,
     skillId: Number(skillId),
     actorCharacterId:
@@ -202,7 +234,15 @@ export function createWorkbenchActionDraft({
     note,
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
-    effectCommands: normalizeWorkbenchEffectCommands(effectCommands, id),
+    ...(statusGeneration
+      ? { statusGeneration: statusGeneration.descriptor }
+      : kiboStatusGeneration
+        ? { statusGeneration: kiboStatusGeneration }
+        : {}),
+    effectCommands: normalizeWorkbenchEffectCommands(
+      resolvedEffectCommands,
+      actionId
+    ),
   };
 }
 

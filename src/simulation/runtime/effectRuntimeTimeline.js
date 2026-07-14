@@ -255,6 +255,10 @@ function createInheritedRuntimeEffectState(effect) {
     refreshCount: Math.max(0, Number(effect.refreshCount) || 0),
     revision: positiveIntegerOrDefault(effect.revision, 1),
     tags: uniqueValues(effect.tags),
+    icon: effect.icon ?? null,
+    confidence: effect.confidence ?? null,
+    trackingStatus: effect.trackingStatus ?? null,
+    sourceIdentity: cloneSourceIdentity(effect.sourceIdentity),
     modifiers: Array.isArray(effect.modifiers)
       ? effect.modifiers.map(modifier => ({ ...modifier }))
       : [],
@@ -347,6 +351,10 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     maxStacks: positiveIntegerOrDefault(command.maxStacks, 1),
     tags: uniqueValues(command.tags),
     sourceStatus: command.sourceStatus ?? 'project-configured-effect-command',
+    icon: command.icon ?? null,
+    confidence: command.confidence ?? null,
+    trackingStatus: command.trackingStatus ?? null,
+    sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
     modifiers: Array.isArray(command.modifiers)
       ? command.modifiers.map(modifier => ({ ...modifier }))
       : [],
@@ -476,6 +484,10 @@ function createRuntimeEffectState(command) {
     tags: command.tags,
     modifiers: command.modifiers,
     sourceStatus: command.sourceStatus,
+    icon: command.icon,
+    confidence: command.confidence,
+    trackingStatus: command.trackingStatus,
+    sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
     appliedToCalculators: false,
     active: true,
   };
@@ -502,6 +514,12 @@ function refreshRuntimeEffectState(existing, command) {
     tags: uniqueValues([...existing.tags, ...command.tags]),
     modifiers: command.modifiers,
     sourceStatus: command.sourceStatus,
+    icon: command.icon ?? existing.icon ?? null,
+    confidence: command.confidence ?? existing.confidence ?? null,
+    trackingStatus: command.trackingStatus ?? existing.trackingStatus ?? null,
+    sourceIdentity:
+      cloneSourceIdentity(command.sourceIdentity) ??
+      cloneSourceIdentity(existing.sourceIdentity),
     appliedToCalculators: false,
   };
 }
@@ -582,6 +600,12 @@ function createEffectRuntimeEvent({
       targetId: state?.targetId ?? command?.targetId ?? null,
     },
     sourceStatus: command?.sourceStatus ?? state?.sourceStatus ?? null,
+    icon: command?.icon ?? state?.icon ?? null,
+    confidence: command?.confidence ?? state?.confidence ?? null,
+    trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
+    sourceIdentity: cloneSourceIdentity(
+      command?.sourceIdentity ?? state?.sourceIdentity
+    ),
     modifiers: (command?.modifiers ?? state?.modifiers ?? []).map(modifier => ({
       ...modifier,
     })),
@@ -595,6 +619,7 @@ function createEffectRuntimeEvent({
       stackAfter,
       expiresAtMs: after?.expiresAtMs ?? null,
       appliedToCalculators: false,
+      trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
     },
     applied: true,
   };
@@ -605,8 +630,15 @@ function cloneEffectState(effect) {
     ? {
         ...effect,
         tags: [...effect.tags],
+        sourceIdentity: cloneSourceIdentity(effect.sourceIdentity),
         modifiers: effect.modifiers.map(modifier => ({ ...modifier })),
       }
+    : null;
+}
+
+function cloneSourceIdentity(value) {
+  return value && typeof value === 'object'
+    ? JSON.parse(JSON.stringify(value))
     : null;
 }
 

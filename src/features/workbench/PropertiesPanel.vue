@@ -367,12 +367,19 @@
         v-for="(command, commandIndex) in effectCommands"
         :key="command.id"
         class="effect-command-row"
+        :class="{ generated: isGeneratedEffectCommand(command) }"
         :data-effect-command-id="command.id"
+        :data-source-status="command.sourceStatus || ''"
+        :data-tracking-status="command.trackingStatus || ''"
         data-testid="workbench-effect-command-row"
       >
         <div class="effect-command-heading">
           <strong>{{ command.effectName || command.effectId }}</strong>
+          <small v-if="isGeneratedEffectCommand(command)">
+            自动 · {{ formatEffectTrackingStatus(command) }}
+          </small>
           <button
+            v-else
             type="button"
             title="删除状态效果"
             aria-label="删除状态效果"
@@ -384,7 +391,17 @@
           </button>
         </div>
 
-        <div class="effect-command-fields">
+        <div
+          v-if="isGeneratedEffectCommand(command)"
+          class="effect-command-generated-summary"
+          data-testid="workbench-generated-effect-summary"
+        >
+          <strong>{{ formatGeneratedEffectTiming(command) }}</strong>
+          <span>{{ formatGeneratedEffectSource(command) }}</span>
+          <small>仅用于状态追踪，不进入 HP、韧性或资源计算</small>
+        </div>
+
+        <div v-else class="effect-command-fields">
           <label class="effect-field-wide">
             <span>效果键</span>
             <input
@@ -799,6 +816,34 @@ const workbenchFrameRate = WORKBENCH_FPS;
 const effectCommands = computed(
   () => props.selectedAction.effectCommands ?? []
 );
+
+function isGeneratedEffectCommand(command) {
+  return command?.sourceStatus === 'generated-from-azpr-action-status-catalog';
+}
+
+function formatEffectTrackingStatus(command) {
+  return command?.appliedToCalculators
+    ? '已应用'
+    : command?.trackingStatus === 'unapplied'
+      ? '未应用'
+      : '追踪';
+}
+
+function formatGeneratedEffectTiming(command) {
+  const startFrame = msToFrame(command?.offsetMs ?? 0);
+  const duration = command?.durationMs;
+  const durationText = duration == null ? '持续' : `${msToFrame(duration)}F`;
+  return `${startFrame}F 触发 · ${durationText}`;
+}
+
+function formatGeneratedEffectSource(command) {
+  const source = command?.sourceIdentity ?? {};
+  const target =
+    command?.targetKind === EFFECT_TARGET_KINDS.ENEMY ? '敌人' : '角色';
+  const confidence = command?.confidence === 'high' ? '高置信' : '中置信';
+  const stacking = source.stackingStatus ? '叠层未确认' : '叠层已确认';
+  return `${target} · ${confidence} · ${stacking} · ${source.behaviorClassName || '结构化动作目录'}`;
+}
 const effectTargetOptions = computed(() => {
   const actorOptions = props.actors.map(actor => ({
     value: `${EFFECT_TARGET_KINDS.ACTOR}|${actor.id}`,
@@ -1518,6 +1563,13 @@ h2 {
   gap: 8px;
 }
 
+.effect-command-heading > small {
+  margin-left: auto;
+  color: #f2b366;
+  font-size: 10px;
+  font-weight: 800;
+}
+
 .effect-editor-heading {
   min-height: 42px;
   color: #d8dee3;
@@ -1555,6 +1607,27 @@ h2 {
   gap: 10px;
   padding: 12px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.effect-command-row.generated {
+  border-color: rgba(242, 179, 102, 0.34);
+}
+
+.effect-command-generated-summary {
+  display: grid;
+  gap: 4px;
+  color: #c8d1d8;
+  font-size: 11px;
+}
+
+.effect-command-generated-summary strong {
+  color: #f4f7f8;
+  font-size: 12px;
+}
+
+.effect-command-generated-summary small {
+  color: #8f9aa3;
+  font-size: 10px;
 }
 
 .effect-command-heading strong {

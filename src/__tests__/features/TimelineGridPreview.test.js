@@ -271,7 +271,7 @@ describe('TimelineGridPreview', () => {
     });
   });
 
-  it('renders action readiness and legal skill cooldown windows on the timeline', () => {
+  it('renders action readiness and legal skill cooldown windows on the timeline', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
         actionReadinessTimeline: {
@@ -322,9 +322,12 @@ describe('TimelineGridPreview', () => {
     expect(cooldownWindow.attributes()).toMatchObject({
       'data-action-id': 'action-a',
       'data-charge-index': '0',
+      'data-start-frame-index': '0',
+      'data-end-frame-index': '90',
       'data-end-ms': '1500',
       'data-window-id': 'action-a|cooldown-charge|0',
     });
+    expect(cooldownWindow.text()).toContain('普通攻击');
     expect(
       wrapper
         .get(
@@ -333,6 +336,17 @@ describe('TimelineGridPreview', () => {
         .attributes('style')
     ).toContain('top: 61px');
     expect(cooldownWindow.attributes('style')).toContain('top: 109px');
+    await cooldownWindow.trigger('click');
+    expect(wrapper.emitted('select-action')?.at(-1)?.[0]).toEqual({
+      actionId: 'action-a',
+      mode: 'replace',
+    });
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toEqual({
+      frameIndex: 0,
+      timeMs: 0,
+      statePointId: '',
+      source: 'timeline-cooldown-window',
+    });
   });
 
   it('renders, selects, and creates persisted action relations', async () => {
@@ -429,11 +443,16 @@ describe('TimelineGridPreview', () => {
       targetName: '训练假人',
       startMs: 500,
       endMs: 2500,
+      startFrame: 30,
+      endFrame: 150,
       lifecycleEvents: [
         { eventId: 'mark-apply', type: 'EFFECT_APPLIED', timeMs: 500 },
         { eventId: 'mark-remove', type: 'EFFECT_REMOVED', timeMs: 2500 },
       ],
       selectionEventId: 'mark-remove',
+      confidence: 'medium',
+      trackingStatus: 'unapplied',
+      sourceStatus: 'generated-from-azpr-action-status-catalog',
     });
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
@@ -472,6 +491,15 @@ describe('TimelineGridPreview', () => {
         .find('[data-testid="workbench-timeline-effect-interval"]')
         .attributes('data-effect-id')
     ).toBe('mark');
+    expect(intervals[1].attributes()).toMatchObject({
+      'data-start-frame-index': '30',
+      'data-end-frame-index': '150',
+      'data-confidence': 'medium',
+      'data-tracking-status': 'unapplied',
+      'data-source-status': 'generated-from-azpr-action-status-catalog',
+      'data-applied-to-calculators': 'false',
+    });
+    expect(intervals[1].text()).toContain('未应用');
     expect(wrapper.text()).toContain('训练假人');
     expect(wrapper.findAll('.effect-lifecycle-marker')).toHaveLength(3);
 

@@ -11,6 +11,8 @@
     "audit:production-imports:check": "node scripts/audit-production-imports.mjs --assert-clean",
     "audit:bundle": "node scripts/audit-build-bundle.mjs",
     "audit:bundle:check": "node scripts/audit-build-bundle.mjs --assert-budget",
+    "audit:action-status": "node scripts/generate-action-status-catalog.mjs",
+    "audit:action-status:check": "node scripts/generate-action-status-catalog.mjs --assert-clean",
     "audit:applied-source-bindings": "node scripts/audit-applied-source-bindings.mjs",
     "audit:applied-source-bindings:check": "node scripts/audit-applied-source-bindings.mjs --assert-clean",
     "audit:workbench-data": "node scripts/audit-workbench-production-data.mjs",
@@ -19,7 +21,7 @@
     "benchmark:long-axis:check": "node --expose-gc scripts/benchmark-workbench-long-axis.mjs --assert-budget",
     "benchmark:long-axis:browser": "playwright test e2e/workbench-long-axis.spec.js -g @workbench-long-axis",
     "benchmark:long-axis:comparison": "playwright test e2e/workbench-long-axis-comparison.spec.js -g @workbench-comparison-long-axis",
-    "data:generate": "node scripts/generate-azpr-data.mjs",
+    "data:generate": "node scripts/generate-azpr-data.mjs && node scripts/generate-action-status-catalog.mjs --write",
     "data:sync-action-icons": "node scripts/sync-workbench-action-icons.mjs",
     "data:sync-loadout-icons": "node scripts/sync-workbench-loadout-icons.mjs",
     "data:generate-runtime-capture-manifest": "node scripts/generate-runtime-capture-hook-manifest.mjs",
@@ -33,7 +35,7 @@
     "test:e2e": "playwright test",
     "test:e2e:production-preview": "npm run audit:applied-source-bindings:check && npm run build && playwright test --config playwright.production.config.js",
     "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
-    "test:trial-release": "npm run test -- --run && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
+    "test:trial-release": "npm run test -- --run && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:action-status:check && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {

@@ -27480,3 +27480,11 @@ six-resource-runtime-capture-plan v1
 新增独立生成文件 `workbench-loadout-detail-catalog.json`，`kind = workbench-loadout-detail-catalog`、`schemaVersion = 1`。它按设备、奇波和灵子 ID 提供真实名称、静态图标文件名及数据源可直接支持的展示摘要，并固定声明 `loadoutEffectsAppliedToCalculators = false`、`displayValuesAreSourceRecords = true`。Workbench 通过独立静态资源按需读取该目录；它不并入 `workbench-seed.json`，不改变 calculator、runtime 或六条能量轴合同。
 
 项目敌人实例可选新增 `enemy.icon`，值直接来自既有敌人目录，用于配置面板显示真实身份图。旧项目缺少该字段时继续兼容，重新按敌人 ID 构建项目即可恢复；Workbench project/draft schemaVersion 不升级。角色、奇波、五件装备与灵子仍使用既有 `teamSlots` 和 `actorConfigs[].loadout` 持久化字段，因此本地草稿、JSON、分享链接和 PNG 无需迁移即可恢复 M2 配置。
+
+## 433. Action status generation catalog v1
+
+新增生成文件 `workbench-action-status-catalog.json`，只保存真实动作目录中可结构化确认的 CD、效果身份、动作变体绑定、触发帧、生命周期和来源 identity。目录策略禁止描述文本推断；证据不足的候选保持 tracking-only，叠层未知时只声明 `unconfirmed-single-instance-runtime-projection`，所有自动效果固定 `appliedToCalculators = false`。
+
+Workbench v16 动作可选新增 `statusGeneration`；自动 `effectCommands[]` 可选携带 `icon / confidence / trackingStatus / sourceIdentity`。这些字段由动作 ID、技能、变体与生成目录确定性重建，不形成第二套 UI 真相。compiler、effect runtime、`AzPrEffectIntervalProjection` 和 `AzPrActionEffectRelationGraph` 透传同一来源字段；循环边界的 `initialRuntimeState.activeEffects[]` 也保留它们及剩余时长。
+
+项目 schemaVersion 不升级。旧项目缺少 `statusGeneration` 时在 normalization 中自动生成；动作变体改变、复制、移动、删除或载体回放后都会重建生成命令并移除旧 identity。手工 `effectCommands` 继续兼容，且不会被误标为目录生成项。该新增不改变 HP、韧性、3 条角色资源或 3 条奇波资源的 calculator 输入。

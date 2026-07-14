@@ -1619,6 +1619,244 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
   await page.screenshot({ path: 'reports/m1-empty-scenario-narrow.png' });
 });
 
+test('[m3-real-action-status-workflow] generates and replays sourced cooldown and effect state from real action-library drags', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+  );
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  const lifecycleSource = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100322"][data-action-kind="star-carry"]'
+  );
+  const trackingOnlySource = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
+  );
+  await expect(lifecycleSource).toBeVisible();
+  await expect(trackingOnlySource).toBeVisible();
+
+  await dragLocatorTo(page, lifecycleSource, actorLane, {
+    targetPosition: { x: 90, y: 82 },
+  });
+  let lifecycleAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-readiness-status="ready"]'
+  );
+  await expect(lifecycleAction).toHaveCount(1);
+  await expect(lifecycleAction).toHaveAttribute(
+    'data-status-generation-status',
+    'action-status-generation-ready-with-lifecycle'
+  );
+  await expect(lifecycleAction).toHaveAttribute(
+    'data-generated-effect-count',
+    '1'
+  );
+  const lifecycleActionId =
+    await lifecycleAction.getAttribute('data-action-id');
+  let cooldown = timeline.locator(
+    `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${lifecycleActionId}"]`
+  );
+  let interval = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${lifecycleActionId}"]`
+  );
+  await expect(cooldown).toHaveCount(1);
+  await expect(cooldown).toContainText('就绪生效');
+  await expect(interval).toHaveCount(1);
+  await expect(interval).toContainText('防御力降低');
+  await expect(interval).toContainText('未应用');
+  await expect(interval).toHaveAttribute('data-start-frame-index', /\d+/);
+  await expect(interval).toHaveAttribute('data-end-frame-index', /\d+/);
+  await expectGeneratedStatusTiming(lifecycleAction, cooldown, interval);
+
+  await interval.click();
+  await expect(timeline).toHaveAttribute(
+    'data-flow-selected-action-id',
+    lifecycleActionId
+  );
+  await expect(timeline).toHaveAttribute(
+    'data-cursor-frame-index',
+    await interval.getAttribute('data-end-frame-index')
+  );
+  await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
+  const generatedEffectRow = page.locator(
+    '[data-testid="workbench-effect-command-row"][data-source-status="generated-from-azpr-action-status-catalog"]'
+  );
+  await expect(generatedEffectRow).toHaveAttribute(
+    'data-tracking-status',
+    'unapplied'
+  );
+  await expect(
+    generatedEffectRow.getByTestId('workbench-generated-effect-summary')
+  ).toContainText('仅用于状态追踪');
+  await expect(
+    generatedEffectRow.getByTestId('workbench-effect-delete')
+  ).toHaveCount(0);
+  const lifecycleEvents = page.getByTestId(
+    'workbench-effect-interval-lifecycle-event'
+  );
+  await expect(lifecycleEvents).toHaveCount(2);
+  await lifecycleEvents.first().click();
+  await expect(timeline).toHaveAttribute(
+    'data-cursor-frame-index',
+    await interval.getAttribute('data-start-frame-index')
+  );
+  await closeInspectorIfVisible(page);
+
+  const intervalStartBeforeMove = Number(
+    await interval.getAttribute('data-start-ms')
+  );
+  await lifecycleAction.press('ArrowRight');
+  await expect
+    .poll(async () => Number(await interval.getAttribute('data-start-ms')))
+    .toBeGreaterThan(intervalStartBeforeMove);
+  const intervalStartAfterMove = Number(
+    await interval.getAttribute('data-start-ms')
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect
+    .poll(async () => Number(await interval.getAttribute('data-start-ms')))
+    .toBe(intervalStartBeforeMove);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect
+    .poll(async () => Number(await interval.getAttribute('data-start-ms')))
+    .toBe(intervalStartAfterMove);
+
+  await dragLocatorTo(page, lifecycleSource, actorLane, {
+    targetPosition: { x: 500, y: 82 },
+  });
+  const blockedAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-readiness-status="blocked"]'
+  );
+  await expect(blockedAction).toHaveCount(1);
+  const blockedActionId = await blockedAction.getAttribute('data-action-id');
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${blockedActionId}"]`
+    )
+  ).toHaveCount(0);
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${blockedActionId}"]`
+    )
+  ).toHaveCount(0);
+
+  await dragLocatorTo(page, trackingOnlySource, actorLane, {
+    targetPosition: { x: 320, y: 82 },
+  });
+  const trackingOnlyAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
+  );
+  await expect(trackingOnlyAction).toHaveCount(1);
+  const trackingOnlyActionId =
+    await trackingOnlyAction.getAttribute('data-action-id');
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${trackingOnlyActionId}"]`
+    )
+  ).toHaveCount(0);
+
+  await blockedAction.press('Delete');
+  await expect(blockedAction).toHaveCount(0);
+  await lifecycleAction.press('Delete');
+  await expect(interval).toHaveCount(0);
+  await page.getByTestId('workbench-undo-edit').click();
+  lifecycleAction = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-action-id="${lifecycleActionId}"]`
+  );
+  interval = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${lifecycleActionId}"]`
+  );
+  cooldown = timeline.locator(
+    `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${lifecycleActionId}"]`
+  );
+  await expect(interval).toHaveCount(1);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(interval).toHaveCount(0);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(interval).toHaveCount(1);
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(interval).toHaveCount(1);
+  await expectGeneratedStatusTiming(lifecycleAction, cooldown, interval);
+
+  await page.getByTestId('workbench-timeline-zoom-input').evaluate(element => {
+    element.value = '2';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await lifecycleAction.scrollIntoViewIfNeeded();
+  await expectGeneratedStatusPixelAlignment(
+    timeline,
+    lifecycleAction,
+    cooldown,
+    interval
+  );
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m3-action-status-desktop.png' });
+
+  await closeInspectorIfVisible(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await lifecycleAction.scrollIntoViewIfNeeded();
+  await expectGeneratedStatusPixelAlignment(
+    timeline,
+    lifecycleAction,
+    cooldown,
+    interval
+  );
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m3-action-status-narrow.png' });
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.getByTestId('workbench-timeline-zoom-input').evaluate(element => {
+    element.value = '1';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await page.getByTestId('workbench-scenario-add').click();
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    0
+  );
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  await dragLocatorTo(page, lifecycleSource, actorLane, {
+    targetPosition: { x: 120, y: 82 },
+  });
+  const emptyScenarioAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"]'
+  );
+  await expect(emptyScenarioAction).toHaveCount(1);
+  const emptyScenarioActionId =
+    await emptyScenarioAction.getAttribute('data-action-id');
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${emptyScenarioActionId}"]`
+    )
+  ).toHaveCount(1);
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${emptyScenarioActionId}"]`
+    )
+  ).toHaveCount(1);
+});
+
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
   page,
 }) => {
@@ -4482,6 +4720,59 @@ async function expectTimelineCursorAligned(cursor, target) {
       return Math.abs(
         cursorBox.x + cursorBox.width / 2 - (targetBox.x + targetBox.width / 2)
       );
+    })
+    .toBeLessThanOrEqual(1.5);
+}
+
+async function expectGeneratedStatusTiming(action, cooldown, interval) {
+  const actionStartMs = Number(await action.getAttribute('data-start-ms'));
+  await expect(cooldown).toHaveAttribute(
+    'data-start-ms',
+    String(actionStartMs)
+  );
+  await expect
+    .poll(async () => Number(await cooldown.getAttribute('data-end-ms')))
+    .toBeCloseTo(actionStartMs + 24000, 3);
+  await expect
+    .poll(async () => Number(await interval.getAttribute('data-start-ms')))
+    .toBeCloseTo(actionStartMs + 950, 3);
+  await expect
+    .poll(async () => Number(await interval.getAttribute('data-end-ms')))
+    .toBeCloseTo(actionStartMs + 8950, 3);
+}
+
+async function expectGeneratedStatusPixelAlignment(
+  timeline,
+  action,
+  cooldown,
+  interval
+) {
+  await expect
+    .poll(async () => {
+      const [actionBox, cooldownBox, intervalBox, laneBox] = await Promise.all([
+        action.boundingBox(),
+        cooldown.boundingBox(),
+        interval.boundingBox(),
+        timeline.getByTestId('workbench-timeline-lane').boundingBox(),
+      ]);
+      const durationMs = Number(
+        await timeline.getAttribute('data-duration-ms')
+      );
+      if (
+        !actionBox ||
+        !cooldownBox ||
+        !intervalBox ||
+        !laneBox ||
+        !durationMs
+      ) {
+        return Number.POSITIVE_INFINITY;
+      }
+      const cooldownOffsetError = Math.abs(cooldownBox.x - actionBox.x);
+      const expectedEffectOffset = (laneBox.width * 950) / durationMs;
+      const effectOffsetError = Math.abs(
+        intervalBox.x - actionBox.x - expectedEffectOffset
+      );
+      return Math.max(cooldownOffsetError, effectOffsetError);
     })
     .toBeLessThanOrEqual(1.5);
 }

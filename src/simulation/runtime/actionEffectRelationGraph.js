@@ -104,6 +104,26 @@ export function createActionEffectRelationGraph({
       targetId,
       targetName: runtimeEvent?.targetName ?? state?.targetName ?? null,
       sourceActionIds: [...sourceActionIds],
+      sourceStatus:
+        runtimeCommand?.sourceStatus ??
+        state?.sourceStatus ??
+        entry.command.sourceStatus ??
+        null,
+      confidence:
+        runtimeCommand?.confidence ??
+        state?.confidence ??
+        entry.command.confidence ??
+        null,
+      trackingStatus:
+        runtimeCommand?.trackingStatus ??
+        state?.trackingStatus ??
+        entry.command.trackingStatus ??
+        null,
+      sourceIdentity: cloneSourceIdentity(
+        runtimeCommand?.sourceIdentity ??
+          state?.sourceIdentity ??
+          entry.command.sourceIdentity
+      ),
     });
     entry.effectNodeId = nodeId;
   }
@@ -307,8 +327,22 @@ function createEffectEdge(
     frameIndex: runtimeEvent?.frameIndex ?? runtimeCommand?.frameIndex ?? null,
     runtimeEventId: runtimeEvent?.eventId ?? null,
     runtimeEventType: runtimeEvent?.type ?? null,
+    sourceStatus:
+      runtimeCommand?.sourceStatus ?? entry.command.sourceStatus ?? null,
+    confidence: runtimeCommand?.confidence ?? entry.command.confidence ?? null,
+    trackingStatus:
+      runtimeCommand?.trackingStatus ?? entry.command.trackingStatus ?? null,
+    sourceIdentity: cloneSourceIdentity(
+      runtimeCommand?.sourceIdentity ?? entry.command.sourceIdentity
+    ),
     appliedToCalculators: false,
   };
+}
+
+function cloneSourceIdentity(value) {
+  return value && typeof value === 'object'
+    ? JSON.parse(JSON.stringify(value))
+    : null;
 }
 
 function actionEndpoint(actionId, anchor) {

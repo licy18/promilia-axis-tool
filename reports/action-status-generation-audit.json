@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-08T03:35:51.289Z",
+  "sourceKind": "azpr-action-status-generation-audit",
+  "status": "action-status-generation-audit-passed",
+  "valid": true,
+  "summary": {
+    "skillCount": 120,
+    "cooldownSkillCount": 40,
+    "noConfirmedCooldownSkillCount": 80,
+    "effectCandidateCount": 6,
+    "lifecycleBoundEffectCount": 1,
+    "trackingOnlyEffectCount": 5,
+    "kiboActionCount": 366,
+    "kiboConfirmedStatusActionCount": 0,
+    "calculatorAppliedEffectCount": 0,
+    "issueCount": 0,
+    "valid": true
+  },
+  "coverage": [
+    {
+      "skillId": 10100312,
+      "requiredActionKind": "star-skill",
+      "requiredActionVariantIndex": 0,
+      "effectId": "buff-101003079",
+      "effectName": "焰火",
+      "status": "tracking-only-behavior-binding-unconfirmed",
+      "triggerFrame": null,
+      "durationMs": 10000,
+      "confidence": "tracking-only",
+      "trackingStatus": "unapplied",
+      "appliedToCalculators": false
+    },
+    {
+      "skillId": 10100313,
+      "requiredActionKind": "ultimate",
+      "requiredActionVariantIndex": 0,
+      "effectId": "buff-101003206",
+      "effectName": "Buff 101003206",
+      "status": "tracking-only-resource-identity",
+      "triggerFrame": null,
+      "durationMs": 15000,
+      "confidence": "tracking-only",
+      "trackingStatus": "unapplied",
+      "appliedToCalculators": false
+    },
+    {
+      "skillId": 10100322,
+      "requiredActionKind": "star-carry",
+      "requiredActionVariantIndex": 0,
+      "effectId": "buff-101003141",
+      "effectName": "防御力降低",
+      "status": "lifecycle-bound",
+      "triggerFrame": 57,
+      "durationMs": 8000,
+      "confidence": "medium",
+      "trackingStatus": "unapplied",
+      "appliedToCalculators": false
+    },
+    {
+      "skillId": 10900101,
+      "requiredActionKind": null,
+      "requiredActionVariantIndex": null,
+      "effectId": "buff-109001270",
+      "effectName": "Buff 109001270",
+      "status": "tracking-only-resource-identity",
+      "triggerFrame": null,
+      "durationMs": 8000,
+      "confidence": "tracking-only",
+      "trackingStatus": "unapplied",
+      "appliedToCalculators": false
+    },
+    {
+      "skillId": 10900113,
+      "requiredActionKind": "ultimate",
+      "requiredActionVariantIndex": 0,
+      "effectId": "buff-799",
+      "effectName": "Buff 799",
+      "status": "tracking-only-resource-identity",
+      "triggerFrame": null,
+      "durationMs": 100,
+      "confidence": "tracking-only",
+      "trackingStatus": "unapplied",
+      "appliedToCalculators": false
+    },
+    {
+      "skillId": 10900143,
+      "requiredActionKind": null,
+      "requiredActionVariantIndex": null,
+      "effectId": "buff-109001270",
+      "effectName": "Buff 109001270",
+      "status": "tracking-only-resource-identity",
+      "triggerFrame": null,
+      "durationMs": 8000,
+      "confidence": "tracking-only",
+      "trackingStatus": "unapplied",
+      "appliedToCalculators": false
+    }
+  ],
+  "issues": []
+}

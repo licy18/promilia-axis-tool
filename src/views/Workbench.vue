@@ -5236,7 +5236,12 @@ function selectActionEffectRelation(relationRequest) {
   return true;
 }
 
-function selectEffectInterval({ intervalId = '', eventId = '' } = {}) {
+function selectEffectInterval({
+  intervalId = '',
+  eventId = '',
+  actionId = '',
+  timeMs = null,
+} = {}) {
   const interval = effectIntervalProjection.value.intervals.find(
     item => item.intervalId === intervalId
   );
@@ -5247,6 +5252,18 @@ function selectEffectInterval({ intervalId = '', eventId = '' } = {}) {
   selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   boxSelectionMode.value = false;
+  dismissedSideInspectorKey.value = '';
+  const sourceActionId = actionId || interval.sourceActionId || '';
+  if (sourceActionId && findActionDraftById(sourceActionId)) {
+    setWorkbenchActionSelection([sourceActionId], sourceActionId, {
+      anchorActionId: sourceActionId,
+    });
+    syncActionLibraryCharacterIdFromDraft(findActionDraftById(sourceActionId));
+  }
+  selectTimelineFrame({
+    timeMs: timeMs ?? interval.endMs,
+    source: 'effect-interval',
+  });
   selectedEffectIntervalId.value = interval.intervalId;
   selectedEffectEventId.value = interval.lifecycleEventIds.includes(eventId)
     ? eventId
@@ -5267,6 +5284,19 @@ function selectEffectEvent(eventId) {
   selectedActionRelationId.value = '';
   selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
+  dismissedSideInspectorKey.value = '';
+  const event = interval.lifecycleEvents.find(item => item.eventId === eventId);
+  const sourceActionId = event?.actionId || interval.sourceActionId || '';
+  if (sourceActionId && findActionDraftById(sourceActionId)) {
+    setWorkbenchActionSelection([sourceActionId], sourceActionId, {
+      anchorActionId: sourceActionId,
+    });
+    syncActionLibraryCharacterIdFromDraft(findActionDraftById(sourceActionId));
+  }
+  selectTimelineFrame({
+    timeMs: event?.timeMs ?? interval.endMs,
+    source: 'effect-lifecycle-event',
+  });
   return true;
 }
 

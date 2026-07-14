@@ -1673,6 +1673,9 @@ describe('Workbench view', () => {
 
     await timelineEffectInterval.trigger('click');
     await nextTick();
+    const selectedIntervalEndFrame = timelineEffectInterval.attributes(
+      'data-end-frame-index'
+    );
     expect(
       wrapper
         .find('main.workbench')
@@ -1682,6 +1685,16 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-effect-selected-interval"]').text()
     ).toContain('测试增益');
     expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-cursor-frame-index')
+    ).toBe(selectedIntervalEndFrame);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-flow-selected-action-id')
+    ).toBe('action-0001');
+    expect(
       wrapper.findAll(
         '[data-testid="workbench-effect-interval-lifecycle-event"]'
       )
@@ -1690,6 +1703,11 @@ describe('Workbench view', () => {
       .findAll('[data-testid="workbench-effect-interval-lifecycle-event"]')[0]
       .trigger('click');
     await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-cursor-frame-index')
+    ).toBe(timelineEffectInterval.attributes('data-start-frame-index'));
     expect(
       wrapper.findAll('[data-testid="workbench-effect-active-row"]')
     ).toHaveLength(1);

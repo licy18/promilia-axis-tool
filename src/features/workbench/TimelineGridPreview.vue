@@ -644,18 +644,31 @@
                 />
               </svg>
             </div>
-            <div
+            <button
               v-for="window in lane.cooldownWindows"
               :key="window.windowId"
               class="cooldown-window"
+              type="button"
               :style="cooldownWindowStyle(window, lane)"
               :title="formatCooldownWindowTitle(window)"
+              :aria-label="formatCooldownWindowTitle(window)"
               :data-action-id="window.actionId"
               :data-charge-index="window.chargeIndex"
+              :data-start-ms="window.startMs"
               :data-end-ms="window.endMs"
+              :data-start-frame-index="msToFrame(window.startMs)"
+              :data-end-frame-index="msToFrame(window.endMs)"
+              :data-confidence="window.confidence || ''"
+              :data-tracking-status="window.trackingStatus || ''"
               :data-window-id="window.windowId"
               data-testid="workbench-timeline-cooldown-window"
-            />
+              @pointerdown.stop
+              @click.stop="selectCooldownWindow(window)"
+            >
+              <span class="cooldown-window-glyph" aria-hidden="true">CD</span>
+              <span class="cooldown-window-label">{{ window.actionName }}</span>
+              <small>{{ formatCooldownWindowStatus(window) }}</small>
+            </button>
 
             <div
               v-for="action in lane.actions"
@@ -697,6 +710,12 @@
               :data-readiness-status="getActionReadiness(action).status"
               :data-readiness-executable="
                 getActionReadiness(action).executable ? 'true' : 'false'
+              "
+              :data-status-generation-status="
+                action.statusGeneration?.status || ''
+              "
+              :data-generated-effect-count="
+                action.statusGeneration?.summary?.generatedEffectCount ?? 0
               "
               :data-batch-id="action.generationBatch?.batchId || ''"
               :data-batch-highlight="
@@ -805,6 +824,15 @@
               :data-source-action-id="interval.sourceActionId || ''"
               :data-start-ms="interval.startMs"
               :data-end-ms="interval.endMs"
+              :data-start-frame-index="interval.startFrame"
+              :data-end-frame-index="interval.endFrame"
+              :data-icon-name="interval.icon || ''"
+              :data-confidence="interval.confidence || ''"
+              :data-tracking-status="interval.trackingStatus || ''"
+              :data-source-status="interval.sourceStatus || ''"
+              :data-applied-to-calculators="
+                interval.appliedToCalculators ? 'true' : 'false'
+              "
               :data-lifecycle-event-count="interval.lifecycleEvents.length"
               :data-selected="
                 interval.intervalId === selectedEffectIntervalId
@@ -823,9 +851,19 @@
               <span class="effect-interval-label">
                 {{ interval.effectName || interval.effectId }}
               </span>
-              <small v-if="interval.maxStacks > 1">
-                {{ interval.peakStacks }}/{{ interval.maxStacks }}
-              </small>
+              <span
+                v-if="
+                  formatEffectIntervalStatus(interval) || interval.maxStacks > 1
+                "
+                class="effect-interval-meta"
+              >
+                <small v-if="formatEffectIntervalStatus(interval)">
+                  {{ formatEffectIntervalStatus(interval) }}
+                </small>
+                <small v-if="interval.maxStacks > 1">
+                  {{ interval.peakStacks }}/{{ interval.maxStacks }}
+                </small>
+              </span>
               <i
                 v-for="event in interval.lifecycleEvents.slice(1)"
                 :key="event.eventId"
@@ -961,6 +999,7 @@ const TIMELINE_ACTOR_ACTION_TOP_PX = 61;
 const TIMELINE_ACTION_HEIGHT_PX = 42;
 const TIMELINE_ACTION_SLOT_GAP_PX = 4;
 const TIMELINE_COOLDOWN_GAP_PX = 6;
+const TIMELINE_COOLDOWN_HEIGHT_PX = 16;
 const TIMELINE_EFFECT_TOP_PX = 8;
 const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 16;
 const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
@@ -2419,6 +2458,13 @@ function effectIntervalGlyph(interval) {
     .toUpperCase();
 }
 
+function formatEffectIntervalStatus(interval) {
+  if (interval.appliedToCalculators) return '已应用';
+  if (interval.trackingStatus === 'unapplied') return '未应用';
+  if (String(interval.trackingStatus ?? '').includes('tracking')) return '追踪';
+  return interval.sourceStatus ? '追踪' : '';
+}
+
 function formatEffectIntervalTitle(interval) {
   const lifecycleText = interval.lifecycleEvents
     .map(event => formatEffectLifecycleOperation(event.type))
@@ -2432,17 +2478,32 @@ function formatEffectIntervalTitle(interval) {
         ' 层'
       : '';
   const activeText = interval.activeAtScenarioEnd ? ' · 场景结束时仍生效' : '';
+  const sourceAction = actionsById.value.get(interval.sourceActionId);
+  const sourceText = sourceAction
+    ? `来源 ${sourceAction.name || sourceAction.id}`
+    : '来源动作未绑定';
+  const trackingText = formatEffectIntervalStatus(interval) || '状态未标记';
   return (
     [
       interval.effectName || interval.effectId,
       interval.targetName || interval.targetId,
+      sourceText,
       String(interval.startFrame) + 'F-' + String(interval.endFrame) + 'F',
+      trackingText,
     ].join(' · ') +
     stackText +
     activeText +
     ' · ' +
     lifecycleText
   );
+}
+
+function selectCooldownWindow(window) {
+  emitTimelineFrame({
+    timeMs: window.startMs,
+    source: 'timeline-cooldown-window',
+  });
+  emit('select-action', { actionId: window.actionId, mode: 'replace' });
 }
 
 function formatEffectLifecycleOperation(type) {
@@ -2544,7 +2605,12 @@ function getTimelineEffectAreaBottom(lane) {
 }
 
 function getTimelineDataTop(lane) {
-  return getTimelineActionAreaBottom(lane) + TIMELINE_DATA_GAP_PX;
+  const cooldownBottom = lane.cooldownWindows?.length
+    ? getTimelineActionAreaBottom(lane) +
+      TIMELINE_COOLDOWN_GAP_PX +
+      TIMELINE_COOLDOWN_HEIGHT_PX
+    : getTimelineActionAreaBottom(lane);
+  return cooldownBottom + TIMELINE_DATA_GAP_PX;
 }
 
 function getTimelineStateCurveMarkerTop(marker, lane) {
@@ -2727,7 +2793,12 @@ function formatTimelineActionTitle(action) {
 }
 
 function formatCooldownWindowTitle(window) {
-  return `${window.actionName} · CD ${formatFrameTime(window.startMs)}-${formatFrameTime(window.endMs)} · 槽位 ${window.chargeIndex + 1}/${window.cooldownCount}`;
+  return `${window.actionName} · CD ${msToFrame(window.startMs)}F-${msToFrame(window.endMs)}F · ${formatCooldownWindowStatus(window)} · 槽位 ${window.chargeIndex + 1}/${window.cooldownCount}`;
+}
+
+function formatCooldownWindowStatus(window) {
+  if (window.trackingStatus === 'applied-to-readiness') return '就绪生效';
+  return window.trackingStatus ? '追踪' : 'CD';
 }
 
 function resolveActionLaneId(action) {
@@ -3267,7 +3338,7 @@ function selectTimelineFrameFromPointer(event) {
   if (
     props.boxSelectionMode ||
     event.target?.closest?.(
-      '.action-block, .action-relation-hit, .cycle-boundary, .effect-interval, .state-curve-marker, .timeline-frame-cursor, [data-testid="workbench-timeline-state-curve-breakpoint"]'
+      '.action-block, .action-relation-hit, .cycle-boundary, .cooldown-window, .effect-interval, .state-curve-marker, .timeline-frame-cursor, [data-testid="workbench-timeline-state-curve-breakpoint"]'
     )
   ) {
     return;
@@ -3517,7 +3588,9 @@ function beginBoxSelection(event) {
   if (
     !props.boxSelectionMode ||
     (event.button ?? 0) !== 0 ||
-    event.target?.closest?.('.action-block, .action-relation-hit')
+    event.target?.closest?.(
+      '.action-block, .action-relation-hit, .cooldown-window, .effect-interval'
+    )
   ) {
     return;
   }
@@ -4864,14 +4937,58 @@ h2 {
 
 .cooldown-window {
   position: absolute;
-  box-sizing: border-box;
-  height: 5px;
-  min-width: 2px;
-  border: 1px solid rgba(242, 179, 102, 0.72);
-  border-radius: 2px;
-  background: rgba(242, 179, 102, 0.32);
-  pointer-events: none;
   z-index: 3;
+  display: grid;
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 5px 1px 2px;
+  overflow: hidden;
+  border: 1px solid rgba(242, 179, 102, 0.72);
+  border-radius: 3px;
+  background: #493b2b;
+  color: #fff3dc;
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+.cooldown-window:hover,
+.cooldown-window:focus {
+  border-color: rgba(255, 255, 255, 0.9);
+  outline: none;
+}
+
+.cooldown-window-glyph {
+  display: inline-grid;
+  width: 20px;
+  height: 12px;
+  place-items: center;
+  border-radius: 2px;
+  background: rgba(8, 12, 16, 0.38);
+  color: #ffd291;
+  font-size: 8px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cooldown-window-label {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cooldown-window small {
+  color: #ffd9a4;
+  font-size: 8px;
+  white-space: nowrap;
 }
 
 .effect-interval {
@@ -4943,6 +5060,13 @@ h2 {
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.effect-interval-meta {
+  display: inline-flex;
+  min-width: 0;
+  gap: 3px;
+  overflow: hidden;
 }
 
 .effect-interval small {

@@ -140,6 +140,28 @@ function createOpenEffectInterval(event, intervalIndex, requestedStartMs) {
     effectId: event.effectId ?? event.after?.effectId ?? event.before?.effectId,
     effectName:
       event.effectName ?? event.after?.effectName ?? event.before?.effectName,
+    icon: event.icon ?? event.after?.icon ?? event.before?.icon ?? null,
+    confidence:
+      event.confidence ??
+      event.after?.confidence ??
+      event.before?.confidence ??
+      null,
+    trackingStatus:
+      event.trackingStatus ??
+      event.after?.trackingStatus ??
+      event.before?.trackingStatus ??
+      null,
+    sourceStatus:
+      event.sourceStatus ??
+      event.after?.sourceStatus ??
+      event.before?.sourceStatus ??
+      null,
+    sourceIdentity:
+      cloneSourceIdentity(
+        event.sourceIdentity ??
+          event.after?.sourceIdentity ??
+          event.before?.sourceIdentity
+      ) ?? null,
     targetKind:
       event.targetKind ?? event.after?.targetKind ?? event.before?.targetKind,
     targetId: event.targetId ?? event.after?.targetId ?? event.before?.targetId,
@@ -167,6 +189,12 @@ function appendEffectIntervalEvent(interval, event) {
     interval.sourceActorIds.push(event.actorId);
   }
   interval.effectName = event.effectName || interval.effectName;
+  interval.icon = event.icon || interval.icon;
+  interval.confidence = event.confidence || interval.confidence;
+  interval.trackingStatus = event.trackingStatus || interval.trackingStatus;
+  interval.sourceStatus = event.sourceStatus || interval.sourceStatus;
+  interval.sourceIdentity =
+    cloneSourceIdentity(event.sourceIdentity) ?? interval.sourceIdentity;
   interval.targetName = event.targetName || interval.targetName;
   interval.peakStacks = Math.max(
     interval.peakStacks,
@@ -206,6 +234,11 @@ function finalizeEffectInterval(
     instanceKey: interval.instanceKey,
     effectId: interval.effectId,
     effectName: interval.effectName || interval.effectId,
+    icon: interval.icon ?? null,
+    confidence: interval.confidence ?? null,
+    trackingStatus: interval.trackingStatus ?? null,
+    sourceStatus: interval.sourceStatus ?? null,
+    sourceIdentity: cloneSourceIdentity(interval.sourceIdentity),
     targetKind: interval.targetKind,
     targetId: interval.targetId,
     targetName: interval.targetName || interval.targetId,
@@ -241,6 +274,12 @@ function finalizeEffectInterval(
     ).length,
     appliedToCalculators: false,
   };
+}
+
+function cloneSourceIdentity(value) {
+  return value && typeof value === 'object'
+    ? JSON.parse(JSON.stringify(value))
+    : null;
 }
 
 function nextIntervalIndex(countByInstanceKey, instanceKey) {

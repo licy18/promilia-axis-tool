@@ -380,16 +380,24 @@ function formatIntervalFrames(interval) {
 }
 
 function formatIntervalStacks(interval) {
+  const status = formatTrackingStatus(interval);
   if (interval.maxStacks > 1) {
     return (
-      '峰值 ' +
+      status +
+      ' · 峰值 ' +
       String(interval.peakStacks) +
       '/' +
       String(interval.maxStacks) +
       ' 层'
     );
   }
-  return interval.activeAtScenarioEnd ? '场景结束时仍生效' : '已结束';
+  return `${status} · ${interval.activeAtScenarioEnd ? '场景结束时仍生效' : '已结束'}`;
+}
+
+function formatTrackingStatus(value) {
+  if (value.appliedToCalculators) return '已应用';
+  if (value.trackingStatus === 'unapplied') return '未应用';
+  return '追踪';
 }
 
 function formatLifecycleStack(event) {

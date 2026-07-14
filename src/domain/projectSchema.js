@@ -2,6 +2,11 @@ import { createSkillDamageModel } from './skillDamageSegments';
 import { createSkillLogicModel } from './skillLogicModel';
 import { normalizeInitialRuntimeState } from './initialRuntimeState';
 import { inferCatalogActionKind } from './skillActionCatalog';
+import {
+  createKiboActionStatusGeneration,
+  createSkillActionStatusGeneration,
+  mergeGeneratedActionStatusEffectCommands,
+} from './actionStatusGeneration';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -250,9 +255,22 @@ export function createSkillAction({
     ) ??
     damageModel.variants?.[0] ??
     null;
+  const actionId = id ?? createStableId('action');
+  const logicModel = createSkillLogicModel(skill, level, { damageModel });
+  const statusGeneration = createSkillActionStatusGeneration({
+    actionId,
+    skill,
+    level,
+    actionVariantIndex: selectedActionVariant?.index ?? actionVariantIndex,
+    logicModel,
+  });
+  const resolvedEffectCommands = mergeGeneratedActionStatusEffectCommands(
+    effectCommands,
+    statusGeneration.effectCommands
+  );
 
   return {
-    id: id ?? createStableId('action'),
+    id: actionId,
     type: ACTION_TYPES.SKILL,
     actorId,
     skillId: skill.id,
@@ -277,7 +295,8 @@ export function createSkillAction({
     spCost: skill.spCost,
     elementId: skill.elementId,
     damageModel,
-    logicModel: createSkillLogicModel(skill, level, { damageModel }),
+    logicModel,
+    statusGeneration: statusGeneration.descriptor,
     timing: {
       needsTimingData: Boolean(skill.needsTimingData),
       source: skill.timingSource ?? 'unknown',
@@ -288,7 +307,7 @@ export function createSkillAction({
     note,
     insertion,
     generationBatch,
-    ...createActionEffectCommandsField(effectCommands),
+    ...createActionEffectCommandsField(resolvedEffectCommands),
   };
 }
 
@@ -423,8 +442,9 @@ export function createKiboEventAction({
   insertion = null,
   effectCommands = [],
 } = {}) {
+  const actionId = id ?? createStableId('action');
   return {
-    id: id ?? createStableId('action'),
+    id: actionId,
     type: ACTION_TYPES.KIBO_EVENT,
     actorId,
     kiboId,
@@ -450,6 +470,12 @@ export function createKiboEventAction({
       : {}),
     note,
     insertion,
+    statusGeneration: createKiboActionStatusGeneration({
+      actionId,
+      kiboId,
+      skillId,
+      timingSource,
+    }),
     appliedToCalculators: false,
     ...createActionEffectCommandsField(effectCommands),
   };
@@ -469,6 +495,10 @@ export function createEffectCommand({
   maxStacks = 1,
   tags = [],
   sourceStatus = 'project-configured-effect-command',
+  icon = null,
+  confidence = null,
+  trackingStatus = null,
+  sourceIdentity = null,
   modifiers = [],
 } = {}) {
   return {
@@ -490,11 +520,25 @@ export function createEffectCommand({
       ? [...new Set(tags.map(tag => String(tag).trim()).filter(Boolean))]
       : [],
     sourceStatus,
+    ...(String(icon ?? '').trim() ? { icon: String(icon).trim() } : {}),
+    ...(String(confidence ?? '').trim()
+      ? { confidence: String(confidence).trim() }
+      : {}),
+    ...(String(trackingStatus ?? '').trim()
+      ? { trackingStatus: String(trackingStatus).trim() }
+      : {}),
+    ...(sourceIdentity && typeof sourceIdentity === 'object'
+      ? { sourceIdentity: cloneJsonObject(sourceIdentity) }
+      : {}),
     modifiers: Array.isArray(modifiers)
       ? modifiers.map(item => ({ ...item }))
       : [],
     appliedToCalculators: false,
   };
+}
+
+function cloneJsonObject(value) {
+  return JSON.parse(JSON.stringify(value));
 }
 
 function createActionEffectCommandsField(effectCommands) {

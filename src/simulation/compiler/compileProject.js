@@ -558,6 +558,11 @@ function compileActionEffectCommands(action, actorsById, enemy) {
       timeMs: roundRuntimeConfigValue(
         (Number(action.startMs) || 0) + (Number(command.offsetMs) || 0)
       ),
+      ...(command.sourceIdentity
+        ? {
+            sourceIdentity: JSON.parse(JSON.stringify(command.sourceIdentity)),
+          }
+        : {}),
       modifiers: (command.modifiers ?? []).map(modifier => ({ ...modifier })),
       appliedToCalculators: false,
     };
