@@ -7131,6 +7131,11 @@ function getLocalStorage() {
   min-width: 0;
 }
 
+.timeline-area {
+  height: calc(100dvh - 120px);
+  min-height: 660px;
+}
+
 .review-workspace {
   display: grid;
   grid-area: review;
@@ -7489,6 +7494,11 @@ function getLocalStorage() {
       'review'
       'actions';
     padding: 6px;
+  }
+
+  .timeline-area {
+    height: calc(100dvh - 112px);
+    min-height: 660px;
   }
 
   .workbench-grid.layout-left-collapsed .action-library {

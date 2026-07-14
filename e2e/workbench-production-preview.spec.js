@@ -371,8 +371,11 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
   const desktopLayout = await readTimelineFirstLayout(page);
   expect(desktopLayout.laneCount).toBe(15);
   expect(desktopLayout.timeline.width).toBeGreaterThanOrEqual(1100);
+  expect(desktopLayout.timeline.height).toBeGreaterThanOrEqual(660);
   expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(900);
-  expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(900);
+  expect(desktopLayout.shell.scrollHeight).toBeGreaterThan(
+    desktopLayout.shell.clientHeight
+  );
   expect(desktopLayout.review.top).toBeGreaterThanOrEqual(
     desktopLayout.timeline.bottom
   );
@@ -383,7 +386,23 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
     desktopLayout.timeline.left
   );
   await expectTimelineRowsAligned(timeline);
+  await expectTimelineTrackReadability(timeline);
   await expectPageWithoutHorizontalOverflow(page);
+
+  const timelineHeightBeforeZoom = desktopLayout.timeline.height;
+  await page.getByTestId('workbench-timeline-zoom-input').fill('2');
+  await expect(page.getByTestId('workbench-timeline-zoom-value')).toHaveText(
+    '2x'
+  );
+  const zoomedLayout = await readTimelineFirstLayout(page);
+  expect(zoomedLayout.viewport.scrollWidth).toBeGreaterThan(
+    zoomedLayout.viewport.clientWidth
+  );
+  expect(zoomedLayout.timeline.height).toBe(timelineHeightBeforeZoom);
+  expect(zoomedLayout.shell.clientHeight).toBe(
+    desktopLayout.shell.clientHeight
+  );
+  await page.getByTestId('workbench-timeline-zoom-input').fill('1');
   await page.screenshot({ path: 'reports/m1a-workbench-desktop.png' });
 
   const timelineBoxBeforeInspector = await timeline.boundingBox();
@@ -513,8 +532,12 @@ test('[m1b-team-kibo-energy] keeps three actor and three kibo energy owners sync
   await page.getByTestId('workbench-close-side-inspector').click();
   await expect(inspector).toBeHidden();
   await expectTimelineRowsAligned(timeline);
+  await expectTimelineTrackReadability(timeline);
   const desktopLayout = await readTimelineFirstLayout(page);
-  expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(900);
+  expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(900);
+  expect(desktopLayout.shell.scrollHeight).toBeGreaterThan(
+    desktopLayout.shell.clientHeight
+  );
   await page.screenshot({ path: 'reports/m1b-six-energy-desktop.png' });
 
   await page.setViewportSize({ width: 390, height: 900 });
@@ -917,11 +940,7 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await expectTimelineRowsAligned(timeline);
   await expect
     .poll(() =>
-      timeline
-        .locator(
-          '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-toughness-curve"]'
-        )
-        .evaluate(element => element.getBoundingClientRect().bottom)
+      timeline.evaluate(element => element.getBoundingClientRect().bottom)
     )
     .toBeLessThanOrEqual(900);
   await page.screenshot({ path: 'reports/m2-direct-equipped-desktop.png' });
@@ -3577,7 +3596,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
       source: {
         sourceScenarioId: 'scenario-0001',
         boundaryId: 'cycle-boundary-0001',
-        boundaryTimeMs,
+        boundaryTimeMs: expect.any(Number),
       },
       enemy: {
         hp: { currentValue: expect.any(Number) },
@@ -3599,6 +3618,10 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
       ],
     },
   });
+  expect(project.initialRuntimeState.source.boundaryTimeMs).toBeCloseTo(
+    boundaryTimeMs,
+    3
+  );
 
   await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await page
@@ -3919,6 +3942,47 @@ async function expectTimelineRowsAligned(timeline) {
     rowsSeparated: true,
     labelsAligned: true,
   });
+}
+
+async function expectTimelineTrackReadability(timeline) {
+  const metrics = await timeline.evaluate(element => {
+    const actorRow = element.querySelector(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-action"]'
+    );
+    const actorAction = actorRow?.querySelector(
+      '[data-testid="workbench-timeline-action"]'
+    );
+    const loadoutSlot = element.querySelector(
+      '[data-testid="workbench-direct-loadout-slot"]'
+    );
+    const curveRows = [
+      ...element.querySelectorAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind$="curve"]'
+      ),
+    ];
+    const actorRect = actorRow?.getBoundingClientRect();
+    const actionRect = actorAction?.getBoundingClientRect();
+    const slotRect = loadoutSlot?.getBoundingClientRect();
+    return {
+      actorHeight: actorRect?.height ?? 0,
+      actionTopGap:
+        actorRect && actionRect ? actionRect.top - actorRect.top : 0,
+      actionBottomGap:
+        actorRect && actionRect ? actorRect.bottom - actionRect.bottom : 0,
+      slotAspect:
+        slotRect?.width && slotRect?.height
+          ? slotRect.height / slotRect.width
+          : 0,
+      curveHeights: curveRows.map(row => row.getBoundingClientRect().height),
+    };
+  });
+  expect(metrics.actorHeight).toBeGreaterThanOrEqual(164);
+  expect(metrics.actionTopGap).toBeGreaterThanOrEqual(28);
+  expect(metrics.actionBottomGap).toBeGreaterThanOrEqual(28);
+  expect(metrics.slotAspect).toBeGreaterThanOrEqual(0.82);
+  expect(metrics.slotAspect).toBeLessThanOrEqual(1.15);
+  expect(metrics.curveHeights).toHaveLength(8);
+  expect(metrics.curveHeights.every(height => height >= 44)).toBe(true);
 }
 
 async function openProjectMenu(page) {
@@ -4295,6 +4359,7 @@ async function readTimelineFirstLayout(page) {
         left: Math.round(rect.left),
         right: Math.round(rect.right),
         width: Math.round(rect.width),
+        height: Math.round(rect.height),
       };
     };
     const lanes = [
@@ -4312,6 +4377,23 @@ async function readTimelineFirstLayout(page) {
     }));
     return {
       timeline: readRect('[data-testid="workbench-timeline-grid-preview"]'),
+      shell: (() => {
+        const element = document.querySelector('.timeline-shell');
+        return {
+          ...readRect('.timeline-shell'),
+          clientHeight: element?.clientHeight ?? 0,
+          scrollHeight: element?.scrollHeight ?? 0,
+        };
+      })(),
+      viewport: (() => {
+        const element = document.querySelector(
+          '[data-testid="workbench-timeline-viewport"]'
+        );
+        return {
+          clientWidth: element?.clientWidth ?? 0,
+          scrollWidth: element?.scrollWidth ?? 0,
+        };
+      })(),
       review: readRect('[data-testid="workbench-review-workspace"]'),
       actions: readRect('.action-library'),
       inspector: readRect('.side-stack'),

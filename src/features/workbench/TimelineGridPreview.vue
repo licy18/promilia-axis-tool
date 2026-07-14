@@ -648,7 +648,7 @@
               v-for="window in lane.cooldownWindows"
               :key="window.windowId"
               class="cooldown-window"
-              :style="cooldownWindowStyle(window)"
+              :style="cooldownWindowStyle(window, lane)"
               :title="formatCooldownWindowTitle(window)"
               :data-action-id="window.actionId"
               :data-charge-index="window.chargeIndex"
@@ -681,7 +681,7 @@
                 },
                 `type-${action.type}`,
               ]"
-              :style="actionStyle(action)"
+              :style="actionStyle(action, lane)"
               :data-action-id="action.id"
               :data-action-type="action.type"
               :data-skill-id="action.skillId ?? ''"
@@ -952,18 +952,21 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
-const TIMELINE_LANE_MIN_HEIGHT_PX = 62;
-const TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX = 96;
-const TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX = 40;
-const TIMELINE_CURVE_LANE_HEIGHT_PX = 21;
-const TIMELINE_ACTION_TOP_PX = 4;
+const TIMELINE_LANE_MIN_HEIGHT_PX = 100;
+const TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX = 164;
+const TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX = 64;
+const TIMELINE_CURVE_LANE_HEIGHT_PX = 44;
+const TIMELINE_ACTION_TOP_PX = 29;
+const TIMELINE_ACTOR_ACTION_TOP_PX = 61;
 const TIMELINE_ACTION_HEIGHT_PX = 42;
 const TIMELINE_ACTION_SLOT_GAP_PX = 4;
+const TIMELINE_COOLDOWN_GAP_PX = 6;
+const TIMELINE_EFFECT_TOP_PX = 8;
 const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 16;
 const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
-const TIMELINE_EFFECT_SECTION_GAP_PX = 3;
+const TIMELINE_EFFECT_SECTION_GAP_PX = 8;
 const TIMELINE_LANE_GAP_PX = 3;
-const TIMELINE_DATA_GAP_PX = 2;
+const TIMELINE_DATA_GAP_PX = 10;
 const RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT = 2.25;
 const ACTION_ICON_COMPONENTS = Object.freeze({
   skill: Lightning,
@@ -1339,7 +1342,7 @@ const actionRelationLayoutByActionId = computed(() => {
         endX: clampPercent(startPercent + widthPercent),
         y:
           laneTop +
-          getTimelineActionTop(action.timelineSlot) +
+          getTimelineActionTop(lane, action.timelineSlot) +
           TIMELINE_ACTION_HEIGHT_PX / 2,
       });
     }
@@ -2335,7 +2338,7 @@ function normalizeActionEditFocusField(fieldKey) {
   return fieldKey || '';
 }
 
-function actionStyle(action) {
+function actionStyle(action, lane) {
   const previewOffsetMs = isDraggingAction(action.id)
     ? (dragState.value?.currentOffsetMs ?? 0)
     : 0;
@@ -2345,7 +2348,7 @@ function actionStyle(action) {
   const width = getTimelineActionWidthPercent(action, left);
   return {
     left: `${left}%`,
-    top: `${getTimelineActionTop(action.timelineSlot)}px`,
+    top: `${getTimelineActionTop(lane, action.timelineSlot)}px`,
     width: `${width}%`,
   };
 }
@@ -2362,7 +2365,7 @@ function getTimelineActionWidthPercent(action, leftPercent = 0) {
   );
 }
 
-function cooldownWindowStyle(window) {
+function cooldownWindowStyle(window, lane) {
   const startMs = Math.max(0, Number(window.startMs) || 0);
   const endMs = Math.min(
     props.durationMs,
@@ -2370,7 +2373,7 @@ function cooldownWindowStyle(window) {
   );
   return {
     left: `${clampPercent((startMs / props.durationMs) * 100)}%`,
-    top: `${getTimelineActionTop(window.timelineSlot) + TIMELINE_ACTION_HEIGHT_PX - 4}px`,
+    top: `${getTimelineActionTop(lane, window.timelineSlot) + TIMELINE_ACTION_HEIGHT_PX + TIMELINE_COOLDOWN_GAP_PX}px`,
     width: `${clampPercent(((endMs - startMs) / props.durationMs) * 100, 0.5, 100)}%`,
   };
 }
@@ -2502,9 +2505,16 @@ function stateCurveMarkerStyle(marker, lane) {
   };
 }
 
-function getTimelineActionTop(slot) {
+function getTimelineActionTop(lane, slot) {
+  const preferredTop =
+    lane?.kind === 'actor-action'
+      ? TIMELINE_ACTOR_ACTION_TOP_PX
+      : TIMELINE_ACTION_TOP_PX;
   return (
-    TIMELINE_ACTION_TOP_PX +
+    Math.max(
+      preferredTop,
+      getTimelineEffectAreaBottom(lane) + TIMELINE_EFFECT_SECTION_GAP_PX
+    ) +
     Math.max(0, Number(slot) || 0) *
       (TIMELINE_ACTION_HEIGHT_PX + TIMELINE_ACTION_SLOT_GAP_PX)
   );
@@ -2513,32 +2523,33 @@ function getTimelineActionTop(slot) {
 function getTimelineActionAreaBottom(lane) {
   const slotCount = getTimelineActionSlotCount(lane);
   return (
-    TIMELINE_ACTION_TOP_PX +
+    getTimelineActionTop(lane, 0) +
     slotCount * TIMELINE_ACTION_HEIGHT_PX +
     Math.max(0, slotCount - 1) * TIMELINE_ACTION_SLOT_GAP_PX
   );
 }
 
-function getTimelineEffectTop(lane) {
-  return getTimelineActionAreaBottom(lane) + TIMELINE_EFFECT_SECTION_GAP_PX;
+function getTimelineEffectTop() {
+  return TIMELINE_EFFECT_TOP_PX;
 }
 
-function getTimelineDataTop(lane) {
+function getTimelineEffectAreaBottom(lane) {
   const effectSlotCount = getTimelineEffectSlotCount(lane);
-  if (effectSlotCount === 0) {
-    return getTimelineActionAreaBottom(lane) + TIMELINE_DATA_GAP_PX;
-  }
+  if (effectSlotCount === 0) return TIMELINE_EFFECT_TOP_PX;
   return (
-    getTimelineEffectTop(lane) +
+    getTimelineEffectTop() +
     effectSlotCount * TIMELINE_EFFECT_INTERVAL_HEIGHT_PX +
-    Math.max(0, effectSlotCount - 1) * TIMELINE_EFFECT_INTERVAL_GAP_PX +
-    TIMELINE_DATA_GAP_PX
+    Math.max(0, effectSlotCount - 1) * TIMELINE_EFFECT_INTERVAL_GAP_PX
   );
 }
 
+function getTimelineDataTop(lane) {
+  return getTimelineActionAreaBottom(lane) + TIMELINE_DATA_GAP_PX;
+}
+
 function getTimelineStateCurveMarkerTop(marker, lane) {
-  if (lane.type === 'curve') return 14;
-  return getTimelineDataTop(lane) + (marker.top - 54);
+  if (lane.type === 'curve') return 18;
+  return getTimelineDataTop(lane) + Math.max(0, marker.top - 92);
 }
 
 function getTimelineLaneHeight(lane) {
@@ -2553,7 +2564,7 @@ function getTimelineLaneHeight(lane) {
     lane.kind === 'actor-action'
       ? TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX
       : TIMELINE_LANE_MIN_HEIGHT_PX,
-    getTimelineDataTop(lane) + 12,
+    getTimelineDataTop(lane) + 24,
     runtimeEventBottom
   );
 }
@@ -3862,6 +3873,13 @@ onBeforeUnmount(() => {
   background: #1c2228;
 }
 
+.timeline-panel {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .panel-title {
   position: relative;
   display: flex;
@@ -4174,6 +4192,7 @@ h2 {
 }
 
 .timeline-scale {
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: 188px minmax(0, 1fr);
   gap: 0;
@@ -4225,14 +4244,20 @@ h2 {
 
 .timeline-shell {
   display: grid;
+  min-height: 0;
+  flex: 1 1 auto;
   grid-template-columns: 188px minmax(0, 1fr);
   gap: 0;
   margin: 7px 10px 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .lane-labels,
 .timeline-lane {
   display: grid;
+  align-content: start;
   gap: 3px;
   min-width: 100%;
 }
@@ -4482,14 +4507,14 @@ h2 {
 
 .lane-label[data-lane-kind='actor-action'] {
   align-items: flex-start;
-  min-height: 96px;
-  padding: 6px 7px 60px;
+  min-height: 164px;
+  padding: 8px 7px 120px;
 }
 
 .lane-label[data-lane-kind='actor-action'] .lane-avatar {
-  width: 38px;
-  height: 38px;
-  flex-basis: 38px;
+  width: 44px;
+  height: 44px;
+  flex-basis: 44px;
 }
 
 .lane-avatar img {
@@ -4560,7 +4585,7 @@ h2 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 4px;
-  height: 52px;
+  height: 110px;
 }
 
 .lane-loadout-slot {
@@ -4752,7 +4777,7 @@ h2 {
 
 .timeline-state-curve {
   position: absolute;
-  inset: 5px 0;
+  inset: 7px 0;
   color: #a6b7ff;
 }
 
@@ -5386,9 +5411,9 @@ h2 {
   }
 
   .lane-label[data-lane-kind='actor-action'] {
-    min-height: 96px;
+    min-height: 164px;
     padding-right: 5px;
-    padding-bottom: 58px;
+    padding-bottom: 92px;
     padding-left: 5px;
   }
 
@@ -5408,7 +5433,7 @@ h2 {
     right: 4px;
     left: 4px;
     gap: 3px;
-    height: 50px;
+    height: 82px;
   }
 
   .lane-identity-copy strong {

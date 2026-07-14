@@ -255,8 +255,8 @@ describe('TimelineGridPreview', () => {
       '[data-testid="workbench-timeline-runtime-event-marker"]'
     );
     expect(markers).toHaveLength(2);
-    expect(markers[0].attributes('style')).toContain('top: 48px');
-    expect(markers[1].attributes('style')).toContain('top: 68px');
+    expect(markers[0].attributes('style')).toContain('top: 113px');
+    expect(markers[1].attributes('style')).toContain('top: 133px');
 
     await markers[1].trigger('click');
     await markers[0].trigger('click');
@@ -325,6 +325,14 @@ describe('TimelineGridPreview', () => {
       'data-end-ms': '1500',
       'data-window-id': 'action-a|cooldown-charge|0',
     });
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-a"]'
+        )
+        .attributes('style')
+    ).toContain('top: 61px');
+    expect(cooldownWindow.attributes('style')).toContain('top: 109px');
   });
 
   it('renders, selects, and creates persisted action relations', async () => {
@@ -776,7 +784,17 @@ describe('TimelineGridPreview', () => {
         .findAll('[data-testid="workbench-direct-loadout-slot"]')
         .map(slot => slot.attributes('data-loadout-slot'))
     ).toEqual(['weapon', 'top', 'bottom', 'earring', 'ring', 'soulessenceId']);
-    expect(readStyleNumber(identity.attributes('style'), 'height')).toBe(96);
+    expect(readStyleNumber(identity.attributes('style'), 'height')).toBe(164);
+    expect(
+      readStyleNumber(
+        wrapper
+          .get(
+            '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-a"]'
+          )
+          .attributes('style'),
+        'height'
+      )
+    ).toBe(44);
 
     await identity.get('.lane-identity-command').trigger('click');
     expect(wrapper.emitted('select-identity')?.at(-1)?.[0]).toEqual({
