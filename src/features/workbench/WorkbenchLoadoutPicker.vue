@@ -99,6 +99,10 @@
             class="picker-scrollbar"
             aria-hidden="true"
             data-testid="workbench-loadout-scrollbar"
+            @pointerdown.stop.prevent="beginOptionGridScrollbarDrag"
+            @pointermove.stop.prevent="moveOptionGridScrollbarDrag"
+            @pointerup.stop.prevent="endOptionGridScrollbarDrag"
+            @pointercancel.stop.prevent="endOptionGridScrollbarDrag"
           >
             <span
               class="picker-scrollbar-thumb"
@@ -178,6 +182,7 @@ const loading = ref(!catalog.value);
 const loadError = ref('');
 const searchQuery = ref('');
 let previousBodyOverflow;
+let optionGridScrollbarPointerId = null;
 const pickerTitleId = `workbench-loadout-picker-title-${String(
   props.request.kind
 )}`;
@@ -340,6 +345,41 @@ function syncOptionGridScroll(event) {
   };
 }
 
+function beginOptionGridScrollbarDrag(event) {
+  optionGridScrollbarPointerId = event.pointerId;
+  event.currentTarget.setPointerCapture?.(event.pointerId);
+  scrollOptionGridFromRail(event);
+}
+
+function moveOptionGridScrollbarDrag(event) {
+  if (event.pointerId !== optionGridScrollbarPointerId) return;
+  scrollOptionGridFromRail(event);
+}
+
+function endOptionGridScrollbarDrag(event) {
+  if (event.pointerId !== optionGridScrollbarPointerId) return;
+  event.currentTarget.releasePointerCapture?.(event.pointerId);
+  optionGridScrollbarPointerId = null;
+}
+
+function scrollOptionGridFromRail(event) {
+  const optionGrid = optionGridRef.value;
+  if (!optionGrid) return;
+  const rail = event.currentTarget.getBoundingClientRect();
+  const thumbHeight = Math.max(
+    32,
+    rail.height * (optionGrid.clientHeight / optionGrid.scrollHeight)
+  );
+  const travel = Math.max(1, rail.height - thumbHeight);
+  const thumbTop = Math.min(
+    travel,
+    Math.max(0, event.clientY - rail.top - thumbHeight / 2)
+  );
+  optionGrid.scrollTop =
+    (thumbTop / travel) * (optionGrid.scrollHeight - optionGrid.clientHeight);
+  syncOptionGridScroll();
+}
+
 async function loadCatalog(options = {}) {
   loading.value = true;
   loadError.value = '';
@@ -482,9 +522,7 @@ h2 {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-color: #79c7b9 #26323a;
-  scrollbar-gutter: stable;
-  scrollbar-width: auto;
+  scrollbar-width: none;
 }
 
 .loadout-option-viewport {
@@ -509,7 +547,8 @@ h2 {
   border-radius: 4px;
   background: #26323a;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  pointer-events: none;
+  cursor: ns-resize;
+  touch-action: none;
 }
 
 .picker-scrollbar-thumb {
@@ -523,18 +562,8 @@ h2 {
 }
 
 .loadout-option-grid::-webkit-scrollbar {
-  width: 12px;
-}
-
-.loadout-option-grid::-webkit-scrollbar-track {
-  background: #26323a;
-}
-
-.loadout-option-grid::-webkit-scrollbar-thumb {
-  min-height: 48px;
-  border: 2px solid #26323a;
-  border-radius: 6px;
-  background: #79c7b9;
+  width: 0;
+  height: 0;
 }
 
 .loadout-option {

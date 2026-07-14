@@ -3,6 +3,12 @@ import { nextTick } from 'vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import { serializeWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
 
+function readStyleNumber(style, property) {
+  return Number(
+    String(style).match(new RegExp(`${property}:\\s*([\\d.]+)`, 'u'))?.[1]
+  );
+}
+
 describe('TimelineGridPreview', () => {
   it('renders the official icon, action kind, and frame duration on action blocks', () => {
     const action = {
@@ -27,6 +33,10 @@ describe('TimelineGridPreview', () => {
       '/assets/actions/tex_icon_skill_109001_00.png'
     );
     expect(block.text()).toContain('普通攻击 · 60F');
+    expect(readStyleNumber(block.attributes('style'), 'width')).toBeCloseTo(
+      100 / 3,
+      4
+    );
   });
 
   it('accepts action-library entries from the standard text drag payload', async () => {
@@ -245,8 +255,8 @@ describe('TimelineGridPreview', () => {
       '[data-testid="workbench-timeline-runtime-event-marker"]'
     );
     expect(markers).toHaveLength(2);
-    expect(markers[0].attributes('style')).toContain('top: 42px');
-    expect(markers[1].attributes('style')).toContain('top: 62px');
+    expect(markers[0].attributes('style')).toContain('top: 48px');
+    expect(markers[1].attributes('style')).toContain('top: 68px');
 
     await markers[1].trigger('click');
     await markers[0].trigger('click');
@@ -760,7 +770,13 @@ describe('TimelineGridPreview', () => {
     });
     expect(
       identity.findAll('[data-testid="workbench-direct-loadout-slot"]')
-    ).toHaveLength(7);
+    ).toHaveLength(6);
+    expect(
+      identity
+        .findAll('[data-testid="workbench-direct-loadout-slot"]')
+        .map(slot => slot.attributes('data-loadout-slot'))
+    ).toEqual(['weapon', 'top', 'bottom', 'earring', 'ring', 'soulessenceId']);
+    expect(readStyleNumber(identity.attributes('style'), 'height')).toBe(96);
 
     await identity.get('.lane-identity-command').trigger('click');
     expect(wrapper.emitted('select-identity')?.at(-1)?.[0]).toEqual({
@@ -783,6 +799,11 @@ describe('TimelineGridPreview', () => {
       characterId: 109001,
       selectedId: 500001,
     });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-direct-kibo-picker"]')
+        .attributes('data-selected-id')
+    ).toBe('500001');
 
     await wrapper
       .get(

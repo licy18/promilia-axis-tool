@@ -832,6 +832,7 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await page.reload();
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await expectTimelineActionWidthsMatchDuration(timeline);
   const initialSlot3CharacterId = 101007;
   const demoActorIds = [109001, 101003, 101010];
   await page
@@ -869,9 +870,9 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
     )
   ).toHaveAttribute('data-active', 'true');
 
-  await demoSlot3
+  await timeline
     .locator(
-      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="kiboId"]'
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="101010"] [data-testid="workbench-direct-kibo-picker"]'
     )
     .click();
   await expectM2PickerScrollContainment(page, 100);
@@ -3986,6 +3987,12 @@ async function expectM2PickerScrollContainment(page, minimumOptionCount) {
   const scrollThumb = picker.getByTestId('workbench-loadout-scrollbar-thumb');
   await expect(picker).toBeVisible();
   await expect(optionGrid).toBeVisible();
+  await expect(scrollBar).toHaveCount(1);
+  await expect
+    .poll(() =>
+      optionGrid.evaluate(element => getComputedStyle(element).scrollbarWidth)
+    )
+    .toBe('none');
   expect(
     await picker.getByTestId('workbench-loadout-option').count()
   ).toBeGreaterThan(minimumOptionCount);
@@ -4030,14 +4037,19 @@ async function expectM2PickerScrollContainment(page, minimumOptionCount) {
 }
 
 async function selectM2LoadoutOption(page, characterId, slotKey, selectedId) {
-  const actorLane = page.locator(
-    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
-  );
-  await actorLane
-    .locator(
-      `[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
-    )
-    .click();
+  if (slotKey === 'kiboId') {
+    await page
+      .locator(
+        `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="${characterId}"] [data-testid="workbench-direct-kibo-picker"]`
+      )
+      .click();
+  } else {
+    await page
+      .locator(
+        `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+      )
+      .click();
+  }
   const picker = page.getByTestId('workbench-loadout-picker');
   await expect(picker).toBeVisible();
   await picker
@@ -4071,12 +4083,9 @@ async function expectM2TeamDirect(page, actorIds) {
 }
 
 async function hydrateM2LoadoutCatalog(page, characterId) {
-  const actorLane = page.locator(
-    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
-  );
-  await actorLane
+  await page
     .locator(
-      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="kiboId"]'
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="${characterId}"] [data-testid="workbench-direct-kibo-picker"]`
     )
     .click();
   const picker = page.getByTestId('workbench-loadout-picker');
@@ -4092,8 +4101,8 @@ async function expectM2ActorLoadoutDirect(page, characterId, config) {
     `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
   );
   await expect(
-    actorLane.locator(
-      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="kiboId"]'
+    page.locator(
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="${characterId}"] [data-testid="workbench-direct-kibo-picker"]`
     )
   ).toHaveAttribute('data-selected-id', config.kiboId);
   for (const [slotKey, equipmentId] of Object.entries(config.equipment)) {
@@ -4110,11 +4119,44 @@ async function expectM2ActorLoadoutDirect(page, characterId, config) {
   ).toHaveAttribute('data-selected-id', config.soulessenceId);
   await expect(
     actorLane.locator('[data-testid="workbench-direct-loadout-slot"] img')
-  ).toHaveCount(7);
+  ).toHaveCount(6);
   for (const image of await actorLane
     .locator('[data-testid="workbench-direct-loadout-slot"] img')
     .all()) {
     await expectLoadedImage(image);
+  }
+}
+
+async function expectTimelineActionWidthsMatchDuration(timeline) {
+  const measurements = await timeline.evaluate(root => {
+    const durationMs = Number(root.dataset.durationMs);
+    return [
+      ...root.querySelectorAll('[data-testid="workbench-timeline-action"]'),
+    ]
+      .slice(0, 8)
+      .map(action => {
+        const containingBlock = action.offsetParent;
+        const containingBlockWidth =
+          containingBlock?.getBoundingClientRect().width ?? 0;
+        return {
+          actionId: action.dataset.actionId,
+          durationMs: Number(action.dataset.durationMs),
+          renderedPercent:
+            containingBlockWidth > 0
+              ? (action.getBoundingClientRect().width / containingBlockWidth) *
+                100
+              : 0,
+          stylePercent: Number.parseFloat(action.style.width),
+        };
+      })
+      .filter(item => item.durationMs > 0);
+  });
+  expect(measurements.length).toBeGreaterThan(0);
+  const durationMs = Number(await timeline.getAttribute('data-duration-ms'));
+  for (const measurement of measurements) {
+    const expectedPercent = (measurement.durationMs / durationMs) * 100;
+    expect(measurement.stylePercent).toBeCloseTo(expectedPercent, 5);
+    expect(measurement.renderedPercent).toBeCloseTo(expectedPercent, 1);
   }
 }
 

@@ -12,6 +12,7 @@
     :data-flow-runtime-focus-source="flowRuntimeFocusSource"
     :data-cursor-frame-index="timelineCursor.frameIndex"
     :data-cursor-time-ms="timelineCursor.timeMs"
+    :data-duration-ms="durationMs"
     :data-playback-running="playbackRunning ? 'true' : 'false'"
     :data-playback-rate="playbackRate"
     :data-playback-range-mode="playbackRangeMode"
@@ -402,6 +403,7 @@
               class="lane-direct-identity lane-kibo-command"
               type="button"
               title="选择奇波"
+              :data-selected-id="lane.identity?.kiboId || ''"
               data-testid="workbench-direct-kibo-picker"
               @click.stop="openLaneLoadoutPicker(lane, 'kibo')"
             >
@@ -950,14 +952,17 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
-const TIMELINE_LANE_MIN_HEIGHT_PX = 54;
+const TIMELINE_LANE_MIN_HEIGHT_PX = 62;
+const TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX = 96;
+const TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX = 40;
+const TIMELINE_CURVE_LANE_HEIGHT_PX = 21;
 const TIMELINE_ACTION_TOP_PX = 4;
-const TIMELINE_ACTION_HEIGHT_PX = 36;
+const TIMELINE_ACTION_HEIGHT_PX = 42;
 const TIMELINE_ACTION_SLOT_GAP_PX = 4;
 const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 16;
 const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
 const TIMELINE_EFFECT_SECTION_GAP_PX = 3;
-const TIMELINE_LANE_GAP_PX = 4;
+const TIMELINE_LANE_GAP_PX = 3;
 const TIMELINE_DATA_GAP_PX = 2;
 const RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT = 2.25;
 const ACTION_ICON_COMPONENTS = Object.freeze({
@@ -1004,7 +1009,6 @@ const STATE_CURVE_TRACK_MARKER_TOP = {
   selfEnergyChange: 106,
 };
 const LOADOUT_SLOT_DEFINITIONS = Object.freeze([
-  { key: 'kiboId', label: '奇波', kind: 'kibo' },
   { key: 'weapon', label: '武器', kind: 'equipment' },
   { key: 'top', label: '上装', kind: 'equipment' },
   { key: 'bottom', label: '下装', kind: 'equipment' },
@@ -1329,13 +1333,7 @@ const actionRelationLayoutByActionId = computed(() => {
       const startPercent = clampPercent(
         ((action.startMs + previewOffsetMs) / props.durationMs) * 100
       );
-      const widthPercent = clampPercent(
-        ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) /
-          props.durationMs) *
-          100,
-        8,
-        100
-      );
+      const widthPercent = getTimelineActionWidthPercent(action, startPercent);
       layoutByActionId.set(action.id, {
         startX: startPercent,
         endX: clampPercent(startPercent + widthPercent),
@@ -2344,18 +2342,24 @@ function actionStyle(action) {
   const left = clampPercent(
     ((action.startMs + previewOffsetMs) / props.durationMs) * 100
   );
-  const width = clampPercent(
-    ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) /
-      props.durationMs) *
-      100,
-    8,
-    100
-  );
+  const width = getTimelineActionWidthPercent(action, left);
   return {
     left: `${left}%`,
     top: `${getTimelineActionTop(action.timelineSlot)}px`,
     width: `${width}%`,
   };
+}
+
+function getTimelineActionWidthPercent(action, leftPercent = 0) {
+  const durationMs = Math.max(
+    MIN_ACTION_DURATION_MS,
+    Number(action.durationMs) || DEFAULT_TIMELINE_ACTION_DURATION_MS
+  );
+  return clampPercent(
+    (durationMs / props.durationMs) * 100,
+    0,
+    Math.max(0, 100 - leftPercent)
+  );
 }
 
 function cooldownWindowStyle(window) {
@@ -2538,13 +2542,17 @@ function getTimelineStateCurveMarkerTop(marker, lane) {
 }
 
 function getTimelineLaneHeight(lane) {
-  if (lane.type === 'curve') return 28;
-  if (lane.type === 'kibo' && lane.actions.length === 0) return 32;
+  if (lane.type === 'curve') return TIMELINE_CURVE_LANE_HEIGHT_PX;
+  if (lane.type === 'kibo' && lane.actions.length === 0) {
+    return TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX;
+  }
   const runtimeEventBottom = lane.runtimeEventSlotCount
     ? getTimelineDataTop(lane) + lane.runtimeEventSlotCount * 20 + 2
     : 0;
   return Math.max(
-    TIMELINE_LANE_MIN_HEIGHT_PX,
+    lane.kind === 'actor-action'
+      ? TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX
+      : TIMELINE_LANE_MIN_HEIGHT_PX,
     getTimelineDataTop(lane) + 12,
     runtimeEventBottom
   );
@@ -2640,10 +2648,8 @@ function createRuntimeEventLayout(markers) {
 }
 
 function getTimelineActionLayoutDurationMs(action) {
-  const displayMinDurationMs = props.durationMs * 0.08;
   return Math.max(
     MIN_ACTION_DURATION_MS,
-    displayMinDurationMs,
     Number(action.durationMs) || DEFAULT_TIMELINE_ACTION_DURATION_MS
   );
 }
@@ -4227,7 +4233,7 @@ h2 {
 .lane-labels,
 .timeline-lane {
   display: grid;
-  gap: 4px;
+  gap: 3px;
   min-width: 100%;
 }
 
@@ -4476,14 +4482,14 @@ h2 {
 
 .lane-label[data-lane-kind='actor-action'] {
   align-items: flex-start;
-  min-height: 64px;
-  padding: 4px 7px 22px;
+  min-height: 96px;
+  padding: 6px 7px 60px;
 }
 
 .lane-label[data-lane-kind='actor-action'] .lane-avatar {
-  width: 34px;
-  height: 34px;
-  flex-basis: 34px;
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
 }
 
 .lane-avatar img {
@@ -4551,9 +4557,10 @@ h2 {
   bottom: 3px;
   left: 5px;
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 3px;
-  height: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  height: 52px;
 }
 
 .lane-loadout-slot {
@@ -4567,7 +4574,7 @@ h2 {
   border-radius: 2px;
   background: #0e1418;
   color: #7f8b91;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -4805,14 +4812,14 @@ h2 {
 .action-block {
   position: absolute;
   top: 4px;
-  display: grid;
+  display: block;
   box-sizing: border-box;
-  height: 36px;
-  min-width: 0;
-  grid-template-columns: 26px minmax(0, 1fr);
-  align-items: center;
-  gap: 6px;
-  padding: 4px clamp(24px, 18%, 54px) 4px 7px;
+  container-name: timeline-action;
+  container-type: inline-size;
+  height: 42px;
+  min-width: 1px;
+  padding: 0;
+  overflow: hidden;
   border: 1px solid rgba(121, 199, 185, 0.5);
   border-radius: 6px;
   background: linear-gradient(180deg, #274840 0%, #20352f 100%);
@@ -4984,13 +4991,20 @@ h2 {
 }
 
 .action-block.has-result-edit {
-  padding-right: clamp(46px, 24%, 76px);
+  padding-right: 0;
 }
 
 .action-kind-icon {
   width: 16px;
   height: 16px;
   color: #baf1e6;
+}
+
+.action-block > .action-kind-icon {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
 }
 
 .action-image-icon {
@@ -5002,9 +5016,16 @@ h2 {
 }
 
 .action-block-copy {
+  position: absolute;
+  inset: 4px 4px 4px 37px;
   display: grid;
   min-width: 0;
   gap: 1px;
+  align-content: center;
+}
+
+.action-block.has-result-edit .action-block-copy {
+  right: 46px;
 }
 
 .action-block-copy strong,
@@ -5158,6 +5179,23 @@ h2 {
 .duration-handle:focus {
   outline: 1px solid rgba(255, 255, 255, 0.8);
   outline-offset: 1px;
+}
+
+@container timeline-action (max-width: 44px) {
+  .action-block-copy,
+  .timeline-action-result-edit-button,
+  .duration-handle,
+  .overlap-badge,
+  .auto-delay-badge {
+    display: none;
+  }
+
+  .action-block > .action-kind-icon {
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .runtime-event-marker {
@@ -5348,7 +5386,9 @@ h2 {
   }
 
   .lane-label[data-lane-kind='actor-action'] {
+    min-height: 96px;
     padding-right: 5px;
+    padding-bottom: 58px;
     padding-left: 5px;
   }
 
@@ -5359,15 +5399,16 @@ h2 {
   }
 
   .lane-label[data-lane-kind='actor-action'] .lane-avatar {
-    width: 28px;
-    height: 28px;
-    flex-basis: 28px;
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
   }
 
   .lane-loadout-rack {
     right: 4px;
     left: 4px;
-    gap: 2px;
+    gap: 3px;
+    height: 50px;
   }
 
   .lane-identity-copy strong {

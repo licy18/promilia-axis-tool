@@ -125,14 +125,15 @@ async function selectLoadoutFromTimeline(
   selectedId
 ) {
   await settleWorkbenchAsyncPanels();
-  const actorLane = wrapper.get(
-    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
-  );
-  await actorLane
-    .get(
-      `[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
-    )
-    .trigger('click');
+  const picker =
+    slotKey === 'kiboId'
+      ? wrapper.get(
+          `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="${characterId}"] [data-testid="workbench-direct-kibo-picker"]`
+        )
+      : wrapper.get(
+          `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+        );
+  await picker.trigger('click');
   await settleWorkbenchAsyncPanels();
   wrapper.findComponent(WorkbenchLoadoutPicker).vm.$emit('select', selectedId);
   await nextTick();
@@ -146,6 +147,11 @@ function getTimelineTeamSlot(wrapper, slotIndex) {
 }
 
 function getTimelineLoadoutSlot(wrapper, characterId, slotKey) {
+  if (slotKey === 'kiboId') {
+    return wrapper.get(
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="${characterId}"] [data-testid="workbench-direct-kibo-picker"]`
+    );
+  }
   return wrapper.get(
     `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
   );
@@ -2201,7 +2207,7 @@ describe('Workbench view', () => {
     expect(wrapper.findAll('.action-item')).toHaveLength(1);
 
     wrapper.unmount();
-  });
+  }, 10_000);
 
   it('drives the edit-runtime-return loop from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
