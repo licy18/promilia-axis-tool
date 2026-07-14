@@ -66,6 +66,7 @@ describe('WorkbenchLoadoutPicker', () => {
       .get('[data-testid="workbench-loadout-option"]')
       .trigger('click');
     expect(wrapper.emitted('select')?.at(-1)).toEqual([1010111]);
+    wrapper.unmount();
   });
 
   it('marks characters already assigned to the three fixed slots', async () => {
@@ -95,5 +96,25 @@ describe('WorkbenchLoadoutPicker', () => {
     expect(wrapper.text()).toContain('队伍槽位 3');
     expect(wrapper.text()).toContain('当前槽位');
     expect(wrapper.text()).not.toContain('NaN');
+    wrapper.unmount();
+  });
+
+  it('locks background scrolling while the modal is mounted', async () => {
+    document.body.style.overflow = 'auto';
+    const wrapper = mount(WorkbenchLoadoutPicker, {
+      props: {
+        request: {
+          kind: 'soulessence',
+          selectedId: null,
+        },
+      },
+      global: { stubs: { teleport: true } },
+    });
+    await flushPromises();
+
+    expect(document.body.style.overflow).toBe('hidden');
+    wrapper.unmount();
+    expect(document.body.style.overflow).toBe('auto');
+    document.body.style.overflow = '';
   });
 });

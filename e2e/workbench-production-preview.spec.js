@@ -869,6 +869,18 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
     )
   ).toHaveAttribute('data-active', 'true');
 
+  await demoSlot3
+    .locator(
+      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="kiboId"]'
+    )
+    .click();
+  await expectM2PickerScrollContainment(page, 100);
+  await page.screenshot({
+    path: 'reports/m2-loadout-picker-scroll-desktop.png',
+  });
+  await page.getByTestId('workbench-loadout-close').click();
+  await expect(page.getByTestId('workbench-loadout-picker')).toBeHidden();
+
   await configureM2TeamDirectly(page, demoActorIds);
   const demoSoulSlot = timeline.locator(
     '[data-testid="workbench-timeline-lane-label"][data-character-id="101010"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="soulessenceId"]'
@@ -962,6 +974,18 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
       '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
     )
   ).toHaveAttribute('data-active', 'true');
+
+  await emptySlot3
+    .locator(
+      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="soulessenceId"]'
+    )
+    .click();
+  await expectM2PickerScrollContainment(page, 50);
+  await page.screenshot({
+    path: 'reports/m2-loadout-picker-scroll-narrow.png',
+  });
+  await page.getByTestId('workbench-loadout-close').click();
+  await expect(page.getByTestId('workbench-loadout-picker')).toBeHidden();
 
   const emptyActorIds = [109001, 101003, 101010];
   await configureM2TeamDirectly(page, emptyActorIds);
@@ -3953,6 +3977,56 @@ async function configureM2TeamDirectly(page, actorIds) {
     );
     await expectM2ActorLoadoutDirect(page, characterId, config);
   }
+}
+
+async function expectM2PickerScrollContainment(page, minimumOptionCount) {
+  const picker = page.getByTestId('workbench-loadout-picker');
+  const optionGrid = picker.locator('.loadout-option-grid');
+  const scrollBar = picker.getByTestId('workbench-loadout-scrollbar');
+  const scrollThumb = picker.getByTestId('workbench-loadout-scrollbar-thumb');
+  await expect(picker).toBeVisible();
+  await expect(optionGrid).toBeVisible();
+  expect(
+    await picker.getByTestId('workbench-loadout-option').count()
+  ).toBeGreaterThan(minimumOptionCount);
+
+  const metrics = await optionGrid.evaluate(element => ({
+    clientHeight: element.clientHeight,
+    overflowY: getComputedStyle(element).overflowY,
+    scrollHeight: element.scrollHeight,
+  }));
+  expect(metrics.overflowY).toBe('auto');
+  expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight);
+  await expect(scrollBar).toBeVisible();
+  await expect(scrollThumb).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.body.style.overflow))
+    .toBe('hidden');
+
+  const pageScrollBefore = await page.evaluate(() => ({
+    document: document.scrollingElement?.scrollTop ?? 0,
+    window: window.scrollY,
+  }));
+  const thumbTopBefore = await scrollThumb.evaluate(element =>
+    Number.parseFloat(element.style.top)
+  );
+  await optionGrid.hover();
+  await page.mouse.wheel(0, 1200);
+  await expect
+    .poll(() => optionGrid.evaluate(element => element.scrollTop))
+    .toBeGreaterThan(0);
+  await expect
+    .poll(() =>
+      scrollThumb.evaluate(element => Number.parseFloat(element.style.top))
+    )
+    .toBeGreaterThan(thumbTopBefore);
+  await page.mouse.wheel(0, 100_000);
+  expect(
+    await page.evaluate(() => ({
+      document: document.scrollingElement?.scrollTop ?? 0,
+      window: window.scrollY,
+    }))
+  ).toEqual(pageScrollBefore);
 }
 
 async function selectM2LoadoutOption(page, characterId, slotKey, selectedId) {

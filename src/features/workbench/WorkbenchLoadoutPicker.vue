@@ -4,6 +4,7 @@
       class="loadout-picker-overlay"
       data-testid="workbench-loadout-picker"
       @click.self="emit('close')"
+      @wheel.stop
     >
       <section
         ref="dialogRef"
@@ -55,41 +56,56 @@
           />
         </label>
 
-        <div
-          v-if="options.length"
-          class="loadout-option-grid"
-          :data-option-count="options.length"
-        >
-          <button
-            v-for="option in options"
-            :key="option.id"
-            class="loadout-option"
-            :class="{ selected: option.id === selectedId }"
-            type="button"
-            :data-option-id="option.id"
-            :aria-pressed="option.id === selectedId"
-            data-testid="workbench-loadout-option"
-            @click="emit('select', option.id)"
+        <div v-if="options.length" class="loadout-option-viewport">
+          <div
+            ref="optionGridRef"
+            class="loadout-option-grid"
+            :data-option-count="options.length"
+            @scroll="syncOptionGridScroll"
           >
-            <span class="option-icon" aria-hidden="true">
-              <span>{{ option.initial }}</span>
-              <img
-                v-if="option.iconUrl"
-                :src="option.iconUrl"
-                alt=""
-                @error="hideBrokenImage"
-              />
-            </span>
-            <span class="option-copy">
-              <strong>{{ option.name }}</strong>
-              <small>{{ option.summary }}</small>
-              <span v-if="option.markers?.length" class="option-markers">
-                <em v-for="marker in option.markers" :key="marker">
-                  {{ marker }}
-                </em>
+            <button
+              v-for="option in options"
+              :key="option.id"
+              class="loadout-option"
+              :class="{ selected: option.id === selectedId }"
+              type="button"
+              :data-option-id="option.id"
+              :aria-pressed="option.id === selectedId"
+              data-testid="workbench-loadout-option"
+              @click="emit('select', option.id)"
+            >
+              <span class="option-icon" aria-hidden="true">
+                <span>{{ option.initial }}</span>
+                <img
+                  v-if="option.iconUrl"
+                  :src="option.iconUrl"
+                  alt=""
+                  @error="hideBrokenImage"
+                />
               </span>
-            </span>
-          </button>
+              <span class="option-copy">
+                <strong>{{ option.name }}</strong>
+                <small>{{ option.summary }}</small>
+                <span v-if="option.markers?.length" class="option-markers">
+                  <em v-for="marker in option.markers" :key="marker">
+                    {{ marker }}
+                  </em>
+                </span>
+              </span>
+            </button>
+          </div>
+          <div
+            v-if="optionGridScrollable"
+            class="picker-scrollbar"
+            aria-hidden="true"
+            data-testid="workbench-loadout-scrollbar"
+          >
+            <span
+              class="picker-scrollbar-thumb"
+              :style="optionGridThumbStyle"
+              data-testid="workbench-loadout-scrollbar-thumb"
+            />
+          </div>
         </div>
         <div v-else-if="loadError" class="picker-state error-state">
           <strong>资料载入失败</strong>
@@ -108,7 +124,14 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
 import { Close, Delete, RefreshRight, Search } from '@element-plus/icons-vue';
 import {
   getWorkbenchLoadoutDetailCatalogSnapshot,
@@ -144,10 +167,17 @@ const props = defineProps({
 
 const emit = defineEmits(['catalog-loaded', 'close', 'select']);
 const dialogRef = ref(null);
+const optionGridRef = ref(null);
+const optionGridMetrics = ref({
+  clientHeight: 0,
+  scrollHeight: 0,
+  scrollTop: 0,
+});
 const catalog = ref(getWorkbenchLoadoutDetailCatalogSnapshot());
 const loading = ref(!catalog.value);
 const loadError = ref('');
 const searchQuery = ref('');
+let previousBodyOverflow;
 const pickerTitleId = `workbench-loadout-picker-title-${String(
   props.request.kind
 )}`;
@@ -216,13 +246,44 @@ const options = computed(() => {
     String(option.name).toLocaleLowerCase('zh-CN').includes(query)
   );
 });
+const optionGridScrollable = computed(
+  () =>
+    optionGridMetrics.value.scrollHeight >
+    optionGridMetrics.value.clientHeight + 1
+);
+const optionGridThumbStyle = computed(() => {
+  const { clientHeight, scrollHeight, scrollTop } = optionGridMetrics.value;
+  if (!clientHeight || !scrollHeight) {
+    return { height: '100%', top: '0%' };
+  }
+  const height = Math.max(8, (clientHeight / scrollHeight) * 100);
+  const progress = scrollTop / Math.max(1, scrollHeight - clientHeight);
+  return {
+    height: `${height}%`,
+    top: `${Math.min(100 - height, Math.max(0, progress * (100 - height)))}%`,
+  };
+});
+
+watch(
+  () => [props.request.kind, props.request.slotKey, options.value.length],
+  async () => {
+    await nextTick();
+    syncOptionGridScroll();
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
+  previousBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
   window.addEventListener('keydown', closeOnEscape);
   void nextTick(() => dialogRef.value?.focus());
 });
 
 onBeforeUnmount(() => {
+  if (previousBodyOverflow !== undefined) {
+    document.body.style.overflow = previousBodyOverflow;
+  }
   window.removeEventListener('keydown', closeOnEscape);
 });
 
@@ -269,6 +330,16 @@ function hideBrokenImage(event) {
   event.currentTarget.dataset.missing = 'true';
 }
 
+function syncOptionGridScroll(event) {
+  const element = event?.currentTarget ?? optionGridRef.value;
+  if (!element) return;
+  optionGridMetrics.value = {
+    clientHeight: element.clientHeight,
+    scrollHeight: element.scrollHeight,
+    scrollTop: element.scrollTop,
+  };
+}
+
 async function loadCatalog(options = {}) {
   loading.value = true;
   loadError.value = '';
@@ -292,12 +363,16 @@ async function loadCatalog(options = {}) {
   place-items: center;
   padding: 28px;
   background: rgba(5, 8, 10, 0.72);
+  overscroll-behavior: contain;
 }
 
 .loadout-picker-dialog {
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
   width: min(920px, 100%);
-  max-height: min(720px, calc(100vh - 56px));
+  height: min(720px, calc(100vh - 56px));
+  height: min(720px, calc(100dvh - 56px));
+  min-height: 0;
   overflow: hidden;
   border: 1px solid rgba(121, 199, 185, 0.42);
   border-radius: 6px;
@@ -400,9 +475,66 @@ h2 {
 .loadout-option-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  align-content: start;
   gap: 8px;
+  min-height: 0;
   padding: 12px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #79c7b9 #26323a;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+}
+
+.loadout-option-viewport {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.loadout-option-grid {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding-right: 24px;
+}
+
+.picker-scrollbar {
+  position: absolute;
+  top: 12px;
+  right: 7px;
+  bottom: 12px;
+  width: 8px;
+  border-radius: 4px;
+  background: #26323a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.picker-scrollbar-thumb {
+  position: absolute;
+  right: 1px;
+  left: 1px;
+  min-height: 32px;
+  border-radius: 3px;
+  background: #79c7b9;
+  box-shadow: 0 0 0 1px rgba(5, 8, 10, 0.45);
+}
+
+.loadout-option-grid::-webkit-scrollbar {
+  width: 12px;
+}
+
+.loadout-option-grid::-webkit-scrollbar-track {
+  background: #26323a;
+}
+
+.loadout-option-grid::-webkit-scrollbar-thumb {
+  min-height: 48px;
+  border: 2px solid #26323a;
+  border-radius: 6px;
+  background: #79c7b9;
 }
 
 .loadout-option {
@@ -535,7 +667,8 @@ h2 {
 
   .loadout-picker-dialog {
     width: 100%;
-    max-height: 86vh;
+    height: 86vh;
+    height: 86dvh;
     border-right: 0;
     border-bottom: 0;
     border-left: 0;
