@@ -203,6 +203,17 @@
       @delete="deleteWorkspaceScenario"
     />
 
+    <WorkbenchLoadoutPicker
+      v-if="loadoutPickerRequest"
+      :request="loadoutPickerRequest"
+      :characters="workbenchSeed.gameData.characters"
+      :enemies="gameData.enemies"
+      :team-slots="teamSlots"
+      @catalog-loaded="installLoadoutDetailCatalog"
+      @select="applyLoadoutPickerSelection"
+      @close="closeLoadoutPicker"
+    />
+
     <WorkbenchPresetLibraryDialog
       :visible="presetDialogVisible"
       :presets="workbenchPresets"
@@ -425,6 +436,7 @@
           :enemy="scenario.enemy"
           :timeline-topology="project.metadata.timelineTopology"
           :kibos="loadoutOptions.kibos"
+          :loadout-detail-catalog="loadoutDetailCatalog"
           :actions="scenario.actions"
           :timeline-entry-catalog="timelineEntryCatalog"
           :timeline-entry-default-actor-id="actionLibraryActor.id"
@@ -470,6 +482,7 @@
           :external-timeline-entry-drag="actionLibraryTimelineEntryDrag"
           @select-action="selectAction"
           @select-identity="selectTimelineIdentity"
+          @open-loadout-picker="openLoadoutPicker"
           @select-action-group="selectActionGroup"
           @select-action-relation="selectActionRelation"
           @select-action-effect-relation="selectActionEffectRelation"
@@ -795,18 +808,14 @@
         >
           <TeamLoadoutPanel
             :actors="scenario.actors"
-            :characters="workbenchSeed.gameData.characters"
             :team-slots="teamSlots"
-            :kibos="loadoutOptions.kibos"
-            :equipment="loadoutOptions.equipment"
-            :soulessences="loadoutOptions.soulessences"
             :focused-character-id="
               selectedTimelineIdentity?.kind === 'actor'
                 ? selectedTimelineIdentity.characterId
                 : null
             "
             :controlled-actor-character-id="controlledActorCharacterId"
-            @update-team-slot="updateTeamSlot"
+            :loadout-detail-catalog="loadoutDetailCatalog"
             @update-actor-config="updateActorConfig"
             @update-initial-controlled-actor="updateInitialControlledActor"
           />
@@ -946,6 +955,7 @@ import {
   watch,
 } from 'vue';
 import { loadWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
+import { getWorkbenchLoadoutDetailCatalogSnapshot } from '../data/workbenchLoadoutDetailCatalog';
 import {
   Aim,
   ArrowDown,
@@ -1173,6 +1183,9 @@ const EnemyPanel = defineAsyncComponent(
 const TeamLoadoutPanel = defineAsyncComponent(
   () => import('../features/workbench/TeamLoadoutPanel.vue')
 );
+const WorkbenchLoadoutPicker = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchLoadoutPicker.vue')
+);
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
@@ -1259,6 +1272,8 @@ const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const selectedTimelineIdentity = ref(null);
+const loadoutPickerRequest = ref(null);
+const loadoutDetailCatalog = ref(getWorkbenchLoadoutDetailCatalogSnapshot());
 const dismissedSideInspectorKey = ref(
   initialDraft.selectedActionId ? `action:${initialDraft.selectedActionId}` : ''
 );
@@ -1768,6 +1783,11 @@ watch(sideInspectorSelectionKey, (nextKey, previousKey) => {
 });
 
 watch(
+  () => scenarioWorkspace.value.activeScenarioId,
+  () => closeLoadoutPicker()
+);
+
+watch(
   () => effectIntervalProjection.value.intervals,
   intervals => {
     if (!selectedEffectIntervalId.value) {
@@ -2223,6 +2243,64 @@ onBeforeUnmount(() => {
 function handleWorkbenchHashChange() {
   if (!applySharedProjectFromUrl()) {
     openWorkbenchPresetLibraryFromUrl();
+  }
+}
+
+function openLoadoutPicker(request = {}) {
+  loadoutPickerRequest.value = {
+    ...request,
+    selectedId: Number(request.selectedId) || null,
+  };
+}
+
+function closeLoadoutPicker() {
+  loadoutPickerRequest.value = null;
+}
+
+function installLoadoutDetailCatalog(catalog) {
+  loadoutDetailCatalog.value = catalog;
+}
+
+function applyLoadoutPickerSelection(selectedId) {
+  const request = loadoutPickerRequest.value;
+  if (!request) return;
+  const normalizedId = Number(selectedId) || null;
+  closeLoadoutPicker();
+
+  if (request.kind === 'character') {
+    updateTeamSlot({
+      slotId: request.slotId,
+      characterId: normalizedId,
+    });
+    return;
+  }
+  if (request.kind === 'enemy') {
+    updateSelection({ enemyId: normalizedId });
+    return;
+  }
+  if (request.kind === 'kibo') {
+    updateActorConfig({
+      characterId: request.characterId,
+      loadout: { kiboId: normalizedId },
+    });
+    return;
+  }
+  if (request.kind === 'soulessence') {
+    updateActorConfig({
+      characterId: request.characterId,
+      loadout: { soulessenceId: normalizedId },
+    });
+    return;
+  }
+  if (request.kind === 'equipment') {
+    updateActorConfig({
+      characterId: request.characterId,
+      loadout: {
+        equipment: {
+          [request.slotKey]: normalizedId,
+        },
+      },
+    });
   }
 }
 
@@ -4395,6 +4473,7 @@ function resetDraft() {
 }
 
 function applyDraftState(draft) {
+  closeLoadoutPicker();
   const normalizedDraft = createWorkbenchDraftSnapshot(
     draft,
     draft?.savedAt ?? null

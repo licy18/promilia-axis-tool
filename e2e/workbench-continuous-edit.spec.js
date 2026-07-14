@@ -2159,15 +2159,15 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   );
   await openSelectedActionInspector(page);
 
-  const secondaryTeamSlotSelect = page.getByTestId(
-    'workbench-secondary-character-select'
+  const replacementSecondaryCharacterId = '101010';
+  await selectDirectTeamSlot(page, 1, replacementSecondaryCharacterId);
+  const secondaryTeamSlotLane = page.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-2"]'
   );
-  const replacementSecondaryCharacterId = await secondaryTeamSlotSelect
-    .locator('option')
-    .nth(1)
-    .getAttribute('value');
-  expect(replacementSecondaryCharacterId).toBeTruthy();
-  await secondaryTeamSlotSelect.selectOption(replacementSecondaryCharacterId);
+  const primaryLoadoutSlot = slotKey =>
+    page.locator(
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="109001"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+    );
   await expect(
     page.locator(
       `[data-testid="workbench-actor-loadout"][data-team-slot-id="team-slot-2"][data-character-id="${replacementSecondaryCharacterId}"]`
@@ -2199,39 +2199,12 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-runtime-enemy-toughness-state')
   ).toHaveText('剩余 10,000 / 20,000');
-  const kiboSelect = page
-    .locator(
-      '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-    )
-    .first();
-  const weaponSelect = page
-    .locator(
-      '[data-testid="workbench-actor-equipment-select"][data-character-id="109001"][data-loadout-key="weapon"]'
-    )
-    .first();
-  const soulessenceSelect = page
-    .locator(
-      '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
-    )
-    .first();
-  const kiboId = await kiboSelect
-    .locator('option')
-    .nth(1)
-    .getAttribute('value');
-  const weaponId = await weaponSelect
-    .locator('option')
-    .nth(1)
-    .getAttribute('value');
-  const soulessenceId = await soulessenceSelect
-    .locator('option')
-    .nth(1)
-    .getAttribute('value');
-  expect(kiboId).toBeTruthy();
-  expect(weaponId).toBeTruthy();
-  expect(soulessenceId).toBeTruthy();
-  await kiboSelect.selectOption(kiboId);
-  await weaponSelect.selectOption(weaponId);
-  await soulessenceSelect.selectOption(soulessenceId);
+  const kiboId = '500001';
+  const weaponId = '1010111';
+  const soulessenceId = '10001';
+  await selectDirectLoadout(page, 109001, 'kiboId', kiboId);
+  await selectDirectLoadout(page, 109001, 'weapon', weaponId);
+  await selectDirectLoadout(page, 109001, 'soulessenceId', soulessenceId);
   const initialSpInput = page
     .locator(
       '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
@@ -2280,7 +2253,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
         position: 1,
         characterId: Number(replacementSecondaryCharacterId),
       },
-      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
+      { slotId: 'team-slot-3', position: 2, characterId: 101007 },
     ],
     enemyConfig: {
       level: 91,
@@ -2307,7 +2280,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
         characterId: Number(replacementSecondaryCharacterId),
       },
       {
-        characterId: 101003,
+        characterId: 101007,
       },
     ],
   });
@@ -2330,13 +2303,25 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-initial-toughness-input')
   ).toHaveValue('100');
-  await expect(secondaryTeamSlotSelect).toHaveValue('101003');
+  await expect(secondaryTeamSlotLane).toHaveAttribute(
+    'data-character-id',
+    '101003'
+  );
   await expect(
     page.getByTestId('workbench-enemy-element-defense-input-FIRE_DEFENSE')
   ).toHaveValue('');
-  await expect(kiboSelect).toHaveValue('');
-  await expect(weaponSelect).toHaveValue('');
-  await expect(soulessenceSelect).toHaveValue('');
+  await expect(primaryLoadoutSlot('kiboId')).toHaveAttribute(
+    'data-selected-id',
+    ''
+  );
+  await expect(primaryLoadoutSlot('weapon')).toHaveAttribute(
+    'data-selected-id',
+    ''
+  );
+  await expect(primaryLoadoutSlot('soulessenceId')).toHaveAttribute(
+    'data-selected-id',
+    ''
+  );
   await expect(initialSpInput).toHaveValue('');
 
   await page
@@ -2365,15 +2350,25 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-element-defense-FIRE_DEFENSE')
   ).toHaveAttribute('data-source-status', 'user-override');
-  await expect(secondaryTeamSlotSelect).toHaveValue(
+  await expect(secondaryTeamSlotLane).toHaveAttribute(
+    'data-character-id',
     replacementSecondaryCharacterId
   );
   await expect(
     page.getByTestId('workbench-runtime-enemy-toughness-state')
   ).toHaveText('剩余 10,000 / 20,000');
-  await expect(kiboSelect).toHaveValue(kiboId);
-  await expect(weaponSelect).toHaveValue(weaponId);
-  await expect(soulessenceSelect).toHaveValue(soulessenceId);
+  await expect(primaryLoadoutSlot('kiboId')).toHaveAttribute(
+    'data-selected-id',
+    kiboId
+  );
+  await expect(primaryLoadoutSlot('weapon')).toHaveAttribute(
+    'data-selected-id',
+    weaponId
+  );
+  await expect(primaryLoadoutSlot('soulessenceId')).toHaveAttribute(
+    'data-selected-id',
+    soulessenceId
+  );
   await expect(initialSpInput).toHaveValue('0.5');
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
@@ -4092,9 +4087,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
     'data-selected-cycle-section-id',
     'cycle-section-02'
   );
-  const contributionPanel = page.getByTestId(
-    'workbench-cycle-section-panel'
-  );
+  const contributionPanel = page.getByTestId('workbench-cycle-section-panel');
   await expect(contributionPanel).toHaveAttribute(
     'data-selected-window-id',
     'cycle-section-02'
@@ -4708,9 +4701,7 @@ async function seedGeneratedActionBatchDraft(page) {
       segmentCount: 2,
       createdAt: '2026-07-09T00:00:00.000Z',
     };
-    window.localStorage.removeItem(
-      'promilia-axis-tool:workbench-draft:v16'
-    );
+    window.localStorage.removeItem('promilia-axis-tool:workbench-draft:v16');
     window.localStorage.setItem(
       'promilia-axis-tool:workbench-draft:v1',
       JSON.stringify({
@@ -5013,6 +5004,40 @@ async function clickRuntimeLogRow(page, logRow) {
       y: box.height / 2,
     },
   });
+}
+
+async function selectDirectTeamSlot(page, slotIndex, characterId) {
+  const actorLane = page.locator(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-${slotIndex + 1}"]`
+  );
+  await actorLane.getByTestId('workbench-direct-character-picker').click();
+  const picker = page.getByTestId('workbench-loadout-picker');
+  await expect(picker).toBeVisible();
+  await picker
+    .locator(
+      `[data-testid="workbench-loadout-option"][data-option-id="${characterId}"]`
+    )
+    .click();
+  await expect(picker).toBeHidden();
+}
+
+async function selectDirectLoadout(page, characterId, slotKey, selectedId) {
+  const actorLane = page.locator(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+  );
+  await actorLane
+    .locator(
+      `[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+    )
+    .click();
+  const picker = page.getByTestId('workbench-loadout-picker');
+  await expect(picker).toBeVisible();
+  await picker
+    .locator(
+      `[data-testid="workbench-loadout-option"][data-option-id="${selectedId}"]`
+    )
+    .click();
+  await expect(picker).toBeHidden();
 }
 
 async function openSelectedActionInspector(page) {

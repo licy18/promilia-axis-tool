@@ -305,23 +305,31 @@
           :data-lane-kind="lane.kind"
           :data-actor-id="lane.actorId || ''"
           :data-character-id="lane.identity?.characterId || ''"
+          :data-team-slot-id="lane.identity?.slotId || ''"
           :data-controlled-actor="
             isControlledActorLane(lane) ? 'true' : 'false'
           "
-          :role="isIdentityLane(lane) ? 'button' : undefined"
-          :tabindex="isIdentityLane(lane) ? 0 : undefined"
+          :role="isKeyboardIdentityLane(lane) ? 'button' : undefined"
+          :tabindex="isKeyboardIdentityLane(lane) ? 0 : undefined"
           :title="
             lane.curve
               ? `${lane.detail} · ${formatTopologyCurveCursorValue(lane.curve)}`
               : ''
           "
           data-testid="workbench-timeline-lane-label"
-          @click="selectTimelineLaneIdentity(lane)"
-          @keydown.enter.prevent="selectTimelineLaneIdentity(lane)"
-          @keydown.space.prevent="selectTimelineLaneIdentity(lane)"
+          @click="handleTimelineLaneLabelClick(lane)"
+          @keydown.enter.prevent="handleTimelineLaneLabelClick(lane)"
+          @keydown.space.prevent="handleTimelineLaneLabelClick(lane)"
         >
           <template v-if="lane.kind === 'actor-action'">
-            <span class="lane-avatar" aria-hidden="true">
+            <button
+              class="lane-avatar lane-avatar-command"
+              type="button"
+              :title="`更换${lane.name}`"
+              :aria-label="`更换${lane.name}`"
+              data-testid="workbench-direct-character-picker"
+              @click.stop="openLaneLoadoutPicker(lane, 'character')"
+            >
               <span>{{ lane.identity.initial }}</span>
               <img
                 v-if="lane.identity.avatarUrl"
@@ -329,28 +337,88 @@
                 :alt="lane.name"
                 @error="$event.currentTarget.classList.add('missing')"
               />
-            </span>
-            <span class="lane-identity-copy">
+            </button>
+            <button
+              class="lane-identity-copy lane-identity-command"
+              type="button"
+              title="查看角色详细配置"
+              @click.stop="selectTimelineLaneIdentity(lane)"
+            >
               <strong>{{ lane.name }}</strong>
               <small>
                 {{ lane.identity.role }} · {{ lane.identity.elementName }}
               </small>
-            </span>
+            </button>
+            <div class="lane-loadout-rack">
+              <button
+                v-for="slot in lane.identity.loadoutSlots"
+                :key="slot.key"
+                class="lane-loadout-slot"
+                :class="{ equipped: slot.selectedId }"
+                type="button"
+                :title="slot.title"
+                :aria-label="slot.title"
+                :data-loadout-slot="slot.key"
+                :data-selected-id="slot.selectedId || ''"
+                data-testid="workbench-direct-loadout-slot"
+                @click.stop="openLaneLoadoutPicker(lane, slot.kind, slot)"
+              >
+                <span aria-hidden="true">{{ slot.initial }}</span>
+                <img
+                  v-if="slot.iconUrl"
+                  :src="slot.iconUrl"
+                  alt=""
+                  @error="$event.currentTarget.classList.add('missing')"
+                />
+              </button>
+            </div>
             <i class="lane-slot-index">{{ lane.identity.slotLabel }}</i>
           </template>
           <template v-else-if="lane.kind === 'enemy-event'">
-            <span class="lane-avatar enemy-avatar" aria-hidden="true">敌</span>
-            <span class="lane-identity-copy">
-              <strong>{{ lane.name }}</strong>
-              <small>{{ lane.detail }}</small>
-            </span>
+            <button
+              class="lane-direct-identity"
+              type="button"
+              title="选择敌人"
+              data-testid="workbench-direct-enemy-picker"
+              @click.stop="openLaneLoadoutPicker(lane, 'enemy')"
+            >
+              <span class="lane-avatar enemy-avatar" aria-hidden="true">
+                <span>{{ lane.identity.initial }}</span>
+                <img
+                  v-if="lane.identity.iconUrl"
+                  :src="lane.identity.iconUrl"
+                  alt=""
+                  @error="$event.currentTarget.classList.add('missing')"
+                />
+              </span>
+              <span class="lane-identity-copy">
+                <strong>{{ lane.name }}</strong>
+                <small>{{ lane.detail }}</small>
+              </span>
+            </button>
           </template>
           <template v-else-if="lane.kind === 'actor-kibo'">
-            <i class="lane-kibo-mark" aria-hidden="true" />
-            <span class="lane-subtrack-copy">
-              <strong>奇波</strong>
-              <small>{{ lane.detail }}</small>
-            </span>
+            <button
+              class="lane-direct-identity lane-kibo-command"
+              type="button"
+              title="选择奇波"
+              data-testid="workbench-direct-kibo-picker"
+              @click.stop="openLaneLoadoutPicker(lane, 'kibo')"
+            >
+              <span class="lane-kibo-icon" aria-hidden="true">
+                <span>奇</span>
+                <img
+                  v-if="lane.identity.kiboIconUrl"
+                  :src="lane.identity.kiboIconUrl"
+                  alt=""
+                  @error="$event.currentTarget.classList.add('missing')"
+                />
+              </span>
+              <span class="lane-subtrack-copy">
+                <strong>奇波</strong>
+                <small>{{ lane.detail }}</small>
+              </span>
+            </button>
           </template>
           <template v-else-if="lane.curve">
             <i class="lane-curve-mark" aria-hidden="true" />
@@ -935,6 +1003,15 @@ const STATE_CURVE_TRACK_MARKER_TOP = {
   enemyToughnessDamage: 99,
   selfEnergyChange: 106,
 };
+const LOADOUT_SLOT_DEFINITIONS = Object.freeze([
+  { key: 'kiboId', label: '奇波', kind: 'kibo' },
+  { key: 'weapon', label: '武器', kind: 'equipment' },
+  { key: 'top', label: '上装', kind: 'equipment' },
+  { key: 'bottom', label: '下装', kind: 'equipment' },
+  { key: 'earring', label: '耳环', kind: 'equipment' },
+  { key: 'ring', label: '戒指', kind: 'equipment' },
+  { key: 'soulessenceId', label: '灵子', kind: 'soulessence' },
+]);
 
 const props = defineProps({
   actors: {
@@ -956,6 +1033,10 @@ const props = defineProps({
   kibos: {
     type: Array,
     default: () => [],
+  },
+  loadoutDetailCatalog: {
+    type: Object,
+    default: null,
   },
   actions: {
     type: Array,
@@ -1163,6 +1244,7 @@ const emit = defineEmits([
   'update-state-curve-track-filter',
   'update-state-curve-focus-mode',
   'insert-timeline-entry',
+  'open-loadout-picker',
 ]);
 const laneRef = ref(null);
 const scaleViewportRef = ref(null);
@@ -1661,6 +1743,7 @@ function createTimelineActorGroups() {
           ...identity,
           kiboId: kibo?.id ?? null,
           kiboName: kibo?.name ?? '待绑定奇波',
+          kiboIconUrl: resolveLoadoutItemIcon('kibo', kibo?.id),
         },
       }),
       energyCurveLane: createEmptyTimelineLane({
@@ -1715,6 +1798,7 @@ function createActorLaneIdentity(actor, character, index) {
   return {
     kind: 'actor',
     actorId: actor?.id ?? '',
+    slotId: `team-slot-${index + 1}`,
     characterId: Number(actor?.characterId ?? character?.id),
     label,
     initial: Array.from(label)[0] ?? '角',
@@ -1723,7 +1807,54 @@ function createActorLaneIdentity(actor, character, index) {
     elementName: character?.element?.name ?? '属性待确认',
     accentColor: character?.element?.color ?? '#79c7b9',
     avatarUrl: resolveCharacterAvatarUrl(actor?.characterId ?? character?.id),
+    loadoutSlots: createActorLoadoutSlots(actor),
   };
+}
+
+function createActorLoadoutSlots(actor) {
+  return LOADOUT_SLOT_DEFINITIONS.map(definition => {
+    const selectedId = Number(
+      definition.kind === 'equipment'
+        ? actor?.loadout?.equipment?.[definition.key]
+        : actor?.loadout?.[definition.key]
+    );
+    const hasSelection = Number.isFinite(selectedId) && selectedId > 0;
+    const detail = hasSelection
+      ? findLoadoutDetail(definition.kind, selectedId)
+      : null;
+    return {
+      ...definition,
+      selectedId: hasSelection ? selectedId : null,
+      initial: detail
+        ? Array.from(String(detail.name || definition.label))[0]
+        : hasSelection
+          ? definition.label.slice(0, 1)
+          : '+',
+      iconUrl: resolveLoadoutDetailIcon(definition.kind, detail),
+      title: `${definition.label}：${detail?.name ?? (hasSelection ? '资料载入后显示' : '未装备')}`,
+    };
+  });
+}
+
+function findLoadoutDetail(kind, selectedId) {
+  const collection =
+    kind === 'kibo'
+      ? props.loadoutDetailCatalog?.kibos
+      : kind === 'soulessence'
+        ? props.loadoutDetailCatalog?.soulessences
+        : props.loadoutDetailCatalog?.equipment;
+  return (collection ?? []).find(
+    item => Number(item.id) === Number(selectedId)
+  );
+}
+
+function resolveLoadoutItemIcon(kind, selectedId) {
+  return resolveLoadoutDetailIcon(kind, findLoadoutDetail(kind, selectedId));
+}
+
+function resolveLoadoutDetailIcon(kind, detail) {
+  const icon = kind === 'soulessence' ? detail?.icons?.small : detail?.icon;
+  return icon ? `/assets/loadout/${icon}` : '';
 }
 
 function resolveCharacterAvatarUrl(characterId) {
@@ -1743,6 +1874,14 @@ function isIdentityLane(lane) {
     'enemy-hp-curve',
     'enemy-toughness-curve',
   ].includes(lane?.kind);
+}
+
+function isDirectLoadoutLane(lane) {
+  return ['actor-action', 'actor-kibo', 'enemy-event'].includes(lane?.kind);
+}
+
+function isKeyboardIdentityLane(lane) {
+  return isIdentityLane(lane) && !isDirectLoadoutLane(lane);
 }
 
 function isActiveIdentityLane(lane) {
@@ -1786,6 +1925,34 @@ function laneIdentityStyle(lane) {
   };
 }
 
+function handleTimelineLaneLabelClick(lane) {
+  if (isDirectLoadoutLane(lane)) return;
+  selectTimelineLaneIdentity(lane);
+}
+
+function openLaneLoadoutPicker(lane, kind, slot = null) {
+  emit('open-loadout-picker', {
+    kind,
+    slotId: lane.identity?.slotId ?? '',
+    slotKey: slot?.key ?? (kind === 'kibo' ? 'kiboId' : ''),
+    slotLabel:
+      slot?.label ??
+      (kind === 'enemy' ? '敌人' : kind === 'character' ? '角色' : '奇波'),
+    actorId: lane.identity?.actorId ?? lane.actorId ?? '',
+    actorName: lane.identity?.label ?? lane.name ?? '',
+    characterId: lane.identity?.characterId ?? null,
+    enemyId: lane.identity?.enemyId ?? null,
+    selectedId:
+      kind === 'character'
+        ? lane.identity?.characterId
+        : kind === 'enemy'
+          ? lane.identity?.enemyId
+          : kind === 'kibo'
+            ? lane.identity?.kiboId
+            : slot?.selectedId,
+  });
+}
+
 function selectTimelineLaneIdentity(lane) {
   if (!isIdentityLane(lane)) return;
   const isEnemy = lane.kind.startsWith('enemy-');
@@ -1826,6 +1993,8 @@ function createTimelineEnemyGroup(effectIntervals) {
         kind: 'enemy',
         enemyId: props.enemy?.enemyId ?? props.enemy?.id ?? '',
         label: props.enemy?.name || '敌人',
+        initial: Array.from(String(props.enemy?.name || '敌'))[0] ?? '敌',
+        iconUrl: props.enemy?.icon ? `/assets/loadout/${props.enemy.icon}` : '',
         accentColor: '#e1848e',
       },
       effectIntervals,
@@ -2364,12 +2533,12 @@ function getTimelineDataTop(lane) {
 }
 
 function getTimelineStateCurveMarkerTop(marker, lane) {
-  if (lane.type === 'curve') return 17;
+  if (lane.type === 'curve') return 14;
   return getTimelineDataTop(lane) + (marker.top - 54);
 }
 
 function getTimelineLaneHeight(lane) {
-  if (lane.type === 'curve') return 34;
+  if (lane.type === 'curve') return 28;
   if (lane.type === 'kibo' && lane.actions.length === 0) return 32;
   const runtimeEventBottom = lane.runtimeEventSlotCount
     ? getTimelineDataTop(lane) + lane.runtimeEventSlotCount * 20 + 2
@@ -4263,6 +4432,9 @@ h2 {
 
 .lane-label.identity {
   border-left: 3px solid var(--lane-accent);
+}
+
+.lane-label.identity[role='button'] {
   cursor: pointer;
 }
 
@@ -4296,6 +4468,24 @@ h2 {
   font-weight: 800;
 }
 
+.lane-avatar-command {
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.lane-label[data-lane-kind='actor-action'] {
+  align-items: flex-start;
+  min-height: 64px;
+  padding: 4px 7px 22px;
+}
+
+.lane-label[data-lane-kind='actor-action'] .lane-avatar {
+  width: 34px;
+  height: 34px;
+  flex-basis: 34px;
+}
+
 .lane-avatar img {
   position: absolute;
   inset: 0;
@@ -4318,6 +4508,87 @@ h2 {
   display: grid;
   min-width: 0;
   gap: 2px;
+}
+
+.lane-identity-command,
+.lane-direct-identity {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lane-identity-command {
+  padding: 2px 0;
+}
+
+.lane-direct-identity {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+  padding: 0;
+}
+
+.lane-avatar-command:hover,
+.lane-avatar-command:focus-visible,
+.lane-identity-command:hover,
+.lane-identity-command:focus-visible,
+.lane-direct-identity:hover,
+.lane-direct-identity:focus-visible,
+.lane-loadout-slot:hover,
+.lane-loadout-slot:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--lane-accent) 74%, white 26%);
+  outline-offset: 1px;
+}
+
+.lane-loadout-rack {
+  position: absolute;
+  right: 5px;
+  bottom: 3px;
+  left: 5px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  height: 16px;
+}
+
+.lane-loadout-slot {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  padding: 0;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  background: #0e1418;
+  color: #7f8b91;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lane-loadout-slot.equipped {
+  border-color: color-mix(in srgb, var(--lane-accent) 64%, white 36%);
+  color: #e8f5f3;
+}
+
+.lane-loadout-slot img,
+.lane-kibo-icon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lane-loadout-slot img.missing,
+.lane-kibo-icon img.missing {
+  display: none;
 }
 
 .lane-identity-copy strong,
@@ -4356,6 +4627,26 @@ h2 {
   border-radius: 50%;
   background: color-mix(in srgb, var(--lane-accent) 64%, #142019 36%);
   box-shadow: 0 0 7px color-mix(in srgb, var(--lane-accent) 38%, transparent);
+}
+
+.lane-kibo-icon {
+  position: relative;
+  display: grid;
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--lane-accent) 58%, white 42%);
+  border-radius: 3px;
+  background: #101817;
+  color: #9fd5cb;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.lane-kibo-command {
+  gap: 7px;
 }
 
 .lane-curve-mark {
@@ -5056,10 +5347,27 @@ h2 {
     padding: 5px 7px;
   }
 
-  .lane-avatar {
+  .lane-label[data-lane-kind='actor-action'] {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .lane-label:not([data-lane-kind='actor-action']) .lane-avatar {
     width: 34px;
     height: 34px;
     flex-basis: 34px;
+  }
+
+  .lane-label[data-lane-kind='actor-action'] .lane-avatar {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+
+  .lane-loadout-rack {
+    right: 4px;
+    left: 4px;
+    gap: 2px;
   }
 
   .lane-identity-copy strong {

@@ -30,6 +30,7 @@ import RuntimeSelectedDetailPanel from '../../features/workbench/RuntimeSelected
 import TeamLoadoutPanel from '../../features/workbench/TeamLoadoutPanel.vue';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
+import WorkbenchLoadoutPicker from '../../features/workbench/WorkbenchLoadoutPicker.vue';
 import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
 import {
   installProjectSimulationSkillDiagnostics,
@@ -101,6 +102,53 @@ async function settleWorkbenchAsyncPanels() {
   await vi.dynamicImportSettled();
   await flushPromises();
   await nextTick();
+}
+
+async function selectCharacterFromTimeline(wrapper, slotIndex, characterId) {
+  await settleWorkbenchAsyncPanels();
+  const actorLanes = wrapper.findAll(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"]'
+  );
+  await actorLanes[slotIndex]
+    .get('[data-testid="workbench-direct-character-picker"]')
+    .trigger('click');
+  await settleWorkbenchAsyncPanels();
+  wrapper.findComponent(WorkbenchLoadoutPicker).vm.$emit('select', characterId);
+  await nextTick();
+  await nextTick();
+}
+
+async function selectLoadoutFromTimeline(
+  wrapper,
+  characterId,
+  slotKey,
+  selectedId
+) {
+  await settleWorkbenchAsyncPanels();
+  const actorLane = wrapper.get(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+  );
+  await actorLane
+    .get(
+      `[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+    )
+    .trigger('click');
+  await settleWorkbenchAsyncPanels();
+  wrapper.findComponent(WorkbenchLoadoutPicker).vm.$emit('select', selectedId);
+  await nextTick();
+  await nextTick();
+}
+
+function getTimelineTeamSlot(wrapper, slotIndex) {
+  return wrapper.get(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-${slotIndex + 1}"]`
+  );
+}
+
+function getTimelineLoadoutSlot(wrapper, characterId, slotKey) {
+  return wrapper.get(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+  );
 }
 
 describe('Workbench view', () => {
@@ -7076,11 +7124,7 @@ describe('Workbench view', () => {
     });
     await settleWorkbenchAsyncPanels();
 
-    await wrapper
-      .find('[data-testid="workbench-character-select"]')
-      .setValue('101003');
-    await nextTick();
-    await nextTick();
+    await selectCharacterFromTimeline(wrapper, 0, 101003);
 
     const text = wrapper.text();
     expect(text).toContain('寒悠悠');
@@ -7140,10 +7184,7 @@ describe('Workbench view', () => {
     expect(rows.maxHp).toContain('10748');
     expect(rows.critRate).toContain('6.1%');
 
-    await wrapper
-      .find('[data-testid="workbench-secondary-character-select"]')
-      .setValue('101003');
-    await nextTick();
+    await selectCharacterFromTimeline(wrapper, 1, 101003);
     await wrapper
       .find('[data-testid="workbench-add-switch-action"]')
       .trigger('click');
@@ -7352,10 +7393,7 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-skill-value-param-link"]').text()
     ).toContain('未解释参数 1, 7');
 
-    await wrapper
-      .find('[data-testid="workbench-character-select"]')
-      .setValue('101007');
-    await nextTick();
+    await selectCharacterFromTimeline(wrapper, 0, 101007);
     await wrapper
       .find('[data-testid="workbench-skill-select"]')
       .setValue('10100712');
@@ -7626,22 +7664,17 @@ describe('Workbench view', () => {
       skill => skill.characterId === nextCharacter.id
     );
 
-    await wrapper
-      .find('[data-testid="workbench-character-select"]')
-      .setValue(String(nextCharacter.id));
+    await selectCharacterFromTimeline(wrapper, 0, nextCharacter.id);
 
     expect(wrapper.text()).toContain(
       `工作台：${nextCharacter.name} / ${nextSkill.name}`
     );
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
     expect(
-      wrapper
-        .find('[data-testid="workbench-character-select"]')
-        .attributes('data-team-slot-id')
+      getTimelineTeamSlot(wrapper, 0).attributes('data-team-slot-id')
     ).toBe('team-slot-1');
     expect(
-      wrapper.find('[data-testid="workbench-secondary-character-select"]')
-        .element.value
+      getTimelineTeamSlot(wrapper, 1).attributes('data-character-id')
     ).toBe(String(workbenchSeed.defaults.characterId));
     expect(
       wrapper.find('[data-testid="workbench-action-actor-select"]').element
@@ -7691,16 +7724,7 @@ describe('Workbench view', () => {
         .find('.action-block[data-action-id="action-0002"]')
         .attributes('data-lane-id')
     ).toBe('actor-101007');
-    await wrapper
-      .find(
-        '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="101007"]'
-      )
-      .trigger('click');
-    await nextTick();
-    await wrapper
-      .find('[data-testid="workbench-tertiary-character-select"]')
-      .setValue('101010');
-    await nextTick();
+    await selectCharacterFromTimeline(wrapper, 2, 101010);
 
     const migratedAction = wrapper.find(
       '.action-block[data-action-id="action-0002"]'
@@ -7722,6 +7746,41 @@ describe('Workbench view', () => {
         '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
       )
     ).toHaveLength(3);
+  });
+
+  it('clears a pending direct loadout target on close, scenario change, and draft replacement', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    const openCharacterPicker = async () => {
+      await getTimelineTeamSlot(wrapper, 2)
+        .get('[data-testid="workbench-direct-character-picker"]')
+        .trigger('click');
+      await settleWorkbenchAsyncPanels();
+      expect(wrapper.findComponent(WorkbenchLoadoutPicker).exists()).toBe(true);
+    };
+
+    await openCharacterPicker();
+    wrapper.findComponent(WorkbenchLoadoutPicker).vm.$emit('close');
+    await nextTick();
+    expect(wrapper.findComponent(WorkbenchLoadoutPicker).exists()).toBe(false);
+
+    await openCharacterPicker();
+    await wrapper
+      .get('[data-testid="workbench-scenario-add"]')
+      .trigger('click');
+    await nextTick();
+    expect(wrapper.findComponent(WorkbenchLoadoutPicker).exists()).toBe(false);
+
+    await openCharacterPicker();
+    await wrapper.get('[data-testid="workbench-reset-draft"]').trigger('click');
+    await nextTick();
+    expect(wrapper.findComponent(WorkbenchLoadoutPicker).exists()).toBe(false);
   });
 
   it('adds, selects, edits, and deletes timeline actions', async () => {
@@ -7942,10 +8001,7 @@ describe('Workbench view', () => {
       '有未保存改动'
     );
 
-    await wrapper
-      .find('[data-testid="workbench-character-select"]')
-      .setValue(String(spSkill.characterId));
-    await nextTick();
+    await selectCharacterFromTimeline(wrapper, 0, spSkill.characterId);
     await wrapper
       .find('[data-testid="workbench-skill-select"]')
       .setValue(String(spSkill.id));
@@ -8250,8 +8306,7 @@ describe('Workbench view', () => {
 
     expect(wrapper.text()).toContain('3 actor');
     expect(
-      wrapper.find('[data-testid="workbench-secondary-character-select"]')
-        .element.value
+      getTimelineTeamSlot(wrapper, 1).attributes('data-character-id')
     ).toBe('101003');
 
     await wrapper
@@ -8311,9 +8366,7 @@ describe('Workbench view', () => {
         character.id !== workbenchSeed.defaults.characterId &&
         character.id !== 101003
     );
-    await wrapper
-      .find('[data-testid="workbench-secondary-character-select"]')
-      .setValue(String(nextSecondary.id));
+    await selectCharacterFromTimeline(wrapper, 1, nextSecondary.id);
 
     expect(
       wrapper.find('[data-testid="workbench-switch-target-select"]').element
@@ -8322,8 +8375,7 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(`末音 -> ${nextSecondary.name}`);
 
     const tertiaryCharacterId = Number(
-      wrapper.find('[data-testid="workbench-tertiary-character-select"]')
-        .element.value
+      getTimelineTeamSlot(wrapper, 2).attributes('data-character-id')
     );
     await wrapper
       .find('[data-testid="workbench-initial-controlled-actor-select"]')
@@ -9033,12 +9085,7 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
-    await wrapper
-      .find(
-        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-      )
-      .setValue('500001');
-    await nextTick();
+    await selectLoadoutFromTimeline(wrapper, 109001, 'kiboId', 500001);
 
     await wrapper
       .find('[data-testid="workbench-add-kibo-event-action"]')
@@ -9698,21 +9745,9 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-enemy-level-input"]')
       .setValue('95');
-    await wrapper
-      .find(
-        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-      )
-      .setValue('500001');
-    await wrapper
-      .find(
-        '[data-testid="workbench-actor-equipment-select"][data-character-id="109001"][data-loadout-key="weapon"]'
-      )
-      .setValue('1010111');
-    await wrapper
-      .find(
-        '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
-      )
-      .setValue('10001');
+    await selectLoadoutFromTimeline(wrapper, 109001, 'kiboId', 500001);
+    await selectLoadoutFromTimeline(wrapper, 109001, 'weapon', 1010111);
+    await selectLoadoutFromTimeline(wrapper, 109001, 'soulessenceId', 10001);
     const teamLoadoutPanel = wrapper.findComponent(TeamLoadoutPanel);
     const initialSpInput = teamLoadoutPanel.find(
       '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
@@ -9811,19 +9846,19 @@ describe('Workbench view', () => {
       ).element.value
     ).toBe('0.5');
     expect(
-      restored.find(
-        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-      ).element.value
+      getTimelineLoadoutSlot(restored, 109001, 'kiboId').attributes(
+        'data-selected-id'
+      )
     ).toBe('500001');
     expect(
-      restored.find(
-        '[data-testid="workbench-actor-equipment-select"][data-character-id="109001"][data-loadout-key="weapon"]'
-      ).element.value
+      getTimelineLoadoutSlot(restored, 109001, 'weapon').attributes(
+        'data-selected-id'
+      )
     ).toBe('1010111');
     expect(
-      restored.find(
-        '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
-      ).element.value
+      getTimelineLoadoutSlot(restored, 109001, 'soulessenceId').attributes(
+        'data-selected-id'
+      )
     ).toBe('10001');
 
     await restored
@@ -9844,9 +9879,9 @@ describe('Workbench view', () => {
       'Lv.80'
     );
     expect(
-      restored.find(
-        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-      ).element.value
+      getTimelineLoadoutSlot(restored, 109001, 'kiboId').attributes(
+        'data-selected-id'
+      )
     ).toBe('');
     expect(
       restored.find(

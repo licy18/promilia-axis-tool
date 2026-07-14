@@ -9,29 +9,6 @@
     </div>
 
     <div class="team-slot-grid" data-testid="workbench-team-slot-grid">
-      <label
-        v-for="(slot, index) in teamSlots"
-        :key="slot.slotId"
-        class="team-slot-control"
-        :data-team-slot-id="slot.slotId"
-      >
-        <span>槽位 {{ index + 1 }}</span>
-        <select
-          :data-testid="teamSlotTestId(index)"
-          data-team-slot-select="true"
-          :data-team-slot-id="slot.slotId"
-          :value="slot.characterId"
-          @change="emitTeamSlotPatch(slot.slotId, $event.target.value)"
-        >
-          <option
-            v-for="character in characters"
-            :key="character.id"
-            :value="character.id"
-          >
-            {{ formatCharacterOption(character) }}
-          </option>
-        </select>
-      </label>
       <label class="team-slot-control controlled-actor-control">
         <span>初始前台</span>
         <select
@@ -101,68 +78,6 @@
             @change="emitInitialSpPatch(actor, $event.target.value)"
           />
         </label>
-
-        <label>
-          <span>奇波</span>
-          <select
-            :data-character-id="actor.characterId"
-            data-loadout-key="kiboId"
-            data-testid="workbench-actor-kibo-select"
-            :value="actor.loadout?.kiboId ?? ''"
-            @change="emitLoadoutPatch(actor, 'kiboId', $event.target.value)"
-          >
-            <option value="">未配置</option>
-            <option v-for="kibo in kibos" :key="kibo.id" :value="kibo.id">
-              {{ formatKiboOption(kibo) }}
-            </option>
-          </select>
-        </label>
-
-        <label
-          v-for="slot in equipmentSlots"
-          :key="slot.key"
-          class="equipment-control"
-        >
-          <span>{{ slot.label }}</span>
-          <select
-            :data-character-id="actor.characterId"
-            :data-loadout-key="slot.key"
-            data-testid="workbench-actor-equipment-select"
-            :value="actor.loadout?.equipment?.[slot.key] ?? ''"
-            @change="emitEquipmentPatch(actor, slot.key, $event.target.value)"
-          >
-            <option value="">未配置</option>
-            <option
-              v-for="item in equipment[slot.key] ?? []"
-              :key="item.id"
-              :value="item.id"
-            >
-              {{ formatEquipmentOption(item) }}
-            </option>
-          </select>
-        </label>
-
-        <label>
-          <span>灵子</span>
-          <select
-            :data-character-id="actor.characterId"
-            data-loadout-key="soulessenceId"
-            data-testid="workbench-actor-soulessence-select"
-            :value="actor.loadout?.soulessenceId ?? ''"
-            @change="
-              emitLoadoutPatch(actor, 'soulessenceId', $event.target.value)
-            "
-          >
-            <option value="">未配置</option>
-            <option
-              v-for="soulessence in soulessences"
-              :key="soulessence.id"
-              :value="soulessence.id"
-            >
-              {{ formatSoulessenceOption(soulessence) }}
-            </option>
-          </select>
-        </label>
       </div>
 
       <div
@@ -228,30 +143,14 @@
 
 <script setup>
 import { User } from '@element-plus/icons-vue';
-import { ref } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   actors: {
     type: Array,
     required: true,
   },
-  characters: {
-    type: Array,
-    required: true,
-  },
   teamSlots: {
-    type: Array,
-    required: true,
-  },
-  kibos: {
-    type: Array,
-    required: true,
-  },
-  equipment: {
-    type: Object,
-    required: true,
-  },
-  soulessences: {
     type: Array,
     required: true,
   },
@@ -263,10 +162,13 @@ const props = defineProps({
     type: [Number, String],
     default: '',
   },
+  loadoutDetailCatalog: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits([
-  'update-team-slot',
   'update-actor-config',
   'update-initial-controlled-actor',
 ]);
@@ -277,56 +179,15 @@ const equipmentSlots = Object.freeze([
   { key: 'earring', label: '耳环' },
   { key: 'ring', label: '戒指' },
 ]);
-const loadoutDetailCatalog = ref(null);
-fetch(
-  new URL(
-    '../../data/generated/workbench-loadout-detail-catalog.json',
-    import.meta.url
-  )
-)
-  .then(response => response.json())
-  .then(catalog => {
-    loadoutDetailCatalog.value = catalog;
-  })
-  .catch(() => {});
+const loadoutDetailCatalog = computed(() => props.loadoutDetailCatalog);
 
 function isActorFocused(actor, index) {
   if (props.focusedCharacterId == null) return index === 0;
   return Number(actor.characterId) === Number(props.focusedCharacterId);
 }
 
-function emitTeamSlotPatch(slotId, value) {
-  emit('update-team-slot', {
-    slotId,
-    characterId: Number(value),
-  });
-}
-
 function emitInitialControlledActor(value) {
   emit('update-initial-controlled-actor', Number(value));
-}
-
-function teamSlotTestId(index) {
-  return [
-    'workbench-character-select',
-    'workbench-secondary-character-select',
-    'workbench-tertiary-character-select',
-  ][index];
-}
-
-function formatCharacterOption(character) {
-  return [character.name, character.element?.abbrName, character.position?.name]
-    .filter(Boolean)
-    .join(' · ');
-}
-
-function emitLoadoutPatch(actor, key, value) {
-  emit('update-actor-config', {
-    characterId: Number(actor.characterId),
-    loadout: {
-      [key]: normalizeOptionalId(value),
-    },
-  });
 }
 
 function emitInitialSpPatch(actor, value) {
@@ -337,22 +198,6 @@ function emitInitialSpPatch(actor, value) {
   });
 }
 
-function emitEquipmentPatch(actor, slotKey, value) {
-  emit('update-actor-config', {
-    characterId: Number(actor.characterId),
-    loadout: {
-      equipment: {
-        [slotKey]: normalizeOptionalId(value),
-      },
-    },
-  });
-}
-
-function normalizeOptionalId(value) {
-  const id = Number(value);
-  return Number.isFinite(id) && id > 0 ? id : null;
-}
-
 function energyStep(actor) {
   return Number(actor.stats?.maxSp) <= 1 ? 0.01 : 1;
 }
@@ -360,18 +205,6 @@ function energyStep(actor) {
 function formatSpValue(value) {
   const number = Number(value);
   return Number.isFinite(number) ? String(number) : '';
-}
-
-function formatKiboOption(kibo) {
-  return [kibo.name, kibo.element, kibo.stage].filter(Boolean).join(' · ');
-}
-
-function formatEquipmentOption(item) {
-  return [item.rarity, item.name].filter(Boolean).join(' · ');
-}
-
-function formatSoulessenceOption(item) {
-  return [item.rarity, item.name].filter(Boolean).join(' · ');
 }
 
 function hasSelectedLoadout(actor) {

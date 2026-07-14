@@ -747,7 +747,22 @@ describe('TimelineGridPreview', () => {
       '/assets/characters/109001.png'
     );
 
-    await identity.trigger('click');
+    const avatarButton = identity.get(
+      '[data-testid="workbench-direct-character-picker"]'
+    );
+    await avatarButton.trigger('click');
+    expect(wrapper.emitted('open-loadout-picker')?.at(-1)?.[0]).toMatchObject({
+      kind: 'character',
+      actorId: 'actor-a',
+      characterId: 109001,
+      slotId: 'team-slot-1',
+      selectedId: 109001,
+    });
+    expect(
+      identity.findAll('[data-testid="workbench-direct-loadout-slot"]')
+    ).toHaveLength(7);
+
+    await identity.get('.lane-identity-command').trigger('click');
     expect(wrapper.emitted('select-identity')?.at(-1)?.[0]).toEqual({
       kind: 'actor',
       actorId: 'actor-a',
@@ -755,6 +770,18 @@ describe('TimelineGridPreview', () => {
       enemyId: '',
       kiboId: '',
       label: '末音',
+    });
+
+    await wrapper
+      .get(
+        '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-team-slot-1"] [data-testid="workbench-direct-kibo-picker"]'
+      )
+      .trigger('click');
+    expect(wrapper.emitted('open-loadout-picker')?.at(-1)?.[0]).toMatchObject({
+      kind: 'kibo',
+      actorId: 'actor-a',
+      characterId: 109001,
+      selectedId: 500001,
     });
 
     await wrapper

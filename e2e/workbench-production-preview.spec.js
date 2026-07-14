@@ -387,7 +387,7 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
   await page.screenshot({ path: 'reports/m1a-workbench-desktop.png' });
 
   const timelineBoxBeforeInspector = await timeline.boundingBox();
-  await actorIdentities.nth(0).click();
+  await actorIdentities.nth(0).locator('.lane-identity-command').click();
   await expect(inspector).toBeVisible();
   await expect(inspector).toContainText('末音');
   const timelineBoxWithInspector = await timeline.boundingBox();
@@ -452,11 +452,7 @@ test('[m1b-team-kibo-energy] keeps three actor and three kibo energy owners sync
     { characterId: 101007, kiboId: '500003', kiboName: '水灵偶' },
   ];
   for (const binding of bindings) {
-    await page
-      .locator(
-        `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${binding.characterId}"]`
-      )
-      .click();
+    await openActorInspector(page, binding.characterId);
     const inspector = page.getByTestId('workbench-side-inspector');
     await expect(inspector).toBeVisible();
     await expect(
@@ -467,11 +463,12 @@ test('[m1b-team-kibo-energy] keeps three actor and three kibo energy owners sync
         `[data-testid="workbench-actor-loadout"][data-character-id="${binding.characterId}"]`
       )
     ).toHaveAttribute('data-focused', 'true');
-    await inspector
-      .locator(
-        `[data-testid="workbench-actor-kibo-select"][data-character-id="${binding.characterId}"]`
-      )
-      .selectOption(binding.kiboId);
+    await selectM2LoadoutOption(
+      page,
+      binding.characterId,
+      'kiboId',
+      binding.kiboId
+    );
     await expect(page.getByTestId('workbench-action-library-kibo')).toHaveText(
       `奇波 · ${binding.kiboName}`
     );
@@ -494,18 +491,16 @@ test('[m1b-team-kibo-energy] keeps three actor and three kibo energy owners sync
     ).toHaveAttribute('points', '0,100 100,100');
   }
 
+  await selectM2Enemy(page, '300071');
   await timeline
     .locator(
-      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-event"]'
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-hp-curve"]'
     )
     .click();
   const inspector = page.getByTestId('workbench-side-inspector');
   await expect(
     inspector.locator('[data-inspector-panel-key="enemy"]')
   ).toHaveAttribute('data-inspector-panel-order', '0');
-  await inspector
-    .getByTestId('workbench-enemy-config-select')
-    .selectOption('300071');
   await expect(inspector.getByTestId('workbench-enemy-name')).toHaveText(
     '菜鸡'
   );
@@ -536,11 +531,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   await page.goto('/#/workbench');
 
   await openActorInspector(page, 101003);
-  await page
-    .locator(
-      '[data-testid="workbench-actor-kibo-select"][data-character-id="101003"]'
-    )
-    .selectOption('500002');
+  await selectM2LoadoutOption(page, 101003, 'kiboId', '500002');
   await expect(page.getByTestId('workbench-action-library-kibo')).toHaveText(
     '奇波 · 水灵仔'
   );
@@ -835,18 +826,65 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
 test('[m2-team-configuration] configures and reloads source-backed loadouts from demo and empty scenarios', async ({
   page,
 }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
-  const actorIds = [109001, 101003, 101007];
-  await configureM2Team(page, actorIds);
+  const initialSlot3CharacterId = 101007;
+  const demoActorIds = [109001, 101003, 101010];
   await page
-    .getByTestId('workbench-enemy-config-select')
-    .selectOption('300071');
+    .locator(
+      `[data-testid="workbench-action-library-actor"][data-character-id="${initialSlot3CharacterId}"]`
+    )
+    .click();
+  const migratedDemoActions = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-lane-id="actor-${initialSlot3CharacterId}"]`
+  );
+  const migratedDemoActionCount = await migratedDemoActions.count();
+  expect(migratedDemoActionCount).toBeGreaterThan(0);
+
+  const demoSlot3 = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-3"]'
+  );
+  await demoSlot3.getByTestId('workbench-direct-character-picker').click();
+  await expect(page.getByTestId('workbench-loadout-picker')).toBeVisible();
+  await page.screenshot({ path: 'reports/m2-direct-picker-desktop.png' });
+  await page
+    .getByTestId('workbench-loadout-picker')
+    .locator(
+      '[data-testid="workbench-loadout-option"][data-option-id="101010"]'
+    )
+    .click();
+  await expect(page.getByTestId('workbench-loadout-picker')).toBeHidden();
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-lane-id="actor-101010"]'
+    )
+  ).toHaveCount(migratedDemoActionCount);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+
+  await configureM2TeamDirectly(page, demoActorIds);
+  const demoSoulSlot = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-character-id="101010"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="soulessenceId"]'
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(demoSoulSlot).toHaveAttribute('data-selected-id', '');
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(demoSoulSlot).toHaveAttribute(
+    'data-selected-id',
+    M2_LOADOUT_CONFIGS[2].soulessenceId
+  );
+  await selectM2Enemy(page, '300071');
   await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
-  await expectLoadedImage(page.locator('.enemy-icon'));
+  await expectLoadedImage(
+    timeline.getByTestId('workbench-direct-enemy-picker').locator('img')
+  );
 
   await closeInspectorIfVisible(page);
   const demoActionCount = await timeline
@@ -856,46 +894,112 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
     page,
     page.getByTestId('workbench-skill-entry').first(),
     timeline.locator(
-      `[data-testid="workbench-timeline-row"][data-lane-id="actor-${actorIds[2]}"]`
+      `[data-testid="workbench-timeline-row"][data-lane-id="actor-${demoActorIds[2]}"]`
     ),
     { targetPosition: { x: 760, y: 24 } }
   );
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     demoActionCount + 1
   );
+  await expectTimelineRowsAligned(timeline);
+  await expect
+    .poll(() =>
+      timeline
+        .locator(
+          '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-toughness-curve"]'
+        )
+        .evaluate(element => element.getBoundingClientRect().bottom)
+    )
+    .toBeLessThanOrEqual(900);
+  await page.screenshot({ path: 'reports/m2-direct-equipped-desktop.png' });
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已恢复草稿'
   );
-  await expectM2Team(page, actorIds);
-  await page.screenshot({ path: 'reports/m2-team-configuration-desktop.png' });
+  await hydrateM2LoadoutCatalog(page, demoActorIds[0]);
+  await expectM2TeamDirect(page, demoActorIds);
+  await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
 
   await page.getByTestId('workbench-scenario-add').click();
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
-  await configureM2Team(page, actorIds);
-  await closeInspectorIfVisible(page);
-  await openActorInspector(page, actorIds[1]);
-  await closeInspectorIfVisible(page);
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101007"]'
+    )
+    .click();
+  await page.getByTestId('workbench-add-action').click();
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-lane-id="actor-101007"]'
+    )
+  ).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const emptySlot3 = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-3"]'
+  );
+  await emptySlot3.getByTestId('workbench-direct-character-picker').click();
+  await expect(page.getByTestId('workbench-loadout-picker')).toBeVisible();
+  await page.screenshot({ path: 'reports/m2-direct-picker-narrow.png' });
+  await page
+    .getByTestId('workbench-loadout-picker')
+    .locator(
+      '[data-testid="workbench-loadout-option"][data-option-id="101010"]'
+    )
+    .click();
+  await expect(page.getByTestId('workbench-loadout-picker')).toBeHidden();
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-lane-id="actor-101010"]'
+    )
+  ).toHaveCount(1);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+
+  const emptyActorIds = [109001, 101003, 101010];
+  await configureM2TeamDirectly(page, emptyActorIds);
+  const emptySoulSlot = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-character-id="101010"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="soulessenceId"]'
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(emptySoulSlot).toHaveAttribute('data-selected-id', '');
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(emptySoulSlot).toHaveAttribute(
+    'data-selected-id',
+    M2_LOADOUT_CONFIGS[2].soulessenceId
+  );
+  await selectM2Enemy(page, '300071');
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const emptyActionCount = await timeline
+    .getByTestId('workbench-timeline-action')
+    .count();
   await dragLocatorTo(
     page,
     page.getByTestId('workbench-skill-entry').first(),
     timeline.locator(
-      `[data-testid="workbench-timeline-row"][data-lane-id="actor-${actorIds[1]}"]`
+      `[data-testid="workbench-timeline-row"][data-lane-id="actor-${emptyActorIds[2]}"]`
     ),
     { targetPosition: { x: 420, y: 24 } }
   );
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
-    1
+    emptyActionCount + 1
   );
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已恢复草稿'
   );
-  await expectM2Team(page, actorIds);
+  await hydrateM2LoadoutCatalog(page, emptyActorIds[0]);
+  await expectM2TeamDirect(page, emptyActorIds);
+  await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
   await expect(
     timeline.locator(
       '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
@@ -914,7 +1018,7 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await page.setViewportSize({ width: 390, height: 900 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await expectPageWithoutHorizontalOverflow(page);
-  await page.screenshot({ path: 'reports/m2-team-configuration-narrow.png' });
+  await page.screenshot({ path: 'reports/m2-direct-timeline-narrow.png' });
 });
 
 test('[six-resource-capture-import] packages, imports, and replays six owner-specific resource captures', async ({
@@ -1176,14 +1280,8 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   await expect(actorEnergyRows).toHaveCount(3);
   await expect(kiboEnergyRows).toHaveCount(3);
 
-  await timeline
-    .locator(
-      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="101007"]'
-    )
-    .click();
-  await page
-    .getByTestId('workbench-tertiary-character-select')
-    .selectOption('101010');
+  await openActorInspector(page, 101007);
+  await changeM2TeamSlot(page, 2, 101010);
 
   const replacementLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101010"]'
@@ -1199,16 +1297,7 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
     )
   ).toHaveAttribute('data-active', 'true');
 
-  await timeline
-    .locator(
-      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="101010"]'
-    )
-    .click();
-  await page
-    .locator(
-      '[data-testid="workbench-actor-kibo-select"][data-character-id="101010"]'
-    )
-    .selectOption('500004');
+  await selectM2LoadoutOption(page, 101010, 'kiboId', '500004');
   await expect(page.getByTestId('workbench-action-library-kibo')).toHaveText(
     '奇波 · 汐灵偶'
   );
@@ -1349,34 +1438,24 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
   );
   await expectEmptyTimeline();
 
-  await actorLaneLabel(101007).click();
-  await page
-    .getByTestId('workbench-tertiary-character-select')
-    .selectOption('101010');
+  await changeM2TeamSlot(page, 2, 101010);
   const kiboBindings = [
     { characterId: 109001, kiboId: '500001', name: '迅狼' },
     { characterId: 101003, kiboId: '500002', name: '水灵仔' },
     { characterId: 101010, kiboId: '500004', name: '汐灵偶' },
   ];
   for (const binding of kiboBindings) {
-    await actorLaneLabel(binding.characterId).click();
-    await page
-      .locator(
-        `[data-testid="workbench-actor-kibo-select"][data-character-id="${binding.characterId}"]`
-      )
-      .selectOption(binding.kiboId);
+    await selectM2LoadoutOption(
+      page,
+      binding.characterId,
+      'kiboId',
+      binding.kiboId
+    );
   }
-  await timeline
-    .locator(
-      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-event"]'
-    )
-    .click();
-  await page
-    .getByTestId('workbench-enemy-config-select')
-    .selectOption('300071');
+  await selectM2Enemy(page, '300071');
   await expectEmptyTimeline();
 
-  await actorLaneLabel(101003).click();
+  await openActorInspector(page, 101003);
   await closeInspectorIfVisible(page);
   const actorTwoLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
@@ -1503,11 +1582,7 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   await page.goto('/#/workbench');
 
   await openActorInspector(page);
-  await page
-    .locator(
-      '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-    )
-    .selectOption('500001');
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500001');
   await closeInspectorIfVisible(page);
   const palette = page.getByTestId('workbench-timeline-entry-palette');
   const paletteToggle = page.getByTestId(
@@ -1658,11 +1733,7 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
   await page.goto('/#/workbench');
 
   await openActorInspector(page);
-  await page
-    .locator(
-      '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
-    )
-    .selectOption('500001');
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500001');
   await closeInspectorIfVisible(page);
   const palette = page.getByTestId('workbench-timeline-entry-palette');
   const paletteToggle = page.getByTestId(
@@ -3846,73 +3917,129 @@ async function clickProjectMenuCommand(page, testId) {
 async function openActorInspector(page, characterId = 109001) {
   await page
     .locator(
-      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"] .lane-identity-command`
     )
     .click();
   await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
 }
 
-async function configureM2Team(page, actorIds) {
+async function changeM2TeamSlot(page, slotIndex, characterId) {
+  const lane = page.locator(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-${slotIndex + 1}"]`
+  );
+  await lane.getByTestId('workbench-direct-character-picker').click();
+  const picker = page.getByTestId('workbench-loadout-picker');
+  await expect(picker).toBeVisible();
+  await picker
+    .locator(
+      `[data-testid="workbench-loadout-option"][data-option-id="${characterId}"]`
+    )
+    .click();
+  await expect(picker).toBeHidden();
+}
+
+async function configureM2TeamDirectly(page, actorIds) {
   for (const [index, characterId] of actorIds.entries()) {
-    await openActorInspector(page, characterId);
     const config = M2_LOADOUT_CONFIGS[index];
-    const actorPanel = page.locator(
-      `[data-testid="workbench-actor-loadout"][data-character-id="${characterId}"]`
-    );
-    await actorPanel
-      .getByTestId('workbench-actor-kibo-select')
-      .selectOption(config.kiboId);
+    await selectM2LoadoutOption(page, characterId, 'kiboId', config.kiboId);
     for (const [slotKey, equipmentId] of Object.entries(config.equipment)) {
-      await actorPanel
-        .locator(
-          `[data-testid="workbench-actor-equipment-select"][data-loadout-key="${slotKey}"]`
-        )
-        .selectOption(equipmentId);
+      await selectM2LoadoutOption(page, characterId, slotKey, equipmentId);
     }
-    await actorPanel
-      .getByTestId('workbench-actor-soulessence-select')
-      .selectOption(config.soulessenceId);
-    await expectM2ActorLoadout(actorPanel, config);
-  }
-}
-
-async function expectM2Team(page, actorIds) {
-  for (const [index, characterId] of actorIds.entries()) {
-    await openActorInspector(page, characterId);
-    const actorPanel = page.locator(
-      `[data-testid="workbench-actor-loadout"][data-character-id="${characterId}"]`
+    await selectM2LoadoutOption(
+      page,
+      characterId,
+      'soulessenceId',
+      config.soulessenceId
     );
-    await expectM2ActorLoadout(actorPanel, M2_LOADOUT_CONFIGS[index]);
+    await expectM2ActorLoadoutDirect(page, characterId, config);
   }
 }
 
-async function expectM2ActorLoadout(actorPanel, config) {
-  await expect(
-    actorPanel.getByTestId('workbench-actor-kibo-select')
-  ).toHaveValue(config.kiboId);
-  for (const [slotKey, equipmentId] of Object.entries(config.equipment)) {
-    await expect(
-      actorPanel.locator(
-        `[data-testid="workbench-actor-equipment-select"][data-loadout-key="${slotKey}"]`
-      )
-    ).toHaveValue(equipmentId);
+async function selectM2LoadoutOption(page, characterId, slotKey, selectedId) {
+  const actorLane = page.locator(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+  );
+  await actorLane
+    .locator(
+      `[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+    )
+    .click();
+  const picker = page.getByTestId('workbench-loadout-picker');
+  await expect(picker).toBeVisible();
+  await picker
+    .locator(
+      `[data-testid="workbench-loadout-option"][data-option-id="${selectedId}"]`
+    )
+    .click();
+  await expect(picker).toBeHidden();
+}
+
+async function selectM2Enemy(page, enemyId) {
+  await page.getByTestId('workbench-direct-enemy-picker').click();
+  const picker = page.getByTestId('workbench-loadout-picker');
+  await expect(picker).toBeVisible();
+  await picker
+    .locator(
+      `[data-testid="workbench-loadout-option"][data-option-id="${enemyId}"]`
+    )
+    .click();
+  await expect(picker).toBeHidden();
+}
+
+async function expectM2TeamDirect(page, actorIds) {
+  for (const [index, characterId] of actorIds.entries()) {
+    await expectM2ActorLoadoutDirect(
+      page,
+      characterId,
+      M2_LOADOUT_CONFIGS[index]
+    );
   }
+}
+
+async function hydrateM2LoadoutCatalog(page, characterId) {
+  const actorLane = page.locator(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+  );
+  await actorLane
+    .locator(
+      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="kiboId"]'
+    )
+    .click();
+  const picker = page.getByTestId('workbench-loadout-picker');
   await expect(
-    actorPanel.getByTestId('workbench-actor-soulessence-select')
-  ).toHaveValue(config.soulessenceId);
-  const detail = actorPanel.getByTestId('workbench-actor-loadout-detail');
-  await expect(detail).toBeVisible();
-  await expect(detail.locator('[data-loadout-detail-kind="kibo"]')).toHaveCount(
-    1
+    picker.getByTestId('workbench-loadout-option').first()
+  ).toBeVisible();
+  await picker.getByTestId('workbench-loadout-close').click();
+  await expect(picker).toBeHidden();
+}
+
+async function expectM2ActorLoadoutDirect(page, characterId, config) {
+  const actorLane = page.locator(
+    `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
   );
   await expect(
-    detail.locator('[data-loadout-detail-kind="equipment"]')
-  ).toHaveCount(5);
+    actorLane.locator(
+      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="kiboId"]'
+    )
+  ).toHaveAttribute('data-selected-id', config.kiboId);
+  for (const [slotKey, equipmentId] of Object.entries(config.equipment)) {
+    await expect(
+      actorLane.locator(
+        `[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="${slotKey}"]`
+      )
+    ).toHaveAttribute('data-selected-id', equipmentId);
+  }
   await expect(
-    detail.locator('[data-loadout-detail-kind="soulessence"]')
-  ).toHaveCount(1);
-  await expectLoadedImage(actorPanel.locator('.actor-avatar'));
-  for (const image of await detail.locator('img').all()) {
+    actorLane.locator(
+      '[data-testid="workbench-direct-loadout-slot"][data-loadout-slot="soulessenceId"]'
+    )
+  ).toHaveAttribute('data-selected-id', config.soulessenceId);
+  await expect(
+    actorLane.locator('[data-testid="workbench-direct-loadout-slot"] img')
+  ).toHaveCount(7);
+  for (const image of await actorLane
+    .locator('[data-testid="workbench-direct-loadout-slot"] img')
+    .all()) {
     await expectLoadedImage(image);
   }
 }
