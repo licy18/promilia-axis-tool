@@ -1857,35 +1857,35 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
   ).toHaveCount(1);
 });
 
-test('[m3-cooldown-sources-and-stacking] reads real kibo and ultimate cooldowns and separates overlapping skill rows', async ({
+test('[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns, blocks reuse, and separates rows', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
-  await selectM2LoadoutOption(page, 109001, 'kiboId', '500001');
+  await selectM2LoadoutOption(page, 101007, 'kiboId', '500003');
   await page
     .locator(
-      '[data-testid="workbench-action-library-actor"][data-character-id="109001"]'
+      '[data-testid="workbench-action-library-actor"][data-character-id="101007"]'
     )
     .click();
   const kiboSource = page.locator(
-    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500001"][data-skill-id="50000102"]'
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500003"][data-skill-id="50000302"]'
   );
   await expect(kiboSource).toBeVisible();
-  await expect(kiboSource).toHaveAttribute('data-cooldown-ms', '18000');
-  await expect(kiboSource).toContainText('CD 18s');
+  await expect(kiboSource).toHaveAttribute('data-cooldown-ms', '24000');
+  await expect(kiboSource).toContainText('CD 24s');
   await dragLocatorTo(
     page,
     kiboSource,
     timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
     ),
     { targetPosition: { x: 180, y: 36 } }
   );
   const kiboAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-action-type="kiboEvent"][data-skill-id="50000102"]'
+    '[data-testid="workbench-timeline-action"][data-action-type="kiboEvent"][data-skill-id="50000302"]'
   );
   await expect(kiboAction).toHaveCount(1);
   const kiboActionId = await kiboAction.getAttribute('data-action-id');
@@ -1893,14 +1893,54 @@ test('[m3-cooldown-sources-and-stacking] reads real kibo and ultimate cooldowns 
     `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${kiboActionId}"]`
   );
   await expect(kiboCooldown).toHaveAttribute('data-owner-kind', 'kibo');
-  await expect(kiboCooldown).toHaveAttribute('data-owner-id', '500001');
+  await expect(kiboCooldown).toHaveAttribute('data-owner-id', '500003');
+  await expect(kiboCooldown).toHaveAttribute('data-base-duration-ms', '24000');
+  await expect(kiboCooldown).toHaveAttribute(
+    'data-effective-duration-ms',
+    '24000'
+  );
   await expect
     .poll(async () => {
       const startMs = Number(await kiboCooldown.getAttribute('data-start-ms'));
       const endMs = Number(await kiboCooldown.getAttribute('data-end-ms'));
       return Math.round(endMs - startMs);
     })
-    .toBe(18000);
+    .toBe(24000);
+
+  await dragLocatorTo(
+    page,
+    kiboSource,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
+    ),
+    { targetPosition: { x: 450, y: 36 } }
+  );
+  await expect(kiboAction).toHaveCount(2);
+  const blockedKiboAction = kiboAction.nth(1);
+  await expect(blockedKiboAction).toHaveAttribute(
+    'data-readiness-status',
+    'blocked'
+  );
+  await expect
+    .poll(() =>
+      blockedKiboAction.evaluate(element => ({
+        redBorder:
+          getComputedStyle(element).borderTopColor.includes('245, 108, 108'),
+        redBackground:
+          getComputedStyle(element).backgroundImage.includes('84, 48, 51'),
+      }))
+    )
+    .toEqual({
+      redBorder: true,
+      redBackground: true,
+    });
+  const blockedKiboActionId =
+    await blockedKiboAction.getAttribute('data-action-id');
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${blockedKiboActionId}"]`
+    )
+  ).toHaveCount(0);
 
   await page
     .locator(
@@ -1990,13 +2030,40 @@ test('[m3-cooldown-sources-and-stacking] reads real kibo and ultimate cooldowns 
     })
     .toBe(20000);
 
+  await dragLocatorTo(
+    page,
+    confirmedUltimate,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
+    ),
+    { targetPosition: { x: 650, y: 82 } }
+  );
+  await expect(ultimateAction).toHaveCount(2);
+  const blockedUltimateAction = ultimateAction.nth(1);
+  await expect(blockedUltimateAction).toHaveAttribute(
+    'data-readiness-status',
+    'blocked'
+  );
+  const blockedUltimateActionId =
+    await blockedUltimateAction.getAttribute('data-action-id');
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${blockedUltimateActionId}"]`
+    )
+  ).toHaveCount(0);
+
   await closeInspectorIfVisible(page);
   await timeline
     .locator('.timeline-shell')
     .evaluate(element => element.scrollTo({ top: 0 }));
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m3-cooldown-stacking-desktop.png' });
+  await kiboAction.first().scrollIntoViewIfNeeded();
+  await page.screenshot({ path: 'reports/m3-water-kibo-cooldown-desktop.png' });
   await page.setViewportSize({ width: 390, height: 900 });
+  await kiboAction.first().scrollIntoViewIfNeeded();
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({ path: 'reports/m3-water-kibo-cooldown-narrow.png' });
   await timeline
     .locator('.timeline-shell')
     .evaluate(element => element.scrollTo({ top: 0 }));

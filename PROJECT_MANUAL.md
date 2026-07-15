@@ -1544,9 +1544,9 @@ JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整
 
 ### M3 真实动作状态生成闭环已完成实施，等待产品验收（2026-07-15）
 
-真实目录审计现确认 120 个角色技能中 52 个具有结构化 CD，其中 40 个来自 `skillsub_logic.coolDown`，12 个星决技在逻辑 CD 为 0 时使用正值 `skill_level.coolDown`；源表均为 0 时保持“未提供”。366 个奇波动作全部读取标准战斗 CD，奇波对战 CD 仅保留为诊断来源。6 个 Buff 候选中仍只有寒悠悠 `10100322` 具备可直接绑定的 57F 触发与 8000ms 生命周期，其余保持 tracking-only，未确认奇波效果不生成状态。动作草稿、Project、compiler、readiness、effect runtime、区间与关系图共享同一来源 identity；同 owner 重叠 Buff 与不同技能 CD 独立占行，奇波 CD 固定进入所属奇波子轨。全部自动效果仍 `appliedToCalculators = false`，不改变 HP、韧性和六条资源曲线。
+真实目录审计现确认 120 个角色技能中 52 个具有结构化 CD，其中 40 个来自 `skillsub_logic.coolDown`，12 个星决技在逻辑 CD 为 0 时使用正值 `skill_level.coolDown`；源表均为 0 时保持“未提供”。366 个奇波动作全部读取标准战斗 CD，奇波对战 CD 仅保留为诊断来源。6 个 Buff 候选中仍只有寒悠悠 `10100322` 具备可直接绑定的 57F 触发与 8000ms 生命周期，其余保持 tracking-only，未确认奇波效果不生成状态。动作草稿、Project、compiler、readiness、effect runtime、区间与关系图共享同一来源 identity；同 owner 重叠 Buff 与不同技能 CD 独立占行，奇波 CD 固定进入所属奇波子轨。水灵偶 `灵偶涟漪` 已按精确奇波/技能身份显示结构化 `24000ms` CD，同技能窗口内复用和可确认星决技复用均会被统一冲突链阻塞。冷却保留来源基础值与 adapter 计算后的有效值，当前没有可信技能/Buff 修正时只透传基础值，不写死未来机制。全部自动效果仍 `appliedToCalculators = false`，不改变 HP、韧性和六条资源曲线。
 
-完整 `test:trial-release` 通过：96 个测试文件、525 条单元/组件测试、43/43 production preview，生产引用、数据、动作状态、bundle 与 applied-source 守门全部通过；总 JavaScript gzip 为 728,480B，Workbench 主块为 337,175B。新增桌面/窄屏证据为 `reports/m3-cooldown-stacking-desktop.png` 和 `reports/m3-cooldown-stacking-narrow.png`。当前停在 M3 产品验收点，不自动创建下一阶段。
+完整 `test:trial-release` 通过：97 个测试文件、530 条单元/组件测试、43/43 production preview，生产引用、数据、动作状态、bundle 与 applied-source 守门全部通过；总 JavaScript gzip 为 729,806B，Workbench 主块为 338,493B。新增桌面/窄屏证据为 `reports/m3-water-kibo-cooldown-desktop.png` 和 `reports/m3-water-kibo-cooldown-narrow.png`。当前停在 M3 产品验收点，不自动创建下一阶段。
 
 ## 10. 文档维护规则
 

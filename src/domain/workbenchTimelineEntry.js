@@ -30,6 +30,7 @@ export function createWorkbenchTimelineEntry(source = {}) {
   return {
     type,
     skillId: positiveIntegerOrNull(source.skillId),
+    kiboId: positiveIntegerOrNull(source.kiboId),
     actionVariantIndex: Math.max(
       0,
       Number(source.actionVariantIndex ?? source.damageSegmentIndex) || 0

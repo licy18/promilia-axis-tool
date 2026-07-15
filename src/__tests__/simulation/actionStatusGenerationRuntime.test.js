@@ -214,6 +214,184 @@ describe('generated action status runtime', () => {
     ).toEqual([]);
   });
 
+  it('shows the sourced water spirit signature cooldown and evaluates future modifiers before conflicts', () => {
+    const project = createStatusProject(
+      [
+        createKiboStatusAction({
+          id: 'water-signature-1',
+          startMs: 0,
+          kiboId: 500003,
+          skillId: 50000302,
+          actorCharacterId: 101007,
+          name: '灵偶涟漪',
+        }),
+        createKiboStatusAction({
+          id: 'water-signature-2',
+          startMs: 13000,
+          kiboId: 500003,
+          skillId: 50000302,
+          actorCharacterId: 101007,
+          name: '灵偶涟漪',
+        }),
+      ],
+      {
+        actorConfigs: [
+          {
+            characterId: 101007,
+            loadout: { kiboId: 500003 },
+          },
+        ],
+      }
+    );
+    const baseline = runSimulation(project, getWorkbenchGameData());
+
+    expect(
+      baseline.actionRuleDiagnostics.readinessTimeline.cooldownWindows
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'water-signature-1',
+        ownerKind: 'kibo',
+        ownerId: 500003,
+        skillId: 50000302,
+        baseDurationMs: 24000,
+        effectiveDurationMs: 24000,
+        durationMs: 24000,
+      }),
+    ]);
+    expect(
+      baseline.actionRuleDiagnostics.readinessTimeline.actions.find(
+        action => action.actionId === 'water-signature-2'
+      )
+    ).toMatchObject({
+      status: 'blocked',
+      executable: false,
+      violationCodes: ['skill-cooldown-active'],
+      cooldown: {
+        status: 'blocked-no-charge-ready',
+        baseCooldownMs: 24000,
+        effectiveCooldownMs: 24000,
+      },
+    });
+    expect(
+      baseline.eventLog.filter(event => event.type === 'COOLDOWN_START')
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'water-signature-1',
+        payload: expect.objectContaining({
+          cooldownMs: 24000,
+          baseCooldownMs: 24000,
+          ownerKind: 'kibo',
+          ownerId: 500003,
+          skillId: 50000302,
+        }),
+      }),
+    ]);
+
+    const adapted = runSimulation(project, getWorkbenchGameData(), {
+      actionCooldownEvaluationAdapter: {
+        adapterId: 'test-water-cooldown-buff',
+        evaluate(request) {
+          return request.skillId === 50000302
+            ? {
+                effectiveDurationMs: 12000,
+                modifiers: [
+                  {
+                    sourceKind: 'test-only-cooldown-buff',
+                    sourceId: 'test-buff-1',
+                  },
+                ],
+                sourceStatus: 'test-only-modifier-applied',
+              }
+            : {};
+        },
+      },
+    });
+
+    expect(
+      adapted.actionRuleDiagnostics.readinessTimeline.actions.find(
+        action => action.actionId === 'water-signature-2'
+      )
+    ).toMatchObject({
+      status: 'ready',
+      executable: true,
+    });
+    expect(
+      adapted.actionRuleDiagnostics.readinessTimeline.cooldownWindows
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'water-signature-1',
+        baseDurationMs: 24000,
+        effectiveDurationMs: 12000,
+        durationMs: 12000,
+        modifierCount: 1,
+        cooldownEvaluation: expect.objectContaining({
+          status: 'cooldown-evaluation-adapted',
+          appliedModifierCount: 1,
+        }),
+      }),
+      expect.objectContaining({
+        actionId: 'water-signature-2',
+        startMs: 13000,
+        endMs: 25000,
+        durationMs: 12000,
+      }),
+    ]);
+    expect(
+      adapted.eventLog
+        .filter(event => event.type === 'COOLDOWN_START')
+        .map(event => event.payload)
+    ).toEqual([
+      expect.objectContaining({
+        cooldownMs: 12000,
+        baseCooldownMs: 24000,
+        modifierCount: 1,
+      }),
+      expect.objectContaining({
+        cooldownMs: 12000,
+        baseCooldownMs: 24000,
+        modifierCount: 1,
+      }),
+    ]);
+
+    const recoveredWithoutTimingSource = runSimulation(
+      createStatusProject(
+        [
+          createWorkbenchActionDraft({
+            id: 'water-signature-recovered',
+            type: 'kiboEvent',
+            kiboId: 500003,
+            skillId: 50000302,
+            actorCharacterId: 101007,
+            name: '灵偶涟漪',
+            startMs: 0,
+            durationMs: 1550,
+            timingSource: null,
+          }),
+        ],
+        {
+          actorConfigs: [
+            {
+              characterId: 101007,
+              loadout: { kiboId: 500003 },
+            },
+          ],
+        }
+      ),
+      getWorkbenchGameData()
+    );
+    expect(
+      recoveredWithoutTimingSource.actionRuleDiagnostics.readinessTimeline
+        .cooldownWindows
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'water-signature-recovered',
+        kiboId: 500003,
+        skillId: 50000302,
+        durationMs: 24000,
+      }),
+    ]);
+  });
+
   it('creates an ultimate cooldown only when skill-level provides a positive value', () => {
     const confirmed = runSimulation(
       createStatusProject([
@@ -255,6 +433,57 @@ describe('generated action status runtime', () => {
     expect(
       unavailable.actionRuleDiagnostics.readinessTimeline.cooldownWindows
     ).toEqual([]);
+  });
+
+  it('blocks a confirmed ultimate reused before its sourced cooldown ends', () => {
+    const result = runSimulation(
+      createStatusProject([
+        createWorkbenchActionDraft({
+          id: 'ultimate-conflict-1',
+          skillId: 10100713,
+          actorCharacterId: 101007,
+          startMs: 0,
+        }),
+        createWorkbenchActionDraft({
+          id: 'ultimate-conflict-2',
+          skillId: 10100713,
+          actorCharacterId: 101007,
+          startMs: 5000,
+        }),
+      ]),
+      getWorkbenchGameData()
+    );
+
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.actions.find(
+        action => action.actionId === 'ultimate-conflict-2'
+      )
+    ).toMatchObject({
+      status: 'blocked',
+      executable: false,
+      violationCodes: ['skill-cooldown-active'],
+    });
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === 'ultimate-conflict-2'
+      )
+    ).toMatchObject({
+      execute: false,
+      status: 'skipped-rule-blocked',
+    });
+    expect(
+      result.eventLog.filter(event => event.type === 'COOLDOWN_START')
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'ultimate-conflict-1',
+        payload: expect.objectContaining({
+          cooldownMs: 20000,
+          baseCooldownMs: 20000,
+          ownerKind: 'actor',
+          skillId: 10100713,
+        }),
+      }),
+    ]);
   });
 
   it('recomputes trigger timing and removes stale state after project edits', () => {
@@ -346,13 +575,21 @@ function createStatusAction({ id, startMs }) {
   });
 }
 
-function createKiboStatusAction({ id, startMs }) {
+function createKiboStatusAction({
+  id,
+  startMs,
+  kiboId = 500001,
+  skillId = 50000102,
+  actorCharacterId = 109001,
+  name = '迅风刃',
+}) {
   return createWorkbenchActionDraft({
     id,
     type: 'kiboEvent',
-    skillId: 50000102,
-    actorCharacterId: 109001,
-    name: '迅风刃',
+    kiboId,
+    skillId,
+    actorCharacterId,
+    name,
     startMs,
     durationMs: 1200,
     timingSource: 'azpr-unity-skill-control-root',

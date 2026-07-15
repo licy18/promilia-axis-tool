@@ -24,7 +24,15 @@ export {
   createActionHitThreeValueRuntimeInput,
   createThreeValueRuntimeInput,
 } from './runtime/threeValueRuntimeInput';
+export {
+  ACTION_COOLDOWN_EVALUATION_CONTRACT_NAME,
+  ACTION_COOLDOWN_EVALUATION_CONTRACT_VERSION,
+  ACTION_COOLDOWN_EVALUATION_ADAPTER_CONTRACT_NAME,
+  ACTION_COOLDOWN_EVALUATION_ADAPTER_CONTRACT_VERSION,
+  createActionCooldownEvaluation,
+  createActionCooldownAdapterRequest,
+} from './runtime/actionCooldownEvaluation';
 
-export function runSimulation(project, gameData) {
-  return simulateScenario(compileProject(project, gameData));
+export function runSimulation(project, gameData, options = {}) {
+  return simulateScenario(compileProject(project, gameData), options);
 }

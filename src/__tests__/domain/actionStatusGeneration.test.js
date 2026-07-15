@@ -148,6 +148,7 @@ describe('action status generation', () => {
     const kiboDraft = createWorkbenchActionDraft({
       id: 'action-status-kibo',
       type: 'kiboEvent',
+      kiboId: 500001,
       skillId: 50000102,
       actorCharacterId: 109001,
       timingSource: 'azpr-unity-skill-control-root',
@@ -155,6 +156,7 @@ describe('action status generation', () => {
     expect(kiboDraft.statusGeneration).toMatchObject({
       sourceKind: 'azpr-kibo-action-status-generation',
       status: 'action-status-generation-ready-with-cooldown',
+      kiboId: 500001,
       skillId: 50000102,
       cooldown: {
         status: 'confirmed-cooldown',
@@ -190,6 +192,47 @@ describe('action status generation', () => {
       cooldown: {
         status: 'no-confirmed-cooldown',
         durationMs: null,
+      },
+    });
+
+    const ambiguousOwnerGeneration = createKiboActionStatusGeneration({
+      actionId: 'action-status-kibo-ambiguous-owner',
+      skillId: 501016,
+      timingSource: 'azpr-unity-skill-control-root',
+    });
+    expect(ambiguousOwnerGeneration).toMatchObject({
+      status: 'tracking-only-no-confirmed-status-source',
+      kiboId: null,
+      skillId: 501016,
+      cooldown: {
+        status: 'no-confirmed-cooldown',
+        durationMs: null,
+      },
+    });
+
+    const legacyKiboDraft = normalizeWorkbenchActionDrafts(
+      [
+        {
+          id: 'legacy-kibo-event-without-skill',
+          type: 'kiboEvent',
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 600,
+        },
+      ],
+      {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      }
+    )[0];
+    expect(legacyKiboDraft).toMatchObject({
+      type: 'kiboEvent',
+      skillId: null,
+      statusGeneration: {
+        status: 'tracking-only-no-confirmed-status-source',
+        skillId: null,
       },
     });
   });

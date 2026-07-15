@@ -12,7 +12,10 @@ import { createActionEffectRelationGraph } from '../runtime/actionEffectRelation
 
 export function simulateScenario(
   scenario,
-  { threeValueMechanicsAdapterRegistry = null } = {}
+  {
+    threeValueMechanicsAdapterRegistry = null,
+    actionCooldownEvaluationAdapter = null,
+  } = {}
 ) {
   const eventLog = [
     {
@@ -27,11 +30,20 @@ export function simulateScenario(
 
   const damageEvents = [];
   const resourceEvents = [];
-  const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+  const actionRuleDiagnostics = createActionRuleDiagnostics({
+    scenario,
+    cooldownEvaluationAdapter: actionCooldownEvaluationAdapter,
+  });
   const actionExecutionPlan = createActionExecutionPlan({
     scenario,
     actionRuleDiagnostics,
   });
+  const actionReadinessByActionId = new Map(
+    actionRuleDiagnostics.readinessTimeline.actions.map(action => [
+      action.actionId,
+      action,
+    ])
+  );
   const executionPlanByActionId =
     createActionExecutionPlanIndex(actionExecutionPlan);
   const controlledActorTimeline = createControlledActorTimeline({
@@ -52,6 +64,13 @@ export function simulateScenario(
       continue;
     }
     eventLog.push(createActionStartEvent(action));
+    const cooldownStartEvent = createCooldownStartEvent(
+      action,
+      actionReadinessByActionId.get(action.id)?.cooldown
+    );
+    if (cooldownStartEvent) {
+      eventLog.push(cooldownStartEvent);
+    }
 
     const resourceActionEvent = createResourceActionEvent(action);
     if (resourceActionEvent) {
@@ -96,22 +115,6 @@ export function simulateScenario(
       };
       resourceEvents.push(event);
       eventLog.push(event);
-    }
-
-    const cooldownMs = resolveActionCooldownMs(action);
-    if (cooldownMs > 0) {
-      eventLog.push({
-        type: 'COOLDOWN_START',
-        timeMs: action.startMs,
-        actionId: action.id,
-        actorId: action.actorId,
-        payload: {
-          cooldownMs,
-          endsAtMs: action.startMs + cooldownMs,
-          sourceKind:
-            action.logicModel?.logic?.sourceKind ?? 'skill-display-cooldown',
-        },
-      });
     }
 
     const damageEvent = createDamageEvent(action, scenario.enemy);
@@ -168,11 +171,39 @@ export function simulateScenario(
   });
 }
 
-function resolveActionCooldownMs(action) {
+function createCooldownStartEvent(action, cooldown = null) {
   const cooldownMs = Number(
-    action.logicModel?.logic?.cooldownMs ?? action.cooldownMs
+    cooldown?.effectiveCooldownMs ?? cooldown?.cooldownMs
   );
-  return Number.isFinite(cooldownMs) && cooldownMs > 0 ? cooldownMs : 0;
+  if (
+    cooldown?.status !== 'cooldown-charge-consumed' ||
+    !Number.isFinite(cooldownMs) ||
+    cooldownMs <= 0
+  ) {
+    return null;
+  }
+  return {
+    type: 'COOLDOWN_START',
+    timeMs: action.startMs,
+    actionId: action.id,
+    actorId: action.actorId,
+    payload: {
+      cooldownMs,
+      baseCooldownMs: cooldown.baseCooldownMs ?? cooldownMs,
+      endsAtMs: action.startMs + cooldownMs,
+      cooldownCount: cooldown.cooldownCount,
+      ownerKind: cooldown.ownerKind,
+      ownerId: cooldown.ownerId,
+      kiboId: cooldown.kiboId,
+      skillId: cooldown.skillId,
+      sourceKind:
+        cooldown.sourceIdentity?.sourceKind ??
+        cooldown.source?.sourceKind ??
+        'azpr-action-cooldown-evaluation',
+      evaluationStatus: cooldown.cooldownEvaluation?.status ?? null,
+      modifierCount: cooldown.modifierCount ?? 0,
+    },
+  };
 }
 
 function createNonCombatEvent(action, controlledActorTransition = null) {

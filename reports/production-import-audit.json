@@ -84,6 +84,7 @@
       "src/__tests__/scripts/runtimeCaptureFridaHost.test.js",
       "src/__tests__/scripts/runtimeCaptureNormalizeCli.test.js",
       "src/__tests__/scripts/runtimeCapturePlanCli.test.js",
+      "src/__tests__/simulation/actionCooldownEvaluation.test.js",
       "src/__tests__/simulation/actionEffectRelationGraph.test.js",
       "src/__tests__/simulation/actionExecutionPlan.test.js",
       "src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js",
@@ -112,8 +113,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 131,
-    "productionReachableCount": 127,
+    "sourceCodeFileCount": 132,
+    "productionReachableCount": 128,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -131,7 +132,7 @@
       "src/simulation/generation": 4,
       "src/simulation/mechanics": 10,
       "src/simulation/projection": 6,
-      "src/simulation/runtime": 12,
+      "src/simulation/runtime": 13,
       "src/store": 1,
       "src/utils": 2,
       "src/views": 4
@@ -251,6 +252,7 @@
     "src/simulation/projection/projectScenarioComparison.js",
     "src/simulation/projection/projectSimulationResult.js",
     "src/simulation/projection/workbenchSkillDiagnosticsLoader.js",
+    "src/simulation/runtime/actionCooldownEvaluation.js",
     "src/simulation/runtime/actionEffectRelationGraph.js",
     "src/simulation/runtime/actionHitThreeValueRuntimeInput.js",
     "src/simulation/runtime/actionRuleDiagnostics.js",

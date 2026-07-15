@@ -653,9 +653,20 @@
               :title="formatCooldownWindowTitle(window)"
               :aria-label="formatCooldownWindowTitle(window)"
               :data-action-id="window.actionId"
+              :data-skill-id="window.skillId || ''"
               :data-charge-index="window.chargeIndex"
               :data-start-ms="window.startMs"
               :data-end-ms="window.endMs"
+              :data-base-duration-ms="
+                window.baseDurationMs || window.durationMs
+              "
+              :data-effective-duration-ms="
+                window.effectiveDurationMs || window.durationMs
+              "
+              :data-modifier-count="window.modifierCount || 0"
+              :data-cooldown-evaluation-status="
+                window.cooldownEvaluation?.status || ''
+              "
               :data-start-frame-index="msToFrame(window.startMs)"
               :data-end-frame-index="msToFrame(window.endMs)"
               :data-confidence="window.confidence || ''"
@@ -5187,16 +5198,6 @@ h2 {
     0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
-.action-block.readiness-blocked {
-  border-color: rgba(245, 108, 108, 0.92);
-  background: linear-gradient(180deg, #543033 0%, #3f2528 100%);
-}
-
-.action-block.readiness-unresolved {
-  border-color: rgba(242, 179, 102, 0.76);
-  background: linear-gradient(180deg, #4b4231 0%, #393225 100%);
-}
-
 .action-block.dragging {
   cursor: grabbing;
 }
@@ -5371,6 +5372,16 @@ h2 {
 
 .action-block.auto-delayed {
   border-color: rgba(230, 162, 60, 0.78);
+}
+
+.action-block.readiness-blocked {
+  border-color: rgba(245, 108, 108, 0.92);
+  background: linear-gradient(180deg, #543033 0%, #3f2528 100%);
+}
+
+.action-block.readiness-unresolved {
+  border-color: rgba(242, 179, 102, 0.76);
+  background: linear-gradient(180deg, #4b4231 0%, #393225 100%);
 }
 
 .duration-handle {

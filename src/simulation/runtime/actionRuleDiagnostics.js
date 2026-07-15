@@ -1,4 +1,5 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
 
 export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
   'AzPrActionRuleDiagnostics';
@@ -16,9 +17,15 @@ export const ACTION_RULE_STATUSES = Object.freeze({
   UNRESOLVED: 'unresolved',
 });
 
-export function createActionRuleDiagnostics({ scenario = {} } = {}) {
+export function createActionRuleDiagnostics({
+  scenario = {},
+  cooldownEvaluationAdapter = null,
+} = {}) {
   const actions = [...(scenario.actions ?? [])].sort(compareActions);
-  const cooldownEvaluation = createSkillCooldownEvaluation(actions);
+  const cooldownEvaluation = createSkillCooldownEvaluation(actions, {
+    scenario,
+    cooldownEvaluationAdapter,
+  });
   const diagnostics = [
     ...createLaneOverlapDiagnostics(actions),
     ...cooldownEvaluation.diagnostics,
@@ -76,6 +83,8 @@ export function createActionRuleDiagnostics({ scenario = {} } = {}) {
       readinessStatus: readinessTimeline.status,
       readinessActionCount: readinessTimeline.summary.actionCount,
       cooldownWindowCount: readinessTimeline.summary.cooldownWindowCount,
+      cooldownModifiedWindowCount:
+        readinessTimeline.summary.cooldownModifiedWindowCount,
       appliedToSimulationResults: false,
     },
     appliedToSimulationResults: false,
@@ -155,6 +164,10 @@ function createActionReadinessTimeline({
       cooldownTrackedActionCount: actionRows.filter(action => action.cooldown)
         .length,
       cooldownWindowCount: cooldownEvaluation.cooldownWindows.length,
+      cooldownModifiedWindowCount: cooldownEvaluation.cooldownWindows.filter(
+        window =>
+          window.cooldownEvaluation?.status === 'cooldown-evaluation-adapted'
+      ).length,
       appliedToSimulationResults: false,
     },
     appliedToSimulationResults: false,
@@ -235,7 +248,10 @@ function createLaneOverlapDiagnostics(actions) {
   return diagnostics;
 }
 
-function createSkillCooldownEvaluation(actions) {
+function createSkillCooldownEvaluation(
+  actions,
+  { scenario = null, cooldownEvaluationAdapter = null } = {}
+) {
   const cooldownStateBySkillOwner = new Map();
   const diagnostics = [];
   const snapshotsByActionId = new Map();
@@ -248,13 +264,31 @@ function createSkillCooldownEvaluation(actions) {
     ) {
       continue;
     }
-    const cooldown = createSkillCooldownRequirement(action);
-    if (!cooldown) {
+    const baseCooldown = createSkillCooldownRequirement(action);
+    if (!baseCooldown) {
       continue;
     }
     const ownerKind =
       action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor';
     const ownerId = ownerKind === 'kibo' ? action.kiboId : action.actorId;
+    const evaluation = createActionCooldownEvaluation({
+      action,
+      ownerKind,
+      ownerId,
+      baseCooldown,
+      scenario,
+      priorCooldownWindows: cooldownWindows,
+      adapter: cooldownEvaluationAdapter,
+    });
+    if (!evaluation) {
+      continue;
+    }
+    const cooldown = {
+      ...baseCooldown,
+      cooldownMs: evaluation.effective.durationMs,
+      cooldownCount: evaluation.effective.chargeCount,
+      evaluation,
+    };
     const key = `${ownerKind}|${ownerId}|${action.skillId}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
@@ -280,10 +314,15 @@ function createSkillCooldownEvaluation(actions) {
         actionName: action.name,
         actorId: action.actorId,
         actorName: action.actor?.name ?? action.actorId,
+        ownerKind,
+        ownerId,
+        kiboId: action.kiboId ?? null,
         blockingActionId: blocking.sourceActionId,
         blockingActionName: blocking.sourceActionName,
         timeMs: action.startMs,
         cooldownMs: cooldown.cooldownMs,
+        baseCooldownMs: evaluation.base.durationMs,
+        effectiveCooldownMs: evaluation.effective.durationMs,
         cooldownCount: cooldown.cooldownCount,
         readyAtMs: blocking.readyAtMs,
         remainingMs: blocking.readyAtMs - action.startMs,
@@ -291,6 +330,7 @@ function createSkillCooldownEvaluation(actions) {
         editFieldKey: 'startMs',
         message: `${action.name} 可用次数已耗尽，尚有 ${blocking.readyAtMs - action.startMs}ms 冷却`,
         source: cooldown.source,
+        cooldownEvaluation: evaluation,
         appliedToSimulationResults: false,
       });
       snapshotsByActionId.set(
@@ -339,9 +379,13 @@ function createSkillCooldownEvaluation(actions) {
       startMs: action.startMs,
       endMs: readyAtMs,
       durationMs: cooldown.cooldownMs,
+      baseDurationMs: evaluation.base.durationMs,
+      effectiveDurationMs: evaluation.effective.durationMs,
       source: cooldown.source,
       sourceIdentity: cooldown.sourceIdentity,
       confidence: cooldown.confidence,
+      cooldownEvaluation: evaluation,
+      modifierCount: evaluation.appliedModifierCount,
       trackingStatus: 'applied-to-readiness',
       appliedToSimulationResults: false,
     };
@@ -401,7 +445,14 @@ function createCooldownReadinessSnapshot({
     sourceKind: 'azpr-action-cooldown-readiness',
     status,
     cooldownMs: cooldown.cooldownMs,
+    baseCooldownMs: cooldown.evaluation.base.durationMs,
+    effectiveCooldownMs: cooldown.evaluation.effective.durationMs,
     cooldownCount: cooldown.cooldownCount,
+    ownerKind: action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
+    ownerId:
+      action.type === ACTION_TYPES.KIBO_EVENT ? action.kiboId : action.actorId,
+    kiboId: action.kiboId ?? null,
+    skillId: action.skillId ?? null,
     availableBefore: countAvailableCharges(chargesBefore, action.startMs),
     availableAfter: countAvailableCharges(chargesAfter, action.startMs),
     consumedChargeIndex,
@@ -412,6 +463,8 @@ function createCooldownReadinessSnapshot({
     source: cooldown.source,
     sourceIdentity: cooldown.sourceIdentity,
     confidence: cooldown.confidence,
+    cooldownEvaluation: cooldown.evaluation,
+    modifierCount: cooldown.evaluation.appliedModifierCount,
     trackingStatus: 'applied-to-readiness',
     appliedToSimulationResults: false,
   };

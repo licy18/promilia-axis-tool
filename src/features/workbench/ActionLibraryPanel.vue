@@ -566,6 +566,7 @@ const kiboTimelineEntries = computed(() =>
   (activeKibo.value?.actions ?? []).map(action =>
     createWorkbenchTimelineEntry({
       type: ACTION_TYPES.KIBO_EVENT,
+      kiboId: activeKibo.value?.id,
       skillId: action.skillId,
       icon: action.icon,
       eventType: action.kind,

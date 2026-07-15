@@ -27512,3 +27512,11 @@ kiboCooldowns[]
 角色技能 CD 优先使用正值 `skillsub_logic.coolDown`；仅当该值为 0 且 `skill_level.coolDown` 为正值时，使用后者并记录 `confirmed-display-cooldown-logic-zero`。两处均为 0 时返回无可信 CD，不生成零长度条。奇波 runtime readiness 使用标准战斗 `coolDown`，并以 `ownerKind = kibo`、`ownerId = kiboId` 与角色同 skill ID 空间隔离；奇波对战字段只作来源诊断。
 
 时间轴不增加持久化字段。每条轨道在视图投影阶段分别计算 `cooldownSlot` 和效果 `timelineSlot`，只有时间范围重叠的条块才占用不同垂直槽；Buff 区仍位于动作上方，CD 区仍位于动作下方。项目 schema、五载体、HP/韧性/六资源 calculator 输入及所有 `appliedToCalculators` 边界不变。
+
+## 435. Action cooldown evaluation v1 and exact Kibo action identity
+
+新增非持久化 `AzPrActionCooldownEvaluation` 与 `AzPrActionCooldownEvaluationAdapter` v1。每次可执行性检查先保留目录给出的 `base.durationMs / chargeCount / sourceIdentity`，再由可替换 adapter 生成 `effective.durationMs / chargeCount`、`modifiers[]`、adapter identity 和 fallback 状态；冲突队列、冷却窗口和 `COOLDOWN_START` 统一消费 effective 值。adapter 请求保留动作、owner、场景、既有窗口以及后续 runtime effect state 接入口；当前默认实现只透传 base，未确认技能/Buff 修正不参与计算。
+
+`ActionCooldownReadiness` 与 `SkillCooldownWindow` 新增只读 `base/effective` 冷却、owner、Kibo、修正数量和 evaluation 追溯字段。冲突 identity 固定为 `ownerKind + ownerId + skillId`：角色技能按角色隔离，奇波技能按 `kiboId` 隔离；被阻塞动作不生成窗口、冷却事件、效果或三值结果。
+
+Workbench 奇波拖入条目和动作草稿可选保留精确 `kiboId`。目录查询优先使用 `kiboId + skillId`，只有 skill ID 在全目录唯一时才允许缺 owner 回退；多个奇波共用的 skill ID 不再静默绑定。旧项目中的奇波事件若没有真实 skill ID，会保持 `null` 而不会继承角色默认技能；当前装备奇波仍由角色配置解析，因此旧项目和五载体无需升级 schema。该变化不修改 HP、韧性、六资源曲线或任何战斗公式。

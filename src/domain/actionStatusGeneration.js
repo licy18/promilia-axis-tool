@@ -99,8 +99,10 @@ export function createKiboActionStatusGeneration({
     normalizedKiboId,
     normalizedSkillId
   );
+  const resolvedKiboId =
+    normalizedKiboId ?? positiveIntegerOrNull(catalogCooldown?.kiboId);
   const cooldown = createKiboCooldownGenerationStatus({
-    kiboId: normalizedKiboId,
+    kiboId: resolvedKiboId,
     skillId: normalizedSkillId,
     catalogCooldown,
   });
@@ -113,7 +115,7 @@ export function createKiboActionStatusGeneration({
         ? 'action-status-generation-ready-with-cooldown'
         : 'tracking-only-no-confirmed-status-source',
     actionId: String(actionId ?? '').trim() || 'action',
-    kiboId: normalizedKiboId,
+    kiboId: resolvedKiboId,
     skillId: normalizedSkillId,
     timingSource: String(timingSource ?? '').trim() || null,
     cooldown,

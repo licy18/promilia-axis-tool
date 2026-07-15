@@ -151,7 +151,7 @@ export function getSkillsForCharacter(characterId) {
 export function createWorkbenchActionDraft({
   id = DEFAULT_WORKBENCH_ACTION_ID,
   type = ACTION_TYPES.SKILL,
-  skillId = DEFAULT_WORKBENCH_SELECTION.skillId,
+  skillId = null,
   actorCharacterId = DEFAULT_WORKBENCH_SELECTION.characterId,
   startMs = 0,
   durationMs = 1000,
@@ -163,6 +163,7 @@ export function createWorkbenchActionDraft({
   change = 50,
   reason = 'manual-axis-resource',
   eventType = 'phase',
+  kiboId = null,
   name = '',
   icon = null,
   timingSource = null,
@@ -177,7 +178,11 @@ export function createWorkbenchActionDraft({
     0,
     Number(actionVariantIndex ?? damageSegmentIndex) || 0
   );
-  const skill = findById(workbenchSeed.gameData.skills, skillId);
+  const normalizedSkillId =
+    type === ACTION_TYPES.KIBO_EVENT
+      ? positiveIntegerOrNull(skillId)
+      : Number(skillId ?? DEFAULT_WORKBENCH_SELECTION.skillId);
+  const skill = findById(workbenchSeed.gameData.skills, normalizedSkillId);
   const statusGeneration =
     type === ACTION_TYPES.SKILL && skill
       ? createSkillActionStatusGeneration({
@@ -198,14 +203,15 @@ export function createWorkbenchActionDraft({
     type === ACTION_TYPES.KIBO_EVENT
       ? createKiboActionStatusGeneration({
           actionId,
-          skillId,
+          kiboId,
+          skillId: normalizedSkillId,
           timingSource,
         })
       : null;
   return {
     id: actionId,
     type,
-    skillId: Number(skillId),
+    skillId: normalizedSkillId,
     actorCharacterId:
       Number(actorCharacterId) || DEFAULT_WORKBENCH_SELECTION.characterId,
     startMs: Math.max(0, snapMsToFrame(Number(startMs) || 0)),
@@ -225,6 +231,7 @@ export function createWorkbenchActionDraft({
     eventType,
     ...(type === ACTION_TYPES.KIBO_EVENT
       ? {
+          kiboId: positiveIntegerOrNull(kiboId),
           name: String(name ?? '').trim(),
           icon: String(icon ?? '').trim() || null,
           timingSource: timingSource ? String(timingSource).trim() : null,
@@ -731,7 +738,10 @@ export function normalizeWorkbenchActionDrafts(
         return createWorkbenchActionDraft({
           id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
           type: draft.type,
-          skillId: draft.skillId ?? fallbackSkill.id,
+          skillId:
+            draft.type === ACTION_TYPES.KIBO_EVENT
+              ? (draft.skillId ?? null)
+              : (draft.skillId ?? fallbackSkill.id),
           actorCharacterId,
           startMs: draft.startMs,
           durationMs: draft.durationMs,
@@ -744,6 +754,7 @@ export function normalizeWorkbenchActionDrafts(
           change: draft.change,
           reason: draft.reason,
           eventType: draft.eventType,
+          kiboId: draft.kiboId,
           name: draft.name,
           icon: draft.icon,
           timingSource: draft.timingSource,
@@ -883,7 +894,7 @@ function createProjectActionFromDraft(
       id: draft.id,
       actorId: sourceActor.id,
       kiboId,
-      skillId: draft.timingSource ? draft.skillId : null,
+      skillId: draft.skillId,
       icon: draft.icon,
       name: draft.name || `${kibo?.name ?? '奇波'}事件`,
       startMs: draft.startMs,

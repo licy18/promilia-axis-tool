@@ -14,11 +14,17 @@ const kiboCooldownByIdentity = new Map(
     cooldown,
   ])
 );
-const kiboCooldownBySkillId = new Map(
-  (actionStatusCatalog.kiboCooldowns ?? []).map(cooldown => [
-    Number(cooldown.skillId),
-    cooldown,
-  ])
+const kiboCooldownsBySkillId = new Map();
+for (const cooldown of actionStatusCatalog.kiboCooldowns ?? []) {
+  const skillId = Number(cooldown.skillId);
+  const entries = kiboCooldownsBySkillId.get(skillId) ?? [];
+  entries.push(cooldown);
+  kiboCooldownsBySkillId.set(skillId, entries);
+}
+const unambiguousKiboCooldownBySkillId = new Map(
+  [...kiboCooldownsBySkillId.entries()]
+    .filter(([, entries]) => entries.length === 1)
+    .map(([skillId, entries]) => [skillId, entries[0]])
 );
 
 export function getWorkbenchActionStatusCatalog() {
@@ -38,7 +44,7 @@ export function getWorkbenchKiboActionStatusCooldown(kiboId, skillId) {
       ) ?? null
     );
   }
-  return kiboCooldownBySkillId.get(Number(skillId)) ?? null;
+  return unambiguousKiboCooldownBySkillId.get(Number(skillId)) ?? null;
 }
 
 function createKiboCooldownIdentity(kiboId, skillId) {

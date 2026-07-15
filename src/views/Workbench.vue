@@ -2913,6 +2913,7 @@ function addKiboEventAction(entry = null) {
   addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.KIBO_EVENT,
+    kiboId: entry?.kiboId ?? actionLibraryActor.value?.loadout?.kiboId,
     skillId: entry?.skillId ?? selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
     durationMs: entry?.durationMs ?? 600,
@@ -2988,6 +2989,7 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
     });
   } else if (entry.type === ACTION_TYPES.KIBO_EVENT) {
     Object.assign(commonDraft, {
+      kiboId: entry.kiboId,
       eventType: entry.eventType ?? 'activation',
       name: entry.label ?? '',
       icon: entry.icon ?? null,

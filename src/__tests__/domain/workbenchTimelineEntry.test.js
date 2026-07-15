@@ -54,6 +54,19 @@ describe('workbench timeline entry contract', () => {
     expect(
       createWorkbenchTimelineEntry({ type: ACTION_TYPES.WAIT })
     ).toBeNull();
+    expect(
+      createWorkbenchTimelineEntry({
+        type: ACTION_TYPES.KIBO_EVENT,
+        kiboId: '500003',
+        skillId: '50000302',
+        cooldownMs: 24000,
+      })
+    ).toMatchObject({
+      type: ACTION_TYPES.KIBO_EVENT,
+      kiboId: 500003,
+      skillId: 50000302,
+      cooldownMs: 24000,
+    });
   });
 
   it('plans one actor ownership move for a mixed action and kibo selection', () => {
