@@ -885,7 +885,10 @@ const workbenchSeed = buildWorkbenchSeedData({
   soulessences,
   characterAttributePanelByCharacterId,
 });
-const workbenchKiboActionCatalog = buildWorkbenchKiboActionCatalog(kibos);
+const workbenchKiboActionCatalog = buildWorkbenchKiboActionCatalog(
+  kibos,
+  skillsubLogicTable
+);
 const workbenchLoadoutDetailCatalog = createWorkbenchLoadoutDetailProjection({
   generatedAt,
   sources: {
@@ -1235,21 +1238,42 @@ function compactKibo(kibo) {
   };
 }
 
-function buildWorkbenchKiboActionCatalog(kibos) {
+function buildWorkbenchKiboActionCatalog(kibos, skillsubLogicTable) {
+  const logicBySkillId = new Map(
+    (skillsubLogicTable?.rows ?? []).map(row => [Number(row.skillId), row])
+  );
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'workbench-kibo-action-catalog',
     generatedAt,
     source: 'pet-table-and-azpr-unity-skill-control-root',
+    sources: {
+      identity: normalizePath(sourceFiles.kibos),
+      cooldown: normalizePath(sourceFiles.skillsubLogic),
+      timing: 'azpr-unity-skill-control-root',
+    },
     items: kibos.map(kibo => ({
       kiboId: kibo.id,
-      actions: (kibo.skills ?? []).map(skill => ({
-        skillId: skill.skillId,
-        kind: skill.kind,
-        icon: skill.icon,
-        name: skill.name,
-        durationFrames: skill.durationFrames,
-      })),
+      actions: (kibo.skills ?? []).map(skill => {
+        const logic = logicBySkillId.get(Number(skill.skillId)) ?? null;
+        const cooldownMs = positiveNumberOrNull(logic?.coolDown);
+        return {
+          skillId: skill.skillId,
+          kind: skill.kind,
+          icon: skill.icon,
+          name: skill.name,
+          durationFrames: skill.durationFrames,
+          cooldownMs,
+          cooldownCount: cooldownMs
+            ? Math.max(1, Math.trunc(Number(logic?.coolDownCount) || 1))
+            : null,
+          cooldownDefaultMs: nonNegativeNumberOrNull(logic?.coolDownDefault),
+          kiboVersusCooldownMs: positiveNumberOrNull(logic?.kiBoVersusCoolDown),
+          kiboVersusCooldownDefaultMs: nonNegativeNumberOrNull(
+            logic?.kiBoCoolDownDefault
+          ),
+        };
+      }),
     })),
   };
 }
@@ -8702,6 +8726,16 @@ function numberOrNull(value) {
   }
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function positiveNumberOrNull(value) {
+  const number = numberOrNull(value);
+  return number != null && number > 0 ? number : null;
+}
+
+function nonNegativeNumberOrNull(value) {
+  const number = numberOrNull(value);
+  return number != null && number >= 0 ? number : null;
 }
 
 function normalizePath(filePath) {

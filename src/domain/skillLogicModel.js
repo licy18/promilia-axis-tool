@@ -94,6 +94,37 @@ export function resolveSkillLogic(skill, level = 1, options = {}) {
   };
 }
 
+export function resolveSkillCooldownSource(logicModel) {
+  const logic = logicModel?.logic ?? null;
+  const logicDurationMs = positiveNumberOrNull(logic?.cooldownMs);
+  if (logicDurationMs != null) {
+    return {
+      durationMs: logicDurationMs,
+      chargeCount: Math.max(1, Math.trunc(Number(logic?.cooldownCount) || 1)),
+      sourceKind: logic.sourceKind ?? SKILL_LOGIC_SOURCE_KIND,
+      sourceStatus: 'confirmed-logic-cooldown',
+      subSkillId: Number(logic.subSkillId ?? logicModel?.subSkillId) || null,
+      durationFieldPath: logic.fieldPaths?.cooldownMs ?? null,
+      chargeCountFieldPath: logic.fieldPaths?.cooldownCount ?? null,
+    };
+  }
+
+  const display = logicModel?.display ?? null;
+  const displayDurationMs = positiveNumberOrNull(display?.cooldownMs);
+  if (displayDurationMs == null) {
+    return null;
+  }
+  return {
+    durationMs: displayDurationMs,
+    chargeCount: 1,
+    sourceKind: display.sourceKind ?? SKILL_LEVEL_DISPLAY_SOURCE_KIND,
+    sourceStatus: 'confirmed-display-cooldown-logic-zero',
+    subSkillId: Number(logicModel?.subSkillId) || null,
+    durationFieldPath: display.fieldPaths?.cooldownMs ?? null,
+    chargeCountFieldPath: null,
+  };
+}
+
 function createSkillLogicSource() {
   return {
     sourceKind: SKILL_LOGIC_SOURCE_KIND,
@@ -133,6 +164,7 @@ function createSubSkillLogicModel(subSkill) {
     fieldPaths: {
       row: `skillsub_logic.rows[skillId=${subSkillId}]`,
       cooldownMs: `skillsub_logic.rows[skillId=${subSkillId}].coolDown`,
+      cooldownCount: `skillsub_logic.rows[skillId=${subSkillId}].coolDownCount`,
       spCost: `skillsub_logic.rows[skillId=${subSkillId}].spCost`,
       selfCooldownMs: `skillsub_logic.rows[skillId=${subSkillId}].selfCD`,
       publicCooldownMs: `skillsub_logic.rows[skillId=${subSkillId}].publicCD`,
@@ -358,6 +390,11 @@ function parseRawNumber(rawValue) {
   }
   const number = Number(String(rawValue).trim().replace('%', ''));
   return Number.isFinite(number) ? number : null;
+}
+
+function positiveNumberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
 }
 
 function createMissingLogicModel(source, diagnostic) {

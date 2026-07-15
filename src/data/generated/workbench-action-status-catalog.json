@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "generatedAt": "2026-07-08T03:35:51.289Z",
   "sourceKind": "azpr-workbench-action-status-catalog",
   "status": "action-status-catalog-ready",
@@ -15,19 +15,3320 @@
     "skillLogic": "workbench-skill-core.json",
     "skillAssetEvidence": "workbench-skill-diagnostics.json",
     "kiboActions": "workbench-kibo-action-catalog.json",
+    "kiboCooldown": "Config/NewTable/skillsub_logic.json.coolDown (standard battle)",
     "buffInfo": "Config/NewTable/buff_info.json"
   },
   "summary": {
     "skillCount": 120,
-    "cooldownSkillCount": 40,
-    "noConfirmedCooldownSkillCount": 80,
+    "cooldownSkillCount": 52,
+    "logicCooldownSkillCount": 40,
+    "displayCooldownFallbackSkillCount": 12,
+    "ultimateDisplayCooldownFallbackSkillCount": 12,
+    "noConfirmedCooldownSkillCount": 68,
     "effectCandidateCount": 6,
     "lifecycleBoundEffectCount": 1,
     "trackingOnlyEffectCount": 5,
     "kiboActionCount": 366,
+    "kiboConfirmedCooldownActionCount": 366,
     "kiboConfirmedStatusActionCount": 0,
     "calculatorAppliedEffectCount": 0
   },
+  "kiboCooldowns": [
+    {
+      "kiboId": 500001,
+      "skillId": 504004,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500001,
+      "skillId": 50000102,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500001,
+      "skillId": 50000112,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500002,
+      "skillId": 502015,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500002,
+      "skillId": 50000202,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500002,
+      "skillId": 50000203,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500003,
+      "skillId": 502019,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500003,
+      "skillId": 50000302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500003,
+      "skillId": 50000303,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500004,
+      "skillId": 502016,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500004,
+      "skillId": 50000404,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500004,
+      "skillId": 50000417,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500005,
+      "skillId": 501014,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500005,
+      "skillId": 50000502,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500005,
+      "skillId": 50000504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500006,
+      "skillId": 501017,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500006,
+      "skillId": 50000602,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500006,
+      "skillId": 50000604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500007,
+      "skillId": 501016,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500007,
+      "skillId": 50000702,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500007,
+      "skillId": 50000715,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500020,
+      "skillId": 503001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500020,
+      "skillId": 50002001,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500020,
+      "skillId": 50002004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500021,
+      "skillId": 503006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 5000
+    },
+    {
+      "kiboId": 500021,
+      "skillId": 50002102,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500021,
+      "skillId": 50002104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500022,
+      "skillId": 503004,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500022,
+      "skillId": 50002201,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500022,
+      "skillId": 50002204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500023,
+      "skillId": 505013,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500023,
+      "skillId": 50002304,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500023,
+      "skillId": 50002305,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500024,
+      "skillId": 505006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500024,
+      "skillId": 50002404,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500024,
+      "skillId": 50002415,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500025,
+      "skillId": 507003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500025,
+      "skillId": 50002504,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500025,
+      "skillId": 50002515,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500026,
+      "skillId": 505006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500026,
+      "skillId": 50002612,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500026,
+      "skillId": 50002616,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500035,
+      "skillId": 505004,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500035,
+      "skillId": 50003501,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500035,
+      "skillId": 50003503,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500037,
+      "skillId": 501001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500037,
+      "skillId": 50003701,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500037,
+      "skillId": 50003704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500038,
+      "skillId": 501003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500038,
+      "skillId": 50003801,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500038,
+      "skillId": 50003804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500039,
+      "skillId": 501003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500039,
+      "skillId": 50003901,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500039,
+      "skillId": 50003904,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500040,
+      "skillId": 506001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500040,
+      "skillId": 50004002,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 32000
+    },
+    {
+      "kiboId": 500040,
+      "skillId": 50004004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500041,
+      "skillId": 506001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500041,
+      "skillId": 50004102,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 32000
+    },
+    {
+      "kiboId": 500041,
+      "skillId": 50004104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500042,
+      "skillId": 506006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500042,
+      "skillId": 50004202,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 32000
+    },
+    {
+      "kiboId": 500042,
+      "skillId": 50004204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500043,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500043,
+      "skillId": 50004302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500043,
+      "skillId": 50004305,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500044,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500044,
+      "skillId": 50004401,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500044,
+      "skillId": 50004404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500045,
+      "skillId": 504020,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500045,
+      "skillId": 50004501,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500045,
+      "skillId": 50004504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500046,
+      "skillId": 505013,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500046,
+      "skillId": 50004602,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500046,
+      "skillId": 50004604,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500047,
+      "skillId": 505014,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500047,
+      "skillId": 50004703,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500047,
+      "skillId": 50004705,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500048,
+      "skillId": 505018,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500048,
+      "skillId": 50004804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500048,
+      "skillId": 50004805,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500051,
+      "skillId": 506001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500051,
+      "skillId": 50005102,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500051,
+      "skillId": 50005104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500052,
+      "skillId": 506008,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500052,
+      "skillId": 50005202,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500052,
+      "skillId": 50005204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500053,
+      "skillId": 506008,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500053,
+      "skillId": 50005302,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500053,
+      "skillId": 50005304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500057,
+      "skillId": 507001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500057,
+      "skillId": 50005701,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500057,
+      "skillId": 50005704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500058,
+      "skillId": 501002,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500058,
+      "skillId": 50005801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500058,
+      "skillId": 50005804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500064,
+      "skillId": 504001,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500064,
+      "skillId": 50006401,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500064,
+      "skillId": 50006404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500065,
+      "skillId": 504002,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500065,
+      "skillId": 50006501,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500065,
+      "skillId": 50006504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500066,
+      "skillId": 502004,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500066,
+      "skillId": 50006601,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500066,
+      "skillId": 50006604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500067,
+      "skillId": 502006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500067,
+      "skillId": 50006701,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500067,
+      "skillId": 50006704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500068,
+      "skillId": 502003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500068,
+      "skillId": 50006801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500068,
+      "skillId": 50006804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500072,
+      "skillId": 503004,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500072,
+      "skillId": 50007201,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500072,
+      "skillId": 50007204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500081,
+      "skillId": 503007,
+      "cooldownMs": 16000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 8000
+    },
+    {
+      "kiboId": 500081,
+      "skillId": 50008102,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500081,
+      "skillId": 50008104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500082,
+      "skillId": 507008,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500082,
+      "skillId": 50008201,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500082,
+      "skillId": 50008204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500083,
+      "skillId": 501001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500083,
+      "skillId": 50008303,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500083,
+      "skillId": 50008304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500084,
+      "skillId": 506004,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500084,
+      "skillId": 50008403,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500084,
+      "skillId": 50008404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500085,
+      "skillId": 506006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500085,
+      "skillId": 50008503,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500085,
+      "skillId": 50008504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500093,
+      "skillId": 508004,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500093,
+      "skillId": 50009304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500093,
+      "skillId": 50009305,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500095,
+      "skillId": 509001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500095,
+      "skillId": 50009501,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500095,
+      "skillId": 50009504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500096,
+      "skillId": 509002,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500096,
+      "skillId": 50009601,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500096,
+      "skillId": 50009604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500097,
+      "skillId": 502010,
+      "cooldownMs": 12000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 6000
+    },
+    {
+      "kiboId": 500097,
+      "skillId": 50009701,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500097,
+      "skillId": 50009704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500098,
+      "skillId": 502010,
+      "cooldownMs": 12000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 6000
+    },
+    {
+      "kiboId": 500098,
+      "skillId": 50009801,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500098,
+      "skillId": 50009804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500110,
+      "skillId": 505001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500110,
+      "skillId": 50011001,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500110,
+      "skillId": 50011004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500114,
+      "skillId": 503009,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500114,
+      "skillId": 50011402,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500114,
+      "skillId": 50011404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500115,
+      "skillId": 503010,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500115,
+      "skillId": 50011502,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500115,
+      "skillId": 50011504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500116,
+      "skillId": 503018,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500116,
+      "skillId": 50011602,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500116,
+      "skillId": 50011604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500120,
+      "skillId": 504001,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500120,
+      "skillId": 50012002,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500120,
+      "skillId": 50012004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500123,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500123,
+      "skillId": 50012302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500123,
+      "skillId": 50012304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500124,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500124,
+      "skillId": 50012402,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500124,
+      "skillId": 50012404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500125,
+      "skillId": 504014,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500125,
+      "skillId": 50012502,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500125,
+      "skillId": 50012504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500126,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500126,
+      "skillId": 50012602,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500126,
+      "skillId": 50012604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500127,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500127,
+      "skillId": 50012702,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500127,
+      "skillId": 50012704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500128,
+      "skillId": 504014,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500128,
+      "skillId": 50012802,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500128,
+      "skillId": 50012804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500129,
+      "skillId": 507001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500129,
+      "skillId": 50012901,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500129,
+      "skillId": 50012903,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500130,
+      "skillId": 507003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500130,
+      "skillId": 50013001,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500130,
+      "skillId": 50013003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500131,
+      "skillId": 507003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500131,
+      "skillId": 50013101,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500131,
+      "skillId": 50013103,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500132,
+      "skillId": 506004,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500132,
+      "skillId": 50013202,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500132,
+      "skillId": 50013204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500133,
+      "skillId": 506001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500133,
+      "skillId": 50013302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500133,
+      "skillId": 50013304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500134,
+      "skillId": 506006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500134,
+      "skillId": 50013402,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500134,
+      "skillId": 50013404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500138,
+      "skillId": 501001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500138,
+      "skillId": 50013801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500138,
+      "skillId": 50013804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500139,
+      "skillId": 506005,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500139,
+      "skillId": 50013901,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500139,
+      "skillId": 50013904,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500140,
+      "skillId": 506005,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500140,
+      "skillId": 50014001,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500140,
+      "skillId": 50014004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500147,
+      "skillId": 505013,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500147,
+      "skillId": 50014701,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500147,
+      "skillId": 50014704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500148,
+      "skillId": 505014,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500148,
+      "skillId": 50014801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500148,
+      "skillId": 50014804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500149,
+      "skillId": 505017,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500149,
+      "skillId": 50014901,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500149,
+      "skillId": 50014904,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500156,
+      "skillId": 501001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500156,
+      "skillId": 50015602,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500156,
+      "skillId": 50015604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500157,
+      "skillId": 501005,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500157,
+      "skillId": 50015702,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500157,
+      "skillId": 50015704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500158,
+      "skillId": 501005,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500158,
+      "skillId": 50015802,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500158,
+      "skillId": 50015804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500164,
+      "skillId": 507012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500164,
+      "skillId": 50016402,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500164,
+      "skillId": 50016404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500165,
+      "skillId": 507020,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500165,
+      "skillId": 50016502,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500165,
+      "skillId": 50016504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500166,
+      "skillId": 507019,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500166,
+      "skillId": 50016602,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500166,
+      "skillId": 50016604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500173,
+      "skillId": 507012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500173,
+      "skillId": 50017302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500173,
+      "skillId": 50017304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500174,
+      "skillId": 507020,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500174,
+      "skillId": 50017402,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500174,
+      "skillId": 50017404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500175,
+      "skillId": 507013,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500175,
+      "skillId": 50017502,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 0
+    },
+    {
+      "kiboId": 500175,
+      "skillId": 50017504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500179,
+      "skillId": 509001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500179,
+      "skillId": 50017901,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500179,
+      "skillId": 50017904,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500180,
+      "skillId": 509002,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500180,
+      "skillId": 50018001,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500180,
+      "skillId": 50018004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500181,
+      "skillId": 509002,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500181,
+      "skillId": 50018101,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500181,
+      "skillId": 50018104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500185,
+      "skillId": 504009,
+      "cooldownMs": 16000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 8000
+    },
+    {
+      "kiboId": 500185,
+      "skillId": 50018502,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500185,
+      "skillId": 50018504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500186,
+      "skillId": 502001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500186,
+      "skillId": 50018602,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500186,
+      "skillId": 50018604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500187,
+      "skillId": 502007,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500187,
+      "skillId": 50018702,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500187,
+      "skillId": 50018704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500206,
+      "skillId": 508002,
+      "cooldownMs": 12000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 6000
+    },
+    {
+      "kiboId": 500206,
+      "skillId": 50020601,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500206,
+      "skillId": 50020604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500209,
+      "skillId": 505002,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500209,
+      "skillId": 50020901,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500209,
+      "skillId": 50020904,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500213,
+      "skillId": 509001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500213,
+      "skillId": 50021301,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500213,
+      "skillId": 50021304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500216,
+      "skillId": 501009,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500216,
+      "skillId": 50021601,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500216,
+      "skillId": 50021604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500220,
+      "skillId": 509010,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500220,
+      "skillId": 50022001,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500220,
+      "skillId": 50022004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500231,
+      "skillId": 507003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500231,
+      "skillId": 50023101,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500231,
+      "skillId": 50023104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500244,
+      "skillId": 501001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500244,
+      "skillId": 50024401,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 24000
+    },
+    {
+      "kiboId": 500244,
+      "skillId": 50024404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500245,
+      "skillId": 501010,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500245,
+      "skillId": 50024501,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 24000
+    },
+    {
+      "kiboId": 500245,
+      "skillId": 50024504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 3000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500246,
+      "skillId": 501010,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500246,
+      "skillId": 50024601,
+      "cooldownMs": 18000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 24000
+    },
+    {
+      "kiboId": 500246,
+      "skillId": 50024604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500258,
+      "skillId": 505001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500258,
+      "skillId": 50025801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500258,
+      "skillId": 50025804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500259,
+      "skillId": 505002,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500259,
+      "skillId": 50025901,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500259,
+      "skillId": 50025904,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500260,
+      "skillId": 505002,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500260,
+      "skillId": 50026001,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500260,
+      "skillId": 50026004,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500261,
+      "skillId": 502001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500261,
+      "skillId": 50026102,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500261,
+      "skillId": 50026104,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500262,
+      "skillId": 502001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500262,
+      "skillId": 50026202,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500262,
+      "skillId": 50026204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500263,
+      "skillId": 502005,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500263,
+      "skillId": 50026302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500263,
+      "skillId": 50026304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500296,
+      "skillId": 504002,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500296,
+      "skillId": 50029601,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 12000
+    },
+    {
+      "kiboId": 500296,
+      "skillId": 50029604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500304,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500304,
+      "skillId": 50030401,
+      "cooldownMs": 30000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500304,
+      "skillId": 50030404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500305,
+      "skillId": 504020,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500305,
+      "skillId": 50030501,
+      "cooldownMs": 30000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500305,
+      "skillId": 50030504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500306,
+      "skillId": 504006,
+      "cooldownMs": 12000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 6000
+    },
+    {
+      "kiboId": 500306,
+      "skillId": 50030601,
+      "cooldownMs": 30000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 999999999,
+      "kiboVersusCooldownDefaultMs": 999999999
+    },
+    {
+      "kiboId": 500306,
+      "skillId": 50030604,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500313,
+      "skillId": 501016,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500313,
+      "skillId": 50031302,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500313,
+      "skillId": 50031304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 3000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500322,
+      "skillId": 504001,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500322,
+      "skillId": 50032201,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500322,
+      "skillId": 50032204,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500323,
+      "skillId": 504008,
+      "cooldownMs": 12000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 6000
+    },
+    {
+      "kiboId": 500323,
+      "skillId": 50032301,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500323,
+      "skillId": 50032304,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500324,
+      "skillId": 504006,
+      "cooldownMs": 12000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 24000,
+      "kiboVersusCooldownDefaultMs": 6000
+    },
+    {
+      "kiboId": 500324,
+      "skillId": 50032401,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500324,
+      "skillId": 50032404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500354,
+      "skillId": 509001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500354,
+      "skillId": 50035401,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500354,
+      "skillId": 50035404,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500355,
+      "skillId": 509002,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500355,
+      "skillId": 50035501,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500355,
+      "skillId": 50035504,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500357,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500357,
+      "skillId": 50035701,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500357,
+      "skillId": 50035704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500358,
+      "skillId": 505011,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500358,
+      "skillId": 50035801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500358,
+      "skillId": 50035804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500360,
+      "skillId": 509002,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500360,
+      "skillId": 50036001,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500360,
+      "skillId": 50036003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500368,
+      "skillId": 504012,
+      "cooldownMs": 1000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500368,
+      "skillId": 50036801,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500368,
+      "skillId": 50036803,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500369,
+      "skillId": 507003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500369,
+      "skillId": 50036901,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500369,
+      "skillId": 50036903,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500370,
+      "skillId": 507003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 10000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500370,
+      "skillId": 50037001,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500370,
+      "skillId": 50037003,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500399,
+      "skillId": 502007,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500399,
+      "skillId": 50039901,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500399,
+      "skillId": 50039903,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500467,
+      "skillId": 506001,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500467,
+      "skillId": 50046701,
+      "cooldownMs": 16000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 20000,
+      "kiboVersusCooldownDefaultMs": 10000
+    },
+    {
+      "kiboId": 500467,
+      "skillId": 50046704,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500468,
+      "skillId": 506006,
+      "cooldownMs": 8000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 16000,
+      "kiboVersusCooldownDefaultMs": 4000
+    },
+    {
+      "kiboId": 500468,
+      "skillId": 50046801,
+      "cooldownMs": 16000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 20000,
+      "kiboVersusCooldownDefaultMs": 10000
+    },
+    {
+      "kiboId": 500468,
+      "skillId": 50046804,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500469,
+      "skillId": 506002,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500469,
+      "skillId": 50046903,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500469,
+      "skillId": 50046907,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    },
+    {
+      "kiboId": 500470,
+      "skillId": 506002,
+      "cooldownMs": 3000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 6000,
+      "kiboVersusCooldownDefaultMs": 1500
+    },
+    {
+      "kiboId": 500470,
+      "skillId": 50047001,
+      "cooldownMs": 24000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 32000,
+      "kiboVersusCooldownDefaultMs": 16000
+    },
+    {
+      "kiboId": 500470,
+      "skillId": 50047007,
+      "cooldownMs": 5000,
+      "cooldownCount": 1,
+      "cooldownDefaultMs": 0,
+      "kiboVersusCooldownMs": 5000,
+      "kiboVersusCooldownDefaultMs": 2500
+    }
+  ],
   "effectCandidates": [
     {
       "schemaVersion": 1,

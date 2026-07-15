@@ -180,6 +180,19 @@ function buildActionStatusCatalog({
   const cooldownSkillCount = [...cooldownBySkillId.values()].filter(
     item => item.status === 'confirmed-cooldown'
   ).length;
+  const logicCooldownSkillCount = [...cooldownBySkillId.values()].filter(
+    item => item.sourceKind === 'skillsub-logic'
+  ).length;
+  const displayCooldownFallbackSkillCount = [
+    ...cooldownBySkillId.values(),
+  ].filter(item => item.sourceKind === 'skill-level-display').length;
+  const ultimateDisplayCooldownFallbackSkillCount = [
+    ...cooldownBySkillId.entries(),
+  ].filter(
+    ([skillId, item]) =>
+      item.sourceKind === 'skill-level-display' &&
+      Number(skillById.get(skillId)?.displayType) === 2
+  ).length;
   const lifecycleBoundEffectCount = effectCandidates.filter(
     item => item.status === 'lifecycle-bound'
   ).length;
@@ -189,9 +202,31 @@ function buildActionStatusCatalog({
     (sum, kibo) => sum + (kibo.actions?.length ?? 0),
     0
   );
+  const kiboCooldowns = (kiboCatalog?.items ?? [])
+    .flatMap(kibo =>
+      (kibo.actions ?? []).map(action => ({
+        kiboId: Number(kibo.kiboId),
+        skillId: Number(action.skillId),
+        cooldownMs: positiveNumberOrNull(action.cooldownMs),
+        cooldownCount: Math.max(
+          1,
+          Math.trunc(Number(action.cooldownCount) || 1)
+        ),
+        cooldownDefaultMs: nonNegativeNumberOrNull(action.cooldownDefaultMs),
+        kiboVersusCooldownMs: positiveNumberOrNull(action.kiboVersusCooldownMs),
+        kiboVersusCooldownDefaultMs: nonNegativeNumberOrNull(
+          action.kiboVersusCooldownDefaultMs
+        ),
+      }))
+    )
+    .filter(row => row.kiboId > 0 && row.skillId > 0 && row.cooldownMs != null)
+    .sort(
+      (left, right) =>
+        left.kiboId - right.kiboId || left.skillId - right.skillId
+    );
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedAt: diagnostics.generatedAt ?? seed.generatedAt ?? null,
     sourceKind: 'azpr-workbench-action-status-catalog',
     status: 'action-status-catalog-ready',
@@ -207,11 +242,16 @@ function buildActionStatusCatalog({
       skillLogic: 'workbench-skill-core.json',
       skillAssetEvidence: 'workbench-skill-diagnostics.json',
       kiboActions: 'workbench-kibo-action-catalog.json',
+      kiboCooldown:
+        'Config/NewTable/skillsub_logic.json.coolDown (standard battle)',
       buffInfo: 'Config/NewTable/buff_info.json',
     },
     summary: {
       skillCount: skills.length,
       cooldownSkillCount,
+      logicCooldownSkillCount,
+      displayCooldownFallbackSkillCount,
+      ultimateDisplayCooldownFallbackSkillCount,
       noConfirmedCooldownSkillCount: Math.max(
         0,
         skills.length - cooldownSkillCount
@@ -220,9 +260,11 @@ function buildActionStatusCatalog({
       lifecycleBoundEffectCount,
       trackingOnlyEffectCount,
       kiboActionCount,
+      kiboConfirmedCooldownActionCount: kiboCooldowns.length,
       kiboConfirmedStatusActionCount: 0,
       calculatorAppliedEffectCount: 0,
     },
+    kiboCooldowns,
     effectCandidates: effectCandidates.sort(
       (left, right) =>
         left.skillId - right.skillId ||
@@ -233,7 +275,7 @@ function buildActionStatusCatalog({
 }
 
 function summarizeCooldownCoverage(item) {
-  const cooldownRows = (item?.subSkills ?? [])
+  const logicRows = (item?.subSkills ?? [])
     .map(subSkill => ({
       subSkillId: Number(subSkill.subSkillId),
       cooldownMs: Number(subSkill.logic?.cooldownMs) || 0,
@@ -241,11 +283,36 @@ function summarizeCooldownCoverage(item) {
         1,
         Math.trunc(Number(subSkill.logic?.cooldownCount) || 1)
       ),
+      sourceKind: 'skillsub-logic',
     }))
     .filter(row => row.cooldownMs > 0);
+  if (logicRows.length > 0) {
+    return {
+      status: 'confirmed-cooldown',
+      sourceKind: 'skillsub-logic',
+      rows: logicRows,
+    };
+  }
+  const fallbackSubSkillId =
+    (item?.subSkills ?? []).length === 1
+      ? Number(item.subSkills[0].subSkillId)
+      : null;
+  const cooldownRows = uniqueByKey(
+    (item?.levels ?? [])
+      .map(level => ({
+        subSkillId: fallbackSubSkillId,
+        cooldownMs: Number(level.display?.cooldownMs) || 0,
+        cooldownCount: 1,
+        sourceKind: 'skill-level-display',
+        skillLevelRowId: Number(level.skillLevelRowId) || null,
+      }))
+      .filter(row => row.cooldownMs > 0),
+    row => `${row.subSkillId}|${row.cooldownMs}`
+  );
   return {
     status:
       cooldownRows.length > 0 ? 'confirmed-cooldown' : 'no-confirmed-cooldown',
+    sourceKind: cooldownRows.length > 0 ? 'skill-level-display' : 'unconfirmed',
     rows: cooldownRows,
   };
 }
@@ -351,6 +418,25 @@ function buildAuditReport(catalog) {
   }
   if (catalog.summary.kiboConfirmedStatusActionCount !== 0) {
     issues.push({ code: 'kibo-status-source-must-remain-unconfirmed' });
+  }
+  if (
+    catalog.summary.kiboConfirmedCooldownActionCount !==
+    catalog.summary.kiboActionCount
+  ) {
+    issues.push({
+      code: 'kibo-cooldown-coverage-incomplete',
+      expectedCount: catalog.summary.kiboActionCount,
+      actualCount: catalog.summary.kiboConfirmedCooldownActionCount,
+    });
+  }
+  for (const cooldown of catalog.kiboCooldowns ?? []) {
+    if (!(Number(cooldown.cooldownMs) > 0)) {
+      issues.push({
+        code: 'kibo-cooldown-must-not-use-zero-placeholder',
+        kiboId: cooldown.kiboId,
+        skillId: cooldown.skillId,
+      });
+    }
   }
   if (catalog.summary.calculatorAppliedEffectCount !== 0) {
     issues.push({ code: 'generated-status-must-not-apply-to-calculators' });
@@ -490,6 +576,21 @@ function uniqueNumbers(values) {
   return [...new Set(values.filter(value => Number.isFinite(value)))].sort(
     (left, right) => left - right
   );
+}
+
+function uniqueByKey(values, createKey) {
+  const seen = new Set();
+  return values.filter(value => {
+    const key = createKey(value);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function nonNegativeNumberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number >= 0 ? number : null;
 }
 
 function compareOptionalNumber(left, right) {

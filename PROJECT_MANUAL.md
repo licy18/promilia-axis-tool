@@ -1542,11 +1542,11 @@ JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整
 
 下一阶段目标：M3 真实动作状态生成闭环。先审计真实动作目录中可信的 CD 与效果生命周期来源，再复用现有 generation、execution plan、readiness timeline、effect runtime 和同轴投影，使从动作库拖入的真实动作自动形成有来源的 Buff/状态区间、CD 条和生命周期节点，并在编辑、循环与五载体回放后保持一致。缺少可靠来源时保持空区或平线，未知效果继续 `tracking-only / unapplied`；不启动 P3 非 fixture 真实采样，不接入测试期倍率、培养公式、防御或抗性。M3 完成后停止等待产品验收。
 
-### M3 真实动作状态生成闭环已完成实施，等待产品验收（2026-07-14）
+### M3 真实动作状态生成闭环已完成实施，等待产品验收（2026-07-15）
 
-真实目录审计确认 120 个角色技能中 40 个具有结构化 CD；6 个 Buff 候选中仅寒悠悠 `10100322` 具备可直接绑定的 57F 触发与 8000ms 生命周期，其余 5 个和 366 个奇波动作不生成虚假状态。动作草稿、Project、compiler、readiness、effect runtime、区间与关系图现共享同一来源 identity；阻塞、编辑、复制、循环继承及方案复制/本地草稿/JSON/分享链接/PNG 均从同一描述重算。时间轴直接显示可回源的 CD 与状态区间，未知叠层明确保持未确认，全部自动效果仍 `appliedToCalculators = false`，不改变 HP、韧性和六条资源曲线。
+真实目录审计现确认 120 个角色技能中 52 个具有结构化 CD，其中 40 个来自 `skillsub_logic.coolDown`，12 个星决技在逻辑 CD 为 0 时使用正值 `skill_level.coolDown`；源表均为 0 时保持“未提供”。366 个奇波动作全部读取标准战斗 CD，奇波对战 CD 仅保留为诊断来源。6 个 Buff 候选中仍只有寒悠悠 `10100322` 具备可直接绑定的 57F 触发与 8000ms 生命周期，其余保持 tracking-only，未确认奇波效果不生成状态。动作草稿、Project、compiler、readiness、effect runtime、区间与关系图共享同一来源 identity；同 owner 重叠 Buff 与不同技能 CD 独立占行，奇波 CD 固定进入所属奇波子轨。全部自动效果仍 `appliedToCalculators = false`，不改变 HP、韧性和六条资源曲线。
 
-完整 `test:trial-release` 通过：96 个测试文件、518 条单元/组件测试、42/42 production preview，生产引用、数据、动作状态、bundle 与 applied-source 守门全部通过；总 JavaScript gzip 为 724,180B，Workbench 主块为 332,870B。桌面与窄屏证据为 `reports/m3-action-status-desktop.png` 和 `reports/m3-action-status-narrow.png`。当前停在 M3 产品验收点，不自动创建下一阶段。
+完整 `test:trial-release` 通过：96 个测试文件、525 条单元/组件测试、43/43 production preview，生产引用、数据、动作状态、bundle 与 applied-source 守门全部通过；总 JavaScript gzip 为 728,480B，Workbench 主块为 337,175B。新增桌面/窄屏证据为 `reports/m3-cooldown-stacking-desktop.png` 和 `reports/m3-cooldown-stacking-narrow.png`。当前停在 M3 产品验收点，不自动创建下一阶段。
 
 ## 10. 文档维护规则
 

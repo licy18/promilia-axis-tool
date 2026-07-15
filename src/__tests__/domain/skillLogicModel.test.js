@@ -9,11 +9,14 @@ import {
   getSkillLogicIndexSummary,
   getValueParamIndexSummary,
   resolveSkillLogic,
+  resolveSkillCooldownSource,
 } from '../../domain/skillLogicModel';
 
 describe('skill logic model adapter', () => {
   it('resolves skill_level, skillsub_logic, and skillsub_ele_value sources for a skill action level', () => {
-    const skill = getWorkbenchGameData().skills.find((item) => item.id === 10900101);
+    const skill = getWorkbenchGameData().skills.find(
+      item => item.id === 10900101
+    );
     const model = createSkillLogicModel(skill, 1);
 
     expect(model).toMatchObject({
@@ -99,7 +102,9 @@ describe('skill logic model adapter', () => {
 
   it('keeps display cooldown separate from logic cooldown when source tables disagree', () => {
     const summary = getSkillLogicIndexSummary();
-    const skill = getWorkbenchGameData().skills.find((item) => item.id === 10100712);
+    const skill = getWorkbenchGameData().skills.find(
+      item => item.id === 10100712
+    );
     const model = resolveSkillLogic(skill, 1);
 
     expect(summary).toMatchObject({
@@ -140,8 +145,46 @@ describe('skill logic model adapter', () => {
     ]);
   });
 
+  it('prefers logic cooldowns and only falls back to a positive display cooldown', () => {
+    const logicSkill = getWorkbenchGameData().skills.find(
+      item => item.id === 10100712
+    );
+    expect(
+      resolveSkillCooldownSource(createSkillLogicModel(logicSkill, 1))
+    ).toMatchObject({
+      durationMs: 20000,
+      chargeCount: 1,
+      sourceKind: SKILL_LOGIC_SOURCE_KIND,
+      sourceStatus: 'confirmed-logic-cooldown',
+      durationFieldPath: 'skillsub_logic.rows[skillId=10100712].coolDown',
+      chargeCountFieldPath:
+        'skillsub_logic.rows[skillId=10100712].coolDownCount',
+    });
+
+    const confirmedUltimate = getWorkbenchGameData().skills.find(
+      item => item.id === 10100713
+    );
+    expect(
+      resolveSkillCooldownSource(createSkillLogicModel(confirmedUltimate, 1))
+    ).toMatchObject({
+      durationMs: 20000,
+      chargeCount: 1,
+      sourceKind: SKILL_LEVEL_DISPLAY_SOURCE_KIND,
+      sourceStatus: 'confirmed-display-cooldown-logic-zero',
+    });
+
+    const unavailableUltimate = getWorkbenchGameData().skills.find(
+      item => item.id === 10100313
+    );
+    expect(
+      resolveSkillCooldownSource(createSkillLogicModel(unavailableUltimate, 1))
+    ).toBeNull();
+  });
+
   it('keeps valueParam-to-damage-segment links diagnostic until a direct numeric match exists', () => {
-    const skill = getWorkbenchGameData().skills.find((item) => item.id === 10900101);
+    const skill = getWorkbenchGameData().skills.find(
+      item => item.id === 10900101
+    );
     const damageModel = createSkillDamageModel(skill, 1);
     const model = createSkillLogicModel(skill, 1, { damageModel });
 
@@ -172,12 +215,18 @@ describe('skill logic model adapter', () => {
       matches: [],
       unmatchedParamIds: [1, 7],
     });
-    expect(model.diagnostics.filter((diagnostic) => diagnostic.code === 'skill-value-param-damage-segment-unmatched'))
-      .toHaveLength(4);
+    expect(
+      model.diagnostics.filter(
+        diagnostic =>
+          diagnostic.code === 'skill-value-param-damage-segment-unmatched'
+      )
+    ).toHaveLength(4);
   });
 
   it('preserves valueParam diagnostics on skills that also have display-versus-logic timing differences', () => {
-    const skill = getWorkbenchGameData().skills.find((item) => item.id === 10100712);
+    const skill = getWorkbenchGameData().skills.find(
+      item => item.id === 10100712
+    );
     const damageModel = createSkillDamageModel(skill, 1);
     const model = resolveSkillLogic(skill, 1, { damageModel });
 
@@ -198,12 +247,18 @@ describe('skill logic model adapter', () => {
         unexplainedParamIds: [1, 7],
       },
     });
-    expect(model.damageParameterLinks.map((link) => [link.label, link.rawValue, link.status])).toEqual([
+    expect(
+      model.damageParameterLinks.map(link => [
+        link.label,
+        link.rawValue,
+        link.status,
+      ])
+    ).toEqual([
       ['星鸣技', '180%', 'unmatched'],
       ['伤害提升', '10%', 'unmatched'],
       ['星结合击', '37%', 'unmatched'],
     ]);
-    expect(model.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
+    expect(model.diagnostics.map(diagnostic => diagnostic.code)).toEqual([
       'skill-display-logic-timing-mismatch',
       'skill-value-param-damage-segment-unmatched',
       'skill-value-param-damage-segment-unmatched',
@@ -212,7 +267,9 @@ describe('skill logic model adapter', () => {
   });
 
   it('clamps requested level to the available skill_level rows', () => {
-    const skill = getWorkbenchGameData().skills.find((item) => item.id === 10900101);
+    const skill = getWorkbenchGameData().skills.find(
+      item => item.id === 10900101
+    );
     const model = createSkillLogicModel(skill, 99);
 
     expect(model).toMatchObject({
@@ -221,6 +278,6 @@ describe('skill logic model adapter', () => {
       skillLevelRowId: 1668,
       subSkillId: 10900101,
     });
-    expect(model.elementValues.map((row) => row.rowId)).toEqual([984, 996]);
+    expect(model.elementValues.map(row => row.rowId)).toEqual([984, 996]);
   });
 });

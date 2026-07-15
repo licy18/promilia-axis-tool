@@ -660,6 +660,9 @@
               :data-end-frame-index="msToFrame(window.endMs)"
               :data-confidence="window.confidence || ''"
               :data-tracking-status="window.trackingStatus || ''"
+              :data-owner-kind="window.ownerKind || 'actor'"
+              :data-owner-id="window.ownerId || window.actorId || ''"
+              :data-cooldown-slot="window.cooldownSlot ?? 0"
               :data-window-id="window.windowId"
               data-testid="workbench-timeline-cooldown-window"
               @pointerdown.stop
@@ -803,7 +806,7 @@
 
             <button
               v-for="interval in lane.effectIntervals"
-              :key="interval.intervalId"
+              :key="interval.timelineLayoutKey"
               class="effect-interval"
               :class="[
                 'target-' + interval.targetKind,
@@ -830,6 +833,7 @@
               :data-confidence="interval.confidence || ''"
               :data-tracking-status="interval.trackingStatus || ''"
               :data-source-status="interval.sourceStatus || ''"
+              :data-effect-slot="interval.timelineSlot ?? 0"
               :data-applied-to-calculators="
                 interval.appliedToCalculators ? 'true' : 'false'
               "
@@ -1695,15 +1699,24 @@ const timelineLanes = computed(() => {
   });
 
   (props.actionReadinessTimeline?.cooldownWindows ?? []).forEach(window => {
-    const lane = lanesById.get(window.actorId);
+    const laneId =
+      window.ownerKind === 'kibo'
+        ? kiboLaneIdByActorId.value.get(window.actorId)
+        : window.actorId;
+    const lane = allLanesById.get(laneId);
     const action = lane?.actions.find(item => item.id === window.actionId);
     if (!lane || !action) {
       return;
     }
     lane.cooldownWindows.push({
       ...window,
-      timelineSlot: action.timelineSlot ?? 0,
     });
+  });
+
+  allLanes.forEach(lane => {
+    const cooldownLayout = createTimelineCooldownLayout(lane.cooldownWindows);
+    lane.cooldownWindows = cooldownLayout.windows;
+    lane.cooldownSlotCount = cooldownLayout.slotCount;
   });
 
   runtimeEventMarkers.value.forEach(event => {
@@ -2105,6 +2118,7 @@ function createEmptyTimelineLane({
     runtimeEventSlotCount: 0,
     stateCurveMarkers: [],
     cooldownWindows: [],
+    cooldownSlotCount: 0,
     effectIntervals: [...effectIntervals],
   };
 }
@@ -2412,7 +2426,7 @@ function cooldownWindowStyle(window, lane) {
   );
   return {
     left: `${clampPercent((startMs / props.durationMs) * 100)}%`,
-    top: `${getTimelineActionTop(lane, window.timelineSlot) + TIMELINE_ACTION_HEIGHT_PX + TIMELINE_COOLDOWN_GAP_PX}px`,
+    top: `${getTimelineCooldownTop(lane, window.cooldownSlot)}px`,
     width: `${clampPercent(((endMs - startMs) / props.durationMs) * 100, 0.5, 100)}%`,
   };
 }
@@ -2605,12 +2619,26 @@ function getTimelineEffectAreaBottom(lane) {
 }
 
 function getTimelineDataTop(lane) {
-  const cooldownBottom = lane.cooldownWindows?.length
-    ? getTimelineActionAreaBottom(lane) +
-      TIMELINE_COOLDOWN_GAP_PX +
-      TIMELINE_COOLDOWN_HEIGHT_PX
-    : getTimelineActionAreaBottom(lane);
-  return cooldownBottom + TIMELINE_DATA_GAP_PX;
+  return getTimelineCooldownAreaBottom(lane) + TIMELINE_DATA_GAP_PX;
+}
+
+function getTimelineCooldownTop(lane, slot = 0) {
+  return (
+    getTimelineActionAreaBottom(lane) +
+    (getTimelineCooldownSlotCount(lane) > 0 ? TIMELINE_COOLDOWN_GAP_PX : 0) +
+    Math.max(0, Number(slot) || 0) *
+      (TIMELINE_COOLDOWN_HEIGHT_PX + TIMELINE_EFFECT_INTERVAL_GAP_PX)
+  );
+}
+
+function getTimelineCooldownAreaBottom(lane) {
+  const slotCount = getTimelineCooldownSlotCount(lane);
+  if (slotCount === 0) return getTimelineActionAreaBottom(lane);
+  return (
+    getTimelineCooldownTop(lane, 0) +
+    slotCount * TIMELINE_COOLDOWN_HEIGHT_PX +
+    Math.max(0, slotCount - 1) * TIMELINE_EFFECT_INTERVAL_GAP_PX
+  );
 }
 
 function getTimelineStateCurveMarkerTop(marker, lane) {
@@ -2643,6 +2671,10 @@ function getTimelineEffectSlotCount(lane) {
   return Math.max(0, Number(lane?.effectSlotCount) || 0);
 }
 
+function getTimelineCooldownSlotCount(lane) {
+  return Math.max(0, Number(lane?.cooldownSlotCount) || 0);
+}
+
 function createTimelineActionLayout(actions) {
   const slotEndTimes = [];
   const slotByActionId = new Map();
@@ -2667,7 +2699,7 @@ function createTimelineActionLayout(actions) {
 
 function createTimelineEffectLayout(intervals) {
   const slotEndTimes = [];
-  const slotByIntervalId = new Map();
+  const slotByInterval = new Map();
   const sortedIntervals = [...intervals].sort(
     (left, right) =>
       (Number(left.startMs) || 0) - (Number(right.startMs) || 0) ||
@@ -2686,13 +2718,47 @@ function createTimelineEffectLayout(intervals) {
       );
     const slotIndex = findAvailableTimelineActionSlot(slotEndTimes, startMs);
     slotEndTimes[slotIndex] = endMs;
-    slotByIntervalId.set(interval.intervalId, slotIndex);
+    slotByInterval.set(interval, slotIndex);
   });
 
   return {
-    intervals: intervals.map(interval => ({
+    intervals: intervals.map((interval, index) => ({
       ...interval,
-      timelineSlot: slotByIntervalId.get(interval.intervalId) ?? 0,
+      timelineLayoutKey: `${interval.intervalId || interval.instanceKey || 'effect'}|${index}`,
+      timelineSlot: slotByInterval.get(interval) ?? 0,
+    })),
+    slotCount: slotEndTimes.length,
+  };
+}
+
+function createTimelineCooldownLayout(windows) {
+  const slotEndTimes = [];
+  const slotByWindow = new Map();
+  const sortedWindows = [...windows].sort(
+    (left, right) =>
+      (Number(left.startMs) || 0) - (Number(right.startMs) || 0) ||
+      (Number(left.endMs) || 0) - (Number(right.endMs) || 0) ||
+      String(left.windowId).localeCompare(String(right.windowId))
+  );
+
+  sortedWindows.forEach(window => {
+    const startMs = Number(window.startMs) || 0;
+    const endMs =
+      startMs +
+      Math.max(
+        Number(window.durationMs) || Number(window.endMs) - startMs || 0,
+        props.durationMs * 0.005,
+        WORKBENCH_FRAME_MS
+      );
+    const slotIndex = findAvailableTimelineActionSlot(slotEndTimes, startMs);
+    slotEndTimes[slotIndex] = endMs;
+    slotByWindow.set(window, slotIndex);
+  });
+
+  return {
+    windows: windows.map(window => ({
+      ...window,
+      cooldownSlot: slotByWindow.get(window) ?? 0,
     })),
     slotCount: slotEndTimes.length,
   };

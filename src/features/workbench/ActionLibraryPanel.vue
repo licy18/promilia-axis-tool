@@ -135,6 +135,7 @@
           :data-skill-id="entry.skillId"
           :data-action-kind="entry.kind"
           :data-action-variant-index="entry.actionVariantIndex"
+          :data-cooldown-ms="entry.cooldownMs ?? ''"
           data-entry-type="skill"
           data-drag-enabled="true"
           @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
@@ -173,6 +174,7 @@
           :data-kibo-id="activeKibo.id"
           :data-skill-id="entry.skillId"
           :data-action-kind="entry.eventType"
+          :data-cooldown-ms="entry.cooldownMs ?? ''"
           data-entry-type="kiboEvent"
           data-drag-enabled="true"
           @pointerdown="beginKiboTimelineEntryDrag($event, entry)"
@@ -569,6 +571,7 @@ const kiboTimelineEntries = computed(() =>
       eventType: action.kind,
       label: action.name,
       durationMs: frameToMs(action.durationFrames),
+      cooldownMs: action.cooldownMs,
       timingSource: 'azpr-unity-skill-control-root',
       needsTimingData: false,
       note: 'Skill Control 时长已确认；效果未接入 calculator。',
@@ -887,11 +890,22 @@ function actionDetailValue(action) {
 }
 
 function getActionCooldownMs(action) {
+  const generatedCooldownMs = Number(
+    action.statusGeneration?.cooldown?.durationMs
+  );
+  if (Number.isFinite(generatedCooldownMs) && generatedCooldownMs > 0) {
+    return generatedCooldownMs;
+  }
   return action.logicModel?.logic?.cooldownMs ?? action.cooldownMs ?? null;
 }
 
 function getActionCooldownCount(action) {
-  return Math.max(1, Number(action.logicModel?.logic?.cooldownCount) || 1);
+  return Math.max(
+    1,
+    Number(action.statusGeneration?.cooldown?.chargeCount) ||
+      Number(action.logicModel?.logic?.cooldownCount) ||
+      1
+  );
 }
 
 function formatActionCooldown(action) {
@@ -917,7 +931,11 @@ function formatActionEntryMeta(entry) {
     entry.sourceLabel && entry.sourceLabel !== entry.label
       ? `${entry.sourceLabel} / `
       : '';
-  return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}`;
+  const cooldown =
+    entry.cooldownMs || entry.kind === 'ultimate'
+      ? ` / CD ${formatCatalogCooldown(entry.cooldownMs)}`
+      : '';
+  return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}${cooldown}`;
 }
 
 function formatKiboActionMeta(entry) {
@@ -926,7 +944,14 @@ function formatKiboActionMeta(entry) {
     active: '主动技',
     break: '合击技',
   };
-  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}`;
+  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)} / CD ${formatCatalogCooldown(entry.cooldownMs)}`;
+}
+
+function formatCatalogCooldown(value) {
+  const cooldownMs = Number(value);
+  return Number.isFinite(cooldownMs) && cooldownMs > 0
+    ? `${cooldownMs / 1000}s`
+    : '未提供';
 }
 
 function actionEntryIconUrl(entry) {

@@ -241,14 +241,21 @@ function createSkillCooldownEvaluation(actions) {
   const snapshotsByActionId = new Map();
   const cooldownWindows = [];
   for (const action of actions) {
-    if (action.type !== ACTION_TYPES.SKILL || !action.actorId) {
+    if (
+      ![ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action.type) ||
+      !action.actorId ||
+      (action.type === ACTION_TYPES.KIBO_EVENT && !action.kiboId)
+    ) {
       continue;
     }
     const cooldown = createSkillCooldownRequirement(action);
     if (!cooldown) {
       continue;
     }
-    const key = `${action.actorId}|${action.skillId}`;
+    const ownerKind =
+      action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor';
+    const ownerId = ownerKind === 'kibo' ? action.kiboId : action.actorId;
+    const key = `${ownerKind}|${ownerId}|${action.skillId}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
     const chargesBefore = cloneCooldownCharges(state.charges);
@@ -323,6 +330,9 @@ function createSkillCooldownEvaluation(actions) {
       actionName: action.name,
       actorId: action.actorId,
       actorName: action.actor?.name ?? action.actorId,
+      ownerKind,
+      ownerId,
+      kiboId: action.kiboId ?? null,
       skillId: action.skillId,
       chargeIndex: consumedCharge.chargeIndex,
       cooldownCount: cooldown.cooldownCount,

@@ -10,7 +10,7 @@ export async function loadWorkbenchKiboActionCatalog(fetchImpl = fetch) {
   }
   const catalog = await response.json();
   if (
-    catalog?.schemaVersion !== 1 ||
+    catalog?.schemaVersion !== 2 ||
     catalog?.kind !== 'workbench-kibo-action-catalog' ||
     !Array.isArray(catalog.items)
   ) {

@@ -1,8 +1,14 @@
-import { getWorkbenchActionStatusEffectCandidates } from '../data/workbenchActionStatusCatalog';
+import {
+  getWorkbenchActionStatusEffectCandidates,
+  getWorkbenchKiboActionStatusCooldown,
+} from '../data/workbenchActionStatusCatalog';
 import { frameToMs } from './timebase';
 import { inferCatalogActionKind } from './skillActionCatalog';
 import { getSkillActionVariants } from './skillDamageSegments';
-import { createSkillLogicModel } from './skillLogicModel';
+import {
+  createSkillLogicModel,
+  resolveSkillCooldownSource,
+} from './skillLogicModel';
 
 export const ACTION_STATUS_GENERATION_CONTRACT_NAME =
   'AzPrActionStatusGeneration';
@@ -87,22 +93,33 @@ export function createKiboActionStatusGeneration({
   skillId = null,
   timingSource = null,
 } = {}) {
+  const normalizedKiboId = positiveIntegerOrNull(kiboId);
+  const normalizedSkillId = positiveIntegerOrNull(skillId);
+  const catalogCooldown = getWorkbenchKiboActionStatusCooldown(
+    normalizedKiboId,
+    normalizedSkillId
+  );
+  const cooldown = createKiboCooldownGenerationStatus({
+    kiboId: normalizedKiboId,
+    skillId: normalizedSkillId,
+    catalogCooldown,
+  });
   return {
     schemaVersion: 1,
     contractName: ACTION_STATUS_GENERATION_CONTRACT_NAME,
     sourceKind: 'azpr-kibo-action-status-generation',
-    status: 'tracking-only-no-confirmed-status-source',
+    status:
+      cooldown.status === 'confirmed-cooldown'
+        ? 'action-status-generation-ready-with-cooldown'
+        : 'tracking-only-no-confirmed-status-source',
     actionId: String(actionId ?? '').trim() || 'action',
-    kiboId: positiveIntegerOrNull(kiboId),
-    skillId: positiveIntegerOrNull(skillId),
+    kiboId: normalizedKiboId,
+    skillId: normalizedSkillId,
     timingSource: String(timingSource ?? '').trim() || null,
-    cooldown: {
-      status: 'no-confirmed-cooldown',
-      applied: false,
-    },
+    cooldown,
     effects: [],
     summary: {
-      confirmedCooldownCount: 0,
+      confirmedCooldownCount: cooldown.status === 'confirmed-cooldown' ? 1 : 0,
       effectCandidateCount: 0,
       generatedEffectCount: 0,
       trackingOnlyEffectCount: 0,
@@ -129,8 +146,37 @@ export function stripGeneratedActionStatusEffectCommands(commands = []) {
 }
 
 function createCooldownGenerationStatus(logicModel) {
-  const logic = logicModel?.logic ?? null;
-  const durationMs = Number(logic?.cooldownMs);
+  const source = resolveSkillCooldownSource(logicModel);
+  if (!source) {
+    return {
+      status: 'no-confirmed-cooldown',
+      durationMs: null,
+      chargeCount: null,
+      sourceIdentity: null,
+      applied: false,
+    };
+  }
+  return {
+    status: 'confirmed-cooldown',
+    durationMs: source.durationMs,
+    chargeCount: source.chargeCount,
+    sourceIdentity: {
+      sourceKind: source.sourceKind,
+      sourceStatus: source.sourceStatus,
+      subSkillId: source.subSkillId,
+      durationFieldPath: source.durationFieldPath,
+      chargeCountFieldPath: source.chargeCountFieldPath,
+    },
+    applied: true,
+  };
+}
+
+function createKiboCooldownGenerationStatus({
+  kiboId,
+  skillId,
+  catalogCooldown,
+}) {
+  const durationMs = Number(catalogCooldown?.cooldownMs);
   if (!Number.isFinite(durationMs) || durationMs <= 0) {
     return {
       status: 'no-confirmed-cooldown',
@@ -143,13 +189,22 @@ function createCooldownGenerationStatus(logicModel) {
   return {
     status: 'confirmed-cooldown',
     durationMs,
-    chargeCount: Math.max(1, Math.trunc(Number(logic.cooldownCount) || 1)),
+    chargeCount: Math.max(
+      1,
+      Math.trunc(Number(catalogCooldown.cooldownCount) || 1)
+    ),
     sourceIdentity: {
-      sourceKind: logic.sourceKind ?? 'azpr-newtable-skill-logic-index',
-      sourceStatus: logicModel?.status ?? 'mapped',
-      subSkillId: Number(logic.subSkillId) || null,
-      durationFieldPath: logic.fieldPaths?.cooldownMs ?? null,
-      chargeCountFieldPath: logic.fieldPaths?.cooldownCount ?? null,
+      sourceKind: 'azpr-newtable-kibo-standard-battle-cooldown',
+      sourceStatus: 'confirmed-structured-data',
+      kiboId,
+      subSkillId: skillId,
+      cooldownMode: 'standard-battle',
+      durationFieldPath: `skillsub_logic.rows[skillId=${skillId}].coolDown`,
+      chargeCountFieldPath: `skillsub_logic.rows[skillId=${skillId}].coolDownCount`,
+      cooldownDefaultMs: catalogCooldown.cooldownDefaultMs ?? null,
+      kiboVersusCooldownMs: catalogCooldown.kiboVersusCooldownMs ?? null,
+      kiboVersusCooldownDefaultMs:
+        catalogCooldown.kiboVersusCooldownDefaultMs ?? null,
     },
     applied: true,
   };

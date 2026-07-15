@@ -258,23 +258,37 @@ function auditWorkbenchSeed(loadedFiles) {
 function auditKiboActionCatalog(loadedFiles) {
   const catalog = loadedFiles['workbench-kibo-action-catalog.json'].data;
   const kibos = loadedFiles['kibos.json'].data.items ?? [];
-  const expected = {
-    schemaVersion: 1,
-    kind: 'workbench-kibo-action-catalog',
-    generatedAt: catalog.generatedAt,
-    source: 'pet-table-and-azpr-unity-skill-control-root',
-    items: kibos.map(kibo => ({
-      kiboId: kibo.id,
-      actions: (kibo.skills ?? []).map(skill => ({
+  const projectIdentity = items =>
+    (items ?? []).map(kibo => ({
+      kiboId: kibo.kiboId ?? kibo.id,
+      actions: (kibo.actions ?? kibo.skills ?? []).map(skill => ({
         skillId: skill.skillId,
         kind: skill.kind,
         icon: skill.icon,
         name: skill.name,
         durationFrames: skill.durationFrames,
       })),
-    })),
-  };
-  return deepEqual(catalog, expected);
+    }));
+  const actions = (catalog.items ?? []).flatMap(kibo => kibo.actions ?? []);
+  const cooldownsValid = actions.every(
+    action =>
+      Number(action.cooldownMs) > 0 &&
+      Number.isInteger(Number(action.cooldownCount)) &&
+      Number(action.cooldownCount) >= 1 &&
+      Number(action.cooldownDefaultMs) >= 0 &&
+      Number(action.kiboVersusCooldownMs) > 0 &&
+      Number(action.kiboVersusCooldownDefaultMs) >= 0
+  );
+
+  return (
+    catalog.schemaVersion === 2 &&
+    catalog.kind === 'workbench-kibo-action-catalog' &&
+    catalog.source === 'pet-table-and-azpr-unity-skill-control-root' &&
+    String(catalog.sources?.cooldown ?? '').includes('skillsub_logic.json') &&
+    deepEqual(projectIdentity(catalog.items), projectIdentity(kibos)) &&
+    actions.length > 0 &&
+    cooldownsValid
+  );
 }
 
 function auditLoadoutDetailCatalog(loadedFiles) {

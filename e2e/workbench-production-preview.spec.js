@@ -1857,6 +1857,154 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
   ).toHaveCount(1);
 });
 
+test('[m3-cooldown-sources-and-stacking] reads real kibo and ultimate cooldowns and separates overlapping skill rows', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500001');
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="109001"]'
+    )
+    .click();
+  const kiboSource = page.locator(
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500001"][data-skill-id="50000102"]'
+  );
+  await expect(kiboSource).toBeVisible();
+  await expect(kiboSource).toHaveAttribute('data-cooldown-ms', '18000');
+  await expect(kiboSource).toContainText('CD 18s');
+  await dragLocatorTo(
+    page,
+    kiboSource,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
+    ),
+    { targetPosition: { x: 180, y: 36 } }
+  );
+  const kiboAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-type="kiboEvent"][data-skill-id="50000102"]'
+  );
+  await expect(kiboAction).toHaveCount(1);
+  const kiboActionId = await kiboAction.getAttribute('data-action-id');
+  const kiboCooldown = timeline.locator(
+    `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${kiboActionId}"]`
+  );
+  await expect(kiboCooldown).toHaveAttribute('data-owner-kind', 'kibo');
+  await expect(kiboCooldown).toHaveAttribute('data-owner-id', '500001');
+  await expect
+    .poll(async () => {
+      const startMs = Number(await kiboCooldown.getAttribute('data-start-ms'));
+      const endMs = Number(await kiboCooldown.getAttribute('data-end-ms'));
+      return Math.round(endMs - startMs);
+    })
+    .toBe(18000);
+
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  const firstSkillSource = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100322"][data-action-kind="star-carry"]'
+  );
+  const secondSkillSource = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
+  );
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+  );
+  await dragLocatorTo(page, firstSkillSource, actorLane, {
+    targetPosition: { x: 100, y: 82 },
+  });
+  await dragLocatorTo(page, secondSkillSource, actorLane, {
+    targetPosition: { x: 380, y: 82 },
+  });
+  const firstAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"]'
+  );
+  const secondAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
+  );
+  const firstCooldown = timeline.locator(
+    `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${await firstAction.getAttribute('data-action-id')}"]`
+  );
+  const secondCooldown = timeline.locator(
+    `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${await secondAction.getAttribute('data-action-id')}"]`
+  );
+  await expect(firstCooldown).toHaveCount(1);
+  await expect(secondCooldown).toHaveCount(1);
+  await expect
+    .poll(async () => [
+      await firstCooldown.getAttribute('data-cooldown-slot'),
+      await secondCooldown.getAttribute('data-cooldown-slot'),
+    ])
+    .toEqual(['0', '1']);
+  expect(
+    await firstCooldown.evaluate(element => element.getBoundingClientRect().top)
+  ).not.toBe(
+    await secondCooldown.evaluate(
+      element => element.getBoundingClientRect().top
+    )
+  );
+
+  const unavailableUltimate = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100313"][data-action-kind="ultimate"]'
+  );
+  await expect(unavailableUltimate).toHaveAttribute('data-cooldown-ms', '');
+  await expect(unavailableUltimate).toContainText('CD 未提供');
+
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101007"]'
+    )
+    .click();
+  const confirmedUltimate = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100713"][data-action-kind="ultimate"]'
+  );
+  await expect(confirmedUltimate).toHaveAttribute('data-cooldown-ms', '20000');
+  await expect(confirmedUltimate).toContainText('CD 20s');
+  await dragLocatorTo(
+    page,
+    confirmedUltimate,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
+    ),
+    { targetPosition: { x: 540, y: 82 } }
+  );
+  const ultimateAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100713"]'
+  );
+  const ultimateCooldown = timeline.locator(
+    `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${await ultimateAction.getAttribute('data-action-id')}"]`
+  );
+  await expect
+    .poll(async () => {
+      const startMs = Number(
+        await ultimateCooldown.getAttribute('data-start-ms')
+      );
+      const endMs = Number(await ultimateCooldown.getAttribute('data-end-ms'));
+      return Math.round(endMs - startMs);
+    })
+    .toBe(20000);
+
+  await closeInspectorIfVisible(page);
+  await timeline
+    .locator('.timeline-shell')
+    .evaluate(element => element.scrollTo({ top: 0 }));
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m3-cooldown-stacking-desktop.png' });
+  await page.setViewportSize({ width: 390, height: 900 });
+  await timeline
+    .locator('.timeline-shell')
+    .evaluate(element => element.scrollTo({ top: 0 }));
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m3-cooldown-stacking-narrow.png' });
+});
+
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
   page,
 }) => {

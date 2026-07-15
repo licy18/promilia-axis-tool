@@ -1,5 +1,9 @@
 import { frameToMs } from './timebase';
 import { getSkillActionVariants } from './skillDamageSegments';
+import {
+  createSkillLogicModel,
+  resolveSkillCooldownSource,
+} from './skillLogicModel';
 
 export const AZPR_ACTION_KIND_ORDER = Object.freeze([
   'normal-attack',
@@ -44,6 +48,9 @@ export function getSkillActionCatalog(skills = [], level = 1) {
   const entries = [];
   for (const skill of skills) {
     const variants = getSkillActionVariants(skill, level);
+    const cooldown = resolveSkillCooldownSource(
+      createSkillLogicModel(skill, level)
+    );
     for (const variant of variants) {
       const kind = inferCatalogActionKind(variant, skill);
       if (!kind) {
@@ -68,6 +75,8 @@ export function getSkillActionCatalog(skills = [], level = 1) {
         hitModel: variant.hitModel,
         durationFrames,
         durationMs: frameToMs(durationFrames),
+        cooldownMs: cooldown?.durationMs ?? null,
+        cooldownSourceKind: cooldown?.sourceKind ?? null,
         sourceVariant: variant,
         exactLabelMatch: isExactCatalogLabel(variant.label, kind),
       });

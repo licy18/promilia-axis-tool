@@ -27488,3 +27488,27 @@ six-resource-runtime-capture-plan v1
 Workbench v16 动作可选新增 `statusGeneration`；自动 `effectCommands[]` 可选携带 `icon / confidence / trackingStatus / sourceIdentity`。这些字段由动作 ID、技能、变体与生成目录确定性重建，不形成第二套 UI 真相。compiler、effect runtime、`AzPrEffectIntervalProjection` 和 `AzPrActionEffectRelationGraph` 透传同一来源字段；循环边界的 `initialRuntimeState.activeEffects[]` 也保留它们及剩余时长。
 
 项目 schemaVersion 不升级。旧项目缺少 `statusGeneration` 时在 normalization 中自动生成；动作变体改变、复制、移动、删除或载体回放后都会重建生成命令并移除旧 identity。手工 `effectCommands` 继续兼容，且不会被误标为目录生成项。该新增不改变 HP、韧性、3 条角色资源或 3 条奇波资源的 calculator 输入。
+
+## 434. Action status cooldown catalog v2 and independent status lanes
+
+`workbench-kibo-action-catalog.json` 与 `workbench-action-status-catalog.json` 升级为 schema v2。奇波动作目录新增标准战斗与奇波对战冷却来源字段；状态目录新增奇波/技能冷却覆盖统计及可同步生成的奇波 CD 索引：
+
+```text
+kibo action
+  cooldownMs / cooldownCount / cooldownDefaultMs
+  kiboVersusCooldownMs / kiboVersusCooldownDefaultMs
+
+action status summary
+  logicCooldownSkillCount
+  displayCooldownFallbackSkillCount
+  ultimateDisplayCooldownFallbackSkillCount
+  kiboConfirmedCooldownActionCount
+
+kiboCooldowns[]
+  kiboId / skillId / cooldownMs / cooldownCount
+  cooldownDefaultMs / kiboVersusCooldownMs / kiboVersusCooldownDefaultMs
+```
+
+角色技能 CD 优先使用正值 `skillsub_logic.coolDown`；仅当该值为 0 且 `skill_level.coolDown` 为正值时，使用后者并记录 `confirmed-display-cooldown-logic-zero`。两处均为 0 时返回无可信 CD，不生成零长度条。奇波 runtime readiness 使用标准战斗 `coolDown`，并以 `ownerKind = kibo`、`ownerId = kiboId` 与角色同 skill ID 空间隔离；奇波对战字段只作来源诊断。
+
+时间轴不增加持久化字段。每条轨道在视图投影阶段分别计算 `cooldownSlot` 和效果 `timelineSlot`，只有时间范围重叠的条块才占用不同垂直槽；Buff 区仍位于动作上方，CD 区仍位于动作下方。项目 schema、五载体、HP/韧性/六资源 calculator 输入及所有 `appliedToCalculators` 边界不变。

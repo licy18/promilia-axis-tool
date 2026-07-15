@@ -150,6 +150,113 @@ describe('generated action status runtime', () => {
     );
   });
 
+  it('uses the sourced kibo cooldown on the kibo owner lane and blocks reuse', () => {
+    const project = createStatusProject(
+      [
+        createKiboStatusAction({ id: 'kibo-status-action-1', startMs: 0 }),
+        createKiboStatusAction({
+          id: 'kibo-status-action-blocked',
+          startMs: 1000,
+        }),
+      ],
+      {
+        actorConfigs: [
+          {
+            characterId: 109001,
+            loadout: { kiboId: 500001 },
+          },
+        ],
+      }
+    );
+    const result = runSimulation(project, getWorkbenchGameData());
+
+    expect(result.actionExecutionPlan.actions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'kibo-status-action-1',
+          execute: true,
+        }),
+        expect.objectContaining({
+          actionId: 'kibo-status-action-blocked',
+          execute: false,
+          status: 'skipped-rule-blocked',
+        }),
+      ])
+    );
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.cooldownWindows
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'kibo-status-action-1',
+        actorId: 'actor-109001',
+        ownerKind: 'kibo',
+        ownerId: 500001,
+        kiboId: 500001,
+        skillId: 50000102,
+        startMs: 0,
+        endMs: 18000,
+        durationMs: 18000,
+        sourceIdentity: expect.objectContaining({
+          sourceKind: 'azpr-newtable-kibo-standard-battle-cooldown',
+          cooldownMode: 'standard-battle',
+        }),
+      }),
+    ]);
+
+    const unbound = runSimulation(
+      createStatusProject([
+        createKiboStatusAction({ id: 'kibo-status-unbound', startMs: 0 }),
+      ]),
+      getWorkbenchGameData()
+    );
+    expect(
+      unbound.actionRuleDiagnostics.readinessTimeline.cooldownWindows
+    ).toEqual([]);
+  });
+
+  it('creates an ultimate cooldown only when skill-level provides a positive value', () => {
+    const confirmed = runSimulation(
+      createStatusProject([
+        createWorkbenchActionDraft({
+          id: 'ultimate-status-confirmed',
+          skillId: 10100713,
+          actorCharacterId: 101007,
+          startMs: 0,
+        }),
+      ]),
+      getWorkbenchGameData()
+    );
+    expect(
+      confirmed.actionRuleDiagnostics.readinessTimeline.cooldownWindows
+    ).toEqual([
+      expect.objectContaining({
+        actionId: 'ultimate-status-confirmed',
+        ownerKind: 'actor',
+        skillId: 10100713,
+        durationMs: 20000,
+        sourceIdentity: expect.objectContaining({
+          sourceKind: 'azpr-newtable-skill-level-display',
+          sourceStatus: 'confirmed-display-cooldown-logic-zero',
+        }),
+      }),
+    ]);
+
+    const unavailable = runSimulation(
+      createStatusProject([
+        createWorkbenchActionDraft({
+          id: 'ultimate-status-unavailable',
+          skillId: 10100313,
+          actorCharacterId: 101003,
+          startMs: 0,
+        }),
+      ]),
+      getWorkbenchGameData()
+    );
+    expect(
+      unavailable.actionRuleDiagnostics.readinessTimeline.cooldownWindows
+    ).toEqual([]);
+  });
+
   it('recomputes trigger timing and removes stale state after project edits', () => {
     const moved = runSimulation(
       createStatusProject([
@@ -239,7 +346,24 @@ function createStatusAction({ id, startMs }) {
   });
 }
 
-function createStatusProject(actions, { initialRuntimeState = null } = {}) {
+function createKiboStatusAction({ id, startMs }) {
+  return createWorkbenchActionDraft({
+    id,
+    type: 'kiboEvent',
+    skillId: 50000102,
+    actorCharacterId: 109001,
+    name: '迅风刃',
+    startMs,
+    durationMs: 1200,
+    timingSource: 'azpr-unity-skill-control-root',
+    needsTimingData: false,
+  });
+}
+
+function createStatusProject(
+  actions,
+  { initialRuntimeState = null, actorConfigs = null } = {}
+) {
   return createWorkbenchProject(
     {
       characterId: 109001,
@@ -251,6 +375,7 @@ function createStatusProject(actions, { initialRuntimeState = null } = {}) {
       actions,
       durationMs: 30000,
       initialRuntimeState,
+      actorConfigs,
     }
   );
 }

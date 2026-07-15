@@ -349,6 +349,93 @@ describe('TimelineGridPreview', () => {
     });
   });
 
+  it('stacks overlapping cooldown and effect bars independently in one actor lane', () => {
+    const firstEffect = createEffectInterval({
+      intervalId: 'shared-runtime-interval',
+      effectId: 'effect-a',
+      effectName: '状态 A',
+      startMs: 0,
+      endMs: 2400,
+      sourceActionId: 'action-a',
+    });
+    const secondEffect = createEffectInterval({
+      intervalId: 'shared-runtime-interval',
+      effectId: 'effect-b',
+      effectName: '状态 B',
+      startMs: 500,
+      endMs: 2800,
+      sourceActionId: 'action-c',
+    });
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actions: [
+          createAction({
+            id: 'action-a',
+            name: '星鸣技',
+            actorId: 'actor-a',
+            startMs: 0,
+          }),
+          createAction({
+            id: 'action-c',
+            name: '星结合击',
+            actorId: 'actor-a',
+            startMs: 1000,
+          }),
+        ],
+        effectIntervals: [firstEffect, secondEffect],
+        actionReadinessTimeline: {
+          actions: [],
+          cooldownWindows: [
+            {
+              windowId: 'action-a|cooldown-charge|0',
+              actionId: 'action-a',
+              actionName: '星鸣技',
+              actorId: 'actor-a',
+              startMs: 0,
+              endMs: 24000,
+              durationMs: 24000,
+            },
+            {
+              windowId: 'action-c|cooldown-charge|0',
+              actionId: 'action-c',
+              actionName: '星结合击',
+              actorId: 'actor-a',
+              startMs: 1000,
+              endMs: 25000,
+              durationMs: 24000,
+            },
+          ],
+        },
+      }),
+    });
+
+    const cooldownWindows = wrapper.findAll(
+      '[data-testid="workbench-timeline-cooldown-window"]'
+    );
+    expect(cooldownWindows).toHaveLength(2);
+    expect(
+      cooldownWindows.map(item => item.attributes('data-cooldown-slot'))
+    ).toEqual(['0', '1']);
+    expect(
+      cooldownWindows.map(item =>
+        readStyleNumber(item.attributes('style'), 'top')
+      )
+    ).toEqual([109, 128]);
+
+    const effectIntervals = wrapper.findAll(
+      '[data-testid="workbench-timeline-effect-interval"]'
+    );
+    expect(effectIntervals).toHaveLength(2);
+    expect(
+      effectIntervals.map(item => item.attributes('data-effect-slot'))
+    ).toEqual(['0', '1']);
+    expect(
+      effectIntervals.map(item =>
+        readStyleNumber(item.attributes('style'), 'top')
+      )
+    ).toEqual([8, 27]);
+  });
+
   it('renders, selects, and creates persisted action relations', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

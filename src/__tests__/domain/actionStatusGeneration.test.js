@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { getWorkbenchActionStatusCatalog } from '../../data/workbenchActionStatusCatalog';
-import { GENERATED_ACTION_STATUS_SOURCE } from '../../domain/actionStatusGeneration';
+import {
+  GENERATED_ACTION_STATUS_SOURCE,
+  createKiboActionStatusGeneration,
+} from '../../domain/actionStatusGeneration';
 import {
   createWorkbenchActionClipboard,
   pasteWorkbenchActionClipboard,
@@ -27,11 +30,15 @@ describe('action status generation', () => {
       },
       summary: {
         skillCount: 120,
-        cooldownSkillCount: 40,
+        cooldownSkillCount: 52,
+        logicCooldownSkillCount: 40,
+        displayCooldownFallbackSkillCount: 12,
+        ultimateDisplayCooldownFallbackSkillCount: 12,
         effectCandidateCount: 6,
         lifecycleBoundEffectCount: 1,
         trackingOnlyEffectCount: 5,
         kiboActionCount: 366,
+        kiboConfirmedCooldownActionCount: 366,
         kiboConfirmedStatusActionCount: 0,
         calculatorAppliedEffectCount: 0,
       },
@@ -85,8 +92,7 @@ describe('action status generation', () => {
           behaviorClassName: 'InjectToTargetKeyFrameBehaviorData',
           triggerFrameField: 'SkillBehaviorData.startFrame',
           durationField: 'TBuffElementParams.time',
-          stackingStatus:
-            'unconfirmed-single-instance-runtime-projection',
+          stackingStatus: 'unconfirmed-single-instance-runtime-projection',
         }),
         appliedToCalculators: false,
       }),
@@ -114,7 +120,7 @@ describe('action status generation', () => {
     expect(otherVariant.effectCommands).toEqual([]);
   });
 
-  it('keeps unbound buff evidence tracking-only and kibo actions state-empty', () => {
+  it('keeps unbound buff evidence tracking-only while sourcing kibo cooldowns', () => {
     const trackingDraft = createWorkbenchActionDraft({
       id: 'action-status-tracking',
       skillId: 10100312,
@@ -148,14 +154,79 @@ describe('action status generation', () => {
     });
     expect(kiboDraft.statusGeneration).toMatchObject({
       sourceKind: 'azpr-kibo-action-status-generation',
-      status: 'tracking-only-no-confirmed-status-source',
+      status: 'action-status-generation-ready-with-cooldown',
       skillId: 50000102,
+      cooldown: {
+        status: 'confirmed-cooldown',
+        durationMs: 18000,
+        chargeCount: 1,
+        sourceIdentity: {
+          sourceKind: 'azpr-newtable-kibo-standard-battle-cooldown',
+          sourceStatus: 'confirmed-structured-data',
+          subSkillId: 50000102,
+          cooldownMode: 'standard-battle',
+          durationFieldPath: 'skillsub_logic.rows[skillId=50000102].coolDown',
+        },
+        applied: true,
+      },
       summary: {
+        confirmedCooldownCount: 1,
         generatedEffectCount: 0,
         calculatorAppliedEffectCount: 0,
       },
     });
     expect(kiboDraft.effectCommands).toEqual([]);
+
+    const mismatchedGeneration = createKiboActionStatusGeneration({
+      actionId: 'action-status-kibo-mismatched',
+      kiboId: 500002,
+      skillId: 50000102,
+      timingSource: 'azpr-unity-skill-control-root',
+    });
+    expect(mismatchedGeneration).toMatchObject({
+      status: 'tracking-only-no-confirmed-status-source',
+      kiboId: 500002,
+      skillId: 50000102,
+      cooldown: {
+        status: 'no-confirmed-cooldown',
+        durationMs: null,
+      },
+    });
+  });
+
+  it('uses a positive skill-level cooldown for ultimates whose logic row is zero', () => {
+    const confirmedUltimate = createWorkbenchActionDraft({
+      id: 'action-status-ultimate-confirmed',
+      skillId: 10100713,
+      actorCharacterId: 101007,
+    });
+    expect(confirmedUltimate.statusGeneration).toMatchObject({
+      actionKind: 'ultimate',
+      cooldown: {
+        status: 'confirmed-cooldown',
+        durationMs: 20000,
+        chargeCount: 1,
+        sourceIdentity: {
+          sourceKind: 'azpr-newtable-skill-level-display',
+          sourceStatus: 'confirmed-display-cooldown-logic-zero',
+          durationFieldPath: 'skill_level.rows[id=340].coolDown',
+        },
+      },
+    });
+
+    const unavailableUltimate = createWorkbenchActionDraft({
+      id: 'action-status-ultimate-unavailable',
+      skillId: 10100313,
+      actorCharacterId: 101003,
+    });
+    expect(unavailableUltimate.statusGeneration).toMatchObject({
+      actionKind: 'ultimate',
+      cooldown: {
+        status: 'no-confirmed-cooldown',
+        durationMs: null,
+        applied: false,
+      },
+    });
   });
 
   it('regenerates stable commands after replay normalization', () => {

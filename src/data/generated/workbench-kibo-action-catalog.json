@@ -1,8 +1,13 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "kind": "workbench-kibo-action-catalog",
-  "generatedAt": "2026-07-08T03:35:51.289Z",
+  "generatedAt": "2026-07-15T07:08:29.340Z",
   "source": "pet-table-and-azpr-unity-skill-control-root",
+  "sources": {
+    "identity": "C:/PC2/Codex/AzPr/BWiki/data/local-kibo-forms/all.local-kibo-forms.json",
+    "cooldown": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_logic.json",
+    "timing": "azpr-unity-skill-control-root"
+  },
   "items": [
     {
       "kiboId": 500001,
@@ -12,21 +17,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500001_02.png",
           "name": "迅风刃",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 504004,
           "kind": "active",
           "icon": "tex_icon_petskill_504004.png",
           "name": "狂风冲击",
-          "durationFrames": 220
+          "durationFrames": 220,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50000112,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "迅狼-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -38,21 +58,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500004_02.png",
           "name": "水灵涟漪",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 502015,
           "kind": "active",
           "icon": "tex_icon_petskill_502015.png",
           "name": "水弹连射",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50000203,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "水灵仔-合击",
-          "durationFrames": 93
+          "durationFrames": 93,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -64,21 +99,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500004_02.png",
           "name": "灵偶涟漪",
-          "durationFrames": 93
+          "durationFrames": 93,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 502019,
           "kind": "active",
           "icon": "tex_icon_petskill_502019.png",
           "name": "漂浮水泡",
-          "durationFrames": 73
+          "durationFrames": 73,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50000303,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "水灵偶-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -90,21 +140,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500004_02.png",
           "name": "潮汐涟漪",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 502016,
           "kind": "active",
           "icon": "tex_icon_petskill_502016.png",
           "name": "大海浪",
-          "durationFrames": 55
+          "durationFrames": 55,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50000417,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "汐灵偶-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -116,21 +181,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500007_01.png",
           "name": "火环",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 501014,
           "kind": "active",
           "icon": "tex_icon_petskill_501014.png",
           "name": "火球连射",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50000504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "火灵仔-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -142,21 +222,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500007_01.png",
           "name": "灵偶火环",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 501017,
           "kind": "active",
           "icon": "tex_icon_petskill_501017.png",
           "name": "空降之焰",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50000604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "火灵偶-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -168,21 +263,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500007_01.png",
           "name": "灼焰火环",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 501016,
           "kind": "active",
           "icon": "tex_icon_petskill_501016.png",
           "name": "分裂之焰",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50000715,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "焰灵偶-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -194,21 +304,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500021_02.png",
           "name": "雪横扫",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 503001,
           "kind": "active",
           "icon": "tex_icon_petskill_503001.png",
           "name": "冰锥",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50002004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "小雪狼-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -220,21 +345,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500021_02.png",
           "name": "冰速横扫",
-          "durationFrames": 135
+          "durationFrames": 135,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 503006,
           "kind": "active",
           "icon": "tex_icon_petskill_503006.png",
           "name": "寒冰碎片",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 5000
         },
         {
           "skillId": 50002104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "冰速狼-合击",
-          "durationFrames": 135
+          "durationFrames": 135,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -246,21 +386,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500021_02.png",
           "name": "霜刃横扫",
-          "durationFrames": 135
+          "durationFrames": 135,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 503004,
           "kind": "active",
           "icon": "tex_icon_petskill_503004.png",
           "name": "冰矛连射",
-          "durationFrames": 235
+          "durationFrames": 235,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50002204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "霜刃狼-合击",
-          "durationFrames": 130
+          "durationFrames": 130,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -272,21 +427,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500024_01.png",
           "name": "扑通变菜",
-          "durationFrames": 176
+          "durationFrames": 176,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 505013,
           "kind": "active",
           "icon": "tex_icon_petskill_505011.png",
           "name": "种子飞弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50002305,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "苗鸡-合击",
-          "durationFrames": 74
+          "durationFrames": 74,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -298,21 +468,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500024_01.png",
           "name": "鸡飞叶跳",
-          "durationFrames": 178
+          "durationFrames": 178,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 505006,
           "kind": "active",
           "icon": "tex_icon_petskill_505006.png",
           "name": "灵木繁星",
-          "durationFrames": 255
+          "durationFrames": 255,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50002415,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "菜鸡-合击",
-          "durationFrames": 144
+          "durationFrames": 144,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -324,21 +509,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500025_01.png",
           "name": "拉加冲锋",
-          "durationFrames": 190
+          "durationFrames": 190,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 507003,
           "kind": "active",
           "icon": "tex_icon_petskill_507003.png",
           "name": "落雷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50002515,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "拉加野猪-合击",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -350,21 +550,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500026_02.png",
           "name": "碧灵激流",
-          "durationFrames": 234
+          "durationFrames": 234,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505006,
           "kind": "active",
           "icon": "tex_icon_petskill_505006.png",
           "name": "灵木繁星",
-          "durationFrames": 255
+          "durationFrames": 255,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50002612,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "碧羽灵龙-合击",
-          "durationFrames": 116
+          "durationFrames": 116,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -376,21 +591,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500035_01.png",
           "name": "治愈守护",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505004,
           "kind": "active",
           "icon": "tex_icon_petskill_505004.png",
           "name": "株连灵木",
-          "durationFrames": 235
+          "durationFrames": 235,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50003501,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "叶冠驼-合击",
-          "durationFrames": 119
+          "durationFrames": 119,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -402,21 +632,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500039_01.png",
           "name": "火苗踏击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 501001,
           "kind": "active",
           "icon": "tex_icon_petskill_501001.png",
           "name": "火球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50003704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "焰羊羊-合击",
-          "durationFrames": 75
+          "durationFrames": 75,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -428,21 +673,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500039_01.png",
           "name": "火焰踏击",
-          "durationFrames": 114
+          "durationFrames": 114,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 501003,
           "kind": "active",
           "icon": "tex_icon_petskill_501003.png",
           "name": "烈焰弹",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50003804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "尾火羊-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -454,21 +714,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500039_01.png",
           "name": "爆炎踏击",
-          "durationFrames": 114
+          "durationFrames": 114,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 501003,
           "kind": "active",
           "icon": "tex_icon_petskill_501003.png",
           "name": "烈焰弹",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50003904,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "炎灼角羊-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -480,21 +755,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500042_02.png",
           "name": "尾锤击",
-          "durationFrames": 118
+          "durationFrames": 118,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 32000
         },
         {
           "skillId": 506001,
           "kind": "active",
           "icon": "tex_icon_petskill_506001.png",
           "name": "岩锥",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50004004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "铁球蜥-合击",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -506,21 +796,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500042_02.png",
           "name": "砸地锤击",
-          "durationFrames": 174
+          "durationFrames": 174,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 32000
         },
         {
           "skillId": 506001,
           "kind": "active",
           "icon": "tex_icon_petskill_506001.png",
           "name": "岩锥",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50004104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "三角蜥-合击",
-          "durationFrames": 131
+          "durationFrames": 131,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -532,21 +837,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500042_02.png",
           "name": "角斗重锤",
-          "durationFrames": 233
+          "durationFrames": 233,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 32000
         },
         {
           "skillId": 506006,
           "kind": "active",
           "icon": "tex_icon_petskill_506006.png",
           "name": "裂地岩突",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50004204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "角斗蜥-合击",
-          "durationFrames": 179
+          "durationFrames": 179,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -558,21 +878,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500045_01.png",
           "name": "蝶磷粉",
-          "durationFrames": 70
+          "durationFrames": 70,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50004305,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "小浮蝶-合击",
-          "durationFrames": 70
+          "durationFrames": 70,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -584,21 +919,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500045_01.png",
           "name": "浮蝶磷粉",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50004404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "浮蝶-合击",
-          "durationFrames": 104
+          "durationFrames": 104,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -610,21 +960,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500045_01.png",
           "name": "幻蝶磷粉",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504020,
           "kind": "active",
           "icon": "tex_icon_petskill_504020.png",
           "name": "旋风回旋镖",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50004504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "幻蝶-合击",
-          "durationFrames": 91
+          "durationFrames": 91,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -636,21 +1001,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500048_02.png",
           "name": "木苞生长",
-          "durationFrames": 104
+          "durationFrames": 104,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505013,
           "kind": "active",
           "icon": "tex_icon_petskill_505011.png",
           "name": "种子飞弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50004602,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "木灵苞-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -662,21 +1042,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500048_02.png",
           "name": "灵朵绽放",
-          "durationFrames": 136
+          "durationFrames": 136,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505014,
           "kind": "active",
           "icon": "tex_icon_petskill_505020.png",
           "name": "花绽飞弹",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50004703,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "木灵朵-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -688,21 +1083,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500048_02.png",
           "name": "蔓音回响",
-          "durationFrames": 97
+          "durationFrames": 97,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505018,
           "kind": "active",
           "icon": "tex_icon_petskill_505018.png",
           "name": "种子风暴",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50004804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "蔓音花-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -714,21 +1124,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500053_02.png",
           "name": "岩甲突击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 506001,
           "kind": "active",
           "icon": "tex_icon_petskill_506001.png",
           "name": "岩锥",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50005104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "岩甲蜥-合击",
-          "durationFrames": 71
+          "durationFrames": 71,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -740,21 +1165,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500053_02.png",
           "name": "穿甲突击",
-          "durationFrames": 70
+          "durationFrames": 70,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 506008,
           "kind": "active",
           "icon": "tex_icon_petskill_506008.png",
           "name": "岩固之盾",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50005204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "穿甲蜥-合击",
-          "durationFrames": 140
+          "durationFrames": 140,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -766,21 +1206,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500053_02.png",
           "name": "钻山猛击",
-          "durationFrames": 248
+          "durationFrames": 248,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 506008,
           "kind": "active",
           "icon": "tex_icon_petskill_506008.png",
           "name": "岩固之盾",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50005304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "钻山蜥-合击",
-          "durationFrames": 104
+          "durationFrames": 104,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -792,21 +1247,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500025_01.png",
           "name": "猪突猛进",
-          "durationFrames": 160
+          "durationFrames": 160,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 507001,
           "kind": "active",
           "icon": "tex_icon_petskill_507001.png",
           "name": "雷球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50005704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "猪古力-合击",
-          "durationFrames": 87
+          "durationFrames": 87,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -818,21 +1288,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500058_01.png",
           "name": "焰翎利箭",
-          "durationFrames": 53
+          "durationFrames": 53,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 501002,
           "kind": "active",
           "icon": "tex_icon_petskill_501002.png",
           "name": "炽焰冲锋",
-          "durationFrames": 210
+          "durationFrames": 210,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50005804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "焰翎龙-合击",
-          "durationFrames": 70
+          "durationFrames": 70,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -844,21 +1329,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500065_01.png",
           "name": "柔风飞刃",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504001,
           "kind": "active",
           "icon": "tex_icon_petskill_504001.png",
           "name": "风刃",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50006404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "柔风鹰-合击",
-          "durationFrames": 133
+          "durationFrames": 133,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -870,21 +1370,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500065_01.png",
           "name": "风锐翼展",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504002,
           "kind": "active",
           "icon": "tex_icon_petskill_504002.png",
           "name": "凛风斩",
-          "durationFrames": 160
+          "durationFrames": 160,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50006504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "风剪鹰-合击",
-          "durationFrames": 99
+          "durationFrames": 99,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -896,21 +1411,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500068_01.png",
           "name": "水流射击",
-          "durationFrames": 161
+          "durationFrames": 161,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502004,
           "kind": "active",
           "icon": "tex_icon_petskill_502004.png",
           "name": "毒液弹",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50006604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "兔耳鳐-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -922,21 +1452,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500068_01.png",
           "name": "分裂水流",
-          "durationFrames": 134
+          "durationFrames": 134,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502006,
           "kind": "active",
           "icon": "tex_icon_petskill_502006.png",
           "name": "水弹散射",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50006704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "飞鳐-合击",
-          "durationFrames": 94
+          "durationFrames": 94,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -948,21 +1493,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500068_01.png",
           "name": "水流激涌",
-          "durationFrames": 171
+          "durationFrames": 171,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502003,
           "kind": "active",
           "icon": "tex_icon_petskill_502003.png",
           "name": "爆裂水球",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50006804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "星鳐-合击",
-          "durationFrames": 110
+          "durationFrames": 110,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -974,21 +1534,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500072_01.png",
           "name": "极寒冲刺",
-          "durationFrames": 175
+          "durationFrames": 175,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 503004,
           "kind": "active",
           "icon": "tex_icon_petskill_503004.png",
           "name": "冰矛连射",
-          "durationFrames": 235
+          "durationFrames": 235,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50007204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "乌尔-合击",
-          "durationFrames": 130
+          "durationFrames": 130,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1000,21 +1575,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500081_01.png",
           "name": "碎冰寒矛",
-          "durationFrames": 68
+          "durationFrames": 68,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 503007,
           "kind": "active",
           "icon": "tex_icon_petskill_503007.png",
           "name": "凛冬矛击",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 16000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 8000
         },
         {
           "skillId": 50008104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "碎冰兔-合击",
-          "durationFrames": 120
+          "durationFrames": 120,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1026,21 +1616,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500082_01.png",
           "name": "雷冠之力",
-          "durationFrames": 110
+          "durationFrames": 110,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507008,
           "kind": "active",
           "icon": "tex_icon_petskill_507008.png",
           "name": "滚滚落雷",
-          "durationFrames": 250
+          "durationFrames": 250,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50008204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雷冠牦-合击",
-          "durationFrames": 92
+          "durationFrames": 92,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1052,21 +1657,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500083_02.png",
           "name": "火热跃击",
-          "durationFrames": 117
+          "durationFrames": 117,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 501001,
           "kind": "active",
           "icon": "tex_icon_petskill_501001.png",
           "name": "火球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50008304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "滚地犰-合击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1078,21 +1698,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500083_02.png",
           "name": "炎火跃击",
-          "durationFrames": 114
+          "durationFrames": 114,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 506004,
           "kind": "active",
           "icon": "tex_icon_petskill_506004.png",
           "name": "岩石滚撞",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50008404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "覆甲犰-合击",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1104,21 +1739,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500083_02.png",
           "name": "炽火陨星",
-          "durationFrames": 144
+          "durationFrames": 144,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 506006,
           "kind": "active",
           "icon": "tex_icon_petskill_506006.png",
           "name": "裂地岩突",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50008504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "熔岩犰-合击",
-          "durationFrames": 130
+          "durationFrames": 130,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1130,21 +1780,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500093_02.png",
           "name": "紧急治疗",
-          "durationFrames": 86
+          "durationFrames": 86,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 508004,
           "kind": "active",
           "icon": "tex_icon_petskill_508004.png",
           "name": "辉光倾至",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50009304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "目绒兔-合击",
-          "durationFrames": 70
+          "durationFrames": 70,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1156,21 +1821,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500096_01.png",
           "name": "烟雾毒舌",
-          "durationFrames": 153
+          "durationFrames": 153,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509001,
           "kind": "active",
           "icon": "tex_icon_petskill_509001.png",
           "name": "暗魂影",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50009504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雾粘蛙-合击",
-          "durationFrames": 125
+          "durationFrames": 125,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1182,21 +1862,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500096_01.png",
           "name": "雾球毒舌",
-          "durationFrames": 282
+          "durationFrames": 282,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509002,
           "kind": "active",
           "icon": "tex_icon_petskill_509002.png",
           "name": "暗魂影爆阵",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50009604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雾球蛙-合击",
-          "durationFrames": 73
+          "durationFrames": 73,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1208,21 +1903,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500098_01.png",
           "name": "水波冲击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 502010,
           "kind": "active",
           "icon": "tex_icon_petskill_502010.png",
           "name": "唤潮",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 12000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 6000
         },
         {
           "skillId": 50009704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "水岩灵-合击",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1234,21 +1944,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500098_01.png",
           "name": "水波奔涌",
-          "durationFrames": 130
+          "durationFrames": 130,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 502010,
           "kind": "active",
           "icon": "tex_icon_petskill_502010.png",
           "name": "唤潮",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 12000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 6000
         },
         {
           "skillId": 50009804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "水岩卫-合击",
-          "durationFrames": 107
+          "durationFrames": 107,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1260,21 +1985,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500026_02.png",
           "name": "灵龙漩水",
-          "durationFrames": 109
+          "durationFrames": 109,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505001,
           "kind": "active",
           "icon": "tex_icon_petskill_505001.png",
           "name": "灵木弹",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50011004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "宝蓝雏龙-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1286,21 +2026,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500116_02.png",
           "name": "寒气",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 503009,
           "kind": "active",
           "icon": "tex_icon_petskill_503001.png",
           "name": "冰晶弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50011404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "冰灵仔-合击",
-          "durationFrames": 120
+          "durationFrames": 120,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1312,21 +2067,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500116_02.png",
           "name": "冰灵寒气",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 503010,
           "kind": "active",
           "icon": "tex_icon_petskill_503001.png",
           "name": "冰晶散射",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50011504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "冰灵偶-合击",
-          "durationFrames": 120
+          "durationFrames": 120,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1338,21 +2108,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500116_02.png",
           "name": "霜灵寒域",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 503018,
           "kind": "active",
           "icon": "tex_icon_petskill_503018.png",
           "name": "寒冰之罚",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50011604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "霜灵偶-合击",
-          "durationFrames": 120
+          "durationFrames": 120,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1364,21 +2149,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500120_02.png",
           "name": "哈加冲锋",
-          "durationFrames": 145
+          "durationFrames": 145,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504001,
           "kind": "active",
           "icon": "tex_icon_petskill_504001.png",
           "name": "风刃",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50012004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "哈加-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1390,21 +2190,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500125_01.png",
           "name": "飞绒风苞",
-          "durationFrames": 86
+          "durationFrames": 86,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50012304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "风灵苞-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1416,21 +2231,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500125_01.png",
           "name": "飞绒风域",
-          "durationFrames": 99
+          "durationFrames": 99,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50012404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "风灵朵-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1442,21 +2272,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500125_01.png",
           "name": "飞绒漫舞",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504014,
           "kind": "active",
           "icon": "tex_icon_petskill_504014.png",
           "name": "风刃扩张",
-          "durationFrames": 55
+          "durationFrames": 55,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50012504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "岚音花-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1468,21 +2313,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500128_02.png",
           "name": "烈风",
-          "durationFrames": 70
+          "durationFrames": 70,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50012604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "风灵仔-合击",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1494,21 +2354,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500128_02.png",
           "name": "灵偶烈风",
-          "durationFrames": 75
+          "durationFrames": 75,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50012704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "风灵偶-合击",
-          "durationFrames": 93
+          "durationFrames": 93,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1520,21 +2395,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500128_02.png",
           "name": "激岚烈风",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 504014,
           "kind": "active",
           "icon": "tex_icon_petskill_504014.png",
           "name": "风刃扩张",
-          "durationFrames": 55
+          "durationFrames": 55,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50012804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "岚灵偶-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1546,21 +2436,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500131_01.png",
           "name": "稚猴抓",
-          "durationFrames": 79
+          "durationFrames": 79,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 507001,
           "kind": "active",
           "icon": "tex_icon_petskill_507001.png",
           "name": "雷球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50012903,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "呼姆猴-合击",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1572,21 +2477,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500131_01.png",
           "name": "连抓带扫",
-          "durationFrames": 194
+          "durationFrames": 194,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 507003,
           "kind": "active",
           "icon": "tex_icon_petskill_507003.png",
           "name": "落雷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50013003,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "环尾猴-合击",
-          "durationFrames": 156
+          "durationFrames": 156,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1598,21 +2518,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500131_01.png",
           "name": "环影连击",
-          "durationFrames": 230
+          "durationFrames": 230,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507003,
           "kind": "active",
           "icon": "tex_icon_petskill_507003.png",
           "name": "落雷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50013103,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "环影猴-合击",
-          "durationFrames": 69
+          "durationFrames": 69,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1624,21 +2559,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500132_02.png",
           "name": "一地嘟噜毛",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506004,
           "kind": "active",
           "icon": "tex_icon_petskill_506004.png",
           "name": "岩石滚撞",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50013204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "嘟噜-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1650,21 +2600,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500134_02.png",
           "name": "援护之助",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506001,
           "kind": "active",
           "icon": "tex_icon_petskill_506001.png",
           "name": "岩锥",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50013304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "加多利-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1676,21 +2641,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500134_02.png",
           "name": "援护之域",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506006,
           "kind": "active",
           "icon": "tex_icon_petskill_506006.png",
           "name": "裂地岩突",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50013404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "加杜-合击",
-          "durationFrames": 110
+          "durationFrames": 110,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1702,21 +2682,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500140_01.png",
           "name": "宝石飞射",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 501001,
           "kind": "active",
           "icon": "tex_icon_petskill_501001.png",
           "name": "火球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50013804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "红宝虫-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1728,21 +2723,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500140_01.png",
           "name": "赤晶飞射",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506005,
           "kind": "active",
           "icon": "tex_icon_petskill_506005.png",
           "name": "巨石投掷",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50013904,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "赤晶甲-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1754,21 +2764,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500140_01.png",
           "name": "炎晶爆袭",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506005,
           "kind": "active",
           "icon": "tex_icon_petskill_506005.png",
           "name": "巨石投掷",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50014004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "炎晶甲-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1780,21 +2805,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500149_01.png",
           "name": "枝蔓",
-          "durationFrames": 135
+          "durationFrames": 135,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 505013,
           "kind": "active",
           "icon": "tex_icon_petskill_505011.png",
           "name": "种子飞弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50014704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "木灵仔-合击",
-          "durationFrames": 101
+          "durationFrames": 101,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1806,21 +2846,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500149_01.png",
           "name": "突袭枝蔓",
-          "durationFrames": 145
+          "durationFrames": 145,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 505014,
           "kind": "active",
           "icon": "tex_icon_petskill_505020.png",
           "name": "花绽飞弹",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50014804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "木灵偶-合击",
-          "durationFrames": 101
+          "durationFrames": 101,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1832,21 +2887,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500149_01.png",
           "name": "繁生枝蔓",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 505017,
           "kind": "active",
           "icon": "tex_icon_petskill_505017.png",
           "name": "地蔓突击",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50014904,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "蔓灵偶-合击",
-          "durationFrames": 101
+          "durationFrames": 101,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1858,21 +2928,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500158_02.png",
           "name": "火花旋风",
-          "durationFrames": 210
+          "durationFrames": 210,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 501001,
           "kind": "active",
           "icon": "tex_icon_petskill_501001.png",
           "name": "火球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50015604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "火花雀-合击",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1884,21 +2969,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500158_02.png",
           "name": "焰火旋风",
-          "durationFrames": 227
+          "durationFrames": 227,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 501005,
           "kind": "active",
           "icon": "tex_icon_petskill_501005.png",
           "name": "焰弹连发",
-          "durationFrames": 270
+          "durationFrames": 270,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50015704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "焰火雀-合击",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1910,21 +3010,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500158_02.png",
           "name": "烈火龙卷",
-          "durationFrames": 240
+          "durationFrames": 240,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 501005,
           "kind": "active",
           "icon": "tex_icon_petskill_501005.png",
           "name": "焰弹连发",
-          "durationFrames": 270
+          "durationFrames": 270,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50015804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "火烈鹰-合击",
-          "durationFrames": 111
+          "durationFrames": 111,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1936,21 +3051,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500166_01.png",
           "name": "雷灵旋律",
-          "durationFrames": 111
+          "durationFrames": 111,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507012,
           "kind": "active",
           "icon": "tex_icon_petskill_507021.png",
           "name": "电能子弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50016404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雷灵苞-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1962,21 +3092,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500166_01.png",
           "name": "雷鸣协奏",
-          "durationFrames": 119
+          "durationFrames": 119,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507020,
           "kind": "active",
           "icon": "tex_icon_petskill_507020.png",
           "name": "连锁雷暴",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50016504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雷灵朵-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -1988,21 +3133,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500166_01.png",
           "name": "雷音乐章",
-          "durationFrames": 110
+          "durationFrames": 110,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507019,
           "kind": "active",
           "icon": "tex_icon_petskill_507019.png",
           "name": "雷电惩戒",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50016604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "电音花-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2014,21 +3174,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500175_01.png",
           "name": "雷环",
-          "durationFrames": 205
+          "durationFrames": 205,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 507012,
           "kind": "active",
           "icon": "tex_icon_petskill_507021.png",
           "name": "电能子弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50017304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雷灵仔-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2040,21 +3215,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500175_01.png",
           "name": "灵偶雷环",
-          "durationFrames": 240
+          "durationFrames": 240,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 507020,
           "kind": "active",
           "icon": "tex_icon_petskill_507020.png",
           "name": "连锁雷暴",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50017404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "雷灵偶-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2066,21 +3256,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500175_01.png",
           "name": "惊骇雷环",
-          "durationFrames": 240
+          "durationFrames": 240,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 0
         },
         {
           "skillId": 507013,
           "kind": "active",
           "icon": "tex_icon_petskill_507022.png",
           "name": "镭射",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50017504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "电灵偶-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2092,21 +3297,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500181_01.png",
           "name": "音波",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509001,
           "kind": "active",
           "icon": "tex_icon_petskill_509001.png",
           "name": "暗魂影",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50017904,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "竖耳蝠-合击",
-          "durationFrames": 103
+          "durationFrames": 103,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2118,21 +3338,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500181_01.png",
           "name": "喧哗音波",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509002,
           "kind": "active",
           "icon": "tex_icon_petskill_509002.png",
           "name": "暗魂影爆阵",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50018004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "嘻哈蝠-合击",
-          "durationFrames": 103
+          "durationFrames": 103,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2144,21 +3379,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500181_01.png",
           "name": "汹涌音波",
-          "durationFrames": 190
+          "durationFrames": 190,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509002,
           "kind": "active",
           "icon": "tex_icon_petskill_509002.png",
           "name": "暗魂影爆阵",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50018104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "笑面蝠-合击",
-          "durationFrames": 103
+          "durationFrames": 103,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2170,21 +3420,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500185_02.png",
           "name": "幻惑之风",
-          "durationFrames": 168
+          "durationFrames": 168,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504009,
           "kind": "active",
           "icon": "tex_icon_petskill_504009.png",
           "name": "旋风涡流",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 16000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 8000
         },
         {
           "skillId": 50018504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "森彩灵蝶-合击",
-          "durationFrames": 113
+          "durationFrames": 113,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2196,21 +3461,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500186_02.png",
           "name": "激浪旋冲",
-          "durationFrames": 138
+          "durationFrames": 138,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502001,
           "kind": "active",
           "icon": "tex_icon_petskill_502001.png",
           "name": "水弹",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50018604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "布鲁达-合击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2222,21 +3502,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500186_02.png",
           "name": "羽舞旋击",
-          "durationFrames": 230
+          "durationFrames": 230,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502007,
           "kind": "active",
           "icon": "tex_icon_petskill_502007.png",
           "name": "泡泡攻击",
-          "durationFrames": 175
+          "durationFrames": 175,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50018704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "蓝羽西格尼-合击",
-          "durationFrames": 99
+          "durationFrames": 99,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2248,21 +3543,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500206_01.png",
           "name": "震地回响",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 508002,
           "kind": "active",
           "icon": "tex_icon_petskill_508002.png",
           "name": "辉光熠熠",
-          "durationFrames": 260
+          "durationFrames": 260,
+          "cooldownMs": 12000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 6000
         },
         {
           "skillId": 50020604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "驮驮龙-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2274,21 +3584,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500209_01.png",
           "name": "森境束缚",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 505002,
           "kind": "active",
           "icon": "tex_icon_petskill_505002.png",
           "name": "飘叶散射",
-          "durationFrames": 230
+          "durationFrames": 230,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50020904,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "森境鹿-合击",
-          "durationFrames": 99
+          "durationFrames": 99,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2300,21 +3625,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500213_01.png",
           "name": "菇噜噜噜",
-          "durationFrames": 75
+          "durationFrames": 75,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509001,
           "kind": "active",
           "icon": "tex_icon_petskill_509001.png",
           "name": "暗魂影",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50021304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "菇噜噜-合击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2326,21 +3666,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500216_01.png",
           "name": "爆破爪",
-          "durationFrames": 78
+          "durationFrames": 78,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 501009,
           "kind": "active",
           "icon": "tex_icon_petskill_501009.png",
           "name": "烈焰斩",
-          "durationFrames": 160
+          "durationFrames": 160,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50021604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "烈豹-合击",
-          "durationFrames": 89
+          "durationFrames": 89,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2352,21 +3707,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500220_01.png",
           "name": "星云连射",
-          "durationFrames": 227
+          "durationFrames": 227,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 509010,
           "kind": "active",
           "icon": "tex_icon_petskill_509010.png",
           "name": "暗影连袭",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50022004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "星云伊欧-合击",
-          "durationFrames": 103
+          "durationFrames": 103,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2378,21 +3748,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500025_01.png",
           "name": "霸主奔袭",
-          "durationFrames": 195
+          "durationFrames": 195,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 507003,
           "kind": "active",
           "icon": "tex_icon_petskill_507003.png",
           "name": "落雷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50023104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "铁鬃霸主-合击",
-          "durationFrames": 85
+          "durationFrames": 85,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2404,21 +3789,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500246_01.png",
           "name": "哞哞拳",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 24000
         },
         {
           "skillId": 501001,
           "kind": "active",
           "icon": "tex_icon_petskill_501001.png",
           "name": "火球",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50024404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "焰哞哞-合击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2430,21 +3830,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500246_01.png",
           "name": "焰牛冲拳",
-          "durationFrames": 140
+          "durationFrames": 140,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 24000
         },
         {
           "skillId": 501010,
           "kind": "active",
           "icon": "tex_icon_petskill_501010.png",
           "name": "火焰冲撞",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50024504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "焰牛牛-合击",
-          "durationFrames": 125
+          "durationFrames": 125,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 3000,
+          "kiboVersusCooldownDefaultMs": 1500
         }
       ]
     },
@@ -2456,21 +3871,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500246_01.png",
           "name": "烈焰冲拳",
-          "durationFrames": 178
+          "durationFrames": 178,
+          "cooldownMs": 18000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 24000
         },
         {
           "skillId": 501010,
           "kind": "active",
           "icon": "tex_icon_petskill_501010.png",
           "name": "火焰冲撞",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50024604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "烈焰角牛-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2482,21 +3912,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500260_01.png",
           "name": "芽之息",
-          "durationFrames": 106
+          "durationFrames": 106,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505001,
           "kind": "active",
           "icon": "tex_icon_petskill_505001.png",
           "name": "灵木弹",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50025804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "小芽狐-合击",
-          "durationFrames": 125
+          "durationFrames": 125,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2508,21 +3953,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500260_01.png",
           "name": "蓬尾之息",
-          "durationFrames": 108
+          "durationFrames": 108,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505002,
           "kind": "active",
           "icon": "tex_icon_petskill_505002.png",
           "name": "飘叶散射",
-          "durationFrames": 230
+          "durationFrames": 230,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50025904,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "蓬尾狐-合击",
-          "durationFrames": 168
+          "durationFrames": 168,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2534,21 +3994,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500260_01.png",
           "name": "萝冠之息",
-          "durationFrames": 170
+          "durationFrames": 170,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505002,
           "kind": "active",
           "icon": "tex_icon_petskill_505002.png",
           "name": "飘叶散射",
-          "durationFrames": 230
+          "durationFrames": 230,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50026004,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "萝冠灵狐-合击",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2560,21 +4035,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500263_02.png",
           "name": "狸仔击",
-          "durationFrames": 216
+          "durationFrames": 216,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502001,
           "kind": "active",
           "icon": "tex_icon_petskill_502001.png",
           "name": "水弹",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50026104,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "河狸仔-合击",
-          "durationFrames": 79
+          "durationFrames": 79,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2586,21 +4076,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500263_02.png",
           "name": "波波狸击",
-          "durationFrames": 290
+          "durationFrames": 290,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502001,
           "kind": "active",
           "icon": "tex_icon_petskill_502001.png",
           "name": "水弹",
-          "durationFrames": 185
+          "durationFrames": 185,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50026204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "波河狸-合击",
-          "durationFrames": 181
+          "durationFrames": 181,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2612,21 +4117,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500263_02.png",
           "name": "大师狸击",
-          "durationFrames": 327
+          "durationFrames": 327,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502005,
           "kind": "active",
           "icon": "tex_icon_petskill_502005.png",
           "name": "浪袭",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50026304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "河狸大师-合击",
-          "durationFrames": 125
+          "durationFrames": 125,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2638,21 +4158,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500296_01.png",
           "name": "雷霆穿梭",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 12000
         },
         {
           "skillId": 504002,
           "kind": "active",
           "icon": "tex_icon_petskill_504002.png",
           "name": "凛风斩",
-          "durationFrames": 160
+          "durationFrames": 160,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50029604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "帕莫拉-合击",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2664,21 +4199,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500306_02.png",
           "name": "风旋",
-          "durationFrames": 260
+          "durationFrames": 260,
+          "cooldownMs": 30000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50030404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "库库-合击",
-          "durationFrames": 133
+          "durationFrames": 133,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2690,21 +4240,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500306_02.png",
           "name": "大风旋",
-          "durationFrames": 527
+          "durationFrames": 527,
+          "cooldownMs": 30000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 504020,
           "kind": "active",
           "icon": "tex_icon_petskill_504020.png",
           "name": "旋风回旋镖",
-          "durationFrames": 60
+          "durationFrames": 60,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50030504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "库库尔-合击",
-          "durationFrames": 95
+          "durationFrames": 95,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2716,21 +4281,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500306_02.png",
           "name": "与风共舞",
-          "durationFrames": 640
+          "durationFrames": 640,
+          "cooldownMs": 30000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 999999999,
+          "kiboVersusCooldownDefaultMs": 999999999
         },
         {
           "skillId": 504006,
           "kind": "active",
           "icon": "tex_icon_petskill_504006.png",
           "name": "风龙卷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 12000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 6000
         },
         {
           "skillId": 50030604,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "库库尔克-合击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2742,21 +4322,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500313_01.png",
           "name": "绒心炸弹",
-          "durationFrames": 241
+          "durationFrames": 241,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 501016,
           "kind": "active",
           "icon": "tex_icon_petskill_501016.png",
           "name": "分裂之焰",
-          "durationFrames": 150
+          "durationFrames": 150,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50031304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "绒心布里尼-合击",
-          "durationFrames": 105
+          "durationFrames": 105,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 3000,
+          "kiboVersusCooldownDefaultMs": 1500
         }
       ]
     },
@@ -2768,21 +4363,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500323_02.png",
           "name": "卷风呼啸",
-          "durationFrames": 218
+          "durationFrames": 218,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504001,
           "kind": "active",
           "icon": "tex_icon_petskill_504001.png",
           "name": "风刃",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50032204,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "赛可洛-合击",
-          "durationFrames": 97
+          "durationFrames": 97,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2794,21 +4404,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500323_02.png",
           "name": "龙卷风暴",
-          "durationFrames": 282
+          "durationFrames": 282,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504008,
           "kind": "active",
           "icon": "tex_icon_petskill_504008.png",
           "name": "召风凝场",
-          "durationFrames": 345
+          "durationFrames": 345,
+          "cooldownMs": 12000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 6000
         },
         {
           "skillId": 50032304,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "托纳缇欧-合击",
-          "durationFrames": 98
+          "durationFrames": 98,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2820,21 +4445,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500323_02.png",
           "name": "暴风旋引",
-          "durationFrames": 359
+          "durationFrames": 359,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504006,
           "kind": "active",
           "icon": "tex_icon_petskill_504006.png",
           "name": "风龙卷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 12000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 24000,
+          "kiboVersusCooldownDefaultMs": 6000
         },
         {
           "skillId": 50032404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "伊欧利安-合击",
-          "durationFrames": 132
+          "durationFrames": 132,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2846,21 +4486,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500355_01.png",
           "name": "下压",
-          "durationFrames": 296
+          "durationFrames": 296,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 509001,
           "kind": "active",
           "icon": "tex_icon_petskill_509001.png",
           "name": "暗魂影",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50035404,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "小暮鸮-合击",
-          "durationFrames": 75
+          "durationFrames": 75,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2872,21 +4527,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500355_01.png",
           "name": "暗影下压",
-          "durationFrames": 289
+          "durationFrames": 289,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 509002,
           "kind": "active",
           "icon": "tex_icon_petskill_509002.png",
           "name": "暗魂影爆阵",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50035504,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "夜猫鸮-合击",
-          "durationFrames": 75
+          "durationFrames": 75,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2898,21 +4568,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500358_01.png",
           "name": "迅愈之风",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50035704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "啵啵丁-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2924,21 +4609,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500358_01.png",
           "name": "复苏季风",
-          "durationFrames": 316
+          "durationFrames": 316,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 505011,
           "kind": "active",
           "icon": "tex_icon_petskill_505021.png",
           "name": "森之守护",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50035804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "绒绒云-合击",
-          "durationFrames": 115
+          "durationFrames": 115,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2950,21 +4650,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500360_01.png",
           "name": "血噬暗影",
-          "durationFrames": 492
+          "durationFrames": 492,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 509002,
           "kind": "active",
           "icon": "tex_icon_petskill_509002.png",
           "name": "暗魂影爆阵",
-          "durationFrames": 200
+          "durationFrames": 200,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50036003,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "怯影之翼-合击",
-          "durationFrames": 639
+          "durationFrames": 639,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -2976,21 +4691,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500370_01.png",
           "name": "符之乐声",
-          "durationFrames": 234
+          "durationFrames": 234,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 504012,
           "kind": "active",
           "icon": "tex_icon_petskill_504018.png",
           "name": "小风弹",
-          "durationFrames": 50
+          "durationFrames": 50,
+          "cooldownMs": 1000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50036803,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "小音浮-合击",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3002,21 +4732,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500370_01.png",
           "name": "呱乐演奏",
-          "durationFrames": 475
+          "durationFrames": 475,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507003,
           "kind": "active",
           "icon": "tex_icon_petskill_507003.png",
           "name": "落雷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50036903,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "乐乐蛙-合击",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3028,21 +4773,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500370_01.png",
           "name": "风暴音域",
-          "durationFrames": 410
+          "durationFrames": 410,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 507003,
           "kind": "active",
           "icon": "tex_icon_petskill_507003.png",
           "name": "落雷",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 10000,
+          "kiboVersusCooldownDefaultMs": 2500
         },
         {
           "skillId": 50037003,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "音霸蛙-合击",
-          "durationFrames": 84
+          "durationFrames": 84,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3054,21 +4814,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500399_01.png",
           "name": "绽源之云",
-          "durationFrames": 721
+          "durationFrames": 721,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 502007,
           "kind": "active",
           "icon": "tex_icon_petskill_502007.png",
           "name": "泡泡攻击",
-          "durationFrames": 175
+          "durationFrames": 175,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50039903,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "浮云-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3080,21 +4855,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500468_01.png",
           "name": "震踪踏击",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 16000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 20000,
+          "kiboVersusCooldownDefaultMs": 10000
         },
         {
           "skillId": 506001,
           "kind": "active",
           "icon": "tex_icon_petskill_506001.png",
           "name": "岩锥",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50046704,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "小岩蹄-合击",
-          "durationFrames": 80
+          "durationFrames": 80,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3106,21 +4896,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500468_01.png",
           "name": "震袭连踏",
-          "durationFrames": 100
+          "durationFrames": 100,
+          "cooldownMs": 16000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 20000,
+          "kiboVersusCooldownDefaultMs": 10000
         },
         {
           "skillId": 506006,
           "kind": "active",
           "icon": "tex_icon_petskill_506006.png",
           "name": "裂地岩突",
-          "durationFrames": 165
+          "durationFrames": 165,
+          "cooldownMs": 8000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 16000,
+          "kiboVersusCooldownDefaultMs": 4000
         },
         {
           "skillId": 50046804,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "重岩蹄-合击",
-          "durationFrames": 90
+          "durationFrames": 90,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3132,21 +4937,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500470_01.png",
           "name": "旋转镰刃",
-          "durationFrames": 345
+          "durationFrames": 345,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506002,
           "kind": "active",
           "icon": "tex_icon_petskill_506002.png",
           "name": "岩韧斩",
-          "durationFrames": 160
+          "durationFrames": 160,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50046907,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "跳跳稻草人-合击",
-          "durationFrames": 82
+          "durationFrames": 82,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     },
@@ -3158,21 +4978,36 @@
           "kind": "signature",
           "icon": "tex_icon_petskill_500470_01.png",
           "name": "镰舞风暴",
-          "durationFrames": 280
+          "durationFrames": 280,
+          "cooldownMs": 24000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 32000,
+          "kiboVersusCooldownDefaultMs": 16000
         },
         {
           "skillId": 506002,
           "kind": "active",
           "icon": "tex_icon_petskill_506002.png",
           "name": "岩韧斩",
-          "durationFrames": 160
+          "durationFrames": 160,
+          "cooldownMs": 3000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 6000,
+          "kiboVersusCooldownDefaultMs": 1500
         },
         {
           "skillId": 50047007,
           "kind": "break",
           "icon": "tex_icon_skill_petbreakatk.png",
           "name": "秋日守望者-合击",
-          "durationFrames": 88
+          "durationFrames": 88,
+          "cooldownMs": 5000,
+          "cooldownCount": 1,
+          "cooldownDefaultMs": 0,
+          "kiboVersusCooldownMs": 5000,
+          "kiboVersusCooldownDefaultMs": 2500
         }
       ]
     }
