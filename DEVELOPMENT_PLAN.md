@@ -374,7 +374,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M3 / 真实动作状态生成闭环已完成实施，等待产品验收**。M3-A/B/C 已完成真实动作目录审计、统一 generation、既有 runtime 生命周期接线、同轴可视化和真实动作库拖入验收；追加整改现已让同轨重叠 Buff/CD 独立占行，从结构化数据读取奇波标准战斗 CD 与可确认的星决技 CD，并让同 owner、同技能的冷却冲突真正阻塞 runtime。CD 以来源基础值进入 `base -> adapter -> effective` 合同，未来技能/Buff 修正可由 adapter 提供有效时长、次数和修正来源；当前没有可信修正机制时只透传基础值。缺少可信来源时保持空区或平线，未知效果继续 `tracking-only / unapplied`。M3 没有接入测试期倍率、装备/灵子/奇波培养公式、防御、抗性或真实采样，也没有扩张分析报告。当前停在 M3 验收点，不自动创建 M4。
+当前里程碑：**M3 / 真实动作状态生成闭环已完成并通过产品验收**。M3-A/B/C 已完成真实动作目录审计、统一 generation、既有 runtime 生命周期接线、同轴可视化和真实动作库拖入验收；追加整改现已让同轨重叠 Buff/CD 独立占行，从结构化数据读取奇波标准战斗 CD 与可确认的星决技 CD，并让同 owner、同技能的冷却冲突真正阻塞 runtime。CD 以来源基础值进入 `base -> adapter -> effective` 合同，未来技能/Buff 修正可由 adapter 提供有效时长、次数和修正来源；当前没有可信修正机制时只透传基础值。缺少可信来源时保持空区或平线，未知效果继续 `tracking-only / unapplied`。M3 没有接入测试期倍率、装备/灵子/奇波培养公式、防御、抗性或真实采样，也没有扩张分析报告。M3 已通过产品验收；下一阶段尚未确认，不自动创建 M4。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -400,7 +400,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 验收结果：M2 已完成并通过产品验收。93 个测试文件、508 条单元/组件测试与 41/41 production preview 全部通过；本轮新增固定首屏时间轴高度、轨道可读尺寸、动作上下留白以及横向滚动条不改变外框高度的浏览器守门。生产引用、数据、bundle 与 applied-source 审计通过；总 JavaScript gzip 为 719,860B，Workbench 主块为 329,042B，低于 740,000B/370,000B 硬门槛。桌面与窄屏证据由 `m1a-workbench-desktop.png`、`m1a-workbench-narrow.png`、`m2-direct-equipped-desktop.png` 和 `m2-direct-timeline-narrow.png` 覆盖。下一阶段尚未确认。
 
-### M3-A：动作状态生成层（已完成）
+### M3-A：动作状态生成层（已完成并通过产品验收）
 
 - 先审计真实角色与奇波动作目录，明确哪些可编排动作具有可信 CD、效果身份和生命周期来源，哪些只能保持无状态；审计只决定自动生成覆盖，不反向填造缺失数据。
 - 动作从动作库拖入后，由统一 generation 路径把可信动作记录转换为结构化冷却来源、效果身份及已确认的触发/结束描述。Project、动作草稿、compiler 输入和回放消费同一描述，不建立第二套 UI 数据。
@@ -409,7 +409,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 完成结果：覆盖审计确认 120 个角色技能中 52 个具有正式结构化 CD：40 个直接来自 `skillsub_logic.coolDown`，另有 12 个星决技在逻辑行为 CD 为 0 时由正值 `skill_level.coolDown` 提供展示/就绪 CD；两处均为 0 的技能保持“未提供”，不生成零长度条。366 个奇波动作全部从 `skillsub_logic.coolDown` 读取标准战斗 CD，并保留奇波对战 CD 作为来源诊断，不混用为当前模式。6 个 Buff 对象候选中仅寒悠悠 `10100322` 的星携技满足“明确目标注入行为 + 57F 触发 + 8000ms 生命周期 + 结构化动作变体绑定”，其余 5 个保持 tracking-only；奇波仍不生成未确认 Buff。动作草稿、Project 动作和回放共享 `AzPrActionStatusGeneration`，生成项保留来源身份、置信状态并始终 `appliedToCalculators = false`。
 
-### M3-B：运行时状态生命周期（已完成）
+### M3-B：运行时状态生命周期（已完成并通过产品验收）
 
 - 复用现有 compiler、execution plan、readiness timeline、effect runtime、interval projection 与 relation graph；动作实际执行后生成可信 CD 窗口，并在有可靠输入时生成 `apply / refresh / stack / consume / remove / expire` 生命周期。
 - 被规则阻塞或跳过的动作不得生成 CD 或效果。移动、复制、删除、跨轨、切人、撤销/重做和循环继承后必须经同一响应链重算，不保留旧窗口或旧节点。
@@ -418,7 +418,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 完成结果：目录 generation 已直接进入既有 compiler 和 execution plan；可信 CD 由 readiness timeline 生成，唯一严格绑定的生命周期由 effect runtime 统一投影到区间与 action/effect relation graph。冷却状态按 `ownerKind + ownerId + skillId` 隔离并使用有效 CD 判定，同技能在窗口内复用会被 execution plan 跳过，不产生第二个 CD 窗口、效果或数值事件。来源基础值与最终有效值由 `AzPrActionCooldownEvaluation` 分离，adapter 可按动作时点读取场景、既有窗口和后续 runtime effect state 接口并返回修正结果；默认 adapter 不猜测任何技能/Buff 公式。移动、删除、复制和循环边界继承均从同一描述重算，方案复制、本地草稿、JSON、分享链接和 PNG 已验证恢复相同状态，全部效果继续 `appliedToCalculators = false`。
 
-### M3-C：同轴可视化与真实工作流验收（已完成，待产品验收）
+### M3-C：同轴可视化与真实工作流验收（已完成并通过产品验收）
 
 - 在 M2 已预留的轨道空间内，动作块上方显示 Buff/状态区间，下方显示 CD 条与生命周期节点；动作块继续居中，不能靠无边界增加轨道高度破坏固定高时间轴。
 - 条块显示稳定图标或空态、名称、来源动作、开始/结束帧和来源状态。点击条块或节点应移动统一帧游标、打开既有检查器并可回到来源动作；无可靠来源时保持干净空区。
@@ -467,7 +467,7 @@ M1 共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735
 23. 已完成：六资源采样计划与离线预检，固定 3 个角色 SP owner 和 3 个奇波能量 owner，生成独立受控命令并守门已有文件与 production 批次。
 24. 已完成：Workbench 项目到六资源计划桥接，队伍、奇波、敌人和动作 owner 从项目 JSON 自动锁定，歧义必须显式消解。
 25. 已完成并通过产品验收：M2 时间轴直接装配与可读性整改。角色头像、奇波子轨和敌人身份均为可视选择入口，角色身份区直接显示五件装备与灵子 6 个槽位；固定高时间轴内部浏览放大的角色轨与 8 条状态曲线，动作居中并保留 Buff/CD 区，长轴横向滚动不改变工作区总高度。E2E 通过卡片选择器完成换人和装配，不调用右侧原生下拉框冒充主流程。
-26. 已完成实施，等待产品验收：M3-A/B/C 已打通真实动作目录 generation、既有 runtime 生命周期、同轴 Buff/CD 展示和真实动作库拖入工作流；整改后同轨状态条独立占行，奇波与可确认星决技读取真实结构化 CD，同技能复用进入统一冲突检测，未来技能/Buff CD 修正通过 `base -> adapter -> effective` 合同接入而非写死。当前停止，不自动进入 M4、P3 真实采样或公式研究。
+26. 已完成并通过产品验收：M3-A/B/C 已打通真实动作目录 generation、既有 runtime 生命周期、同轴 Buff/CD 展示和真实动作库拖入工作流；整改后同轨状态条独立占行，奇波与可确认星决技读取真实结构化 CD，同技能复用进入统一冲突检测，未来技能/Buff CD 修正通过 `base -> adapter -> effective` 合同接入而非写死。下一阶段尚未确认，不自动进入 M4、P3 真实采样或公式研究。
 
 ## 8. 风险和取舍
 
