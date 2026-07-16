@@ -40,7 +40,12 @@
     "
     :data-action-placement-mode="actionPlacementMode"
     :data-action-placement-status="
-      lastActionPlacementProposal?.status ?? ''
+      actionPlacementPreview?.proposal?.status ??
+      lastActionPlacementProposal?.status ??
+      ''
+    "
+    :data-action-placement-preview-active="
+      actionPlacementPreview?.active ? 'true' : 'false'
     "
   >
     <nav class="top-nav">
@@ -486,6 +491,7 @@
           :external-timeline-entry-drag="actionLibraryTimelineEntryDrag"
           :action-placement-mode="actionPlacementMode"
           :action-placement-proposal="lastActionPlacementProposal"
+          :action-placement-preview="actionPlacementPreview"
           @select-action="selectAction"
           @select-identity="selectTimelineIdentity"
           @open-loadout-picker="openLoadoutPicker"
@@ -517,6 +523,8 @@
           @shift-selected-actions="shiftSelectedActions"
           @delete-selected-actions="deleteSelectedActions"
           @insert-timeline-entry="insertTimelineEntry"
+          @preview-action-placement="previewActionPlacement"
+          @clear-action-placement-preview="clearActionPlacementPreview"
           @update-action-placement-mode="setActionPlacementMode"
         />
 
@@ -1321,6 +1329,7 @@ const workbenchLayout = ref(createInitialWorkbenchLayoutState());
 const activeWorkbenchLayoutResize = ref('');
 const actionLibraryTimelineEntryDrag = ref(null);
 const lastActionPlacementProposal = ref(null);
+const actionPlacementPreview = ref(null);
 const actionPlacementMode = ref(WORKBENCH_ACTION_PLACEMENT_MODES.FREE);
 const projectImportInput = ref(null);
 const pngExportSurface = ref(null);
@@ -2079,6 +2088,7 @@ function beginActionLibraryEntryPointerDrag(payload = {}) {
     startY: Number(payload.clientY) || 0,
     active: false,
     targetLaneId: '',
+    previewKey: '',
   };
   actionLibraryTimelineEntryDrag.value = {
     entry,
@@ -2121,10 +2131,28 @@ function handleActionLibraryEntryPointerMove(event) {
     event.clientY,
     state.entry
   );
+  const startMs = state.targetLaneId
+    ? resolveActionLibraryEntryDropTime(state.targetLaneId, event.clientX)
+    : 0;
+  const previewKey = state.targetLaneId + ':' + String(startMs);
+  if (state.targetLaneId && previewKey !== state.previewKey) {
+    state.previewKey = previewKey;
+    previewActionPlacement({
+      kind: 'insert',
+      entry: state.entry,
+      laneId: state.targetLaneId,
+      startMs,
+    });
+  } else if (!state.targetLaneId) {
+    state.previewKey = '';
+    clearActionPlacementPreview();
+  }
   actionLibraryTimelineEntryDrag.value = {
     entry: state.entry,
     active: true,
     targetLaneId: state.targetLaneId,
+    startMs,
+    placementStatus: actionPlacementPreview.value?.proposal?.status ?? '',
   };
 }
 
@@ -2156,6 +2184,7 @@ function completeActionLibraryEntryPointerDrag(event) {
 function cancelActionLibraryEntryPointerDrag() {
   actionLibraryEntryPointerState = null;
   actionLibraryTimelineEntryDrag.value = null;
+  clearActionPlacementPreview();
   window?.removeEventListener?.(
     'pointermove',
     handleActionLibraryEntryPointerMove
@@ -2939,6 +2968,7 @@ function setActionPlacementMode(mode) {
   }
   actionPlacementMode.value = nextMode;
   lastActionPlacementProposal.value = null;
+  clearActionPlacementPreview();
 }
 
 function isConstraintAssistedPlacement() {
@@ -3025,6 +3055,79 @@ function createPlacementPreflightIssue(code, message) {
       sourceKind: 'workbench-timeline-lane-contract',
     },
   };
+}
+
+function previewActionPlacement(payload = {}) {
+  if (payload.kind === 'move') {
+    const request = createMoveActionPlacementRequest(payload);
+    if (!request) {
+      clearActionPlacementPreview();
+      return;
+    }
+    lastActionPlacementProposal.value = request.proposal;
+    actionPlacementPreview.value = createActionPlacementPreviewState({
+      kind: 'move',
+      proposal: request.proposal,
+      requestedActions: request.requestedActions,
+    });
+    return;
+  }
+  if (payload.kind === 'insert') {
+    previewTimelineEntryPlacement(payload);
+  }
+}
+
+function createActionPlacementPreviewState({
+  kind,
+  proposal,
+  requestedActions,
+  label = '',
+  icon = null,
+} = {}) {
+  return {
+    active: true,
+    kind,
+    label,
+    icon,
+    proposal,
+    requestedActions: decorateActionPlacementPreviewActions(
+      requestedActions,
+      label,
+      icon
+    ),
+    proposedActions: decorateActionPlacementPreviewActions(
+      proposal?.proposedActions,
+      label,
+      icon
+    ),
+  };
+}
+
+function decorateActionPlacementPreviewActions(
+  actions = [],
+  fallbackLabel = '',
+  fallbackIcon = null
+) {
+  const scenarioActionById = new Map(
+    (scenario.value.actions ?? []).map(action => [action.id, action])
+  );
+  return (actions ?? []).map(action => {
+    const scenarioAction = scenarioActionById.get(action.id);
+    return {
+      ...action,
+      laneId: resolveDraftLaneId(action),
+      label:
+        scenarioAction?.name ??
+        action.name ??
+        (fallbackLabel || action.id),
+      icon: scenarioAction?.icon ?? action.icon ?? fallbackIcon,
+      timelineSlot: scenarioAction?.timelineSlot ?? 0,
+    };
+  });
+}
+
+function clearActionPlacementPreview() {
+  actionPlacementPreview.value = null;
 }
 
 function addWaitAction() {
@@ -3125,14 +3228,39 @@ function addEnemyEventAction() {
 }
 
 function insertTimelineEntry({ entry, laneId, startMs }) {
+  clearActionPlacementPreview();
+  const request = createTimelineEntryDraftRequest({
+    entry,
+    laneId,
+    startMs,
+    actionId: createNextActionId(),
+  });
+  if (!request) {
+    return false;
+  }
+  if (request.targetLane.characterId != null) {
+    actionLibraryCharacterId.value = request.actorCharacterId;
+  }
+  return Boolean(
+    addInsertedAction(request.draftPatch, {
+      requestedStartMs: request.requestedStartMs,
+    })?.committed
+  );
+}
+
+function createTimelineEntryDraftRequest({
+  entry,
+  laneId,
+  startMs,
+  actionId,
+} = {}) {
   const targetLane = resolveWorkbenchTimelineLaneTarget(laneId);
   if (
     !targetLane ||
     !isWorkbenchTimelineEntryAllowedInLane(entry, targetLane.kind)
   ) {
-    return;
+    return null;
   }
-
   const actorCharacterId = Number(
     targetLane.characterId ?? actionLibraryCharacterId.value
   );
@@ -3141,37 +3269,50 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
     0,
     project.value.time.durationMs
   );
-  if (targetLane.characterId != null) {
-    actionLibraryCharacterId.value = actorCharacterId;
-  }
-
+  let draftPatch;
   if (entry.type === ACTION_TYPES.SKILL) {
-    addSkillAction(entry, { actorCharacterId, requestedStartMs });
-    return;
+    const actionEntry = normalizeActionEntryInput(entry, actorCharacterId);
+    const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
+    const level = resolveSkillInsertLevel(actorCharacterId, skill);
+    draftPatch = {
+      id: actionId,
+      skillId: skill.id,
+      actorCharacterId,
+      level,
+      actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
+      damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
+      durationMs: actionEntry.durationMs,
+      note:
+        actionEntry.note ??
+        (actionEntry.label ?? '动作') +
+          '：' +
+          (actionEntry.rawValue ?? '倍率待补') +
+          '；真实动作帧等待 asset 或运行时捕获补充。',
+    };
+  } else {
+    draftPatch = {
+      id: actionId,
+      type: entry.type,
+      skillId: entry.skillId ?? selectedDraft.value.skillId,
+      actorCharacterId,
+      durationMs: entry.durationMs ?? 600,
+      level: selectedDraft.value.level,
+    };
   }
-
-  const commonDraft = {
-    id: createNextActionId(),
-    type: entry.type,
-    skillId: entry.skillId ?? selectedDraft.value.skillId,
-    actorCharacterId,
-    durationMs: entry.durationMs ?? 600,
-    level: selectedDraft.value.level,
-  };
   if (entry.type === ACTION_TYPES.SWITCH) {
-    Object.assign(commonDraft, {
+    Object.assign(draftPatch, {
       targetCharacterId: resolveAlternateActorCharacterId(actorCharacterId),
       note: '切换至其他角色',
     });
   } else if (entry.type === ACTION_TYPES.RESOURCE) {
-    Object.assign(commonDraft, {
+    Object.assign(draftPatch, {
       resource: 'sp',
       change: 50,
       reason: 'manual-axis-resource',
       note: '手动资源变化',
     });
   } else if (entry.type === ACTION_TYPES.KIBO_EVENT) {
-    Object.assign(commonDraft, {
+    Object.assign(draftPatch, {
       kiboId: entry.kiboId,
       eventType: entry.eventType ?? 'activation',
       name: entry.label ?? '',
@@ -3181,12 +3322,46 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
       note: entry.note ?? '奇波事件标记；效果未接入 calculator。',
     });
   } else if (entry.type === ACTION_TYPES.ENEMY_EVENT) {
-    Object.assign(commonDraft, {
+    Object.assign(draftPatch, {
       eventType: entry.eventType ?? 'phase',
       note: '敌人阶段标记',
     });
   }
-  addInsertedAction(commonDraft, { requestedStartMs });
+  return {
+    actorCharacterId,
+    draftPatch: {
+      ...draftPatch,
+      startMs: requestedStartMs,
+    },
+    requestedStartMs,
+    targetLane,
+  };
+}
+
+function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
+  const request = createTimelineEntryDraftRequest({
+    entry,
+    laneId,
+    startMs,
+    actionId: 'action-placement-preview',
+  });
+  if (!request) {
+    clearActionPlacementPreview();
+    return;
+  }
+  const requestedAction = createWorkbenchActionDraft(request.draftPatch);
+  const proposal = createActionPlacementProposal({
+    requestedActions: [requestedAction],
+    requestedLaneId: laneId,
+  });
+  lastActionPlacementProposal.value = proposal;
+  actionPlacementPreview.value = createActionPlacementPreviewState({
+    kind: 'insert',
+    proposal,
+    requestedActions: [requestedAction],
+    label: entry.label ?? '',
+    icon: entry.icon ?? null,
+  });
 }
 
 function copyAction(actionId) {
@@ -3383,6 +3558,83 @@ function moveSelectedActions({
   targetLaneId = null,
 } = {}) {
   clearSegmentSplitPreview();
+  const request = createMoveActionPlacementRequest({
+    actionIds,
+    primaryActionId,
+    offsetMs,
+    targetLaneId,
+  });
+  if (!request) {
+    return false;
+  }
+  const {
+    affectedActionIds,
+    editedActionId,
+    laneMovePlan,
+    nextActions: requestedNextActions,
+    proposal,
+    requestedActions,
+    targetLane,
+  } = request;
+  const previousAction = findActionDraftById(editedActionId);
+  const editSourceFocus = captureActionEditSourceFocus(editedActionId);
+  lastActionPlacementProposal.value = proposal;
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    requestedActions
+  );
+  if (!committedActions) {
+    return false;
+  }
+  const nextActions = isConstraintAssistedPlacement()
+    ? replacePlacementActions(actionDrafts.value, committedActions)
+    : requestedNextActions;
+  const nextActionsById = new Map(
+    nextActions.map(action => [action.id, action])
+  );
+  const changedActionIds = affectedActionIds.filter(actionId => {
+    const previous = findActionDraftById(actionId);
+    const next = nextActionsById.get(actionId);
+    return JSON.stringify(previous) !== JSON.stringify(next);
+  });
+  if (changedActionIds.length === 0) {
+    return false;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  actionDrafts.value = nextActions;
+  setWorkbenchActionSelection(affectedActionIds, editedActionId, {
+    anchorActionId: editedActionId,
+  });
+  const nextAction = findActionDraftById(editedActionId);
+  if (previousAction && nextAction) {
+    const editPatch = {};
+    if (Number(previousAction.startMs) !== Number(nextAction.startMs)) {
+      editPatch.startMs = nextAction.startMs;
+    }
+    if (laneMovePlan?.changesOwner) {
+      editPatch.laneId = targetLaneId;
+      editPatch.actorCharacterId = Number(targetLane.characterId);
+    }
+    recordActionEditSource(editedActionId, editPatch, {
+      previousAction,
+      nextAction,
+      focus: editSourceFocus,
+    });
+  }
+  if (laneMovePlan?.changesOwner) {
+    actionLibraryCharacterId.value = Number(targetLane.characterId);
+  }
+  markDraftDirty();
+  return true;
+}
+
+function createMoveActionPlacementRequest({
+  actionIds = selectedActionIds.value,
+  primaryActionId = selectedActionId.value,
+  offsetMs = 0,
+  targetLaneId = null,
+} = {}) {
   const availableActionIds = new Set(
     actionDrafts.value.map(action => action.id)
   );
@@ -3402,11 +3654,9 @@ function moveSelectedActions({
       ? selectedActionId.value
       : (affectedActionIds[0] ?? '');
   if (!editedActionId) {
-    return false;
+    return null;
   }
 
-  const previousAction = findActionDraftById(editedActionId);
-  const editSourceFocus = captureActionEditSourceFocus(editedActionId);
   const targetLane = targetLaneId
     ? resolveWorkbenchTimelineLaneTarget(targetLaneId)
     : null;
@@ -3468,55 +3718,15 @@ function moveSelectedActions({
       targetLaneId || resolveDraftLaneId(requestedActions[0]),
     preflightIssues,
   });
-  lastActionPlacementProposal.value = proposal;
-  const committedActions = applyConstraintAssistedProposal(
+  return {
+    affectedActionIds,
+    editedActionId,
+    laneMovePlan,
+    nextActions,
     proposal,
-    requestedActions
-  );
-  if (!committedActions) {
-    return false;
-  }
-  if (isConstraintAssistedPlacement()) {
-    nextActions = replacePlacementActions(actionDrafts.value, committedActions);
-  }
-  const nextActionsById = new Map(
-    nextActions.map(action => [action.id, action])
-  );
-  const changedActionIds = affectedActionIds.filter(actionId => {
-    const previous = findActionDraftById(actionId);
-    const next = nextActionsById.get(actionId);
-    return JSON.stringify(previous) !== JSON.stringify(next);
-  });
-  if (changedActionIds.length === 0) {
-    return false;
-  }
-
-  recordWorkbenchHistorySnapshot();
-  actionDrafts.value = nextActions;
-  setWorkbenchActionSelection(affectedActionIds, editedActionId, {
-    anchorActionId: editedActionId,
-  });
-  const nextAction = findActionDraftById(editedActionId);
-  if (previousAction && nextAction) {
-    const editPatch = {};
-    if (Number(previousAction.startMs) !== Number(nextAction.startMs)) {
-      editPatch.startMs = nextAction.startMs;
-    }
-    if (laneMovePlan?.changesOwner) {
-      editPatch.laneId = targetLaneId;
-      editPatch.actorCharacterId = Number(targetLane.characterId);
-    }
-    recordActionEditSource(editedActionId, editPatch, {
-      previousAction,
-      nextAction,
-      focus: editSourceFocus,
-    });
-  }
-  if (laneMovePlan?.changesOwner) {
-    actionLibraryCharacterId.value = Number(targetLane.characterId);
-  }
-  markDraftDirty();
-  return true;
+    requestedActions,
+    targetLane,
+  };
 }
 
 function copyActionBatch(batchId) {
@@ -5022,6 +5232,7 @@ function applyWorkbenchConfigurationState(state) {
 function clearWorkbenchProjectTransientState() {
   pauseTimelinePlayback();
   lastActionPlacementProposal.value = null;
+  clearActionPlacementPreview();
   selectedStateCurvePointId.value = '';
   timelineCursorFrameIndex.value = 0;
   timelinePlaybackRate.value = 1;

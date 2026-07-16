@@ -40,6 +40,122 @@ describe('TimelineGridPreview', () => {
     );
   });
 
+  it('renders requested and suggested frame guides with an assisted ghost', () => {
+    const requestedAction = {
+      ...createAction({
+        id: 'action-a',
+        name: '普通攻击',
+        actorId: 'actor-a',
+        startMs: 500,
+      }),
+      laneId: 'actor-a',
+      label: '普通攻击',
+    };
+    const suggestedAction = {
+      ...requestedAction,
+      startMs: 1000,
+    };
+    const proposal = {
+      status: 'adjustable',
+      committable: true,
+      requestedStartMs: 500,
+      suggestedStartMs: 1000,
+      adjustments: [{ message: '同轨动作占用' }],
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actionPlacementMode: 'assisted',
+        actionPlacementProposal: proposal,
+        actionPlacementPreview: {
+          active: true,
+          kind: 'move',
+          proposal,
+          requestedActions: [requestedAction],
+          proposedActions: [suggestedAction],
+        },
+      }),
+    });
+
+    const ghost = wrapper.get(
+      '[data-testid="workbench-action-placement-ghost"]'
+    );
+    expect(
+      wrapper.get(
+        '[data-testid="workbench-action-placement-request-guide"]'
+      ).text()
+    ).toBe('30F');
+    expect(
+      wrapper.get(
+        '[data-testid="workbench-action-placement-suggested-guide"]'
+      ).text()
+    ).toBe('60F');
+    expect(ghost.attributes()).toMatchObject({
+      'data-action-id': 'action-a',
+      'data-lane-id': 'actor-a',
+      'data-placement-status': 'adjustable',
+      'data-requested-start-ms': '500',
+      'data-suggested-start-ms': '1000',
+    });
+    expect(readStyleNumber(ghost.attributes('style'), 'left')).toBeCloseTo(
+      100 / 3,
+      4
+    );
+    expect(ghost.text()).toContain('普通攻击60F');
+  });
+
+  it('previews and clears an existing action pointer drag before commit', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      attachTo: document.body,
+      props: createTimelineProps(),
+    });
+    const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    lane.element.getBoundingClientRect = () => createRect(0, 0, 600, 240);
+    const action = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-a"]'
+    );
+
+    action.element.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        bubbles: true,
+        button: 0,
+        clientX: 0,
+        clientY: 20,
+      })
+    );
+    window.dispatchEvent(
+      new MouseEvent('pointermove', {
+        bubbles: true,
+        clientX: 200,
+        clientY: 20,
+      })
+    );
+    await nextTick();
+    expect(wrapper.emitted('preview-action-placement')?.at(-1)?.[0]).toEqual({
+      kind: 'move',
+      actionIds: ['action-a'],
+      primaryActionId: 'action-a',
+      offsetMs: 1000,
+      targetLaneId: null,
+    });
+
+    window.dispatchEvent(
+      new MouseEvent('pointerup', {
+        bubbles: true,
+        clientX: 200,
+        clientY: 20,
+      })
+    );
+    await nextTick();
+    expect(wrapper.emitted('move-selected-actions')?.at(-1)?.[0]).toEqual({
+      actionIds: ['action-a'],
+      primaryActionId: 'action-a',
+      offsetMs: 1000,
+      targetLaneId: null,
+    });
+    expect(wrapper.emitted('clear-action-placement-preview')).toHaveLength(1);
+    wrapper.unmount();
+  });
+
   it('renders the official icon, action kind, and frame duration on action blocks', () => {
     const action = {
       ...createAction({

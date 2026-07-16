@@ -19,6 +19,9 @@
     :data-controlled-actor-id="controlledActorAtCursor?.actorId ?? ''"
     :data-action-placement-mode="actionPlacementMode"
     :data-action-placement-status="actionPlacementProposal?.status ?? ''"
+    :data-action-placement-preview-active="
+      actionPlacementPreview?.active ? 'true' : 'false'
+    "
     data-testid="workbench-timeline-grid-preview"
   >
     <div class="panel-title">
@@ -478,6 +481,32 @@
           @contextmenu.prevent="openTimelineContextMenu"
         >
           <div
+            v-if="actionPlacementPreview?.active"
+            class="action-placement-guide requested"
+            :class="placementPreviewStatusClass"
+            :style="
+              actionPlacementGuideStyle(
+                actionPlacementPreview.proposal?.requestedStartMs
+              )
+            "
+            data-testid="workbench-action-placement-request-guide"
+          >
+            <span>{{ placementPreviewRequestedFrameLabel }}</span>
+          </div>
+          <div
+            v-if="showSuggestedPlacementGuide"
+            class="action-placement-guide suggested"
+            :class="placementPreviewStatusClass"
+            :style="
+              actionPlacementGuideStyle(
+                actionPlacementPreview.proposal?.suggestedStartMs
+              )
+            "
+            data-testid="workbench-action-placement-suggested-guide"
+          >
+            <span>{{ placementPreviewSuggestedFrameLabel }}</span>
+          </div>
+          <div
             v-if="selectedCycleSection"
             class="cycle-section-highlight"
             :style="cycleSectionHighlightStyle"
@@ -604,6 +633,35 @@
             @dragleave="handleTimelineEntryDragLeave($event, lane)"
             @drop="handleTimelineEntryDrop($event, lane)"
           >
+            <div
+              v-for="ghost in placementGhostsForLane(lane)"
+              :key="ghost.id"
+              class="action-placement-ghost"
+              :class="placementPreviewStatusClass"
+              :style="actionPlacementGhostStyle(ghost, lane)"
+              :data-action-id="ghost.id"
+              :data-lane-id="lane.id"
+              :data-placement-status="
+                actionPlacementPreview.proposal?.status ?? ''
+              "
+              :data-requested-start-ms="
+                actionPlacementPreview.proposal?.requestedStartMs ?? ''
+              "
+              :data-suggested-start-ms="
+                actionPlacementPreview.proposal?.suggestedStartMs ?? ''
+              "
+              data-testid="workbench-action-placement-ghost"
+              :title="formatActionPlacementPreviewTitle(ghost)"
+            >
+              <img
+                v-if="resolveWorkbenchActionVisualIdentity(ghost).iconUrl"
+                :src="resolveWorkbenchActionVisualIdentity(ghost).iconUrl"
+                alt=""
+                aria-hidden="true"
+              />
+              <strong>{{ ghost.label }}</strong>
+              <small>{{ msToFrame(ghost.startMs) }}F</small>
+            </div>
             <div
               v-for="interval in controlledIntervalsForLane(lane)"
               :key="interval.intervalId"
@@ -1153,6 +1211,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionPlacementPreview: {
+    type: Object,
+    default: null,
+  },
   activeActorCharacterId: {
     type: [Number, String],
     default: '',
@@ -1345,6 +1407,8 @@ const emit = defineEmits([
   'insert-timeline-entry',
   'open-loadout-picker',
   'update-action-placement-mode',
+  'preview-action-placement',
+  'clear-action-placement-preview',
 ]);
 const laneRef = ref(null);
 const scaleViewportRef = ref(null);
@@ -1353,6 +1417,7 @@ const laneRowRefs = new Map();
 const dragState = ref(null);
 const externalDropTargetLaneId = ref('');
 const timelineShelfEntryDrag = ref(null);
+const timelineEntryPlacementPreviewKey = ref('');
 const resizeState = ref(null);
 const boxSelectionState = ref(null);
 const cycleBoundaryDragState = ref(null);
@@ -1364,6 +1429,31 @@ const mainFlowActionSurface = computed(() =>
     mainFlowCommandSurface: props.mainFlowCommandSurface,
   })
 );
+const placementPreviewStatusClass = computed(() =>
+  props.actionPlacementPreview?.proposal?.status
+    ? 'status-' + props.actionPlacementPreview.proposal.status
+    : ''
+);
+const showSuggestedPlacementGuide = computed(() => {
+  const proposal = props.actionPlacementPreview?.proposal;
+  return (
+    props.actionPlacementMode === 'assisted' &&
+    proposal?.committable &&
+    Number(proposal.suggestedStartMs) !== Number(proposal.requestedStartMs)
+  );
+});
+const placementPreviewRequestedFrameLabel = computed(() => {
+  const timeMs = props.actionPlacementPreview?.proposal?.requestedStartMs;
+  return Number.isFinite(Number(timeMs))
+    ? String(msToFrame(Number(timeMs))) + 'F'
+    : '';
+});
+const placementPreviewSuggestedFrameLabel = computed(() => {
+  const timeMs = props.actionPlacementPreview?.proposal?.suggestedStartMs;
+  return Number.isFinite(Number(timeMs))
+    ? String(msToFrame(Number(timeMs))) + 'F'
+    : '';
+});
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -2456,6 +2546,69 @@ function actionStyle(action, lane) {
   };
 }
 
+function placementGhostsForLane(lane) {
+  const preview = props.actionPlacementPreview;
+  if (!preview?.active) {
+    return [];
+  }
+  const useSuggestedActions =
+    props.actionPlacementMode === 'assisted' &&
+    preview.proposal?.committable &&
+    preview.proposedActions?.length;
+  const actions = useSuggestedActions
+    ? preview.proposedActions
+    : preview.requestedActions;
+  return (actions ?? []).filter(action => action.laneId === lane.id);
+}
+
+function actionPlacementGhostStyle(action, lane) {
+  const left = clampPercent(
+    (Number(action.startMs) / props.durationMs) * 100
+  );
+  return {
+    left: String(left) + '%',
+    top: String(getTimelineActionTop(lane, action.timelineSlot)) + 'px',
+    width: String(getTimelineActionWidthPercent(action, left)) + '%',
+    transform: left >= 100 ? 'translateX(-100%)' : 'none',
+  };
+}
+
+function actionPlacementGuideStyle(timeMs) {
+  return {
+    left:
+      String(
+        clampPercent((Number(timeMs) / props.durationMs) * 100)
+      ) + '%',
+  };
+}
+
+function formatActionPlacementPreviewTitle(action) {
+  const proposal = props.actionPlacementPreview?.proposal;
+  const statusLabel = {
+    valid: '位置合法',
+    adjustable: '已有确定建议位置',
+    blocked:
+      props.actionPlacementMode === 'free'
+        ? '存在冲突，自由模式仍保留请求位置'
+        : '当前位置不可提交',
+    unresolved: '条件待确认，保持请求位置',
+  }[proposal?.status] ?? '位置预览';
+  const requestedFrame = msToFrame(proposal?.requestedStartMs ?? 0);
+  const suggestedFrame = msToFrame(proposal?.suggestedStartMs ?? 0);
+  const frameText =
+    requestedFrame === suggestedFrame
+      ? String(requestedFrame) + 'F'
+      : String(requestedFrame) + 'F -> ' + String(suggestedFrame) + 'F';
+  const issue =
+    proposal?.conflicts?.[0]?.message ??
+    proposal?.adjustments?.[0]?.message ??
+    proposal?.unresolved?.[0]?.message ??
+    '';
+  return [action.label, statusLabel, frameText, issue]
+    .filter(Boolean)
+    .join(' · ');
+}
+
 function getTimelineActionWidthPercent(action, leftPercent = 0) {
   const durationMs = Math.max(
     MIN_ACTION_DURATION_MS,
@@ -3276,6 +3429,7 @@ function beginDrag(event, action) {
     minOffsetMs: -minStartMs,
     maxOffsetMs: Math.max(-minStartMs, props.durationMs - maxEndMs),
     currentOffsetMs: 0,
+    previewKey: '',
   };
 
   window.addEventListener('pointermove', handleDragMove);
@@ -3354,30 +3508,47 @@ function handleDragMove(event) {
     return;
   }
 
+  let targetLaneId = dragState.value.targetLaneId;
   if (dragState.value.canChangeLane) {
     const draggedActions = resolveDraggedActions(dragState.value);
-    dragState.value = {
-      ...dragState.value,
-      targetLaneId: resolveLegalBatchLaneAtPoint(
-        event.clientY,
-        draggedActions,
-        actionsById.value.get(dragState.value.actionId)
-      ),
-    };
+    targetLaneId = resolveLegalBatchLaneAtPoint(
+      event.clientY,
+      draggedActions,
+      actionsById.value.get(dragState.value.actionId)
+    );
   }
 
   const deltaMs =
     ((event.clientX - dragState.value.initialClientX) /
       dragState.value.laneWidth) *
     props.durationMs;
+  const currentOffsetMs = clampNumber(
+    snapTimeMs(deltaMs),
+    dragState.value.minOffsetMs,
+    dragState.value.maxOffsetMs
+  );
+  const targetMoveLaneId =
+    targetLaneId && targetLaneId !== dragState.value.initialLaneId
+      ? targetLaneId
+      : null;
+  const previewKey =
+    String(currentOffsetMs) + ':' + String(targetMoveLaneId ?? '');
+  const shouldEmitPreview = previewKey !== dragState.value.previewKey;
   dragState.value = {
     ...dragState.value,
-    currentOffsetMs: clampNumber(
-      snapTimeMs(deltaMs),
-      dragState.value.minOffsetMs,
-      dragState.value.maxOffsetMs
-    ),
+    targetLaneId,
+    currentOffsetMs,
+    previewKey,
   };
+  if (shouldEmitPreview) {
+    emit('preview-action-placement', {
+      kind: 'move',
+      actionIds: dragState.value.actionIds,
+      primaryActionId: dragState.value.actionId,
+      offsetMs: currentOffsetMs,
+      targetLaneId: targetMoveLaneId,
+    });
+  }
 }
 
 function endDrag(event) {
@@ -3418,6 +3589,7 @@ function endDrag(event) {
   }
 
   dragState.value = null;
+  emit('clear-action-placement-preview');
   window.removeEventListener('pointermove', handleDragMove);
   window.removeEventListener('pointerup', endDrag);
   window.removeEventListener('pointercancel', endDrag);
@@ -3934,6 +4106,22 @@ function handleTimelineEntryDragOver(event, lane) {
     event.dataTransfer.dropEffect = 'copy';
   }
   externalDropTargetLaneId.value = lane.id;
+  const startMs = resolveTimelineEntryDropStartMs(event, lane);
+  const previewKey =
+    lane.id +
+    ':' +
+    String(startMs) +
+    ':' +
+    String(entry.skillId ?? entry.eventType ?? entry.type);
+  if (previewKey !== timelineEntryPlacementPreviewKey.value) {
+    timelineEntryPlacementPreviewKey.value = previewKey;
+    emit('preview-action-placement', {
+      kind: 'insert',
+      entry,
+      laneId: lane.id,
+      startMs,
+    });
+  }
 }
 
 function handleTimelineEntryDragLeave(event, lane) {
@@ -3942,6 +4130,8 @@ function handleTimelineEntryDragLeave(event, lane) {
     !event.currentTarget?.contains?.(event.relatedTarget)
   ) {
     externalDropTargetLaneId.value = '';
+    timelineEntryPlacementPreviewKey.value = '';
+    emit('clear-action-placement-preview');
   }
 }
 
@@ -3951,16 +4141,7 @@ function handleTimelineEntryDrop(event, lane) {
     return;
   }
   event.preventDefault();
-  const rect = laneRowRefs.get(lane.id)?.getBoundingClientRect?.();
-  const startMs = rect?.width
-    ? clampNumber(
-        snapTimeMs(
-          ((event.clientX - rect.left) / rect.width) * props.durationMs
-        ),
-        0,
-        props.durationMs - WORKBENCH_FRAME_MS
-      )
-    : 0;
+  const startMs = resolveTimelineEntryDropStartMs(event, lane);
   emit('insert-timeline-entry', {
     entry,
     laneId: lane.id,
@@ -3969,6 +4150,21 @@ function handleTimelineEntryDrop(event, lane) {
     startMs,
   });
   externalDropTargetLaneId.value = '';
+  timelineEntryPlacementPreviewKey.value = '';
+  emit('clear-action-placement-preview');
+}
+
+function resolveTimelineEntryDropStartMs(event, lane) {
+  const rect = laneRowRefs.get(lane.id)?.getBoundingClientRect?.();
+  return rect?.width
+    ? clampNumber(
+        snapTimeMs(
+          ((event.clientX - rect.left) / rect.width) * props.durationMs
+        ),
+        0,
+        props.durationMs - WORKBENCH_FRAME_MS
+      )
+    : 0;
 }
 
 function resolveTimelineEntryDrag(event) {
@@ -4002,6 +4198,8 @@ function beginTimelineShelfEntryDrag(event, source) {
 function endTimelineShelfEntryDrag() {
   timelineShelfEntryDrag.value = null;
   externalDropTargetLaneId.value = '';
+  timelineEntryPlacementPreviewKey.value = '';
+  emit('clear-action-placement-preview');
 }
 
 function insertTimelineShelfEntry(entry) {
@@ -4051,6 +4249,7 @@ onBeforeUnmount(() => {
   cancelBoxSelection();
   endCycleBoundaryDrag();
   endTimelineCursorDrag();
+  emit('clear-action-placement-preview');
 });
 </script>
 
@@ -4623,6 +4822,47 @@ h2 {
   pointer-events: none;
 }
 
+.action-placement-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 6;
+  width: 0;
+  border-left: 1px dashed currentColor;
+  color: #70d6b7;
+  pointer-events: none;
+}
+
+.action-placement-guide.suggested {
+  border-left-style: solid;
+  border-left-width: 2px;
+}
+
+.action-placement-guide.status-adjustable {
+  color: #f2c56b;
+}
+
+.action-placement-guide.status-blocked {
+  color: #ef767a;
+}
+
+.action-placement-guide.status-unresolved {
+  color: #9aa7b0;
+}
+
+.action-placement-guide span {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  padding: 1px 3px;
+  border-radius: 2px;
+  background: rgba(11, 15, 18, 0.9);
+  color: currentColor;
+  font-size: 9px;
+  line-height: 13px;
+  white-space: nowrap;
+}
+
 .timeline-frame-cursor {
   position: absolute;
   top: 0;
@@ -5073,6 +5313,64 @@ h2 {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
   cursor: pointer;
   z-index: 2;
+}
+
+.action-placement-ghost {
+  position: absolute;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: 42px;
+  min-width: 36px;
+  padding: 4px 6px;
+  overflow: hidden;
+  border: 1px solid #70d6b7;
+  border-radius: 5px;
+  background: rgba(34, 84, 74, 0.9);
+  color: #f3fffd;
+  box-shadow: 0 0 0 1px rgba(112, 214, 183, 0.24);
+  pointer-events: none;
+}
+
+.action-placement-ghost.status-adjustable {
+  border-color: #f2c56b;
+  background: rgba(101, 78, 31, 0.92);
+  box-shadow: 0 0 0 1px rgba(242, 197, 107, 0.24);
+}
+
+.action-placement-ghost.status-blocked {
+  border-color: #ef767a;
+  background: rgba(105, 39, 44, 0.92);
+  box-shadow: 0 0 0 1px rgba(239, 118, 122, 0.24);
+}
+
+.action-placement-ghost.status-unresolved {
+  border-color: #9aa7b0;
+  background: rgba(62, 71, 78, 0.92);
+}
+
+.action-placement-ghost img {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+}
+
+.action-placement-ghost strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-placement-ghost small {
+  color: inherit;
+  font-size: 9px;
+  opacity: 0.78;
 }
 
 .action-block.cursor-active {

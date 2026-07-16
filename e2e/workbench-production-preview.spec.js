@@ -1481,6 +1481,15 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     'scenario-0002'
   );
   await expectEmptyTimeline();
+  await page
+    .locator(
+      '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+    )
+    .click();
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-action-placement-mode',
+    'assisted'
+  );
 
   await changeM2TeamSlot(page, 2, 101010);
   const kiboBindings = [
@@ -2070,6 +2079,220 @@ test('[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m3-cooldown-stacking-narrow.png' });
+});
+
+test('[m4-constraint-placement] previews, commits, rejects, and restores real pointer scheduling', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]'
+  );
+  const cooldownSkill = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10900112"][data-action-kind="star-skill"]'
+  );
+  const timelineActions = timeline.getByTestId('workbench-timeline-action');
+  const assistedMode = page.locator(
+    '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+  );
+  const freeMode = page.locator(
+    '[data-testid="workbench-action-placement-mode-option"][data-mode="free"]'
+  );
+
+  await assistedMode.click();
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-mode',
+    'assisted'
+  );
+  await beginPointerDragTo(page, cooldownSkill, actorLane, {
+    targetPosition: { x: 280, y: 82 },
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-preview-active',
+    'true'
+  );
+  await expect(
+    timeline.getByTestId('workbench-action-placement-ghost')
+  ).toBeVisible();
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(2);
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-preview-active',
+    'false'
+  );
+
+  const firstCooldownAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  const firstCooldownBox = await firstCooldownAction.boundingBox();
+  const actorLaneBox = await actorLane.boundingBox();
+  expect(firstCooldownBox).toBeTruthy();
+  expect(actorLaneBox).toBeTruthy();
+  await beginPointerDragTo(page, cooldownSkill, actorLane, {
+    targetPosition: {
+      x: firstCooldownBox.x - actorLaneBox.x + firstCooldownBox.width / 2,
+      y: 82,
+    },
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'adjustable'
+  );
+  await expect(
+    timeline.getByTestId('workbench-action-placement-request-guide')
+  ).toBeVisible();
+  await expect(
+    timeline.getByTestId('workbench-action-placement-suggested-guide')
+  ).toBeVisible();
+  await expect(
+    timeline.getByTestId('workbench-action-placement-ghost')
+  ).toHaveAttribute('data-placement-status', 'adjustable');
+  await page.screenshot({
+    path: 'reports/m4-constraint-placement-desktop.png',
+  });
+  await page.mouse.up();
+
+  const assistedCooldownAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0003"]'
+  );
+  await expect(assistedCooldownAction).toHaveAttribute(
+    'data-readiness-status',
+    'ready'
+  );
+  const firstStartMs = Number(
+    await firstCooldownAction.getAttribute('data-start-ms')
+  );
+  const assistedStartMs = Number(
+    await assistedCooldownAction.getAttribute('data-start-ms')
+  );
+  expect(assistedStartMs).toBeGreaterThan(firstStartMs);
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timelineActions).toHaveCount(2);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(timelineActions).toHaveCount(3);
+
+  const repeatedCooldownTarget = {
+    x: firstCooldownBox.x - actorLaneBox.x + firstCooldownBox.width / 2,
+    y: 82,
+  };
+  await dragLocatorTo(page, cooldownSkill, actorLane, {
+    targetPosition: repeatedCooldownTarget,
+  });
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+    )
+  ).toHaveAttribute('data-readiness-status', 'ready');
+  await dragLocatorTo(page, cooldownSkill, actorLane, {
+    targetPosition: repeatedCooldownTarget,
+  });
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0005"]'
+    )
+  ).toHaveAttribute('data-readiness-status', 'ready');
+
+  const actionCountBeforeBlockedDrop = await timelineActions.count();
+  await beginPointerDragTo(page, cooldownSkill, actorLane, {
+    targetPosition: repeatedCooldownTarget,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-preview-active',
+    'true'
+  );
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'blocked'
+  );
+  await expect(
+    timeline.getByTestId('workbench-action-placement-ghost')
+  ).toHaveAttribute('data-placement-status', 'blocked');
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(actionCountBeforeBlockedDrop);
+
+  await freeMode.click();
+  await expect(workbench).toHaveAttribute('data-action-placement-mode', 'free');
+  const restoredAssistedAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0003"]'
+  );
+  const freeTargetBox = await firstCooldownAction.boundingBox();
+  const freeLaneBox = await actorLane.boundingBox();
+  await beginPointerDragTo(page, restoredAssistedAction, actorLane, {
+    targetPosition: {
+      x: freeTargetBox.x - freeLaneBox.x + freeTargetBox.width / 2,
+      y: 82,
+    },
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'adjustable'
+  );
+  await page.mouse.up();
+  await expect(restoredAssistedAction).toHaveAttribute(
+    'data-readiness-status',
+    'blocked'
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(restoredAssistedAction).toHaveAttribute(
+    'data-readiness-status',
+    'ready'
+  );
+
+  await assistedMode.click();
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await restoredAssistedAction.scrollIntoViewIfNeeded();
+  const narrowSourceBox = await restoredAssistedAction.boundingBox();
+  const narrowLaneBox = await actorLane.boundingBox();
+  const narrowViewportBox = await timeline
+    .getByTestId('workbench-timeline-viewport')
+    .boundingBox();
+  expect(narrowSourceBox).toBeTruthy();
+  expect(narrowLaneBox).toBeTruthy();
+  expect(narrowViewportBox).toBeTruthy();
+  const narrowSourceCenterX =
+    narrowSourceBox.x + narrowSourceBox.width / 2;
+  const narrowVisibleLeft = Math.max(
+    narrowLaneBox.x + 12,
+    narrowViewportBox.x + 12
+  );
+  const narrowVisibleRight = Math.min(
+    narrowLaneBox.x + narrowLaneBox.width - 12,
+    narrowViewportBox.x + narrowViewportBox.width - 12
+  );
+  let narrowTargetClientX = Math.min(
+    narrowVisibleRight,
+    narrowSourceCenterX + 48
+  );
+  if (Math.abs(narrowTargetClientX - narrowSourceCenterX) < 20) {
+    narrowTargetClientX = Math.max(
+      narrowVisibleLeft,
+      narrowSourceCenterX - 48
+    );
+  }
+  await beginPointerDragTo(page, restoredAssistedAction, actorLane, {
+    targetPosition: {
+      x: narrowTargetClientX - narrowLaneBox.x,
+      y: narrowSourceBox.y - narrowLaneBox.y + narrowSourceBox.height / 2,
+    },
+    scrollTargetIntoView: false,
+  });
+  await expect(
+    timeline.getByTestId('workbench-action-placement-ghost')
+  ).toBeVisible();
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/m4-constraint-placement-narrow.png',
+  });
+  await page.mouse.up();
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-preview-active',
+    'false'
+  );
 });
 
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
@@ -5088,7 +5311,26 @@ async function dragLocatorTo(
   target,
   { sourcePosition = null, targetPosition = null } = {}
 ) {
-  await target.scrollIntoViewIfNeeded();
+  await beginPointerDragTo(page, source, target, {
+    sourcePosition,
+    targetPosition,
+  });
+  await page.mouse.up();
+}
+
+async function beginPointerDragTo(
+  page,
+  source,
+  target,
+  {
+    sourcePosition = null,
+    targetPosition = null,
+    scrollTargetIntoView = true,
+  } = {}
+) {
+  if (scrollTargetIntoView) {
+    await target.scrollIntoViewIfNeeded();
+  }
   const scrolledWithinLibrary = await source.evaluate(element => {
     const scrollContainer = element.closest('.action-library');
     if (!scrollContainer) {
@@ -5122,7 +5364,6 @@ async function dragLocatorTo(
   await page.mouse.down();
   await page.mouse.move(from.x + 8, from.y + 2, { steps: 3 });
   await page.mouse.move(to.x, to.y, { steps: 16 });
-  await page.mouse.up();
 }
 
 async function dragWorkbenchFile(page, { name, mimeType, buffer }) {

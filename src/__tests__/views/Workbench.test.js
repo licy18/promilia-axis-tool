@@ -1955,6 +1955,74 @@ describe('Workbench view', () => {
     ).toBe('0');
   });
 
+  it('shows the unified requested and suggested preview without mutating actions', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await wrapper
+      .find(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
+    await nextTick();
+    const secondAction = () =>
+      wrapper.get(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+      );
+    const originalStartMs = Number(
+      secondAction().attributes('data-start-ms')
+    );
+    const timeline = wrapper.getComponent(TimelineGridPreview);
+
+    timeline.vm.$emit('preview-action-placement', {
+      kind: 'move',
+      actionIds: ['action-0002'],
+      primaryActionId: 'action-0002',
+      offsetMs: -originalStartMs,
+      targetLaneId: null,
+    });
+    await nextTick();
+
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-action-placement-preview-active': 'true',
+      'data-action-placement-status': 'adjustable',
+    });
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-action-placement-request-guide"]'
+      ).exists()
+    ).toBe(true);
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-action-placement-suggested-guide"]'
+      ).exists()
+    ).toBe(true);
+    expect(
+      wrapper.findAll('[data-testid="workbench-action-placement-ghost"]')
+    ).toHaveLength(1);
+    expect(Number(secondAction().attributes('data-start-ms'))).toBe(
+      originalStartMs
+    );
+
+    timeline.vm.$emit('clear-action-placement-preview');
+    await nextTick();
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-action-placement-preview-active': 'false',
+    });
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-action-placement-ghost"]'
+      ).exists()
+    ).toBe(false);
+  });
+
   it('prioritizes runtime detail in the side inspector while reviewing results', async () => {
     const wrapper = mount(Workbench, {
       global: {
