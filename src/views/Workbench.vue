@@ -38,6 +38,10 @@
     :data-library-entry-drag-target-lane-id="
       actionLibraryTimelineEntryDrag?.targetLaneId ?? ''
     "
+    :data-action-placement-mode="actionPlacementMode"
+    :data-action-placement-status="
+      lastActionPlacementProposal?.status ?? ''
+    "
   >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
@@ -480,6 +484,8 @@
           :action-readiness-timeline="simulationResult.actionReadinessTimeline"
           :main-flow-command-surface="mainFlowCommandSurface"
           :external-timeline-entry-drag="actionLibraryTimelineEntryDrag"
+          :action-placement-mode="actionPlacementMode"
+          :action-placement-proposal="lastActionPlacementProposal"
           @select-action="selectAction"
           @select-identity="selectTimelineIdentity"
           @open-loadout-picker="openLoadoutPicker"
@@ -511,6 +517,7 @@
           @shift-selected-actions="shiftSelectedActions"
           @delete-selected-actions="deleteSelectedActions"
           @insert-timeline-entry="insertTimelineEntry"
+          @update-action-placement-mode="setActionPlacementMode"
         />
 
         <WorkbenchCycleSectionPanel
@@ -1050,6 +1057,8 @@ import {
 } from '../domain/workbenchActionClipboard';
 import {
   createWorkbenchActionPlacementProposal,
+  expandWorkbenchPlacementActionIds,
+  WORKBENCH_ACTION_PLACEMENT_MODES,
   WORKBENCH_ACTION_PLACEMENT_STATUSES,
 } from '../domain/workbenchActionPlacement';
 import {
@@ -1225,7 +1234,7 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   placeholder: false,
 };
 const AUTO_DELAY_NOTE_PATTERN =
-  /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
+  /^(?:自动推迟：同轨已有动作占用，已从|约束辅助：已从) \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDemoDraftState();
 const selection = ref({ ...initialDraft.selection });
 const teamSlots = ref(initialDraft.teamSlots.map(slot => ({ ...slot })));
@@ -1312,6 +1321,7 @@ const workbenchLayout = ref(createInitialWorkbenchLayoutState());
 const activeWorkbenchLayoutResize = ref('');
 const actionLibraryTimelineEntryDrag = ref(null);
 const lastActionPlacementProposal = ref(null);
+const actionPlacementMode = ref(WORKBENCH_ACTION_PLACEMENT_MODES.FREE);
 const projectImportInput = ref(null);
 const pngExportSurface = ref(null);
 const pngExporting = ref(false);
@@ -2666,6 +2676,16 @@ function updateSegmentSplitOptions(patch) {
 function updateActionTime({ actionId, startMs }) {
   clearSegmentSplitPreview();
   const previousAction = findActionDraftById(actionId);
+  if (!previousAction) {
+    return false;
+  }
+  if (isConstraintAssistedPlacement()) {
+    return moveSelectedActions({
+      actionIds: [actionId],
+      primaryActionId: actionId,
+      offsetMs: Number(startMs) - Number(previousAction.startMs),
+    });
+  }
   const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
   const nextActions = actionDrafts.value.map(action => {
@@ -2697,6 +2717,7 @@ function updateActionTime({ actionId, startMs }) {
     }
   );
   markDraftDirty();
+  return true;
 }
 
 function updateActionDuration({ actionId, durationMs }) {
@@ -2828,6 +2849,61 @@ function confirmSkillSegmentActions() {
   }
 
   const generationBatch = createSegmentGenerationBatch(preview);
+  if (isConstraintAssistedPlacement()) {
+    const usedActionIds = new Set(
+      actionDrafts.value.map(action => action.id)
+    );
+    const requestedActions = preview.actions.map(item =>
+      createWorkbenchActionDraft({
+        id: createNextActionIdFromUsedIds(usedActionIds),
+        skillId: preview.skillId,
+        actorCharacterId: preview.actorCharacterId,
+        level: preview.level,
+        actionVariantIndex: item.actionVariantIndex,
+        damageSegmentIndex: item.damageSegmentIndex,
+        startMs: item.requestedStartMs,
+        note:
+          '动作形态拆分：' +
+          formatActionVariantPreview(item) +
+          '；非真实命中帧。',
+        generationBatch,
+      })
+    );
+    const proposal = createActionPlacementProposal({
+      requestedActions,
+      requestedLaneId: resolveDraftLaneId(requestedActions[0]),
+    });
+    lastActionPlacementProposal.value = proposal;
+    const committedActions = applyConstraintAssistedProposal(
+      proposal,
+      requestedActions
+    );
+    if (!committedActions) {
+      return;
+    }
+    const insertIndex = resolveInsertIndex();
+    recordWorkbenchHistorySnapshot();
+    const runtimeReviewState = captureActionMutationRuntimeReviewState();
+    actionDrafts.value = [
+      ...actionDrafts.value.slice(0, insertIndex),
+      ...committedActions,
+      ...actionDrafts.value.slice(insertIndex),
+    ];
+    setWorkbenchActionSelection(
+      committedActions.map(action => action.id),
+      committedActions[0].id,
+      { anchorActionId: committedActions[0].id }
+    );
+    applyActionMutationRuntimeSyncRequest({
+      actionId: committedActions[0].id,
+      runtimeReviewState,
+      selectedActionChanged: true,
+      affectedActionIds: committedActions.map(action => action.id),
+    });
+    markDraftDirty();
+    clearSegmentSplitPreview();
+    return;
+  }
   preview.actions.forEach(item => {
     addInsertedAction(
       {
@@ -2850,6 +2926,105 @@ function confirmSkillSegmentActions() {
 
 function clearSegmentSplitPreview() {
   segmentSplitPreview.value = null;
+}
+
+function setActionPlacementMode(mode) {
+  const nextMode = Object.values(WORKBENCH_ACTION_PLACEMENT_MODES).includes(
+    mode
+  )
+    ? mode
+    : WORKBENCH_ACTION_PLACEMENT_MODES.FREE;
+  if (actionPlacementMode.value === nextMode) {
+    return;
+  }
+  actionPlacementMode.value = nextMode;
+  lastActionPlacementProposal.value = null;
+}
+
+function isConstraintAssistedPlacement() {
+  return actionPlacementMode.value === WORKBENCH_ACTION_PLACEMENT_MODES.ASSISTED;
+}
+
+function applyConstraintAssistedProposal(proposal, requestedActions) {
+  if (!isConstraintAssistedPlacement()) {
+    return requestedActions;
+  }
+  if (!proposal?.committable) {
+    draftStatus.value =
+      '约束辅助：' +
+      (proposal?.conflicts?.[0]?.message ?? '当前位置无法提交');
+    return null;
+  }
+  const proposedById = new Map(
+    (proposal.proposedActions ?? []).map(action => [action.id, action])
+  );
+  return requestedActions.map(action => ({
+    ...action,
+    ...(proposedById.get(action.id) ?? {}),
+  }));
+}
+
+function resolveCommittedInsertPlacement(placement) {
+  if (!isConstraintAssistedPlacement()) {
+    return placement;
+  }
+  const proposedActions = applyConstraintAssistedProposal(
+    placement?.proposal,
+    placement?.proposal?.proposedActions ?? []
+  );
+  const proposedAction = proposedActions?.[0];
+  if (!proposedAction) {
+    return null;
+  }
+  const adjustment = placement.proposal.adjustments?.[0];
+  return {
+    ...placement,
+    assisted: true,
+    autoDelayed: proposedAction.startMs > placement.requestedStartMs,
+    conflictActionIds: [
+      ...new Set(
+        (placement.proposal.adjustments ?? [])
+          .flatMap(issue => [
+            issue?.actionId,
+            issue?.blockingActionId,
+            ...(issue?.actionIds ?? []),
+          ])
+          .filter(
+            actionId =>
+              actionId && actionId !== placement.proposal.requestedActionIds[0]
+          )
+      ),
+    ],
+    startMs: proposedAction.startMs,
+    reason: adjustment?.code ?? 'constraint-assisted',
+  };
+}
+
+function replacePlacementActions(actions, proposedActions) {
+  const proposedById = new Map(
+    (proposedActions ?? []).map(action => [action.id, action])
+  );
+  return actions.map(action =>
+    proposedById.has(action.id)
+      ? createWorkbenchActionDraft({
+          ...action,
+          ...proposedById.get(action.id),
+          ...clearInsertionForManualEdit(action),
+        })
+      : action
+  );
+}
+
+function createPlacementPreflightIssue(code, message) {
+  return {
+    schemaVersion: 1,
+    code,
+    status: WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED,
+    message,
+    source: {
+      sourceKind: 'workbench-timeline-lane-contract',
+    },
+  };
 }
 
 function addWaitAction() {
@@ -3024,24 +3199,34 @@ function copyAction(actionId) {
     return;
   }
 
-  recordWorkbenchHistorySnapshot();
-  const runtimeReviewState = captureActionMutationRuntimeReviewState();
-  const nextAction = createWorkbenchActionDraft({
+  const requestedAction = createWorkbenchActionDraft({
     ...sourceAction,
     id: createNextActionId(),
-    startMs: clampNumber(
-      sourceAction.startMs + 1000,
-      0,
-      project.value.time.durationMs
-    ),
+    startMs: isConstraintAssistedPlacement()
+      ? sourceAction.startMs + 1000
+      : clampNumber(
+          sourceAction.startMs + 1000,
+          0,
+          project.value.time.durationMs
+        ),
     note: stripAutoDelayNote(sourceAction.note),
     insertion: null,
     generationBatch: null,
   });
-  lastActionPlacementProposal.value = createActionPlacementProposal({
-    requestedActions: [nextAction],
-    requestedLaneId: resolveDraftLaneId(nextAction),
+  const proposal = createActionPlacementProposal({
+    requestedActions: [requestedAction],
+    requestedLaneId: resolveDraftLaneId(requestedAction),
   });
+  lastActionPlacementProposal.value = proposal;
+  const nextAction = applyConstraintAssistedProposal(proposal, [
+    requestedAction,
+  ])?.[0];
+  if (!nextAction) {
+    return false;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, sourceIndex + 1),
     nextAction,
@@ -3056,6 +3241,7 @@ function copyAction(actionId) {
     affectedActionIds: [nextAction.id],
   });
   markDraftDirty();
+  return true;
 }
 
 function copySelectedActions({ actionIds = selectedActionIds.value } = {}) {
@@ -3081,6 +3267,7 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
     timelineDurationMs: project.value.time.durationMs,
     targetStartMs,
     pasteGapMs: NEW_ACTION_INSERT_GAP_MS,
+    clampToTimeline: !isConstraintAssistedPlacement(),
     createActionId: usedActionIds =>
       createNextActionIdFromUsedIds(usedActionIds),
     createRelationId: usedRelationIds =>
@@ -3094,18 +3281,31 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
     return null;
   }
 
-  const nextRelations = normalizeWorkbenchActionRelations(
+  let nextRelations = normalizeWorkbenchActionRelations(
     [...actionRelations.value, ...pasteResult.pastedRelations],
     [...actionDrafts.value, ...pasteResult.pastedActions]
   );
-  lastActionPlacementProposal.value = createActionPlacementProposal({
+  const proposal = createActionPlacementProposal({
     requestedActions: pasteResult.pastedActions,
     relations: nextRelations,
     requestedLaneId: resolveDraftLaneId(pasteResult.pastedActions[0]),
   });
+  lastActionPlacementProposal.value = proposal;
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    pasteResult.pastedActions
+  );
+  if (!committedActions) {
+    return null;
+  }
+  nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...pasteResult.pastedRelations],
+    [...actionDrafts.value, ...committedActions]
+  );
+
   recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
-  actionDrafts.value = [...actionDrafts.value, ...pasteResult.pastedActions];
+  actionDrafts.value = [...actionDrafts.value, ...committedActions];
   actionRelations.value = nextRelations;
   actionClipboard.value = pasteResult.nextClipboard;
   setWorkbenchActionSelection(
@@ -3124,7 +3324,10 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
     affectedActionIds: pasteResult.selectedActionIds,
   });
   markDraftDirty();
-  return pasteResult;
+  return {
+    ...pasteResult,
+    pastedActions: committedActions,
+  };
 }
 
 function deleteSelectedActions({ actionIds = selectedActionIds.value } = {}) {
@@ -3183,9 +3386,16 @@ function moveSelectedActions({
   const availableActionIds = new Set(
     actionDrafts.value.map(action => action.id)
   );
-  const affectedActionIds = [...new Set(actionIds)].filter(actionId =>
+  const requestedActionIds = [...new Set(actionIds)].filter(actionId =>
     availableActionIds.has(actionId)
   );
+  const affectedActionIds = isConstraintAssistedPlacement()
+    ? expandWorkbenchPlacementActionIds({
+        actions: actionDrafts.value,
+        actionIds: requestedActionIds,
+        actionRelations: actionRelations.value,
+      })
+    : requestedActionIds;
   const editedActionId = affectedActionIds.includes(primaryActionId)
     ? primaryActionId
     : affectedActionIds.includes(selectedActionId.value)
@@ -3197,13 +3407,6 @@ function moveSelectedActions({
 
   const previousAction = findActionDraftById(editedActionId);
   const editSourceFocus = captureActionEditSourceFocus(editedActionId);
-  const shifted = shiftWorkbenchActionDrafts(
-    actionDrafts.value,
-    affectedActionIds,
-    offsetMs,
-    project.value.time.durationMs
-  );
-  let nextActions = shifted.actions;
   const targetLane = targetLaneId
     ? resolveWorkbenchTimelineLaneTarget(targetLaneId)
     : null;
@@ -3217,6 +3420,24 @@ function moveSelectedActions({
         getLaneOwnerId: lane => lane.characterId,
       })
     : null;
+  const preflightIssues =
+    targetLaneId && !laneMovePlan
+      ? [
+          createPlacementPreflightIssue(
+            'placement-lane-move-incompatible',
+            '所选动作组不能整体移动到目标轨道'
+          ),
+        ]
+      : [];
+  const shifted = isConstraintAssistedPlacement()
+    ? null
+    : shiftWorkbenchActionDrafts(
+        actionDrafts.value,
+        affectedActionIds,
+        offsetMs,
+        project.value.time.durationMs
+      );
+  let nextActions = shifted?.actions ?? actionDrafts.value;
   if (laneMovePlan?.changesOwner) {
     nextActions = nextActions.map(action =>
       affectedActionIds.includes(action.id)
@@ -3228,15 +3449,36 @@ function moveSelectedActions({
     );
   }
 
-  lastActionPlacementProposal.value = createActionPlacementProposal({
-    requestedActions: nextActions.filter(action =>
-      affectedActionIds.includes(action.id)
-    ),
+  const requestedOffsetMs = snapMsToFrame(Number(offsetMs) || 0);
+  const requestedActions = nextActions
+    .filter(action => affectedActionIds.includes(action.id))
+    .map(action =>
+      isConstraintAssistedPlacement()
+        ? {
+            ...action,
+            startMs: snapMsToFrame(
+              Number(action.startMs) + requestedOffsetMs
+            ),
+          }
+        : action
+    );
+  const proposal = createActionPlacementProposal({
+    requestedActions,
     requestedLaneId:
-      targetLaneId || resolveDraftLaneId(nextActions.find(action =>
-        affectedActionIds.includes(action.id)
-      )),
+      targetLaneId || resolveDraftLaneId(requestedActions[0]),
+    preflightIssues,
   });
+  lastActionPlacementProposal.value = proposal;
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    requestedActions
+  );
+  if (!committedActions) {
+    return false;
+  }
+  if (isConstraintAssistedPlacement()) {
+    nextActions = replacePlacementActions(actionDrafts.value, committedActions);
+  }
   const nextActionsById = new Map(
     nextActions.map(action => [action.id, action])
   );
@@ -3257,7 +3499,7 @@ function moveSelectedActions({
   const nextAction = findActionDraftById(editedActionId);
   if (previousAction && nextAction) {
     const editPatch = {};
-    if (shifted.appliedOffsetMs) {
+    if (Number(previousAction.startMs) !== Number(nextAction.startMs)) {
       editPatch.startMs = nextAction.startMs;
     }
     if (laneMovePlan?.changesOwner) {
@@ -3303,11 +3545,15 @@ function copyActionBatch(batchId) {
       return startMs + resolveDraftDurationMs(action);
     })
   );
-  const offsetMs = clampNumber(
-    sourceMaxEndMs + NEW_ACTION_INSERT_GAP_MS - sourceMinStartMs,
-    -sourceMinStartMs,
-    project.value.time.durationMs - sourceMaxStartMs
-  );
+  const requestedOffsetMs =
+    sourceMaxEndMs + NEW_ACTION_INSERT_GAP_MS - sourceMinStartMs;
+  const offsetMs = isConstraintAssistedPlacement()
+    ? requestedOffsetMs
+    : clampNumber(
+        requestedOffsetMs,
+        -sourceMinStartMs,
+        project.value.time.durationMs - sourceMaxStartMs
+      );
   const copiedGenerationBatch = createCopiedGenerationBatch(
     sourceActions[0].generationBatch,
     sourceActions.length
@@ -3317,11 +3563,13 @@ function copyActionBatch(batchId) {
     createWorkbenchActionDraft({
       ...action,
       id: createNextActionIdFromUsedIds(usedActionIds),
-      startMs: clampNumber(
-        (Number(action.startMs) || 0) + offsetMs,
-        0,
-        project.value.time.durationMs
-      ),
+      startMs: isConstraintAssistedPlacement()
+        ? (Number(action.startMs) || 0) + offsetMs
+        : clampNumber(
+            (Number(action.startMs) || 0) + offsetMs,
+            0,
+            project.value.time.durationMs
+          ),
       note: stripAutoDelayNote(action.note),
       insertion: null,
       generationBatch: copiedGenerationBatch,
@@ -3352,34 +3600,47 @@ function copyActionBatch(batchId) {
       })),
     copiedActions
   );
-  const nextRelations = normalizeWorkbenchActionRelations(
+  let nextRelations = normalizeWorkbenchActionRelations(
     [...actionRelations.value, ...copiedRelations],
     [...actionDrafts.value, ...copiedActions]
   );
-  lastActionPlacementProposal.value = createActionPlacementProposal({
+  const proposal = createActionPlacementProposal({
     requestedActions: copiedActions,
     relations: nextRelations,
     requestedLaneId: resolveDraftLaneId(copiedActions[0]),
   });
+  lastActionPlacementProposal.value = proposal;
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    copiedActions
+  );
+  if (!committedActions) {
+    return false;
+  }
+  nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...copiedRelations],
+    [...actionDrafts.value, ...committedActions]
+  );
 
   recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
   const insertIndex = Math.max(...sourceEntries.map(entry => entry.index)) + 1;
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, insertIndex),
-    ...copiedActions,
+    ...committedActions,
     ...actionDrafts.value.slice(insertIndex),
   ];
   actionRelations.value = nextRelations;
-  selectedActionId.value = copiedActions[0].id;
-  syncActionLibraryCharacterIdFromDraft(copiedActions[0]);
+  selectedActionId.value = committedActions[0].id;
+  syncActionLibraryCharacterIdFromDraft(committedActions[0]);
   applyActionMutationRuntimeSyncRequest({
-    actionId: copiedActions[0].id,
+    actionId: committedActions[0].id,
     runtimeReviewState,
     selectedActionChanged: true,
-    affectedActionIds: copiedActions.map(action => action.id),
+    affectedActionIds: committedActions.map(action => action.id),
   });
   markDraftDirty();
+  return true;
 }
 
 function deleteAction(actionId) {
@@ -3501,37 +3762,65 @@ function shiftActionBatch({ batchId, offsetMs }) {
     action => action.id === selectedActionId.value
   );
   const affectedActionIds = batchActions.map(action => action.id);
-  const appliedOffsetMs = clampNumber(
-    offset,
-    -minStartMs,
-    project.value.time.durationMs - maxStartMs
-  );
+  const appliedOffsetMs = isConstraintAssistedPlacement()
+    ? snapMsToFrame(offset)
+    : clampNumber(
+        offset,
+        -minStartMs,
+        project.value.time.durationMs - maxStartMs
+      );
   if (appliedOffsetMs === 0) {
     return;
   }
 
-  const nextActions = actionDrafts.value.map(action => {
+  let nextActions = actionDrafts.value.map(action => {
     if (action.generationBatch?.batchId !== batchId) {
       return action;
     }
 
-    const nextStartMs = clampNumber(
-      (Number(action.startMs) || 0) + appliedOffsetMs,
-      0,
-      project.value.time.durationMs
-    );
-    return createWorkbenchActionDraft({
+    const nextStartMs = isConstraintAssistedPlacement()
+      ? snapMsToFrame((Number(action.startMs) || 0) + appliedOffsetMs)
+      : clampNumber(
+          (Number(action.startMs) || 0) + appliedOffsetMs,
+          0,
+          project.value.time.durationMs
+        );
+    const nextAction = createWorkbenchActionDraft({
       ...action,
       ...clearInsertionForManualEdit(action),
-      startMs: nextStartMs,
+      startMs: Math.max(0, nextStartMs),
     });
+    return isConstraintAssistedPlacement()
+      ? { ...nextAction, startMs: nextStartMs }
+      : nextAction;
   });
-  lastActionPlacementProposal.value = createActionPlacementProposal({
-    requestedActions: nextActions.filter(action =>
-      affectedActionIds.includes(action.id)
-    ),
+  const requestedActions = nextActions.filter(action =>
+    affectedActionIds.includes(action.id)
+  );
+  const proposal = createActionPlacementProposal({
+    requestedActions,
     requestedLaneId: resolveDraftLaneId(batchActions[0]),
   });
+  lastActionPlacementProposal.value = proposal;
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    requestedActions
+  );
+  if (!committedActions) {
+    return false;
+  }
+  if (isConstraintAssistedPlacement()) {
+    nextActions = replacePlacementActions(actionDrafts.value, committedActions);
+  }
+  if (
+    affectedActionIds.every(actionId => {
+      const previous = findActionDraftById(actionId);
+      const next = nextActions.find(action => action.id === actionId);
+      return JSON.stringify(previous) === JSON.stringify(next);
+    })
+  ) {
+    return false;
+  }
   recordWorkbenchHistorySnapshot();
   actionDrafts.value = nextActions;
   applyActionMutationRuntimeSyncRequest({
@@ -3541,6 +3830,7 @@ function shiftActionBatch({ batchId, offsetMs }) {
     affectedActionIds,
   });
   markDraftDirty();
+  return true;
 }
 
 function saveDraft() {
@@ -4731,6 +5021,7 @@ function applyWorkbenchConfigurationState(state) {
 
 function clearWorkbenchProjectTransientState() {
   pauseTimelinePlayback();
+  lastActionPlacementProposal.value = null;
   selectedStateCurvePointId.value = '';
   timelineCursorFrameIndex.value = 0;
   timelinePlaybackRate.value = 1;
@@ -6423,17 +6714,25 @@ function addInsertedAction(actionPatch, options = {}) {
     startMs: options.requestedStartMs ?? resolveInsertStartMs(baseInsertIndex),
   });
   const placement = resolveInsertPlacement(candidateAction, baseInsertIndex);
+  const committedPlacement = resolveCommittedInsertPlacement(placement);
+  if (!committedPlacement) {
+    return {
+      action: null,
+      placement,
+      committed: false,
+    };
+  }
   const nextAction = createWorkbenchActionDraft({
     ...candidateAction,
-    startMs: placement.startMs,
-    note: createInsertionNote(candidateAction.note, placement),
-    insertion: createInsertionMetadata(placement),
+    startMs: committedPlacement.startMs,
+    note: createInsertionNote(candidateAction.note, committedPlacement),
+    insertion: createInsertionMetadata(committedPlacement),
   });
   recordWorkbenchHistorySnapshot();
   actionDrafts.value = [
-    ...actionDrafts.value.slice(0, placement.insertIndex),
+    ...actionDrafts.value.slice(0, committedPlacement.insertIndex),
     nextAction,
-    ...actionDrafts.value.slice(placement.insertIndex),
+    ...actionDrafts.value.slice(committedPlacement.insertIndex),
   ];
   selectedActionId.value = nextAction.id;
   applyActionMutationRuntimeSyncRequest({
@@ -6445,7 +6744,8 @@ function addInsertedAction(actionPatch, options = {}) {
   markDraftDirty();
   return {
     action: nextAction,
-    placement,
+    placement: committedPlacement,
+    committed: true,
   };
 }
 
@@ -6798,7 +7098,7 @@ function createInsertionMetadata(placement) {
     resolvedStartMs: placement.startMs,
     delayedByMs: placement.startMs - placement.requestedStartMs,
     laneId: placement.laneId,
-    reason: 'same-lane-conflict',
+    reason: placement.reason ?? 'same-lane-conflict',
     conflictActionIds: placement.conflictActionIds,
   };
 }
@@ -6808,7 +7108,9 @@ function createInsertionNote(note, placement) {
     return note;
   }
 
-  const message = `自动推迟：同轨已有动作占用，已从 ${placement.requestedStartMs}ms 调整到 ${placement.startMs}ms。`;
+  const message = placement.assisted
+    ? `约束辅助：已从 ${placement.requestedStartMs}ms 调整到 ${placement.startMs}ms。`
+    : `自动推迟：同轨已有动作占用，已从 ${placement.requestedStartMs}ms 调整到 ${placement.startMs}ms。`;
   return note ? `${note}\n${message}` : message;
 }
 

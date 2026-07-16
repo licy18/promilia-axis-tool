@@ -1856,6 +1856,105 @@ describe('Workbench view', () => {
     ).toHaveLength(4);
   });
 
+  it('commits a cooldown suggestion atomically in constraint-assisted mode', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    await wrapper
+      .find(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
+
+    const addCooldownSkill = async () => {
+      await wrapper
+        .find('[data-testid="workbench-skill-entry"][data-skill-id="10900112"]')
+        .trigger('click');
+      await nextTick();
+    };
+    await addCooldownSkill();
+    await addCooldownSkill();
+    const historyCountBeforeSuggestion = Number(
+      wrapper
+        .find('[data-testid="workbench-undo-edit"]')
+        .attributes('data-history-count')
+    );
+    await addCooldownSkill();
+
+    const assistedAction = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+    );
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-action-placement-mode': 'assisted',
+      'data-action-placement-status': 'adjustable',
+    });
+    expect(assistedAction.attributes()).toMatchObject({
+      'data-readiness-status': 'ready',
+      'data-readiness-executable': 'true',
+    });
+    expect(
+      Number(
+        wrapper
+          .find('[data-testid="workbench-undo-edit"]')
+          .attributes('data-history-count')
+      )
+    ).toBe(historyCountBeforeSuggestion + 1);
+
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+      ).exists()
+    ).toBe(false);
+  });
+
+  it('rejects an assisted move beyond the axis without creating history', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await wrapper
+      .find(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
+    const timeline = wrapper.getComponent(TimelineGridPreview);
+    const action = () =>
+      wrapper.get(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+      );
+    const initialStartMs = action().attributes('data-start-ms');
+
+    timeline.vm.$emit('update-action-time', {
+      actionId: 'action-0001',
+      startMs: Number(timeline.props('durationMs')),
+    });
+    await nextTick();
+
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-action-placement-status': 'blocked',
+    });
+    expect(action().attributes('data-start-ms')).toBe(initialStartMs);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-undo-edit"]')
+        .attributes('data-history-count')
+    ).toBe('0');
+  });
+
   it('prioritizes runtime detail in the side inspector while reviewing results', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -9191,6 +9290,11 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-timeline-create-relations"]')
       .trigger('click');
+    await wrapper
+      .find(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
     await nextTick();
 
     const firstStartMs = Number(
@@ -9203,7 +9307,7 @@ describe('Workbench view', () => {
     wrapper
       .findComponent(TimelineGridPreview)
       .vm.$emit('move-selected-actions', {
-        actionIds: ['action-0001', 'action-0002'],
+        actionIds: ['action-0001'],
         primaryActionId: 'action-0001',
         offsetMs: frameToMs(12),
         targetLaneId: 'actor-101003',

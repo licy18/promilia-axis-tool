@@ -114,6 +114,7 @@ export function pasteWorkbenchActionClipboard(
     createActionId,
     createRelationId = createNextWorkbenchActionRelationIdFromUsedIds,
     pasteGapMs = WORKBENCH_FRAME_MS,
+    clampToTimeline = true,
     normalizeSourceAction = action => action,
   } = {}
 ) {
@@ -142,11 +143,9 @@ export function pasteWorkbenchActionClipboard(
   const requestedPasteStartMs = hasExplicitTarget
     ? Number(targetStartMs)
     : Number(clipboard.nextPasteStartMs);
-  const pasteStartMs = clampNumber(
-    snapMsToFrame(requestedPasteStartMs),
-    0,
-    maxPasteStartMs
-  );
+  const pasteStartMs = clampToTimeline
+    ? clampNumber(snapMsToFrame(requestedPasteStartMs), 0, maxPasteStartMs)
+    : Math.max(0, snapMsToFrame(requestedPasteStartMs));
   const usedActionIds = new Set(existingActions.map(action => action.id));
   const actionIdMap = new Map();
   const pastedActions = clipboard.actions.map(sourceAction => {

@@ -150,4 +150,23 @@ describe('workbench action clipboard', () => {
       frameToMs(180),
     ]);
   });
+
+  it('keeps an assisted paste request beyond the axis for proposal blocking', () => {
+    const actions = createActions();
+    const clipboard = createWorkbenchActionClipboard(
+      actions,
+      ['action-0001', 'action-0003']
+    );
+    let nextActionIndex = 1;
+    const result = pasteWorkbenchActionClipboard(clipboard, {
+      existingActions: actions,
+      timelineDurationMs: frameToMs(210),
+      targetStartMs: frameToMs(190),
+      clampToTimeline: false,
+      createActionId: () => `pasted-${nextActionIndex++}`,
+    });
+
+    expect(result.pasteStartMs).toBe(frameToMs(190));
+    expect(result.pastedActions.at(-1).startMs).toBe(frameToMs(310));
+  });
 });

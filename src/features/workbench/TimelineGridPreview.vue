@@ -17,12 +17,34 @@
     :data-playback-rate="playbackRate"
     :data-playback-range-mode="playbackRangeMode"
     :data-controlled-actor-id="controlledActorAtCursor?.actorId ?? ''"
+    :data-action-placement-mode="actionPlacementMode"
+    :data-action-placement-status="actionPlacementProposal?.status ?? ''"
     data-testid="workbench-timeline-grid-preview"
   >
     <div class="panel-title">
       <Clock class="panel-icon" />
       <h2>时间轴</h2>
       <div class="timeline-tools">
+        <div
+          class="timeline-placement-mode"
+          role="group"
+          aria-label="排轴模式"
+          data-testid="workbench-action-placement-mode"
+        >
+          <button
+            v-for="option in actionPlacementModeOptions"
+            :key="option.key"
+            type="button"
+            :class="{ active: actionPlacementMode === option.key }"
+            :aria-pressed="actionPlacementMode === option.key"
+            :data-mode="option.key"
+            data-testid="workbench-action-placement-mode-option"
+            :title="option.title"
+            @click="$emit('update-action-placement-mode', option.key)"
+          >
+            {{ option.label }}
+          </button>
+        </div>
         <details class="timeline-entry-palette">
           <summary
             data-testid="workbench-timeline-entry-palette-toggle"
@@ -1073,6 +1095,14 @@ const LOADOUT_SLOT_DEFINITIONS = Object.freeze([
   { key: 'ring', label: '戒指', kind: 'equipment' },
   { key: 'soulessenceId', label: '灵子', kind: 'soulessence' },
 ]);
+const actionPlacementModeOptions = Object.freeze([
+  { key: 'free', label: '自由', title: '按指定位置自由排轴' },
+  {
+    key: 'assisted',
+    label: '辅助',
+    title: '提交时按已知冲突建议合法位置',
+  },
+]);
 
 const props = defineProps({
   actors: {
@@ -1112,6 +1142,14 @@ const props = defineProps({
     default: '',
   },
   externalTimelineEntryDrag: {
+    type: Object,
+    default: null,
+  },
+  actionPlacementMode: {
+    type: String,
+    default: 'free',
+  },
+  actionPlacementProposal: {
     type: Object,
     default: null,
   },
@@ -1306,6 +1344,7 @@ const emit = defineEmits([
   'update-state-curve-focus-mode',
   'insert-timeline-entry',
   'open-loadout-picker',
+  'update-action-placement-mode',
 ]);
 const laneRef = ref(null);
 const scaleViewportRef = ref(null);
@@ -4057,6 +4096,37 @@ h2 {
   align-items: center;
   gap: 6px;
   margin-left: auto;
+}
+
+.timeline-placement-mode {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 42px);
+  height: 28px;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: rgba(5, 9, 12, 0.48);
+}
+
+.timeline-placement-mode button {
+  min-width: 0;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: #91a0a9;
+  font-size: 11px;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.timeline-placement-mode button:hover,
+.timeline-placement-mode button:focus-visible {
+  color: #d7e5e8;
+}
+
+.timeline-placement-mode button.active {
+  background: #2d6d69;
+  color: #f4ffff;
 }
 
 .timeline-view-options {

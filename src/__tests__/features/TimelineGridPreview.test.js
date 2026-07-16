@@ -10,6 +10,36 @@ function readStyleNumber(style, property) {
 }
 
 describe('TimelineGridPreview', () => {
+  it('exposes free and constraint-assisted placement as an explicit mode choice', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actionPlacementMode: 'free',
+        actionPlacementProposal: { status: 'valid' },
+      }),
+    });
+    const timeline = wrapper.get(
+      '[data-testid="workbench-timeline-grid-preview"]'
+    );
+    const options = wrapper.findAll(
+      '[data-testid="workbench-action-placement-mode-option"]'
+    );
+
+    expect(timeline.attributes()).toMatchObject({
+      'data-action-placement-mode': 'free',
+      'data-action-placement-status': 'valid',
+    });
+    expect(options.map(option => option.attributes('data-mode'))).toEqual([
+      'free',
+      'assisted',
+    ]);
+    expect(options[0].attributes('aria-pressed')).toBe('true');
+
+    await options[1].trigger('click');
+    expect(wrapper.emitted('update-action-placement-mode')?.at(-1)?.[0]).toBe(
+      'assisted'
+    );
+  });
+
   it('renders the official icon, action kind, and frame duration on action blocks', () => {
     const action = {
       ...createAction({

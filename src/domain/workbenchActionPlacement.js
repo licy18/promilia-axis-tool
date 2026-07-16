@@ -13,6 +13,10 @@ export const WORKBENCH_ACTION_PLACEMENT_STATUSES = Object.freeze({
   BLOCKED: 'blocked',
   UNRESOLVED: 'unresolved',
 });
+export const WORKBENCH_ACTION_PLACEMENT_MODES = Object.freeze({
+  FREE: 'free',
+  ASSISTED: 'assisted',
+});
 
 const AUTO_ADJUSTABLE_RULE_CODES = new Set([
   ACTION_RULE_CODES.LANE_OVERLAP,
