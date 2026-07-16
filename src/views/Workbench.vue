@@ -1049,6 +1049,10 @@ import {
   shiftWorkbenchActionDrafts,
 } from '../domain/workbenchActionClipboard';
 import {
+  createWorkbenchActionPlacementProposal,
+  WORKBENCH_ACTION_PLACEMENT_STATUSES,
+} from '../domain/workbenchActionPlacement';
+import {
   createNextWorkbenchActionRelationIdFromUsedIds,
   createWorkbenchActionRelationChain,
   normalizeWorkbenchActionRelations,
@@ -1133,7 +1137,16 @@ import {
   snapMsToFrame,
 } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
+import { createActionExecutionPlan } from '../simulation/engine/actionExecutionPlan';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
+import {
+  ACTION_RULE_STATUSES,
+  createActionRuleDiagnostics,
+} from '../simulation/runtime/actionRuleDiagnostics';
+import {
+  createControlledActorTimeline,
+  resolveControlledActorAt,
+} from '../simulation/runtime/controlledActorTimeline';
 import {
   DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
   createWorkbenchProfileCompatibilityReport,
@@ -1298,6 +1311,7 @@ const workbenchGrid = ref(null);
 const workbenchLayout = ref(createInitialWorkbenchLayoutState());
 const activeWorkbenchLayoutResize = ref('');
 const actionLibraryTimelineEntryDrag = ref(null);
+const lastActionPlacementProposal = ref(null);
 const projectImportInput = ref(null);
 const pngExportSurface = ref(null);
 const pngExporting = ref(false);
@@ -1358,23 +1372,10 @@ const gameDataCompatibilityReport = computed(() =>
   createWorkbenchGameDataCompatibilityReport(getWorkbenchDraftState())
 );
 const project = computed(() =>
-  createWorkbenchProject(selection.value, {
-    teamSlots: teamSlots.value,
-    actorConfigs: actorConfigs.value,
-    enemyConfig: enemyConfig.value,
-    configurationLibrary: configurationLibrary.value,
-    configurationSelection: configurationSelection.value,
-    gameDataBinding: gameDataBinding.value,
-    gameDataCompatibilityReport: gameDataCompatibilityReport.value,
-    mechanicsProfileSelection: mechanicsProfileSelection.value,
-    mechanicsProfileCompatibilityReport:
-      mechanicsProfileCompatibilityReport.value,
-    actions: actionDrafts.value,
-    actionRelations: actionRelations.value,
-    cycleBoundaries: cycleBoundaries.value,
-    initialRuntimeState: initialRuntimeState.value,
-    runtimeSampleCaptures: runtimeSampleCaptures.value,
-  })
+  createCurrentWorkbenchProjectForActions(
+    actionDrafts.value,
+    actionRelations.value
+  )
 );
 const scenario = computed(() =>
   compileProject(project.value, gameData, {
@@ -2664,11 +2665,10 @@ function updateSegmentSplitOptions(patch) {
 
 function updateActionTime({ actionId, startMs }) {
   clearSegmentSplitPreview();
-  recordWorkbenchHistorySnapshot();
   const previousAction = findActionDraftById(actionId);
   const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
-  actionDrafts.value = actionDrafts.value.map(action => {
+  const nextActions = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
       return action;
     }
@@ -2679,6 +2679,14 @@ function updateActionTime({ actionId, startMs }) {
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
+  lastActionPlacementProposal.value = createActionPlacementProposal({
+    requestedActions: nextActions.filter(action => action.id === actionId),
+    requestedLaneId: resolveDraftLaneId(
+      nextActions.find(action => action.id === actionId)
+    ),
+  });
+  recordWorkbenchHistorySnapshot();
+  actionDrafts.value = nextActions;
   recordActionEditSource(
     actionId,
     { startMs },
@@ -3030,6 +3038,10 @@ function copyAction(actionId) {
     insertion: null,
     generationBatch: null,
   });
+  lastActionPlacementProposal.value = createActionPlacementProposal({
+    requestedActions: [nextAction],
+    requestedLaneId: resolveDraftLaneId(nextAction),
+  });
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, sourceIndex + 1),
     nextAction,
@@ -3082,13 +3094,19 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
     return null;
   }
 
+  const nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...pasteResult.pastedRelations],
+    [...actionDrafts.value, ...pasteResult.pastedActions]
+  );
+  lastActionPlacementProposal.value = createActionPlacementProposal({
+    requestedActions: pasteResult.pastedActions,
+    relations: nextRelations,
+    requestedLaneId: resolveDraftLaneId(pasteResult.pastedActions[0]),
+  });
   recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
   actionDrafts.value = [...actionDrafts.value, ...pasteResult.pastedActions];
-  actionRelations.value = normalizeWorkbenchActionRelations(
-    [...actionRelations.value, ...pasteResult.pastedRelations],
-    actionDrafts.value
-  );
+  actionRelations.value = nextRelations;
   actionClipboard.value = pasteResult.nextClipboard;
   setWorkbenchActionSelection(
     pasteResult.selectedActionIds,
@@ -3210,6 +3228,15 @@ function moveSelectedActions({
     );
   }
 
+  lastActionPlacementProposal.value = createActionPlacementProposal({
+    requestedActions: nextActions.filter(action =>
+      affectedActionIds.includes(action.id)
+    ),
+    requestedLaneId:
+      targetLaneId || resolveDraftLaneId(nextActions.find(action =>
+        affectedActionIds.includes(action.id)
+      )),
+  });
   const nextActionsById = new Map(
     nextActions.map(action => [action.id, action])
   );
@@ -3325,6 +3352,15 @@ function copyActionBatch(batchId) {
       })),
     copiedActions
   );
+  const nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...copiedRelations],
+    [...actionDrafts.value, ...copiedActions]
+  );
+  lastActionPlacementProposal.value = createActionPlacementProposal({
+    requestedActions: copiedActions,
+    relations: nextRelations,
+    requestedLaneId: resolveDraftLaneId(copiedActions[0]),
+  });
 
   recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
@@ -3334,10 +3370,7 @@ function copyActionBatch(batchId) {
     ...copiedActions,
     ...actionDrafts.value.slice(insertIndex),
   ];
-  actionRelations.value = normalizeWorkbenchActionRelations(
-    [...actionRelations.value, ...copiedRelations],
-    actionDrafts.value
-  );
+  actionRelations.value = nextRelations;
   selectedActionId.value = copiedActions[0].id;
   syncActionLibraryCharacterIdFromDraft(copiedActions[0]);
   applyActionMutationRuntimeSyncRequest({
@@ -3477,8 +3510,7 @@ function shiftActionBatch({ batchId, offsetMs }) {
     return;
   }
 
-  recordWorkbenchHistorySnapshot();
-  actionDrafts.value = actionDrafts.value.map(action => {
+  const nextActions = actionDrafts.value.map(action => {
     if (action.generationBatch?.batchId !== batchId) {
       return action;
     }
@@ -3494,6 +3526,14 @@ function shiftActionBatch({ batchId, offsetMs }) {
       startMs: nextStartMs,
     });
   });
+  lastActionPlacementProposal.value = createActionPlacementProposal({
+    requestedActions: nextActions.filter(action =>
+      affectedActionIds.includes(action.id)
+    ),
+    requestedLaneId: resolveDraftLaneId(batchActions[0]),
+  });
+  recordWorkbenchHistorySnapshot();
+  actionDrafts.value = nextActions;
   applyActionMutationRuntimeSyncRequest({
     fallbackActionId: selectedActionId.value,
     runtimeReviewState,
@@ -3963,6 +4003,132 @@ function createWorkbenchProjectFromDraft(draft) {
     initialRuntimeState: draft.initialRuntimeState,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
   });
+}
+
+function createCurrentWorkbenchProjectForActions(
+  actions,
+  relations = actionRelations.value
+) {
+  return createWorkbenchProject(selection.value, {
+    teamSlots: teamSlots.value,
+    actorConfigs: actorConfigs.value,
+    enemyConfig: enemyConfig.value,
+    configurationLibrary: configurationLibrary.value,
+    configurationSelection: configurationSelection.value,
+    gameDataBinding: gameDataBinding.value,
+    gameDataCompatibilityReport: gameDataCompatibilityReport.value,
+    mechanicsProfileSelection: mechanicsProfileSelection.value,
+    mechanicsProfileCompatibilityReport:
+      mechanicsProfileCompatibilityReport.value,
+    actions,
+    actionRelations: relations,
+    cycleBoundaries: cycleBoundaries.value,
+    initialRuntimeState: initialRuntimeState.value,
+    runtimeSampleCaptures: runtimeSampleCaptures.value,
+  });
+}
+
+function createActionPlacementProposal({
+  requestedActions,
+  currentActions = actionDrafts.value,
+  relations = actionRelations.value,
+  requestedLaneId = '',
+  preflightIssues = [],
+} = {}) {
+  return createWorkbenchActionPlacementProposal({
+    currentActions,
+    requestedActions,
+    actionRelations: relations,
+    timelineDurationMs: project.value.time.durationMs,
+    requestedLaneId,
+    preflightIssues,
+    evaluateCandidate: (candidateActions, context) =>
+      evaluateActionPlacementCandidate(candidateActions, relations, context),
+  });
+}
+
+function evaluateActionPlacementCandidate(
+  candidateActions,
+  relations,
+  { requestedActionIds = [] } = {}
+) {
+  const candidateProject = createCurrentWorkbenchProjectForActions(
+    candidateActions,
+    relations
+  );
+  const candidateScenario = compileProject(candidateProject, gameData, {
+    threeValueMechanicsProfileCatalog:
+      DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  });
+  const actionRuleDiagnostics = createActionRuleDiagnostics({
+    scenario: candidateScenario,
+  });
+  const actionExecutionPlan = createActionExecutionPlan({
+    scenario: candidateScenario,
+    actionRuleDiagnostics,
+  });
+  const controlledActorTimeline = createControlledActorTimeline({
+    scenario: candidateScenario,
+    actionExecutionPlan,
+  });
+  return {
+    sourceKind: 'workbench-compiled-action-placement-evaluation',
+    actionRuleDiagnostics,
+    controlledActorTimeline,
+    unresolved: createControlledActorPlacementAdvisories({
+      scenario: candidateScenario,
+      controlledActorTimeline,
+      requestedActionIds,
+    }),
+    ruleSources: [
+      actionRuleDiagnostics.sourceKind,
+      controlledActorTimeline.sourceKind,
+    ],
+  };
+}
+
+function createControlledActorPlacementAdvisories({
+  scenario,
+  controlledActorTimeline,
+  requestedActionIds,
+}) {
+  const requestedActionIdSet = new Set(requestedActionIds);
+  return (scenario.actions ?? [])
+    .filter(
+      action =>
+        requestedActionIdSet.has(action.id) &&
+        action.type === ACTION_TYPES.SKILL &&
+        action.actorId
+    )
+    .map(action => {
+      const controlledActor = resolveControlledActorAt(
+        controlledActorTimeline,
+        action.startMs
+      );
+      if (!controlledActor || controlledActor.actorId === action.actorId) {
+        return null;
+      }
+      return {
+        schemaVersion: 1,
+        id: 'controlled-actor-placement-unresolved|' + action.id,
+        code: 'controlled-actor-placement-unresolved',
+        status: ACTION_RULE_STATUSES.UNRESOLVED,
+        severity: 'warning',
+        actionId: action.id,
+        actionIds: [action.id],
+        actorId: action.actorId,
+        timeMs: action.startMs,
+        message:
+          action.name +
+          ' 位于其他角色的前台区间；离场可用规则尚未确认，因此仅提示',
+        source: {
+          sourceKind: controlledActorTimeline.sourceKind,
+          sourceStatus: 'tracking-only',
+        },
+        appliedToSimulationResults: false,
+      };
+    })
+    .filter(Boolean);
 }
 
 function getWorkbenchDraftState() {
@@ -6450,6 +6616,37 @@ function resolveInsertPlacement(
   draftSource = actionDrafts.value
 ) {
   const laneId = resolveDraftLaneId(candidateAction);
+  const requestedStartMs = clampNumber(
+    candidateAction.startMs,
+    0,
+    project.value.time.durationMs
+  );
+  const requestedAction = createWorkbenchActionDraft({
+    ...candidateAction,
+    startMs: requestedStartMs,
+  });
+  const proposal = createActionPlacementProposal({
+    currentActions: draftSource,
+    requestedActions: [requestedAction],
+    requestedLaneId: laneId,
+  });
+  lastActionPlacementProposal.value = proposal;
+  return {
+    ...resolveLegacyInsertPlacement(
+      requestedAction,
+      baseInsertIndex,
+      draftSource
+    ),
+    proposal,
+  };
+}
+
+function resolveLegacyInsertPlacement(
+  candidateAction,
+  baseInsertIndex,
+  draftSource
+) {
+  const laneId = resolveDraftLaneId(candidateAction);
   const durationMs = resolveDraftDurationMs(candidateAction);
   const maxStartMs = project.value.time.durationMs;
   const requestedStartMs = clampNumber(candidateAction.startMs, 0, maxStartMs);
@@ -6464,11 +6661,9 @@ function resolveInsertPlacement(
   for (let scanIndex = 0; scanIndex < ranges.length; scanIndex += 1) {
     const range = ranges[scanIndex];
     const endMs = startMs + durationMs;
-
     if (endMs <= range.startMs || startMs >= range.endMs) {
       continue;
     }
-
     const nextStartMs = clampNumber(
       range.endMs + NEW_ACTION_INSERT_GAP_MS,
       0,
@@ -6480,7 +6675,6 @@ function resolveInsertPlacement(
       startMs = nextStartMs;
       break;
     }
-
     startMs = nextStartMs;
     scanIndex = -1;
   }

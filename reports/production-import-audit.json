@@ -22,6 +22,7 @@
       "src/__tests__/domain/skillDamageSegments.test.js",
       "src/__tests__/domain/skillLogicModel.test.js",
       "src/__tests__/domain/workbenchActionClipboard.test.js",
+      "src/__tests__/domain/workbenchActionPlacement.test.js",
       "src/__tests__/domain/workbenchActionRelations.test.js",
       "src/__tests__/domain/workbenchActionVisualIdentity.test.js",
       "src/__tests__/domain/workbenchAnalysisReport.test.js",
@@ -113,8 +114,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 132,
-    "productionReachableCount": 128,
+    "sourceCodeFileCount": 133,
+    "productionReachableCount": 129,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -122,7 +123,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 4,
-      "src/domain": 29,
+      "src/domain": 30,
       "src/features/workbench": 47,
       "src/i18n": 1,
       "src/router": 1,
@@ -160,6 +161,7 @@
     "src/domain/skillLogicModel.js",
     "src/domain/timebase.js",
     "src/domain/workbenchActionClipboard.js",
+    "src/domain/workbenchActionPlacement.js",
     "src/domain/workbenchActionRelations.js",
     "src/domain/workbenchActionVisualIdentity.js",
     "src/domain/workbenchAnalysisReport.js",
