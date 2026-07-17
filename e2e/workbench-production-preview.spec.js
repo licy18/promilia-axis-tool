@@ -2254,8 +2254,7 @@ test('[m4-constraint-placement] previews, commits, rejects, and restores real po
   expect(narrowSourceBox).toBeTruthy();
   expect(narrowLaneBox).toBeTruthy();
   expect(narrowViewportBox).toBeTruthy();
-  const narrowSourceCenterX =
-    narrowSourceBox.x + narrowSourceBox.width / 2;
+  const narrowSourceCenterX = narrowSourceBox.x + narrowSourceBox.width / 2;
   const narrowVisibleLeft = Math.max(
     narrowLaneBox.x + 12,
     narrowViewportBox.x + 12
@@ -2269,10 +2268,7 @@ test('[m4-constraint-placement] previews, commits, rejects, and restores real po
     narrowSourceCenterX + 48
   );
   if (Math.abs(narrowTargetClientX - narrowSourceCenterX) < 20) {
-    narrowTargetClientX = Math.max(
-      narrowVisibleLeft,
-      narrowSourceCenterX - 48
-    );
+    narrowTargetClientX = Math.max(narrowVisibleLeft, narrowSourceCenterX - 48);
   }
   await beginPointerDragTo(page, restoredAssistedAction, actorLane, {
     targetPosition: {
@@ -2293,6 +2289,275 @@ test('[m4-constraint-placement] previews, commits, rejects, and restores real po
     'data-action-placement-preview-active',
     'false'
   );
+});
+
+test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a real actor-kibo relation group', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+
+  const workbench = page.locator('main.workbench');
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const timelineActions = timeline.getByTestId('workbench-timeline-action');
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]'
+  );
+  const kiboLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
+  );
+  const assistedMode = page.locator(
+    '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+  );
+  const freeMode = page.locator(
+    '[data-testid="workbench-action-placement-mode-option"][data-mode="free"]'
+  );
+
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500003');
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="109001"]'
+    )
+    .click();
+  const actorSource = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10900112"][data-action-kind="star-skill"]'
+  );
+  const kiboSource = page.locator(
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500003"][data-skill-id="50000302"]'
+  );
+  await dragLocatorTo(page, actorSource, actorLane, {
+    targetPosition: { x: 120, y: 82 },
+  });
+  await dragLocatorTo(page, kiboSource, kiboLane, {
+    targetPosition: { x: 120, y: 36 },
+  });
+  const sourceActorAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
+  );
+  const sourceKiboAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="50000302"]'
+  );
+  const sourceActionIds = [
+    await sourceActorAction.getAttribute('data-action-id'),
+    await sourceKiboAction.getAttribute('data-action-id'),
+  ];
+  expect(sourceActionIds.every(Boolean)).toBe(true);
+  await boxSelectTimelineActions(page, sourceActionIds);
+  await page.getByTestId('workbench-timeline-create-relations').click();
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+
+  const fragmentLibrary = await openTimelineFragmentLibrary(page);
+  await fragmentLibrary
+    .getByTestId('workbench-fragment-name-input')
+    .fill('末音与水灵偶连携');
+  await fragmentLibrary
+    .getByTestId('workbench-fragment-tags-input')
+    .fill('连携, 起手');
+  await fragmentLibrary.getByTestId('workbench-save-timeline-fragment').click();
+  const fragmentCard = fragmentLibrary.getByTestId(
+    'workbench-timeline-fragment'
+  );
+  await expect(fragmentCard).toHaveCount(1);
+  await expect(fragmentCard).toHaveAttribute(
+    'data-compatibility-status',
+    'valid'
+  );
+  await expect(fragmentCard).toContainText('2 动作');
+  await expect(fragmentCard).toContainText('角色 / 奇波');
+
+  const fragmentExportPromise = page.waitForEvent('download');
+  await fragmentLibrary
+    .getByTestId('workbench-export-fragment-library')
+    .click();
+  const fragmentExport = await fragmentExportPromise;
+  const fragmentExportPath = await fragmentExport.path();
+  expect(fragmentExportPath).toBeTruthy();
+  const exportedFragmentLibrary = JSON.parse(
+    await readFile(fragmentExportPath, 'utf8')
+  );
+  expect(exportedFragmentLibrary.summary).toMatchObject({
+    fragmentCount: 1,
+    actionCount: 2,
+  });
+
+  await page.getByTestId('workbench-scenario-add').click();
+  await expect(timelineActions).toHaveCount(0);
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500003');
+  await assistedMode.click();
+  const emptyFragmentLibrary = await openTimelineFragmentLibrary(page);
+  const fragmentInsert = emptyFragmentLibrary.getByTestId(
+    'workbench-insert-timeline-fragment'
+  );
+  await expect(fragmentInsert).toBeEnabled();
+  await dragLocatorTo(page, fragmentInsert, actorLane, {
+    targetPosition: { x: 120, y: 82 },
+  });
+  await expect(timelineActions).toHaveCount(2);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  const insertedActorActions = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
+  );
+  const insertedKiboActions = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="50000302"]'
+  );
+  await expect(insertedActorActions).toHaveCount(1);
+  await expect(insertedKiboActions).toHaveCount(1);
+  await expect(insertedActorActions).toHaveAttribute(
+    'data-lane-id',
+    'actor-109001'
+  );
+  await expect(insertedKiboActions).toHaveAttribute(
+    'data-lane-id',
+    'kibo-team-slot-1'
+  );
+  for (const action of [insertedActorActions, insertedKiboActions]) {
+    const actionId = await action.getAttribute('data-action-id');
+    await expect(
+      timeline.locator(
+        '[data-testid="workbench-timeline-cooldown-window"][data-action-id="' +
+          actionId +
+          '"]'
+      )
+    ).toHaveCount(1);
+  }
+  await closeInspectorIfVisible(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m5-timeline-fragment-desktop.png',
+  });
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timelineActions).toHaveCount(0);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '0');
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(timelineActions).toHaveCount(2);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+
+  const restoredActorAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
+  );
+  const actorActionBox = await restoredActorAction.boundingBox();
+  const actorLaneBox = await actorLane.boundingBox();
+  expect(actorActionBox).toBeTruthy();
+  expect(actorLaneBox).toBeTruthy();
+  const overlappingTarget = {
+    x: actorActionBox.x - actorLaneBox.x + 2,
+    y: 82,
+  };
+  const originalActorStartMs = Number(
+    await restoredActorAction.getAttribute('data-start-ms')
+  );
+
+  await beginPointerDragTo(page, fragmentInsert, actorLane, {
+    targetPosition: overlappingTarget,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'adjustable'
+  );
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(4);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+  await expect(insertedActorActions).toHaveCount(2);
+  const assistedActorStartMs = Number(
+    await insertedActorActions.nth(1).getAttribute('data-start-ms')
+  );
+  expect(assistedActorStartMs).toBeGreaterThan(originalActorStartMs);
+  await beginPointerDragTo(page, fragmentInsert, actorLane, {
+    targetPosition: overlappingTarget,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'blocked'
+  );
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(4);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timelineActions).toHaveCount(2);
+
+  await freeMode.click();
+  await beginPointerDragTo(page, fragmentInsert, actorLane, {
+    targetPosition: overlappingTarget,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'adjustable'
+  );
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(4);
+  await expect(insertedActorActions).toHaveCount(2);
+  const freeActorStartMs = Number(
+    await insertedActorActions.nth(1).getAttribute('data-start-ms')
+  );
+  expect(Math.abs(freeActorStartMs - originalActorStartMs)).toBeLessThanOrEqual(
+    100
+  );
+  expect(freeActorStartMs).toBeLessThan(assistedActorStartMs);
+  await expect(insertedActorActions.nth(1)).toHaveAttribute(
+    'data-readiness-status',
+    'blocked'
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timelineActions).toHaveCount(2);
+
+  await changeM2TeamSlot(page, 0, 101010);
+  const incompatibleFragmentLibrary = await openTimelineFragmentLibrary(page);
+  const incompatibleFragment = incompatibleFragmentLibrary.getByTestId(
+    'workbench-timeline-fragment'
+  );
+  await expect(incompatibleFragment).toHaveAttribute(
+    'data-compatibility-status',
+    'blocked'
+  );
+  await expect(
+    incompatibleFragmentLibrary.getByTestId(
+      'workbench-insert-timeline-fragment'
+    )
+  ).toBeDisabled();
+  await expect(timelineActions).toHaveCount(2);
+
+  await changeM2TeamSlot(page, 0, 109001);
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500003');
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(timelineActions).toHaveCount(2);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-kibo"][data-character-id="109001"] [data-testid="workbench-direct-kibo-picker"]'
+    )
+  ).toHaveAttribute('data-selected-id', '500003');
+
+  await page.getByTestId('workbench-scenario-add').click();
+  await expect(timelineActions).toHaveCount(0);
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500003');
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await openTimelineFragmentLibrary(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const narrowFragmentInsert = page.getByTestId(
+    'workbench-insert-timeline-fragment'
+  );
+  await beginPointerDragTo(page, narrowFragmentInsert, actorLane, {
+    targetPosition: { x: 76, y: 82 },
+    scrollTargetIntoView: false,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-preview-active',
+    'true'
+  );
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(2);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m5-timeline-fragment-narrow.png',
+  });
 });
 
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
@@ -4923,6 +5188,15 @@ async function closeInspectorIfVisible(page) {
   if (await inspector.isVisible()) {
     await page.getByTestId('workbench-close-side-inspector').click();
   }
+}
+
+async function openTimelineFragmentLibrary(page) {
+  const panel = page.getByTestId('workbench-timeline-fragment-library');
+  if (!(await panel.isVisible())) {
+    await page.getByTestId('workbench-fragment-library-tab').click();
+  }
+  await expect(panel).toBeVisible();
+  return panel;
 }
 
 async function prepareBasicWorkbenchScenario(page) {

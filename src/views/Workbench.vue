@@ -384,6 +384,7 @@
         :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
+        :timeline-fragments="workbenchTimelineFragmentViews"
         @select-action="selectAction"
         @open-action-context-menu="openActionContextMenu"
         @delete-selected-actions="deleteSelectedActions"
@@ -404,6 +405,13 @@
         @shift-action-batch="shiftActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
         @begin-timeline-entry-drag="beginActionLibraryEntryPointerDrag"
+        @save-timeline-fragment="saveSelectedActionsAsTimelineFragment"
+        @insert-timeline-fragment="insertTimelineFragment"
+        @duplicate-timeline-fragment="duplicateTimelineFragment"
+        @delete-timeline-fragment="deleteTimelineFragment"
+        @export-timeline-fragment-library="exportTimelineFragmentLibrary"
+        @import-timeline-fragment-library="importTimelineFragmentLibrary"
+        @begin-timeline-fragment-drag="beginTimelineFragmentPointerDrag"
       />
 
       <div
@@ -1138,8 +1146,19 @@ import {
   duplicateWorkbenchPreset,
   loadWorkbenchPresetLibrary,
 } from '../domain/workbenchPresetStorage';
-import { instantiateWorkbenchTimelineFragment } from '../domain/workbenchTimelineFragment';
-import { loadWorkbenchTimelineFragmentLibrary } from '../domain/workbenchTimelineFragmentStorage';
+import {
+  createWorkbenchTimelineFragment,
+  evaluateWorkbenchTimelineFragmentCompatibility,
+  instantiateWorkbenchTimelineFragment,
+} from '../domain/workbenchTimelineFragment';
+import {
+  addWorkbenchTimelineFragment,
+  deleteWorkbenchTimelineFragment,
+  duplicateWorkbenchTimelineFragment,
+  importWorkbenchTimelineFragmentLibrary,
+  loadWorkbenchTimelineFragmentLibrary,
+  serializeWorkbenchTimelineFragmentLibrary,
+} from '../domain/workbenchTimelineFragmentStorage';
 import {
   createWorkbenchProjectPngFileName,
   createWorkbenchProjectPngMetadata,
@@ -1224,6 +1243,7 @@ const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const loadoutOptions = getWorkbenchLoadoutOptions();
 const kiboActionsById = ref(new Map());
+const kiboActionCatalogLoaded = ref(false);
 const actionLibraryKibos = computed(() =>
   loadoutOptions.kibos.map(kibo => ({
     ...kibo,
@@ -1315,6 +1335,18 @@ const projectShareUrl = ref('');
 const presetDialogVisible = ref(false);
 const workbenchPresets = ref([]);
 const workbenchTimelineFragments = ref([]);
+const workbenchTimelineFragmentViews = computed(() =>
+  workbenchTimelineFragments.value.map(fragment => ({
+    ...fragment,
+    compatibility: evaluateWorkbenchTimelineFragmentCompatibility(fragment, {
+      teamSlots: teamSlots.value,
+      actorConfigs: actorConfigs.value,
+      kiboActionsById: kiboActionCatalogLoaded.value
+        ? kiboActionsById.value
+        : null,
+    }),
+  }))
+);
 const comparisonDialogVisible = ref(false);
 const comparisonBaselineDraft = ref(null);
 const comparisonBaselineSource = ref(null);
@@ -2086,6 +2118,7 @@ function beginActionLibraryEntryPointerDrag(payload = {}) {
   }
   cancelActionLibraryEntryPointerDrag();
   actionLibraryEntryPointerState = {
+    kind: 'entry',
     entry,
     pointerId: Number(payload.pointerId),
     startX: Number(payload.clientX) || 0,
@@ -2096,6 +2129,57 @@ function beginActionLibraryEntryPointerDrag(payload = {}) {
   };
   actionLibraryTimelineEntryDrag.value = {
     entry,
+    active: false,
+    targetLaneId: '',
+  };
+  window?.addEventListener?.(
+    'pointermove',
+    handleActionLibraryEntryPointerMove,
+    { passive: false }
+  );
+  window?.addEventListener?.(
+    'pointerup',
+    completeActionLibraryEntryPointerDrag
+  );
+  window?.addEventListener?.(
+    'pointercancel',
+    cancelActionLibraryEntryPointerDrag
+  );
+}
+
+function beginTimelineFragmentPointerDrag(payload = {}) {
+  const fragment = workbenchTimelineFragments.value.find(
+    item => item.id === payload.fragmentId
+  );
+  const compatibility = evaluateWorkbenchTimelineFragmentCompatibility(
+    fragment,
+    {
+      teamSlots: teamSlots.value,
+      actorConfigs: actorConfigs.value,
+      kiboActionsById: kiboActionCatalogLoaded.value
+        ? kiboActionsById.value
+        : null,
+    }
+  );
+  if (!fragment || compatibility.status !== 'valid') {
+    draftStatus.value =
+      compatibility.issues[0]?.message ?? '片段身份或来源不兼容';
+    return;
+  }
+  cancelActionLibraryEntryPointerDrag();
+  actionLibraryEntryPointerState = {
+    kind: 'fragment',
+    fragment,
+    pointerId: Number(payload.pointerId),
+    startX: Number(payload.clientX) || 0,
+    startY: Number(payload.clientY) || 0,
+    active: false,
+    targetLaneId: '',
+    previewKey: '',
+  };
+  actionLibraryTimelineEntryDrag.value = {
+    fragmentId: fragment.id,
+    label: fragment.name,
     active: false,
     targetLaneId: '',
   };
@@ -2130,29 +2214,47 @@ function handleActionLibraryEntryPointerMove(event) {
     state.active = true;
   }
   event.preventDefault();
-  state.targetLaneId = resolveActionLibraryEntryDropLaneId(
-    event.clientX,
-    event.clientY,
-    state.entry
-  );
+  state.targetLaneId =
+    state.kind === 'fragment'
+      ? resolveTimelineFragmentDropLaneId(
+          event.clientX,
+          event.clientY,
+          state.fragment
+        )
+      : resolveActionLibraryEntryDropLaneId(
+          event.clientX,
+          event.clientY,
+          state.entry
+        );
   const startMs = state.targetLaneId
     ? resolveActionLibraryEntryDropTime(state.targetLaneId, event.clientX)
     : 0;
   const previewKey = state.targetLaneId + ':' + String(startMs);
   if (state.targetLaneId && previewKey !== state.previewKey) {
     state.previewKey = previewKey;
-    previewActionPlacement({
-      kind: 'insert',
-      entry: state.entry,
-      laneId: state.targetLaneId,
-      startMs,
-    });
+    previewActionPlacement(
+      state.kind === 'fragment'
+        ? {
+            kind: 'fragment',
+            fragment: state.fragment,
+            laneId: state.targetLaneId,
+            startMs,
+          }
+        : {
+            kind: 'insert',
+            entry: state.entry,
+            laneId: state.targetLaneId,
+            startMs,
+          }
+    );
   } else if (!state.targetLaneId) {
     state.previewKey = '';
     clearActionPlacementPreview();
   }
   actionLibraryTimelineEntryDrag.value = {
-    entry: state.entry,
+    entry: state.entry ?? null,
+    fragmentId: state.fragment?.id ?? null,
+    label: state.fragment?.name ?? state.entry?.label ?? '',
     active: true,
     targetLaneId: state.targetLaneId,
     startMs,
@@ -2166,13 +2268,20 @@ function completeActionLibraryEntryPointerDrag(event) {
     return;
   }
   const targetLaneId = state.active
-    ? resolveActionLibraryEntryDropLaneId(
-        event.clientX,
-        event.clientY,
-        state.entry
-      ) || state.targetLaneId
+    ? (state.kind === 'fragment'
+        ? resolveTimelineFragmentDropLaneId(
+            event.clientX,
+            event.clientY,
+            state.fragment
+          )
+        : resolveActionLibraryEntryDropLaneId(
+            event.clientX,
+            event.clientY,
+            state.entry
+          )) || state.targetLaneId
     : '';
   const entry = state.entry;
+  const fragment = state.fragment;
   const startMs = targetLaneId
     ? resolveActionLibraryEntryDropTime(targetLaneId, event.clientX)
     : 0;
@@ -2181,7 +2290,11 @@ function completeActionLibraryEntryPointerDrag(event) {
   }
   cancelActionLibraryEntryPointerDrag();
   if (targetLaneId) {
-    insertTimelineEntry({ entry, laneId: targetLaneId, startMs });
+    if (state.kind === 'fragment') {
+      insertTimelineFragment(fragment.id, { targetStartMs: startMs });
+    } else {
+      insertTimelineEntry({ entry, laneId: targetLaneId, startMs });
+    }
   }
 }
 
@@ -2217,6 +2330,29 @@ function resolveActionLibraryEntryDropLaneId(clientX, clientY, entry) {
     : '';
 }
 
+function resolveTimelineFragmentDropLaneId(clientX, clientY, fragment) {
+  if (typeof document === 'undefined') {
+    return '';
+  }
+  const laneElement = document
+    .elementFromPoint(Number(clientX) || 0, Number(clientY) || 0)
+    ?.closest?.('[data-testid="workbench-timeline-row"]');
+  const laneId = laneElement?.getAttribute?.('data-lane-id') ?? '';
+  const lane = resolveWorkbenchTimelineLaneTarget(laneId);
+  if (!lane) {
+    return '';
+  }
+  const acceptsFragment = fragment.actions.some(action => {
+    if (action.lane.kind !== lane.kind) {
+      return false;
+    }
+    return lane.characterId == null
+      ? action.lane.kind === WORKBENCH_TIMELINE_LANE_KINDS.ENEMY_EVENT
+      : Number(action.source.actorCharacterId) === Number(lane.characterId);
+  });
+  return acceptsFragment ? laneId : '';
+}
+
 function resolveActionLibraryEntryDropTime(laneId, clientX) {
   const laneElement = workbenchRoot.value?.querySelector?.(
     `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"]`
@@ -2240,8 +2376,11 @@ onMounted(() => {
       kiboActionsById.value = new Map(
         catalog.items.map(item => [Number(item.kiboId), item.actions ?? []])
       );
+      kiboActionCatalogLoaded.value = true;
     })
-    .catch(() => {});
+    .catch(() => {
+      kiboActionCatalogLoaded.value = false;
+    });
   void getWorkbenchLayoutApi().then(layoutApi => {
     workbenchLayout.value =
       layoutApi.loadWorkbenchLayoutState(getLocalStorage());
@@ -3079,6 +3218,10 @@ function previewActionPlacement(payload = {}) {
   }
   if (payload.kind === 'insert') {
     previewTimelineEntryPlacement(payload);
+    return;
+  }
+  if (payload.kind === 'fragment') {
+    previewTimelineFragmentPlacement(payload);
   }
 }
 
@@ -3369,6 +3512,43 @@ function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
   });
 }
 
+function previewTimelineFragmentPlacement({
+  fragment,
+  laneId,
+  startMs,
+} = {}) {
+  const instantiation = instantiateWorkbenchTimelineFragment(fragment, {
+    targetStartMs: startMs,
+    teamSlots: teamSlots.value,
+    actorConfigs: actorConfigs.value,
+    kiboActionsById: kiboActionCatalogLoaded.value
+      ? kiboActionsById.value
+      : null,
+    existingActions: actionDrafts.value,
+    existingRelations: actionRelations.value,
+  });
+  if (!instantiation.committable) {
+    clearActionPlacementPreview();
+    return;
+  }
+  const nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...instantiation.relations],
+    [...actionDrafts.value, ...instantiation.actions]
+  );
+  const proposal = createActionPlacementProposal({
+    requestedActions: instantiation.actions,
+    relations: nextRelations,
+    requestedLaneId: laneId,
+  });
+  lastActionPlacementProposal.value = proposal;
+  actionPlacementPreview.value = createActionPlacementPreviewState({
+    kind: 'fragment',
+    proposal,
+    requestedActions: instantiation.actions,
+    label: fragment.name,
+  });
+}
+
 function copyAction(actionId) {
   clearSegmentSplitPreview();
   const sourceIndex = actionDrafts.value.findIndex(
@@ -3522,7 +3702,9 @@ function insertTimelineFragment(
     targetStartMs,
     teamSlots: teamSlots.value,
     actorConfigs: actorConfigs.value,
-    kiboActionsById: kiboActionsById.value,
+    kiboActionsById: kiboActionCatalogLoaded.value
+      ? kiboActionsById.value
+      : null,
     existingActions: actionDrafts.value,
     existingRelations: actionRelations.value,
     createActionId: usedActionIds =>
@@ -4334,6 +4516,100 @@ function refreshWorkbenchTimelineFragmentLibrary() {
   const library = loadWorkbenchTimelineFragmentLibrary(getLocalStorage());
   workbenchTimelineFragments.value = library.fragments;
   return library;
+}
+
+function saveSelectedActionsAsTimelineFragment(metadata = {}) {
+  const fragment = createWorkbenchTimelineFragment({
+    actions: actionDrafts.value,
+    selectedActionIds: selectedActionIds.value,
+    actionRelations: actionRelations.value,
+    teamSlots: teamSlots.value,
+    actorConfigs: actorConfigs.value,
+    metadata,
+  });
+  if (!fragment) {
+    draftStatus.value = '请先选择可编排动作';
+    return null;
+  }
+  const library = addWorkbenchTimelineFragment(
+    getLocalStorage(),
+    fragment
+  );
+  if (!library) {
+    draftStatus.value = '片段存储不可用';
+    return null;
+  }
+  workbenchTimelineFragments.value = library.fragments;
+  draftStatus.value = `已保存片段：${fragment.name}`;
+  return fragment;
+}
+
+function duplicateTimelineFragment(fragmentId) {
+  const library = duplicateWorkbenchTimelineFragment(
+    getLocalStorage(),
+    fragmentId
+  );
+  if (!library) {
+    draftStatus.value = '片段复制失败';
+    return false;
+  }
+  workbenchTimelineFragments.value = library.fragments;
+  draftStatus.value = '已复制片段';
+  return true;
+}
+
+function deleteTimelineFragment(fragmentId) {
+  const library = deleteWorkbenchTimelineFragment(
+    getLocalStorage(),
+    fragmentId
+  );
+  workbenchTimelineFragments.value = library.fragments;
+  draftStatus.value = '已删除片段';
+  return true;
+}
+
+function exportTimelineFragmentLibrary() {
+  if (typeof Blob === 'undefined' || !workbenchTimelineFragments.value.length) {
+    draftStatus.value = '没有可导出的片段';
+    return false;
+  }
+  const exportedAt = new Date().toISOString();
+  const blob = new Blob(
+    [
+      serializeWorkbenchTimelineFragmentLibrary(
+        workbenchTimelineFragments.value,
+        exportedAt
+      ),
+    ],
+    { type: 'application/json' }
+  );
+  downloadWorkbenchBlob(
+    blob,
+    `promilia-timeline-fragments-${exportedAt.slice(0, 10)}.json`
+  );
+  draftStatus.value = '已导出片段库';
+  return true;
+}
+
+async function importTimelineFragmentLibrary(file) {
+  try {
+    const rawLibrary =
+      typeof file === 'string' ? file : await file?.text?.();
+    const library = importWorkbenchTimelineFragmentLibrary(
+      getLocalStorage(),
+      rawLibrary
+    );
+    if (!library) {
+      draftStatus.value = '片段库文件无效';
+      return false;
+    }
+    workbenchTimelineFragments.value = library.fragments;
+    draftStatus.value = `已导入 ${library.summary.fragmentCount} 个片段`;
+    return true;
+  } catch {
+    draftStatus.value = '片段库导入失败';
+    return false;
+  }
 }
 
 function saveCurrentWorkbenchPreset(metadata) {
@@ -8336,6 +8612,13 @@ function getLocalStorage() {
       'review'
       'actions';
     padding: 6px;
+  }
+
+  .workbench-grid:has(> .action-library.fragment-mode) {
+    grid-template-areas:
+      'actions'
+      'mainflow'
+      'review';
   }
 
   .timeline-area {

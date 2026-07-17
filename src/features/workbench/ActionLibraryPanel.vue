@@ -1,9 +1,51 @@
 <template>
-  <section class="panel action-library">
+  <section
+    class="panel action-library"
+    :class="{ 'fragment-mode': activeLibraryView === 'fragments' }"
+    :data-library-view="activeLibraryView"
+  >
     <div class="panel-title">
       <Collection class="panel-icon" />
       <h2>动作库</h2>
     </div>
+
+    <div class="library-mode-switch" role="tablist" aria-label="动作库视图">
+      <button
+        type="button"
+        role="tab"
+        data-testid="workbench-action-library-tab"
+        :aria-selected="activeLibraryView === 'actions'"
+        :class="{ active: activeLibraryView === 'actions' }"
+        @click="activeLibraryView = 'actions'"
+      >
+        动作
+      </button>
+      <button
+        type="button"
+        role="tab"
+        data-testid="workbench-fragment-library-tab"
+        :aria-selected="activeLibraryView === 'fragments'"
+        :class="{ active: activeLibraryView === 'fragments' }"
+        @click="activeLibraryView = 'fragments'"
+      >
+        片段
+        <span>{{ timelineFragments.length }}</span>
+      </button>
+    </div>
+
+    <WorkbenchTimelineFragmentLibrary
+      v-if="activeLibraryView === 'fragments'"
+      class="fragment-library-host"
+      :fragments="timelineFragments"
+      :selected-action-count="selectedActionIds.length"
+      @save-fragment="$emit('save-timeline-fragment', $event)"
+      @insert-fragment="$emit('insert-timeline-fragment', $event)"
+      @duplicate-fragment="$emit('duplicate-timeline-fragment', $event)"
+      @delete-fragment="$emit('delete-timeline-fragment', $event)"
+      @export-library="$emit('export-timeline-fragment-library')"
+      @import-library="$emit('import-timeline-fragment-library', $event)"
+      @begin-fragment-drag="$emit('begin-timeline-fragment-drag', $event)"
+    />
 
     <div class="actor-tabs" role="tablist" aria-label="动作库角色">
       <button
@@ -463,8 +505,9 @@
 </template>
 
 <script setup>
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { Collection, EditPen } from '@element-plus/icons-vue';
+import WorkbenchTimelineFragmentLibrary from './WorkbenchTimelineFragmentLibrary.vue';
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
@@ -515,6 +558,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  timelineFragments: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits([
@@ -538,8 +585,16 @@ const emit = defineEmits([
   'shift-action-batch',
   'update-active-actor',
   'begin-timeline-entry-drag',
+  'save-timeline-fragment',
+  'insert-timeline-fragment',
+  'duplicate-timeline-fragment',
+  'delete-timeline-fragment',
+  'export-timeline-fragment-library',
+  'import-timeline-fragment-library',
+  'begin-timeline-fragment-drag',
 ]);
 
+const activeLibraryView = ref('actions');
 const batchAlignStarts = reactive({});
 const batchShiftOffsets = reactive({});
 const batchShiftStepMs = frameToMs(30);
@@ -1062,6 +1117,47 @@ function formatInsertionNote(insertion) {
   width: 17px;
   height: 17px;
   color: #79c7b9;
+}
+
+.library-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 8px 10px 0;
+}
+
+.library-mode-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #9aa5ad;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+}
+
+.library-mode-switch button.active {
+  border-color: rgba(121, 199, 185, 0.48);
+  background: rgba(121, 199, 185, 0.12);
+  color: #e8f8f5;
+}
+
+.library-mode-switch span {
+  min-width: 17px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 9px;
+}
+
+.action-library.fragment-mode
+  > :not(.panel-title):not(.library-mode-switch):not(.fragment-library-host) {
+  display: none;
 }
 
 h2 {

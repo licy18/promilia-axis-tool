@@ -1558,6 +1558,12 @@ JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整
 
 下一阶段目标：M5 可复用编排片段与动作组模板。把当前多选动作或完整关系组保存为局部片段，在现有动作库中拖回任意身份兼容的方案；片段只保留来源 identity、固定队伍槽兼容要求、相对帧差、轨道和关系，插入时重新经过 M4 放置提议并重建 M3 generation/runtime。M5 不做自动最优循环、数值评分、真实采样、公式研究或社区模板平台，包体只在阶段末统一检查。
 
+### M5 可复用编排片段与动作组模板已完成，等待产品验收（2026-07-17）
+
+Workbench 现可把当前多选动作或完整关系组保存为独立版本化片段，并在“动作 / 片段”库中搜索、复制、删除、导入导出及拖回兼容方案。片段保留来源 identity、固定队伍槽、角色/奇波要求、相对帧差、轨道和关系，不携带旧 CD、Buff、曲线或日志；插入时整组复用 M4 放置提议和单次历史事务，再由 M3 generation/runtime 重建状态。真实角色/奇波关系组已覆盖辅助避让、自由冲突、轴末整体阻塞、身份不兼容、撤销/重做、项目回载及 390px 拖拽，无未知 owner 猜测或部分落盘。
+
+完整 `test:trial-release` 通过 100 个测试文件、553 条单元/组件测试、45/45 production preview 和 41/41 必需能力，验收报告判定为 `trial-ready`；生产引用、数据、动作状态、applied-source 和 bundle 守门全部通过。总 JavaScript gzip 为 723,205B，初始入口为 89,229B，Workbench 主块为 338,124B；视觉证据为 `reports/m5-timeline-fragment-desktop.png` 与 `reports/m5-timeline-fragment-narrow.png`。当前停止在 M5 产品验收点，不自动进入 M6。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -123,6 +123,142 @@ describe('ActionLibraryPanel', () => {
     });
     expect(wrapper.emitted('begin-timeline-entry-drag')).toBeUndefined();
   });
+
+  it('saves and reuses compatible fragments through the compact library view', async () => {
+    const props = createActionLibraryProps();
+    props.selectedActionIds = ['action-0001', 'action-0002'];
+    props.timelineFragments = [
+      {
+        id: 'fragment-alpha',
+        name: '角色奇波连携',
+        description: '',
+        tags: ['连携'],
+        durationMs: 2500,
+        summary: {
+          actionCount: 3,
+          laneKinds: ['actor-action', 'actor-kibo'],
+        },
+        compatibility: {
+          status: 'valid',
+          issues: [],
+        },
+      },
+      {
+        id: 'fragment-blocked',
+        name: '不兼容片段',
+        description: '',
+        tags: [],
+        durationMs: 1000,
+        summary: {
+          actionCount: 1,
+          laneKinds: ['actor-action'],
+        },
+        compatibility: {
+          status: 'blocked',
+          issues: [{ message: '固定槽位角色不匹配' }],
+        },
+      },
+    ];
+    const wrapper = mount(ActionLibraryPanel, { props });
+
+    await wrapper
+      .get('[data-testid="workbench-fragment-library-tab"]')
+      .trigger('click');
+    expect(wrapper.attributes('data-library-view')).toBe('fragments');
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-fragment"]')
+    ).toHaveLength(2);
+
+    await wrapper
+      .get('[data-testid="workbench-fragment-name-input"]')
+      .setValue('新的连携');
+    await wrapper
+      .get('[data-testid="workbench-fragment-tags-input"]')
+      .setValue('连携, 起手');
+    await wrapper
+      .get('[data-testid="workbench-save-timeline-fragment"]')
+      .trigger('submit');
+    expect(wrapper.emitted('save-timeline-fragment')?.[0]?.[0]).toEqual({
+      name: '新的连携',
+      tags: '连携, 起手',
+    });
+
+    const compatible = wrapper.get(
+      '[data-testid="workbench-insert-timeline-fragment"][data-fragment-id="fragment-alpha"]'
+    );
+    await dispatchPointerDown(wrapper, compatible, {
+      button: 0,
+      pointerId: 17,
+      clientX: 18,
+      clientY: 26,
+    });
+    expect(wrapper.emitted('begin-timeline-fragment-drag')?.[0]?.[0]).toEqual({
+      fragmentId: 'fragment-alpha',
+      pointerId: 17,
+      clientX: 18,
+      clientY: 26,
+    });
+    await compatible.trigger('click');
+    expect(wrapper.emitted('insert-timeline-fragment')?.[0]).toEqual([
+      'fragment-alpha',
+    ]);
+
+    const blocked = wrapper.get(
+      '[data-testid="workbench-insert-timeline-fragment"][data-fragment-id="fragment-blocked"]'
+    );
+    expect(blocked.attributes('disabled')).toBeDefined();
+    expect(blocked.attributes('title')).toBe('固定槽位角色不匹配');
+
+    await wrapper
+      .get('[data-testid="workbench-fragment-search"]')
+      .setValue('不兼容');
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-fragment"]')
+    ).toHaveLength(1);
+    await wrapper
+      .get('[data-testid="workbench-fragment-search"]')
+      .setValue('没有结果');
+    expect(wrapper.get('[data-testid="workbench-fragment-empty"]').text()).toBe(
+      '没有匹配的片段'
+    );
+    await wrapper.get('[data-testid="workbench-fragment-search"]').setValue('');
+
+    await wrapper
+      .get(
+        '[data-testid="workbench-duplicate-timeline-fragment"][data-fragment-id="fragment-alpha"]'
+      )
+      .trigger('click');
+    expect(wrapper.emitted('duplicate-timeline-fragment')?.[0]).toEqual([
+      'fragment-alpha',
+    ]);
+    await wrapper
+      .get(
+        '[data-testid="workbench-delete-timeline-fragment"][data-fragment-id="fragment-alpha"]'
+      )
+      .trigger('click');
+    expect(wrapper.emitted('delete-timeline-fragment')?.[0]).toEqual([
+      'fragment-alpha',
+    ]);
+    await wrapper
+      .get('[data-testid="workbench-export-fragment-library"]')
+      .trigger('click');
+    expect(wrapper.emitted('export-timeline-fragment-library')).toHaveLength(1);
+
+    const importInput = wrapper.get(
+      '[data-testid="workbench-import-fragment-library-file"]'
+    );
+    const importedFile = new File(['{}'], 'timeline-fragments.json', {
+      type: 'application/json',
+    });
+    Object.defineProperty(importInput.element, 'files', {
+      configurable: true,
+      value: [importedFile],
+    });
+    await importInput.trigger('change');
+    expect(wrapper.emitted('import-timeline-fragment-library')?.[0]).toEqual([
+      importedFile,
+    ]);
+  });
 });
 
 function createActionLibraryProps() {

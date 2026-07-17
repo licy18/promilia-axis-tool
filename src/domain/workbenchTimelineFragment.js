@@ -890,7 +890,9 @@ function createWorkbenchTimelineFragmentId(now, randomSuffix = '') {
 }
 
 function normalizeTags(tags) {
-  return [...new Set(arrayOrEmpty(tags).map(normalizeText).filter(Boolean))];
+  const values =
+    typeof tags === 'string' ? tags.split(/[,，]/) : arrayOrEmpty(tags);
+  return [...new Set(values.map(normalizeText).filter(Boolean))];
 }
 
 function normalizeText(value) {
