@@ -1138,6 +1138,7 @@ import {
   duplicateWorkbenchPreset,
   loadWorkbenchPresetLibrary,
 } from '../domain/workbenchPresetStorage';
+import { instantiateWorkbenchTimelineFragment } from '../domain/workbenchTimelineFragment';
 import { loadWorkbenchTimelineFragmentLibrary } from '../domain/workbenchTimelineFragmentStorage';
 import {
   createWorkbenchProjectPngFileName,
@@ -3506,6 +3507,98 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
   return {
     ...pasteResult,
     pastedActions: committedActions,
+  };
+}
+
+function insertTimelineFragment(
+  fragmentId,
+  { targetStartMs = frameToMs(timelineCursorFrameIndex.value) } = {}
+) {
+  clearSegmentSplitPreview();
+  const fragment = workbenchTimelineFragments.value.find(
+    item => item.id === fragmentId
+  );
+  const instantiation = instantiateWorkbenchTimelineFragment(fragment, {
+    targetStartMs,
+    teamSlots: teamSlots.value,
+    actorConfigs: actorConfigs.value,
+    kiboActionsById: kiboActionsById.value,
+    existingActions: actionDrafts.value,
+    existingRelations: actionRelations.value,
+    createActionId: usedActionIds =>
+      createNextActionIdFromUsedIds(usedActionIds),
+    createRelationId: usedRelationIds =>
+      createNextWorkbenchActionRelationIdFromUsedIds(usedRelationIds),
+  });
+  if (!instantiation.committable) {
+    draftStatus.value =
+      instantiation.issues[0]?.message ?? '片段身份或来源不兼容';
+    return null;
+  }
+
+  let nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...instantiation.relations],
+    [...actionDrafts.value, ...instantiation.actions]
+  );
+  const proposal = createActionPlacementProposal({
+    requestedActions: instantiation.actions,
+    relations: nextRelations,
+    requestedLaneId: resolveDraftLaneId(instantiation.actions[0]),
+  });
+  lastActionPlacementProposal.value = proposal;
+  if (!proposal.committable) {
+    draftStatus.value =
+      proposal.conflicts[0]?.message ?? '片段无法完整放入当前位置';
+    return null;
+  }
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    instantiation.actions
+  );
+  if (!committedActions) {
+    return null;
+  }
+  nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...instantiation.relations],
+    [...actionDrafts.value, ...committedActions]
+  );
+  const insertedRelationIds = new Set(
+    instantiation.relations.map(relation => relation.id)
+  );
+  if (
+    nextRelations.filter(relation => insertedRelationIds.has(relation.id))
+      .length !== instantiation.relations.length
+  ) {
+    draftStatus.value = '片段关系无法完整落盘';
+    return null;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
+  actionDrafts.value = [...actionDrafts.value, ...committedActions];
+  actionRelations.value = nextRelations;
+  setWorkbenchActionSelection(
+    instantiation.selectedActionIds,
+    instantiation.primaryActionId,
+    { anchorActionId: instantiation.primaryActionId }
+  );
+  selectedActionRelationId.value = '';
+  syncActionLibraryCharacterIdFromDraft(
+    findActionDraftById(instantiation.primaryActionId)
+  );
+  applyActionMutationRuntimeSyncRequest({
+    actionId: instantiation.primaryActionId,
+    runtimeReviewState,
+    selectedActionChanged: true,
+    affectedActionIds: instantiation.selectedActionIds,
+  });
+  markDraftDirty();
+  draftStatus.value = `已插入片段：${fragment.name}`;
+  return {
+    ...instantiation,
+    proposal,
+    actions: committedActions,
+    relations: instantiation.relations,
   };
 }
 

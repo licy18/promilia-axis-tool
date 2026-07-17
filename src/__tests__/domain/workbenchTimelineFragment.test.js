@@ -3,8 +3,14 @@ import { GENERATED_ACTION_STATUS_SOURCE } from '../../domain/actionStatusGenerat
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { frameToMs } from '../../domain/timebase';
 import {
+  createDefaultWorkbenchDraftState,
+  createWorkbenchProjectFileSnapshot,
+  parseWorkbenchProjectFile,
+} from '../../domain/workbenchDraftStorage';
+import {
   createWorkbenchTimelineFragment,
   evaluateWorkbenchTimelineFragmentCompatibility,
+  instantiateWorkbenchTimelineFragment,
   parseWorkbenchTimelineFragment,
 } from '../../domain/workbenchTimelineFragment';
 import {
@@ -12,6 +18,7 @@ import {
   createDefaultWorkbenchTeamSlots,
   createWorkbenchActionDraft,
   getSkillsForCharacter,
+  getWorkbenchLoadoutOptions,
 } from '../../domain/workbenchProjectFactory';
 
 describe('workbench timeline fragment', () => {
@@ -160,6 +167,156 @@ describe('workbench timeline fragment', () => {
       parseWorkbenchTimelineFragment({ ...fragment, schemaVersion: 99 })
     ).toBeNull();
   });
+
+  it('instantiates one atomic action and relation group with regenerated identities', () => {
+    const context = createFragmentContext();
+    const fragment = createWorkbenchTimelineFragment({
+      ...context,
+      selectedActionIds: ['action-0002'],
+      metadata: { id: 'fragment-instantiation' },
+      now: '2026-07-17T08:00:00.000Z',
+    });
+    let nextActionIndex = 101;
+    let nextRelationIndex = 101;
+    const result = instantiateWorkbenchTimelineFragment(fragment, {
+      targetStartMs: frameToMs(360),
+      teamSlots: context.teamSlots,
+      actorConfigs: context.actorConfigs,
+      kiboActionsById: new Map([
+        [context.kiboId, [{ skillId: context.kiboSkillId }]],
+      ]),
+      existingActions: [{ id: 'action-0100' }],
+      existingRelations: [{ id: 'relation-0100' }],
+      createActionId: () =>
+        `action-${String(nextActionIndex++).padStart(4, '0')}`,
+      createRelationId: () =>
+        `relation-${String(nextRelationIndex++).padStart(4, '0')}`,
+    });
+
+    expect(result).toMatchObject({
+      status: 'valid',
+      committable: true,
+      selectedActionIds: ['action-0101', 'action-0102', 'action-0103'],
+      primaryActionId: 'action-0101',
+    });
+    expect(result.actions.map(action => action.startMs)).toEqual([
+      frameToMs(360),
+      frameToMs(405),
+      frameToMs(450),
+    ]);
+    expect(result.actions[0]).toMatchObject({
+      id: 'action-0101',
+      insertion: null,
+      generationBatch: null,
+      statusGeneration: {
+        actionId: 'action-0101',
+        sourceKind: 'azpr-action-status-generation',
+      },
+    });
+    expect(
+      result.actions[0].effectCommands.find(
+        command => command.effectId === 'manual-fragment-effect'
+      )
+    ).toMatchObject({ id: 'action-0101-effect-01' });
+    expect(result.actions[1]).toMatchObject({
+      id: 'action-0102',
+      type: ACTION_TYPES.KIBO_EVENT,
+      kiboId: context.kiboId,
+      statusGeneration: {
+        actionId: 'action-0102',
+        sourceKind: 'azpr-kibo-action-status-generation',
+      },
+    });
+    expect(result.relations).toEqual([
+      expect.objectContaining({
+        id: 'relation-0101',
+        fromActionId: 'action-0101',
+        toActionId: 'action-0102',
+      }),
+      expect.objectContaining({
+        id: 'relation-0102',
+        fromActionId: 'action-0102',
+        toActionId: 'action-0103',
+      }),
+    ]);
+  });
+
+  it('refuses owner mismatches and damaged relation groups without partial drafts', () => {
+    const context = createFragmentContext();
+    const fragment = createWorkbenchTimelineFragment({
+      ...context,
+      selectedActionIds: context.actions.map(action => action.id),
+      metadata: { id: 'fragment-atomic-block' },
+    });
+    const mismatchedSlots = context.teamSlots.map((slot, index) =>
+      index === 0
+        ? { ...slot, characterId: context.teamSlots[2].characterId }
+        : slot
+    );
+    const blocked = instantiateWorkbenchTimelineFragment(fragment, {
+      teamSlots: mismatchedSlots,
+      actorConfigs: context.actorConfigs,
+      kiboActionsById: new Map([
+        [context.kiboId, [{ skillId: context.kiboSkillId }]],
+      ]),
+    });
+
+    expect(blocked).toMatchObject({
+      status: 'blocked',
+      committable: false,
+      actions: [],
+      relations: [],
+    });
+
+    const damaged = structuredClone(fragment);
+    damaged.relations[0].toFragmentActionId = 'missing-fragment-action';
+    expect(parseWorkbenchTimelineFragment(damaged)).toBeNull();
+    expect(instantiateWorkbenchTimelineFragment(damaged)).toMatchObject({
+      status: 'blocked',
+      committable: false,
+      actions: [],
+      relations: [],
+    });
+  });
+
+  it('round-trips instantiated actions through the standard project carrier', () => {
+    const context = createFragmentContext();
+    const fragment = createWorkbenchTimelineFragment({
+      ...context,
+      selectedActionIds: context.actions.map(action => action.id),
+      metadata: { id: 'fragment-project-round-trip' },
+    });
+    const instantiated = instantiateWorkbenchTimelineFragment(fragment, {
+      targetStartMs: frameToMs(240),
+      teamSlots: context.teamSlots,
+      actorConfigs: context.actorConfigs,
+      kiboActionsById: new Map([
+        [context.kiboId, [{ skillId: context.kiboSkillId }]],
+      ]),
+    });
+    const draft = createDefaultWorkbenchDraftState();
+    const restored = parseWorkbenchProjectFile(
+      createWorkbenchProjectFileSnapshot({
+        ...draft,
+        teamSlots: context.teamSlots,
+        actorConfigs: context.actorConfigs,
+        actionDrafts: instantiated.actions,
+        actionRelations: instantiated.relations,
+        selectedActionId: instantiated.primaryActionId,
+      })
+    );
+
+    expect(restored.actionDrafts.map(action => action.id)).toEqual(
+      instantiated.selectedActionIds
+    );
+    expect(restored.actionRelations).toEqual(
+      instantiated.relations.map(relation => expect.objectContaining(relation))
+    );
+    expect(restored.actionDrafts[0].statusGeneration).toMatchObject({
+      actionId: instantiated.primaryActionId,
+      sourceKind: 'azpr-action-status-generation',
+    });
+  });
 });
 
 function createFragmentContext() {
@@ -167,7 +324,9 @@ function createFragmentContext() {
   const baseActorConfigs = createDefaultWorkbenchActorConfigs();
   const firstSkill = getSkillsForCharacter(teamSlots[0].characterId)[0];
   const secondSkill = getSkillsForCharacter(teamSlots[1].characterId)[0];
-  const kiboId = Number(baseActorConfigs[0].loadout.kiboId) || 900001;
+  const kiboId =
+    Number(baseActorConfigs[0].loadout.kiboId) ||
+    Number(getWorkbenchLoadoutOptions().kibos[0].id);
   const actorConfigs = baseActorConfigs.map((config, index) =>
     index === 0 ? { ...config, loadout: { ...config.loadout, kiboId } } : config
   );

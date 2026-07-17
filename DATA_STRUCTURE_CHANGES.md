@@ -27554,3 +27554,9 @@ AzPrWorkbenchTimelineFragment v1
 保存动作时会沿现有关系图扩展为完整关系组，并以最早动作归零。片段动作的 `source` 只保留可重新构造草稿的动作输入；动作实例 ID、绝对起点、`insertion`、`generationBatch`、`statusGeneration`、目录自动生成的效果命令以及 CD/Buff/曲线/日志/calculator 输出均不保存。手工效果命令保留输入语义但移除旧命令 ID，后续插入时重新分配。
 
 本地库使用 `workbench-timeline-fragment-library v1` 和独立 storage key `promilia-axis-tool:timeline-fragments:v1`，支持单一 JSON 库导入导出、命名、标签、复制与删除。兼容检查要求涉及的固定队伍槽保持同一角色，奇波动作还要求同一奇波及真实来源动作；目录尚未加载时只标为 `unresolved`，身份或来源确定不匹配时标为 `blocked`。该合同不进入项目五载体，不改变项目 schema、M3 runtime 或 HP/韧性/六资源 calculator 输入。
+
+## 437. Timeline fragment instantiation v1
+
+新增非持久化 `workbench-timeline-fragment-instantiation` 结果。输入片段、当前三人固定槽、角色配置、奇波动作目录、目标起点及已有动作/关系 ID；输出新动作、新关系、选中组和兼容问题。只有兼容状态为 `valid`、所有动作均成功重建且关系数量完整时 `committable = true`。角色或奇波身份不匹配、来源动作缺失、目录尚未加载、关系端点损坏或循环关系都不会生成可提交的部分结果。
+
+实例化使用现有 `createWorkbenchActionDraft` 重新构造每个动作，并为动作、手工效果命令和关系分配新 ID。相对帧差、固定槽位和关系 gap 保持不变；`statusGeneration`、目录效果命令、CD/Buff 区间、曲线和日志继续从当前数据目录与 M3 runtime 重建。Workbench 将完整实例化结果作为一个 M4 放置提议处理：轴末或其他确定阻塞整组拒绝，自由模式保持请求起点，辅助模式整组应用建议偏移；提交只写入一次历史快照并沿既有运行时同步链刷新。实例化结果本身不进入项目 schema，成功后的标准动作与关系继续由原五载体保存。

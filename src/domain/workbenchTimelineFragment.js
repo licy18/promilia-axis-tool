@@ -5,8 +5,14 @@ import {
   expandWorkbenchPlacementActionIds,
   WORKBENCH_ACTION_PLACEMENT_STATUSES,
 } from './workbenchActionPlacement';
-import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
-import { getSkillsForCharacter } from './workbenchProjectFactory';
+import {
+  createNextWorkbenchActionRelationIdFromUsedIds,
+  normalizeWorkbenchActionRelations,
+} from './workbenchActionRelations';
+import {
+  createWorkbenchActionDraft,
+  getSkillsForCharacter,
+} from './workbenchProjectFactory';
 import {
   resolveWorkbenchTimelineLaneKind,
   WORKBENCH_TIMELINE_LANE_KINDS,
@@ -164,10 +170,16 @@ export function normalizeWorkbenchTimelineFragment(fragment) {
   }
 
   const relations = normalizeFragmentRelations(fragment.relations, actions);
+  if (relations.length !== arrayOrEmpty(fragment.relations).length) {
+    return null;
+  }
   const requirements = normalizeFragmentRequirements(
     fragment.requirements,
     actions
   );
+  if (!hasCompleteFragmentRequirements(actions, requirements)) {
+    return null;
+  }
   const durationMs = Math.max(
     WORKBENCH_FRAME_MS,
     ...actions.map(action => action.relativeStartMs + action.source.durationMs)
@@ -319,6 +331,114 @@ export function evaluateWorkbenchTimelineFragmentCompatibility(
     status,
     issues,
     fragment: normalizedFragment,
+  });
+}
+
+export function instantiateWorkbenchTimelineFragment(
+  fragment,
+  {
+    targetStartMs = 0,
+    teamSlots = [],
+    actorConfigs = [],
+    kiboActionsById = null,
+    existingActions = [],
+    existingRelations = [],
+    createActionId = createNextFragmentActionId,
+    createRelationId = createNextWorkbenchActionRelationIdFromUsedIds,
+  } = {}
+) {
+  const normalizedFragment = normalizeWorkbenchTimelineFragment(fragment);
+  const compatibility = evaluateWorkbenchTimelineFragmentCompatibility(
+    normalizedFragment,
+    { teamSlots, actorConfigs, kiboActionsById }
+  );
+  if (
+    !normalizedFragment ||
+    compatibility.status !== WORKBENCH_ACTION_PLACEMENT_STATUSES.VALID ||
+    typeof createActionId !== 'function' ||
+    typeof createRelationId !== 'function'
+  ) {
+    return createFragmentInstantiationResult({
+      status: compatibility.status,
+      compatibility,
+    });
+  }
+
+  const slotsById = new Map(teamSlots.map(slot => [slot.slotId, slot]));
+  const configsByCharacterId = new Map(
+    actorConfigs.map(config => [Number(config?.characterId), config])
+  );
+  const usedActionIds = new Set(existingActions.map(action => action.id));
+  const usedRelationIds = new Set(
+    existingRelations.map(relation => relation.id)
+  );
+  const actionIdByFragmentId = new Map();
+  const insertStartMs = Math.max(0, snapMsToFrame(Number(targetStartMs) || 0));
+  const actions = normalizedFragment.actions.map(fragmentAction => {
+    const id = createActionId(usedActionIds);
+    usedActionIds.add(id);
+    actionIdByFragmentId.set(fragmentAction.fragmentActionId, id);
+    const source = cloneValue(fragmentAction.source);
+    const slot = fragmentAction.lane.slotId
+      ? slotsById.get(fragmentAction.lane.slotId)
+      : null;
+    if (slot) {
+      source.actorCharacterId = Number(slot.characterId);
+    }
+    if (source.type === ACTION_TYPES.SWITCH) {
+      const targetRequirement = normalizedFragment.requirements.teamSlots.find(
+        requirement => requirement.characterId === source.targetCharacterId
+      );
+      const targetSlot = targetRequirement
+        ? slotsById.get(targetRequirement.slotId)
+        : null;
+      source.targetCharacterId = Number(targetSlot?.characterId) || null;
+    }
+    if (source.type === ACTION_TYPES.KIBO_EVENT) {
+      source.kiboId = positiveIntegerOrNull(
+        configsByCharacterId.get(source.actorCharacterId)?.loadout?.kiboId
+      );
+    }
+    return createWorkbenchActionDraft({
+      ...source,
+      id,
+      startMs: insertStartMs + fragmentAction.relativeStartMs,
+      insertion: null,
+      generationBatch: null,
+    });
+  });
+  const relations = normalizeWorkbenchActionRelations(
+    normalizedFragment.relations.map(relation => ({
+      id: createRelationId(usedRelationIds),
+      kind: relation.kind,
+      fromActionId: actionIdByFragmentId.get(relation.fromFragmentActionId),
+      toActionId: actionIdByFragmentId.get(relation.toFragmentActionId),
+      sourceAnchor: relation.sourceAnchor,
+      targetAnchor: relation.targetAnchor,
+      gapMs: relation.gapMs,
+    })),
+    actions
+  );
+  if (relations.length !== normalizedFragment.relations.length) {
+    return createFragmentInstantiationResult({
+      status: WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED,
+      compatibility,
+      issues: [
+        createCompatibilityIssue(
+          'fragment-relation-instantiation-incomplete',
+          '片段关系无法完整重建',
+          WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED
+        ),
+      ],
+    });
+  }
+
+  return createFragmentInstantiationResult({
+    status: WORKBENCH_ACTION_PLACEMENT_STATUSES.VALID,
+    compatibility,
+    fragment: normalizedFragment,
+    actions,
+    relations,
   });
 }
 
@@ -598,6 +718,44 @@ function normalizeFragmentRequirements(requirements, actions) {
   return { fixedTeamSlots: true, teamSlots };
 }
 
+function hasCompleteFragmentRequirements(actions, requirements) {
+  const requirementsBySlotId = new Map(
+    requirements.teamSlots.map(requirement => [requirement.slotId, requirement])
+  );
+  for (const action of actions) {
+    if (
+      [
+        WORKBENCH_TIMELINE_LANE_KINDS.ACTOR_ACTION,
+        WORKBENCH_TIMELINE_LANE_KINDS.ACTOR_KIBO,
+      ].includes(action.lane.kind)
+    ) {
+      const requirement = requirementsBySlotId.get(action.lane.slotId);
+      if (
+        !requirement ||
+        requirement.characterId !== action.source.actorCharacterId
+      ) {
+        return false;
+      }
+      if (
+        action.source.type === ACTION_TYPES.KIBO_EVENT &&
+        requirement.kiboId !== action.source.kiboId
+      ) {
+        return false;
+      }
+    }
+    if (
+      action.source.type === ACTION_TYPES.SWITCH &&
+      !requirements.teamSlots.some(
+        requirement =>
+          requirement.characterId === action.source.targetCharacterId
+      )
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function normalizeFragmentSource(source) {
   return {
     sourceKind:
@@ -676,6 +834,49 @@ function createCompatibilityResult({ status, issues, fragment = null }) {
     ),
     fragmentId: fragment?.id ?? null,
   };
+}
+
+function createFragmentInstantiationResult({
+  status,
+  compatibility,
+  fragment = null,
+  actions = [],
+  relations = [],
+  issues = [],
+}) {
+  const allIssues = [...(compatibility?.issues ?? []), ...issues];
+  return {
+    schemaVersion: 1,
+    sourceKind: 'workbench-timeline-fragment-instantiation',
+    status,
+    committable:
+      status === WORKBENCH_ACTION_PLACEMENT_STATUSES.VALID &&
+      actions.length > 0 &&
+      relations.length === (fragment?.relations?.length ?? 0),
+    fragmentId: fragment?.id ?? compatibility?.fragmentId ?? null,
+    actions,
+    relations,
+    selectedActionIds: actions.map(action => action.id),
+    primaryActionId: actions[0]?.id ?? '',
+    compatibility,
+    issues: allIssues,
+  };
+}
+
+function createNextFragmentActionId(usedActionIds) {
+  const usedIds = usedActionIds ?? new Set();
+  const maxIndex = [...usedIds].reduce((maximum, actionId) => {
+    const match = String(actionId).match(/^action-(\d+)$/);
+    return match ? Math.max(maximum, Number(match[1])) : maximum;
+  }, 0);
+  let nextIndex = maxIndex + 1;
+  let actionId = `action-${String(nextIndex).padStart(4, '0')}`;
+  while (usedIds.has(actionId)) {
+    nextIndex += 1;
+    actionId = `action-${String(nextIndex).padStart(4, '0')}`;
+  }
+  usedIds.add(actionId);
+  return actionId;
 }
 
 function createWorkbenchTimelineFragmentId(now, randomSuffix = '') {
