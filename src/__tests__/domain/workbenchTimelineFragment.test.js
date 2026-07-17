@@ -1,0 +1,246 @@
+import { describe, expect, it } from 'vitest';
+import { GENERATED_ACTION_STATUS_SOURCE } from '../../domain/actionStatusGeneration';
+import { ACTION_TYPES } from '../../domain/projectSchema';
+import { frameToMs } from '../../domain/timebase';
+import {
+  createWorkbenchTimelineFragment,
+  evaluateWorkbenchTimelineFragmentCompatibility,
+  parseWorkbenchTimelineFragment,
+} from '../../domain/workbenchTimelineFragment';
+import {
+  createDefaultWorkbenchActorConfigs,
+  createDefaultWorkbenchTeamSlots,
+  createWorkbenchActionDraft,
+  getSkillsForCharacter,
+} from '../../domain/workbenchProjectFactory';
+
+describe('workbench timeline fragment', () => {
+  it('captures a complete relation group with fixed-slot identities and no old runtime state', () => {
+    const context = createFragmentContext();
+    const fragment = createWorkbenchTimelineFragment({
+      ...context,
+      selectedActionIds: ['action-0002'],
+      metadata: {
+        id: 'fragment-chain',
+        name: '跨角色连携',
+        tags: ['连携', '测试'],
+      },
+      now: '2026-07-17T08:00:00.000Z',
+    });
+
+    expect(fragment).toMatchObject({
+      id: 'fragment-chain',
+      name: '跨角色连携',
+      tags: ['连携', '测试'],
+      source: {
+        sourceActionIds: ['action-0001', 'action-0002', 'action-0003'],
+        expandedFromSelection: true,
+        runtimeOutputsIncluded: false,
+      },
+      summary: {
+        actionCount: 3,
+        relationCount: 2,
+        requiredTeamSlotCount: 2,
+        generatedStatusSnapshotCount: 0,
+        runtimeOutputCount: 0,
+      },
+    });
+    expect(fragment.actions.map(action => action.relativeStartMs)).toEqual([
+      0,
+      frameToMs(45),
+      frameToMs(90),
+    ]);
+    expect(fragment.actions.map(action => action.lane.kind)).toEqual([
+      'actor-action',
+      'actor-kibo',
+      'actor-action',
+    ]);
+    expect(fragment.relations).toEqual([
+      expect.objectContaining({
+        fromFragmentActionId: 'fragment-action-0001',
+        toFragmentActionId: 'fragment-action-0002',
+      }),
+      expect.objectContaining({
+        fromFragmentActionId: 'fragment-action-0002',
+        toFragmentActionId: 'fragment-action-0003',
+      }),
+    ]);
+    expect(fragment.requirements.teamSlots).toEqual([
+      expect.objectContaining({
+        slotId: context.teamSlots[0].slotId,
+        characterId: context.teamSlots[0].characterId,
+        kiboId: context.kiboId,
+      }),
+      expect.objectContaining({
+        slotId: context.teamSlots[1].slotId,
+        characterId: context.teamSlots[1].characterId,
+      }),
+    ]);
+
+    const skillSource = fragment.actions[0].source;
+    expect(skillSource).not.toHaveProperty('id');
+    expect(skillSource).not.toHaveProperty('startMs');
+    expect(skillSource).not.toHaveProperty('insertion');
+    expect(skillSource).not.toHaveProperty('generationBatch');
+    expect(skillSource).not.toHaveProperty('statusGeneration');
+    expect(skillSource.note).toBe('保留作者备注');
+    expect(skillSource.effectCommands).toEqual([
+      expect.objectContaining({ effectId: 'manual-fragment-effect' }),
+    ]);
+    expect(skillSource.effectCommands[0]).not.toHaveProperty('id');
+  });
+
+  it('validates exact team and Kibo ownership while keeping unloaded catalogs unresolved', () => {
+    const context = createFragmentContext();
+    const fragment = createWorkbenchTimelineFragment({
+      ...context,
+      selectedActionIds: context.actions.map(action => action.id),
+      metadata: { id: 'fragment-compatibility' },
+      now: '2026-07-17T08:00:00.000Z',
+    });
+    const kiboActionsById = new Map([
+      [context.kiboId, [{ skillId: context.kiboSkillId }]],
+    ]);
+
+    expect(
+      evaluateWorkbenchTimelineFragmentCompatibility(fragment, {
+        teamSlots: context.teamSlots,
+        actorConfigs: context.actorConfigs,
+        kiboActionsById,
+      })
+    ).toMatchObject({ status: 'valid', compatible: true, issues: [] });
+
+    expect(
+      evaluateWorkbenchTimelineFragmentCompatibility(fragment, {
+        teamSlots: context.teamSlots,
+        actorConfigs: context.actorConfigs,
+      })
+    ).toMatchObject({
+      status: 'unresolved',
+      compatible: true,
+      unresolvedIssues: [
+        expect.objectContaining({ code: 'fragment-kibo-catalog-unavailable' }),
+      ],
+    });
+
+    const mismatchedSlots = context.teamSlots.map((slot, index) =>
+      index === 0
+        ? { ...slot, characterId: context.teamSlots[2].characterId }
+        : slot
+    );
+    expect(
+      evaluateWorkbenchTimelineFragmentCompatibility(fragment, {
+        teamSlots: mismatchedSlots,
+        actorConfigs: context.actorConfigs,
+        kiboActionsById,
+      })
+    ).toMatchObject({
+      status: 'blocked',
+      compatible: false,
+      blockingIssues: [
+        expect.objectContaining({
+          code: 'fragment-team-slot-character-mismatch',
+        }),
+      ],
+    });
+  });
+
+  it('rejects unsupported versions instead of silently migrating identities', () => {
+    const context = createFragmentContext();
+    const fragment = createWorkbenchTimelineFragment({
+      ...context,
+      selectedActionIds: ['action-0001'],
+      metadata: { id: 'fragment-versioned' },
+    });
+
+    expect(
+      parseWorkbenchTimelineFragment(JSON.stringify(fragment))
+    ).not.toBeNull();
+    expect(
+      parseWorkbenchTimelineFragment({ ...fragment, schemaVersion: 99 })
+    ).toBeNull();
+  });
+});
+
+function createFragmentContext() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const baseActorConfigs = createDefaultWorkbenchActorConfigs();
+  const firstSkill = getSkillsForCharacter(teamSlots[0].characterId)[0];
+  const secondSkill = getSkillsForCharacter(teamSlots[1].characterId)[0];
+  const kiboId = Number(baseActorConfigs[0].loadout.kiboId) || 900001;
+  const actorConfigs = baseActorConfigs.map((config, index) =>
+    index === 0 ? { ...config, loadout: { ...config.loadout, kiboId } } : config
+  );
+  const kiboSkillId = 990001;
+  const actions = [
+    createWorkbenchActionDraft({
+      id: 'action-0001',
+      type: ACTION_TYPES.SKILL,
+      actorCharacterId: teamSlots[0].characterId,
+      skillId: firstSkill.id,
+      startMs: frameToMs(30),
+      durationMs: frameToMs(30),
+      note: ['保留作者备注', '约束辅助：已从 0ms 调整到 500ms。'].join('\n'),
+      insertion: { autoDelayed: true, requestedStartMs: 0 },
+      generationBatch: { batchId: 'old-batch' },
+      effectCommands: [
+        {
+          id: 'manual-old-id',
+          effectId: 'manual-fragment-effect',
+          effectName: '手工效果',
+          operation: 'apply',
+          targetKind: 'actor',
+          durationMs: 1000,
+        },
+        {
+          id: 'generated-old-id',
+          effectId: 'generated-fragment-effect',
+          effectName: '旧自动效果',
+          operation: 'apply',
+          targetKind: 'actor',
+          durationMs: 1000,
+          sourceStatus: GENERATED_ACTION_STATUS_SOURCE,
+        },
+      ],
+    }),
+    createWorkbenchActionDraft({
+      id: 'action-0002',
+      type: ACTION_TYPES.KIBO_EVENT,
+      actorCharacterId: teamSlots[0].characterId,
+      kiboId,
+      skillId: kiboSkillId,
+      name: '测试奇波动作',
+      startMs: frameToMs(75),
+      durationMs: frameToMs(30),
+      needsTimingData: false,
+    }),
+    createWorkbenchActionDraft({
+      id: 'action-0003',
+      type: ACTION_TYPES.SKILL,
+      actorCharacterId: teamSlots[1].characterId,
+      skillId: secondSkill.id,
+      startMs: frameToMs(120),
+      durationMs: frameToMs(30),
+    }),
+  ];
+  const actionRelations = [
+    {
+      id: 'relation-0001',
+      fromActionId: 'action-0001',
+      toActionId: 'action-0002',
+    },
+    {
+      id: 'relation-0002',
+      fromActionId: 'action-0002',
+      toActionId: 'action-0003',
+    },
+  ];
+  return {
+    teamSlots,
+    actorConfigs,
+    actions,
+    actionRelations,
+    kiboId,
+    kiboSkillId,
+  };
+}

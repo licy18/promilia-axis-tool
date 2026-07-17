@@ -27520,3 +27520,37 @@ kiboCooldowns[]
 `ActionCooldownReadiness` 与 `SkillCooldownWindow` 新增只读 `base/effective` 冷却、owner、Kibo、修正数量和 evaluation 追溯字段。冲突 identity 固定为 `ownerKind + ownerId + skillId`：角色技能按角色隔离，奇波技能按 `kiboId` 隔离；被阻塞动作不生成窗口、冷却事件、效果或三值结果。
 
 Workbench 奇波拖入条目和动作草稿可选保留精确 `kiboId`。目录查询优先使用 `kiboId + skillId`，只有 skill ID 在全目录唯一时才允许缺 owner 回退；多个奇波共用的 skill ID 不再静默绑定。旧项目中的奇波事件若没有真实 skill ID，会保持 `null` 而不会继承角色默认技能；当前装备奇波仍由角色配置解析，因此旧项目和五载体无需升级 schema。该变化不修改 HP、韧性、六资源曲线或任何战斗公式。
+
+## 436. Workbench timeline fragment v1
+
+新增独立于完整项目预设和 Workbench project schema 的局部编排合同：
+
+```text
+AzPrWorkbenchTimelineFragment v1
+  id / name / description / tags / createdAt / updatedAt
+  durationMs
+  source
+    sourceActionIds[]
+    expandedFromSelection
+    runtimeOutputsIncluded = false
+  actions[]
+    fragmentActionId
+    relativeStartMs
+    lane
+      kind = actor-action | actor-kibo | enemy-event | system
+      slotId? / position?
+    sourceIdentity
+    source
+  relations[]
+    fragmentRelationId
+    fromFragmentActionId / toFragmentActionId
+    kind / sourceAnchor / targetAnchor / gapMs
+  requirements
+    fixedTeamSlots = true
+    teamSlots[]
+      slotId / position / characterId / kiboId?
+```
+
+保存动作时会沿现有关系图扩展为完整关系组，并以最早动作归零。片段动作的 `source` 只保留可重新构造草稿的动作输入；动作实例 ID、绝对起点、`insertion`、`generationBatch`、`statusGeneration`、目录自动生成的效果命令以及 CD/Buff/曲线/日志/calculator 输出均不保存。手工效果命令保留输入语义但移除旧命令 ID，后续插入时重新分配。
+
+本地库使用 `workbench-timeline-fragment-library v1` 和独立 storage key `promilia-axis-tool:timeline-fragments:v1`，支持单一 JSON 库导入导出、命名、标签、复制与删除。兼容检查要求涉及的固定队伍槽保持同一角色，奇波动作还要求同一奇波及真实来源动作；目录尚未加载时只标为 `unresolved`，身份或来源确定不匹配时标为 `blocked`。该合同不进入项目五载体，不改变项目 schema、M3 runtime 或 HP/韧性/六资源 calculator 输入。

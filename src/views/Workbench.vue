@@ -47,6 +47,7 @@
     :data-action-placement-preview-active="
       actionPlacementPreview?.active ? 'true' : 'false'
     "
+    :data-timeline-fragment-count="workbenchTimelineFragments.length"
   >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
@@ -1137,6 +1138,7 @@ import {
   duplicateWorkbenchPreset,
   loadWorkbenchPresetLibrary,
 } from '../domain/workbenchPresetStorage';
+import { loadWorkbenchTimelineFragmentLibrary } from '../domain/workbenchTimelineFragmentStorage';
 import {
   createWorkbenchProjectPngFileName,
   createWorkbenchProjectPngMetadata,
@@ -1311,6 +1313,7 @@ const draftStatus = ref('未保存草稿');
 const projectShareUrl = ref('');
 const presetDialogVisible = ref(false);
 const workbenchPresets = ref([]);
+const workbenchTimelineFragments = ref([]);
 const comparisonDialogVisible = ref(false);
 const comparisonBaselineDraft = ref(null);
 const comparisonBaselineSource = ref(null);
@@ -2245,6 +2248,7 @@ onMounted(() => {
   window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.addEventListener?.('hashchange', handleWorkbenchHashChange);
   refreshWorkbenchPresetLibrary();
+  refreshWorkbenchTimelineFragmentLibrary();
   openWorkbenchPresetLibraryFromUrl();
   if (applySharedProjectFromUrl()) {
     return;
@@ -4230,6 +4234,12 @@ function openWorkbenchPresetLibraryFromUrl() {
 function refreshWorkbenchPresetLibrary() {
   const library = loadWorkbenchPresetLibrary(getLocalStorage());
   workbenchPresets.value = library.presets;
+  return library;
+}
+
+function refreshWorkbenchTimelineFragmentLibrary() {
+  const library = loadWorkbenchTimelineFragmentLibrary(getLocalStorage());
+  workbenchTimelineFragments.value = library.fragments;
   return library;
 }
 
