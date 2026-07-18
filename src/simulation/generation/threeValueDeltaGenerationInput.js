@@ -212,7 +212,9 @@ function createAppliedGenerationInputLayer({
         ...(entry.elementId == null
           ? {}
           : { elementConfigId: numberOrNull(entry.elementId) }),
-        sequenceIndex: index,
+        sequenceIndex: numberOrNull(entry.runtimeSequenceIndex) ?? index,
+        runtimeSequenceIndex:
+          numberOrNull(entry.runtimeSequenceIndex) ?? index,
         timeMs: roundTimelineMs(timeMs),
         frameIndex,
         frameLabel: formatTimelineFrame(frameIndex),

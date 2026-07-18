@@ -211,12 +211,26 @@ function createVerifiedKiboEnergyRuntimeCurves({
         hitKey: event.hitKey ?? null,
         hitIndex: event.hitIndex ?? null,
         hitSkillId: event.hitSkillId ?? null,
+        runtimeSequenceIndex:
+          Number(event.runtimeSequenceIndex) || event.runtimeSequenceIndex === 0
+            ? Number(event.runtimeSequenceIndex)
+            : eventIndex,
         timeMs: roundNumber(event.timeMs),
         frameIndex: timeToFrame(event.timeMs),
         delta: roundNumber(event.payload?.change ?? 0),
         reason: event.payload?.reason ?? null,
         sourceIdentity: event.payload?.sourceIdentity ?? null,
         stateSnapshot: {
+          before: {
+            kiboEnergy: {
+              currentValue: roundNumber(
+                event.payload?.beforeValue ??
+                  Number(event.payload?.currentValue ?? 0) -
+                    Number(event.payload?.change ?? 0)
+              ),
+              maxValue,
+            },
+          },
           after: {
             kiboEnergy: {
               currentValue: roundNumber(event.payload?.currentValue ?? 0),
@@ -228,6 +242,7 @@ function createVerifiedKiboEnergyRuntimeCurves({
       .sort(
         (left, right) =>
           left.timeMs - right.timeMs ||
+          left.runtimeSequenceIndex - right.runtimeSequenceIndex ||
           String(left.sourceDeltaId).localeCompare(String(right.sourceDeltaId))
       );
     const baselineStatus = kiboId

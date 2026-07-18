@@ -74,13 +74,13 @@ export function createVerifiedCombatRuntime({
     const costPercent = numberOrNull(
       resolution.controlBinding?.logic?.spCostPercent
     );
-    if (costPercent > 0) {
+    if (costPercent == null || costPercent > 0) {
       descriptors.push({
         kind: 'action-cost',
         timeMs: action.startMs,
         action,
         resolution,
-        cost: costPercent / 100,
+        costPercent,
       });
     }
     for (const hit of resolution.hits) {
@@ -118,20 +118,34 @@ export function createVerifiedCombatRuntime({
   const kiboResourceEvents = [];
   const eventLog = [];
   const hitRecoveryAtByIdentity = new Map();
+  const blockedActionIds = new Set();
+  const executionBlocks = [];
 
   for (const descriptor of descriptors) {
     if (descriptor.timeMs > durationMs) continue;
+    if (
+      descriptor.action?.id &&
+      blockedActionIds.has(descriptor.action.id) &&
+      descriptor.kind !== 'action-cost'
+    ) {
+      continue;
+    }
     if (descriptor.kind === 'manual-resource') {
       applyManualResourceDescriptor({ descriptor, state, resourceEvents });
       continue;
     }
     if (descriptor.kind === 'action-cost') {
-      applyActionCostDescriptor({
+      const executionBlock = applyActionCostDescriptor({
         descriptor,
         state,
         resourceEvents,
         kiboResourceEvents,
       });
+      if (executionBlock) {
+        blockedActionIds.add(descriptor.action.id);
+        executionBlocks.push(executionBlock);
+        eventLog.push(createResourceExecutionBlockedEvent(executionBlock));
+      }
       continue;
     }
     if (descriptor.kind === 'weakness-state-tick') {
@@ -141,7 +155,7 @@ export function createVerifiedCombatRuntime({
         state,
       });
       if (stateEvent) {
-        damageEvents.push(stateEvent);
+        appendRuntimeEvent(damageEvents, stateEvent, state);
         eventLog.push(stateEvent);
       }
       continue;
@@ -172,7 +186,7 @@ export function createVerifiedCombatRuntime({
         });
         continue;
       }
-      damageEvents.push(hitResult.damageEvent);
+      appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
       eventLog.push(hitResult.damageEvent);
       applyHitRecovery({
         descriptor,
@@ -206,6 +220,7 @@ export function createVerifiedCombatRuntime({
     resourceEvents,
     kiboResourceEvents,
     eventLog,
+    executionBlocks,
     initialState,
     finalState: createFinalState(state, durationMs),
     summary: {
@@ -239,6 +254,7 @@ export function createVerifiedCombatRuntime({
       shieldedHitCount: damageEvents.filter(
         event => event.payload.shieldState?.absorbed > 0
       ).length,
+      resourceBlockedActionCount: executionBlocks.length,
       applied: true,
     },
     applied: true,
@@ -298,6 +314,12 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
         actorId: actor.id,
         kiboLane: { kiboId: actor.loadout?.kiboId ?? null },
       }));
+  const slotIdByActorId = new Map(
+    groups.map((group, index) => [
+      String(group.actorId),
+      group.slotId ?? `team-slot-${index + 1}`,
+    ])
+  );
   const kiboEnergy = new Map();
   for (const [index, group] of groups.entries()) {
     const actor = actorById.get(String(group.actorId));
@@ -373,6 +395,8 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
     actorEnergy,
     kiboEnergy,
     kiboProfileById,
+    slotIdByActorId,
+    nextRuntimeSequenceIndex: 0,
     enemy: {
       enemyId: Number.isInteger(enemyId) ? enemyId : null,
       profile: enemyProfile ?? null,
@@ -592,16 +616,19 @@ function applyManualResourceDescriptor({ descriptor, state, resourceEvents }) {
     Number(action.change) || 0
   );
   if (actual === 0) return;
-  resourceEvents.push(
+  appendRuntimeEvent(
+    resourceEvents,
     createActorResourceEvent({
       timeMs: descriptor.timeMs,
       action,
       actorId: action.actorId,
+      resourceState: actorState,
       change: actual,
       reason: action.reason || 'manual-axis-resource',
       confidence: 'manual',
       hitKey: null,
-    })
+    }),
+    state
   );
 }
 
@@ -611,13 +638,37 @@ function applyActionCostDescriptor({
   resourceEvents,
   kiboResourceEvents,
 }) {
-  const { action, cost, resolution } = descriptor;
+  const { action, costPercent, resolution } = descriptor;
+  if (costPercent == null) {
+    return createResourceExecutionBlock({
+      descriptor,
+      status: 'unresolved',
+      reason: 'verified-skill-cost-source-missing',
+    });
+  }
   if (resolution.actionBinding.ownerKind === 'kibo') {
     const kiboState = findKiboStateByAction(state, action);
-    if (!kiboState) return;
+    if (!kiboState) {
+      return createResourceExecutionBlock({
+        descriptor,
+        status: 'unresolved',
+        reason: 'verified-kibo-resource-owner-unresolved',
+      });
+    }
+    const cost = multiplyQ16(kiboState.max, costPercent / 100);
+    if (kiboState.current + Number.EPSILON < cost) {
+      return createResourceExecutionBlock({
+        descriptor,
+        status: 'violated',
+        reason: 'verified-kibo-resource-insufficient',
+        resourceState: kiboState,
+        requiredValue: cost,
+      });
+    }
     const change = applyClampedResourceChange(kiboState, -cost);
     if (change !== 0) {
-      kiboResourceEvents.push(
+      appendRuntimeEvent(
+        kiboResourceEvents,
         createKiboResourceEvent({
           timeMs: descriptor.timeMs,
           action,
@@ -626,28 +677,49 @@ function applyActionCostDescriptor({
           reason: 'verified-skill-cost',
           hitKey: 'action-cost',
           source: resolution,
-        })
+        }),
+        state
       );
     }
-    return;
+    return null;
   }
   const actorState = state.actorEnergy.get(action.actorId);
-  if (!actorState) return;
+  if (!actorState) {
+    return createResourceExecutionBlock({
+      descriptor,
+      status: 'unresolved',
+      reason: 'verified-actor-resource-owner-unresolved',
+    });
+  }
+  const cost = multiplyQ16(actorState.max, costPercent / 100);
+  if (actorState.current + Number.EPSILON < cost) {
+    return createResourceExecutionBlock({
+      descriptor,
+      status: 'violated',
+      reason: 'verified-actor-resource-insufficient',
+      resourceState: actorState,
+      requiredValue: cost,
+    });
+  }
   const change = applyClampedResourceChange(actorState, -cost);
   if (change !== 0) {
-    resourceEvents.push(
+    appendRuntimeEvent(
+      resourceEvents,
       createActorResourceEvent({
         timeMs: descriptor.timeMs,
         action,
         actorId: action.actorId,
+        resourceState: actorState,
         change,
         reason: 'verified-skill-cost',
         confidence: 'verified',
         hitKey: 'action-cost',
         source: resolution,
-      })
+      }),
+      state
     );
   }
+  return null;
 }
 
 function applyAutoSpDescriptor({
@@ -671,18 +743,20 @@ function applyAutoSpDescriptor({
       sprSec: source.sprSec,
       sprSecBack: source.sprSecBack,
       spGetUp: source.spGetUp,
-      spGetUpAuto: source.spGetUpAuto,
+      spRetAuto: source.spRetAuto,
       tickSeconds: FIXED_STEP_MS / 1000,
-      maximumSp: remaining,
+      maximumSp: actorState.max,
     });
     const change = applyClampedResourceChange(actorState, result.value);
     if (change === 0) continue;
-    resourceEvents.push(
+    appendRuntimeEvent(
+      resourceEvents,
       createActorResourceEvent({
         timeMs: descriptor.timeMs,
         action: null,
         actorId: actorState.actor.id,
         actorName: actorState.actor.name,
+        resourceState: actorState,
         change,
         reason: background
           ? 'verified-auto-sp-background'
@@ -696,28 +770,30 @@ function applyAutoSpDescriptor({
           formula: result,
           sourceIdentity: source.sourceIdentity,
         },
-      })
+      }),
+      state
     );
   }
 
   for (const kiboState of state.kiboEnergy.values()) {
     const background = controlled?.actorId !== kiboState.actorId;
-    const profile = kiboState.profile;
-    if (!profile?.applied) continue;
+    const source = createKiboSpSource(kiboState.profile);
+    if (!source.applied) continue;
     const remaining = Math.max(0, kiboState.max - kiboState.current);
     if (remaining <= 0) continue;
     const result = calculateAutoSp({
       background,
-      sprSec: basisPoints(profile.sprSecBasisPoints),
-      sprSecBack: basisPoints(profile.sprSecBackBasisPoints),
-      spGetUp: 0,
-      spGetUpAuto: basisPoints(profile.spGetUpAutoBasisPoints),
+      sprSec: source.sprSec,
+      sprSecBack: source.sprSecBack,
+      spGetUp: source.spGetUp,
+      spRetAuto: source.spRetAuto,
       tickSeconds: FIXED_STEP_MS / 1000,
-      maximumSp: remaining,
+      maximumSp: kiboState.max,
     });
     const change = applyClampedResourceChange(kiboState, result.value);
     if (change === 0) continue;
-    kiboResourceEvents.push(
+    appendRuntimeEvent(
+      kiboResourceEvents,
       createKiboResourceEvent({
         timeMs: descriptor.timeMs,
         action: null,
@@ -730,9 +806,10 @@ function applyAutoSpDescriptor({
         source: {
           packageId: getInstalledVerifiedCombatMechanicsPackage()?.packageId,
           formula: result,
-          profile,
+          sourceIdentity: source.sourceIdentity,
         },
-      })
+      }),
+      state
     );
   }
 }
@@ -830,20 +907,36 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
   updateShieldState(enemy, damageResult, damageInput);
   const hpDamage = Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
   const toughnessBefore = enemy.toughness;
+  const preShieldHpDamageRaw =
+    damageResult.preShieldRaw ?? damageResult.raw;
+  const weaknessTypeMultiplier = resolveWeaknessTypeMultiplier(
+    enemyProfile,
+    hit
+  );
+  const weaknessElementMultiplier = resolveWeaknessElementMultiplier(
+    enemyProfile,
+    hit
+  );
+  const weaknessMaximum = positiveNumberOrNull(
+    enemyProfile.weaknessDamageMaximum
+  );
+  const weaknessMinimum = positiveNumberOrNull(
+    enemyProfile.weaknessDamageMinimum
+  );
   const weaknessResult = calculateWeaknessDamage({
     pure: damageType === 8,
     attack: source.attack,
     ratioBasisPoints,
-    outputDamageRaw: damageResult.preShieldRaw ?? damageResult.raw,
+    outputDamageRaw: preShieldHpDamageRaw,
     outputType: damageType,
     inWeakState: enemy.inBreak,
     worldEventConflictPer: 1,
-    typeMultiplier: resolveWeaknessTypeMultiplier(enemyProfile, hit),
-    elementMultiplier: resolveWeaknessElementMultiplier(enemyProfile, hit),
+    typeMultiplier: weaknessTypeMultiplier,
+    elementMultiplier: weaknessElementMultiplier,
     weaknessSkillDamageUp: 1,
     weakBreakDamageRateBasisPoints: hit.damage.weakBreakDamageRateBasisPoints,
-    maximum: positiveNumberOrNull(enemyProfile.weaknessDamageMaximum),
-    minimum: positiveNumberOrNull(enemyProfile.weaknessDamageMinimum),
+    maximum: weaknessMaximum,
+    minimum: weaknessMinimum,
   });
   const toughnessDamage = Math.min(
     enemy.toughness,
@@ -904,6 +997,11 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
         attackSource: source.sourceIdentity,
         rawDamage: hpDamage,
         toughnessDamage,
+        hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
+        toughnessLossPercent: ratioOrZero(
+          toughnessDamage,
+          enemy.maxToughness
+        ),
         formulaVersion: 'azpr-verified-q16.16-20260718',
         formulaBreakdown: {
           version: 'azpr-verified-combat-hit-v1',
@@ -912,6 +1010,18 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
           result: hpDamage,
           verifiedResult: damageResult,
           weaknessResult,
+          weaknessInput: {
+            preShieldHpDamageRaw: String(preShieldHpDamageRaw ?? '0'),
+            typeMultiplier: weaknessTypeMultiplier,
+            elementMultiplier: weaknessElementMultiplier,
+            weaknessSkillDamageUp: 1,
+            weakBreakDamageRateBasisPoints:
+              hit.damage.weakBreakDamageRateBasisPoints,
+            maximum: weaknessMaximum,
+            minimum: weaknessMinimum,
+            maximumWeakness: enemy.maxToughness,
+            sourceIdentity: enemyProfile.sourceIdentity,
+          },
           randomBranch,
           sourceIdentity: resolution.actionBinding.identity,
           appliedLayerKeys: ['verifiedCombatHit'],
@@ -973,33 +1083,46 @@ function applyHitRecovery({
   kiboResourceEvents,
 }) {
   const { action, hit, resolution } = descriptor;
+  const recoverSp = Number(hit.energy.recoverSp) || 0;
+  const petRecoverSp = Number(hit.energy.petRecoverSp) || 0;
+  if (recoverSp <= 0 && petRecoverSp <= 0) return;
   const intervalMs = Math.max(0, Number(hit.energy.recoverIntervalMs) || 0);
-  const intervalIdentity = `${resolution.actionBinding.identity}|${hit.elementId}`;
+  const intervalIdentity = `damage-element:${
+    hit.pathId ?? hit.elementId ?? 'unresolved'
+  }`;
   const lastTimeMs = hitRecoveryAtByIdentity.get(intervalIdentity);
   if (lastTimeMs != null && descriptor.timeMs - lastTimeMs < intervalMs) return;
   hitRecoveryAtByIdentity.set(intervalIdentity, descriptor.timeMs);
 
   const sourceActorId = action.actorId;
-  const heroBase = calculateHitSp({
-    recoverSp: hit.energy.recoverSp,
-    pet: false,
-    spGetUp: 0,
-    spGetUpAttack: 0,
-    maximumSp: Number.MAX_SAFE_INTEGER,
-    recoverInterval: intervalMs,
-  }).value;
-  if (heroBase > 0) {
-    for (const actorState of state.actorEnergy.values()) {
+  if (recoverSp > 0) {
+    const actorRecipients = [...state.actorEnergy.values()].sort(
+      (left, right) =>
+        Number(right.actor.id === sourceActorId) -
+        Number(left.actor.id === sourceActorId)
+    );
+    for (const actorState of actorRecipients) {
+      const source = createActorSpSource(actorState.actor, actorState.profile);
+      const formula = calculateHitSp({
+        recoverSp,
+        pet: false,
+        spGetUp: source.spGetUp,
+        spGetUpAttack: source.spGetUpAttack,
+        maximumSp: Number.MAX_SAFE_INTEGER,
+        recoverInterval: intervalMs,
+      });
       const share = actorState.actor.id === sourceActorId ? 1 : 0.5;
-      const desired = multiplyQ16(heroBase, share);
+      const desired = multiplyQ16(formula.value, share);
       const change = applyClampedResourceChange(actorState, desired);
       if (change === 0) continue;
-      resourceEvents.push(
+      appendRuntimeEvent(
+        resourceEvents,
         createActorResourceEvent({
           timeMs: descriptor.timeMs,
           action,
           actorId: actorState.actor.id,
           actorName: actorState.actor.name,
+          resourceState: actorState,
           change,
           reason:
             share === 1
@@ -1013,25 +1136,39 @@ function applyHitRecovery({
           hitIndex: hit.hitIndex,
           hitSkillId: resolution.actionBinding.controlSkillId,
           elementId: hit.elementId,
-          source: resolution,
-        })
+          source: {
+            ...resolution,
+            formula,
+            sourceIdentity: source.sourceIdentity,
+            recoverIntervalIdentity: intervalIdentity,
+            share,
+          },
+        }),
+        state
       );
     }
   }
 
-  const petBase = calculateHitSp({
-    petRecoverSp: hit.energy.petRecoverSp,
-    pet: true,
-    spGetUp: 0,
-    spGetUpAttack: 0,
-    maximumSp: Number.MAX_SAFE_INTEGER,
-    recoverInterval: intervalMs,
-  }).value;
-  if (petBase <= 0) return;
+  if (petRecoverSp <= 0) return;
   for (const kiboState of state.kiboEnergy.values()) {
-    const change = applyClampedResourceChange(kiboState, petBase);
+    const source = createKiboSpSource(kiboState.profile);
+    if (!source.applied) continue;
+    const formula = calculateHitSp({
+      petRecoverSp,
+      pet: true,
+      spGetUp: source.spGetUp,
+      spGetUpAttack: source.spGetUpAttack,
+      maximumSp: Number.MAX_SAFE_INTEGER,
+      recoverInterval: intervalMs,
+    });
+    const share = 1;
+    const change = applyClampedResourceChange(
+      kiboState,
+      multiplyQ16(formula.value, share)
+    );
     if (change === 0) continue;
-    kiboResourceEvents.push(
+    appendRuntimeEvent(
+      kiboResourceEvents,
       createKiboResourceEvent({
         timeMs: descriptor.timeMs,
         action,
@@ -1042,8 +1179,15 @@ function applyHitRecovery({
         hitIndex: hit.hitIndex,
         hitSkillId: resolution.actionBinding.controlSkillId,
         elementId: hit.elementId,
-        source: resolution,
-      })
+        source: {
+          ...resolution,
+          formula,
+          sourceIdentity: source.sourceIdentity,
+          recoverIntervalIdentity: intervalIdentity,
+          share,
+        },
+      }),
+      state
     );
   }
 }
@@ -1123,13 +1267,31 @@ function createActorSpSource(actor, profile) {
     sprSecBack: basisPoints(
       profile?.sprSecBackBasisPoints ?? getAttribute(actor, 'SPR_SEC_BACK')
     ),
-    spGetUp: 0,
-    spGetUpAuto: basisPoints(
-      profile?.spGetUpAutoBasisPoints ?? getAttribute(actor, 'SPGETUP_AUTO')
+    spGetUp: basisPoints(
+      profile?.spGetUpBasisPoints ?? getAttribute(actor, 'SPGETUP')
+    ),
+    spRetAuto: basisPoints(
+      profile?.spRetAutoBasisPoints ??
+        getAttribute(actor, 'SPRET_AUTO') ??
+        getAttribute(actor, 'SPGETUP_AUTO')
     ),
     spGetUpAttack: basisPoints(
       profile?.spGetUpAttackBasisPoints ?? getAttribute(actor, 'SPGETUP_ATK')
     ),
+    sourceIdentity: profile?.sourceIdentity ?? null,
+  };
+}
+
+function createKiboSpSource(profile) {
+  return {
+    applied: profile?.applied === true,
+    sprSec: basisPoints(profile?.sprSecBasisPoints),
+    sprSecBack: basisPoints(profile?.sprSecBackBasisPoints),
+    spGetUp: basisPoints(profile?.spGetUpBasisPoints),
+    spRetAuto: basisPoints(
+      profile?.spRetAutoBasisPoints ?? profile?.spGetUpAutoBasisPoints
+    ),
+    spGetUpAttack: basisPoints(profile?.spGetUpAttackBasisPoints),
     sourceIdentity: profile?.sourceIdentity ?? null,
   };
 }
@@ -1139,6 +1301,7 @@ function createActorResourceEvent({
   action,
   actorId,
   actorName,
+  resourceState,
   change,
   reason,
   confidence,
@@ -1148,6 +1311,8 @@ function createActorResourceEvent({
   elementId = null,
   source = null,
 }) {
+  const afterValue = roundValue(resourceState?.current);
+  const beforeValue = roundValue(afterValue - change);
   return {
     type: 'VERIFIED_RESOURCE_CHANGE',
     timeMs: roundValue(timeMs),
@@ -1160,7 +1325,11 @@ function createActorResourceEvent({
       verifiedCombat: true,
       actorName: actorName ?? action?.actor?.name ?? null,
       resource: 'sp',
+      beforeValue,
       change: roundValue(change),
+      afterValue,
+      currentValue: afterValue,
+      maxValue: roundValue(resourceState?.max),
       reason,
       confidence,
       elementId,
@@ -1169,6 +1338,10 @@ function createActorResourceEvent({
         getInstalledVerifiedCombatMechanicsPackage()?.packageId,
       sourceIdentity:
         source?.actionBinding?.identity ?? source?.sourceIdentity ?? null,
+      resourceOwnerSourceIdentity: source?.sourceIdentity ?? null,
+      recoverIntervalIdentity: source?.recoverIntervalIdentity ?? null,
+      share: source?.share ?? null,
+      formula: source?.formula ?? null,
       appliedToCalculators: true,
     },
   };
@@ -1186,6 +1359,8 @@ function createKiboResourceEvent({
   elementId = null,
   source = null,
 }) {
+  const afterValue = roundValue(kiboState.current);
+  const beforeValue = roundValue(afterValue - change);
   return {
     type: 'VERIFIED_KIBO_RESOURCE_CHANGE',
     timeMs: roundValue(timeMs),
@@ -1199,8 +1374,10 @@ function createKiboResourceEvent({
       resource: 'kibo-energy',
       slotId: kiboState.slotId,
       kiboId: kiboState.kiboId,
+      beforeValue,
       change: roundValue(change),
-      currentValue: roundValue(kiboState.current),
+      afterValue,
+      currentValue: afterValue,
       maxValue: kiboState.max,
       reason,
       confidence: 'verified',
@@ -1210,6 +1387,10 @@ function createKiboResourceEvent({
         getInstalledVerifiedCombatMechanicsPackage()?.packageId,
       sourceIdentity:
         source?.actionBinding?.identity ?? source?.sourceIdentity ?? null,
+      resourceOwnerSourceIdentity: source?.sourceIdentity ?? null,
+      recoverIntervalIdentity: source?.recoverIntervalIdentity ?? null,
+      share: source?.share ?? null,
+      formula: source?.formula ?? null,
       appliedToCalculators: true,
     },
   };
@@ -1284,12 +1465,69 @@ function resolveHitRatio(hit, action) {
 }
 
 function findKiboStateByAction(state, action) {
-  return [...state.kiboEnergy.values()].find(
-    entry =>
-      entry.actorId === action.actorId &&
-      Number(entry.kiboId) ===
-        Number(action.kiboId ?? action.actor?.loadout?.kiboId)
+  const slotId = state.slotIdByActorId.get(String(action.actorId));
+  const entry = slotId ? state.kiboEnergy.get(slotId) : null;
+  const expectedKiboId = Number(
+    action.kiboId ?? action.actor?.loadout?.kiboId
   );
+  if (!entry || Number(entry.kiboId) !== expectedKiboId) return null;
+  return entry;
+}
+
+function createResourceExecutionBlock({
+  descriptor,
+  status,
+  reason,
+  resourceState = null,
+  requiredValue = null,
+}) {
+  const resolution = descriptor.resolution;
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-resource-execution-block',
+    code: 'verified-resource-cost-unavailable',
+    status,
+    executable: false,
+    actionId: descriptor.action.id,
+    actionName: descriptor.action.name ?? descriptor.action.id,
+    actorId: descriptor.action.actorId ?? null,
+    ownerKind: resolution.actionBinding.ownerKind,
+    slotId: resourceState?.slotId ?? null,
+    kiboId: resourceState?.kiboId ?? null,
+    timeMs: roundValue(descriptor.timeMs),
+    requiredValue:
+      requiredValue == null ? null : roundValue(requiredValue),
+    currentValue:
+      resourceState?.current == null
+        ? null
+        : roundValue(resourceState.current),
+    maxValue:
+      resourceState?.max == null ? null : roundValue(resourceState.max),
+    reason,
+    sourceIdentity: resolution.controlBinding?.logic?.sourceIdentity ?? null,
+    appliedToCalculators: true,
+  };
+}
+
+function createResourceExecutionBlockedEvent(block) {
+  return {
+    type: 'VERIFIED_ACTION_RESOURCE_BLOCKED',
+    timeMs: block.timeMs,
+    actionId: block.actionId,
+    actorId: block.actorId,
+    payload: block,
+  };
+}
+
+function appendRuntimeEvent(target, event, state) {
+  const runtimeSequenceIndex = state.nextRuntimeSequenceIndex;
+  state.nextRuntimeSequenceIndex += 1;
+  event.runtimeSequenceIndex = runtimeSequenceIndex;
+  if (event.payload) {
+    event.payload.runtimeSequenceIndex = runtimeSequenceIndex;
+  }
+  target.push(event);
+  return event;
 }
 
 function applyClampedResourceChange(state, requestedChange) {
@@ -1392,6 +1630,7 @@ function createUnavailableRuntime({ enabled, reason }) {
     resourceEvents: [],
     kiboResourceEvents: [],
     eventLog: [],
+    executionBlocks: [],
     initialState: null,
     finalState: null,
     summary: {
@@ -1408,6 +1647,7 @@ function createUnavailableRuntime({ enabled, reason }) {
       kiboResourceEventCount: 0,
       breakTriggerCount: 0,
       shieldedHitCount: 0,
+      resourceBlockedActionCount: 0,
       applied: false,
     },
     applied: false,
@@ -1468,6 +1708,8 @@ function compareDescriptors(left, right) {
 function compareEvents(left, right) {
   return (
     Number(left.timeMs) - Number(right.timeMs) ||
+    Number(left.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) -
+      Number(right.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) ||
     String(left.actionId ?? '').localeCompare(String(right.actionId ?? '')) ||
     String(left.hitKey ?? '').localeCompare(String(right.hitKey ?? ''))
   );
@@ -1480,6 +1722,10 @@ function timeToFrame(timeMs) {
 function roundValue(value) {
   const number = Number(value);
   return Number.isFinite(number) ? Number(number.toFixed(6)) : 0;
+}
+
+function ratioOrZero(value, maximum) {
+  return maximum > 0 ? roundValue(Number(value) / Number(maximum)) : 0;
 }
 
 function clampNumber(value, minimum, maximum) {

@@ -29,6 +29,7 @@ import {
 import { duplicateWorkbenchScenario } from '../../domain/workbenchScenarioWorkspace';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
 
 const ONE_PIXEL_PNG_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
@@ -214,10 +215,66 @@ function createVerifiedReplaySignature(draft) {
       curve.pointCount,
       curve.appliedToCalculators,
     ]),
+    sparseDisplaySignature: createSparseDisplaySignature(result, scenario),
     appliedKiboIds: resources.curvesByKibo
       .filter(curve => curve.appliedToCalculators)
       .map(curve => curve.kiboId),
   };
+}
+
+function createSparseDisplaySignature(result, scenario) {
+  const stateCurves = result.runtimeOutputs.stateCurves;
+  const curveInputs = [
+    ...stateCurves.resources.curvesByActor.map(curve => ({
+      id: `actor:${curve.actorId}`,
+      trackKey: 'selfEnergyChange',
+      curve,
+    })),
+    ...stateCurves.resources.curvesByKibo.map(curve => ({
+      id: `kibo:${curve.slotId}:${curve.kiboId}`,
+      trackKey: 'kiboEnergyChange',
+      curve,
+    })),
+    {
+      id: 'enemy:hp',
+      trackKey: 'enemyHpDamage',
+      curve: {
+        stateMetric: stateCurves.enemy.stateMetrics.hp,
+        points: stateCurves.enemy.points,
+      },
+    },
+    {
+      id: 'enemy:toughness',
+      trackKey: 'enemyToughnessDamage',
+      curve: {
+        stateMetric: stateCurves.enemy.stateMetrics.toughness,
+        points: stateCurves.enemy.points,
+      },
+    },
+  ];
+
+  return curveInputs.map(({ id, trackKey, curve }) => {
+    const projection = projectTimelineStateDisplaySeries({
+      trackKey,
+      points: curve.points,
+      initialValue: curve.stateMetric.initialValue,
+      maxValue: curve.stateMetric.maxValue,
+      durationMs: scenario.time.durationMs,
+      resolveStatePointId: point => point.sourceDeltaId,
+    });
+    return {
+      id,
+      displayPointCount: projection.displayPointCount,
+      nodes: projection.semanticNodes.map(node => [
+        node.actionId,
+        node.frameIndex,
+        node.eventCount,
+        node.beforeValue,
+        node.afterValue,
+        node.statePointIds,
+      ]),
+    };
+  });
 }
 
 function createMemoryStorage() {

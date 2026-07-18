@@ -268,7 +268,7 @@ test('[stage-9b-runtime-step-curves] keeps actor resources and enemy states alig
       `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve"]`
     );
   const breakpoints = laneId =>
-    curve(laneId).getByTestId('workbench-timeline-state-curve-breakpoint');
+    curve(laneId).getByTestId('workbench-timeline-state-curve-node');
   await expect(breakpoints('enemy-hp-curve')).toHaveCount(1);
   await expect(breakpoints('enemy-toughness-curve')).toHaveCount(0);
 
@@ -583,8 +583,8 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   const toughnessCurve = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="enemy-toughness-curve"] [data-testid="workbench-timeline-state-curve"]'
   );
-  const hpPointCountBefore = Number(
-    await hpCurve.getAttribute('data-point-count')
+  const hpSimulationPointCountBefore = Number(
+    await hpCurve.getAttribute('data-simulation-point-count')
   );
 
   const directSkillSource = page.getByTestId('workbench-skill-entry').first();
@@ -598,20 +598,17 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   await expect(skillAction).toHaveAttribute('data-lane-id', 'actor-101003');
   await expectImageLoaded(skillAction.locator('img.action-image-icon'));
   await expect
-    .poll(async () => Number(await hpCurve.getAttribute('data-point-count')))
-    .toBeGreaterThan(hpPointCountBefore);
+    .poll(async () =>
+      Number(await hpCurve.getAttribute('data-simulation-point-count'))
+    )
+    .toBeGreaterThan(hpSimulationPointCountBefore);
   const hpPointCountAfterSkill = Number(
     await hpCurve.getAttribute('data-point-count')
   );
   const skillHpBreakpoint = hpCurve.locator(
-    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0002"]'
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0002"]'
   );
-  await expect(skillHpBreakpoint).toHaveCount(1);
-  await expectActionAndCurvePointAligned(
-    page,
-    'action-0002',
-    skillHpBreakpoint
-  );
+  await expect(skillHpBreakpoint).toHaveCount(0);
   await closeInspectorIfVisible(page);
 
   await dragLocatorTo(
@@ -637,7 +634,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     '0'
   );
   let resourceBreakpoint = actorEnergyCurve(101003).locator(
-    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0003"]'
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0003"]'
   );
   await expectActionAndCurvePointAligned(
     page,
@@ -721,7 +718,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     '1'
   );
   resourceBreakpoint = actorEnergyCurve(101007).locator(
-    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0003"]'
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0003"]'
   );
   await expectActionAndCurvePointAligned(
     page,
@@ -790,7 +787,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     '0'
   );
   resourceBreakpoint = actorEnergyCurve(101003).locator(
-    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0003"]'
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0003"]'
   );
   await resourceBreakpoint.click();
   const resourceStatePointId = await resourceBreakpoint.getAttribute(
@@ -828,7 +825,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     'data-point-count',
     '1'
   );
-  await expect(skillHpBreakpoint).toHaveCount(1);
+  await expect(skillHpBreakpoint).toHaveCount(0);
   await expect(
     timeline.locator(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
@@ -1145,12 +1142,18 @@ test('[six-resource-capture-import] packages, imports, and replays six owner-spe
       '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
     )
   ).toHaveCount(3);
-  for (const actorId of actorIds) {
-    await expect(
-      timeline.locator(
-        `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
-      )
-    ).toHaveAttribute('data-point-count', '1');
+  for (const [index, actorId] of actorIds.entries()) {
+    const sampledCurve = timeline.locator(
+      `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
+    );
+    await expect(sampledCurve).toHaveAttribute(
+      'data-simulation-point-count',
+      '1'
+    );
+    await expect(sampledCurve).toHaveAttribute(
+      'data-point-count',
+      index === 0 ? '0' : '1'
+    );
   }
 
   const downloadPromise = page.waitForEvent('download');
@@ -1181,12 +1184,18 @@ test('[six-resource-capture-import] packages, imports, and replays six owner-spe
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已导入项目'
   );
-  for (const actorId of actorIds) {
-    await expect(
-      timeline.locator(
-        `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
-      )
-    ).toHaveAttribute('data-point-count', '1');
+  for (const [index, actorId] of actorIds.entries()) {
+    const restoredCurve = timeline.locator(
+      `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
+    );
+    await expect(restoredCurve).toHaveAttribute(
+      'data-simulation-point-count',
+      '1'
+    );
+    await expect(restoredCurve).toHaveAttribute(
+      'data-point-count',
+      index === 0 ? '0' : '1'
+    );
   }
 });
 
@@ -1367,14 +1376,20 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   );
   await expect(insertedAction).toHaveAttribute('data-lane-id', 'actor-101010');
 
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0002"]'
+    )
+  ).toHaveCount(0);
   const reviewedEvent = timeline
     .locator(
-      '[data-testid="workbench-timeline-runtime-event-marker"][title^="普通攻击 · 命中 · "]'
+      '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0001"]'
     )
     .first();
   await expect(reviewedEvent).toBeVisible();
-  const reviewedEventTitle = await reviewedEvent.getAttribute('title');
-  expect(parseRuntimeEventFrame(reviewedEventTitle)).toBeGreaterThanOrEqual(0);
+  expect(
+    Number(await reviewedEvent.getAttribute('data-frame-index'))
+  ).toBeGreaterThanOrEqual(0);
   await reviewedEvent.click();
   await expect(
     page.getByTestId('workbench-runtime-selected-detail')
@@ -1389,10 +1404,11 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
       Number(await insertedAction.getAttribute('data-start-ms'))
     )
     .toBeGreaterThan(insertedStartBeforeEdit);
-  const restoredReviewedEvent = timeline.getByRole('button', {
-    name: reviewedEventTitle,
-    exact: true,
-  });
+  const restoredReviewedEvent = timeline
+    .locator(
+      '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0001"]'
+    )
+    .first();
 
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
@@ -1453,7 +1469,7 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     await expect(timelineActions).toHaveCount(0);
     await expect(
       timeline.locator(
-        '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id]:not([data-action-id=""])'
+        '[data-testid="workbench-timeline-state-curve-node"][data-action-id]:not([data-action-id=""])'
       )
     ).toHaveCount(0);
     await expect(actorEnergyRows).toHaveCount(3);
@@ -1574,14 +1590,14 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     );
     await expect(
       curve(`kibo-energy-team-slot-${slotIndex}`).locator(
-        `[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="${kiboActionId}"]`
+        `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${kiboActionId}"]`
       )
     ).toHaveCount(0);
   }
   for (const laneId of ['enemy-hp-curve', 'enemy-toughness-curve']) {
     await expect(
       curve(laneId).locator(
-        '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id]:not([data-action-id=""])'
+        '[data-testid="workbench-timeline-state-curve-node"][data-action-id]:not([data-action-id=""])'
       )
     ).toHaveCount(0);
   }
@@ -2660,11 +2676,11 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     );
   const actionBreakpoints = (laneId, actionId) =>
     curve(laneId).locator(
-      `[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="${actionId}"]`
+      `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${actionId}"]`
     );
   const actionHitBreakpoints = (laneId, actionId) =>
     curve(laneId).locator(
-      `[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="${actionId}"][data-hit-key^="verified-hit-"]`
+      `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${actionId}"][data-hit-key^="verified-hit-"]`
     );
   const pangHpPoints = actionHitBreakpoints('enemy-hp-curve', pangActionId);
   const pangToughnessPoints = actionHitBreakpoints(
@@ -2677,18 +2693,37 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     heavyActionId
   );
   const breakRecoveryPoints = curve('enemy-toughness-curve').locator(
-    `[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="${pangActionId}"][data-hit-key^="verified-break-linear-recovery-"]`
+    `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${pangActionId}"][data-hit-key^="verified-break-linear-recovery-"]`
   );
   const breakExitPoint = curve('enemy-toughness-curve').locator(
-    `[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="${pangActionId}"][data-hit-key^="verified-break-exit-"]`
+    `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${pangActionId}"][data-hit-key^="verified-break-exit-"]`
   );
 
   await expect(pangHpPoints).toHaveCount(1);
   await expect(pangToughnessPoints).toHaveCount(1);
-  await expect(heavyHpPoints).toHaveCount(5);
-  await expect(heavyToughnessPoints).toHaveCount(5);
-  await expect(breakRecoveryPoints.first()).toBeVisible();
+  await expect(heavyHpPoints).toHaveCount(4);
+  await expect(heavyToughnessPoints).toHaveCount(4);
+  await expect(breakRecoveryPoints).toHaveCount(0);
   await expect(breakExitPoint).toHaveCount(1);
+  await expect(
+    timeline.getByTestId('workbench-timeline-runtime-event-marker')
+  ).toHaveCount(0);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve-marker')
+  ).toHaveCount(0);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-state-curve"] svg circle:not(.timeline-state-curve-cursor)'
+    )
+  ).toHaveCount(0);
+  const curveLineStyle = await curve('enemy-hp-curve')
+    .getByTestId('workbench-timeline-state-curve-line')
+    .evaluate(element => {
+      const style = getComputedStyle(element);
+      return { filter: style.filter, strokeWidth: style.strokeWidth };
+    });
+  expect(curveLineStyle.filter).toBe('none');
+  expect(Number.parseFloat(curveLineStyle.strokeWidth)).toBe(2);
   const breakExitFrame = await breakExitPoint.getAttribute('data-frame-index');
   await breakExitPoint.click();
   await expect(timeline).toHaveAttribute(
@@ -2711,7 +2746,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     'data-frame-index',
     String(pangStartFrame + 14)
   );
-  for (const [index, offset] of [27, 38, 49, 138, 142].entries()) {
+  for (const [index, offset] of [27, 38, 49, 142].entries()) {
     await expect(heavyHpPoints.nth(index)).toHaveAttribute(
       'data-frame-index',
       String(heavyStartFrame + offset)
@@ -2776,8 +2811,8 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     actionBreakpoints('kibo-energy-team-slot-3', heavyActionId)
   ).toHaveCount(0);
   await page.getByTestId('workbench-undo-edit').click();
-  await expect(heavyHpPoints).toHaveCount(5);
-  await expect(heavyToughnessPoints).toHaveCount(5);
+  await expect(heavyHpPoints).toHaveCount(4);
+  await expect(heavyToughnessPoints).toHaveCount(4);
 
   await page.getByTestId('workbench-timeline-zoom-input').evaluate(element => {
     element.value = '2';
@@ -2792,7 +2827,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   );
   await closeInspectorIfVisible(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: 'reports/m6-verified-combat-desktop.png' });
+  await page.screenshot({ path: 'reports/m6r-sparse-curves-desktop.png' });
 
   await page.setViewportSize({ width: 390, height: 900 });
   await heavyAction.scrollIntoViewIfNeeded();
@@ -2805,7 +2840,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: 'reports/m6-verified-combat-narrow.png' });
+  await page.screenshot({ path: 'reports/m6r-sparse-curves-narrow.png' });
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.getByTestId('workbench-save-draft').click();
@@ -2814,7 +2849,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     '已恢复草稿'
   );
   await expect(pangHpPoints).toHaveCount(1);
-  await expect(heavyHpPoints).toHaveCount(5);
+  await expect(heavyHpPoints).toHaveCount(4);
   await expect(
     actionBreakpoints('kibo-energy-team-slot-3', heavyActionId)
   ).toHaveCount(1);
@@ -3251,7 +3286,7 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
     '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
   );
   let energyBreakpoint = actorEnergyCurve.getByTestId(
-    'workbench-timeline-state-curve-breakpoint'
+    'workbench-timeline-state-curve-node'
   );
   const originalResourceFrame = Number(
     await energyBreakpoint.getAttribute('data-frame-index')
@@ -3285,7 +3320,7 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
   );
   await expect(actorEnergyCurve).toHaveAttribute('data-cursor-value', '0');
   energyBreakpoint = actorEnergyCurve.getByTestId(
-    'workbench-timeline-state-curve-breakpoint'
+    'workbench-timeline-state-curve-node'
   );
   await expect(energyBreakpoint).toHaveAttribute('data-frame-index', '900');
 
@@ -3321,7 +3356,7 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
     '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve"]'
   );
   const hpBreakpoint = hpCurve
-    .getByTestId('workbench-timeline-state-curve-breakpoint')
+    .getByTestId('workbench-timeline-state-curve-node')
     .first();
   await hpBreakpoint.click();
   const hpFrame = await hpBreakpoint.getAttribute('data-frame-index');
@@ -3467,7 +3502,7 @@ test('[stage-10d-timeline-playback] plays the full axis and loops a selected cyc
 
   const hpMarker = page
     .locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-marker"]'
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-node"]'
     )
     .first();
   await hpMarker.click();
@@ -5018,16 +5053,23 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
   });
   const timelinePageScrollY = await page.evaluate(() => window.scrollY);
 
-  const runtimeEvents = timeline.getByTestId(
-    'workbench-timeline-runtime-event-marker'
+  await expect(
+    timeline.getByTestId('workbench-timeline-runtime-event-marker')
+  ).toHaveCount(0);
+  const runtimeEvents = timeline.locator(
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id]:not([data-action-id=""])'
   );
-  const runtimeEvent = runtimeEvents.first();
+  const runtimeEvent = timeline.locator(
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="demo-actor-2-energy"]'
+  );
   await expect(runtimeEvent).toBeVisible();
-  const initialRuntimeEventTitle = await runtimeEvent.getAttribute('title');
-  const initialRuntimeFrame = parseRuntimeEventFrame(initialRuntimeEventTitle);
+  const initialRuntimeFrame = Number(
+    await runtimeEvent.getAttribute('data-frame-index')
+  );
+  expect(Number.isInteger(initialRuntimeFrame)).toBe(true);
   await expect(runtimeEvent.locator('..')).toHaveAttribute(
-    'data-lane-id',
-    'actor-109001'
+    'data-track-key',
+    /enemyHpDamage|enemyToughnessDamage|selfEnergyChange|kiboEnergyChange/
   );
 
   await runtimeEvent.click();
@@ -5037,7 +5079,7 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
   );
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-action')
-  ).toHaveText('普通攻击');
+  ).toHaveText('资源事件');
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-frame')
   ).toContainText(formatRuntimeFrameLabel(initialRuntimeFrame));
@@ -5054,8 +5096,8 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
 
   if ((await runtimeEvents.count()) > 1) {
     const secondRuntimeEvent = runtimeEvents.nth(1);
-    const secondRuntimeFrame = parseRuntimeEventFrame(
-      await secondRuntimeEvent.getAttribute('title')
+    const secondRuntimeFrame = Number(
+      await secondRuntimeEvent.getAttribute('data-frame-index')
     );
     await secondRuntimeEvent.click();
     await expect(timeline).toHaveAttribute(
@@ -5080,12 +5122,6 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
     path: 'reports/m1-runtime-event-review-narrow.png',
   });
 });
-
-function parseRuntimeEventFrame(title) {
-  const frame = Number(String(title ?? '').match(/(\d+)F$/)?.[1]);
-  expect(Number.isInteger(frame)).toBe(true);
-  return frame;
-}
 
 function formatRuntimeFrameLabel(frameIndex) {
   return `${Math.floor(frameIndex / 60)}s${frameIndex % 60}f`;
@@ -5389,7 +5425,6 @@ async function expectM2ActorLoadoutDirect(page, characterId, config) {
 
 async function expectTimelineActionWidthsMatchDuration(timeline) {
   const measurements = await timeline.evaluate(root => {
-    const durationMs = Number(root.dataset.durationMs);
     return [
       ...root.querySelectorAll('[data-testid="workbench-timeline-action"]'),
     ]
@@ -5490,7 +5525,7 @@ async function expectDemoMilestoneState(page, { resourceFrameIndex }) {
     '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"] [data-testid="workbench-timeline-state-curve"]'
   );
   const resourceBreakpoint = actorEnergyCurve(101003).locator(
-    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="demo-actor-2-energy"]'
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="demo-actor-2-energy"]'
   );
 
   await expect(

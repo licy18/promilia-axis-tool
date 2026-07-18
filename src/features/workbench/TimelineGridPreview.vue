@@ -222,70 +222,6 @@
           formatZoom(timelineZoom)
         }}</span>
       </div>
-      <details class="timeline-view-options">
-        <summary
-          title="曲线与诊断显示"
-          data-testid="workbench-timeline-view-options-toggle"
-        >
-          <Operation class="control-icon" />
-          <span>显示</span>
-        </summary>
-        <div class="timeline-view-options-menu">
-          <div
-            v-if="stateCurveTimelineLayerOptions.length"
-            class="state-layer-toggle-group"
-            data-testid="workbench-timeline-state-layer-toggle-group"
-          >
-            <label
-              v-for="layer in stateCurveTimelineLayerOptions"
-              :key="layer.key"
-              class="state-layer-toggle"
-              :class="{ 'has-points': layer.pointCount > 0 }"
-              :data-layer-key="layer.key"
-            >
-              <input
-                type="checkbox"
-                :checked="isStateCurveTimelineLayerVisible(layer.key)"
-                :data-layer-key="layer.key"
-                :data-point-count="layer.pointCount"
-                data-testid="workbench-timeline-state-layer-toggle"
-                @change="
-                  setStateCurveLayerVisible(layer.key, $event.target.checked)
-                "
-              />
-              <span>{{ layer.label }} {{ layer.pointCount }}</span>
-            </label>
-          </div>
-          <div
-            v-if="stateCurveTimelineTrackOptions.length"
-            class="state-track-toggle-group"
-            data-testid="workbench-timeline-state-track-toggle-group"
-          >
-            <label
-              v-for="track in stateCurveTimelineTrackOptions"
-              :key="track.trackKey"
-              class="state-track-toggle"
-              :class="{ 'has-points': track.pointCount > 0 }"
-              :data-track-key="track.trackKey"
-            >
-              <input
-                type="checkbox"
-                :checked="isStateCurveTrackVisible(track.trackKey)"
-                :data-track-key="track.trackKey"
-                :data-point-count="track.pointCount"
-                data-testid="workbench-timeline-state-track-toggle"
-                @change="
-                  setStateCurveTrackVisible(
-                    track.trackKey,
-                    $event.target.checked
-                  )
-                "
-              />
-              <span>{{ track.label }} {{ track.pointCount }}</span>
-            </label>
-          </div>
-        </div>
-      </details>
     </div>
 
     <div class="timeline-scale">
@@ -685,6 +621,8 @@
               :data-cursor-frame-index="timelineCursor.frameIndex"
               :data-max-value="lane.curve.maxValue ?? ''"
               :data-point-count="lane.curve.pointCount"
+              :data-simulation-point-count="lane.curve.simulationPointCount"
+              :data-semantic-node-count="lane.curve.semanticNodes.length"
               data-testid="workbench-timeline-state-curve"
             >
               <svg viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -692,27 +630,8 @@
                   :points="lane.curve.stepPoints"
                   :data-lane-id="lane.id"
                   :data-track-key="lane.curve.trackKey"
-                  :data-point-count="lane.curve.pointCount"
+                  :data-point-count="lane.curve.displayPointCount"
                   data-testid="workbench-timeline-state-curve-line"
-                />
-                <circle
-                  v-for="point in lane.curve.breakpoints"
-                  :key="point.id"
-                  :cx="point.xPercent"
-                  :cy="point.yPercent"
-                  r="1.8"
-                  :data-action-id="point.actionId"
-                  :data-hit-key="point.hitKey"
-                  :data-state-point-id="point.statePointId"
-                  :data-time-ms="point.timeMs"
-                  :data-frame-index="point.frameIndex"
-                  :data-current-value="point.currentValue"
-                  data-testid="workbench-timeline-state-curve-breakpoint"
-                  role="button"
-                  tabindex="0"
-                  @click.stop="selectRuntimeCurveBreakpoint(point)"
-                  @keydown.enter.prevent="selectRuntimeCurveBreakpoint(point)"
-                  @keydown.space.prevent="selectRuntimeCurveBreakpoint(point)"
                 />
                 <circle
                   class="timeline-state-curve-cursor"
@@ -724,6 +643,36 @@
                   data-testid="workbench-timeline-state-curve-cursor"
                 />
               </svg>
+              <button
+                v-for="point in lane.curve.semanticNodes"
+                :key="point.id"
+                class="timeline-state-curve-node"
+                :class="{
+                  selected: point.statePointIds.includes(
+                    flowSelectedStateCurvePointId
+                  ),
+                }"
+                type="button"
+                :style="runtimeCurveNodeStyle(point)"
+                :title="formatRuntimeCurveNodeTitle(point)"
+                :aria-label="formatRuntimeCurveNodeTitle(point)"
+                :data-action-id="point.actionId"
+                :data-hit-key="point.hitKey"
+                :data-state-point-id="point.statePointId"
+                :data-state-point-ids="point.statePointIds.join(',')"
+                :data-runtime-focus-source="
+                  point.statePointIds.includes(flowSelectedStateCurvePointId)
+                    ? flowRuntimeFocusSource
+                    : ''
+                "
+                :data-event-count="point.eventCount"
+                :data-time-ms="point.timeMs"
+                :data-frame-index="point.frameIndex"
+                :data-current-value="point.currentValue"
+                data-testid="workbench-timeline-state-curve-node"
+                @pointerdown.stop
+                @click.stop="selectRuntimeCurveBreakpoint(point)"
+              />
             </div>
             <button
               v-for="window in lane.cooldownWindows"
@@ -969,61 +918,6 @@
               />
             </button>
 
-            <button
-              v-for="event in lane.runtimeEventMarkers"
-              :key="event.statePointIds[0]"
-              class="runtime-event-marker"
-              :class="[
-                `event-${event.kind}`,
-                { selected: isRuntimeEventMarkerSelected(event) },
-              ]"
-              type="button"
-              :style="runtimeEventMarkerStyle(event, lane)"
-              :title="event.title"
-              data-testid="workbench-timeline-runtime-event-marker"
-              @pointerdown.stop
-              @click.stop="selectRuntimeEventMarker(event)"
-            >
-              <Lightning aria-hidden="true" />
-            </button>
-
-            <div
-              v-for="marker in lane.stateCurveMarkers"
-              :key="marker.id"
-              class="state-curve-marker"
-              :class="[
-                `state-layer-${marker.layerKey}`,
-                `state-track-${marker.trackKey}`,
-                {
-                  selected:
-                    marker.statePointId === flowSelectedStateCurvePointId,
-                },
-              ]"
-              :style="stateCurveMarkerStyle(marker, lane)"
-              :title="formatStateCurveMarkerTitle(marker)"
-              :aria-label="formatStateCurveMarkerTitle(marker)"
-              :data-action-id="marker.actionId"
-              :data-lane-id="lane.id"
-              :data-track-key="marker.trackKey"
-              :data-layer-key="marker.layerKey"
-              :data-frame-index="marker.frameIndex"
-              :data-frame-label="marker.frameLabel"
-              :data-delta="marker.delta"
-              :data-cumulative="marker.cumulative"
-              :data-state-point-id="marker.statePointId"
-              :data-runtime-focus-source="
-                marker.statePointId === flowSelectedStateCurvePointId
-                  ? flowRuntimeFocusSource
-                  : ''
-              "
-              :data-marker-title="formatStateCurveMarkerTitle(marker)"
-              data-testid="workbench-timeline-state-curve-marker"
-              role="button"
-              tabindex="0"
-              @click="selectStateCurveMarker(marker)"
-              @keydown.enter.prevent="selectStateCurveMarker(marker)"
-              @keydown.space.prevent="selectStateCurveMarker(marker)"
-            />
           </div>
         </div>
       </div>
@@ -1048,7 +942,6 @@ import {
   Histogram,
   Lightning,
   Minus,
-  Operation,
   Plus,
   StarFilled,
   Switch,
@@ -1068,7 +961,6 @@ import {
   msToFrame,
   snapMsToFrame,
 } from '../../domain/timebase';
-import { createStateCurvePointId } from './stateCurvePointIdentity';
 import { createWorkbenchMainFlowActionSurface } from './workbenchMainFlowActions';
 import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 import {
@@ -1081,6 +973,7 @@ import {
   serializeWorkbenchTimelineEntry,
 } from '../../domain/workbenchTimelineEntry';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
+import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -1102,7 +995,6 @@ const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
 const TIMELINE_EFFECT_SECTION_GAP_PX = 8;
 const TIMELINE_LANE_GAP_PX = 3;
 const TIMELINE_DATA_GAP_PX = 10;
-const RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT = 2.25;
 const ACTION_ICON_COMPONENTS = Object.freeze({
   skill: Lightning,
   kiboEvent: StarFilled,
@@ -1112,40 +1004,10 @@ const ACTION_ICON_COMPONENTS = Object.freeze({
   wait: Timer,
   annotation: ChatLineSquare,
 });
-const STATE_CURVE_TIMELINE_LAYER_KEYS = new Set([
-  'applied',
-  'sampled',
-  'placeholder',
-]);
-const STATE_CURVE_TIMELINE_LAYER_OPTIONS = [
-  {
-    key: 'applied',
-    label: '已用',
-  },
-  {
-    key: 'sampled',
-    label: '采样',
-  },
-  {
-    key: 'placeholder',
-    label: '占位',
-  },
-];
-const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
-  applied: true,
-  candidate: true,
-  sampled: false,
-  placeholder: false,
-};
 const playbackRangeModeOptions = [
   { key: 'axis', label: '全轴' },
   { key: 'section', label: '区段' },
 ];
-const STATE_CURVE_TRACK_MARKER_TOP = {
-  enemyHpDamage: 92,
-  enemyToughnessDamage: 99,
-  selfEnergyChange: 106,
-};
 const LOADOUT_SLOT_DEFINITIONS = Object.freeze([
   { key: 'weapon', label: '武器', kind: 'equipment' },
   { key: 'top', label: '上装', kind: 'equipment' },
@@ -1735,45 +1597,6 @@ const flowSelectedStateCurvePointId = computed(
 const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source || props.runtimeFocusSource
 );
-const runtimeEventMarkers = computed(createRuntimeTimelineEventMarkers);
-const stateCurveTimelineLayerOptions = computed(() =>
-  STATE_CURVE_TIMELINE_LAYER_OPTIONS.map(layer => {
-    const matchingLayers = (
-      props.threeValueCurveFramework?.stateCurves?.tracks ?? []
-    ).flatMap(track =>
-      (track.layers ?? []).filter(item => item.key === layer.key)
-    );
-    const pointCount = matchingLayers.reduce(
-      (sum, item) => sum + (item.pointCount ?? 0),
-      0
-    );
-    return {
-      ...layer,
-      pointCount,
-    };
-  }).filter(layer => layer.pointCount > 0)
-);
-const stateCurveTimelineTrackOptions = computed(() =>
-  (props.threeValueCurveFramework?.stateCurves?.tracks ?? [])
-    .map(track => ({
-      trackKey: track.trackKey,
-      label: track.label,
-      pointCount: getStateCurveTimelineTrackPointCount(track),
-    }))
-    .filter(track => track.pointCount > 0)
-);
-const effectiveStateCurveLayerFilters = computed(() => ({
-  ...DEFAULT_STATE_CURVE_LAYER_FILTERS,
-  ...(props.stateCurveLayerFilters ?? {}),
-}));
-const effectiveStateCurveTrackFilters = computed(
-  () => props.stateCurveTrackFilters ?? {}
-);
-const isStateCurveSelectedFocusActive = computed(
-  () =>
-    props.stateCurveFocusMode === 'selected' &&
-    flowSelectedStateCurvePointId.value
-);
 const overlapActionIds = computed(
   () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
 );
@@ -1860,33 +1683,8 @@ const timelineLanes = computed(() => {
     lane.cooldownSlotCount = cooldownLayout.slotCount;
   });
 
-  runtimeEventMarkers.value.forEach(event => {
-    const action = actionsById.value.get(event.actionId);
-    const lane = action
-      ? (allLanesById.get(resolveActionLaneId(action)) ?? systemLane)
-      : systemLane;
-    lane.runtimeEventMarkers.push(event);
-  });
-
-  createStateCurveTimelineMarkers().forEach(marker => {
-    const lane =
-      allLanesById.get(resolveStateCurveLaneId(marker, actorGroups)) ??
-      systemLane;
-    lane.stateCurveMarkers.push(marker);
-  });
-
-  allLanes.forEach(lane => {
-    const runtimeEventLayout = createRuntimeEventLayout(
-      lane.runtimeEventMarkers
-    );
-    lane.runtimeEventMarkers = runtimeEventLayout.markers;
-    lane.runtimeEventSlotCount = runtimeEventLayout.slotCount;
-  });
-
   const visibleLanes = allLanes.filter(lane => lane !== systemLane);
   return systemLane.actions.length > 0 ||
-    systemLane.runtimeEventMarkers.length > 0 ||
-    systemLane.stateCurveMarkers.length > 0 ||
     systemLane.effectIntervals.length > 0
     ? [...visibleLanes, systemLane]
     : visibleLanes;
@@ -2255,9 +2053,6 @@ function createEmptyTimelineLane({
     identity,
     curve,
     actions: [],
-    runtimeEventMarkers: [],
-    runtimeEventSlotCount: 0,
-    stateCurveMarkers: [],
     cooldownWindows: [],
     cooldownSlotCount: 0,
     effectIntervals: [...effectIntervals],
@@ -2290,65 +2085,17 @@ function createTimelineStateCurve({
   const maxValue = strictNumberOrNull(
     stateMetric?.maxValue ?? fallbackMaxValue
   );
-  const direction =
-    trackKey === 'selfEnergyChange' || trackKey === 'kiboEnergyChange'
-      ? 'increase'
-      : 'decrease';
-  let currentValue = initialValue;
-  const values = [initialValue];
-  const breakpoints = [...(runtimeCurve?.points ?? [])]
-    .filter(point => point.trackKey === trackKey)
-    .sort(compareRuntimeCurvePoints)
-    .map((point, index) => {
-      const metricKey = getRuntimeCurveMetricKey(trackKey);
-      const snapshotValue = strictNumberOrNull(
-        point.stateSnapshot?.after?.[metricKey]?.currentValue
-      );
-      const delta = numberOrZero(getRuntimeCurvePointDelta(point, trackKey));
-      currentValue =
-        snapshotValue ??
-        (direction === 'decrease'
-          ? Math.max(0, currentValue - delta)
-          : currentValue + delta);
-      values.push(currentValue);
-      return {
-        id:
-          point.sourceDeltaId ??
-          `${trackKey}-${actorId || slotId || kiboId}-${index}`,
-        sourceDeltaId: point.sourceDeltaId ?? '',
-        statePointId:
-          runtimeStatePointContextByDeltaId.value.get(point.sourceDeltaId)
-            ?.statePointId ?? '',
-        actionId: point.actionId ?? '',
-        hitKey: point.hitKey ?? '',
-        timeMs: numberOrZero(point.timeMs),
-        frameIndex: numberOrZero(point.frameIndex),
-        currentValue,
-      };
-    });
-  const minimum = Math.min(0, ...values);
-  const maximum = Math.max(1, maxValue ?? 0, ...values);
-  const range = maximum - minimum || 1;
-  let cursorValue = initialValue;
-  for (const point of breakpoints) {
-    if (point.frameIndex > timelineCursor.value.frameIndex) {
-      break;
-    }
-    cursorValue = point.currentValue;
-  }
-  let previousY = curveValueToY(initialValue, minimum, range);
-  const stepCoordinates = [`0,${previousY}`];
-
-  breakpoints.forEach(point => {
-    point.xPercent = clampPercent((point.timeMs / props.durationMs) * 100);
-    point.yPercent = curveValueToY(point.currentValue, minimum, range);
-    stepCoordinates.push(
-      `${point.xPercent},${previousY}`,
-      `${point.xPercent},${point.yPercent}`
-    );
-    previousY = point.yPercent;
+  const displaySeries = projectTimelineStateDisplaySeries({
+    trackKey,
+    points: runtimeCurve?.points ?? [],
+    initialValue,
+    maxValue,
+    durationMs: props.durationMs,
+    resolveStatePointId: point =>
+      runtimeStatePointContextByDeltaId.value.get(point.sourceDeltaId)
+        ?.statePointId ?? '',
   });
-  stepCoordinates.push(`100,${previousY}`);
+  const cursorValue = displaySeries.valueAtTime(timelineCursor.value.timeMs);
 
   return {
     trackKey,
@@ -2356,13 +2103,17 @@ function createTimelineStateCurve({
     slotId,
     kiboId,
     initialValue,
-    currentValue,
+    currentValue: displaySeries.currentValue,
     cursorValue,
-    cursorYPercent: curveValueToY(cursorValue, minimum, range),
-    maxValue,
-    pointCount: breakpoints.length,
-    breakpoints,
-    stepPoints: stepCoordinates.join(' '),
+    cursorYPercent: 100 - (cursorValue / displaySeries.maxValue) * 100,
+    maxValue: displaySeries.maxValue,
+    pointCount: displaySeries.semanticNodeCount,
+    displayPointCount: displaySeries.displayPointCount,
+    simulationPointCount: displaySeries.simulationPointCount,
+    semanticNodes: displaySeries.semanticNodes,
+    stepPoints: displaySeries.linePoints
+      .map(point => `${point.xPercent},${point.yPercent}`)
+      .join(' '),
   };
 }
 
@@ -2389,72 +2140,6 @@ function resolveRuntimeStateCurve(trackKey, { actorId, slotId, kiboId }) {
   };
 }
 
-function getRuntimeCurveMetricKey(trackKey) {
-  if (trackKey === 'enemyHpDamage') return 'enemyHp';
-  if (trackKey === 'enemyToughnessDamage') return 'enemyToughness';
-  if (trackKey === 'kiboEnergyChange') return 'kiboEnergy';
-  return 'selfEnergy';
-}
-
-function getRuntimeCurvePointDelta(point, trackKey) {
-  if (trackKey === 'enemyHpDamage') return point.hpDelta;
-  if (trackKey === 'enemyToughnessDamage') return point.toughnessDelta;
-  return point.energyDelta;
-}
-
-function compareRuntimeCurvePoints(left, right) {
-  return (
-    numberOrZero(left.timeMs) - numberOrZero(right.timeMs) ||
-    numberOrZero(left.runtimeSequenceIndex) -
-      numberOrZero(right.runtimeSequenceIndex)
-  );
-}
-
-function createRuntimeTimelineEventMarkers() {
-  const markers = new Map();
-  props.runtimeStatePointContexts.forEach(({ row, statePointId }) => {
-    if (!row?.actionId || !statePointId) return;
-    if (
-      row.resultStatus === 'verified-toughness-state-change-applied' ||
-      /^verified-(?:normal-toughness-recovery|break-(?:linear-recovery|end-wait|exit))-/.test(
-        row.hitKey ?? ''
-      )
-    ) {
-      return;
-    }
-    const kind =
-      row.trackKey?.includes('Energy') && !row.hitKey && row.hitIndex == null
-        ? 'resource'
-        : 'hit';
-    const id =
-      kind === 'hit' ? `${row.actionId}|${row.frameIndex}` : statePointId;
-    const marker = markers.get(id);
-    if (marker) marker.statePointIds.push(statePointId);
-    else
-      markers.set(
-        id,
-        createRuntimeTimelineEventMarker(row, kind, statePointId)
-      );
-  });
-  return [...markers.values()];
-}
-
-function createRuntimeTimelineEventMarker(row, kind, statePointId) {
-  const frameIndex = row.frameIndex;
-  return {
-    statePointIds: [statePointId],
-    actionId: row.actionId,
-    kind,
-    frameIndex,
-    title: `${row.actionName || row.actionId} · ${
-      kind === 'hit' ? '命中' : '资源变化'
-    } · ${frameIndex}F`,
-  };
-}
-
-function curveValueToY(value, minimum, range) {
-  return Number((100 - ((value - minimum) / range) * 100).toFixed(4));
-}
 
 function formatCompactNumber(value) {
   return Number(numberOrZero(value).toFixed(2)).toLocaleString('zh-CN');
@@ -2475,10 +2160,6 @@ function isActionInSelectedBatch(action) {
     selectedBatchId.value &&
     action.generationBatch?.batchId === selectedBatchId.value
   );
-}
-
-function isRuntimeEventMarkerSelected(event) {
-  return event.statePointIds.includes(flowSelectedStateCurvePointId.value);
 }
 
 function isActionEditFocused(action) {
@@ -2761,35 +2442,11 @@ function selectEffectInterval(interval) {
   });
 }
 
-function runtimeEventMarkerStyle(event, lane) {
-  const left = clampPercent(
-    (frameToMs(event.frameIndex) / props.durationMs) * 100
-  );
-  return {
-    left: `${left}%`,
-    top: `${getTimelineDataTop(lane) + event.timelineEventSlot * 20}px`,
-    transform:
-      left === 0
-        ? 'translateX(0)'
-        : left === 100
-          ? 'translateX(-100%)'
-          : 'translateX(-50%)',
-  };
-}
-
 function laneRowStyle(lane) {
   const height = getTimelineLaneHeight(lane);
   return {
     height: `${height}px`,
     minHeight: `${height}px`,
-  };
-}
-
-function stateCurveMarkerStyle(marker, lane) {
-  const left = clampPercent((marker.timeMs / props.durationMs) * 100);
-  return {
-    left: `${left}%`,
-    top: `${getTimelineStateCurveMarkerTop(marker, lane)}px`,
   };
 }
 
@@ -2854,25 +2511,16 @@ function getTimelineCooldownAreaBottom(lane) {
   );
 }
 
-function getTimelineStateCurveMarkerTop(marker, lane) {
-  if (lane.type === 'curve') return 18;
-  return getTimelineDataTop(lane) + Math.max(0, marker.top - 92);
-}
-
 function getTimelineLaneHeight(lane) {
   if (lane.type === 'curve') return TIMELINE_CURVE_LANE_HEIGHT_PX;
   if (lane.type === 'kibo' && lane.actions.length === 0) {
     return TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX;
   }
-  const runtimeEventBottom = lane.runtimeEventSlotCount
-    ? getTimelineDataTop(lane) + lane.runtimeEventSlotCount * 20 + 2
-    : 0;
   return Math.max(
     lane.kind === 'actor-action'
       ? TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX
       : TIMELINE_LANE_MIN_HEIGHT_PX,
-    getTimelineDataTop(lane) + 24,
-    runtimeEventBottom
+    getTimelineDataTop(lane) + 24
   );
 }
 
@@ -2977,32 +2625,6 @@ function createTimelineCooldownLayout(windows) {
   };
 }
 
-function createRuntimeEventLayout(markers) {
-  const lastPercentBySlot = [];
-  const minimumGapPercent =
-    RUNTIME_EVENT_MARKER_MIN_GAP_PERCENT / timelineZoom.value;
-  const laidOutMarkers = [...markers]
-    .sort(
-      (left, right) =>
-        left.frameIndex - right.frameIndex ||
-        left.title.localeCompare(right.title)
-    )
-    .map(marker => {
-      const markerPercent = clampPercent(
-        (frameToMs(marker.frameIndex) / props.durationMs) * 100
-      );
-      let timelineEventSlot = lastPercentBySlot.findIndex(
-        lastPercent => markerPercent - lastPercent >= minimumGapPercent
-      );
-      if (timelineEventSlot === -1) {
-        timelineEventSlot = lastPercentBySlot.length;
-      }
-      lastPercentBySlot[timelineEventSlot] = markerPercent;
-      return { ...marker, timelineEventSlot };
-    });
-  return { markers: laidOutMarkers, slotCount: lastPercentBySlot.length };
-}
-
 function getTimelineActionLayoutDurationMs(action) {
   return Math.max(
     MIN_ACTION_DURATION_MS,
@@ -3088,197 +2710,6 @@ function resolveActionLaneId(action) {
   );
 }
 
-function resolveStateCurveLaneId(marker, actorGroups = []) {
-  if (marker.trackKey === 'enemyHpDamage') return 'enemy-hp-curve';
-  if (marker.trackKey === 'enemyToughnessDamage') {
-    return 'enemy-toughness-curve';
-  }
-  const action = actionsById.value.get(marker.actionId);
-  const actorId = marker.actorId ?? (action ? resolveActionLaneId(action) : '');
-  if (marker.trackKey === 'selfEnergyChange' && actorId) {
-    return actorGroups.find(group => group.actionLane.id === actorId)
-      ?.energyCurveLane.id;
-  }
-  return 'system';
-}
-
-function createStateCurveTimelineMarkers() {
-  return (props.threeValueCurveFramework?.stateCurves?.tracks ?? []).flatMap(
-    track =>
-      isStateCurveTrackVisible(track.trackKey)
-        ? (track.layers ?? [])
-            .filter(
-              layer =>
-                STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key) &&
-                isStateCurveTimelineLayerVisible(layer.key) &&
-                (layer.pointCount ?? 0) > 0
-            )
-            .flatMap((layer, layerIndex) =>
-              (layer.points ?? []).map((point, pointIndex) =>
-                createStateCurveTimelineMarker({
-                  track,
-                  layer,
-                  point,
-                  layerIndex,
-                  pointIndex,
-                })
-              )
-            )
-            .filter(marker => isStateCurveMarkerInFocus(marker))
-        : []
-  );
-}
-
-function createStateCurveTimelineMarker({
-  track,
-  layer,
-  point,
-  layerIndex,
-  pointIndex,
-}) {
-  const frameIndex = Number(point.frameIndex);
-  const timeMs = Number.isFinite(Number(point.timeMs))
-    ? Number(point.timeMs)
-    : Number.isFinite(frameIndex)
-      ? frameIndex * WORKBENCH_FRAME_MS
-      : 0;
-  const frameLabel =
-    point.frameLabel ??
-    (Number.isFinite(frameIndex)
-      ? formatFrameTime(frameIndex * WORKBENCH_FRAME_MS)
-      : formatFrameTime(timeMs));
-
-  return {
-    id: createStateCurvePointId({
-      trackKey: track.trackKey,
-      layerKey: layer.key,
-      point,
-      pointIndex,
-    }),
-    statePointId: createStateCurvePointId({
-      trackKey: track.trackKey,
-      layerKey: layer.key,
-      point,
-      pointIndex,
-    }),
-    trackKey: track.trackKey,
-    trackLabel: track.label,
-    layerKey: layer.key,
-    layerLabel: formatStateCurveLayerLabel(layer.key),
-    valueUnit: layer.valueUnit ?? track.valueUnit,
-    actionId: point.actionId ?? '',
-    actionName: point.actionName ?? '',
-    actorId: point.actorId ?? '',
-    frameIndex,
-    frameLabel,
-    timeMs,
-    top: STATE_CURVE_TRACK_MARKER_TOP[track.trackKey] ?? 99,
-    delta: point.delta,
-    cumulative: point.cumulative,
-    hitIndex: point.hitIndex,
-    eventType: point.eventType ?? '',
-    resultStatus: point.resultStatus ?? '',
-    sourceKind: point.sourceKind ?? '',
-    elementConfigIds: point.elementConfigIds ?? [],
-    sourceElementConfigId: point.sourceElementConfigId,
-    elementConfigId: point.elementConfigId,
-    spBefore: point.spBefore,
-    spAfter: point.spAfter,
-  };
-}
-
-function formatStateCurveMarkerTitle(marker) {
-  const sourceParts = [];
-  const actionText = marker.actionName || marker.actionId;
-  if (actionText) {
-    sourceParts.push(actionText);
-  }
-  if (Number.isFinite(Number(marker.hitIndex))) {
-    sourceParts.push(`hit${Number(marker.hitIndex)}`);
-  }
-  const elementText = formatStateCurveMarkerElements(marker);
-  if (elementText) {
-    sourceParts.push(elementText);
-  }
-  if (marker.eventType) {
-    sourceParts.push(marker.eventType);
-  }
-  const spText = formatStateCurveMarkerSpRange(marker);
-  if (spText) {
-    sourceParts.push(spText);
-  }
-  if (marker.resultStatus) {
-    sourceParts.push(marker.resultStatus);
-  }
-  if (marker.sourceKind) {
-    sourceParts.push(marker.sourceKind);
-  }
-  const sourceText = sourceParts.length ? ` · ${sourceParts.join(' · ')}` : '';
-  return `状态点 ${marker.trackLabel} ${marker.layerLabel} ${marker.frameLabel}: Δ${formatStateCurveTimelineNumber(marker.delta)} Σ${formatStateCurveTimelineNumber(marker.cumulative)}${sourceText}`;
-}
-
-function formatStateCurveLayerLabel(key) {
-  if (key === 'applied') {
-    return '已用';
-  }
-  if (key === 'sampled') {
-    return '采样';
-  }
-  if (key === 'placeholder') {
-    return '占位';
-  }
-  return key;
-}
-
-function formatStateCurveMarkerElements(marker) {
-  const ids = [
-    ...(marker.elementConfigIds ?? []),
-    marker.sourceElementConfigId,
-    marker.elementConfigId,
-  ]
-    .map(id => Number(id))
-    .filter(Number.isFinite);
-  const uniqueIds = [...new Set(ids)];
-  if (uniqueIds.length === 0) {
-    return '';
-  }
-  return `element ${uniqueIds.join('/')}`;
-}
-
-function formatStateCurveMarkerSpRange(marker) {
-  if (
-    !Number.isFinite(Number(marker.spBefore)) ||
-    !Number.isFinite(Number(marker.spAfter))
-  ) {
-    return '';
-  }
-  return `SP ${formatStateCurveTimelineNumber(marker.spBefore)}->${formatStateCurveTimelineNumber(marker.spAfter)}`;
-}
-
-function selectStateCurveMarker(marker) {
-  emitTimelineFrame({
-    frameIndex: marker.frameIndex,
-    timeMs: marker.timeMs,
-    statePointId: marker.statePointId,
-    source: 'timeline-state-point',
-  });
-  if (isRuntimeStateCurveMarker(marker)) {
-    emit(
-      'dispatch-flow-action',
-      mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
-        source: 'state-curve-point',
-        actionId: marker.actionId,
-        statePointId: marker.statePointId,
-        payload: {
-          preserveStateCurveFilters: true,
-        },
-      })
-    );
-    return;
-  }
-  emit('select-state-curve-point', marker.statePointId);
-}
-
 function selectRuntimeCurveBreakpoint(point) {
   const timelineFrame = {
     frameIndex: point.frameIndex,
@@ -3294,6 +2725,7 @@ function selectRuntimeCurveBreakpoint(point) {
         actionId: point.actionId,
         statePointId: point.statePointId,
         payload: {
+          statePointIds: point.statePointIds,
           preserveStateCurveFilters: true,
           timelineFrame,
         },
@@ -3303,85 +2735,23 @@ function selectRuntimeCurveBreakpoint(point) {
   emitTimelineFrame(timelineFrame);
 }
 
-function selectRuntimeEventMarker(event) {
-  emitTimelineFrame({
-    frameIndex: event.frameIndex,
-    timeMs: frameToMs(event.frameIndex),
-    statePointId: event.statePointIds[0],
-    source: 'timeline-runtime-event',
-  });
-  emit(
-    'dispatch-flow-action',
-    mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
-      source: 'timeline-runtime-event',
-      actionId: event.actionId,
-      statePointId: event.statePointIds[0],
-      payload: {
-        statePointIds: event.statePointIds,
-        preserveStateCurveFilters: true,
-      },
-    })
-  );
+function runtimeCurveNodeStyle(point) {
+  return {
+    left: `${point.xPercent}%`,
+    top: `${point.yPercent}%`,
+  };
 }
 
-function isRuntimeStateCurveMarker(marker) {
-  return marker?.layerKey === 'applied';
-}
-
-function isStateCurveTimelineLayerVisible(layerKey) {
-  return Boolean(effectiveStateCurveLayerFilters.value[layerKey]);
-}
-
-function setStateCurveLayerVisible(layerKey, visible) {
-  emit('update-state-curve-layer-filter', {
-    layerKey,
-    visible: Boolean(visible),
-  });
-}
-
-function isStateCurveTrackVisible(trackKey) {
-  return effectiveStateCurveTrackFilters.value[trackKey] !== false;
-}
-
-function setStateCurveTrackVisible(trackKey, visible) {
-  emit('update-state-curve-track-filter', {
-    trackKey,
-    visible: Boolean(visible),
-  });
-}
-
-function getStateCurveTimelineTrackPointCount(track) {
-  return (track.layers ?? [])
-    .filter(layer => STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key))
-    .reduce((sum, layer) => sum + (layer.pointCount ?? 0), 0);
-}
-
-function isStateCurveMarkerInFocus(marker) {
-  return (
-    !isStateCurveSelectedFocusActive.value ||
-    marker.statePointId === flowSelectedStateCurvePointId.value
-  );
+function formatRuntimeCurveNodeTitle(point) {
+  const eventText =
+    point.eventCount > 1 ? `${point.eventCount} 个变化` : '状态变化';
+  return `${point.frameIndex}F · ${eventText} · ${formatCompactNumber(
+    point.beforeValue
+  )} -> ${formatCompactNumber(point.afterValue)}`;
 }
 
 function formatTimelineNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
-}
-
-function formatStateCurveTimelineNumber(value) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) {
-    return '-';
-  }
-  if (!Number.isInteger(number)) {
-    const sign = number < 0 ? '-' : '';
-    const normalized = Math.abs(number)
-      .toFixed(4)
-      .replace(/0+$/, '')
-      .replace(/\.$/, '');
-    const [integerPart, decimalPart] = normalized.split('.');
-    return `${sign}${formatTimelineNumber(integerPart)}${decimalPart ? `.${decimalPart}` : ''}`;
-  }
-  return formatTimelineNumber(number);
 }
 
 function formatSigned(value) {
@@ -3637,7 +3007,7 @@ function selectTimelineFrameFromPointer(event) {
   if (
     props.boxSelectionMode ||
     event.target?.closest?.(
-      '.action-block, .action-relation-hit, .cycle-boundary, .cooldown-window, .effect-interval, .state-curve-marker, .timeline-frame-cursor, [data-testid="workbench-timeline-state-curve-breakpoint"]'
+      '.action-block, .action-relation-hit, .cycle-boundary, .cooldown-window, .effect-interval, .timeline-state-curve-node, .timeline-frame-cursor'
     )
   ) {
     return;
@@ -5263,33 +4633,37 @@ h2 {
 .timeline-state-curve polyline {
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.2;
-  vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 2px currentColor);
-}
-
-.timeline-state-curve circle {
-  fill: currentColor;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 
-.timeline-state-curve
-  [data-testid='workbench-timeline-state-curve-breakpoint'] {
+.timeline-state-curve-node {
+  position: absolute;
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 2px solid #11171d;
+  border-radius: 50%;
+  background: currentColor;
+  color: inherit;
+  transform: translate(-50%, -50%);
   cursor: pointer;
-  pointer-events: auto;
 }
 
-.timeline-state-curve
-  [data-testid='workbench-timeline-state-curve-breakpoint']:focus {
+.timeline-state-curve-node:hover,
+.timeline-state-curve-node:focus-visible,
+.timeline-state-curve-node.selected {
+  border-color: #ffffff;
   outline: none;
-  stroke: #ffffff;
-  stroke-width: 1.5;
+  transform: translate(-50%, -50%) scale(1.375);
 }
 
 .timeline-state-curve .timeline-state-curve-cursor {
   fill: #ffffff;
   stroke: currentColor;
   stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
@@ -5801,75 +5175,6 @@ h2 {
     height: 20px;
     transform: translate(-50%, -50%);
   }
-}
-
-.runtime-event-marker {
-  position: absolute;
-  z-index: 8;
-  display: grid;
-  width: 18px;
-  height: 18px;
-  padding: 3px;
-  place-items: center;
-  border: 1px solid rgba(242, 179, 102, 0.8);
-  border-radius: 4px;
-  background: #2b2317;
-  color: #f2b366;
-  box-shadow: 0 0 8px rgba(230, 162, 60, 0.28);
-  transform: translateX(-50%);
-  cursor: pointer;
-}
-
-.runtime-event-marker.event-resource {
-  border-color: rgba(166, 183, 255, 0.82);
-  background: #1c2237;
-  color: #a6b7ff;
-  box-shadow: 0 0 8px rgba(166, 183, 255, 0.28);
-}
-
-.runtime-event-marker.selected {
-  border-color: #ffffff;
-  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.55);
-}
-
-.runtime-event-marker:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 1px;
-}
-
-.state-curve-marker {
-  position: absolute;
-  z-index: 3;
-  width: 7px;
-  height: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.74);
-  border-radius: 2px;
-  background: #dff9f3;
-  box-shadow: 0 0 10px rgba(223, 249, 243, 0.38);
-  transform: translateX(-50%) rotate(45deg);
-}
-
-.state-curve-marker:focus,
-.state-curve-marker.selected {
-  outline: 2px solid rgba(255, 255, 255, 0.86);
-  outline-offset: 3px;
-}
-
-.state-curve-marker.selected {
-  box-shadow:
-    0 0 0 3px rgba(121, 199, 185, 0.22),
-    0 0 16px rgba(223, 249, 243, 0.52);
-}
-
-.state-curve-marker.state-layer-sampled {
-  background: #79c7b9;
-  box-shadow: 0 0 12px rgba(121, 199, 185, 0.52);
-}
-
-.state-curve-marker.state-layer-placeholder {
-  border-color: rgba(239, 197, 116, 0.82);
-  background: rgba(20, 25, 30, 0.96);
-  box-shadow: 0 0 10px rgba(239, 197, 116, 0.36);
 }
 
 .empty-lane {

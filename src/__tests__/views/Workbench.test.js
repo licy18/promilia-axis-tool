@@ -886,33 +886,17 @@ describe('Workbench view', () => {
       'data-state-point-id'
     );
     expect(firstCandidateStatePointId).toBeTruthy();
-    const stateTimelineMarkers = wrapper.findAll(
-      '[data-testid="workbench-timeline-state-curve-marker"]'
-    );
-    expect(stateTimelineMarkers).toHaveLength(1);
-    expect(stateTimelineMarkers[0].attributes('data-track-key')).toBe(
-      'enemyHpDamage'
-    );
-    expect(stateTimelineMarkers[0].attributes('data-layer-key')).toBe(
-      'applied'
-    );
-    expect(stateTimelineMarkers[0].attributes('data-frame-label')).toBe('0s0f');
-    expect(stateTimelineMarkers[0].attributes('data-lane-id')).toBe(
-      'enemy-hp-curve'
-    );
-    expect(stateTimelineMarkers[0].attributes('data-marker-title')).toContain(
-      '状态点 敌人HP伤害 已用 0s0f: Δ12,461 Σ12,461'
-    );
-    expect(stateTimelineMarkers[0].attributes('data-marker-title')).toContain(
-      '普通攻击'
-    );
-    const appliedStatePointId = stateTimelineMarkers[0].attributes(
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(0);
+    const appliedStatePointId = hpStateCurvePoints[0].attributes(
       'data-state-point-id'
     );
     expect(appliedStatePointId).toBeTruthy();
-    expect(hpStateCurvePoints[0].attributes('data-state-point-id')).toBe(
-      appliedStatePointId
+    const runtimeCurveNode = wrapper.find(
+      `[data-testid="workbench-timeline-state-curve-node"][data-state-point-id="${appliedStatePointId}"]`
     );
+    expect(runtimeCurveNode.exists()).toBe(true);
     let actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -938,32 +922,21 @@ describe('Workbench view', () => {
     await firstCandidatePoint.trigger('click');
     await nextTick();
     expect(firstCandidatePoint.classes()).toContain('selected');
-    expect(
-      wrapper
-        .find(
-          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
-        )
-        .classes()
-    ).not.toContain('selected');
-    await stateTimelineMarkers[0].trigger('click');
+    expect(runtimeCurveNode.classes()).not.toContain('selected');
+    await runtimeCurveNode.trigger('click');
     await nextTick();
     expect(
       getLastDispatchedFlowAction(wrapper, TimelineGridPreview)
     ).toMatchObject({
       kind: 'select-runtime-state-point',
-      source: 'state-curve-point',
+      source: 'timeline-runtime-curve',
       statePointId: appliedStatePointId,
       payload: {
+        statePointIds: [appliedStatePointId],
         preserveStateCurveFilters: true,
       },
     });
-    expect(
-      wrapper
-        .find(
-          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
-        )
-        .classes()
-    ).toContain('selected');
+    expect(runtimeCurveNode.classes()).toContain('selected');
     expect(
       wrapper
         .find(
@@ -994,11 +967,7 @@ describe('Workbench view', () => {
     expect(focusSelectedButton.attributes('disabled')).toBeUndefined();
     expect(focusSelectedButton.classes()).toContain('active');
     expect(
-      wrapper
-        .find(
-          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
-        )
-        .attributes('data-runtime-focus-source')
+      runtimeCurveNode.attributes('data-runtime-focus-source')
     ).toBe('state-curve-point');
     expect(
       wrapper
@@ -1020,9 +989,7 @@ describe('Workbench view', () => {
         )
         .text()
     ).toContain('raw-damage · 1/1层 · 1点');
-    expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-    ).toHaveLength(1);
+    expect(runtimeCurveNode.exists()).toBe(true);
     expect(
       wrapper
         .find('[data-testid="workbench-state-curve-focus-selected"]')
@@ -1053,9 +1020,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curve-point"]')
         .attributes('data-state-point-id')
     ).toBe(firstCandidateStatePointId);
-    expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-    ).toHaveLength(0);
+    expect(runtimeCurveNode.classes()).not.toContain('selected');
     const frameGroupOptions = wrapper.findAll(
       '[data-testid="workbench-state-curve-frame-group-option"]'
     );
@@ -1107,9 +1072,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curve-point"]')
         .attributes('data-state-point-id')
     ).toBe(appliedStatePointId);
-    expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-    ).toHaveLength(1);
+    expect(runtimeCurveNode.classes()).toContain('selected');
     await focusAllButton.trigger('click');
     await nextTick();
     expect(
@@ -1123,18 +1086,9 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
     ).toContain('active');
-    const timelineStateTrackToggles = wrapper.findAll(
-      '[data-testid="workbench-timeline-state-track-toggle"]'
-    );
     expect(
-      timelineStateTrackToggles.map(toggle =>
-        toggle.attributes('data-track-key')
-      )
-    ).toEqual(['enemyHpDamage']);
-    expect(timelineStateTrackToggles[0].attributes('data-point-count')).toBe(
-      '1'
-    );
-    expect(timelineStateTrackToggles[0].element.checked).toBe(true);
+      wrapper.findAll('[data-testid="workbench-timeline-state-track-toggle"]')
+    ).toHaveLength(0);
     await stateCurveTrackToggles.enemyHpDamage.setValue(false);
     await nextTick();
     expect(
@@ -1149,19 +1103,8 @@ describe('Workbench view', () => {
         )
         .exists()
     ).toBe(false);
-    expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-    ).toHaveLength(0);
-    expect(
-      wrapper.find(
-        '[data-testid="workbench-timeline-state-track-toggle"][data-track-key="enemyHpDamage"]'
-      ).element.checked
-    ).toBe(false);
-    await wrapper
-      .find(
-        '[data-testid="workbench-timeline-state-track-toggle"][data-track-key="enemyHpDamage"]'
-      )
-      .setValue(true);
+    expect(runtimeCurveNode.exists()).toBe(true);
+    await stateCurveTrackToggles.enemyHpDamage.setValue(true);
     await nextTick();
     expect(
       wrapper
@@ -1173,26 +1116,16 @@ describe('Workbench view', () => {
         '[data-testid="workbench-state-curve-track-toggle"][data-track-key="enemyHpDamage"]'
       ).element.checked
     ).toBe(true);
+    expect(runtimeCurveNode.exists()).toBe(true);
     expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-    ).toHaveLength(1);
-    const timelineStateLayerToggles = wrapper.findAll(
-      '[data-testid="workbench-timeline-state-layer-toggle"]'
-    );
-    expect(
-      timelineStateLayerToggles.map(toggle =>
-        toggle.attributes('data-layer-key')
-      )
-    ).toEqual(['applied']);
-    expect(timelineStateLayerToggles[0].attributes('data-point-count')).toBe(
-      '1'
-    );
-    expect(timelineStateLayerToggles[0].element.checked).toBe(true);
-    await timelineStateLayerToggles[0].setValue(false);
-    await nextTick();
-    expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+      wrapper.findAll('[data-testid="workbench-timeline-state-layer-toggle"]')
     ).toHaveLength(0);
+    await wrapper
+      .find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+      )
+      .setValue(false);
+    await nextTick();
     expect(
       wrapper.find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
@@ -1209,9 +1142,7 @@ describe('Workbench view', () => {
       )
       .setValue(true);
     await nextTick();
-    expect(
-      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-    ).toHaveLength(1);
+    expect(runtimeCurveNode.exists()).toBe(true);
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
@@ -1515,7 +1446,7 @@ describe('Workbench view', () => {
       contributionFocusedCurvePoint.attributes('data-runtime-focus-source')
     ).toBe('action-contribution');
     const contributionFocusedTimelineMarker = wrapper.find(
-      `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+      `[data-testid="workbench-timeline-state-curve-node"][data-state-point-id="${appliedStatePointId}"]`
     );
     expect(contributionFocusedTimelineMarker.exists()).toBe(true);
     expect(contributionFocusedTimelineMarker.classes()).toContain('selected');
@@ -1574,7 +1505,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-timeline-runtime-event-marker"]')
         .exists()
-    ).toBe(true);
+    ).toBe(false);
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'
     );
@@ -5622,7 +5553,7 @@ describe('Workbench view', () => {
     });
 
     const appliedMarker = wrapper.find(
-      '[data-testid="workbench-timeline-state-curve-marker"]'
+      '[data-testid="workbench-timeline-state-curve-node"]'
     );
     const appliedStatePointId = appliedMarker.attributes('data-state-point-id');
 
@@ -5662,7 +5593,7 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
-          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+          `[data-testid="workbench-timeline-state-curve-node"][data-state-point-id="${appliedStatePointId}"]`
         )
         .classes()
     ).toContain('selected');
@@ -6733,7 +6664,7 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
-          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${statePointId}"]`
+          `[data-testid="workbench-timeline-state-curve-node"][data-state-point-id="${statePointId}"]`
         )
         .classes()
     ).toContain('selected');
@@ -8465,32 +8396,25 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('phase-2 / 进入二阶段');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
     const placeholderStateLayerToggle = wrapper.find(
-      '[data-testid="workbench-timeline-state-layer-toggle"][data-layer-key="placeholder"]'
+      '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="placeholder"]'
     );
     expect(placeholderStateLayerToggle.exists()).toBe(true);
     await placeholderStateLayerToggle.setValue(true);
     await nextTick();
-    const placeholderStateMarkers = wrapper
-      .findAll('[data-testid="workbench-timeline-state-curve-marker"]')
-      .filter(marker => marker.attributes('data-layer-key') === 'placeholder');
-    expect(placeholderStateMarkers.length).toBeGreaterThan(0);
     expect(
-      placeholderStateMarkers.some(
-        marker => marker.attributes('data-action-id') === 'action-0002'
-      )
-    ).toBe(true);
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(0);
     expect(
-      placeholderStateMarkers.some(
-        marker => marker.attributes('data-action-id') === 'action-0003'
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0002"]'
       )
-    ).toBe(true);
+    ).toHaveLength(1);
     expect(
-      placeholderStateMarkers.every(marker =>
-        marker
-          .attributes('data-marker-title')
-          ?.includes('action-result-placeholder')
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0003"]'
       )
-    ).toBe(true);
+    ).toHaveLength(0);
+    expect(wrapper.text()).toContain('action-result-placeholder');
   });
 
   it('adds a switch action targeting a secondary actor', async () => {
@@ -8650,9 +8574,10 @@ describe('Workbench view', () => {
         .attributes('data-lane-id')
     ).toBe('actor-109001');
     expect(
-      wrapper.find('[data-testid="workbench-timeline-runtime-event-marker"]')
-        .element.parentElement.dataset.laneId
-    ).toBe('actor-109001');
+      wrapper
+        .find('[data-testid="workbench-timeline-runtime-event-marker"]')
+        .exists()
+    ).toBe(false);
 
     await wrapper
       .find('[data-testid="workbench-add-switch-action"]')
@@ -8846,9 +8771,10 @@ describe('Workbench view', () => {
         .attributes('data-lane-id')
     ).toBe('actor-101003');
     expect(
-      wrapper.find('[data-testid="workbench-timeline-runtime-event-marker"]')
-        .element.parentElement.dataset.laneId
-    ).toBe('actor-101003');
+      wrapper
+        .find('[data-testid="workbench-timeline-runtime-event-marker"]')
+        .exists()
+    ).toBe(false);
 
     const optionValues = Array.from(
       wrapper.find('[data-testid="workbench-skill-select"]').element.options
@@ -9484,7 +9410,7 @@ describe('Workbench view', () => {
       },
     });
     const hpBreakpoint = wrapper.get(
-      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-breakpoint"]'
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-node"]'
     );
     const runtimeStatePointId = hpBreakpoint.attributes('data-state-point-id');
     const runtimeFrameIndex = hpBreakpoint.attributes('data-frame-index');

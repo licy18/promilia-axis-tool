@@ -29,14 +29,46 @@ export function simulateScenario(
     },
   ];
 
-  const actionRuleDiagnostics = createActionRuleDiagnostics({
+  let actionRuleDiagnostics = createActionRuleDiagnostics({
     scenario,
     cooldownEvaluationAdapter: actionCooldownEvaluationAdapter,
   });
-  const actionExecutionPlan = createActionExecutionPlan({
+  let actionExecutionPlan = createActionExecutionPlan({
     scenario,
     actionRuleDiagnostics,
   });
+  let controlledActorTimeline = createControlledActorTimeline({
+    scenario,
+    actionExecutionPlan,
+  });
+  let verifiedCombatRuntime = createVerifiedCombatRuntime({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+  });
+  const verifiedExecutionBlocks = verifiedCombatRuntime.executionBlocks ?? [];
+  if (verifiedExecutionBlocks.length > 0) {
+    actionRuleDiagnostics = applyVerifiedResourceExecutionBlocks({
+      actionRuleDiagnostics,
+      executionBlocks: verifiedExecutionBlocks,
+    });
+    actionExecutionPlan = createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics,
+    });
+    controlledActorTimeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+    verifiedCombatRuntime = attachVerifiedExecutionBlocks(
+      createVerifiedCombatRuntime({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+      }),
+      verifiedExecutionBlocks
+    );
+  }
   const actionReadinessByActionId = new Map(
     actionRuleDiagnostics.readinessTimeline.actions.map(action => [
       action.actionId,
@@ -45,21 +77,12 @@ export function simulateScenario(
   );
   const executionPlanByActionId =
     createActionExecutionPlanIndex(actionExecutionPlan);
-  const controlledActorTimeline = createControlledActorTimeline({
-    scenario,
-    actionExecutionPlan,
-  });
   const controlledTransitionByActionId = new Map(
     controlledActorTimeline.transitions.map(transition => [
       transition.actionId,
       transition,
     ])
   );
-  const verifiedCombatRuntime = createVerifiedCombatRuntime({
-    scenario,
-    actionExecutionPlan,
-    controlledActorTimeline,
-  });
   const verifiedCombatSelected = verifiedCombatRuntime.enabled === true;
   const verifiedCombatEnabled = verifiedCombatRuntime.ready === true;
   const damageEvents = verifiedCombatEnabled
@@ -209,6 +232,123 @@ export function simulateScenario(
     kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
     threeValueMechanicsAdapterRegistry,
   });
+}
+
+function applyVerifiedResourceExecutionBlocks({
+  actionRuleDiagnostics,
+  executionBlocks,
+}) {
+  const blockedByActionId = new Map(
+    executionBlocks.map(block => [block.actionId, block])
+  );
+  const runtimeDiagnostics = executionBlocks.map(block => ({
+    schemaVersion: 1,
+    id: `${block.code}|${block.actionId}`,
+    code: block.code,
+    ruleKey: 'verified-resource-cost-precondition',
+    status: 'violated',
+    severity: 'error',
+    actionId: block.actionId,
+    actionIds: [block.actionId],
+    actionName: block.actionName,
+    actorId: block.actorId,
+    timeMs: block.timeMs,
+    message:
+      block.status === 'unresolved'
+        ? `${block.actionName} 的已验证资源消耗来源或作用对象不完整`
+        : `${block.actionName} 的已验证资源不足，动作未执行`,
+    source: {
+      sourceKind: block.sourceKind,
+      sourceStatus: block.reason,
+      sourceIdentity: block.sourceIdentity,
+    },
+    runtimeBlock: block,
+    appliedToSimulationResults: true,
+  }));
+  const readinessActions = actionRuleDiagnostics.readinessTimeline.actions.map(
+    action => {
+      const block = blockedByActionId.get(action.actionId);
+      if (!block) return action;
+      const diagnosticId = `${block.code}|${block.actionId}`;
+      return {
+        ...action,
+        status: 'blocked',
+        executable: false,
+        diagnosticIds: [...new Set([...action.diagnosticIds, diagnosticId])],
+        violationCodes: [...new Set([...action.violationCodes, block.code])],
+        verifiedResourceExecutionBlock: block,
+        appliedToSimulationResults: true,
+      };
+    }
+  );
+  const blockedActionCount = readinessActions.filter(
+    action => !action.executable
+  ).length;
+  const readinessTimeline = {
+    ...actionRuleDiagnostics.readinessTimeline,
+    status: 'action-readiness-timeline-ready-with-blocked-actions',
+    actions: readinessActions,
+    cooldownWindows:
+      actionRuleDiagnostics.readinessTimeline.cooldownWindows.filter(
+        window => !blockedByActionId.has(window.actionId)
+      ),
+    summary: {
+      ...actionRuleDiagnostics.readinessTimeline.summary,
+      readyActionCount: readinessActions.filter(
+        action => action.status === 'ready'
+      ).length,
+      blockedActionCount,
+      verifiedResourceBlockedActionCount: executionBlocks.length,
+      appliedToSimulationResults: true,
+    },
+    appliedToSimulationResults: true,
+  };
+  const diagnostics = [
+    ...actionRuleDiagnostics.diagnostics,
+    ...runtimeDiagnostics,
+  ];
+  return {
+    ...actionRuleDiagnostics,
+    status: 'action-rules-violated',
+    executable: false,
+    diagnostics,
+    readinessTimeline,
+    summary: {
+      ...actionRuleDiagnostics.summary,
+      diagnosticCount: diagnostics.length,
+      violationCount:
+        actionRuleDiagnostics.summary.violationCount + executionBlocks.length,
+      errorCount:
+        actionRuleDiagnostics.summary.errorCount + executionBlocks.length,
+      verifiedResourceBlockedActionCount: executionBlocks.length,
+      appliedToSimulationResults: true,
+    },
+    appliedToSimulationResults: true,
+  };
+}
+
+function attachVerifiedExecutionBlocks(runtime, executionBlocks) {
+  const blockEvents = executionBlocks.map(block => ({
+    type: 'VERIFIED_ACTION_RESOURCE_BLOCKED',
+    timeMs: block.timeMs,
+    actionId: block.actionId,
+    actorId: block.actorId,
+    payload: block,
+  }));
+  return {
+    ...runtime,
+    executionBlocks,
+    eventLog: [...runtime.eventLog, ...blockEvents].sort(
+      (left, right) =>
+        Number(left.timeMs) - Number(right.timeMs) ||
+        Number(left.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) -
+          Number(right.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER)
+    ),
+    summary: {
+      ...runtime.summary,
+      resourceBlockedActionCount: executionBlocks.length,
+    },
+  };
 }
 
 function createCooldownStartEvent(action, cooldown = null) {

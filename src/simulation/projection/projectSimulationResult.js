@@ -1520,11 +1520,15 @@ export function projectSimulationResult({
   }));
 
   const resourceTimeline = resourceEvents.map(event => ({
+    runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     timeMs: event.timeMs,
     actionId: event.actionId,
     actorId: event.actorId,
     resource: event.payload.resource,
     change: event.payload.change,
+    beforeValue: event.payload.beforeValue ?? null,
+    afterValue: event.payload.afterValue ?? null,
+    maxValue: event.payload.maxValue ?? null,
     reason: event.payload.reason,
     confidence: event.payload.confidence,
     hitKey: event.hitKey ?? null,
@@ -1534,6 +1538,7 @@ export function projectSimulationResult({
   }));
 
   const kiboResourceTimeline = kiboResourceEvents.map(event => ({
+    runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     timeMs: event.timeMs,
     actionId: event.actionId,
     actorId: event.actorId,
@@ -1541,6 +1546,8 @@ export function projectSimulationResult({
     kiboId: event.payload.kiboId,
     resource: event.payload.resource,
     change: event.payload.change,
+    beforeValue: event.payload.beforeValue ?? null,
+    afterValue: event.payload.afterValue ?? null,
     currentValue: event.payload.currentValue,
     maxValue: event.payload.maxValue,
     reason: event.payload.reason,
@@ -6458,6 +6465,7 @@ function createVerifiedActionResultEntry({
     hitIndex: damageEvent.hitIndex ?? damageEvent.payload?.hitIndex ?? null,
     hitSkillId: damageEvent.hitSkillId ?? null,
     elementId: damageEvent.payload?.elementId ?? null,
+    runtimeSequenceIndex: damageEvent.runtimeSequenceIndex ?? null,
     verifiedMechanicsStatus,
     hpDamage: createHpDamageResult(action, damageEvent, damageElementSource),
     toughnessDamage: createToughnessDamageResult(
@@ -6494,6 +6502,7 @@ function createVerifiedResourceResultEntry({
       hitIndex: resourceEvent.hitIndex ?? null,
       hitSkillId: resourceEvent.hitSkillId ?? null,
       elementId: resourceEvent.payload?.elementId ?? null,
+      runtimeSequenceIndex: resourceEvent.runtimeSequenceIndex ?? null,
       verifiedMechanicsStatus,
       hpDamage: createVerifiedNotApplicableResult(
         'hp-damage',
@@ -6513,6 +6522,7 @@ function createVerifiedResourceResultEntry({
     }),
     actorId,
     actorName,
+    runtimeSequenceIndex: resourceEvent.runtimeSequenceIndex ?? null,
   };
 }
 
@@ -6554,6 +6564,7 @@ function createVerifiedResultEntryBase({
   hitIndex,
   hitSkillId,
   elementId,
+  runtimeSequenceIndex = null,
   verifiedMechanicsStatus,
   hpDamage,
   toughnessDamage,
@@ -6575,6 +6586,7 @@ function createVerifiedResultEntryBase({
     hitIndex,
     hitSkillId,
     elementId,
+    runtimeSequenceIndex,
     executionStatus: executionEntry?.status ?? 'scheduled',
     readinessStatus: executionEntry?.readinessStatus ?? 'ready',
     executionPlanEntry: executionEntry,
@@ -6607,6 +6619,8 @@ function createVerifiedNotApplicableResult(kind, status) {
 function compareVerifiedActionResultEntries(left, right) {
   return (
     Number(left.timeMs) - Number(right.timeMs) ||
+    Number(left.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) -
+      Number(right.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) ||
     String(left.actionId ?? '').localeCompare(String(right.actionId ?? '')) ||
     Number(left.hitIndex ?? 0) - Number(right.hitIndex ?? 0) ||
     String(left.hitKey ?? '').localeCompare(String(right.hitKey ?? '')) ||

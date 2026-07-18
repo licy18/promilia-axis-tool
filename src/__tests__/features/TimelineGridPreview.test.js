@@ -257,16 +257,19 @@ describe('TimelineGridPreview', () => {
     ).toContain('selected');
   });
 
-  it('uses an injected main flow command surface for runtime state markers', async () => {
+  it('uses an injected main flow command surface for sparse runtime curve nodes', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
-        threeValueCurveFramework: createRuntimeStateCurveFramework(),
+        runtimeStateCurves: createRuntimeTimelineStateCurves(),
+        runtimeStatePointContexts: [
+          { statePointId: 'runtime-hp-a', row: { sourceDeltaId: 'hp-a' } },
+        ],
         mainFlowCommandSurface: createInjectedMainFlowCommandSurface(),
       }),
     });
 
     const marker = wrapper.find(
-      '[data-testid="workbench-timeline-state-curve-marker"]'
+      '[data-testid="workbench-timeline-state-curve-node"][data-state-point-id="runtime-hp-a"]'
     );
     expect(marker.exists()).toBe(true);
 
@@ -276,40 +279,44 @@ describe('TimelineGridPreview', () => {
       kind: 'select-runtime-state-point',
       source: 'timeline-surface-test',
       actionId: 'action-a',
-      statePointId: 'enemyHpDamage|applied|action-a|0|0',
+      statePointId: 'runtime-hp-a',
       canRun: true,
       payload: {
+        statePointIds: ['runtime-hp-a'],
         preserveStateCurveFilters: true,
+        timelineFrame: {
+          frameIndex: 72,
+          timeMs: 1200,
+          statePointId: 'runtime-hp-a',
+          source: 'timeline-runtime-curve',
+        },
       },
     });
   });
 
-  it('links hit and resource events to one exact-frame review flow', async () => {
+  it('uses curve nodes as the only exact-frame numeric review targets', async () => {
     const surface = createInjectedMainFlowCommandSurface();
     const runtimeStatePointContexts = [
       createRuntimeEventContext({
-        sourceDeltaId: 'delta-hp',
+        sourceDeltaId: 'hp-a',
         statePointId: 'state-hp',
         actionId: 'action-a',
         trackKey: 'enemyHpDamage',
+        frameIndex: 72,
+        timeMs: 1200,
         hpDelta: 100,
       }),
       createRuntimeEventContext({
-        sourceDeltaId: 'delta-toughness',
+        sourceDeltaId: 'toughness-a',
         statePointId: 'state-toughness',
         actionId: 'action-a',
         trackKey: 'enemyToughnessDamage',
+        frameIndex: 108,
+        timeMs: 1800,
         toughnessDelta: 20,
       }),
       createRuntimeEventContext({
-        sourceDeltaId: 'delta-energy',
-        statePointId: 'state-energy',
-        actionId: 'action-a',
-        trackKey: 'selfEnergyChange',
-        energyDelta: 15,
-      }),
-      createRuntimeEventContext({
-        sourceDeltaId: 'resource-energy',
+        sourceDeltaId: 'energy-b',
         statePointId: 'state-resource',
         actionId: 'action-b',
         actorId: 'actor-b',
@@ -326,29 +333,41 @@ describe('TimelineGridPreview', () => {
     ];
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
+        runtimeStateCurves: createRuntimeTimelineStateCurves(),
         runtimeStatePointContexts,
         mainFlowCommandSurface: surface,
       }),
     });
 
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-runtime-event-marker"]'
+      )
+    ).toHaveLength(0);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-state-curve-marker"]'
+      )
+    ).toHaveLength(0);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-state-curve-breakpoint"]'
+      )
+    ).toHaveLength(0);
     const markers = wrapper.findAll(
-      '[data-testid="workbench-timeline-runtime-event-marker"]'
+      '[data-testid="workbench-timeline-state-curve-node"]'
     );
-    expect(markers).toHaveLength(2);
-    expect(markers.map(marker => marker.classes()[1])).toEqual([
-      'event-hit',
-      'event-resource',
-    ]);
-    expect(markers[0].element.parentElement.dataset.laneId).toBe('actor-a');
-    expect(markers[1].element.parentElement.dataset.laneId).toBe('actor-b');
-    expect(markers[0].attributes('title')).toBe('普通攻击 · 命中 · 30F');
+    expect(markers).toHaveLength(3);
 
-    await markers[0].trigger('click');
+    const hpNode = wrapper.get(
+      '[data-testid="workbench-timeline-state-curve-node"][data-state-point-id="state-hp"]'
+    );
+    await hpNode.trigger('click');
     expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toEqual({
-      frameIndex: 30,
-      timeMs: 500,
+      frameIndex: 72,
+      timeMs: 1200,
       statePointId: 'state-hp',
-      source: 'timeline-runtime-event',
+      source: 'timeline-runtime-curve',
     });
     expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
       kind: 'select-runtime-state-point',
@@ -356,64 +375,84 @@ describe('TimelineGridPreview', () => {
       actionId: 'action-a',
       statePointId: 'state-hp',
       payload: {
-        statePointIds: ['state-hp', 'state-toughness', 'state-energy'],
+        statePointIds: ['state-hp'],
         preserveStateCurveFilters: true,
       },
     });
-
-    await wrapper.setProps({ selectedStateCurvePointId: 'state-toughness' });
-    const selectedMarker = wrapper.findAll(
-      '[data-testid="workbench-timeline-runtime-event-marker"]'
-    )[0];
-    expect(selectedMarker.classes()).toContain('selected');
   });
 
-  it('stacks nearby runtime events so each exact frame remains clickable', async () => {
-    const surface = createInjectedMainFlowCommandSurface();
+  it('clusters dense same-action changes into one semantic node without losing ids', async () => {
+    const runtimeStateCurves = createRuntimeTimelineStateCurves();
+    runtimeStateCurves.enemy.points = [
+      {
+        sourceDeltaId: 'dense-hp-1',
+        actionId: 'action-a',
+        trackKey: 'enemyHpDamage',
+        frameIndex: 30,
+        timeMs: 500,
+        hpDelta: 10,
+        stateSnapshot: { after: { enemyHp: { currentValue: 990 } } },
+      },
+      {
+        sourceDeltaId: 'dense-hp-2',
+        actionId: 'action-a',
+        trackKey: 'enemyHpDamage',
+        frameIndex: 33,
+        timeMs: 550,
+        hpDelta: 20,
+        stateSnapshot: { after: { enemyHp: { currentValue: 970 } } },
+      },
+    ];
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
         durationMs: 30000,
+        runtimeStateCurves,
         runtimeStatePointContexts: [
           createRuntimeEventContext({
-            sourceDeltaId: 'delta-frame-0',
-            statePointId: 'state-frame-0',
+            sourceDeltaId: 'dense-hp-1',
+            statePointId: 'dense-state-1',
             actionId: 'action-a',
             trackKey: 'enemyHpDamage',
-            frameIndex: 0,
-            timeMs: 0,
-            hpDelta: 100,
+            frameIndex: 30,
+            timeMs: 500,
+            hpDelta: 10,
           }),
           createRuntimeEventContext({
-            sourceDeltaId: 'delta-frame-36',
-            statePointId: 'state-frame-36',
+            sourceDeltaId: 'dense-hp-2',
+            statePointId: 'dense-state-2',
             actionId: 'action-a',
-            trackKey: 'enemyToughnessDamage',
-            frameIndex: 36,
-            timeMs: 600,
-            toughnessDelta: 20,
+            trackKey: 'enemyHpDamage',
+            frameIndex: 33,
+            timeMs: 550,
+            hpDelta: 20,
           }),
         ],
-        mainFlowCommandSurface: surface,
+        mainFlowCommandSurface: createInjectedMainFlowCommandSurface(),
       }),
     });
 
-    const markers = wrapper.findAll(
-      '[data-testid="workbench-timeline-runtime-event-marker"]'
-    );
-    expect(markers).toHaveLength(2);
-    expect(markers[0].attributes('style')).toContain('top: 113px');
-    expect(markers[1].attributes('style')).toContain('top: 133px');
-
-    await markers[1].trigger('click');
+    const markers = wrapper
+      .get(
+        '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"]'
+      )
+      .findAll('[data-testid="workbench-timeline-state-curve-node"]');
+    expect(markers).toHaveLength(1);
+    expect(markers[0].attributes()).toMatchObject({
+      'data-event-count': '2',
+      'data-state-point-ids': 'dense-state-1,dense-state-2',
+    });
     await markers[0].trigger('click');
     expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject(
       {
-        frameIndex: 0,
-        statePointId: 'state-frame-0',
+        frameIndex: 33,
+        statePointId: 'dense-state-2',
       }
     );
     expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
-      statePointId: 'state-frame-0',
+      statePointId: 'dense-state-2',
+      payload: {
+        statePointIds: ['dense-state-1', 'dense-state-2'],
+      },
     });
   });
 
@@ -1201,9 +1240,9 @@ describe('TimelineGridPreview', () => {
       wrapper.get(
         `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve"]`
       );
-    const breakpoints = laneId =>
+    const semanticNodes = laneId =>
       curve(laneId).findAll(
-        '[data-testid="workbench-timeline-state-curve-breakpoint"]'
+        '[data-testid="workbench-timeline-state-curve-node"]'
       );
 
     expect(curve('energy-actor-a').attributes('data-point-count')).toBe('0');
@@ -1212,7 +1251,7 @@ describe('TimelineGridPreview', () => {
       'data-current-value': '0.5',
       'data-point-count': '1',
     });
-    expect(breakpoints('energy-actor-b')[0].attributes()).toMatchObject({
+    expect(semanticNodes('energy-actor-b')[0].attributes()).toMatchObject({
       'data-action-id': 'action-b',
       'data-time-ms': '1000',
       'data-frame-index': '60',
@@ -1223,12 +1262,14 @@ describe('TimelineGridPreview', () => {
         .get('[data-testid="workbench-timeline-state-curve-line"]')
         .attributes('points')
     ).toBe('0,100 33.33333333333333,100 33.33333333333333,50 100,50');
-    expect(breakpoints('enemy-hp-curve')[0].attributes()).toMatchObject({
+    expect(semanticNodes('enemy-hp-curve')[0].attributes()).toMatchObject({
       'data-action-id': 'action-a',
       'data-time-ms': '1200',
       'data-current-value': '900',
     });
-    expect(breakpoints('enemy-toughness-curve')[0].attributes()).toMatchObject({
+    expect(
+      semanticNodes('enemy-toughness-curve')[0].attributes()
+    ).toMatchObject({
       'data-action-id': 'action-a',
       'data-time-ms': '1800',
       'data-current-value': '80',
@@ -1249,9 +1290,9 @@ describe('TimelineGridPreview', () => {
       },
     });
     await wrapper.setProps({ runtimeStateCurves: movedRuntimeStateCurves });
-    expect(breakpoints('energy-actor-b')).toHaveLength(2);
+    expect(semanticNodes('energy-actor-b')).toHaveLength(2);
     expect(
-      breakpoints('energy-actor-b').map(point =>
+      semanticNodes('energy-actor-b').map(point =>
         point.attributes('data-time-ms')
       )
     ).toEqual(['1500', '2400']);
@@ -1261,12 +1302,56 @@ describe('TimelineGridPreview', () => {
     await wrapper.setProps({
       runtimeStateCurves: JSON.parse(JSON.stringify(movedRuntimeStateCurves)),
     });
-    expect(breakpoints('energy-actor-b')).toHaveLength(0);
+    expect(semanticNodes('energy-actor-b')).toHaveLength(0);
     expect(
       curve('energy-actor-b')
         .get('[data-testid="workbench-timeline-state-curve-line"]')
         .attributes('points')
     ).toBe('0,100 100,100');
+  });
+
+  it('keeps 30 second auto recovery ticks out of the visible node count', () => {
+    const runtimeStateCurves = createRuntimeTimelineStateCurves();
+    runtimeStateCurves.resources.curvesByActor[0] = {
+      actorId: 'actor-a',
+      stateMetric: { initialValue: 0, currentValue: 6, maxValue: 100 },
+      points: Array.from({ length: 300 }, (_, index) => ({
+        sourceDeltaId: `auto-${index + 1}`,
+        actionId: '',
+        actorId: 'actor-a',
+        trackKey: 'selfEnergyChange',
+        timeMs: (index + 1) * 100,
+        frameIndex: (index + 1) * 6,
+        energyDelta: 0.02,
+        hitKey: `auto-sp-actor-a-${(index + 1) * 6}`,
+        stateSnapshot: {
+          after: { selfEnergy: { currentValue: (index + 1) * 0.02 } },
+        },
+      })),
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        durationMs: 30000,
+        runtimeStateCurves,
+      }),
+    });
+    const curve = wrapper.get(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-a"] [data-testid="workbench-timeline-state-curve"]'
+    );
+
+    expect(curve.attributes()).toMatchObject({
+      'data-simulation-point-count': '300',
+      'data-semantic-node-count': '0',
+      'data-point-count': '0',
+    });
+    expect(
+      curve
+        .get('[data-testid="workbench-timeline-state-curve-line"]')
+        .attributes('data-point-count')
+    ).toBe('2');
+    expect(
+      curve.findAll('[data-testid="workbench-timeline-state-curve-node"]')
+    ).toHaveLength(0);
   });
 
   it('scrubs one 60fps cursor through actions, eight curves, and runtime points', async () => {
@@ -1348,7 +1433,7 @@ describe('TimelineGridPreview', () => {
     ).toBe('true');
 
     await curve('enemy-hp-curve')
-      .get('[data-testid="workbench-timeline-state-curve-breakpoint"]')
+      .get('[data-testid="workbench-timeline-state-curve-node"]')
       .trigger('click');
     expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toEqual({
       frameIndex: 72,
@@ -1661,35 +1746,6 @@ function createEffectRelation(overrides) {
     targetTimeMs: 0,
     runtimeEventId: '',
     ...overrides,
-  };
-}
-
-function createRuntimeStateCurveFramework() {
-  return {
-    stateCurves: {
-      tracks: [
-        {
-          trackKey: 'enemyHpDamage',
-          label: '敌人HP伤害',
-          layers: [
-            {
-              key: 'applied',
-              pointCount: 1,
-              points: [
-                {
-                  actionId: 'action-a',
-                  actionName: '普通攻击',
-                  frameIndex: 0,
-                  frameLabel: '0s0f',
-                  delta: 100,
-                  cumulative: 100,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
   };
 }
 

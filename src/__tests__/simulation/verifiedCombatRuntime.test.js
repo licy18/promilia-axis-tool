@@ -17,8 +17,10 @@ import {
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import {
+  calculateAutoSp,
   calculateRealDamage,
   calculateWeaknessDamage,
+  qFromFloat,
 } from '../../simulation/mechanics/verifiedCombatFormulaRuntime';
 
 const PANGPANG_CHARACTER_ID = 101007;
@@ -35,6 +37,51 @@ afterEach(() => {
 });
 
 describe('verified combat mechanics runtime', () => {
+  it('uses SPGETUP and SPRET_AUTO in the exact Q16.16 auto recovery order', () => {
+    const foreground = calculateAutoSp({
+      background: false,
+      sprSec: 0.2084,
+      sprSecBack: 0.1042,
+      spGetUp: 0,
+      spRetAuto: 0,
+      tickSeconds: 0.1,
+      maximumSp: 1,
+    });
+    const background = calculateAutoSp({
+      background: true,
+      sprSec: 0.2084,
+      sprSecBack: 0.1042,
+      spGetUp: 0,
+      spRetAuto: 0,
+      tickSeconds: 0.1,
+      maximumSp: 1,
+    });
+
+    expect(foreground).toMatchObject({
+      raw: '1365',
+      value: 0.0208282470703125,
+    });
+    expect(background).toMatchObject({
+      raw: '682',
+      value: 0.010406494140625,
+    });
+    expect(foreground.trace.find(step => step.name === 'auto_sp_bonus')).toEqual(
+      expect.objectContaining({
+        attributeKeys: ['SPGETUP', 'SPRET_AUTO'],
+        legacyAlias: null,
+      })
+    );
+    const actorProfile = verifiedCombatMechanicsPackage.ownerProfiles.actor.find(
+      profile => profile.characterId === 109001
+    );
+    expect(actorProfile).toMatchObject({
+      spGetUpBasisPoints: null,
+      spRetAutoBasisPoints: 0,
+      spGetUpAttackBasisPoints: 0,
+    });
+    expect(actorProfile).not.toHaveProperty('spGetUpAutoBasisPoints');
+  });
+
   it('resolves the two acceptance source chains without an inferred alias', () => {
     const actorResolution = resolveVerifiedCombatActionMechanics({
       id: 'pangpang-normal',
@@ -221,6 +268,247 @@ describe('verified combat mechanics runtime', () => {
       )
     ).toHaveLength(2);
     expect(secondHitRecovery).toEqual([]);
+    expect(
+      result.verifiedCombatRuntime.kiboResourceEvents.filter(
+        event => event.actionId === 'verified-pangpang-normal-second'
+      )
+    ).toEqual([]);
+  });
+
+  it('integrates exact 0.1 second ticks, switches foreground at the boundary, and clamps at full', () => {
+    const oneSecond = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: false,
+      durationMs: 1000,
+    });
+    expect(oneSecond.verifiedCombatRuntime.finalState.actorEnergy).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-109001',
+          currentValue: 0.208282,
+        }),
+        expect.objectContaining({
+          actorId: 'actor-101003',
+          currentValue: 0.104065,
+        }),
+      ])
+    );
+
+    const switched = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: false,
+      durationMs: 1000,
+      switchAtMs: 500,
+    });
+    const eventsAtBoundary = switched.verifiedCombatRuntime.resourceEvents.filter(
+      event => event.timeMs === 500
+    );
+    expect(eventsAtBoundary).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-109001',
+          payload: expect.objectContaining({
+            reason: 'verified-auto-sp-background',
+            change: 0.010406,
+          }),
+        }),
+        expect.objectContaining({
+          actorId: 'actor-101003',
+          payload: expect.objectContaining({
+            reason: 'verified-auto-sp-foreground',
+            change: 0.020828,
+          }),
+        }),
+      ])
+    );
+    expect(switched.verifiedCombatRuntime.finalState.actorEnergy).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-109001',
+          currentValue: 0.145752,
+        }),
+        expect.objectContaining({
+          actorId: 'actor-101003',
+          currentValue: 0.166595,
+        }),
+      ])
+    );
+
+    const filled = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: false,
+      durationMs: 200,
+      initialSpByCharacterId: { 109001: 0.99 },
+    });
+    const fullEvent = filled.verifiedCombatRuntime.resourceEvents.find(
+      event => event.actorId === 'actor-109001' && event.timeMs === 100
+    );
+    expect(fullEvent?.payload).toMatchObject({
+      beforeValue: 0.99,
+      change: 0.01,
+      afterValue: 1,
+      currentValue: 1,
+      maxValue: 1,
+    });
+    expect(
+      filled.verifiedCombatRuntime.resourceEvents.some(
+        event => event.actorId === 'actor-109001' && event.timeMs === 200
+      )
+    ).toBe(false);
+  });
+
+  it('uses recipient SP attributes and one DamageElement interval for Pangpang hit recovery', () => {
+    const result = simulateVerifiedAcceptanceScenario();
+    const hitEvents = result.verifiedCombatRuntime.resourceEvents.filter(
+      event =>
+        event.actionId === 'verified-pangpang-normal' &&
+        event.payload.reason.includes('verified-hit-sp')
+    );
+
+    expect(hitEvents).toHaveLength(3);
+    expect(hitEvents.find(event => event.actorId === 'actor-101007')).toEqual(
+      expect.objectContaining({
+        hitKey: 'verified-hit-1-101007012',
+        payload: expect.objectContaining({
+          afterValue: 1,
+          recoverIntervalIdentity:
+            'damage-element:-9212100609153088879',
+          share: 1,
+          resourceOwnerSourceIdentity:
+            'NewTable/template_value.rows[id=101007].baseAttribute',
+          formula: expect.objectContaining({
+            raw: '70123',
+            value: 1.0699920654296875,
+          }),
+        }),
+      })
+    );
+    expect(
+      hitEvents
+        .filter(event => event.actorId !== 'actor-101007')
+        .every(event => event.payload.share === 0.5)
+    ).toBe(true);
+    const kiboHitEvents =
+      result.verifiedCombatRuntime.kiboResourceEvents.filter(
+        event => event.actionId === 'verified-pangpang-normal'
+      );
+    expect(kiboHitEvents).toHaveLength(1);
+    expect(
+      kiboHitEvents.find(event => event.payload.slotId === 'team-slot-3')
+    ).toEqual(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          beforeValue: 0.041656,
+          afterValue: 1,
+          share: 1,
+          recoverIntervalIdentity:
+            'damage-element:-9212100609153088879',
+          formula: expect.objectContaining({
+            raw: '272702',
+            value: 4.161102294921875,
+            trace: expect.arrayContaining([
+              expect.objectContaining({
+                name: 'pet_recover_sp',
+                raw: '272623',
+                configValue: 41599,
+              }),
+            ]),
+          }),
+        }),
+      })
+    );
+  });
+
+  it('deducts Heavy Rock Hoof from 1 to 0 before same-frame recovery and blocks insufficient execution', () => {
+    const full = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: true,
+      durationMs: 1000,
+      kiboStartMs: 100,
+      initialRuntimeState: {
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-3',
+            kiboId: HEAVY_ROCK_HOOF_ID,
+            currentValue: 1,
+            maxValue: 1,
+          },
+        ],
+      },
+    });
+    const sameFrame = full.verifiedCombatRuntime.kiboResourceEvents.filter(
+      event => event.payload.slotId === 'team-slot-3' && event.timeMs === 100
+    );
+    expect(sameFrame[0]).toMatchObject({
+      actionId: 'verified-heavy-rock-hoof',
+      hitKey: 'action-cost',
+      payload: {
+        reason: 'verified-skill-cost',
+        beforeValue: 1,
+        change: -1,
+        afterValue: 0,
+        currentValue: 0,
+        maxValue: 1,
+      },
+    });
+    expect(sameFrame[1]).toMatchObject({
+      actionId: null,
+      payload: {
+        reason: 'verified-auto-sp-background',
+        beforeValue: 0,
+      },
+    });
+    expect(sameFrame[0].runtimeSequenceIndex).toBeLessThan(
+      sameFrame[1].runtimeSequenceIndex
+    );
+    const curvePoints = full.runtimeOutputs.resourceCurves.curvesByKibo
+      .find(curve => curve.slotId === 'team-slot-3')
+      .points.filter(point => point.timeMs === 100);
+    expect(curvePoints.map(point => point.reason)).toEqual([
+      'verified-skill-cost',
+      'verified-auto-sp-background',
+    ]);
+    expect(curvePoints[0].stateSnapshot).toMatchObject({
+      before: { kiboEnergy: { currentValue: 1 } },
+      after: { kiboEnergy: { currentValue: 0 } },
+    });
+
+    const insufficient = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: true,
+      durationMs: 1000,
+      kiboStartMs: 100,
+    });
+    expect(
+      insufficient.actionExecutionPlan.actions.find(
+        action => action.actionId === 'verified-heavy-rock-hoof'
+      )
+    ).toMatchObject({
+      execute: false,
+      violationCodes: ['verified-resource-cost-unavailable'],
+    });
+    expect(insufficient.verifiedCombatRuntime.executionBlocks).toEqual([
+      expect.objectContaining({
+        actionId: 'verified-heavy-rock-hoof',
+        reason: 'verified-kibo-resource-insufficient',
+        requiredValue: 1,
+      }),
+    ]);
+    expect(
+      insufficient.verifiedCombatRuntime.damageEvents.some(
+        event => event.actionId === 'verified-heavy-rock-hoof'
+      )
+    ).toBe(false);
+    expect(
+      insufficient.actionRuleDiagnostics.readinessTimeline.cooldownWindows.some(
+        window => window.actionId === 'verified-heavy-rock-hoof'
+      )
+    ).toBe(false);
+    expect(
+      insufficient.effectTimeline.events.some(
+        event => event.actionId === 'verified-heavy-rock-hoof'
+      )
+    ).toBe(false);
   });
 
   it('applies matching shields and enters Break without enabling useOneBreak', () => {
@@ -399,6 +687,50 @@ describe('verified combat mechanics runtime', () => {
       deducted: '50',
     });
   });
+
+  it('keeps the verified weakness multiplier and clamp order with independent loss percentages', () => {
+    const vector = calculateWeaknessDamage({
+      outputDamageRaw: qFromFloat(123.456),
+      typeMultiplier: 1.2,
+      elementMultiplier: 0.8,
+      weaknessSkillDamageUp: 1.1,
+      weakBreakDamageRateBasisPoints: 7500,
+      maximum: 100,
+      minimum: 10,
+    });
+    expect(vector).toMatchObject({
+      raw: '6407709',
+      value: 97.77388000488281,
+      deducted: '98',
+    });
+    expect(vector.trace.map(step => step.name)).toEqual([
+      'hp_damage_before_shield',
+      'weakness_type',
+      'weakness_element',
+      'weakness_base_applied',
+      'weakness_skill_tag',
+      'weak_break_rate',
+      'weakness_maximum',
+      'weakness_minimum',
+    ]);
+
+    const hit = simulateVerifiedAcceptanceScenario({ includeKibo: false })
+      .verifiedCombatRuntime.damageEvents[0];
+    expect(hit.payload.formulaBreakdown.weaknessInput).toMatchObject({
+      preShieldHpDamageRaw: expect.any(String),
+      weakBreakDamageRateBasisPoints: 10000,
+      maximumWeakness: 6667,
+    });
+    expect(hit.payload.hpLossPercent).toBe(
+      Number((hit.payload.rawDamage / 8628).toFixed(6))
+    );
+    expect(hit.payload.toughnessLossPercent).toBe(
+      Number((hit.payload.toughnessDamage / 6667).toFixed(6))
+    );
+    expect(hit.payload.toughnessLossPercent).toBeGreaterThan(
+      hit.payload.hpLossPercent
+    );
+  });
 });
 
 function simulateVerifiedAcceptanceScenario({
@@ -408,6 +740,9 @@ function simulateVerifiedAcceptanceScenario({
   includeKibo = true,
   initialRuntimeState = null,
   durationMs = 5000,
+  kiboStartMs = null,
+  switchAtMs = null,
+  initialSpByCharacterId = {},
 } = {}) {
   const teamSlots = createDefaultWorkbenchTeamSlots();
   const actorConfigs = createDefaultWorkbenchActorConfigs(
@@ -416,13 +751,18 @@ function simulateVerifiedAcceptanceScenario({
     Number(config.characterId) === PANGPANG_CHARACTER_ID
       ? {
           ...config,
-          initialSp: 0,
+          initialSp:
+            initialSpByCharacterId[PANGPANG_CHARACTER_ID] ?? 0,
           loadout: {
             ...config.loadout,
             kiboId: HEAVY_ROCK_HOOF_ID,
           },
         }
-      : { ...config, initialSp: 0 }
+      : {
+          ...config,
+          initialSp:
+            initialSpByCharacterId[Number(config.characterId)] ?? 0,
+        }
   );
   const actions = includeActor
     ? [
@@ -457,7 +797,8 @@ function simulateVerifiedAcceptanceScenario({
         type: 'kiboEvent',
         actorCharacterId: PANGPANG_CHARACTER_ID,
         skillId: HEAVY_ROCK_HOOF_SKILL_ID,
-        startMs: includeSecondPangpang ? 2000 : 1000,
+        startMs:
+          kiboStartMs ?? (includeSecondPangpang ? 2000 : 1000),
         durationMs: 2600,
         eventType: 'signature',
       })
@@ -473,6 +814,18 @@ function simulateVerifiedAcceptanceScenario({
         startMs: 2000,
         durationMs: 2600,
         eventType: 'signature',
+      })
+    );
+  }
+  if (switchAtMs != null) {
+    actions.push(
+      createWorkbenchActionDraft({
+        id: 'verified-switch-actor-2',
+        type: 'switch',
+        actorCharacterId: 109001,
+        targetCharacterId: 101003,
+        startMs: switchAtMs,
+        durationMs: 0,
       })
     );
   }

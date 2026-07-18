@@ -552,6 +552,10 @@ function createThreeValueGenerationDelta({
     valueSource,
     candidateCount: numberOrNull(point.candidateCount),
     sequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
+    runtimeSequenceIndex:
+      numberOrNull(point.runtimeSequenceIndex) ??
+      numberOrNull(point.sequenceIndex) ??
+      pointIndex,
     stateCurveSequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
     applied,
     replaceable: !applied,
@@ -1094,6 +1098,10 @@ export function compareThreeValueGenerationDeltas(left, right) {
   return (
     compareNullableTimelineNumber(left.frameIndex, right.frameIndex) ||
     compareNullableTimelineNumber(left.timeMs, right.timeMs) ||
+    compareNullableTimelineNumber(
+      left.runtimeSequenceIndex,
+      right.runtimeSequenceIndex
+    ) ||
     compareNullableTimelineNumber(left.hitIndex, right.hitIndex) ||
     String(left.actionId ?? '').localeCompare(String(right.actionId ?? '')) ||
     compareThreeValueTrackOrder(left.trackKey, right.trackKey) ||

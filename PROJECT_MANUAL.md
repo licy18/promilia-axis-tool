@@ -1566,13 +1566,13 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 
 下一阶段目标：M6 真实三值机制接入与同轴演算。权威来源为 AzPr 知识库 2026-07-18 的 verified 战斗公式包：Q16.16 数值运行时、普通/失序爆发/真实伤害、护盾、削韧与 Break、前后台自动回能以及角色/奇波命中回能均已复原，并有 18/18 复算验证、机器证据和真实技能样例。M6 先把这些产物同步成仓库内版本化公式与动作元素包，再通过现有 generation、mechanics adapter 和 hit transaction 驱动三角色 SP、三奇波能量、敌人 HP 与韧性/Break 八条同轴曲线。输入或来源不完整时继续明确 `unresolved / unapplied`；不重新研究公式，不接入未确认装备、灵子、培养效果、特殊开关、吸血、反伤或事件回调。
 
-### M6 真实三值机制接入与同轴演算已完成，等待产品验收（2026-07-18）
+### M6-R 数值链与稀疏曲线整改已完成，等待产品复验（2026-07-18）
 
 仓库现有单一受控同步/审计入口，可把知识库复算器、证据、真实样例和完整 Battle 来源生成可发布的 verified 公式包。当前包通过 18/18 向量验证，覆盖 619 个候选动作、224 个 applied 动作绑定和 1763 个 applied hit 绑定；208 个敌人韧性 profile 中 204 个通过原表交叉校验并可应用，4 个保持 unresolved。新建方案默认使用 verified profile，旧载体保留原 profile，来源或输入不完整的动作与敌人不会静默回退到预览计算。
 
-现有 generation、mechanics adapter、hit transaction 与 runtime projection 已共同消费同一 verified runtime：Q16.16 普通/失序/真实伤害、盾、削韧/Weakness/Break、普通韧性恢复延迟、Break 线性恢复/结束等待/退出、100ms 前后台自动回能、角色/奇波命中 SP、间隔/分享/消耗/裁剪均按来源 identity 原子写入八条曲线。芃芃 `10100703 / 101007012` 和重岩蹄 `50046903` 的真实链路已在 Workbench 中完成动作拖入、节点回源、移动/删除、撤销/重做、长轴、循环继承与五载体回放验收。严格目录目前只绑定 damage type 1-5；无唯一真实动作来源的纯 Weakness、真实伤害和叠加越限分支只做公式级守门，不伪造目录动作。未确认装备、灵子、培养效果、防御/抗性修正、吸血、反伤、事件回调和 `useOneBreak` 仍明确 `unapplied`。
+现有 generation、mechanics adapter、hit transaction 与 runtime projection 继续消费同一 verified runtime。M6-R 将属性 227 统一为 `SPRET_AUTO`，按各角色/奇波 owner 读取命中回复属性并按 DamageElement identity 限流；重岩蹄 `50046903` 的奇波能量消耗可在施放帧精确 `1 -> 0`，不足能量会阻止伤害、CD 和效果。HP 与削韧保持知识库 Q16.16 顺序，并分别按自身 max 归一化。
 
-完整 `test:trial-release` 通过 103 个测试文件、566 条测试和 46/46 production preview，41 项必需能力判定为 `trial-ready`；总 JavaScript gzip 为 738,031B，低于 740,000B 硬门槛但高于 735,000B 预警线。视觉证据为 `reports/m6-verified-combat-desktop.png` 与 `reports/m6-verified-combat-narrow.png`。M6 已通过工程验收，当前停止并等待产品验收，不自动进入 M7。
+曲线新增独立显示投影：100ms 自动回能与韧性恢复压缩为斜率边界、回满点和终点，离散变化保留 before/after 阶跃；同一动作密集命中聚合，不同动作保留独立来源。逐 tick 白点、动作下方 Lightning 队列、重复菱形和 glow/filter 已移除。完整 `test:trial-release` 通过 104 个测试文件、578 条测试和 46/46 production preview；总 JavaScript gzip 为 739,113B，低于 740,000B 硬门槛。视觉证据为 `reports/m6r-sparse-curves-desktop.png` 与 `reports/m6r-sparse-curves-narrow.png`。当前停止在 M6-R，等待产品复验，不自动进入 M7。
 
 ## 10. 文档维护规则
 
