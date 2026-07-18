@@ -41,6 +41,92 @@ export const THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY = {
 export const DEFAULT_THREE_VALUE_MECHANICS_PROFILE =
   createDefaultThreeValueMechanicsProfile();
 
+export const VERIFIED_THREE_VALUE_MECHANICS_PROFILE =
+  createVerifiedThreeValueMechanicsProfile();
+
+export function createVerifiedThreeValueMechanicsProfile() {
+  const operandKinds = {
+    'source-value-identity': {
+      trackKeys: TRACK_KEYS,
+      steps: [
+        {
+          key: 'verified-runtime-identity',
+          operation: 'identity',
+          layerKeys: [],
+          stateEffectTrackKeys: TRACK_KEYS,
+        },
+      ],
+      status: 'applied-verified-combat-runtime-value',
+      applied: true,
+    },
+    'explicit-self-energy-event-sum': {
+      trackKeys: ['selfEnergyChange'],
+      steps: [
+        {
+          key: 'verified-resource-event-sum',
+          operation: 'sum',
+          layerKeys: ['explicitResourceDelta'],
+          stateEffectTrackKeys: ['selfEnergyChange'],
+        },
+      ],
+      status: 'applied-verified-resource-events',
+      applied: true,
+    },
+  };
+  return {
+    schemaVersion: 1,
+    contractName: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
+    contractVersion: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
+    profileId: 'azpr-three-value-verified-tc-20260718',
+    profileVersion: 1,
+    sourceKind: 'azpr-verified-combat-mechanics-package-profile',
+    status: 'azpr-verified-combat-mechanics-profile-ready',
+    ready: true,
+    operandKinds,
+    supportedOperandKinds: Object.keys(operandKinds),
+    tracks: {
+      enemyHpDamage: {
+        outputField: 'hpDelta',
+        stateEffect: THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.enemyHpDamage,
+        appliedLayers: ['verifiedCombatHit'],
+        unappliedLayers: ['cultivationEffects', 'unverifiedCallbacks'],
+      },
+      enemyToughnessDamage: {
+        outputField: 'toughnessDelta',
+        stateEffect: THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.enemyToughnessDamage,
+        appliedLayers: ['verifiedCombatHit'],
+        unappliedLayers: ['useOneBreak', 'cultivationEffects'],
+      },
+      selfEnergyChange: {
+        outputField: 'energyDelta',
+        stateEffect: THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.selfEnergyChange,
+        appliedLayers: [
+          'verifiedCombatHit',
+          'verifiedAutoSp',
+          'explicitResourceDelta',
+        ],
+        unappliedLayers: ['cultivationEffects', 'unverifiedCallbacks'],
+      },
+    },
+    policy: {
+      verifiedPackageRequired: true,
+      uniqueActionBindingRequired: true,
+      completeFormulaInputsRequired: true,
+      unconfirmedFormulaLayersApplied: false,
+      unconfirmedCultivationEffectsApplied: false,
+      randomBranchesRequirePersistedRolls: true,
+      unsupportedOperandsFallbackToGenerationDelta: false,
+    },
+    summary: {
+      trackCount: TRACK_KEYS.length,
+      supportedOperandKindCount: Object.keys(operandKinds).length,
+      appliedOperandKindCount: Object.values(operandKinds).filter(
+        item => item.applied
+      ).length,
+    },
+  };
+}
+
 export function createDefaultThreeValueMechanicsProfile() {
   const operandKinds = {
     'hp-raw-preview-product': {

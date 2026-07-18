@@ -702,6 +702,7 @@
                   :cy="point.yPercent"
                   r="1.8"
                   :data-action-id="point.actionId"
+                  :data-hit-key="point.hitKey"
                   :data-state-point-id="point.statePointId"
                   :data-time-ms="point.timeMs"
                   :data-frame-index="point.frameIndex"
@@ -2319,6 +2320,7 @@ function createTimelineStateCurve({
           runtimeStatePointContextByDeltaId.value.get(point.sourceDeltaId)
             ?.statePointId ?? '',
         actionId: point.actionId ?? '',
+        hitKey: point.hitKey ?? '',
         timeMs: numberOrZero(point.timeMs),
         frameIndex: numberOrZero(point.frameIndex),
         currentValue,
@@ -2412,6 +2414,14 @@ function createRuntimeTimelineEventMarkers() {
   const markers = new Map();
   props.runtimeStatePointContexts.forEach(({ row, statePointId }) => {
     if (!row?.actionId || !statePointId) return;
+    if (
+      row.resultStatus === 'verified-toughness-state-change-applied' ||
+      /^verified-(?:normal-toughness-recovery|break-(?:linear-recovery|end-wait|exit))-/.test(
+        row.hitKey ?? ''
+      )
+    ) {
+      return;
+    }
     const kind =
       row.trackKey?.includes('Energy') && !row.hitKey && row.hitIndex == null
         ? 'resource'
@@ -3270,26 +3280,27 @@ function selectStateCurveMarker(marker) {
 }
 
 function selectRuntimeCurveBreakpoint(point) {
-  emitTimelineFrame({
+  const timelineFrame = {
     frameIndex: point.frameIndex,
     timeMs: point.timeMs,
     statePointId: point.statePointId,
     source: 'timeline-runtime-curve',
-  });
-  if (!point.statePointId) {
-    return;
+  };
+  if (point.statePointId) {
+    emit(
+      'dispatch-flow-action',
+      mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
+        source: 'timeline-runtime-curve',
+        actionId: point.actionId,
+        statePointId: point.statePointId,
+        payload: {
+          preserveStateCurveFilters: true,
+          timelineFrame,
+        },
+      })
+    );
   }
-  emit(
-    'dispatch-flow-action',
-    mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
-      source: 'timeline-runtime-curve',
-      actionId: point.actionId,
-      statePointId: point.statePointId,
-      payload: {
-        preserveStateCurveFilters: true,
-      },
-    })
-  );
+  emitTimelineFrame(timelineFrame);
 }
 
 function selectRuntimeEventMarker(event) {

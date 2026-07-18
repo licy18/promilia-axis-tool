@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-17T01:08:52.631Z",
+  "generatedAt": "2026-07-18T10:41:26.948Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -20,10 +20,10 @@
   "summary": {
     "requiredCapabilityCount": 41,
     "passedCapabilityCount": 41,
-    "testCount": 45,
-    "passedTestCount": 45,
+    "testCount": 46,
+    "passedTestCount": 46,
     "playwrightStatus": "passed",
-    "durationMs": 179878
+    "durationMs": 178841
   },
   "capabilities": [
     {
@@ -237,7 +237,7 @@
       "capability": "applied-source-binding-guard",
       "title": "[applied-source-binding-guard] accepts the production three-track source audit",
       "status": "passed",
-      "durationMs": 782,
+      "durationMs": 682,
       "retry": 0,
       "errors": []
     },
@@ -245,7 +245,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 2140,
+      "durationMs": 1885,
       "retry": 0,
       "errors": []
     },
@@ -253,7 +253,7 @@
       "capability": "stage-9a-timeline-topology",
       "title": "[stage-9a-timeline-topology] renders three actor groups and eight state curves on desktop and narrow screens",
       "status": "passed",
-      "durationMs": 1351,
+      "durationMs": 995,
       "retry": 0,
       "errors": []
     },
@@ -261,7 +261,7 @@
       "capability": "controlled-actor-timeline",
       "title": "[controlled-actor-timeline] edits, reviews, and restores the active character at exact frames",
       "status": "passed",
-      "durationMs": 3188,
+      "durationMs": 2321,
       "retry": 0,
       "errors": []
     },
@@ -269,7 +269,7 @@
       "capability": "stage-9b-runtime-step-curves",
       "title": "[stage-9b-runtime-step-curves] keeps actor resources and enemy states aligned through edit operations",
       "status": "passed",
-      "durationMs": 2369,
+      "durationMs": 1608,
       "retry": 0,
       "errors": []
     },
@@ -277,7 +277,7 @@
       "capability": "m1a-timeline-identity",
       "title": "[m1a-timeline-identity] keeps the complete team topology in the timeline-first workspace",
       "status": "passed",
-      "durationMs": 1866,
+      "durationMs": 1283,
       "retry": 0,
       "errors": []
     },
@@ -285,7 +285,7 @@
       "capability": "m1b-team-kibo-energy",
       "title": "[m1b-team-kibo-energy] keeps three actor and three kibo energy owners synchronized with configuration",
       "status": "passed",
-      "durationMs": 3417,
+      "durationMs": 2636,
       "retry": 0,
       "errors": []
     },
@@ -293,7 +293,7 @@
       "capability": "m1c-library-to-runtime",
       "title": "[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-isolated runtime curves",
       "status": "passed",
-      "durationMs": 7517,
+      "durationMs": 5625,
       "retry": 0,
       "errors": []
     },
@@ -301,7 +301,7 @@
       "capability": "m2-team-configuration",
       "title": "[m2-team-configuration] configures and reloads source-backed loadouts from demo and empty scenarios",
       "status": "passed",
-      "durationMs": 27130,
+      "durationMs": 43373,
       "retry": 0,
       "errors": []
     },
@@ -309,7 +309,7 @@
       "capability": "six-resource-capture-import",
       "title": "[six-resource-capture-import] packages, imports, and replays six owner-specific resource captures",
       "status": "passed",
-      "durationMs": 3098,
+      "durationMs": 2535,
       "retry": 0,
       "errors": []
     },
@@ -317,7 +317,7 @@
       "capability": "m1d-demo-milestone",
       "title": "[m1d-demo-milestone] replays the visible three-person demo through every project carrier",
       "status": "passed",
-      "durationMs": 9346,
+      "durationMs": 12039,
       "retry": 0,
       "errors": []
     },
@@ -325,7 +325,7 @@
       "capability": "m1-trial-release-workflow",
       "title": "[m1-trial-release-workflow] keeps a populated slot through configuration, review, edit, and project recovery",
       "status": "passed",
-      "durationMs": 6054,
+      "durationMs": 8056,
       "retry": 0,
       "errors": []
     },
@@ -333,7 +333,7 @@
       "capability": "m1-empty-scenario-workflow",
       "title": "[m1-empty-scenario-workflow] builds and restores a six-energy-axis project from zero actions",
       "status": "passed",
-      "durationMs": 7455,
+      "durationMs": 13815,
       "retry": 0,
       "errors": []
     },
@@ -341,7 +341,7 @@
       "capability": "m3-real-action-status-workflow",
       "title": "[m3-real-action-status-workflow] generates and replays sourced cooldown and effect state from real action-library drags",
       "status": "passed",
-      "durationMs": 6557,
+      "durationMs": 4495,
       "retry": 0,
       "errors": []
     },
@@ -349,7 +349,7 @@
       "capability": "m3-cooldown-sources-and-stacking",
       "title": "[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns, blocks reuse, and separates rows",
       "status": "passed",
-      "durationMs": 5315,
+      "durationMs": 3579,
       "retry": 0,
       "errors": []
     },
@@ -357,7 +357,7 @@
       "capability": "m4-constraint-placement",
       "title": "[m4-constraint-placement] previews, commits, rejects, and restores real pointer scheduling",
       "status": "passed",
-      "durationMs": 5974,
+      "durationMs": 4090,
       "retry": 0,
       "errors": []
     },
@@ -365,7 +365,15 @@
       "capability": "m5-reusable-timeline-fragments",
       "title": "[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a real actor-kibo relation group",
       "status": "passed",
-      "durationMs": 9428,
+      "durationMs": 6198,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "m6-verified-combat-workflow",
+      "title": "[m6-verified-combat-workflow] drives eight curves from verified Pangpang and Heavy Rock Hoof actions",
+      "status": "passed",
+      "durationMs": 11787,
       "retry": 0,
       "errors": []
     },
@@ -373,7 +381,7 @@
       "capability": "stage-10a-multitrack-editing",
       "title": "[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes",
       "status": "passed",
-      "durationMs": 4728,
+      "durationMs": 2597,
       "retry": 0,
       "errors": []
     },
@@ -381,7 +389,7 @@
       "capability": "stage-10b-cross-lane-batch-editing",
       "title": "[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and restores a mixed timeline group",
       "status": "passed",
-      "durationMs": 4854,
+      "durationMs": 2726,
       "retry": 0,
       "errors": []
     },
@@ -389,7 +397,7 @@
       "capability": "stage-10c-frame-cursor-review",
       "title": "[stage-10c-frame-cursor-review] links timeline frames, eight curve states, actions, and runtime logs",
       "status": "passed",
-      "durationMs": 4381,
+      "durationMs": 2749,
       "retry": 0,
       "errors": []
     },
@@ -397,7 +405,7 @@
       "capability": "stage-10d-timeline-playback",
       "title": "[stage-10d-timeline-playback] plays the full axis and loops a selected cycle section",
       "status": "passed",
-      "durationMs": 3554,
+      "durationMs": 1854,
       "retry": 0,
       "errors": []
     },
@@ -405,7 +413,7 @@
       "capability": "stage-11a-contribution-windows",
       "title": "[stage-11a-contribution-windows] aggregates three tracks and returns to the exact runtime point",
       "status": "passed",
-      "durationMs": 2815,
+      "durationMs": 1710,
       "retry": 0,
       "errors": []
     },
@@ -413,7 +421,7 @@
       "capability": "stage-11b-window-comparison",
       "title": "[stage-11b-window-comparison] compares one cycle and opens the baseline contribution",
       "status": "passed",
-      "durationMs": 2875,
+      "durationMs": 1755,
       "retry": 0,
       "errors": []
     },
@@ -421,7 +429,7 @@
       "capability": "stage-12a-analysis-report",
       "title": "[stage-12a-analysis-report] exports, validates, and reopens frozen analysis sources",
       "status": "passed",
-      "durationMs": 3817,
+      "durationMs": 2173,
       "retry": 0,
       "errors": []
     },
@@ -429,7 +437,7 @@
       "capability": "stage-12b-analysis-report-png",
       "title": "[stage-12b-analysis-report-png] exports and reopens a visual report with embedded metadata",
       "status": "passed",
-      "durationMs": 2507,
+      "durationMs": 1434,
       "retry": 0,
       "errors": []
     },
@@ -437,7 +445,7 @@
       "capability": "stage-12c-analysis-report-reproducibility",
       "title": "[stage-12c-analysis-report-reproducibility] audits exact, drifted, and incompatible frozen outputs",
       "status": "passed",
-      "durationMs": 1927,
+      "durationMs": 1175,
       "retry": 0,
       "errors": []
     },
@@ -445,7 +453,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 1204,
+      "durationMs": 782,
       "retry": 0,
       "errors": []
     },
@@ -453,7 +461,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 1870,
+      "durationMs": 1993,
       "retry": 0,
       "errors": []
     },
@@ -461,7 +469,7 @@
       "capability": "profile-compatibility-gate",
       "title": "[profile-compatibility-gate] rejects an unavailable profile without replacing the current project",
       "status": "passed",
-      "durationMs": 1574,
+      "durationMs": 973,
       "retry": 0,
       "errors": []
     },
@@ -469,7 +477,7 @@
       "capability": "game-data-compatibility-gate",
       "title": "[game-data-compatibility-gate] rejects an unavailable AzPr config reference without replacing the current project",
       "status": "passed",
-      "durationMs": 1674,
+      "durationMs": 951,
       "retry": 0,
       "errors": []
     },
@@ -477,7 +485,7 @@
       "capability": "action-skill-compatibility-gate",
       "title": "[action-skill-compatibility-gate] rejects an unavailable skill before action fallback without replacing the current project",
       "status": "passed",
-      "durationMs": 1744,
+      "durationMs": 1021,
       "retry": 0,
       "errors": []
     },
@@ -485,7 +493,7 @@
       "capability": "configuration-instances",
       "title": "[configuration-instances] binds reusable simulation configs to scenarios and JSON",
       "status": "passed",
-      "durationMs": 2325,
+      "durationMs": 1391,
       "retry": 0,
       "errors": []
     },
@@ -493,7 +501,7 @@
       "capability": "png-project-exchange",
       "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
       "status": "passed",
-      "durationMs": 2953,
+      "durationMs": 2335,
       "retry": 0,
       "errors": []
     },
@@ -501,7 +509,7 @@
       "capability": "project-drop-recovery",
       "title": "[project-drop-recovery] restores a production project without replacing it on invalid drop",
       "status": "passed",
-      "durationMs": 2194,
+      "durationMs": 1931,
       "retry": 0,
       "errors": []
     },
@@ -509,7 +517,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 1880,
+      "durationMs": 1152,
       "retry": 0,
       "errors": []
     },
@@ -517,7 +525,7 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 2680,
+      "durationMs": 2291,
       "retry": 0,
       "errors": []
     },
@@ -525,7 +533,7 @@
       "capability": "effect-interval-review",
       "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
       "status": "passed",
-      "durationMs": 2053,
+      "durationMs": 1134,
       "retry": 0,
       "errors": []
     },
@@ -533,7 +541,7 @@
       "capability": "action-effect-relations",
       "title": "[action-effect-relations] keeps action, effect, log, and six energy tracks in one relation flow",
       "status": "passed",
-      "durationMs": 1988,
+      "durationMs": 1111,
       "retry": 0,
       "errors": []
     },
@@ -541,7 +549,7 @@
       "capability": "scenario-comparison",
       "title": "[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action",
       "status": "passed",
-      "durationMs": 2470,
+      "durationMs": 1497,
       "retry": 0,
       "errors": []
     },
@@ -549,7 +557,7 @@
       "capability": "cycle-sections",
       "title": "[cycle-sections] creates, reviews, and restores a production cycle boundary",
       "status": "passed",
-      "durationMs": 2649,
+      "durationMs": 2237,
       "retry": 0,
       "errors": []
     },
@@ -557,7 +565,7 @@
       "capability": "cycle-inheritance",
       "title": "[cycle-inheritance] creates and restores a production scenario from a runtime boundary",
       "status": "passed",
-      "durationMs": 2465,
+      "durationMs": 2180,
       "retry": 0,
       "errors": []
     },
@@ -565,7 +573,7 @@
       "capability": "workspace-scenarios",
       "title": "[workspace-scenarios] switches, compares, and restores independent production scenarios",
       "status": "passed",
-      "durationMs": 2720,
+      "durationMs": 2521,
       "retry": 0,
       "errors": []
     },
@@ -573,7 +581,7 @@
       "capability": "workspace-layout",
       "title": "[workspace-layout] restores desktop focus modes and keeps narrow content available",
       "status": "passed",
-      "durationMs": 2159,
+      "durationMs": 1424,
       "retry": 0,
       "errors": []
     },
@@ -581,15 +589,15 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 1727,
+      "durationMs": 1151,
       "retry": 0,
       "errors": []
     },
     {
       "capability": "m1-runtime-event-review",
-      "title": "[m1-runtime-event-review] links source events, exact frames, three-value detail, and edit refresh across six energy axes",
+      "title": "[m1-runtime-event-review] links source events, exact frames, and three-value detail across six energy axes",
       "status": "passed",
-      "durationMs": 2996,
+      "durationMs": 2525,
       "retry": 0,
       "errors": []
     }

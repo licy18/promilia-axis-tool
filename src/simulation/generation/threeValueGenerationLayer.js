@@ -326,9 +326,7 @@ function createGenerationExecutionScope({
         executableActionIds.has(action.id)
       ),
     },
-    actionResultTimeline: (actionResultTimeline ?? []).filter(entry =>
-      executableActionIds.has(entry.actionId)
-    ),
+    actionResultTimeline: (actionResultTimeline ?? []).filter(includePoint),
     candidateValueSeries: scopedCandidateValueSeries,
     stateCurves: scopedStateCurves,
     summary: {
@@ -687,6 +685,9 @@ function createThreeValueGenerationHitKey({
   frameIndex,
   pointIndex,
 }) {
+  if (point.hitKey) {
+    return String(point.hitKey);
+  }
   const hitIndex = numberOrNull(point.hitIndex);
   if (Number.isFinite(hitIndex)) {
     return `hit-${hitIndex}`;

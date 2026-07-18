@@ -9,6 +9,7 @@ import {
 } from './actionExecutionPlan';
 import { createControlledActorTimeline } from '../runtime/controlledActorTimeline';
 import { createActionEffectRelationGraph } from '../runtime/actionEffectRelationGraph';
+import { createVerifiedCombatRuntime } from '../mechanics/verifiedCombatRuntime';
 
 export function simulateScenario(
   scenario,
@@ -28,8 +29,6 @@ export function simulateScenario(
     },
   ];
 
-  const damageEvents = [];
-  const resourceEvents = [];
   const actionRuleDiagnostics = createActionRuleDiagnostics({
     scenario,
     cooldownEvaluationAdapter: actionCooldownEvaluationAdapter,
@@ -56,6 +55,19 @@ export function simulateScenario(
       transition,
     ])
   );
+  const verifiedCombatRuntime = createVerifiedCombatRuntime({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+  });
+  const verifiedCombatSelected = verifiedCombatRuntime.enabled === true;
+  const verifiedCombatEnabled = verifiedCombatRuntime.ready === true;
+  const damageEvents = verifiedCombatEnabled
+    ? [...verifiedCombatRuntime.damageEvents]
+    : [];
+  const resourceEvents = verifiedCombatEnabled
+    ? [...verifiedCombatRuntime.resourceEvents]
+    : [];
 
   for (const action of scenario.actions) {
     const executionEntry = executionPlanByActionId.get(action.id);
@@ -74,8 +86,10 @@ export function simulateScenario(
 
     const resourceActionEvent = createResourceActionEvent(action);
     if (resourceActionEvent) {
-      resourceEvents.push(resourceActionEvent);
-      eventLog.push(resourceActionEvent);
+      if (!verifiedCombatSelected) {
+        resourceEvents.push(resourceActionEvent);
+        eventLog.push(resourceActionEvent);
+      }
       continue;
     }
 
@@ -98,6 +112,26 @@ export function simulateScenario(
           timingSource: action.timing.source,
         },
       });
+    }
+
+    if (verifiedCombatSelected) {
+      const resolution = verifiedCombatRuntime.actionResolutionById.get(
+        action.id
+      );
+      if (!resolution?.ready) {
+        eventLog.push({
+          type: 'DAMAGE_SKIPPED',
+          timeMs: action.startMs,
+          actionId: action.id,
+          payload: {
+            reason:
+              resolution?.status ?? 'verified-action-mechanics-unresolved',
+            verifiedCombat: true,
+            appliedToCalculators: false,
+          },
+        });
+      }
+      continue;
     }
 
     if (Number(action.spCost) > 0) {
@@ -131,6 +165,10 @@ export function simulateScenario(
         },
       });
     }
+  }
+
+  if (verifiedCombatEnabled) {
+    eventLog.push(...verifiedCombatRuntime.eventLog);
   }
 
   const effectTimeline = createEffectRuntimeTimeline({
@@ -167,6 +205,8 @@ export function simulateScenario(
     actionExecutionPlan,
     controlledActorTimeline,
     actionEffectRelationGraph,
+    verifiedCombatRuntime,
+    kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
     threeValueMechanicsAdapterRegistry,
   });
 }

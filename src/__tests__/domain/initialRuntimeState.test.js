@@ -19,6 +19,14 @@ describe('initial runtime state', () => {
         enemyId: 'enemy-1',
         hp: { currentValue: 850, maxValue: 1000 },
         toughness: { currentValue: 60, maxValue: 100 },
+        inBreak: true,
+        breakElapsedMs: 450,
+        lastToughnessSourceActionId: 'action-break',
+        lastToughnessSourceActorId: 'actor-1',
+        lastToughnessBindingIdentity: 'actor|101|1001|0|1003',
+        profileSourceIdentity: 'enemy-profile-1',
+        valueShields: [{ value: 120, outputTypes: [1], elementTypes: [3] }],
+        hitCountShields: [{ count: 2, outputTypes: [-1] }],
       },
       selfEnergyByActor: [
         {
@@ -27,6 +35,17 @@ describe('initial runtime state', () => {
           actorName: '末音',
           currentValue: 35,
           maxValue: 100,
+        },
+      ],
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-1',
+          characterId: 101,
+          kiboId: 500469,
+          kiboName: '重岩蹄',
+          currentValue: 0.75,
+          maxValue: 1,
         },
       ],
       activeEffects: [
@@ -51,7 +70,7 @@ describe('initial runtime state', () => {
     });
 
     expect(state).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       contractName: 'AzPrInitialRuntimeState',
       status: 'initial-runtime-state-inherited',
       source: {
@@ -71,9 +90,24 @@ describe('initial runtime state', () => {
           baselineStatus: 'baseline-inherited-from-cycle-boundary',
         },
         toughness: { currentValue: 60 },
+        inBreak: true,
+        breakElapsedMs: 450,
+        recoveryDelayRemainingMs: 0,
+        lastToughnessSourceActionId: 'action-break',
+        profileSourceIdentity: 'enemy-profile-1',
+        valueShields: [{ value: 120 }],
+        hitCountShields: [{ count: 2 }],
       },
       selfEnergyByActor: [
         { actorId: 'actor-1', characterId: 101, currentValue: 35 },
+      ],
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-1',
+          kiboId: 500469,
+          currentValue: 0.75,
+        },
       ],
       activeEffects: [
         {
@@ -103,7 +137,7 @@ describe('initial runtime state', () => {
         },
       })
     ).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       status: 'initial-runtime-state-ready',
       controlledActor: {
         actorId: 'actor-2',
@@ -113,6 +147,7 @@ describe('initial runtime state', () => {
       },
       enemy: null,
       selfEnergyByActor: [],
+      kiboEnergyBySlot: [],
       activeEffects: [],
     });
   });

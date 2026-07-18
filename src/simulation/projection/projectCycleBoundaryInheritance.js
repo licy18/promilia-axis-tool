@@ -83,6 +83,8 @@ export function projectCycleBoundaryInheritance({
       shiftedBoundaryCount: cycleBoundaries.length,
       inheritedEnergyActorCount:
         initialRuntimeState?.selfEnergyByActor?.length ?? 0,
+      inheritedKiboEnergyCount:
+        initialRuntimeState?.kiboEnergyBySlot?.length ?? 0,
       inheritedControlledActorId:
         initialRuntimeState?.controlledActor?.actorId ?? null,
       inheritedEffectCount: initialRuntimeState?.activeEffects?.length ?? 0,
@@ -128,6 +130,10 @@ export function createInitialRuntimeStateAtBoundary({
       ];
     })
   );
+  const kiboEnergyBySlot = createKiboEnergyStateAtBoundary({
+    curves: runtimeOutputs?.resourceCurves?.curvesByKibo,
+    boundaryTimeMs,
+  });
 
   for (const snapshot of sortRuntimeSnapshots(stateSnapshots.snapshots)) {
     if (!isBeforeBoundary(snapshot.timeMs, boundaryTimeMs)) {
@@ -143,6 +149,14 @@ export function createInitialRuntimeStateAtBoundary({
       );
     }
   }
+  const verifiedEnemyState = createVerifiedEnemyStateAtBoundary({
+    verifiedCombatRuntime: runtimeOutputs?.verifiedCombatRuntime,
+    boundaryTimeMs,
+  });
+  if (verifiedEnemyState) {
+    enemyState.hp = verifiedEnemyState.hp;
+    enemyState.toughness = verifiedEnemyState.toughness;
+  }
 
   return normalizeInitialRuntimeState({
     source: {
@@ -156,12 +170,138 @@ export function createInitialRuntimeStateAtBoundary({
       enemyId: scenario?.enemy?.id ?? null,
       hp: enemyState.hp,
       toughness: enemyState.toughness,
+      inBreak: verifiedEnemyState?.inBreak === true,
+      breakElapsedMs: verifiedEnemyState?.breakElapsedMs ?? null,
+      recoveryDelayRemainingMs:
+        verifiedEnemyState?.recoveryDelayRemainingMs ?? null,
+      valueShields: verifiedEnemyState?.valueShields ?? [],
+      hitCountShields: verifiedEnemyState?.hitCountShields ?? [],
+      lastToughnessSourceActionId:
+        verifiedEnemyState?.lastToughnessSourceActionId ?? null,
+      lastToughnessSourceActorId:
+        verifiedEnemyState?.lastToughnessSourceActorId ?? null,
+      lastToughnessBindingIdentity:
+        verifiedEnemyState?.lastToughnessBindingIdentity ?? null,
+      profileSourceIdentity:
+        verifiedEnemyState?.profileSourceIdentity ?? null,
     },
     selfEnergyByActor: [...energyStateByActor.values()],
+    kiboEnergyBySlot,
     activeEffects: createInheritedActiveEffectsAtBoundary(
       runtimeOutputs?.effectTimeline?.events,
       boundaryTimeMs
     ),
+  });
+}
+
+function createVerifiedEnemyStateAtBoundary({
+  verifiedCombatRuntime,
+  boundaryTimeMs,
+}) {
+  const initial = verifiedCombatRuntime?.initialState?.enemy;
+  if (!verifiedCombatRuntime?.ready || !initial) return null;
+
+  let state = {
+    hp: finiteNumberOrNull(initial.hp),
+    maxHp: finiteNumberOrNull(initial.maxHp),
+    toughness: finiteNumberOrNull(initial.toughness),
+    maxToughness: finiteNumberOrNull(initial.maxToughness),
+    inBreak: initial.inBreak === true,
+    breakStartedAtMs: initial.inBreak
+      ? -nonNegativeNumber(initial.breakElapsedMs)
+      : null,
+    normalRecoveryEligibleAtMs:
+      !initial.inBreak && initial.recoveryDelayRemainingMs != null
+        ? nonNegativeNumber(initial.recoveryDelayRemainingMs)
+        : null,
+    valueShields: cloneValue(initial.valueShields ?? []),
+    hitCountShields: cloneValue(initial.hitCountShields ?? []),
+    lastToughnessSourceActionId:
+      initial.lastToughnessSourceActionId ?? null,
+    lastToughnessSourceActorId: initial.lastToughnessSourceActorId ?? null,
+    lastToughnessBindingIdentity:
+      initial.lastToughnessBindingIdentity ?? null,
+    profileSourceIdentity: initial.profileSourceIdentity ?? null,
+  };
+  const events = [...(verifiedCombatRuntime.damageEvents ?? [])].sort(
+    (left, right) =>
+      nonNegativeNumber(left.timeMs) - nonNegativeNumber(right.timeMs) ||
+      String(left.hitKey ?? '').localeCompare(String(right.hitKey ?? ''))
+  );
+  for (const event of events) {
+    if (!isBeforeBoundary(event.timeMs, boundaryTimeMs)) break;
+    const after = event.payload?.stateTransaction?.after;
+    if (!after) continue;
+    state = {
+      ...state,
+      ...cloneValue(after),
+      profileSourceIdentity:
+        event.payload?.enemyProfileSourceIdentity ??
+        state.profileSourceIdentity,
+    };
+  }
+  if (state.hp == null || state.toughness == null) return null;
+
+  return {
+    hp: {
+      currentValue: state.hp,
+      maxValue: state.maxHp ?? initial.maxHp,
+    },
+    toughness: {
+      currentValue: state.toughness,
+      maxValue: state.maxToughness ?? initial.maxToughness,
+    },
+    inBreak: state.inBreak === true,
+    breakElapsedMs:
+      state.inBreak && state.breakStartedAtMs != null
+        ? roundValue(boundaryTimeMs - state.breakStartedAtMs)
+        : 0,
+    recoveryDelayRemainingMs:
+      !state.inBreak && state.normalRecoveryEligibleAtMs != null
+        ? roundValue(
+            Math.max(0, state.normalRecoveryEligibleAtMs - boundaryTimeMs)
+          )
+        : null,
+    valueShields: cloneValue(state.valueShields ?? []),
+    hitCountShields: cloneValue(state.hitCountShields ?? []),
+    lastToughnessSourceActionId:
+      state.lastToughnessSourceActionId ?? null,
+    lastToughnessSourceActorId:
+      state.lastToughnessSourceActorId ?? null,
+    lastToughnessBindingIdentity:
+      state.lastToughnessBindingIdentity ?? null,
+    profileSourceIdentity: state.profileSourceIdentity ?? null,
+  };
+}
+
+function createKiboEnergyStateAtBoundary({ curves, boundaryTimeMs }) {
+  return (curves ?? []).flatMap(curve => {
+    if (!curve?.slotId || !curve?.kiboId) return [];
+    let currentValue = finiteNumberOrNull(curve.baseline?.initialValue) ?? 0;
+    const maxValue =
+      finiteNumberOrNull(curve.baseline?.maxValue) ??
+      finiteNumberOrNull(curve.stateMetric?.maxValue);
+    for (const point of [...(curve.points ?? [])].sort(
+      (left, right) =>
+        nonNegativeNumber(left.timeMs) - nonNegativeNumber(right.timeMs)
+    )) {
+      if (!isBeforeBoundary(point.timeMs, boundaryTimeMs)) break;
+      const pointValue = finiteNumberOrNull(
+        point.stateSnapshot?.after?.kiboEnergy?.currentValue
+      );
+      if (pointValue != null) currentValue = pointValue;
+    }
+    return [
+      {
+        slotId: curve.slotId,
+        actorId: curve.actorId ?? null,
+        characterId: curve.characterId ?? null,
+        kiboId: curve.kiboId,
+        kiboName: curve.kiboName ?? null,
+        currentValue,
+        maxValue,
+      },
+    ];
   });
 }
 

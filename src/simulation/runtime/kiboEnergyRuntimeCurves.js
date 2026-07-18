@@ -19,7 +19,10 @@ function createKiboEnergySourceSemantics() {
   };
 }
 
-export function createKiboEnergyRuntimeCurves({ scenario } = {}) {
+export function createKiboEnergyRuntimeCurves({
+  scenario,
+  verifiedCombatRuntime = null,
+} = {}) {
   const topologyGroups =
     scenario?.sourceProject?.metadata?.timelineTopology?.actorGroups ?? [];
   const actors = Array.isArray(scenario?.actors) ? scenario.actors : [];
@@ -36,6 +39,14 @@ export function createKiboEnergyRuntimeCurves({ scenario } = {}) {
           kiboName: null,
         },
       }));
+
+  if (verifiedCombatRuntime?.ready) {
+    return createVerifiedKiboEnergyRuntimeCurves({
+      groups,
+      actorById,
+      verifiedCombatRuntime,
+    });
+  }
 
   return groups.map((group, index) => {
     const actor = actorById.get(String(group.actorId));
@@ -140,6 +151,146 @@ export function createKiboEnergyRuntimeCurves({ scenario } = {}) {
   });
 }
 
+function createVerifiedKiboEnergyRuntimeCurves({
+  groups,
+  actorById,
+  verifiedCombatRuntime,
+}) {
+  const initialBySlot = new Map(
+    (verifiedCombatRuntime.initialState?.kiboEnergy ?? []).map(entry => [
+      entry.slotId,
+      entry,
+    ])
+  );
+  const finalBySlot = new Map(
+    (verifiedCombatRuntime.finalState?.kiboEnergy ?? []).map(entry => [
+      entry.slotId,
+      entry,
+    ])
+  );
+  const eventsBySlot = new Map();
+  for (const event of verifiedCombatRuntime.kiboResourceEvents ?? []) {
+    const slotId = event.payload?.slotId;
+    if (!slotId) continue;
+    const events = eventsBySlot.get(slotId) ?? [];
+    events.push(event);
+    eventsBySlot.set(slotId, events);
+  }
+
+  return groups.map((group, index) => {
+    const actor = actorById.get(String(group.actorId));
+    const slotId = group.slotId ?? `team-slot-${index + 1}`;
+    const actorId = group.actorId ?? actor?.id ?? '';
+    const kiboId = positiveIntegerOrNull(
+      group.kiboEnergyCurve?.kiboId ??
+        group.kiboLane?.kiboId ??
+        actor?.loadout?.kiboId
+    );
+    const kiboName =
+      group.kiboEnergyCurve?.kiboName ??
+      group.kiboLane?.kiboName ??
+      (kiboId ? `奇波 ${kiboId}` : '未绑定奇波');
+    const initialState = initialBySlot.get(slotId) ?? null;
+    const finalState = finalBySlot.get(slotId) ?? initialState;
+    const initialValue = numberOrNull(initialState?.currentValue) ?? 0;
+    const currentValue = numberOrNull(finalState?.currentValue) ?? initialValue;
+    const maxValue =
+      numberOrNull(finalState?.maxValue ?? initialState?.maxValue) ?? 1;
+    const points = (eventsBySlot.get(slotId) ?? [])
+      .map((event, eventIndex) => ({
+        sourceDeltaId: [
+          'verified-kibo-energy',
+          slotId,
+          event.actionId ?? 'system',
+          event.hitKey ?? eventIndex,
+          timeToFrame(event.timeMs),
+        ].join('|'),
+        trackKey: 'kiboEnergyChange',
+        actionId: event.actionId ?? '',
+        actorId: event.actorId ?? actorId,
+        hitKey: event.hitKey ?? null,
+        hitIndex: event.hitIndex ?? null,
+        hitSkillId: event.hitSkillId ?? null,
+        timeMs: roundNumber(event.timeMs),
+        frameIndex: timeToFrame(event.timeMs),
+        delta: roundNumber(event.payload?.change ?? 0),
+        reason: event.payload?.reason ?? null,
+        sourceIdentity: event.payload?.sourceIdentity ?? null,
+        stateSnapshot: {
+          after: {
+            kiboEnergy: {
+              currentValue: roundNumber(event.payload?.currentValue ?? 0),
+              maxValue,
+            },
+          },
+        },
+      }))
+      .sort(
+        (left, right) =>
+          left.timeMs - right.timeMs ||
+          String(left.sourceDeltaId).localeCompare(String(right.sourceDeltaId))
+      );
+    const baselineStatus = kiboId
+      ? 'verified-kibo-sp-runtime-baseline'
+      : 'tracking-slot-unconfigured';
+    const applied = Boolean(kiboId && initialState);
+    return {
+      schemaVersion: 1,
+      contractName: KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_NAME,
+      contractVersion: KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_VERSION,
+      resourceOwnerKind: 'kibo',
+      slotId,
+      actorId,
+      actorName: actor?.name ?? '',
+      characterId: Number(group.characterId ?? actor?.characterId) || null,
+      kiboId,
+      kiboName,
+      resource: 'kibo-energy',
+      semanticResource: 'kibo-sp',
+      sourceSemantics: {
+        sourceKind: 'azpr-verified-combat-runtime-kibo-sp',
+        semanticResource: 'kibo-sp',
+        status: applied
+          ? 'verified-kibo-sp-runtime-applied'
+          : 'verified-kibo-slot-unconfigured',
+        valueSourceStatus: applied ? 'verified-formula-package' : 'unresolved',
+        packageId: verifiedCombatRuntime.packageId,
+        trackingOnly: !applied,
+        appliedToCalculators: applied,
+      },
+      baseline: {
+        sourceKind: 'azpr-verified-combat-runtime-kibo-sp',
+        status: baselineStatus,
+        initialValue,
+        currentValue,
+        maxValue,
+        confirmed: applied,
+        appliedToCalculators: applied,
+      },
+      stateMetric: {
+        key: 'kiboEnergy',
+        label: '奇波能量',
+        valueUnit: 'sp',
+        semanticResource: 'kibo-sp',
+        initialValue,
+        currentValue,
+        maxValue,
+        delta: roundNumber(currentValue - initialValue),
+        baselineStatus,
+        baselineConfirmed: applied,
+        stateLabel: '当前',
+      },
+      delta: roundNumber(currentValue - initialValue),
+      pointCount: points.length,
+      points,
+      trackingOnly: !applied,
+      appliedToCalculators: applied,
+      applied,
+      order: Number(group.position ?? index),
+    };
+  });
+}
+
 function createKiboEnergyObservations({ scenario, slotId, actorId, kiboId }) {
   if (!kiboId) {
     return [];
@@ -173,7 +324,7 @@ function createKiboEnergyObservations({ scenario, slotId, actorId, kiboId }) {
         cdTime < 0 ||
         totalTime == null ||
         totalTime <= 0 ||
-        event.ready !== (cdTime <= 0) ||
+        event.ready !== cdTime <= 0 ||
         frameIndex == null ||
         frameIndex < 0
       ) {
@@ -242,6 +393,10 @@ function getReadinessValue(observation) {
   return roundNumber(
     observation.totalTime - Math.min(observation.cdTime, observation.totalTime)
   );
+}
+
+function timeToFrame(timeMs) {
+  return Math.max(0, Math.round(Number(timeMs) / AZPR_TIMELINE_FRAME_MS));
 }
 
 function positiveIntegerOrNull(value) {

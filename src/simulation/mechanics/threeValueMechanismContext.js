@@ -117,11 +117,10 @@ export function createThreeValueMechanismContext({
 
 function resolveSourceActor(scenario, action, point) {
   const actorId = point?.actorId ?? action?.actorId;
-  return (
-    action?.actor ??
-    (scenario?.actors ?? []).find(actor => actor.id === actorId) ??
-    null
+  const pointActor = (scenario?.actors ?? []).find(
+    actor => actor.id === actorId
   );
+  return pointActor ?? action?.actor ?? null;
 }
 
 function resolveTargetEnemy(scenario, action, point) {

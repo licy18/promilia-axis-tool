@@ -30,8 +30,8 @@ describe('three value mechanics profile catalog', () => {
       status: 'mechanics-profile-catalog-ready',
       ready: true,
       summary: {
-        profileCount: 1,
-        validProfileCount: 1,
+        profileCount: 2,
+        validProfileCount: 2,
         invalidProfileCount: 0,
         issueCount: 0,
       },
@@ -156,7 +156,7 @@ describe('three value mechanics profile catalog', () => {
         catalogId: 'azpr-production-profile-catalog',
         status: 'mechanics-profile-catalog-ready',
         ready: true,
-        profileCount: 1,
+        profileCount: 2,
       },
       mechanicsProfileCompatibility: {
         status: 'exact',

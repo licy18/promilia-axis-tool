@@ -979,6 +979,7 @@ import {
   watch,
 } from 'vue';
 import { loadWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
+import { loadVerifiedCombatMechanicsPackage } from '../data/verifiedCombatMechanicsPackage';
 import { getWorkbenchLoadoutDetailCatalogSnapshot } from '../data/workbenchLoadoutDetailCatalog';
 import {
   Aim,
@@ -1100,7 +1101,10 @@ import {
   getWorkbenchGameDataCompatibilityReport,
   normalizeWorkbenchGameDataBinding,
 } from '../domain/workbenchGameDataCatalog';
-import { normalizeWorkbenchMechanicsProfileSelection } from '../domain/workbenchMechanicsProfileSelection';
+import {
+  createVerifiedWorkbenchMechanicsProfileSelection,
+  normalizeWorkbenchMechanicsProfileSelection,
+} from '../domain/workbenchMechanicsProfileSelection';
 import {
   createWorkbenchAnalysisReportFileName,
   createWorkbenchContributionAnalysisReport,
@@ -1266,7 +1270,14 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
 };
 const AUTO_DELAY_NOTE_PATTERN =
   /^(?:自动推迟：同轨已有动作占用，已从|约束辅助：已从) \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
-const initialDraft = createDefaultWorkbenchDemoDraftState();
+const initialDraft = createWorkbenchDraftSnapshot(
+  {
+    ...createDefaultWorkbenchDemoDraftState(),
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  },
+  null
+);
 const selection = ref({ ...initialDraft.selection });
 const teamSlots = ref(initialDraft.teamSlots.map(slot => ({ ...slot })));
 const actorConfigs = ref([...initialDraft.actorConfigs]);
@@ -2371,6 +2382,13 @@ function resolveActionLibraryEntryDropTime(laneId, clientX) {
 }
 
 onMounted(() => {
+  void loadVerifiedCombatMechanicsPackage()
+    .then(() => {
+      runtimeDiagnosticsRevision.value += 1;
+    })
+    .catch(() => {
+      runtimeDiagnosticsRevision.value += 1;
+    });
   void loadWorkbenchKiboActionCatalog()
     .then(catalog => {
       kiboActionsById.value = new Map(
@@ -3023,9 +3041,7 @@ function confirmSkillSegmentActions() {
 
   const generationBatch = createSegmentGenerationBatch(preview);
   if (isConstraintAssistedPlacement()) {
-    const usedActionIds = new Set(
-      actionDrafts.value.map(action => action.id)
-    );
+    const usedActionIds = new Set(actionDrafts.value.map(action => action.id));
     const requestedActions = preview.actions.map(item =>
       createWorkbenchActionDraft({
         id: createNextActionIdFromUsedIds(usedActionIds),
@@ -3116,7 +3132,9 @@ function setActionPlacementMode(mode) {
 }
 
 function isConstraintAssistedPlacement() {
-  return actionPlacementMode.value === WORKBENCH_ACTION_PLACEMENT_MODES.ASSISTED;
+  return (
+    actionPlacementMode.value === WORKBENCH_ACTION_PLACEMENT_MODES.ASSISTED
+  );
 }
 
 function applyConstraintAssistedProposal(proposal, requestedActions) {
@@ -3125,8 +3143,7 @@ function applyConstraintAssistedProposal(proposal, requestedActions) {
   }
   if (!proposal?.committable) {
     draftStatus.value =
-      '约束辅助：' +
-      (proposal?.conflicts?.[0]?.message ?? '当前位置无法提交');
+      '约束辅助：' + (proposal?.conflicts?.[0]?.message ?? '当前位置无法提交');
     return null;
   }
   const proposedById = new Map(
@@ -3265,9 +3282,7 @@ function decorateActionPlacementPreviewActions(
       ...action,
       laneId: resolveDraftLaneId(action),
       label:
-        scenarioAction?.name ??
-        action.name ??
-        (fallbackLabel || action.id),
+        scenarioAction?.name ?? action.name ?? (fallbackLabel || action.id),
       icon: scenarioAction?.icon ?? action.icon ?? fallbackIcon,
       timelineSlot: scenarioAction?.timelineSlot ?? 0,
     };
@@ -3512,11 +3527,7 @@ function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
   });
 }
 
-function previewTimelineFragmentPlacement({
-  fragment,
-  laneId,
-  startMs,
-} = {}) {
+function previewTimelineFragmentPlacement({ fragment, laneId, startMs } = {}) {
   const instantiation = instantiateWorkbenchTimelineFragment(fragment, {
     targetStartMs: startMs,
     teamSlots: teamSlots.value,
@@ -3985,16 +3996,13 @@ function createMoveActionPlacementRequest({
       isConstraintAssistedPlacement()
         ? {
             ...action,
-            startMs: snapMsToFrame(
-              Number(action.startMs) + requestedOffsetMs
-            ),
+            startMs: snapMsToFrame(Number(action.startMs) + requestedOffsetMs),
           }
         : action
     );
   const proposal = createActionPlacementProposal({
     requestedActions,
-    requestedLaneId:
-      targetLaneId || resolveDraftLaneId(requestedActions[0]),
+    requestedLaneId: targetLaneId || resolveDraftLaneId(requestedActions[0]),
     preflightIssues,
   });
   return {
@@ -4340,7 +4348,10 @@ function switchWorkspaceScenario(scenarioId) {
 }
 
 function addWorkspaceScenario() {
-  const emptyDraft = createWorkbenchScenarioDraftSnapshot({ actionDrafts: [] });
+  const emptyDraft = createWorkbenchScenarioDraftSnapshot({
+    mechanicsProfileSelection: mechanicsProfileSelection.value,
+    actionDrafts: [],
+  });
   const result = addWorkbenchScenario(
     scenarioWorkspace.value,
     createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState()),
@@ -4531,10 +4542,7 @@ function saveSelectedActionsAsTimelineFragment(metadata = {}) {
     draftStatus.value = '请先选择可编排动作';
     return null;
   }
-  const library = addWorkbenchTimelineFragment(
-    getLocalStorage(),
-    fragment
-  );
+  const library = addWorkbenchTimelineFragment(getLocalStorage(), fragment);
   if (!library) {
     draftStatus.value = '片段存储不可用';
     return null;
@@ -4593,8 +4601,7 @@ function exportTimelineFragmentLibrary() {
 
 async function importTimelineFragmentLibrary(file) {
   try {
-    const rawLibrary =
-      typeof file === 'string' ? file : await file?.text?.();
+    const rawLibrary = typeof file === 'string' ? file : await file?.text?.();
     const library = importWorkbenchTimelineFragmentLibrary(
       getLocalStorage(),
       rawLibrary
@@ -5511,7 +5518,11 @@ function applyImportedProjectDraft(draft, statusText) {
 function resetDraft() {
   clearWorkbenchDraft(getLocalStorage());
   projectShareUrl.value = '';
-  applyDraftState(createDefaultWorkbenchDraftState());
+  applyDraftState({
+    ...createDefaultWorkbenchDraftState(),
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
   clearWorkbenchProjectTransientState();
   clearSegmentSplitPreview();
   undoHistoryStack.value = [];
@@ -6940,12 +6951,26 @@ function dispatchWorkbenchFlowAction(action = {}) {
     const diagnosticsReady = ensureRuntimeDiagnosticsLoaded();
     if (diagnosticsReady instanceof Promise) {
       return diagnosticsReady.then(() =>
-        dispatchWorkbenchFlowActionNow(action)
+        finalizeWorkbenchFlowAction(
+          action,
+          dispatchWorkbenchFlowActionNow(action)
+        )
       );
     }
   }
 
-  return dispatchWorkbenchFlowActionNow(action);
+  return finalizeWorkbenchFlowAction(
+    action,
+    dispatchWorkbenchFlowActionNow(action)
+  );
+}
+
+function finalizeWorkbenchFlowAction(action, result) {
+  const timelineFrame = action?.payload?.timelineFrame;
+  if (result?.handled && timelineFrame) {
+    selectTimelineFrame(timelineFrame);
+  }
+  return result;
 }
 
 function dispatchWorkbenchFlowActionNow(action = {}) {

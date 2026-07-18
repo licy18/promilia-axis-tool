@@ -1,0 +1,4007 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-verified-combat-mechanics-sync-audit",
+  "status": "verified-combat-mechanics-sync-audit-ready",
+  "packageId": "azpr-tc-2026-07-18",
+  "packageHash": "41bd7217e39a3447f135f2c5542195f51934264f92ce6976801cbc3d25f89ea4",
+  "evidenceStatus": "reverse-engineered-verified",
+  "validation": {
+    "passed": 18,
+    "failed": 0,
+    "status": "verified",
+    "outputHash": "e13481b71c08c2dc481dd5b2ee1e321c56e1e42f2b4a3c28fa4a5f0c54cb71ec"
+  },
+  "sourceCoverage": {
+    "candidateActionCount": 619,
+    "foundControlCount": 407,
+    "indexedElementPathCount": 1373,
+    "appliedActionBindingCount": 224,
+    "appliedHitBindingCount": 1763,
+    "uniqueControlBindingCount": 215,
+    "uniqueControlHitBindingCount": 1295,
+    "unresolvedActionBindingCount": 395,
+    "enemyProfileCount": 208,
+    "appliedEnemyProfileCount": 204,
+    "appliedHitDamageTypeCounts": {
+      "1": 851,
+      "2": 42,
+      "3": 224,
+      "4": 174,
+      "5": 4
+    }
+  },
+  "requiredAcceptanceBindings": {
+    "pangpang": {
+      "ready": true,
+      "identity": "actor|101007|10100701|0|10100703",
+      "controlSkillId": 10100703,
+      "elementIds": [
+        101007012
+      ]
+    },
+    "heavyRockHoof": {
+      "ready": true,
+      "identity": "kibo|500469|50046903|0|50046903",
+      "controlSkillId": 50046903,
+      "elementIds": [
+        500469062,
+        500469008,
+        500469008,
+        500469072,
+        500469072
+      ]
+    }
+  },
+  "unresolvedBindings": [
+    {
+      "identity": "actor|101003|10100301|0|10100301",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100301,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100301|1|10100301",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100301,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10100301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100301|3|10100301",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100301,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10100301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100301|5|10100301",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100301,
+      "actionVariantIndex": 5,
+      "controlSkillId": 10100301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100301|6|10100301",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100301,
+      "actionVariantIndex": 6,
+      "controlSkillId": 10100301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100312|0|10100312",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100312,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100312|1|10100312",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100312,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10100312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100322|0|10100322",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100322,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100322,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100322|1|10100322",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100322,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10100322,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100322|2|10100322",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100322,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10100322,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101003|10100361|0|10100361",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "sourceSkillId": 10100361,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100361,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100701|1|10100701",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100701,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10100701,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100701|3|10100701",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100701,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10100701,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100701|4|10100701",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100701,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10100701,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100712|0|10100712",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100712,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100712,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100712|2|10100712",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100712,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10100712,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100713|0|10100713",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100713,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100713,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100713|1|10100713",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100713,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10100713,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100721|0|10100721",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100721,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100721,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100721|1|10100721",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100721,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10100721,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100721|2|10100721",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100721,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10100721,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100761|0|10100761",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100761,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100761,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|0|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|1|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|2|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|3|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|4|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|5|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 5,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|6|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 6,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101001|7|10101001",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101001,
+      "actionVariantIndex": 7,
+      "controlSkillId": 10101001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101012|0|10101012",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10101012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101012|1|10101012",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101012,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10101012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101021|0|10101021",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101021,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10101021,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101021|1|10101021",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101021,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10101021,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101021|2|10101021",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101021,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10101021,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|101010|10101061|0|10101061",
+      "ownerKind": "actor",
+      "ownerId": 101010,
+      "sourceSkillId": 10101061,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10101061,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200101|0|10200101",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200101|1|10200101",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200101,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200101|2|10200101",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200101,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200101|3|10200101",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200101,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200112|0|10200112",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10200112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200112|1|10200112",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200112,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10200112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200122|1|10200122",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200122,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10200122,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200122|2|10200122",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200122,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10200122,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|102001|10200161|0|10200161",
+      "ownerKind": "actor",
+      "ownerId": 102001,
+      "sourceSkillId": 10200161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10200161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300201|0|10300201",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10300201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300201|1|10300201",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300201,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10300201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300201|2|10300201",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300201,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10300201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300201|3|10300201",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300201,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10300201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300212|0|10300212",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300212,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10300212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300212|1|10300212",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300212,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10300212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300221|0|10300221",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300221,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10300221,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300221|1|10300221",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300221,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10300221,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300221|2|10300221",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300221,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10300221,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|103002|10300261|0|10300261",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "sourceSkillId": 10300261,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10300261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700101|0|10700101",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700101|4|10700101",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700101,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10700101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700101|6|10700101",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700101,
+      "actionVariantIndex": 6,
+      "controlSkillId": 10700101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700101|7|10700101",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700101,
+      "actionVariantIndex": 7,
+      "controlSkillId": 10700101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700112|0|10700112",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700112|4|10700112",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700112,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10700112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700113|0|10700113",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700113,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700113,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700113|1|10700113",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700113,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700113,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700121|0|10700121",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700121,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700121|1|10700121",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700121,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700121|2|10700121",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700121,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10700121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700121|3|10700121",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700121,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10700121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700121|4|10700121",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700121,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10700121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107001|10700161|0|10700161",
+      "ownerKind": "actor",
+      "ownerId": 107001,
+      "sourceSkillId": 10700161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700201|0|10700201",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700201|1|10700201",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700201,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700201|2|10700201",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700201,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10700201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700201|3|10700201",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700201,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10700201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700212|0|10700212",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700212,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700212|1|10700212",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700212,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700213|0|10700213",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700213,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700222|0|10700222",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700222,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700222|1|10700222",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700222,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700222|2|10700222",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700222,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10700222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700261|0|10700261",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700261,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|0|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|1|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|2|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|3|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|4|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|5|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 5,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|6|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 6,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|7|10700301",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 7,
+      "controlSkillId": 10700301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700312|0|10700312",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700312,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700312|1|10700312",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700312,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700321|0|10700321",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700321,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700321,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700321|1|10700321",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700321,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10700321,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700321|2|10700321",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700321,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10700321,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700361|0|10700361",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700361,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700361,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800101|0|10800101",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800101|1|10800101",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800101,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800101|3|10800101",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800101,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10800101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800101|4|10800101",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800101,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10800101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800112|0|10800112",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800112|1|10800112",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800112,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800113|0|10800113",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800113,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800113,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800113|1|10800113",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800113,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800113,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800121|0|10800121",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800121,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800121|1|10800121",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800121,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800121|2|10800121",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800121,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108001|10800161|0|10800161",
+      "ownerKind": "actor",
+      "ownerId": 108001,
+      "sourceSkillId": 10800161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|0|10800201",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|1|10800201",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|2|10800201",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|3|10800201",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10800201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|4|10800201",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10800201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|5|10800201",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 5,
+      "controlSkillId": 10800201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800212|0|10800212",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800212,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800212|1|10800212",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800212,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800213|0|10800213",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800213,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800213|1|10800213",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800213,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800213|2|10800213",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800213,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800213|3|10800213",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800213,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10800213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800213|4|10800213",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800213,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10800213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800222|0|10800222",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800222,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800222|1|10800222",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800222,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800222|2|10800222",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800222,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800261|0|10800261",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800261,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800261|1|10800261",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800261,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800301|0|10800301",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800301,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800301|1|10800301",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800301,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800301|2|10800301",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800301,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800301|4|10800301",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800301,
+      "actionVariantIndex": 4,
+      "controlSkillId": 10800301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800301|6|10800301",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800301,
+      "actionVariantIndex": 6,
+      "controlSkillId": 10800301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800301|7|10800301",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800301,
+      "actionVariantIndex": 7,
+      "controlSkillId": 10800301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800312|0|10800312",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800312,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800312|1|10800312",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800312,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800313|0|10800313",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800313,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800313,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800313|1|10800313",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800313,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800313,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800322|0|10800322",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800322,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800322,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800322|1|10800322",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800322,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800322,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800322|2|10800322",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800322,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800322,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108003|10800361|0|10800361",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "sourceSkillId": 10800361,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800361,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800501|0|10800501",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800501,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800501,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800501|1|10800501",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800501,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800501,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800501|2|10800501",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800501,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800501,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800501|3|10800501",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800501,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10800501,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800512|0|10800512",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800512,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800512,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800512|1|10800512",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800512,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800512,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800513|0|10800513",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800513,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800513,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800522|0|10800522",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800522,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800522,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800522|1|10800522",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800522,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10800522,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800522|2|10800522",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800522,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10800522,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|108005|10800561|0|10800561",
+      "ownerKind": "actor",
+      "ownerId": 108005,
+      "sourceSkillId": 10800561,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800561,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900101|0|10900101",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900101|1|10900101",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900101,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900101|2|10900101",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900101,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900101|3|10900101",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900101,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900112|0|10900112",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900112|2|10900112",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900112,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10900112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900121|0|10900121",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900121,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900121|2|10900121",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900121,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10900121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900121|3|10900121",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900121,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10900121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109001|10900161|0|10900161",
+      "ownerKind": "actor",
+      "ownerId": 109001,
+      "sourceSkillId": 10900161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|0|10900201",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|1|10900201",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|2|10900201",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|3|10900201",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 3,
+      "controlSkillId": 10900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|5|10900201",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 5,
+      "controlSkillId": 10900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|6|10900201",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 6,
+      "controlSkillId": 10900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900212|0|10900212",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900212,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900212|1|10900212",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900212,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10900212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900213|0|10900213",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900213,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900213|1|10900213",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900213,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10900213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900221|0|10900221",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900221,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900221,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900221|1|10900221",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900221,
+      "actionVariantIndex": 1,
+      "controlSkillId": 10900221,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900221|2|10900221",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900221,
+      "actionVariantIndex": 2,
+      "controlSkillId": 10900221,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900261|0|10900261",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900261,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100101|0|11100101",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11100101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100101|5|11100101",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100101,
+      "actionVariantIndex": 5,
+      "controlSkillId": 11100101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100101|6|11100101",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100101,
+      "actionVariantIndex": 6,
+      "controlSkillId": 11100101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100101|7|11100101",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100101,
+      "actionVariantIndex": 7,
+      "controlSkillId": 11100101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100112|0|11100112",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11100112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100112|1|11100112",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100112,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11100112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100113|0|11100113",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100113,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11100113,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100113|1|11100113",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100113,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11100113,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100121|0|11100121",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100121,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11100121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100121|1|11100121",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100121,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11100121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100121|2|11100121",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100121,
+      "actionVariantIndex": 2,
+      "controlSkillId": 11100121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100161|0|11100161",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11100161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|0|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|1|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|2|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 2,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|3|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 3,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|4|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 4,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|5|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 5,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|6|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 6,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|7|11200101",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 7,
+      "controlSkillId": 11200101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200112|0|11200112",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200112|1|11200112",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200112,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11200112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200121|0|11200121",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200121,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200121|1|11200121",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200121,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11200121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200121|2|11200121",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200121,
+      "actionVariantIndex": 2,
+      "controlSkillId": 11200121,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200161|0|11200161",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200201|0|11200201",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200201|1|11200201",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200201,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11200201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200201|3|11200201",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200201,
+      "actionVariantIndex": 3,
+      "controlSkillId": 11200201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200201|4|11200201",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200201,
+      "actionVariantIndex": 4,
+      "controlSkillId": 11200201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200212|0|11200212",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200212,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200212|1|11200212",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200212,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11200212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200213|0|11200213",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200213,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200213,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200222|0|11200222",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200222,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200222|1|11200222",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200222,
+      "actionVariantIndex": 1,
+      "controlSkillId": 11200222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200222|2|11200222",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200222,
+      "actionVariantIndex": 2,
+      "controlSkillId": 11200222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|112002|11200261|0|11200261",
+      "ownerKind": "actor",
+      "ownerId": 112002,
+      "sourceSkillId": 11200261,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900101|0|19900101",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900101|1|19900101",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900101,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900101|4|19900101",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900101,
+      "actionVariantIndex": 4,
+      "controlSkillId": 19900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900101|5|19900101",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900101,
+      "actionVariantIndex": 5,
+      "controlSkillId": 19900101,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900112|0|19900112",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900112,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900112|2|19900112",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900112,
+      "actionVariantIndex": 2,
+      "controlSkillId": 19900112,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900122|0|19900122",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900122,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900122,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900122|1|19900122",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900122,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900122,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900122|2|19900122",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900122,
+      "actionVariantIndex": 2,
+      "controlSkillId": 19900122,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900161|0|19900161",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900161,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900161,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900201|0|19900201",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900201|1|19900201",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900201,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900201|4|19900201",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900201,
+      "actionVariantIndex": 4,
+      "controlSkillId": 19900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900201|5|19900201",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900201,
+      "actionVariantIndex": 5,
+      "controlSkillId": 19900201,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900212|0|19900212",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900212,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900212|2|19900212",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900212,
+      "actionVariantIndex": 2,
+      "controlSkillId": 19900212,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900222|0|19900222",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900222,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900222|1|19900222",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900222,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900222|2|19900222",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900222,
+      "actionVariantIndex": 2,
+      "controlSkillId": 19900222,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900261|0|19900261",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900261,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900261,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900301|0|19900301",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900301,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900301|1|19900301",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900301,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900301|2|19900301",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900301,
+      "actionVariantIndex": 2,
+      "controlSkillId": 19900301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900301|3|19900301",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900301,
+      "actionVariantIndex": 3,
+      "controlSkillId": 19900301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900301|5|19900301",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900301,
+      "actionVariantIndex": 5,
+      "controlSkillId": 19900301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900301|6|19900301",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900301,
+      "actionVariantIndex": 6,
+      "controlSkillId": 19900301,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900312|0|19900312",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900312,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900312|1|19900312",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900312,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900312,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900321|0|19900321",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900321,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900321,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900321|1|19900321",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900321,
+      "actionVariantIndex": 1,
+      "controlSkillId": 19900321,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900321|2|19900321",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900321,
+      "actionVariantIndex": 2,
+      "controlSkillId": 19900321,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "actor|199003|19900361|0|19900361",
+      "ownerKind": "actor",
+      "ownerId": 199003,
+      "sourceSkillId": 19900361,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900361,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500001|50000102|0|50000102",
+      "ownerKind": "kibo",
+      "ownerId": 500001,
+      "sourceSkillId": 50000102,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000102,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500002|50000202|0|50000202",
+      "ownerKind": "kibo",
+      "ownerId": 500002,
+      "sourceSkillId": 50000202,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000202,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500002|502015|0|502015",
+      "ownerKind": "kibo",
+      "ownerId": 500002,
+      "sourceSkillId": 502015,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502015,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500002|50000203|0|50000203",
+      "ownerKind": "kibo",
+      "ownerId": 500002,
+      "sourceSkillId": 50000203,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000203,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500003|50000302|0|50000302",
+      "ownerKind": "kibo",
+      "ownerId": 500003,
+      "sourceSkillId": 50000302,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000302,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500003|502019|0|502019",
+      "ownerKind": "kibo",
+      "ownerId": 500003,
+      "sourceSkillId": 502019,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502019,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500003|50000303|0|50000303",
+      "ownerKind": "kibo",
+      "ownerId": 500003,
+      "sourceSkillId": 50000303,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000303,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500004|50000404|0|50000404",
+      "ownerKind": "kibo",
+      "ownerId": 500004,
+      "sourceSkillId": 50000404,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000404,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500004|502016|0|502016",
+      "ownerKind": "kibo",
+      "ownerId": 500004,
+      "sourceSkillId": 502016,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502016,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500004|50000417|0|50000417",
+      "ownerKind": "kibo",
+      "ownerId": 500004,
+      "sourceSkillId": 50000417,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50000417,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500005|501014|0|501014",
+      "ownerKind": "kibo",
+      "ownerId": 500005,
+      "sourceSkillId": 501014,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501014,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500006|501017|0|501017",
+      "ownerKind": "kibo",
+      "ownerId": 500006,
+      "sourceSkillId": 501017,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501017,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500007|501016|0|501016",
+      "ownerKind": "kibo",
+      "ownerId": 500007,
+      "sourceSkillId": 501016,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501016,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500020|503001|0|503001",
+      "ownerKind": "kibo",
+      "ownerId": 500020,
+      "sourceSkillId": 503001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500020|50002004|0|50002004",
+      "ownerKind": "kibo",
+      "ownerId": 500020,
+      "sourceSkillId": 50002004,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50002004,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500021|503006|0|503006",
+      "ownerKind": "kibo",
+      "ownerId": 500021,
+      "sourceSkillId": 503006,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503006,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500022|503004|0|503004",
+      "ownerKind": "kibo",
+      "ownerId": 500022,
+      "sourceSkillId": 503004,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503004,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500023|505013|0|505013",
+      "ownerKind": "kibo",
+      "ownerId": 500023,
+      "sourceSkillId": 505013,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505013,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500024|505006|0|505006",
+      "ownerKind": "kibo",
+      "ownerId": 500024,
+      "sourceSkillId": 505006,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505006,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500025|507003|0|507003",
+      "ownerKind": "kibo",
+      "ownerId": 500025,
+      "sourceSkillId": 507003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500026|505006|0|505006",
+      "ownerKind": "kibo",
+      "ownerId": 500026,
+      "sourceSkillId": 505006,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505006,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500035|50003503|0|50003503",
+      "ownerKind": "kibo",
+      "ownerId": 500035,
+      "sourceSkillId": 50003503,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50003503,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500035|505004|0|505004",
+      "ownerKind": "kibo",
+      "ownerId": 500035,
+      "sourceSkillId": 505004,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505004,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500035|50003501|0|50003501",
+      "ownerKind": "kibo",
+      "ownerId": 500035,
+      "sourceSkillId": 50003501,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50003501,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500037|501001|0|501001",
+      "ownerKind": "kibo",
+      "ownerId": 500037,
+      "sourceSkillId": 501001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500038|501003|0|501003",
+      "ownerKind": "kibo",
+      "ownerId": 500038,
+      "sourceSkillId": 501003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500039|501003|0|501003",
+      "ownerKind": "kibo",
+      "ownerId": 500039,
+      "sourceSkillId": 501003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500040|506001|0|506001",
+      "ownerKind": "kibo",
+      "ownerId": 500040,
+      "sourceSkillId": 506001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500041|506001|0|506001",
+      "ownerKind": "kibo",
+      "ownerId": 500041,
+      "sourceSkillId": 506001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500043|50004302|0|50004302",
+      "ownerKind": "kibo",
+      "ownerId": 500043,
+      "sourceSkillId": 50004302,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50004302,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500043|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500043,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500044|50004401|0|50004401",
+      "ownerKind": "kibo",
+      "ownerId": 500044,
+      "sourceSkillId": 50004401,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50004401,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500044|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500044,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500045|50004501|0|50004501",
+      "ownerKind": "kibo",
+      "ownerId": 500045,
+      "sourceSkillId": 50004501,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50004501,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500045|504020|0|504020",
+      "ownerKind": "kibo",
+      "ownerId": 500045,
+      "sourceSkillId": 504020,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504020,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500046|50004604|0|50004604",
+      "ownerKind": "kibo",
+      "ownerId": 500046,
+      "sourceSkillId": 50004604,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50004604,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500046|505013|0|505013",
+      "ownerKind": "kibo",
+      "ownerId": 500046,
+      "sourceSkillId": 505013,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505013,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500047|50004705|0|50004705",
+      "ownerKind": "kibo",
+      "ownerId": 500047,
+      "sourceSkillId": 50004705,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50004705,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500047|505014|0|505014",
+      "ownerKind": "kibo",
+      "ownerId": 500047,
+      "sourceSkillId": 505014,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505014,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500048|50004805|0|50004805",
+      "ownerKind": "kibo",
+      "ownerId": 500048,
+      "sourceSkillId": 50004805,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50004805,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500048|505018|0|505018",
+      "ownerKind": "kibo",
+      "ownerId": 500048,
+      "sourceSkillId": 505018,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505018,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500051|506001|0|506001",
+      "ownerKind": "kibo",
+      "ownerId": 500051,
+      "sourceSkillId": 506001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500052|506008|0|506008",
+      "ownerKind": "kibo",
+      "ownerId": 500052,
+      "sourceSkillId": 506008,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506008,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500053|506008|0|506008",
+      "ownerKind": "kibo",
+      "ownerId": 500053,
+      "sourceSkillId": 506008,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506008,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500057|507001|0|507001",
+      "ownerKind": "kibo",
+      "ownerId": 500057,
+      "sourceSkillId": 507001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500058|50005801|0|50005801",
+      "ownerKind": "kibo",
+      "ownerId": 500058,
+      "sourceSkillId": 50005801,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50005801,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500064|504001|0|504001",
+      "ownerKind": "kibo",
+      "ownerId": 500064,
+      "sourceSkillId": 504001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500066|50006601|0|50006601",
+      "ownerKind": "kibo",
+      "ownerId": 500066,
+      "sourceSkillId": 50006601,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50006601,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500066|502004|0|502004",
+      "ownerKind": "kibo",
+      "ownerId": 500066,
+      "sourceSkillId": 502004,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502004,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500067|502006|0|502006",
+      "ownerKind": "kibo",
+      "ownerId": 500067,
+      "sourceSkillId": 502006,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502006,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500068|502003|0|502003",
+      "ownerKind": "kibo",
+      "ownerId": 500068,
+      "sourceSkillId": 502003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500072|503004|0|503004",
+      "ownerKind": "kibo",
+      "ownerId": 500072,
+      "sourceSkillId": 503004,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503004,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500081|50008102|0|50008102",
+      "ownerKind": "kibo",
+      "ownerId": 500081,
+      "sourceSkillId": 50008102,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50008102,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500081|503007|0|503007",
+      "ownerKind": "kibo",
+      "ownerId": 500081,
+      "sourceSkillId": 503007,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503007,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500082|507008|0|507008",
+      "ownerKind": "kibo",
+      "ownerId": 500082,
+      "sourceSkillId": 507008,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507008,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500083|501001|0|501001",
+      "ownerKind": "kibo",
+      "ownerId": 500083,
+      "sourceSkillId": 501001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500093|50009305|0|50009305",
+      "ownerKind": "kibo",
+      "ownerId": 500093,
+      "sourceSkillId": 50009305,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50009305,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500095|509001|0|509001",
+      "ownerKind": "kibo",
+      "ownerId": 500095,
+      "sourceSkillId": 509001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500096|509002|0|509002",
+      "ownerKind": "kibo",
+      "ownerId": 500096,
+      "sourceSkillId": 509002,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509002,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500097|502010|0|502010",
+      "ownerKind": "kibo",
+      "ownerId": 500097,
+      "sourceSkillId": 502010,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502010,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500098|502010|0|502010",
+      "ownerKind": "kibo",
+      "ownerId": 500098,
+      "sourceSkillId": 502010,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502010,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500098|50009804|0|50009804",
+      "ownerKind": "kibo",
+      "ownerId": 500098,
+      "sourceSkillId": 50009804,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50009804,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500110|505001|0|505001",
+      "ownerKind": "kibo",
+      "ownerId": 500110,
+      "sourceSkillId": 505001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500114|503009|0|503009",
+      "ownerKind": "kibo",
+      "ownerId": 500114,
+      "sourceSkillId": 503009,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503009,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500115|503010|0|503010",
+      "ownerKind": "kibo",
+      "ownerId": 500115,
+      "sourceSkillId": 503010,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503010,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500116|503018|0|503018",
+      "ownerKind": "kibo",
+      "ownerId": 500116,
+      "sourceSkillId": 503018,
+      "actionVariantIndex": 0,
+      "controlSkillId": 503018,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500120|504001|0|504001",
+      "ownerKind": "kibo",
+      "ownerId": 500120,
+      "sourceSkillId": 504001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500123|50012302|0|50012302",
+      "ownerKind": "kibo",
+      "ownerId": 500123,
+      "sourceSkillId": 50012302,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50012302,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500123|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500123,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500124|50012402|0|50012402",
+      "ownerKind": "kibo",
+      "ownerId": 500124,
+      "sourceSkillId": 50012402,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50012402,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500124|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500124,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500125|50012502|0|50012502",
+      "ownerKind": "kibo",
+      "ownerId": 500125,
+      "sourceSkillId": 50012502,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50012502,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500125|504014|0|504014",
+      "ownerKind": "kibo",
+      "ownerId": 500125,
+      "sourceSkillId": 504014,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504014,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500126|50012602|0|50012602",
+      "ownerKind": "kibo",
+      "ownerId": 500126,
+      "sourceSkillId": 50012602,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50012602,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500126|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500126,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500127|50012702|0|50012702",
+      "ownerKind": "kibo",
+      "ownerId": 500127,
+      "sourceSkillId": 50012702,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50012702,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500127|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500127,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500128|50012802|0|50012802",
+      "ownerKind": "kibo",
+      "ownerId": 500128,
+      "sourceSkillId": 50012802,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50012802,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500128|504014|0|504014",
+      "ownerKind": "kibo",
+      "ownerId": 500128,
+      "sourceSkillId": 504014,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504014,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500129|507001|0|507001",
+      "ownerKind": "kibo",
+      "ownerId": 500129,
+      "sourceSkillId": 507001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500130|507003|0|507003",
+      "ownerKind": "kibo",
+      "ownerId": 500130,
+      "sourceSkillId": 507003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500131|507003|0|507003",
+      "ownerKind": "kibo",
+      "ownerId": 500131,
+      "sourceSkillId": 507003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500133|50013302|0|50013302",
+      "ownerKind": "kibo",
+      "ownerId": 500133,
+      "sourceSkillId": 50013302,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50013302,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500133|506001|0|506001",
+      "ownerKind": "kibo",
+      "ownerId": 500133,
+      "sourceSkillId": 506001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500134|50013402|0|50013402",
+      "ownerKind": "kibo",
+      "ownerId": 500134,
+      "sourceSkillId": 50013402,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50013402,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500138|50013801|0|50013801",
+      "ownerKind": "kibo",
+      "ownerId": 500138,
+      "sourceSkillId": 50013801,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50013801,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500138|501001|0|501001",
+      "ownerKind": "kibo",
+      "ownerId": 500138,
+      "sourceSkillId": 501001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500139|50013901|0|50013901",
+      "ownerKind": "kibo",
+      "ownerId": 500139,
+      "sourceSkillId": 50013901,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50013901,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500139|506005|0|506005",
+      "ownerKind": "kibo",
+      "ownerId": 500139,
+      "sourceSkillId": 506005,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506005,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500140|50014001|0|50014001",
+      "ownerKind": "kibo",
+      "ownerId": 500140,
+      "sourceSkillId": 50014001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50014001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500140|506005|0|506005",
+      "ownerKind": "kibo",
+      "ownerId": 500140,
+      "sourceSkillId": 506005,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506005,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500147|505013|0|505013",
+      "ownerKind": "kibo",
+      "ownerId": 500147,
+      "sourceSkillId": 505013,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505013,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500147|50014704|0|50014704",
+      "ownerKind": "kibo",
+      "ownerId": 500147,
+      "sourceSkillId": 50014704,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50014704,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500148|505014|0|505014",
+      "ownerKind": "kibo",
+      "ownerId": 500148,
+      "sourceSkillId": 505014,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505014,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500148|50014804|0|50014804",
+      "ownerKind": "kibo",
+      "ownerId": 500148,
+      "sourceSkillId": 50014804,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50014804,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500149|505017|0|505017",
+      "ownerKind": "kibo",
+      "ownerId": 500149,
+      "sourceSkillId": 505017,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505017,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500149|50014904|0|50014904",
+      "ownerKind": "kibo",
+      "ownerId": 500149,
+      "sourceSkillId": 50014904,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50014904,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500156|501001|0|501001",
+      "ownerKind": "kibo",
+      "ownerId": 500156,
+      "sourceSkillId": 501001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500156|50015604|0|50015604",
+      "ownerKind": "kibo",
+      "ownerId": 500156,
+      "sourceSkillId": 50015604,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50015604,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500157|501005|0|501005",
+      "ownerKind": "kibo",
+      "ownerId": 500157,
+      "sourceSkillId": 501005,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501005,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500157|50015704|0|50015704",
+      "ownerKind": "kibo",
+      "ownerId": 500157,
+      "sourceSkillId": 50015704,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50015704,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500158|501005|0|501005",
+      "ownerKind": "kibo",
+      "ownerId": 500158,
+      "sourceSkillId": 501005,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501005,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500164|50016402|0|50016402",
+      "ownerKind": "kibo",
+      "ownerId": 500164,
+      "sourceSkillId": 50016402,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50016402,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500164|507012|0|507012",
+      "ownerKind": "kibo",
+      "ownerId": 500164,
+      "sourceSkillId": 507012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500165|50016502|0|50016502",
+      "ownerKind": "kibo",
+      "ownerId": 500165,
+      "sourceSkillId": 50016502,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50016502,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500165|507020|0|507020",
+      "ownerKind": "kibo",
+      "ownerId": 500165,
+      "sourceSkillId": 507020,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507020,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500166|50016602|0|50016602",
+      "ownerKind": "kibo",
+      "ownerId": 500166,
+      "sourceSkillId": 50016602,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50016602,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500166|507019|0|507019",
+      "ownerKind": "kibo",
+      "ownerId": 500166,
+      "sourceSkillId": 507019,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507019,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500173|507012|0|507012",
+      "ownerKind": "kibo",
+      "ownerId": 500173,
+      "sourceSkillId": 507012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500174|507020|0|507020",
+      "ownerKind": "kibo",
+      "ownerId": 500174,
+      "sourceSkillId": 507020,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507020,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500179|509001|0|509001",
+      "ownerKind": "kibo",
+      "ownerId": 500179,
+      "sourceSkillId": 509001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500180|509002|0|509002",
+      "ownerKind": "kibo",
+      "ownerId": 500180,
+      "sourceSkillId": 509002,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509002,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500181|509002|0|509002",
+      "ownerKind": "kibo",
+      "ownerId": 500181,
+      "sourceSkillId": 509002,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509002,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500185|50018502|0|50018502",
+      "ownerKind": "kibo",
+      "ownerId": 500185,
+      "sourceSkillId": 50018502,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50018502,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500185|504009|0|504009",
+      "ownerKind": "kibo",
+      "ownerId": 500185,
+      "sourceSkillId": 504009,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504009,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500186|50018602|0|50018602",
+      "ownerKind": "kibo",
+      "ownerId": 500186,
+      "sourceSkillId": 50018602,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50018602,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500186|502001|0|502001",
+      "ownerKind": "kibo",
+      "ownerId": 500186,
+      "sourceSkillId": 502001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500187|502007|0|502007",
+      "ownerKind": "kibo",
+      "ownerId": 500187,
+      "sourceSkillId": 502007,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502007,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500213|509001|0|509001",
+      "ownerKind": "kibo",
+      "ownerId": 500213,
+      "sourceSkillId": 509001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500220|50022001|0|50022001",
+      "ownerKind": "kibo",
+      "ownerId": 500220,
+      "sourceSkillId": 50022001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50022001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500220|509010|0|509010",
+      "ownerKind": "kibo",
+      "ownerId": 500220,
+      "sourceSkillId": 509010,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509010,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500231|507003|0|507003",
+      "ownerKind": "kibo",
+      "ownerId": 500231,
+      "sourceSkillId": 507003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500244|501001|0|501001",
+      "ownerKind": "kibo",
+      "ownerId": 500244,
+      "sourceSkillId": 501001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500258|50025801|0|50025801",
+      "ownerKind": "kibo",
+      "ownerId": 500258,
+      "sourceSkillId": 50025801,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50025801,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500258|505001|0|505001",
+      "ownerKind": "kibo",
+      "ownerId": 500258,
+      "sourceSkillId": 505001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500259|50025901|0|50025901",
+      "ownerKind": "kibo",
+      "ownerId": 500259,
+      "sourceSkillId": 50025901,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50025901,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500260|50026001|0|50026001",
+      "ownerKind": "kibo",
+      "ownerId": 500260,
+      "sourceSkillId": 50026001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50026001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500261|502001|0|502001",
+      "ownerKind": "kibo",
+      "ownerId": 500261,
+      "sourceSkillId": 502001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500262|502001|0|502001",
+      "ownerKind": "kibo",
+      "ownerId": 500262,
+      "sourceSkillId": 502001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500263|502005|0|502005",
+      "ownerKind": "kibo",
+      "ownerId": 500263,
+      "sourceSkillId": 502005,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502005,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500304|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500304,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500305|504020|0|504020",
+      "ownerKind": "kibo",
+      "ownerId": 500305,
+      "sourceSkillId": 504020,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504020,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500306|504006|0|504006",
+      "ownerKind": "kibo",
+      "ownerId": 500306,
+      "sourceSkillId": 504006,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504006,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500313|50031302|0|50031302",
+      "ownerKind": "kibo",
+      "ownerId": 500313,
+      "sourceSkillId": 50031302,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50031302,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500313|501016|0|501016",
+      "ownerKind": "kibo",
+      "ownerId": 500313,
+      "sourceSkillId": 501016,
+      "actionVariantIndex": 0,
+      "controlSkillId": 501016,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500322|504001|0|504001",
+      "ownerKind": "kibo",
+      "ownerId": 500322,
+      "sourceSkillId": 504001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500324|504006|0|504006",
+      "ownerKind": "kibo",
+      "ownerId": 500324,
+      "sourceSkillId": 504006,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504006,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500354|509001|0|509001",
+      "ownerKind": "kibo",
+      "ownerId": 500354,
+      "sourceSkillId": 509001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500355|509002|0|509002",
+      "ownerKind": "kibo",
+      "ownerId": 500355,
+      "sourceSkillId": 509002,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509002,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500357|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500357,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500358|505011|0|505011",
+      "ownerKind": "kibo",
+      "ownerId": 500358,
+      "sourceSkillId": 505011,
+      "actionVariantIndex": 0,
+      "controlSkillId": 505011,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500360|509002|0|509002",
+      "ownerKind": "kibo",
+      "ownerId": 500360,
+      "sourceSkillId": 509002,
+      "actionVariantIndex": 0,
+      "controlSkillId": 509002,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500368|50036801|0|50036801",
+      "ownerKind": "kibo",
+      "ownerId": 500368,
+      "sourceSkillId": 50036801,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50036801,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500368|504012|0|504012",
+      "ownerKind": "kibo",
+      "ownerId": 500368,
+      "sourceSkillId": 504012,
+      "actionVariantIndex": 0,
+      "controlSkillId": 504012,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500369|50036901|0|50036901",
+      "ownerKind": "kibo",
+      "ownerId": 500369,
+      "sourceSkillId": 50036901,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50036901,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500369|507003|0|507003",
+      "ownerKind": "kibo",
+      "ownerId": 500369,
+      "sourceSkillId": 507003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500370|50037001|0|50037001",
+      "ownerKind": "kibo",
+      "ownerId": 500370,
+      "sourceSkillId": 50037001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50037001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500370|507003|0|507003",
+      "ownerKind": "kibo",
+      "ownerId": 500370,
+      "sourceSkillId": 507003,
+      "actionVariantIndex": 0,
+      "controlSkillId": 507003,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500399|50039901|0|50039901",
+      "ownerKind": "kibo",
+      "ownerId": 500399,
+      "sourceSkillId": 50039901,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50039901,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500399|502007|0|502007",
+      "ownerKind": "kibo",
+      "ownerId": 500399,
+      "sourceSkillId": 502007,
+      "actionVariantIndex": 0,
+      "controlSkillId": 502007,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500467|50046701|0|50046701",
+      "ownerKind": "kibo",
+      "ownerId": 500467,
+      "sourceSkillId": 50046701,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50046701,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500467|506001|0|506001",
+      "ownerKind": "kibo",
+      "ownerId": 500467,
+      "sourceSkillId": 506001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 506001,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    },
+    {
+      "identity": "kibo|500468|50046801|0|50046801",
+      "ownerKind": "kibo",
+      "ownerId": 500468,
+      "sourceSkillId": 50046801,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50046801,
+      "status": "control-found-no-unique-complete-damage-hit",
+      "applied": false
+    }
+  ]
+}

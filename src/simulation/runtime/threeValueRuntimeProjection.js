@@ -30,6 +30,7 @@ export function createThreeValueRuntimeProjection({
   actionExecutionPlan,
   controlledActorTimeline,
   actionEffectRelationGraph,
+  verifiedCombatRuntime = null,
 }) {
   const runtimeControlledActorTimeline =
     controlledActorTimeline ??
@@ -83,7 +84,10 @@ export function createThreeValueRuntimeProjection({
     stateSnapshotByDeltaId,
     hitTransactionByDeltaId,
   });
-  const kiboEnergyCurveBySlot = createKiboEnergyRuntimeCurves({ scenario });
+  const kiboEnergyCurveBySlot = createKiboEnergyRuntimeCurves({
+    scenario,
+    verifiedCombatRuntime,
+  });
   const simLog = createThreeValueRuntimeSimLog(
     appliedDeltas,
     stateSnapshotByDeltaId,
@@ -141,6 +145,7 @@ export function createThreeValueRuntimeProjection({
     actionExecutionPlan,
     controlledActorTimeline: runtimeControlledActorTimeline,
     actionEffectRelationGraph: runtimeActionEffectRelationGraph,
+    verifiedCombatRuntime,
   });
 
   return {
@@ -172,6 +177,7 @@ export function createThreeValueRuntimeProjection({
     enemyStateCurve,
     selfEnergyCurveByActor,
     kiboEnergyCurveBySlot,
+    verifiedCombatRuntime,
     simLog,
     summary,
     applied: true,
@@ -190,6 +196,7 @@ function createThreeValueRuntimeOutputs({
   actionExecutionPlan,
   controlledActorTimeline,
   actionEffectRelationGraph,
+  verifiedCombatRuntime,
 }) {
   const outputConsistency = createRuntimeOutputConsistency({
     outputContract,
@@ -210,6 +217,7 @@ function createThreeValueRuntimeOutputs({
     effectTimeline,
     controlledActorTimeline,
     actionEffectRelationGraph,
+    verifiedCombatRuntime,
     summary,
     outputConsistency,
   });
@@ -231,6 +239,7 @@ function createThreeValueRuntimeOutputs({
     supplementalOutputNames: [
       'controlledActorTimeline',
       'actionEffectRelationGraph',
+      'verifiedCombatRuntime',
     ],
     outputContract,
     outputConsumerContract,
@@ -245,6 +254,7 @@ function createThreeValueRuntimeOutputs({
     actionExecutionPlan,
     controlledActorTimeline,
     actionEffectRelationGraph,
+    verifiedCombatRuntime,
     summary,
     outputConsistency,
     outputs: {
@@ -255,6 +265,7 @@ function createThreeValueRuntimeOutputs({
       effectTimeline,
       controlledActorTimeline,
       actionEffectRelationGraph,
+      verifiedCombatRuntime,
       resources: resourceCurves,
       summary,
     },

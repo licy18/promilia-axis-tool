@@ -374,7 +374,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M6 / 真实三值机制接入与同轴演算，待实施**。M5 已通过产品验收。AzPr 知识库现已交付状态为 `reverse-engineered-verified` 的战斗公式包，覆盖 Q16.16 数值运行时、普通/失序爆发/真实伤害、护盾、削韧与 Break、前后台自动回能及角色/奇波命中回能，并提供 18/18 通过的 ESM 复算器、机器证据索引和真实技能样例。M6 将这些产物受控同步进现有 generation、mechanics adapter、runtime hit transaction 与八条同轴曲线，不重做公式研究，也不把装备、灵子、培养效果或尚未确认的特殊开关混入已应用结果。
+当前里程碑：**M6 / 真实三值机制接入与同轴演算，已实现并通过工程验收，等待产品验收**。知识库 verified 公式包、严格动作/命中绑定、Q16.16 三值运行时、角色/奇波 SP 与八条同轴曲线已接入同一 generation/runtime 主链；来源不足继续 `unresolved / unapplied`，旧 preview 项目保持原 profile。M6 不自动延伸为 M7、真实采样或未确认培养机制。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -482,27 +482,33 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 验收结果：M5 已完成并通过产品验收。
 
-### M6-A：验证公式包与动作机制生成（待实施）
+### M6-A：验证公式包与动作机制生成（已完成，等待产品验收）
 
 - 新增单一受控同步入口，把 `C:\PC2\Codex\AzPr\work\combat-formulas\combat-formula-calculator.mjs`、`outputs\combat-formulas-evidence-20260718.json`、1/12 级真实技能样例及来源 build/hash 转成仓库内可发布的版本化公式包；生产运行不得依赖外部绝对路径。同步结果必须保留区域、日期、来源 identity、置信状态和校验和，并以知识库 18/18 向量作为交叉守门。
 - 在现有 mechanics profile catalog 注册 verified profile，完整声明 Q16.16 截断、中点取偶和实际乘法顺序；旧 preview profile 只保留为旧项目兼容与缺输入诊断，新建方案默认选择 verified profile。公式包版本或项目选择不兼容时明确阻塞/降级，不静默回到 raw preview。
 - 从完整 Battle 导出与现有动作目录生成严格的 `skill/subskill -> damage element -> formula/recoverSP/petRecoverSP/recoverInterval/weakBreakDamageRate` 绑定。只有来源链唯一且所需输入齐全的动作进入 applied；未绑定动作保持 `unresolved / unapplied`，禁止从技能描述文本猜倍率或机制。
 
-### M6-B：三值运行时与状态机替换（待实施）
+完成结果：新增 `data:sync-verified-combat` 与 `audit:verified-combat` 单一受控入口，知识库复算器、证据、真实样例和完整 Battle 来源被同步为仓库内 `azpr-verified-combat-mechanics-package` v1 与生成式 Q16.16 runtime。当前包通过 18/18 验证，审计 619 个候选动作、407 个 control、224 个 applied 动作绑定和 1763 个 applied hit 绑定；208 个敌人韧性 profile 中 204 个通过原表属性交叉校验并可应用，其余 4 个保持 unresolved。每次同步保留 build、区域、来源哈希、package hash 与 identity。verified profile 已注册，新建方案默认使用，旧项目继续保留自身 profile；包未加载、身份不唯一、control 缺失或敌人输入不完整时只返回 unresolved，不回退伪造预览值。
+
+### M6-B：三值运行时与状态机替换（已完成，等待产品验收）
 
 - 复用现有 `AzPrThreeValueMechanicsAdapter` 和 runtime hit transaction，接入普通、失序爆发、真实伤害、次数盾/数值盾与最低值约束；每个命中按知识库顺序执行 Q16.16 运算并保留 trace。暴击等随机分支使用项目中显式、可回放的命中结果，不在每次响应式重算时重新随机。
 - 同一命中事务以护盾前 HP 伤害计算普通削韧，支持专用 Weakness 路线、`WDM_MIN/MAX`、恢复延迟、Break 线性恢复、结束等待及 Break 承伤倍率；HP 与韧性必须共享同一命中 identity、帧位和 before/delta/after，不得分别用两套预览值。
 - 角色与奇波资源轴按 0.1 秒固定步长计算前台/后台自动回能，并在准确命中帧应用 `recoverSP / petRecoverSP / recoverInterval`、后台分享、动作消耗和 `[0, MAXSP]` 裁剪。受控角色区间决定前后台身份，六个资源 owner 独立；缺少确切 MAXSP、属性或动作来源时只保留未决平线，不伪造变化。
 - M3 已确认状态可以通过现有 adapter 影响公式；装备、灵子、奇波培养、吸血、反伤、事件回调和 `useOneBreak` 等尚未确认机制继续 `unapplied`，不为完成 M6 扩写知识库边界。
 
-### M6-C：八曲线同轴工作流与产品验收（待实施）
+完成结果：新增 `AzPrVerifiedCombatRuntime` v1，并由现有 simulation engine、standard delta generation、mechanics adapter、hit transaction 和 runtime projection 共同消费。命中事务按 verified Q16.16 路线处理普通/失序/真实伤害、数值盾/次数盾、普通削韧、纯 Weakness 与 Break 状态；敌人 profile 驱动普通韧性恢复延迟、Break 线性恢复、结束等待和退出，所有命中与状态步都保留同一 before/delta/after 及来源 identity。角色与奇波 SP 复用 100ms 固定步长、前后台身份、命中恢复/分享/间隔/消耗/裁剪，随机分支只消费可回放结果。`AzPrInitialRuntimeState` 升级为 v3，循环继承角色 SP、奇波 SP、敌人 HP/韧性/Break 进度、恢复剩余时间、盾、来源锚点与既有效果；被阻塞动作和 unresolved 动作不生成 applied 三值。
+
+### M6-C：八曲线同轴工作流与产品验收（已完成，等待产品验收）
 
 - 用户从真实动作库拖入具有精确来源的角色或奇波动作后，三角色 SP、三奇波能量、敌人 HP 与敌人韧性/Break 八条曲线在同一 60fps 时间轴按帧变化；自动回能显示连续阶梯，命中/消耗/削韧/Break 节点可点击并回到来源动作。既有检查器只增加公式版本、分支、before/delta/after 和来源摘要，不新增大型分析页面。
 - 真实主流程至少覆盖芃芃 `10100703 / 101007012` 的 HP、削韧、角色/奇波命中回能链，以及重岩蹄 `50046903` 的三伤害元素链；覆盖前后台切换、回能间隔、SP 裁剪、护盾吸收、Break 前后承伤、纯 Weakness、自由/辅助排轴、片段插入后重算、撤销/重做和来源不足保持 unapplied。
 - 默认方案与空方案均验证方案复制、本地草稿、JSON、分享链接、PNG、循环继承、1440x900、390x900 和长轴滚动。五载体必须恢复相同 verified profile、动作绑定、命中事务、曲线断点与 trace；旧 preview 项目导入不得被静默改写。
 - 完成时新增公式同步/漂移审计并运行完整 `test:trial-release`，视觉证据同时展示动作、八条真实曲线和可回源节点。包体只在 M6-C 末尾统一检查，不拆出压缩阶段；M6 完成后停止等待产品验收，不自动进入 M7 或自动最优排轴。
 
-M1 共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735,000B 仅作预警；初始入口 120,000B、Workbench 主块 370,000B 继续守门。只有 M1 结束时超出硬门槛才做一次针对性优化。不新增公式、数值考古、runtime calibration、报告载体或来源合同。
+完成结果：真实 Workbench 路径已覆盖芃芃公开动作 `10100701` 经 control `10100703` 命中 `101007012`，以及重岩蹄 `50046903` 的五个真实 hit；三角色 SP、三奇波 SP、敌人 HP 与韧性/Break 均由同一帧级事件驱动并可回到 source identity。动作移动、删除、撤销/重做、长轴缩放、循环继承和五载体恢复保持一致。当前严格动作目录的 applied hit 只覆盖 damage type 1-5；没有唯一真实动作 binding 的纯 Weakness、真实伤害和叠加越限分支只保留公式级守门，不伪造可拖动作或曲线节点。完整 `test:trial-release` 通过 103 个测试文件、566 条单元/组件/集成测试、46/46 production preview 与 41/41 必需能力；总 JavaScript gzip 为 738,031B，初始入口为 89,225B，Workbench 主块为 352,701B，均低于 740,000B / 120,000B / 370,000B 硬门槛，总量高于 735,000B 预警线。视觉证据为 `reports/m6-verified-combat-desktop.png` 与 `reports/m6-verified-combat-narrow.png`。M6 当前只等待产品验收，不自动创建下一里程碑。
+
+共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735,000B 仅作预警；初始入口 120,000B、Workbench 主块 370,000B 继续守门。阶段结束时只有超出硬门槛才做一次针对性优化；不以逐字节压缩替代产品能力，也不扩写当前里程碑之外的数值考古、runtime calibration 或报告载体。
 
 ## 6. 推荐里程碑
 
@@ -548,7 +554,7 @@ M1 共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735
 26. 已完成并通过产品验收：M3-A/B/C 已打通真实动作目录 generation、既有 runtime 生命周期、同轴 Buff/CD 展示和真实动作库拖入工作流；整改后同轨状态条独立占行，奇波与可确认星决技读取真实结构化 CD，同技能复用进入统一冲突检测，未来技能/Buff CD 修正通过 `base -> adapter -> effective` 合同接入而非写死。下一阶段尚未确认，不自动进入 M4、P3 真实采样或公式研究。
 27. 已完成并通过产品验收：M4-A/B/C 已完成统一合法放置提议、事务式约束编辑和同轴拖拽反馈。自由模式保留原提交语义；辅助模式只在用户明确选择后整组采用确定建议，阻塞不落盘，关系组、跨轨 owner、剪贴板和撤销/重做保持原子一致。真实动作库拖拽、默认/空方案、五载体、循环继承、桌面/窄屏与完整 trial-release 已通过。
 28. 已完成并通过产品验收：M5-A/B/C 已交付局部片段合同、独立本地库、严格兼容检查、M4 整组放置、M3 运行时重建，以及动作库中的保存、搜索、导入导出、点击/拖拽插入工作流。片段不保存旧结果、不猜测不兼容 owner。
-29. 待实施：M6-A/B/C 把 AzPr 知识库已验证的 Q16.16 战斗公式包、动作元素来源、HP/韧性/Break 与角色/奇波 SP 主链接入现有生成和运行时，使八条同轴曲线由真实动作驱动。阶段只应用高置信且输入完整的来源，不恢复 P3 采样，不扩展未确认培养效果或自动最优排轴。
+29. 已完成，等待产品验收：M6-A/B/C 已把 AzPr 知识库 verified Q16.16 公式包、严格动作元素来源、HP/韧性/Break 与角色/奇波 SP 主链接入现有生成和运行时，使八条同轴曲线由真实动作驱动。阶段只应用高置信且输入完整的来源，没有恢复 P3 采样，也没有扩展未确认培养效果或自动最优排轴。
 
 ## 8. 风险和取舍
 

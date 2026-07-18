@@ -1,6 +1,6 @@
 # promilia-axis-tool 项目手册
 
-最后更新：2026-07-14
+最后更新：2026-07-18
 
 当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面、旧 editor/timeline 组件、旧项目 store 和旧计算工具已经按引用审计退役。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
@@ -37,7 +37,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 
 ## 2. 当前项目状态
 
-当前项目已经形成可供本地用户试用的 Workbench production demo；真实公式覆盖、首份真实战斗采样和远程部署仍未完成，不能视为最终版本。
+当前项目已经形成可供本地用户试用的 Workbench production demo，并已接入 verified 公式包与首批真实动作三值链；完整动作覆盖、首份非 fixture 真实战斗采样和远程部署仍未完成，不能视为最终版本。
 
 已完成的主线能力：
 
@@ -45,7 +45,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 - 真实 AzPr 生成数据、版本化项目模型和无 UI 模拟运行时。
 - 60fps 的 3 角色主轴、3 奇波子轴和敌人轴，以及动作属性编辑、批次操作、撤销重做和草稿恢复。
 - 队伍、敌人、装备、奇波、灵子和初始资源配置，以及按方案绑定的可复用配置实例。
-- `Action -> Hit -> ThreeValueDelta` 生成合同、统一可注册 mechanics adapter，以及 HP、韧性、3 条角色能量和 3 条奇波能量曲线、日志、详情和贡献分析。奇波能量当前仍为 `tracking-only / unapplied`。
+- `Action -> Hit -> ThreeValueDelta` 生成合同、统一可注册 mechanics adapter，以及 HP、韧性、3 条角色 SP 和 3 条奇波 SP 曲线、日志、详情和贡献分析。verified 来源完整的角色/奇波动作进入 applied；旧观测和来源不足项继续 `tracking-only / unapplied`。
 - 冷却/执行计划、效果命令和运行时复盘联动。
 - JSON、PNG 元数据、分享链接、runtime capture 和本地预设轴库。
 - 受控 runtime capture manifest、规范化、production audit 和显式 PID host。
@@ -54,9 +54,9 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run test:trial-release`：候选发布完整守门一次通过。
-- `npm run test -- --run`：85 个测试文件、476 条测试通过。
-- `npm run test:e2e:production-preview`：40/40 项必需能力通过，报告结论为 `trial-ready`。
-- 生产引用、生产数据、applied source 和包体审计通过；总 JavaScript 为 739,969B gzip，低于 740,000B 发布硬门槛。
+- `npm run test -- --run`：103 个测试文件、566 条测试通过。
+- `npm run test:e2e:production-preview`：46/46 条 production preview 与 41/41 项必需能力通过，报告结论为 `trial-ready`。
+- 生产引用、生产数据、verified 公式包、applied source 和包体审计通过；总 JavaScript 为 738,031B gzip，初始入口为 89,225B，Workbench 主块为 352,701B，均低于各自发布硬门槛；总量高于 735,000B 预警线。
 
 ## 3. 目录速览
 
@@ -1565,6 +1565,14 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 完整 `test:trial-release` 通过 100 个测试文件、553 条单元/组件测试、45/45 production preview 和 41/41 必需能力，验收报告判定为 `trial-ready`；生产引用、数据、动作状态、applied-source 和 bundle 守门全部通过。总 JavaScript gzip 为 723,205B，初始入口为 89,229B，Workbench 主块为 338,124B；视觉证据为 `reports/m5-timeline-fragment-desktop.png` 与 `reports/m5-timeline-fragment-narrow.png`。M5 已通过产品验收。
 
 下一阶段目标：M6 真实三值机制接入与同轴演算。权威来源为 AzPr 知识库 2026-07-18 的 verified 战斗公式包：Q16.16 数值运行时、普通/失序爆发/真实伤害、护盾、削韧与 Break、前后台自动回能以及角色/奇波命中回能均已复原，并有 18/18 复算验证、机器证据和真实技能样例。M6 先把这些产物同步成仓库内版本化公式与动作元素包，再通过现有 generation、mechanics adapter 和 hit transaction 驱动三角色 SP、三奇波能量、敌人 HP 与韧性/Break 八条同轴曲线。输入或来源不完整时继续明确 `unresolved / unapplied`；不重新研究公式，不接入未确认装备、灵子、培养效果、特殊开关、吸血、反伤或事件回调。
+
+### M6 真实三值机制接入与同轴演算已完成，等待产品验收（2026-07-18）
+
+仓库现有单一受控同步/审计入口，可把知识库复算器、证据、真实样例和完整 Battle 来源生成可发布的 verified 公式包。当前包通过 18/18 向量验证，覆盖 619 个候选动作、224 个 applied 动作绑定和 1763 个 applied hit 绑定；208 个敌人韧性 profile 中 204 个通过原表交叉校验并可应用，4 个保持 unresolved。新建方案默认使用 verified profile，旧载体保留原 profile，来源或输入不完整的动作与敌人不会静默回退到预览计算。
+
+现有 generation、mechanics adapter、hit transaction 与 runtime projection 已共同消费同一 verified runtime：Q16.16 普通/失序/真实伤害、盾、削韧/Weakness/Break、普通韧性恢复延迟、Break 线性恢复/结束等待/退出、100ms 前后台自动回能、角色/奇波命中 SP、间隔/分享/消耗/裁剪均按来源 identity 原子写入八条曲线。芃芃 `10100703 / 101007012` 和重岩蹄 `50046903` 的真实链路已在 Workbench 中完成动作拖入、节点回源、移动/删除、撤销/重做、长轴、循环继承与五载体回放验收。严格目录目前只绑定 damage type 1-5；无唯一真实动作来源的纯 Weakness、真实伤害和叠加越限分支只做公式级守门，不伪造目录动作。未确认装备、灵子、培养效果、防御/抗性修正、吸血、反伤、事件回调和 `useOneBreak` 仍明确 `unapplied`。
+
+完整 `test:trial-release` 通过 103 个测试文件、566 条测试和 46/46 production preview，41 项必需能力判定为 `trial-ready`；总 JavaScript gzip 为 738,031B，低于 740,000B 硬门槛但高于 735,000B 预警线。视觉证据为 `reports/m6-verified-combat-desktop.png` 与 `reports/m6-verified-combat-narrow.png`。M6 已通过工程验收，当前停止并等待产品验收，不自动进入 M7。
 
 ## 10. 文档维护规则
 

@@ -47,6 +47,18 @@ vi.mock('../../domain/workbenchDraftStorage', async importOriginal => {
   };
 });
 
+vi.mock(
+  '../../domain/workbenchMechanicsProfileSelection',
+  async importOriginal => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      createVerifiedWorkbenchMechanicsProfileSelection: () =>
+        actual.normalizeWorkbenchMechanicsProfileSelection(),
+    };
+  }
+);
+
 vi.mock('../../data/workbenchKiboActionCatalog', () => ({
   loadWorkbenchKiboActionCatalog: async () => ({
     schemaVersion: 1,
@@ -1910,9 +1922,11 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
     await nextTick();
     expect(
-      wrapper.find(
-        '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+        )
+        .exists()
     ).toBe(false);
   });
 
@@ -1976,9 +1990,7 @@ describe('Workbench view', () => {
       wrapper.get(
         '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
       );
-    const originalStartMs = Number(
-      secondAction().attributes('data-start-ms')
-    );
+    const originalStartMs = Number(secondAction().attributes('data-start-ms'));
     const timeline = wrapper.getComponent(TimelineGridPreview);
 
     timeline.vm.$emit('preview-action-placement', {
@@ -1995,14 +2007,14 @@ describe('Workbench view', () => {
       'data-action-placement-status': 'adjustable',
     });
     expect(
-      wrapper.find(
-        '[data-testid="workbench-action-placement-request-guide"]'
-      ).exists()
+      wrapper
+        .find('[data-testid="workbench-action-placement-request-guide"]')
+        .exists()
     ).toBe(true);
     expect(
-      wrapper.find(
-        '[data-testid="workbench-action-placement-suggested-guide"]'
-      ).exists()
+      wrapper
+        .find('[data-testid="workbench-action-placement-suggested-guide"]')
+        .exists()
     ).toBe(true);
     expect(
       wrapper.findAll('[data-testid="workbench-action-placement-ghost"]')
@@ -2017,9 +2029,7 @@ describe('Workbench view', () => {
       'data-action-placement-preview-active': 'false',
     });
     expect(
-      wrapper.find(
-        '[data-testid="workbench-action-placement-ghost"]'
-      ).exists()
+      wrapper.find('[data-testid="workbench-action-placement-ghost"]').exists()
     ).toBe(false);
   });
 

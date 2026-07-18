@@ -1,4 +1,4 @@
-export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 2;
+export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 3;
 export const INITIAL_RUNTIME_STATE_CONTRACT_NAME = 'AzPrInitialRuntimeState';
 
 export function normalizeInitialRuntimeState(value, defaults = {}) {
@@ -16,6 +16,9 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
   const selfEnergyByActor = normalizeInitialSelfEnergyStates(
     sourceValue.selfEnergyByActor
   );
+  const kiboEnergyBySlot = normalizeInitialKiboEnergyStates(
+    sourceValue.kiboEnergyBySlot
+  );
   const activeEffects = normalizeInitialActiveEffects(
     sourceValue.activeEffects
   );
@@ -23,6 +26,7 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     !controlledActor &&
     !enemy &&
     selfEnergyByActor.length === 0 &&
+    kiboEnergyBySlot.length === 0 &&
     activeEffects.length === 0
   ) {
     return null;
@@ -39,6 +43,7 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     controlledActor,
     enemy,
     selfEnergyByActor,
+    kiboEnergyBySlot,
     activeEffects,
     applied: true,
   };
@@ -79,13 +84,47 @@ function normalizeInitialEnemyState(value) {
   }
   const hp = normalizeInitialMetric(value.hp, 'hp');
   const toughness = normalizeInitialMetric(value.toughness, 'toughness');
-  if (!hp && !toughness) {
+  const valueShields = normalizeInitialValueShields(value.valueShields);
+  const hitCountShields = normalizeInitialHitCountShields(
+    value.hitCountShields
+  );
+  const inBreak = value.inBreak === true;
+  const breakElapsedMs = nonNegativeNumberOrNull(value.breakElapsedMs);
+  const recoveryDelayRemainingMs = nonNegativeNumberOrNull(
+    value.recoveryDelayRemainingMs
+  );
+  if (
+    !hp &&
+    !toughness &&
+    !inBreak &&
+    breakElapsedMs == null &&
+    recoveryDelayRemainingMs == null &&
+    valueShields.length === 0 &&
+    hitCountShields.length === 0
+  ) {
     return null;
   }
   return {
     enemyId: optionalText(value.enemyId),
     hp,
     toughness,
+    inBreak,
+    breakElapsedMs: inBreak ? (breakElapsedMs ?? 0) : 0,
+    recoveryDelayRemainingMs: inBreak
+      ? 0
+      : recoveryDelayRemainingMs,
+    lastToughnessSourceActionId: optionalText(
+      value.lastToughnessSourceActionId
+    ),
+    lastToughnessSourceActorId: optionalText(
+      value.lastToughnessSourceActorId
+    ),
+    lastToughnessBindingIdentity: optionalText(
+      value.lastToughnessBindingIdentity
+    ),
+    profileSourceIdentity: optionalText(value.profileSourceIdentity),
+    valueShields,
+    hitCountShields,
   };
 }
 
@@ -123,6 +162,84 @@ function normalizeInitialSelfEnergyStates(values) {
       },
     ];
   });
+}
+
+function normalizeInitialKiboEnergyStates(values) {
+  const usedSlotIds = new Set();
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const slotId = optionalText(value?.slotId);
+    const kiboId = positiveIntegerOrNull(value?.kiboId);
+    const currentValue = nonNegativeNumberOrNull(value?.currentValue);
+    if (!slotId || !kiboId || currentValue == null || usedSlotIds.has(slotId)) {
+      return [];
+    }
+    usedSlotIds.add(slotId);
+    return [
+      {
+        slotId,
+        actorId: optionalText(value?.actorId),
+        characterId: numberOrNull(value?.characterId),
+        kiboId,
+        kiboName: optionalText(value?.kiboName),
+        currentValue,
+        maxValue: nonNegativeNumberOrNull(value?.maxValue),
+        valueUnit: 'sp',
+        baselineStatus: 'baseline-inherited-from-cycle-boundary',
+      },
+    ];
+  });
+}
+
+function normalizeInitialValueShields(values) {
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const source = value && typeof value === 'object' ? value : { value };
+    const shieldValue = nonNegativeNumberOrNull(source.value);
+    const raw = optionalIntegerText(source.raw);
+    if (shieldValue == null && raw == null) return [];
+    return [
+      {
+        ...(raw == null ? {} : { raw }),
+        ...(shieldValue == null ? {} : { value: shieldValue }),
+        outputTypes: normalizeNumberList(
+          source.outputTypes ?? source.damageTypes
+        ),
+        elementTypes: normalizeNumberList(
+          source.elementTypes ?? source.elements
+        ),
+      },
+    ];
+  });
+}
+
+function normalizeInitialHitCountShields(values) {
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const source =
+      value && typeof value === 'object' ? value : { count: value };
+    const count = nonNegativeIntegerOrNull(source.count ?? source.value);
+    if (count == null) return [];
+    return [
+      {
+        count,
+        outputTypes: normalizeNumberList(
+          source.outputTypes ?? source.damageTypes
+        ),
+        elementTypes: normalizeNumberList(
+          source.elementTypes ?? source.elements
+        ),
+      },
+    ];
+  });
+}
+
+function normalizeNumberList(values) {
+  return (Array.isArray(values) ? values : [])
+    .map(numberOrNull)
+    .filter(value => value != null);
+}
+
+function optionalIntegerText(value) {
+  const text = String(value ?? '').trim();
+  return /^-?\d+$/.test(text) ? text : null;
 }
 
 function normalizeInitialActiveEffects(values) {
@@ -225,6 +342,16 @@ function positiveInteger(value, fallback) {
 function nonNegativeInteger(value) {
   const number = Math.trunc(Number(value));
   return Number.isFinite(number) && number >= 0 ? number : 0;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const number = numberOrNull(value);
+  return number == null ? null : Math.max(0, Math.trunc(number));
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
 
 function roundValue(value) {

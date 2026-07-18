@@ -23,6 +23,7 @@ describe('cycle boundary inheritance projection', () => {
         retainedRelationCount: 1,
         shiftedBoundaryCount: 1,
         inheritedEnergyActorCount: 1,
+        inheritedKiboEnergyCount: 1,
         inheritedControlledActorId: 'actor-2',
         inheritedEffectCount: 1,
         clearedRuntimeSampleCaptureCount: 1,
@@ -50,9 +51,23 @@ describe('cycle boundary inheritance projection', () => {
       },
       enemy: {
         hp: { currentValue: 900, maxValue: 1000 },
-        toughness: { currentValue: 80, maxValue: 100 },
+        toughness: { currentValue: 40, maxValue: 100 },
+        inBreak: true,
+        breakElapsedMs: 500,
+        recoveryDelayRemainingMs: 0,
+        valueShields: [{ value: 25 }],
+        lastToughnessSourceActionId: 'action-before',
+        lastToughnessBindingIdentity: 'actor|101|1001|0|1003',
       },
       selfEnergyByActor: [{ actorId: 'actor-1', currentValue: 25 }],
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          kiboId: 500469,
+          currentValue: 0.5,
+          maxValue: 1,
+        },
+      ],
       controlledActor: { actorId: 'actor-2', characterId: 102 },
       activeEffects: [
         {
@@ -72,7 +87,10 @@ describe('cycle boundary inheritance projection', () => {
     });
 
     expect(state.enemy.hp.currentValue).toBe(900);
+    expect(state.enemy.toughness.currentValue).toBe(40);
+    expect(state.enemy.breakElapsedMs).toBe(500);
     expect(state.selfEnergyByActor[0].currentValue).toBe(25);
+    expect(state.kiboEnergyBySlot[0].currentValue).toBe(0.5);
     expect(state.activeEffects.map(effect => effect.effectId)).toEqual([
       'focus',
     ]);
@@ -227,6 +245,32 @@ function createRuntimeOutputs() {
         },
       ],
     },
+    resourceCurves: {
+      curvesByKibo: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-1',
+          characterId: 101,
+          kiboId: 500469,
+          kiboName: '重岩蹄',
+          baseline: { initialValue: 0, maxValue: 1 },
+          points: [
+            {
+              timeMs: 500,
+              stateSnapshot: {
+                after: { kiboEnergy: { currentValue: 0.5, maxValue: 1 } },
+              },
+            },
+            {
+              timeMs: 1000,
+              stateSnapshot: {
+                after: { kiboEnergy: { currentValue: 0.75, maxValue: 1 } },
+              },
+            },
+          ],
+        },
+      ],
+    },
     effectTimeline: {
       events: [
         {
@@ -256,6 +300,81 @@ function createRuntimeOutputs() {
           runtimeSequenceIndex: 3,
           instanceKey: boundaryAppliedState.instanceKey,
           after: boundaryAppliedState,
+        },
+      ],
+    },
+    verifiedCombatRuntime: {
+      ready: true,
+      initialState: {
+        enemy: {
+          enemyId: 300032,
+          hp: 1000,
+          maxHp: 1000,
+          toughness: 100,
+          maxToughness: 100,
+          inBreak: false,
+          breakElapsedMs: 0,
+          recoveryDelayRemainingMs: 0,
+          valueShields: [{ value: 50 }],
+          hitCountShields: [],
+          profileSourceIdentity: 'enemy-profile-1',
+        },
+      },
+      damageEvents: [
+        {
+          timeMs: 500,
+          hitKey: 'break-hit',
+          payload: {
+            enemyProfileSourceIdentity: 'enemy-profile-1',
+            stateTransaction: {
+              after: {
+                hp: 900,
+                toughness: 0,
+                inBreak: true,
+                breakStartedAtMs: 500,
+                normalRecoveryEligibleAtMs: null,
+                lastToughnessSourceActionId: 'action-before',
+                lastToughnessSourceActorId: 'actor-1',
+                lastToughnessBindingIdentity: 'actor|101|1001|0|1003',
+                valueShields: [{ value: 25 }],
+                hitCountShields: [],
+              },
+            },
+          },
+        },
+        {
+          timeMs: 900,
+          hitKey: 'break-recovery',
+          payload: {
+            enemyProfileSourceIdentity: 'enemy-profile-1',
+            stateTransaction: {
+              after: {
+                hp: 900,
+                toughness: 40,
+                inBreak: true,
+                breakStartedAtMs: 500,
+                normalRecoveryEligibleAtMs: null,
+                lastToughnessSourceActionId: 'action-before',
+                lastToughnessSourceActorId: 'actor-1',
+                lastToughnessBindingIdentity: 'actor|101|1001|0|1003',
+                valueShields: [{ value: 25 }],
+                hitCountShields: [],
+              },
+            },
+          },
+        },
+        {
+          timeMs: 1000,
+          hitKey: 'boundary-event',
+          payload: {
+            stateTransaction: {
+              after: {
+                hp: 700,
+                toughness: 100,
+                inBreak: false,
+              },
+            },
+          },
         },
       ],
     },

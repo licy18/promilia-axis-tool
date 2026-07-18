@@ -1,6 +1,7 @@
 import { normalizeWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
 import {
   DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
+  VERIFIED_THREE_VALUE_MECHANICS_PROFILE,
   resolveThreeValueMechanicsProfileSelection,
   validateThreeValueMechanicsProfile,
 } from './threeValueMechanicsProfile';
@@ -17,7 +18,10 @@ export const DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG =
 export function createThreeValueMechanicsProfileCatalog({
   catalogId = 'azpr-production-profile-catalog',
   catalogVersion = 1,
-  profiles = [DEFAULT_THREE_VALUE_MECHANICS_PROFILE],
+  profiles = [
+    DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
+    VERIFIED_THREE_VALUE_MECHANICS_PROFILE,
+  ],
   defaultSelection,
 } = {}) {
   const entries = [];

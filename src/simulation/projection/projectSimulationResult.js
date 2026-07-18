@@ -1,4 +1,5 @@
 import { createThreeValueGenerationBundle } from '../generation/threeValueGenerationBuilder';
+import { ACTION_TYPES } from '../../domain/projectSchema';
 import {
   createSelfEnergyDeltaSummaryByActor,
   createThreeValueRuntimeProjection,
@@ -1442,6 +1443,8 @@ export function projectSimulationResult({
   eventLog,
   damageEvents,
   resourceEvents,
+  kiboResourceEvents = [],
+  verifiedCombatRuntime = null,
   effectTimeline,
   actionRuleDiagnostics,
   actionExecutionPlan,
@@ -1458,6 +1461,7 @@ export function projectSimulationResult({
     resourceEvents,
     runtimeSampleContext,
     actionExecutionPlan,
+    verifiedCombatRuntime,
   });
   const candidateValueSeries = buildCandidateValueSeries(
     actionResultTimeline,
@@ -1487,9 +1491,12 @@ export function projectSimulationResult({
     actionExecutionPlan,
     controlledActorTimeline,
     actionEffectRelationGraph,
+    verifiedCombatRuntime,
   });
   const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
   const damageTimeline = damageEvents.map(event => ({
+    eventType: event.type,
+    stateEventKind: event.payload.stateEventKind ?? null,
     timeMs: event.timeMs,
     actionId: event.actionId,
     actorId: event.actorId,
@@ -1499,9 +1506,14 @@ export function projectSimulationResult({
     rawDamage: event.payload.rawDamage,
     formulaVersion: event.payload.formulaVersion,
     formulaBreakdown: event.payload.formulaBreakdown,
-    segmentLabel: event.payload.segment.label,
-    multiplier: event.payload.segment.multiplier,
-    segment: event.payload.segment,
+    hitKey: event.hitKey ?? event.payload.hitKey ?? null,
+    hitIndex: event.hitIndex ?? event.payload.hitIndex ?? null,
+    hitSkillId: event.hitSkillId ?? null,
+    elementId: event.payload.elementId ?? null,
+    toughnessDamage: event.payload.toughnessDamage ?? 0,
+    segmentLabel: event.payload.segment?.label ?? null,
+    multiplier: event.payload.segment?.multiplier ?? null,
+    segment: event.payload.segment ?? null,
     confidence: event.payload.confidence,
     precision: event.payload.precision,
     timingAccuracy: event.payload.timingAccuracy,
@@ -1515,6 +1527,28 @@ export function projectSimulationResult({
     change: event.payload.change,
     reason: event.payload.reason,
     confidence: event.payload.confidence,
+    hitKey: event.hitKey ?? null,
+    hitIndex: event.hitIndex ?? null,
+    hitSkillId: event.hitSkillId ?? null,
+    elementId: event.payload.elementId ?? null,
+  }));
+
+  const kiboResourceTimeline = kiboResourceEvents.map(event => ({
+    timeMs: event.timeMs,
+    actionId: event.actionId,
+    actorId: event.actorId,
+    slotId: event.payload.slotId,
+    kiboId: event.payload.kiboId,
+    resource: event.payload.resource,
+    change: event.payload.change,
+    currentValue: event.payload.currentValue,
+    maxValue: event.payload.maxValue,
+    reason: event.payload.reason,
+    confidence: event.payload.confidence,
+    hitKey: event.hitKey ?? null,
+    hitIndex: event.hitIndex ?? null,
+    hitSkillId: event.hitSkillId ?? null,
+    elementId: event.payload.elementId ?? null,
   }));
 
   const runtimeOutputSummary = runtimeOutputs.summary ?? {};
@@ -1563,6 +1597,8 @@ export function projectSimulationResult({
     runtimeOutputs,
     damageTimeline,
     resourceTimeline,
+    kiboResourceTimeline,
+    verifiedCombatRuntime,
     effectTimeline: runtimeOutputs.effectTimeline,
     controlledActorTimeline: runtimeOutputs.controlledActorTimeline,
     actionEffectRelationGraph: runtimeOutputs.actionEffectRelationGraph,
@@ -1574,7 +1610,9 @@ export function projectSimulationResult({
       totalProjectedToughnessDamage,
       totalSelfEnergyDelta,
       selfEnergyDeltaByActor,
-      projectedHitCount: damageTimeline.length,
+      projectedHitCount: damageTimeline.filter(
+        event => !event.stateEventKind
+      ).length,
       resourceEventCount: resourceTimeline.length,
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
@@ -6217,7 +6255,18 @@ function buildActionResultTimeline({
   resourceEvents,
   runtimeSampleContext = null,
   actionExecutionPlan = null,
+  verifiedCombatRuntime = null,
 }) {
+  if (verifiedCombatRuntime?.ready) {
+    return buildVerifiedActionResultTimeline({
+      scenario,
+      damageEvents,
+      resourceEvents,
+      runtimeSampleContext,
+      actionExecutionPlan,
+      verifiedCombatRuntime,
+    });
+  }
   const damageByActionId = groupEventsByActionId(damageEvents);
   const resourcesByActionId = groupEventsByActionId(resourceEvents);
   const executionByActionId = new Map(
@@ -6280,6 +6329,289 @@ function buildActionResultTimeline({
         ],
       };
     });
+}
+
+function buildVerifiedActionResultTimeline({
+  scenario,
+  damageEvents,
+  resourceEvents,
+  runtimeSampleContext,
+  actionExecutionPlan,
+  verifiedCombatRuntime,
+}) {
+  const damageByActionId = groupEventsByActionId(damageEvents);
+  const resourcesByActionId = groupEventsByActionId(resourceEvents);
+  const executionByActionId = new Map(
+    (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
+  );
+  const rows = [];
+
+  for (const action of scenario.actions ?? []) {
+    const executionEntry = executionByActionId.get(action.id) ?? null;
+    if (executionEntry?.execute === false) continue;
+    const actionDamageEvents = damageByActionId.get(action.id) ?? [];
+    const actionResourceEvents = resourcesByActionId.get(action.id) ?? [];
+    const damageElementSource = createActionDamageElementSource(action);
+    const resolution = verifiedCombatRuntime.actionResolutionById.get(
+      action.id
+    );
+
+    for (const damageEvent of actionDamageEvents) {
+      rows.push(
+        createVerifiedActionResultEntry({
+          action,
+          executionEntry,
+          damageEvent,
+          damageElementSource,
+          verifiedMechanicsStatus: resolution?.status ?? null,
+        })
+      );
+    }
+    for (const resourceEvent of actionResourceEvents) {
+      rows.push(
+        createVerifiedResourceResultEntry({
+          action,
+          executionEntry,
+          resourceEvent,
+          damageElementSource,
+          runtimeSampleContext,
+          verifiedMechanicsStatus: resolution?.status ?? null,
+        })
+      );
+    }
+    if (actionDamageEvents.length === 0 && actionResourceEvents.length === 0) {
+      rows.push(
+        createVerifiedEmptyActionResultEntry({
+          action,
+          executionEntry,
+          verifiedMechanicsStatus:
+            resolution?.status ?? 'verified-action-mechanics-unresolved',
+        })
+      );
+    }
+  }
+
+  for (const resourceEvent of resourcesByActionId.get(null) ?? []) {
+    const actor = (scenario.actors ?? []).find(
+      item => item.id === resourceEvent.actorId
+    );
+    rows.push(
+      createVerifiedResourceResultEntry({
+        action: {
+          id: null,
+          type: ACTION_TYPES.RESOURCE,
+          name: actor ? `${actor.name} 自动回能` : '自动回能',
+          actorId: resourceEvent.actorId ?? null,
+          actor,
+          targetId: null,
+          startMs: resourceEvent.timeMs,
+          durationMs: 0,
+          skillId: null,
+        },
+        executionEntry: null,
+        resourceEvent,
+        damageElementSource: null,
+        runtimeSampleContext,
+        verifiedMechanicsStatus: 'verified-auto-sp-runtime-event',
+      })
+    );
+  }
+
+  for (const damageEvent of damageByActionId.get(null) ?? []) {
+    rows.push(
+      createVerifiedActionResultEntry({
+        action: {
+          id: null,
+          type: ACTION_TYPES.ENEMY_EVENT,
+          name: damageEvent.payload?.segment?.label ?? '敌人韧性状态变化',
+          actorId: damageEvent.actorId ?? null,
+          actor: null,
+          targetId: damageEvent.targetId ?? scenario.enemy?.id ?? null,
+          target: scenario.enemy ?? null,
+          startMs: damageEvent.timeMs,
+          durationMs: 0,
+          skillId: null,
+        },
+        executionEntry: null,
+        damageEvent,
+        damageElementSource: null,
+        verifiedMechanicsStatus: 'verified-weakness-state-runtime-event',
+      })
+    );
+  }
+
+  return rows.sort(compareVerifiedActionResultEntries);
+}
+
+function createVerifiedActionResultEntry({
+  action,
+  executionEntry,
+  damageEvent,
+  damageElementSource,
+  verifiedMechanicsStatus,
+}) {
+  return createVerifiedResultEntryBase({
+    action,
+    executionEntry,
+    timeMs: damageEvent.timeMs,
+    hitKey: damageEvent.hitKey ?? damageEvent.payload?.hitKey ?? null,
+    hitIndex: damageEvent.hitIndex ?? damageEvent.payload?.hitIndex ?? null,
+    hitSkillId: damageEvent.hitSkillId ?? null,
+    elementId: damageEvent.payload?.elementId ?? null,
+    verifiedMechanicsStatus,
+    hpDamage: createHpDamageResult(action, damageEvent, damageElementSource),
+    toughnessDamage: createToughnessDamageResult(
+      action,
+      damageEvent,
+      damageElementSource
+    ),
+    selfEnergyChange: createVerifiedNotApplicableResult(
+      'self-energy-change',
+      'verified-hit-has-no-owner-resource-event'
+    ),
+    sourceEventTypes: [damageEvent.type],
+  });
+}
+
+function createVerifiedResourceResultEntry({
+  action,
+  executionEntry,
+  resourceEvent,
+  damageElementSource,
+  runtimeSampleContext,
+  verifiedMechanicsStatus,
+}) {
+  const actorId = resourceEvent.actorId ?? action.actorId ?? null;
+  const actorName =
+    resourceEvent.payload?.actorName ??
+    (actorId === action.actorId ? action.actor?.name : null);
+  return {
+    ...createVerifiedResultEntryBase({
+      action,
+      executionEntry,
+      timeMs: resourceEvent.timeMs,
+      hitKey: resourceEvent.hitKey ?? null,
+      hitIndex: resourceEvent.hitIndex ?? null,
+      hitSkillId: resourceEvent.hitSkillId ?? null,
+      elementId: resourceEvent.payload?.elementId ?? null,
+      verifiedMechanicsStatus,
+      hpDamage: createVerifiedNotApplicableResult(
+        'hp-damage',
+        'verified-resource-event-only'
+      ),
+      toughnessDamage: createVerifiedNotApplicableResult(
+        'toughness-damage',
+        'verified-resource-event-only'
+      ),
+      selfEnergyChange: createSelfEnergyChangeResult(
+        action,
+        [resourceEvent],
+        damageElementSource,
+        runtimeSampleContext
+      ),
+      sourceEventTypes: [resourceEvent.type],
+    }),
+    actorId,
+    actorName,
+  };
+}
+
+function createVerifiedEmptyActionResultEntry({
+  action,
+  executionEntry,
+  verifiedMechanicsStatus,
+}) {
+  return createVerifiedResultEntryBase({
+    action,
+    executionEntry,
+    timeMs: action.startMs,
+    hitKey: 'verified-unresolved',
+    hitIndex: null,
+    hitSkillId: null,
+    elementId: null,
+    verifiedMechanicsStatus,
+    hpDamage: createVerifiedNotApplicableResult(
+      'hp-damage',
+      verifiedMechanicsStatus
+    ),
+    toughnessDamage: createVerifiedNotApplicableResult(
+      'toughness-damage',
+      verifiedMechanicsStatus
+    ),
+    selfEnergyChange: createVerifiedNotApplicableResult(
+      'self-energy-change',
+      verifiedMechanicsStatus
+    ),
+    sourceEventTypes: [],
+  });
+}
+
+function createVerifiedResultEntryBase({
+  action,
+  executionEntry,
+  timeMs,
+  hitKey,
+  hitIndex,
+  hitSkillId,
+  elementId,
+  verifiedMechanicsStatus,
+  hpDamage,
+  toughnessDamage,
+  selfEnergyChange,
+  sourceEventTypes,
+}) {
+  return {
+    actionId: action.id,
+    actionType: action.type,
+    actionName: action.name,
+    timeMs,
+    durationMs: action.durationMs,
+    actorId: action.actorId ?? null,
+    actorName: action.actor?.name ?? null,
+    targetId: action.targetId ?? null,
+    targetName: action.target?.name ?? null,
+    skillId: action.skillId ?? null,
+    hitKey,
+    hitIndex,
+    hitSkillId,
+    elementId,
+    executionStatus: executionEntry?.status ?? 'scheduled',
+    readinessStatus: executionEntry?.readinessStatus ?? 'ready',
+    executionPlanEntry: executionEntry,
+    verifiedMechanicsStatus,
+    hpDamage,
+    toughnessDamage,
+    selfEnergyChange,
+    hitCandidateSummary: summarizeActionHitCandidates([], null),
+    hitCandidates: [],
+    sourceEventTypes,
+  };
+}
+
+function createVerifiedNotApplicableResult(kind, status) {
+  return {
+    value: 0,
+    applied: false,
+    status,
+    precision: 'verified-unapplied',
+    confidence: 'verified',
+    formulaBreakdown: createNotApplicableBreakdown({
+      kind,
+      status,
+      reason: 'No verified event for this track at this frame.',
+    }),
+    sourceEvidence: null,
+  };
+}
+
+function compareVerifiedActionResultEntries(left, right) {
+  return (
+    Number(left.timeMs) - Number(right.timeMs) ||
+    String(left.actionId ?? '').localeCompare(String(right.actionId ?? '')) ||
+    Number(left.hitIndex ?? 0) - Number(right.hitIndex ?? 0) ||
+    String(left.hitKey ?? '').localeCompare(String(right.hitKey ?? '')) ||
+    String(left.actorId ?? '').localeCompare(String(right.actorId ?? ''))
+  );
 }
 
 function createActionHitCandidateResult({ action, damageElementSource }) {
@@ -8430,6 +8762,13 @@ function createHpDamageResult(action, damageEvent, damageElementSource) {
     };
   }
 
+  if (damageEvent.payload?.stateEventKind) {
+    return createVerifiedNotApplicableResult(
+      'hp-damage',
+      'verified-toughness-state-event-only'
+    );
+  }
+
   const sourceEvidence = attachFormulaCandidatePreview(
     createDamageElementChainSource(damageElementSource, 'hpDamage'),
     damageEvent.payload
@@ -8451,6 +8790,47 @@ function createHpDamageResult(action, damageEvent, damageElementSource) {
 }
 
 function createToughnessDamageResult(action, damageEvent, damageElementSource) {
+  if (damageEvent?.payload?.verifiedCombat === true) {
+    const value = Number(damageEvent.payload.toughnessDamage) || 0;
+    const sourceIdentity =
+      damageEvent.payload.bindingIdentity ??
+      damageEvent.payload.formulaBreakdown?.sourceIdentity ??
+      null;
+    return {
+      value,
+      applied: true,
+      status: damageEvent.payload.stateEventKind
+        ? 'verified-toughness-state-change-applied'
+        : 'verified-toughness-damage-applied',
+      precision: damageEvent.payload.precision,
+      confidence: damageEvent.payload.confidence,
+      sourceEvidence: {
+        status: 'verified-combat-source-bound',
+        sourceIdentity,
+        elementConfigId: damageEvent.payload.elementId ?? null,
+      },
+      formulaBreakdown: {
+        version: damageEvent.payload.stateEventKind
+          ? 'azpr-verified-toughness-state-v1'
+          : 'azpr-verified-toughness-damage-v1',
+        status: 'verified-combat-formula-applied',
+        expression: damageEvent.payload.stateEventKind
+          ? damageEvent.payload.formulaBreakdown?.expression
+          : 'verified weakness deduction from the same hit transaction',
+        result: value,
+        sourceIdentity,
+        appliedLayerKeys: ['verifiedCombatHit'],
+        unappliedLayerKeys: ['useOneBreak', 'cultivationEffects'],
+        layers: {
+          verifiedCombatHit: {
+            value,
+            applied: true,
+            source: sourceIdentity,
+          },
+        },
+      },
+    };
+  }
   const hasSkillDamage = isSkillAction(action) && Boolean(damageEvent);
   const sourceEvidence = createDamageElementChainSource(
     damageElementSource,
@@ -8547,21 +8927,30 @@ function createSelfEnergyChangeResult(
   );
   const hasCandidateFields =
     sourceEvidence?.status === 'candidate-fields-found';
+  const verifiedResource = energyEvents.some(
+    event => event.payload?.verifiedCombat === true
+  );
 
   return {
     value: explicitDelta,
     applied: hasExplicitDelta,
     status: hasExplicitDelta
-      ? skillAction
-        ? 'explicit-cost-applied-charge-formula-unmapped'
-        : 'explicit-resource-delta-applied'
+      ? verifiedResource
+        ? 'verified-resource-change-applied'
+        : skillAction
+          ? 'explicit-cost-applied-charge-formula-unmapped'
+          : 'explicit-resource-delta-applied'
       : skillAction
         ? hasCandidateFields
           ? 'candidate-fields-found-charge-formula-unmapped'
           : 'charge-formula-unmapped'
         : 'not-applicable',
     resource: energyEvents[0]?.payload.resource ?? 'sp',
-    precision: hasExplicitDelta ? 'explicit-delta' : 'unmapped',
+    precision: hasExplicitDelta
+      ? verifiedResource
+        ? 'verified-q16.16-resource-event'
+        : 'explicit-delta'
+      : 'unmapped',
     confidence: hasExplicitDelta
       ? energyEvents[0].payload.confidence
       : hasCandidateFields
@@ -8570,11 +8959,15 @@ function createSelfEnergyChangeResult(
     sourceEvidence,
     runtimeFormulaProbe: sourceEvidence?.selfEnergyRuntimeFormulaProbe ?? null,
     formulaBreakdown: {
-      version: 'stage5-self-energy-breakdown-placeholder-v1',
+      version: verifiedResource
+        ? 'azpr-verified-self-energy-v1'
+        : 'stage5-self-energy-breakdown-placeholder-v1',
       status: hasExplicitDelta
-        ? skillAction
-          ? 'explicit-cost-applied-charge-formula-unmapped'
-          : 'explicit-resource-delta-applied'
+        ? verifiedResource
+          ? 'verified-resource-change-applied'
+          : skillAction
+            ? 'explicit-cost-applied-charge-formula-unmapped'
+            : 'explicit-resource-delta-applied'
         : skillAction
           ? hasCandidateFields
             ? 'candidate-fields-found-charge-formula-unmapped'
@@ -8585,9 +8978,11 @@ function createSelfEnergyChangeResult(
         : null,
       result: explicitDelta,
       appliedLayerKeys: hasExplicitDelta ? ['explicitResourceDelta'] : [],
-      unappliedLayerKeys: skillAction
-        ? ['actionChargeGain', 'hitEnergyGain', 'passiveEnergyModifiers']
-        : [],
+      unappliedLayerKeys: verifiedResource
+        ? ['cultivationEffects', 'unverifiedCallbacks']
+        : skillAction
+          ? ['actionChargeGain', 'hitEnergyGain', 'passiveEnergyModifiers']
+          : [],
       layers: {
         explicitResourceDelta: {
           label: '显式资源变化',
@@ -8603,6 +8998,12 @@ function createSelfEnergyChangeResult(
             change: event.payload.change,
             reason: event.payload.reason,
             confidence: event.payload.confidence,
+            hitKey: event.hitKey ?? null,
+            hitIndex: event.hitIndex ?? null,
+            hitSkillId: event.hitSkillId ?? null,
+            elementId: event.payload.elementId ?? null,
+            packageId: event.payload.packageId ?? null,
+            sourceIdentity: event.payload.sourceIdentity ?? null,
           })),
         },
         actionChargeGain: {

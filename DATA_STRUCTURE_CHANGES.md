@@ -27560,3 +27560,31 @@ AzPrWorkbenchTimelineFragment v1
 新增非持久化 `workbench-timeline-fragment-instantiation` 结果。输入片段、当前三人固定槽、角色配置、奇波动作目录、目标起点及已有动作/关系 ID；输出新动作、新关系、选中组和兼容问题。只有兼容状态为 `valid`、所有动作均成功重建且关系数量完整时 `committable = true`。角色或奇波身份不匹配、来源动作缺失、目录尚未加载、关系端点损坏或循环关系都不会生成可提交的部分结果。
 
 实例化使用现有 `createWorkbenchActionDraft` 重新构造每个动作，并为动作、手工效果命令和关系分配新 ID。相对帧差、固定槽位和关系 gap 保持不变；`statusGeneration`、目录效果命令、CD/Buff 区间、曲线和日志继续从当前数据目录与 M3 runtime 重建。Workbench 将完整实例化结果作为一个 M4 放置提议处理：轴末或其他确定阻塞整组拒绝，自由模式保持请求起点，辅助模式整组应用建议偏移；提交只写入一次历史快照并沿既有运行时同步链刷新。实例化结果本身不进入项目 schema，成功后的标准动作与关系继续由原五载体保存。
+
+## 438. Verified combat mechanics package v1
+
+新增生成文件 `verified-combat-mechanics-package.json`，`kind = azpr-verified-combat-mechanics-package`、`schemaVersion = 1`。它由 `scripts/sync-verified-combat-mechanics.mjs` 从受控知识库复算器、机器证据、真实等级样例和完整 Battle 资源生成，保存 `packageId / packageVersion / packageHash / region / clientBuild / evidenceDate`、逐文件哈希、18/18 验证结果、已确认 finding、已知缺口、策略、`actionBindings[] / controlBindings[] / ownerProfiles` 与覆盖汇总。生产运行只读取仓库内静态资源，不依赖外部绝对路径。
+
+动作 binding identity 由 `ownerKind + ownerId + sourceSkillId + actionVariantIndex + controlSkillId` 组成；只有动作和 control 链均唯一、命中字段完整时 `applied = true`。当前包包含 619 个候选动作、224 个 applied 动作 binding 和 1763 个 applied hit binding。`ownerProfiles.enemy[]` 另保存 `maxWeakness`、物理/法术/元素倍率、Weakness 最小/最大值、普通恢复延迟/速率、Break/结束时长、Break 承伤倍率和来源 identity，并与 `template_value` 的 201-221 属性交叉校验；208 个 profile 中 204 个 applied，4 个 unresolved。包通过异步静态资源加载并在会话内缓存；包未安装、identity 缺失、control 缺失或输入不完整时返回 `unresolved / unapplied`，不会回退到描述推断或旧 preview 数值。同步器同时生成 `verifiedCombatFormulaRuntime.js`，并由 `audit:verified-combat` 对来源漂移、包内容与 18/18 复算执行发布守门。
+
+## 439. Verified mechanics profile and combat runtime v1
+
+mechanics profile catalog 新增 `azpr-three-value-verified-tc-20260718` v1。新建 Workbench 方案选择 verified profile；旧本地草稿、JSON、分享链接和 PNG 保留其已保存的 profile，导入时不静默改写。verified profile 使用 `source-value-identity` 把运行时已计算的 HP、韧性和角色 SP 写入既有 standard delta，仍由现有 adapter、hit transaction、runtime snapshot、曲线、日志和 summary 消费；不建立平行 UI 结果模型。
+
+新增非持久化 `AzPrVerifiedCombatRuntime` v1：
+
+```text
+packageId / packageHash
+actionResolutionById
+initialState / finalState
+hitEvents[] / resourceEvents[] / kiboResourceEvents[]
+eventLog[] / summary
+```
+
+命中事件保留动作、hit、formula、source identity、帧、before/delta/after 与 trace，并按 verified Q16.16 路线处理普通/失序/真实伤害、数值盾/次数盾、普通削韧、纯 Weakness 和 Break。`weakness-state-tick` 与资源事件都使用 100ms 固定步长；前者生成 `VERIFIED_TOUGHNESS_STATE_CHANGE`，区分普通韧性恢复、Break 线性恢复、结束等待和退出，并以同一来源动作 identity 写入敌人韧性曲线，后者组合前后台自动回能、`recoverSP / petRecoverSP / recoverInterval`、后台分享、动作消耗和 `[0, MAXSP]` 裁剪。随机分支只消费持久化结果。被 execution plan 阻塞的动作、未解析动作或缺输入命中不生成 applied 事件。`AzPrThreeValueRuntimeProjection` 只新增 `verifiedCombatRuntime` 补充输出，既有八曲线、五载体和项目 schemaVersion 不升级。
+
+## 440. Initial runtime state v3 for verified inheritance
+
+`AzPrInitialRuntimeState` 从 v2 升级为 v3。新增 `kiboEnergyBySlot[]`，以 `slotId / actorId / characterId / kiboId / currentValue / maxValue` 保存三个奇波 SP owner；敌人初始状态新增 `inBreak / breakElapsedMs / recoveryDelayRemainingMs / valueShields[] / hitCountShields[] / lastToughnessSourceActionId / lastToughnessSourceActorId`。旧 v1/v2 数据缺少这些字段时按空列表、非 Break 和无来源锚点兼容，不伪造盾或奇波资源。
+
+循环边界现从 verified 资源曲线读取边界前一刻的三条奇波 SP，并与既有三角色 SP、敌人 HP/韧性、Break 已经过时长、普通恢复剩余时间、盾、韧性来源锚点、受控角色和 active effects 一起生成下一周期初始状态；边界事件使用严格“小于边界”语义，避免同帧事件被前后周期重复消费。`curvesByKibo` 在 verified runtime 就绪时改用真实 kibo SP 事件、`semanticResource = kibo-sp` 与 `appliedToCalculators = true`；旧 capture 的 `PetUltimateCdTime` 观测路径继续保留为 tracking-only。项目、草稿、JSON、分享链接和 PNG 仍使用现有 v16 载体结构，无需项目 schema 迁移。

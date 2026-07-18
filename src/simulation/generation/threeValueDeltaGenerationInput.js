@@ -202,6 +202,16 @@ function createAppliedGenerationInputLayer({
         targetId: entry.targetId,
         targetName: entry.targetName,
         skillId: numberOrNull(entry.skillId),
+        ...(entry.hitKey ? { hitKey: entry.hitKey } : {}),
+        ...(entry.hitIndex == null
+          ? {}
+          : { hitIndex: numberOrNull(entry.hitIndex) }),
+        ...(entry.hitSkillId == null
+          ? {}
+          : { hitSkillId: numberOrNull(entry.hitSkillId) }),
+        ...(entry.elementId == null
+          ? {}
+          : { elementConfigId: numberOrNull(entry.elementId) }),
         sequenceIndex: index,
         timeMs: roundTimelineMs(timeMs),
         frameIndex,
