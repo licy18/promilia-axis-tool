@@ -8,7 +8,7 @@ const actor = {
   name: '寒悠悠',
   level: 80,
   initialSp: 0,
-  stats: { maxSp: 1 },
+  stats: { maxSp: 100, spValueUnit: 'absolute-sp-points' },
   loadout: {
     kiboId: 500001,
     equipment: {
@@ -85,12 +85,18 @@ describe('TeamLoadoutPanel', () => {
     const wrapper = mountPanel();
     await wrapper
       .get('[data-testid="workbench-actor-initial-sp-input"]')
-      .setValue('0.5');
+      .setValue('72');
+
+    expect(
+      wrapper
+        .get('[data-testid="workbench-actor-initial-sp-input"]')
+        .attributes()
+    ).toMatchObject({ max: '100', step: '1' });
 
     expect(wrapper.emitted('update-actor-config')?.at(-1)).toEqual([
       {
         characterId: 101003,
-        initialSp: 0.5,
+        initialSp: 72,
       },
     ]);
   });

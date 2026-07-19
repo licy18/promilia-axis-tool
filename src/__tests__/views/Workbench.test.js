@@ -9256,7 +9256,7 @@ describe('Workbench view', () => {
     const savedDraft = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
     );
-    expect(savedDraft).toMatchObject({ schemaVersion: 16 });
+    expect(savedDraft).toMatchObject({ schemaVersion: 17 });
     expect(
       savedDraft.actionDrafts.find(action => action.id === 'action-0002')
     ).toMatchObject({
@@ -9886,12 +9886,12 @@ describe('Workbench view', () => {
     );
     expect(initialSpInput.attributes()).toMatchObject({
       min: '0',
-      max: '1',
-      step: '0.01',
+      max: '100',
+      step: '1',
     });
     teamLoadoutPanel.vm.$emit('update-actor-config', {
       characterId: 109001,
-      initialSp: 0.5,
+      initialSp: 50,
     });
     await nextTick();
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
@@ -9905,7 +9905,7 @@ describe('Workbench view', () => {
       wrapper.find(
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
       ).element.value
-    ).toBe('0.5');
+    ).toBe('50');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
 
     const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
@@ -9922,7 +9922,7 @@ describe('Workbench view', () => {
       actorConfigs: [
         {
           characterId: 109001,
-          initialSp: 0.5,
+          initialSp: 50,
           loadout: {
             kiboId: 500001,
             equipment: {
@@ -9976,7 +9976,7 @@ describe('Workbench view', () => {
       restored.find(
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
       ).element.value
-    ).toBe('0.5');
+    ).toBe('50');
     expect(
       getTimelineLoadoutSlot(restored, 109001, 'kiboId').attributes(
         'data-selected-id'

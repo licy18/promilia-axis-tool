@@ -1,6 +1,6 @@
 export const LONG_AXIS_ACTION_COUNT = 120;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v16';
+  'promilia-axis-tool:workbench-draft:v17';
 
 export function createLongAxisSnapshot({
   level = 1,
@@ -31,7 +31,7 @@ export function createLongAxisSnapshot({
     })
   );
   return {
-    schemaVersion: 16,
+    schemaVersion: 17,
     game: 'azur-promilia',
     type: 'workbench-draft',
     savedAt: '2026-07-10T00:00:00.000Z',

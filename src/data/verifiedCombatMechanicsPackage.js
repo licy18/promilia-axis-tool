@@ -156,6 +156,34 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   if (!Array.isArray(value?.ownerProfiles?.enemy)) {
     issues.push('enemy-profiles-missing');
   }
+  if (
+    value?.spUnitContract?.status !== 'verified-sp-unit-contract-ready' ||
+    value?.spUnitContract?.valueUnit !== 'absolute-sp-points'
+  ) {
+    issues.push('sp-unit-contract-invalid');
+  }
+  if (
+    !Array.isArray(value?.ownerProfiles?.actor) ||
+    value.ownerProfiles.actor.some(
+      profile =>
+        Number(profile.maxSpBase) !== 1 ||
+        Number(profile.maxSpGrowthMultiplier) !== 100 ||
+        Number(profile.effectiveMaxSp) !== 100
+    )
+  ) {
+    issues.push('actor-sp-profiles-invalid');
+  }
+  if (
+    !Array.isArray(value?.ownerProfiles?.kibo) ||
+    value.ownerProfiles.kibo.some(
+      profile =>
+        Number(profile.maxSpBase) !== 1 ||
+        Number(profile.maxSpGrowthMultiplier) !== 100 ||
+        Number(profile.effectiveMaxSp) !== 100
+    )
+  ) {
+    issues.push('kibo-sp-profiles-invalid');
+  }
   return {
     valid: issues.length === 0,
     status: issues.length

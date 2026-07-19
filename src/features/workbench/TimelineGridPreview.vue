@@ -1778,7 +1778,7 @@ function createTimelineActorGroups() {
           slotId: topology.kiboEnergyCurve?.slotId ?? `team-slot-${index + 1}`,
           kiboId: kibo?.id ?? null,
           fallbackInitialValue: 0,
-          fallbackMaxValue: null,
+          fallbackMaxValue: 100,
         }),
       }),
     };

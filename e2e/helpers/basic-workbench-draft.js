@@ -1,9 +1,9 @@
 export const BASIC_WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v16';
+  'promilia-axis-tool:workbench-draft:v17';
 
 export function createBasicWorkbenchDraftFixture() {
   return {
-    schemaVersion: 16,
+    schemaVersion: 17,
     game: 'azur-promilia',
     type: 'workbench-draft',
     savedAt: null,

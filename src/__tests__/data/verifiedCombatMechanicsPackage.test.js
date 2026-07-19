@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import audit from '../../../reports/verified-combat-mechanics-audit.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
   getInstalledVerifiedCombatMechanicsPackage,
@@ -22,6 +23,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
+      packageVersion: 2,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -31,6 +33,19 @@ describe('verified combat mechanics package', () => {
         kiboProfileCount: 122,
         enemyProfileCount: 208,
         appliedEnemyProfileCount: 204,
+      },
+      spUnitContract: {
+        valueUnit: 'absolute-sp-points',
+        actor: {
+          maxSpGrowthTemplateId: 1001001,
+          maxSpGrowthMultiplier: 100,
+        },
+        kibo: {
+          petGrowthBaseId: 5001000,
+          maxSpGrowthTemplateId: 5001001,
+          maxSpGrowthMultiplier: 100,
+        },
+        skillCost: { sourceField: 'spCost', divisor: null },
       },
     });
     expect(mechanicsPackage.packageHash).toMatch(/^[a-f0-9]{64}$/);
@@ -50,6 +65,39 @@ describe('verified combat mechanics package', () => {
       status: 'verified-enemy-break-profile-ready',
       applied: true,
     });
+    expect(spUnitContract).toEqual(mechanicsPackage.spUnitContract);
+    expect(
+      mechanicsPackage.ownerProfiles.actor.find(
+        profile => profile.characterId === 101007
+      )
+    ).toMatchObject({
+      maxSpBase: 1,
+      maxSpGrowthTemplateId: 1001001,
+      maxSpGrowthMultiplier: 100,
+      effectiveMaxSp: 100,
+      maxSp: 100,
+    });
+    expect(
+      mechanicsPackage.ownerProfiles.kibo.find(
+        profile => profile.kiboId === 500469
+      )
+    ).toMatchObject({
+      maxSpBase: 1,
+      maxSpGrowthTemplateId: 5001001,
+      maxSpGrowthMultiplier: 100,
+      effectiveMaxSp: 100,
+      maxSp: 100,
+    });
+    expect(
+      mechanicsPackage.controlBindings.find(
+        binding => binding.controlSkillId === 50046903
+      )?.logic
+    ).toMatchObject({ spCost: 100 });
+    expect(
+      mechanicsPackage.controlBindings.some(binding =>
+        Object.hasOwn(binding.logic, 'spCostPercent')
+      )
+    ).toBe(false);
     expect(audit).toMatchObject({
       status: 'verified-combat-mechanics-sync-audit-ready',
       packageId: mechanicsPackage.packageId,

@@ -256,7 +256,7 @@ function applyVerifiedResourceExecutionBlocks({
     message:
       block.status === 'unresolved'
         ? `${block.actionName} 的已验证资源消耗来源或作用对象不完整`
-        : `${block.actionName} 的已验证资源不足，动作未执行`,
+        : `${block.actionName} 需要 SP ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`,
     source: {
       sourceKind: block.sourceKind,
       sourceStatus: block.reason,

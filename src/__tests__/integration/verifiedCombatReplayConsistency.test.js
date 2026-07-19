@@ -91,6 +91,11 @@ describe('verified combat project replay consistency', () => {
       actorCurveCount: 3,
       kiboCurveCount: 3,
       appliedKiboIds: [500469],
+      spUnitSignature: {
+        actorMaximums: [100, 100, 100],
+        kiboMaximums: [100],
+        heavyCost: [100, -100, 0],
+      },
     });
     expect(signatures[0].damageEventCount).toBeGreaterThan(6);
     expect(signatures[0].stateEventKinds).toEqual(
@@ -149,6 +154,16 @@ function createVerifiedReplayDraft() {
           hp: { currentValue: 8628, maxValue: 8628 },
           toughness: { currentValue: 1, maxValue: 6667 },
         },
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-3',
+            actorId: 'actor-101007',
+            characterId: 101007,
+            kiboId: 500469,
+            currentValue: 100,
+            maxValue: 100,
+          },
+        ],
       },
       runtimeSampleCaptures: [],
       selectedActionId: 'verified-replay-pangpang',
@@ -201,6 +216,28 @@ function createVerifiedReplaySignature(draft) {
       event.payload.toughnessDamage,
     ]),
     finalState: result.verifiedCombatRuntime.finalState,
+    spUnitSignature: {
+      actorMaximums: result.verifiedCombatRuntime.finalState.actorEnergy
+        .map(entry => entry.maxValue)
+        .sort((left, right) => left - right),
+      kiboMaximums: result.verifiedCombatRuntime.finalState.kiboEnergy
+        .map(entry => entry.maxValue)
+        .sort((left, right) => left - right),
+      heavyCost: (() => {
+        const event = result.verifiedCombatRuntime.kiboResourceEvents.find(
+          item =>
+            item.actionId === 'verified-replay-kibo' &&
+            item.payload.reason === 'verified-skill-cost'
+        );
+        return event
+          ? [
+              event.payload.beforeValue,
+              event.payload.change,
+              event.payload.afterValue,
+            ]
+          : null;
+      })(),
+    },
     actorCurveCount: resources.curvesByActor.length,
     kiboCurveCount: resources.curvesByKibo.length,
     actorCurveSignature: resources.curvesByActor.map(curve => [

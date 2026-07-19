@@ -1,4 +1,5 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
 
 export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
@@ -29,7 +30,11 @@ export function createActionRuleDiagnostics({
   const diagnostics = [
     ...createLaneOverlapDiagnostics(actions),
     ...cooldownEvaluation.diagnostics,
-    ...createSkillSpPreconditionDiagnostics(actions, scenario.actors ?? []),
+    ...createSkillSpPreconditionDiagnostics(
+      actions,
+      scenario.actors ?? [],
+      scenario
+    ),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
     item => item.status === ACTION_RULE_STATUSES.VIOLATED
@@ -493,7 +498,13 @@ function compareCooldownCharges(left, right) {
   );
 }
 
-function createSkillSpPreconditionDiagnostics(actions, actors) {
+function createSkillSpPreconditionDiagnostics(actions, actors, scenario) {
+  if (
+    scenario?.mechanicsProfile?.profileId ===
+    VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID
+  ) {
+    return [];
+  }
   const actorById = new Map(actors.map(actor => [actor.id, actor]));
   return actions
     .filter(action => action.type === ACTION_TYPES.SKILL && action.actorId)
@@ -519,14 +530,14 @@ function createSkillSpPreconditionDiagnostics(actions, actors) {
         actorId: action.actorId,
         actorName: actor?.name ?? action.actorId,
         timeMs: action.startMs,
-        requiredSpRaw: requirement.spCost,
+        requiredSp: requirement.spCost,
         actorInitialSp: finiteNumberOrNull(actor?.initialSp),
         actorMaxSp: finiteNumberOrNull(actor?.stats?.maxSp),
         suggestedStartMs: null,
         editFieldKey: '',
-        message: `${action.name} 需要 SP ${requirement.spCost}，与角色 0-1 能量单位的换算待确认`,
+        message: `${action.name} 需要 SP ${requirement.spCost}，当前 ${finiteNumberOrNull(actor?.initialSp) ?? 0}/${finiteNumberOrNull(actor?.stats?.maxSp) ?? '待定'}；当前机制配置未应用该消耗`,
         source: requirement.source,
-        unresolved: ['skill-sp-cost-to-runtime-energy-unit'],
+        unresolved: ['skill-sp-cost-not-applied-by-selected-profile'],
         appliedToSimulationResults: false,
       };
     })

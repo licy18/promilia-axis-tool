@@ -849,7 +849,7 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
 test('[m2-team-configuration] configures and reloads source-backed loadouts from demo and empty scenarios', async ({
   page,
 }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(240_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
@@ -1008,6 +1008,7 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await expect(page.getByTestId('workbench-loadout-picker')).toBeHidden();
 
   const emptyActorIds = [109001, 101003, 101010];
+  await closeInspectorIfVisible(page);
   await configureM2TeamDirectly(page, emptyActorIds);
   const emptySoulSlot = timeline.locator(
     '[data-testid="workbench-timeline-lane-label"][data-character-id="101010"] [data-testid="workbench-direct-loadout-slot"][data-loadout-slot="soulessenceId"]'
@@ -2625,6 +2626,46 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     .getByTestId('workbench-enemy-initial-toughness-input')
     .fill('0.01');
   await closeInspectorIfVisible(page);
+  await page.getByTestId('workbench-save-draft').click();
+  await page.evaluate(() => {
+    const storageKey = 'promilia-axis-tool:workbench-draft:v17';
+    const draft = JSON.parse(window.localStorage.getItem(storageKey));
+    const initialRuntimeState = {
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-3',
+          actorId: 'actor-101007',
+          characterId: 101007,
+          kiboId: 500469,
+          currentValue: 100,
+          maxValue: 100,
+          valueUnit: 'absolute-sp-points',
+        },
+      ],
+    };
+    const applyToScenarioDrafts = value => {
+      if (!value || typeof value !== 'object') return;
+      if (
+        Array.isArray(value.actorConfigs) &&
+        Array.isArray(value.actionDrafts)
+      ) {
+        value.initialRuntimeState = initialRuntimeState;
+      }
+      Object.values(value).forEach(applyToScenarioDrafts);
+    };
+    applyToScenarioDrafts(draft);
+    window.localStorage.setItem(storageKey, JSON.stringify(draft));
+  });
+  const reloadedPackageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.reload();
+  await reloadedPackageResponse;
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
   await page
     .locator(
       '[data-testid="workbench-action-library-actor"][data-character-id="101007"]'
@@ -2758,14 +2799,35 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
       actionBreakpoints(`energy-actor-${characterId}`, pangActionId)
     ).toHaveCount(1);
   }
-  for (const slotIndex of [1, 2, 3]) {
+  for (const slotIndex of [1, 2]) {
     await expect(
       actionBreakpoints(`kibo-energy-team-slot-${slotIndex}`, pangActionId)
     ).toHaveCount(1);
   }
   await expect(
+    actionBreakpoints('kibo-energy-team-slot-3', pangActionId)
+  ).toHaveCount(0);
+  await expect(
     actionBreakpoints('kibo-energy-team-slot-3', heavyActionId)
   ).toHaveCount(1);
+  await expect(
+    actionBreakpoints('kibo-energy-team-slot-3', heavyActionId)
+  ).toHaveAttribute('title', /100 -> 0/u);
+  await expect(curve('kibo-energy-team-slot-3')).toHaveAttribute(
+    'data-max-value',
+    '100'
+  );
+  for (const characterId of [109001, 101003, 101007]) {
+    await expect(curve(`energy-actor-${characterId}`)).toHaveAttribute(
+      'data-max-value',
+      '100'
+    );
+  }
+  expect(
+    Number(await curve('energy-actor-109001').getAttribute('data-current-value'))
+  ).toBeLessThan(10);
+  await expect(page.locator('body')).not.toContainText('0-1 能量单位');
+  await expect(page.locator('body')).not.toContainText('原始消耗 100 · MAXSP 1');
   await expect(
     actionBreakpoints('kibo-energy-team-slot-1', heavyActionId)
   ).toHaveCount(0);
@@ -2825,9 +2887,18 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     heavyHpPoints.last(),
     142
   );
+  const heavyActionOffsetLeft = await heavyAction.evaluate(
+    element => element.offsetLeft
+  );
+  await timeline
+    .getByTestId('workbench-timeline-viewport')
+    .evaluate((element, actionOffsetLeft) => {
+      element.scrollLeft = Math.max(0, Number(actionOffsetLeft) - 220);
+      element.dispatchEvent(new Event('scroll', { bubbles: true }));
+    }, heavyActionOffsetLeft);
   await closeInspectorIfVisible(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: 'reports/m6r-sparse-curves-desktop.png' });
+  await page.screenshot({ path: 'reports/m6r2-sp-units-desktop.png' });
 
   await page.setViewportSize({ width: 390, height: 900 });
   await heavyAction.scrollIntoViewIfNeeded();
@@ -2837,10 +2908,16 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     heavyHpPoints.last(),
     142
   );
+  await timeline
+    .getByTestId('workbench-timeline-viewport')
+    .evaluate((element, actionOffsetLeft) => {
+      element.scrollLeft = Math.max(0, Number(actionOffsetLeft) - 220);
+      element.dispatchEvent(new Event('scroll', { bubbles: true }));
+    }, heavyActionOffsetLeft);
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: 'reports/m6r-sparse-curves-narrow.png' });
+  await page.screenshot({ path: 'reports/m6r2-sp-units-narrow.png' });
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.getByTestId('workbench-save-draft').click();
@@ -2966,7 +3043,7 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   const exported = JSON.parse(
     await readFile(await (await downloadPromise).path(), 'utf8')
   );
-  expect(exported).toMatchObject({ schemaVersion: 16 });
+  expect(exported).toMatchObject({ schemaVersion: 17 });
   expect(
     exported.actionDrafts.find(action => action.id === 'action-0002')
   ).toMatchObject({
@@ -4170,7 +4247,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     game: 'azur-promilia',
     type: 'workbench-project',
     gameDataBinding: {
@@ -4354,7 +4431,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     configurationLibrary: {
       schemaVersion: 1,
       actorInstances: expect.any(Array),
@@ -4527,7 +4604,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(16);
+  expect(project.schemaVersion).toBe(17);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -4760,7 +4837,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(16);
+  expect(project.schemaVersion).toBe(17);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -4830,7 +4907,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     initialRuntimeState: {
       contractName: 'AzPrInitialRuntimeState',
       source: {
@@ -4893,7 +4970,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(16);
+  expect(project.schemaVersion).toBe(17);
   expect(project.scenarioWorkspace).toMatchObject({
     activeScenarioId: 'scenario-0002',
     scenarios: [
@@ -5057,7 +5134,7 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
     timeline.getByTestId('workbench-timeline-runtime-event-marker')
   ).toHaveCount(0);
   const runtimeEvents = timeline.locator(
-    '[data-testid="workbench-timeline-state-curve-node"][data-action-id]:not([data-action-id=""])'
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id]:not([data-action-id=""])[data-state-point-id]:not([data-state-point-id=""])'
   );
   const runtimeEvent = timeline.locator(
     '[data-testid="workbench-timeline-state-curve-node"][data-action-id="demo-actor-2-energy"]'

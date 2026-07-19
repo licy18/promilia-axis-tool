@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSpUnitContract",
+  "status": "verified-sp-unit-contract-ready",
+  "valueUnit": "absolute-sp-points",
+  "minimumSp": 0,
+  "actor": {
+    "level": 1,
+    "maxSpGrowthTemplateId": 1001001,
+    "maxSpGrowthMultiplier": 100,
+    "formula": "effectiveMaxSp = maxSpBase * maxSpGrowthMultiplier",
+    "sourceIdentity": "NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]"
+  },
+  "kibo": {
+    "level": 1,
+    "petGrowthBaseId": 5001000,
+    "maxSpGrowthTemplateId": 5001001,
+    "maxSpGrowthMultiplier": 100,
+    "formula": "effectiveMaxSp = maxSpBase * maxSpGrowthMultiplier",
+    "sourceIdentity": "NewTable/game.rows[title=PETGROW_ID].value=5001000|NewTable/template_value.rows[id=5001001].baseAttribute[6]"
+  },
+  "skillCost": {
+    "sourceField": "spCost",
+    "valueUnit": "absolute-sp-points",
+    "divisor": null,
+    "legacyReadAliases": [
+      "spCostPercent"
+    ]
+  },
+  "recovery": {
+    "valueUnit": "absolute-sp-points",
+    "fixedStepMs": 100,
+    "attributeRatioDivisor": 10000
+  },
+  "legacy": {
+    "normalizedMaximum": 1,
+    "readPolicy": "legacy-normalized-values-scale-to-effective-max-sp",
+    "writePolicy": "absolute-sp-points-only"
+  }
+}

@@ -1832,11 +1832,11 @@ describe('first vertical slice simulation', () => {
           characterId: 109001,
           stats: expect.objectContaining({
             attack: 1920,
-            maxSp: 1,
+            maxSp: 100,
           }),
           energy: expect.objectContaining({
             resource: 'sp',
-            maxValue: 1,
+            maxValue: 100,
             status: 'initial-current-sp-baseline-pending',
           }),
         }),

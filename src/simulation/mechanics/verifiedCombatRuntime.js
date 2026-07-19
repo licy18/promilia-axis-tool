@@ -71,16 +71,18 @@ export function createVerifiedCombatRuntime({
     const resolution = resolveVerifiedCombatActionMechanics(action);
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
-    const costPercent = numberOrNull(
-      resolution.controlBinding?.logic?.spCostPercent
+    const spCost = numberOrNull(
+      resolution.controlBinding?.logic?.spCost ??
+        resolution.controlBinding?.logic?.spCostRaw ??
+        resolution.controlBinding?.logic?.spCostPercent
     );
-    if (costPercent == null || costPercent > 0) {
+    if (spCost == null || spCost > 0) {
       descriptors.push({
         kind: 'action-cost',
         timeMs: action.startMs,
         action,
         resolution,
-        costPercent,
+        spCost,
       });
     }
     for (const hit of resolution.hits) {
@@ -275,17 +277,16 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
           entry.actorId === actor.id ||
           Number(entry.characterId) === Number(actor.characterId)
       );
+      const profile = actorProfileById.get(Number(actor.characterId)) ?? null;
       const max = positiveNumber(
-        inherited?.maxValue ??
-          actor.stats?.maxSp ??
-          actorProfileById.get(Number(actor.characterId))?.maxSp,
-        1
+        profile?.effectiveMaxSp ?? profile?.maxSp ?? actor.stats?.maxSp,
+        100
       );
       return [
         actor.id,
         {
           actor,
-          profile: actorProfileById.get(Number(actor.characterId)) ?? null,
+          profile,
           current: clampNumber(
             inherited?.currentValue ?? actor.initialSp ?? 0,
             0,
@@ -332,6 +333,10 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
     const inherited = scenario?.initialRuntimeState?.kiboEnergyBySlot?.find(
       entry => entry.slotId === slotId && Number(entry.kiboId) === kiboId
     );
+    const max = positiveNumber(
+      profile?.effectiveMaxSp ?? profile?.maxSp,
+      100
+    );
     kiboEnergy.set(slotId, {
       slotId,
       actorId: actor?.id ?? group.actorId ?? null,
@@ -340,9 +345,9 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
       current: clampNumber(
         inherited?.currentValue ?? 0,
         0,
-        profile?.maxSp ?? 1
+        max
       ),
-      max: positiveNumber(profile?.maxSp, 1),
+      max,
     });
   }
   const inheritedEnemy = scenario?.initialRuntimeState?.enemy ?? null;
@@ -638,8 +643,8 @@ function applyActionCostDescriptor({
   resourceEvents,
   kiboResourceEvents,
 }) {
-  const { action, costPercent, resolution } = descriptor;
-  if (costPercent == null) {
+  const { action, spCost, resolution } = descriptor;
+  if (spCost == null) {
     return createResourceExecutionBlock({
       descriptor,
       status: 'unresolved',
@@ -655,7 +660,7 @@ function applyActionCostDescriptor({
         reason: 'verified-kibo-resource-owner-unresolved',
       });
     }
-    const cost = multiplyQ16(kiboState.max, costPercent / 100);
+    const cost = spCost;
     if (kiboState.current + Number.EPSILON < cost) {
       return createResourceExecutionBlock({
         descriptor,
@@ -691,7 +696,7 @@ function applyActionCostDescriptor({
       reason: 'verified-actor-resource-owner-unresolved',
     });
   }
-  const cost = multiplyQ16(actorState.max, costPercent / 100);
+  const cost = spCost;
   if (actorState.current + Number.EPSILON < cost) {
     return createResourceExecutionBlock({
       descriptor,
@@ -1325,6 +1330,7 @@ function createActorResourceEvent({
       verifiedCombat: true,
       actorName: actorName ?? action?.actor?.name ?? null,
       resource: 'sp',
+      valueUnit: 'absolute-sp-points',
       beforeValue,
       change: roundValue(change),
       afterValue,
@@ -1372,6 +1378,7 @@ function createKiboResourceEvent({
     payload: {
       verifiedCombat: true,
       resource: 'kibo-energy',
+      valueUnit: 'absolute-sp-points',
       slotId: kiboState.slotId,
       kiboId: kiboState.kiboId,
       beforeValue,
@@ -1503,6 +1510,7 @@ function createResourceExecutionBlock({
         : roundValue(resourceState.current),
     maxValue:
       resourceState?.max == null ? null : roundValue(resourceState.max),
+    valueUnit: 'absolute-sp-points',
     reason,
     sourceIdentity: resolution.controlBinding?.logic?.sourceIdentity ?? null,
     appliedToCalculators: true,
@@ -1605,6 +1613,7 @@ function createFinalState(state, timeMs = 0) {
       actorId: entry.actor.id,
       currentValue: roundValue(entry.current),
       maxValue: entry.max,
+      valueUnit: 'absolute-sp-points',
     })),
     kiboEnergy: [...state.kiboEnergy.values()].map(entry => ({
       slotId: entry.slotId,
@@ -1612,6 +1621,7 @@ function createFinalState(state, timeMs = 0) {
       kiboId: entry.kiboId,
       currentValue: roundValue(entry.current),
       maxValue: entry.max,
+      valueUnit: 'absolute-sp-points',
     })),
   };
 }

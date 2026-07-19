@@ -7,6 +7,10 @@ import {
   createSkillActionStatusGeneration,
   mergeGeneratedActionStatusEffectCommands,
 } from './actionStatusGeneration';
+import {
+  applyActorSpResourceProfile,
+  createActorSpResourceProfile,
+} from './spUnitContract';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -157,6 +161,9 @@ export function createActorFromCharacter(character, options = {}) {
   }
 
   const actorId = options.actorId ?? `actor-${character.id}`;
+  const spResourceProfile = createActorSpResourceProfile(
+    character.property?.baseAttributes
+  );
 
   return {
     id: actorId,
@@ -166,7 +173,11 @@ export function createActorFromCharacter(character, options = {}) {
     elementId: character.element?.id ?? null,
     role: character.position?.name ?? null,
     propertyId: character.property?.id ?? null,
-    baseAttributes: character.property?.baseAttributes ?? [],
+    baseAttributes: applyActorSpResourceProfile(
+      character.property?.baseAttributes,
+      spResourceProfile
+    ),
+    spResourceProfile,
     attributePanel: character.attributePanel ?? null,
     initialSp:
       options.initialSp == null || options.initialSp === ''

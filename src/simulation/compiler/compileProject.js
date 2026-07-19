@@ -295,7 +295,9 @@ function compileActor(actor, charactersById) {
         'damageReduction',
         0
       ),
-      maxSp: getAttributeValue(actor.baseAttributes, 'MAXSP'),
+      maxSp:
+        actor.spResourceProfile?.effectiveMaxSp ??
+        getAttributeValue(actor.baseAttributes, 'MAXSP'),
       source: actor.attributePanel
         ? 'character-attribute-panel-current-rank'
         : 'baseAttributes',

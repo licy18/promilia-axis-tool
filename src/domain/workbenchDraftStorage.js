@@ -29,11 +29,16 @@ import {
   rememberWorkbenchGameDataCompatibilityReport,
 } from './workbenchGameDataCatalog';
 import { decodeBase64Url, encodeBase64Url } from '../utils/base64Url';
+import {
+  AZPR_DEFAULT_EFFECTIVE_MAX_SP,
+  scaleLegacyNormalizedSpValue,
+} from './spUnitContract';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 16;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 17;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v16';
+  'promilia-axis-tool:workbench-draft:v17';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v16',
   'promilia-axis-tool:workbench-draft:v15',
   'promilia-axis-tool:workbench-draft:v14',
   'promilia-axis-tool:workbench-draft:v13',
@@ -373,10 +378,11 @@ export function parseWorkbenchProjectShareCode(rawCode) {
 }
 
 export function parseWorkbenchProjectFile(rawProject) {
-  const project = parseWorkbenchDraftPayload(rawProject);
-  if (!project || !isSupportedWorkbenchProjectPayload(project)) {
+  const sourceProject = parseWorkbenchDraftPayload(rawProject);
+  if (!sourceProject || !isSupportedWorkbenchProjectPayload(sourceProject)) {
     return null;
   }
+  const project = migrateLegacyWorkbenchSpUnits(sourceProject);
   return createWorkbenchDraftSnapshot(
     project,
     project.savedAt ?? project.exportedAt ?? null
@@ -416,10 +422,11 @@ export function normalizeWorkbenchSegmentSplitOptions(options = {}) {
 }
 
 export function parseWorkbenchDraft(rawDraft) {
-  const draft = parseWorkbenchDraftPayload(rawDraft);
-  if (!draft || !isWorkbenchDraftPayload(draft)) {
+  const sourceDraft = parseWorkbenchDraftPayload(rawDraft);
+  if (!sourceDraft || !isWorkbenchDraftPayload(sourceDraft)) {
     return null;
   }
+  const draft = migrateLegacyWorkbenchSpUnits(sourceDraft);
 
   return createWorkbenchDraftSnapshot(draft, draft.savedAt ?? null);
 }
@@ -434,6 +441,80 @@ function parseWorkbenchDraftPayload(rawDraft) {
   } catch {
     return null;
   }
+}
+
+function migrateLegacyWorkbenchSpUnits(payload) {
+  if (Number(payload?.schemaVersion) >= WORKBENCH_DRAFT_SCHEMA_VERSION) {
+    return payload;
+  }
+  return migrateLegacySpNode(payload);
+}
+
+function migrateLegacySpNode(value) {
+  if (Array.isArray(value)) {
+    return value.map(migrateLegacySpNode);
+  }
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+  const migrated = Object.fromEntries(
+    Object.entries(value).map(([key, child]) => [
+      key,
+      migrateLegacySpNode(child),
+    ])
+  );
+  if (Array.isArray(migrated.actorConfigs)) {
+    migrated.actorConfigs = migrated.actorConfigs.map(
+      migrateLegacyActorConfigSp
+    );
+  }
+  if (migrated.initialRuntimeState) {
+    migrated.initialRuntimeState = migrateLegacyInitialRuntimeSp(
+      migrated.initialRuntimeState
+    );
+  }
+  return migrated;
+}
+
+function migrateLegacyActorConfigSp(config) {
+  if (!config || typeof config !== 'object' || config.initialSp == null) {
+    return config;
+  }
+  return {
+    ...config,
+    initialSp: scaleLegacyNormalizedSpValue(config.initialSp),
+  };
+}
+
+function migrateLegacyInitialRuntimeSp(state) {
+  const migrated = { ...state };
+  if (Array.isArray(state.selfEnergyByActor)) {
+    migrated.selfEnergyByActor = state.selfEnergyByActor.map(entry =>
+      migrateLegacyRuntimeSpEntry(entry)
+    );
+  }
+  if (Array.isArray(state.kiboEnergyBySlot)) {
+    migrated.kiboEnergyBySlot = state.kiboEnergyBySlot.map(entry =>
+      migrateLegacyRuntimeSpEntry(entry)
+    );
+  }
+  return migrated;
+}
+
+function migrateLegacyRuntimeSpEntry(entry) {
+  if (!entry || typeof entry !== 'object') return entry;
+  const legacyNormalized =
+    entry.maxValue == null ||
+    (Number(entry.maxValue) > 0 && Number(entry.maxValue) <= 1);
+  if (!legacyNormalized) return entry;
+  return {
+    ...entry,
+    currentValue: scaleLegacyNormalizedSpValue(
+      entry.currentValue
+    ),
+    maxValue: AZPR_DEFAULT_EFFECTIVE_MAX_SP,
+    valueUnit: 'absolute-sp-points',
+  };
 }
 
 function isWorkbenchDraftPayload(payload) {

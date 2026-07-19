@@ -33,6 +33,14 @@ const PACKAGE_OUTPUT = path.join(
   GENERATED_ROOT,
   'verified-combat-mechanics-package.json'
 );
+const SP_UNIT_CONTRACT_OUTPUT = path.join(
+  GENERATED_ROOT,
+  'verified-sp-unit-contract.json'
+);
+const SP_UNIT_RUNTIME_OUTPUT = path.join(
+  GENERATED_ROOT,
+  'verified-sp-unit-runtime.js'
+);
 const AUDIT_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -65,6 +73,8 @@ const LEVEL_SAMPLE_PATHS = [1, 12].map(level =>
   )
 );
 const TEMPLATE_VALUE_PATH = path.join(NEW_TABLE_ROOT, 'template_value.json');
+const TEMPLATE_HERO_PATH = path.join(NEW_TABLE_ROOT, 'template_hero.json');
+const GAME_PATH = path.join(NEW_TABLE_ROOT, 'game.json');
 const SKILL_LOGIC_PATH = path.join(NEW_TABLE_ROOT, 'skillsub_logic.json');
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
 const options = parseArgs(process.argv.slice(2));
@@ -113,6 +123,11 @@ async function main() {
     })
   );
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
+  const spUnitContract = createSpUnitContract({
+    templateRows,
+    templateHeroRows: readJson(TEMPLATE_HERO_PATH).rows,
+    gameRows: readJson(GAME_PATH).rows,
+  });
   const enemyProfiles = createEnemyProfiles({
     profiles: readJson(ENEMY_BREAK_PROFILES_PATH).profiles,
     templateRows,
@@ -120,10 +135,12 @@ async function main() {
   const kiboProfiles = createKiboProfiles({
     candidates,
     templateRows,
+    spUnitContract,
   });
   const actorProfiles = createActorProfiles({
     characters: seed?.gameData?.characters,
     templateRows,
+    spUnitContract,
   });
   const packageValue = createPackage({
     evidence,
@@ -133,6 +150,7 @@ async function main() {
     kiboProfiles,
     actorProfiles,
     enemyProfiles,
+    spUnitContract,
   });
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
@@ -146,6 +164,11 @@ async function main() {
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
+    [
+      SP_UNIT_CONTRACT_OUTPUT,
+      `${JSON.stringify(spUnitContract, null, 2)}\n`,
+    ],
+    [SP_UNIT_RUNTIME_OUTPUT, createSpUnitRuntimeSource(spUnitContract)],
     [RUNTIME_OUTPUT, runtimeSource],
     [AUDIT_OUTPUT, `${JSON.stringify(audit, null, 2)}\n`],
   ];
@@ -211,6 +234,8 @@ function assertRequiredInputs() {
     path.join(NEW_TABLE_ROOT, 'element_formula.json'),
     path.join(NEW_TABLE_ROOT, 'skillsub_ele_value.json'),
     TEMPLATE_VALUE_PATH,
+    TEMPLATE_HERO_PATH,
+    GAME_PATH,
     SKILL_LOGIC_PATH,
   ]) {
     if (!fs.existsSync(filePath)) {
@@ -595,6 +620,7 @@ function createPackage({
   kiboProfiles,
   actorProfiles,
   enemyProfiles,
+  spUnitContract,
 }) {
   const controlBySkillId = new Map(
     controlBindings.map(binding => [binding.controlSkillId, binding])
@@ -696,6 +722,8 @@ function createPackage({
       path.join(NEW_TABLE_ROOT, 'skillsub_ele_value.json'),
     ],
     ['base-attribute-template-values', TEMPLATE_VALUE_PATH],
+    ['hero-growth-templates', TEMPLATE_HERO_PATH],
+    ['game-constants', GAME_PATH],
     ['skill-logic', SKILL_LOGIC_PATH],
   ].map(([id, filePath]) => ({
     id,
@@ -713,13 +741,14 @@ function createPackage({
       actorProfiles,
       kiboProfiles,
       enemyProfiles,
+      spUnitContract,
     })
   );
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 1,
+    packageVersion: 2,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -742,7 +771,9 @@ function createPackage({
       unresolvedBindingsApplied: false,
       cultivationEffectsApplied: false,
       randomBranchesRequirePersistedRolls: true,
+      spValueUnit: 'absolute-sp-points',
     },
+    spUnitContract,
     actionBindings,
     controlBindings: verifiedControlBindings,
     ownerProfiles: {
@@ -785,7 +816,7 @@ function createControlSkillLogic(row) {
     };
   }
   return {
-    spCostPercent: finiteNumberOrNull(row.spCost),
+    spCost: finiteNumberOrNull(row.spCost),
     cooldownMs: finiteNumberOrNull(row.coolDown),
     cooldownCount: finiteNumberOrNull(row.coolDownCount),
     skillTag: row.skillTag ?? null,
@@ -796,7 +827,7 @@ function createControlSkillLogic(row) {
   };
 }
 
-function createActorProfiles({ characters, templateRows }) {
+function createActorProfiles({ characters, templateRows, spUnitContract }) {
   const rowById = new Map(
     (templateRows ?? []).map(row => [Number(row.id), row])
   );
@@ -808,24 +839,36 @@ function createActorProfiles({ characters, templateRows }) {
       const attributes = parseBaseAttributes(
         rowById.get(characterId)?.baseAttribute
       );
+      const maxSpBase = attributes.get(6) ?? null;
+      const maxSpGrowthMultiplier =
+        spUnitContract.actor.maxSpGrowthMultiplier;
+      const effectiveMaxSp = calculateEffectiveMaxSp(
+        maxSpBase,
+        maxSpGrowthMultiplier
+      );
       return {
         characterId,
-        maxSp: attributes.get(6) ?? null,
+        maxSpBase,
+        maxSpGrowthTemplateId:
+          spUnitContract.actor.maxSpGrowthTemplateId,
+        maxSpGrowthMultiplier,
+        effectiveMaxSp,
+        maxSp: effectiveMaxSp,
         sprSecBasisPoints: attributes.get(110) ?? null,
         sprSecBackBasisPoints: attributes.get(226) ?? null,
         spGetUpBasisPoints: attributes.get(105) ?? null,
         spRetAutoBasisPoints: attributes.get(227) ?? null,
         spGetUpAttackBasisPoints: attributes.get(228) ?? null,
-        sourceIdentity: `NewTable/template_value.rows[id=${characterId}].baseAttribute`,
-        status: attributes.size
+        sourceIdentity: `NewTable/template_value.rows[id=${characterId}].baseAttribute|${spUnitContract.actor.sourceIdentity}`,
+        status: attributes.size && effectiveMaxSp != null
           ? 'verified-actor-resource-profile-ready'
           : 'verified-actor-resource-profile-unresolved',
-        applied: attributes.size > 0,
+        applied: attributes.size > 0 && effectiveMaxSp != null,
       };
     });
 }
 
-function createKiboProfiles({ candidates, templateRows }) {
+function createKiboProfiles({ candidates, templateRows, spUnitContract }) {
   const rowById = new Map(
     (templateRows ?? []).map(row => [Number(row.id), row])
   );
@@ -840,10 +883,22 @@ function createKiboProfiles({ candidates, templateRows }) {
       const attributes = parseBaseAttributes(
         rowById.get(kiboId)?.baseAttribute
       );
+      const maxSpBase = attributes.get(6) ?? null;
+      const maxSpGrowthMultiplier =
+        spUnitContract.kibo.maxSpGrowthMultiplier;
+      const effectiveMaxSp = calculateEffectiveMaxSp(
+        maxSpBase,
+        maxSpGrowthMultiplier
+      );
       return {
         kiboId,
         attack: attributes.get(1) ?? null,
-        maxSp: attributes.get(6) ?? null,
+        maxSpBase,
+        maxSpGrowthTemplateId:
+          spUnitContract.kibo.maxSpGrowthTemplateId,
+        maxSpGrowthMultiplier,
+        effectiveMaxSp,
+        maxSp: effectiveMaxSp,
         sprSecBasisPoints: attributes.get(110) ?? null,
         sprSecBackBasisPoints: attributes.get(226) ?? null,
         spGetUpBasisPoints: attributes.get(105) ?? null,
@@ -852,13 +907,101 @@ function createKiboProfiles({ candidates, templateRows }) {
         criticalRateBasisPoints: attributes.get(7) ?? null,
         criticalDamageBasisPoints: attributes.get(8) ?? null,
         damageUpBasisPoints: attributes.get(21) ?? null,
-        sourceIdentity: `NewTable/template_value.rows[id=${kiboId}].baseAttribute`,
-        status: attributes.size
+        sourceIdentity: `NewTable/template_value.rows[id=${kiboId}].baseAttribute|${spUnitContract.kibo.sourceIdentity}`,
+        status: attributes.size && effectiveMaxSp != null
           ? 'verified-kibo-base-profile-ready'
           : 'verified-kibo-base-profile-unresolved',
-        applied: attributes.size > 0,
+        applied: attributes.size > 0 && effectiveMaxSp != null,
       };
     });
+}
+
+function createSpUnitContract({ templateRows, templateHeroRows, gameRows }) {
+  const templateRowById = new Map(
+    (templateRows ?? []).map(row => [Number(row.id), row])
+  );
+  const actorGrowthRow = (templateHeroRows ?? []).find(
+    row => Number(row.type) === 1 && Number(row.level) === 1
+  );
+  const actorGrowthTemplateId = Number(actorGrowthRow?.baseAttribute);
+  const actorGrowthMultiplier = parseBaseAttributes(
+    templateRowById.get(actorGrowthTemplateId)?.baseAttribute
+  ).get(6);
+  const petGrowthBaseId = Number(
+    (gameRows ?? []).find(row => row.title === 'PETGROW_ID')?.value
+  );
+  const kiboGrowthTemplateId = petGrowthBaseId + 1;
+  const kiboGrowthMultiplier = parseBaseAttributes(
+    templateRowById.get(kiboGrowthTemplateId)?.baseAttribute
+  ).get(6);
+  if (
+    !Number.isInteger(actorGrowthTemplateId) ||
+    !Number.isFinite(actorGrowthMultiplier) ||
+    !Number.isInteger(petGrowthBaseId) ||
+    !Number.isFinite(kiboGrowthMultiplier)
+  ) {
+    throw new Error('verified SP growth source is incomplete');
+  }
+  return {
+    schemaVersion: 1,
+    contractName: 'AzPrSpUnitContract',
+    status: 'verified-sp-unit-contract-ready',
+    valueUnit: 'absolute-sp-points',
+    minimumSp: 0,
+    actor: {
+      level: 1,
+      maxSpGrowthTemplateId: actorGrowthTemplateId,
+      maxSpGrowthMultiplier: actorGrowthMultiplier,
+      formula: 'effectiveMaxSp = maxSpBase * maxSpGrowthMultiplier',
+      sourceIdentity: `NewTable/template_hero.rows[type=1,level=1].baseAttribute=${actorGrowthTemplateId}|NewTable/template_value.rows[id=${actorGrowthTemplateId}].baseAttribute[6]`,
+    },
+    kibo: {
+      level: 1,
+      petGrowthBaseId,
+      maxSpGrowthTemplateId: kiboGrowthTemplateId,
+      maxSpGrowthMultiplier: kiboGrowthMultiplier,
+      formula: 'effectiveMaxSp = maxSpBase * maxSpGrowthMultiplier',
+      sourceIdentity: `NewTable/game.rows[title=PETGROW_ID].value=${petGrowthBaseId}|NewTable/template_value.rows[id=${kiboGrowthTemplateId}].baseAttribute[6]`,
+    },
+    skillCost: {
+      sourceField: 'spCost',
+      valueUnit: 'absolute-sp-points',
+      divisor: null,
+      legacyReadAliases: ['spCostPercent'],
+    },
+    recovery: {
+      valueUnit: 'absolute-sp-points',
+      fixedStepMs: 100,
+      attributeRatioDivisor: 10000,
+    },
+    legacy: {
+      normalizedMaximum: 1,
+      readPolicy: 'legacy-normalized-values-scale-to-effective-max-sp',
+      writePolicy: 'absolute-sp-points-only',
+    },
+  };
+}
+
+function calculateEffectiveMaxSp(maxSpBase, maxSpGrowthMultiplier) {
+  const base = finiteNumberOrNull(maxSpBase);
+  const growth = finiteNumberOrNull(maxSpGrowthMultiplier);
+  return base == null || growth == null ? null : base * growth;
+}
+
+function createSpUnitRuntimeSource(contract) {
+  const values = {
+    SP_VALUE_UNIT: contract.valueUnit,
+    ACTOR_SP_GROWTH_TEMPLATE_ID: contract.actor.maxSpGrowthTemplateId,
+    ACTOR_SP_GROWTH_MULTIPLIER: contract.actor.maxSpGrowthMultiplier,
+    KIBO_SP_GROWTH_BASE_ID: contract.kibo.petGrowthBaseId,
+    KIBO_SP_GROWTH_TEMPLATE_ID: contract.kibo.maxSpGrowthTemplateId,
+    KIBO_SP_GROWTH_MULTIPLIER: contract.kibo.maxSpGrowthMultiplier,
+  };
+  return `// Generated by scripts/sync-verified-combat-mechanics.mjs.\n${Object.entries(
+    values
+  )
+    .map(([name, value]) => `export const ${name}=${JSON.stringify(value)};`)
+    .join('\n')}\n`;
 }
 
 function createEnemyProfiles({ profiles, templateRows }) {

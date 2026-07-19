@@ -2242,7 +2242,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2530,7 +2530,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -4244,7 +4244,7 @@ test('creates an inherited scenario with continued runtime state @workbench-main
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     initialRuntimeState: {
       source: {
         sourceScenarioId: 'scenario-0001',
@@ -4322,7 +4322,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 16,
+    schemaVersion: 17,
     scenarioWorkspace: {
       activeScenarioId: 'scenario-0002',
       scenarios: [
@@ -4701,6 +4701,7 @@ async function seedGeneratedActionBatchDraft(page) {
       segmentCount: 2,
       createdAt: '2026-07-09T00:00:00.000Z',
     };
+    window.localStorage.removeItem('promilia-axis-tool:workbench-draft:v17');
     window.localStorage.removeItem('promilia-axis-tool:workbench-draft:v16');
     window.localStorage.setItem(
       'promilia-axis-tool:workbench-draft:v1',
@@ -4851,6 +4852,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v17') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v16') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v15') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v12') ??

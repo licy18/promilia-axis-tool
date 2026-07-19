@@ -135,7 +135,10 @@ function formatRuleLabel(code) {
   if (code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE) {
     return '技能冷却';
   }
-  if (code === ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED) {
+  if (
+    code === ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED ||
+    code === 'verified-resource-cost-unavailable'
+  ) {
     return 'SP 条件';
   }
   return code;
@@ -144,9 +147,6 @@ function formatRuleLabel(code) {
 function formatRuleSource(item) {
   if (item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE) {
     return `可用时间 ${item.readyAtMs}ms · ${item.source?.fieldPath ?? 'skillsub_logic'}`;
-  }
-  if (item.code === ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED) {
-    return `原始消耗 ${item.requiredSpRaw} · MAXSP ${item.actorMaxSp ?? '待定'}`;
   }
   return `${item.actorName ?? item.actorId} · ${item.range?.durationMs ?? 0}ms`;
 }

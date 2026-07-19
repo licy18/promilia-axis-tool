@@ -685,7 +685,7 @@ P7：蓝原真实机制适配。
 - 新增标准 `AzPrActionRuleDiagnostics` 合同；每条诊断统一包含规则代码、严重级别、状态、来源动作、阻塞动作、时间范围、来源字段和可选建议起始时间。
 - 同角色轨的技能/切人动作发生占用重叠时标记为确定错误；注释、资源标记等非占用事件不会误判为动作冲突。
 - 同角色同技能按 `skillsub_logic.coolDown / cooldownCount` 建立充能队列；可用次数耗尽后再次使用才标记为确定错误，非法施放不会重新开始冷却窗口。
-- `skillsub_logic.spCost > 0` 会进入同一合同，但当前只标记为待确认前置条件；不会把原始 `100` 直接当作角色 0-1 能量曲线的扣减值。
+- `skillsub_logic.spCost > 0` 当时只作为未决前置条件进入合同；M6-R2 后续已由客户端路径确认其单位为绝对 SP 点，原始 `100` 表示需要并扣除 `100/100`。
 - Workbench 新增排轴规则面板，可定位问题动作并把确定冲突移动到建议帧；动作属性和运行结果随现有响应式模拟链刷新。
 - 动作库和 `COOLDOWN_START` 事件统一显示/使用逻辑层冷却；规则诊断固定 `appliedToSimulationResults = false`，不修改三值 calculator 或既有伤害结果。
 
@@ -1570,9 +1570,15 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 
 仓库现有单一受控同步/审计入口，可把知识库复算器、证据、真实样例和完整 Battle 来源生成可发布的 verified 公式包。当前包通过 18/18 向量验证，覆盖 619 个候选动作、224 个 applied 动作绑定和 1763 个 applied hit 绑定；208 个敌人韧性 profile 中 204 个通过原表交叉校验并可应用，4 个保持 unresolved。新建方案默认使用 verified profile，旧载体保留原 profile，来源或输入不完整的动作与敌人不会静默回退到预览计算。
 
-现有 generation、mechanics adapter、hit transaction 与 runtime projection 继续消费同一 verified runtime。M6-R 将属性 227 统一为 `SPRET_AUTO`，按各角色/奇波 owner 读取命中回复属性并按 DamageElement identity 限流；重岩蹄 `50046903` 的奇波能量消耗可在施放帧精确 `1 -> 0`，不足能量会阻止伤害、CD 和效果。HP 与削韧保持知识库 Q16.16 顺序，并分别按自身 max 归一化。
+现有 generation、mechanics adapter、hit transaction 与 runtime projection 继续消费同一 verified runtime。M6-R 将属性 227 统一为 `SPRET_AUTO`，按各角色/奇波 owner 读取命中回复属性并按 DamageElement identity 限流；其最初记录的 `1 -> 0` 消耗结论已由 M6-R2 推翻，最终语义为 `100 -> 0`，不足 `100` 会阻止伤害、CD 和效果。HP 与削韧保持知识库 Q16.16 顺序，并分别按自身 max 归一化。
 
-曲线新增独立显示投影：100ms 自动回能与韧性恢复压缩为斜率边界、回满点和终点，离散变化保留 before/after 阶跃；同一动作密集命中聚合，不同动作保留独立来源。逐 tick 白点、动作下方 Lightning 队列、重复菱形和 glow/filter 已移除。完整 `test:trial-release` 通过 104 个测试文件、578 条测试和 46/46 production preview；总 JavaScript gzip 为 739,113B，低于 740,000B 硬门槛。视觉证据为 `reports/m6r-sparse-curves-desktop.png` 与 `reports/m6r-sparse-curves-narrow.png`。当前停止在 M6-R，等待产品复验，不自动进入 M7。
+曲线新增独立显示投影：100ms 自动回能与韧性恢复压缩为斜率边界、回满点和终点，离散变化保留 before/after 阶跃；同一动作密集命中聚合，不同动作保留独立来源。逐 tick 白点、动作下方 Lightning 队列、重复菱形和 glow/filter 已移除。该结果继续作为 M6-R2 的显示基线。
+
+### M6-R2 SP 单位契约修正已完成，等待产品复验（2026-07-19）
+
+角色与奇波现统一使用 `0..100` 绝对 SP 点：基础 `MAXSP=1` 通过各自成长模板倍率 `100` 得到最终上限，`spCost=100` 不再除以 `100`。自动回复 1 秒为 `0.208282`、30 秒为 `6.248474`；芃芃 `101007012` 单次有效命中回复角色 `1.069992`、奇波 `4.161102`，重岩蹄 `50046903` 满值在施放帧 `100 -> 0`，`99/100` 阻止执行。v1-v16 载体在统一入口迁移，新写出使用 schema v17 和绝对点语义；空奇波槽也显示 `0/100`。
+
+105 个测试文件共 582 条单元/组件/集成测试及 46 条 production preview 已纳入最终守门；总 JavaScript gzip 为 739,933B，Workbench 主块为 354,623B。桌面与窄屏证据为 `reports/m6r2-sp-units-desktop.png` 和 `reports/m6r2-sp-units-narrow.png`。当前停在 M6-R2 等待产品复验，不进入 M7。
 
 ## 10. 文档维护规则
 

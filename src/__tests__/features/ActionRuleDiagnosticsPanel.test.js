@@ -30,9 +30,10 @@ describe('ActionRuleDiagnosticsPanel', () => {
       actionIds: ['action-3'],
       actionName: '星决技',
       actorName: '末音',
-      message: '星决技 SP 单位待确认',
-      requiredSpRaw: 100,
-      actorMaxSp: 1,
+      message: '星决技 需要 SP 100，当前 50/100',
+      requiredSp: 100,
+      actorInitialSp: 50,
+      actorMaxSp: 100,
       suggestedStartMs: null,
     };
     const wrapper = mount(ActionRuleDiagnosticsPanel, {
@@ -74,6 +75,7 @@ describe('ActionRuleDiagnosticsPanel', () => {
     expect(wrapper.emitted('locate-action')?.[0]).toEqual([cooldown]);
     expect(wrapper.emitted('apply-suggested-start')?.[0]).toEqual([cooldown]);
     expect(wrapper.text()).toContain('移至 1020F');
-    expect(wrapper.text()).toContain('原始消耗 100 · MAXSP 1');
+    expect(wrapper.text()).toContain('需要 SP 100，当前 50/100');
+    expect(wrapper.text()).not.toContain('0-1');
   });
 });

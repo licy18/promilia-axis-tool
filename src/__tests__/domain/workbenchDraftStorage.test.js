@@ -666,7 +666,7 @@ describe('workbench draft storage project files', () => {
       profileVersion: 1,
     };
     expect(migrated).toMatchObject({
-      schemaVersion: 16,
+      schemaVersion: 17,
       mechanicsProfileSelection: expectedSelection,
       scenarioWorkspace: {
         scenarios: [
@@ -674,6 +674,80 @@ describe('workbench draft storage project files', () => {
         ],
       },
     });
+  });
+
+  it('migrates v16 normalized actor and kibo SP into absolute points', () => {
+    const project = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      actorConfigs: [
+        { characterId: 109001, initialSp: 0.25 },
+        { characterId: 101003, initialSp: 1 },
+      ],
+      initialRuntimeState: {
+        selfEnergyByActor: [
+          {
+            actorId: 'actor-109001',
+            characterId: 109001,
+            currentValue: 0.4,
+            maxValue: 1,
+          },
+        ],
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-1',
+            kiboId: 500001,
+            currentValue: 0.6,
+            maxValue: 1,
+          },
+        ],
+      },
+      actionDrafts: [],
+      selectedActionId: '',
+    });
+    project.schemaVersion = 16;
+
+    const migrated = parseWorkbenchProjectFile(project);
+
+    expect(migrated).toMatchObject({
+      schemaVersion: 17,
+      actorConfigs: [
+        { characterId: 109001, initialSp: 25 },
+        { characterId: 101003, initialSp: 100 },
+        { characterId: 101007, initialSp: null },
+      ],
+      initialRuntimeState: {
+        selfEnergyByActor: [
+          {
+            actorId: 'actor-109001',
+            currentValue: 40,
+            maxValue: 100,
+            valueUnit: 'sp',
+          },
+        ],
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-1',
+            kiboId: 500001,
+            currentValue: 60,
+            maxValue: 100,
+            valueUnit: 'sp',
+          },
+        ],
+      },
+    });
+    expect(
+      migrated.scenarioWorkspace.scenarios[0].draft.actorConfigs
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ characterId: 109001, initialSp: 25 }),
+        expect.objectContaining({ characterId: 101003, initialSp: 100 }),
+      ])
+    );
   });
 
   it('loads legacy v1 local storage and clears all storage generations', () => {

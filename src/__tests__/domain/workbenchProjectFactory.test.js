@@ -360,11 +360,11 @@ describe('workbench project actor configuration', () => {
       actorConfigs: [
         {
           characterId: DEFAULT_WORKBENCH_SELECTION.characterId,
-          initialSp: 0.25,
+          initialSp: 25,
         },
         {
           characterId: DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
-          initialSp: 0.75,
+          initialSp: 75,
         },
       ],
     });
@@ -372,13 +372,13 @@ describe('workbench project actor configuration', () => {
     const simulation = simulateScenario(scenario);
 
     expect(project.actors.map(actor => actor.initialSp)).toEqual([
-      0.25,
-      0.75,
+      25,
+      75,
       null,
     ]);
     expect(scenario.actors.map(actor => actor.initialSp)).toEqual([
-      0.25,
-      0.75,
+      25,
+      75,
       null,
     ]);
     expect(
@@ -386,14 +386,14 @@ describe('workbench project actor configuration', () => {
     ).toEqual([
       expect.objectContaining({
         actorId: `actor-${DEFAULT_WORKBENCH_SELECTION.characterId}`,
-        initialValue: 0.25,
-        currentValue: 0.25,
+        initialValue: 25,
+        currentValue: 25,
         baselineStatus: 'baseline-derived-from-scenario-actor-self-energy',
       }),
       expect.objectContaining({
         actorId: `actor-${DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId}`,
-        initialValue: 0.75,
-        currentValue: 0.75,
+        initialValue: 75,
+        currentValue: 75,
         baselineStatus: 'baseline-derived-from-scenario-actor-self-energy',
       }),
       expect.objectContaining({
@@ -407,7 +407,7 @@ describe('workbench project actor configuration', () => {
       simulation.threeValueGenerationLayer.deltas.find(delta => delta.applied)
         ?.mechanismContext?.sourceActor?.energy
     ).toMatchObject({
-      initialValue: 0.25,
+      initialValue: 25,
       currentValue: null,
       status: 'initial-sp-project-configured-runtime-current-pending',
     });
@@ -421,7 +421,7 @@ describe('workbench project actor configuration', () => {
       [
         {
           characterId: DEFAULT_WORKBENCH_SELECTION.characterId,
-          initialSp: 9,
+          initialSp: 109,
         },
         {
           characterId: DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
@@ -430,10 +430,30 @@ describe('workbench project actor configuration', () => {
       ],
       DEFAULT_WORKBENCH_SELECTION
     );
-    expect(normalized.map(config => config.initialSp)).toEqual([1, null, null]);
+    expect(normalized.map(config => config.initialSp)).toEqual([
+      100,
+      null,
+      null,
+    ]);
 
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
-    project.actors[0].initialSp = 2;
+    expect(project.actors[0]).toMatchObject({
+      spResourceProfile: {
+        maxSpBase: 1,
+        maxSpGrowthMultiplier: 100,
+        effectiveMaxSp: 100,
+      },
+      baseAttributes: expect.arrayContaining([
+        expect.objectContaining({
+          key: 'MAXSP',
+          value: 100,
+          baseValue: 1,
+          growthMultiplier: 100,
+          valueUnit: 'absolute-sp-points',
+        }),
+      ]),
+    });
+    project.actors[0].initialSp = 101;
     const validation = validateProject(project, getWorkbenchGameData());
     expect(validation.valid).toBe(false);
     expect(validation.errors.map(error => error.code)).toContain(

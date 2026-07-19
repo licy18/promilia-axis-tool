@@ -46,6 +46,7 @@ import {
   mergeGeneratedActionStatusEffectCommands,
   stripGeneratedActionStatusEffectCommands,
 } from './actionStatusGeneration';
+import { resolveActorEffectiveMaxSp } from './spUnitContract';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -1129,10 +1130,7 @@ function normalizeWorkbenchInitialSp(value, character) {
   if (!Number.isFinite(initialSp)) {
     return null;
   }
-  const maxSp = Number(
-    character?.property?.baseAttributes?.find(item => item.key === 'MAXSP')
-      ?.value
-  );
+  const maxSp = resolveActorEffectiveMaxSp(character);
   const normalized = Number.isFinite(maxSp)
     ? Math.min(maxSp, Math.max(0, initialSp))
     : Math.max(0, initialSp);

@@ -6,7 +6,7 @@ import {
 } from '../../simulation/runtime/actionRuleDiagnostics';
 
 describe('action rule diagnostics', () => {
-  it('reports actor-lane overlap, confirmed cooldown violations, and unresolved SP units', () => {
+  it('reports actor-lane overlap, confirmed cooldown violations, and unapplied preview SP costs', () => {
     const scenario = {
       actors: [createActor()],
       actions: [
@@ -79,11 +79,13 @@ describe('action rule diagnostics', () => {
         expect.objectContaining({
           code: ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED,
           actionId: 'action-3',
-          requiredSpRaw: 100,
-          actorInitialSp: 0.5,
-          actorMaxSp: 1,
+          requiredSp: 100,
+          actorInitialSp: 50,
+          actorMaxSp: 100,
           severity: 'warning',
-          unresolved: ['skill-sp-cost-to-runtime-energy-unit'],
+          unresolved: ['skill-sp-cost-not-applied-by-selected-profile'],
+          message:
+            '星决技 需要 SP 100，当前 50/100；当前机制配置未应用该消耗',
         }),
       ])
     );
@@ -286,8 +288,8 @@ function createActor() {
   return {
     id: 'actor-1',
     name: '测试角色',
-    initialSp: 0.5,
-    stats: { maxSp: 1 },
+    initialSp: 50,
+    stats: { maxSp: 100 },
   };
 }
 
