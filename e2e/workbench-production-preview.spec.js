@@ -50,7 +50,8 @@ const M2_LOADOUT_CONFIGS = [
 test.beforeEach(async ({ page }, testInfo) => {
   if (
     testInfo.title.includes('[m1d-demo-milestone]') ||
-    testInfo.title.includes('[m6-verified-combat-workflow]')
+    testInfo.title.includes('[m6-verified-combat-workflow]') ||
+    testInfo.title.includes('[m7-catalog-runtime-workflow]')
   ) {
     return;
   }
@@ -2824,10 +2825,14 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     );
   }
   expect(
-    Number(await curve('energy-actor-109001').getAttribute('data-current-value'))
+    Number(
+      await curve('energy-actor-109001').getAttribute('data-current-value')
+    )
   ).toBeLessThan(10);
   await expect(page.locator('body')).not.toContainText('0-1 能量单位');
-  await expect(page.locator('body')).not.toContainText('原始消耗 100 · MAXSP 1');
+  await expect(page.locator('body')).not.toContainText(
+    '原始消耗 100 · MAXSP 1'
+  );
   await expect(
     actionBreakpoints('kibo-energy-team-slot-1', heavyActionId)
   ).toHaveCount(0);
@@ -2930,6 +2935,154 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   await expect(
     actionBreakpoints('kibo-energy-team-slot-3', heavyActionId)
   ).toHaveCount(1);
+});
+
+test('[m7-catalog-runtime-workflow] runs mapped actor and kibo actions while exposing unresolved catalog entries', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const verifiedPackageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.goto('/#/workbench');
+  await verifiedPackageResponse;
+  await page.getByTestId('workbench-scenario-add').click();
+  await selectM2LoadoutOption(page, 101007, 'kiboId', '500001');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const selectActorLibrary = characterId =>
+    page.locator(
+      `[data-testid="workbench-action-library-actor"][data-character-id="${characterId}"]`
+    );
+  const curveNodesForAction = (laneId, actionId) =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve-node"][data-action-id="${actionId}"]`
+    );
+
+  await selectActorLibrary(101003).click();
+  const unresolvedHanNormal = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100301"][data-action-kind="normal-attack"]'
+  );
+  const hanStar = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
+  );
+  await expect(unresolvedHanNormal).toHaveAttribute(
+    'data-mechanics-classification',
+    'unresolved'
+  );
+  await expect(unresolvedHanNormal).toContainText('三值未完整');
+  await expect(hanStar).toHaveAttribute(
+    'data-mechanics-classification',
+    'applied'
+  );
+  await dragLocatorTo(
+    page,
+    hanStar,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+    ),
+    { targetPosition: { x: 110, y: 82 } }
+  );
+
+  await selectActorLibrary(109001).click();
+  const muyinCharged = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10900101"][data-action-kind="charged-attack"]'
+  );
+  await expect(muyinCharged).toHaveAttribute(
+    'data-mechanics-classification',
+    'applied'
+  );
+  await dragLocatorTo(
+    page,
+    muyinCharged,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]'
+    ),
+    { targetPosition: { x: 310, y: 82 } }
+  );
+
+  await selectActorLibrary(101007).click();
+  const windKiboActive = page.locator(
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500001"][data-skill-id="504004"]'
+  );
+  await expect(windKiboActive).toHaveAttribute(
+    'data-mechanics-classification',
+    'applied'
+  );
+  await dragLocatorTo(
+    page,
+    windKiboActive,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
+    ),
+    { targetPosition: { x: 520, y: 36 } }
+  );
+
+  const hanAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
+  );
+  const muyinAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10900101"]'
+  );
+  const kiboAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="504004"]'
+  );
+  await expect(hanAction).toHaveCount(1);
+  await expect(muyinAction).toHaveCount(1);
+  await expect(kiboAction).toHaveCount(1);
+  const actionIds = {
+    han: await hanAction.getAttribute('data-action-id'),
+    muyin: await muyinAction.getAttribute('data-action-id'),
+    kibo: await kiboAction.getAttribute('data-action-id'),
+  };
+  for (const actionId of Object.values(actionIds))
+    expect(actionId).toBeTruthy();
+  for (const actionId of Object.values(actionIds)) {
+    await expect
+      .poll(() => curveNodesForAction('enemy-hp-curve', actionId).count())
+      .toBeGreaterThan(0);
+    await expect
+      .poll(() =>
+        curveNodesForAction('enemy-toughness-curve', actionId).count()
+      )
+      .toBeGreaterThan(0);
+  }
+
+  const hanNode = curveNodesForAction('enemy-hp-curve', actionIds.han).first();
+  const frameBeforeMove = Number(
+    await hanNode.getAttribute('data-frame-index')
+  );
+  await hanAction.press('ArrowRight');
+  await expect
+    .poll(async () => Number(await hanNode.getAttribute('data-frame-index')))
+    .toBe(frameBeforeMove + 1);
+
+  await closeInspectorIfVisible(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m7-catalog-runtime-desktop.png' });
+  await page.setViewportSize({ width: 390, height: 900 });
+  await kiboAction.scrollIntoViewIfNeeded();
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m7-catalog-runtime-narrow.png' });
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(hanAction).toHaveCount(1);
+  await expect(muyinAction).toHaveCount(1);
+  await expect(kiboAction).toHaveCount(1);
+  for (const actionId of Object.values(actionIds)) {
+    await expect
+      .poll(() => curveNodesForAction('enemy-hp-curve', actionId).count())
+      .toBeGreaterThan(0);
+  }
 });
 
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({

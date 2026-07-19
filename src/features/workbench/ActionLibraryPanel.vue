@@ -178,6 +178,8 @@
           :data-action-kind="entry.kind"
           :data-action-variant-index="entry.actionVariantIndex"
           :data-cooldown-ms="entry.cooldownMs ?? ''"
+          :data-mechanics-classification="entry.mechanicsClassification"
+          :title="entry.mechanicsTooltip"
           data-entry-type="skill"
           data-drag-enabled="true"
           @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
@@ -217,6 +219,8 @@
           :data-skill-id="entry.skillId"
           :data-action-kind="entry.eventType"
           :data-cooldown-ms="entry.cooldownMs ?? ''"
+          :data-mechanics-classification="entry.mechanicsClassification"
+          :title="entry.mechanicsTooltip"
           data-entry-type="kiboEvent"
           data-drag-enabled="true"
           @pointerdown="beginKiboTimelineEntryDrag($event, entry)"
@@ -513,6 +517,7 @@ import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
 import { resolveWorkbenchActionIconUrl } from '../../domain/workbenchActionVisualIdentity';
 import { formatFrameTime, frameToMs, msToFrame } from '../../domain/timebase';
+import { getVerifiedCombatActionMapping } from '../../data/verifiedCombatMechanicsPackage';
 const props = defineProps({
   actor: {
     type: Object,
@@ -561,6 +566,10 @@ const props = defineProps({
   timelineFragments: {
     type: Array,
     default: () => [],
+  },
+  mechanicsRevision: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -613,25 +622,33 @@ const activeKibo = computed(() =>
   )
 );
 
-const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
+const actionEntries = computed(() => {
+  void props.mechanicsRevision;
+  return getSkillActionCatalog(props.skills, 1).map(entry =>
+    annotateMechanicsCoverage(entry, ACTION_TYPES.SKILL)
+  );
+});
 const defaultTimelineSkillEntry = computed(
   () => actionEntries.value[0] ?? null
 );
 const kiboTimelineEntries = computed(() =>
   (activeKibo.value?.actions ?? []).map(action =>
-    createWorkbenchTimelineEntry({
-      type: ACTION_TYPES.KIBO_EVENT,
-      kiboId: activeKibo.value?.id,
-      skillId: action.skillId,
-      icon: action.icon,
-      eventType: action.kind,
-      label: action.name,
-      durationMs: frameToMs(action.durationFrames),
-      cooldownMs: action.cooldownMs,
-      timingSource: 'azpr-unity-skill-control-root',
-      needsTimingData: false,
-      note: 'Skill Control 时长已确认；效果未接入 calculator。',
-    })
+    annotateMechanicsCoverage(
+      createWorkbenchTimelineEntry({
+        type: ACTION_TYPES.KIBO_EVENT,
+        kiboId: activeKibo.value?.id,
+        skillId: action.skillId,
+        icon: action.icon,
+        eventType: action.kind,
+        label: action.name,
+        durationMs: frameToMs(action.durationFrames),
+        cooldownMs: action.cooldownMs,
+        timingSource: 'azpr-unity-skill-control-root',
+        needsTimingData: false,
+        note: 'Skill Control 时长已确认；效果未接入 calculator。',
+      }),
+      ACTION_TYPES.KIBO_EVENT
+    )
   )
 );
 const defaultKiboTimelineEntry = computed(
@@ -991,7 +1008,7 @@ function formatActionEntryMeta(entry) {
     entry.cooldownMs || entry.kind === 'ultimate'
       ? ` / CD ${formatCatalogCooldown(entry.cooldownMs)}`
       : '';
-  return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}${cooldown}`;
+  return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}${cooldown}${formatMechanicsCoverage(entry)}`;
 }
 
 function formatKiboActionMeta(entry) {
@@ -1000,7 +1017,35 @@ function formatKiboActionMeta(entry) {
     active: '主动技',
     break: '合击技',
   };
-  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)} / CD ${formatCatalogCooldown(entry.cooldownMs)}`;
+  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)} / CD ${formatCatalogCooldown(entry.cooldownMs)}${formatMechanicsCoverage(entry)}`;
+}
+
+function annotateMechanicsCoverage(entry, type) {
+  const mapping = getVerifiedCombatActionMapping({
+    type,
+    skillId: entry.skillId,
+    actionVariantIndex: entry.actionVariantIndex ?? 0,
+    kiboId: type === ACTION_TYPES.KIBO_EVENT ? activeKibo.value?.id : null,
+    actor: {
+      characterId: props.actor.characterId,
+      loadout: props.actor.loadout,
+    },
+  });
+  const mechanicsClassification = mapping?.classification ?? 'loading';
+  return {
+    ...entry,
+    mechanicsClassification,
+    mechanicsTooltip:
+      mechanicsClassification === 'unresolved'
+        ? `三值未完整：${mapping.reasons.join('、')}`
+        : null,
+  };
+}
+
+function formatMechanicsCoverage(entry) {
+  if (entry.mechanicsClassification === 'unresolved') return ' / 三值未完整';
+  if (entry.mechanicsClassification === 'verified-zero') return ' / 三值无变化';
+  return '';
 }
 
 function formatCatalogCooldown(value) {

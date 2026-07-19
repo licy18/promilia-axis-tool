@@ -109,6 +109,72 @@ describe('verified combat project replay consistency', () => {
       expect(signature).toEqual(signatures[0]);
     }
   });
+
+  it('preserves cross-catalog actor, action-kind, and kibo bindings across all project carriers', async () => {
+    const source = createCrossCatalogReplayDraft();
+    const duplicated = duplicateWorkbenchScenario(
+      source.scenarioWorkspace,
+      source.scenarioWorkspace.activeScenarioId,
+      source
+    );
+    const storage = createMemoryStorage();
+    saveWorkbenchDraft(storage, source);
+    const local = loadWorkbenchDraft(storage);
+    const json = parseWorkbenchProjectFile(
+      serializeWorkbenchProjectFile(source, EXPORTED_AT)
+    );
+    const share = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(source, EXPORTED_AT)
+    );
+    const png = await embedWorkbenchProjectInPng(
+      new Uint8Array(Buffer.from(ONE_PIXEL_PNG_BASE64, 'base64')),
+      createWorkbenchProjectPngMetadata(source, EXPORTED_AT)
+    );
+    const pngDraft = await parseWorkbenchProjectPng(png);
+    const signatures = [
+      createVerifiedReplaySignature(duplicated.scenario.draft),
+      createVerifiedReplaySignature(local),
+      createVerifiedReplaySignature(json),
+      createVerifiedReplaySignature(share),
+      createVerifiedReplaySignature(pngDraft),
+    ];
+
+    expect(signatures[0].bindingIdentities).toEqual([
+      'actor|101003|10100312|0|10100312',
+      'actor|109001|10900101|1|10900110',
+      'kibo|500001|504004|0|504004',
+    ]);
+    expect(
+      Object.fromEntries(
+        [
+          'verified-replay-han-star',
+          'verified-replay-muyin-charged',
+          'verified-replay-wind-kibo',
+        ].map(actionId => [
+          actionId,
+          signatures[0].damageSignature.filter(event => event[0] === actionId)
+            .length,
+        ])
+      )
+    ).toEqual({
+      'verified-replay-han-star': 7,
+      'verified-replay-muyin-charged': 3,
+      'verified-replay-wind-kibo': 6,
+    });
+    expect(signatures[0]).toMatchObject({
+      actorCurveCount: 3,
+      kiboCurveCount: 3,
+      appliedKiboIds: [500001],
+      topology: {
+        actorActionLaneCount: 3,
+        kiboLaneCount: 3,
+        stateCurveCount: 8,
+      },
+    });
+    for (const signature of signatures.slice(1)) {
+      expect(signature).toEqual(signatures[0]);
+    }
+  });
 });
 
 function createVerifiedReplayDraft() {
@@ -167,6 +233,77 @@ function createVerifiedReplayDraft() {
       },
       runtimeSampleCaptures: [],
       selectedActionId: 'verified-replay-pangpang',
+    },
+    EXPORTED_AT
+  );
+}
+
+function createCrossCatalogReplayDraft() {
+  const base = createDefaultWorkbenchDraftState();
+  const actorConfigs = base.actorConfigs.map(config => ({
+    ...config,
+    initialSp: 0,
+    loadout:
+      Number(config.characterId) === 101007
+        ? { ...config.loadout, kiboId: 500001 }
+        : config.loadout,
+  }));
+  return createWorkbenchDraftSnapshot(
+    {
+      ...base,
+      actorConfigs,
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+      actionDrafts: [
+        createWorkbenchActionDraft({
+          id: 'verified-replay-han-star',
+          type: 'skill',
+          actorCharacterId: 101003,
+          skillId: 10100312,
+          actionVariantIndex: 0,
+          startMs: 0,
+          durationMs: 1400,
+        }),
+        createWorkbenchActionDraft({
+          id: 'verified-replay-muyin-charged',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900101,
+          actionVariantIndex: 1,
+          startMs: 1800,
+          durationMs: 1000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'verified-replay-wind-kibo',
+          type: 'kiboEvent',
+          actorCharacterId: 101007,
+          skillId: 504004,
+          kiboId: 500001,
+          actionVariantIndex: 0,
+          startMs: 3200,
+          durationMs: 3000,
+          eventType: 'active',
+        }),
+      ],
+      initialRuntimeState: {
+        enemy: {
+          enemyId: String(base.selection.enemyId),
+          hp: { currentValue: 8628, maxValue: 8628 },
+          toughness: { currentValue: 6667, maxValue: 6667 },
+        },
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-3',
+            actorId: 'actor-101007',
+            characterId: 101007,
+            kiboId: 500001,
+            currentValue: 0,
+            maxValue: 100,
+          },
+        ],
+      },
+      runtimeSampleCaptures: [],
+      selectedActionId: 'verified-replay-han-star',
     },
     EXPORTED_AT
   );

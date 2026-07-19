@@ -1580,6 +1580,12 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 
 105 个测试文件共 582 条单元/组件/集成测试及 46 条 production preview 已纳入最终守门；总 JavaScript gzip 为 739,933B，Workbench 主块为 354,623B。桌面与窄屏证据为 `reports/m6r2-sp-units-desktop.png` 和 `reports/m6r2-sp-units-narrow.png`。当前停在 M6-R2 等待产品复验，不进入 M7。
 
+### M7 全角色、全技能三值映射与运行时覆盖已完成，等待产品验收（2026-07-19）
+
+当前客户端 20 个角色、122 个奇波的 562 个顶层公开动作已全部进入可审计分类：318 个可运行，244 个因投射物命中时点、触发帧、control variant 或基础函数输入不足保持 `unresolved`，没有把缺源写成零。生成包审计 1,174 个来源命中节点并发布 1,028 个完整动作命中绑定；667 个非零回能元素全部关联或进入结构化 unresolved 报告。通用 verified runtime 已按选定 control/subskill 驱动八条曲线，寒悠悠星鸣技、末音重击和 500001 奇波主动技的逐段 HP、韧性及共享回能通过跨 owner 精确断言，五种项目载体恢复同一结果；动作库会明确标出未完整项及原因。
+
+完整 `test:trial-release` 通过 105 个测试文件、586 条测试和 47/47 production preview，所有生产数据、来源与映射审计通过。总 JavaScript gzip 为 739,564B，Workbench 主块为 365,560B；视觉证据为 `reports/m7-catalog-runtime-desktop.png` 与 `reports/m7-catalog-runtime-narrow.png`。当前停在 M7 等待产品验收，不自动进入下一里程碑。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

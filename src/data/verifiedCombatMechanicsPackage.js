@@ -5,7 +5,6 @@ const packageUrl = new URL(
 
 let installedPackage = null;
 let packagePromise = null;
-let actionBindingByIdentity = new Map();
 let controlBindingBySkillId = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
@@ -37,9 +36,6 @@ export function installVerifiedCombatMechanicsPackage(value) {
     );
   }
   installedPackage = value;
-  actionBindingByIdentity = new Map(
-    value.actionBindings.map(binding => [binding.identity, binding])
-  );
   controlBindingBySkillId = new Map(
     value.controlBindings.map(binding => [binding.controlSkillId, binding])
   );
@@ -50,10 +46,15 @@ export function getInstalledVerifiedCombatMechanicsPackage() {
   return installedPackage;
 }
 
+export function getVerifiedCombatActionMapping(action = {}) {
+  if (!installedPackage) return null;
+  const candidates = findActionMappings(action);
+  return candidates.length === 1 ? candidates[0] : null;
+}
+
 export function clearInstalledVerifiedCombatMechanicsPackage() {
   installedPackage = null;
   packagePromise = null;
-  actionBindingByIdentity = new Map();
   controlBindingBySkillId = new Map();
 }
 
@@ -65,18 +66,7 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     );
   }
   const owner = resolveActionOwner(action);
-  const identity = createVerifiedCombatActionBindingIdentity({
-    ownerKind: owner.kind,
-    ownerId: owner.id,
-    sourceSkillId: action.skillId,
-    actionVariantIndex:
-      action.actionVariantIndex ?? action.damageSegmentIndex ?? 0,
-    controlSkillId: null,
-  });
-  const prefix = identity.slice(0, identity.lastIndexOf('|') + 1);
-  const candidates = installedPackage.actionBindings.filter(binding =>
-    binding.identity.startsWith(prefix)
-  );
+  const candidates = findActionMappings(action, owner);
   if (candidates.length !== 1) {
     return createUnresolvedActionMechanics(
       action,
@@ -86,11 +76,55 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
       { owner, candidateCount: candidates.length }
     );
   }
-  const actionBinding = actionBindingByIdentity.get(candidates[0].identity);
+  const actionMapping = candidates[0];
+  if (actionMapping?.classification !== 'applied') {
+    const partialControlBinding = controlBindingBySkillId.get(
+      actionMapping?.controlSkillId
+    );
+    if (
+      actionMapping?.selectedSubSkillIndex != null &&
+      Number(partialControlBinding?.logic?.spCost) > 0
+    ) {
+      return {
+        schemaVersion: 1,
+        sourceKind: 'azpr-verified-combat-action-mechanics-resolution',
+        status: 'verified-combat-action-mechanics-resource-only',
+        packageId: installedPackage.packageId,
+        packageHash: installedPackage.packageHash,
+        owner,
+        actionBinding: actionMapping,
+        controlBinding: partialControlBinding,
+        hits: [],
+        reasons: actionMapping.reasons ?? [],
+        complete: false,
+        ready: true,
+        applied: true,
+      };
+    }
+    return createUnresolvedActionMechanics(
+      action,
+      `verified-action-binding-${actionMapping?.classification ?? 'missing'}`,
+      {
+        owner,
+        reasons: actionMapping?.reasons ?? [],
+      }
+    );
+  }
+  const actionBinding = actionMapping;
   const controlBinding = controlBindingBySkillId.get(
     actionBinding.controlSkillId
   );
-  if (!controlBinding?.applied || !controlBinding.hits?.length) {
+  const selectedHitIdentities = new Set(
+    actionMapping.selectedHitIdentities ?? []
+  );
+  const hits = (controlBinding?.hits ?? []).filter(
+    hit =>
+      hit.mapIndex === actionBinding.selectedSubSkillIndex &&
+      (!selectedHitIdentities.size ||
+        selectedHitIdentities.has(hit.hitIdentity))
+  );
+  const hasAppliedCost = Number(controlBinding?.logic?.spCost) > 0;
+  if (!controlBinding || (!hits.length && !hasAppliedCost)) {
     return createUnresolvedActionMechanics(
       action,
       'verified-control-binding-missing',
@@ -106,7 +140,8 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     owner,
     actionBinding,
     controlBinding,
-    hits: controlBinding.hits,
+    hits,
+    complete: true,
     ready: true,
     applied: true,
   };
@@ -149,6 +184,18 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   }
   if (!Array.isArray(value?.actionBindings)) {
     issues.push('action-bindings-missing');
+  }
+  if (
+    !Array.isArray(value?.actionMappings) ||
+    value.actionMappings.length !== value?.summary?.candidateActionCount ||
+    value.actionMappings.some(
+      mapping =>
+        !['applied', 'verified-zero', 'unresolved'].includes(
+          mapping.classification
+        )
+    )
+  ) {
+    issues.push('action-mappings-invalid');
   }
   if (!Array.isArray(value?.controlBindings)) {
     issues.push('control-bindings-missing');
@@ -203,6 +250,21 @@ function resolveActionOwner(action) {
     kind: 'actor',
     id: Number.isInteger(characterId) && characterId > 0 ? characterId : null,
   };
+}
+
+function findActionMappings(action, owner = resolveActionOwner(action)) {
+  const identity = createVerifiedCombatActionBindingIdentity({
+    ownerKind: owner.kind,
+    ownerId: owner.id,
+    sourceSkillId: action.skillId,
+    actionVariantIndex:
+      action.actionVariantIndex ?? action.damageSegmentIndex ?? 0,
+    controlSkillId: null,
+  });
+  const prefix = identity.slice(0, identity.lastIndexOf('|') + 1);
+  return installedPackage.actionMappings.filter(mapping =>
+    mapping.identity.startsWith(prefix)
+  );
 }
 
 function createUnresolvedActionMechanics(action, reason, extra = {}) {

@@ -32,19 +32,6 @@ export default defineConfig({
             return 'workbench-project-tools';
           }
           if (
-            id.endsWith('/threeValueMechanicsProfile.js') ||
-            id.endsWith('/threeValueMechanicsAdapter.js') ||
-            id.endsWith('/threeValueAppliedSourceBinding.js') ||
-            id.endsWith('/threeValueHpOperandSourceBinding.js') ||
-            id.endsWith('/threeValueMechanicsLayerInputs.js') ||
-            id.endsWith('/threeValueMechanismConfiguration.js') ||
-            id.endsWith('/threeValueMechanicsProfileCatalog.js') ||
-            id.endsWith('/workbenchConfigurationSourceContract.js') ||
-            id.endsWith('/workbenchMechanicsProfileSelection.js')
-          ) {
-            return 'azpr-mechanics-runtime';
-          }
-          if (
             [
               'ActionRuleDiagnosticsPanel.vue',
               'AnalysisPanel.vue',

@@ -41,10 +41,21 @@ const SP_UNIT_RUNTIME_OUTPUT = path.join(
   GENERATED_ROOT,
   'verified-sp-unit-runtime.js'
 );
+const CHARACTER_CATALOG_PATH = path.join(GENERATED_ROOT, 'characters.json');
 const AUDIT_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
   'verified-combat-mechanics-audit.json'
+);
+const ACTION_COVERAGE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-combat-action-coverage.json'
+);
+const ACTION_COVERAGE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-combat-action-coverage.md'
 );
 const CALCULATOR_PATH = path.join(
   FORMULA_ROOT,
@@ -76,7 +87,18 @@ const TEMPLATE_VALUE_PATH = path.join(NEW_TABLE_ROOT, 'template_value.json');
 const TEMPLATE_HERO_PATH = path.join(NEW_TABLE_ROOT, 'template_hero.json');
 const GAME_PATH = path.join(NEW_TABLE_ROOT, 'game.json');
 const SKILL_LOGIC_PATH = path.join(NEW_TABLE_ROOT, 'skillsub_logic.json');
+const PET_PATH = path.join(NEW_TABLE_ROOT, 'pet.json');
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
+const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
+  'charged-attack': ['ground', 2],
+  'star-skill': ['ground', 3],
+  ultimate: ['ground', 4],
+  'dodge-attack': ['ground', 204],
+  'plunging-attack': ['aerial', 301],
+  'limit-counter': ['ground', 207],
+  'star-combo': ['ground', 208],
+  'perfect-parry': ['ground', 209],
+});
 const options = parseArgs(process.argv.slice(2));
 
 await main();
@@ -90,7 +112,13 @@ async function main() {
   const kiboCatalog = readJson(
     path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json')
   );
-  const candidates = createActionCandidates(seed, kiboCatalog, evidence);
+  const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
+  const candidates = createActionCandidates({
+    seed,
+    kiboCatalog,
+    characterCatalog,
+    petRows: readJson(PET_PATH).rows,
+  });
   const controlIds = new Set([
     ...candidates.map(candidate => candidate.controlSkillId),
     ...(evidence.samples ?? []).map(sample => Number(sample.skillId)),
@@ -100,9 +128,17 @@ async function main() {
     .map(findSkillControl)
     .filter(Boolean);
   const wantedPathIds = new Set(
-    controls.flatMap(control => control.elementRefs.map(ref => ref.pathId))
+    controls
+      .flatMap(control => control.elementRefs.map(ref => ref.pathId))
+      .filter(Boolean)
   );
-  const indexedElements = await loadElementsByPathId(wantedPathIds);
+  const wantedElementIds = new Set(
+    controls
+      .flatMap(control => control.elementRefs.map(ref => ref.elementIdHint))
+      .filter(Number.isInteger)
+  );
+  const { indexedElements, indexedElementsById, nonzeroRecoveryElements } =
+    await loadElementIndex(wantedPathIds, wantedElementIds);
   const formulas = new Map(
     readJson(path.join(NEW_TABLE_ROOT, 'element_formula.json')).rows.map(
       row => [Number(row.id), row.functionOutput ?? null]
@@ -115,6 +151,7 @@ async function main() {
     createControlBinding({
       control,
       indexedElements,
+      indexedElementsById,
       formulas,
       overridesBySkillAndElement,
       skillLogicById: new Map(
@@ -161,16 +198,20 @@ async function main() {
     evidence,
     validation,
   });
+  const coverage = createActionCoverageReport({
+    packageValue,
+    controlBindings,
+    nonzeroRecoveryElements,
+  });
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
-    [
-      SP_UNIT_CONTRACT_OUTPUT,
-      `${JSON.stringify(spUnitContract, null, 2)}\n`,
-    ],
+    [SP_UNIT_CONTRACT_OUTPUT, `${JSON.stringify(spUnitContract, null, 2)}\n`],
     [SP_UNIT_RUNTIME_OUTPUT, createSpUnitRuntimeSource(spUnitContract)],
     [RUNTIME_OUTPUT, runtimeSource],
     [AUDIT_OUTPUT, `${JSON.stringify(audit, null, 2)}\n`],
+    [ACTION_COVERAGE_JSON_OUTPUT, `${JSON.stringify(coverage, null, 2)}\n`],
+    [ACTION_COVERAGE_MARKDOWN_OUTPUT, createActionCoverageMarkdown(coverage)],
   ];
   const drift = outputs.filter(([filePath, content]) =>
     fs.existsSync(filePath) ? readText(filePath) !== content : true
@@ -201,8 +242,9 @@ async function main() {
         controlCount: controls.length,
         appliedActionBindingCount: packageValue.actionBindings.length,
         appliedHitBindingCount: packageValue.summary.appliedHitBindingCount,
-        appliedEnemyProfileCount:
-          packageValue.summary.appliedEnemyProfileCount,
+        unresolvedActionCount: packageValue.summary.unresolvedActionCount,
+        verifiedZeroActionCount: packageValue.summary.verifiedZeroActionCount,
+        appliedEnemyProfileCount: packageValue.summary.appliedEnemyProfileCount,
         validatorPassed: validation.passed,
         outputs: outputs.map(([filePath]) => relativePath(filePath)),
       },
@@ -237,6 +279,8 @@ function assertRequiredInputs() {
     TEMPLATE_HERO_PATH,
     GAME_PATH,
     SKILL_LOGIC_PATH,
+    PET_PATH,
+    CHARACTER_CATALOG_PATH,
   ]) {
     if (!fs.existsSync(filePath)) {
       throw new Error(`required verified combat input missing: ${filePath}`);
@@ -276,68 +320,94 @@ function validateEvidence(evidence, validation) {
   }
 }
 
-function createActionCandidates(seed, kiboCatalog, evidence) {
+function createActionCandidates({
+  seed,
+  kiboCatalog,
+  characterCatalog,
+  petRows,
+}) {
   const candidates = [];
   const publicSkills = seed?.gameData?.skills ?? [];
-  for (const skill of publicSkills) {
-    const labels = skill?.level?.labels ?? [];
-    const actionVariants = labels
-      .map((label, actionVariantIndex) => ({
-        actionVariantIndex,
-        label,
-        actionKind: inferActionKind(label, skill.displayName),
-      }))
-      .filter(variant => variant.actionKind !== 'skill-action');
-    for (const variant of actionVariants) {
+  const skillsByCharacterId = groupBy(publicSkills, skill =>
+    Number(skill.characterId)
+  );
+  for (const character of characterCatalog?.items ?? []) {
+    const entries = [];
+    for (const skill of skillsByCharacterId.get(Number(character.id)) ?? []) {
+      for (const [actionVariantIndex, label] of (
+        skill?.level?.labels ?? []
+      ).entries()) {
+        const actionKind = inferPublicActionKind(label, skill);
+        if (!actionKind) continue;
+        entries.push({
+          skill,
+          actionVariantIndex,
+          label,
+          actionKind,
+          score: scorePublicActionVariant(label, actionKind),
+        });
+      }
+    }
+    const selectedByKind = new Map();
+    for (const entry of entries) {
+      const current = selectedByKind.get(entry.actionKind);
+      if (!current || entry.score > current.score) {
+        selectedByKind.set(entry.actionKind, entry);
+      }
+    }
+    for (const variant of selectedByKind.values()) {
+      const skill = variant.skill;
+      const control = resolveActorControl(character, variant);
       candidates.push({
         ownerKind: 'actor',
-        ownerId: Number(skill.characterId),
-        ownerName: skill.characterName ?? null,
+        ownerId: Number(character.id),
+        ownerName: character.name ?? skill.characterName ?? null,
         sourceSkillId: Number(skill.id),
         sourceSkillName: skill.name ?? skill.displayName ?? null,
         actionVariantIndex: variant.actionVariantIndex,
         actionVariantLabel: variant.label ?? null,
         actionKind: variant.actionKind,
-        controlSkillId: Number(skill.id),
-        bindingKind: 'direct-public-skill-control',
-        bindingEligible: actionVariants.length === 1,
+        publicVariants: collectRelatedPublicVariants(skill, variant.actionKind),
+        controlSkillId: control.controlSkillId,
+        bindingKind: control.bindingKind,
+        bindingSourceIdentity: control.sourceIdentity,
+        bindingEligible: Number.isInteger(control.controlSkillId),
       });
     }
   }
+  const kiboNameById = new Map(
+    (seed?.gameData?.kibos ?? []).map(item => [Number(item.id), item.name])
+  );
+  const petRowById = new Map((petRows ?? []).map(row => [Number(row.id), row]));
   for (const item of kiboCatalog?.items ?? []) {
     for (const action of item.actions ?? []) {
+      const variantSource = resolveKiboControlVariantSource(
+        petRowById.get(Number(item.kiboId)),
+        action
+      );
       candidates.push({
         ownerKind: 'kibo',
         ownerId: Number(item.kiboId),
-        ownerName: item.name ?? null,
+        ownerName: kiboNameById.get(Number(item.kiboId)) ?? null,
         sourceSkillId: Number(action.skillId),
         sourceSkillName: action.name ?? null,
         actionVariantIndex: 0,
         actionVariantLabel: action.name ?? null,
         actionKind: action.kind ?? 'kibo-action',
+        publicVariants: [
+          {
+            index: 0,
+            label: action.name ?? null,
+            sourceIdentity: `workbench-kibo-action-catalog.items[kiboId=${item.kiboId}].actions[skillId=${action.skillId}]`,
+          },
+        ],
         controlSkillId: Number(action.skillId),
         bindingKind: 'direct-kibo-skill-control',
+        bindingSourceIdentity: `workbench-kibo-action-catalog.items[kiboId=${item.kiboId}].actions[skillId=${action.skillId}].skillId`,
+        controlVariantSkillLevel: variantSource.skillLevel,
+        controlVariantSourceIdentity: variantSource.sourceIdentity,
         bindingEligible: true,
       });
-    }
-  }
-
-  for (const sample of evidence.samples ?? []) {
-    if (sample.damageElementId == null) {
-      continue;
-    }
-    const aliases = candidates.filter(
-      candidate =>
-        candidate.ownerKind === 'actor' &&
-        normalizeText(candidate.ownerName) === normalizeText(sample.owner) &&
-        normalizeText(candidate.sourceSkillName) ===
-          normalizeText(sample.skillName) &&
-        candidate.actionKind === 'normal-attack'
-    );
-    if (aliases.length === 1) {
-      aliases[0].controlSkillId = Number(sample.skillId);
-      aliases[0].bindingKind = 'verified-evidence-owner-name-alias';
-      aliases[0].bindingEligible = true;
     }
   }
 
@@ -356,6 +426,140 @@ function createActionCandidates(seed, kiboCatalog, evidence) {
         candidate.controlSkillId,
       ].join('|')
   );
+}
+
+function resolveKiboControlVariantSource(petRow, action) {
+  const fieldByKind = {
+    signature: 'signatureSkillList',
+    active: 'skillList',
+    break: 'breakSkillList',
+  };
+  const field = fieldByKind[action.kind];
+  const entries = parseKiboSkillEntries(petRow?.[field]);
+  const matches = entries.filter(
+    entry => Number(entry.skillId) === Number(action.skillId)
+  );
+  const selected = action.kind === 'active' ? matches.at(-1) : matches.at(0);
+  return {
+    skillLevel: integerOrNull(selected?.skillLevel),
+    sourceIdentity: field
+      ? `NewTable/pet.rows[id=${petRow?.id ?? 'missing'}].${field}`
+      : null,
+  };
+}
+
+function parseKiboSkillEntries(value) {
+  return String(value ?? '')
+    .split('|')
+    .map((entry, index) => {
+      const [rawSlot, rawSkillId, rawSkillLevel] = entry.split('#');
+      return {
+        index,
+        slot: integerOrNull(rawSlot),
+        skillId: integerOrNull(rawSkillId),
+        skillLevel: integerOrNull(rawSkillLevel),
+      };
+    })
+    .filter(entry => entry.skillId != null);
+}
+
+function resolveActorControl(character, variant) {
+  const slots = character?.skillSlots ?? [];
+  if (variant.actionKind === 'normal-attack') {
+    const ownerPrefix = String(character.id);
+    const backupControls = slots.filter(
+      slot =>
+        slot.group === 'backup' &&
+        String(slot.skillId).startsWith(ownerPrefix) &&
+        String(slot.skillId).endsWith('03')
+    );
+    return backupControls.length === 1
+      ? {
+          controlSkillId: Number(backupControls[0].skillId),
+          bindingKind: 'hero-backup-normal-control',
+          sourceIdentity: `characters.items[id=${character.id}].skillSlots[group=backup,skillId=${backupControls[0].skillId}]`,
+        }
+      : {
+          controlSkillId: null,
+          bindingKind: 'hero-backup-normal-control-unresolved',
+          sourceIdentity: `characters.items[id=${character.id}].skillSlots[group=backup]`,
+        };
+  }
+
+  const slotContract = ACTOR_CONTROL_SLOT_BY_ACTION_KIND[variant.actionKind];
+  if (slotContract) {
+    const [group, slotId] = slotContract;
+    const matches = slots.filter(
+      slot => slot.group === group && Number(slot.slot) === slotId
+    );
+    return matches.length === 1
+      ? {
+          controlSkillId: Number(matches[0].skillId),
+          bindingKind: 'hero-public-action-slot-control',
+          sourceIdentity: `characters.items[id=${character.id}].skillSlots[group=${group},slot=${slotId}]`,
+        }
+      : {
+          controlSkillId: null,
+          bindingKind: 'hero-public-action-slot-control-unresolved',
+          sourceIdentity: `characters.items[id=${character.id}].skillSlots[group=${group},slot=${slotId}]`,
+        };
+  }
+
+  const directSlots = slots.filter(
+    slot => Number(slot.skillId) === Number(variant.skill.id)
+  );
+  return directSlots.length > 0
+    ? {
+        controlSkillId: Number(variant.skill.id),
+        bindingKind: 'hero-direct-public-skill-control',
+        sourceIdentity: `characters.items[id=${character.id}].skillSlots[skillId=${variant.skill.id}]`,
+      }
+    : {
+        controlSkillId: null,
+        bindingKind: 'hero-direct-public-skill-control-unresolved',
+        sourceIdentity: `workbench-seed.gameData.skills[id=${variant.skill.id}]`,
+      };
+}
+
+function collectRelatedPublicVariants(skill, actionKind) {
+  return (skill?.level?.labels ?? [])
+    .map((label, index) => ({
+      index,
+      label,
+      sourceIdentity: `workbench-seed.gameData.skills[id=${skill.id}].level.labels[${index}]`,
+    }))
+    .filter(variant => isRelatedPublicVariant(variant.label, actionKind));
+}
+
+function isRelatedPublicVariant(label, actionKind) {
+  const value = String(label ?? '').trim();
+  if (actionKind === 'normal-attack') return /普攻|普通攻击/.test(value);
+  if (actionKind === 'charged-attack') return /重击/.test(value);
+  if (actionKind === 'dodge-attack') return /闪击/.test(value);
+  if (actionKind === 'plunging-attack') return /跃击/.test(value);
+  if (actionKind === 'star-carry') return /^星携技/.test(value);
+  return inferPublicActionKind(value, {}) === actionKind;
+}
+
+function scorePublicActionVariant(label, actionKind) {
+  const value = String(label ?? '').trim();
+  const preferred =
+    {
+      'normal-attack': ['普攻', '普通攻击'],
+      'charged-attack': ['重击'],
+      'dodge-attack': ['闪击'],
+      'plunging-attack': ['跃击'],
+      'star-skill': ['星鸣技'],
+      'star-combo': ['星结合击'],
+      ultimate: ['星决技'],
+      'star-carry': ['星携技'],
+      'limit-counter': ['极限反击'],
+      'perfect-parry': ['完美招架', '精准防御', '集中闪避'],
+    }[actionKind] ?? [];
+  if (preferred.includes(value)) return 100;
+  if (actionKind === 'star-carry' && /^星携技·/.test(value)) return 90;
+  if (actionKind === 'charged-attack' && /^重击/.test(value)) return 80;
+  return 1;
 }
 
 function findSkillControl(skillId) {
@@ -403,15 +607,35 @@ function collectElementRefs(skillControl) {
   for (const [mapIndex, resourceMap] of (
     skillControl.skillResourceMaps ?? []
   ).entries()) {
-    for (const [elementIndex, ref] of (resourceMap.elements ?? []).entries()) {
-      const pathId = String(ref?.m_PathID ?? '');
-      if (/^-?\d+$/.test(pathId)) {
-        refs.push({
-          mapIndex,
-          elementIndex,
-          fileId: Number(ref.m_FileID) || 0,
-          pathId,
-        });
+    for (const referenceKind of ['elements', 'bulletElements']) {
+      for (const [elementIndex, ref] of (
+        resourceMap[referenceKind] ?? []
+      ).entries()) {
+        const pathId = String(ref?.m_PathID ?? '');
+        const elementIdHint = Number.isInteger(Number(ref))
+          ? Number(ref)
+          : null;
+        if (/^-?\d+$/.test(pathId)) {
+          refs.push({
+            mapIndex,
+            referenceKind,
+            elementIndex,
+            fileId: Number(ref.m_FileID) || 0,
+            pathId,
+            elementIdHint,
+            sourceIdentity: `skillResourceMaps[${mapIndex}].${referenceKind}[${elementIndex}]`,
+          });
+        } else if (Number.isInteger(elementIdHint)) {
+          refs.push({
+            mapIndex,
+            referenceKind,
+            elementIndex,
+            fileId: 0,
+            pathId: null,
+            elementIdHint,
+            sourceIdentity: `skillResourceMaps[${mapIndex}].${referenceKind}[${elementIndex}]`,
+          });
+        }
       }
     }
   }
@@ -419,7 +643,7 @@ function collectElementRefs(skillControl) {
 }
 
 function collectBehaviorTriggers(directory, mainFilePath, elementRefs) {
-  const wanted = new Set(elementRefs.map(ref => ref.pathId));
+  const wanted = new Set(elementRefs.map(ref => ref.pathId).filter(Boolean));
   const triggers = new Map([...wanted].map(pathId => [pathId, []]));
   for (const name of fs.readdirSync(directory)) {
     const filePath = path.join(directory, name);
@@ -461,8 +685,10 @@ function collectReferencedPathIds(value) {
   }
 }
 
-async function loadElementsByPathId(wantedPathIds) {
-  const result = new Map();
+async function loadElementIndex(wantedPathIds, wantedElementIds) {
+  const indexedElements = new Map();
+  const indexedElementsById = new Map();
+  const nonzeroRecoveryElements = [];
   const input = fs.createReadStream(ELEMENT_INDEX_PATH, { encoding: 'utf8' });
   const lines = readline.createInterface({ input, crlfDelay: Infinity });
   for await (const line of lines) {
@@ -470,12 +696,45 @@ async function loadElementsByPathId(wantedPathIds) {
     const record = JSON.parse(
       line.replace(/("path_id"\s*:\s*)(-?\d+)/, '$1"$2"')
     );
-    if (!wantedPathIds.has(record.path_id)) continue;
-    const entries = result.get(record.path_id) ?? [];
-    entries.push(record.typetree);
-    result.set(record.path_id, entries);
+    const indexed = {
+      asset: record.asset ?? null,
+      pathId: String(record.path_id),
+      name: record.name ?? null,
+      typetree: record.typetree ?? null,
+    };
+    if (wantedPathIds.has(indexed.pathId)) {
+      const entries = indexedElements.get(indexed.pathId) ?? [];
+      entries.push(indexed);
+      indexedElements.set(indexed.pathId, entries);
+    }
+    const elementId = integerOrNull(record.typetree?.elementConfigId);
+    if (wantedElementIds.has(elementId)) {
+      const entries = indexedElementsById.get(elementId) ?? [];
+      entries.push(indexed);
+      indexedElementsById.set(elementId, entries);
+    }
+    const recoverSp = finiteNumberOrNull(record.typetree?.recoverSP);
+    const petRecoverSp = finiteNumberOrNull(record.typetree?.petRecoverSP);
+    if ((recoverSp ?? 0) > 0 || (petRecoverSp ?? 0) > 0) {
+      nonzeroRecoveryElements.push({
+        pathId: indexed.pathId,
+        elementId: integerOrNull(record.typetree?.elementConfigId),
+        name: record.typetree?.elementName ?? record.name ?? null,
+        recoverSp,
+        petRecoverSp,
+        recoverIntervalMs: finiteNumberOrNull(record.typetree?.recoverInterval),
+        sourceIdentity: `battle-element-assets.jsonl#path_id=${indexed.pathId}`,
+      });
+    }
   }
-  return result;
+  return {
+    indexedElements,
+    indexedElementsById,
+    nonzeroRecoveryElements: dedupeBy(
+      nonzeroRecoveryElements,
+      entry => `${entry.pathId}|${entry.elementId}`
+    ),
+  };
 }
 
 function indexLevelOverrides(rows) {
@@ -499,19 +758,24 @@ function indexLevelOverrides(rows) {
 function createControlBinding({
   control,
   indexedElements,
+  indexedElementsById,
   formulas,
   overridesBySkillAndElement,
   skillLogicById,
 }) {
   const elements = control.elementRefs.map(ref => {
-    const indexed = indexedElements.get(ref.pathId) ?? [];
+    const indexed = ref.pathId
+      ? (indexedElements.get(ref.pathId) ?? [])
+      : (indexedElementsById.get(ref.elementIdHint) ?? []);
     const uniqueIndexed = dedupeBy(
       indexed.filter(Boolean),
-      value => `${value.elementConfigId}|${value.m_Name ?? ''}`
+      value =>
+        `${value.typetree?.elementConfigId}|${value.typetree?.m_Name ?? ''}`
     );
-    const tree = uniqueIndexed.length === 1 ? uniqueIndexed[0] : null;
+    const indexedRecord = uniqueIndexed.length === 1 ? uniqueIndexed[0] : null;
+    const tree = indexedRecord?.typetree ?? null;
     const triggers = dedupeBy(
-      control.behaviorTriggers.get(ref.pathId) ?? [],
+      (ref.pathId ? control.behaviorTriggers.get(ref.pathId) : []) ?? [],
       value => `${value.behaviorPathId}|${value.startFrame}`
     ).filter(trigger => Number.isInteger(trigger.startFrame));
     const elementId = Number(tree?.elementConfigId);
@@ -543,17 +807,64 @@ function createControlBinding({
     if (finiteNumberOrNull(tree?.damageType) == null) {
       issues.push('damage-type-missing');
     }
-    if (triggers.length === 0) issues.push('trigger-frame-missing');
+    if (triggers.length === 0) {
+      issues.push(
+        ref.referenceKind === 'bulletElements'
+          ? 'projectile-impact-frame-runtime-dependent'
+          : 'trigger-frame-missing'
+      );
+    }
     if (finiteNumberOrNull(ratiosByLevel[1]) == null) {
       issues.push('level-ratio-missing');
     }
-    const applied = issues.length === 0;
+    const dimensions = classifyHitDimensions({
+      tree,
+      uniqueElement: uniqueIndexed.length === 1,
+      formulaReady:
+        uniqueIndexed.length === 1 &&
+        SUPPORTED_BASE_FUNCTION_IDS.has(baseFunctionId) &&
+        commonFunctionId === 1 &&
+        finiteNumberOrNull(tree?.damageType) != null &&
+        finiteNumberOrNull(ratiosByLevel[1]) != null,
+    });
+    const threeValueRelevant = Boolean(
+      tree &&
+      ['damageType', 'weakBreakDamageRate', 'recoverSP', 'petRecoverSP'].some(
+        field => Object.hasOwn(tree, field)
+      )
+    );
+    const runtimeDimensionReady = Object.values(dimensions).some(
+      dimension => dimension.status === 'applied'
+    );
+    const allDimensionsVerifiedZero = Object.values(dimensions).every(
+      dimension => dimension.status === 'verified-zero'
+    );
+    const classification =
+      triggers.length > 0 && runtimeDimensionReady
+        ? 'applied'
+        : triggers.length > 0 && allDimensionsVerifiedZero
+          ? 'verified-zero'
+          : 'unresolved';
+    const unresolvedReasons = dedupeBy(
+      [
+        ...issues,
+        ...Object.entries(dimensions)
+          .filter(([, dimension]) => dimension.status === 'unresolved')
+          .flatMap(([dimension, value]) =>
+            value.reasons.map(reason => `${dimension}:${reason}`)
+          ),
+      ],
+      value => value
+    );
     return {
       elementId: Number.isInteger(elementId) ? elementId : null,
-      pathId: ref.pathId,
+      pathId: ref.pathId ?? indexedRecord?.pathId ?? null,
       mapIndex: ref.mapIndex,
+      referenceKind: ref.referenceKind,
       elementIndex: ref.elementIndex,
       name: tree?.elementName ?? tree?.m_Name ?? null,
+      sourceIdentity: `${relativeExternalPath(control.filePath)}#${ref.sourceIdentity}|battle-element-assets.jsonl#${ref.pathId ? `path_id=${ref.pathId}` : `elementConfigId=${ref.elementIdHint}`}`,
+      sourceAsset: indexedRecord?.asset ?? null,
       formula: {
         commonFunctionId: Number.isInteger(commonFunctionId)
           ? commonFunctionId
@@ -588,13 +899,37 @@ function createControlBinding({
         petRecoverSp: finiteNumberOrNull(tree?.petRecoverSP),
         recoverIntervalMs: finiteNumberOrNull(tree?.recoverInterval),
       },
+      threeValueRelevant,
+      dimensions,
       triggers,
-      status: applied
-        ? 'verified-action-hit-binding-applied'
-        : 'verified-action-hit-binding-unresolved',
-      confidence: applied ? 'high' : 'unresolved',
-      issues,
-      applied,
+      classification,
+      status: `verified-action-hit-binding-${classification}`,
+      confidence: classification === 'applied' ? 'high' : classification,
+      issues: unresolvedReasons,
+      applied: classification === 'applied',
+    };
+  });
+  const players = control.value.skillControlData?.skillPlayers ?? [];
+  const resourceMaps = control.value.skillResourceMaps ?? [];
+  const variantCount = Math.max(players.length, resourceMaps.length);
+  const variants = Array.from({ length: variantCount }, (_, mapIndex) => {
+    const player = players[mapIndex] ?? null;
+    const resourceMap = resourceMaps[mapIndex] ?? null;
+    const variantElements = elements.filter(
+      element => element.mapIndex === mapIndex
+    );
+    return {
+      subSkillIndex: mapIndex,
+      playerSkillId: integerOrNull(player?.skillId),
+      frameCounts: player?.frameCountDict ?? [],
+      directElementReferenceCount: (resourceMap?.elements ?? []).length,
+      bulletElementReferenceCount: (resourceMap?.bulletElements ?? []).length,
+      elementCount: variantElements.length,
+      runnableElementCount: variantElements.filter(
+        element => element.classification === 'applied'
+      ).length,
+      indirectReferences: collectIndirectResourceReferences(resourceMap),
+      sourceIdentity: `${relativeExternalPath(control.filePath)}#skillControlData.skillPlayers[${mapIndex}]|skillResourceMaps[${mapIndex}]`,
     };
   });
   return {
@@ -608,8 +943,106 @@ function createControlBinding({
       ) ?? [],
     sourcePath: relativeExternalPath(control.filePath),
     logic: createControlSkillLogic(skillLogicById.get(control.skillId)),
+    variants,
     elements,
   };
+}
+
+function classifyHitDimensions({ tree, uniqueElement, formulaReady }) {
+  if (!uniqueElement || !tree) {
+    return Object.fromEntries(
+      ['hp', 'toughness', 'actorSp', 'kiboSp'].map(key => [
+        key,
+        createDimensionClassification('unresolved', [
+          'element-source-not-unique',
+        ]),
+      ])
+    );
+  }
+  const damageType = finiteNumberOrNull(tree.damageType);
+  const weakBreakDamageRate = finiteNumberOrNull(tree.weakBreakDamageRate);
+  const hp =
+    damageType === 8
+      ? createDimensionClassification(
+          'verified-zero',
+          ['pure-weakness-damage-type'],
+          'damageType'
+        )
+      : formulaReady
+        ? createDimensionClassification('applied', [], 'formulaParams')
+        : createDimensionClassification('unresolved', [
+            damageType == null
+              ? 'damage-type-missing'
+              : 'damage-formula-inputs-incomplete',
+          ]);
+  const toughness =
+    weakBreakDamageRate === 0
+      ? createDimensionClassification(
+          'verified-zero',
+          ['weak-break-damage-rate-explicit-zero'],
+          'weakBreakDamageRate'
+        )
+      : weakBreakDamageRate != null && formulaReady
+        ? createDimensionClassification('applied', [], 'weakBreakDamageRate')
+        : createDimensionClassification('unresolved', [
+            weakBreakDamageRate == null
+              ? 'weak-break-damage-rate-missing'
+              : 'pre-shield-damage-inputs-incomplete',
+          ]);
+  return {
+    hp,
+    toughness,
+    actorSp: classifyExplicitNumericField(tree, 'recoverSP'),
+    kiboSp: classifyExplicitNumericField(tree, 'petRecoverSP'),
+  };
+}
+
+function classifyExplicitNumericField(tree, field) {
+  if (!Object.hasOwn(tree, field)) {
+    return createDimensionClassification('unresolved', [
+      `${field}-field-missing`,
+    ]);
+  }
+  const value = finiteNumberOrNull(tree[field]);
+  if (value == null) {
+    return createDimensionClassification('unresolved', [
+      `${field}-value-invalid`,
+    ]);
+  }
+  return createDimensionClassification(
+    value === 0 ? 'verified-zero' : 'applied',
+    value === 0 ? [`${field}-explicit-zero`] : [],
+    field
+  );
+}
+
+function createDimensionClassification(status, reasons, sourceField = null) {
+  return {
+    status,
+    reasons,
+    sourceField,
+  };
+}
+
+function collectIndirectResourceReferences(resourceMap) {
+  if (!resourceMap) return [];
+  const fields = ['extraSkills', 'allSummonInfos'];
+  return fields.flatMap(field =>
+    (resourceMap[field] ?? []).map((value, index) => ({
+      kind: field,
+      index,
+      identity:
+        value && typeof value === 'object'
+          ? {
+              id: integerOrNull(value.id ?? value.skillId ?? value.unitId),
+              fileId: integerOrNull(value.m_FileID),
+              pathId: value.m_PathID == null ? null : String(value.m_PathID),
+            }
+          : value,
+      status: 'unresolved',
+      reason: 'indirect-reference-not-expanded',
+    }))
+  );
 }
 
 function createPackage({
@@ -625,89 +1058,66 @@ function createPackage({
   const controlBySkillId = new Map(
     controlBindings.map(binding => [binding.controlSkillId, binding])
   );
-  const expandedActionBindings = candidates
-    .filter(candidate => candidate.bindingEligible)
-    .map(candidate => {
-      const control = controlBySkillId.get(candidate.controlSkillId);
-      const hits = (control?.elements ?? [])
-        .filter(element => element.applied)
-        .flatMap(element =>
-          element.triggers.map(trigger => ({
-            ...element,
-            trigger,
-          }))
-        )
-        .sort(
-          (left, right) =>
-            left.trigger.startFrame - right.trigger.startFrame ||
-            left.elementId - right.elementId
-        )
-        .map((element, index) => ({
-          ...element,
-          triggers: undefined,
-          hitIndex: index + 1,
-        }));
-      if (hits.length === 0) return null;
-      return {
-        identity: createBindingIdentity(candidate),
-        ownerKind: candidate.ownerKind,
-        ownerId: candidate.ownerId,
-        ownerName: candidate.ownerName,
-        sourceSkillId: candidate.sourceSkillId,
-        sourceSkillName: candidate.sourceSkillName,
-        actionVariantIndex: candidate.actionVariantIndex,
-        actionVariantLabel: candidate.actionVariantLabel,
-        actionKind: candidate.actionKind,
-        controlSkillId: candidate.controlSkillId,
-        bindingKind: candidate.bindingKind,
-        frameRate: control.frameRate ?? 60,
-        hits,
-        status: 'verified-action-mechanics-binding-applied',
-        confidence: 'high',
-        applied: true,
-      };
-    })
-    .filter(Boolean);
-  const usedControlSkillIds = new Set(
-    expandedActionBindings.map(binding => binding.controlSkillId)
+  const preparedControlBindings = controlBindings.map(binding => {
+    const hits = createControlRuntimeHits(binding);
+    return {
+      ...binding,
+      hits,
+      status: hits.length
+        ? 'verified-skill-control-mechanics-binding-applied'
+        : 'verified-skill-control-mechanics-binding-unresolved',
+      confidence: hits.length ? 'high' : 'unresolved',
+      applied: hits.length > 0,
+    };
+  });
+  const preparedControlBySkillId = new Map(
+    preparedControlBindings.map(binding => [binding.controlSkillId, binding])
   );
-  const verifiedControlBindings = controlBindings
-    .filter(binding => usedControlSkillIds.has(binding.controlSkillId))
-    .map(binding => ({
-      controlSkillId: binding.controlSkillId,
-      frameRate: binding.frameRate,
-      frameCounts: binding.frameCounts,
-      sourcePath: binding.sourcePath,
-      logic: binding.logic,
-      hits: binding.elements
-        .filter(element => element.applied)
-        .flatMap(element =>
-          element.triggers.map(trigger => ({
-            ...element,
-            trigger,
-          }))
-        )
-        .sort(
-          (left, right) =>
-            left.trigger.startFrame - right.trigger.startFrame ||
-            left.elementId - right.elementId
-        )
-        .map((element, index) => ({
-          ...element,
-          triggers: undefined,
-          hitIndex: index + 1,
-        })),
-      status: 'verified-skill-control-mechanics-binding-applied',
+  const actionMappings = candidates.map(candidate =>
+    createActionMapping(
+      candidate,
+      preparedControlBySkillId.get(candidate.controlSkillId)
+    )
+  );
+  const actionBindings = actionMappings
+    .filter(mapping => mapping.classification === 'applied')
+    .map(mapping => ({
+      identity: mapping.identity,
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      sourceSkillId: mapping.sourceSkillId,
+      sourceSkillName: mapping.sourceSkillName,
+      actionVariantIndex: mapping.actionVariantIndex,
+      actionVariantLabel: mapping.actionVariantLabel,
+      actionKind: mapping.actionKind,
+      controlSkillId: mapping.controlSkillId,
+      selectedSubSkillIndex: mapping.selectedSubSkillIndex,
+      bindingKind: mapping.bindingKind,
+      bindingSourceIdentity: mapping.bindingSourceIdentity,
+      controlVariantSkillLevel: mapping.controlVariantSkillLevel,
+      controlVariantSourceIdentity: mapping.controlVariantSourceIdentity,
+      controlFrameRate: mapping.controlFrameRate,
+      hitCount: mapping.runtimeHitCount,
+      status: 'verified-action-mechanics-binding-applied',
       confidence: 'high',
       applied: true,
     }));
-  const actionBindings = expandedActionBindings.map(
-    ({ hits, frameRate, ...binding }) => ({
-      ...binding,
-      controlFrameRate: frameRate,
-      hitCount: hits.length,
-    })
+  const publishedControlSkillIds = new Set(
+    actionMappings
+      .filter(mapping => {
+        if (mapping.classification === 'applied') return true;
+        const control = preparedControlBySkillId.get(mapping.controlSkillId);
+        return (
+          mapping.selectedSubSkillIndex != null &&
+          Number(control?.logic?.spCost) > 0
+        );
+      })
+      .map(mapping => mapping.controlSkillId)
   );
+  const packagedControlBindings = preparedControlBindings
+    .filter(binding => publishedControlSkillIds.has(binding.controlSkillId))
+    .map(createPublishedControlBinding);
   const sourceFiles = [
     ['calculator', CALCULATOR_PATH],
     ['validator', VALIDATOR_PATH],
@@ -725,6 +1135,13 @@ function createPackage({
     ['hero-growth-templates', TEMPLATE_HERO_PATH],
     ['game-constants', GAME_PATH],
     ['skill-logic', SKILL_LOGIC_PATH],
+    ['public-kibo-skill-levels', PET_PATH],
+    ['public-character-catalog', CHARACTER_CATALOG_PATH],
+    [
+      'public-kibo-action-catalog',
+      path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json'),
+    ],
+    ['public-workbench-seed', path.join(GENERATED_ROOT, 'workbench-seed.json')],
   ].map(([id, filePath]) => ({
     id,
     sourceIdentity: relativeExternalPath(filePath),
@@ -736,8 +1153,9 @@ function createPackage({
       region: evidence.region,
       evidenceDate: evidence.date,
       sources: sourceFiles.map(source => [source.id, source.sha256]),
+      actionMappings,
       actionBindings,
-      controlBindings: verifiedControlBindings,
+      controlBindings: packagedControlBindings,
       actorProfiles,
       kiboProfiles,
       enemyProfiles,
@@ -748,7 +1166,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 2,
+    packageVersion: 3,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -774,8 +1192,9 @@ function createPackage({
       spValueUnit: 'absolute-sp-points',
     },
     spUnitContract,
+    actionMappings,
     actionBindings,
-    controlBindings: verifiedControlBindings,
+    controlBindings: packagedControlBindings,
     ownerProfiles: {
       actor: actorProfiles,
       kibo: kiboProfiles,
@@ -783,13 +1202,20 @@ function createPackage({
     },
     summary: {
       candidateActionCount: candidates.length,
+      classifiedActionCount: actionMappings.length,
       appliedActionBindingCount: actionBindings.length,
       appliedHitBindingCount: actionBindings.reduce(
         (sum, binding) => sum + binding.hitCount,
         0
       ),
-      uniqueControlBindingCount: verifiedControlBindings.length,
-      uniqueControlHitBindingCount: verifiedControlBindings.reduce(
+      verifiedZeroActionCount: actionMappings.filter(
+        mapping => mapping.classification === 'verified-zero'
+      ).length,
+      unresolvedActionCount: actionMappings.filter(
+        mapping => mapping.classification === 'unresolved'
+      ).length,
+      uniqueControlBindingCount: packagedControlBindings.length,
+      uniqueControlHitBindingCount: packagedControlBindings.reduce(
         (sum, binding) => sum + binding.hits.length,
         0
       ),
@@ -806,6 +1232,270 @@ function createPackage({
       ).length,
     },
   };
+}
+
+function createControlRuntimeHits(control) {
+  const indexByMap = new Map();
+  return (control?.elements ?? [])
+    .filter(element => element.classification === 'applied')
+    .flatMap(element =>
+      element.triggers.map(trigger => ({
+        ...element,
+        trigger,
+      }))
+    )
+    .sort(
+      (left, right) =>
+        left.mapIndex - right.mapIndex ||
+        left.trigger.startFrame - right.trigger.startFrame ||
+        (left.elementId ?? 0) - (right.elementId ?? 0)
+    )
+    .map(element => {
+      const hitIndex = (indexByMap.get(element.mapIndex) ?? 0) + 1;
+      indexByMap.set(element.mapIndex, hitIndex);
+      const hitIdentity = [
+        control.controlSkillId,
+        element.mapIndex,
+        element.referenceKind,
+        element.elementIndex,
+        element.pathId,
+        element.trigger.startFrame,
+      ].join('|');
+      return {
+        elementId: element.elementId,
+        pathId: element.pathId,
+        mapIndex: element.mapIndex,
+        referenceKind: element.referenceKind,
+        elementIndex: element.elementIndex,
+        name: element.name,
+        sourceIdentity: element.sourceIdentity,
+        formula: element.formula,
+        damage: element.damage,
+        energy: element.energy,
+        trigger: element.trigger,
+        hitIndex,
+        hitIdentity,
+      };
+    });
+}
+
+function createPublishedControlBinding(binding) {
+  return {
+    controlSkillId: binding.controlSkillId,
+    frameRate: binding.frameRate,
+    frameCounts: binding.frameCounts,
+    sourcePath: binding.sourcePath,
+    logic: binding.logic,
+    variants: binding.variants.map(variant => ({
+      subSkillIndex: variant.subSkillIndex,
+      playerSkillId: variant.playerSkillId,
+      directElementReferenceCount: variant.directElementReferenceCount,
+      bulletElementReferenceCount: variant.bulletElementReferenceCount,
+      elementCount: variant.elementCount,
+      runnableElementCount: variant.runnableElementCount,
+      sourceIdentity: variant.sourceIdentity,
+    })),
+    hits: binding.hits,
+    status: binding.status,
+    confidence: binding.confidence,
+    applied: binding.applied,
+  };
+}
+
+function createActionMapping(candidate, control) {
+  const identity = createBindingIdentity(candidate);
+  const base = {
+    identity,
+    ownerKind: candidate.ownerKind,
+    ownerId: candidate.ownerId,
+    ownerName: candidate.ownerName,
+    sourceSkillId: candidate.sourceSkillId,
+    sourceSkillName: candidate.sourceSkillName,
+    actionVariantIndex: candidate.actionVariantIndex,
+    actionVariantLabel: candidate.actionVariantLabel,
+    actionKind: candidate.actionKind,
+    publicVariants: candidate.publicVariants ?? [],
+    controlSkillId: candidate.controlSkillId,
+    bindingKind: candidate.bindingKind,
+    bindingSourceIdentity: candidate.bindingSourceIdentity ?? null,
+    controlVariantSkillLevel: candidate.controlVariantSkillLevel ?? null,
+    controlVariantSourceIdentity:
+      candidate.controlVariantSourceIdentity ?? null,
+    controlFrameRate: control?.frameRate ?? 60,
+  };
+  if (!candidate.bindingEligible || !control) {
+    return {
+      ...base,
+      selectedSubSkillIndex: null,
+      linked: false,
+      runtimeReady: false,
+      runtimeHitCount: 0,
+      classification: 'unresolved',
+      reasons: [
+        control ? 'public-control-link-unresolved' : 'skill-control-missing',
+      ],
+      dimensionSummary: createEmptyDimensionSummary('unresolved'),
+    };
+  }
+  const variantResolution = resolveControlVariant(control, candidate);
+  if (!variantResolution.applied) {
+    return {
+      ...base,
+      selectedSubSkillIndex: null,
+      controlVariantResolution: variantResolution,
+      linked: true,
+      runtimeReady: false,
+      runtimeHitCount: 0,
+      classification: 'unresolved',
+      reasons: variantResolution.reasons,
+      dimensionSummary: summarizeDimensions(
+        control.elements.filter(element => element.mapIndex != null)
+      ),
+    };
+  }
+  const selectedSubSkillIndex = variantResolution.subSkillIndex;
+  const selectedElements = control.elements.filter(
+    element => element.mapIndex === selectedSubSkillIndex
+  );
+  const runtimeHits = control.hits.filter(
+    hit => hit.mapIndex === selectedSubSkillIndex
+  );
+  const spCost = finiteNumberOrNull(control.logic?.spCost);
+  const hasAppliedCost = spCost != null && spCost > 0;
+  const relevantElements = selectedElements.filter(
+    element => element.threeValueRelevant
+  );
+  const blockingUnresolved = relevantElements.filter(
+    element => element.classification === 'unresolved'
+  );
+  const allRelevantZero =
+    relevantElements.length > 0 &&
+    relevantElements.every(
+      element => element.classification === 'verified-zero'
+    );
+  const classification =
+    blockingUnresolved.length > 0
+      ? 'unresolved'
+      : runtimeHits.length > 0 || hasAppliedCost
+        ? 'applied'
+        : allRelevantZero && spCost === 0
+          ? 'verified-zero'
+          : 'unresolved';
+  const unresolvedReasons = dedupeBy(
+    blockingUnresolved
+      .filter(element => element.classification === 'unresolved')
+      .flatMap(element => element.issues),
+    value => value
+  );
+  if (classification === 'unresolved' && unresolvedReasons.length === 0) {
+    unresolvedReasons.push(
+      selectedElements.length === 0
+        ? 'selected-control-variant-has-no-three-value-elements'
+        : 'selected-control-variant-has-no-runnable-hit'
+    );
+  }
+  return {
+    ...base,
+    selectedSubSkillIndex,
+    controlVariantResolution: variantResolution,
+    linked: true,
+    runtimeReady: classification === 'applied',
+    runtimeHitCount: runtimeHits.length,
+    selectedElementCount: selectedElements.length,
+    selectedHitIdentities: runtimeHits.map(hit => hit.hitIdentity),
+    classification,
+    reasons: unresolvedReasons,
+    dimensionSummary: summarizeDimensions(selectedElements),
+  };
+}
+
+function resolveControlVariant(control, candidate) {
+  const variants = control?.variants ?? [];
+  if (variants.length === 1) {
+    return {
+      subSkillIndex: variants[0].subSkillIndex,
+      status: 'applied',
+      kind: 'single-control-variant',
+      sourceIdentity: variants[0].sourceIdentity,
+      reasons: [],
+      applied: true,
+    };
+  }
+  const requestedSkillLevel = integerOrNull(
+    candidate?.controlVariantSkillLevel
+  );
+  if (requestedSkillLevel != null) {
+    const levelMatches = variants.filter(
+      variant => Number(variant.playerSkillId) === requestedSkillLevel
+    );
+    if (levelMatches.length === 1) {
+      return {
+        subSkillIndex: levelMatches[0].subSkillIndex,
+        status: 'applied',
+        kind: 'kibo-skill-level-player-variant',
+        sourceIdentity: `${candidate.controlVariantSourceIdentity}|${levelMatches[0].sourceIdentity}`,
+        reasons: [],
+        applied: true,
+      };
+    }
+    const levelIndexVariant = variants[requestedSkillLevel - 1];
+    if (candidate.ownerKind === 'kibo' && levelIndexVariant) {
+      return {
+        subSkillIndex: levelIndexVariant.subSkillIndex,
+        status: 'applied',
+        kind: 'kibo-skill-level-index-variant',
+        sourceIdentity: `${candidate.controlVariantSourceIdentity}|${levelIndexVariant.sourceIdentity}`,
+        reasons: [],
+        applied: true,
+      };
+    }
+  }
+  const rootMatches = variants.filter(
+    variant => Number(variant.playerSkillId) === Number(control.controlSkillId)
+  );
+  if (rootMatches.length === 1) {
+    return {
+      subSkillIndex: rootMatches[0].subSkillIndex,
+      status: 'applied',
+      kind: 'unique-root-player-skill-variant',
+      sourceIdentity: rootMatches[0].sourceIdentity,
+      reasons: [],
+      applied: true,
+    };
+  }
+  return {
+    subSkillIndex: null,
+    status: 'unresolved',
+    kind: 'control-variant-selection-unresolved',
+    sourceIdentity: control.sourcePath,
+    reasons: [
+      variants.length === 0
+        ? 'control-has-no-resource-map-variant'
+        : rootMatches.length > 1
+          ? 'multiple-root-player-skill-variants'
+          : 'multiple-control-variants-without-root-selection',
+    ],
+    applied: false,
+  };
+}
+
+function summarizeDimensions(elements) {
+  const result = {};
+  for (const dimension of ['hp', 'toughness', 'actorSp', 'kiboSp']) {
+    result[dimension] = countValues(
+      elements.map(element => element.dimensions?.[dimension]?.status)
+    );
+  }
+  return result;
+}
+
+function createEmptyDimensionSummary(status) {
+  return Object.fromEntries(
+    ['hp', 'toughness', 'actorSp', 'kiboSp'].map(dimension => [
+      dimension,
+      { [status]: 1 },
+    ])
+  );
 }
 
 function createControlSkillLogic(row) {
@@ -840,8 +1530,7 @@ function createActorProfiles({ characters, templateRows, spUnitContract }) {
         rowById.get(characterId)?.baseAttribute
       );
       const maxSpBase = attributes.get(6) ?? null;
-      const maxSpGrowthMultiplier =
-        spUnitContract.actor.maxSpGrowthMultiplier;
+      const maxSpGrowthMultiplier = spUnitContract.actor.maxSpGrowthMultiplier;
       const effectiveMaxSp = calculateEffectiveMaxSp(
         maxSpBase,
         maxSpGrowthMultiplier
@@ -849,8 +1538,7 @@ function createActorProfiles({ characters, templateRows, spUnitContract }) {
       return {
         characterId,
         maxSpBase,
-        maxSpGrowthTemplateId:
-          spUnitContract.actor.maxSpGrowthTemplateId,
+        maxSpGrowthTemplateId: spUnitContract.actor.maxSpGrowthTemplateId,
         maxSpGrowthMultiplier,
         effectiveMaxSp,
         maxSp: effectiveMaxSp,
@@ -860,9 +1548,10 @@ function createActorProfiles({ characters, templateRows, spUnitContract }) {
         spRetAutoBasisPoints: attributes.get(227) ?? null,
         spGetUpAttackBasisPoints: attributes.get(228) ?? null,
         sourceIdentity: `NewTable/template_value.rows[id=${characterId}].baseAttribute|${spUnitContract.actor.sourceIdentity}`,
-        status: attributes.size && effectiveMaxSp != null
-          ? 'verified-actor-resource-profile-ready'
-          : 'verified-actor-resource-profile-unresolved',
+        status:
+          attributes.size && effectiveMaxSp != null
+            ? 'verified-actor-resource-profile-ready'
+            : 'verified-actor-resource-profile-unresolved',
         applied: attributes.size > 0 && effectiveMaxSp != null,
       };
     });
@@ -884,8 +1573,7 @@ function createKiboProfiles({ candidates, templateRows, spUnitContract }) {
         rowById.get(kiboId)?.baseAttribute
       );
       const maxSpBase = attributes.get(6) ?? null;
-      const maxSpGrowthMultiplier =
-        spUnitContract.kibo.maxSpGrowthMultiplier;
+      const maxSpGrowthMultiplier = spUnitContract.kibo.maxSpGrowthMultiplier;
       const effectiveMaxSp = calculateEffectiveMaxSp(
         maxSpBase,
         maxSpGrowthMultiplier
@@ -894,8 +1582,7 @@ function createKiboProfiles({ candidates, templateRows, spUnitContract }) {
         kiboId,
         attack: attributes.get(1) ?? null,
         maxSpBase,
-        maxSpGrowthTemplateId:
-          spUnitContract.kibo.maxSpGrowthTemplateId,
+        maxSpGrowthTemplateId: spUnitContract.kibo.maxSpGrowthTemplateId,
         maxSpGrowthMultiplier,
         effectiveMaxSp,
         maxSp: effectiveMaxSp,
@@ -908,9 +1595,10 @@ function createKiboProfiles({ candidates, templateRows, spUnitContract }) {
         criticalDamageBasisPoints: attributes.get(8) ?? null,
         damageUpBasisPoints: attributes.get(21) ?? null,
         sourceIdentity: `NewTable/template_value.rows[id=${kiboId}].baseAttribute|${spUnitContract.kibo.sourceIdentity}`,
-        status: attributes.size && effectiveMaxSp != null
-          ? 'verified-kibo-base-profile-ready'
-          : 'verified-kibo-base-profile-unresolved',
+        status:
+          attributes.size && effectiveMaxSp != null
+            ? 'verified-kibo-base-profile-ready'
+            : 'verified-kibo-base-profile-unresolved',
         applied: attributes.size > 0 && effectiveMaxSp != null,
       };
     });
@@ -1093,29 +1781,23 @@ function createAudit({
   evidence,
   validation,
 }) {
-  const appliedKeys = new Set(
-    packageValue.actionBindings.map(binding => binding.identity)
-  );
   const controlBySkillId = new Map(
     packageValue.controlBindings.map(binding => [
       binding.controlSkillId,
       binding,
     ])
   );
-  const unresolved = candidates
-    .filter(candidate => !appliedKeys.has(createBindingIdentity(candidate)))
-    .map(candidate => ({
-      identity: createBindingIdentity(candidate),
-      ownerKind: candidate.ownerKind,
-      ownerId: candidate.ownerId,
-      sourceSkillId: candidate.sourceSkillId,
-      actionVariantIndex: candidate.actionVariantIndex,
-      controlSkillId: candidate.controlSkillId,
-      status: controls.some(
-        control => control.skillId === candidate.controlSkillId
-      )
-        ? 'control-found-no-unique-complete-damage-hit'
-        : 'skill-control-missing',
+  const unresolved = packageValue.actionMappings
+    .filter(mapping => mapping.classification === 'unresolved')
+    .map(mapping => ({
+      identity: mapping.identity,
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      sourceSkillId: mapping.sourceSkillId,
+      actionVariantIndex: mapping.actionVariantIndex,
+      controlSkillId: mapping.controlSkillId,
+      status: 'unresolved',
+      reasons: mapping.reasons,
       applied: false,
     }));
   return {
@@ -1128,6 +1810,7 @@ function createAudit({
     validation,
     sourceCoverage: {
       candidateActionCount: candidates.length,
+      classifiedActionCount: packageValue.actionMappings.length,
       foundControlCount: controls.length,
       indexedElementPathCount: indexedElements.size,
       appliedActionBindingCount: packageValue.actionBindings.length,
@@ -1137,8 +1820,7 @@ function createAudit({
         packageValue.summary.uniqueControlHitBindingCount,
       unresolvedActionBindingCount: unresolved.length,
       enemyProfileCount: packageValue.summary.enemyProfileCount,
-      appliedEnemyProfileCount:
-        packageValue.summary.appliedEnemyProfileCount,
+      appliedEnemyProfileCount: packageValue.summary.appliedEnemyProfileCount,
       appliedHitDamageTypeCounts: countValues(
         packageValue.controlBindings.flatMap(binding =>
           binding.hits.map(hit => hit.damage?.damageType)
@@ -1159,6 +1841,345 @@ function createAudit({
     },
     unresolvedBindings: unresolved,
   };
+}
+
+function createActionCoverageReport({
+  packageValue,
+  controlBindings,
+  nonzeroRecoveryElements,
+}) {
+  const controlBySkillId = new Map(
+    controlBindings.map(binding => [binding.controlSkillId, binding])
+  );
+  const groupedMappings = groupBy(
+    packageValue.actionMappings,
+    mapping => `${mapping.ownerKind}|${mapping.actionKind}`
+  );
+  const byOwnerActionKind = [...groupedMappings.entries()]
+    .map(([key, mappings]) => {
+      const [ownerKind, actionKind] = key.split('|');
+      return createCoverageSummary({ ownerKind, actionKind, mappings });
+    })
+    .sort(
+      (left, right) =>
+        left.ownerKind.localeCompare(right.ownerKind) ||
+        left.actionKind.localeCompare(right.actionKind)
+    );
+  const byOwner = [
+    ...groupBy(
+      packageValue.actionMappings,
+      mapping => `${mapping.ownerKind}|${mapping.ownerId}`
+    ).entries(),
+  ]
+    .map(([key, mappings]) => {
+      const [ownerKind, rawOwnerId] = key.split('|');
+      return {
+        ...createCoverageSummary({ ownerKind, mappings }),
+        ownerId: Number(rawOwnerId),
+        ownerName: mappings[0]?.ownerName ?? null,
+        actionKinds: countValues(mappings.map(mapping => mapping.actionKind)),
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.ownerKind.localeCompare(right.ownerKind) ||
+        left.ownerId - right.ownerId
+    );
+  const unresolvedActions = packageValue.actionMappings
+    .filter(mapping => mapping.classification === 'unresolved')
+    .map(mapping => ({
+      identity: mapping.identity,
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      actionKind: mapping.actionKind,
+      sourceSkillId: mapping.sourceSkillId,
+      sourceSkillName: mapping.sourceSkillName,
+      controlSkillId: mapping.controlSkillId,
+      publicVariants: mapping.publicVariants,
+      reasons: mapping.reasons,
+    }));
+  const unresolvedReferences = packageValue.actionMappings.flatMap(mapping => {
+    const control = controlBySkillId.get(mapping.controlSkillId);
+    if (!control || mapping.selectedSubSkillIndex == null) return [];
+    return control.elements
+      .filter(
+        element =>
+          element.mapIndex === mapping.selectedSubSkillIndex &&
+          element.classification === 'unresolved'
+      )
+      .map(element => ({
+        actionIdentity: mapping.identity,
+        ownerKind: mapping.ownerKind,
+        ownerId: mapping.ownerId,
+        actionKind: mapping.actionKind,
+        controlSkillId: mapping.controlSkillId,
+        subSkillIndex: mapping.selectedSubSkillIndex,
+        pathId: element.pathId,
+        elementId: element.elementId,
+        referenceKind: element.referenceKind,
+        threeValueRelevant: element.threeValueRelevant,
+        reasons: element.issues,
+        sourceIdentity: element.sourceIdentity,
+      }));
+  });
+  const publicVariantCoverage = packageValue.actionMappings.flatMap(mapping =>
+    (mapping.publicVariants ?? []).map(variant => {
+      const selected =
+        Number(variant.index) === Number(mapping.actionVariantIndex);
+      return {
+        actionIdentity: mapping.identity,
+        ownerKind: mapping.ownerKind,
+        ownerId: mapping.ownerId,
+        actionKind: mapping.actionKind,
+        sourceSkillId: mapping.sourceSkillId,
+        publicVariantIndex: variant.index,
+        publicVariantLabel: variant.label,
+        selected,
+        classification: selected ? mapping.classification : 'unresolved',
+        reasons: selected
+          ? mapping.reasons
+          : ['public-variant-to-control-subskill-association-missing'],
+        sourceIdentity: variant.sourceIdentity,
+      };
+    })
+  );
+  const controlVariantCoverage = controlBindings.flatMap(control =>
+    control.variants.map(variant => {
+      const mappings = packageValue.actionMappings.filter(
+        mapping =>
+          mapping.controlSkillId === control.controlSkillId &&
+          mapping.selectedSubSkillIndex === variant.subSkillIndex
+      );
+      return {
+        controlSkillId: control.controlSkillId,
+        subSkillIndex: variant.subSkillIndex,
+        playerSkillId: variant.playerSkillId,
+        elementCount: variant.elementCount,
+        runnableElementCount: variant.runnableElementCount,
+        actionIdentities: mappings.map(mapping => mapping.identity),
+        classification: mappings.length
+          ? mappings.some(mapping => mapping.classification === 'applied')
+            ? 'applied'
+            : mappings.every(
+                  mapping => mapping.classification === 'verified-zero'
+                )
+              ? 'verified-zero'
+              : 'unresolved'
+          : 'unresolved',
+        reasons: mappings.length
+          ? dedupeBy(
+              mappings.flatMap(mapping => mapping.reasons),
+              value => value
+            )
+          : ['public-action-variant-association-missing'],
+        sourceIdentity: variant.sourceIdentity,
+      };
+    })
+  );
+  const publicPathReferences = new Map();
+  for (const mapping of packageValue.actionMappings) {
+    const control = controlBySkillId.get(mapping.controlSkillId);
+    if (!control) continue;
+    for (const element of control.elements) {
+      const references = publicPathReferences.get(element.pathId) ?? [];
+      references.push({
+        actionIdentity: mapping.identity,
+        classification: mapping.classification,
+        controlSkillId: mapping.controlSkillId,
+        subSkillIndex: element.mapIndex,
+        selected: mapping.selectedSubSkillIndex === element.mapIndex,
+      });
+      publicPathReferences.set(element.pathId, references);
+    }
+  }
+  const nonzeroRecoveryCoverage = nonzeroRecoveryElements.map(element => {
+    const references = publicPathReferences.get(element.pathId) ?? [];
+    const selectedReferences = references.filter(
+      reference => reference.selected
+    );
+    const appliedReferences = selectedReferences.filter(
+      reference => reference.classification === 'applied'
+    );
+    return {
+      ...element,
+      classification: appliedReferences.length ? 'applied' : 'unresolved',
+      actionReferences: selectedReferences.length
+        ? selectedReferences
+        : references,
+      reasons: appliedReferences.length
+        ? []
+        : [
+            selectedReferences.length
+              ? 'linked-only-to-unresolved-public-action'
+              : references.length
+                ? 'referenced-only-by-unselected-control-variant'
+                : 'not-referenced-by-public-action-control',
+          ],
+    };
+  });
+  const requiredActorKinds = ['normal-attack', 'star-skill', 'ultimate'];
+  const missingRequiredActorActions = byOwner
+    .filter(owner => owner.ownerKind === 'actor')
+    .flatMap(owner =>
+      requiredActorKinds
+        .filter(kind => !owner.actionKinds[kind])
+        .map(actionKind => ({
+          ownerId: owner.ownerId,
+          ownerName: owner.ownerName,
+          actionKind,
+          reason: 'public-required-action-kind-missing',
+        }))
+    );
+  const summary = createCoverageSummary({
+    mappings: packageValue.actionMappings,
+  });
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-combat-action-coverage',
+    status: 'verified-combat-action-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    sourceDenominator: {
+      kind: 'current-client-public-actor-and-kibo-action-catalogs',
+      actorOwnerCount: byOwner.filter(owner => owner.ownerKind === 'actor')
+        .length,
+      kiboOwnerCount: byOwner.filter(owner => owner.ownerKind === 'kibo')
+        .length,
+      actionCount: packageValue.actionMappings.length,
+      requiredActorKinds,
+    },
+    complete:
+      summary.directoryActionCount === summary.classifiedActionCount &&
+      missingRequiredActorActions.length === 0,
+    summary: {
+      ...summary,
+      controlVariantCount: controlVariantCoverage.length,
+      unresolvedControlVariantCount: controlVariantCoverage.filter(
+        variant => variant.classification === 'unresolved'
+      ).length,
+      nonzeroRecoveryElementCount: nonzeroRecoveryCoverage.length,
+      unresolvedNonzeroRecoveryElementCount: nonzeroRecoveryCoverage.filter(
+        element => element.classification === 'unresolved'
+      ).length,
+      unresolvedReferenceCount: unresolvedReferences.length,
+      publicVariantCount: publicVariantCoverage.length,
+      unresolvedPublicVariantCount: publicVariantCoverage.filter(
+        variant => variant.classification === 'unresolved'
+      ).length,
+    },
+    byOwnerActionKind,
+    byOwner,
+    missingRequiredActorActions,
+    unresolvedActions,
+    unresolvedReferences,
+    publicVariantCoverage,
+    controlVariantCoverage,
+    nonzeroRecoveryCoverage,
+  };
+}
+
+function createCoverageSummary({
+  ownerKind = null,
+  actionKind = null,
+  mappings,
+}) {
+  const dimensionCounts = Object.fromEntries(
+    ['hp', 'toughness', 'actorSp', 'kiboSp'].map(dimension => {
+      const counts = { nonzero: 0, 'verified-zero': 0, unresolved: 0 };
+      for (const mapping of mappings) {
+        const summary = mapping.dimensionSummary?.[dimension] ?? {};
+        counts.nonzero += Number(summary.applied ?? 0);
+        counts['verified-zero'] += Number(summary['verified-zero'] ?? 0);
+        counts.unresolved += Number(summary.unresolved ?? 0);
+      }
+      return [dimension, counts];
+    })
+  );
+  return {
+    ...(ownerKind ? { ownerKind } : {}),
+    ...(actionKind ? { actionKind } : {}),
+    directoryActionCount: mappings.length,
+    classifiedActionCount: mappings.filter(mapping =>
+      ['applied', 'verified-zero', 'unresolved'].includes(
+        mapping.classification
+      )
+    ).length,
+    linkedActionCount: mappings.filter(mapping => mapping.linked).length,
+    runnableActionCount: mappings.filter(mapping => mapping.runtimeReady)
+      .length,
+    verifiedZeroActionCount: mappings.filter(
+      mapping => mapping.classification === 'verified-zero'
+    ).length,
+    unresolvedActionCount: mappings.filter(
+      mapping => mapping.classification === 'unresolved'
+    ).length,
+    hitNodeCount: mappings.reduce(
+      (sum, mapping) => sum + Number(mapping.runtimeHitCount ?? 0),
+      0
+    ),
+    dimensions: dimensionCounts,
+  };
+}
+
+function createActionCoverageMarkdown(report) {
+  const lines = [
+    '# M7 真实三值动作覆盖',
+    '',
+    `- 包：\`${report.packageId}\``,
+    `- 公开动作分母：${report.summary.directoryActionCount}`,
+    `- 已关联：${report.summary.linkedActionCount}`,
+    `- 可运行：${report.summary.runnableActionCount}`,
+    `- 明确零：${report.summary.verifiedZeroActionCount}`,
+    `- 未解析：${report.summary.unresolvedActionCount}`,
+    `- 真实命中节点：${report.summary.hitNodeCount}`,
+    `- 公开动作变体：${report.summary.publicVariantCount}（未解析 ${report.summary.unresolvedPublicVariantCount}）`,
+    `- 非零回能元素：${report.summary.nonzeroRecoveryElementCount}（未关联 ${report.summary.unresolvedNonzeroRecoveryElementCount}）`,
+    '',
+    '## Owner / 动作类型',
+    '',
+    '| Owner | 动作类型 | 目录 | 关联 | 可运行 | 明确零 | 未解析 | 命中 |',
+    '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |',
+    ...report.byOwnerActionKind.map(
+      row =>
+        `| ${row.ownerKind} | ${row.actionKind} | ${row.directoryActionCount} | ${row.linkedActionCount} | ${row.runnableActionCount} | ${row.verifiedZeroActionCount} | ${row.unresolvedActionCount} | ${row.hitNodeCount} |`
+    ),
+    '',
+    '## 未解析动作',
+    '',
+  ];
+  if (report.unresolvedActions.length === 0) {
+    lines.push('- 无。');
+  } else {
+    for (const item of report.unresolvedActions) {
+      lines.push(
+        `- \`${item.identity}\` ${item.ownerName ?? item.ownerId} / ${item.actionKind} / ${item.sourceSkillName ?? item.sourceSkillId}: ${item.reasons.join(', ')}`
+      );
+    }
+  }
+  lines.push('', '## 未关联非零回能元素', '');
+  const unresolvedRecovery = report.nonzeroRecoveryCoverage.filter(
+    item => item.classification === 'unresolved'
+  );
+  if (unresolvedRecovery.length === 0) {
+    lines.push('- 无。');
+  } else {
+    const reasonCounts = countValues(
+      unresolvedRecovery.flatMap(item => item.reasons)
+    );
+    for (const [reason, count] of Object.entries(reasonCounts)) {
+      lines.push(`- ${reason}: ${count}`);
+    }
+    lines.push(
+      '',
+      '逐项 source identity 与字段值见 `verified-combat-action-coverage.json#nonzeroRecoveryCoverage`。'
+    );
+  }
+  lines.push(
+    '',
+    '> `unresolved` 不会进入运行时，也不会被写成 0；完整逐项原因见同名 JSON 报告。'
+  );
+  return `${lines.join('\n')}\n`;
 }
 
 function findRequiredBinding(bindings, controlBySkillId, predicate) {
@@ -1210,8 +2231,8 @@ function createBrowserRuntimeSource(source) {
       'qRatio(input.spRetAuto ?? input.spGetUpAuto),'
     )
     .replace(
-      'raw = applyFactor(raw, bonus, \'auto_sp_bonus\', trace);',
-      'raw = applyFactor(raw, bonus, \'auto_sp_bonus\', trace, { attributeKeys: [\'SPGETUP\', \'SPRET_AUTO\'], legacyAlias: input.spRetAuto == null && input.spGetUpAuto != null ? \'SPGETUP_AUTO\' : null });'
+      "raw = applyFactor(raw, bonus, 'auto_sp_bonus', trace);",
+      "raw = applyFactor(raw, bonus, 'auto_sp_bonus', trace, { attributeKeys: ['SPGETUP', 'SPRET_AUTO'], legacyAlias: input.spRetAuto == null && input.spGetUpAuto != null ? 'SPGETUP_AUTO' : null });"
     )
     .trimEnd();
   return [
@@ -1224,19 +2245,38 @@ function createBrowserRuntimeSource(source) {
   ].join('\n');
 }
 
-function inferActionKind(label, displayName) {
-  const value = `${label ?? ''} ${displayName ?? ''}`;
-  if (/普攻|普通攻击/.test(value)) return 'normal-attack';
-  if (/重击/.test(value) && !/提升|派生/.test(value)) return 'charged-attack';
-  if (/闪击|闪避攻击/.test(value)) return 'dodge-attack';
-  if (/跃击|下落攻击|空中攻击/.test(value)) return 'plunging-attack';
-  if (/星鸣技/.test(value)) return 'star-skill';
-  if (/星结合击/.test(value)) return 'star-combo';
-  if (/星决技/.test(value)) return 'ultimate';
-  if (/星携技/.test(value)) return 'star-carry';
-  if (/极限反击/.test(value)) return 'limit-counter';
-  if (/完美招架|精准防御|集中闪避/.test(value)) return 'perfect-parry';
-  return 'skill-action';
+function inferPublicActionKind(label, skill = {}) {
+  const normalizedLabel = String(label ?? '').trim();
+  const values = normalizedLabel
+    ? [normalizedLabel]
+    : [String(skill.displayName ?? '').trim()].filter(Boolean);
+  if (values.some(value => value === '普攻' || value === '普通攻击')) {
+    return 'normal-attack';
+  }
+  if (
+    values.some(
+      value =>
+        value === '重击' ||
+        (value.startsWith('重击') && !/(提升|派生)/.test(value))
+    )
+  ) {
+    return 'charged-attack';
+  }
+  if (values.includes('闪击')) return 'dodge-attack';
+  if (values.includes('跃击')) return 'plunging-attack';
+  if (values.includes('星鸣技')) return 'star-skill';
+  if (values.includes('星结合击')) return 'star-combo';
+  if (values.includes('星决技')) return 'ultimate';
+  if (values.some(value => value === '星携技' || /^星携技·/.test(value))) {
+    return 'star-carry';
+  }
+  if (values.includes('极限反击')) return 'limit-counter';
+  if (
+    values.some(value => ['完美招架', '精准防御', '集中闪避'].includes(value))
+  ) {
+    return 'perfect-parry';
+  }
+  return null;
 }
 
 function applyLevelOverride(baseValues, valueParam) {
@@ -1323,4 +2363,15 @@ function dedupeBy(values, keyOf) {
     if (!result.has(key)) result.set(key, value);
   }
   return [...result.values()];
+}
+
+function groupBy(values, keyOf) {
+  const result = new Map();
+  for (const value of values ?? []) {
+    const key = keyOf(value);
+    const entries = result.get(key) ?? [];
+    entries.push(value);
+    result.set(key, entries);
+  }
+  return result;
 }

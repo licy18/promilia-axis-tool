@@ -385,6 +385,7 @@
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
         :timeline-fragments="workbenchTimelineFragmentViews"
+        :mechanics-revision="runtimeDiagnosticsRevision"
         @select-action="selectAction"
         @open-action-context-menu="openActionContextMenu"
         @delete-selected-actions="deleteSelectedActions"

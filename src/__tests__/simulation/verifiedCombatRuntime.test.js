@@ -66,15 +66,18 @@ describe('verified combat mechanics runtime', () => {
       raw: '682',
       value: 0.010406494140625,
     });
-    expect(foreground.trace.find(step => step.name === 'auto_sp_bonus')).toEqual(
+    expect(
+      foreground.trace.find(step => step.name === 'auto_sp_bonus')
+    ).toEqual(
       expect.objectContaining({
         attributeKeys: ['SPGETUP', 'SPRET_AUTO'],
         legacyAlias: null,
       })
     );
-    const actorProfile = verifiedCombatMechanicsPackage.ownerProfiles.actor.find(
-      profile => profile.characterId === 109001
-    );
+    const actorProfile =
+      verifiedCombatMechanicsPackage.ownerProfiles.actor.find(
+        profile => profile.characterId === 109001
+      );
     expect(actorProfile).toMatchObject({
       maxSpBase: 1,
       maxSpGrowthTemplateId: 1001001,
@@ -212,6 +215,94 @@ describe('verified combat mechanics runtime', () => {
     );
   });
 
+  it('runs generated mappings across actors, action kinds, and a shared kibo skill', () => {
+    const result = simulateCrossCatalogScenario();
+    const resolutions = [
+      'verified-han-star-skill',
+      'verified-muyin-charged',
+      'verified-wind-kibo-active',
+    ].map(actionId =>
+      result.verifiedCombatRuntime.actionResolutionById.get(actionId)
+    );
+
+    expect(resolutions).toEqual(
+      resolutions.map(() =>
+        expect.objectContaining({ ready: true, complete: true })
+      )
+    );
+    expect(
+      new Set(
+        resolutions.map(resolution => resolution.actionBinding.actionKind)
+      )
+    ).toEqual(new Set(['star-skill', 'charged-attack', 'active']));
+    for (const actionId of [
+      'verified-han-star-skill',
+      'verified-muyin-charged',
+      'verified-wind-kibo-active',
+    ]) {
+      expect(
+        result.verifiedCombatRuntime.damageEvents.some(
+          event => event.actionId === actionId
+        )
+      ).toBe(true);
+    }
+    const damageTotals = Object.fromEntries(
+      [
+        'verified-han-star-skill',
+        'verified-muyin-charged',
+        'verified-wind-kibo-active',
+      ].map(actionId => {
+        const events = result.verifiedCombatRuntime.damageEvents.filter(
+          event => event.actionId === actionId
+        );
+        return [
+          actionId,
+          {
+            hitCount: events.length,
+            hp: events.reduce((sum, event) => sum + event.payload.rawDamage, 0),
+            toughness: events.reduce(
+              (sum, event) => sum + event.payload.toughnessDamage,
+              0
+            ),
+          },
+        ];
+      })
+    );
+    expect(damageTotals).toEqual({
+      'verified-han-star-skill': { hitCount: 7, hp: 459, toughness: 321 },
+      'verified-muyin-charged': { hitCount: 3, hp: 359, toughness: 350 },
+      'verified-wind-kibo-active': {
+        hitCount: 6,
+        hp: 3030,
+        toughness: 606,
+      },
+    });
+    const hanActorRecovery = result.verifiedCombatRuntime.resourceEvents.filter(
+      event =>
+        event.actionId === 'verified-han-star-skill' &&
+        event.payload.reason.includes('hit-sp')
+    );
+    expect(
+      hanActorRecovery.slice(0, 3).map(event => event.payload.change)
+    ).toEqual([0.479889, 0.239944, 0.239944]);
+    expect(
+      result.verifiedCombatRuntime.kiboResourceEvents.find(
+        event =>
+          event.actionId === 'verified-han-star-skill' &&
+          event.payload.reason === 'verified-hit-pet-sp-shared-recovery'
+      )?.payload
+    ).toMatchObject({
+      kiboId: 500001,
+      change: 1.860519,
+    });
+    expect(result.verifiedCombatRuntime.finalState.enemy.hp).toBeLessThan(
+      result.verifiedCombatRuntime.initialState.enemy.hp
+    );
+    expect(
+      result.verifiedCombatRuntime.finalState.enemy.toughness
+    ).toBeLessThan(result.verifiedCombatRuntime.initialState.enemy.toughness);
+  });
+
   it('does not emit verified damage or resource state for a cooldown-blocked action', () => {
     const result = simulateVerifiedAcceptanceScenario({
       includeBlockedRepeat: true,
@@ -318,9 +409,10 @@ describe('verified combat mechanics runtime', () => {
       durationMs: 1000,
       switchAtMs: 500,
     });
-    const eventsAtBoundary = switched.verifiedCombatRuntime.resourceEvents.filter(
-      event => event.timeMs === 500
-    );
+    const eventsAtBoundary =
+      switched.verifiedCombatRuntime.resourceEvents.filter(
+        event => event.timeMs === 500
+      );
     expect(eventsAtBoundary).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -393,8 +485,7 @@ describe('verified combat mechanics runtime', () => {
           change: 1.069992,
           afterValue: 1.090805,
           maxValue: 100,
-          recoverIntervalIdentity:
-            'damage-element:-9212100609153088879',
+          recoverIntervalIdentity: 'damage-element:-9212100609153088879',
           share: 1,
           resourceOwnerSourceIdentity: expect.stringContaining(
             'NewTable/template_value.rows[id=101007].baseAttribute|NewTable/template_hero.rows[type=1,level=1]'
@@ -426,8 +517,7 @@ describe('verified combat mechanics runtime', () => {
           afterValue: 4.202759,
           maxValue: 100,
           share: 1,
-          recoverIntervalIdentity:
-            'damage-element:-9212100609153088879',
+          recoverIntervalIdentity: 'damage-element:-9212100609153088879',
           formula: expect.objectContaining({
             raw: '272702',
             value: 4.161102294921875,
@@ -572,8 +662,7 @@ describe('verified combat mechanics runtime', () => {
     });
     expect(
       full.actionRuleDiagnostics.diagnostics.some(
-        diagnostic =>
-          diagnostic.code === 'skill-sp-precondition-unresolved'
+        diagnostic => diagnostic.code === 'skill-sp-precondition-unresolved'
       )
     ).toBe(false);
     expect(JSON.stringify(full.actionRuleDiagnostics)).not.toContain('0-1');
@@ -632,19 +721,19 @@ describe('verified combat mechanics runtime', () => {
       hp: 8628,
       inBreak: true,
     });
-    expect(shielded.verifiedCombatRuntime.finalState.enemy.toughness).toBeCloseTo(
-      2888.938385,
-      5
-    );
+    expect(
+      shielded.verifiedCombatRuntime.finalState.enemy.toughness
+    ).toBeCloseTo(2888.938385, 5);
     expect(
       shielded.verifiedCombatRuntime.damageEvents.filter(
-        event =>
-          event.payload.stateEventKind === 'break-linear-recovery'
+        event => event.payload.stateEventKind === 'break-linear-recovery'
       )
     ).not.toHaveLength(0);
     expect(
-      shielded.verifiedCombatRuntime.damageEvents.some(
-        event => event.payload.formulaBreakdown?.unappliedLayerKeys?.includes('useOneBreak')
+      shielded.verifiedCombatRuntime.damageEvents.some(event =>
+        event.payload.formulaBreakdown?.unappliedLayerKeys?.includes(
+          'useOneBreak'
+        )
       )
     ).toBe(true);
 
@@ -719,8 +808,7 @@ describe('verified combat mechanics runtime', () => {
       },
     });
     const recoveryEvents = result.verifiedCombatRuntime.damageEvents.filter(
-      event =>
-        event.payload.stateEventKind === 'normal-toughness-recovery'
+      event => event.payload.stateEventKind === 'normal-toughness-recovery'
     );
 
     expect(recoveryEvents).toHaveLength(5);
@@ -733,9 +821,9 @@ describe('verified combat mechanics runtime', () => {
       },
     });
     expect(recoveryEvents[0].payload.toughnessDamage).toBeLessThan(0);
-    expect(result.verifiedCombatRuntime.finalState.enemy.toughness).toBeGreaterThan(
-      6000
-    );
+    expect(
+      result.verifiedCombatRuntime.finalState.enemy.toughness
+    ).toBeGreaterThan(6000);
     expect(
       result.actionResultTimeline.some(
         row =>
@@ -743,9 +831,10 @@ describe('verified combat mechanics runtime', () => {
           'verified-weakness-state-runtime-event'
       )
     ).toBe(true);
-    const toughnessPoints = result.runtimeOutputs.stateCurves.enemy.points.filter(
-      point => point.trackKey === 'enemyToughnessDamage'
-    );
+    const toughnessPoints =
+      result.runtimeOutputs.stateCurves.enemy.points.filter(
+        point => point.trackKey === 'enemyToughnessDamage'
+      );
     expect(toughnessPoints).toHaveLength(5);
     expect(
       toughnessPoints.at(-1).stateSnapshot.after.enemyToughness.currentValue
@@ -845,8 +934,7 @@ function simulateVerifiedAcceptanceScenario({
     Number(config.characterId) === PANGPANG_CHARACTER_ID
       ? {
           ...config,
-          initialSp:
-            initialSpByCharacterId[PANGPANG_CHARACTER_ID] ?? 0,
+          initialSp: initialSpByCharacterId[PANGPANG_CHARACTER_ID] ?? 0,
           loadout: {
             ...config.loadout,
             kiboId: HEAVY_ROCK_HOOF_ID,
@@ -854,8 +942,7 @@ function simulateVerifiedAcceptanceScenario({
         }
       : {
           ...config,
-          initialSp:
-            initialSpByCharacterId[Number(config.characterId)] ?? 0,
+          initialSp: initialSpByCharacterId[Number(config.characterId)] ?? 0,
         }
   );
   const actions = includeActor
@@ -904,8 +991,7 @@ function simulateVerifiedAcceptanceScenario({
         type: 'kiboEvent',
         actorCharacterId: PANGPANG_CHARACTER_ID,
         skillId: HEAVY_ROCK_HOOF_SKILL_ID,
-        startMs:
-          kiboStartMs ?? (includeSecondPangpang ? 2000 : 1000),
+        startMs: kiboStartMs ?? (includeSecondPangpang ? 2000 : 1000),
         durationMs: 2600,
         eventType: 'signature',
       })
@@ -961,4 +1047,68 @@ function simulateVerifiedAcceptanceScenario({
   });
   const scenario = compileProject(project, getWorkbenchGameData());
   return simulateScenario(scenario);
+}
+
+function simulateCrossCatalogScenario() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const actorConfigs = createDefaultWorkbenchActorConfigs(
+    DEFAULT_WORKBENCH_SELECTION
+  ).map(config => ({
+    ...config,
+    initialSp: 0,
+    loadout:
+      Number(config.characterId) === PANGPANG_CHARACTER_ID
+        ? { ...config.loadout, kiboId: 500001 }
+        : config.loadout,
+  }));
+  const actions = [
+    createWorkbenchActionDraft({
+      id: 'verified-han-star-skill',
+      type: 'skill',
+      actorCharacterId: 101003,
+      skillId: 10100312,
+      actionVariantIndex: 0,
+      startMs: 0,
+      durationMs: 1400,
+    }),
+    createWorkbenchActionDraft({
+      id: 'verified-muyin-charged',
+      type: 'skill',
+      actorCharacterId: 109001,
+      skillId: 10900101,
+      actionVariantIndex: 1,
+      startMs: 1800,
+      durationMs: 1000,
+    }),
+    createWorkbenchActionDraft({
+      id: 'verified-wind-kibo-active',
+      type: 'kiboEvent',
+      actorCharacterId: PANGPANG_CHARACTER_ID,
+      skillId: 504004,
+      kiboId: 500001,
+      actionVariantIndex: 0,
+      startMs: 3200,
+      durationMs: 3000,
+      eventType: 'active',
+    }),
+  ];
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    durationMs: 8000,
+    teamSlots,
+    actorConfigs,
+    actions,
+    initialRuntimeState: {
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-3',
+          kiboId: 500001,
+          currentValue: 0,
+          maxValue: 100,
+        },
+      ],
+    },
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return simulateScenario(compileProject(project, getWorkbenchGameData()));
 }

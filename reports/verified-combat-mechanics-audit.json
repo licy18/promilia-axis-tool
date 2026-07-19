@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e51191b7f28aac83e834952df20f7d1d77e6d092c99371d71316b9167cf98a1c",
+  "packageHash": "dcad0eb49a9d19e97e74261126d934b9eb5a35ea51b43bbda737e0417ae00eab",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -12,21 +12,22 @@
     "outputHash": "a3dbea0bb416a72e299e212445b4f8364c0fd83f2b3148484066820da77b6797"
   },
   "sourceCoverage": {
-    "candidateActionCount": 619,
-    "foundControlCount": 407,
-    "indexedElementPathCount": 1373,
-    "appliedActionBindingCount": 224,
-    "appliedHitBindingCount": 1763,
-    "uniqueControlBindingCount": 215,
-    "uniqueControlHitBindingCount": 1295,
-    "unresolvedActionBindingCount": 395,
+    "candidateActionCount": 562,
+    "classifiedActionCount": 562,
+    "foundControlCount": 502,
+    "indexedElementPathCount": 1781,
+    "appliedActionBindingCount": 318,
+    "appliedHitBindingCount": 1028,
+    "uniqueControlBindingCount": 366,
+    "uniqueControlHitBindingCount": 1771,
+    "unresolvedActionBindingCount": 244,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 851,
-      "2": 42,
-      "3": 224,
-      "4": 174,
+      "1": 1177,
+      "2": 97,
+      "3": 286,
+      "4": 207,
       "5": 4
     }
   },
@@ -54,163 +55,58 @@
   },
   "unresolvedBindings": [
     {
-      "identity": "actor|101003|10100301|0|10100301",
+      "identity": "actor|101003|10100301|0|10100303",
       "ownerKind": "actor",
       "ownerId": 101003,
       "sourceSkillId": 10100301,
       "actionVariantIndex": 0,
-      "controlSkillId": 10100301,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10100303,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101003|10100301|1|10100301",
+      "identity": "actor|101003|10100301|1|10100310",
       "ownerKind": "actor",
       "ownerId": 101003,
       "sourceSkillId": 10100301,
       "actionVariantIndex": 1,
-      "controlSkillId": 10100301,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10100310,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101003|10100301|3|10100301",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100301,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10100301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100301|5|10100301",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100301,
-      "actionVariantIndex": 5,
-      "controlSkillId": 10100301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100301|6|10100301",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100301,
-      "actionVariantIndex": 6,
-      "controlSkillId": 10100301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100312|0|10100312",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100312,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100312,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100312|1|10100312",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100312,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10100312,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100322|0|10100322",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100322,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100322,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100322|1|10100322",
+      "identity": "actor|101003|10100322|1|10100325",
       "ownerKind": "actor",
       "ownerId": 101003,
       "sourceSkillId": 10100322,
       "actionVariantIndex": 1,
-      "controlSkillId": 10100322,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10100325,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101003|10100322|2|10100322",
+      "identity": "actor|101003|10100322|2|10100327",
       "ownerKind": "actor",
       "ownerId": 101003,
       "sourceSkillId": 10100322,
       "actionVariantIndex": 2,
-      "controlSkillId": 10100322,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101003|10100361|0|10100361",
-      "ownerKind": "actor",
-      "ownerId": 101003,
-      "sourceSkillId": 10100361,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100361,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100701|1|10100701",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100701,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10100701,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100701|3|10100701",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100701,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10100701,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100701|4|10100701",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100701,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10100701,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100712|0|10100712",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100712,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100712,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100712|2|10100712",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100712,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10100712,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10100327,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
@@ -220,137 +116,50 @@
       "sourceSkillId": 10100713,
       "actionVariantIndex": 0,
       "controlSkillId": 10100713,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101007|10100713|1|10100713",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100713,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10100713,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100721|0|10100721",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100721,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100721,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100721|1|10100721",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100721,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10100721,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100721|2|10100721",
+      "identity": "actor|101007|10100721|2|10100727",
       "ownerKind": "actor",
       "ownerId": 101007,
       "sourceSkillId": 10100721,
       "actionVariantIndex": 2,
-      "controlSkillId": 10100721,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10100727,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101007|10100761|0|10100761",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100761,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100761,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|0|10101001",
+      "identity": "actor|101010|10101001|0|10101003",
       "ownerKind": "actor",
       "ownerId": 101010,
       "sourceSkillId": 10101001,
       "actionVariantIndex": 0,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10101003,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101010|10101001|1|10101001",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101001,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|2|10101001",
+      "identity": "actor|101010|10101001|2|10101010",
       "ownerKind": "actor",
       "ownerId": 101010,
       "sourceSkillId": 10101001,
       "actionVariantIndex": 2,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|3|10101001",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101001,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|4|10101001",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101001,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|5|10101001",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101001,
-      "actionVariantIndex": 5,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|6|10101001",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101001,
-      "actionVariantIndex": 6,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101001|7|10101001",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101001,
-      "actionVariantIndex": 7,
-      "controlSkillId": 10101001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10101010,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -360,17 +169,29 @@
       "sourceSkillId": 10101012,
       "actionVariantIndex": 0,
       "controlSkillId": 10101012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101010|10101012|1|10101012",
+      "identity": "actor|101010|10101013|0|10101013",
       "ownerKind": "actor",
       "ownerId": 101010,
-      "sourceSkillId": 10101012,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10101012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "sourceSkillId": 10101013,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10101013,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -380,167 +201,66 @@
       "sourceSkillId": 10101021,
       "actionVariantIndex": 0,
       "controlSkillId": 10101021,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101010|10101021|1|10101021",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101021,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10101021,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101021|2|10101021",
+      "identity": "actor|101010|10101021|2|10101027",
       "ownerKind": "actor",
       "ownerId": 101010,
       "sourceSkillId": 10101021,
       "actionVariantIndex": 2,
-      "controlSkillId": 10101021,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10101027,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|101010|10101061|0|10101061",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101061,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10101061,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200101|0|10200101",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200101,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200101|1|10200101",
+      "identity": "actor|102001|10200101|1|10200110",
       "ownerKind": "actor",
       "ownerId": 102001,
       "sourceSkillId": 10200101,
       "actionVariantIndex": 1,
-      "controlSkillId": 10200101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10200110,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|102001|10200101|2|10200101",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200101,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200101|3|10200101",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200101,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200112|0|10200112",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200112,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10200112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200112|1|10200112",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200112,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10200112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200122|1|10200122",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200122,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10200122,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200122|2|10200122",
+      "identity": "actor|102001|10200122|2|10200127",
       "ownerKind": "actor",
       "ownerId": 102001,
       "sourceSkillId": 10200122,
       "actionVariantIndex": 2,
-      "controlSkillId": 10200122,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10200127,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|102001|10200161|0|10200161",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10200161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300201|0|10300201",
+      "identity": "actor|103002|10300201|0|10300203",
       "ownerKind": "actor",
       "ownerId": 103002,
       "sourceSkillId": 10300201,
       "actionVariantIndex": 0,
-      "controlSkillId": 10300201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300201|1|10300201",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300201,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10300201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300201|2|10300201",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300201,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10300201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300201|3|10300201",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300201,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10300201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10300203,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -550,97 +270,76 @@
       "sourceSkillId": 10300212,
       "actionVariantIndex": 0,
       "controlSkillId": 10300212,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|103002|10300212|1|10300212",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300212,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10300212,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300221|0|10300221",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300221,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10300221,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300221|1|10300221",
+      "identity": "actor|103002|10300221|1|10300225",
       "ownerKind": "actor",
       "ownerId": 103002,
       "sourceSkillId": 10300221,
       "actionVariantIndex": 1,
-      "controlSkillId": 10300221,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10300225,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|103002|10300221|2|10300221",
+      "identity": "actor|103002|10300221|2|10300227",
       "ownerKind": "actor",
       "ownerId": 103002,
       "sourceSkillId": 10300221,
       "actionVariantIndex": 2,
-      "controlSkillId": 10300221,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10300227,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|103002|10300261|0|10300261",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300261,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10300261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700101|0|10700101",
+      "identity": "actor|107001|10700101|0|10700103",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700101,
       "actionVariantIndex": 0,
-      "controlSkillId": 10700101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700103,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107001|10700101|4|10700101",
+      "identity": "actor|107001|10700101|4|10700110",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700101,
       "actionVariantIndex": 4,
-      "controlSkillId": 10700101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700110,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107001|10700101|6|10700101",
+      "identity": "actor|107001|10700101|6|10700115",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700101,
       "actionVariantIndex": 6,
-      "controlSkillId": 10700101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700101|7|10700101",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700101,
-      "actionVariantIndex": 7,
-      "controlSkillId": 10700101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700115,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -650,17 +349,23 @@
       "sourceSkillId": 10700112,
       "actionVariantIndex": 0,
       "controlSkillId": 10700112,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107001|10700112|4|10700112",
+      "identity": "actor|107001|10700112|4|10700126",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700112,
       "actionVariantIndex": 4,
-      "controlSkillId": 10700112,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700126,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -670,17 +375,10 @@
       "sourceSkillId": 10700113,
       "actionVariantIndex": 0,
       "controlSkillId": 10700113,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700113|1|10700113",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700113,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10700113,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
@@ -690,97 +388,51 @@
       "sourceSkillId": 10700121,
       "actionVariantIndex": 0,
       "controlSkillId": 10700121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107001|10700121|1|10700121",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700121,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10700121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700121|2|10700121",
+      "identity": "actor|107001|10700121|2|10700125",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700121,
       "actionVariantIndex": 2,
-      "controlSkillId": 10700121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700125,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107001|10700121|3|10700121",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700121,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10700121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700121|4|10700121",
+      "identity": "actor|107001|10700121|4|10700127",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700121,
       "actionVariantIndex": 4,
-      "controlSkillId": 10700121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700127,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107001|10700161|0|10700161",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107002|10700201|0|10700201",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "sourceSkillId": 10700201,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107002|10700201|1|10700201",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "sourceSkillId": 10700201,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10700201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107002|10700201|2|10700201",
+      "identity": "actor|107002|10700201|2|10700215",
       "ownerKind": "actor",
       "ownerId": 107002,
       "sourceSkillId": 10700201,
       "actionVariantIndex": 2,
-      "controlSkillId": 10700201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107002|10700201|3|10700201",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "sourceSkillId": 10700201,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10700201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700215,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
@@ -790,17 +442,23 @@
       "sourceSkillId": 10700212,
       "actionVariantIndex": 0,
       "controlSkillId": 10700212,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107002|10700212|1|10700212",
+      "identity": "actor|107002|10700212|1|10700226",
       "ownerKind": "actor",
       "ownerId": 107002,
       "sourceSkillId": 10700212,
       "actionVariantIndex": 1,
-      "controlSkillId": 10700212,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700226,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
@@ -810,7 +468,13 @@
       "sourceSkillId": 10700213,
       "actionVariantIndex": 0,
       "controlSkillId": 10700213,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
@@ -820,137 +484,38 @@
       "sourceSkillId": 10700222,
       "actionVariantIndex": 0,
       "controlSkillId": 10700222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107002|10700222|1|10700222",
+      "identity": "actor|107002|10700222|1|10700225",
       "ownerKind": "actor",
       "ownerId": 107002,
       "sourceSkillId": 10700222,
       "actionVariantIndex": 1,
-      "controlSkillId": 10700222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700225,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107002|10700222|2|10700222",
+      "identity": "actor|107002|10700222|2|10700227",
       "ownerKind": "actor",
       "ownerId": 107002,
       "sourceSkillId": 10700222,
       "actionVariantIndex": 2,
-      "controlSkillId": 10700222,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107002|10700261|0|10700261",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "sourceSkillId": 10700261,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|0|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|1|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|2|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|3|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|4|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|5|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 5,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|6|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 6,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700301|7|10700301",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700301,
-      "actionVariantIndex": 7,
-      "controlSkillId": 10700301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700312|0|10700312",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700312,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700312,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700312|1|10700312",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700312,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10700312,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700227,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
@@ -960,77 +525,36 @@
       "sourceSkillId": 10700321,
       "actionVariantIndex": 0,
       "controlSkillId": 10700321,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107003|10700321|1|10700321",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700321,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10700321,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|107003|10700321|2|10700321",
+      "identity": "actor|107003|10700321|2|10700327",
       "ownerKind": "actor",
       "ownerId": 107003,
       "sourceSkillId": 10700321,
       "actionVariantIndex": 2,
-      "controlSkillId": 10700321,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10700327,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|107003|10700361|0|10700361",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700361,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700361,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800101|0|10800101",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800101,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800101|1|10800101",
+      "identity": "actor|108001|10800101|1|10800110",
       "ownerKind": "actor",
       "ownerId": 108001,
       "sourceSkillId": 10800101,
       "actionVariantIndex": 1,
-      "controlSkillId": 10800101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800101|3|10800101",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800101,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10800101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800101|4|10800101",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800101,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10800101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800110,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
@@ -1040,17 +564,13 @@
       "sourceSkillId": 10800112,
       "actionVariantIndex": 0,
       "controlSkillId": 10800112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800112|1|10800112",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800112,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800112,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -1060,117 +580,50 @@
       "sourceSkillId": 10800113,
       "actionVariantIndex": 0,
       "controlSkillId": 10800113,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108001|10800113|1|10800113",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800113,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800113,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800121|0|10800121",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800121,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800121|1|10800121",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800121,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800121|2|10800121",
+      "identity": "actor|108001|10800121|2|10800127",
       "ownerKind": "actor",
       "ownerId": 108001,
       "sourceSkillId": 10800121,
       "actionVariantIndex": 2,
-      "controlSkillId": 10800121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800127,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108001|10800161|0|10800161",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800201|0|10800201",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800201,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800201|1|10800201",
+      "identity": "actor|108002|10800201|1|10800210",
       "ownerKind": "actor",
       "ownerId": 108002,
       "sourceSkillId": 10800201,
       "actionVariantIndex": 1,
-      "controlSkillId": 10800201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800210,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108002|10800201|2|10800201",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800201,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800201|3|10800201",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800201,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10800201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800201|4|10800201",
+      "identity": "actor|108002|10800201|4|10800215",
       "ownerKind": "actor",
       "ownerId": 108002,
       "sourceSkillId": 10800201,
       "actionVariantIndex": 4,
-      "controlSkillId": 10800201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800201|5|10800201",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800201,
-      "actionVariantIndex": 5,
-      "controlSkillId": 10800201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800215,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -1180,17 +633,10 @@
       "sourceSkillId": 10800212,
       "actionVariantIndex": 0,
       "controlSkillId": 10800212,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800212|1|10800212",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800212,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800212,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
@@ -1200,47 +646,11 @@
       "sourceSkillId": 10800213,
       "actionVariantIndex": 0,
       "controlSkillId": 10800213,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800213|1|10800213",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800213,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800213,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800213|2|10800213",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800213,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800213,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800213|3|10800213",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800213,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10800213,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800213|4|10800213",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800213,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10800213,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -1250,127 +660,63 @@
       "sourceSkillId": 10800222,
       "actionVariantIndex": 0,
       "controlSkillId": 10800222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108002|10800222|1|10800222",
+      "identity": "actor|108002|10800222|1|10800225",
       "ownerKind": "actor",
       "ownerId": 108002,
       "sourceSkillId": 10800222,
       "actionVariantIndex": 1,
-      "controlSkillId": 10800222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800225,
+      "status": "unresolved",
+      "reasons": [
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108002|10800222|2|10800222",
+      "identity": "actor|108002|10800222|2|10800227",
       "ownerKind": "actor",
       "ownerId": 108002,
       "sourceSkillId": 10800222,
       "actionVariantIndex": 2,
-      "controlSkillId": 10800222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800227,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108002|10800261|0|10800261",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800261,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800261|1|10800261",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800261,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800301|0|10800301",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800301,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800301|1|10800301",
+      "identity": "actor|108003|10800301|1|10800310",
       "ownerKind": "actor",
       "ownerId": 108003,
       "sourceSkillId": 10800301,
       "actionVariantIndex": 1,
-      "controlSkillId": 10800301,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800310,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108003|10800301|2|10800301",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800301,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800301|4|10800301",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800301,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10800301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800301|6|10800301",
+      "identity": "actor|108003|10800301|6|10800315",
       "ownerKind": "actor",
       "ownerId": 108003,
       "sourceSkillId": 10800301,
       "actionVariantIndex": 6,
-      "controlSkillId": 10800301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800301|7|10800301",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800301,
-      "actionVariantIndex": 7,
-      "controlSkillId": 10800301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800312|0|10800312",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800312,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800312,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800312|1|10800312",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800312,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800312,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800315,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -1380,17 +726,11 @@
       "sourceSkillId": 10800313,
       "actionVariantIndex": 0,
       "controlSkillId": 10800313,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800313|1|10800313",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800313,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800313,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -1400,97 +740,37 @@
       "sourceSkillId": 10800322,
       "actionVariantIndex": 0,
       "controlSkillId": 10800322,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108003|10800322|1|10800322",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800322,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800322,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800322|2|10800322",
+      "identity": "actor|108003|10800322|2|10800327",
       "ownerKind": "actor",
       "ownerId": 108003,
       "sourceSkillId": 10800322,
       "actionVariantIndex": 2,
-      "controlSkillId": 10800322,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800327,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108003|10800361|0|10800361",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800361,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800361,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800501|0|10800501",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800501,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800501,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800501|1|10800501",
+      "identity": "actor|108005|10800501|1|10800510",
       "ownerKind": "actor",
       "ownerId": 108005,
       "sourceSkillId": 10800501,
       "actionVariantIndex": 1,
-      "controlSkillId": 10800501,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800501|2|10800501",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800501,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800501,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800501|3|10800501",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800501,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10800501,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800512|0|10800512",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800512,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800512,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800512|1|10800512",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800512,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800512,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800510,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -1500,327 +780,93 @@
       "sourceSkillId": 10800513,
       "actionVariantIndex": 0,
       "controlSkillId": 10800513,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108005|10800522|0|10800522",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800522,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800522,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800522|1|10800522",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800522,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800522,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800522|2|10800522",
+      "identity": "actor|108005|10800522|2|10800527",
       "ownerKind": "actor",
       "ownerId": 108005,
       "sourceSkillId": 10800522,
       "actionVariantIndex": 2,
-      "controlSkillId": 10800522,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10800527,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|108005|10800561|0|10800561",
+      "identity": "actor|109001|10900113|0|10900113",
       "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800561,
+      "ownerId": 109001,
+      "sourceSkillId": 10900113,
       "actionVariantIndex": 0,
-      "controlSkillId": 10800561,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10900113,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|109001|10900101|0|10900101",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900101,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900101|1|10900101",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900101,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900101|2|10900101",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900101,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900101|3|10900101",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900101,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900112|0|10900112",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900112,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900112|2|10900112",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900112,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10900112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900121|0|10900121",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900121,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900121|2|10900121",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900121,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10900121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900121|3|10900121",
+      "identity": "actor|109001|10900121|3|10900127",
       "ownerKind": "actor",
       "ownerId": 109001,
       "sourceSkillId": 10900121,
       "actionVariantIndex": 3,
-      "controlSkillId": 10900121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10900127,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|109001|10900161|0|10900161",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900201|0|10900201",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900201,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900201|1|10900201",
+      "identity": "actor|109002|10900201|1|10900210",
       "ownerKind": "actor",
       "ownerId": 109002,
       "sourceSkillId": 10900201,
       "actionVariantIndex": 1,
-      "controlSkillId": 10900201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10900210,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|109002|10900201|2|10900201",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900201,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900201|3|10900201",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900201,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900201|5|10900201",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900201,
-      "actionVariantIndex": 5,
-      "controlSkillId": 10900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900201|6|10900201",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900201,
-      "actionVariantIndex": 6,
-      "controlSkillId": 10900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900212|0|10900212",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900212,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900212,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900212|1|10900212",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900212,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10900212,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900213|0|10900213",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900213,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900213,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900213|1|10900213",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900213,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10900213,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900221|0|10900221",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900221,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900221,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900221|1|10900221",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900221,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10900221,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900221|2|10900221",
+      "identity": "actor|109002|10900221|2|10900227",
       "ownerKind": "actor",
       "ownerId": 109002,
       "sourceSkillId": 10900221,
       "actionVariantIndex": 2,
-      "controlSkillId": 10900221,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 10900227,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|109002|10900261|0|10900261",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900261,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100101|0|11100101",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100101,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11100101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100101|5|11100101",
+      "identity": "actor|111001|11100101|5|11100110",
       "ownerKind": "actor",
       "ownerId": 111001,
       "sourceSkillId": 11100101,
       "actionVariantIndex": 5,
-      "controlSkillId": 11100101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100101|6|11100101",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100101,
-      "actionVariantIndex": 6,
-      "controlSkillId": 11100101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100101|7|11100101",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100101,
-      "actionVariantIndex": 7,
-      "controlSkillId": 11100101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11100110,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -1830,17 +876,10 @@
       "sourceSkillId": 11100112,
       "actionVariantIndex": 0,
       "controlSkillId": 11100112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100112|1|11100112",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100112,
-      "actionVariantIndex": 1,
-      "controlSkillId": 11100112,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -1850,17 +889,10 @@
       "sourceSkillId": 11100113,
       "actionVariantIndex": 0,
       "controlSkillId": 11100113,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100113|1|11100113",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100113,
-      "actionVariantIndex": 1,
-      "controlSkillId": 11100113,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
@@ -1870,137 +902,50 @@
       "sourceSkillId": 11100121,
       "actionVariantIndex": 0,
       "controlSkillId": 11100121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|111001|11100121|1|11100121",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100121,
-      "actionVariantIndex": 1,
-      "controlSkillId": 11100121,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100121|2|11100121",
+      "identity": "actor|111001|11100121|2|11100127",
       "ownerKind": "actor",
       "ownerId": 111001,
       "sourceSkillId": 11100121,
       "actionVariantIndex": 2,
-      "controlSkillId": 11100121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11100127,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|111001|11100161|0|11100161",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11100161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|0|11200101",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|1|11200101",
+      "identity": "actor|112001|11200101|1|11200110",
       "ownerKind": "actor",
       "ownerId": 112001,
       "sourceSkillId": 11200101,
       "actionVariantIndex": 1,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200110,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112001|11200101|2|11200101",
+      "identity": "actor|112001|11200113|0|11200113",
       "ownerKind": "actor",
       "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 2,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|3|11200101",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 3,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|4|11200101",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 4,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|5|11200101",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 5,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|6|11200101",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 6,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200101|7|11200101",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200101,
-      "actionVariantIndex": 7,
-      "controlSkillId": 11200101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200112|0|11200112",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200112,
+      "sourceSkillId": 11200113,
       "actionVariantIndex": 0,
-      "controlSkillId": 11200112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200112|1|11200112",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200112,
-      "actionVariantIndex": 1,
-      "controlSkillId": 11200112,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200113,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
@@ -2010,77 +955,80 @@
       "sourceSkillId": 11200121,
       "actionVariantIndex": 0,
       "controlSkillId": 11200121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112001|11200121|1|11200121",
+      "identity": "actor|112001|11200121|1|11200125",
       "ownerKind": "actor",
       "ownerId": 112001,
       "sourceSkillId": 11200121,
       "actionVariantIndex": 1,
-      "controlSkillId": 11200121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200125,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112001|11200121|2|11200121",
+      "identity": "actor|112001|11200121|2|11200127",
       "ownerKind": "actor",
       "ownerId": 112001,
       "sourceSkillId": 11200121,
       "actionVariantIndex": 2,
-      "controlSkillId": 11200121,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200127,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112001|11200161|0|11200161",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11200161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112002|11200201|0|11200201",
+      "identity": "actor|112002|11200201|0|11200203",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200201,
       "actionVariantIndex": 0,
-      "controlSkillId": 11200201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200203,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112002|11200201|1|11200201",
+      "identity": "actor|112002|11200201|1|11200210",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200201,
       "actionVariantIndex": 1,
-      "controlSkillId": 11200201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200210,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112002|11200201|3|11200201",
+      "identity": "actor|112002|11200201|3|11200215",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200201,
       "actionVariantIndex": 3,
-      "controlSkillId": 11200201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112002|11200201|4|11200201",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "sourceSkillId": 11200201,
-      "actionVariantIndex": 4,
-      "controlSkillId": 11200201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200215,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2090,17 +1038,14 @@
       "sourceSkillId": 11200212,
       "actionVariantIndex": 0,
       "controlSkillId": 11200212,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|112002|11200212|1|11200212",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "sourceSkillId": 11200212,
-      "actionVariantIndex": 1,
-      "controlSkillId": 11200212,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2110,7 +1055,13 @@
       "sourceSkillId": 11200213,
       "actionVariantIndex": 0,
       "controlSkillId": 11200213,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -2120,317 +1071,150 @@
       "sourceSkillId": 11200222,
       "actionVariantIndex": 0,
       "controlSkillId": 11200222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112002|11200222|1|11200222",
+      "identity": "actor|112002|11200222|1|11200225",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200222,
       "actionVariantIndex": 1,
-      "controlSkillId": 11200222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200225,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112002|11200222|2|11200222",
+      "identity": "actor|112002|11200222|2|11200227",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200222,
       "actionVariantIndex": 2,
-      "controlSkillId": 11200222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 11200227,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|112002|11200261|0|11200261",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "sourceSkillId": 11200261,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11200261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900101|0|19900101",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900101,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900101|1|19900101",
+      "identity": "actor|199001|19900101|1|19900110",
       "ownerKind": "actor",
       "ownerId": 199001,
       "sourceSkillId": 19900101,
       "actionVariantIndex": 1,
-      "controlSkillId": 19900101,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900110,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199001|19900101|4|19900101",
+      "identity": "actor|199001|19900113|0|19900113",
       "ownerKind": "actor",
       "ownerId": 199001,
-      "sourceSkillId": 19900101,
-      "actionVariantIndex": 4,
-      "controlSkillId": 19900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900101|5|19900101",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900101,
-      "actionVariantIndex": 5,
-      "controlSkillId": 19900101,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900112|0|19900112",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900112,
+      "sourceSkillId": 19900113,
       "actionVariantIndex": 0,
-      "controlSkillId": 19900112,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900113,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199001|19900112|2|19900112",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900112,
-      "actionVariantIndex": 2,
-      "controlSkillId": 19900112,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900122|0|19900122",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900122,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900122,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900122|1|19900122",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900122,
-      "actionVariantIndex": 1,
-      "controlSkillId": 19900122,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900122|2|19900122",
+      "identity": "actor|199001|19900122|2|19900127",
       "ownerKind": "actor",
       "ownerId": 199001,
       "sourceSkillId": 19900122,
       "actionVariantIndex": 2,
-      "controlSkillId": 19900122,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900127,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199001|19900161|0|19900161",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900161,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900161,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900201|0|19900201",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900201,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900201|1|19900201",
+      "identity": "actor|199002|19900201|1|19900210",
       "ownerKind": "actor",
       "ownerId": 199002,
       "sourceSkillId": 19900201,
       "actionVariantIndex": 1,
-      "controlSkillId": 19900201,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900210,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-root-player-skill-variants"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199002|19900201|4|19900201",
+      "identity": "actor|199002|19900213|0|19900213",
       "ownerKind": "actor",
       "ownerId": 199002,
-      "sourceSkillId": 19900201,
-      "actionVariantIndex": 4,
-      "controlSkillId": 19900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900201|5|19900201",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900201,
-      "actionVariantIndex": 5,
-      "controlSkillId": 19900201,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900212|0|19900212",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900212,
+      "sourceSkillId": 19900213,
       "actionVariantIndex": 0,
-      "controlSkillId": 19900212,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900213,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199002|19900212|2|19900212",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900212,
-      "actionVariantIndex": 2,
-      "controlSkillId": 19900212,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900222|0|19900222",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900222,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900222,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900222|1|19900222",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900222,
-      "actionVariantIndex": 1,
-      "controlSkillId": 19900222,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900222|2|19900222",
+      "identity": "actor|199002|19900222|2|19900227",
       "ownerKind": "actor",
       "ownerId": 199002,
       "sourceSkillId": 19900222,
       "actionVariantIndex": 2,
-      "controlSkillId": 19900222,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900227,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199002|19900261|0|19900261",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900261,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900261,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900301|0|19900301",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900301,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900301|1|19900301",
+      "identity": "actor|199003|19900301|1|19900310",
       "ownerKind": "actor",
       "ownerId": 199003,
       "sourceSkillId": 19900301,
       "actionVariantIndex": 1,
-      "controlSkillId": 19900301,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900310,
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199003|19900301|2|19900301",
+      "identity": "actor|199003|19900313|0|19900313",
       "ownerKind": "actor",
       "ownerId": 199003,
-      "sourceSkillId": 19900301,
-      "actionVariantIndex": 2,
-      "controlSkillId": 19900301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900301|3|19900301",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900301,
-      "actionVariantIndex": 3,
-      "controlSkillId": 19900301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900301|5|19900301",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900301,
-      "actionVariantIndex": 5,
-      "controlSkillId": 19900301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900301|6|19900301",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900301,
-      "actionVariantIndex": 6,
-      "controlSkillId": 19900301,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900312|0|19900312",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900312,
+      "sourceSkillId": 19900313,
       "actionVariantIndex": 0,
-      "controlSkillId": 19900312,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900312|1|19900312",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900312,
-      "actionVariantIndex": 1,
-      "controlSkillId": 19900312,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900313,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -2440,37 +1224,23 @@
       "sourceSkillId": 19900321,
       "actionVariantIndex": 0,
       "controlSkillId": 19900321,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
-      "identity": "actor|199003|19900321|1|19900321",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900321,
-      "actionVariantIndex": 1,
-      "controlSkillId": 19900321,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900321|2|19900321",
+      "identity": "actor|199003|19900321|2|19900327",
       "ownerKind": "actor",
       "ownerId": 199003,
       "sourceSkillId": 19900321,
       "actionVariantIndex": 2,
-      "controlSkillId": 19900321,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900361|0|19900361",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900361,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900361,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "controlSkillId": 19900327,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
       "applied": false
     },
     {
@@ -2480,7 +1250,11 @@
       "sourceSkillId": 50000102,
       "actionVariantIndex": 0,
       "controlSkillId": 50000102,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2490,7 +1264,12 @@
       "sourceSkillId": 50000202,
       "actionVariantIndex": 0,
       "controlSkillId": 50000202,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -2500,7 +1279,11 @@
       "sourceSkillId": 502015,
       "actionVariantIndex": 0,
       "controlSkillId": 502015,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2510,7 +1293,11 @@
       "sourceSkillId": 50000203,
       "actionVariantIndex": 0,
       "controlSkillId": 50000203,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2520,7 +1307,12 @@
       "sourceSkillId": 50000302,
       "actionVariantIndex": 0,
       "controlSkillId": 50000302,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -2530,7 +1322,11 @@
       "sourceSkillId": 502019,
       "actionVariantIndex": 0,
       "controlSkillId": 502019,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2540,7 +1336,11 @@
       "sourceSkillId": 50000303,
       "actionVariantIndex": 0,
       "controlSkillId": 50000303,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2550,7 +1350,13 @@
       "sourceSkillId": 50000404,
       "actionVariantIndex": 0,
       "controlSkillId": 50000404,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -2560,7 +1366,11 @@
       "sourceSkillId": 502016,
       "actionVariantIndex": 0,
       "controlSkillId": 502016,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2570,7 +1380,11 @@
       "sourceSkillId": 50000417,
       "actionVariantIndex": 0,
       "controlSkillId": 50000417,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2580,7 +1394,11 @@
       "sourceSkillId": 501014,
       "actionVariantIndex": 0,
       "controlSkillId": 501014,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2590,7 +1408,11 @@
       "sourceSkillId": 501017,
       "actionVariantIndex": 0,
       "controlSkillId": 501017,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2600,7 +1422,11 @@
       "sourceSkillId": 501016,
       "actionVariantIndex": 0,
       "controlSkillId": 501016,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2610,7 +1436,11 @@
       "sourceSkillId": 503001,
       "actionVariantIndex": 0,
       "controlSkillId": 503001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2620,7 +1450,11 @@
       "sourceSkillId": 50002004,
       "actionVariantIndex": 0,
       "controlSkillId": 50002004,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2630,7 +1464,11 @@
       "sourceSkillId": 503006,
       "actionVariantIndex": 0,
       "controlSkillId": 503006,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2640,7 +1478,11 @@
       "sourceSkillId": 503004,
       "actionVariantIndex": 0,
       "controlSkillId": 503004,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2650,7 +1492,11 @@
       "sourceSkillId": 505013,
       "actionVariantIndex": 0,
       "controlSkillId": 505013,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2660,7 +1506,11 @@
       "sourceSkillId": 505006,
       "actionVariantIndex": 0,
       "controlSkillId": 505006,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2670,7 +1520,25 @@
       "sourceSkillId": 507003,
       "actionVariantIndex": 0,
       "controlSkillId": 507003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500026|50002616|0|50002616",
+      "ownerKind": "kibo",
+      "ownerId": 500026,
+      "sourceSkillId": 50002616,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50002616,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2680,7 +1548,11 @@
       "sourceSkillId": 505006,
       "actionVariantIndex": 0,
       "controlSkillId": 505006,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2690,7 +1562,12 @@
       "sourceSkillId": 50003503,
       "actionVariantIndex": 0,
       "controlSkillId": 50003503,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -2700,7 +1577,11 @@
       "sourceSkillId": 505004,
       "actionVariantIndex": 0,
       "controlSkillId": 505004,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2710,7 +1591,11 @@
       "sourceSkillId": 50003501,
       "actionVariantIndex": 0,
       "controlSkillId": 50003501,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2720,7 +1605,25 @@
       "sourceSkillId": 501001,
       "actionVariantIndex": 0,
       "controlSkillId": 501001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500038|50003801|0|50003801",
+      "ownerKind": "kibo",
+      "ownerId": 500038,
+      "sourceSkillId": 50003801,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50003801,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2730,7 +1633,25 @@
       "sourceSkillId": 501003,
       "actionVariantIndex": 0,
       "controlSkillId": 501003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500039|50003901|0|50003901",
+      "ownerKind": "kibo",
+      "ownerId": 500039,
+      "sourceSkillId": 50003901,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50003901,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2740,7 +1661,11 @@
       "sourceSkillId": 501003,
       "actionVariantIndex": 0,
       "controlSkillId": 501003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2750,7 +1675,11 @@
       "sourceSkillId": 506001,
       "actionVariantIndex": 0,
       "controlSkillId": 506001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2760,17 +1689,11 @@
       "sourceSkillId": 506001,
       "actionVariantIndex": 0,
       "controlSkillId": 506001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500043|50004302|0|50004302",
-      "ownerKind": "kibo",
-      "ownerId": 500043,
-      "sourceSkillId": 50004302,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50004302,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2780,17 +1703,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500044|50004401|0|50004401",
-      "ownerKind": "kibo",
-      "ownerId": 500044,
-      "sourceSkillId": 50004401,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50004401,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2800,17 +1717,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500045|50004501|0|50004501",
-      "ownerKind": "kibo",
-      "ownerId": 500045,
-      "sourceSkillId": 50004501,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50004501,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2820,7 +1731,11 @@
       "sourceSkillId": 504020,
       "actionVariantIndex": 0,
       "controlSkillId": 504020,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2830,7 +1745,11 @@
       "sourceSkillId": 50004604,
       "actionVariantIndex": 0,
       "controlSkillId": 50004604,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2840,7 +1759,11 @@
       "sourceSkillId": 505013,
       "actionVariantIndex": 0,
       "controlSkillId": 505013,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2850,7 +1773,11 @@
       "sourceSkillId": 50004705,
       "actionVariantIndex": 0,
       "controlSkillId": 50004705,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2860,7 +1787,11 @@
       "sourceSkillId": 505014,
       "actionVariantIndex": 0,
       "controlSkillId": 505014,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2870,7 +1801,11 @@
       "sourceSkillId": 50004805,
       "actionVariantIndex": 0,
       "controlSkillId": 50004805,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2880,7 +1815,11 @@
       "sourceSkillId": 505018,
       "actionVariantIndex": 0,
       "controlSkillId": 505018,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2890,7 +1829,11 @@
       "sourceSkillId": 506001,
       "actionVariantIndex": 0,
       "controlSkillId": 506001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2900,7 +1843,23 @@
       "sourceSkillId": 506008,
       "actionVariantIndex": 0,
       "controlSkillId": 506008,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500053|50005302|0|50005302",
+      "ownerKind": "kibo",
+      "ownerId": 500053,
+      "sourceSkillId": 50005302,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50005302,
+      "status": "unresolved",
+      "reasons": [
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2910,7 +1869,10 @@
       "sourceSkillId": 506008,
       "actionVariantIndex": 0,
       "controlSkillId": 506008,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
@@ -2920,7 +1882,11 @@
       "sourceSkillId": 507001,
       "actionVariantIndex": 0,
       "controlSkillId": 507001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2930,7 +1896,11 @@
       "sourceSkillId": 50005801,
       "actionVariantIndex": 0,
       "controlSkillId": 50005801,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2940,7 +1910,11 @@
       "sourceSkillId": 504001,
       "actionVariantIndex": 0,
       "controlSkillId": 504001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2950,7 +1924,10 @@
       "sourceSkillId": 50006601,
       "actionVariantIndex": 0,
       "controlSkillId": 50006601,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
@@ -2960,7 +1937,14 @@
       "sourceSkillId": 502004,
       "actionVariantIndex": 0,
       "controlSkillId": 502004,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2970,7 +1954,11 @@
       "sourceSkillId": 502006,
       "actionVariantIndex": 0,
       "controlSkillId": 502006,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2980,7 +1968,11 @@
       "sourceSkillId": 502003,
       "actionVariantIndex": 0,
       "controlSkillId": 502003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -2990,7 +1982,11 @@
       "sourceSkillId": 503004,
       "actionVariantIndex": 0,
       "controlSkillId": 503004,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3000,7 +1996,11 @@
       "sourceSkillId": 50008102,
       "actionVariantIndex": 0,
       "controlSkillId": 50008102,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3010,7 +2010,39 @@
       "sourceSkillId": 503007,
       "actionVariantIndex": 0,
       "controlSkillId": 503007,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500081|50008104|0|50008104",
+      "ownerKind": "kibo",
+      "ownerId": 500081,
+      "sourceSkillId": 50008104,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50008104,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500082|50008201|0|50008201",
+      "ownerKind": "kibo",
+      "ownerId": 500082,
+      "sourceSkillId": 50008201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50008201,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3020,7 +2052,11 @@
       "sourceSkillId": 507008,
       "actionVariantIndex": 0,
       "controlSkillId": 507008,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3030,7 +2066,25 @@
       "sourceSkillId": 501001,
       "actionVariantIndex": 0,
       "controlSkillId": 501001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500085|50008503|0|50008503",
+      "ownerKind": "kibo",
+      "ownerId": 500085,
+      "sourceSkillId": 50008503,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50008503,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3040,7 +2094,13 @@
       "sourceSkillId": 50009305,
       "actionVariantIndex": 0,
       "controlSkillId": 50009305,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -3050,7 +2110,11 @@
       "sourceSkillId": 509001,
       "actionVariantIndex": 0,
       "controlSkillId": 509001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3060,7 +2124,11 @@
       "sourceSkillId": 509002,
       "actionVariantIndex": 0,
       "controlSkillId": 509002,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3070,7 +2138,10 @@
       "sourceSkillId": 502010,
       "actionVariantIndex": 0,
       "controlSkillId": 502010,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
@@ -3080,7 +2151,10 @@
       "sourceSkillId": 502010,
       "actionVariantIndex": 0,
       "controlSkillId": 502010,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
       "applied": false
     },
     {
@@ -3090,7 +2164,10 @@
       "sourceSkillId": 50009804,
       "actionVariantIndex": 0,
       "controlSkillId": 50009804,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
@@ -3100,7 +2177,11 @@
       "sourceSkillId": 505001,
       "actionVariantIndex": 0,
       "controlSkillId": 505001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3110,7 +2191,11 @@
       "sourceSkillId": 503009,
       "actionVariantIndex": 0,
       "controlSkillId": 503009,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3120,7 +2205,11 @@
       "sourceSkillId": 503010,
       "actionVariantIndex": 0,
       "controlSkillId": 503010,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3130,7 +2219,11 @@
       "sourceSkillId": 503018,
       "actionVariantIndex": 0,
       "controlSkillId": 503018,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3140,17 +2233,11 @@
       "sourceSkillId": 504001,
       "actionVariantIndex": 0,
       "controlSkillId": 504001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500123|50012302|0|50012302",
-      "ownerKind": "kibo",
-      "ownerId": 500123,
-      "sourceSkillId": 50012302,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50012302,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3160,17 +2247,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500124|50012402|0|50012402",
-      "ownerKind": "kibo",
-      "ownerId": 500124,
-      "sourceSkillId": 50012402,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50012402,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3180,17 +2261,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500125|50012502|0|50012502",
-      "ownerKind": "kibo",
-      "ownerId": 500125,
-      "sourceSkillId": 50012502,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50012502,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3200,7 +2275,11 @@
       "sourceSkillId": 504014,
       "actionVariantIndex": 0,
       "controlSkillId": 504014,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3210,7 +2289,11 @@
       "sourceSkillId": 50012602,
       "actionVariantIndex": 0,
       "controlSkillId": 50012602,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3220,7 +2303,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3230,7 +2317,11 @@
       "sourceSkillId": 50012702,
       "actionVariantIndex": 0,
       "controlSkillId": 50012702,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3240,7 +2331,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3250,7 +2345,11 @@
       "sourceSkillId": 50012802,
       "actionVariantIndex": 0,
       "controlSkillId": 50012802,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3260,7 +2359,11 @@
       "sourceSkillId": 504014,
       "actionVariantIndex": 0,
       "controlSkillId": 504014,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3270,7 +2373,11 @@
       "sourceSkillId": 507001,
       "actionVariantIndex": 0,
       "controlSkillId": 507001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3280,7 +2387,11 @@
       "sourceSkillId": 507003,
       "actionVariantIndex": 0,
       "controlSkillId": 507003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3290,17 +2401,11 @@
       "sourceSkillId": 507003,
       "actionVariantIndex": 0,
       "controlSkillId": 507003,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500133|50013302|0|50013302",
-      "ownerKind": "kibo",
-      "ownerId": 500133,
-      "sourceSkillId": 50013302,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50013302,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3310,17 +2415,11 @@
       "sourceSkillId": 506001,
       "actionVariantIndex": 0,
       "controlSkillId": 506001,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500134|50013402|0|50013402",
-      "ownerKind": "kibo",
-      "ownerId": 500134,
-      "sourceSkillId": 50013402,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50013402,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3330,7 +2429,11 @@
       "sourceSkillId": 50013801,
       "actionVariantIndex": 0,
       "controlSkillId": 50013801,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3340,7 +2443,11 @@
       "sourceSkillId": 501001,
       "actionVariantIndex": 0,
       "controlSkillId": 501001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3350,7 +2457,11 @@
       "sourceSkillId": 50013901,
       "actionVariantIndex": 0,
       "controlSkillId": 50013901,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3360,7 +2471,11 @@
       "sourceSkillId": 506005,
       "actionVariantIndex": 0,
       "controlSkillId": 506005,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3370,7 +2485,11 @@
       "sourceSkillId": 50014001,
       "actionVariantIndex": 0,
       "controlSkillId": 50014001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3380,7 +2499,11 @@
       "sourceSkillId": 506005,
       "actionVariantIndex": 0,
       "controlSkillId": 506005,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3390,7 +2513,11 @@
       "sourceSkillId": 505013,
       "actionVariantIndex": 0,
       "controlSkillId": 505013,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3400,7 +2527,11 @@
       "sourceSkillId": 50014704,
       "actionVariantIndex": 0,
       "controlSkillId": 50014704,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3410,7 +2541,11 @@
       "sourceSkillId": 505014,
       "actionVariantIndex": 0,
       "controlSkillId": 505014,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3420,7 +2555,11 @@
       "sourceSkillId": 50014804,
       "actionVariantIndex": 0,
       "controlSkillId": 50014804,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3430,7 +2569,11 @@
       "sourceSkillId": 505017,
       "actionVariantIndex": 0,
       "controlSkillId": 505017,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3440,7 +2583,11 @@
       "sourceSkillId": 50014904,
       "actionVariantIndex": 0,
       "controlSkillId": 50014904,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3450,7 +2597,11 @@
       "sourceSkillId": 501001,
       "actionVariantIndex": 0,
       "controlSkillId": 501001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3460,7 +2611,25 @@
       "sourceSkillId": 50015604,
       "actionVariantIndex": 0,
       "controlSkillId": 50015604,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500157|50015702|0|50015702",
+      "ownerKind": "kibo",
+      "ownerId": 500157,
+      "sourceSkillId": 50015702,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50015702,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3470,7 +2639,11 @@
       "sourceSkillId": 501005,
       "actionVariantIndex": 0,
       "controlSkillId": 501005,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3480,7 +2653,25 @@
       "sourceSkillId": 50015704,
       "actionVariantIndex": 0,
       "controlSkillId": 50015704,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500158|50015802|0|50015802",
+      "ownerKind": "kibo",
+      "ownerId": 500158,
+      "sourceSkillId": 50015802,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50015802,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3490,17 +2681,11 @@
       "sourceSkillId": 501005,
       "actionVariantIndex": 0,
       "controlSkillId": 501005,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500164|50016402|0|50016402",
-      "ownerKind": "kibo",
-      "ownerId": 500164,
-      "sourceSkillId": 50016402,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50016402,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3510,17 +2695,11 @@
       "sourceSkillId": 507012,
       "actionVariantIndex": 0,
       "controlSkillId": 507012,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500165|50016502|0|50016502",
-      "ownerKind": "kibo",
-      "ownerId": 500165,
-      "sourceSkillId": 50016502,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50016502,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3530,17 +2709,11 @@
       "sourceSkillId": 507020,
       "actionVariantIndex": 0,
       "controlSkillId": 507020,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500166|50016602|0|50016602",
-      "ownerKind": "kibo",
-      "ownerId": 500166,
-      "sourceSkillId": 50016602,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50016602,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3550,7 +2723,11 @@
       "sourceSkillId": 507019,
       "actionVariantIndex": 0,
       "controlSkillId": 507019,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3560,7 +2737,11 @@
       "sourceSkillId": 507012,
       "actionVariantIndex": 0,
       "controlSkillId": 507012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3570,7 +2751,11 @@
       "sourceSkillId": 507020,
       "actionVariantIndex": 0,
       "controlSkillId": 507020,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3580,7 +2765,11 @@
       "sourceSkillId": 509001,
       "actionVariantIndex": 0,
       "controlSkillId": 509001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3590,7 +2779,11 @@
       "sourceSkillId": 509002,
       "actionVariantIndex": 0,
       "controlSkillId": 509002,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3600,7 +2793,11 @@
       "sourceSkillId": 509002,
       "actionVariantIndex": 0,
       "controlSkillId": 509002,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3610,7 +2807,11 @@
       "sourceSkillId": 50018502,
       "actionVariantIndex": 0,
       "controlSkillId": 50018502,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3620,7 +2821,11 @@
       "sourceSkillId": 504009,
       "actionVariantIndex": 0,
       "controlSkillId": 504009,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3630,7 +2835,10 @@
       "sourceSkillId": 50018602,
       "actionVariantIndex": 0,
       "controlSkillId": 50018602,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
       "applied": false
     },
     {
@@ -3640,7 +2848,11 @@
       "sourceSkillId": 502001,
       "actionVariantIndex": 0,
       "controlSkillId": 502001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3650,7 +2862,28 @@
       "sourceSkillId": 502007,
       "actionVariantIndex": 0,
       "controlSkillId": 502007,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500209|50020901|0|50020901",
+      "ownerKind": "kibo",
+      "ownerId": 500209,
+      "sourceSkillId": 50020901,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50020901,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3660,7 +2893,11 @@
       "sourceSkillId": 509001,
       "actionVariantIndex": 0,
       "controlSkillId": 509001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3670,7 +2907,11 @@
       "sourceSkillId": 50022001,
       "actionVariantIndex": 0,
       "controlSkillId": 50022001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3680,7 +2921,11 @@
       "sourceSkillId": 509010,
       "actionVariantIndex": 0,
       "controlSkillId": 509010,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3690,7 +2935,11 @@
       "sourceSkillId": 507003,
       "actionVariantIndex": 0,
       "controlSkillId": 507003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3700,7 +2949,11 @@
       "sourceSkillId": 501001,
       "actionVariantIndex": 0,
       "controlSkillId": 501001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3710,7 +2963,14 @@
       "sourceSkillId": 50025801,
       "actionVariantIndex": 0,
       "controlSkillId": 50025801,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3720,7 +2980,11 @@
       "sourceSkillId": 505001,
       "actionVariantIndex": 0,
       "controlSkillId": 505001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3730,7 +2994,14 @@
       "sourceSkillId": 50025901,
       "actionVariantIndex": 0,
       "controlSkillId": 50025901,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3740,7 +3011,14 @@
       "sourceSkillId": 50026001,
       "actionVariantIndex": 0,
       "controlSkillId": 50026001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3750,7 +3028,11 @@
       "sourceSkillId": 502001,
       "actionVariantIndex": 0,
       "controlSkillId": 502001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3760,7 +3042,11 @@
       "sourceSkillId": 502001,
       "actionVariantIndex": 0,
       "controlSkillId": 502001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3770,7 +3056,25 @@
       "sourceSkillId": 502005,
       "actionVariantIndex": 0,
       "controlSkillId": 502005,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500304|50030401|0|50030401",
+      "ownerKind": "kibo",
+      "ownerId": 500304,
+      "sourceSkillId": 50030401,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50030401,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3780,7 +3084,38 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500304|50030404|0|50030404",
+      "ownerKind": "kibo",
+      "ownerId": 500304,
+      "sourceSkillId": 50030404,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50030404,
+      "status": "unresolved",
+      "reasons": [
+        "multiple-control-variants-without-root-selection"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500305|50030501|0|50030501",
+      "ownerKind": "kibo",
+      "ownerId": 500305,
+      "sourceSkillId": 50030501,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50030501,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3790,7 +3125,25 @@
       "sourceSkillId": 504020,
       "actionVariantIndex": 0,
       "controlSkillId": 504020,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500306|50030601|0|50030601",
+      "ownerKind": "kibo",
+      "ownerId": 500306,
+      "sourceSkillId": 50030601,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50030601,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3800,7 +3153,11 @@
       "sourceSkillId": 504006,
       "actionVariantIndex": 0,
       "controlSkillId": 504006,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3810,7 +3167,11 @@
       "sourceSkillId": 50031302,
       "actionVariantIndex": 0,
       "controlSkillId": 50031302,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3820,7 +3181,25 @@
       "sourceSkillId": 501016,
       "actionVariantIndex": 0,
       "controlSkillId": 501016,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500322|50032201|0|50032201",
+      "ownerKind": "kibo",
+      "ownerId": 500322,
+      "sourceSkillId": 50032201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50032201,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3830,7 +3209,38 @@
       "sourceSkillId": 504001,
       "actionVariantIndex": 0,
       "controlSkillId": 504001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500323|50032301|0|50032301",
+      "ownerKind": "kibo",
+      "ownerId": 500323,
+      "sourceSkillId": 50032301,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50032301,
+      "status": "unresolved",
+      "reasons": [
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500324|50032401|0|50032401",
+      "ownerKind": "kibo",
+      "ownerId": 500324,
+      "sourceSkillId": 50032401,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50032401,
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3840,7 +3250,11 @@
       "sourceSkillId": 504006,
       "actionVariantIndex": 0,
       "controlSkillId": 504006,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3850,7 +3264,11 @@
       "sourceSkillId": 509001,
       "actionVariantIndex": 0,
       "controlSkillId": 509001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3860,7 +3278,11 @@
       "sourceSkillId": 509002,
       "actionVariantIndex": 0,
       "controlSkillId": 509002,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3870,7 +3292,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3880,7 +3306,26 @@
       "sourceSkillId": 505011,
       "actionVariantIndex": 0,
       "controlSkillId": 505011,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "selected-control-variant-has-no-runnable-hit"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "kibo|500360|50036001|0|50036001",
+      "ownerKind": "kibo",
+      "ownerId": 500360,
+      "sourceSkillId": 50036001,
+      "actionVariantIndex": 0,
+      "controlSkillId": 50036001,
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
       "applied": false
     },
     {
@@ -3890,17 +3335,11 @@
       "sourceSkillId": 509002,
       "actionVariantIndex": 0,
       "controlSkillId": 509002,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500368|50036801|0|50036801",
-      "ownerKind": "kibo",
-      "ownerId": 500368,
-      "sourceSkillId": 50036801,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50036801,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3910,17 +3349,11 @@
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500369|50036901|0|50036901",
-      "ownerKind": "kibo",
-      "ownerId": 500369,
-      "sourceSkillId": 50036901,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50036901,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3930,17 +3363,11 @@
       "sourceSkillId": 507003,
       "actionVariantIndex": 0,
       "controlSkillId": 507003,
-      "status": "control-found-no-unique-complete-damage-hit",
-      "applied": false
-    },
-    {
-      "identity": "kibo|500370|50037001|0|50037001",
-      "ownerKind": "kibo",
-      "ownerId": 500370,
-      "sourceSkillId": 50037001,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50037001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3950,7 +3377,11 @@
       "sourceSkillId": 507003,
       "actionVariantIndex": 0,
       "controlSkillId": 507003,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3960,7 +3391,14 @@
       "sourceSkillId": 50039901,
       "actionVariantIndex": 0,
       "controlSkillId": 50039901,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3970,7 +3408,11 @@
       "sourceSkillId": 502007,
       "actionVariantIndex": 0,
       "controlSkillId": 502007,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3980,7 +3422,11 @@
       "sourceSkillId": 50046701,
       "actionVariantIndex": 0,
       "controlSkillId": 50046701,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -3990,7 +3436,11 @@
       "sourceSkillId": 506001,
       "actionVariantIndex": 0,
       "controlSkillId": 506001,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     },
     {
@@ -4000,7 +3450,11 @@
       "sourceSkillId": 50046801,
       "actionVariantIndex": 0,
       "controlSkillId": 50046801,
-      "status": "control-found-no-unique-complete-damage-hit",
+      "status": "unresolved",
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ],
       "applied": false
     }
   ]

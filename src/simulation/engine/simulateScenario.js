@@ -141,7 +141,7 @@ export function simulateScenario(
       const resolution = verifiedCombatRuntime.actionResolutionById.get(
         action.id
       );
-      if (!resolution?.ready) {
+      if (!resolution?.ready || resolution.complete === false) {
         eventLog.push({
           type: 'DAMAGE_SKIPPED',
           timeMs: action.startMs,
@@ -149,7 +149,9 @@ export function simulateScenario(
           payload: {
             reason:
               resolution?.status ?? 'verified-action-mechanics-unresolved',
+            reasons: resolution?.reasons ?? [],
             verifiedCombat: true,
+            resourceDimensionsApplied: resolution?.ready === true,
             appliedToCalculators: false,
           },
         });
