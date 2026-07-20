@@ -4,6 +4,7 @@ import {
   ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME,
   createActionRuleDiagnostics,
 } from '../../simulation/runtime/actionRuleDiagnostics';
+import { frameToMs } from '../../domain/timebase';
 
 describe('action rule diagnostics', () => {
   it('reports actor-lane overlap, confirmed cooldown violations, and unapplied preview SP costs', () => {
@@ -330,6 +331,83 @@ describe('action rule diagnostics', () => {
       ])
     );
     expect(result.readinessTimeline.actions).toHaveLength(3);
+  });
+
+  it('keeps free placement while diagnosing real normal-attack input windows', () => {
+    const createPair = ({
+      groupId,
+      baseFrame,
+      nextFrame,
+      status = 'applied',
+    }) => [
+      createSkillAction({
+        id: `${groupId}-a1`,
+        name: 'A1',
+        startMs: frameToMs(baseFrame),
+        durationMs: frameToMs(5),
+        attackGroupId: groupId,
+        attackSequenceIndex: 1,
+        attackSequenceTotal: 2,
+        attackInput: {
+          linkTimingStatus: status,
+          linkTimingReasons:
+            status === 'applied'
+              ? []
+              : ['next-control-event-bridge-window-unavailable'],
+          linkWindow:
+            status === 'applied' ? { startFrame: 19, endFrame: 46 } : null,
+        },
+      }),
+      createSkillAction({
+        id: `${groupId}-a2`,
+        name: 'A2',
+        startMs: frameToMs(baseFrame + nextFrame),
+        durationMs: frameToMs(5),
+        attackGroupId: groupId,
+        attackSequenceIndex: 2,
+        attackSequenceTotal: 2,
+      }),
+    ];
+    const result = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [createActor()],
+        actions: [
+          ...createPair({ groupId: 'early', baseFrame: 0, nextFrame: 10 }),
+          ...createPair({ groupId: 'valid', baseFrame: 100, nextFrame: 19 }),
+          ...createPair({ groupId: 'late', baseFrame: 200, nextFrame: 50 }),
+          ...createPair({
+            groupId: 'unknown',
+            baseFrame: 300,
+            nextFrame: 20,
+            status: 'unresolved',
+          }),
+        ],
+      },
+    });
+
+    expect(result.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY,
+          actionId: 'early-a2',
+          relativeStartFrame: 10,
+        }),
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE,
+          actionId: 'late-a2',
+          relativeStartFrame: 50,
+        }),
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED,
+          actionId: 'unknown-a1',
+        }),
+      ])
+    );
+    expect(result.diagnostics.some(item => item.actionId === 'valid-a2')).toBe(
+      false
+    );
+    expect(result.executable).toBe(true);
   });
 });
 

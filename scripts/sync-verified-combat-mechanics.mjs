@@ -647,6 +647,7 @@ function findSkillControl(skillId) {
         filePath,
         value,
         elementRefs,
+        playerEventBridges: collectSkillPlayerEventBridges(directory, value),
         behaviorTriggers: collectBehaviorTriggers(
           directory,
           filePath,
@@ -696,6 +697,107 @@ function collectElementRefs(skillControl) {
     }
   }
   return refs;
+}
+
+function collectSkillPlayerEventBridges(directory, skillControl) {
+  const objectFiles = createUnityObjectFileIndex(directory);
+  return (skillControl.skillControlData?.skillPlayers ?? []).map(
+    (player, subSkillIndex) =>
+      (player.skillTrackDatas ?? []).flatMap((trackRef, trackIndex) => {
+        const track = readReferencedUnityObject(objectFiles, trackRef);
+        return (track?.value?.behaviorlineControl ?? []).flatMap(
+          (behaviorLine, behaviorLineIndex) =>
+            (behaviorLine.behaviorList ?? []).flatMap(behaviorRef => {
+              const behavior = readReferencedUnityObject(
+                objectFiles,
+                behaviorRef
+              );
+              if (!behavior || !isEventBridgeBehavior(behavior.value))
+                return [];
+              const startFrame = integerOrNull(behavior.value.startFrame);
+              const frameCount = integerOrNull(behavior.value.frameCount);
+              if (
+                startFrame == null ||
+                startFrame < 0 ||
+                frameCount == null ||
+                frameCount <= 0
+              ) {
+                return [];
+              }
+              return [
+                {
+                  subSkillIndex,
+                  trackIndex,
+                  behaviorLineIndex,
+                  behaviorLineName:
+                    String(
+                      behaviorLine.name ?? behaviorLine.trackName ?? ''
+                    ).trim() || null,
+                  trackPathId: track?.pathId ?? null,
+                  behaviorPathId: behavior.pathId,
+                  startFrame,
+                  frameCount,
+                  endFrame: startFrame + frameCount,
+                  allowAttack:
+                    behavior.value.allowAttack === true ||
+                    Number(behavior.value.allowAttack) === 1,
+                  bridgeType: integerOrNull(behavior.value.bridge),
+                  continuousAttackType: integerOrNull(behavior.value.type),
+                  targetSkillId: integerOrNull(behavior.value.skillId),
+                  skillIndex: integerOrNull(behavior.value.skillIndex),
+                  frameIndex: integerOrNull(behavior.value.frameIndex),
+                  baseOnInput:
+                    behavior.value.baseOnInput === true ||
+                    Number(behavior.value.baseOnInput) === 1,
+                  inputToIndex:
+                    behavior.value.inputToIndex === true ||
+                    Number(behavior.value.inputToIndex) === 1,
+                  sourceIdentity: `${relativeExternalPath(track.filePath)}#behaviorlineControl[${behaviorLineIndex}].behaviorList[pathId=${behavior.pathId}]|${relativeExternalPath(behavior.filePath)}`,
+                },
+              ];
+            })
+        );
+      })
+  );
+}
+
+function createUnityObjectFileIndex(directory) {
+  const result = new Map();
+  for (const name of fs.readdirSync(directory)) {
+    if (!name.endsWith('.json')) continue;
+    const match = name.match(/__(-?\d+)\.json$/);
+    if (!match) continue;
+    const pathId = match[1];
+    const filePath = path.join(directory, name);
+    const score = name.startsWith('MonoBehaviour_') ? 2 : 1;
+    const current = result.get(pathId);
+    if (!current || score > current.score) {
+      result.set(pathId, { filePath, score });
+    }
+  }
+  return result;
+}
+
+function readReferencedUnityObject(objectFiles, reference) {
+  const pathId = String(reference?.m_PathID ?? '');
+  const indexed = objectFiles.get(pathId);
+  if (!indexed) return null;
+  return {
+    pathId,
+    filePath: indexed.filePath,
+    value: readUnityJson(indexed.filePath),
+  };
+}
+
+function isEventBridgeBehavior(value) {
+  return (
+    value &&
+    typeof value === 'object' &&
+    Object.hasOwn(value, 'allowAttack') &&
+    Object.hasOwn(value, 'bridge') &&
+    Object.hasOwn(value, 'type') &&
+    Object.hasOwn(value, 'skillId')
+  );
 }
 
 function collectBehaviorTriggers(directory, mainFilePath, elementRefs) {
@@ -978,6 +1080,7 @@ function createControlBinding({
       subSkillIndex: mapIndex,
       playerSkillId: integerOrNull(player?.skillId),
       frameCounts: player?.frameCountDict ?? [],
+      eventBridges: control.playerEventBridges?.[mapIndex] ?? [],
       directElementReferenceCount: (resourceMap?.elements ?? []).length,
       bulletElementReferenceCount: (resourceMap?.bulletElements ?? []).length,
       elementCount: variantElements.length,
@@ -1274,7 +1377,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 4,
+    packageVersion: 5,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -1361,6 +1464,22 @@ function createPackage({
           ).length,
         0
       ),
+      appliedAttackInputTimingCount: actionMappings.reduce(
+        (sum, mapping) =>
+          sum +
+          (mapping.attackInputSegments ?? []).filter(
+            segment => segment.effectiveDurationStatus === 'applied'
+          ).length,
+        0
+      ),
+      unresolvedAttackInputTimingCount: actionMappings.reduce(
+        (sum, mapping) =>
+          sum +
+          (mapping.attackInputSegments ?? []).filter(
+            segment => segment.effectiveDurationStatus !== 'applied'
+          ).length,
+        0
+      ),
     },
   };
 }
@@ -1436,7 +1555,8 @@ function createPublishedControlBinding(binding) {
 }
 
 function createAttackInputSegments(candidate, controlBySkillId) {
-  const segments = (candidate.attackInputControls ?? []).map(input => {
+  const inputs = candidate.attackInputControls ?? [];
+  const segments = inputs.map((input, segmentIndex) => {
     const control = controlBySkillId.get(input.controlSkillId);
     const mapping = createActionMapping(
       {
@@ -1448,9 +1568,14 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       },
       control
     );
+    const selectedHitIdentities = mapping.selectedHitIdentities ?? [];
     const timing = resolveAttackInputSegmentTiming(
       control,
-      mapping.selectedSubSkillIndex
+      mapping.selectedSubSkillIndex,
+      {
+        nextControlSkillId: inputs[segmentIndex + 1]?.controlSkillId ?? null,
+        selectedHitIdentities,
+      }
     );
     return {
       identity: `${mapping.identity}|attack-input-${input.sequenceIndex}`,
@@ -1467,14 +1592,23 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       controlFrameRate: mapping.controlFrameRate,
       controlVariantSkillLevel: mapping.controlVariantSkillLevel,
       controlVariantSourceIdentity: mapping.controlVariantSourceIdentity,
+      animationDurationFrames: timing.animationDurationFrames,
+      animationDurationStatus: timing.animationDurationStatus,
+      animationDurationSourceIdentity: timing.animationDurationSourceIdentity,
+      hitEndFrame: timing.hitEndFrame,
+      hitEndSourceIdentity: timing.hitEndSourceIdentity,
+      effectiveDurationFrames: timing.effectiveDurationFrames,
+      effectiveDurationStatus: timing.effectiveDurationStatus,
       durationFrames: timing.durationFrames,
       durationStatus: timing.status,
+      durationBasis: timing.durationBasis,
       durationSourceIdentity: timing.sourceIdentity,
-      defaultLinkDelayFrames: null,
-      linkWindow: null,
-      linkTimingStatus: 'unresolved',
-      linkTimingReasons: ['attack-input-link-window-track-unavailable'],
-      selectedHitIdentities: mapping.selectedHitIdentities ?? [],
+      defaultLinkDelayFrames: timing.effectiveDurationFrames == null ? null : 0,
+      linkWindow: timing.linkWindow,
+      linkWindows: timing.linkWindows,
+      linkTimingStatus: timing.linkTimingStatus,
+      linkTimingReasons: timing.linkTimingReasons,
+      selectedHitIdentities,
       hitCount: mapping.runtimeHitCount ?? 0,
       classification: mapping.classification,
       reasons: mapping.reasons ?? [],
@@ -1495,10 +1629,85 @@ function createAttackInputSegments(candidate, controlBySkillId) {
   return segments;
 }
 
-function resolveAttackInputSegmentTiming(control, selectedSubSkillIndex) {
+function resolveAttackInputSegmentTiming(
+  control,
+  selectedSubSkillIndex,
+  { nextControlSkillId = null, selectedHitIdentities = [] } = {}
+) {
   const selectedVariant = control?.variants?.find(
     variant => variant.subSkillIndex === selectedSubSkillIndex
   );
+  const animation = resolveAttackInputAnimationTiming(control, selectedVariant);
+  const selectedHitSet = new Set(selectedHitIdentities);
+  const selectedHits = (control?.hits ?? []).filter(hit =>
+    selectedHitSet.has(hit.hitIdentity)
+  );
+  const hitEndFrame = selectedHits.length
+    ? Math.max(...selectedHits.map(hit => Number(hit.trigger?.startFrame) || 0))
+    : null;
+  const hitEndSourceIdentity =
+    selectedHits
+      .filter(hit => Number(hit.trigger?.startFrame) === hitEndFrame)
+      .map(hit => hit.sourceIdentity)
+      .join('|') || null;
+  const linkKind = nextControlSkillId
+    ? 'next-control-input-window'
+    : 'attack-reopen-window';
+  const linkWindows = normalizeAttackInputWindows(
+    (selectedVariant?.eventBridges ?? []).filter(bridge =>
+      nextControlSkillId
+        ? bridge.targetSkillId === nextControlSkillId
+        : bridge.allowAttack
+    ),
+    { kind: linkKind, targetControlSkillId: nextControlSkillId }
+  );
+  const linkWindow = linkWindows[0] ?? null;
+  const fullHitSafeWindowStart = linkWindow
+    ? Math.max(linkWindow.startFrame, hitEndFrame ?? linkWindow.startFrame)
+    : null;
+  const linkWindowContainsFinalHit =
+    linkWindow != null && fullHitSafeWindowStart <= linkWindow.endFrame;
+  const effectiveDurationFrames = linkWindowContainsFinalHit
+    ? fullHitSafeWindowStart
+    : null;
+  const durationFrames =
+    effectiveDurationFrames ?? Math.max(1, (hitEndFrame ?? 0) + 1);
+  const linkTimingReasons = linkWindowContainsFinalHit
+    ? []
+    : linkWindow
+      ? ['input-window-ends-before-final-hit']
+      : [
+          nextControlSkillId
+            ? 'next-control-event-bridge-window-unavailable'
+            : 'attack-reopen-event-bridge-window-unavailable',
+        ];
+  return {
+    animationDurationFrames: animation.durationFrames,
+    animationDurationStatus: animation.status,
+    animationDurationSourceIdentity: animation.sourceIdentity,
+    hitEndFrame,
+    hitEndSourceIdentity,
+    effectiveDurationFrames,
+    effectiveDurationStatus: linkWindowContainsFinalHit
+      ? 'applied'
+      : 'unresolved',
+    durationFrames,
+    status: linkWindowContainsFinalHit ? 'applied' : 'unresolved',
+    durationBasis: linkWindowContainsFinalHit
+      ? linkKind
+      : 'unresolved-hit-envelope',
+    sourceIdentity:
+      linkWindow?.sourceIdentity ??
+      hitEndSourceIdentity ??
+      animation.sourceIdentity,
+    linkWindow,
+    linkWindows,
+    linkTimingStatus: linkWindowContainsFinalHit ? 'applied' : 'unresolved',
+    linkTimingReasons,
+  };
+}
+
+function resolveAttackInputAnimationTiming(control, selectedVariant) {
   const selectedFrame = resolveDefaultFrameCount(selectedVariant?.frameCounts);
   if (selectedFrame) {
     return {
@@ -1533,6 +1742,45 @@ function resolveAttackInputSegmentTiming(control, selectedSubSkillIndex) {
     status: 'unresolved',
     sourceIdentity: control?.sourcePath ?? null,
   };
+}
+
+function normalizeAttackInputWindows(
+  bridges,
+  { kind, targetControlSkillId = null }
+) {
+  const windows = dedupeBy(
+    bridges
+      .map(bridge => ({
+        kind,
+        targetControlSkillId,
+        startFrame: Math.max(0, Number(bridge.startFrame) || 0),
+        endFrame: Math.max(0, Number(bridge.endFrame) || 0),
+        durationFrames: Math.max(0, Number(bridge.frameCount) || 0),
+        continuousAttackType: bridge.continuousAttackType,
+        bridgeType: bridge.bridgeType,
+        sourceIdentity: bridge.sourceIdentity,
+      }))
+      .filter(
+        window =>
+          window.durationFrames > 0 && window.endFrame > window.startFrame
+      )
+      .sort(
+        (left, right) =>
+          left.startFrame - right.startFrame ||
+          left.endFrame - right.endFrame ||
+          left.sourceIdentity.localeCompare(right.sourceIdentity)
+      ),
+    window =>
+      [
+        window.kind,
+        window.targetControlSkillId,
+        window.startFrame,
+        window.endFrame,
+        window.continuousAttackType,
+        window.bridgeType,
+      ].join('|')
+  );
+  return windows;
 }
 
 function resolveDefaultFrameCount(frameCounts) {
@@ -2335,6 +2583,22 @@ function createActionCoverageReport({
         (sum, chain) => sum + chain.unresolvedSegmentCount,
         0
       ),
+      appliedAttackInputTimingCount: attackInputChains.reduce(
+        (sum, chain) =>
+          sum +
+          chain.segments.filter(
+            segment => segment.effectiveDurationStatus === 'applied'
+          ).length,
+        0
+      ),
+      unresolvedAttackInputTimingCount: attackInputChains.reduce(
+        (sum, chain) =>
+          sum +
+          chain.segments.filter(
+            segment => segment.effectiveDurationStatus !== 'applied'
+          ).length,
+        0
+      ),
     },
     byOwnerActionKind,
     byOwner,
@@ -2405,6 +2669,7 @@ function createActionCoverageMarkdown(report) {
     `- 公开动作变体：${report.summary.publicVariantCount}（未解析 ${report.summary.unresolvedPublicVariantCount}）`,
     `- 非零回能元素：${report.summary.nonzeroRecoveryElementCount}（未关联 ${report.summary.unresolvedNonzeroRecoveryElementCount}）`,
     `- 普攻输入链：${report.summary.attackInputChainCount} 条 / ${report.summary.attackInputSegmentCount} 个输入段（可运行 ${report.summary.appliedAttackInputSegmentCount}，未解析 ${report.summary.unresolvedAttackInputSegmentCount}）`,
+    `- 普攻输入时序：已确认 ${report.summary.appliedAttackInputTimingCount}，未确认 ${report.summary.unresolvedAttackInputTimingCount}`,
     '',
     '## 普攻输入链',
     '',

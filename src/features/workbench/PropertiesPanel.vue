@@ -61,6 +61,31 @@
           >
           <small>{{ selectedAction.attackInput.classification }}</small>
         </div>
+        <div class="logic-source-item">
+          <span>有效占轴</span>
+          <strong
+            >{{
+              selectedAction.attackInput.effectiveDurationFrames ??
+              selectedAction.attackInput.durationFrames
+            }}F</strong
+          >
+          <small>{{
+            formatAttackInputWindow(selectedAction.attackInput)
+          }}</small>
+        </div>
+        <div class="logic-source-item">
+          <span>动画与命中</span>
+          <strong
+            >动画
+            {{
+              selectedAction.attackInput.animationDurationFrames ?? '待确认'
+            }}F</strong
+          >
+          <small
+            >最后命中
+            {{ selectedAction.attackInput.hitEndFrame ?? '待确认' }}F</small
+          >
+        </div>
       </div>
     </div>
 
@@ -871,6 +896,24 @@ function formatGeneratedEffectTiming(command) {
   const duration = command?.durationMs;
   const durationText = duration == null ? '持续' : `${msToFrame(duration)}F`;
   return `${startFrame}F 触发 · ${durationText}`;
+}
+
+function formatAttackInputWindow(attackInput) {
+  const window = attackInput?.linkWindow;
+  if (
+    attackInput?.linkTimingStatus !== 'applied' ||
+    window?.startFrame == null ||
+    window?.endFrame == null
+  ) {
+    return '输入窗口待确认';
+  }
+  const mode =
+    window.continuousAttackType === 1
+      ? '立即衔接'
+      : window.continuousAttackType === 0
+        ? '等待衔接'
+        : '输入衔接';
+  return `${window.startFrame}-${window.endFrame}F · ${mode}`;
 }
 
 function formatGeneratedEffectSource(command) {

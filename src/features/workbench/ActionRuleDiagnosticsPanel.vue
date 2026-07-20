@@ -147,6 +147,15 @@ function formatRuleLabel(code) {
   if (code === ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID) {
     return '普攻链顺序';
   }
+  if (code === ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED) {
+    return '普攻窗口待确认';
+  }
+  if (code === ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY) {
+    return '普攻输入过早';
+  }
+  if (code === ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE) {
+    return '普攻输入过晚';
+  }
   if (code === ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED) {
     return '旧普攻待迁移';
   }

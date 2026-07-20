@@ -1592,6 +1592,12 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 
 完整 `test:trial-release` 通过 106 个测试文件、597 条测试和 48/48 production preview；总 JavaScript gzip 为 680,130B，Workbench 主块为 368,851B。桌面与窄屏证据为 `reports/m7r1-attack-input-chain-desktop.png` 和 `reports/m7r1-attack-input-chain-narrow.png`。当前停在 M7-R1 等待产品复验，不进入 M8。
 
+### M7-R2 普攻连段时序修正已完成，等待产品复验（2026-07-20）
+
+普攻输入段现把完整动画、末次命中、EventBridge 输入窗口和有效占轴时长分开记录。当前 95 段中 63 段有可靠时序，32 段保持 `unresolved`；莉莉 A1-A5 已从错误的完整动画 `155/221/282/192/293F` 改为真实有效占轴 `19/32/40/42/56F`，完整动画只保留为来源证据。旧版未编辑连段会自动紧凑迁移，单段编辑保持独立，窗口外自由排轴只产生可操作诊断。
+
+发布守门通过 106 个测试文件、599 条测试和 48/48 production preview；五载体保持采用的输入窗口、有效时长和逐段运行时结果。总 JavaScript gzip 为 681,539B，Workbench 主块为 369,983B；桌面与窄屏证据为 `reports/m7r2-attack-input-timing-desktop.png` 和 `reports/m7r2-attack-input-timing-narrow.png`。当前停在 M7-R2 等待产品复验，不进入 M8。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

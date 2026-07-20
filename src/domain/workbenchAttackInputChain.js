@@ -1,4 +1,4 @@
-import { frameToMs, snapMsToFrame } from './timebase';
+import { frameToMs, msToFrame, snapMsToFrame } from './timebase';
 
 export const ATTACK_INPUT_CHAIN_SOURCE = 'normal-attack-input-chain';
 export const ATTACK_INPUT_LEGACY_UNRESOLVED = 'legacy-unresolved';
@@ -75,7 +75,7 @@ export function createWorkbenchAttackInputChainDrafts({
     const actionId = actionIds[index];
     const durationMs = Math.max(
       frameToMs(1),
-      frameToMs(segment.durationFrames)
+      frameToMs(segment.effectiveDurationFrames ?? segment.durationFrames)
     );
     const linkDelayFrames = segment.defaultLinkDelayFrames;
     const action = {
@@ -123,11 +123,14 @@ export function migrateLegacyAttackInputActionDrafts(
       unresolvedActionIds: [],
     };
   }
-  const usedIds = new Set(actions.map(action => String(action.id ?? '')));
+  const refreshed = refreshAttackInputActionDrafts(actions, resolveMapping);
+  const usedIds = new Set(
+    refreshed.actions.map(action => String(action.id ?? ''))
+  );
   const unresolvedActionIds = [];
-  let changed = false;
+  let changed = refreshed.changed;
   const result = [];
-  for (const action of actions) {
+  for (const action of refreshed.actions) {
     if (
       action?.type !== 'skill' ||
       action.attackInput ||
@@ -186,7 +189,13 @@ export function migrateLegacyAttackInputActionDrafts(
 function normalizeAttackInputSegment(segment) {
   const identity = normalizeText(segment?.identity);
   const controlSkillId = positiveIntegerOrNull(segment?.controlSkillId);
-  const durationFrames = Math.max(0, Number(segment?.durationFrames) || 0);
+  const effectiveDurationFrames = positiveIntegerOrNull(
+    segment?.effectiveDurationFrames
+  );
+  const durationFrames =
+    effectiveDurationFrames ??
+    positiveIntegerOrNull(segment?.durationFrames) ??
+    0;
   const sequenceIndex = Math.max(0, Number(segment?.sequenceIndex) || 0);
   const sequenceTotal = Math.max(0, Number(segment?.sequenceTotal) || 0);
   if (
@@ -209,9 +218,13 @@ function normalizeAttackInputSegment(segment) {
     ),
     playerSkillId: positiveIntegerOrNull(segment.playerSkillId),
     resourceMapIndex: nonNegativeIntegerOrNull(segment.resourceMapIndex),
+    animationDurationFrames: positiveIntegerOrNull(
+      segment.animationDurationFrames
+    ),
+    hitEndFrame: nonNegativeIntegerOrNull(segment.hitEndFrame),
+    effectiveDurationFrames,
     durationFrames,
     durationStatus: normalizeText(segment.durationStatus) ?? 'unresolved',
-    durationSourceIdentity: normalizeText(segment.durationSourceIdentity),
     defaultLinkDelayFrames: nonNegativeIntegerOrNull(
       segment.defaultLinkDelayFrames
     ),
@@ -232,7 +245,131 @@ function normalizeLinkWindow(value) {
   const endFrame = nonNegativeIntegerOrNull(value.endFrame);
   return startFrame == null && endFrame == null
     ? null
-    : { startFrame, endFrame };
+    : {
+        kind: normalizeText(value.kind),
+        targetControlSkillId: positiveIntegerOrNull(value.targetControlSkillId),
+        startFrame,
+        endFrame,
+        durationFrames: nonNegativeIntegerOrNull(value.durationFrames),
+        continuousAttackType: nonNegativeIntegerOrNull(
+          value.continuousAttackType
+        ),
+        bridgeType: nonNegativeIntegerOrNull(value.bridgeType),
+        sourceIdentity: normalizeText(value.sourceIdentity),
+      };
+}
+
+function refreshAttackInputActionDrafts(actions, resolveMapping) {
+  const refreshes = new Map();
+  for (const action of actions) {
+    if (!action?.attackInput || action.attackInputLegacyStatus) continue;
+    const mapping = resolveMapping(action);
+    if (mapping?.actionKind !== 'normal-attack') continue;
+    const segments = normalizeAttackInputSegments(mapping.attackInputSegments);
+    const segment = segments.find(
+      item =>
+        item.sequenceIndex === Number(action.attackSequenceIndex) &&
+        item.controlSkillId === Number(action.attackInput.controlSkillId)
+    );
+    if (!segment) continue;
+    const oldDefaultFrames =
+      positiveIntegerOrNull(action.attackInput.effectiveDurationFrames) ??
+      positiveIntegerOrNull(action.attackInput.durationFrames);
+    const durationWasDefault =
+      oldDefaultFrames != null &&
+      Math.abs(msToFrame(action.durationMs) - oldDefaultFrames) <= 1;
+    refreshes.set(action.id, {
+      segment,
+      durationWasDefault,
+      oldDefaultFrames,
+    });
+  }
+  const pristineGroups = findPristineAttackInputGroups(actions, refreshes);
+  let changed = false;
+  const refreshedActions = actions.map(action => {
+    const refresh = refreshes.get(action.id);
+    if (!refresh) return action;
+    const durationFrames =
+      refresh.segment.effectiveDurationFrames ?? refresh.segment.durationFrames;
+    const next = {
+      ...action,
+      ...(refresh.durationWasDefault
+        ? { durationMs: frameToMs(durationFrames) }
+        : {}),
+      attackSequenceIndex: refresh.segment.sequenceIndex,
+      attackSequenceTotal: refresh.segment.sequenceTotal,
+      attackInput: refresh.segment,
+    };
+    if (!sameValue(action, next)) changed = true;
+    return next;
+  });
+  for (const group of pristineGroups) {
+    let cursorMs = group[0].startMs;
+    for (const originalAction of group) {
+      const actionIndex = refreshedActions.findIndex(
+        action => action.id === originalAction.id
+      );
+      if (actionIndex < 0) continue;
+      const action = refreshedActions[actionIndex];
+      if (Math.abs(Number(action.startMs) - Number(cursorMs)) > 0.001) {
+        refreshedActions[actionIndex] = { ...action, startMs: cursorMs };
+        changed = true;
+      }
+      cursorMs = snapMsToFrame(
+        cursorMs +
+          refreshedActions[actionIndex].durationMs +
+          frameToMs(
+            refreshedActions[actionIndex].attackInput.defaultLinkDelayFrames ??
+              0
+          )
+      );
+    }
+  }
+  return { actions: refreshedActions, changed };
+}
+
+function findPristineAttackInputGroups(actions, refreshes) {
+  const groups = new Map();
+  for (const action of actions) {
+    if (!action?.attackGroupId || !refreshes.has(action.id)) continue;
+    if (!groups.has(action.attackGroupId)) groups.set(action.attackGroupId, []);
+    groups.get(action.attackGroupId).push(action);
+  }
+  return [...groups.values()]
+    .map(groupActions =>
+      [...groupActions].sort(
+        (left, right) =>
+          Number(left.attackSequenceIndex) - Number(right.attackSequenceIndex)
+      )
+    )
+    .filter(group => {
+      const expectedTotal = Number(group[0]?.attackSequenceTotal) || 0;
+      if (
+        expectedTotal !== group.length ||
+        group.some(
+          (action, index) =>
+            Number(action.attackSequenceIndex) !== index + 1 ||
+            !refreshes.get(action.id)?.durationWasDefault
+        )
+      ) {
+        return false;
+      }
+      return group.every((action, index) => {
+        if (index === 0) return true;
+        const previous = group[index - 1];
+        const previousRefresh = refreshes.get(previous.id);
+        const expectedStartMs = snapMsToFrame(
+          Number(previous.startMs) +
+            frameToMs(previousRefresh.oldDefaultFrames) +
+            frameToMs(previous.attackInput.defaultLinkDelayFrames ?? 0)
+        );
+        return Math.abs(Number(action.startMs) - expectedStartMs) <= 0.001;
+      });
+    });
+}
+
+function sameValue(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 function normalizeTextArray(values) {

@@ -1368,12 +1368,9 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   ).toContainText('汐灵偶');
 
   await closeInspectorIfVisible(page);
-  await dragLocatorTo(
-    page,
-    getSingleSkillActionEntry(page),
-    replacementLane,
-    { targetPosition: { x: 760, y: 26 } }
-  );
+  await dragLocatorTo(page, getSingleSkillActionEntry(page), replacementLane, {
+    targetPosition: { x: 760, y: 26 },
+  });
   const insertedAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
   );
@@ -1386,13 +1383,16 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   ).toHaveCount(0);
   const reviewedEvent = timeline
     .locator(
-      '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0001"]'
+      '[data-testid="workbench-timeline-state-curve-node"][data-action-id^="action-0001"]'
     )
-    .first();
+    .last();
   await expect(reviewedEvent).toBeVisible();
-  expect(
-    Number(await reviewedEvent.getAttribute('data-frame-index'))
-  ).toBeGreaterThanOrEqual(0);
+  const reviewedActionId = await reviewedEvent.getAttribute('data-action-id');
+  const reviewedFrameIndex = Number(
+    await reviewedEvent.getAttribute('data-frame-index')
+  );
+  expect(reviewedActionId).toMatch(/^action-0001/);
+  expect(reviewedFrameIndex).toBeGreaterThanOrEqual(0);
   await reviewedEvent.click();
   await expect(
     page.getByTestId('workbench-runtime-selected-detail')
@@ -1409,7 +1409,7 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
     .toBeGreaterThan(insertedStartBeforeEdit);
   const restoredReviewedEvent = timeline
     .locator(
-      '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0001"]'
+      `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${reviewedActionId}"][data-frame-index="${reviewedFrameIndex}"]`
     )
     .first();
 
@@ -1540,12 +1540,9 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
   const actorTwoLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
   );
-  await dragLocatorTo(
-    page,
-    getSingleSkillActionEntry(page),
-    actorTwoLane,
-    { targetPosition: { x: 300, y: 26 } }
-  );
+  await dragLocatorTo(page, getSingleSkillActionEntry(page), actorTwoLane, {
+    targetPosition: { x: 300, y: 26 },
+  });
   await closeInspectorIfVisible(page);
   await dragLocatorTo(
     page,
@@ -2353,9 +2350,11 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
   await dragLocatorTo(page, kiboSource, kiboLane, {
     targetPosition: { x: 120, y: 36 },
   });
-  const sourceActorAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
-  ).last();
+  const sourceActorAction = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
+    )
+    .last();
   const sourceKiboAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="50000302"]'
   );
@@ -3089,7 +3088,7 @@ test('[m7-catalog-runtime-workflow] runs mapped actor and kibo actions while exp
   }
 });
 
-test('[m7-r1-normal-attack-input-chain] drags one catalog entry into editable A1-A5 siblings', async ({
+test('[m7-r2-normal-attack-input-timing] uses real input windows for compact editable A1-A5 siblings', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -3139,12 +3138,37 @@ test('[m7-r1-normal-attack-input-chain] drags one catalog entry into editable A1
       }))
     )
   ).toEqual([
-    { label: 'A1', sequenceIndex: 1, durationMs: frameToMs(155) },
-    { label: 'A2', sequenceIndex: 2, durationMs: frameToMs(221) },
-    { label: 'A3', sequenceIndex: 3, durationMs: frameToMs(282) },
-    { label: 'A4', sequenceIndex: 4, durationMs: frameToMs(192) },
-    { label: 'A5', sequenceIndex: 5, durationMs: frameToMs(293) },
+    { label: 'A1', sequenceIndex: 1, durationMs: frameToMs(19) },
+    { label: 'A2', sequenceIndex: 2, durationMs: frameToMs(32) },
+    { label: 'A3', sequenceIndex: 3, durationMs: frameToMs(40) },
+    { label: 'A4', sequenceIndex: 4, durationMs: frameToMs(42) },
+    { label: 'A5', sequenceIndex: 5, durationMs: frameToMs(56) },
   ]);
+  const compactFrames = await group.evaluateAll(actions =>
+    actions.map(action => ({
+      startMs: Number(action.getAttribute('data-start-ms')),
+      durationMs: Number(action.getAttribute('data-duration-ms')),
+    }))
+  );
+  expect(
+    compactFrames
+      .slice(1)
+      .every(
+        (action, index) =>
+          Math.abs(
+            action.startMs -
+              (compactFrames[index].startMs + compactFrames[index].durationMs)
+          ) < 0.001
+      )
+  ).toBe(true);
+  await group.nth(2).click();
+  await expect(
+    page.getByTestId('workbench-attack-input-segment-source')
+  ).toContainText(/有效占轴\s*40F/);
+  await expect(
+    page.getByTestId('workbench-attack-input-segment-source')
+  ).toContainText(/动画\s*282F/);
+  await closeInspectorIfVisible(page);
 
   await page.getByTestId('workbench-undo-edit').click();
   await expect(group).toHaveCount(0);
@@ -3229,7 +3253,7 @@ test('[m7-r1-normal-attack-input-chain] drags one catalog entry into editable A1
   await closeInspectorIfVisible(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
-    path: 'reports/m7r1-attack-input-chain-desktop.png',
+    path: 'reports/m7r2-attack-input-timing-desktop.png',
   });
 
   await page.setViewportSize({ width: 390, height: 900 });
@@ -3238,7 +3262,7 @@ test('[m7-r1-normal-attack-input-chain] drags one catalog entry into editable A1
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
-    path: 'reports/m7r1-attack-input-chain-narrow.png',
+    path: 'reports/m7r2-attack-input-timing-narrow.png',
   });
 });
 

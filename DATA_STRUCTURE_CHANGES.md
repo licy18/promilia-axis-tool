@@ -27588,3 +27588,19 @@ eventLog[] / summary
 `AzPrInitialRuntimeState` 从 v2 升级为 v3。新增 `kiboEnergyBySlot[]`，以 `slotId / actorId / characterId / kiboId / currentValue / maxValue` 保存三个奇波 SP owner；敌人初始状态新增 `inBreak / breakElapsedMs / recoveryDelayRemainingMs / valueShields[] / hitCountShields[] / lastToughnessSourceActionId / lastToughnessSourceActorId`。旧 v1/v2 数据缺少这些字段时按空列表、非 Break 和无来源锚点兼容，不伪造盾或奇波资源。
 
 循环边界现从 verified 资源曲线读取边界前一刻的三条奇波 SP，并与既有三角色 SP、敌人 HP/韧性、Break 已经过时长、普通恢复剩余时间、盾、韧性来源锚点、受控角色和 active effects 一起生成下一周期初始状态；边界事件使用严格“小于边界”语义，避免同帧事件被前后周期重复消费。`curvesByKibo` 在 verified runtime 就绪时改用真实 kibo SP 事件、`semanticResource = kibo-sp` 与 `appliedToCalculators = true`；旧 capture 的 `PetUltimateCdTime` 观测路径继续保留为 tracking-only。项目、草稿、JSON、分享链接和 PNG 仍使用现有 v16 载体结构，无需项目 schema 迁移。
+
+## 441. Normal attack input timing contract v2
+
+`verified-combat-mechanics-package.json` 升级为 package v5。角色 normal-attack mapping 的 `attackInputSegments[]` 在既有 `sequenceIndex / sequenceTotal / controlSkillId / selectedHitIdentities` 基础上，将完整动画证据与有效排轴时序分离：
+
+```text
+animationDurationFrames / animationDurationStatus / animationDurationSourceIdentity
+hitEndFrame / hitEndSourceIdentity
+effectiveDurationFrames / effectiveDurationStatus
+durationFrames / durationStatus / durationBasis / durationSourceIdentity
+linkWindow / linkWindows[] / linkTimingStatus / linkTimingReasons[]
+```
+
+生成器沿 `skillPlayer -> skillTrackData -> behaviorlineControl -> EventBridgeBehaviorData` 解析指向下一 control 的输入窗口或末段重新开放普攻窗口，并保留 `Immediately / Wait` 模式与来源 identity。有效占轴取输入窗口起点与末次命中帧中的较晚者；窗口在末次命中前结束或没有唯一来源时，状态保持 `unresolved`，`durationFrames` 只提供覆盖已知命中的未决显示范围，不声明为真实连段时长。
+
+Workbench action 继续使用现有项目 schema，只持久化实际采用的 `linkWindow`、有效/动画/末次命中帧和原有逐段 identity；完整候选窗口与来源审计留在按需公式包。五种载体因此恢复同一采用窗口、块宽和逐段三值结果，无需升级项目版本。旧 M7-R1 分段动作在来源唯一且仍保持原始连续排布时会刷新元数据、时长并紧凑重排；已移动、删除或自定义时长的动作保留用户编辑。旧聚合普攻仍按既有唯一解析或 `legacy-unresolved` 规则处理。

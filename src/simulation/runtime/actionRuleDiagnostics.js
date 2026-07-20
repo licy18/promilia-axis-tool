@@ -14,6 +14,9 @@ export const ACTION_RULE_CODES = Object.freeze({
   SKILL_SP_PRECONDITION_UNRESOLVED: 'skill-sp-precondition-unresolved',
   ATTACK_INPUT_CHAIN_INCOMPLETE: 'attack-input-chain-incomplete',
   ATTACK_INPUT_CHAIN_ORDER_INVALID: 'attack-input-chain-order-invalid',
+  ATTACK_INPUT_LINK_TIMING_UNRESOLVED: 'attack-input-link-timing-unresolved',
+  ATTACK_INPUT_LINK_TOO_EARLY: 'attack-input-link-too-early',
+  ATTACK_INPUT_LINK_TOO_LATE: 'attack-input-link-too-late',
   ATTACK_INPUT_LEGACY_UNRESOLVED: 'attack-input-legacy-unresolved',
 });
 
@@ -39,7 +42,7 @@ export function createActionRuleDiagnostics({
       scenario.actors ?? [],
       scenario
     ),
-    ...createAttackInputChainDiagnostics(actions),
+    ...createAttackInputChainDiagnostics(actions, scenario.time?.fps),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
     item => item.status === ACTION_RULE_STATUSES.VIOLATED
@@ -72,7 +75,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 6,
+      ruleCount: 9,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -94,6 +97,9 @@ export function createActionRuleDiagnostics({
         [
           ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
           ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+          ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED,
+          ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY,
+          ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE,
           ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED,
         ].includes(item.code)
       ).length,
@@ -108,7 +114,7 @@ export function createActionRuleDiagnostics({
   };
 }
 
-function createAttackInputChainDiagnostics(actions) {
+function createAttackInputChainDiagnostics(actions, fps = 60) {
   const diagnostics = actions
     .filter(action => action.attackInputLegacyStatus === 'legacy-unresolved')
     .map(action =>
@@ -161,6 +167,61 @@ function createAttackInputChainDiagnostics(actions) {
           action: inverted,
           groupActions: bySequence,
           message: `普攻输入链顺序已改变，${inverted.name} 早于前一输入段`,
+        })
+      );
+    }
+    for (const action of bySequence) {
+      const sequenceIndex = Number(action.attackSequenceIndex) || 0;
+      if (sequenceIndex <= 0 || sequenceIndex >= expectedTotal) continue;
+      const nextAction = bySequence.find(
+        candidate => Number(candidate.attackSequenceIndex) === sequenceIndex + 1
+      );
+      if (!nextAction) continue;
+      const linkWindow = action.attackInput?.linkWindow;
+      if (
+        action.attackInput?.linkTimingStatus !== 'applied' ||
+        !linkWindow
+      ) {
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED,
+            action,
+            groupActions: [action, nextAction],
+            message: `${action.name} 到 ${nextAction.name} 的真实输入窗口尚未确认，当前自由排布不会被自动修正`,
+          })
+        );
+        continue;
+      }
+      const relativeStartFrame = msToFrame(
+        Number(nextAction.startMs) - Number(action.startMs),
+        fps
+      );
+      if (
+        relativeStartFrame >= linkWindow.startFrame &&
+        relativeStartFrame <= linkWindow.endFrame
+      ) {
+        continue;
+      }
+      const tooEarly = relativeStartFrame < linkWindow.startFrame;
+      diagnostics.push(
+        createAttackInputDiagnostic({
+          code: tooEarly
+            ? ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY
+            : ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE,
+          action: nextAction,
+          groupActions: [action, nextAction],
+          message: tooEarly
+            ? `${nextAction.name} 比 ${action.name} 的最早输入窗口提前 ${linkWindow.startFrame - relativeStartFrame}F`
+            : `${nextAction.name} 已超过 ${action.name} 的输入窗口 ${relativeStartFrame - linkWindow.endFrame}F`,
+          extra: {
+            relativeStartFrame,
+            suggestedStartMs:
+              Number(action.startMs) +
+              ((tooEarly ? linkWindow.startFrame : linkWindow.endFrame) *
+                1000) /
+                (Number(fps) || 60),
+            editFieldKey: 'startMs',
+          },
         })
       );
     }

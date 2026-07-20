@@ -25,7 +25,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 4,
+      packageVersion: 5,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -42,6 +42,8 @@ describe('verified combat mechanics package', () => {
         attackInputSegmentCount: 95,
         appliedAttackInputSegmentCount: 49,
         unresolvedAttackInputSegmentCount: 46,
+        appliedAttackInputTimingCount: 63,
+        unresolvedAttackInputTimingCount: 32,
       },
       spUnitContract: {
         valueUnit: 'absolute-sp-points',
@@ -141,8 +143,44 @@ describe('verified combat mechanics package', () => {
     );
     expect(fiveInput.attackInputSegments[2]).toMatchObject({
       controlSkillId: 10200103,
-      durationFrames: 282,
+      durationFrames: 40,
+      effectiveDurationFrames: 40,
+      animationDurationFrames: 282,
+      hitEndFrame: 30,
+      linkWindow: {
+        startFrame: 40,
+        endFrame: 96,
+        continuousAttackType: 1,
+      },
       hitCount: 6,
+    });
+    expect(
+      fiveInput.attackInputSegments.map(segment => segment.durationFrames)
+    ).toEqual([19, 32, 40, 42, 56]);
+    expect(
+      fiveInput.attackInputSegments.map(
+        segment => segment.animationDurationFrames
+      )
+    ).toEqual([155, 221, 282, 192, 293]);
+    expect(
+      fiveInput.attackInputSegments.every(
+        segment =>
+          segment.durationFrames >= (segment.hitEndFrame ?? 0) &&
+          segment.durationFrames <= segment.linkWindow.endFrame
+      )
+    ).toBe(true);
+    const fullHitSafeSegment = mechanicsPackage.actionMappings
+      .find(
+        mapping =>
+          mapping.ownerId === 107002 && mapping.actionKind === 'normal-attack'
+      )
+      .attackInputSegments.find(segment => segment.sequenceIndex === 3);
+    expect(fullHitSafeSegment).toMatchObject({
+      controlSkillId: 10700203,
+      hitEndFrame: 100,
+      effectiveDurationFrames: 100,
+      linkWindow: { startFrame: 87, endFrame: 126 },
+      linkTimingStatus: 'applied',
     });
     const hitIdentities = fiveInput.attackInputSegments.flatMap(
       segment => segment.selectedHitIdentities
