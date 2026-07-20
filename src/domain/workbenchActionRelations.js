@@ -42,18 +42,28 @@ export function normalizeWorkbenchActionRelations(
         : createNextWorkbenchActionRelationIdFromUsedIds(usedRelationIds);
     usedRelationIds.add(id);
     edgeKeys.add(edgeKey);
+    const kind = Object.values(ACTION_RELATION_KINDS).includes(
+      sourceRelation?.kind
+    )
+      ? sourceRelation.kind
+      : ACTION_RELATION_KINDS.SEQUENCE;
+    const simultaneous = kind === ACTION_RELATION_KINDS.SIMULTANEOUS;
     normalizedRelations.push(
       createActionRelation({
         id,
-        kind: ACTION_RELATION_KINDS.SEQUENCE,
+        kind,
         fromActionId,
         toActionId,
-        sourceAnchor: ACTION_RELATION_ANCHORS.SOURCE_END,
+        sourceAnchor: simultaneous
+          ? ACTION_RELATION_ANCHORS.SOURCE_START
+          : ACTION_RELATION_ANCHORS.SOURCE_END,
         targetAnchor: ACTION_RELATION_ANCHORS.TARGET_START,
-        gapMs: resolveWorkbenchActionRelationGapMs(
-          actionsById.get(fromActionId),
-          actionsById.get(toActionId)
-        ),
+        gapMs: simultaneous
+          ? 0
+          : resolveWorkbenchActionRelationGapMs(
+              actionsById.get(fromActionId),
+              actionsById.get(toActionId)
+            ),
       })
     );
   }

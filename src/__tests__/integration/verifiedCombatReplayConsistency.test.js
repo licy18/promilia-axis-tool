@@ -190,6 +190,14 @@ describe('verified combat project replay consistency', () => {
         kiboLaneCount: 3,
         stateCurveCount: 8,
       },
+      actionRelationSignature: [
+        [
+          'simultaneous',
+          'verified-replay-pangpang-combo',
+          'verified-replay-wind-kibo-combo',
+          0,
+        ],
+      ],
       operationInputSignature: [
         ['verified-replay-han-star', 'skill', 'press', 'E', 0, null],
         [
@@ -451,6 +459,17 @@ function createCrossCatalogReplayDraft() {
           eventType: 'break',
         }),
       ],
+      actionRelations: [
+        {
+          id: 'verified-replay-joint-relation',
+          kind: 'simultaneous',
+          fromActionId: 'verified-replay-pangpang-combo',
+          toActionId: 'verified-replay-wind-kibo-combo',
+          sourceAnchor: 'start',
+          targetAnchor: 'start',
+          gapMs: 0,
+        },
+      ],
       initialRuntimeState: {
         enemy: {
           enemyId: String(base.selection.enemyId),
@@ -511,6 +530,12 @@ function createVerifiedReplaySignature(draft) {
   return {
     profileId: scenario.mechanicsProfile.profileId,
     topology: scenario.sourceProject.metadata.timelineTopology.summary,
+    actionRelationSignature: scenario.actionRelations.map(relation => [
+      relation.kind,
+      relation.fromActionId,
+      relation.toActionId,
+      relation.gapMs,
+    ]),
     bindingIdentities: result.verifiedCombatRuntime.actionResolutions
       .filter(resolution => resolution.ready)
       .map(resolution => resolution.actionBinding.identity)

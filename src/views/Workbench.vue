@@ -978,7 +978,6 @@ import {
   ref,
   watch,
 } from 'vue';
-import { loadWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import {
   getVerifiedCombatActionMapping,
   loadVerifiedCombatMechanicsPackage,
@@ -1060,7 +1059,7 @@ import {
   normalizeWorkbenchSelection,
   normalizeWorkbenchTeamSlots,
 } from '../domain/workbenchProjectFactory';
-import { ACTION_TYPES } from '../domain/projectSchema';
+import { ACTION_RELATION_KINDS, ACTION_TYPES } from '../domain/projectSchema';
 import {
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
@@ -2386,6 +2385,18 @@ function resolveActionLibraryEntryDropTime(laneId, clientX) {
   );
 }
 
+async function ensureWorkbenchKiboActionCatalog() {
+  if (!kiboActionCatalogLoaded.value) {
+    const { loadWorkbenchKiboActionCatalog } =
+      await import('../data/workbenchKiboActionCatalog');
+    const catalog = await loadWorkbenchKiboActionCatalog();
+    kiboActionsById.value = new Map(
+      catalog.items.map(item => [Number(item.kiboId), item.actions ?? []])
+    );
+    kiboActionCatalogLoaded.value = true;
+  }
+}
+
 onMounted(() => {
   void loadVerifiedCombatMechanicsPackage()
     .then(() => {
@@ -2395,16 +2406,7 @@ onMounted(() => {
     .catch(() => {
       runtimeDiagnosticsRevision.value += 1;
     });
-  void loadWorkbenchKiboActionCatalog()
-    .then(catalog => {
-      kiboActionsById.value = new Map(
-        catalog.items.map(item => [Number(item.kiboId), item.actions ?? []])
-      );
-      kiboActionCatalogLoaded.value = true;
-    })
-    .catch(() => {
-      kiboActionCatalogLoaded.value = false;
-    });
+  void ensureWorkbenchKiboActionCatalog().catch(() => {});
   void getWorkbenchLayoutApi().then(layoutApi => {
     workbenchLayout.value =
       layoutApi.loadWorkbenchLayoutState(getLocalStorage());
@@ -2679,8 +2681,15 @@ function remapInitialControlledActor(characterRemap) {
 }
 
 function updateAction(patch) {
-  recordWorkbenchHistorySnapshot();
   const actionId = selectedActionId.value;
+  if (
+    Object.prototype.hasOwnProperty.call(patch, 'startMs') &&
+    Object.keys(patch).length === 1 &&
+    expandSimultaneousActionIds([actionId]).length > 1
+  ) {
+    return updateActionTime({ actionId, startMs: patch.startMs });
+  }
+  recordWorkbenchHistorySnapshot();
   const previousAction = findActionDraftById(actionId);
   const editSourceFocus = captureActionEditSourceFocus(actionId);
   actionDrafts.value = actionDrafts.value.map(action => {
@@ -2858,9 +2867,10 @@ function updateActionTime({ actionId, startMs }) {
   if (!previousAction) {
     return false;
   }
-  if (isConstraintAssistedPlacement()) {
+  const simultaneousActionIds = expandSimultaneousActionIds([actionId]);
+  if (isConstraintAssistedPlacement() || simultaneousActionIds.length > 1) {
     return moveSelectedActions({
-      actionIds: [actionId],
+      actionIds: simultaneousActionIds,
       primaryActionId: actionId,
       offsetMs: Number(startMs) - Number(previousAction.startMs),
     });
@@ -2968,7 +2978,7 @@ function rebindTimelineActionDraftToCharacter(action, targetCharacterId) {
   });
 }
 
-function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
+async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
   const actorCharacterId = Number(
     insertOptions.actorCharacterId ??
       actionLibraryActor.value?.characterId ??
@@ -2983,6 +2993,19 @@ function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
   const requestedStartMs =
     insertOptions.requestedStartMs ??
     resolveInsertStartMs(resolveInsertIndex());
+  if (actionEntry.kind === 'star-combo') {
+    return insertTimelineEntry({
+      entry: createWorkbenchTimelineEntry({
+        ...actionEntry,
+        type: ACTION_TYPES.SKILL,
+      }),
+      laneId: resolveDraftLaneId({
+        type: ACTION_TYPES.SKILL,
+        actorCharacterId,
+      }),
+      startMs: requestedStartMs,
+    });
+  }
   const attackInputDrafts = createAttackInputChainDraftPatches({
     entry: actionEntry,
     actorCharacterId,
@@ -3290,7 +3313,17 @@ function addResourceAction() {
   });
 }
 
-function addKiboEventAction(entry = null) {
+async function addKiboEventAction(entry = null) {
+  if (entry?.eventType === 'break') {
+    return insertTimelineEntry({
+      entry,
+      laneId: resolveDraftLaneId({
+        type: ACTION_TYPES.KIBO_EVENT,
+        actorCharacterId: actionLibraryCharacterId.value,
+      }),
+      startMs: resolveInsertStartMs(resolveInsertIndex()),
+    });
+  }
   addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.KIBO_EVENT,
@@ -3321,9 +3354,9 @@ function addEnemyEventAction() {
   });
 }
 
-function insertTimelineEntry({ entry, laneId, startMs }) {
+async function insertTimelineEntry({ entry, laneId, startMs }) {
   clearActionPlacementPreview();
-  const request = createTimelineEntryDraftRequest({
+  const request = await createTimelineEntryInsertionRequest({
     entry,
     laneId,
     startMs,
@@ -3332,17 +3365,86 @@ function insertTimelineEntry({ entry, laneId, startMs }) {
   if (!request) {
     return false;
   }
+  if (request.blockedMessage) {
+    draftStatus.value = request.blockedMessage;
+    return false;
+  }
   if (request.targetLane.characterId != null) {
     actionLibraryCharacterId.value = request.actorCharacterId;
   }
   if (request.draftPatches.length > 1) {
-    return Boolean(addInsertedActionGroup(request.draftPatches)?.committed);
+    return Boolean(
+      addInsertedActionGroup(request.draftPatches, {
+        actionRelations: request.actionRelations,
+      })?.committed
+    );
   }
   return Boolean(
     addInsertedAction(request.draftPatch, {
       requestedStartMs: request.requestedStartMs,
     })?.committed
   );
+}
+
+async function createTimelineEntryInsertionRequest(options = {}) {
+  const request = createTimelineEntryDraftRequest(options);
+  if (!request) {
+    return request;
+  }
+  const actorActionEntries = getSkillActionCatalog(
+    getSkillsForCharacter(request.actorCharacterId),
+    1
+  );
+  const jointAttackInsertion =
+    await import('../domain/workbenchJointAttackInsertion');
+  if (
+    !jointAttackInsertion.isWorkbenchJointAttackTimelineEntry(
+      options.entry,
+      actorActionEntries
+    )
+  ) {
+    return request;
+  }
+  try {
+    await ensureWorkbenchKiboActionCatalog();
+  } catch {
+    return { ...request, blockedMessage: '奇波动作目录加载失败，无法加入合击' };
+  }
+
+  const usedActionIds = new Set(actionDrafts.value.map(action => action.id));
+  usedActionIds.add(options.actionId);
+  const companionActionId = String(options.actionId).includes('preview')
+    ? `${options.actionId}-joint`
+    : createNextActionIdFromUsedIds(usedActionIds);
+  const usedRelationIds = new Set(
+    actionRelations.value.map(relation => relation.id)
+  );
+  const relationId = String(options.actionId).includes('preview')
+    ? 'relation-placement-preview-joint'
+    : createNextWorkbenchActionRelationIdFromUsedIds(usedRelationIds);
+  const actorConfig = actorConfigs.value.find(
+    config => Number(config.characterId) === Number(request.actorCharacterId)
+  );
+  const equippedKiboId = Number(actorConfig?.loadout?.kiboId) || null;
+  const expansion = jointAttackInsertion.createWorkbenchJointAttackInsertion({
+    entry: options.entry,
+    actorCharacterId: request.actorCharacterId,
+    actorActionEntries,
+    kiboActionEntries: kiboActionsById.value.get(equippedKiboId) ?? [],
+    equippedKiboId,
+    baseDraftPatches: request.draftPatches,
+    startMs: request.requestedStartMs,
+    companionActionId,
+    relationId,
+  });
+  return expansion.status === 'blocked'
+    ? { ...request, blockedMessage: expansion.message }
+    : {
+        ...request,
+        draftPatch: expansion.draftPatches[0] ?? request.draftPatch,
+        draftPatches: expansion.draftPatches,
+        actionRelations: expansion.actionRelations ?? [],
+      };
 }
 
 function createTimelineEntryDraftRequest({
@@ -3453,22 +3555,27 @@ function createTimelineEntryDraftRequest({
   };
 }
 
-function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
-  const request = createTimelineEntryDraftRequest({
+async function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
+  const request = await createTimelineEntryInsertionRequest({
     entry,
     laneId,
     startMs,
     actionId: 'action-placement-preview',
   });
-  if (!request) {
+  if (!request || request.blockedMessage) {
     clearActionPlacementPreview();
     return;
   }
   const requestedActions = request.draftPatches.map(patch =>
     createWorkbenchActionDraft(patch)
   );
+  const previewRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...(request.actionRelations ?? [])],
+    [...actionDrafts.value, ...requestedActions]
+  );
   const proposal = createActionPlacementProposal({
     requestedActions,
+    relations: previewRelations,
     requestedLaneId: laneId,
   });
   lastActionPlacementProposal.value = proposal;
@@ -3515,6 +3622,22 @@ function previewTimelineFragmentPlacement({ fragment, laneId, startMs } = {}) {
 }
 
 function copyAction(actionId) {
+  const simultaneousActionIds = expandSimultaneousActionIds([actionId]);
+  if (simultaneousActionIds.length > 1) {
+    const sourceStartMs = Math.min(
+      ...actionDrafts.value
+        .filter(action => simultaneousActionIds.includes(action.id))
+        .map(action => Number(action.startMs) || 0)
+    );
+    actionClipboard.value = createWorkbenchActionClipboard(
+      actionDrafts.value,
+      simultaneousActionIds,
+      actionRelations.value
+    );
+    return Boolean(
+      pasteSelectedActions({ targetStartMs: sourceStartMs + 1000 })
+    );
+  }
   const sourceIndex = actionDrafts.value.findIndex(
     action => action.id === actionId
   );
@@ -3569,9 +3692,10 @@ function copyAction(actionId) {
 }
 
 function copySelectedActions({ actionIds = selectedActionIds.value } = {}) {
+  const expandedActionIds = expandSimultaneousActionIds(actionIds);
   const clipboard = createWorkbenchActionClipboard(
     actionDrafts.value,
-    actionIds,
+    expandedActionIds,
     actionRelations.value
   );
   if (!clipboard) {
@@ -3746,7 +3870,7 @@ function insertTimelineFragment(
 }
 
 function deleteSelectedActions({ actionIds = selectedActionIds.value } = {}) {
-  const requestedActionIds = new Set(actionIds);
+  const requestedActionIds = new Set(expandSimultaneousActionIds(actionIds));
   const affectedActionIds = actionDrafts.value
     .filter(action => requestedActionIds.has(action.id))
     .map(action => action.id);
@@ -3788,6 +3912,15 @@ function shiftSelectedActions({
   offsetMs = 0,
 } = {}) {
   return moveSelectedActions({ actionIds, offsetMs });
+}
+
+function expandSimultaneousActionIds(actionIds = []) {
+  return expandWorkbenchPlacementActionIds({
+    actions: actionDrafts.value,
+    actionIds,
+    actionRelations: actionRelations.value,
+    relationKinds: [ACTION_RELATION_KINDS.SIMULTANEOUS],
+  });
 }
 
 function moveSelectedActions({
@@ -3879,13 +4012,14 @@ function createMoveActionPlacementRequest({
   const requestedActionIds = [...new Set(actionIds)].filter(actionId =>
     availableActionIds.has(actionId)
   );
+  const simultaneousActionIds = expandSimultaneousActionIds(requestedActionIds);
   const affectedActionIds = isConstraintAssistedPlacement()
     ? expandWorkbenchPlacementActionIds({
         actions: actionDrafts.value,
-        actionIds: requestedActionIds,
+        actionIds: simultaneousActionIds,
         actionRelations: actionRelations.value,
       })
-    : requestedActionIds;
+    : simultaneousActionIds;
   const editedActionId = affectedActionIds.includes(primaryActionId)
     ? primaryActionId
     : affectedActionIds.includes(selectedActionId.value)
@@ -3908,6 +4042,17 @@ function createMoveActionPlacementRequest({
         getLaneOwnerId: lane => lane.characterId,
       })
     : null;
+  if (
+    laneMovePlan?.changesOwner &&
+    actionRelations.value.some(
+      relation =>
+        relation.kind === ACTION_RELATION_KINDS.SIMULTANEOUS &&
+        simultaneousActionIds.includes(relation.fromActionId)
+    )
+  ) {
+    draftStatus.value = '合击配对不能跨角色槽移动';
+    return null;
+  }
   const preflightIssues =
     targetLaneId && !laneMovePlan
       ? [
@@ -4088,31 +4233,7 @@ function copyActionBatch(batchId) {
 }
 
 function deleteAction(actionId) {
-  const index = actionDrafts.value.findIndex(action => action.id === actionId);
-  if (index < 0) {
-    return;
-  }
-
-  recordWorkbenchHistorySnapshot();
-  const runtimeReviewState = captureActionMutationRuntimeReviewState();
-  const selectedWasRemoved = selectedActionId.value === actionId;
-  actionDrafts.value = actionDrafts.value.filter(
-    action => action.id !== actionId
-  );
-
-  if (selectedWasRemoved) {
-    const nextIndex = Math.min(index, actionDrafts.value.length - 1);
-    const nextAction = actionDrafts.value[nextIndex];
-    selectedActionId.value = nextAction?.id ?? '';
-    syncActionLibraryCharacterIdFromDraft(nextAction);
-  }
-  applyActionMutationRuntimeSyncRequest({
-    actionId: selectedActionId.value,
-    runtimeReviewState,
-    selectedActionChanged: selectedWasRemoved,
-    affectedActionIds: [actionId],
-  });
-  markDraftDirty();
+  return deleteSelectedActions({ actionIds: [actionId] });
 }
 
 function deleteActionBatch(batchId) {
@@ -7277,15 +7398,23 @@ function createNextActionIdFromUsedIds(usedActionIds) {
   return nextActionId;
 }
 
-function addInsertedActionGroup(actionPatches = []) {
+function addInsertedActionGroup(
+  actionPatches = [],
+  { actionRelations: insertedRelations = [] } = {}
+) {
   const requestedActions = actionPatches.map(patch =>
     createWorkbenchActionDraft(patch)
   );
   if (!requestedActions.length) {
     return { actions: [], proposal: null, committed: false };
   }
+  let nextRelations = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...insertedRelations],
+    [...actionDrafts.value, ...requestedActions]
+  );
   const proposal = createActionPlacementProposal({
     requestedActions,
+    relations: nextRelations,
     requestedLaneId: resolveDraftLaneId(requestedActions[0]),
   });
   lastActionPlacementProposal.value = proposal;
@@ -7304,6 +7433,11 @@ function addInsertedActionGroup(actionPatches = []) {
     ...committedActions,
     ...actionDrafts.value.slice(insertIndex),
   ];
+  nextRelations = normalizeWorkbenchActionRelations(
+    nextRelations,
+    actionDrafts.value
+  );
+  actionRelations.value = nextRelations;
   setWorkbenchActionSelection(
     committedActions.map(action => action.id),
     committedActions[0].id,
@@ -7316,7 +7450,12 @@ function addInsertedActionGroup(actionPatches = []) {
     affectedActionIds: committedActions.map(action => action.id),
   });
   markDraftDirty();
-  return { actions: committedActions, proposal, committed: true };
+  return {
+    actions: committedActions,
+    relations: insertedRelations,
+    proposal,
+    committed: true,
+  };
 }
 
 function addInsertedAction(actionPatch, options = {}) {

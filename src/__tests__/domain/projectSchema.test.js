@@ -102,6 +102,36 @@ describe('project domain schema', () => {
     );
   });
 
+  it('validates simultaneous action relations at the same start frame', () => {
+    const project = createFirstVerticalSliceProject();
+    project.actions.push({
+      ...project.actions[0],
+      id: 'action-joint-counterpart',
+    });
+    project.actionRelations = [
+      {
+        id: 'relation-joint',
+        kind: 'simultaneous',
+        fromActionId: project.actions[0].id,
+        toActionId: 'action-joint-counterpart',
+        sourceAnchor: 'start',
+        targetAnchor: 'start',
+        gapMs: 0,
+      },
+    ];
+
+    expect(
+      validateProject(project, getFirstVerticalSliceGameData()).valid
+    ).toBe(true);
+
+    project.actionRelations[0].gapMs = 16.6667;
+    const invalid = validateProject(project, getFirstVerticalSliceGameData());
+    expect(invalid.valid).toBe(false);
+    expect(invalid.errors.map(error => error.code)).toContain(
+      'actionRelation.gapMs.invalid'
+    );
+  });
+
   it('rejects unknown actor and skill references', () => {
     const project = createFirstVerticalSliceProject();
     project.actions[0] = {

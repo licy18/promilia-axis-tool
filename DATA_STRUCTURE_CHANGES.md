@@ -27620,3 +27620,9 @@ inputTrigger
 `holdTriggerTimeMs` 只表示客户端确认的按住时长，不使用完整动画、动作块时长或命中尾长代替。没有可靠触发字段时保持缺失；生成器不从描述文本或命中数量推断输入。
 
 新增非持久化 `AzPrTimelineOperationInputProjection` v1，由当前标准 action、换人事件、上述 `inputTrigger` 与单一蓝色星原 PC 键位 profile 派生 `command / mode / keyCode / keyLabel / startMs / endMs / actionId / relatedActionIds / switchTransitionId / source identity`。奇波 Q 输入还读取同一 verified control binding 的 `controlLogic.spCost`，只有正消耗动作才生成；角色星结合击与当前装备奇波的合击只有在同一 60fps 帧时才投影一个共享 F，`relatedActionIds` 保留双方 identity。配对合法性由既有 action readiness/runtime diagnostics 消费，未装备、缺失或错帧均阻止执行。碰撞行和像素宽度只属于视图布局。操作 marker 不进入 Workbench project、草稿、JSON、分享链接或 PNG 元数据；五载体回载后从同一动作和队伍槽重新投影，因此项目 schemaVersion 不升级，也不改变八曲线或 calculator 输入。
+
+## 443. Simultaneous joint-attack relation
+
+`actionRelations[]` 新增可选 `kind = simultaneous`，其唯一合法锚点合同为 `sourceAnchor = start / targetAnchor = start / gapMs = 0`。该关系只表达两个独立 action instance 必须同帧开始，不改变动作各自的持续时间、命中、CD、状态或三值来源；既有 `sequence` 仍保持 `end -> start` 语义。编译期效果关系图只消费 `sequence`，同步关系由 Workbench 放置与编辑事务消费，因此不会被误当成 Buff/效果传播边。
+
+角色星结合击与已装备奇波合击通过统一生成入口组成一条 `simultaneous` 关系。两块仍各自保存 owner、skill/control identity、轨道和运行时输入，但插入、时间移动、复制、删除及撤销/重做按完整关系组提交；跨角色槽重新绑定被阻止。项目 schemaVersion 不升级，方案复制、本地草稿、JSON、分享链接和 PNG 均沿现有 `actionRelations[]` 保存并恢复该关系；旧项目没有该字段时继续按原规则读取。

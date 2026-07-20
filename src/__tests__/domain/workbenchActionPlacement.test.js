@@ -64,9 +64,7 @@ describe('workbenchActionPlacement', () => {
 
   it('moves an overlapping action group as one unit to the earliest evaluated position', () => {
     const proposal = createWorkbenchActionPlacementProposal({
-      currentActions: [
-        action('existing', 1000, 1500, { actorId: 'actor-1' }),
-      ],
+      currentActions: [action('existing', 1000, 1500, { actorId: 'actor-1' })],
       requestedActions: [
         action('group-a', 1500, 500, { actorId: 'actor-1' }),
         action('group-b', 3000, 500, { actorId: 'actor-2' }),
@@ -121,9 +119,7 @@ describe('workbenchActionPlacement', () => {
       WORKBENCH_ACTION_PLACEMENT_STATUSES.ADJUSTABLE
     );
     expect(proposal.suggestedStartMs).toBe(4000);
-    expect(proposal.ruleSources).toContain(
-      'azpr-skill-cooldown-window'
-    );
+    expect(proposal.ruleSources).toContain('azpr-skill-cooldown-window');
   });
 
   it('blocks an internal group conflict that translation cannot resolve', () => {
@@ -136,9 +132,7 @@ describe('workbenchActionPlacement', () => {
       evaluateCandidate: evaluateWithRules,
     });
 
-    expect(proposal.status).toBe(
-      WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED
-    );
+    expect(proposal.status).toBe(WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED);
     expect(proposal.committable).toBe(false);
     expect(proposal.conflicts[0].code).toBe('action-lane-overlap');
   });
@@ -182,9 +176,7 @@ describe('workbenchActionPlacement', () => {
       evaluateCandidate: evaluateWithRules,
     });
 
-    expect(proposal.status).toBe(
-      WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED
-    );
+    expect(proposal.status).toBe(WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED);
     expect(proposal.conflicts.at(-1).code).toBe(
       'placement-group-exceeds-timeline-end'
     );
@@ -202,5 +194,20 @@ describe('workbenchActionPlacement', () => {
         ],
       })
     ).toEqual(['a', 'b', 'c']);
+  });
+
+  it('can expand only simultaneous relations for atomic free placement', () => {
+    const actions = [action('a', 0), action('b', 0), action('c', 2000)];
+    expect(
+      expandWorkbenchPlacementActionIds({
+        actions,
+        actionIds: ['a'],
+        actionRelations: [
+          { kind: 'simultaneous', fromActionId: 'a', toActionId: 'b' },
+          { kind: 'sequence', fromActionId: 'b', toActionId: 'c' },
+        ],
+        relationKinds: ['simultaneous'],
+      })
+    ).toEqual(['a', 'b']);
   });
 });

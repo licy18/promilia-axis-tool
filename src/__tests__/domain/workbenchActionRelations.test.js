@@ -110,6 +110,39 @@ describe('workbench action relations', () => {
     ).toBe(true);
   });
 
+  it('preserves simultaneous start anchors without converting them to a sequence gap', () => {
+    const actions = createActions()
+      .slice(0, 2)
+      .map(action => ({
+        ...action,
+        startMs: frameToMs(60),
+      }));
+    expect(
+      normalizeWorkbenchActionRelations(
+        [
+          {
+            id: 'joint-relation',
+            kind: 'simultaneous',
+            fromActionId: 'action-0001',
+            toActionId: 'action-0002',
+            gapMs: 999,
+          },
+        ],
+        actions
+      )
+    ).toEqual([
+      {
+        id: 'joint-relation',
+        kind: 'simultaneous',
+        fromActionId: 'action-0001',
+        toActionId: 'action-0002',
+        sourceAnchor: 'start',
+        targetAnchor: 'start',
+        gapMs: 0,
+      },
+    ]);
+  });
+
   it('synchronizes gaps after movement and removes touched edges', () => {
     const actions = createActions();
     const relation = createWorkbenchActionRelationChain([], actions, [

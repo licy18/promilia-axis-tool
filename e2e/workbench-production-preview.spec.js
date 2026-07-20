@@ -3022,6 +3022,7 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     'data-mechanics-classification',
     'applied'
   );
+  await expect(windKiboCombo).toHaveCount(1);
   await dragLocatorTo(
     page,
     pangCombo,
@@ -3029,14 +3030,6 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
       '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
     ),
     { targetPosition: { x: 220, y: 82 } }
-  );
-  await dragLocatorTo(
-    page,
-    windKiboCombo,
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
-    ),
-    { targetPosition: { x: 220, y: 36 } }
   );
   await dragLocatorTo(
     page,
@@ -3081,6 +3074,16 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
   await expect(kiboEnergyAction).toHaveCount(1);
   await expect(kiboActiveAction).toHaveCount(1);
   await expect(kiboComboAction).toHaveCount(1);
+  const initialJointStartMs = Number(
+    await pangComboAction.getAttribute('data-start-ms')
+  );
+  expect(Number(await kiboComboAction.getAttribute('data-start-ms'))).toBe(
+    initialJointStartMs
+  );
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-action-relation-count',
+    '1'
+  );
   const actionIds = {
     han: await hanAction.getAttribute('data-action-id'),
     pangCombo: await pangComboAction.getAttribute('data-action-id'),
@@ -3143,6 +3146,24 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
       )
       .toBeGreaterThan(0);
   }
+
+  await pangComboAction.press('ArrowRight');
+  await expect
+    .poll(async () =>
+      Number(await pangComboAction.getAttribute('data-start-ms'))
+    )
+    .toBeCloseTo(initialJointStartMs + frameToMs(1), 3);
+  await expect
+    .poll(async () =>
+      Number(await kiboComboAction.getAttribute('data-start-ms'))
+    )
+    .toBeCloseTo(initialJointStartMs + frameToMs(1), 3);
+  await kiboComboAction.press('Delete');
+  await expect(pangComboAction).toHaveCount(0);
+  await expect(kiboComboAction).toHaveCount(0);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(pangComboAction).toHaveCount(1);
+  await expect(kiboComboAction).toHaveCount(1);
 
   const hanNode = curveNodesForAction('enemy-hp-curve', actionIds.han).first();
   const frameBeforeMove = Number(

@@ -374,7 +374,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M7-R3 / 按键操作轴与合击输入约束已完成，等待产品复验**。保留 M7-R2 的真实普攻输入时序和 M6-R2 的 `0..100` 绝对 SP 合同；本轮只修正由当前动作与换人事件派生的同轴输入投影及其合击合法性，不进入 M8。
+当前里程碑：**M7-R3 / 按键操作轴、合击输入约束与原子配对插入已完成，等待产品复验**。保留 M7-R2 的真实普攻输入时序和 M6-R2 的 `0..100` 绝对 SP 合同；本轮只修正由当前动作与换人事件派生的同轴输入投影及其合击合法性，不进入 M8。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -574,7 +574,9 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 完成结果：新增唯一的蓝色星原 PC 键位 profile 与 `AzPrTimelineOperationInputProjection` v1。客户端已确认的普攻/重击、星鸣技、星决技、奇波技和格挡/反击键位均保留来源 identity；上下文攻击才使用明确标注的项目默认映射。verified 公式包升级为 v6，从 `skillsub_logic.inputTriggerType / holdTriggerTime` 生成 press/hold 合同，hold 只采用真实按住时长，不借用动画尾长。时间刻度上方现按同一 x 坐标投影莉莉 A1-A5 的 5 个独立 LMB、E/R 技能输入与 1/2/3 换人；奇波仅在 verified control 的 `spCost > 0` 时投影 Q。角色星结合击必须与当前已装备奇波的合击在同一 60fps 帧出现，合法配对只生成一个关联双方 action identity 的 F；未装备奇波、缺少配对或错帧会同时进入 readiness 与 runtime 阻断。碰撞自动分层，点击标记会选择来源动作并移动统一帧游标，移动、删除和撤销/重做只更新对应标记。纯投影不写入项目，五载体回放和 PNG 导出继续消费同一动作真相。
 
-完整 `test:trial-release` 通过 108 个测试文件、607 条单元/组件/集成测试和 48/48 production preview，41/41 必需能力、数据同步、生产引用、动作状态、applied-source 与 bundle 守门全部通过。总 JavaScript gzip 为 686,637B，初始入口为 89,226B，Workbench 主块为 369,142B，均低于硬门槛。视觉证据为 `reports/m7r3-operation-axis-desktop.png`、`reports/m7r3-operation-axis-narrow.png`、`reports/m7r3-operation-axis-skills-desktop.png`、`reports/m7r3-operation-axis-skills-narrow.png` 与 `reports/m7r3-operation-axis-zoomed-desktop.png`。当前停在 M7-R3 等待产品复验，不进入 M8。
+合击插入整改：从角色动作库拖入“星结合击”或从奇波子轨拖入“合击”，现都会在一次历史事务中自动生成另一半，并以 `simultaneous / start -> start / gapMs = 0` 关系吸附到同一 60fps 帧。任一半的时间移动、复制或删除都会原子作用于整对，单次撤销/重做恢复整对；跨角色槽移动被拒绝。没有已装备奇波、目录中缺少可靠对应动作或奇波身份不匹配时整次插入被阻止，不落盘半套合击。
+
+完整 `test:trial-release` 通过 109 个测试文件、613 条单元/组件/集成测试和 48/48 production preview，41/41 必需能力、数据同步、生产引用、动作状态、applied-source 与 bundle 守门全部通过。总 JavaScript gzip 为 688,924B，初始入口为 89,228B，Workbench 主块为 369,906B，均低于硬门槛。视觉证据为 `reports/m7r3-operation-axis-desktop.png`、`reports/m7r3-operation-axis-narrow.png`、`reports/m7r3-operation-axis-skills-desktop.png`、`reports/m7r3-operation-axis-skills-narrow.png`、`reports/m7r3-operation-axis-zoomed-desktop.png`、`reports/m7-catalog-runtime-desktop.png` 与 `reports/m7-catalog-runtime-narrow.png`。当前停在 M7-R3 等待产品复验，不进入 M8。
 
 共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735,000B 仅作预警；初始入口 120,000B、Workbench 主块 370,000B 继续守门。阶段结束时只有超出硬门槛才做一次针对性优化；不以逐字节压缩替代产品能力，也不扩写当前里程碑之外的数值考古、runtime calibration 或报告载体。
 
@@ -630,7 +632,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 30. 已完成，等待产品验收：M7 已以公开角色/奇波动作目录为独立分母生成全量动作、变体和命中三值分类，接入同一 verified runtime 与八曲线，并通过机器/Markdown 覆盖报告、跨 owner 主流程和五载体回放收口；不自动进入下一里程碑。
 31. 已完成，等待产品复验：M7-R1 已按真实 normal-attack control 链生成独立 `A1..An`，并守住逐段运行时、整链事务、旧项目迁移和五载体一致性；不进入 M8。
 32. 已完成，等待产品复验：M7-R2 已将完整动画尾长与有效连段占轴分离，按真实 EventBridge 输入窗口排布和诊断 `A1..An`；不进入 M8。
-33. 已完成，等待产品复验：M7-R3 从当前动作与换人事件派生统一按键输入；耗能奇波主动技使用 Q，角色星结合击与已装备奇波合击必须同帧共享 F，否则阻止执行；不持久化 marker，不进入 M8。
+33. 已完成，等待产品复验：M7-R3 从当前动作与换人事件派生统一按键输入；耗能奇波主动技使用 Q，角色星结合击与已装备奇波合击必须同帧共享 F。拖入任意一半会自动补齐另一半并以单次事务同帧吸附，后续移动、复制、删除和撤销/重做保持整对；不持久化 marker，不进入 M8。
 
 ## 8. 风险和取舍
 

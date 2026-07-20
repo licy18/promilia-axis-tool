@@ -28,9 +28,11 @@ export const ACTION_TYPES = Object.freeze({
 
 export const ACTION_RELATION_KINDS = Object.freeze({
   SEQUENCE: 'sequence',
+  SIMULTANEOUS: 'simultaneous',
 });
 
 export const ACTION_RELATION_ANCHORS = Object.freeze({
+  SOURCE_START: 'start',
   SOURCE_END: 'end',
   TARGET_START: 'start',
 });
@@ -764,11 +766,17 @@ function validateActionRelations(actionRelations, actions, errors) {
         )
       );
     }
-    if (relation.sourceAnchor !== ACTION_RELATION_ANCHORS.SOURCE_END) {
+    const simultaneous = relation.kind === ACTION_RELATION_KINDS.SIMULTANEOUS;
+    const expectedSourceAnchor = simultaneous
+      ? ACTION_RELATION_ANCHORS.SOURCE_START
+      : ACTION_RELATION_ANCHORS.SOURCE_END;
+    if (relation.sourceAnchor !== expectedSourceAnchor) {
       errors.push(
         issue(
           'actionRelation.sourceAnchor.invalid',
-          'Sequence relation sourceAnchor must be end',
+          simultaneous
+            ? 'Simultaneous relation sourceAnchor must be start'
+            : 'Sequence relation sourceAnchor must be end',
           `${path}.sourceAnchor`
         )
       );
@@ -787,6 +795,14 @@ function validateActionRelations(actionRelations, actions, errors) {
         issue(
           'actionRelation.gapMs.invalid',
           'Action relation gapMs must be finite',
+          `${path}.gapMs`
+        )
+      );
+    } else if (simultaneous && Number(relation.gapMs) !== 0) {
+      errors.push(
+        issue(
+          'actionRelation.gapMs.invalid',
+          'Simultaneous relation gapMs must be zero',
           `${path}.gapMs`
         )
       );

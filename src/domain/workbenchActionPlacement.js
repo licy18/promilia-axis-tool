@@ -33,8 +33,11 @@ export function createWorkbenchActionPlacementProposal({
   evaluateCandidate = null,
   preflightIssues = [],
 } = {}) {
-  const normalizedRequestedActions = normalizeRequestedActions(requestedActions);
-  const requestedActionIds = normalizedRequestedActions.map(action => action.id);
+  const normalizedRequestedActions =
+    normalizeRequestedActions(requestedActions);
+  const requestedActionIds = normalizedRequestedActions.map(
+    action => action.id
+  );
   const requestedActionIdSet = new Set(requestedActionIds);
   const relationIds = collectPlacementRelationIds(
     actionRelations,
@@ -281,6 +284,7 @@ export function expandWorkbenchPlacementActionIds({
   actions = [],
   actionIds = [],
   actionRelations = [],
+  relationKinds = null,
 } = {}) {
   const availableIds = new Set(actions.map(action => action.id));
   const expandedIds = new Set(
@@ -292,14 +296,15 @@ export function expandWorkbenchPlacementActionIds({
   while (changed) {
     changed = false;
     for (const relation of actionRelations ?? []) {
+      if (relationKinds && !relationKinds.includes(relation?.kind)) {
+        continue;
+      }
       const fromActionId = relation?.fromActionId;
       const toActionId = relation?.toActionId;
       if (!availableIds.has(fromActionId) || !availableIds.has(toActionId)) {
         continue;
       }
-      if (
-        expandedIds.has(fromActionId) !== expandedIds.has(toActionId)
-      ) {
+      if (expandedIds.has(fromActionId) !== expandedIds.has(toActionId)) {
         expandedIds.add(fromActionId);
         expandedIds.add(toActionId);
         changed = true;
@@ -330,8 +335,7 @@ function createProposal({
     contractName: WORKBENCH_ACTION_PLACEMENT_CONTRACT_NAME,
     sourceKind: 'workbench-action-placement-proposal',
     status,
-    committable:
-      status !== WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED,
+    committable: status !== WORKBENCH_ACTION_PLACEMENT_STATUSES.BLOCKED,
     requestedActionIds,
     affectedActionIds: [...requestedActionIds],
     relationIds,
@@ -413,7 +417,9 @@ function createActionGroupRange(actions) {
   if (!actions?.length) {
     return { startMs: 0, endMs: 0, durationMs: 0 };
   }
-  const startMs = Math.min(...actions.map(action => Number(action.startMs) || 0));
+  const startMs = Math.min(
+    ...actions.map(action => Number(action.startMs) || 0)
+  );
   const endMs = Math.max(
     ...actions.map(
       action =>
@@ -515,13 +521,9 @@ function resolveNextPlacementOffset({
   const offsets = [];
   for (const diagnostic of violations) {
     const targetAction = proposedById.get(diagnostic.actionId);
-    if (
-      targetAction &&
-      Number.isFinite(Number(diagnostic.suggestedStartMs))
-    ) {
+    if (targetAction && Number.isFinite(Number(diagnostic.suggestedStartMs))) {
       offsets.push(
-        Number(diagnostic.suggestedStartMs) -
-          Number(targetAction.startMs)
+        Number(diagnostic.suggestedStartMs) - Number(targetAction.startMs)
       );
       continue;
     }
@@ -541,16 +543,10 @@ function resolveNextPlacementOffset({
           Number(externalAction.durationMs) -
           Number(blockingAction.startMs)
       );
-    } else if (
-      diagnostic.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE
-    ) {
+    } else if (diagnostic.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE) {
       offsets.push(
         Number(externalAction.startMs) +
-          Number(
-            diagnostic.effectiveCooldownMs ??
-              diagnostic.cooldownMs ??
-              0
-          ) -
+          Number(diagnostic.effectiveCooldownMs ?? diagnostic.cooldownMs ?? 0) -
           Number(blockingAction.startMs)
       );
     }
