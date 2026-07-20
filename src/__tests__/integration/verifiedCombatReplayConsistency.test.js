@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
-  getVerifiedCombatActionMapping,
+  getVerifiedCombatActionInputMapping,
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -155,15 +155,19 @@ describe('verified combat project replay consistency', () => {
 
     expect(signatures[0].bindingIdentities).toEqual([
       'actor|101003|10100312|0|10100312',
+      'actor|101007|10100712|2|10100726',
       'actor|109001|10900101|1|10900110',
+      'kibo|500001|50000112|0|50000112',
       'kibo|500001|504004|0|504004',
     ]);
     expect(
       Object.fromEntries(
         [
           'verified-replay-han-star',
+          'verified-replay-pangpang-combo',
           'verified-replay-muyin-charged',
           'verified-replay-wind-kibo',
+          'verified-replay-wind-kibo-combo',
         ].map(actionId => [
           actionId,
           signatures[0].damageSignature.filter(event => event[0] === actionId)
@@ -172,8 +176,10 @@ describe('verified combat project replay consistency', () => {
       )
     ).toEqual({
       'verified-replay-han-star': 7,
+      'verified-replay-pangpang-combo': 1,
       'verified-replay-muyin-charged': 3,
       'verified-replay-wind-kibo': 6,
+      'verified-replay-wind-kibo-combo': 1,
     });
     expect(signatures[0]).toMatchObject({
       actorCurveCount: 3,
@@ -191,10 +197,17 @@ describe('verified combat project replay consistency', () => {
           'charged-attack',
           'hold',
           'LMB',
-          1800,
-          2050,
+          2800,
+          3050,
         ],
-        ['verified-replay-wind-kibo', 'kibo-skill', 'press', 'Q', 3200, null],
+        [
+          'verified-replay-pangpang-combo',
+          'joint-attack',
+          'press',
+          'F',
+          7400,
+          null,
+        ],
       ],
     });
     for (const signature of signatures.slice(1)) {
@@ -403,7 +416,7 @@ function createCrossCatalogReplayDraft() {
           actorCharacterId: 109001,
           skillId: 10900101,
           actionVariantIndex: 1,
-          startMs: 1800,
+          startMs: 2800,
           durationMs: 1000,
         }),
         createWorkbenchActionDraft({
@@ -413,9 +426,29 @@ function createCrossCatalogReplayDraft() {
           skillId: 504004,
           kiboId: 500001,
           actionVariantIndex: 0,
-          startMs: 3200,
+          startMs: 4200,
           durationMs: 3000,
           eventType: 'active',
+        }),
+        createWorkbenchActionDraft({
+          id: 'verified-replay-pangpang-combo',
+          type: 'skill',
+          actorCharacterId: 101007,
+          skillId: 10100712,
+          actionVariantIndex: 2,
+          startMs: 7400,
+          durationMs: 1000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'verified-replay-wind-kibo-combo',
+          type: 'kiboEvent',
+          actorCharacterId: 101007,
+          skillId: 50000112,
+          kiboId: 500001,
+          actionVariantIndex: 0,
+          startMs: 7400,
+          durationMs: 1500,
+          eventType: 'break',
         }),
       ],
       initialRuntimeState: {
@@ -469,7 +502,7 @@ function createVerifiedReplaySignature(draft) {
     controlledActorTimeline: result.runtimeOutputs.controlledActorTimeline,
     durationMs: scenario.time.durationMs,
     resolveActionMapping(action) {
-      return getVerifiedCombatActionMapping({
+      return getVerifiedCombatActionInputMapping({
         ...action,
         actor: actorsById.get(String(action.actorId ?? '')) ?? null,
       });

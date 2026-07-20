@@ -22,6 +22,7 @@
       :title="markerTitle(marker)"
       :data-operation-id="marker.id"
       :data-action-id="marker.actionId"
+      :data-related-action-ids="marker.relatedActionIds.join(',')"
       :data-command="marker.command"
       :data-mode="marker.mode"
       :data-start-ms="marker.startMs"
@@ -41,7 +42,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import {
-  getVerifiedCombatActionMapping,
+  getVerifiedCombatActionInputMapping,
   loadVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -88,7 +89,7 @@ const projection = computed(() => {
     actors: props.actors,
     durationMs: props.durationMs,
     resolveActionMapping(action) {
-      return getVerifiedCombatActionMapping({
+      return getVerifiedCombatActionInputMapping({
         ...action,
         actor: actorById.value.get(String(action.actorId ?? '')) ?? null,
       });
@@ -159,7 +160,9 @@ function selectMarker(marker) {
 
 function markerTone(command) {
   if (command === 'switch') return 'switch';
-  if (['skill', 'ultimate', 'kibo-skill'].includes(command)) return 'ability';
+  if (['skill', 'ultimate', 'kibo-skill', 'joint-attack'].includes(command)) {
+    return 'ability';
+  }
   return 'attack';
 }
 

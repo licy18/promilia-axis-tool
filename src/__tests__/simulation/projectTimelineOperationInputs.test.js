@@ -114,9 +114,14 @@ describe('projectTimelineOperationInputs', () => {
     expect(layout.markers[0].intervalWidthPx).toBe(75);
   });
 
-  it('maps skills, kibo input and team switches through the central PC profile', () => {
+  it('maps actor and energy-consuming kibo inputs through the central PC profile', () => {
     const actors = [
-      { id: 'actor-a', characterId: 101003, name: '角色一' },
+      {
+        id: 'actor-a',
+        characterId: 101003,
+        name: '角色一',
+        loadout: { kiboId: 500001 },
+      },
       { id: 'actor-b', characterId: 101004, name: '角色二' },
       { id: 'actor-c', characterId: 101005, name: '角色三' },
     ];
@@ -133,12 +138,42 @@ describe('projectTimelineOperationInputs', () => {
         actionKind: 'ultimate',
         startMs: 200,
       }),
+      createAction({
+        id: 'actor-combo',
+        name: '星结合击',
+        actionKind: 'star-combo',
+        actorId: 'actor-a',
+        startMs: 250,
+      }),
       {
-        id: 'kibo',
+        id: 'kibo-energy-skill',
         type: 'kiboEvent',
-        skillId: 50046903,
-        name: '奇波技能',
+        skillId: 50000102,
+        actorId: 'actor-a',
+        kiboId: 500001,
+        eventType: 'signature',
+        name: '奇波能量技',
         startMs: 300,
+      },
+      {
+        id: 'kibo-active-zero-cost',
+        type: 'kiboEvent',
+        skillId: 504004,
+        actorId: 'actor-a',
+        kiboId: 500001,
+        eventType: 'active',
+        name: '奇波普通主动动作',
+        startMs: 350,
+      },
+      {
+        id: 'kibo-combo',
+        type: 'kiboEvent',
+        skillId: 50000112,
+        actorId: 'actor-a',
+        kiboId: 500001,
+        eventType: 'break',
+        name: '奇波合击',
+        startMs: 250,
       },
       ...actors.map((actor, index) => ({
         id: `switch-${index + 1}`,
@@ -158,6 +193,27 @@ describe('projectTimelineOperationInputs', () => {
       actions,
       actors,
       durationMs: 3000,
+      resolveActionMapping(action) {
+        if (action.id === 'kibo-energy-skill') {
+          return {
+            actionKind: 'signature',
+            controlLogic: { spCost: 100 },
+          };
+        }
+        if (action.id === 'kibo-active-zero-cost') {
+          return {
+            actionKind: 'active',
+            controlLogic: { spCost: 0 },
+          };
+        }
+        if (action.id === 'kibo-combo') {
+          return {
+            actionKind: 'break',
+            controlLogic: { spCost: 0 },
+          };
+        }
+        return null;
+      },
     });
 
     expect(
@@ -165,11 +221,24 @@ describe('projectTimelineOperationInputs', () => {
     ).toEqual([
       ['skill', 'E'],
       ['ultimate', 'R'],
-      ['kibo', 'Q'],
+      ['actor-combo', 'F'],
+      ['kibo-energy-skill', 'Q'],
       ['switch-1', '1'],
       ['switch-2', '2'],
       ['switch-3', '3'],
     ]);
+    expect(
+      projection.markers.some(
+        marker => marker.actionId === 'kibo-active-zero-cost'
+      )
+    ).toBe(false);
+    expect(
+      projection.markers.find(marker => marker.actionId === 'actor-combo')
+        ?.relatedActionIds
+    ).toEqual(['actor-combo', 'kibo-combo']);
+    expect(
+      projection.markers.some(marker => marker.actionId === 'kibo-combo')
+    ).toBe(false);
   });
 
   it('layers nearby inputs without changing their exact timeline starts', () => {
@@ -207,6 +276,7 @@ function createAction({
   name = '普通攻击',
   actionKind = 'normal-attack',
   attackSequenceIndex = null,
+  actorId = null,
   startMs = 0,
   durationMs = 500,
 }) {
@@ -215,6 +285,7 @@ function createAction({
     type: 'skill',
     actionKind,
     attackSequenceIndex,
+    actorId,
     name,
     startMs,
     durationMs,

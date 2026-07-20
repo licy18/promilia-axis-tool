@@ -55,6 +55,13 @@ export const AZPR_PC_DEFAULT_INPUT_PROFILE = Object.freeze({
       sourceIdentity:
         'ResourcesLang/chs/Table/lang_words.json[text=E键释放星鸣技]',
     }),
+    'star-combo': createBinding({
+      command: 'joint-attack',
+      keyCode: 'KeyF',
+      keyLabel: 'F',
+      sourceIdentity:
+        'ResourcesLang/chs/Table/lang_words.json[id=-6779289353185610056].value',
+    }),
     ultimate: createBinding({
       command: 'ultimate',
       keyCode: 'KeyR',
@@ -67,7 +74,7 @@ export const AZPR_PC_DEFAULT_INPUT_PROFILE = Object.freeze({
       keyCode: 'KeyQ',
       keyLabel: 'Q',
       sourceIdentity:
-        'ResourcesLang/chs/Table/lang_words.json[text=Q键释放奇波技能]',
+        'ResourcesLang/chs/Table/lang_words.json[id=-269864882337931080].value',
     }),
     'limit-counter': createBinding({
       command: 'limit-counter',
@@ -96,13 +103,24 @@ export const AZPR_PC_DEFAULT_INPUT_PROFILE = Object.freeze({
   }),
 });
 
-export function resolveAzPrActionInputBinding(action = {}) {
+export function resolveAzPrActionInputBinding(
+  action = {},
+  actionMapping = null
+) {
   if (
     action.type === 'kiboEvent' &&
     Number.isInteger(Number(action.skillId)) &&
     Number(action.skillId) > 0
   ) {
-    return AZPR_PC_DEFAULT_INPUT_PROFILE.commands['kibo-skill'];
+    const actionKind =
+      action.eventType ?? action.actionKind ?? actionMapping?.actionKind;
+    if (actionKind === 'break') {
+      return AZPR_PC_DEFAULT_INPUT_PROFILE.commands['star-combo'];
+    }
+    if (Number(actionMapping?.controlLogic?.spCost) > 0) {
+      return AZPR_PC_DEFAULT_INPUT_PROFILE.commands['kibo-skill'];
+    }
+    return null;
   }
   if (action.type !== 'skill') return null;
   return AZPR_PC_DEFAULT_INPUT_PROFILE.commands[action.actionKind] ?? null;

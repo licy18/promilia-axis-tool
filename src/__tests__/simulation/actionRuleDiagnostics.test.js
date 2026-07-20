@@ -174,6 +174,98 @@ describe('action rule diagnostics', () => {
     ).toBe(false);
   });
 
+  it('requires an equipped kibo and a same-frame joint attack pair', () => {
+    const actor = {
+      ...createActor(),
+      loadout: { kiboId: 500001 },
+    };
+    const createActorCombo = startMs =>
+      createSkillAction({
+        id: 'actor-combo',
+        skillId: 10100712,
+        name: '星结合击',
+        actionKind: 'star-combo',
+        actor,
+        startMs,
+      });
+    const createKiboCombo = startMs => ({
+      id: 'kibo-combo',
+      type: 'kiboEvent',
+      skillId: 50000112,
+      name: '迅狼-合击',
+      eventType: 'break',
+      actorId: actor.id,
+      actor,
+      kiboId: 500001,
+      startMs,
+      durationMs: 500,
+    });
+
+    const valid = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [actor],
+        actions: [
+          createActorCombo(frameToMs(120)),
+          createKiboCombo(frameToMs(120)),
+        ],
+      },
+    });
+    expect(valid.summary.jointAttackViolationCount).toBe(0);
+    expect(
+      valid.readinessTimeline.actions.every(action => action.executable)
+    ).toBe(true);
+
+    const mismatched = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [actor],
+        actions: [
+          createActorCombo(frameToMs(120)),
+          createKiboCombo(frameToMs(121)),
+        ],
+      },
+    });
+    expect(
+      mismatched.diagnostics.filter(
+        item => item.code === ACTION_RULE_CODES.JOINT_ATTACK_FRAME_MISMATCH
+      )
+    ).toHaveLength(2);
+    expect(
+      mismatched.readinessTimeline.actions.every(
+        action => action.executable === false
+      )
+    ).toBe(true);
+
+    const actorWithoutKibo = { ...actor, loadout: { kiboId: null } };
+    const missingKibo = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [actorWithoutKibo],
+        actions: [
+          createSkillAction({
+            id: 'actor-combo-without-kibo',
+            skillId: 10100712,
+            name: '星结合击',
+            actionKind: 'star-combo',
+            actor: actorWithoutKibo,
+            startMs: frameToMs(120),
+          }),
+        ],
+      },
+    });
+    expect(missingKibo.diagnostics).toEqual([
+      expect.objectContaining({
+        code: ACTION_RULE_CODES.JOINT_ATTACK_KIBO_REQUIRED,
+        actionId: 'actor-combo-without-kibo',
+      }),
+    ]);
+    expect(missingKibo.readinessTimeline.actions[0]).toMatchObject({
+      executable: false,
+      status: 'blocked',
+    });
+  });
+
   it('consumes configured cooldown charges before reporting a violation', () => {
     const scenario = {
       actors: [createActor()],

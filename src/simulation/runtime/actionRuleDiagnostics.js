@@ -18,6 +18,9 @@ export const ACTION_RULE_CODES = Object.freeze({
   ATTACK_INPUT_LINK_TOO_EARLY: 'attack-input-link-too-early',
   ATTACK_INPUT_LINK_TOO_LATE: 'attack-input-link-too-late',
   ATTACK_INPUT_LEGACY_UNRESOLVED: 'attack-input-legacy-unresolved',
+  JOINT_ATTACK_KIBO_REQUIRED: 'joint-attack-kibo-required',
+  JOINT_ATTACK_PAIR_MISSING: 'joint-attack-pair-missing',
+  JOINT_ATTACK_FRAME_MISMATCH: 'joint-attack-frame-mismatch',
 });
 
 export const ACTION_RULE_STATUSES = Object.freeze({
@@ -43,6 +46,11 @@ export function createActionRuleDiagnostics({
       scenario
     ),
     ...createAttackInputChainDiagnostics(actions, scenario.time?.fps),
+    ...createJointAttackDiagnostics(
+      actions,
+      scenario.actors ?? [],
+      scenario.time?.fps
+    ),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
     item => item.status === ACTION_RULE_STATUSES.VIOLATED
@@ -75,7 +83,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 9,
+      ruleCount: 12,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -103,6 +111,13 @@ export function createActionRuleDiagnostics({
           ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED,
         ].includes(item.code)
       ).length,
+      jointAttackViolationCount: diagnostics.filter(item =>
+        [
+          ACTION_RULE_CODES.JOINT_ATTACK_KIBO_REQUIRED,
+          ACTION_RULE_CODES.JOINT_ATTACK_PAIR_MISSING,
+          ACTION_RULE_CODES.JOINT_ATTACK_FRAME_MISMATCH,
+        ].includes(item.code)
+      ).length,
       readinessStatus: readinessTimeline.status,
       readinessActionCount: readinessTimeline.summary.actionCount,
       cooldownWindowCount: readinessTimeline.summary.cooldownWindowCount,
@@ -112,6 +127,160 @@ export function createActionRuleDiagnostics({
     },
     appliedToSimulationResults: false,
   };
+}
+
+function createJointAttackDiagnostics(actions, actors, fps = 60) {
+  const actorById = new Map(
+    actors.map(actor => [String(actor.id ?? ''), actor])
+  );
+  const actorCombos = actions.filter(isActorJointAttack);
+  const kiboCombos = actions.filter(isKiboJointAttack);
+  return [
+    ...actorCombos.map(action =>
+      createJointAttackDiagnostic({
+        action,
+        counterpartActions: kiboCombos,
+        actorById,
+        fps,
+        side: 'actor',
+      })
+    ),
+    ...kiboCombos.map(action =>
+      createJointAttackDiagnostic({
+        action,
+        counterpartActions: actorCombos,
+        actorById,
+        fps,
+        side: 'kibo',
+      })
+    ),
+  ].filter(Boolean);
+}
+
+function createJointAttackDiagnostic({
+  action,
+  counterpartActions,
+  actorById,
+  fps,
+  side,
+}) {
+  const actor = actorById.get(String(action.actorId ?? '')) ?? action.actor;
+  const configuredKiboId = positiveIntegerOrNull(actor?.loadout?.kiboId);
+  const actionKiboId = positiveIntegerOrNull(action.kiboId);
+  if (
+    configuredKiboId == null ||
+    (side === 'kibo' && actionKiboId !== configuredKiboId)
+  ) {
+    return createJointAttackDiagnosticRecord({
+      code: ACTION_RULE_CODES.JOINT_ATTACK_KIBO_REQUIRED,
+      action,
+      actor,
+      configuredKiboId,
+      message:
+        side === 'actor'
+          ? `${action.name} 需要角色先装备奇波并与其合击技同时发动`
+          : `${action.name} 不属于该角色当前装备的奇波，不能发动合击`,
+    });
+  }
+
+  const compatibleActions = counterpartActions.filter(counterpart => {
+    if (String(counterpart.actorId ?? '') !== String(action.actorId ?? '')) {
+      return false;
+    }
+    return (
+      side === 'kibo' ||
+      positiveIntegerOrNull(counterpart.kiboId) === configuredKiboId
+    );
+  });
+  const actionFrame = msToFrame(action.startMs, fps);
+  const sameFrame = compatibleActions.find(
+    counterpart => msToFrame(counterpart.startMs, fps) === actionFrame
+  );
+  if (sameFrame) return null;
+
+  const nearest = compatibleActions.sort(
+    (left, right) =>
+      Math.abs(Number(left.startMs) - Number(action.startMs)) -
+        Math.abs(Number(right.startMs) - Number(action.startMs)) ||
+      String(left.id).localeCompare(String(right.id))
+  )[0];
+  if (!nearest) {
+    return createJointAttackDiagnosticRecord({
+      code: ACTION_RULE_CODES.JOINT_ATTACK_PAIR_MISSING,
+      action,
+      actor,
+      configuredKiboId,
+      message:
+        side === 'actor'
+          ? `${action.name} 缺少同帧的奇波合击技`
+          : `${action.name} 缺少同帧的角色星结合击`,
+    });
+  }
+  return createJointAttackDiagnosticRecord({
+    code: ACTION_RULE_CODES.JOINT_ATTACK_FRAME_MISMATCH,
+    action,
+    actor,
+    configuredKiboId,
+    counterpart: nearest,
+    suggestedStartMs: Number(nearest.startMs) || 0,
+    message: `${action.name} 必须与 ${nearest.name} 在同一帧发动`,
+  });
+}
+
+function createJointAttackDiagnosticRecord({
+  code,
+  action,
+  actor,
+  configuredKiboId,
+  counterpart = null,
+  suggestedStartMs = null,
+  message,
+}) {
+  return {
+    schemaVersion: 1,
+    id: createDiagnosticId(code, action.id, counterpart?.id),
+    code,
+    ruleKey: 'joint-attack-pairing',
+    status: ACTION_RULE_STATUSES.VIOLATED,
+    severity: 'error',
+    actionId: action.id,
+    actionIds: uniqueValues([action.id, counterpart?.id].filter(Boolean)),
+    actionName: action.name,
+    actorId: action.actorId ?? null,
+    actorName: actor?.name ?? action.actorId ?? null,
+    kiboId: action.kiboId ?? configuredKiboId,
+    pairedActionId: counterpart?.id ?? null,
+    timeMs: Number(action.startMs) || 0,
+    suggestedStartMs,
+    editFieldKey: suggestedStartMs == null ? '' : 'startMs',
+    message,
+    source: {
+      sourceKind: 'azpr-joint-attack-input-contract',
+      sourceStatus: 'verified-joint-attack-pairing-required',
+      fieldPaths: [
+        'action.actionKind',
+        'action.eventType',
+        'action.startMs',
+        'action.actorId',
+        'action.kiboId',
+        'actor.loadout.kiboId',
+      ],
+    },
+    appliedToSimulationResults: true,
+  };
+}
+
+function isActorJointAttack(action) {
+  return (
+    action.type === ACTION_TYPES.SKILL && action.actionKind === 'star-combo'
+  );
+}
+
+function isKiboJointAttack(action) {
+  return (
+    action.type === ACTION_TYPES.KIBO_EVENT &&
+    (action.eventType === 'break' || action.actionKind === 'break')
+  );
 }
 
 function createAttackInputChainDiagnostics(actions, fps = 60) {
@@ -178,10 +347,7 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
       );
       if (!nextAction) continue;
       const linkWindow = action.attackInput?.linkWindow;
-      if (
-        action.attackInput?.linkTimingStatus !== 'applied' ||
-        !linkWindow
-      ) {
+      if (action.attackInput?.linkTimingStatus !== 'applied' || !linkWindow) {
         diagnostics.push(
           createAttackInputDiagnostic({
             code: ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED,
@@ -843,6 +1009,11 @@ function finiteNumberOrNull(value) {
   }
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
 
 function uniqueValues(values) {

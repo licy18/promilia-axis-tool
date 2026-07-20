@@ -54,6 +54,18 @@ export function getVerifiedCombatActionMapping(action = {}) {
   return candidates.length === 1 ? candidates[0] : null;
 }
 
+export function getVerifiedCombatActionInputMapping(action = {}) {
+  const actionMapping = getVerifiedCombatActionMapping(action);
+  if (!actionMapping) return null;
+  const controlBinding = controlBindingBySkillId.get(
+    actionMapping.controlSkillId
+  );
+  return {
+    ...actionMapping,
+    controlLogic: controlBinding?.logic ?? null,
+  };
+}
+
 export function clearInstalledVerifiedCombatMechanicsPackage() {
   installedPackage = null;
   packagePromise = null;

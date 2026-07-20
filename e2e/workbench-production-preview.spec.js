@@ -2988,7 +2988,6 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     ),
     { targetPosition: { x: 110, y: 82 } }
   );
-
   await selectActorLibrary(109001).click();
   const muyinCharged = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10900101"][data-action-kind="charged-attack"]'
@@ -3007,8 +3006,17 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
   );
 
   await selectActorLibrary(101007).click();
+  const pangCombo = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100712"][data-action-kind="star-combo"]'
+  );
+  const windKiboEnergySkill = page.locator(
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500001"][data-skill-id="50000102"]'
+  );
   const windKiboActive = page.locator(
     '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500001"][data-skill-id="504004"]'
+  );
+  const windKiboCombo = page.locator(
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500001"][data-skill-id="50000112"]'
   );
   await expect(windKiboActive).toHaveAttribute(
     'data-mechanics-classification',
@@ -3016,29 +3024,70 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
   );
   await dragLocatorTo(
     page,
+    pangCombo,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
+    ),
+    { targetPosition: { x: 220, y: 82 } }
+  );
+  await dragLocatorTo(
+    page,
+    windKiboCombo,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
+    ),
+    { targetPosition: { x: 220, y: 36 } }
+  );
+  await dragLocatorTo(
+    page,
+    windKiboEnergySkill,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
+    ),
+    { targetPosition: { x: 440, y: 36 } }
+  );
+  await dragLocatorTo(
+    page,
     windKiboActive,
     timeline.locator(
       '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-3"]'
     ),
-    { targetPosition: { x: 520, y: 36 } }
+    { targetPosition: { x: 560, y: 36 } }
   );
-
-  const hanAction = timeline.locator(
+  const hanActions = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
   );
+  const hanAction = hanActions.filter({ hasText: '星鸣技' });
+  const pangComboAction = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10100712"]'
+    )
+    .filter({ hasText: '星结合击' });
   const muyinAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10900101"]'
   );
-  const kiboAction = timeline.locator(
+  const kiboEnergyAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="50000102"]'
+  );
+  const kiboActiveAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="504004"]'
   );
+  const kiboComboAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="50000112"]'
+  );
   await expect(hanAction).toHaveCount(1);
+  await expect(pangComboAction).toHaveCount(1);
   await expect(muyinAction).toHaveCount(1);
-  await expect(kiboAction).toHaveCount(1);
+  await expect(kiboEnergyAction).toHaveCount(1);
+  await expect(kiboActiveAction).toHaveCount(1);
+  await expect(kiboComboAction).toHaveCount(1);
   const actionIds = {
     han: await hanAction.getAttribute('data-action-id'),
+    pangCombo: await pangComboAction.getAttribute('data-action-id'),
     muyin: await muyinAction.getAttribute('data-action-id'),
-    kibo: await kiboAction.getAttribute('data-action-id'),
+    kiboEnergy: await kiboEnergyAction.getAttribute('data-action-id'),
+    kiboActive: await kiboActiveAction.getAttribute('data-action-id'),
+    kiboCombo: await kiboComboAction.getAttribute('data-action-id'),
   };
   for (const actionId of Object.values(actionIds))
     expect(actionId).toBeTruthy();
@@ -3050,10 +3099,19 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
       `[data-testid="workbench-timeline-operation-marker"][data-action-id="${actionId}"]`
     );
   const hanOperation = operationMarkerFor(actionIds.han);
+  const pangComboOperation = operationMarkerFor(actionIds.pangCombo);
   const muyinOperation = operationMarkerFor(actionIds.muyin);
-  const kiboOperation = operationMarkerFor(actionIds.kibo);
+  const kiboEnergyOperation = operationMarkerFor(actionIds.kiboEnergy);
+  const kiboActiveOperation = operationMarkerFor(actionIds.kiboActive);
+  const kiboComboOperation = operationMarkerFor(actionIds.kiboCombo);
   await expect(hanOperation).toHaveText('E');
   await expect(hanOperation).toHaveAttribute('data-mode', 'press');
+  await expect(pangComboOperation).toHaveText('F');
+  await expect(pangComboOperation).toHaveAttribute('data-mode', 'press');
+  await expect(pangComboOperation).toHaveAttribute(
+    'data-related-action-ids',
+    `${actionIds.pangCombo},${actionIds.kiboCombo}`
+  );
   await expect(muyinOperation).toHaveText('LMB (Hold)');
   await expect(muyinOperation).toHaveAttribute('data-mode', 'hold');
   await expect
@@ -3065,9 +3123,17 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
       return endMs - startMs;
     })
     .toBe(250);
-  await expect(kiboOperation).toHaveText('Q');
-  await expect(kiboOperation).toHaveAttribute('data-mode', 'press');
-  for (const actionId of Object.values(actionIds)) {
+  await expect(kiboEnergyOperation).toHaveText('Q');
+  await expect(kiboEnergyOperation).toHaveAttribute('data-mode', 'press');
+  await expect(kiboActiveOperation).toHaveCount(0);
+  await expect(kiboComboOperation).toHaveCount(0);
+  for (const actionId of [
+    actionIds.han,
+    actionIds.pangCombo,
+    actionIds.muyin,
+    actionIds.kiboActive,
+    actionIds.kiboCombo,
+  ]) {
     await expect
       .poll(() => curveNodesForAction('enemy-hp-curve', actionId).count())
       .toBeGreaterThan(0);
@@ -3100,7 +3166,7 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     path: 'reports/m7r3-operation-axis-skills-desktop.png',
   });
   await page.setViewportSize({ width: 390, height: 900 });
-  await kiboAction.scrollIntoViewIfNeeded();
+  await kiboComboAction.scrollIntoViewIfNeeded();
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -3116,9 +3182,18 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     '已恢复草稿'
   );
   await expect(hanAction).toHaveCount(1);
+  await expect(pangComboAction).toHaveCount(1);
   await expect(muyinAction).toHaveCount(1);
-  await expect(kiboAction).toHaveCount(1);
-  for (const actionId of Object.values(actionIds)) {
+  await expect(kiboEnergyAction).toHaveCount(1);
+  await expect(kiboActiveAction).toHaveCount(1);
+  await expect(kiboComboAction).toHaveCount(1);
+  for (const actionId of [
+    actionIds.han,
+    actionIds.pangCombo,
+    actionIds.muyin,
+    actionIds.kiboActive,
+    actionIds.kiboCombo,
+  ]) {
     await expect
       .poll(() => curveNodesForAction('enemy-hp-curve', actionId).count())
       .toBeGreaterThan(0);

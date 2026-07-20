@@ -22,9 +22,20 @@ export function projectTimelineOperationInputs({
       transition,
     ])
   );
+  const jointAttackPairs = createJointAttackPairs(actions, actors);
+  const pairedKiboActionIds = new Set(
+    [...jointAttackPairs.values()].map(pair => pair.kiboAction.id)
+  );
   const markers = [];
 
   for (const action of actions) {
+    if (isKiboJointAttack(action)) {
+      continue;
+    }
+    const jointAttackPair = jointAttackPairs.get(action.id) ?? null;
+    if (isActorJointAttack(action) && !jointAttackPair) {
+      continue;
+    }
     const marker =
       action?.type === 'switch'
         ? createSwitchMarker({
@@ -37,6 +48,7 @@ export function projectTimelineOperationInputs({
             action,
             durationMs: normalizedDurationMs,
             actionMapping: resolveActionMapping(action),
+            jointAttackPair,
           });
     if (marker) markers.push(marker);
   }
@@ -57,6 +69,8 @@ export function projectTimelineOperationInputs({
       pressCount: markers.filter(marker => marker.mode === 'press').length,
       holdCount: markers.filter(marker => marker.mode === 'hold').length,
       unresolvedCount: markers.filter(marker => !marker.applied).length,
+      jointAttackCount: jointAttackPairs.size,
+      pairedKiboActionCount: pairedKiboActionIds.size,
     },
     applied: true,
   };
@@ -124,8 +138,13 @@ export function layoutTimelineOperationMarkers(
   };
 }
 
-function createActionMarker({ action, durationMs, actionMapping }) {
-  const binding = resolveAzPrActionInputBinding(action);
+function createActionMarker({
+  action,
+  durationMs,
+  actionMapping,
+  jointAttackPair,
+}) {
+  const binding = resolveAzPrActionInputBinding(action, actionMapping);
   if (!binding) return null;
   const inputTrigger = resolveActionInputTrigger(action, actionMapping);
   const mode = inputTrigger?.mode ?? binding.defaultMode ?? 'press';
@@ -152,8 +171,13 @@ function createActionMarker({ action, durationMs, actionMapping }) {
     endMs,
     durationMs: endMs == null ? 0 : endMs - startMs,
     actionId: String(action.id ?? ''),
+    relatedActionIds: jointAttackPair
+      ? [String(action.id), String(jointAttackPair.kiboAction.id)]
+      : [String(action.id ?? '')],
     switchTransitionId: null,
-    actionName: String(action.name ?? action.actionKind ?? binding.command),
+    actionName: jointAttackPair
+      ? `${action.name} + ${jointAttackPair.kiboAction.name}`
+      : String(action.name ?? action.actionKind ?? binding.command),
     actionKind: action.actionKind ?? action.type,
     attackSequenceIndex: positiveIntegerOrNull(action.attackSequenceIndex),
     sourceKind: binding.sourceKind,
@@ -168,6 +192,45 @@ function createActionMarker({ action, durationMs, actionMapping }) {
       : 'timeline-operation-hold-duration-unresolved',
     applied: holdResolved,
   };
+}
+
+function createJointAttackPairs(actions, actors) {
+  const actorById = new Map(
+    actors.map(actor => [String(actor.id ?? ''), actor])
+  );
+  const kiboCombos = actions.filter(isKiboJointAttack);
+  const pairs = new Map();
+  for (const action of actions.filter(isActorJointAttack)) {
+    const actor = actorById.get(String(action.actorId ?? '')) ?? action.actor;
+    const configuredKiboId = positiveIntegerOrNull(actor?.loadout?.kiboId);
+    if (configuredKiboId == null) continue;
+    const frameIndex = timelineFrameIndex(action.startMs);
+    const kiboAction = kiboCombos.find(
+      candidate =>
+        String(candidate.actorId ?? '') === String(action.actorId ?? '') &&
+        positiveIntegerOrNull(candidate.kiboId) === configuredKiboId &&
+        timelineFrameIndex(candidate.startMs) === frameIndex
+    );
+    if (kiboAction) {
+      pairs.set(action.id, { actorAction: action, kiboAction, frameIndex });
+    }
+  }
+  return pairs;
+}
+
+function isActorJointAttack(action) {
+  return action.type === 'skill' && action.actionKind === 'star-combo';
+}
+
+function isKiboJointAttack(action) {
+  return (
+    action.type === 'kiboEvent' &&
+    (action.eventType === 'break' || action.actionKind === 'break')
+  );
+}
+
+function timelineFrameIndex(timeMs) {
+  return Math.round(finiteNumber(timeMs) / (1000 / 60));
 }
 
 function createSwitchMarker({ action, actors, transition, durationMs }) {
@@ -191,6 +254,7 @@ function createSwitchMarker({ action, actors, transition, durationMs }) {
     endMs: null,
     durationMs: 0,
     actionId: String(action.id ?? ''),
+    relatedActionIds: [String(action.id ?? '')],
     switchTransitionId: transition?.transitionId ?? null,
     actionName: `切换至 ${targetActor?.name ?? `角色 ${binding.slot}`}`,
     actionKind: 'switch',

@@ -5,6 +5,7 @@ import mechanicsPackage from '../../data/generated/verified-combat-mechanics-pac
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
+  getVerifiedCombatActionInputMapping,
   getInstalledVerifiedCombatMechanicsPackage,
   installVerifiedCombatMechanicsPackage,
   loadVerifiedCombatMechanicsPackage,
@@ -136,6 +137,35 @@ describe('verified combat mechanics package', () => {
       status: 'verified-combat-mechanics-sync-audit-ready',
       packageId: mechanicsPackage.packageId,
       packageHash: mechanicsPackage.packageHash,
+    });
+  });
+
+  it('exposes verified kibo SP cost to the operation input projection', () => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+
+    expect(
+      getVerifiedCombatActionInputMapping({
+        type: 'kiboEvent',
+        kiboId: 500001,
+        skillId: 50000102,
+        actionVariantIndex: 0,
+      })
+    ).toMatchObject({
+      actionKind: 'signature',
+      controlSkillId: 50000102,
+      controlLogic: { spCost: 100 },
+    });
+    expect(
+      getVerifiedCombatActionInputMapping({
+        type: 'kiboEvent',
+        kiboId: 500001,
+        skillId: 504004,
+        actionVariantIndex: 0,
+      })
+    ).toMatchObject({
+      actionKind: 'active',
+      controlSkillId: 504004,
+      controlLogic: { spCost: 0 },
     });
   });
 

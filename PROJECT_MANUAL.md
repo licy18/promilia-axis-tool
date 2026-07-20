@@ -1598,11 +1598,11 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 
 发布守门通过 106 个测试文件、599 条测试和 48/48 production preview；五载体保持采用的输入窗口、有效时长和逐段运行时结果。总 JavaScript gzip 为 681,539B，Workbench 主块为 369,983B；桌面与窄屏证据为 `reports/m7r2-attack-input-timing-desktop.png` 和 `reports/m7r2-attack-input-timing-narrow.png`。当前停在 M7-R2 等待产品复验，不进入 M8。
 
-### M7-R3 按键操作轴已完成，等待产品复验（2026-07-20）
+### M7-R3 按键操作轴与合击约束已完成，等待产品复验（2026-07-20）
 
-时间刻度上方现有一条与动作共享缩放、滚动和帧坐标的按键操作轴。中央蓝色星原 PC profile 统一解析 LMB、E、R、Q 与 1/2/3 换人；verified 包 v6 从客户端 `inputTriggerType / holdTriggerTime` 生成 press/hold，莉莉 A1-A5 各自只有一个输入标记，长按使用真实区间，多 hit、自动事件、CD 和 Buff 不重复生成输入。重叠标记自动分层，点击可回到来源动作；它是动作/换人的纯投影，不新增载体字段。
+时间刻度上方现有一条与动作共享缩放、滚动和帧坐标的按键操作轴。中央蓝色星原 PC profile 统一解析 LMB、E、R、Q、F 与 1/2/3 换人；奇波只有 verified control 的 `spCost > 0` 才显示 Q。角色星结合击必须与当前已装备奇波的合击在同一 60fps 帧发动，合法配对只显示一个关联双方 action 的 F；无奇波、缺少配对或错帧都会阻止双方运行时执行。多 hit、自动事件、CD 和 Buff 不重复生成输入；纯投影不新增载体字段。
 
-完整发布守门通过 108 个测试文件、605 条测试、48/48 production preview 和 41/41 必需能力；总 JavaScript gzip 为 685,422B，初始入口 89,225B，Workbench 主块 368,358B。桌面、窄屏、技能/长按和缩放证据保存在 `reports/m7r3-operation-axis-*.png`。当前停在 M7-R3 等待产品复验，不进入 M8。
+完整发布守门通过 108 个测试文件、607 条测试、48/48 production preview 和 41/41 必需能力；总 JavaScript gzip 为 686,637B，初始入口 89,226B，Workbench 主块 369,142B。桌面、窄屏、技能/长按和缩放证据保存在 `reports/m7r3-operation-axis-*.png`。当前停在 M7-R3 等待产品复验，不进入 M8。
 
 ## 10. 文档维护规则
 
