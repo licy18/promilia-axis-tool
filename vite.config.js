@@ -22,6 +22,13 @@ export default defineConfig({
         onlyExplicitManualChunks: true,
         manualChunks(id) {
           if (
+            id.endsWith(
+              '/simulation/projection/projectTimelineStateDisplaySeries.js'
+            )
+          ) {
+            return 'workbench-timeline-projection';
+          }
+          if (
             [
               'WorkbenchAnalysisReportDialog.vue',
               'WorkbenchConfigurationLibraryPanel.vue',

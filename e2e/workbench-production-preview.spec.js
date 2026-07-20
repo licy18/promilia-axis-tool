@@ -2940,7 +2940,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   ).toHaveCount(1);
 });
 
-test('[m7-catalog-runtime-workflow] runs mapped actor and kibo actions while exposing unresolved catalog entries', async ({
+test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped actor and kibo actions while exposing unresolved catalog entries', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -3042,6 +3042,31 @@ test('[m7-catalog-runtime-workflow] runs mapped actor and kibo actions while exp
   };
   for (const actionId of Object.values(actionIds))
     expect(actionId).toBeTruthy();
+  const operationAxis = timeline.getByTestId(
+    'workbench-timeline-operation-axis'
+  );
+  const operationMarkerFor = actionId =>
+    operationAxis.locator(
+      `[data-testid="workbench-timeline-operation-marker"][data-action-id="${actionId}"]`
+    );
+  const hanOperation = operationMarkerFor(actionIds.han);
+  const muyinOperation = operationMarkerFor(actionIds.muyin);
+  const kiboOperation = operationMarkerFor(actionIds.kibo);
+  await expect(hanOperation).toHaveText('E');
+  await expect(hanOperation).toHaveAttribute('data-mode', 'press');
+  await expect(muyinOperation).toHaveText('LMB (Hold)');
+  await expect(muyinOperation).toHaveAttribute('data-mode', 'hold');
+  await expect
+    .poll(async () => {
+      const startMs = Number(
+        await muyinOperation.getAttribute('data-start-ms')
+      );
+      const endMs = Number(await muyinOperation.getAttribute('data-end-ms'));
+      return endMs - startMs;
+    })
+    .toBe(250);
+  await expect(kiboOperation).toHaveText('Q');
+  await expect(kiboOperation).toHaveAttribute('data-mode', 'press');
   for (const actionId of Object.values(actionIds)) {
     await expect
       .poll(() => curveNodesForAction('enemy-hp-curve', actionId).count())
@@ -3057,20 +3082,32 @@ test('[m7-catalog-runtime-workflow] runs mapped actor and kibo actions while exp
   const frameBeforeMove = Number(
     await hanNode.getAttribute('data-frame-index')
   );
+  const operationStartBeforeMove = Number(
+    await hanOperation.getAttribute('data-start-ms')
+  );
   await hanAction.press('ArrowRight');
   await expect
     .poll(async () => Number(await hanNode.getAttribute('data-frame-index')))
     .toBe(frameBeforeMove + 1);
+  await expect
+    .poll(async () => Number(await hanOperation.getAttribute('data-start-ms')))
+    .toBeCloseTo(operationStartBeforeMove + frameToMs(1), 3);
 
   await closeInspectorIfVisible(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m7-catalog-runtime-desktop.png' });
+  await timeline.screenshot({
+    path: 'reports/m7r3-operation-axis-skills-desktop.png',
+  });
   await page.setViewportSize({ width: 390, height: 900 });
   await kiboAction.scrollIntoViewIfNeeded();
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m7-catalog-runtime-narrow.png' });
+  await timeline.screenshot({
+    path: 'reports/m7r3-operation-axis-skills-narrow.png',
+  });
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.getByTestId('workbench-save-draft').click();
@@ -3088,7 +3125,7 @@ test('[m7-catalog-runtime-workflow] runs mapped actor and kibo actions while exp
   }
 });
 
-test('[m7-r2-normal-attack-input-timing] uses real input windows for compact editable A1-A5 siblings', async ({
+test('[m7-r2-normal-attack-input-timing][m7-r3-operation-axis] uses real input windows for compact editable A1-A5 siblings', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -3187,6 +3224,59 @@ test('[m7-r2-normal-attack-input-timing] uses real input windows for compact edi
       ])
     )
   );
+  const operationAxis = timeline.getByTestId(
+    'workbench-timeline-operation-axis'
+  );
+  const operationMarkerFor = actionId =>
+    operationAxis.locator(
+      `[data-testid="workbench-timeline-operation-marker"][data-action-id="${actionId}"]`
+    );
+  for (const actionId of Object.values(actionIds)) {
+    await expect(operationMarkerFor(actionId)).toHaveCount(1);
+    await expect(operationMarkerFor(actionId)).toHaveText('LMB');
+  }
+  await operationMarkerFor(actionIds[1]).click();
+  await expect(actionBySequence(1)).toHaveAttribute('data-selected', 'true');
+  const firstActionStartMs = Number(
+    await actionBySequence(1).getAttribute('data-start-ms')
+  );
+  await expect(timeline).toHaveAttribute(
+    'data-cursor-frame-index',
+    String(Math.round(firstActionStartMs / frameToMs(1)))
+  );
+  await page.getByTestId('workbench-add-switch-action').click();
+  const switchAction = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-action-type="switch"]'
+    )
+    .last();
+  await expect(switchAction).toHaveCount(1);
+  const switchActionId = await switchAction.getAttribute('data-action-id');
+  const switchOperation = operationMarkerFor(switchActionId);
+  await expect(switchOperation).toHaveAttribute('data-command', 'switch');
+  await expect(switchOperation).toHaveText(/^[123]$/);
+  await expect
+    .poll(async () =>
+      Number(await operationAxis.getAttribute('data-row-count'))
+    )
+    .toBeGreaterThan(1);
+  const operationRows = await operationAxis
+    .getByTestId('workbench-timeline-operation-marker')
+    .evaluateAll(markers =>
+      markers.map(marker => ({
+        rowIndex: Number(marker.getAttribute('data-row-index')),
+        left: marker.getBoundingClientRect().left,
+        right: marker.getBoundingClientRect().right,
+      }))
+    );
+  for (const rowIndex of new Set(operationRows.map(row => row.rowIndex))) {
+    const row = operationRows
+      .filter(item => item.rowIndex === rowIndex)
+      .sort((left, right) => left.left - right.left);
+    for (let index = 1; index < row.length; index += 1) {
+      expect(row[index].left).toBeGreaterThanOrEqual(row[index - 1].right);
+    }
+  }
   const startsBeforeMove = Object.fromEntries(
     await group.evaluateAll(actions =>
       actions.map(action => [
@@ -3205,6 +3295,20 @@ test('[m7-r2-normal-attack-input-timing] uses real input windows for compact edi
       Number(await actionBySequence(2).getAttribute('data-start-ms'))
     )
     .not.toBe(startsBeforeMove[actionIds[2]]);
+  await expect
+    .poll(async () =>
+      Number(
+        await operationMarkerFor(actionIds[2]).getAttribute('data-start-ms')
+      )
+    )
+    .toBe(Number(await actionBySequence(2).getAttribute('data-start-ms')));
+  const movedActionBox = await actionBySequence(2).boundingBox();
+  const movedOperationBox = await operationMarkerFor(
+    actionIds[2]
+  ).boundingBox();
+  expect(Math.abs(movedActionBox.x - movedOperationBox.x)).toBeLessThanOrEqual(
+    1
+  );
   const startsAfterMove = Object.fromEntries(
     await group.evaluateAll(actions =>
       actions.map(action => [
@@ -3229,6 +3333,7 @@ test('[m7-r2-normal-attack-input-timing] uses real input windows for compact edi
   await actionBySequence(3).click();
   await page.keyboard.press('Delete');
   await expect(group).toHaveCount(4);
+  await expect(operationMarkerFor(actionIds[3])).toHaveCount(0);
   await expect(curveNodesForAction(actionIds[3])).toHaveCount(0);
   await expect(
     page.locator(
@@ -3237,12 +3342,50 @@ test('[m7-r2-normal-attack-input-timing] uses real input windows for compact edi
   ).toBeVisible();
   await page.getByTestId('workbench-undo-edit').click();
   await expect(group).toHaveCount(5);
+  await expect(operationMarkerFor(actionIds[3])).toHaveCount(1);
   await page.getByTestId('workbench-undo-edit').click();
   await expect
     .poll(async () =>
       Number(await actionBySequence(2).getAttribute('data-start-ms'))
     )
     .toBe(startsBeforeMove[actionIds[2]]);
+
+  await page.getByTestId('workbench-timeline-zoom-in').click();
+  await page.getByTestId('workbench-timeline-zoom-in').click();
+  await expect(page.getByTestId('workbench-timeline-zoom-value')).toHaveText(
+    '1.5x'
+  );
+  const timelineViewport = timeline.getByTestId('workbench-timeline-viewport');
+  const scaleViewport = timeline.getByTestId(
+    'workbench-timeline-scale-viewport'
+  );
+  await timelineViewport.evaluate(element => {
+    element.scrollLeft = Math.max(1, element.scrollWidth * 0.2);
+    element.dispatchEvent(new Event('scroll'));
+  });
+  await expect
+    .poll(async () => {
+      const timelineScroll = await timelineViewport.evaluate(
+        element => element.scrollLeft
+      );
+      const scaleScroll = await scaleViewport.evaluate(
+        element => element.scrollLeft
+      );
+      return Math.abs(timelineScroll - scaleScroll);
+    })
+    .toBeLessThanOrEqual(1);
+  const zoomedActionLeft = await actionBySequence(5).evaluate(
+    element => element.getBoundingClientRect().left
+  );
+  const zoomedOperationLeft = await operationMarkerFor(actionIds[5]).evaluate(
+    element => element.getBoundingClientRect().left
+  );
+  expect(Math.abs(zoomedActionLeft - zoomedOperationLeft)).toBeLessThanOrEqual(
+    1
+  );
+  await timeline.screenshot({
+    path: 'reports/m7r3-operation-axis-zoomed-desktop.png',
+  });
 
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
@@ -3255,6 +3398,9 @@ test('[m7-r2-normal-attack-input-timing] uses real input windows for compact edi
   await page.screenshot({
     path: 'reports/m7r2-attack-input-timing-desktop.png',
   });
+  await timeline.screenshot({
+    path: 'reports/m7r3-operation-axis-desktop.png',
+  });
 
   await page.setViewportSize({ width: 390, height: 900 });
   await actionBySequence(5).scrollIntoViewIfNeeded();
@@ -3263,6 +3409,9 @@ test('[m7-r2-normal-attack-input-timing] uses real input windows for compact edi
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: 'reports/m7r2-attack-input-timing-narrow.png',
+  });
+  await timeline.screenshot({
+    path: 'reports/m7r3-operation-axis-narrow.png',
   });
 });
 

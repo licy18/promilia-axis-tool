@@ -25,7 +25,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 5,
+      packageVersion: 6,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -64,6 +64,24 @@ describe('verified combat mechanics package', () => {
       mechanicsPackage.actionBindings
         .filter(binding => binding.actionKind === 'normal-attack')
         .every(binding => binding.attackSequenceIndex != null)
+    ).toBe(true);
+    const verifiedChargedInput = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.actionKind === 'charged-attack' &&
+        mapping.inputTrigger?.mode === 'hold'
+    );
+    expect(verifiedChargedInput?.inputTrigger).toMatchObject({
+      triggerType: 1,
+      mode: 'hold',
+      holdTriggerTimeMs: 250,
+      sourceKind: 'azpr-skillsub-logic-input-trigger',
+      status: 'verified-input-trigger-ready',
+      confidence: 'high',
+    });
+    expect(
+      mechanicsPackage.actionMappings
+        .flatMap(mapping => mapping.attackInputSegments ?? [])
+        .some(segment => segment.inputTrigger?.mode === 'press')
     ).toBe(true);
     expect(
       mechanicsPackage.sourceFiles.every(source =>

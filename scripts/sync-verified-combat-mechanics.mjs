@@ -1377,7 +1377,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 5,
+    packageVersion: 6,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -1592,6 +1592,7 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       controlFrameRate: mapping.controlFrameRate,
       controlVariantSkillLevel: mapping.controlVariantSkillLevel,
       controlVariantSourceIdentity: mapping.controlVariantSourceIdentity,
+      inputTrigger: mapping.inputTrigger,
       animationDurationFrames: timing.animationDurationFrames,
       animationDurationStatus: timing.animationDurationStatus,
       animationDurationSourceIdentity: timing.animationDurationSourceIdentity,
@@ -1813,6 +1814,7 @@ function createActionMapping(candidate, control) {
     controlVariantSourceIdentity:
       candidate.controlVariantSourceIdentity ?? null,
     controlFrameRate: control?.frameRate ?? 60,
+    inputTrigger: createControlInputTrigger(control?.logic),
   };
   if (!candidate.bindingEligible || !control) {
     return {
@@ -2002,8 +2004,37 @@ function createControlSkillLogic(row) {
     cooldownCount: finiteNumberOrNull(row.coolDownCount),
     skillTag: row.skillTag ?? null,
     petSkillLogicTag: row.petSkillLogicTag ?? null,
+    inputTriggerType: integerOrNull(row.inputTriggerType),
+    holdTriggerTimeMs: finiteNumberOrNull(row.holdTriggerTime),
     sourceIdentity: `NewTable/skillsub_logic.rows[skillId=${row.skillId}]`,
     status: 'verified-skill-logic-ready',
+    applied: true,
+  };
+}
+
+function createControlInputTrigger(logic) {
+  const triggerType = integerOrNull(logic?.inputTriggerType);
+  if (triggerType == null) return null;
+  const holdTriggerTimeMs = Math.max(
+    0,
+    finiteNumberOrNull(logic?.holdTriggerTimeMs) ?? 0
+  );
+  return {
+    triggerType,
+    triggerTypeName:
+      triggerType === 0
+        ? 'Down'
+        : triggerType === 1
+          ? 'Press'
+          : triggerType === 2
+            ? 'Up'
+            : 'Unknown',
+    mode: triggerType === 1 && holdTriggerTimeMs > 0 ? 'hold' : 'press',
+    holdTriggerTimeMs,
+    sourceKind: 'azpr-skillsub-logic-input-trigger',
+    sourceIdentity: `${logic.sourceIdentity}.inputTriggerType|${logic.sourceIdentity}.holdTriggerTime`,
+    status: 'verified-input-trigger-ready',
+    confidence: 'high',
     applied: true,
   };
 }

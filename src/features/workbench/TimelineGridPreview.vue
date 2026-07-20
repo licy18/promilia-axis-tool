@@ -225,13 +225,22 @@
     </div>
 
     <div class="timeline-scale">
-      <span class="scale-spacer" />
+      <span class="scale-spacer">按键</span>
       <div
         ref="scaleViewportRef"
         class="scale-viewport"
         data-testid="workbench-timeline-scale-viewport"
         @scroll="synchronizeTimelineScroll('scale')"
       >
+        <TimelineOperationAxis
+          class="operation-axis-slot"
+          :style="timelineTrackStyle"
+          :actions="actions"
+          :actors="actors"
+          :duration-ms="durationMs"
+          :selected-action-id="selectedActionId"
+          @select-action="emit('select-action', $event)"
+        />
         <div
           class="scale-track"
           :style="timelineTrackStyle"
@@ -932,7 +941,14 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  watch,
+} from 'vue';
 import {
   ArrowLeft,
   ArrowRight,
@@ -976,6 +992,10 @@ import {
 } from '../../domain/workbenchTimelineEntry';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
+
+const TimelineOperationAxis = defineAsyncComponent(
+  () => import('./TimelineOperationAxis.vue')
+);
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -3996,8 +4016,27 @@ h2 {
   grid-template-columns: 188px minmax(0, 1fr);
   gap: 0;
   padding: 7px 10px 0;
+  overflow-y: scroll;
+  scrollbar-color: transparent transparent;
+  scrollbar-gutter: stable;
   color: #8f9aa3;
   font-size: 12px;
+}
+
+.timeline-scale::-webkit-scrollbar-thumb,
+.timeline-scale::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scale-spacer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 10px 12px 0 0;
+  border-bottom: 1px solid #303941;
+  color: #aab3ba;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .scale-viewport,
@@ -4013,6 +4052,13 @@ h2 {
 
 .scale-viewport::-webkit-scrollbar {
   display: none;
+}
+
+.operation-axis-slot {
+  position: relative;
+  width: 100%;
+  min-width: 100%;
+  min-height: 35px;
 }
 
 .scale-track {
@@ -5285,6 +5331,7 @@ h2 {
   }
 
   .scale-track,
+  .operation-axis-slot,
   .timeline-lane {
     min-width: var(--timeline-mobile-min-width);
   }

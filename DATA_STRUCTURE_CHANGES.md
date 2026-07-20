@@ -27604,3 +27604,19 @@ linkWindow / linkWindows[] / linkTimingStatus / linkTimingReasons[]
 生成器沿 `skillPlayer -> skillTrackData -> behaviorlineControl -> EventBridgeBehaviorData` 解析指向下一 control 的输入窗口或末段重新开放普攻窗口，并保留 `Immediately / Wait` 模式与来源 identity。有效占轴取输入窗口起点与末次命中帧中的较晚者；窗口在末次命中前结束或没有唯一来源时，状态保持 `unresolved`，`durationFrames` 只提供覆盖已知命中的未决显示范围，不声明为真实连段时长。
 
 Workbench action 继续使用现有项目 schema，只持久化实际采用的 `linkWindow`、有效/动画/末次命中帧和原有逐段 identity；完整候选窗口与来源审计留在按需公式包。五种载体因此恢复同一采用窗口、块宽和逐段三值结果，无需升级项目版本。旧 M7-R1 分段动作在来源唯一且仍保持原始连续排布时会刷新元数据、时长并紧凑重排；已移动、删除或自定义时长的动作保留用户编辑。旧聚合普攻仍按既有唯一解析或 `legacy-unresolved` 规则处理。
+
+## 442. Verified input trigger and timeline operation projection v1
+
+`verified-combat-mechanics-package.json` 升级为 package v6。角色与奇波 action mapping，以及角色普攻 `attackInputSegments[]`，可选新增由 `skillsub_logic.inputTriggerType / holdTriggerTime` 直接生成的 `inputTrigger`：
+
+```text
+inputTrigger
+  triggerType / triggerTypeName
+  mode = press | hold
+  holdTriggerTimeMs
+  sourceKind / sourceIdentity / status / confidence / applied
+```
+
+`holdTriggerTimeMs` 只表示客户端确认的按住时长，不使用完整动画、动作块时长或命中尾长代替。没有可靠触发字段时保持缺失；生成器不从描述文本或命中数量推断输入。
+
+新增非持久化 `AzPrTimelineOperationInputProjection` v1，由当前标准 action、换人事件、上述 `inputTrigger` 与单一蓝色星原 PC 键位 profile 派生 `command / mode / keyCode / keyLabel / startMs / endMs / actionId / switchTransitionId / source identity`。碰撞行和像素宽度只属于视图布局。操作 marker 不进入 Workbench project、草稿、JSON、分享链接或 PNG 元数据；五载体回载后从同一动作和队伍槽重新投影，因此项目 schemaVersion 不升级，也不改变八曲线或 calculator 输入。

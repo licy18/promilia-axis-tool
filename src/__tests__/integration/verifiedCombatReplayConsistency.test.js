@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
+  getVerifiedCombatActionMapping,
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -31,6 +32,7 @@ import { duplicateWorkbenchScenario } from '../../domain/workbenchScenarioWorksp
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
+import { projectTimelineOperationInputs } from '../../simulation/projection/projectTimelineOperationInputs';
 import { frameToMs } from '../../domain/timebase';
 
 const ONE_PIXEL_PNG_BASE64 =
@@ -104,6 +106,10 @@ describe('verified combat project replay consistency', () => {
         kiboMaximums: [100],
         heavyCost: [100, -100, 0],
       },
+      operationInputSignature: [
+        ['verified-replay-pangpang', 'normal-attack', 'press', 'LMB', 0, null],
+        ['verified-replay-kibo', 'kibo-skill', 'press', 'Q', 1000, null],
+      ],
     });
     expect(signatures[0].damageEventCount).toBeGreaterThan(6);
     expect(signatures[0].stateEventKinds).toEqual(
@@ -178,6 +184,18 @@ describe('verified combat project replay consistency', () => {
         kiboLaneCount: 3,
         stateCurveCount: 8,
       },
+      operationInputSignature: [
+        ['verified-replay-han-star', 'skill', 'press', 'E', 0, null],
+        [
+          'verified-replay-muyin-charged',
+          'charged-attack',
+          'hold',
+          'LMB',
+          1800,
+          2050,
+        ],
+        ['verified-replay-wind-kibo', 'kibo-skill', 'press', 'Q', 3200, null],
+      ],
     });
     for (const signature of signatures.slice(1)) {
       expect(signature).toEqual(signatures[0]);
@@ -217,6 +235,16 @@ describe('verified combat project replay consistency', () => {
       actionSignatures[0][0].startMs + actionSignatures[0][0].durationMs
     );
     expect(actionSignatures[0][2].durationMs).toBe(frameToMs(90));
+    expect(runtimeSignatures[0].operationInputSignature).toEqual(
+      actionSignatures[0].map(action => [
+        action.id,
+        'normal-attack',
+        'press',
+        'LMB',
+        action.startMs,
+        null,
+      ])
+    );
     for (const signature of actionSignatures.slice(1)) {
       expect(signature).toEqual(actionSignatures[0]);
     }
@@ -432,6 +460,21 @@ function createVerifiedReplaySignature(draft) {
   const scenario = compileProject(project, getWorkbenchGameData());
   const result = simulateScenario(scenario);
   const resources = result.runtimeOutputs.resourceCurves;
+  const actorsById = new Map(
+    scenario.actors.map(actor => [String(actor.id), actor])
+  );
+  const operationInputs = projectTimelineOperationInputs({
+    actions: scenario.actions,
+    actors: scenario.actors,
+    controlledActorTimeline: result.runtimeOutputs.controlledActorTimeline,
+    durationMs: scenario.time.durationMs,
+    resolveActionMapping(action) {
+      return getVerifiedCombatActionMapping({
+        ...action,
+        actor: actorsById.get(String(action.actorId ?? '')) ?? null,
+      });
+    },
+  });
   return {
     profileId: scenario.mechanicsProfile.profileId,
     topology: scenario.sourceProject.metadata.timelineTopology.summary,
@@ -495,6 +538,14 @@ function createVerifiedReplaySignature(draft) {
       curve.appliedToCalculators,
     ]),
     sparseDisplaySignature: createSparseDisplaySignature(result, scenario),
+    operationInputSignature: operationInputs.markers.map(marker => [
+      marker.actionId,
+      marker.command,
+      marker.mode,
+      marker.keyLabel,
+      marker.startMs,
+      marker.endMs,
+    ]),
     appliedKiboIds: resources.curvesByKibo
       .filter(curve => curve.appliedToCalculators)
       .map(curve => curve.kiboId),
