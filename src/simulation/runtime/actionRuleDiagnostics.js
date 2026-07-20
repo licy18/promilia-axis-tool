@@ -6,11 +6,15 @@ export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
   'AzPrActionRuleDiagnostics';
 export const ACTION_READINESS_TIMELINE_CONTRACT_NAME =
   'AzPrActionReadinessTimeline';
+const ACTION_BOUNDARY_EPSILON_MS = 0.001;
 
 export const ACTION_RULE_CODES = Object.freeze({
   LANE_OVERLAP: 'action-lane-overlap',
   SKILL_COOLDOWN_ACTIVE: 'skill-cooldown-active',
   SKILL_SP_PRECONDITION_UNRESOLVED: 'skill-sp-precondition-unresolved',
+  ATTACK_INPUT_CHAIN_INCOMPLETE: 'attack-input-chain-incomplete',
+  ATTACK_INPUT_CHAIN_ORDER_INVALID: 'attack-input-chain-order-invalid',
+  ATTACK_INPUT_LEGACY_UNRESOLVED: 'attack-input-legacy-unresolved',
 });
 
 export const ACTION_RULE_STATUSES = Object.freeze({
@@ -35,6 +39,7 @@ export function createActionRuleDiagnostics({
       scenario.actors ?? [],
       scenario
     ),
+    ...createAttackInputChainDiagnostics(actions),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
     item => item.status === ACTION_RULE_STATUSES.VIOLATED
@@ -67,7 +72,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 3,
+      ruleCount: 6,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -85,6 +90,13 @@ export function createActionRuleDiagnostics({
       unresolvedSpPreconditionCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED
       ).length,
+      attackInputChainDiagnosticCount: diagnostics.filter(item =>
+        [
+          ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
+          ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+          ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED,
+        ].includes(item.code)
+      ).length,
       readinessStatus: readinessTimeline.status,
       readinessActionCount: readinessTimeline.summary.actionCount,
       cooldownWindowCount: readinessTimeline.summary.cooldownWindowCount,
@@ -93,6 +105,103 @@ export function createActionRuleDiagnostics({
       appliedToSimulationResults: false,
     },
     appliedToSimulationResults: false,
+  };
+}
+
+function createAttackInputChainDiagnostics(actions) {
+  const diagnostics = actions
+    .filter(action => action.attackInputLegacyStatus === 'legacy-unresolved')
+    .map(action =>
+      createAttackInputDiagnostic({
+        code: ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED,
+        action,
+        message: `${action.name} 是无法唯一拆分的旧版聚合普攻，不参与三值结算`,
+      })
+    );
+  const groups = groupByKey(
+    actions.filter(action => action.attackGroupId),
+    action => action.attackGroupId
+  );
+  groups.forEach(groupActions => {
+    const bySequence = [...groupActions].sort(
+      (left, right) =>
+        Number(left.attackSequenceIndex) - Number(right.attackSequenceIndex)
+    );
+    const expectedTotal = Math.max(
+      ...bySequence.map(action => Number(action.attackSequenceTotal) || 0)
+    );
+    const presentIndexes = new Set(
+      bySequence.map(action => Number(action.attackSequenceIndex))
+    );
+    const missingIndexes = Array.from(
+      { length: expectedTotal },
+      (_, index) => index + 1
+    ).filter(index => !presentIndexes.has(index));
+    if (missingIndexes.length) {
+      const action = bySequence[0];
+      diagnostics.push(
+        createAttackInputDiagnostic({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
+          action,
+          groupActions: bySequence,
+          message: `普攻输入链缺少 ${missingIndexes.map(index => `A${index}`).join('、')}，其余输入段保持独立`,
+          extra: { missingSequenceIndexes: missingIndexes },
+        })
+      );
+    }
+    const inverted = bySequence.find(
+      (action, index) =>
+        index > 0 &&
+        Number(action.startMs) < Number(bySequence[index - 1].startMs)
+    );
+    if (inverted) {
+      diagnostics.push(
+        createAttackInputDiagnostic({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+          action: inverted,
+          groupActions: bySequence,
+          message: `普攻输入链顺序已改变，${inverted.name} 早于前一输入段`,
+        })
+      );
+    }
+  });
+  return diagnostics;
+}
+
+function createAttackInputDiagnostic({
+  code,
+  action,
+  groupActions = [action],
+  message,
+  extra = {},
+}) {
+  return {
+    schemaVersion: 1,
+    id: createDiagnosticId(code, action.id, action.attackGroupId),
+    code,
+    ruleKey: 'normal-attack-input-chain',
+    status: ACTION_RULE_STATUSES.UNRESOLVED,
+    severity: 'warning',
+    actionId: action.id,
+    actionIds: groupActions.map(item => item.id),
+    actionName: action.name,
+    actorId: action.actorId,
+    actorName: action.actor?.name ?? action.actorId,
+    timeMs: action.startMs,
+    attackGroupId: action.attackGroupId,
+    message,
+    source: {
+      sourceKind: 'project-action-attack-input-sequence',
+      sourceStatus: code,
+      fieldPaths: [
+        'action.attackGroupId',
+        'action.attackSequenceIndex',
+        'action.attackSequenceTotal',
+        'action.attackInputLegacyStatus',
+      ],
+    },
+    appliedToSimulationResults: false,
+    ...extra,
   };
 }
 
@@ -202,11 +311,11 @@ function createLaneOverlapDiagnostics(actions) {
         candidateIndex += 1
       ) {
         const candidate = sortedRanges[candidateIndex];
-        if (candidate.startMs >= blocking.endMs) {
+        if (candidate.startMs >= blocking.endMs - ACTION_BOUNDARY_EPSILON_MS) {
           break;
         }
         const overlapEndMs = Math.min(blocking.endMs, candidate.endMs);
-        if (overlapEndMs <= candidate.startMs) {
+        if (overlapEndMs - candidate.startMs <= ACTION_BOUNDARY_EPSILON_MS) {
           continue;
         }
         diagnostics.push({

@@ -76,10 +76,16 @@
         class="icon-button"
         data-testid="workbench-add-action"
         type="button"
-        :data-drag-enabled="Boolean(defaultTimelineSkillEntry)"
+        :disabled="
+          defaultTimelineSkillEntry?.mechanicsClassification === 'loading'
+        "
+        :data-drag-enabled="
+          Boolean(defaultTimelineSkillEntry) &&
+          defaultTimelineSkillEntry.mechanicsClassification !== 'loading'
+        "
         data-entry-type="skill"
         @pointerdown="beginDefaultSkillDrag"
-        @click="$emit('add-action')"
+        @click="$emit('add-skill-action', defaultTimelineSkillEntry)"
       >
         + 动作
       </button>
@@ -179,9 +185,11 @@
           :data-action-variant-index="entry.actionVariantIndex"
           :data-cooldown-ms="entry.cooldownMs ?? ''"
           :data-mechanics-classification="entry.mechanicsClassification"
+          :data-attack-input-count="entry.attackInputSegments?.length ?? 0"
           :title="entry.mechanicsTooltip"
+          :disabled="entry.mechanicsClassification === 'loading'"
           data-entry-type="skill"
-          data-drag-enabled="true"
+          :data-drag-enabled="entry.mechanicsClassification !== 'loading'"
           @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
           @click="$emit('add-skill-action', entry)"
         >
@@ -577,7 +585,6 @@ const emit = defineEmits([
   'select-action',
   'open-action-context-menu',
   'delete-selected-actions',
-  'add-action',
   'add-skill-action',
   'add-wait-action',
   'add-switch-action',
@@ -1034,10 +1041,11 @@ function annotateMechanicsCoverage(entry, type) {
   const mechanicsClassification = mapping?.classification ?? 'loading';
   return {
     ...entry,
+    attackInputSegments: mapping?.attackInputSegments ?? [],
     mechanicsClassification,
     mechanicsTooltip:
       mechanicsClassification === 'unresolved'
-        ? `三值未完整：${mapping.reasons.join('、')}`
+        ? `三值未完整：${(mapping?.reasons ?? []).join('、')}`
         : null,
   };
 }

@@ -75,15 +75,20 @@ const skillDiagnosticsChunk = report.javaScriptChunks.find(chunk =>
       moduleRow.id === 'src/data/generated/workbench-skill-diagnostics.json'
   )
 );
+const skillDiagnosticsAsset = report.assets.find(asset =>
+  /workbench-skill-diagnostics-.*\.json$/u.test(asset.fileName)
+);
 const projectionGuard = {
   workbenchUsesProductionDataProjection:
     Boolean(workbenchChunk) && workbenchDetectedForbiddenModules.length === 0,
   skillDiagnosticsLazyChunkPresent:
-    Boolean(skillDiagnosticsChunk) &&
-    skillDiagnosticsChunk.fileName !== workbenchChunk?.fileName,
+    Boolean(skillDiagnosticsAsset) ||
+    (Boolean(skillDiagnosticsChunk) &&
+      skillDiagnosticsChunk.fileName !== workbenchChunk?.fileName),
   forbiddenModules: workbenchForbiddenModules,
   detectedForbiddenModules: workbenchDetectedForbiddenModules,
   skillDiagnosticsChunk: skillDiagnosticsChunk?.fileName ?? null,
+  skillDiagnosticsAsset: skillDiagnosticsAsset?.fileName ?? null,
 };
 const budgetStatus = {
   initialEntryWithinBudget:

@@ -5,7 +5,7 @@ export function createSixResourceCaptureBatchFixture({
 } = {}) {
   const actorCharacterIds = [109001, 101003, 101007];
   const actorIds = actorCharacterIds.map(characterId => `actor-${characterId}`);
-  const skillIds = [10900101, 10100301, 10100701];
+  const skillIds = [10900112, 10100312, 10100712];
   const kiboIds = [500001, 500002, 500003];
   const draft = createBasicWorkbenchDraftFixture();
 

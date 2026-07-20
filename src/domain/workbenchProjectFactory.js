@@ -47,6 +47,7 @@ import {
   stripGeneratedActionStatusEffectCommands,
 } from './actionStatusGeneration';
 import { resolveActorEffectiveMaxSp } from './spUnitContract';
+import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -173,6 +174,7 @@ export function createWorkbenchActionDraft({
   insertion = null,
   generationBatch = null,
   effectCommands = [],
+  ...attackInputFields
 } = {}) {
   const actionId = String(id ?? '').trim() || DEFAULT_WORKBENCH_ACTION_ID;
   const normalizedActionVariantIndex = Math.max(
@@ -242,6 +244,7 @@ export function createWorkbenchActionDraft({
     note,
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
+    ...normalizeAttackInputActionFields({ id: actionId, ...attackInputFields }),
     ...(statusGeneration
       ? { statusGeneration: statusGeneration.descriptor }
       : kiboStatusGeneration
@@ -764,11 +767,23 @@ export function normalizeWorkbenchActionDrafts(
           insertion: draft.insertion,
           generationBatch: draft.generationBatch,
           effectCommands: draft.effectCommands,
+          ...normalizeAttackInputActionFields(draft),
         });
       }
 
       const requestedSkill = findById(actorSkills, draft.skillId);
-      const skill = requestedSkill ?? fallbackSkill;
+      const compatibleEntry = requestedSkill
+        ? null
+        : resolveCompatibleSkillActionEntry(draft, actorSkills);
+      const skill =
+        requestedSkill ??
+        findById(actorSkills, compatibleEntry?.skillId) ??
+        fallbackSkill;
+      const actionVariantIndex = requestedSkill
+        ? (draft.actionVariantIndex ?? draft.damageSegmentIndex)
+        : (compatibleEntry?.actionVariantIndex ??
+          draft.actionVariantIndex ??
+          draft.damageSegmentIndex);
       return createWorkbenchActionDraft({
         id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
         type: ACTION_TYPES.SKILL,
@@ -778,7 +793,7 @@ export function normalizeWorkbenchActionDrafts(
         durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
         actionVariantIndex: clampActionVariantIndex(
-          draft.actionVariantIndex ?? draft.damageSegmentIndex,
+          actionVariantIndex,
           skill,
           draft.level
         ),
@@ -792,6 +807,7 @@ export function normalizeWorkbenchActionDrafts(
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
         effectCommands: draft.effectCommands,
+        ...normalizeAttackInputActionFields(draft),
       });
     })
     .filter(
@@ -799,6 +815,25 @@ export function normalizeWorkbenchActionDrafts(
         draft.type !== ACTION_TYPES.SKILL ||
         findById(workbenchSeed.gameData.skills, draft.skillId)
     );
+}
+
+function resolveCompatibleSkillActionEntry(draft, actorSkills) {
+  const sourceSkill = findById(workbenchSeed.gameData.skills, draft.skillId);
+  if (!sourceSkill) return null;
+  const sourceVariantIndex = Math.max(
+    0,
+    Number(draft.actionVariantIndex ?? draft.damageSegmentIndex) || 0
+  );
+  const sourceEntry = getSkillActionCatalog(
+    [sourceSkill],
+    Math.max(1, Number(draft.level) || 1)
+  ).find(entry => entry.actionVariantIndex === sourceVariantIndex);
+  if (!sourceEntry?.kind) return null;
+  return (
+    getSkillActionCatalog(actorSkills, 1).find(
+      entry => entry.kind === sourceEntry.kind
+    ) ?? null
+  );
 }
 
 function createProjectActionFromDraft(
@@ -928,6 +963,7 @@ function createProjectActionFromDraft(
       draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
     generationBatch: draft.generationBatch,
+    attackInputFields: draft,
     effectCommands,
   });
 }

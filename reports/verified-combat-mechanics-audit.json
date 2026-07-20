@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "dcad0eb49a9d19e97e74261126d934b9eb5a35ea51b43bbda737e0417ae00eab",
+  "packageHash": "2d367d333b5e29d2ceb9171c45f386e085b80d8b5571ea729aa27ab44eeb3983",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -14,27 +14,27 @@
   "sourceCoverage": {
     "candidateActionCount": 562,
     "classifiedActionCount": 562,
-    "foundControlCount": 502,
-    "indexedElementPathCount": 1781,
-    "appliedActionBindingCount": 318,
-    "appliedHitBindingCount": 1028,
-    "uniqueControlBindingCount": 366,
-    "uniqueControlHitBindingCount": 1771,
+    "foundControlCount": 577,
+    "indexedElementPathCount": 2172,
+    "appliedActionBindingCount": 352,
+    "appliedHitBindingCount": 1175,
+    "uniqueControlBindingCount": 446,
+    "uniqueControlHitBindingCount": 2518,
     "unresolvedActionBindingCount": 244,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 1177,
-      "2": 97,
-      "3": 286,
-      "4": 207,
+      "1": 1724,
+      "2": 235,
+      "3": 339,
+      "4": 216,
       "5": 4
     }
   },
   "requiredAcceptanceBindings": {
     "pangpang": {
       "ready": true,
-      "identity": "actor|101007|10100701|0|10100703",
+      "identity": "actor|101007|10100701|0|10100703|attack-input-3",
       "controlSkillId": 10100703,
       "elementIds": [
         101007012

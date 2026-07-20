@@ -762,6 +762,9 @@
                 action.statusGeneration?.summary?.generatedEffectCount ?? 0
               "
               :data-batch-id="action.generationBatch?.batchId || ''"
+              :data-attack-group-id="action.attackGroupId || ''"
+              :data-attack-sequence-index="action.attackSequenceIndex || ''"
+              :data-attack-sequence-total="action.attackSequenceTotal || ''"
               :data-batch-highlight="
                 isActionInSelectedBatch(action) ? 'true' : 'false'
               "
@@ -917,7 +920,6 @@
                 :style="effectLifecycleMarkerStyle(event, interval)"
               />
             </button>
-
           </div>
         </div>
       </div>
@@ -1684,8 +1686,7 @@ const timelineLanes = computed(() => {
   });
 
   const visibleLanes = allLanes.filter(lane => lane !== systemLane);
-  return systemLane.actions.length > 0 ||
-    systemLane.effectIntervals.length > 0
+  return systemLane.actions.length > 0 || systemLane.effectIntervals.length > 0
     ? [...visibleLanes, systemLane]
     : visibleLanes;
 });
@@ -2140,7 +2141,6 @@ function resolveRuntimeStateCurve(trackKey, { actorId, slotId, kiboId }) {
   };
 }
 
-
 function formatCompactNumber(value) {
   return Number(numberOrZero(value).toFixed(2)).toLocaleString('zh-CN');
 }
@@ -2253,9 +2253,7 @@ function placementGhostsForLane(lane) {
 }
 
 function actionPlacementGhostStyle(action, lane) {
-  const left = clampPercent(
-    (Number(action.startMs) / props.durationMs) * 100
-  );
+  const left = clampPercent((Number(action.startMs) / props.durationMs) * 100);
   return {
     left: String(left) + '%',
     top: String(getTimelineActionTop(lane, action.timelineSlot)) + 'px',
@@ -2266,24 +2264,22 @@ function actionPlacementGhostStyle(action, lane) {
 
 function actionPlacementGuideStyle(timeMs) {
   return {
-    left:
-      String(
-        clampPercent((Number(timeMs) / props.durationMs) * 100)
-      ) + '%',
+    left: String(clampPercent((Number(timeMs) / props.durationMs) * 100)) + '%',
   };
 }
 
 function formatActionPlacementPreviewTitle(action) {
   const proposal = props.actionPlacementPreview?.proposal;
-  const statusLabel = {
-    valid: '位置合法',
-    adjustable: '已有确定建议位置',
-    blocked:
-      props.actionPlacementMode === 'free'
-        ? '存在冲突，自由模式仍保留请求位置'
-        : '当前位置不可提交',
-    unresolved: '条件待确认，保持请求位置',
-  }[proposal?.status] ?? '位置预览';
+  const statusLabel =
+    {
+      valid: '位置合法',
+      adjustable: '已有确定建议位置',
+      blocked:
+        props.actionPlacementMode === 'free'
+          ? '存在冲突，自由模式仍保留请求位置'
+          : '当前位置不可提交',
+      unresolved: '条件待确认，保持请求位置',
+    }[proposal?.status] ?? '位置预览';
   const requestedFrame = msToFrame(proposal?.requestedStartMs ?? 0);
   const suggestedFrame = msToFrame(proposal?.suggestedStartMs ?? 0);
   const frameText =
@@ -2641,7 +2637,7 @@ function compareTimelineActionStart(left, right) {
 }
 
 function findAvailableTimelineActionSlot(slotEndTimes, startMs) {
-  const index = slotEndTimes.findIndex(endMs => startMs >= endMs);
+  const index = slotEndTimes.findIndex(endMs => startMs >= endMs - 0.001);
   return index >= 0 ? index : slotEndTimes.length;
 }
 
@@ -2650,6 +2646,9 @@ function actionIconComponent(action) {
 }
 
 function actionLabel(action) {
+  if (action.attackSequenceIndex != null) {
+    return `A${action.attackSequenceIndex}`;
+  }
   if (action.type === 'switch') {
     return `${action.name} -> ${action.targetActor?.name ?? '目标'}`;
   }

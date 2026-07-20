@@ -1586,6 +1586,12 @@ Workbench 现可把当前多选动作或完整关系组保存为独立版本化�
 
 完整 `test:trial-release` 通过 105 个测试文件、586 条测试和 47/47 production preview，所有生产数据、来源与映射审计通过。总 JavaScript gzip 为 739,564B，Workbench 主块为 365,560B；视觉证据为 `reports/m7-catalog-runtime-desktop.png` 与 `reports/m7-catalog-runtime-narrow.png`。当前停在 M7 等待产品验收，不自动进入下一里程碑。
 
+### M7-R1 普攻输入链拆分已完成，等待产品复验（2026-07-20）
+
+动作库仍只显示一个“普攻”入口，但一次拖入现按客户端 control 边界生成可独立编辑的 `A1..An` 兄弟动作。当前 20 名角色共生成 20 条链、95 个输入段（49 个完整绑定、46 个明确 unresolved），覆盖数据驱动的 5/4/3 段链；单次输入内多 hit 只归属对应 A 块。逐段移动、删除和编辑只重算自身节点，整链插入保持单次撤销事务，旧聚合普攻仅在可唯一解析时迁移，五种项目载体保持块 ID、顺序和三值结果。
+
+完整 `test:trial-release` 通过 106 个测试文件、597 条测试和 48/48 production preview；总 JavaScript gzip 为 680,130B，Workbench 主块为 368,851B。桌面与窄屏证据为 `reports/m7r1-attack-input-chain-desktop.png` 和 `reports/m7r1-attack-input-chain-narrow.png`。当前停在 M7-R1 等待产品复验，不进入 M8。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

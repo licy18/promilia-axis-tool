@@ -11,6 +11,7 @@ import {
   applyActorSpResourceProfile,
   createActorSpResourceProfile,
 } from './spUnitContract';
+import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -249,6 +250,7 @@ export function createSkillAction({
   note = '',
   insertion = null,
   generationBatch = null,
+  attackInputFields = null,
   effectCommands = [],
 }) {
   if (!skill) {
@@ -279,6 +281,10 @@ export function createSkillAction({
     effectCommands,
     statusGeneration.effectCommands
   );
+  const normalizedAttackInputFields = normalizeAttackInputActionFields({
+    id: actionId,
+    ...(attackInputFields ?? {}),
+  });
 
   return {
     id: actionId,
@@ -288,11 +294,13 @@ export function createSkillAction({
     icon: skill.icon ?? null,
     actionKind: inferCatalogActionKind(selectedActionVariant, skill),
     name:
-      selectedActionVariant?.displayLabel ??
-      selectedActionVariant?.label ??
-      skill.displayName ??
-      skill.name ??
-      `Skill ${skill.id}`,
+      normalizedAttackInputFields.attackSequenceIndex != null
+        ? `A${normalizedAttackInputFields.attackSequenceIndex}`
+        : (selectedActionVariant?.displayLabel ??
+          selectedActionVariant?.label ??
+          skill.displayName ??
+          skill.name ??
+          `Skill ${skill.id}`),
     startMs,
     durationMs,
     targetId,
@@ -318,6 +326,7 @@ export function createSkillAction({
     note,
     insertion,
     generationBatch,
+    ...normalizedAttackInputFields,
     ...createActionEffectCommandsField(resolvedEffectCommands),
   };
 }

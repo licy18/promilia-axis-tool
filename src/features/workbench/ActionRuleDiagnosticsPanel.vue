@@ -141,12 +141,24 @@ function formatRuleLabel(code) {
   ) {
     return 'SP 条件';
   }
+  if (code === ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE) {
+    return '普攻链缺段';
+  }
+  if (code === ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID) {
+    return '普攻链顺序';
+  }
+  if (code === ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED) {
+    return '旧普攻待迁移';
+  }
   return code;
 }
 
 function formatRuleSource(item) {
   if (item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE) {
     return `可用时间 ${item.readyAtMs}ms · ${item.source?.fieldPath ?? 'skillsub_logic'}`;
+  }
+  if (String(item.code).startsWith('attack-input-')) {
+    return `${item.actorName ?? item.actorId} · ${item.attackGroupId ?? '旧版动作'}`;
   }
   return `${item.actorName ?? item.actorId} · ${item.range?.durationMs ?? 0}ms`;
 }

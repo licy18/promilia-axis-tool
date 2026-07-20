@@ -7,6 +7,7 @@ import {
   getWorkbenchGameData,
   getWorkbenchLoadoutOptions,
   getWorkbenchSeed,
+  normalizeWorkbenchActionDrafts,
   normalizeWorkbenchActorConfigs,
   normalizeWorkbenchTeamSlots,
 } from '../../domain/workbenchProjectFactory';
@@ -30,6 +31,29 @@ afterAll(() => {
 });
 
 describe('workbench project actor configuration', () => {
+  it('keeps the action kind when a team-slot remap changes the owner', () => {
+    const [action] = normalizeWorkbenchActionDrafts(
+      [
+        {
+          id: 'remapped-star-skill',
+          type: 'skill',
+          skillId: 10900112,
+          actorCharacterId: 101010,
+          actionVariantIndex: 0,
+          durationMs: 1500,
+        },
+      ],
+      101010
+    );
+
+    expect(action).toMatchObject({
+      id: 'remapped-star-skill',
+      actorCharacterId: 101010,
+      skillId: 10101012,
+      actionVariantIndex: 0,
+    });
+  });
+
   it('compiles and simulates an explicit empty action list', () => {
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
       actions: [],

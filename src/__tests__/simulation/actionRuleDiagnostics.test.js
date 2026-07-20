@@ -84,8 +84,7 @@ describe('action rule diagnostics', () => {
           actorMaxSp: 100,
           severity: 'warning',
           unresolved: ['skill-sp-cost-not-applied-by-selected-profile'],
-          message:
-            '星决技 需要 SP 100，当前 50/100；当前机制配置未应用该消耗',
+          message: '星决技 需要 SP 100，当前 50/100；当前机制配置未应用该消耗',
         }),
       ])
     );
@@ -282,6 +281,56 @@ describe('action rule diagnostics', () => {
       },
     });
   });
+
+  it('diagnoses deleted and reordered normal attack inputs without repairing the chain', () => {
+    const result = createActionRuleDiagnostics({
+      scenario: {
+        actors: [createActor()],
+        actions: [
+          createSkillAction({
+            id: 'attack-a1',
+            name: 'A1',
+            startMs: 0,
+            attackGroupId: 'attack-group-1',
+            attackSequenceIndex: 1,
+            attackSequenceTotal: 4,
+          }),
+          createSkillAction({
+            id: 'attack-a2',
+            name: 'A2',
+            startMs: 2000,
+            attackGroupId: 'attack-group-1',
+            attackSequenceIndex: 2,
+            attackSequenceTotal: 4,
+          }),
+          createSkillAction({
+            id: 'attack-a4',
+            name: 'A4',
+            startMs: 1000,
+            attackGroupId: 'attack-group-1',
+            attackSequenceIndex: 4,
+            attackSequenceTotal: 4,
+          }),
+        ],
+      },
+    });
+
+    expect(result.executable).toBe(true);
+    expect(result.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
+          missingSequenceIndexes: [3],
+          actionIds: ['attack-a1', 'attack-a2', 'attack-a4'],
+        }),
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+          actionId: 'attack-a4',
+        }),
+      ])
+    );
+    expect(result.readinessTimeline.actions).toHaveLength(3);
+  });
 });
 
 function createActor() {
@@ -302,6 +351,7 @@ function createSkillAction({
   cooldownMs = 0,
   cooldownCount = 1,
   spCost = 0,
+  ...extra
 }) {
   return {
     id,
@@ -326,5 +376,6 @@ function createSkillAction({
         },
       },
     },
+    ...extra,
   };
 }

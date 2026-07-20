@@ -27,6 +27,43 @@
       </span>
     </div>
 
+    <div
+      v-if="selectedAction.attackInput"
+      class="logic-source"
+      data-testid="workbench-attack-input-segment-source"
+    >
+      <div class="logic-source-title">
+        <span>普攻输入段</span>
+        <strong
+          >A{{ selectedAction.attackSequenceIndex }} / A{{
+            selectedAction.attackSequenceTotal
+          }}</strong
+        >
+      </div>
+      <div class="logic-source-grid">
+        <div class="logic-source-item">
+          <span>输入来源</span>
+          <strong
+            >control {{ selectedAction.attackInput.controlSkillId }}</strong
+          >
+          <small
+            >resourceMap
+            {{ selectedAction.attackInput.resourceMapIndex }}</small
+          >
+        </div>
+        <div class="logic-source-item">
+          <span>命中绑定</span>
+          <strong
+            >{{
+              selectedAction.attackInput.selectedHitIdentities?.length ?? 0
+            }}
+            项</strong
+          >
+          <small>{{ selectedAction.attackInput.classification }}</small>
+        </div>
+      </div>
+    </div>
+
     <div class="control-grid">
       <label
         data-testid="workbench-action-edit-control"

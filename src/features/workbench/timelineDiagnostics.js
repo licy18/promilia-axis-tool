@@ -3,6 +3,7 @@ export const SYSTEM_TIMELINE_LANE_ID = 'system';
 export const SYSTEM_TIMELINE_LANE_NAME = '系统';
 export const ENEMY_TIMELINE_LANE_ID = 'enemy-events';
 export const ENEMY_TIMELINE_LANE_NAME = '敌人';
+const TIMELINE_BOUNDARY_EPSILON_MS = 0.001;
 
 export function createTimelineDiagnostics({
   actors = [],
@@ -56,13 +57,13 @@ export function createTimelineDiagnostics({
         nextIndex += 1
       ) {
         const next = sortedRanges[nextIndex];
-        if (next.startMs >= current.endMs) {
+        if (next.startMs >= current.endMs - TIMELINE_BOUNDARY_EPSILON_MS) {
           break;
         }
 
         const overlapStartMs = Math.max(current.startMs, next.startMs);
         const overlapEndMs = Math.min(current.endMs, next.endMs);
-        if (overlapEndMs <= overlapStartMs) {
+        if (overlapEndMs - overlapStartMs <= TIMELINE_BOUNDARY_EPSILON_MS) {
           continue;
         }
 

@@ -16,6 +16,7 @@ import {
   serializeWorkbenchProjectFile,
 } from '../../domain/workbenchDraftStorage';
 import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
+import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
 import {
   createWorkbenchActionDraft,
   createWorkbenchProject,
@@ -30,10 +31,17 @@ import { duplicateWorkbenchScenario } from '../../domain/workbenchScenarioWorksp
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
+import { frameToMs } from '../../domain/timebase';
 
 const ONE_PIXEL_PNG_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
 const EXPORTED_AT = '2026-07-18T08:00:00.000Z';
+const PANGPANG_ATTACK_INPUT = verifiedCombatMechanicsPackage.actionMappings
+  .find(
+    mapping =>
+      mapping.ownerId === 101007 && mapping.actionKind === 'normal-attack'
+  )
+  .attackInputSegments.find(segment => segment.sequenceIndex === 3);
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -82,7 +90,7 @@ describe('verified combat project replay consistency', () => {
         stateCurveCount: 8,
       },
       bindingIdentities: [
-        'actor|101007|10100701|0|10100703',
+        'actor|101007|10100701|0|10100703|attack-input-3',
         'kibo|500469|50046903|0|50046903',
       ],
       hitEventCount: 6,
@@ -175,7 +183,90 @@ describe('verified combat project replay consistency', () => {
       expect(signature).toEqual(signatures[0]);
     }
   });
+
+  it('preserves every independent A block and edit across all five project carriers', async () => {
+    const source = createAttackInputReplayDraft();
+    const duplicated = duplicateWorkbenchScenario(
+      source.scenarioWorkspace,
+      source.scenarioWorkspace.activeScenarioId,
+      source
+    );
+    const storage = createMemoryStorage();
+    saveWorkbenchDraft(storage, source);
+    const local = loadWorkbenchDraft(storage);
+    const json = parseWorkbenchProjectFile(
+      serializeWorkbenchProjectFile(source, EXPORTED_AT)
+    );
+    const share = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(source, EXPORTED_AT)
+    );
+    const png = await embedWorkbenchProjectInPng(
+      new Uint8Array(Buffer.from(ONE_PIXEL_PNG_BASE64, 'base64')),
+      createWorkbenchProjectPngMetadata(source, EXPORTED_AT)
+    );
+    const pngDraft = await parseWorkbenchProjectPng(png);
+    const drafts = [duplicated.scenario.draft, local, json, share, pngDraft];
+    const actionSignatures = drafts.map(createAttackInputActionSignature);
+    const runtimeSignatures = drafts.map(createVerifiedReplaySignature);
+
+    expect(actionSignatures[0]).toHaveLength(5);
+    expect(actionSignatures[0].map(action => action.sequenceIndex)).toEqual([
+      1, 2, 3, 4, 5,
+    ]);
+    expect(actionSignatures[0][1].startMs).not.toBe(
+      actionSignatures[0][0].startMs + actionSignatures[0][0].durationMs
+    );
+    expect(actionSignatures[0][2].durationMs).toBe(frameToMs(90));
+    for (const signature of actionSignatures.slice(1)) {
+      expect(signature).toEqual(actionSignatures[0]);
+    }
+    for (const signature of runtimeSignatures.slice(1)) {
+      expect(signature).toEqual(runtimeSignatures[0]);
+    }
+  });
 });
+
+function createAttackInputReplayDraft() {
+  const base = createDefaultWorkbenchDraftState();
+  const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+    item => item.ownerId === 109001 && item.actionKind === 'normal-attack'
+  );
+  let actionIndex = 0;
+  const chain = createWorkbenchAttackInputChainDrafts({
+    entry: mapping,
+    actorCharacterId: 109001,
+    skillId: mapping.sourceSkillId,
+    level: 1,
+    startMs: 0,
+    createActionId: () => `replay-a${++actionIndex}`,
+  });
+  chain[1] = { ...chain[1], startMs: chain[1].startMs + frameToMs(30) };
+  chain[2] = { ...chain[2], durationMs: frameToMs(90) };
+  return createWorkbenchDraftSnapshot(
+    {
+      ...base,
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+      actionDrafts: chain,
+      selectedActionId: chain[1].id,
+    },
+    null
+  );
+}
+
+function createAttackInputActionSignature(draft) {
+  return draft.actionDrafts.map(action => ({
+    id: action.id,
+    attackGroupId: action.attackGroupId,
+    sequenceIndex: action.attackSequenceIndex,
+    sequenceTotal: action.attackSequenceTotal,
+    segmentIdentity: action.attackInput.identity,
+    controlSkillId: action.attackInput.controlSkillId,
+    hitIdentities: action.attackInput.selectedHitIdentities,
+    startMs: action.startMs,
+    durationMs: action.durationMs,
+  }));
+}
 
 function createVerifiedReplayDraft() {
   const base = createDefaultWorkbenchDraftState();
@@ -202,7 +293,8 @@ function createVerifiedReplayDraft() {
           skillId: 10100701,
           actionVariantIndex: 0,
           startMs: 0,
-          durationMs: 600,
+          durationMs: frameToMs(PANGPANG_ATTACK_INPUT.durationFrames),
+          ...createAttackInputFields(PANGPANG_ATTACK_INPUT),
         }),
         createWorkbenchActionDraft({
           id: 'verified-replay-kibo',
@@ -236,6 +328,15 @@ function createVerifiedReplayDraft() {
     },
     EXPORTED_AT
   );
+}
+
+function createAttackInputFields(segment) {
+  return {
+    attackGroupId: 'verified-replay-pangpang-chain',
+    attackSequenceIndex: segment.sequenceIndex,
+    attackSequenceTotal: segment.sequenceTotal,
+    attackInput: segment,
+  };
 }
 
 function createCrossCatalogReplayDraft() {

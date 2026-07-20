@@ -1,5 +1,25 @@
-import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
+const diagnosticsUrl = new URL(
+  '../../data/generated/workbench-skill-diagnostics.json',
+  import.meta.url
+);
 
-export function getWorkbenchSkillDiagnostics() {
-  return workbenchSkillDiagnostics;
+let diagnosticsPromise = null;
+
+export function getWorkbenchSkillDiagnostics(fetchImpl = fetch) {
+  if (!diagnosticsPromise) {
+    diagnosticsPromise = fetchImpl(diagnosticsUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(
+            `Unable to load workbench skill diagnostics: ${response.status}`
+          );
+        }
+        return response.json();
+      })
+      .catch(error => {
+        diagnosticsPromise = null;
+        throw error;
+      });
+  }
+  return diagnosticsPromise;
 }

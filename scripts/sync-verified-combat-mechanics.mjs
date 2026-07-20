@@ -113,14 +113,24 @@ async function main() {
     path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json')
   );
   const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
+  const skillLogicRows = readJson(SKILL_LOGIC_PATH).rows;
+  const skillLogicById = new Map(
+    skillLogicRows.map(row => [Number(row.skillId), row])
+  );
   const candidates = createActionCandidates({
     seed,
     kiboCatalog,
     characterCatalog,
     petRows: readJson(PET_PATH).rows,
+    skillLogicById,
   });
   const controlIds = new Set([
     ...candidates.map(candidate => candidate.controlSkillId),
+    ...candidates.flatMap(candidate =>
+      (candidate.attackInputControls ?? []).map(
+        segment => segment.controlSkillId
+      )
+    ),
     ...(evidence.samples ?? []).map(sample => Number(sample.skillId)),
   ]);
   const controls = [...controlIds]
@@ -154,9 +164,7 @@ async function main() {
       indexedElementsById,
       formulas,
       overridesBySkillAndElement,
-      skillLogicById: new Map(
-        readJson(SKILL_LOGIC_PATH).rows.map(row => [Number(row.skillId), row])
-      ),
+      skillLogicById,
     })
   );
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
@@ -325,6 +333,7 @@ function createActionCandidates({
   kiboCatalog,
   characterCatalog,
   petRows,
+  skillLogicById,
 }) {
   const candidates = [];
   const publicSkills = seed?.gameData?.skills ?? [];
@@ -358,6 +367,10 @@ function createActionCandidates({
     for (const variant of selectedByKind.values()) {
       const skill = variant.skill;
       const control = resolveActorControl(character, variant);
+      const attackInputControls =
+        variant.actionKind === 'normal-attack'
+          ? resolveActorAttackInputControls(character, variant, skillLogicById)
+          : [];
       candidates.push({
         ownerKind: 'actor',
         ownerId: Number(character.id),
@@ -372,6 +385,7 @@ function createActionCandidates({
         bindingKind: control.bindingKind,
         bindingSourceIdentity: control.sourceIdentity,
         bindingEligible: Number.isInteger(control.controlSkillId),
+        ...(attackInputControls.length ? { attackInputControls } : {}),
       });
     }
   }
@@ -426,6 +440,48 @@ function createActionCandidates({
         candidate.controlSkillId,
       ].join('|')
   );
+}
+
+function resolveActorAttackInputControls(character, variant, skillLogicById) {
+  const ownerPrefix = String(character?.id ?? '');
+  const availableControlIds = new Set([
+    Number(variant?.skill?.id),
+    ...(character?.skillSlots ?? [])
+      .filter(slot => slot.group === 'backup')
+      .map(slot => Number(slot.skillId)),
+  ]);
+  const controls = [];
+  for (let sequenceIndex = 1; sequenceIndex <= 9; sequenceIndex += 1) {
+    const controlSkillId = Number(
+      `${ownerPrefix}${String(sequenceIndex).padStart(2, '0')}`
+    );
+    const logic = skillLogicById?.get(controlSkillId);
+    const controlDirectory = path.join(
+      BATTLE_ROOT,
+      'SkillList',
+      `skill_control_${controlSkillId}.asset`,
+      'MonoBehaviour'
+    );
+    if (
+      !availableControlIds.has(controlSkillId) ||
+      String(logic?.skillTag ?? '') !== '1' ||
+      !fs.existsSync(controlDirectory)
+    ) {
+      break;
+    }
+    controls.push({
+      sequenceIndex,
+      controlSkillId,
+      sourceIdentity:
+        sequenceIndex === 1
+          ? `workbench-seed.gameData.skills[id=${variant.skill.id}]|NewTable/skillsub_logic.rows[skillId=${controlSkillId}].skillTag`
+          : `characters.items[id=${character.id}].skillSlots[group=backup,skillId=${controlSkillId}]|NewTable/skillsub_logic.rows[skillId=${controlSkillId}].skillTag`,
+    });
+  }
+  return controls.map(control => ({
+    ...control,
+    sequenceTotal: controls.length,
+  }));
 }
 
 function resolveKiboControlVariantSource(petRow, action) {
@@ -1073,36 +1129,81 @@ function createPackage({
   const preparedControlBySkillId = new Map(
     preparedControlBindings.map(binding => [binding.controlSkillId, binding])
   );
-  const actionMappings = candidates.map(candidate =>
-    createActionMapping(
+  const actionMappings = candidates.map(candidate => {
+    const mapping = createActionMapping(
       candidate,
       preparedControlBySkillId.get(candidate.controlSkillId)
-    )
-  );
-  const actionBindings = actionMappings
-    .filter(mapping => mapping.classification === 'applied')
-    .map(mapping => ({
-      identity: mapping.identity,
+    );
+    if (candidate.actionKind !== 'normal-attack') {
+      return mapping;
+    }
+    const attackInputSegments = createAttackInputSegments(
+      candidate,
+      preparedControlBySkillId
+    );
+    return {
+      ...mapping,
+      attackInputChainStatus:
+        attackInputSegments.length > 0
+          ? 'verified-attack-input-chain-classified'
+          : 'verified-attack-input-chain-unresolved',
+      attackInputSegments,
+      attackInputSegmentCount: attackInputSegments.length,
+      attackInputAppliedSegmentCount: attackInputSegments.filter(
+        segment => segment.classification === 'applied'
+      ).length,
+      attackInputUnresolvedSegmentCount: attackInputSegments.filter(
+        segment => segment.classification === 'unresolved'
+      ).length,
+    };
+  });
+  const actionBindings = actionMappings.flatMap(mapping => {
+    const runtimeBindings =
+      mapping.actionKind === 'normal-attack'
+        ? (mapping.attackInputSegments ?? []).filter(
+            segment => segment.classification === 'applied'
+          )
+        : mapping.classification === 'applied'
+          ? [mapping]
+          : [];
+    return runtimeBindings.map(binding => ({
+      identity: binding.identity,
+      aggregateIdentity:
+        mapping.actionKind === 'normal-attack' ? mapping.identity : null,
       ownerKind: mapping.ownerKind,
       ownerId: mapping.ownerId,
       ownerName: mapping.ownerName,
       sourceSkillId: mapping.sourceSkillId,
       sourceSkillName: mapping.sourceSkillName,
       actionVariantIndex: mapping.actionVariantIndex,
-      actionVariantLabel: mapping.actionVariantLabel,
+      actionVariantLabel: binding.label ?? mapping.actionVariantLabel,
       actionKind: mapping.actionKind,
-      controlSkillId: mapping.controlSkillId,
-      selectedSubSkillIndex: mapping.selectedSubSkillIndex,
-      bindingKind: mapping.bindingKind,
-      bindingSourceIdentity: mapping.bindingSourceIdentity,
-      controlVariantSkillLevel: mapping.controlVariantSkillLevel,
-      controlVariantSourceIdentity: mapping.controlVariantSourceIdentity,
-      controlFrameRate: mapping.controlFrameRate,
-      hitCount: mapping.runtimeHitCount,
+      controlSkillId: binding.controlSkillId,
+      selectedSubSkillIndex: binding.selectedSubSkillIndex,
+      bindingKind:
+        mapping.actionKind === 'normal-attack'
+          ? 'hero-normal-attack-input-control'
+          : mapping.bindingKind,
+      bindingSourceIdentity:
+        binding.sourceIdentity ?? mapping.bindingSourceIdentity,
+      controlVariantSkillLevel:
+        binding.controlVariantSkillLevel ?? mapping.controlVariantSkillLevel,
+      controlVariantSourceIdentity:
+        binding.controlVariantSourceIdentity ??
+        mapping.controlVariantSourceIdentity,
+      controlFrameRate: binding.controlFrameRate ?? mapping.controlFrameRate,
+      hitCount: binding.hitCount ?? mapping.runtimeHitCount,
+      ...(mapping.actionKind === 'normal-attack'
+        ? {
+            attackSequenceIndex: binding.sequenceIndex,
+            attackSequenceTotal: binding.sequenceTotal,
+          }
+        : {}),
       status: 'verified-action-mechanics-binding-applied',
       confidence: 'high',
       applied: true,
     }));
+  });
   const publishedControlSkillIds = new Set(
     actionMappings
       .filter(mapping => {
@@ -1115,6 +1216,13 @@ function createPackage({
       })
       .map(mapping => mapping.controlSkillId)
   );
+  for (const mapping of actionMappings) {
+    for (const segment of mapping.attackInputSegments ?? []) {
+      if (Number.isInteger(segment.controlSkillId)) {
+        publishedControlSkillIds.add(segment.controlSkillId);
+      }
+    }
+  }
   const packagedControlBindings = preparedControlBindings
     .filter(binding => publishedControlSkillIds.has(binding.controlSkillId))
     .map(createPublishedControlBinding);
@@ -1166,7 +1274,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 3,
+    packageVersion: 4,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -1230,6 +1338,29 @@ function createPackage({
       kiboActionBindingCount: actionBindings.filter(
         binding => binding.ownerKind === 'kibo'
       ).length,
+      attackInputChainCount: actionMappings.filter(
+        mapping => mapping.actionKind === 'normal-attack'
+      ).length,
+      attackInputSegmentCount: actionMappings.reduce(
+        (sum, mapping) => sum + (mapping.attackInputSegments?.length ?? 0),
+        0
+      ),
+      appliedAttackInputSegmentCount: actionMappings.reduce(
+        (sum, mapping) =>
+          sum +
+          (mapping.attackInputSegments ?? []).filter(
+            segment => segment.classification === 'applied'
+          ).length,
+        0
+      ),
+      unresolvedAttackInputSegmentCount: actionMappings.reduce(
+        (sum, mapping) =>
+          sum +
+          (mapping.attackInputSegments ?? []).filter(
+            segment => segment.classification === 'unresolved'
+          ).length,
+        0
+      ),
     },
   };
 }
@@ -1260,6 +1391,7 @@ function createControlRuntimeHits(control) {
         element.elementIndex,
         element.pathId,
         element.trigger.startFrame,
+        hitIndex,
       ].join('|');
       return {
         elementId: element.elementId,
@@ -1289,6 +1421,7 @@ function createPublishedControlBinding(binding) {
     variants: binding.variants.map(variant => ({
       subSkillIndex: variant.subSkillIndex,
       playerSkillId: variant.playerSkillId,
+      frameCounts: variant.frameCounts,
       directElementReferenceCount: variant.directElementReferenceCount,
       bulletElementReferenceCount: variant.bulletElementReferenceCount,
       elementCount: variant.elementCount,
@@ -1300,6 +1433,116 @@ function createPublishedControlBinding(binding) {
     confidence: binding.confidence,
     applied: binding.applied,
   };
+}
+
+function createAttackInputSegments(candidate, controlBySkillId) {
+  const segments = (candidate.attackInputControls ?? []).map(input => {
+    const control = controlBySkillId.get(input.controlSkillId);
+    const mapping = createActionMapping(
+      {
+        ...candidate,
+        controlSkillId: input.controlSkillId,
+        bindingKind: 'hero-normal-attack-input-control',
+        bindingSourceIdentity: input.sourceIdentity,
+        attackInputControls: undefined,
+      },
+      control
+    );
+    const timing = resolveAttackInputSegmentTiming(
+      control,
+      mapping.selectedSubSkillIndex
+    );
+    return {
+      identity: `${mapping.identity}|attack-input-${input.sequenceIndex}`,
+      sequenceIndex: input.sequenceIndex,
+      sequenceTotal: input.sequenceTotal,
+      label: `A${input.sequenceIndex}`,
+      controlSkillId: input.controlSkillId,
+      selectedSubSkillIndex: mapping.selectedSubSkillIndex,
+      playerSkillId:
+        control?.variants?.find(
+          variant => variant.subSkillIndex === mapping.selectedSubSkillIndex
+        )?.playerSkillId ?? null,
+      resourceMapIndex: mapping.selectedSubSkillIndex,
+      controlFrameRate: mapping.controlFrameRate,
+      controlVariantSkillLevel: mapping.controlVariantSkillLevel,
+      controlVariantSourceIdentity: mapping.controlVariantSourceIdentity,
+      durationFrames: timing.durationFrames,
+      durationStatus: timing.status,
+      durationSourceIdentity: timing.sourceIdentity,
+      defaultLinkDelayFrames: null,
+      linkWindow: null,
+      linkTimingStatus: 'unresolved',
+      linkTimingReasons: ['attack-input-link-window-track-unavailable'],
+      selectedHitIdentities: mapping.selectedHitIdentities ?? [],
+      hitCount: mapping.runtimeHitCount ?? 0,
+      classification: mapping.classification,
+      reasons: mapping.reasons ?? [],
+      sourceIdentity: `${input.sourceIdentity}|${control?.sourcePath ?? 'skill-control-missing'}`,
+    };
+  });
+  const hitOwners = new Map();
+  for (const segment of segments) {
+    for (const hitIdentity of segment.selectedHitIdentities) {
+      if (hitOwners.has(hitIdentity)) {
+        throw new Error(
+          `normal attack hit ${hitIdentity} belongs to multiple input segments: ${hitOwners.get(hitIdentity)} and ${segment.identity}`
+        );
+      }
+      hitOwners.set(hitIdentity, segment.identity);
+    }
+  }
+  return segments;
+}
+
+function resolveAttackInputSegmentTiming(control, selectedSubSkillIndex) {
+  const selectedVariant = control?.variants?.find(
+    variant => variant.subSkillIndex === selectedSubSkillIndex
+  );
+  const selectedFrame = resolveDefaultFrameCount(selectedVariant?.frameCounts);
+  if (selectedFrame) {
+    return {
+      durationFrames: selectedFrame.frameCount,
+      status: 'applied',
+      sourceIdentity: `${selectedVariant.sourceIdentity}.frameCountDict[key=${selectedFrame.key}]`,
+    };
+  }
+  const candidates = (control?.variants ?? [])
+    .map(variant => ({
+      variant,
+      frame: resolveDefaultFrameCount(variant.frameCounts),
+    }))
+    .filter(candidate => candidate.frame);
+  const uniqueDurations = [
+    ...new Set(candidates.map(candidate => candidate.frame.frameCount)),
+  ];
+  if (uniqueDurations.length === 1) {
+    return {
+      durationFrames: uniqueDurations[0],
+      status: 'tracking-only',
+      sourceIdentity: candidates
+        .map(
+          candidate =>
+            `${candidate.variant.sourceIdentity}.frameCountDict[key=${candidate.frame.key}]`
+        )
+        .join('|'),
+    };
+  }
+  return {
+    durationFrames: uniqueDurations.length ? Math.max(...uniqueDurations) : 60,
+    status: 'unresolved',
+    sourceIdentity: control?.sourcePath ?? null,
+  };
+}
+
+function resolveDefaultFrameCount(frameCounts) {
+  const values = (frameCounts ?? [])
+    .map(value => ({
+      key: Number(value?.key),
+      frameCount: Math.max(0, Number(value?.frameCount) || 0),
+    }))
+    .filter(value => value.frameCount > 0);
+  return values.find(value => value.key === 0) ?? values[0] ?? null;
 }
 
 function createActionMapping(candidate, control) {
@@ -2031,6 +2274,18 @@ function createActionCoverageReport({
           reason: 'public-required-action-kind-missing',
         }))
     );
+  const attackInputChains = packageValue.actionMappings
+    .filter(mapping => mapping.actionKind === 'normal-attack')
+    .map(mapping => ({
+      actionIdentity: mapping.identity,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      sourceSkillId: mapping.sourceSkillId,
+      sequenceTotal: mapping.attackInputSegments?.length ?? 0,
+      appliedSegmentCount: mapping.attackInputAppliedSegmentCount ?? 0,
+      unresolvedSegmentCount: mapping.attackInputUnresolvedSegmentCount ?? 0,
+      segments: mapping.attackInputSegments ?? [],
+    }));
   const summary = createCoverageSummary({
     mappings: packageValue.actionMappings,
   });
@@ -2067,6 +2322,19 @@ function createActionCoverageReport({
       unresolvedPublicVariantCount: publicVariantCoverage.filter(
         variant => variant.classification === 'unresolved'
       ).length,
+      attackInputChainCount: attackInputChains.length,
+      attackInputSegmentCount: attackInputChains.reduce(
+        (sum, chain) => sum + chain.sequenceTotal,
+        0
+      ),
+      appliedAttackInputSegmentCount: attackInputChains.reduce(
+        (sum, chain) => sum + chain.appliedSegmentCount,
+        0
+      ),
+      unresolvedAttackInputSegmentCount: attackInputChains.reduce(
+        (sum, chain) => sum + chain.unresolvedSegmentCount,
+        0
+      ),
     },
     byOwnerActionKind,
     byOwner,
@@ -2076,6 +2344,7 @@ function createActionCoverageReport({
     publicVariantCoverage,
     controlVariantCoverage,
     nonzeroRecoveryCoverage,
+    attackInputChains,
   };
 }
 
@@ -2135,6 +2404,16 @@ function createActionCoverageMarkdown(report) {
     `- 真实命中节点：${report.summary.hitNodeCount}`,
     `- 公开动作变体：${report.summary.publicVariantCount}（未解析 ${report.summary.unresolvedPublicVariantCount}）`,
     `- 非零回能元素：${report.summary.nonzeroRecoveryElementCount}（未关联 ${report.summary.unresolvedNonzeroRecoveryElementCount}）`,
+    `- 普攻输入链：${report.summary.attackInputChainCount} 条 / ${report.summary.attackInputSegmentCount} 个输入段（可运行 ${report.summary.appliedAttackInputSegmentCount}，未解析 ${report.summary.unresolvedAttackInputSegmentCount}）`,
+    '',
+    '## 普攻输入链',
+    '',
+    '| 角色 | 输入段 | 可运行 | 未解析 | control |',
+    '| --- | ---: | ---: | ---: | --- |',
+    ...report.attackInputChains.map(
+      chain =>
+        `| ${chain.ownerName ?? chain.ownerId} | ${chain.sequenceTotal} | ${chain.appliedSegmentCount} | ${chain.unresolvedSegmentCount} | ${chain.segments.map(segment => segment.controlSkillId).join(' / ')} |`
+    ),
     '',
     '## Owner / 动作类型',
     '',

@@ -12,6 +12,11 @@ import {
 } from 'vitest';
 import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
+import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   WORKBENCH_DRAFT_SCHEMA_VERSION,
   WORKBENCH_DRAFT_STORAGE_KEY,
@@ -24,6 +29,7 @@ import {
 import { WORKBENCH_LAYOUT_STORAGE_KEY } from '../../domain/workbenchLayout';
 import { frameToMs } from '../../domain/timebase';
 import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
+import ActionLibraryPanel from '../../features/workbench/ActionLibraryPanel.vue';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
 import ResourceMonitorPanel from '../../features/workbench/ResourceMonitorPanel.vue';
 import RuntimeSelectedDetailPanel from '../../features/workbench/RuntimeSelectedDetailPanel.vue';
@@ -116,6 +122,30 @@ async function settleWorkbenchAsyncPanels() {
   await nextTick();
 }
 
+async function addSkillActionFromLibrary(
+  wrapper,
+  actionKind = 'dodge-attack'
+) {
+  const activeActor = wrapper.get(
+    '[data-testid="workbench-action-library-actor"][data-active="true"]'
+  );
+  const characterId = Number(activeActor.attributes('data-character-id'));
+  const entry = getSkillActionCatalog(
+    workbenchSeed.gameData.skills.filter(
+      skill => Number(skill.characterId) === characterId
+    ),
+    1
+  ).find(item => item.kind === actionKind);
+  expect(entry).toBeTruthy();
+  wrapper.findComponent(ActionLibraryPanel).vm.$emit('add-skill-action', entry);
+  await nextTick();
+  return entry;
+}
+
+async function addSingleSkillActionFromLibrary(wrapper) {
+  return addSkillActionFromLibrary(wrapper);
+}
+
 async function selectCharacterFromTimeline(wrapper, slotIndex, characterId) {
   await settleWorkbenchAsyncPanels();
   const actorLanes = wrapper.findAll(
@@ -173,6 +203,7 @@ describe('Workbench view', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     window.localStorage.clear();
+    clearInstalledVerifiedCombatMechanicsPackage();
   });
 
   it('renders the first real-data simulation slice', async () => {
@@ -966,9 +997,9 @@ describe('Workbench view', () => {
     expect(focusAllButton.classes()).not.toContain('active');
     expect(focusSelectedButton.attributes('disabled')).toBeUndefined();
     expect(focusSelectedButton.classes()).toContain('active');
-    expect(
-      runtimeCurveNode.attributes('data-runtime-focus-source')
-    ).toBe('state-curve-point');
+    expect(runtimeCurveNode.attributes('data-runtime-focus-source')).toBe(
+      'state-curve-point'
+    );
     expect(
       wrapper
         .find('[data-testid="workbench-state-curves"] .source-heading strong')
@@ -1703,10 +1734,7 @@ describe('Workbench view', () => {
     await settleWorkbenchAsyncPanels();
 
     const addCooldownSkill = async () => {
-      await wrapper
-        .find('[data-testid="workbench-skill-entry"][data-skill-id="10900112"]')
-        .trigger('click');
-      await nextTick();
+      await addSkillActionFromLibrary(wrapper, 'star-skill');
     };
     await addCooldownSkill();
     await addCooldownSkill();
@@ -1817,10 +1845,7 @@ describe('Workbench view', () => {
       .trigger('click');
 
     const addCooldownSkill = async () => {
-      await wrapper
-        .find('[data-testid="workbench-skill-entry"][data-skill-id="10900112"]')
-        .trigger('click');
-      await nextTick();
+      await addSkillActionFromLibrary(wrapper, 'star-skill');
     };
     await addCooldownSkill();
     await addCooldownSkill();
@@ -1910,7 +1935,7 @@ describe('Workbench view', () => {
         },
       },
     });
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await wrapper
       .find(
         '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
@@ -2172,8 +2197,8 @@ describe('Workbench view', () => {
       },
     });
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
+    await addSingleSkillActionFromLibrary(wrapper);
     await nextTick();
 
     await wrapper
@@ -4425,7 +4450,7 @@ describe('Workbench view', () => {
       .text();
     expect(originalStatePointId).toContain('action-0001');
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await nextTick();
 
     const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
@@ -4505,7 +4530,7 @@ describe('Workbench view', () => {
       .text();
     expect(originalStatePointId).toContain('action-0001');
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await nextTick();
 
     let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
@@ -7720,8 +7745,7 @@ describe('Workbench view', () => {
       },
     });
 
-    const starSkillEntry = findActionLibraryEntry(wrapper, 'star-skill');
-    await starSkillEntry.trigger('click');
+    await addSkillActionFromLibrary(wrapper, 'star-skill');
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
@@ -7759,8 +7783,8 @@ describe('Workbench view', () => {
       },
     });
 
-    await findActionLibraryEntry(wrapper, 'charged-attack').trigger('click');
-    await findActionLibraryEntry(wrapper, 'dodge-attack').trigger('click');
+    await addSkillActionFromLibrary(wrapper, 'charged-attack');
+    await addSkillActionFromLibrary(wrapper, 'dodge-attack');
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '3 action'
@@ -7926,7 +7950,7 @@ describe('Workbench view', () => {
       },
     });
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
@@ -8631,7 +8655,7 @@ describe('Workbench view', () => {
       '暂无轨道重叠'
     );
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     expect(
       wrapper.findAll('[data-testid="workbench-action-overlap-warning"]')
     ).toHaveLength(0);
@@ -8649,7 +8673,7 @@ describe('Workbench view', () => {
     ).toContain('末音');
     expect(
       wrapper.find('[data-testid="workbench-overlap-item"]').text()
-    ).toContain('普通攻击 / 普通攻击');
+    ).toContain('普通攻击 / 闪击');
     expect(
       wrapper.find('[data-testid="workbench-overlap-item"]').text()
     ).toContain('500-1000ms');
@@ -8827,7 +8851,7 @@ describe('Workbench view', () => {
       )
     ).toBe('true');
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
 
     expect(
       wrapper
@@ -8921,9 +8945,7 @@ describe('Workbench view', () => {
       findActionLibraryEntry(wrapper, selectedSecondaryEntry.kind).exists()
     ).toBe(true);
 
-    await findActionLibraryEntry(wrapper, selectedSecondaryEntry.kind).trigger(
-      'click'
-    );
+    await addSkillActionFromLibrary(wrapper, selectedSecondaryEntry.kind);
 
     expect(
       wrapper
@@ -8963,16 +8985,11 @@ describe('Workbench view', () => {
       },
     });
     const secondaryCharacterId = 101003;
-    const secondarySkill = workbenchSeed.gameData.skills.find(
-      skill => Number(skill.characterId) === secondaryCharacterId
-    );
 
     await findActionLibraryActorButton(wrapper, secondaryCharacterId).trigger(
       'click'
     );
-    await findActionLibrarySkillEntry(wrapper, secondarySkill.id).trigger(
-      'click'
-    );
+    const secondaryEntry = await addSkillActionFromLibrary(wrapper);
     expect(
       wrapper
         .find(
@@ -9016,7 +9033,7 @@ describe('Workbench view', () => {
     expect(savedDraft.actionDrafts[2]).toMatchObject({
       id: 'action-0002',
       actorCharacterId: secondaryCharacterId,
-      skillId: secondarySkill.id,
+      skillId: secondaryEntry.skillId,
       startMs: 2000,
     });
   });
@@ -9032,11 +9049,8 @@ describe('Workbench view', () => {
       },
     });
     const secondaryCharacterId = 101003;
-    const secondarySkill = workbenchSeed.gameData.skills.find(
-      skill => Number(skill.characterId) === secondaryCharacterId
-    );
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('2000');
@@ -9047,9 +9061,7 @@ describe('Workbench view', () => {
     await findActionLibraryActorButton(wrapper, secondaryCharacterId).trigger(
       'click'
     );
-    await findActionLibrarySkillEntry(wrapper, secondarySkill.id).trigger(
-      'click'
-    );
+    await addSkillActionFromLibrary(wrapper);
 
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
@@ -9072,14 +9084,14 @@ describe('Workbench view', () => {
       wrapper,
       workbenchSeed.defaults.characterId
     ).trigger('click');
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
 
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('4000');
+    ).toBe('3600');
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
-    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 4000ms。');
+    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 3600ms。');
     expect(
       wrapper
         .find(
@@ -9092,7 +9104,7 @@ describe('Workbench view', () => {
     ).toHaveLength(1);
     expect(
       wrapper.find('[data-testid="workbench-action-insert-delay-note"]').text()
-    ).toContain('自动推迟 2000ms -> 4000ms');
+    ).toContain('自动推迟 2000ms -> 3600ms');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
@@ -9101,10 +9113,10 @@ describe('Workbench view', () => {
     ).toContain('末音');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('普通攻击');
+    ).toContain('闪击');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('2000ms -> 4000ms');
+    ).toContain('2000ms -> 3600ms');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -9127,12 +9139,12 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0004')
     ).toMatchObject({
       actorCharacterId: workbenchSeed.defaults.characterId,
-      startMs: 4000,
+      startMs: 3600,
       insertion: {
         autoDelayed: true,
         requestedStartMs: 2000,
-        resolvedStartMs: 4000,
-        delayedByMs: 2000,
+        resolvedStartMs: 3600,
+        delayedByMs: 1600,
         laneId: 'actor-109001',
         reason: 'same-lane-conflict',
         conflictActionIds: ['action-0002'],
@@ -9533,7 +9545,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-note-input"]')
       .setValue(
-        '手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 4000ms。'
+        '手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 3600ms。'
       );
 
     expect(
@@ -9554,7 +9566,7 @@ describe('Workbench view', () => {
       insertion: {
         autoDelayed: true,
         requestedStartMs: 2000,
-        resolvedStartMs: 4000,
+        resolvedStartMs: 3600,
       },
     });
   });
@@ -9605,7 +9617,7 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0003')
     ).toMatchObject({
       startMs: 4500,
-      note: expect.stringContaining('普通攻击：'),
+      note: expect.stringContaining('闪击：'),
       insertion: null,
     });
   });
@@ -9710,7 +9722,7 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0003')
     ).toMatchObject({
       actorCharacterId: 101003,
-      note: expect.stringContaining('普通攻击：'),
+      note: expect.stringContaining('闪击：'),
       insertion: null,
     });
   });
@@ -9726,11 +9738,11 @@ describe('Workbench view', () => {
       },
     });
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await wrapper
       .findAll('[data-testid="workbench-delete-action"]')[0]
       .trigger('click');
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
 
     const actionIds = wrapper
       .findAll('.action-item')
@@ -9870,7 +9882,7 @@ describe('Workbench view', () => {
     });
     await settleWorkbenchAsyncPanels();
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await wrapper
       .find('[data-testid="workbench-start-input"]')
       .setValue('2400');
@@ -10297,7 +10309,7 @@ describe('Workbench view', () => {
       'data-workspace-scenario-count': '1',
       'data-active-workspace-scenario-id': 'scenario-0001',
     });
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await wrapper
       .find('[data-testid="workbench-scenario-rename"]')
       .trigger('click');
@@ -10322,7 +10334,7 @@ describe('Workbench view', () => {
     expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
     );
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
       '3 action'
     );
@@ -10508,7 +10520,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-scenario-duplicate"]')
       .trigger('click');
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     await wrapper
       .find('[data-testid="workbench-open-comparison"]')
       .trigger('click');
@@ -10562,7 +10574,7 @@ describe('Workbench view', () => {
         },
       },
     });
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
     lane.element.getBoundingClientRect = () => ({
       width: 600,
@@ -10636,7 +10648,7 @@ describe('Workbench view', () => {
         },
       },
     });
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await addSingleSkillActionFromLibrary(wrapper);
     const originalSecondActionStartMs = Number(
       wrapper
         .get(
@@ -10844,6 +10856,109 @@ describe('Workbench view', () => {
       'data-workbench-right-panel-width': '300',
     });
     restored.unmount();
+  });
+
+  it('inserts a normal attack chain in one transaction and edits sibling inputs independently', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+
+    await findActionLibraryEntry(wrapper, 'normal-attack').trigger('click');
+    await nextTick();
+
+    const insertedGroupId = wrapper
+      .findAll(
+        '[data-testid="workbench-timeline-action"][data-attack-sequence-index="1"]'
+      )
+      .map(row => row.attributes('data-attack-group-id'))
+      .find(groupId => groupId && !groupId.startsWith('legacy-'));
+    const groupRows = () =>
+      wrapper.findAll(
+        `[data-testid="workbench-timeline-action"][data-attack-group-id="${insertedGroupId}"]`
+      );
+
+    expect(insertedGroupId).toBeTruthy();
+    expect(groupRows()).toHaveLength(5);
+    expect(groupRows().map(row => row.get('strong').text())).toEqual([
+      'A1',
+      'A2',
+      'A3',
+      'A4',
+      'A5',
+    ]);
+    expect(
+      wrapper
+        .get('[data-testid="workbench-undo-edit"]')
+        .attributes('data-history-count')
+    ).toBe('1');
+
+    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(groupRows()).toHaveLength(0);
+    await wrapper.get('[data-testid="workbench-redo-edit"]').trigger('click');
+    await nextTick();
+    expect(groupRows()).toHaveLength(5);
+
+    const rowsBeforeMove = groupRows();
+    const actionIds = Object.fromEntries(
+      rowsBeforeMove.map(row => [
+        Number(row.attributes('data-attack-sequence-index')),
+        row.attributes('data-action-id'),
+      ])
+    );
+    const startsBeforeMove = Object.fromEntries(
+      rowsBeforeMove.map(row => [
+        row.attributes('data-action-id'),
+        Number(row.attributes('data-start-ms')),
+      ])
+    );
+    wrapper.findComponent(TimelineGridPreview).vm.$emit('update-action-time', {
+      actionId: actionIds[2],
+      startMs: startsBeforeMove[actionIds[2]] + frameToMs(30),
+    });
+    await nextTick();
+    const startsAfterMove = Object.fromEntries(
+      groupRows().map(row => [
+        row.attributes('data-action-id'),
+        Number(row.attributes('data-start-ms')),
+      ])
+    );
+    expect(startsAfterMove[actionIds[2]]).not.toBe(
+      startsBeforeMove[actionIds[2]]
+    );
+    for (const actionId of [
+      actionIds[1],
+      actionIds[3],
+      actionIds[4],
+      actionIds[5],
+    ]) {
+      expect(startsAfterMove[actionId]).toBe(startsBeforeMove[actionId]);
+    }
+
+    wrapper
+      .findComponent(TimelineGridPreview)
+      .vm.$emit('delete-action', actionIds[3]);
+    await nextTick();
+    expect(groupRows()).toHaveLength(4);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-rule-row"][data-rule-code="attack-input-chain-incomplete"]'
+        )
+        .exists()
+    ).toBe(true);
+
+    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(groupRows()).toHaveLength(5);
+    wrapper.unmount();
+    clearInstalledVerifiedCombatMechanicsPackage();
   });
 });
 
@@ -11059,11 +11174,11 @@ async function dragTimelineAction(
 }
 
 async function createAutoDelayedPrimarySkillAction(wrapper) {
-  await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+  await addSingleSkillActionFromLibrary(wrapper);
   await wrapper
     .find('.action-item[data-action-id="action-0001"]')
     .trigger('click');
-  await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+  await addSingleSkillActionFromLibrary(wrapper);
 }
 
 function findActionLibraryActorButton(wrapper, characterId) {

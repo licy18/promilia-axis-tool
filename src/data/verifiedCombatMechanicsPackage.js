@@ -1,3 +1,5 @@
+import { normalizeAttackInputSegments } from '../domain/workbenchAttackInputChain';
+
 const packageUrl = new URL(
   './generated/verified-combat-mechanics-package.json',
   import.meta.url
@@ -77,12 +79,25 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     );
   }
   const actionMapping = candidates[0];
-  if (actionMapping?.classification !== 'applied') {
+  const resolvedActionBinding = resolveActionBinding(actionMapping, action);
+  if (!resolvedActionBinding.binding) {
+    return createUnresolvedActionMechanics(
+      action,
+      resolvedActionBinding.reason,
+      {
+        owner,
+        actionBinding: actionMapping,
+        candidateCount: resolvedActionBinding.candidateCount ?? 0,
+      }
+    );
+  }
+  const actionBinding = resolvedActionBinding.binding;
+  if (actionBinding?.classification !== 'applied') {
     const partialControlBinding = controlBindingBySkillId.get(
-      actionMapping?.controlSkillId
+      actionBinding?.controlSkillId
     );
     if (
-      actionMapping?.selectedSubSkillIndex != null &&
+      actionBinding?.selectedSubSkillIndex != null &&
       Number(partialControlBinding?.logic?.spCost) > 0
     ) {
       return {
@@ -92,10 +107,10 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
         packageId: installedPackage.packageId,
         packageHash: installedPackage.packageHash,
         owner,
-        actionBinding: actionMapping,
+        actionBinding,
         controlBinding: partialControlBinding,
         hits: [],
-        reasons: actionMapping.reasons ?? [],
+        reasons: actionBinding.reasons ?? [],
         complete: false,
         ready: true,
         applied: true,
@@ -103,19 +118,19 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     }
     return createUnresolvedActionMechanics(
       action,
-      `verified-action-binding-${actionMapping?.classification ?? 'missing'}`,
+      `verified-action-binding-${actionBinding?.classification ?? 'missing'}`,
       {
         owner,
-        reasons: actionMapping?.reasons ?? [],
+        actionBinding,
+        reasons: actionBinding?.reasons ?? [],
       }
     );
   }
-  const actionBinding = actionMapping;
   const controlBinding = controlBindingBySkillId.get(
     actionBinding.controlSkillId
   );
   const selectedHitIdentities = new Set(
-    actionMapping.selectedHitIdentities ?? []
+    actionBinding.selectedHitIdentities ?? []
   );
   const hits = (controlBinding?.hits ?? []).filter(
     hit =>
@@ -200,6 +215,9 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   if (!Array.isArray(value?.controlBindings)) {
     issues.push('control-bindings-missing');
   }
+  if (!hasValidAttackInputChains(value)) {
+    issues.push('attack-input-segments-invalid');
+  }
   if (!Array.isArray(value?.ownerProfiles?.enemy)) {
     issues.push('enemy-profiles-missing');
   }
@@ -265,6 +283,68 @@ function findActionMappings(action, owner = resolveActionOwner(action)) {
   return installedPackage.actionMappings.filter(mapping =>
     mapping.identity.startsWith(prefix)
   );
+}
+
+function resolveActionBinding(actionMapping, action) {
+  if (actionMapping?.actionKind !== 'normal-attack') {
+    return { binding: actionMapping };
+  }
+  const segmentIdentity = String(action.attackInput?.identity ?? '').trim();
+  const controlSkillId = Number(action.attackInput?.controlSkillId);
+  const sequenceIndex = Number(action.attackSequenceIndex);
+  if (!segmentIdentity && !controlSkillId && !sequenceIndex) {
+    return {
+      binding: null,
+      reason: 'verified-normal-attack-legacy-aggregate-unresolved',
+    };
+  }
+  const candidates = (actionMapping.attackInputSegments ?? []).filter(
+    segment =>
+      (segmentIdentity && segment.identity === segmentIdentity) ||
+      (!segmentIdentity &&
+        (!controlSkillId || segment.controlSkillId === controlSkillId) &&
+        (!sequenceIndex || segment.sequenceIndex === sequenceIndex))
+  );
+  if (candidates.length !== 1) {
+    return {
+      binding: null,
+      reason:
+        candidates.length > 1
+          ? 'verified-normal-attack-input-segment-ambiguous'
+          : 'verified-normal-attack-input-segment-missing',
+      candidateCount: candidates.length,
+    };
+  }
+  const segment = candidates[0];
+  return {
+    binding: {
+      ...actionMapping,
+      ...segment,
+      identity: segment.identity,
+      aggregateIdentity: actionMapping.identity,
+      runtimeHitCount: segment.hitCount,
+      attackInputSegment: segment,
+    },
+  };
+}
+
+function hasValidAttackInputChains(value) {
+  const normalMappings = (value?.actionMappings ?? []).filter(
+    mapping => mapping.actionKind === 'normal-attack'
+  );
+  if (!normalMappings.length) return false;
+  const controlIds = new Set(
+    (value?.controlBindings ?? []).map(binding => binding.controlSkillId)
+  );
+  return normalMappings.every(mapping => {
+    const normalized = normalizeAttackInputSegments(
+      mapping.attackInputSegments
+    );
+    return (
+      normalized.length === mapping.attackInputSegments?.length &&
+      normalized.every(segment => controlIds.has(segment.controlSkillId))
+    );
+  });
 }
 
 function createUnresolvedActionMechanics(action, reason, extra = {}) {

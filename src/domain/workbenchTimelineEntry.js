@@ -1,4 +1,5 @@
 import { ACTION_TYPES } from './projectSchema';
+import { normalizeAttackInputSegments } from './workbenchAttackInputChain';
 
 export const WORKBENCH_TIMELINE_LANE_KINDS = Object.freeze({
   ACTOR_ACTION: 'actor-action',
@@ -44,6 +45,9 @@ export function createWorkbenchTimelineEntry(source = {}) {
     needsTimingData: Boolean(source.needsTimingData),
     rawValue: source.rawValue ?? null,
     note: textOrNull(source.note),
+    attackInputSegments: normalizeAttackInputSegments(
+      source.attackInputSegments
+    ),
   };
 }
 

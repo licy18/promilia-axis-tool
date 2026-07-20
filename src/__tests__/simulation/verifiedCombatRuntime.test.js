@@ -14,6 +14,7 @@ import {
   createWorkbenchProject,
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
+import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import {
@@ -28,6 +29,15 @@ const PANGPANG_SKILL_ID = 10100701;
 const MUYIN_ULTIMATE_SKILL_ID = 10900113;
 const HEAVY_ROCK_HOOF_ID = 500469;
 const HEAVY_ROCK_HOOF_SKILL_ID = 50046903;
+const PANGPANG_NORMAL_MAPPING =
+  verifiedCombatMechanicsPackage.actionMappings.find(
+    mapping =>
+      mapping.ownerId === PANGPANG_CHARACTER_ID &&
+      mapping.actionKind === 'normal-attack'
+  );
+const PANGPANG_ATTACK_INPUT = PANGPANG_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 3
+);
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -96,6 +106,7 @@ describe('verified combat mechanics runtime', () => {
       type: 'skill',
       skillId: PANGPANG_SKILL_ID,
       actionVariantIndex: 0,
+      ...createPangpangAttackInputFields('direct-pangpang-chain'),
       actor: {
         characterId: PANGPANG_CHARACTER_ID,
         loadout: { kiboId: HEAVY_ROCK_HOOF_ID },
@@ -117,7 +128,7 @@ describe('verified combat mechanics runtime', () => {
       ready: true,
       packageId: 'azpr-tc-2026-07-18',
       actionBinding: {
-        identity: 'actor|101007|10100701|0|10100703',
+        identity: 'actor|101007|10100701|0|10100703|attack-input-3',
         controlSkillId: 10100703,
       },
     });
@@ -301,6 +312,46 @@ describe('verified combat mechanics runtime', () => {
     expect(
       result.verifiedCombatRuntime.finalState.enemy.toughness
     ).toBeLessThan(result.verifiedCombatRuntime.initialState.enemy.toughness);
+  });
+
+  it('moves and removes only the selected normal attack input and its hit nodes', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item => item.ownerId === 102001 && item.actionKind === 'normal-attack'
+    );
+    let idIndex = 0;
+    const chain = createWorkbenchAttackInputChainDrafts({
+      entry: mapping,
+      actorCharacterId: 102001,
+      skillId: mapping.sourceSkillId,
+      level: 1,
+      startMs: 0,
+      createActionId: () => `lili-a${++idIndex}`,
+    }).slice(0, 3);
+    const baseline = simulateAttackInputChain(chain);
+    const baselineTimes = damageTimesByAction(baseline, chain);
+
+    expect(baselineTimes['lili-a1']).toHaveLength(3);
+    expect(baselineTimes['lili-a2']).toHaveLength(4);
+    expect(baselineTimes['lili-a3']).toHaveLength(6);
+
+    const movedStartMs = chain[2].startMs + chain[2].durationMs + 1000;
+    const moved = simulateAttackInputChain(
+      chain.map(action =>
+        action.id === 'lili-a2' ? { ...action, startMs: movedStartMs } : action
+      )
+    );
+    const movedTimes = damageTimesByAction(moved, chain);
+    expect(movedTimes['lili-a1']).toEqual(baselineTimes['lili-a1']);
+    expect(movedTimes['lili-a3']).toEqual(baselineTimes['lili-a3']);
+    expect(movedTimes['lili-a2']).not.toEqual(baselineTimes['lili-a2']);
+
+    const deleted = simulateAttackInputChain(
+      chain.filter(action => action.id !== 'lili-a3')
+    );
+    const deletedTimes = damageTimesByAction(deleted, chain);
+    expect(deletedTimes['lili-a1']).toEqual(baselineTimes['lili-a1']);
+    expect(deletedTimes['lili-a2']).toEqual(baselineTimes['lili-a2']);
+    expect(deletedTimes['lili-a3']).toEqual([]);
   });
 
   it('does not emit verified damage or resource state for a cooldown-blocked action', () => {
@@ -915,6 +966,47 @@ describe('verified combat mechanics runtime', () => {
   });
 });
 
+function createPangpangAttackInputFields(attackGroupId) {
+  return {
+    attackGroupId,
+    attackSequenceIndex: PANGPANG_ATTACK_INPUT.sequenceIndex,
+    attackSequenceTotal: PANGPANG_ATTACK_INPUT.sequenceTotal,
+    attackInput: PANGPANG_ATTACK_INPUT,
+  };
+}
+
+function simulateAttackInputChain(actions) {
+  const selection = {
+    ...DEFAULT_WORKBENCH_SELECTION,
+    characterId: 102001,
+    skillId: 10200101,
+  };
+  const teamSlots = createDefaultWorkbenchTeamSlots(selection);
+  const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+    config => ({ ...config, initialSp: 0 })
+  );
+  const project = createWorkbenchProject(selection, {
+    durationMs: 30000,
+    teamSlots,
+    actorConfigs,
+    actions,
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return simulateScenario(compileProject(project, getWorkbenchGameData()));
+}
+
+function damageTimesByAction(result, actions) {
+  return Object.fromEntries(
+    actions.map(action => [
+      action.id,
+      result.verifiedCombatRuntime.damageEvents
+        .filter(event => event.actionId === action.id)
+        .map(event => event.timeMs),
+    ])
+  );
+}
+
 function simulateVerifiedAcceptanceScenario({
   includeActor = true,
   includeActorUltimate = false,
@@ -955,6 +1047,7 @@ function simulateVerifiedAcceptanceScenario({
           actionVariantIndex: 0,
           startMs: 0,
           durationMs: 600,
+          ...createPangpangAttackInputFields('pangpang-chain-1'),
         }),
       ]
     : [];
@@ -968,6 +1061,7 @@ function simulateVerifiedAcceptanceScenario({
         actionVariantIndex: 0,
         startMs: 1000,
         durationMs: 600,
+        ...createPangpangAttackInputFields('pangpang-chain-2'),
       })
     );
   }

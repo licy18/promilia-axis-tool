@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import {
   DEFAULT_WORKBENCH_SELECTION,
@@ -11,6 +11,7 @@ import {
   installProjectSimulationSkillDiagnostics,
   resetProjectSimulationSkillDiagnostics,
 } from '../../simulation/projection/projectSimulationResult';
+import { getWorkbenchSkillDiagnostics } from '../../simulation/projection/workbenchSkillDiagnosticsLoader';
 
 afterEach(() => {
   resetProjectSimulationSkillDiagnostics();
@@ -49,6 +50,19 @@ function selectAppliedRuntimeValues(result) {
 }
 
 describe('skill diagnostics lazy boundary', () => {
+  it('fetches and caches the diagnostics JSON outside the JavaScript bundle', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => workbenchSkillDiagnostics,
+    });
+
+    await expect(getWorkbenchSkillDiagnostics(fetchImpl)).resolves.toBe(
+      workbenchSkillDiagnostics
+    );
+    await getWorkbenchSkillDiagnostics(fetchImpl);
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
   it('keeps applied runtime state stable when optional evidence is installed', () => {
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
     resetProjectSimulationSkillDiagnostics();

@@ -25,19 +25,23 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 3,
+      packageVersion: 4,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
         candidateActionCount: 562,
         classifiedActionCount: 562,
-        appliedActionBindingCount: 318,
-        appliedHitBindingCount: 1028,
+        appliedActionBindingCount: 352,
+        appliedHitBindingCount: 1175,
         unresolvedActionCount: 244,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
         appliedEnemyProfileCount: 204,
+        attackInputChainCount: 20,
+        attackInputSegmentCount: 95,
+        appliedAttackInputSegmentCount: 49,
+        unresolvedAttackInputSegmentCount: 46,
       },
       spUnitContract: {
         valueUnit: 'absolute-sp-points',
@@ -54,6 +58,11 @@ describe('verified combat mechanics package', () => {
       },
     });
     expect(mechanicsPackage.packageHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(
+      mechanicsPackage.actionBindings
+        .filter(binding => binding.actionKind === 'normal-attack')
+        .every(binding => binding.attackSequenceIndex != null)
+    ).toBe(true);
     expect(
       mechanicsPackage.sourceFiles.every(source =>
         /^[a-f0-9]{64}$/.test(source.sha256)
@@ -110,6 +119,69 @@ describe('verified combat mechanics package', () => {
     });
   });
 
+  it('maps normal attacks to real input controls instead of aggregate hit blocks', () => {
+    const fiveInput = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerId === 102001 && mapping.actionKind === 'normal-attack'
+    );
+    const fourInput = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerId === 101007 && mapping.actionKind === 'normal-attack'
+    );
+    const threeInput = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerId === 108003 && mapping.actionKind === 'normal-attack'
+    );
+
+    expect(fiveInput.attackInputSegments).toHaveLength(5);
+    expect(fourInput.attackInputSegments).toHaveLength(4);
+    expect(threeInput.attackInputSegments).toHaveLength(3);
+    expect(fiveInput.attackInputSegments.map(segment => segment.label)).toEqual(
+      ['A1', 'A2', 'A3', 'A4', 'A5']
+    );
+    expect(fiveInput.attackInputSegments[2]).toMatchObject({
+      controlSkillId: 10200103,
+      durationFrames: 282,
+      hitCount: 6,
+    });
+    const hitIdentities = fiveInput.attackInputSegments.flatMap(
+      segment => segment.selectedHitIdentities
+    );
+    expect(new Set(hitIdentities).size).toBe(hitIdentities.length);
+
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    const aggregate = resolveVerifiedCombatActionMechanics({
+      id: 'legacy-normal-attack',
+      type: 'skill',
+      skillId: fiveInput.sourceSkillId,
+      actor: { characterId: 102001 },
+    });
+    expect(aggregate).toMatchObject({
+      ready: false,
+      status: 'verified-normal-attack-legacy-aggregate-unresolved',
+    });
+
+    const segment = fiveInput.attackInputSegments[2];
+    const resolved = resolveVerifiedCombatActionMechanics({
+      id: 'normal-attack-a3',
+      type: 'skill',
+      skillId: fiveInput.sourceSkillId,
+      attackSequenceIndex: segment.sequenceIndex,
+      attackInput: segment,
+      actor: { characterId: 102001 },
+    });
+    expect(resolved).toMatchObject({
+      ready: true,
+      actionBinding: {
+        identity: segment.identity,
+        controlSkillId: 10200103,
+        attackInputSegment: { sequenceIndex: 3 },
+      },
+    });
+    expect(resolved.hits).toHaveLength(6);
+    expect(resolved.hits.every(hit => hit.mapIndex === 0)).toBe(true);
+  });
+
   it('classifies the independent public action denominator without silent omissions', () => {
     expect(actionCoverage).toMatchObject({
       status: 'verified-combat-action-coverage-ready',
@@ -122,6 +194,8 @@ describe('verified combat mechanics package', () => {
       summary: {
         directoryActionCount: 562,
         classifiedActionCount: 562,
+        attackInputChainCount: 20,
+        attackInputSegmentCount: 95,
       },
       missingRequiredActorActions: [],
     });
@@ -178,6 +252,16 @@ describe('verified combat mechanics package', () => {
         .filter(item => item.ownerKind === 'kibo')
         .reduce((sum, owner) => sum + owner.directoryActionCount, 0)
     ).toBe(366);
+    expect(actionCoverage.attackInputChains).toHaveLength(20);
+    expect(
+      actionCoverage.attackInputChains.every(
+        chain =>
+          chain.sequenceTotal === chain.segments.length &&
+          chain.segments.every(
+            (segment, index) => segment.sequenceIndex === index + 1
+          )
+      )
+    ).toBe(true);
   });
 
   it('resolves only the selected resource map for a shared kibo control', () => {
