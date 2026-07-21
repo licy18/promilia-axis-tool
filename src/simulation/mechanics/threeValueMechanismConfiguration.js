@@ -86,6 +86,8 @@ export function createThreeValueMechanismConfiguration({
     policy: {
       resolvedProjectValuesOnly: true,
       unconfirmedCultivationEffectsApplied: false,
+      verifiedStaticCultivationPropertiesApplied: true,
+      dynamicLoadoutEffectsApplied: false,
       calculatorReadsConfigurationLibrary: false,
       calculatorReadsUnconfirmedLoadoutEffects: false,
     },
@@ -95,10 +97,18 @@ export function createThreeValueMechanismConfiguration({
         source => source.configurationInstanceId
       ).length,
       enemyInstanceBacked: Boolean(enemySource?.configurationInstanceId),
-      unappliedLoadoutSelectionCount: actorSources.reduce(
+      selectedLoadoutItemCount: actorSources.reduce(
         (total, source) => total + source.loadout.selectedItemCount,
         0
       ),
+      staticLoadoutAppliedActorCount: actorSources.filter(
+        source =>
+          source.loadout.selectedItemCount > 0 &&
+          source.application.loadout.staticPropertiesAppliedToCalculators
+      ).length,
+      dynamicLoadoutEffectUnappliedActorCount: actorSources.filter(
+        source => source.loadout.selectedItemCount > 0
+      ).length,
       elementDefenseOverrideCount:
         enemySource?.elementDefense.overrideCount ?? 0,
       sourceContractReady: sourceContract?.ready ?? null,
@@ -163,8 +173,10 @@ function createActorConfigurationSource({
   const initialSp = numberOrNull(actor?.initialSp ?? resolvedConfig.initialSp);
   const loadout = createLoadoutSource(
     actor?.loadout ?? resolvedConfig.loadout,
-    gameDataReference?.loadout
+    gameDataReference?.loadout,
+    actor?.verifiedStaticProperties
   );
+  const staticPropertiesReady = actor?.verifiedStaticProperties?.ready === true;
   const ready = Boolean(
     actor?.id &&
     Number.isFinite(Number(actor?.characterId)) &&
@@ -207,8 +219,18 @@ function createActorConfigurationSource({
         appliedToRuntime: Number.isFinite(initialSp),
       },
       loadout: {
-        status: 'project-loadout-effects-unconfirmed-unapplied',
-        appliedToCalculators: false,
+        status: staticPropertiesReady
+          ? 'verified-static-loadout-properties-applied-dynamic-effects-unapplied'
+          : 'verified-static-loadout-properties-unresolved',
+        appliedToCalculators: staticPropertiesReady,
+        staticPropertiesAppliedToCalculators: staticPropertiesReady,
+        dynamicEffectsAppliedToCalculators: false,
+        sourceIdentity:
+          actor?.verifiedStaticProperties?.sourceIdentity ?? null,
+        unresolved:
+          actor?.verifiedStaticProperties?.unresolved ?? [],
+        unappliedDynamicEffects:
+          actor?.verifiedStaticProperties?.unapplied ?? [],
       },
     },
   };
@@ -355,7 +377,11 @@ function createConfigurationRuntimeBinding({
   };
 }
 
-function createLoadoutSource(loadout = {}, gameDataLoadout = {}) {
+function createLoadoutSource(
+  loadout = {},
+  gameDataLoadout = {},
+  staticProperties = null
+) {
   const equipment = Object.fromEntries(
     EQUIPMENT_KEYS.map(key => [key, numberOrNull(loadout?.equipment?.[key])])
   );
@@ -369,7 +395,11 @@ function createLoadoutSource(loadout = {}, gameDataLoadout = {}) {
     selectedItemCount:
       LOADOUT_KEYS.filter(key => source[key] != null).length +
       EQUIPMENT_KEYS.filter(key => equipment[key] != null).length,
-    appliedToCalculators: false,
+    appliedToCalculators: staticProperties?.ready === true,
+    staticPropertiesAppliedToCalculators: staticProperties?.ready === true,
+    dynamicEffectsAppliedToCalculators: false,
+    staticPropertyStatus: staticProperties?.status ?? null,
+    staticPropertySourceIdentity: staticProperties?.sourceIdentity ?? null,
     gameDataReferences: gameDataLoadout?.references ?? null,
     gameDataReady: gameDataLoadout?.ready ?? null,
   };

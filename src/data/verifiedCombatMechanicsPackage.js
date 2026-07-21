@@ -203,6 +203,27 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('package-hash-invalid');
   }
   if (
+    value?.mechanismEvidence?.status !==
+      'verified-mechanism-evidence-manifest-ready' ||
+    !Array.isArray(value?.mechanismEvidence?.sources) ||
+    value.mechanismEvidence.sources.length < 7 ||
+    value.mechanismEvidence.sources.some(
+      source =>
+        source.validationStatus !== 'verified-source-structure-ready' ||
+        !/^[a-f0-9]{64}$/.test(String(source.sha256 ?? ''))
+    )
+  ) {
+    issues.push('mechanism-evidence-invalid');
+  }
+  if (
+    value?.staticPropertyCatalog?.status !==
+      'verified-static-property-catalog-ready' ||
+    value?.staticPropertyCatalog?.identityAudit?.verifiedActorCount !== 17 ||
+    value?.staticPropertyCatalog?.identityAudit?.verifiedKiboCount !== 147
+  ) {
+    issues.push('static-property-catalog-invalid');
+  }
+  if (
     value?.validation?.status !== 'verified-18-of-18' ||
     value?.validation?.passed !== 18 ||
     value?.validation?.failed !== 0

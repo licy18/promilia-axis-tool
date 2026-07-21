@@ -291,7 +291,7 @@ describe('workbench project actor configuration', () => {
       project.actors.map(actor => actor.loadout)
     );
     expect(project.metadata.loadoutCalculationStatus).toBe(
-      'project-config-only'
+      'verified-static-properties-applied-dynamic-effects-unapplied'
     );
     expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
   });

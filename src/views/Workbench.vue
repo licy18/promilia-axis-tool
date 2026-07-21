@@ -1045,6 +1045,7 @@ import {
   createTimelineDiagnostics,
 } from '../features/workbench/timelineDiagnostics';
 import {
+  DEFAULT_WORKBENCH_KIBO_CONFIG,
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
   createWorkbenchProject,
@@ -1447,12 +1448,13 @@ const project = computed(() =>
     actionRelations.value
   )
 );
-const scenario = computed(() =>
-  compileProject(project.value, gameData, {
+const scenario = computed(() => {
+  void runtimeDiagnosticsRevision.value;
+  return compileProject(project.value, gameData, {
     threeValueMechanicsProfileCatalog:
       DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
-  })
-);
+  });
+});
 const simulationResult = computed(() => {
   void runtimeDiagnosticsRevision.value;
   return simulateScenario(scenario.value);
@@ -2491,14 +2493,21 @@ function applyLoadoutPickerSelection(selectedId) {
   if (request.kind === 'kibo') {
     updateActorConfig({
       characterId: request.characterId,
-      loadout: { kiboId: normalizedId },
+      loadout: {
+        kiboId: normalizedId,
+        kiboConfig: structuredClone(DEFAULT_WORKBENCH_KIBO_CONFIG),
+      },
     });
     return;
   }
   if (request.kind === 'soulessence') {
     updateActorConfig({
       characterId: request.characterId,
-      loadout: { soulessenceId: normalizedId },
+      loadout: {
+        soulessenceId: normalizedId,
+        soulessenceLevel: null,
+        soulessenceRank: null,
+      },
     });
     return;
   }
@@ -2508,6 +2517,9 @@ function applyLoadoutPickerSelection(selectedId) {
       loadout: {
         equipment: {
           [request.slotKey]: normalizedId,
+        },
+        equipmentLevels: {
+          [request.slotKey]: null,
         },
       },
     });
@@ -2800,6 +2812,7 @@ function updateActorConfig(patch = {}) {
   }
   recordWorkbenchHistorySnapshot();
   const hasInitialSp = Object.prototype.hasOwnProperty.call(patch, 'initialSp');
+  const hasLevel = Object.prototype.hasOwnProperty.call(patch, 'level');
   const nextActorConfigs = normalizeWorkbenchActorConfigs(
     actorConfigs.value.map(config => {
       if (Number(config.characterId) !== Number(characterId)) {
@@ -2808,12 +2821,29 @@ function updateActorConfig(patch = {}) {
       return {
         ...config,
         ...(hasInitialSp ? { initialSp: patch.initialSp } : {}),
+        ...(hasLevel ? { level: patch.level } : {}),
+        cultivation: {
+          ...config.cultivation,
+          ...patch.cultivation,
+        },
         loadout: {
           ...config.loadout,
           ...loadout,
           equipment: {
             ...config.loadout?.equipment,
             ...loadout.equipment,
+          },
+          equipmentLevels: {
+            ...config.loadout?.equipmentLevels,
+            ...loadout.equipmentLevels,
+          },
+          kiboConfig: {
+            ...config.loadout?.kiboConfig,
+            ...loadout.kiboConfig,
+            comprehensionByAttribute: {
+              ...config.loadout?.kiboConfig?.comprehensionByAttribute,
+              ...loadout.kiboConfig?.comprehensionByAttribute,
+            },
           },
         },
       };

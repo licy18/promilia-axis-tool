@@ -26,6 +26,18 @@ export const VERIFIED_COMBAT_RUNTIME_CONTRACT_NAME =
 
 const FIXED_STEP_MS = 100;
 const FRAME_RATE = 60;
+const ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE = Object.freeze({
+  0: 51,
+  1: 52,
+  2: 53,
+  3: 54,
+  4: 55,
+  5: 56,
+  6: 57,
+  7: 58,
+  8: 59,
+  9: 60,
+});
 
 export function isVerifiedCombatMechanicsScenario(scenario) {
   return (
@@ -277,7 +289,15 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
           entry.actorId === actor.id ||
           Number(entry.characterId) === Number(actor.characterId)
       );
-      const profile = actorProfileById.get(Number(actor.characterId)) ?? null;
+      const generatedProfile =
+        actorProfileById.get(Number(actor.characterId)) ?? null;
+      const staticProperties = actor.verifiedStaticProperties ?? null;
+      const profile = staticProperties?.ready
+        ? staticProperties.resourceProfile
+        : staticProperties?.status ===
+            'verified-static-property-catalog-not-installed'
+          ? generatedProfile
+          : null;
       const max = positiveNumber(
         profile?.effectiveMaxSp ?? profile?.maxSp ?? actor.stats?.maxSp,
         100
@@ -328,7 +348,13 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
       group.kiboLane?.kiboId ?? actor?.loadout?.kiboId
     );
     if (!kiboId) continue;
-    const profile = kiboProfileById.get(kiboId) ?? null;
+    const generatedProfile = kiboProfileById.get(kiboId) ?? null;
+    const staticKibo = actor?.verifiedStaticKiboProperties ?? null;
+    const profile = staticKibo?.ready
+      ? createStaticKiboRuntimeProfile(staticKibo)
+      : staticKibo == null
+        ? generatedProfile
+        : null;
     const slotId = group.slotId ?? `team-slot-${index + 1}`;
     const inherited = scenario?.initialRuntimeState?.kiboEnergyBySlot?.find(
       entry => entry.slotId === slotId && Number(entry.kiboId) === kiboId
@@ -433,6 +459,36 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
         inheritedEnemy?.hitCountShields
       ),
     },
+  };
+}
+
+function createStaticKiboRuntimeProfile(staticKibo) {
+  const attributes = new Map(
+    (staticKibo.attributes ?? []).map(attribute => [
+      Number(attribute.id),
+      attribute,
+    ])
+  );
+  return {
+    ...staticKibo.resourceProfile,
+    kiboId: staticKibo.kiboId,
+    attack: staticKibo.stats?.attack ?? null,
+    criticalRateBasisPoints: attributes.get(7)?.rawValue ?? null,
+    criticalDamageBasisPoints: attributes.get(8)?.rawValue ?? null,
+    damageUpBasisPoints: attributes.get(21)?.rawValue ?? null,
+    physicalDamageUpBasisPoints: attributes.get(25)?.rawValue ?? null,
+    magicDamageUpBasisPoints: attributes.get(27)?.rawValue ?? null,
+    elementDamageUpBasisPointsByType: Object.fromEntries(
+      Object.entries(ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE).map(
+        ([elementType, attributeId]) => [
+          elementType,
+          attributes.get(attributeId)?.rawValue ?? 0,
+        ]
+      )
+    ),
+    sourceIdentity: staticKibo.sourceIdentity,
+    status: staticKibo.status,
+    applied: staticKibo.ready === true,
   };
 }
 
@@ -821,7 +877,7 @@ function applyAutoSpDescriptor({
 
 function applyHitDescriptor({ descriptor, scenario, state }) {
   const { action, resolution, hit } = descriptor;
-  const source = resolveHitSource({ action, resolution, state });
+  const source = resolveHitSource({ action, resolution, hit, state });
   const ratioBasisPoints = resolveHitRatio(hit, action);
   const enemy = state.enemy;
   const enemyProfile = enemy.profile;
@@ -876,8 +932,8 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
     ),
     physicalRatio: basisPoints(hit.damage.physicalRatioBasisPoints),
     magicRatio: basisPoints(hit.damage.magicRatioBasisPoints),
-    attackerPhysicalUp: 0,
-    attackerMagicUp: 0,
+    attackerPhysicalUp: source.physicalDamageUp,
+    attackerMagicUp: source.magicDamageUp,
     targetPhysicalDown: 0,
     targetMagicDown: 0,
     attackerDamageUp: source.damageUp,
@@ -1197,7 +1253,7 @@ function applyHitRecovery({
   }
 }
 
-function resolveHitSource({ action, resolution, state }) {
+function resolveHitSource({ action, resolution, hit, state }) {
   if (resolution.actionBinding.ownerKind === 'kibo') {
     const kiboState = findKiboStateByAction(state, action);
     const profile = kiboState?.profile;
@@ -1212,7 +1268,13 @@ function resolveHitSource({ action, resolution, state }) {
       criticalRate: basisPoints(profile?.criticalRateBasisPoints),
       criticalDamage: basisPoints(profile?.criticalDamageBasisPoints, 1),
       damageUp: basisPoints(profile?.damageUpBasisPoints),
-      elementDamageUp: 0,
+      physicalDamageUp: basisPoints(profile?.physicalDamageUpBasisPoints),
+      magicDamageUp: basisPoints(profile?.magicDamageUpBasisPoints),
+      elementDamageUp: basisPoints(
+        profile?.elementDamageUpBasisPointsByType?.[
+          Number(hit?.damage?.elementalType)
+        ]
+      ),
       sourceIdentity: profile?.sourceIdentity ?? null,
     };
   }
@@ -1228,9 +1290,13 @@ function resolveHitSource({ action, resolution, state }) {
     criticalRate: numberOrNull(actor?.stats?.critRate) ?? 0,
     criticalDamage: numberOrNull(actor?.stats?.critDamage) ?? 1,
     damageUp: numberOrNull(actor?.stats?.damageAmplification) ?? 0,
+    physicalDamageUp: basisPoints(
+      getAttribute(actor, 'PHYSICAL_SHOOTDMGUP')
+    ),
+    magicDamageUp: basisPoints(getAttribute(actor, 'MAGIC_SHOOTDMGDUP')),
     elementDamageUp: resolveActorElementDamageUp(
       actor,
-      resolution.hits?.[0]?.damage?.elementalType
+      hit?.damage?.elementalType
     ),
     sourceIdentity: actor?.stats?.source ?? 'compiled-actor-stats',
   };

@@ -22,6 +22,14 @@ export default defineConfig({
         onlyExplicitManualChunks: true,
         manualChunks(id) {
           if (
+            [
+              '/simulation/mechanics/verifiedCombatStaticProperties.js',
+              '/simulation/mechanics/threeValueMechanismConfiguration.js',
+            ].some(modulePath => id.endsWith(modulePath))
+          ) {
+            return 'verified-combat-configuration';
+          }
+          if (
             id.endsWith(
               '/simulation/projection/projectTimelineStateDisplaySeries.js'
             )

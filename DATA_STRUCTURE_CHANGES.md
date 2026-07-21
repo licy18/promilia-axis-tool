@@ -27626,3 +27626,9 @@ inputTrigger
 `actionRelations[]` 新增可选 `kind = simultaneous`，其唯一合法锚点合同为 `sourceAnchor = start / targetAnchor = start / gapMs = 0`。该关系只表达两个独立 action instance 必须同帧开始，不改变动作各自的持续时间、命中、CD、状态或三值来源；既有 `sequence` 仍保持 `end -> start` 语义。编译期效果关系图只消费 `sequence`，同步关系由 Workbench 放置与编辑事务消费，因此不会被误当成 Buff/效果传播边。
 
 角色星结合击与已装备奇波合击通过统一生成入口组成一条 `simultaneous` 关系。两块仍各自保存 owner、skill/control identity、轨道和运行时输入，但插入、时间移动、复制、删除及撤销/重做按完整关系组提交；跨角色槽重新绑定被阻止。项目 schemaVersion 不升级，方案复制、本地草稿、JSON、分享链接和 PNG 均沿现有 `actionRelations[]` 保存并恢复该关系；旧项目没有该字段时继续按原规则读取。
+
+## 444. Verified static property catalog and loadout inputs v1
+
+`verified-combat-mechanics-package.json` 升级为 package v7，新增 `mechanismEvidence` 和 `staticPropertyCatalog`。前者记录统一知识索引、6 份机器事实快照及其版本、来源 identity、SHA256、字节数和结构验证；后者保存角色等级/星赐/好感度、灵子、饰品装备、属性定义，以及奇波物种/成长/爱好/悟性/亲密度/继承的静态来源。`identityAudit` 独立记录 Workbench 与 verified 集合的并集分类，未暴露或非当前公开身份不会被删除或补造 profile。
+
+Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel`；loadout 新增 `soulessenceLevel / soulessenceRank / equipmentLevels` 及 `kiboConfig.level / hobbyId / intimacyLevel / comprehensionByAttribute`。旧项目缺少字段时由现有规范化入口补默认配置，项目 schemaVersion 不升级；方案复制、本地草稿、JSON、分享链接和 PNG 保存这些输入。`AzPrVerifiedStaticProperties` 编译结果、逐来源明细和角色到奇波继承均为运行时派生值，不写入项目载体。灵子 effect 与饰品套装技能继续标为动态 `unapplied`，不会混入战前静态 EB/EP/EE。

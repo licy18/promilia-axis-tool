@@ -187,6 +187,9 @@ export function createActorFromCharacter(character, options = {}) {
         ? null
         : Number(options.initialSp),
     skillLevels: options.skillLevels ?? {},
+    cultivation: {
+      ...(options.cultivation ?? {}),
+    },
     loadout: createLoadout({
       actorId,
       characterId: character.id,
@@ -223,6 +226,10 @@ export function createLoadout({
   kiboId = null,
   equipment = {},
   soulessenceId = null,
+  soulessenceLevel = null,
+  soulessenceRank = null,
+  equipmentLevels = {},
+  kiboConfig = {},
 } = {}) {
   return {
     actorId,
@@ -236,6 +243,21 @@ export function createLoadout({
       ring: equipment.ring ?? null,
     },
     soulessenceId,
+    soulessenceLevel,
+    soulessenceRank,
+    equipmentLevels: {
+      weapon: equipmentLevels.weapon ?? null,
+      top: equipmentLevels.top ?? null,
+      bottom: equipmentLevels.bottom ?? null,
+      earring: equipmentLevels.earring ?? null,
+      ring: equipmentLevels.ring ?? null,
+    },
+    kiboConfig: {
+      ...kiboConfig,
+      comprehensionByAttribute: {
+        ...(kiboConfig.comprehensionByAttribute ?? {}),
+      },
+    },
   };
 }
 

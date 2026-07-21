@@ -73,6 +73,28 @@ const EVIDENCE_PATH = path.join(
   OUTPUT_ROOT,
   'combat-formulas-evidence-20260718.json'
 );
+const MECHANISM_KNOWLEDGE_PATH = path.join(
+  AZPR_ROOT,
+  'BWiki',
+  'data',
+  'combat-formula-knowledge.json'
+);
+const PROPERTY_SOURCES_PATH = path.join(
+  OUTPUT_ROOT,
+  'combat-property-sources-20260719.json'
+);
+const SP_RECOVERY_SHARING_PATH = path.join(
+  OUTPUT_ROOT,
+  'combat-sp-recovery-sharing-20260719.json'
+);
+const OVERLIMIT_MECHANICS_PATH = path.join(
+  OUTPUT_ROOT,
+  'combat-overlimit-mechanics-20260718.json'
+);
+const COEFFICIENT_RANGES_PATH = path.join(
+  OUTPUT_ROOT,
+  'combat-coefficient-ranges-20260718.json'
+);
 const ENEMY_BREAK_PROFILES_PATH = path.join(
   OUTPUT_ROOT,
   'combat-enemy-break-profiles-20260718.json'
@@ -88,6 +110,35 @@ const TEMPLATE_HERO_PATH = path.join(NEW_TABLE_ROOT, 'template_hero.json');
 const GAME_PATH = path.join(NEW_TABLE_ROOT, 'game.json');
 const SKILL_LOGIC_PATH = path.join(NEW_TABLE_ROOT, 'skillsub_logic.json');
 const PET_PATH = path.join(NEW_TABLE_ROOT, 'pet.json');
+const STATIC_PROPERTY_TABLE_NAMES = Object.freeze([
+  'accessory',
+  'accessory_main',
+  'accessory_set',
+  'accessory_sub_parameter',
+  'battle_info',
+  'hero',
+  'hero_favorability_info',
+  'pet',
+  'pet_attributeinheritance',
+  'pet_favorability',
+  'pet_hobby',
+  'pet_learningtalent',
+  'skill',
+  'soulessence',
+  'soulessence_rank',
+  'soulessence_value',
+  'talent_rank',
+  'talent_rune',
+  'unit_property',
+]);
+const STATIC_PROPERTY_TABLE_PATHS = Object.freeze(
+  Object.fromEntries(
+    STATIC_PROPERTY_TABLE_NAMES.map(name => [
+      name,
+      path.join(NEW_TABLE_ROOT, `${name}.json`),
+    ])
+  )
+);
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
 const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
   'charged-attack': ['ground', 2],
@@ -108,6 +159,7 @@ async function main() {
   const validation = runCalculatorValidation();
   const evidence = readJson(EVIDENCE_PATH);
   validateEvidence(evidence, validation);
+  const mechanismEvidence = createMechanismEvidenceManifest();
   const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
   const kiboCatalog = readJson(
     path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json')
@@ -187,15 +239,32 @@ async function main() {
     templateRows,
     spUnitContract,
   });
+  const staticPropertyTables = Object.fromEntries(
+    Object.entries(STATIC_PROPERTY_TABLE_PATHS).map(([name, filePath]) => [
+      name,
+      readJson(filePath).rows ?? [],
+    ])
+  );
+  const staticPropertyCatalog = createStaticPropertyCatalog({
+    tables: staticPropertyTables,
+    templateRows,
+    templateHeroRows: readJson(TEMPLATE_HERO_PATH).rows,
+    publicCharacters: seed?.gameData?.characters ?? [],
+    publicKibos: seed?.gameData?.kibos ?? [],
+    propertySourceSnapshot: readJson(PROPERTY_SOURCES_PATH),
+    spUnitContract,
+  });
   const packageValue = createPackage({
     evidence,
     validation,
+    mechanismEvidence,
     candidates,
     controlBindings,
     kiboProfiles,
     actorProfiles,
     enemyProfiles,
     spUnitContract,
+    staticPropertyCatalog,
   });
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
@@ -205,6 +274,7 @@ async function main() {
     indexedElements,
     evidence,
     validation,
+    staticPropertyCatalog,
   });
   const coverage = createActionCoverageReport({
     packageValue,
@@ -279,6 +349,11 @@ function assertRequiredInputs() {
     VALIDATOR_PATH,
     ELEMENT_INDEX_PATH,
     EVIDENCE_PATH,
+    MECHANISM_KNOWLEDGE_PATH,
+    PROPERTY_SOURCES_PATH,
+    SP_RECOVERY_SHARING_PATH,
+    OVERLIMIT_MECHANICS_PATH,
+    COEFFICIENT_RANGES_PATH,
     ENEMY_BREAK_PROFILES_PATH,
     ...LEVEL_SAMPLE_PATHS,
     path.join(NEW_TABLE_ROOT, 'element_formula.json'),
@@ -289,6 +364,7 @@ function assertRequiredInputs() {
     SKILL_LOGIC_PATH,
     PET_PATH,
     CHARACTER_CATALOG_PATH,
+    ...Object.values(STATIC_PROPERTY_TABLE_PATHS),
   ]) {
     if (!fs.existsSync(filePath)) {
       throw new Error(`required verified combat input missing: ${filePath}`);
@@ -1204,19 +1280,527 @@ function collectIndirectResourceReferences(resourceMap) {
   );
 }
 
+function createMechanismEvidenceManifest() {
+  const definitions = [
+    {
+      id: 'combat-formula-knowledge',
+      filePath: MECHANISM_KNOWLEDGE_PATH,
+      validate: value =>
+        value?.status === 'reverse-engineered-verified' &&
+        Array.isArray(value?.entries) &&
+        value.entries.length > 0,
+    },
+    {
+      id: 'combat-property-sources',
+      filePath: PROPERTY_SOURCES_PATH,
+      validate: value =>
+        value?.formulas?.staticPanelRaw ===
+          'S = EB * (1 + EP_raw/10000) + EE' &&
+        value?.character?.baseGrowth?.characterCount === 17 &&
+        value?.kibo?.baseGrowth?.battlePetCount === 147,
+    },
+    {
+      id: 'combat-sp-recovery-sharing',
+      filePath: SP_RECOVERY_SHARING_PATH,
+      validate: value =>
+        value?.runtime &&
+        value?.currentConfiguration &&
+        Array.isArray(value?.evidence),
+    },
+    {
+      id: 'combat-overlimit-mechanics',
+      filePath: OVERLIMIT_MECHANICS_PATH,
+      validate: value =>
+        Array.isArray(value?.markContainers) &&
+        Array.isArray(value?.tuningProfiles),
+    },
+    {
+      id: 'combat-formulas-evidence',
+      filePath: EVIDENCE_PATH,
+      validate: value =>
+        value?.calculator?.passed === 18 && value?.calculator?.failed === 0,
+    },
+    {
+      id: 'combat-coefficient-ranges',
+      filePath: COEFFICIENT_RANGES_PATH,
+      validate: value =>
+        Array.isArray(value?.propertyGuards) && value.propertyGuards.length > 0,
+    },
+    {
+      id: 'combat-enemy-break-profiles',
+      filePath: ENEMY_BREAK_PROFILES_PATH,
+      validate: value =>
+        Array.isArray(value?.profiles) && value.profiles.length > 0,
+    },
+  ];
+  const sources = definitions.map(definition => {
+    const value = readJson(definition.filePath);
+    if (!definition.validate(value)) {
+      throw new Error(
+        `verified mechanism source structure invalid: ${definition.id}`
+      );
+    }
+    return {
+      id: definition.id,
+      version: String(value.version ?? value.schemaVersion ?? 'unversioned'),
+      sourceStatus: value.status ?? null,
+      validationStatus: 'verified-source-structure-ready',
+      sourceIdentity: relativeExternalPath(definition.filePath),
+      sha256: sha256File(definition.filePath),
+      bytes: fs.statSync(definition.filePath).size,
+    };
+  });
+  return {
+    schemaVersion: 1,
+    contractName: 'AzPrVerifiedMechanismEvidenceManifest',
+    status: 'verified-mechanism-evidence-manifest-ready',
+    sources,
+  };
+}
+
+function createStaticPropertyCatalog({
+  tables,
+  templateRows,
+  templateHeroRows,
+  publicCharacters,
+  publicKibos,
+  propertySourceSnapshot,
+  spUnitContract,
+}) {
+  const templateById = new Map(
+    (templateRows ?? []).map(row => [Number(row.id), row])
+  );
+  const unitPropertyById = new Map(
+    (tables.unit_property ?? []).map(row => [Number(row.id), row])
+  );
+  const talentRuneById = new Map(
+    (tables.talent_rune ?? []).map(row => [Number(row.id), row])
+  );
+  const skillById = new Map(
+    (tables.skill ?? []).map(row => [Number(row.id), row])
+  );
+  const verifiedHeroes = (tables.hero ?? []).filter(
+    row => Number(row.isCollect) === 1 && Number(row.isUsable) === 1
+  );
+  const verifiedKibos = (tables.pet ?? []).filter(
+    row => row.isBattle === true && templateById.has(Number(row.id))
+  );
+  const actorProfiles = verifiedHeroes.map(hero => {
+    const property = unitPropertyById.get(Number(hero.propertyId));
+    const baseTemplateId = Number(property?.baseAttributeId);
+    const baseTemplate = templateById.get(baseTemplateId);
+    return {
+      characterId: Number(hero.id),
+      propertyId: Number(hero.propertyId),
+      baseTemplateId,
+      templateAttributes: parseAttributeEntries(baseTemplate?.baseAttribute),
+      sourceIdentity: `NewTable/hero.rows[id=${hero.id}].propertyId=${hero.propertyId}|NewTable/unit_property.rows[id=${hero.propertyId}].baseAttributeId=${baseTemplateId}|NewTable/template_value.rows[id=${baseTemplateId}].baseAttribute`,
+      status: baseTemplate
+        ? 'verified-static-actor-profile-ready'
+        : 'verified-static-actor-profile-unresolved',
+      applied: Boolean(baseTemplate),
+    };
+  });
+  const actorLevelGrowth = (templateHeroRows ?? [])
+    .filter(row => Number(row.type) === 1 && Number.isInteger(Number(row.level)))
+    .map(row => ({
+      level: Number(row.level),
+      templateId: Number(row.baseAttribute),
+      attributes: parseAttributeEntries(
+        templateById.get(Number(row.baseAttribute))?.baseAttribute
+      ),
+      sourceIdentity: `NewTable/template_hero.rows[type=1,level=${row.level}].baseAttribute=${row.baseAttribute}|NewTable/template_value.rows[id=${row.baseAttribute}].baseAttribute`,
+    }))
+    .sort((left, right) => left.level - right.level);
+  const starGiftProfiles = verifiedHeroes.map(hero => ({
+    characterId: Number(hero.id),
+    ranks: (tables.talent_rank ?? [])
+      .filter(row => Number(row.heroId) === Number(hero.id))
+      .sort((left, right) => Number(left.rank) - Number(right.rank))
+      .map(row => {
+        const runeIds = parseIntegerList(row.rankBreakthroughItem);
+        return {
+          rank: Number(row.rank),
+          attributes: parseAttributeEntries(row.attribute),
+          runeIds,
+          runeAttributes: sumAttributeEntryLists(
+            runeIds.map(runeId =>
+              parseAttributeEntries(talentRuneById.get(runeId)?.runeAttribute)
+            )
+          ),
+          sourceIdentity: `NewTable/talent_rank.rows[id=${row.id},heroId=${hero.id},rank=${row.rank}].attribute+rankBreakthroughItem|NewTable/talent_rune.rows[id in ${runeIds.join(',')}].runeAttribute`,
+        };
+      }),
+  }));
+  const favorabilityProfiles = verifiedHeroes.map(hero => ({
+    characterId: Number(hero.id),
+    levels: (tables.hero_favorability_info ?? [])
+      .filter(row => Number(row.heroId) === Number(hero.id))
+      .map(row => ({
+        level: Number(row.favorabilityLevel),
+        attributes: parseAttributeEntries(row.levelUpAttribute),
+        sourceIdentity: `NewTable/hero_favorability_info.rows[id=${row.id}].levelUpAttribute`,
+      }))
+      .sort((left, right) => left.level - right.level),
+  }));
+  const soulessenceProfiles = (tables.soulessence ?? []).map(item => {
+    const valuePrefix = Number(item.attribute) * 1000;
+    const levels = (tables.soulessence_value ?? [])
+      .filter(row => {
+        const id = Number(row.id);
+        return id > valuePrefix && id < valuePrefix + 1000;
+      })
+      .map(row => ({
+        level: Number(row.id) - valuePrefix,
+        attributes: parseAttributeEntries(row.baseAttribute),
+        sourceIdentity: `NewTable/soulessence_value.rows[id=${row.id}].baseAttribute`,
+      }))
+      .sort((left, right) => left.level - right.level);
+    const ranks = (tables.soulessence_rank ?? [])
+      .filter(row => Number(row.relatedId) === Number(item.id))
+      .map(row => ({
+        rank: Number(row.rank),
+        levelLimit: Number(row.rankLevelLimit),
+        attributes: parseAttributeEntries(row.rankUpAttributeAll),
+        sourceIdentity: `NewTable/soulessence_rank.rows[id=${row.id},relatedId=${item.id},rank=${row.rank}].rankUpAttributeAll`,
+      }))
+      .sort((left, right) => left.rank - right.rank);
+    const skill = skillById.get(Number(item.reishiSkill));
+    return {
+      soulessenceId: Number(item.id),
+      attributeTemplateId: Number(item.attribute),
+      levels,
+      ranks,
+      maximumLevel: levels.at(-1)?.level ?? null,
+      maximumRank: ranks.at(-1)?.rank ?? null,
+      effectSkill: {
+        skillId: Number(item.reishiSkill) || null,
+        skillType: Number(skill?.skillType) || null,
+        status:
+          Number(skill?.skillType) === 2
+            ? 'numeric-static-skill-requires-attribute-binding'
+            : 'effect-skill-dynamic-unapplied',
+        appliedToStaticPanel: false,
+        sourceIdentity: `NewTable/soulessence.rows[id=${item.id}].reishiSkill|NewTable/skill.rows[id=${item.reishiSkill}].skillType`,
+      },
+      sourceIdentity: `NewTable/soulessence.rows[id=${item.id}]`,
+      status: levels.length
+        ? 'verified-static-soulessence-profile-ready'
+        : 'verified-static-soulessence-profile-unresolved',
+      applied: levels.length > 0,
+    };
+  });
+  const mainRowsByGroup = groupBy(
+    tables.accessory_main ?? [],
+    row => String(row.groupId)
+  );
+  const subRowsByGroup = groupBy(
+    tables.accessory_sub_parameter ?? [],
+    row => String(row.groupId)
+  );
+  const equipmentProfiles = (tables.accessory ?? []).map(item => {
+    const mainGroupId = parseAttributeEntries(item.mainAttr)[0]?.id ?? null;
+    const mainRows = mainRowsByGroup.get(String(mainGroupId)) ?? [];
+    const mainLevels = [...groupBy(mainRows, row => String(row.level)).entries()]
+      .map(([level, rows]) => ({
+        level: Number(level),
+        attributes: rows
+          .map(row => ({
+            id: Number(row.battleInfo),
+            value: Number(row.value),
+          }))
+          .filter(entry => Number.isFinite(entry.id) && Number.isFinite(entry.value)),
+        sourceIdentity: `NewTable/accessory_main.rows[groupId=${mainGroupId},level=${level}]`,
+      }))
+      .sort((left, right) => left.level - right.level);
+    const subAttributes = (subRowsByGroup.get(String(item.subParameter)) ?? [])
+      .map(row => ({
+        id: Number(row.parameter),
+        minimum: Number(row.minValue),
+        maximum: Number(row.maxValue),
+        value:
+          Number(row.minValue) === Number(row.maxValue)
+            ? Number(row.minValue)
+            : null,
+        status:
+          Number(row.minValue) === Number(row.maxValue)
+            ? 'verified-fixed-sub-attribute'
+            : 'unresolved-random-sub-attribute',
+        sourceIdentity: `NewTable/accessory_sub_parameter.rows[id=${row.id},groupId=${item.subParameter}]`,
+      }))
+      .filter(entry => Number.isFinite(entry.id));
+    return {
+      equipmentId: Number(item.id),
+      slotType: Number(item.type),
+      setId: Number(item.setId) || null,
+      mainGroupId,
+      maximumLevel: mainLevels.at(-1)?.level ?? null,
+      mainLevels,
+      subAttributes,
+      sourceIdentity: `NewTable/accessory.rows[id=${item.id}]`,
+      status: mainLevels.length
+        ? 'verified-static-equipment-profile-ready'
+        : 'verified-static-equipment-profile-unresolved',
+      applied: mainLevels.length > 0,
+    };
+  });
+  const accessorySets = (tables.accessory_set ?? []).flatMap(row =>
+    parseAttributeEntries(row.skill).map(entry => {
+      const skill = skillById.get(Number(entry.value));
+      return {
+        setId: Number(row.id),
+        pieces: Number(entry.id),
+        skillId: Number(entry.value),
+        skillType: Number(skill?.skillType) || null,
+        status:
+          Number(skill?.skillType) === 2
+            ? 'numeric-static-set-skill-requires-attribute-binding'
+            : 'effect-set-skill-dynamic-unapplied',
+        appliedToStaticPanel: false,
+        sourceIdentity: `NewTable/accessory_set.rows[id=${row.id}].skill|NewTable/skill.rows[id=${entry.value}].skillType`,
+      };
+    })
+  );
+  const kiboProfiles = verifiedKibos.map(kibo => ({
+    kiboId: Number(kibo.id),
+    speciesAttributes: parseAttributeEntries(
+      templateById.get(Number(kibo.id))?.baseAttribute
+    ),
+    sourceIdentity: `NewTable/pet.rows[id=${kibo.id},isBattle=true]|NewTable/template_value.rows[id=${kibo.id}].baseAttribute`,
+    status: 'verified-static-kibo-profile-ready',
+    applied: true,
+  }));
+  const kiboLevelGrowth = Array.from({ length: 100 }, (_, index) => index + 1)
+    .map(level => {
+      const templateId = Number(spUnitContract.kibo.petGrowthBaseId) + level;
+      const template = templateById.get(templateId);
+      return template
+        ? {
+            level,
+            templateId,
+            attributes: parseAttributeEntries(template.baseAttribute),
+            sourceIdentity: `NewTable/template_value.rows[id=${templateId}].baseAttribute`,
+          }
+        : null;
+    })
+    .filter(Boolean);
+  const hobbies = (tables.pet_hobby ?? []).map(row => ({
+    hobbyId: Number(row.id),
+    attributes: parseAttributeEntries(row.baseAttribute),
+    sourceIdentity: `NewTable/pet_hobby.rows[id=${row.id}].baseAttribute`,
+  }));
+  const comprehensionGrades = (tables.pet_learningtalent ?? []).map(row => {
+    const [minimum, maximum] = parseIntegerList(row.range);
+    return {
+      attributeEnumId: Number(row.enumId),
+      grade: String(row.level),
+      minimum,
+      maximum,
+      sourceIdentity: `NewTable/pet_learningtalent.rows[id=${row.id}].range`,
+    };
+  });
+  const intimacyLevels = (tables.pet_favorability ?? []).map(row => ({
+    level: Number(row.level),
+    inheritanceBasisPoints: Number(row.levelEffect),
+    sourceIdentity: `NewTable/pet_favorability.rows[id=${row.id}].levelEffect`,
+  }));
+  const inheritance = (tables.pet_attributeinheritance ?? []).map(row => ({
+    sourceAttributeId: Number(row.attrVal),
+    adjustment: Number(row.adjustment),
+    targetAttributeId: Number(row.petAttrVal),
+    sourceIdentity: `NewTable/pet_attributeinheritance.rows[id=${row.id}]`,
+  }));
+  const attributeDefinitions = (tables.battle_info ?? [])
+    .map(row => {
+      const [rawGroupId, rawGroupType] = String(row.attrGroup ?? '').split('|');
+      const id = Number(row.attrVal);
+      return {
+        id,
+        key: id === 227 ? 'SPRET_AUTO' : row.attrID,
+        tableKey: row.attrID,
+        isRatio: Number(row.isRatio) === 1,
+        rawScale: Number(row.isCalRatio) === 1 ? 10000 : 1,
+        groupId: integerOrNull(rawGroupId),
+        groupType: integerOrNull(rawGroupType),
+        minimum: row.useMininumValue ? Number(row.minimumValue) : null,
+        maximum: row.useMaximumValue ? Number(row.maximumValue) : null,
+      };
+    })
+    .filter(row => Number.isInteger(row.id));
+  const identityAudit = createStaticPropertyIdentityAudit({
+    publicCharacters,
+    publicKibos,
+    verifiedHeroes,
+    verifiedKibos,
+    actorProfiles,
+    kiboProfiles,
+  });
+  if (
+    identityAudit.verifiedActorCount !==
+      Number(propertySourceSnapshot?.character?.baseGrowth?.characterCount) ||
+    identityAudit.verifiedKiboCount !==
+      Number(propertySourceSnapshot?.kibo?.baseGrowth?.battlePetCount)
+  ) {
+    throw new Error(
+      `static property identity counts drift from verified snapshot: actors=${identityAudit.verifiedActorCount}/${propertySourceSnapshot?.character?.baseGrowth?.characterCount}, kibos=${identityAudit.verifiedKiboCount}/${propertySourceSnapshot?.kibo?.baseGrowth?.battlePetCount}`
+    );
+  }
+  return {
+    schemaVersion: 1,
+    contractName: 'AzPrVerifiedStaticPropertyCatalog',
+    status: 'verified-static-property-catalog-ready',
+    formula: {
+      staticPanel: 'S=EB*(1+EP_raw/10000)+EE',
+      settlementOrder: [
+        'external-base-sum',
+        'external-percent-sum',
+        'external-base-percent-product',
+        'external-extra-sum',
+      ],
+      actorCoreLevel:
+        'integrate(hero-level-growth * actor-template-factor / 10000)',
+      kiboCoreLevel:
+        'integrate(kibo-level-growth * species-factor / 10000)',
+      kiboPanel:
+        'round(integrate(kibo-level-base*hobby*comprehension)+hero-inheritance)',
+      integrate: 'floor(round(value*10000)/10000)',
+    },
+    policy: {
+      unknownSourcesApplied: false,
+      ambiguousSubAttributesApplied: false,
+      effectSoulessenceSkillsAppliedToStaticPanel: false,
+      effectAccessorySetSkillsAppliedToStaticPanel: false,
+      compiledOutputsPersisted: false,
+    },
+    attributeDefinitions,
+    attributeGroups: propertySourceSnapshot.attributeGroups,
+    actor: {
+      profiles: actorProfiles,
+      levelGrowth: actorLevelGrowth,
+      starGifts: starGiftProfiles,
+      favorability: favorabilityProfiles,
+    },
+    soulessences: soulessenceProfiles,
+    equipment: equipmentProfiles,
+    accessorySets,
+    kibo: {
+      profiles: kiboProfiles,
+      levelGrowth: kiboLevelGrowth,
+      hobbies,
+      comprehensionGrades,
+      intimacyLevels,
+      inheritance,
+    },
+    identityAudit,
+    sourceIdentity: relativeExternalPath(PROPERTY_SOURCES_PATH),
+  };
+}
+
+function createStaticPropertyIdentityAudit({
+  publicCharacters,
+  publicKibos,
+  verifiedHeroes,
+  verifiedKibos,
+  actorProfiles,
+  kiboProfiles,
+}) {
+  const workbenchActors = new Map(
+    (publicCharacters ?? []).map(item => [Number(item.id), item])
+  );
+  const workbenchKibos = new Map(
+    (publicKibos ?? []).map(item => [Number(item.kiboId ?? item.id), item])
+  );
+  const verifiedActorIds = new Set(verifiedHeroes.map(item => Number(item.id)));
+  const verifiedKiboIds = new Set(verifiedKibos.map(item => Number(item.id)));
+  const actorProfileById = new Map(
+    actorProfiles.map(item => [Number(item.characterId), item])
+  );
+  const kiboProfileById = new Map(
+    kiboProfiles.map(item => [Number(item.kiboId), item])
+  );
+  const actors = [...new Set([...workbenchActors.keys(), ...verifiedActorIds])]
+    .sort((left, right) => left - right)
+    .map(id => ({
+      id,
+      name: workbenchActors.get(id)?.name ?? null,
+      inWorkbenchCatalog: workbenchActors.has(id),
+      inVerifiedCollectibleSet: verifiedActorIds.has(id),
+      classification:
+        workbenchActors.has(id) && verifiedActorIds.has(id)
+          ? actorProfileById.get(id)?.applied
+            ? 'applicable'
+            : 'unresolved'
+          : workbenchActors.has(id)
+            ? 'non-current-public-directory'
+            : 'not-exposed-in-current-workbench-catalog',
+    }));
+  const kibos = [...new Set([...workbenchKibos.keys(), ...verifiedKiboIds])]
+    .sort((left, right) => left - right)
+    .map(id => ({
+      id,
+      name: workbenchKibos.get(id)?.name ?? null,
+      inWorkbenchCatalog: workbenchKibos.has(id),
+      inVerifiedBattleSet: verifiedKiboIds.has(id),
+      classification:
+        workbenchKibos.has(id) && verifiedKiboIds.has(id)
+          ? kiboProfileById.get(id)?.applied
+            ? 'applicable'
+            : 'unresolved'
+          : workbenchKibos.has(id)
+            ? 'non-current-public-directory'
+            : 'not-exposed-in-current-workbench-catalog',
+    }));
+  return {
+    status: 'verified-static-property-identity-audit-ready',
+    workbenchActorCount: workbenchActors.size,
+    verifiedActorCount: verifiedActorIds.size,
+    workbenchKiboCount: workbenchKibos.size,
+    verifiedKiboCount: verifiedKiboIds.size,
+    actorClassifications: countValues(actors.map(item => item.classification)),
+    kiboClassifications: countValues(kibos.map(item => item.classification)),
+    actors,
+    kibos,
+  };
+}
+
+function parseAttributeEntries(value) {
+  return [...parseBaseAttributes(value).entries()]
+    .map(([id, amount]) => ({ id: Number(id), value: Number(amount) }))
+    .filter(entry => Number.isFinite(entry.id) && Number.isFinite(entry.value))
+    .sort((left, right) => left.id - right.id);
+}
+
+function sumAttributeEntryLists(lists) {
+  const values = new Map();
+  for (const entries of lists ?? []) {
+    for (const entry of entries ?? []) {
+      values.set(entry.id, (values.get(entry.id) ?? 0) + entry.value);
+    }
+  }
+  return [...values.entries()]
+    .map(([id, value]) => ({ id, value }))
+    .sort((left, right) => left.id - right.id);
+}
+
+function parseIntegerList(value) {
+  return String(value ?? '')
+    .split(/[|,]/)
+    .map(item => Number(String(item).split('#')[0]))
+    .filter(Number.isInteger);
+}
+
 function createPackage({
   evidence,
   validation,
+  mechanismEvidence,
   candidates,
   controlBindings,
   kiboProfiles,
   actorProfiles,
   enemyProfiles,
   spUnitContract,
+  staticPropertyCatalog,
 }) {
-  const controlBySkillId = new Map(
-    controlBindings.map(binding => [binding.controlSkillId, binding])
-  );
   const preparedControlBindings = controlBindings.map(binding => {
     const hits = createControlRuntimeHits(binding);
     return {
@@ -1333,6 +1917,11 @@ function createPackage({
     ['calculator', CALCULATOR_PATH],
     ['validator', VALIDATOR_PATH],
     ['evidence', EVIDENCE_PATH],
+    ['mechanism-knowledge', MECHANISM_KNOWLEDGE_PATH],
+    ['property-sources', PROPERTY_SOURCES_PATH],
+    ['sp-recovery-sharing', SP_RECOVERY_SHARING_PATH],
+    ['overlimit-mechanics', OVERLIMIT_MECHANICS_PATH],
+    ['coefficient-ranges', COEFFICIENT_RANGES_PATH],
     ['enemy-break-profiles', ENEMY_BREAK_PROFILES_PATH],
     ['level-1-samples', LEVEL_SAMPLE_PATHS[0]],
     ['level-12-samples', LEVEL_SAMPLE_PATHS[1]],
@@ -1353,6 +1942,10 @@ function createPackage({
       path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json'),
     ],
     ['public-workbench-seed', path.join(GENERATED_ROOT, 'workbench-seed.json')],
+    ...Object.entries(STATIC_PROPERTY_TABLE_PATHS).map(([name, filePath]) => [
+      `static-property-table-${name}`,
+      filePath,
+    ]),
   ].map(([id, filePath]) => ({
     id,
     sourceIdentity: relativeExternalPath(filePath),
@@ -1371,13 +1964,15 @@ function createPackage({
       kiboProfiles,
       enemyProfiles,
       spUnitContract,
+      mechanismEvidence,
+      staticPropertyCatalog,
     })
   );
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 6,
+    packageVersion: 7,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -1392,6 +1987,7 @@ function createPackage({
       evidenceFailed: evidence.calculator.failed,
     },
     sourceFiles,
+    mechanismEvidence,
     verifiedFindingIds: (evidence.findings ?? []).map(finding => finding.id),
     knownGaps: evidence.knownGaps ?? [],
     policy: {
@@ -1403,6 +1999,7 @@ function createPackage({
       spValueUnit: 'absolute-sp-points',
     },
     spUnitContract,
+    staticPropertyCatalog,
     actionMappings,
     actionBindings,
     controlBindings: packagedControlBindings,
@@ -1433,6 +2030,14 @@ function createPackage({
       kiboProfileCount: kiboProfiles.length,
       actorProfileCount: actorProfiles.length,
       enemyProfileCount: enemyProfiles.length,
+      collectibleActorProfileCount:
+        staticPropertyCatalog.identityAudit.verifiedActorCount,
+      battleKiboProfileCount:
+        staticPropertyCatalog.identityAudit.verifiedKiboCount,
+      workbenchActorIdentityCount:
+        staticPropertyCatalog.identityAudit.workbenchActorCount,
+      workbenchKiboIdentityCount:
+        staticPropertyCatalog.identityAudit.workbenchKiboCount,
       appliedEnemyProfileCount: enemyProfiles.filter(profile => profile.applied)
         .length,
       actorActionBindingCount: actionBindings.filter(
@@ -2210,8 +2815,13 @@ function createSpUnitRuntimeSource(contract) {
   return `// Generated by scripts/sync-verified-combat-mechanics.mjs.\n${Object.entries(
     values
   )
-    .map(([name, value]) => `export const ${name}=${JSON.stringify(value)};`)
+    .map(([name, value]) => `export const ${name}=${runtimeLiteral(value)};`)
     .join('\n')}\n`;
+}
+
+function runtimeLiteral(value) {
+  if (typeof value !== 'string') return JSON.stringify(value);
+  return `'${value.replaceAll('\\', '\\\\').replaceAll('\'', '\\\'')}'`;
 }
 
 function createEnemyProfiles({ profiles, templateRows }) {
@@ -2302,6 +2912,7 @@ function createAudit({
   indexedElements,
   evidence,
   validation,
+  staticPropertyCatalog,
 }) {
   const controlBySkillId = new Map(
     packageValue.controlBindings.map(binding => [
@@ -2330,6 +2941,8 @@ function createAudit({
     packageHash: packageValue.packageHash,
     evidenceStatus: evidence.status,
     validation,
+    mechanismEvidence: packageValue.mechanismEvidence,
+    staticPropertyIdentityAudit: staticPropertyCatalog.identityAudit,
     sourceCoverage: {
       candidateActionCount: candidates.length,
       classifiedActionCount: packageValue.actionMappings.length,
@@ -2806,8 +3419,8 @@ function createBrowserRuntimeSource(source) {
       'qRatio(input.spRetAuto ?? input.spGetUpAuto),'
     )
     .replace(
-      "raw = applyFactor(raw, bonus, 'auto_sp_bonus', trace);",
-      "raw = applyFactor(raw, bonus, 'auto_sp_bonus', trace, { attributeKeys: ['SPGETUP', 'SPRET_AUTO'], legacyAlias: input.spRetAuto == null && input.spGetUpAuto != null ? 'SPGETUP_AUTO' : null });"
+      'raw = applyFactor(raw, bonus, \'auto_sp_bonus\', trace);',
+      'raw = applyFactor(raw, bonus, \'auto_sp_bonus\', trace, { attributeKeys: [\'SPGETUP\', \'SPRET_AUTO\'], legacyAlias: input.spRetAuto == null && input.spGetUpAuto != null ? \'SPGETUP_AUTO\' : null });'
     )
     .trimEnd();
   return [
@@ -2909,12 +3522,6 @@ function relativePath(filePath) {
 
 function relativeExternalPath(filePath) {
   return filePath.replaceAll('\\', '/');
-}
-
-function normalizeText(value) {
-  return String(value ?? '')
-    .trim()
-    .toLowerCase();
 }
 
 function finiteNumberOrNull(value) {

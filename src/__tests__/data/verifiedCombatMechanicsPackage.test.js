@@ -26,7 +26,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 6,
+      packageVersion: 7,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -38,6 +38,10 @@ describe('verified combat mechanics package', () => {
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
+        collectibleActorProfileCount: 17,
+        battleKiboProfileCount: 147,
+        workbenchActorIdentityCount: 20,
+        workbenchKiboIdentityCount: 122,
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
@@ -45,6 +49,41 @@ describe('verified combat mechanics package', () => {
         unresolvedAttackInputSegmentCount: 46,
         appliedAttackInputTimingCount: 63,
         unresolvedAttackInputTimingCount: 32,
+      },
+      mechanismEvidence: {
+        contractName: 'AzPrVerifiedMechanismEvidenceManifest',
+        status: 'verified-mechanism-evidence-manifest-ready',
+        sources: expect.arrayContaining([
+          expect.objectContaining({
+            id: 'combat-formula-knowledge',
+            validationStatus: 'verified-source-structure-ready',
+            sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+          }),
+          expect.objectContaining({ id: 'combat-property-sources' }),
+          expect.objectContaining({ id: 'combat-sp-recovery-sharing' }),
+          expect.objectContaining({ id: 'combat-overlimit-mechanics' }),
+          expect.objectContaining({ id: 'combat-formulas-evidence' }),
+          expect.objectContaining({ id: 'combat-coefficient-ranges' }),
+          expect.objectContaining({ id: 'combat-enemy-break-profiles' }),
+        ]),
+      },
+      staticPropertyCatalog: {
+        status: 'verified-static-property-catalog-ready',
+        identityAudit: {
+          status: 'verified-static-property-identity-audit-ready',
+          workbenchActorCount: 20,
+          verifiedActorCount: 17,
+          workbenchKiboCount: 122,
+          verifiedKiboCount: 147,
+          actorClassifications: {
+            applicable: 17,
+            'non-current-public-directory': 3,
+          },
+          kiboClassifications: {
+            applicable: 122,
+            'not-exposed-in-current-workbench-catalog': 25,
+          },
+        },
       },
       spUnitContract: {
         valueUnit: 'absolute-sp-points',

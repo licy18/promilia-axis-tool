@@ -120,6 +120,21 @@ export const DEFAULT_WORKBENCH_ENEMY_CONFIG = Object.freeze({
 });
 
 export const DEFAULT_WORKBENCH_ACTOR_LEVEL = 80;
+export const DEFAULT_WORKBENCH_KIBO_CONFIG = Object.freeze({
+  level: 80,
+  hobbyId: 1,
+  intimacyLevel: 1,
+  comprehensionByAttribute: Object.freeze({
+    1: 100,
+    3: 100,
+    4: 100,
+    5: 100,
+  }),
+});
+export const DEFAULT_WORKBENCH_CULTIVATION = Object.freeze({
+  starGiftRank: 0,
+  favorabilityLevel: 0,
+});
 
 export const DEFAULT_WORKBENCH_ACTION_ID = 'action-0001';
 
@@ -413,16 +428,15 @@ export function normalizeWorkbenchActorConfig(
 
   return {
     characterId: normalizedCharacterId,
-    level: Number.isFinite(attributeLevel)
-      ? attributeLevel
-      : clampNumber(
-          actorConfig?.level,
-          1,
-          DEFAULT_WORKBENCH_ACTOR_LEVEL,
-          DEFAULT_WORKBENCH_ACTOR_LEVEL
-        ),
+    level: clampNumber(
+      actorConfig?.level ?? attributeLevel,
+      1,
+      100,
+      DEFAULT_WORKBENCH_ACTOR_LEVEL
+    ),
     initialSp: normalizeWorkbenchInitialSp(actorConfig?.initialSp, character),
     loadout: normalizeWorkbenchLoadout(actorConfig?.loadout),
+    cultivation: normalizeWorkbenchCultivation(actorConfig?.cultivation),
   };
 }
 
@@ -441,6 +455,59 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
     soulessenceId: normalizeCatalogId(
       source.soulessenceId,
       WORKBENCH_SOULESSENCES
+    ),
+    soulessenceLevel: optionalClampedInteger(source.soulessenceLevel, 1, 100),
+    soulessenceRank: optionalClampedInteger(source.soulessenceRank, 1, 6),
+    equipmentLevels: Object.fromEntries(
+      Object.keys(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(slotKey => [
+        slotKey,
+        optionalClampedInteger(source.equipmentLevels?.[slotKey], 0, 9),
+      ])
+    ),
+    kiboConfig: normalizeWorkbenchKiboConfig(source.kiboConfig),
+  };
+}
+
+export function normalizeWorkbenchCultivation(cultivation = {}) {
+  return {
+    starGiftRank: clampNumber(cultivation?.starGiftRank, 0, 7, 0),
+    favorabilityLevel: clampNumber(
+      cultivation?.favorabilityLevel,
+      0,
+      10,
+      0
+    ),
+  };
+}
+
+export function normalizeWorkbenchKiboConfig(config = {}) {
+  const source = config ?? {};
+  return {
+    level: clampNumber(source.level, 1, 100, DEFAULT_WORKBENCH_KIBO_CONFIG.level),
+    hobbyId: clampNumber(
+      source.hobbyId,
+      1,
+      Number.MAX_SAFE_INTEGER,
+      DEFAULT_WORKBENCH_KIBO_CONFIG.hobbyId
+    ),
+    intimacyLevel: clampNumber(
+      source.intimacyLevel,
+      1,
+      10,
+      DEFAULT_WORKBENCH_KIBO_CONFIG.intimacyLevel
+    ),
+    comprehensionByAttribute: Object.fromEntries(
+      Object.keys(DEFAULT_WORKBENCH_KIBO_CONFIG.comprehensionByAttribute).map(
+        attributeId => [
+          attributeId,
+          clampNumber(
+            source.comprehensionByAttribute?.[attributeId],
+            75,
+            170,
+            DEFAULT_WORKBENCH_KIBO_CONFIG.comprehensionByAttribute[attributeId]
+          ),
+        ]
+      )
     ),
   };
 }
@@ -539,6 +606,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       initialSp: actorConfig?.initialSp ?? null,
       skillLevels: createSkillLevelsForCharacter(skillDrafts, item.id),
       loadout: actorConfig?.loadout,
+      cultivation: actorConfig?.cultivation,
     });
   });
   const actorsByCharacterId = new Map(
@@ -615,7 +683,8 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
         actionPatch.runtimeSampleCaptures
       ),
-      loadoutCalculationStatus: 'project-config-only',
+      loadoutCalculationStatus:
+        'verified-static-properties-applied-dynamic-effects-unapplied',
     },
   });
 }
@@ -1148,6 +1217,14 @@ function clampNumber(value, min, max, fallback) {
     return fallback;
   }
   return Math.min(max, Math.max(min, number));
+}
+
+function optionalClampedInteger(value, min, max) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isInteger(number)
+    ? Math.min(max, Math.max(min, number))
+    : null;
 }
 
 function normalizeCatalogId(value, catalog) {

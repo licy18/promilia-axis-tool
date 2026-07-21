@@ -280,12 +280,12 @@ describe('verified combat mechanics runtime', () => {
       })
     );
     expect(damageTotals).toEqual({
-      'verified-han-star-skill': { hitCount: 7, hp: 459, toughness: 321 },
-      'verified-muyin-charged': { hitCount: 3, hp: 359, toughness: 350 },
+      'verified-han-star-skill': { hitCount: 7, hp: 224, toughness: 157 },
+      'verified-muyin-charged': { hitCount: 3, hp: 189, toughness: 185 },
       'verified-wind-kibo-active': {
         hitCount: 6,
-        hp: 3030,
-        toughness: 606,
+        hp: 624,
+        toughness: 126,
       },
     });
     const hanActorRecovery = result.verifiedCombatRuntime.resourceEvents.filter(
@@ -539,7 +539,7 @@ describe('verified combat mechanics runtime', () => {
           recoverIntervalIdentity: 'damage-element:-9212100609153088879',
           share: 1,
           resourceOwnerSourceIdentity: expect.stringContaining(
-            'NewTable/template_value.rows[id=101007].baseAttribute|NewTable/template_hero.rows[type=1,level=1]'
+            'verified-static-actor:101007'
           ),
           formula: expect.objectContaining({
             raw: '70123',

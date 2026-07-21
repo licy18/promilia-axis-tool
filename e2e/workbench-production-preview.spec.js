@@ -1068,6 +1068,91 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await page.screenshot({ path: 'reports/m2-direct-timeline-narrow.png' });
 });
 
+test('[m8a-static-loadout] recompiles actor and kibo panels after direct equipment changes and draft reload', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openActorInspector(page, 109001);
+
+  const actorLoadout = page.locator(
+    '[data-testid="workbench-actor-loadout"][data-character-id="109001"]'
+  );
+  const actorPanel = actorLoadout.getByTestId(
+    'workbench-verified-static-property-panel'
+  );
+  await expect(actorPanel).toHaveAttribute(
+    'data-property-status',
+    'verified-static-actor-properties-ready',
+    { timeout: 60_000 }
+  );
+  const actorAttackBefore = await readVerifiedPanelValue(actorPanel, '攻击');
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500001');
+  const kiboPanel = actorPanel.getByTestId(
+    'workbench-verified-kibo-property-panel'
+  );
+  await expect(kiboPanel).toBeVisible();
+  const kiboAttackBefore = await readVerifiedPanelValue(kiboPanel, '攻击');
+
+  await selectM2LoadoutOption(page, 109001, 'weapon', '1010111');
+  await selectM2LoadoutOption(page, 109001, 'top', '1020111');
+  await selectM2LoadoutOption(page, 109001, 'soulessenceId', '10001');
+  await actorLoadout
+    .getByTestId('workbench-actor-star-gift-rank-input')
+    .fill('2');
+  await actorLoadout
+    .getByTestId('workbench-actor-star-gift-rank-input')
+    .blur();
+  await actorLoadout.getByTestId('workbench-kibo-intimacy-input').fill('5');
+  await actorLoadout.getByTestId('workbench-kibo-intimacy-input').blur();
+
+  await expect
+    .poll(() => readVerifiedPanelValue(actorPanel, '攻击'))
+    .toBeGreaterThan(actorAttackBefore);
+  await expect
+    .poll(() => readVerifiedPanelValue(kiboPanel, '攻击'))
+    .toBeGreaterThan(kiboAttackBefore);
+  const actorAttackAfter = await readVerifiedPanelValue(actorPanel, '攻击');
+  const kiboAttackAfter = await readVerifiedPanelValue(kiboPanel, '攻击');
+  await expect(actorPanel).toContainText('动态层未应用');
+  await actorPanel.scrollIntoViewIfNeeded();
+  await expect(actorPanel).toBeVisible();
+  await page.screenshot({ path: 'reports/m8a-static-loadout-desktop.png' });
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await openActorInspector(page, 109001);
+  const restoredActorLoadout = page.locator(
+    '[data-testid="workbench-actor-loadout"][data-character-id="109001"]'
+  );
+  const restoredActorPanel = restoredActorLoadout.getByTestId(
+    'workbench-verified-static-property-panel'
+  );
+  await expect(restoredActorPanel).toHaveAttribute(
+    'data-property-status',
+    'verified-static-actor-properties-ready',
+    { timeout: 60_000 }
+  );
+  const restoredKiboPanel = restoredActorPanel.getByTestId(
+    'workbench-verified-kibo-property-panel'
+  );
+  await expect
+    .poll(() => readVerifiedPanelValue(restoredActorPanel, '攻击'))
+    .toBe(actorAttackAfter);
+  await expect
+    .poll(() => readVerifiedPanelValue(restoredKiboPanel, '攻击'))
+    .toBe(kiboAttackAfter);
+  await expect(
+    restoredActorLoadout.getByTestId('workbench-actor-star-gift-rank-input')
+  ).toHaveValue('2');
+  await expect(
+    restoredActorLoadout.getByTestId('workbench-kibo-intimacy-input')
+  ).toHaveValue('5');
+});
+
 test('[six-resource-capture-import] packages, imports, and replays six owner-specific resource captures', async ({
   page,
 }, testInfo) => {
@@ -5907,6 +5992,18 @@ async function openActorInspector(page, characterId = 109001) {
     )
     .click();
   await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
+}
+
+async function readVerifiedPanelValue(panel, label) {
+  const text = await panel
+    .locator('.property-value-grid')
+    .first()
+    .locator('div')
+    .filter({ hasText: label })
+    .first()
+    .locator('strong')
+    .textContent();
+  return Number(String(text ?? '').replaceAll(',', '').trim());
 }
 
 async function changeM2TeamSlot(page, slotIndex, characterId) {

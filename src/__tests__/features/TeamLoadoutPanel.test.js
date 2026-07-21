@@ -49,10 +49,18 @@ const detailCatalog = {
   ],
 };
 
-function mountPanel() {
+function mountPanel(actorOverrides = {}) {
+  const configuredActor = {
+    ...actor,
+    ...actorOverrides,
+    loadout: {
+      ...actor.loadout,
+      ...(actorOverrides.loadout ?? {}),
+    },
+  };
   return mount(TeamLoadoutPanel, {
     props: {
-      actors: [actor],
+      actors: [configuredActor],
       teamSlots: [{ slotId: 'slot-1', characterId: 101003 }],
       loadoutDetailCatalog: detailCatalog,
     },
@@ -99,5 +107,114 @@ describe('TeamLoadoutPanel', () => {
         initialSp: 72,
       },
     ]);
+  });
+
+  it('shows compiled actor and kibo values and emits source configuration patches', async () => {
+    const wrapper = mountPanel({
+      cultivation: { starGiftRank: 2, favorabilityLevel: 5 },
+      loadout: {
+        equipmentLevels: { weapon: 9 },
+        soulessenceLevel: 100,
+        soulessenceRank: 6,
+        kiboConfig: {
+          level: 80,
+          hobbyId: 1,
+          intimacyLevel: 5,
+          comprehensionByAttribute: { 1: 100, 3: 100, 4: 100, 5: 100 },
+        },
+      },
+      verifiedStaticProperties: {
+        status: 'verified-static-actor-properties-ready',
+        ready: true,
+        level: 80,
+        core: {
+          ATK: { displayValue: 2048 },
+          MAXHP: { displayValue: 12000 },
+          DEF: { displayValue: 420 },
+          MDEF: { displayValue: 390 },
+        },
+        attributes: [
+          { id: 7, key: 'CRI', rawScale: 10000, runtimeValue: 0.12 },
+          { id: 8, key: 'CRI_DMG', rawScale: 10000, runtimeValue: 1.6 },
+        ],
+        sources: [
+          {
+            kind: 'equipment-main',
+            sourceId: '1010111:weapon:9',
+            sourceIdentity: 'NewTable/accessory_main#1010111@9',
+            attributes: [{ id: 7, value: 1200 }],
+          },
+        ],
+        unresolved: [],
+        unapplied: [
+          {
+            kind: 'soulessence-effect-skill',
+            sourceId: 800601,
+            sourceIdentity: 'NewTable/skill#800601',
+          },
+        ],
+      },
+      verifiedStaticKiboProperties: {
+        status: 'verified-static-kibo-properties-ready',
+        ready: true,
+        core: {
+          ATK: { displayValue: 1800 },
+          MAXHP: { displayValue: 7000 },
+          DEF: { displayValue: 180 },
+          MDEF: { displayValue: 170 },
+        },
+        inheritance: {
+          rate: 0.13,
+          core: {
+            ATK: { inheritedBase: 240, inheritedAdd: 26 },
+          },
+        },
+      },
+    });
+
+    expect(
+      wrapper.get('[data-testid="workbench-verified-static-property-panel"]').text()
+    ).toContain('2,048');
+    expect(
+      wrapper.get('[data-testid="workbench-verified-kibo-property-panel"]').text()
+    ).toContain('1,800');
+    expect(wrapper.text()).toContain('动态层未应用');
+
+    await wrapper.get('[data-testid="workbench-actor-level-input"]').setValue('90');
+    await wrapper
+      .get('[data-testid="workbench-actor-star-gift-rank-input"]')
+      .setValue('3');
+    await wrapper.get('[data-testid="workbench-kibo-level-input"]').setValue('90');
+    await wrapper
+      .get('[data-testid="workbench-equipment-level-input"]')
+      .setValue('6');
+    await wrapper
+      .get('[data-testid="workbench-soulessence-rank-input"]')
+      .setValue('5');
+
+    expect(wrapper.emitted('update-actor-config')).toEqual(
+      expect.arrayContaining([
+        [{ characterId: 101003, level: 90 }],
+        [{ characterId: 101003, cultivation: { starGiftRank: 3 } }],
+        [
+          {
+            characterId: 101003,
+            loadout: { kiboConfig: { level: 90 } },
+          },
+        ],
+        [
+          {
+            characterId: 101003,
+            loadout: { equipmentLevels: { weapon: 6 } },
+          },
+        ],
+        [
+          {
+            characterId: 101003,
+            loadout: { soulessenceRank: 5 },
+          },
+        ],
+      ])
+    );
   });
 });

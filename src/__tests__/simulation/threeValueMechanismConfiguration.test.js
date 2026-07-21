@@ -40,20 +40,22 @@ describe('three value mechanism configuration', () => {
             selectedItemCount: 3,
             appliedToCalculators: false,
           }),
-          application: {
-            stats: {
+          application: expect.objectContaining({
+            stats: expect.objectContaining({
               status: 'compiled-actor-stats-applied',
               appliedToCalculators: true,
-            },
-            initialEnergy: {
+            }),
+            initialEnergy: expect.objectContaining({
               status: 'project-initial-sp-applied-to-runtime-baseline',
               appliedToRuntime: true,
-            },
-            loadout: {
-              status: 'project-loadout-effects-unconfirmed-unapplied',
+            }),
+            loadout: expect.objectContaining({
+              status: 'verified-static-loadout-properties-unresolved',
               appliedToCalculators: false,
-            },
-          },
+              staticPropertiesAppliedToCalculators: false,
+              dynamicEffectsAppliedToCalculators: false,
+            }),
+          }),
         }),
       ]),
       enemy: expect.objectContaining({
@@ -85,6 +87,8 @@ describe('three value mechanism configuration', () => {
       policy: {
         resolvedProjectValuesOnly: true,
         unconfirmedCultivationEffectsApplied: false,
+        verifiedStaticCultivationPropertiesApplied: true,
+        dynamicLoadoutEffectsApplied: false,
         calculatorReadsConfigurationLibrary: false,
       },
       sourceContract: {
@@ -120,7 +124,9 @@ describe('three value mechanism configuration', () => {
         actorConfigurationCount: 3,
         actorInstanceBackedCount: 3,
         enemyInstanceBacked: true,
-        unappliedLoadoutSelectionCount: 3,
+        selectedLoadoutItemCount: 3,
+        staticLoadoutAppliedActorCount: 0,
+        dynamicLoadoutEffectUnappliedActorCount: 1,
         elementDefenseOverrideCount: 1,
         sourceContractReady: true,
         selectionIntegrityReady: true,

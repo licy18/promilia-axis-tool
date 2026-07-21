@@ -5,6 +5,7 @@ import {
   validateProject,
 } from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
+import { compileVerifiedStaticActorProperties } from '../mechanics/verifiedCombatStaticProperties';
 import { createThreeValueHpOperandSourceBinding } from '../mechanics/threeValueHpOperandSourceBinding';
 import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
 import { resolveThreeValueMechanicsProfile } from '../mechanics/threeValueMechanicsProfile';
@@ -243,65 +244,102 @@ function arrayOrSingle(value) {
 
 function compileActor(actor, charactersById) {
   const character = charactersById.get(Number(actor.characterId));
+  const staticProperties = compileVerifiedStaticActorProperties({ actor });
+  const staticCatalogAvailable =
+    staticProperties.status !==
+    'verified-static-property-catalog-not-installed';
+  const compiledAttributes = staticProperties.attributes.map(attribute => ({
+    id: attribute.id,
+    key: attribute.key,
+    value: attribute.rawValue,
+    isRatio: attribute.isRatio,
+    source: staticProperties.sourceIdentity ?? null,
+  }));
+  const fallbackStats = {
+    attack: getPanelCoreValue(
+      actor.attributePanel,
+      'attack',
+      getAttributeValue(actor.baseAttributes, 'ATK')
+    ),
+    maxHp: getPanelCoreValue(
+      actor.attributePanel,
+      'maxHp',
+      getAttributeValue(actor.baseAttributes, 'MAXHP')
+    ),
+    physicalDefense: getPanelCoreValue(
+      actor.attributePanel,
+      'physicalDefense',
+      getAttributeValue(actor.baseAttributes, 'DEF')
+    ),
+    magicalDefense: getPanelCoreValue(
+      actor.attributePanel,
+      'magicalDefense',
+      getAttributeValue(actor.baseAttributes, 'MDEF')
+    ),
+    tuningStrength: getPanelCoreValue(
+      actor.attributePanel,
+      'tuningStrength',
+      0
+    ),
+    critRate: getPanelCoreValue(
+      actor.attributePanel,
+      'critRate',
+      getAttributeValue(actor.baseAttributes, 'CRI')
+    ),
+    critDamage: getPanelCoreValue(
+      actor.attributePanel,
+      'critDamage',
+      getAttributeValue(actor.baseAttributes, 'CRI_DMG')
+    ),
+    damageAmplification: getPanelCoreValue(
+      actor.attributePanel,
+      'damageAmplification',
+      0
+    ),
+    damageReduction: getPanelCoreValue(
+      actor.attributePanel,
+      'damageReduction',
+      0
+    ),
+    maxSp:
+      actor.spResourceProfile?.effectiveMaxSp ??
+      getAttributeValue(actor.baseAttributes, 'MAXSP'),
+    source: actor.attributePanel
+      ? 'character-attribute-panel-current-rank'
+      : 'baseAttributes',
+  };
+  const verifiedStats = staticProperties.ready
+    ? {
+        ...staticProperties.stats,
+        damageReduction: 0,
+        maxSp: staticProperties.resourceProfile?.effectiveMaxSp ?? null,
+        source: staticProperties.sourceIdentity,
+      }
+    : {
+        attack: null,
+        maxHp: null,
+        physicalDefense: null,
+        magicalDefense: null,
+        tuningStrength: null,
+        critRate: null,
+        critDamage: null,
+        damageAmplification: null,
+        damageReduction: null,
+        maxSp: null,
+        source: staticProperties.status,
+      };
 
   return {
     ...actor,
+    baseAttributes: staticCatalogAvailable
+      ? compiledAttributes
+      : actor.baseAttributes,
+    verifiedStaticProperties: staticProperties,
+    verifiedStaticKiboProperties: staticProperties.kibo ?? null,
     source: {
       character,
     },
-    stats: {
-      attack: getPanelCoreValue(
-        actor.attributePanel,
-        'attack',
-        getAttributeValue(actor.baseAttributes, 'ATK')
-      ),
-      maxHp: getPanelCoreValue(
-        actor.attributePanel,
-        'maxHp',
-        getAttributeValue(actor.baseAttributes, 'MAXHP')
-      ),
-      physicalDefense: getPanelCoreValue(
-        actor.attributePanel,
-        'physicalDefense',
-        getAttributeValue(actor.baseAttributes, 'DEF')
-      ),
-      magicalDefense: getPanelCoreValue(
-        actor.attributePanel,
-        'magicalDefense',
-        getAttributeValue(actor.baseAttributes, 'MDEF')
-      ),
-      tuningStrength: getPanelCoreValue(
-        actor.attributePanel,
-        'tuningStrength',
-        0
-      ),
-      critRate: getPanelCoreValue(
-        actor.attributePanel,
-        'critRate',
-        getAttributeValue(actor.baseAttributes, 'CRI')
-      ),
-      critDamage: getPanelCoreValue(
-        actor.attributePanel,
-        'critDamage',
-        getAttributeValue(actor.baseAttributes, 'CRI_DMG')
-      ),
-      damageAmplification: getPanelCoreValue(
-        actor.attributePanel,
-        'damageAmplification',
-        0
-      ),
-      damageReduction: getPanelCoreValue(
-        actor.attributePanel,
-        'damageReduction',
-        0
-      ),
-      maxSp:
-        actor.spResourceProfile?.effectiveMaxSp ??
-        getAttributeValue(actor.baseAttributes, 'MAXSP'),
-      source: actor.attributePanel
-        ? 'character-attribute-panel-current-rank'
-        : 'baseAttributes',
-    },
+    stats: staticCatalogAvailable ? verifiedStats : fallbackStats,
   };
 }
 

@@ -374,7 +374,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M7-R3 / 按键操作轴、合击输入约束与原子配对插入已完成，等待产品复验**。保留 M7-R2 的真实普攻输入时序和 M6-R2 的 `0..100` 绝对 SP 合同；本轮只修正由当前动作与换人事件派生的同轴输入投影及其合击合法性，不进入 M8。
+当前里程碑：**M8 / 实际战斗数值机制全量接入（M8-A 已完成，下一步 M8-B）**。M6-R 至 M7-R3 已完成产品验收；M8-A 已接通培养项到角色/奇波静态属性及下游动作输入，下一步扩展全动作 Battle 效果与动态属性运行时，再进入队伍印记和同轴 UI。Word 报告只供人读，生成与运行时必须消费知识库结构化快照及原始 Battle/NewTable 配置，不从技能描述文本猜数值。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -576,7 +576,35 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 合击插入整改：从角色动作库拖入“星结合击”或从奇波子轨拖入“合击”，现都会在一次历史事务中自动生成另一半，并以 `simultaneous / start -> start / gapMs = 0` 关系吸附到同一 60fps 帧。任一半的时间移动、复制或删除都会原子作用于整对，单次撤销/重做恢复整对；跨角色槽移动被拒绝。没有已装备奇波、目录中缺少可靠对应动作或奇波身份不匹配时整次插入被阻止，不落盘半套合击。
 
-完整 `test:trial-release` 通过 109 个测试文件、613 条单元/组件/集成测试和 48/48 production preview，41/41 必需能力、数据同步、生产引用、动作状态、applied-source 与 bundle 守门全部通过。总 JavaScript gzip 为 688,924B，初始入口为 89,228B，Workbench 主块为 369,906B，均低于硬门槛。视觉证据为 `reports/m7r3-operation-axis-desktop.png`、`reports/m7r3-operation-axis-narrow.png`、`reports/m7r3-operation-axis-skills-desktop.png`、`reports/m7r3-operation-axis-skills-narrow.png`、`reports/m7r3-operation-axis-zoomed-desktop.png`、`reports/m7-catalog-runtime-desktop.png` 与 `reports/m7-catalog-runtime-narrow.png`。当前停在 M7-R3 等待产品复验，不进入 M8。
+完整 `test:trial-release` 通过 109 个测试文件、613 条单元/组件/集成测试和 48/48 production preview，41/41 必需能力、数据同步、生产引用、动作状态、applied-source 与 bundle 守门全部通过。总 JavaScript gzip 为 688,924B，初始入口为 89,228B，Workbench 主块为 369,906B，均低于硬门槛。视觉证据为 `reports/m7r3-operation-axis-desktop.png`、`reports/m7r3-operation-axis-narrow.png`、`reports/m7r3-operation-axis-skills-desktop.png`、`reports/m7r3-operation-axis-skills-narrow.png`、`reports/m7r3-operation-axis-zoomed-desktop.png`、`reports/m7-catalog-runtime-desktop.png` 与 `reports/m7-catalog-runtime-narrow.png`。产品已于 2026-07-21 确认 M7-R3 验收通过，M8 以该版本为基线。
+
+### M8-A：机器证据包与静态属性编译（已完成）
+
+- 把 `BWiki/data/combat-formula-knowledge.json` 作为机制索引，把报告生成脚本直接读取的 `combat-property-sources-20260719.json`、`combat-sp-recovery-sharing-20260719.json`、`combat-overlimit-mechanics-20260718.json`、`combat-formulas-evidence-20260718.json`、`combat-coefficient-ranges-20260718.json` 与 `combat-enemy-break-profiles-20260718.json` 作为机器事实输入；技能级绑定继续读取完整 Battle 导出和 NewTable。扩展 `data:sync-verified-combat` 与 `audit:verified-combat`，为每份输入保存版本、来源 identity、哈希和验证结果，禁止解析 DOCX 或复制正文数字。
+- 建立唯一静态属性编译器：角色等级模板、灵子、饰品装备、星赐、好感度按属性 ID 汇总为 EB/EP/EE，再按 `S=EB*(1+EP)+EE` 生成角色战前属性；effect 型灵子/套装技能不得塞进静态面板。装配变化必须直接改变后续伤害、韧性、治疗与 SP 计算输入，并在检查器显示逐来源明细。
+- 接入奇波面板与角色继承：物种和等级底值、爱好、悟性、亲密度继承按结构化快照的取整顺序计算；ATK/DEF/MDEF/MAXHP 的角色基础与加成分别 floor，暴击率先减 500、暴伤先减 15000 再继承。先审计项目当前 20 角色/122 奇波 profile 与报告 17 可收集角色/147 战斗奇波的集合差异，按 identity 分类，不用强行对齐数量。
+
+完成结果：唯一受控同步包已升级到 v7，纳入统一知识索引、6 份机器事实报告及静态 NewTable 输入的版本、来源 identity、SHA256 和结构验证。静态编译器按属性 ID 聚合等级、星赐、好感度、灵子及五件装备的 EB/EP/EE，并以同一结果驱动角色面板、奇波亲密度继承和 verified 动作计算；动态灵子与套装效果继续明确 `unapplied`。身份审计确认 17 个可收集角色全部可应用，Workbench 额外 3 个身份标为非当前公开目录；122 个 Workbench 奇波全部可应用，战斗表额外 25 个身份保留为未暴露目录。配置经方案、草稿、JSON、分享链接和 PNG 保存，编译结果始终从来源重建，不持久化第二份数值真相。
+
+验收结果：三人三奇波换装对照证明角色属性、奇波继承与角色/奇波动作结果沿同一因果链重算；未知身份不回退到示例值或 0，来源漂移由 `audit:verified-combat` 拒绝。完整 `test:trial-release` 通过 110 个测试文件、618 条单元/组件/集成测试和 49/49 production preview；生产引用、数据、动作状态、verified-combat、applied-source 与 bundle 守门全部通过。总 JavaScript gzip 为 696,976B，Workbench 主块为 369,521B，低于 740,000B/370,000B 硬门槛；视觉证据为 `reports/m8a-static-loadout-desktop.png`。
+
+### M8-B：全动作 Battle 效果绑定与动态属性运行时（已定义）
+
+- 在既有 `skill/subskill -> control -> hit` 图上遍历完整 Battle 配置，生成动作到 Damage、PropertyChange、Sp、Heal、Shield、Pack/Judgment/Inject、印记容器及消耗分支的绑定；记录真实命中帧、目标、持续、叠层、刷新、互斥、tags 与来源 identity。不得人工为少数示例技能填效果，也不得从描述文本补枚数或系数。
+- 复用 P4 effect command 生命周期，但让已验证 PropertyChange 真正进入 DB/DP/DE 与标量属性查询，使 buff 在对应时间窗改变后续动作结算；单次命中的穿透、`weakBreakDamageRate`、`recoverSP` 保持 hit-local，不回写面板。SP 同时保留自动回能、命中共享和直接 SpElement 三条入口及各自增幅/共享规则。
+- 每个公开动作按“伤害/韧性/SP/生命/护盾/动态属性/印记”逐维输出 `applied / verified-zero / unresolved` 覆盖审计。只有 `functionId=5` 的已验证字面值可直接落数；其他公式函数先进入复算器或保持 unresolved，禁止把未知值当 0。
+
+### M8-C：队伍印记与九属性调谐运行时（已定义）
+
+- 新增队伍级九元素印记池：每元素上限 5，逐层独立记录获取、20 秒消退与实际消费；获取/消费必须来自 M8-B 的动作效果绑定并落在真实命中帧。持有状态的 5 秒就绪/定时行为、循环初始状态和继承都进入同一确定性事件队列。
+- 持有附伤和消耗超限走 verified Q16.16 路线并使用动作发生时的真实属性快照；火/水/冰/风/木/地/雷/光/暗各自的增益、减益、控制、治疗、回能、持续伤害、连锁与真伤按 profile 分派。消耗按实际持有枚数，保留 before/delta/after；地属性削韧例外、光属性真伤例外和风属性直给 SP 不得套用公共主段。
+- 印记产生的 buff/debuff 继续经 M8-B 的动态属性与效果生命周期作用于后续动作，避免另建一套旁路计算器。来源链不唯一的角色专属/旧测试机制保持 unresolved。
+
+### M8-D：同轴 UI、数值溯源与全量验收（已定义）
+
+- 时间轴新增“队伍印记”资源组，按方案实际涉及元素显示 0-5 阶梯曲线、获取/消耗节点和每层到期边界；技能 buff 在既有效果轴显示区间。二者与操作轴、动作块和八条三值曲线共享同一 60fps 坐标，默认清晰克制，不加点阵、发光拖尾或装饰性控制点。
+- 装配检查器显示“灵子/装备/星赐/好感度 -> 角色属性 -> 奇波继承属性”的逐来源结果；动作检查器显示“动作 -> 效果 -> 属性快照 -> 命中结果 -> 印记/buff 状态”的可回溯链。修改装配或动作后必须从同一 runtime 重算，UI 不自行改数值。
+- 方案复制、本地草稿、JSON、分享链接、PNG 五载体恢复同一装配、效果、印记与数值结果；桌面和 390px 窄屏验收至少覆盖一套完整三人/三奇波流程、九元素标准向量、装备/灵子换装前后对照及 unresolved 可见性。完整 `npm run test:trial-release` 通过后停在 M8 等待产品验收。
 
 共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735,000B 仅作预警；初始入口 120,000B、Workbench 主块 370,000B 继续守门。阶段结束时只有超出硬门槛才做一次针对性优化；不以逐字节压缩替代产品能力，也不扩写当前里程碑之外的数值考古、runtime calibration 或报告载体。
 
@@ -597,6 +625,10 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 | M7-R1  | 拖一次普攻即得到可独立编辑的真实 A1..An 输入链                | control 链生成、逐段命中、整链事务与五载体          |
 | M7-R2  | 普攻块按真实输入窗口紧凑排布并可诊断连段合法性                | EventBridge 窗口、有效时长、旧项目兼容与五载体      |
 | M7-R3  | 在同轴操作栏读取显式输入，并约束角色/奇波合击同帧发动         | 中央键位合同、合击配对、缩放滚动与五载体            |
+| M8-A   | 装配灵子/装备后得到可溯源角色面板，并正确传递到奇波           | 机器证据包、静态属性编译、角色到奇波继承            |
+| M8-B   | 全动作自动绑定 Battle 效果，并在时间窗内改变后续动作结果       | 效果图、动态属性桶、逐维覆盖审计                    |
+| M8-C   | 队伍印记随真实命中获取、消耗、到期并触发九属性调谐             | 九元素状态机、Q16.16 结算、已验证例外               |
+| M8-D   | 在同轴 UI 中复盘装配、buff、印记与动作数值的完整因果链         | 桌面/窄屏、五载体、全量 trial-release               |
 
 ## 7. 立即执行清单
 
@@ -632,7 +664,11 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 30. 已完成，等待产品验收：M7 已以公开角色/奇波动作目录为独立分母生成全量动作、变体和命中三值分类，接入同一 verified runtime 与八曲线，并通过机器/Markdown 覆盖报告、跨 owner 主流程和五载体回放收口；不自动进入下一里程碑。
 31. 已完成，等待产品复验：M7-R1 已按真实 normal-attack control 链生成独立 `A1..An`，并守住逐段运行时、整链事务、旧项目迁移和五载体一致性；不进入 M8。
 32. 已完成，等待产品复验：M7-R2 已将完整动画尾长与有效连段占轴分离，按真实 EventBridge 输入窗口排布和诊断 `A1..An`；不进入 M8。
-33. 已完成，等待产品复验：M7-R3 从当前动作与换人事件派生统一按键输入；耗能奇波主动技使用 Q，角色星结合击与已装备奇波合击必须同帧共享 F。拖入任意一半会自动补齐另一半并以单次事务同帧吸附，后续移动、复制、删除和撤销/重做保持整对；不持久化 marker，不进入 M8。
+33. 已完成并通过产品验收：M7-R3 从当前动作与换人事件派生统一按键输入；耗能奇波主动技使用 Q，角色星结合击与已装备奇波合击必须同帧共享 F。拖入任意一半会自动补齐另一半并以单次事务同帧吸附，后续移动、复制、删除和撤销/重做保持整对。
+34. 已完成：M8-A 已将机器证据与 NewTable 纳入带哈希的唯一同步包，完成角色装配到静态面板、角色面板到奇波继承及下游动作输入的确定性编译；动态培养效果继续 unapplied。
+35. 下一步：M8-B 全动作 Battle 效果绑定与动态属性运行时。生成动作效果图，使已验证 buff 真正改变后续命中，并输出逐维覆盖审计；未知公式保持 unresolved。
+36. 已定义：M8-C 队伍印记与九属性调谐运行时。以 M8-B 的动作绑定驱动获取/消耗/到期，接入九元素持有和超限效果及已验证例外。
+37. 已定义：M8-D 同轴 UI、数值溯源与全量验收。印记资源轴、效果轴和装配/动作检查器共享同一 runtime 事实，五载体和完整发布守门通过后等待产品验收。
 
 ## 8. 风险和取舍
 
