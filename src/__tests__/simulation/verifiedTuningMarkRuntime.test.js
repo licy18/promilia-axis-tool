@@ -114,6 +114,16 @@ describe('verified tuning mark runtime', () => {
           event.appliedToCalculators
       )
     ).toBe(true);
+    const persistentCommands =
+      result.verifiedTuningMarkGeneration.effectCommands.filter(
+        command => command.effectId === 'tuning-mark:150:persistent'
+      );
+    expect(persistentCommands.length).toBeGreaterThan(1);
+    expect(
+      persistentCommands.every(command =>
+        command.tags.includes('tuning-mark-resource-mirror')
+      )
+    ).toBe(true);
   });
 
   it('projects all nine held profiles from one real hit without duplicate input nodes', () => {

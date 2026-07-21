@@ -487,7 +487,7 @@
           :cycle-boundaries="cycleBoundaries"
           :selected-cycle-boundary-id="selectedCycleBoundaryId"
           :selected-cycle-section="selectedCycleSection"
-          :effect-intervals="effectIntervalProjection.intervals"
+          :effect-intervals="effectIntervalProjection.timelineIntervals"
           :selected-effect-interval-id="selectedEffectIntervalId"
           :box-selection-mode="boxSelectionMode"
           :flow-model="workbenchFlowModel"
@@ -967,7 +967,7 @@
         :action-relations="actionRelations"
         :action-effect-relation-graph="runtimeOutputs.actionEffectRelationGraph"
         :cycle-boundaries="cycleBoundaries"
-        :effect-intervals="effectIntervalProjection.intervals"
+        :effect-intervals="effectIntervalProjection.timelineIntervals"
         :timeline-diagnostics="timelineDiagnostics"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
       />

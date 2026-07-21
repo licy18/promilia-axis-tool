@@ -773,6 +773,7 @@ function createPersistentModifierCommands({
   return createTimedModifierCommands({
     effectId: `tuning-mark:${profile.markId}:persistent`,
     effectName: `${profile.element}调谐印记`,
+    tags: ['verified-tuning-mark', 'tuning-mark-resource-mirror'],
     targetKind: 'team',
     targetIds: [],
     scenario,
@@ -796,6 +797,7 @@ function createPersistentModifierCommands({
 function createTimedModifierCommands({
   effectId,
   effectName,
+  tags = ['verified-tuning-mark'],
   targetKind,
   targetIds,
   scenario,
@@ -833,7 +835,7 @@ function createTimedModifierCommands({
     stackMode: EFFECT_STACK_MODES.REPLACE,
     stackDelta: Math.max(1, Number(stackDelta) || 0),
     maxStacks: 5,
-    tags: ['verified-tuning-mark'],
+    tags,
     sourceStatus: TUNING_EFFECT_SOURCE_STATUS,
     confidence: 'verified',
     trackingStatus: appliedToCalculators ? 'applied' : 'tracking-only',

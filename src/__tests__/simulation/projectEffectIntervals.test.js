@@ -241,8 +241,92 @@ describe('effect interval projection', () => {
     });
     expect(projection.summary).toMatchObject({
       intervalCount: 2,
+      timelineIntervalCount: 2,
+      timelineHiddenResourceMirrorCount: 0,
       activeAtScenarioEndCount: 1,
       persistentIntervalCount: 1,
+    });
+  });
+
+  it('keeps team tuning-mark calculator copies auditable without drawing duplicate bars', () => {
+    const projection = projectEffectRuntimeIntervals({
+      effectTimeline: {
+        events: [
+          ...['actor-001', 'actor-002', 'actor-003'].map((targetId, index) =>
+            createEvent({
+              eventId: `fire-mark-${index + 1}`,
+              type: 'EFFECT_APPLIED',
+              timeMs: 1000,
+              instanceKey: `calculator|actor|${targetId}|tuning-mark:150:persistent`,
+              effectId: 'tuning-mark:150:persistent',
+              effectName: '火调谐印记',
+              targetKind: 'actor',
+              targetId,
+              sourceStatus: 'verified-tuning-mark-generated',
+              tags: ['verified-tuning-mark', 'tuning-mark-resource-mirror'],
+              stackAfter: 1,
+              appliedToCalculators: true,
+              after: createState({
+                stacks: 1,
+                maxStacks: 5,
+                expiresAtMs: null,
+                appliedToCalculators: true,
+              }),
+            })
+          ),
+          createEvent({
+            eventId: 'fire-held-effect',
+            type: 'EFFECT_APPLIED',
+            timeMs: 1200,
+            instanceKey: 'calculator|actor|actor-001|tuning-held:150:attack',
+            effectId: 'tuning-held:150:attack',
+            effectName: '火印记持有效果',
+            targetKind: 'actor',
+            targetId: 'actor-001',
+            sourceStatus: 'verified-tuning-mark-generated',
+            tags: ['verified-tuning-mark'],
+            stackAfter: 1,
+            appliedToCalculators: true,
+            after: createState({
+              stacks: 1,
+              expiresAtMs: 1800,
+              appliedToCalculators: true,
+            }),
+          }),
+          createEvent({
+            eventId: 'fire-held-effect-expired',
+            type: 'EFFECT_EXPIRED',
+            timeMs: 1800,
+            instanceKey: 'calculator|actor|actor-001|tuning-held:150:attack',
+            effectId: 'tuning-held:150:attack',
+            effectName: '火印记持有效果',
+            targetKind: 'actor',
+            targetId: 'actor-001',
+            sourceStatus: 'verified-tuning-mark-generated',
+            tags: ['verified-tuning-mark'],
+            stackBefore: 1,
+            appliedToCalculators: true,
+            before: createState({
+              stacks: 1,
+              expiresAtMs: 1800,
+              appliedToCalculators: true,
+            }),
+          }),
+        ],
+      },
+      durationMs: 3000,
+      frameRate: 60,
+    });
+
+    expect(projection.intervals).toHaveLength(4);
+    expect(projection.timelineIntervals).toEqual([
+      expect.objectContaining({ effectId: 'tuning-held:150:attack' }),
+    ]);
+    expect(projection.summary).toMatchObject({
+      intervalCount: 4,
+      timelineIntervalCount: 1,
+      timelineHiddenResourceMirrorCount: 3,
+      calculatorAppliedIntervalCount: 4,
     });
   });
 });

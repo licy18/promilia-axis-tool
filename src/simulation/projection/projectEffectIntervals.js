@@ -93,6 +93,11 @@ export function projectEffectRuntimeIntervals({
   const visibleIntervals = intervals
     .filter(interval => interval.startMs <= scenarioEndMs)
     .sort(compareEffectIntervals);
+  const timelineIntervals = visibleIntervals.filter(
+    interval => !interval.tags.includes('tuning-mark-resource-mirror')
+  );
+  const timelineHiddenResourceMirrorCount =
+    visibleIntervals.length - timelineIntervals.length;
 
   return {
     schemaVersion: 1,
@@ -105,9 +110,12 @@ export function projectEffectRuntimeIntervals({
     durationMs: scenarioEndMs,
     frameRate: normalizeFrameRate(frameRate),
     intervals: visibleIntervals,
+    timelineIntervals,
     summary: {
       eventCount: events.length,
       intervalCount: visibleIntervals.length,
+      timelineIntervalCount: timelineIntervals.length,
+      timelineHiddenResourceMirrorCount,
       actorTargetIntervalCount: visibleIntervals.filter(
         interval => interval.targetKind === 'actor'
       ).length,
@@ -154,6 +162,9 @@ function createOpenEffectInterval(event, intervalIndex, requestedStartMs) {
       event.after?.trackingStatus ??
       event.before?.trackingStatus ??
       null,
+    tags: uniqueValues(
+      event.tags ?? event.after?.tags ?? event.before?.tags ?? []
+    ),
     sourceStatus:
       event.sourceStatus ??
       event.after?.sourceStatus ??
@@ -195,6 +206,10 @@ function appendEffectIntervalEvent(interval, event) {
   interval.icon = event.icon || interval.icon;
   interval.confidence = event.confidence || interval.confidence;
   interval.trackingStatus = event.trackingStatus || interval.trackingStatus;
+  interval.tags = uniqueValues([
+    ...interval.tags,
+    ...(event.tags ?? event.after?.tags ?? event.before?.tags ?? []),
+  ]);
   interval.sourceStatus = event.sourceStatus || interval.sourceStatus;
   interval.sourceIdentity =
     cloneSourceIdentity(event.sourceIdentity) ?? interval.sourceIdentity;
@@ -246,6 +261,7 @@ function finalizeEffectInterval(
     icon: interval.icon ?? null,
     confidence: interval.confidence ?? null,
     trackingStatus: interval.trackingStatus ?? null,
+    tags: [...interval.tags],
     sourceStatus: interval.sourceStatus ?? null,
     sourceIdentity: cloneSourceIdentity(interval.sourceIdentity),
     targetKind: interval.targetKind,
@@ -333,4 +349,8 @@ function msToFrame(timeMs, frameRate) {
 function finiteNumberOrDefault(value, fallback) {
   const number = Number(value);
   return Number.isFinite(number) ? number : fallback;
+}
+
+function uniqueValues(values) {
+  return [...new Set((Array.isArray(values) ? values : []).filter(Boolean))];
 }

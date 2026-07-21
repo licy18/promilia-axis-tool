@@ -1636,6 +1636,8 @@ verified 包 v9 已将九种印记的容器、持有模板、超限包和属性�
 
 完整发布守门通过 115 个测试文件、635 条测试、50/50 production preview 和 41/41 必需能力；总 JavaScript gzip 713,608B，Workbench 主块 369,696B。桌面与窄屏证据为 `reports/m8d-verified-mechanics-desktop.png` 和 `reports/m8d-verified-mechanics-narrow.png`。M8 当前等待产品验收，不自动进入下一里程碑。
 
+产品复验发现队伍印记的逐角色 calculator 目标副本被效果轴重复绘制。现已明确区分“运行时计算实例”和“时间轴显示事实”：逐角色副本继续参与计算与审计，但由唯一队伍印记资源轴负责可视化；真实独立 Buff、减益和持有效果区间不受影响。整改后完整发布守门通过 115 个测试文件、636 条测试和 50/50 production preview；总 JavaScript gzip 713,761B，Workbench 主块 369,839B。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

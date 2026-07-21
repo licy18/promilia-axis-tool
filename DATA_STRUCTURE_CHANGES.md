@@ -27638,3 +27638,7 @@ Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel
 `verified-combat-mechanics-package.json` 升级为 package v8。新增全局 `battleEffectCatalog.nodes[]`，以 `controlSkillId + nodeIdentity` 保存完整 Battle Damage、PropertyChange、Sp、Heal/Shield、Inject、Pack、Judgment、Stack 关系节点；`controlBindings[].effectGraph[]` 只保存稳定 `nodeIdentities`，动作 mapping 通过 `selectedEffectIdentities` 选择运行时绑定，避免复制图节点。每个绑定按伤害、韧性、SP、生命、护盾、动态属性和印记逐维记录 `applied / verified-zero / unresolved`、来源字段与原因。
 
 新增非持久化 `AzPrVerifiedBattleEffectGeneration`，从标准 action 与 execution plan 派生 verified effect commands 和直接 SP/生命/护盾事件；`AzPrEffectRuntimeTimeline` 仅允许 `verified-battle-effect-generated` 且来源 identity 完整的命令进入 calculator，并使用独立 `verified-calculator` instance scope 与手工追踪状态隔离。`AzPrVerifiedCombatRuntime` 在命中时查询活动效果，按客户端动态 Force 或 `((S+DB)*(1+DP)+DE)*ratio` 顺序读取属性；命中局部参数不回写面板。派生 generation、效果状态、动态属性 trace 和计算结果不进入项目 schema，五载体继续保存动作与配置真相并在回载时重建。
+
+## 446. Effect interval timeline display authority
+
+`AzPrEffectIntervalProjection` 新增 `timelineIntervals[]`，并继续由 `intervals[]` 保存完整运行时审计集合。队伍调谐印记为了作用于各角色而展开的 calculator 目标副本使用 `tuning-mark-resource-mirror` tag；这些副本保留在 `intervals[]`、效果 runtime 和来源溯源中，但不进入 `timelineIntervals[]`，其唯一时间轴显示事实由 `AzPrVerifiedTuningMarkCurveProjection` 的队伍印记资源轴承担。独立 Buff、减益、持有效果和敌人效果仍进入两套集合。该投影不持久化，项目 schema 与五载体格式不升级。

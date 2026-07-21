@@ -716,6 +716,7 @@ function createEffectRuntimeEvent({
     icon: command?.icon ?? state?.icon ?? null,
     confidence: command?.confidence ?? state?.confidence ?? null,
     trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
+    tags: uniqueValues(command?.tags ?? state?.tags),
     sourceIdentity: cloneSourceIdentity(
       command?.sourceIdentity ?? state?.sourceIdentity
     ),

@@ -1287,18 +1287,11 @@ test('[m8d-verified-mechanics-ui] reviews real tuning marks and the action mecha
   await expect(fireAcquisitions).toHaveCount(2);
   const firstAcquisition = fireAcquisitions.first();
   await expectTimelineCurveNodeFrameAlignment(timeline, firstAcquisition);
-
-  const verifiedIntervals = timeline.locator(
-    `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${actionId}"]`
-  );
-  await expect(verifiedIntervals.first()).toBeVisible();
   await expect(
-    timeline
-      .locator(
-        `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${actionId}"][data-applied-to-calculators="true"]`
-      )
-      .first()
-  ).toBeVisible();
+    timeline.locator(
+      '[data-testid="workbench-timeline-effect-interval"][data-effect-id="tuning-mark:150:persistent"]'
+    )
+  ).toHaveCount(0);
 
   await firstAcquisition.click();
   const acquisitionFrame =
