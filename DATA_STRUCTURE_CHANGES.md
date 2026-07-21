@@ -27656,3 +27656,9 @@ Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel
 `verified-combat-mechanics-package.json` 升级为 package v12。完整同步审计先把 raw Battle graph 归一为 `semanticEffects[]`，每条记录稳定保存 `semanticIdentity / controlSkillId / mapIndex / pathId / relationPath / trigger / target / lifecycle / formulaIdentity / rawEffectIdentities / publicActions / classification / reasons`；wrapper、条件边和逐目标计算副本不再与最终玩法效果共用分母。完整 3,122 条语义记录保留在覆盖报告，生产包只发布当前可安全运行的精简目录，不能用精简数量代替覆盖结论。
 
 公式参数按 `controlSkillId + mapIndex + pathId` 生成唯一 `formulaIdentity`，并使用 `parameterSets[] / levelParameterSetIndices[]` 去重 1-12 级向量。`AzPrVerifiedBattleEffectFormulaRegistry` 当前只执行机器证据确认的 `function_2=5` 字面 A 与公共 G 比例的 Q16.16 路线；调谐函数委托既有 M8 状态机，其余函数族返回结构化 unresolved。运行时由动作当前实际变体的 `selectedEffectIdentities` 反查语义效果，按静态 target 展开实际接收者，再交给原有 effect timeline；该投影不新增项目字段，五载体仍从动作、队伍和 verified package 重建。
+
+## 449. Verified public runtime coverage report v1
+
+唯一 verified-combat 同步入口新增 `reports/verified-public-runtime-coverage.json` 与同名 Markdown 摘要。报告不进入生产运行包，也不升级项目 schema；它把现有动作、时长、效果、变体与特殊资源覆盖聚合到固定的 562 个公开动作、20 名角色和 122 只奇波分母。每个动作保存 owner/action/control identity、运行状态、占轴来源、变体与特殊资源状态，以及敌人 HP/韧性、角色 SP、奇波 SP、治疗、护盾、动态属性和印记逐维计数。
+
+未解析动作只允许归为 `runtime-dependent / static-evidence-gap / runtime-and-evidence-gap`，出现未分类原因会让 `audit:verified-combat` 失败。非零回能元素另按 `applied-current-public-action / current-public-action-unresolved / public-unselected-control-variant / outside-current-public-action-catalog` 分账，目录外元素与未选变体不再计入当前产品动作缺口。该报告只保存可从 verified package 与覆盖审计重建的派生事实，不持久化运行时曲线或项目结果。

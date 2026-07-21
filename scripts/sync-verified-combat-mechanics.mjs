@@ -87,6 +87,16 @@ const EFFECT_COVERAGE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-combat-effect-coverage.md'
 );
+const PUBLIC_RUNTIME_COVERAGE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-public-runtime-coverage.json'
+);
+const PUBLIC_RUNTIME_COVERAGE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-public-runtime-coverage.md'
+);
 const CALCULATOR_PATH = path.join(
   FORMULA_ROOT,
   'combat-formula-calculator.mjs'
@@ -189,6 +199,11 @@ const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
   'limit-counter': ['ground', 207],
   'star-combo': ['ground', 208],
   'perfect-parry': ['ground', 209],
+});
+const M9_PRODUCT_DENOMINATOR = Object.freeze({
+  publicActionCount: 562,
+  actorOwnerCount: 20,
+  kiboOwnerCount: 122,
 });
 const options = parseArgs(process.argv.slice(2));
 
@@ -401,6 +416,13 @@ async function main() {
   );
   const actionVariantResourceCoverage =
     createActionVariantResourceCoverageReport(packageValue);
+  const publicRuntimeCoverage = createPublicRuntimeCoverageReport({
+    packageValue,
+    actionCoverage: coverage,
+    timingCoverage,
+    effectCoverage,
+    actionVariantResourceCoverage,
+  });
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
@@ -435,6 +457,14 @@ async function main() {
       createActionVariantResourceCoverageMarkdown(
         actionVariantResourceCoverage
       ),
+    ],
+    [
+      PUBLIC_RUNTIME_COVERAGE_JSON_OUTPUT,
+      `${JSON.stringify(publicRuntimeCoverage, null, 2)}\n`,
+    ],
+    [
+      PUBLIC_RUNTIME_COVERAGE_MARKDOWN_OUTPUT,
+      createPublicRuntimeCoverageMarkdown(publicRuntimeCoverage),
     ],
   ];
   const drift = outputs.filter(([filePath, content]) =>
@@ -7711,6 +7741,367 @@ function createEffectCoverageMarkdown(report) {
     ),
     '',
     '> 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。',
+  ];
+  return `${lines.join('\n')}\n`;
+}
+
+function createPublicRuntimeCoverageReport({
+  packageValue,
+  actionCoverage,
+  timingCoverage,
+  effectCoverage,
+  actionVariantResourceCoverage,
+}) {
+  const timingByAction = new Map(
+    timingCoverage.actions.map(action => [action.identity, action])
+  );
+  const effectByAction = new Map(
+    effectCoverage.actions.map(action => [action.actionIdentity, action])
+  );
+  const variantEdgesByOwnerControl = groupBy(
+    packageValue.actionVariantGraph?.edges ?? [],
+    edge => `${edge.ownerId}|${edge.sourceControlSkillId}`
+  );
+  const resourceProfileByOwner = new Map(
+    (packageValue.specialResourceCatalog?.profiles ?? []).map(profile => [
+      Number(profile.ownerId),
+      profile,
+    ])
+  );
+  const actions = packageValue.actionMappings.map(mapping => {
+    const timing = timingByAction.get(mapping.identity) ?? null;
+    const effect = effectByAction.get(mapping.identity) ?? null;
+    const variantEdges =
+      variantEdgesByOwnerControl.get(
+        `${mapping.ownerId}|${mapping.controlSkillId}`
+      ) ?? [];
+    const normalizedReasons = dedupeBy(
+      (mapping.reasons ?? []).map(normalizeProductGapReason),
+      value => value
+    );
+    const gapResolution = classifyProductActionGap(normalizedReasons);
+    const runtimeStatus = mapping.runtimeReady
+      ? 'runnable'
+      : mapping.classification === 'verified-zero'
+        ? 'verified-zero'
+        : gapResolution.status;
+    const resourceProfile = resourceProfileByOwner.get(Number(mapping.ownerId));
+    return {
+      identity: mapping.identity,
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      actionKind: mapping.actionKind,
+      sourceSkillId: mapping.sourceSkillId,
+      sourceSkillName: mapping.sourceSkillName,
+      controlSkillId: mapping.controlSkillId,
+      selectedSubSkillIndex: mapping.selectedSubSkillIndex,
+      runtimeStatus,
+      runnable: Boolean(mapping.runtimeReady),
+      mechanicsClassification: mapping.mechanicsClassification,
+      timing: {
+        status: timing?.status ?? mapping.timingStatus ?? 'unresolved',
+        durationFrames: timing?.durationFrames ?? null,
+        sourceKind: timing?.sourceKind ?? null,
+      },
+      variants: summarizeProductVariantEdges(variantEdges),
+      specialResource: resourceProfile
+        ? {
+            status: resourceProfile.applied ? 'applied' : 'static-evidence-gap',
+            resourceIdentity: resourceProfile.resourceIdentity,
+            capacity: resourceProfile.capacity,
+          }
+        : { status: 'not-applicable' },
+      dimensions: {
+        enemyHp: mapping.dimensionSummary?.hp ?? {},
+        enemyToughness: mapping.dimensionSummary?.toughness ?? {},
+        actorSp: mapping.dimensionSummary?.actorSp ?? {},
+        kiboSp: mapping.dimensionSummary?.kiboSp ?? {},
+        healing: effect?.dimensions?.hp ?? {},
+        shield: effect?.dimensions?.shield ?? {},
+        dynamicProperty: effect?.dimensions?.dynamicProperty ?? {},
+        tuningMark: effect?.dimensions?.mark ?? {},
+      },
+      semanticEffects: {
+        total: effect?.semanticEffectCount ?? 0,
+        applied: effect?.semanticAppliedEffectCount ?? 0,
+        verifiedZero: effect?.semanticVerifiedZeroEffectCount ?? 0,
+        unresolved: effect?.semanticUnresolvedEffectCount ?? 0,
+      },
+      reasons: normalizedReasons,
+      sourceIdentity: mapping.bindingSourceIdentity ?? null,
+    };
+  });
+  const actorOwnerCount = new Set(
+    actions
+      .filter(action => action.ownerKind === 'actor')
+      .map(action => action.ownerId)
+  ).size;
+  const kiboOwnerCount = new Set(
+    actions
+      .filter(action => action.ownerKind === 'kibo')
+      .map(action => action.ownerId)
+  ).size;
+  const unresolvedActions = actions.filter(
+    action => !['runnable', 'verified-zero'].includes(action.runtimeStatus)
+  );
+  const unclassifiedUnresolvedActions = unresolvedActions.filter(
+    action => action.runtimeStatus === 'unclassified-gap'
+  );
+  const requiredActorKinds = new Set([
+    'normal-attack',
+    'star-skill',
+    'ultimate',
+  ]);
+  const actorCoreActions = actions.filter(
+    action =>
+      action.ownerKind === 'actor' && requiredActorKinds.has(action.actionKind)
+  );
+  const requiredKiboKinds = new Set(['active', 'break', 'signature']);
+  const kiboCoreActions = actions.filter(
+    action =>
+      action.ownerKind === 'kibo' && requiredKiboKinds.has(action.actionKind)
+  );
+  const recoveryCoverage = actionCoverage.nonzeroRecoveryCoverage.map(item => {
+    const reason = item.reasons?.[0] ?? null;
+    const productScope =
+      item.classification === 'applied'
+        ? 'applied-current-public-action'
+        : reason === 'linked-only-to-unresolved-public-action'
+          ? 'current-public-action-unresolved'
+          : reason === 'referenced-only-by-unselected-control-variant'
+            ? 'public-unselected-control-variant'
+            : reason === 'not-referenced-by-public-action-control'
+              ? 'outside-current-public-action-catalog'
+              : 'unclassified';
+    return {
+      pathId: item.pathId,
+      elementId: item.elementId,
+      recoverSp: item.recoverSp,
+      petRecoverSp: item.petRecoverSp,
+      recoverIntervalMs: item.recoverIntervalMs,
+      productScope,
+      actionReferences: item.actionReferences,
+      sourceIdentity: item.sourceIdentity,
+    };
+  });
+  const recoveryScopeCounts = countValues(
+    recoveryCoverage.map(item => item.productScope)
+  );
+  const byOwnerActionKind = [
+    ...groupBy(
+      actions,
+      action => `${action.ownerKind}|${action.actionKind}`
+    ).entries(),
+  ]
+    .map(([key, groupedActions]) => {
+      const [ownerKind, actionKind] = key.split('|');
+      return {
+        ownerKind,
+        actionKind,
+        actionCount: groupedActions.length,
+        runtimeStatusCounts: countValues(
+          groupedActions.map(action => action.runtimeStatus)
+        ),
+        timingStatusCounts: countValues(
+          groupedActions.map(action => action.timing.status)
+        ),
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.ownerKind.localeCompare(right.ownerKind) ||
+        left.actionKind.localeCompare(right.actionKind)
+    );
+  const gateChecks = {
+    publicActionDenominator:
+      actions.length === M9_PRODUCT_DENOMINATOR.publicActionCount,
+    actorOwnerDenominator:
+      actorOwnerCount === M9_PRODUCT_DENOMINATOR.actorOwnerCount,
+    kiboOwnerDenominator:
+      kiboOwnerCount === M9_PRODUCT_DENOMINATOR.kiboOwnerCount,
+    everyPublicActionClassified:
+      actions.length === actionCoverage.summary.classifiedActionCount,
+    requiredActorCoreActionsPresent:
+      actorCoreActions.length ===
+        M9_PRODUCT_DENOMINATOR.actorOwnerCount * requiredActorKinds.size &&
+      actionCoverage.missingRequiredActorActions.length === 0,
+    requiredKiboActionsPresent:
+      kiboCoreActions.length ===
+      M9_PRODUCT_DENOMINATOR.kiboOwnerCount * requiredKiboKinds.size,
+    everyUnresolvedActionExplained: unclassifiedUnresolvedActions.length === 0,
+    everyNonzeroRecoveryElementScoped:
+      recoveryCoverage.length ===
+        Object.values(recoveryScopeCounts).reduce(
+          (sum, count) => sum + count,
+          0
+        ) && !recoveryScopeCounts.unclassified,
+  };
+  const gatePassed = Object.values(gateChecks).every(Boolean);
+  if (!gatePassed) {
+    throw new Error(
+      `M9 public runtime coverage gate failed: ${Object.entries(gateChecks)
+        .filter(([, passed]) => !passed)
+        .map(([name]) => name)
+        .join(', ')}`
+    );
+  }
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-public-runtime-coverage',
+    status: 'verified-public-runtime-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    fixedProductDenominator: M9_PRODUCT_DENOMINATOR,
+    complete: gatePassed,
+    gate: { passed: gatePassed, checks: gateChecks },
+    summary: {
+      publicActionCount: actions.length,
+      actorOwnerCount,
+      kiboOwnerCount,
+      runnableActionCount: actions.filter(action => action.runnable).length,
+      verifiedZeroActionCount: actions.filter(
+        action => action.runtimeStatus === 'verified-zero'
+      ).length,
+      unresolvedActionCount: unresolvedActions.length,
+      unresolvedStatusCounts: countValues(
+        unresolvedActions.map(action => action.runtimeStatus)
+      ),
+      unclassifiedUnresolvedActionCount: unclassifiedUnresolvedActions.length,
+      actorCoreActionCount: actorCoreActions.length,
+      actorCoreRunnableCount: actorCoreActions.filter(action => action.runnable)
+        .length,
+      kiboCoreActionCount: kiboCoreActions.length,
+      kiboCoreRunnableCount: kiboCoreActions.filter(action => action.runnable)
+        .length,
+      nonzeroRecoveryElementCount: recoveryCoverage.length,
+      recoveryScopeCounts,
+      actionDimensions: actionCoverage.summary.dimensions,
+      effectDimensions: effectCoverage.summary.dimensions,
+      semanticEffects: {
+        total: effectCoverage.summary.semanticEffectCount,
+        gameplay: effectCoverage.summary.semanticGameplayEffectCount,
+        applied: effectCoverage.summary.semanticAppliedCount,
+        verifiedZero: effectCoverage.summary.semanticVerifiedZeroCount,
+        unresolved: effectCoverage.summary.semanticUnresolvedCount,
+      },
+      timing: timingCoverage.summary,
+      actionVariantsAndResources: actionVariantResourceCoverage.summary,
+    },
+    byOwnerActionKind,
+    actorCoreActions,
+    kiboCoreActions,
+    actions,
+    unresolvedActions,
+    recoveryCoverage,
+  };
+}
+
+function summarizeProductVariantEdges(edges) {
+  if (!edges.length) return { status: 'not-applicable', total: 0 };
+  const applied = edges.filter(edge => edge.applied).length;
+  return {
+    status:
+      applied === edges.length
+        ? 'applied'
+        : applied > 0
+          ? 'partially-applied'
+          : 'static-evidence-gap',
+    total: edges.length,
+    applied,
+    unresolved: edges.length - applied,
+  };
+}
+
+function normalizeProductGapReason(reason) {
+  const replacements = {
+    'pack-lifecycle-runtime-unimplemented':
+      'pack-lifecycle-semantics-evidence-gap',
+    'judgment-condition-runtime-unimplemented':
+      'judgment-condition-semantics-evidence-gap',
+    'nested-damage-trigger-lifecycle-not-expanded':
+      'nested-damage-trigger-lifecycle-evidence-gap',
+  };
+  return replacements[reason] ?? String(reason ?? 'unclassified-gap');
+}
+
+function classifyProductActionGap(reasons) {
+  if (!reasons.length) return { status: 'unclassified-gap' };
+  const categories = new Set(reasons.map(classifyProductGapReason));
+  if (categories.has('unclassified')) return { status: 'unclassified-gap' };
+  if (
+    categories.has('runtime-dependent') &&
+    categories.has('static-evidence-gap')
+  ) {
+    return { status: 'runtime-and-evidence-gap' };
+  }
+  return {
+    status: categories.has('runtime-dependent')
+      ? 'runtime-dependent'
+      : 'static-evidence-gap',
+  };
+}
+
+function classifyProductGapReason(reason) {
+  if (
+    /(runtime-dependent|projectile-(impact|collision)|runtime-target|runtime-trigger|runtime-selection|random-target)/.test(
+      reason
+    )
+  ) {
+    return 'runtime-dependent';
+  }
+  if (
+    /(missing|unresolved|incomplete|unverified|not-invariant|no-runnable|not-expanded|evidence-gap|ambiguous|mismatch|unsupported|without-root-selection|multiple-root|classified-through|not-literal)/.test(
+      reason
+    )
+  ) {
+    return 'static-evidence-gap';
+  }
+  return 'unclassified';
+}
+
+function createPublicRuntimeCoverageMarkdown(report) {
+  const recovery = report.summary.recoveryScopeCounts;
+  const lines = [
+    '# M9-D 公开动作运行时覆盖',
+    '',
+    `- 包：\`${report.packageId}\``,
+    `- 固定产品分母：${report.summary.publicActionCount} 个公开动作 / ${report.summary.actorOwnerCount} 名角色 / ${report.summary.kiboOwnerCount} 只奇波`,
+    `- 可运行：${report.summary.runnableActionCount}`,
+    `- 明确零：${report.summary.verifiedZeroActionCount}`,
+    `- 未解析：${report.summary.unresolvedActionCount}（未分类 ${report.summary.unclassifiedUnresolvedActionCount}）`,
+    `- 角色核心动作：${report.summary.actorCoreRunnableCount}/${report.summary.actorCoreActionCount} 可运行`,
+    `- 奇波 active / break / signature：${report.summary.kiboCoreRunnableCount}/${report.summary.kiboCoreActionCount} 可运行`,
+    '',
+    '## 未解析边界',
+    '',
+    ...Object.entries(report.summary.unresolvedStatusCounts).map(
+      ([status, count]) => `- ${status}: ${count}`
+    ),
+    '',
+    '## 非零命中回能元素',
+    '',
+    `- 当前公开动作已应用：${recovery['applied-current-public-action'] ?? 0}`,
+    `- 当前公开动作因动作证据缺口未应用：${recovery['current-public-action-unresolved'] ?? 0}`,
+    `- 仅属于公开动作未选 control 变体：${recovery['public-unselected-control-variant'] ?? 0}`,
+    `- 不属于当前公开动作目录：${recovery['outside-current-public-action-catalog'] ?? 0}`,
+    '',
+    '## Owner / 动作类型',
+    '',
+    '| Owner | 动作类型 | 分母 | 可运行 | 运行时依赖 | 证据缺口 | 混合缺口 |',
+    '| --- | --- | ---: | ---: | ---: | ---: | ---: |',
+    ...report.byOwnerActionKind.map(row => {
+      const counts = row.runtimeStatusCounts;
+      return `| ${row.ownerKind} | ${row.actionKind} | ${row.actionCount} | ${counts.runnable ?? 0} | ${counts['runtime-dependent'] ?? 0} | ${counts['static-evidence-gap'] ?? 0} | ${counts['runtime-and-evidence-gap'] ?? 0} |`;
+    }),
+    '',
+    '## 发布守门',
+    '',
+    ...Object.entries(report.gate.checks).map(
+      ([name, passed]) => `- ${passed ? '通过' : '失败'}：${name}`
+    ),
+    '',
+    '> 目录外 DamageElement 与未选 control 变体不再计入当前公开动作产品缺口；逐动作、逐维和逐来源 identity 见同名 JSON。',
   ];
   return `${lines.join('\n')}\n`;
 }
