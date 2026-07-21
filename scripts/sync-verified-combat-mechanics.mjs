@@ -57,6 +57,16 @@ const ACTION_COVERAGE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-combat-action-coverage.md'
 );
+const ACTION_TIMING_COVERAGE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-combat-action-timing-coverage.json'
+);
+const ACTION_TIMING_COVERAGE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-combat-action-timing-coverage.md'
+);
 const EFFECT_COVERAGE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -108,6 +118,11 @@ const COEFFICIENT_RANGES_PATH = path.join(
 const ENEMY_BREAK_PROFILES_PATH = path.join(
   OUTPUT_ROOT,
   'combat-enemy-break-profiles-20260718.json'
+);
+const IL2CPP_DUMP_PATH = path.join(
+  OUTPUT_ROOT,
+  'il2cpp-tc-catch-20260709',
+  'dump.cs'
 );
 const LEVEL_SAMPLE_PATHS = [1, 12].map(level =>
   path.join(
@@ -170,6 +185,7 @@ async function main() {
   const evidence = readJson(EVIDENCE_PATH);
   validateEvidence(evidence, validation);
   const mechanismEvidence = createMechanismEvidenceManifest();
+  const battleTargetTypeContract = createBattleTargetTypeContract();
   const overlimitMechanics = readJson(OVERLIMIT_MECHANICS_PATH);
   const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
   const kiboCatalog = readJson(
@@ -198,7 +214,7 @@ async function main() {
   ]);
   const controls = [...controlIds]
     .filter(Number.isInteger)
-    .map(findSkillControl)
+    .map(skillId => findSkillControl(skillId, battleTargetTypeContract))
     .filter(Boolean);
   const wantedPathIds = new Set(
     controls
@@ -291,6 +307,11 @@ async function main() {
     staticPropertyCatalog,
     tuningMechanicsCatalog,
   });
+  const semanticEffectCatalog = createSemanticEffectCatalog({
+    controlBindings,
+    packageValue,
+    battleTargetTypeContract,
+  });
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
     packageValue,
@@ -306,7 +327,11 @@ async function main() {
     controlBindings,
     nonzeroRecoveryElements,
   });
-  const effectCoverage = createEffectCoverageReport(packageValue);
+  const timingCoverage = createActionTimingCoverageReport(packageValue);
+  const effectCoverage = createEffectCoverageReport(
+    packageValue,
+    semanticEffectCatalog
+  );
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
@@ -316,6 +341,14 @@ async function main() {
     [AUDIT_OUTPUT, `${JSON.stringify(audit, null, 2)}\n`],
     [ACTION_COVERAGE_JSON_OUTPUT, `${JSON.stringify(coverage, null, 2)}\n`],
     [ACTION_COVERAGE_MARKDOWN_OUTPUT, createActionCoverageMarkdown(coverage)],
+    [
+      ACTION_TIMING_COVERAGE_JSON_OUTPUT,
+      `${JSON.stringify(timingCoverage, null, 2)}\n`,
+    ],
+    [
+      ACTION_TIMING_COVERAGE_MARKDOWN_OUTPUT,
+      createActionTimingCoverageMarkdown(timingCoverage),
+    ],
     [
       EFFECT_COVERAGE_JSON_OUTPUT,
       `${JSON.stringify(effectCoverage, null, 2)}\n`,
@@ -730,7 +763,7 @@ function scorePublicActionVariant(label, actionKind) {
   return 1;
 }
 
-function findSkillControl(skillId) {
+function findSkillControl(skillId, battleTargetTypeContract) {
   const directory = path.join(
     BATTLE_ROOT,
     'SkillList',
@@ -764,6 +797,12 @@ function findSkillControl(skillId) {
           directory,
           filePath,
           elementRefs
+        ),
+        semanticBehaviorTriggers: collectSemanticBehaviorTriggers(
+          directory,
+          filePath,
+          elementRefs,
+          battleTargetTypeContract
         ),
       };
     }
@@ -987,6 +1026,277 @@ function createBehaviorTarget(code, sourceField) {
               : 'unresolved',
     sourceField,
   };
+}
+
+function createBattleTargetTypeContract() {
+  const source = readText(IL2CPP_DUMP_PATH);
+  const enumNames = [
+    'EDirectInjectTargetType',
+    'ETargetType',
+    'EElementTriggerTargetType',
+    'ETriggerEffectTargetType',
+  ];
+  const enums = Object.fromEntries(
+    enumNames.map(enumName => [enumName, parseIl2CppEnum(source, enumName)])
+  );
+  assertEnumMember(enums.EDirectInjectTargetType, 'Self', 0);
+  assertEnumMember(enums.EDirectInjectTargetType, 'ControllingHero', 1);
+  assertEnumMember(enums.ETargetType, 'Enemy', 1);
+  assertEnumMember(enums.ETargetType, 'Self', 4);
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-battle-target-type-contract',
+    status: 'verified-battle-target-type-contract-ready',
+    clientBuild: 'il2cpp-tc-catch-20260709',
+    sourceIdentity: `${relativeExternalPath(IL2CPP_DUMP_PATH)}#EDirectInjectTargetType|ETargetType|EElementTriggerTargetType|ETriggerEffectTargetType`,
+    sourceSha256: sha256File(IL2CPP_DUMP_PATH),
+    enums,
+  };
+}
+
+function parseIl2CppEnum(source, enumName) {
+  const marker = `public enum ${enumName}`;
+  const start = source.indexOf(marker);
+  if (start < 0) throw new Error(`missing IL2CPP enum ${enumName}`);
+  const bodyStart = source.indexOf('{', start);
+  const bodyEnd = source.indexOf('\n}', bodyStart);
+  if (bodyStart < 0 || bodyEnd < 0) {
+    throw new Error(`invalid IL2CPP enum ${enumName}`);
+  }
+  const members = {};
+  const expression = new RegExp(
+    `public const ${enumName}\\s+([A-Za-z0-9_]+)\\s*=\\s*(-?\\d+);`,
+    'g'
+  );
+  for (const match of source.slice(bodyStart, bodyEnd).matchAll(expression)) {
+    members[match[1]] = Number(match[2]);
+  }
+  if (Object.keys(members).length === 0) {
+    throw new Error(`empty IL2CPP enum ${enumName}`);
+  }
+  return {
+    sourceIdentity: `${relativeExternalPath(IL2CPP_DUMP_PATH)}#${enumName}`,
+    members,
+  };
+}
+
+function assertEnumMember(definition, member, expectedValue) {
+  if (definition?.members?.[member] !== expectedValue) {
+    throw new Error(
+      `IL2CPP enum drift: ${member} expected ${expectedValue}, received ${definition?.members?.[member]}`
+    );
+  }
+}
+
+function collectSemanticBehaviorTriggers(
+  directory,
+  mainFilePath,
+  elementRefs,
+  battleTargetTypeContract
+) {
+  const wanted = new Set(elementRefs.map(ref => ref.pathId).filter(Boolean));
+  const triggers = new Map([...wanted].map(pathId => [pathId, []]));
+  for (const name of fs.readdirSync(directory)) {
+    const filePath = path.join(directory, name);
+    if (
+      filePath === mainFilePath ||
+      !name.endsWith('.json') ||
+      !fs.statSync(filePath).isFile()
+    ) {
+      continue;
+    }
+    const value = readUnityJson(filePath);
+    const referencedPathIds = collectReferencedPathIds(value);
+    for (const pathId of referencedPathIds) {
+      if (!wanted.has(pathId)) continue;
+      const target = resolveSemanticBehaviorElementTarget(
+        value,
+        pathId,
+        battleTargetTypeContract
+      );
+      triggers.get(pathId).push({
+        behaviorPathId: path.basename(name, '.json').split('__').at(-1),
+        startFrame: integerOrNull(value.startFrame),
+        frameCount: integerOrNull(value.frameCount),
+        behaviorIndex: integerOrNull(value.behaviorIndex),
+        timelineGroupIndex: integerOrNull(value.timelineGroupIndex),
+        target: target,
+        sourceIdentity: `${relativeExternalPath(filePath)}#startFrame|${target.sourceField ?? 'target-unresolved'}`,
+      });
+    }
+  }
+  return new Map(
+    [...triggers.entries()].map(([pathId, entries]) => [
+      pathId,
+      dedupeBy(
+        entries,
+        entry =>
+          `${entry.behaviorPathId}|${entry.startFrame}|${entry.target.sourceField}|${entry.target.code}`
+      ),
+    ])
+  );
+}
+
+function resolveSemanticBehaviorElementTarget(
+  value,
+  pathId,
+  battleTargetTypeContract
+) {
+  for (const field of [
+    'toOwnElementDatas',
+    'toOwnElements',
+    'toOwnElementBaseDatas',
+  ]) {
+    if (arrayContainsPathId(value?.[field], pathId)) {
+      return {
+        code: null,
+        kind: 'source-owner',
+        sourceField: field,
+        enumName: null,
+        enumMember: 'ExplicitOwnElementList',
+        resolution: 'static-resolved',
+        runtimeReason: null,
+        sourceIdentity: `${relativeExternalPath(IL2CPP_DUMP_PATH)}#IElementSkillBehaviourData`,
+      };
+    }
+  }
+  if (arrayContainsPathId(value?.elementDataList, pathId)) {
+    return createSemanticBehaviorTarget(
+      integerOrNull(value.directInjectTargetType),
+      'directInjectTargetType',
+      'EDirectInjectTargetType',
+      battleTargetTypeContract
+    );
+  }
+  for (const field of ['elementIdDatas', 'elementBaseDatas']) {
+    if (arrayContainsPathId(value?.[field], pathId)) {
+      return createSemanticBehaviorTarget(
+        integerOrNull(value.targetType),
+        'targetType',
+        'ETargetType',
+        battleTargetTypeContract,
+        field
+      );
+    }
+  }
+  return {
+    code: null,
+    kind: 'unresolved',
+    sourceField: null,
+    enumName: null,
+    enumMember: null,
+    resolution: 'static-evidence-gap',
+    runtimeReason: null,
+    sourceIdentity: null,
+  };
+}
+
+function createSemanticBehaviorTarget(
+  code,
+  sourceField,
+  enumName,
+  battleTargetTypeContract,
+  containerField = sourceField
+) {
+  const definition = battleTargetTypeContract.enums[enumName];
+  const enumMember = Object.entries(definition.members).find(
+    ([, value]) => value === code
+  )?.[0];
+  const classification = classifyBattleTargetMember(enumName, enumMember);
+  return {
+    code,
+    kind: classification.kind,
+    sourceField,
+    containerField,
+    enumName,
+    enumMember: enumMember ?? null,
+    resolution: enumMember ? classification.resolution : 'static-evidence-gap',
+    runtimeReason: enumMember ? classification.runtimeReason : null,
+    sourceIdentity: `${definition.sourceIdentity}.${enumMember ?? `unknown-${code}`}`,
+  };
+}
+
+function classifyBattleTargetMember(enumName, enumMember) {
+  if (enumName === 'ETargetType') {
+    return (
+      {
+        Enemy: targetMember('enemy'),
+        Ally: targetMember('ally'),
+        Any: targetMember(
+          'any',
+          'runtime-dependent',
+          'runtime-target-selection-any'
+        ),
+        Self: targetMember('source-owner'),
+        MonsterGroupConfigPos: targetMember(
+          'monster-group-config-position',
+          'runtime-dependent',
+          'runtime-target-selection-config-position'
+        ),
+      }[enumMember] ?? targetMember('unresolved', 'static-evidence-gap')
+    );
+  }
+  if (enumName === 'EDirectInjectTargetType') {
+    return (
+      {
+        Self: targetMember('source-owner'),
+        ControllingHero: targetMember('controlling-actor'),
+        ControllingPet: targetMember('controlling-kibo'),
+        AllHero: targetMember('team-actors'),
+        AllPet: targetMember('team-kibos'),
+        AllyKiBo: targetMember('ally-kibo'),
+        EnemyKiBo: targetMember(
+          'enemy-kibo',
+          'runtime-dependent',
+          'runtime-target-selection-enemy-kibo'
+        ),
+        PetOwner: targetMember('owner-actor'),
+        SelfPet: targetMember('owner-kibo'),
+        Pet: targetMember(
+          'kibo',
+          'runtime-dependent',
+          'runtime-target-selection-kibo'
+        ),
+        CurrentMaxHp: targetMember(
+          'actor-by-current-max-hp',
+          'runtime-dependent',
+          'runtime-target-selection-current-max-hp'
+        ),
+        CurrentMinHp: targetMember(
+          'actor-by-current-min-hp',
+          'runtime-dependent',
+          'runtime-target-selection-current-min-hp'
+        ),
+        CurrentMaxHpPercent: targetMember(
+          'actor-by-current-max-hp-percent',
+          'runtime-dependent',
+          'runtime-target-selection-current-max-hp-percent'
+        ),
+        CurrentMinHpPercent: targetMember(
+          'actor-by-current-min-hp-percent',
+          'runtime-dependent',
+          'runtime-target-selection-current-min-hp-percent'
+        ),
+        ClosetEntity: targetMember(
+          'closest-entity',
+          'runtime-dependent',
+          'runtime-target-selection-closest-entity'
+        ),
+        Player: targetMember('player'),
+        AllyHero: targetMember('ally-actor'),
+        AllEntiiesWithoutSelf: targetMember('all-entities-without-self'),
+      }[enumMember] ?? targetMember('unresolved', 'static-evidence-gap')
+    );
+  }
+  return targetMember('unresolved', 'static-evidence-gap');
+}
+
+function targetMember(
+  kind,
+  resolution = 'static-resolved',
+  runtimeReason = null
+) {
+  return { kind, resolution, runtimeReason };
 }
 
 function arrayContainsPathId(values, pathId) {
@@ -1306,6 +1616,7 @@ function createControlBinding({
     elements,
     effectGraph,
     effects,
+    semanticBehaviorTriggers: control.semanticBehaviorTriggers,
   };
 }
 
@@ -1771,7 +2082,11 @@ function classifyBattleEffectNode({
       'elementConfigId|notDelElementDataList'
     );
   } else if (['pack', 'stack', 'judgment'].includes(kind)) {
-    reasons.push(`${kind}-state-machine-deferred-to-m8-c`);
+    reasons.push(
+      kind === 'judgment'
+        ? 'judgment-condition-runtime-unimplemented'
+        : `${kind}-lifecycle-runtime-unimplemented`
+    );
     dimensions.mark = createDimensionClassification(
       'unresolved',
       reasons,
@@ -1865,7 +2180,7 @@ function createControlRuntimeEffectBinding({
       reason =>
         !tuningBinding ||
         ![
-          'stack-state-machine-deferred-to-m8-c',
+          'stack-lifecycle-runtime-unimplemented',
           'inject-wrapper-classified-through-child-edges',
         ].includes(reason)
     ),
@@ -3174,17 +3489,25 @@ function createPackage({
     left.catalogIdentity.localeCompare(right.catalogIdentity)
   );
   const actionMappings = candidates.map(candidate => {
-    const mapping = createActionMapping(
-      candidate,
-      preparedControlBySkillId.get(candidate.controlSkillId)
-    );
+    const control = preparedControlBySkillId.get(candidate.controlSkillId);
+    const mechanicsMapping = createActionMapping(candidate, control);
     if (candidate.actionKind !== 'normal-attack') {
-      return mapping;
+      return attachActionTimingContract(
+        mechanicsMapping,
+        createPublicActionTimingContract({
+          candidate,
+          mapping: mechanicsMapping,
+          control,
+        })
+      );
     }
     const attackInputSegments = createAttackInputSegments(
       candidate,
       preparedControlBySkillId
     );
+    const actionTiming =
+      createAttackInputChainTimingContract(attackInputSegments);
+    const mapping = attachActionTimingContract(mechanicsMapping, actionTiming);
     return {
       ...mapping,
       attackInputChainStatus:
@@ -3336,7 +3659,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 9,
+    packageVersion: 10,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -3605,6 +3928,890 @@ function createPublishedEffectDimensions(dimensions) {
   );
 }
 
+function createSemanticEffectCatalog({
+  controlBindings,
+  packageValue,
+  battleTargetTypeContract,
+}) {
+  const publishedControlIds = new Set(
+    packageValue.controlBindings.map(binding => binding.controlSkillId)
+  );
+  const publicActionByRawEffect = new Map();
+  for (const mapping of packageValue.actionMappings) {
+    const selectedEffectIdentities = new Set([
+      ...(mapping.selectedEffectIdentities ?? []),
+      ...(mapping.attackInputSegments ?? []).flatMap(
+        segment => segment.selectedEffectIdentities ?? []
+      ),
+    ]);
+    for (const effectIdentity of selectedEffectIdentities) {
+      appendMapArray(publicActionByRawEffect, effectIdentity, {
+        actionIdentity: mapping.identity,
+        ownerKind: mapping.ownerKind,
+        ownerId: mapping.ownerId,
+        ownerName: mapping.ownerName,
+        actionKind: mapping.actionKind,
+        sourceSkillId: mapping.sourceSkillId,
+        sourceSkillName: mapping.sourceSkillName,
+      });
+    }
+  }
+
+  const candidates = controlBindings
+    .filter(binding => publishedControlIds.has(binding.controlSkillId))
+    .flatMap(binding =>
+      binding.effectGraph.flatMap(root => {
+        const runtimeNodes = root.nodes.filter(isRuntimeEffectGraphNode);
+        const triggers = createSemanticRootTriggerContracts(binding, root);
+        return runtimeNodes.flatMap(node => {
+          const rawEffects = binding.effects.filter(
+            effect =>
+              effect.graphIdentity === root.graphIdentity &&
+              effect.pathId === node.pathId
+          );
+          return triggers.map(trigger =>
+            createSemanticEffectCandidate({
+              root,
+              node,
+              trigger,
+              rawEffects,
+              publicActionByRawEffect,
+            })
+          );
+        });
+      })
+    );
+  const grouped = new Map();
+  for (const candidate of candidates) {
+    const entries = grouped.get(candidate.semanticKey) ?? [];
+    entries.push(candidate);
+    grouped.set(candidate.semanticKey, entries);
+  }
+  const semanticEffects = [...grouped.values()]
+    .map(mergeSemanticEffectCandidates)
+    .sort((left, right) =>
+      left.semanticIdentity.localeCompare(right.semanticIdentity, 'en', {
+        numeric: true,
+      })
+    );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-semantic-battle-effect-catalog',
+    status: 'verified-semantic-battle-effect-catalog-ready',
+    targetTypeContract: battleTargetTypeContract,
+    semanticEffects,
+  };
+}
+
+function isRuntimeEffectGraphNode(node) {
+  if (
+    [
+      'property-change',
+      'sp',
+      'shield',
+      'pack',
+      'stack',
+      'judgment',
+      'inject',
+    ].includes(node.kind)
+  ) {
+    return true;
+  }
+  if (node.kind !== 'damage') return false;
+  return [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0;
+}
+
+function createSemanticRootTriggerContracts(binding, root) {
+  if (root.referenceKind === 'bulletElements') {
+    return [
+      {
+        kind: 'projectile-impact',
+        resolution: 'runtime-dependent',
+        startFrame: null,
+        frameCount: null,
+        behaviorPathId: null,
+        target: {
+          code: null,
+          kind: 'runtime-hit-target',
+          sourceField: 'skillResourceMaps[].bulletElements',
+          enumName: null,
+          enumMember: null,
+          resolution: 'runtime-dependent',
+          runtimeReason: 'runtime-target-from-projectile-collision',
+          sourceIdentity: root.sourceIdentity,
+        },
+        reasons: [
+          'runtime-trigger-projectile-collision-frame',
+          'runtime-target-from-projectile-collision',
+        ],
+        sourceIdentity: root.sourceIdentity,
+      },
+    ];
+  }
+  const sourceTriggers = root.rootPathId
+    ? (binding.semanticBehaviorTriggers?.get(root.rootPathId) ?? [])
+    : [];
+  if (sourceTriggers.length === 0) {
+    return [
+      {
+        kind: 'battle-behavior-event',
+        resolution: 'static-evidence-gap',
+        startFrame: null,
+        frameCount: null,
+        behaviorPathId: null,
+        target: {
+          code: null,
+          kind: 'unresolved',
+          sourceField: null,
+          enumName: null,
+          enumMember: null,
+          resolution: 'static-evidence-gap',
+          runtimeReason: null,
+          sourceIdentity: null,
+        },
+        reasons: [
+          'effect-trigger-frame-static-evidence-gap',
+          'effect-target-static-evidence-gap',
+        ],
+        sourceIdentity: root.sourceIdentity,
+      },
+    ];
+  }
+  return sourceTriggers.map(trigger => ({
+    kind: 'battle-behavior-event',
+    resolution: Number.isInteger(trigger.startFrame)
+      ? 'static-resolved'
+      : 'static-evidence-gap',
+    startFrame: trigger.startFrame,
+    frameCount: trigger.frameCount,
+    behaviorPathId: trigger.behaviorPathId,
+    target: trigger.target,
+    reasons: [
+      ...(Number.isInteger(trigger.startFrame)
+        ? []
+        : ['effect-trigger-frame-static-evidence-gap']),
+      ...(trigger.target.resolution === 'static-evidence-gap'
+        ? ['effect-target-static-evidence-gap']
+        : trigger.target.runtimeReason
+          ? [trigger.target.runtimeReason]
+          : []),
+    ],
+    sourceIdentity: trigger.sourceIdentity,
+  }));
+}
+
+function createSemanticEffectCandidate({
+  root,
+  node,
+  trigger,
+  rawEffects,
+  publicActionByRawEffect,
+}) {
+  const relationPath = resolveEffectGraphRelationPath(root, node.nodeIdentity);
+  const role = classifySemanticEffectRole(node, root);
+  const target = resolveSemanticEffectTarget(node, trigger, rawEffects);
+  const triggerKey =
+    trigger.resolution === 'runtime-dependent'
+      ? `runtime:${root.rootPathId ?? root.graphIdentity}`
+      : trigger.behaviorPathId != null
+        ? `${trigger.behaviorPathId}:${trigger.startFrame ?? 'missing'}`
+        : 'static-evidence-gap';
+  const semanticKey = [
+    root.controlSkillId,
+    root.mapIndex,
+    node.pathId,
+    triggerKey,
+  ].join('|');
+  const rawEffectIdentities = rawEffects.map(effect => effect.effectIdentity);
+  const publicActions = dedupeBy(
+    rawEffectIdentities.flatMap(
+      identity => publicActionByRawEffect.get(identity) ?? []
+    ),
+    action => action.actionIdentity
+  );
+  const reasons = createSemanticEffectReasons({
+    role,
+    node,
+    rawEffects,
+    trigger,
+    target,
+  });
+  const resolution = resolveSemanticPlacementResolution({ trigger, target });
+  const classification = resolveSemanticMechanicClassification(
+    role,
+    node,
+    rawEffects
+  );
+  return {
+    semanticKey,
+    semanticIdentity: `semantic-effect:${semanticKey}`,
+    controlSkillId: root.controlSkillId,
+    mapIndex: root.mapIndex,
+    elementId: node.elementId,
+    pathId: node.pathId,
+    name: node.name,
+    kind: node.kind,
+    role,
+    conditional: relationPath.some(edge =>
+      [
+        'triggerEffectList',
+        'zeroEffectList',
+        'finishEffectList',
+        'injectElementDataList_1',
+        'injectElementDataList_2',
+        'injectElementDataEffects',
+      ].includes(edge.relation)
+    ),
+    relationPath,
+    trigger,
+    target,
+    placementResolution: resolution,
+    staticallyResolvable: resolution === 'static-resolved',
+    lifecycle: {
+      durationMs: resolveSemanticEffectDuration(node, relationPath, root),
+      tags: node.lifecycle.tags,
+      combineType: node.lifecycle.combineType,
+      maxCount: node.lifecycle.maxCount,
+    },
+    classification,
+    dimensions: createPublishedEffectDimensions(node.dimensions),
+    reasons,
+    rawEffectIdentities,
+    graphIdentities: [root.graphIdentity],
+    rootBattleIdentities: [root.rootPathId],
+    battleIdentities: [node.pathId],
+    sourceIdentities: dedupeBy(
+      [node.sourceIdentity, root.sourceIdentity, trigger.sourceIdentity].filter(
+        Boolean
+      ),
+      value => value
+    ),
+    publicActions,
+    calculationMultiplicity: resolveSemanticCalculationMultiplicity(target),
+  };
+}
+
+function classifySemanticEffectRole(node, root) {
+  if (node.tuningMark || node.tuningOverlimit) return 'gameplay-effect';
+  if (node.kind === 'judgment') return 'condition';
+  const hasChildren = root.edges.some(
+    edge => edge.from === node.nodeIdentity && edge.status.includes('resolved')
+  );
+  if (['inject', 'pack'].includes(node.kind)) return 'wrapper';
+  if (node.kind === 'stack' && hasChildren) return 'wrapper';
+  return 'gameplay-effect';
+}
+
+function resolveSemanticEffectTarget(node, trigger, rawEffects) {
+  const appliedTarget = rawEffects.find(effect =>
+    ['team-tuning-pool', 'enemy'].includes(effect.target?.kind)
+  )?.target;
+  if (node.tuningMark || node.tuningOverlimit) {
+    return {
+      ...(appliedTarget ?? { kind: 'unresolved', code: null }),
+      resolution: appliedTarget ? 'static-resolved' : 'static-evidence-gap',
+      enumName: null,
+      enumMember: null,
+      sourceField: 'verified-tuning-mechanics',
+      runtimeReason: null,
+    };
+  }
+  if (node.kind === 'sp') {
+    return {
+      kind: 'source-owner',
+      code: null,
+      resolution: 'static-resolved',
+      enumName: null,
+      enumMember: 'SpElement.Execute.source',
+      sourceField: 'SpElement.Execute.source',
+      runtimeReason: null,
+      sourceIdentity: node.sourceIdentity,
+    };
+  }
+  return trigger.target;
+}
+
+function createSemanticEffectReasons({
+  role,
+  node,
+  rawEffects,
+  trigger,
+  target,
+}) {
+  const reasons = [
+    ...node.reasons,
+    ...rawEffects.flatMap(effect => effect.reasons),
+  ]
+    .map(normalizeSemanticEffectReason)
+    .filter(Boolean)
+    .filter(reason => !reason.startsWith('effect-target-'))
+    .filter(reason => reason !== 'effect-trigger-frame-missing')
+    .filter(
+      reason =>
+        role !== 'wrapper' ||
+        reason !== 'inject-wrapper-classified-through-child-edges'
+    );
+  reasons.push(...trigger.reasons);
+  if (
+    target.resolution === 'static-evidence-gap' &&
+    !reasons.includes('effect-target-static-evidence-gap')
+  ) {
+    reasons.push('effect-target-static-evidence-gap');
+  }
+  if (target.runtimeReason) reasons.push(target.runtimeReason);
+  if (role === 'wrapper') reasons.push('semantic-wrapper-not-gameplay-effect');
+  if (role === 'condition') {
+    reasons.push('semantic-condition-not-standalone-gameplay-effect');
+  }
+  return dedupeBy(reasons, value => value);
+}
+
+function normalizeSemanticEffectReason(reason) {
+  return (
+    {
+      'pack-state-machine-deferred-to-m8-c':
+        'pack-lifecycle-runtime-unimplemented',
+      'stack-state-machine-deferred-to-m8-c':
+        'stack-lifecycle-runtime-unimplemented',
+      'judgment-state-machine-deferred-to-m8-c':
+        'judgment-condition-runtime-unimplemented',
+      'nested-effect-wrapper-semantics-unresolved':
+        'wrapper-condition-semantics-unresolved',
+      'nested-damage-trigger-lifecycle-not-expanded':
+        'nested-damage-runtime-family-unimplemented',
+    }[reason] ?? reason
+  );
+}
+
+function resolveSemanticPlacementResolution({ trigger, target }) {
+  if (
+    trigger.resolution === 'runtime-dependent' ||
+    target.resolution === 'runtime-dependent'
+  ) {
+    return 'runtime-dependent';
+  }
+  if (
+    trigger.resolution === 'static-evidence-gap' ||
+    target.resolution === 'static-evidence-gap'
+  ) {
+    return 'static-evidence-gap';
+  }
+  return 'static-resolved';
+}
+
+function resolveSemanticMechanicClassification(role, node, rawEffects) {
+  if (role !== 'gameplay-effect') return 'structural';
+  if (rawEffects.some(effect => effect.classification === 'applied')) {
+    return 'applied';
+  }
+  if (
+    rawEffects.length > 0 &&
+    rawEffects.every(effect => effect.classification === 'verified-zero')
+  ) {
+    return 'verified-zero';
+  }
+  return node.classification === 'verified-zero'
+    ? 'verified-zero'
+    : 'unresolved';
+}
+
+function resolveSemanticEffectDuration(node, relationPath, root) {
+  const ancestors = relationPath
+    .map(edge =>
+      root.nodes.find(candidate => candidate.nodeIdentity === edge.from)
+    )
+    .filter(Boolean);
+  return resolveEffectDurationMs(node, ancestors);
+}
+
+function resolveSemanticCalculationMultiplicity(target) {
+  const groupTargets = new Set([
+    'team-actors',
+    'team-kibos',
+    'all-entities-without-self',
+  ]);
+  if (groupTargets.has(target.kind)) {
+    return {
+      mode: 'per-recipient-runtime-copy',
+      semanticRecordCount: 1,
+      runtimeCopyCount: 'resolved-at-runtime',
+    };
+  }
+  return {
+    mode:
+      target.resolution === 'runtime-dependent'
+        ? 'runtime-selected-recipient'
+        : 'single-semantic-target',
+    semanticRecordCount: 1,
+    runtimeCopyCount: target.resolution === 'runtime-dependent' ? 1 : null,
+  };
+}
+
+function mergeSemanticEffectCandidates(candidates) {
+  const first = candidates[0];
+  const rawEffectIdentities = dedupeBy(
+    candidates.flatMap(candidate => candidate.rawEffectIdentities),
+    value => value
+  );
+  const publicActions = dedupeBy(
+    candidates.flatMap(candidate => candidate.publicActions),
+    action => action.actionIdentity
+  ).sort((left, right) =>
+    left.actionIdentity.localeCompare(right.actionIdentity, 'en', {
+      numeric: true,
+    })
+  );
+  const classifications = candidates.map(candidate => candidate.classification);
+  return {
+    ...first,
+    graphIdentities: dedupeBy(
+      candidates.flatMap(candidate => candidate.graphIdentities),
+      value => value
+    ).sort(),
+    rootBattleIdentities: dedupeBy(
+      candidates.flatMap(candidate => candidate.rootBattleIdentities),
+      value => value
+    ).sort(),
+    battleIdentities: dedupeBy(
+      candidates.flatMap(candidate => candidate.battleIdentities),
+      value => value
+    ).sort(),
+    sourceIdentities: dedupeBy(
+      candidates.flatMap(candidate => candidate.sourceIdentities),
+      value => value
+    ).sort(),
+    rawEffectIdentities,
+    rawEffectBindingCount: rawEffectIdentities.length,
+    collapsedCandidateCount: candidates.length,
+    publicActions,
+    owners: dedupeBy(
+      publicActions.map(action => ({
+        ownerKind: action.ownerKind,
+        ownerId: action.ownerId,
+        ownerName: action.ownerName,
+      })),
+      owner => `${owner.ownerKind}:${owner.ownerId}`
+    ),
+    reasons: dedupeBy(
+      candidates.flatMap(candidate => candidate.reasons),
+      value => value
+    ),
+    classification: classifications.includes('applied')
+      ? 'applied'
+      : classifications.includes('unresolved')
+        ? 'unresolved'
+        : classifications.includes('verified-zero')
+          ? 'verified-zero'
+          : 'structural',
+  };
+}
+
+function createPublicActionTimingContract({ candidate, mapping, control }) {
+  const variantTimings = (control?.variants ?? []).map(variant =>
+    createControlVariantTimingContract({
+      control,
+      variant,
+      actionKind: candidate.actionKind,
+    })
+  );
+  const selected = variantTimings.find(
+    timing => timing.subSkillIndex === mapping.selectedSubSkillIndex
+  );
+  if (selected) {
+    return createSelectedActionTimingContract({
+      actionKind: candidate.actionKind,
+      control,
+      selected,
+      variantTimings,
+      sourceKind: 'selected-skill-control-player-variant',
+    });
+  }
+  const appliedVariants = variantTimings.filter(
+    timing => timing.occupancy.status === 'applied'
+  );
+  const uniqueDurations = [
+    ...new Set(appliedVariants.map(timing => timing.occupancy.durationFrames)),
+  ];
+  if (
+    variantTimings.length > 0 &&
+    appliedVariants.length === variantTimings.length &&
+    uniqueDurations.length === 1
+  ) {
+    const representative = appliedVariants[0];
+    return createSelectedActionTimingContract({
+      actionKind: candidate.actionKind,
+      control,
+      selected: {
+        ...representative,
+        occupancy: {
+          ...representative.occupancy,
+          sourceKind: 'invariant-across-control-player-variants',
+          sourceIdentity: appliedVariants
+            .map(timing => timing.occupancy.sourceIdentity)
+            .join('|'),
+        },
+      },
+      variantTimings,
+      sourceKind: 'invariant-across-control-player-variants',
+    });
+  }
+  return createUnresolvedActionTimingContract({
+    actionKind: candidate.actionKind,
+    control,
+    variantTimings,
+    reasons: [
+      variantTimings.length === 0
+        ? 'skill-control-player-variant-missing'
+        : appliedVariants.length !== variantTimings.length
+          ? 'control-player-variant-duration-unresolved'
+          : 'control-player-variant-duration-not-invariant',
+    ],
+  });
+}
+
+function createControlVariantTimingContract({
+  control,
+  variant,
+  actionKind,
+  occupancyResolver = resolveStandaloneActionOccupancy,
+  occupancyContext = {},
+}) {
+  const frameRate = positiveNumberOrNull(control?.frameRate) ?? 60;
+  const selectedAnimationFrame = resolveDefaultFrameCount(variant.frameCounts);
+  const animation = selectedAnimationFrame
+    ? {
+        startFrame: 0,
+        endFrame: selectedAnimationFrame.frameCount,
+        durationFrames: selectedAnimationFrame.frameCount,
+        frameRate,
+        status: 'applied',
+        sourceKind: 'skill-control-player-animation-range',
+        sourceIdentity: `${variant.sourceIdentity}.frameCountDict[key=${selectedAnimationFrame.key}]`,
+        conversion: `${selectedAnimationFrame.frameCount} source frames at ${frameRate}fps`,
+      }
+    : {
+        startFrame: 0,
+        endFrame: null,
+        durationFrames: null,
+        frameRate,
+        status: 'unresolved',
+        sourceKind: 'skill-control-player-animation-range',
+        sourceIdentity: variant.sourceIdentity,
+        conversion: null,
+      };
+  const hits = (control?.hits ?? [])
+    .filter(hit => hit.mapIndex === variant.subSkillIndex)
+    .map(hit => ({
+      hitIdentity: hit.hitIdentity,
+      elementId: hit.elementId,
+      pathId: hit.pathId,
+      frame: nonNegativeIntegerOrNull(hit.trigger?.startFrame),
+      sourceIdentity: hit.trigger?.sourceIdentity ?? hit.sourceIdentity,
+    }))
+    .filter(hit => hit.frame != null)
+    .sort(
+      (left, right) =>
+        left.frame - right.frame ||
+        left.hitIdentity.localeCompare(right.hitIdentity)
+    );
+  const windows = normalizeActionTimingWindows(variant.eventBridges);
+  const occupancy = occupancyResolver({
+    actionKind,
+    animation,
+    hits,
+    windows,
+    variant,
+    ...occupancyContext,
+  });
+  const holdDurationMs = positiveNumberOrNull(
+    control?.logic?.holdTriggerTimeMs
+  );
+  const inputMode =
+    control?.logic?.inputTriggerType === 1 && holdDurationMs != null
+      ? 'hold'
+      : 'press';
+  return {
+    schemaVersion: 1,
+    subSkillIndex: variant.subSkillIndex,
+    playerSkillId: variant.playerSkillId,
+    frameRate,
+    input: {
+      mode: inputMode,
+      pressFrame: 0,
+      holdDurationMs: inputMode === 'hold' ? holdDurationMs : null,
+      holdFrames:
+        inputMode === 'hold'
+          ? Math.round((holdDurationMs / 1000) * frameRate)
+          : null,
+      status:
+        control?.logic?.inputTriggerType == null ? 'unresolved' : 'applied',
+      sourceIdentity: control?.logic?.sourceIdentity
+        ? `${control.logic.sourceIdentity}.inputTriggerType|${control.logic.sourceIdentity}.holdTriggerTime`
+        : null,
+    },
+    occupancy,
+    animation,
+    hits,
+    hitEnvelope: createHitEnvelope(hits),
+    windows,
+    cooldown: createActionTimingCooldown(control?.logic),
+    sourceIdentity: variant.sourceIdentity,
+  };
+}
+
+function resolveStandaloneActionOccupancy({ animation }) {
+  if (animation.status !== 'applied') {
+    return createUnresolvedOccupancy('skill-control-animation-range-missing', {
+      sourceIdentity: animation.sourceIdentity,
+      frameRate: animation.frameRate,
+    });
+  }
+  if (animation.durationFrames === 1) {
+    return createUnresolvedOccupancy(
+      'one-frame-public-action-requires-explicit-instant-evidence',
+      {
+        sourceIdentity: animation.sourceIdentity,
+        frameRate: animation.frameRate,
+      }
+    );
+  }
+  return {
+    startFrame: 0,
+    endFrame: animation.durationFrames,
+    durationFrames: animation.durationFrames,
+    frameRate: animation.frameRate,
+    status: 'applied',
+    sourceKind: 'skill-control-player-action-range',
+    sourceIdentity: animation.sourceIdentity,
+    conversion: animation.conversion,
+    reasons: [],
+  };
+}
+
+function createUnresolvedOccupancy(reason, { sourceIdentity, frameRate } = {}) {
+  return {
+    startFrame: 0,
+    endFrame: null,
+    durationFrames: null,
+    frameRate: frameRate ?? null,
+    status: 'unresolved',
+    sourceKind: 'unresolved-action-occupancy',
+    sourceIdentity: sourceIdentity ?? null,
+    conversion: null,
+    reasons: [reason],
+  };
+}
+
+function normalizeActionTimingWindows(bridges = []) {
+  return dedupeBy(
+    (bridges ?? [])
+      .map(bridge => {
+        const startFrame = nonNegativeIntegerOrNull(bridge.startFrame);
+        const endFrame = nonNegativeIntegerOrNull(bridge.endFrame);
+        if (startFrame == null || endFrame == null || endFrame <= startFrame) {
+          return null;
+        }
+        return {
+          kind: classifyActionTimingWindow(bridge),
+          startFrame,
+          endFrame,
+          durationFrames: endFrame - startFrame,
+          targetControlSkillId: positiveIntegerOrNull(bridge.targetSkillId),
+          allowAttack: Boolean(bridge.allowAttack),
+          baseOnInput: Boolean(bridge.baseOnInput),
+          inputToIndex: Boolean(bridge.inputToIndex),
+          bridgeType: nonNegativeIntegerOrNull(bridge.bridgeType),
+          continuousAttackType: nonNegativeIntegerOrNull(
+            bridge.continuousAttackType
+          ),
+          sourceIdentity: bridge.sourceIdentity,
+        };
+      })
+      .filter(Boolean),
+    window =>
+      [
+        window.kind,
+        window.startFrame,
+        window.endFrame,
+        window.targetControlSkillId,
+        window.bridgeType,
+        window.continuousAttackType,
+      ].join('|')
+  ).sort(
+    (left, right) =>
+      left.startFrame - right.startFrame ||
+      left.endFrame - right.endFrame ||
+      left.sourceIdentity.localeCompare(right.sourceIdentity)
+  );
+}
+
+function classifyActionTimingWindow(bridge) {
+  if (positiveIntegerOrNull(bridge.targetSkillId)) {
+    return bridge.baseOnInput || bridge.inputToIndex
+      ? 'input-derived-window'
+      : 'control-transition-window';
+  }
+  if (bridge.allowAttack) return 'attack-reopen-window';
+  return 'cancel-or-derived-window';
+}
+
+function createHitEnvelope(hits) {
+  if (!hits.length) {
+    return {
+      firstFrame: null,
+      lastFrame: null,
+      status: 'unresolved',
+      sourceIdentities: [],
+    };
+  }
+  return {
+    firstFrame: hits[0].frame,
+    lastFrame: hits.at(-1).frame,
+    status: 'applied',
+    sourceIdentities: hits.map(hit => hit.sourceIdentity),
+  };
+}
+
+function createActionTimingCooldown(logic) {
+  const cooldownMs = nonNegativeNumberOrNull(logic?.cooldownMs);
+  return {
+    cooldownMs,
+    chargeCount: positiveIntegerOrNull(logic?.cooldownCount),
+    status: cooldownMs == null ? 'unresolved' : 'applied',
+    sourceIdentity: logic?.sourceIdentity
+      ? `${logic.sourceIdentity}.coolDown|${logic.sourceIdentity}.coolDownCount`
+      : null,
+  };
+}
+
+function createSelectedActionTimingContract({
+  actionKind,
+  control,
+  selected,
+  variantTimings,
+  sourceKind,
+}) {
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-public-action-timing',
+    actionKind,
+    controlSkillId: control?.controlSkillId ?? null,
+    selectedSubSkillIndex: selected.subSkillIndex,
+    frameRate: selected.frameRate,
+    input: selected.input,
+    occupancy: selected.occupancy,
+    animation: selected.animation,
+    hits: selected.hits,
+    hitEnvelope: selected.hitEnvelope,
+    windows: selected.windows,
+    cooldown: selected.cooldown,
+    variantTimings,
+    status: selected.occupancy.status,
+    sourceKind,
+    sourceIdentity: selected.occupancy.sourceIdentity,
+    reasons: selected.occupancy.reasons ?? [],
+  };
+}
+
+function createUnresolvedActionTimingContract({
+  actionKind,
+  control,
+  variantTimings,
+  reasons,
+}) {
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-public-action-timing',
+    actionKind,
+    controlSkillId: control?.controlSkillId ?? null,
+    selectedSubSkillIndex: null,
+    frameRate: positiveNumberOrNull(control?.frameRate) ?? 60,
+    input: createControlInputTrigger(control?.logic),
+    occupancy: createUnresolvedOccupancy(reasons[0], {
+      sourceIdentity: control?.sourcePath ?? null,
+      frameRate: positiveNumberOrNull(control?.frameRate) ?? 60,
+    }),
+    animation: {
+      startFrame: 0,
+      endFrame: null,
+      durationFrames: null,
+      status: 'unresolved',
+      sourceIdentity: control?.sourcePath ?? null,
+    },
+    hits: [],
+    hitEnvelope: createHitEnvelope([]),
+    windows: [],
+    cooldown: createActionTimingCooldown(control?.logic),
+    variantTimings,
+    status: 'unresolved',
+    sourceKind: 'unresolved-action-occupancy',
+    sourceIdentity: control?.sourcePath ?? null,
+    reasons,
+  };
+}
+
+function attachActionTimingContract(mapping, actionTiming) {
+  const mechanicsClassification = mapping.classification;
+  const timingReady = actionTiming.status === 'applied';
+  return {
+    ...mapping,
+    mechanicsClassification,
+    actionTiming,
+    timingStatus: actionTiming.status,
+    classification: timingReady ? mechanicsClassification : 'unresolved',
+    runtimeReady: timingReady && mapping.runtimeReady,
+    complete: timingReady && mapping.complete,
+    reasons: dedupeBy(
+      [
+        ...(mapping.reasons ?? []),
+        ...(timingReady ? [] : actionTiming.reasons),
+      ],
+      value => value
+    ),
+  };
+}
+
+function createAttackInputChainTimingContract(segments) {
+  const timingReady =
+    segments.length > 0 &&
+    segments.every(segment => segment.durationStatus === 'applied');
+  const durationFrames = timingReady
+    ? segments.reduce(
+        (sum, segment) =>
+          sum + segment.durationFrames + (segment.defaultLinkDelayFrames ?? 0),
+        0
+      )
+    : null;
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-normal-attack-input-chain-timing',
+    status: timingReady ? 'applied' : 'unresolved',
+    frameRate: segments[0]?.controlFrameRate ?? 60,
+    input: {
+      mode: 'press',
+      inputCount: segments.length,
+      status: segments.length ? 'applied' : 'unresolved',
+    },
+    occupancy: {
+      startFrame: 0,
+      endFrame: durationFrames,
+      durationFrames,
+      status: timingReady ? 'applied' : 'unresolved',
+      sourceKind: 'normal-attack-input-segment-chain',
+      sourceIdentity: timingReady
+        ? segments.map(segment => segment.durationSourceIdentity).join('|')
+        : null,
+      reasons: timingReady
+        ? []
+        : ['normal-attack-input-segment-duration-unresolved'],
+    },
+    segmentCount: segments.length,
+    reasons: timingReady
+      ? []
+      : ['normal-attack-input-segment-duration-unresolved'],
+  };
+}
+
 function createAttackInputSegments(candidate, controlBySkillId) {
   const inputs = candidate.attackInputControls ?? [];
   const segments = inputs.map((input, segmentIndex) => {
@@ -3629,6 +4836,8 @@ function createAttackInputSegments(candidate, controlBySkillId) {
         selectedHitIdentities,
       }
     );
+    const mechanicsClassification = mapping.classification;
+    const timingReady = timing.status === 'applied';
     return {
       identity: `${mapping.identity}|attack-input-${input.sequenceIndex}`,
       sequenceIndex: input.sequenceIndex,
@@ -3661,13 +4870,20 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       linkWindows: timing.linkWindows,
       linkTimingStatus: timing.linkTimingStatus,
       linkTimingReasons: timing.linkTimingReasons,
+      actionTiming: timing.actionTiming,
+      variantTimings: timing.variantTimings,
       selectedHitIdentities,
       selectedEffectIdentities,
       hitCount: mapping.runtimeHitCount ?? 0,
       effectCount: mapping.runtimeEffectCount ?? 0,
       effectDimensionSummary: mapping.effectDimensionSummary,
-      classification: mapping.classification,
-      reasons: mapping.reasons ?? [],
+      mechanicsClassification,
+      classification: timingReady ? mechanicsClassification : 'unresolved',
+      runtimeReady: timingReady && mapping.runtimeReady,
+      reasons: dedupeBy(
+        [...(mapping.reasons ?? []), ...(timingReady ? [] : timing.reasons)],
+        value => value
+      ),
       sourceIdentity: `${input.sourceIdentity}|${control?.sourcePath ?? 'skill-control-missing'}`,
     };
   });
@@ -3690,153 +4906,173 @@ function resolveAttackInputSegmentTiming(
   selectedSubSkillIndex,
   { nextControlSkillId = null, selectedHitIdentities = [] } = {}
 ) {
-  const selectedVariant = control?.variants?.find(
-    variant => variant.subSkillIndex === selectedSubSkillIndex
+  const variantTimings = (control?.variants ?? []).map(variant =>
+    createControlVariantTimingContract({
+      control,
+      variant,
+      actionKind: 'normal-attack',
+      occupancyResolver: resolveNormalAttackInputOccupancy,
+      occupancyContext: { nextControlSkillId },
+    })
   );
-  const animation = resolveAttackInputAnimationTiming(control, selectedVariant);
+  const selectedVariantTiming = variantTimings.find(
+    timing => timing.subSkillIndex === selectedSubSkillIndex
+  );
+  const appliedVariants = variantTimings.filter(
+    timing => timing.occupancy.status === 'applied'
+  );
+  const uniqueOccupancyDurations = [
+    ...new Set(appliedVariants.map(timing => timing.occupancy.durationFrames)),
+  ];
+  const invariantVariantTiming =
+    !selectedVariantTiming &&
+    variantTimings.length > 0 &&
+    appliedVariants.length === variantTimings.length &&
+    uniqueOccupancyDurations.length === 1
+      ? appliedVariants[0]
+      : null;
+  const resolvedVariantTiming = selectedVariantTiming ?? invariantVariantTiming;
   const selectedHitSet = new Set(selectedHitIdentities);
-  const selectedHits = (control?.hits ?? []).filter(hit =>
-    selectedHitSet.has(hit.hitIdentity)
-  );
-  const hitEndFrame = selectedHits.length
-    ? Math.max(...selectedHits.map(hit => Number(hit.trigger?.startFrame) || 0))
-    : null;
-  const hitEndSourceIdentity =
-    selectedHits
-      .filter(hit => Number(hit.trigger?.startFrame) === hitEndFrame)
-      .map(hit => hit.sourceIdentity)
-      .join('|') || null;
-  const linkKind = nextControlSkillId
-    ? 'next-control-input-window'
-    : 'attack-reopen-window';
-  const linkWindows = normalizeAttackInputWindows(
-    (selectedVariant?.eventBridges ?? []).filter(bridge =>
-      nextControlSkillId
-        ? bridge.targetSkillId === nextControlSkillId
-        : bridge.allowAttack
-    ),
-    { kind: linkKind, targetControlSkillId: nextControlSkillId }
-  );
-  const linkWindow = linkWindows[0] ?? null;
-  const fullHitSafeWindowStart = linkWindow
-    ? Math.max(linkWindow.startFrame, hitEndFrame ?? linkWindow.startFrame)
-    : null;
-  const linkWindowContainsFinalHit =
-    linkWindow != null && fullHitSafeWindowStart <= linkWindow.endFrame;
-  const effectiveDurationFrames = linkWindowContainsFinalHit
-    ? fullHitSafeWindowStart
-    : null;
-  const durationFrames =
-    effectiveDurationFrames ?? Math.max(1, (hitEndFrame ?? 0) + 1);
-  const linkTimingReasons = linkWindowContainsFinalHit
+  const selectedHits = resolvedVariantTiming
+    ? resolvedVariantTiming.hits.filter(
+        hit => selectedHitSet.size === 0 || selectedHitSet.has(hit.hitIdentity)
+      )
+    : [];
+  const hitEnvelope = createHitEnvelope(selectedHits);
+  const occupancy = resolvedVariantTiming?.occupancy ?? null;
+  const timingReady = occupancy?.status === 'applied';
+  const unresolvedReason =
+    variantTimings.length === 0
+      ? 'skill-control-player-variant-missing'
+      : selectedSubSkillIndex != null
+        ? 'selected-control-player-variant-duration-unresolved'
+        : appliedVariants.length !== variantTimings.length
+          ? 'control-player-variant-duration-unresolved'
+          : 'control-player-variant-duration-not-invariant';
+  const reasons = timingReady
     ? []
-    : linkWindow
-      ? ['input-window-ends-before-final-hit']
-      : [
-          nextControlSkillId
-            ? 'next-control-event-bridge-window-unavailable'
-            : 'attack-reopen-event-bridge-window-unavailable',
-        ];
+    : dedupeBy(
+        [
+          unresolvedReason,
+          ...(occupancy?.reasons ?? []),
+          ...variantTimings.flatMap(timing => timing.occupancy.reasons ?? []),
+        ],
+        value => value
+      );
+  const actionTiming = timingReady
+    ? createSelectedActionTimingContract({
+        actionKind: 'normal-attack',
+        control,
+        selected: resolvedVariantTiming,
+        variantTimings,
+        sourceKind: selectedVariantTiming
+          ? 'selected-skill-control-player-variant'
+          : 'invariant-across-control-player-variants',
+      })
+    : createUnresolvedActionTimingContract({
+        actionKind: 'normal-attack',
+        control,
+        variantTimings,
+        reasons,
+      });
+  const linkWindow = timingReady ? (occupancy.linkWindow ?? null) : null;
+  const linkWindows = resolvedVariantTiming
+    ? selectNormalAttackInputWindows(
+        resolvedVariantTiming.windows,
+        nextControlSkillId
+      )
+    : [];
   return {
-    animationDurationFrames: animation.durationFrames,
-    animationDurationStatus: animation.status,
-    animationDurationSourceIdentity: animation.sourceIdentity,
-    hitEndFrame,
-    hitEndSourceIdentity,
-    effectiveDurationFrames,
-    effectiveDurationStatus: linkWindowContainsFinalHit
-      ? 'applied'
-      : 'unresolved',
-    durationFrames,
-    status: linkWindowContainsFinalHit ? 'applied' : 'unresolved',
-    durationBasis: linkWindowContainsFinalHit
-      ? linkKind
-      : 'unresolved-hit-envelope',
-    sourceIdentity:
-      linkWindow?.sourceIdentity ??
-      hitEndSourceIdentity ??
-      animation.sourceIdentity,
+    animationDurationFrames:
+      resolvedVariantTiming?.animation.durationFrames ?? null,
+    animationDurationStatus:
+      resolvedVariantTiming?.animation.status ?? 'unresolved',
+    animationDurationSourceIdentity:
+      resolvedVariantTiming?.animation.sourceIdentity ?? null,
+    hitEndFrame: hitEnvelope.lastFrame,
+    hitEndSourceIdentity: hitEnvelope.sourceIdentities.at(-1) ?? null,
+    effectiveDurationFrames: timingReady ? occupancy.durationFrames : null,
+    effectiveDurationStatus: timingReady ? 'applied' : 'unresolved',
+    durationFrames: timingReady ? occupancy.durationFrames : null,
+    status: timingReady ? 'applied' : 'unresolved',
+    durationBasis: timingReady
+      ? occupancy.sourceKind
+      : 'unresolved-action-occupancy',
+    sourceIdentity: timingReady ? occupancy.sourceIdentity : null,
     linkWindow,
     linkWindows,
-    linkTimingStatus: linkWindowContainsFinalHit ? 'applied' : 'unresolved',
-    linkTimingReasons,
+    linkTimingStatus: timingReady ? 'applied' : 'unresolved',
+    linkTimingReasons: reasons,
+    reasons,
+    actionTiming,
+    variantTimings,
   };
 }
 
-function resolveAttackInputAnimationTiming(control, selectedVariant) {
-  const selectedFrame = resolveDefaultFrameCount(selectedVariant?.frameCounts);
-  if (selectedFrame) {
-    return {
-      durationFrames: selectedFrame.frameCount,
-      status: 'applied',
-      sourceIdentity: `${selectedVariant.sourceIdentity}.frameCountDict[key=${selectedFrame.key}]`,
-    };
+function resolveNormalAttackInputOccupancy({
+  animation,
+  hits,
+  windows,
+  nextControlSkillId,
+}) {
+  const matchingWindows = selectNormalAttackInputWindows(
+    windows,
+    nextControlSkillId
+  );
+  const linkWindow = matchingWindows[0] ?? null;
+  if (!linkWindow) {
+    return createUnresolvedOccupancy(
+      nextControlSkillId
+        ? 'next-control-event-bridge-window-unavailable'
+        : 'attack-reopen-event-bridge-window-unavailable',
+      {
+        sourceIdentity: animation.sourceIdentity,
+        frameRate: animation.frameRate,
+      }
+    );
   }
-  const candidates = (control?.variants ?? [])
-    .map(variant => ({
-      variant,
-      frame: resolveDefaultFrameCount(variant.frameCounts),
-    }))
-    .filter(candidate => candidate.frame);
-  const uniqueDurations = [
-    ...new Set(candidates.map(candidate => candidate.frame.frameCount)),
-  ];
-  if (uniqueDurations.length === 1) {
-    return {
-      durationFrames: uniqueDurations[0],
-      status: 'tracking-only',
-      sourceIdentity: candidates
-        .map(
-          candidate =>
-            `${candidate.variant.sourceIdentity}.frameCountDict[key=${candidate.frame.key}]`
-        )
-        .join('|'),
-    };
+  const finalHitFrame = hits.at(-1)?.frame ?? null;
+  const occupancyEndFrame = Math.max(
+    linkWindow.startFrame,
+    finalHitFrame ?? linkWindow.startFrame
+  );
+  if (occupancyEndFrame > linkWindow.endFrame) {
+    return createUnresolvedOccupancy('input-window-ends-before-final-hit', {
+      sourceIdentity: linkWindow.sourceIdentity,
+      frameRate: animation.frameRate,
+    });
+  }
+  if (occupancyEndFrame <= 1) {
+    return createUnresolvedOccupancy(
+      'one-frame-public-action-requires-explicit-instant-evidence',
+      {
+        sourceIdentity: linkWindow.sourceIdentity,
+        frameRate: animation.frameRate,
+      }
+    );
   }
   return {
-    durationFrames: uniqueDurations.length ? Math.max(...uniqueDurations) : 60,
-    status: 'unresolved',
-    sourceIdentity: control?.sourcePath ?? null,
+    startFrame: 0,
+    endFrame: occupancyEndFrame,
+    durationFrames: occupancyEndFrame,
+    frameRate: animation.frameRate,
+    status: 'applied',
+    sourceKind: nextControlSkillId
+      ? 'next-control-input-window'
+      : 'attack-reopen-window',
+    sourceIdentity: linkWindow.sourceIdentity,
+    conversion: `${occupancyEndFrame} source frames at ${animation.frameRate}fps`,
+    reasons: [],
+    linkWindow,
   };
 }
 
-function normalizeAttackInputWindows(
-  bridges,
-  { kind, targetControlSkillId = null }
-) {
-  const windows = dedupeBy(
-    bridges
-      .map(bridge => ({
-        kind,
-        targetControlSkillId,
-        startFrame: Math.max(0, Number(bridge.startFrame) || 0),
-        endFrame: Math.max(0, Number(bridge.endFrame) || 0),
-        durationFrames: Math.max(0, Number(bridge.frameCount) || 0),
-        continuousAttackType: bridge.continuousAttackType,
-        bridgeType: bridge.bridgeType,
-        sourceIdentity: bridge.sourceIdentity,
-      }))
-      .filter(
-        window =>
-          window.durationFrames > 0 && window.endFrame > window.startFrame
-      )
-      .sort(
-        (left, right) =>
-          left.startFrame - right.startFrame ||
-          left.endFrame - right.endFrame ||
-          left.sourceIdentity.localeCompare(right.sourceIdentity)
-      ),
-    window =>
-      [
-        window.kind,
-        window.targetControlSkillId,
-        window.startFrame,
-        window.endFrame,
-        window.continuousAttackType,
-        window.bridgeType,
-      ].join('|')
+function selectNormalAttackInputWindows(windows, nextControlSkillId) {
+  return (windows ?? []).filter(window =>
+    nextControlSkillId
+      ? window.targetControlSkillId === nextControlSkillId
+      : window.allowAttack
   );
-  return windows;
 }
 
 function resolveDefaultFrameCount(frameCounts) {
@@ -4466,6 +5702,255 @@ function createAudit({
     },
     unresolvedBindings: unresolved,
   };
+}
+
+function createActionTimingCoverageReport(packageValue) {
+  const actionTimings = packageValue.actionMappings.map(mapping =>
+    createActionTimingCoverageRow({
+      identity: mapping.identity,
+      rowKind: 'public-action',
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      actionKind: mapping.actionKind,
+      sourceSkillId: mapping.sourceSkillId,
+      sourceSkillName: mapping.sourceSkillName,
+      controlSkillId: mapping.controlSkillId,
+      timing: mapping.actionTiming,
+      sourceIdentity: mapping.bindingSourceIdentity,
+    })
+  );
+  const attackInputSegments = packageValue.actionMappings.flatMap(mapping =>
+    (mapping.attackInputSegments ?? []).map(segment =>
+      createActionTimingCoverageRow({
+        identity: segment.identity,
+        rowKind: 'normal-attack-input-segment',
+        ownerKind: mapping.ownerKind,
+        ownerId: mapping.ownerId,
+        ownerName: mapping.ownerName,
+        actionKind: mapping.actionKind,
+        sourceSkillId: mapping.sourceSkillId,
+        sourceSkillName: mapping.sourceSkillName,
+        controlSkillId: segment.controlSkillId,
+        sequenceIndex: segment.sequenceIndex,
+        sequenceTotal: segment.sequenceTotal,
+        timing: segment.actionTiming,
+        sourceIdentity: segment.sourceIdentity,
+      })
+    )
+  );
+  const publicVariants = packageValue.actionMappings.flatMap(mapping =>
+    (mapping.publicVariants ?? []).map(variant => {
+      const selected =
+        Number(variant.index) === Number(mapping.actionVariantIndex);
+      return {
+        identity: `${mapping.identity}|public-variant-${variant.index}`,
+        actionIdentity: mapping.identity,
+        ownerKind: mapping.ownerKind,
+        ownerId: mapping.ownerId,
+        ownerName: mapping.ownerName,
+        actionKind: mapping.actionKind,
+        sourceSkillId: mapping.sourceSkillId,
+        publicVariantIndex: variant.index,
+        publicVariantLabel: variant.label,
+        selected,
+        status: selected ? mapping.timingStatus : 'unresolved',
+        durationFrames: selected
+          ? (mapping.actionTiming?.occupancy?.durationFrames ?? null)
+          : null,
+        sourceIdentity: variant.sourceIdentity,
+        reasons: selected
+          ? (mapping.actionTiming?.reasons ?? [])
+          : ['public-variant-action-timing-association-missing'],
+      };
+    })
+  );
+  const controlVariants = packageValue.actionMappings.flatMap(mapping =>
+    (mapping.actionTiming?.variantTimings ?? []).map(variant => ({
+      identity: `${mapping.identity}|control-variant-${variant.subSkillIndex}`,
+      actionIdentity: mapping.identity,
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      actionKind: mapping.actionKind,
+      controlSkillId: mapping.controlSkillId,
+      subSkillIndex: variant.subSkillIndex,
+      playerSkillId: variant.playerSkillId,
+      status: variant.occupancy?.status ?? 'unresolved',
+      durationFrames: variant.occupancy?.durationFrames ?? null,
+      sourceKind:
+        variant.occupancy?.sourceKind ?? 'unresolved-action-occupancy',
+      sourceIdentity:
+        variant.occupancy?.sourceIdentity ?? variant.sourceIdentity,
+      reasons: variant.occupancy?.reasons ?? [],
+      input: variant.input,
+      occupancy: variant.occupancy,
+      animation: variant.animation,
+      hitEnvelope: variant.hitEnvelope,
+      windows: variant.windows,
+      cooldown: variant.cooldown,
+    }))
+  );
+  const timingRows = [...actionTimings, ...attackInputSegments];
+  const oneFrameRows = [...timingRows, ...controlVariants].filter(
+    row => row.durationFrames === 1
+  );
+  const abnormalLongRows = [...timingRows, ...controlVariants].filter(
+    row => Number(row.durationFrames) > 600
+  );
+  const unresolvedRows = timingRows.filter(row => row.status !== 'applied');
+  const byOwnerActionKindSourceStatus = [
+    ...groupBy(
+      actionTimings,
+      row =>
+        `${row.ownerKind}|${row.actionKind}|${row.sourceKind}|${row.status}`
+    ).entries(),
+  ]
+    .map(([key, rows]) => {
+      const [ownerKind, actionKind, sourceKind, status] = key.split('|');
+      return {
+        ownerKind,
+        actionKind,
+        sourceKind,
+        status,
+        count: rows.length,
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.ownerKind.localeCompare(right.ownerKind) ||
+        left.actionKind.localeCompare(right.actionKind) ||
+        left.sourceKind.localeCompare(right.sourceKind) ||
+        left.status.localeCompare(right.status)
+    );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-combat-action-timing-coverage',
+    status: 'verified-combat-action-timing-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    sourceDenominator: {
+      kind: 'current-client-public-actor-and-kibo-action-catalogs',
+      publicActionCount: actionTimings.length,
+      publicVariantCount: publicVariants.length,
+      normalAttackInputSegmentCount: attackInputSegments.length,
+      controlPlayerVariantCount: controlVariants.length,
+    },
+    summary: {
+      appliedActionCount: actionTimings.filter(row => row.status === 'applied')
+        .length,
+      unresolvedActionCount: actionTimings.filter(
+        row => row.status !== 'applied'
+      ).length,
+      appliedAttackInputSegmentCount: attackInputSegments.filter(
+        row => row.status === 'applied'
+      ).length,
+      unresolvedAttackInputSegmentCount: attackInputSegments.filter(
+        row => row.status !== 'applied'
+      ).length,
+      appliedPublicVariantCount: publicVariants.filter(
+        row => row.status === 'applied'
+      ).length,
+      unresolvedPublicVariantCount: publicVariants.filter(
+        row => row.status !== 'applied'
+      ).length,
+      oneFrameCount: oneFrameRows.length,
+      abnormalLongCount: abnormalLongRows.length,
+      unresolvedReasonCounts: countValues(
+        unresolvedRows.flatMap(row => row.reasons)
+      ),
+    },
+    byOwnerActionKindSourceStatus,
+    actions: actionTimings,
+    attackInputSegments,
+    publicVariants,
+    controlVariants,
+    unresolved: unresolvedRows,
+    oneFrame: oneFrameRows,
+    abnormalLong: abnormalLongRows,
+  };
+}
+
+function createActionTimingCoverageRow({ timing, ...identity }) {
+  const occupancy = timing?.occupancy ?? null;
+  return {
+    ...identity,
+    status: timing?.status ?? occupancy?.status ?? 'unresolved',
+    durationFrames: occupancy?.durationFrames ?? null,
+    frameRate: timing?.frameRate ?? occupancy?.frameRate ?? null,
+    sourceKind:
+      occupancy?.sourceKind ??
+      timing?.sourceKind ??
+      'unresolved-action-occupancy',
+    sourceIdentity:
+      occupancy?.sourceIdentity ??
+      timing?.sourceIdentity ??
+      identity.sourceIdentity ??
+      null,
+    reasons: timing?.reasons ?? occupancy?.reasons ?? [],
+    input: timing?.input ?? null,
+    occupancy,
+    animation: timing?.animation ?? null,
+    hitEnvelope: timing?.hitEnvelope ?? null,
+    hitFrames: (timing?.hits ?? []).map(hit => hit.frame),
+    windows: timing?.windows ?? [],
+    cooldown: timing?.cooldown ?? null,
+  };
+}
+
+function createActionTimingCoverageMarkdown(report) {
+  const lines = [
+    '# M9-A 全动作时长与输入占轴审计',
+    '',
+    `- 包：\`${report.packageId}\``,
+    `- 公开动作：${report.sourceDenominator.publicActionCount}（已确认 ${report.summary.appliedActionCount}，未解析 ${report.summary.unresolvedActionCount}）`,
+    `- 公开变体：${report.sourceDenominator.publicVariantCount}（已确认 ${report.summary.appliedPublicVariantCount}，未解析 ${report.summary.unresolvedPublicVariantCount}）`,
+    `- 普攻输入段：${report.sourceDenominator.normalAttackInputSegmentCount}（已确认 ${report.summary.appliedAttackInputSegmentCount}，未解析 ${report.summary.unresolvedAttackInputSegmentCount}）`,
+    `- SkillControl/player 变体：${report.sourceDenominator.controlPlayerVariantCount}`,
+    `- 一帧占轴：${report.summary.oneFrameCount}`,
+    `- 异常长占轴（>600f）：${report.summary.abnormalLongCount}`,
+    '',
+    '## Owner / 动作类型 / 来源状态',
+    '',
+    '| Owner | 动作类型 | 占轴来源 | 状态 | 数量 |',
+    '| --- | --- | --- | --- | ---: |',
+    ...report.byOwnerActionKindSourceStatus.map(
+      row =>
+        `| ${row.ownerKind} | ${row.actionKind} | ${row.sourceKind} | ${row.status} | ${row.count} |`
+    ),
+    '',
+    '## 未解析占轴',
+    '',
+  ];
+  if (report.unresolved.length === 0) {
+    lines.push('- 无。');
+  } else {
+    for (const item of report.unresolved) {
+      lines.push(
+        `- \`${item.identity}\`：${item.reasons.join('、') || 'action-occupancy-unresolved'}`
+      );
+    }
+  }
+  lines.push('', '## 一帧与异常长占轴', '');
+  if (report.oneFrame.length === 0 && report.abnormalLong.length === 0) {
+    lines.push('- 无。');
+  } else {
+    for (const item of report.oneFrame) {
+      lines.push(
+        `- 一帧：\`${item.identity}\`（${item.sourceIdentity ?? '无来源'}）`
+      );
+    }
+    for (const item of report.abnormalLong) {
+      lines.push(
+        `- 异常长：\`${item.identity}\`，${item.durationFrames}f（${item.sourceIdentity ?? '无来源'}）`
+      );
+    }
+  }
+  lines.push(
+    '',
+    '> 动作占轴、动画、命中、输入/派生窗口和冷却分别记录；命中帧与冷却不得作为动作块时长兜底。'
+  );
+  return `${lines.join('\n')}\n`;
 }
 
 function createActionCoverageReport({
@@ -5175,6 +6660,30 @@ function relativeExternalPath(filePath) {
 function finiteNumberOrNull(value) {
   const number = Number(value);
   return value != null && value !== '' && Number.isFinite(number)
+    ? number
+    : null;
+}
+
+function positiveNumberOrNull(value) {
+  const number = Number(value);
+  return value != null && value !== '' && Number.isFinite(number) && number > 0
+    ? number
+    : null;
+}
+
+function nonNegativeNumberOrNull(value) {
+  const number = Number(value);
+  return value != null && value !== '' && Number.isFinite(number) && number >= 0
+    ? number
+    : null;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const number = Number(value);
+  return value != null &&
+    value !== '' &&
+    Number.isInteger(number) &&
+    number >= 0
     ? number
     : null;
 }

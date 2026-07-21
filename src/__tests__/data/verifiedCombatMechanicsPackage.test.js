@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import audit from '../../../reports/verified-combat-mechanics-audit.json';
 import actionCoverage from '../../../reports/verified-combat-action-coverage.json';
+import actionTimingCoverage from '../../../reports/verified-combat-action-timing-coverage.json';
 import effectCoverage from '../../../reports/verified-combat-effect-coverage.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
@@ -27,19 +28,19 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 9,
+      packageVersion: 10,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
         candidateActionCount: 562,
         classifiedActionCount: 562,
-        appliedActionBindingCount: 418,
-        appliedHitBindingCount: 1332,
+        appliedActionBindingCount: 415,
+        appliedHitBindingCount: 1310,
         appliedEffectBindingCount: 125,
         verifiedZeroEffectBindingCount: 2,
         unresolvedEffectBindingCount: 3081,
         battleEffectNodeCount: 3673,
-        unresolvedActionCount: 180,
+        unresolvedActionCount: 189,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
@@ -50,10 +51,10 @@ describe('verified combat mechanics package', () => {
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
-        appliedAttackInputSegmentCount: 51,
-        unresolvedAttackInputSegmentCount: 44,
-        appliedAttackInputTimingCount: 63,
-        unresolvedAttackInputTimingCount: 32,
+        appliedAttackInputSegmentCount: 48,
+        unresolvedAttackInputSegmentCount: 47,
+        appliedAttackInputTimingCount: 64,
+        unresolvedAttackInputTimingCount: 31,
       },
       mechanismEvidence: {
         contractName: 'AzPrVerifiedMechanismEvidenceManifest',
@@ -369,6 +370,103 @@ describe('verified combat mechanics package', () => {
     });
     expect(resolved.hits).toHaveLength(6);
     expect(resolved.hits.every(hit => hit.mapIndex === 0)).toBe(true);
+
+    const unresolvedChain = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerId === 103002 && mapping.actionKind === 'normal-attack'
+    );
+    const unresolvedSegment = unresolvedChain.attackInputSegments[0];
+    expect(
+      resolveVerifiedCombatActionMechanics({
+        id: 'ruby-normal-attack-a1',
+        type: 'skill',
+        skillId: unresolvedChain.sourceSkillId,
+        attackSequenceIndex: unresolvedSegment.sequenceIndex,
+        attackInput: unresolvedSegment,
+        actor: { characterId: 103002 },
+      })
+    ).toMatchObject({
+      ready: false,
+      applied: false,
+      status: 'verified-action-duration-unresolved',
+      hits: [],
+    });
+  });
+
+  it('keeps action occupancy separate from animation, hits, windows, and cooldown', () => {
+    expect(actionTimingCoverage).toMatchObject({
+      status: 'verified-combat-action-timing-coverage-ready',
+      sourceDenominator: {
+        publicActionCount: 562,
+        publicVariantCount: 592,
+        normalAttackInputSegmentCount: 95,
+      },
+      summary: {
+        appliedActionCount: 527,
+        unresolvedActionCount: 35,
+        appliedAttackInputSegmentCount: 64,
+        unresolvedAttackInputSegmentCount: 31,
+        oneFrameCount: 0,
+      },
+      oneFrame: [],
+    });
+
+    const ruby = findNormalAttackMapping(103002);
+    const jade = findNormalAttackMapping(101010);
+    expect(
+      ruby.attackInputSegments.map(segment => segment.durationFrames)
+    ).toEqual([null, null, null, null, null]);
+    expect(
+      ruby.attackInputSegments.map(segment =>
+        segment.variantTimings.map(variant => variant.occupancy.durationFrames)
+      )
+    ).toEqual([
+      [15, null, null, null],
+      [23, null, null, null],
+      [null, null, null, null],
+      [null, null, null, null, 33],
+      [44, 43, 74],
+    ]);
+    expect(
+      jade.attackInputSegments.map(segment => segment.durationFrames)
+    ).toEqual([null, null, 47, null, null]);
+    expect(
+      [...ruby.attackInputSegments, ...jade.attackInputSegments]
+        .filter(segment => segment.durationStatus === 'unresolved')
+        .every(segment => segment.durationFrames == null)
+    ).toBe(true);
+
+    const representativeIdentities = [
+      'actor|101007|10100701|1|10100710',
+      'actor|101003|10100312|0|10100312',
+      'actor|101003|10100313|0|10100313',
+      'actor|101003|10100312|1|10100326',
+      'kibo|500001|504004|0|504004',
+    ];
+    for (const identity of representativeIdentities) {
+      const mapping = mechanicsPackage.actionMappings.find(
+        action => action.identity === identity
+      );
+      expect(mapping.actionTiming).toMatchObject({
+        status: 'applied',
+        occupancy: {
+          status: 'applied',
+          durationFrames: expect.any(Number),
+        },
+        animation: { status: 'applied' },
+        hitEnvelope: expect.any(Object),
+        cooldown: expect.any(Object),
+      });
+      expect(mapping.actionTiming.occupancy.durationFrames).toBeGreaterThan(1);
+    }
+    const starSkill = mechanicsPackage.actionMappings.find(
+      action => action.identity === 'actor|101003|10100312|0|10100312'
+    );
+    expect(starSkill.actionTiming).toMatchObject({
+      occupancy: { durationFrames: 180 },
+      hitEnvelope: { lastFrame: 109 },
+      cooldown: { cooldownMs: 24000 },
+    });
   });
 
   it('classifies the independent public action denominator without silent omissions', () => {
@@ -521,3 +619,12 @@ describe('verified combat mechanics package', () => {
     ).toThrow(/enemy-profiles-missing/);
   });
 });
+
+function findNormalAttackMapping(ownerId) {
+  return mechanicsPackage.actionMappings.find(
+    mapping =>
+      mapping.ownerKind === 'actor' &&
+      mapping.ownerId === ownerId &&
+      mapping.actionKind === 'normal-attack'
+  );
+}

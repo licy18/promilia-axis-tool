@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "91d8bc5dc98d05e67134ece031636e84499e620076a2efa2132fcf0562ecbde9",
+  "packageHash": "84d64c752b498070731bb077b21e261033c21328a4a3c4206f1a1d82dd05f8c6",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1274,14 +1274,14 @@
     "classifiedActionCount": 562,
     "foundControlCount": 577,
     "indexedElementPathCount": 2172,
-    "appliedActionBindingCount": 418,
-    "appliedHitBindingCount": 1332,
+    "appliedActionBindingCount": 415,
+    "appliedHitBindingCount": 1310,
     "uniqueControlBindingCount": 453,
     "uniqueControlHitBindingCount": 2545,
     "appliedEffectBindingCount": 125,
     "verifiedZeroEffectBindingCount": 2,
     "unresolvedEffectBindingCount": 3081,
-    "unresolvedActionBindingCount": 180,
+    "unresolvedActionBindingCount": 189,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
@@ -1366,11 +1366,24 @@
       "controlSkillId": 10100327,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|101007|10100701|0|10100703",
+      "ownerKind": "actor",
+      "ownerId": 101007,
+      "sourceSkillId": 10100701,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10100703,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1383,7 +1396,7 @@
       "controlSkillId": 10100727,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -1401,7 +1414,8 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1414,7 +1428,8 @@
       "controlSkillId": 10101010,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1437,10 +1452,10 @@
         "property-formula-not-literal-function-5",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
@@ -1457,7 +1472,7 @@
       "controlSkillId": 10101027,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -1474,7 +1489,8 @@
       "controlSkillId": 10200110,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1487,7 +1503,8 @@
       "controlSkillId": 10200127,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1500,7 +1517,8 @@
       "controlSkillId": 10300203,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1545,7 +1563,7 @@
       "controlSkillId": 10300227,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
@@ -1562,7 +1580,8 @@
       "controlSkillId": 10700103,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1661,11 +1680,24 @@
       "controlSkillId": 10700127,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|107002|10700201|0|10700203",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "sourceSkillId": 10700201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700203,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1678,7 +1710,8 @@
       "controlSkillId": 10700215,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1691,7 +1724,8 @@
       "controlSkillId": 10700212,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1704,7 +1738,8 @@
       "controlSkillId": 10700226,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1734,7 +1769,8 @@
       "controlSkillId": 10700225,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1747,10 +1783,23 @@
       "controlSkillId": 10700227,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|107003|10700301|0|10700303",
+      "ownerKind": "actor",
+      "ownerId": 107003,
+      "sourceSkillId": 10700301,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10700303,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1763,7 +1812,8 @@
       "controlSkillId": 10700321,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1776,7 +1826,7 @@
       "controlSkillId": 10700327,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -1793,7 +1843,8 @@
       "controlSkillId": 10800110,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1806,11 +1857,24 @@
       "controlSkillId": 10800127,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|108002|10800201|0|10800203",
+      "ownerKind": "actor",
+      "ownerId": 108002,
+      "sourceSkillId": 10800201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10800203,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1823,7 +1887,8 @@
       "controlSkillId": 10800210,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1878,7 +1943,7 @@
       "controlSkillId": 10800227,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -1895,7 +1960,8 @@
       "controlSkillId": 10800310,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1922,7 +1988,7 @@
       "controlSkillId": 10800327,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -1939,7 +2005,8 @@
       "controlSkillId": 10800510,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -1952,7 +2019,7 @@
       "controlSkillId": 10800527,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -1969,11 +2036,24 @@
       "controlSkillId": 10900127,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|109002|10900201|0|10900203",
+      "ownerKind": "actor",
+      "ownerId": 109002,
+      "sourceSkillId": 10900201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 10900203,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -1999,11 +2079,24 @@
       "controlSkillId": 10900227,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|111001|11100101|0|11100103",
+      "ownerKind": "actor",
+      "ownerId": 111001,
+      "sourceSkillId": 11100101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11100103,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -2016,7 +2109,8 @@
       "controlSkillId": 11100110,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2042,7 +2136,8 @@
       "controlSkillId": 11100113,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2055,11 +2150,24 @@
       "controlSkillId": 11100127,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|112001|11200101|0|11200103",
+      "ownerKind": "actor",
+      "ownerId": 112001,
+      "sourceSkillId": 11200101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 11200103,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -2072,7 +2180,8 @@
       "controlSkillId": 11200110,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2098,7 +2207,8 @@
       "controlSkillId": 11200125,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2111,7 +2221,7 @@
       "controlSkillId": 11200127,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -2137,7 +2247,8 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
-        "heal-formula-not-literal-function-5"
+        "heal-formula-not-literal-function-5",
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -2150,7 +2261,8 @@
       "controlSkillId": 11200210,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2234,11 +2346,24 @@
       "controlSkillId": 11200227,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|199001|19900101|0|19900103",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "sourceSkillId": 19900101,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900103,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -2251,7 +2376,8 @@
       "controlSkillId": 19900110,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2264,11 +2390,24 @@
       "controlSkillId": 19900127,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
+      ],
+      "applied": false
+    },
+    {
+      "identity": "actor|199002|19900201|0|19900203",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "sourceSkillId": 19900201,
+      "actionVariantIndex": 0,
+      "controlSkillId": 19900203,
+      "status": "unresolved",
+      "reasons": [
+        "normal-attack-input-segment-duration-unresolved"
       ],
       "applied": false
     },
@@ -2281,7 +2420,8 @@
       "controlSkillId": 19900210,
       "status": "unresolved",
       "reasons": [
-        "multiple-root-player-skill-variants"
+        "multiple-root-player-skill-variants",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2294,7 +2434,7 @@
       "controlSkillId": 19900227,
       "status": "unresolved",
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -2324,7 +2464,8 @@
       "controlSkillId": 19900321,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2337,7 +2478,8 @@
       "controlSkillId": 19900327,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },
@@ -2845,7 +2987,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -3707,7 +3849,8 @@
       "controlSkillId": 50030404,
       "status": "unresolved",
       "reasons": [
-        "multiple-control-variants-without-root-selection"
+        "multiple-control-variants-without-root-selection",
+        "control-player-variant-duration-not-invariant"
       ],
       "applied": false
     },

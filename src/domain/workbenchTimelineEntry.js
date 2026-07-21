@@ -36,12 +36,16 @@ export function createWorkbenchTimelineEntry(source = {}) {
       0,
       Number(source.actionVariantIndex ?? source.damageSegmentIndex) || 0
     ),
+    durationFrames: positiveIntegerOrNull(source.durationFrames),
     durationMs: positiveNumberOrNull(source.durationMs),
     cooldownMs: positiveNumberOrNull(source.cooldownMs),
     eventType: textOrNull(source.eventType),
     icon: textOrNull(source.icon),
     label: textOrNull(source.label),
     timingSource: textOrNull(source.timingSource),
+    timingStatus: textOrNull(source.timingStatus),
+    timingReasons: normalizeTextArray(source.timingReasons),
+    timingSourceIdentity: textOrNull(source.timingSourceIdentity),
     needsTimingData: Boolean(source.needsTimingData),
     rawValue: source.rawValue ?? null,
     note: textOrNull(source.note),
@@ -155,6 +159,16 @@ function positiveNumberOrNull(value) {
 function textOrNull(value) {
   const text = String(value ?? '').trim();
   return text || null;
+}
+
+function normalizeTextArray(values) {
+  return [
+    ...new Set(
+      (Array.isArray(values) ? values : [])
+        .map(value => textOrNull(value))
+        .filter(Boolean)
+    ),
+  ];
 }
 
 function normalizeOwnerId(value) {

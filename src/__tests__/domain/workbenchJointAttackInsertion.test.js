@@ -6,6 +6,7 @@ const actorEntry = {
   skillId: 10100712,
   actionVariantIndex: 2,
   durationMs: 1400,
+  timingStatus: 'applied',
   label: '星结合击',
   rawValue: '37%',
 };
@@ -13,6 +14,8 @@ const kiboEntry = {
   kind: 'break',
   skillId: 50000112,
   durationFrames: 90,
+  durationMs: 1500,
+  timingStatus: 'applied',
   name: '迅狼-合击',
   icon: 'kibo-combo.png',
 };
@@ -74,6 +77,8 @@ describe('workbench joint attack insertion', () => {
         kiboId: 500001,
         skillId: 50000112,
         eventType: 'break',
+        durationMs: 1500,
+        timingStatus: 'applied',
       },
       actorCharacterId: 101007,
       actorActionEntries: [actorEntry],

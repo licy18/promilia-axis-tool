@@ -183,8 +183,12 @@ export function createWorkbenchActionDraft({
   kiboId = null,
   name = '',
   icon = null,
+  durationFrames = null,
   timingSource = null,
-  needsTimingData = true,
+  timingStatus = null,
+  timingReasons = [],
+  timingSourceIdentity = null,
+  needsTimingData = null,
   note = '',
   insertion = null,
   generationBatch = null,
@@ -226,6 +230,15 @@ export function createWorkbenchActionDraft({
           timingSource,
         })
       : null;
+  const normalizedTimingReasons = normalizeTextArray(timingReasons);
+  const hasTimingContract = Boolean(
+    positiveIntegerOrNull(durationFrames) ||
+    textOrNull(timingSource) ||
+    textOrNull(timingStatus) ||
+    normalizedTimingReasons.length ||
+    textOrNull(timingSourceIdentity) ||
+    needsTimingData != null
+  );
   return {
     id: actionId,
     type,
@@ -247,13 +260,24 @@ export function createWorkbenchActionDraft({
     change: Number(change) || 0,
     reason,
     eventType,
+    ...(hasTimingContract
+      ? {
+          durationFrames: positiveIntegerOrNull(durationFrames),
+          timingSource: textOrNull(timingSource),
+          timingStatus: textOrNull(timingStatus),
+          timingReasons: normalizedTimingReasons,
+          timingSourceIdentity: textOrNull(timingSourceIdentity),
+          needsTimingData: Boolean(needsTimingData),
+        }
+      : {}),
     ...(type === ACTION_TYPES.KIBO_EVENT
       ? {
           kiboId: positiveIntegerOrNull(kiboId),
           name: String(name ?? '').trim(),
           icon: String(icon ?? '').trim() || null,
-          timingSource: timingSource ? String(timingSource).trim() : null,
-          needsTimingData: Boolean(needsTimingData),
+          timingSource: textOrNull(timingSource),
+          needsTimingData:
+            needsTimingData == null ? true : Boolean(needsTimingData),
         }
       : {}),
     note,
@@ -830,7 +854,11 @@ export function normalizeWorkbenchActionDrafts(
           kiboId: draft.kiboId,
           name: draft.name,
           icon: draft.icon,
+          durationFrames: draft.durationFrames,
           timingSource: draft.timingSource,
+          timingStatus: draft.timingStatus,
+          timingReasons: draft.timingReasons,
+          timingSourceIdentity: draft.timingSourceIdentity,
           needsTimingData: draft.needsTimingData,
           note: draft.note,
           insertion: draft.insertion,
@@ -872,6 +900,12 @@ export function normalizeWorkbenchActionDrafts(
         change: draft.change,
         reason: draft.reason,
         eventType: draft.eventType,
+        durationFrames: draft.durationFrames,
+        timingSource: draft.timingSource,
+        timingStatus: draft.timingStatus,
+        timingReasons: draft.timingReasons,
+        timingSourceIdentity: draft.timingSourceIdentity,
+        needsTimingData: draft.needsTimingData,
         note: draft.note,
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
@@ -1005,7 +1039,11 @@ function createProjectActionFromDraft(
       startMs: draft.startMs,
       durationMs: draft.durationMs,
       eventType: draft.eventType ?? 'activation',
+      durationFrames: draft.durationFrames,
       timingSource: draft.timingSource,
+      timingStatus: draft.timingStatus,
+      timingReasons: draft.timingReasons,
+      timingSourceIdentity: draft.timingSourceIdentity,
       needsTimingData: draft.needsTimingData,
       note: draft.note || '奇波事件标记',
       insertion: draft.insertion,
@@ -1025,6 +1063,12 @@ function createProjectActionFromDraft(
     targetId,
     startMs: draft.startMs,
     durationMs: draft.durationMs,
+    durationFrames: draft.durationFrames,
+    timingSource: draft.timingSource,
+    timingStatus: draft.timingStatus,
+    timingReasons: draft.timingReasons,
+    timingSourceIdentity: draft.timingSourceIdentity,
+    needsTimingData: draft.needsTimingData,
     level: draft.level,
     actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
     damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
@@ -1094,6 +1138,21 @@ function isNonSkillDraftType(type) {
 function positiveIntegerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function textOrNull(value) {
+  const text = String(value ?? '').trim();
+  return text || null;
+}
+
+function normalizeTextArray(values) {
+  return [
+    ...new Set(
+      (Array.isArray(values) ? values : [])
+        .map(value => textOrNull(value))
+        .filter(Boolean)
+    ),
+  ];
 }
 
 function normalizeActorCharacterId(actorCharacterId, selection, teamSlots) {

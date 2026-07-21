@@ -3,7 +3,6 @@ import {
   ACTION_RELATION_KINDS,
   ACTION_TYPES,
 } from './projectSchema';
-import { frameToMs } from './timebase';
 
 export function isWorkbenchJointAttackTimelineEntry(
   entry = {},
@@ -54,6 +53,12 @@ export function createWorkbenchJointAttackInsertion({
   if (!kiboComboEntry) {
     return blocked('当前奇波目录中没有可确认的合击动作');
   }
+  if (!hasAppliedTiming(starComboEntry)) {
+    return blocked('角色星结合击占轴时长未解析，不能加入时间轴');
+  }
+  if (!hasAppliedTiming(kiboComboEntry)) {
+    return blocked('奇波合击占轴时长未解析，不能加入时间轴');
+  }
 
   const baseDraft = baseDraftPatches[0];
   const actorDraft = insertsActor
@@ -79,14 +84,12 @@ export function createWorkbenchJointAttackInsertion({
         skillId: kiboComboEntry.skillId,
         actorCharacterId,
         startMs,
-        durationMs:
-          positiveNumberOrNull(kiboComboEntry.durationMs) ??
-          frameToMs(kiboComboEntry.durationFrames),
+        durationMs: kiboComboEntry.durationMs,
         level: 1,
         eventType: 'break',
         name: kiboComboEntry.name,
         icon: kiboComboEntry.icon ?? null,
-        timingSource: 'azpr-unity-skill-control-root',
+        timingSource: kiboComboEntry.timingSource,
         needsTimingData: false,
         note: 'Skill Control 时长已确认；与角色星结合击同时发动。',
       };
@@ -139,4 +142,11 @@ function positiveIntegerOrNull(value) {
 function positiveNumberOrNull(value) {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+function hasAppliedTiming(entry) {
+  return (
+    (entry?.timingStatus === 'applied' || entry?.timingStatus == null) &&
+    positiveNumberOrNull(entry.durationMs) != null
+  );
 }

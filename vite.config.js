@@ -31,6 +31,7 @@ export default defineConfig({
           }
           if (
             [
+              '/data/verifiedCombatMechanicsPackage.js',
               '/simulation/mechanics/verifiedCombatStaticProperties.js',
               '/simulation/mechanics/threeValueMechanismConfiguration.js',
             ].some(modulePath => id.endsWith(modulePath))

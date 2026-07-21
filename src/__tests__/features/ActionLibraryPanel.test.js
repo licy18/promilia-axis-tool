@@ -1,7 +1,21 @@
 import { mount } from '@vue/test-utils';
+import { afterEach, beforeEach } from 'vitest';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import ActionLibraryPanel from '../../features/workbench/ActionLibraryPanel.vue';
 
 describe('ActionLibraryPanel', () => {
+  beforeEach(() => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  });
+
+  afterEach(() => {
+    clearInstalledVerifiedCombatMechanicsPackage();
+  });
+
   it('starts pointer drags for skills, resources, bound kibo events, and enemy events', async () => {
     const wrapper = mount(ActionLibraryPanel, {
       props: createActionLibraryProps(),
@@ -98,7 +112,7 @@ describe('ActionLibraryPanel', () => {
         type: 'kiboEvent',
         skillId: 504004,
         eventType: 'active',
-        durationMs: 3666.666667,
+        durationMs: 2666.666667,
       }
     );
   });

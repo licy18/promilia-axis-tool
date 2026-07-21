@@ -111,6 +111,24 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     );
   }
   const actionBinding = resolvedActionBinding.binding;
+  const actionTimingStatus = actionBinding.attackInputSegment
+    ? actionBinding.attackInputSegment.durationStatus
+    : actionBinding.timingStatus;
+  if (actionTimingStatus !== 'applied') {
+    return createUnresolvedActionMechanics(
+      action,
+      'verified-action-duration-unresolved',
+      {
+        owner,
+        actionBinding,
+        reasons:
+          actionBinding.attackInputSegment?.linkTimingReasons ??
+          actionBinding.actionTiming?.reasons ??
+          actionBinding.reasons ??
+          [],
+      }
+    );
+  }
   if (actionBinding?.classification !== 'applied') {
     const partialControlBinding = controlBindingBySkillId.get(
       actionBinding?.controlSkillId
@@ -283,7 +301,7 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('control-bindings-missing');
   }
   if (
-    value?.packageVersion < 9 ||
+    value?.packageVersion < 10 ||
     value?.battleEffectCatalog?.status !==
       'verified-battle-effect-node-catalog-ready' ||
     !Array.isArray(value?.battleEffectCatalog?.nodes) ||
@@ -324,6 +342,9 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   }
   if (!hasValidAttackInputChains(value)) {
     issues.push('attack-input-segments-invalid');
+  }
+  if (!hasValidActionTimingContracts(value)) {
+    issues.push('action-timing-contracts-invalid');
   }
   if (!Array.isArray(value?.ownerProfiles?.enemy)) {
     issues.push('enemy-profiles-missing');
@@ -452,6 +473,41 @@ function hasValidAttackInputChains(value) {
       normalized.every(segment => controlIds.has(segment.controlSkillId))
     );
   });
+}
+
+function hasValidActionTimingContracts(value) {
+  return (value?.actionMappings ?? []).every(mapping => {
+    const timing = mapping.actionTiming;
+    if (!['applied', 'unresolved'].includes(timing?.status)) return false;
+    if (!hasValidTimingOccupancy(timing.occupancy, timing.status)) return false;
+    if (
+      (timing.variantTimings ?? []).some(
+        variant =>
+          !hasValidTimingOccupancy(variant.occupancy, variant.occupancy?.status)
+      )
+    ) {
+      return false;
+    }
+    return (mapping.attackInputSegments ?? []).every(segment => {
+      if (!['applied', 'unresolved'].includes(segment.durationStatus)) {
+        return false;
+      }
+      if (segment.durationStatus === 'applied') {
+        return Number(segment.durationFrames) > 1;
+      }
+      return (
+        segment.durationFrames == null &&
+        segment.effectiveDurationFrames == null
+      );
+    });
+  });
+}
+
+function hasValidTimingOccupancy(occupancy, status) {
+  if (status === 'applied') {
+    return Number(occupancy?.durationFrames) > 1;
+  }
+  return status === 'unresolved' && occupancy?.durationFrames == null;
 }
 
 function createUnresolvedActionMechanics(action, reason, extra = {}) {

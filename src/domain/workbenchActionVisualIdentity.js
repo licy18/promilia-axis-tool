@@ -10,13 +10,17 @@ const KIBO_ACTION_LABELS = {
 export function resolveWorkbenchActionVisualIdentity(action = {}) {
   const actionKind = action.actionKind ?? action.kind ?? action.eventType ?? '';
   const name = action.name || action.label || '动作';
+  const durationMs = Number(action.durationMs);
   return {
     name,
     typeLabel:
       AZPR_ACTION_KIND_LABELS[actionKind] ||
       KIBO_ACTION_LABELS[actionKind] ||
       name,
-    durationFrames: Math.max(1, msToFrame(Number(action.durationMs) || 0)),
+    durationFrames:
+      Number.isFinite(durationMs) && durationMs > 0
+        ? msToFrame(durationMs)
+        : null,
     iconUrl: resolveWorkbenchActionIconUrl(action.icon),
   };
 }

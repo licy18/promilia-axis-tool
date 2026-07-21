@@ -77,7 +77,8 @@
         data-testid="workbench-add-action"
         type="button"
         :disabled="
-          defaultTimelineSkillEntry?.mechanicsClassification === 'loading'
+          !defaultTimelineSkillEntry ||
+          defaultTimelineSkillEntry.mechanicsClassification === 'loading'
         "
         :data-drag-enabled="
           Boolean(defaultTimelineSkillEntry) &&
@@ -185,11 +186,18 @@
           :data-action-variant-index="entry.actionVariantIndex"
           :data-cooldown-ms="entry.cooldownMs ?? ''"
           :data-mechanics-classification="entry.mechanicsClassification"
+          :data-timing-status="entry.timingStatus"
           :data-attack-input-count="entry.attackInputSegments?.length ?? 0"
           :title="entry.mechanicsTooltip"
-          :disabled="entry.mechanicsClassification === 'loading'"
+          :disabled="
+            entry.mechanicsClassification === 'loading' ||
+            entry.timingStatus !== 'applied'
+          "
           data-entry-type="skill"
-          :data-drag-enabled="entry.mechanicsClassification !== 'loading'"
+          :data-drag-enabled="
+            entry.mechanicsClassification !== 'loading' &&
+            entry.timingStatus === 'applied'
+          "
           @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
           @click="$emit('add-skill-action', entry)"
         >
@@ -228,9 +236,11 @@
           :data-action-kind="entry.eventType"
           :data-cooldown-ms="entry.cooldownMs ?? ''"
           :data-mechanics-classification="entry.mechanicsClassification"
+          :data-timing-status="entry.timingStatus"
           :title="entry.mechanicsTooltip"
+          :disabled="entry.timingStatus !== 'applied'"
           data-entry-type="kiboEvent"
-          data-drag-enabled="true"
+          :data-drag-enabled="entry.timingStatus === 'applied'"
           @pointerdown="beginKiboTimelineEntryDrag($event, entry)"
           @click="$emit('add-kibo-event-action', entry)"
         >
@@ -636,7 +646,8 @@ const actionEntries = computed(() => {
   );
 });
 const defaultTimelineSkillEntry = computed(
-  () => actionEntries.value[0] ?? null
+  () =>
+    actionEntries.value.find(entry => entry.timingStatus === 'applied') ?? null
 );
 const kiboTimelineEntries = computed(() =>
   (activeKibo.value?.actions ?? []).map(action =>
@@ -648,18 +659,22 @@ const kiboTimelineEntries = computed(() =>
         icon: action.icon,
         eventType: action.kind,
         label: action.name,
-        durationMs: frameToMs(action.durationFrames),
+        durationMs: null,
         cooldownMs: action.cooldownMs,
-        timingSource: 'azpr-unity-skill-control-root',
-        needsTimingData: false,
-        note: 'Skill Control 时长已确认；效果未接入 calculator。',
+        timingSource: null,
+        timingStatus: 'unresolved',
+        timingReasons: ['verified-action-timing-not-loaded'],
+        needsTimingData: true,
+        note: '动作占轴等待 verified timing 合同。',
       }),
       ACTION_TYPES.KIBO_EVENT
     )
   )
 );
 const defaultKiboTimelineEntry = computed(
-  () => kiboTimelineEntries.value[0] ?? null
+  () =>
+    kiboTimelineEntries.value.find(entry => entry.timingStatus === 'applied') ??
+    null
 );
 
 function beginDefaultSkillDrag(event) {
@@ -1015,7 +1030,8 @@ function formatActionEntryMeta(entry) {
     entry.cooldownMs || entry.kind === 'ultimate'
       ? ` / CD ${formatCatalogCooldown(entry.cooldownMs)}`
       : '';
-  return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}${cooldown}${formatMechanicsCoverage(entry)}`;
+  const duration = formatActionTiming(entry);
+  return `${source}${entry.rawValue ?? '倍率待补'} / ${duration}${cooldown}${formatMechanicsCoverage(entry)}`;
 }
 
 function formatKiboActionMeta(entry) {
@@ -1024,7 +1040,14 @@ function formatKiboActionMeta(entry) {
     active: '主动技',
     break: '合击技',
   };
-  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)} / CD ${formatCatalogCooldown(entry.cooldownMs)}${formatMechanicsCoverage(entry)}`;
+  return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${formatActionTiming(entry)} / CD ${formatCatalogCooldown(entry.cooldownMs)}${formatMechanicsCoverage(entry)}`;
+}
+
+function formatActionTiming(entry) {
+  const durationMs = Number(entry.durationMs);
+  return entry.timingStatus === 'applied' && durationMs > 0
+    ? `${msToFrame(durationMs)}f ${formatFrameTime(durationMs)}`
+    : '时长未解析';
 }
 
 function annotateMechanicsCoverage(entry, type) {
@@ -1039,8 +1062,24 @@ function annotateMechanicsCoverage(entry, type) {
     },
   });
   const mechanicsClassification = mapping?.classification ?? 'loading';
+  const actionTiming = mapping?.actionTiming ?? null;
+  const timingStatus = actionTiming?.status ?? 'unresolved';
+  const durationFrames =
+    timingStatus === 'applied'
+      ? Number(actionTiming?.occupancy?.durationFrames) || null
+      : null;
   return {
     ...entry,
+    durationFrames,
+    durationMs: durationFrames ? frameToMs(durationFrames) : null,
+    timingStatus,
+    timingReasons: actionTiming?.reasons ?? [
+      'verified-action-timing-mapping-missing',
+    ],
+    timingSource: actionTiming?.occupancy?.sourceKind ?? null,
+    timingSourceIdentity:
+      actionTiming?.occupancy?.sourceIdentity ?? actionTiming?.sourceIdentity,
+    needsTimingData: timingStatus !== 'applied',
     attackInputSegments: mapping?.attackInputSegments ?? [],
     mechanicsClassification,
     mechanicsTooltip:

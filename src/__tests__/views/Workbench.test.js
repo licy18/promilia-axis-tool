@@ -122,10 +122,7 @@ async function settleWorkbenchAsyncPanels() {
   await nextTick();
 }
 
-async function addSkillActionFromLibrary(
-  wrapper,
-  actionKind = 'dodge-attack'
-) {
+async function addSkillActionFromLibrary(wrapper, actionKind = 'dodge-attack') {
   const activeActor = wrapper.get(
     '[data-testid="workbench-action-library-actor"][data-active="true"]'
   );
@@ -137,7 +134,25 @@ async function addSkillActionFromLibrary(
     1
   ).find(item => item.kind === actionKind);
   expect(entry).toBeTruthy();
-  wrapper.findComponent(ActionLibraryPanel).vm.$emit('add-skill-action', entry);
+  const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+    action =>
+      action.ownerKind === 'actor' &&
+      action.ownerId === characterId &&
+      action.sourceSkillId === Number(entry.skillId) &&
+      action.actionVariantIndex === Number(entry.actionVariantIndex)
+  );
+  expect(mapping?.actionTiming?.status).toBe('applied');
+  const durationFrames = mapping.actionTiming.occupancy.durationFrames;
+  wrapper.findComponent(ActionLibraryPanel).vm.$emit('add-skill-action', {
+    ...entry,
+    durationFrames,
+    durationMs: frameToMs(durationFrames),
+    timingStatus: 'applied',
+    timingReasons: [],
+    timingSource: mapping.actionTiming.occupancy.sourceKind,
+    timingSourceIdentity: mapping.actionTiming.occupancy.sourceIdentity,
+    attackInputSegments: mapping.attackInputSegments ?? [],
+  });
   await nextTick();
   return entry;
 }
@@ -7755,7 +7770,7 @@ describe('Workbench view', () => {
     ).toContain('星鸣技');
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('1s30f');
+    ).toContain('4s9f');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
@@ -7767,12 +7782,12 @@ describe('Workbench view', () => {
       level: 1,
       actionVariantIndex: 0,
       damageSegmentIndex: 0,
-      durationMs: 1500,
+      durationMs: 4150,
     });
     expect(savedDraft.actionDrafts[1].note).toContain('星鸣技：160%');
   });
 
-  it('uses distinct frame-based default durations for direct combat actions', async () => {
+  it('uses verified action occupancy durations for direct combat actions', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -7796,10 +7811,10 @@ describe('Workbench view', () => {
     ).toEqual(['普通攻击', '重击', '闪击']);
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('1s12f');
+    ).toContain('5s9f');
     expect(
       wrapper.find('.action-item[data-action-id="action-0003"]').text()
-    ).toContain('0s36f');
+    ).toContain('4s0f');
   });
 
   it('rebuilds the workbench project when the selected character changes', async () => {
@@ -7998,7 +8013,7 @@ describe('Workbench view', () => {
     );
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('1000');
+    ).toBe('2000');
     expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
       '有未保存改动'
     );
@@ -8035,7 +8050,7 @@ describe('Workbench view', () => {
     await timelineActions[1].trigger('keydown', { key: 'ArrowRight' });
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('1016.666667');
+    ).toBe('2016.666667');
 
     timelineActions = wrapper.findAll(
       '[data-testid="workbench-timeline-action"]'
@@ -8046,7 +8061,7 @@ describe('Workbench view', () => {
     });
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('950');
+    ).toBe('1950');
 
     timelineActions = wrapper.findAll(
       '[data-testid="workbench-timeline-action"]'
@@ -9088,10 +9103,10 @@ describe('Workbench view', () => {
 
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('3600');
+    ).toBe('7000');
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
-    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 3600ms。');
+    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 7000ms。');
     expect(
       wrapper
         .find(
@@ -9104,7 +9119,7 @@ describe('Workbench view', () => {
     ).toHaveLength(1);
     expect(
       wrapper.find('[data-testid="workbench-action-insert-delay-note"]').text()
-    ).toContain('自动推迟 2000ms -> 3600ms');
+    ).toContain('自动推迟 2000ms -> 7000ms');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
@@ -9116,7 +9131,7 @@ describe('Workbench view', () => {
     ).toContain('闪击');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('2000ms -> 3600ms');
+    ).toContain('2000ms -> 7000ms');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -9139,12 +9154,12 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0004')
     ).toMatchObject({
       actorCharacterId: workbenchSeed.defaults.characterId,
-      startMs: 3600,
+      startMs: 7000,
       insertion: {
         autoDelayed: true,
         requestedStartMs: 2000,
-        resolvedStartMs: 3600,
-        delayedByMs: 1600,
+        resolvedStartMs: 7000,
+        delayedByMs: 5000,
         laneId: 'actor-109001',
         reason: 'same-lane-conflict',
         conflictActionIds: ['action-0002'],
@@ -9224,6 +9239,7 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     await selectLoadoutFromTimeline(wrapper, 109001, 'kiboId', 500001);
 
     await wrapper
@@ -9278,7 +9294,7 @@ describe('Workbench view', () => {
       durationMs: 1416.666667,
       eventType: 'awakening',
       name: '迅风刃',
-      timingSource: 'azpr-unity-skill-control-root',
+      timingSource: 'skill-control-player-action-range',
       needsTimingData: false,
     });
   });
@@ -9293,6 +9309,9 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    await selectLoadoutFromTimeline(wrapper, 109001, 'kiboId', 500001);
 
     await wrapper
       .find('[data-testid="workbench-add-kibo-event-action"]')
@@ -9545,7 +9564,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-note-input"]')
       .setValue(
-        '手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 3600ms。'
+        '手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 7000ms。'
       );
 
     expect(
@@ -9566,7 +9585,7 @@ describe('Workbench view', () => {
       insertion: {
         autoDelayed: true,
         requestedStartMs: 2000,
-        resolvedStartMs: 3600,
+        resolvedStartMs: 7000,
       },
     });
   });

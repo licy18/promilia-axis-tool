@@ -1764,16 +1764,29 @@ const actionLibrarySkills = computed(() =>
   getSkillsForCharacter(actionLibraryActor.value?.characterId)
 );
 const timelineEntryCatalog = computed(() => {
-  const defaultSkillEntry = getSkillActionCatalog(
-    actionLibrarySkills.value,
-    1
-  )[0];
+  void runtimeDiagnosticsRevision.value;
+  const actorCharacterId = actionLibraryActor.value?.characterId;
+  const skillEntries = getSkillActionCatalog(actionLibrarySkills.value, 1).map(
+    entry => normalizeActionEntryInput(entry, actorCharacterId)
+  );
+  const defaultSkillEntry =
+    skillEntries.find(
+      entry => entry.kind !== 'normal-attack' && isActionEntryTimingReady(entry)
+    ) ?? skillEntries.find(isActionEntryTimingReady);
+  const kiboId = Number(actionLibraryActor.value?.loadout?.kiboId) || null;
+  const defaultKiboEntry = (kiboActionsById.value.get(kiboId) ?? [])
+    .map(entry =>
+      normalizeKiboActionEntryInput(entry, kiboId, actorCharacterId)
+    )
+    .find(isActionEntryTimingReady);
   return [
-    createWorkbenchTimelineEntry({
-      ...defaultSkillEntry,
-      type: ACTION_TYPES.SKILL,
-      label: defaultSkillEntry?.label ?? '角色动作',
-    }),
+    defaultSkillEntry
+      ? createWorkbenchTimelineEntry({
+          ...defaultSkillEntry,
+          type: ACTION_TYPES.SKILL,
+          label: defaultSkillEntry.label ?? '角色动作',
+        })
+      : null,
     createWorkbenchTimelineEntry({
       type: ACTION_TYPES.SWITCH,
       label: '切人',
@@ -1782,11 +1795,12 @@ const timelineEntryCatalog = computed(() => {
       type: ACTION_TYPES.RESOURCE,
       label: '资源',
     }),
-    createWorkbenchTimelineEntry({
-      type: ACTION_TYPES.KIBO_EVENT,
-      eventType: 'activation',
-      label: '奇波事件',
-    }),
+    defaultKiboEntry
+      ? createWorkbenchTimelineEntry({
+          ...defaultKiboEntry,
+          type: ACTION_TYPES.KIBO_EVENT,
+        })
+      : null,
     createWorkbenchTimelineEntry({
       type: ACTION_TYPES.ENEMY_EVENT,
       eventType: 'phase',
@@ -3025,6 +3039,10 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
     actionEntryOrSkillId,
     actorCharacterId
   );
+  if (!isActionEntryTimingReady(actionEntry)) {
+    draftStatus.value = formatUnresolvedActionTimingMessage(actionEntry);
+    return false;
+  }
   const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
   const requestedStartMs =
@@ -3064,6 +3082,7 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
       actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
       damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
       durationMs: actionEntry.durationMs,
+      ...createActionTimingDraftFields(actionEntry),
       note:
         actionEntry.note ??
         `${actionEntry.label ?? '动作'}：${actionEntry.rawValue ?? '倍率待补'}；真实动作帧等待 asset 或运行时捕获补充。`,
@@ -3351,6 +3370,10 @@ function addResourceAction() {
 }
 
 async function addKiboEventAction(entry = null) {
+  if (!isActionEntryTimingReady(entry)) {
+    draftStatus.value = formatUnresolvedActionTimingMessage(entry);
+    return false;
+  }
   if (entry?.eventType === 'break') {
     return insertTimelineEntry({
       entry,
@@ -3367,13 +3390,12 @@ async function addKiboEventAction(entry = null) {
     kiboId: entry?.kiboId ?? actionLibraryActor.value?.loadout?.kiboId,
     skillId: entry?.skillId ?? selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
-    durationMs: entry?.durationMs ?? 600,
+    durationMs: entry.durationMs,
     level: selectedDraft.value.level,
     eventType: entry?.eventType ?? 'activation',
     name: entry?.label ?? '',
     icon: entry?.icon ?? null,
-    timingSource: entry?.timingSource ?? null,
-    needsTimingData: entry?.needsTimingData ?? true,
+    ...createActionTimingDraftFields(entry),
     note: entry?.note ?? '奇波事件标记；效果未接入 calculator。',
   });
 }
@@ -3425,13 +3447,13 @@ async function insertTimelineEntry({ entry, laneId, startMs }) {
 
 async function createTimelineEntryInsertionRequest(options = {}) {
   const request = createTimelineEntryDraftRequest(options);
-  if (!request) {
+  if (!request || request.blockedMessage) {
     return request;
   }
   const actorActionEntries = getSkillActionCatalog(
     getSkillsForCharacter(request.actorCharacterId),
     1
-  );
+  ).map(entry => normalizeActionEntryInput(entry, request.actorCharacterId));
   const jointAttackInsertion =
     await import('../domain/workbenchJointAttackInsertion');
   if (
@@ -3467,7 +3489,14 @@ async function createTimelineEntryInsertionRequest(options = {}) {
     entry: options.entry,
     actorCharacterId: request.actorCharacterId,
     actorActionEntries,
-    kiboActionEntries: kiboActionsById.value.get(equippedKiboId) ?? [],
+    kiboActionEntries: (kiboActionsById.value.get(equippedKiboId) ?? []).map(
+      entry =>
+        normalizeKiboActionEntryInput(
+          entry,
+          equippedKiboId,
+          request.actorCharacterId
+        )
+    ),
     equippedKiboId,
     baseDraftPatches: request.draftPatches,
     startMs: request.requestedStartMs,
@@ -3509,6 +3538,15 @@ function createTimelineEntryDraftRequest({
   let attackInputDrafts = [];
   if (entry.type === ACTION_TYPES.SKILL) {
     const actionEntry = normalizeActionEntryInput(entry, actorCharacterId);
+    if (!isActionEntryTimingReady(actionEntry)) {
+      return {
+        blockedMessage: formatUnresolvedActionTimingMessage(actionEntry),
+        targetLane,
+        actorCharacterId,
+        requestedStartMs,
+        draftPatches: [],
+      };
+    }
     const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
     const level = resolveSkillInsertLevel(actorCharacterId, skill);
     draftPatch = {
@@ -3519,6 +3557,7 @@ function createTimelineEntryDraftRequest({
       actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
       damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
       durationMs: actionEntry.durationMs,
+      ...createActionTimingDraftFields(actionEntry),
       note:
         actionEntry.note ??
         (actionEntry.label ?? '动作') +
@@ -3535,12 +3574,27 @@ function createTimelineEntryDraftRequest({
       firstActionId: actionId,
     });
   } else {
+    if (
+      entry.type === ACTION_TYPES.KIBO_EVENT &&
+      !isActionEntryTimingReady(entry)
+    ) {
+      return {
+        blockedMessage: formatUnresolvedActionTimingMessage(entry),
+        targetLane,
+        actorCharacterId,
+        requestedStartMs,
+        draftPatches: [],
+      };
+    }
     draftPatch = {
       id: actionId,
       type: entry.type,
       skillId: entry.skillId ?? selectedDraft.value.skillId,
       actorCharacterId,
-      durationMs: entry.durationMs ?? 600,
+      durationMs:
+        entry.type === ACTION_TYPES.KIBO_EVENT
+          ? entry.durationMs
+          : (entry.durationMs ?? 600),
       level: selectedDraft.value.level,
     };
   }
@@ -3562,8 +3616,7 @@ function createTimelineEntryDraftRequest({
       eventType: entry.eventType ?? 'activation',
       name: entry.label ?? '',
       icon: entry.icon ?? null,
-      timingSource: entry.timingSource ?? null,
-      needsTimingData: entry.needsTimingData ?? true,
+      ...createActionTimingDraftFields(entry),
       note: entry.note ?? '奇波事件标记；效果未接入 calculator。',
     });
   } else if (entry.type === ACTION_TYPES.ENEMY_EVENT) {
@@ -3589,6 +3642,17 @@ function createTimelineEntryDraftRequest({
           ],
     requestedStartMs,
     targetLane,
+  };
+}
+
+function createActionTimingDraftFields(entry) {
+  return {
+    durationFrames: entry?.durationFrames ?? null,
+    timingSource: entry?.timingSource ?? null,
+    timingStatus: entry?.timingStatus ?? null,
+    timingReasons: entry?.timingReasons ?? [],
+    timingSourceIdentity: entry?.timingSourceIdentity ?? null,
+    needsTimingData: entry?.needsTimingData ?? true,
   };
 }
 
@@ -3661,10 +3725,13 @@ function previewTimelineFragmentPlacement({ fragment, laneId, startMs } = {}) {
 function copyAction(actionId) {
   const simultaneousActionIds = expandSimultaneousActionIds([actionId]);
   if (simultaneousActionIds.length > 1) {
-    const sourceStartMs = Math.min(
-      ...actionDrafts.value
-        .filter(action => simultaneousActionIds.includes(action.id))
-        .map(action => Number(action.startMs) || 0)
+    const sourceActions = actionDrafts.value.filter(action =>
+      simultaneousActionIds.includes(action.id)
+    );
+    const sourceEndMs = Math.max(
+      ...sourceActions.map(
+        action => (Number(action.startMs) || 0) + resolveDraftDurationMs(action)
+      )
     );
     actionClipboard.value = createWorkbenchActionClipboard(
       actionDrafts.value,
@@ -3672,7 +3739,9 @@ function copyAction(actionId) {
       actionRelations.value
     );
     return Boolean(
-      pasteSelectedActions({ targetStartMs: sourceStartMs + 1000 })
+      pasteSelectedActions({
+        targetStartMs: sourceEndMs + NEW_ACTION_INSERT_GAP_MS,
+      })
     );
   }
   const sourceIndex = actionDrafts.value.findIndex(
@@ -3687,9 +3756,13 @@ function copyAction(actionId) {
     ...sourceAction,
     id: createNextActionId(),
     startMs: isConstraintAssistedPlacement()
-      ? sourceAction.startMs + 1000
+      ? sourceAction.startMs +
+        resolveDraftDurationMs(sourceAction) +
+        NEW_ACTION_INSERT_GAP_MS
       : clampNumber(
-          sourceAction.startMs + 1000,
+          sourceAction.startMs +
+            resolveDraftDurationMs(sourceAction) +
+            NEW_ACTION_INSERT_GAP_MS,
           0,
           project.value.time.durationMs
         ),
@@ -7915,27 +7988,101 @@ function normalizeActionEntryInput(input, actorCharacterId) {
           skillId: input.skillId,
           actionVariantIndex:
             input.actionVariantIndex ?? input.damageSegmentIndex ?? 0,
-          durationMs: input.durationMs ?? frameToMs(60),
         }
       : (getSkillActionCatalog(getSkillsForCharacter(actorCharacterId), 1).find(
           entry => Number(entry.skillId) === Number(input)
         ) ?? {
           skillId: Number(input),
           actionVariantIndex: 0,
-          durationMs: frameToMs(60),
+          durationFrames: null,
+          durationMs: null,
+          timingStatus: 'unresolved',
+          timingReasons: ['public-action-entry-missing'],
           label: '动作',
           rawValue: null,
         });
-  if (entry.attackInputSegments?.length) return entry;
   const mapping = getVerifiedCombatActionMapping({
     type: ACTION_TYPES.SKILL,
     skillId: entry.skillId,
     actionVariantIndex: entry.actionVariantIndex,
     actor: { characterId: actorCharacterId },
   });
-  return mapping?.actionKind === 'normal-attack'
-    ? { ...entry, attackInputSegments: mapping.attackInputSegments ?? [] }
-    : entry;
+  return applyVerifiedActionTiming(entry, mapping);
+}
+
+function normalizeKiboActionEntryInput(input, kiboId, actorCharacterId) {
+  const entry = {
+    ...input,
+    type: ACTION_TYPES.KIBO_EVENT,
+    kiboId: Number(kiboId) || null,
+    skillId: Number(input?.skillId) || null,
+    eventType: input?.eventType ?? input?.kind ?? 'activation',
+    label: input?.label ?? input?.name ?? '奇波动作',
+    actionVariantIndex: Number(input?.actionVariantIndex) || 0,
+  };
+  const mapping = getVerifiedCombatActionMapping({
+    type: ACTION_TYPES.KIBO_EVENT,
+    skillId: entry.skillId,
+    actionVariantIndex: entry.actionVariantIndex,
+    kiboId: entry.kiboId,
+    actor: {
+      characterId: actorCharacterId,
+      loadout: { kiboId: entry.kiboId },
+    },
+  });
+  return applyVerifiedActionTiming(entry, mapping);
+}
+
+function applyVerifiedActionTiming(entry, mapping) {
+  const actionTiming = mapping?.actionTiming ?? null;
+  if (
+    !actionTiming &&
+    entry?.timingStatus === 'applied' &&
+    Number.isFinite(Number(entry.durationMs)) &&
+    Number(entry.durationMs) > 0
+  ) {
+    return {
+      ...entry,
+      needsTimingData: false,
+      attackInputSegments: entry.attackInputSegments ?? [],
+      mechanicsClassification: entry.mechanicsClassification ?? 'unresolved',
+    };
+  }
+  const timingStatus = actionTiming?.status ?? 'unresolved';
+  const durationFrames =
+    timingStatus === 'applied'
+      ? Number(actionTiming?.occupancy?.durationFrames) || null
+      : null;
+  return {
+    ...entry,
+    durationFrames,
+    durationMs: durationFrames ? frameToMs(durationFrames) : null,
+    timingStatus,
+    timingReasons: actionTiming?.reasons ?? [
+      'verified-action-timing-mapping-missing',
+    ],
+    timingSource: actionTiming?.occupancy?.sourceKind ?? null,
+    timingSourceIdentity:
+      actionTiming?.occupancy?.sourceIdentity ??
+      actionTiming?.sourceIdentity ??
+      null,
+    needsTimingData: timingStatus !== 'applied',
+    attackInputSegments: mapping?.attackInputSegments ?? [],
+    mechanicsClassification: mapping?.classification ?? 'unresolved',
+  };
+}
+
+function isActionEntryTimingReady(entry) {
+  return (
+    entry?.timingStatus === 'applied' &&
+    Number.isFinite(Number(entry.durationMs)) &&
+    Number(entry.durationMs) > 0
+  );
+}
+
+function formatUnresolvedActionTimingMessage(entry) {
+  const reasons = (entry?.timingReasons ?? []).filter(Boolean);
+  return `${entry?.label ?? entry?.name ?? '动作'}占轴时长未解析，不能加入时间轴${reasons.length ? `：${reasons.join('、')}` : ''}`;
 }
 
 function resolveSkillInsertLevel(actorCharacterId, skill) {

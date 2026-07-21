@@ -1,7 +1,7 @@
 import { frameToMs, msToFrame, snapMsToFrame } from './timebase';
 
 export const ATTACK_INPUT_CHAIN_SOURCE = 'normal-attack-input-chain';
-export const ATTACK_INPUT_LEGACY_UNRESOLVED = 'legacy-unresolved';
+export const ATTACK_INPUT_LEGACY_UNRESOLVED = 'legacy-unresolved-duration';
 
 export function normalizeAttackInputSegments(segments = []) {
   const values = (Array.isArray(segments) ? segments : [])
@@ -64,7 +64,17 @@ export function createWorkbenchAttackInputChainDrafts({
   createdAt = null,
 } = {}) {
   const segments = normalizeAttackInputSegments(entry?.attackInputSegments);
-  if (!segments.length || typeof createActionId !== 'function') return [];
+  if (
+    !segments.length ||
+    segments.some(
+      segment =>
+        segment.durationStatus !== 'applied' ||
+        !positiveIntegerOrNull(segment.durationFrames)
+    ) ||
+    typeof createActionId !== 'function'
+  ) {
+    return [];
+  }
   const actionIds = segments.map((segment, index) =>
     createActionId(segment, index)
   );
@@ -73,10 +83,7 @@ export function createWorkbenchAttackInputChainDrafts({
   let cursorMs = Math.max(0, snapMsToFrame(Number(startMs) || 0));
   return segments.map((segment, index) => {
     const actionId = actionIds[index];
-    const durationMs = Math.max(
-      frameToMs(1),
-      frameToMs(segment.effectiveDurationFrames ?? segment.durationFrames)
-    );
+    const durationMs = frameToMs(segment.durationFrames);
     const linkDelayFrames = segment.defaultLinkDelayFrames;
     const action = {
       ...(baseDraft ?? {}),
@@ -180,6 +187,15 @@ export function migrateLegacyAttackInputActionDrafts(
       },
       createdAt: action.generationBatch?.createdAt ?? null,
     });
+    if (drafts.length !== segments.length) {
+      result.push({
+        ...action,
+        attackInputLegacyStatus: ATTACK_INPUT_LEGACY_UNRESOLVED,
+      });
+      unresolvedActionIds.push(action.id);
+      changed = true;
+      continue;
+    }
     result.push(...drafts);
     changed = true;
   }
@@ -193,18 +209,10 @@ function normalizeAttackInputSegment(segment) {
     segment?.effectiveDurationFrames
   );
   const durationFrames =
-    effectiveDurationFrames ??
-    positiveIntegerOrNull(segment?.durationFrames) ??
-    0;
+    effectiveDurationFrames ?? positiveIntegerOrNull(segment?.durationFrames);
   const sequenceIndex = Math.max(0, Number(segment?.sequenceIndex) || 0);
   const sequenceTotal = Math.max(0, Number(segment?.sequenceTotal) || 0);
-  if (
-    !identity ||
-    !controlSkillId ||
-    !durationFrames ||
-    !sequenceIndex ||
-    !sequenceTotal
-  ) {
+  if (!identity || !controlSkillId || !sequenceIndex || !sequenceTotal) {
     return null;
   }
   return {
@@ -221,10 +229,14 @@ function normalizeAttackInputSegment(segment) {
     animationDurationFrames: positiveIntegerOrNull(
       segment.animationDurationFrames
     ),
+    animationDurationStatus:
+      normalizeText(segment.animationDurationStatus) ?? 'unresolved',
     hitEndFrame: nonNegativeIntegerOrNull(segment.hitEndFrame),
     effectiveDurationFrames,
     durationFrames,
     durationStatus: normalizeText(segment.durationStatus) ?? 'unresolved',
+    durationBasis: normalizeText(segment.durationBasis),
+    durationSourceIdentity: normalizeText(segment.durationSourceIdentity),
     defaultLinkDelayFrames: nonNegativeIntegerOrNull(
       segment.defaultLinkDelayFrames
     ),
@@ -280,6 +292,9 @@ function refreshAttackInputActionDrafts(actions, resolveMapping) {
       Math.abs(msToFrame(action.durationMs) - oldDefaultFrames) <= 1;
     refreshes.set(action.id, {
       segment,
+      timingReady:
+        segment.durationStatus === 'applied' &&
+        positiveIntegerOrNull(segment.durationFrames) != null,
       durationWasDefault,
       oldDefaultFrames,
     });
@@ -293,12 +308,15 @@ function refreshAttackInputActionDrafts(actions, resolveMapping) {
       refresh.segment.effectiveDurationFrames ?? refresh.segment.durationFrames;
     const next = {
       ...action,
-      ...(refresh.durationWasDefault
+      ...(refresh.timingReady && refresh.durationWasDefault
         ? { durationMs: frameToMs(durationFrames) }
         : {}),
       attackSequenceIndex: refresh.segment.sequenceIndex,
       attackSequenceTotal: refresh.segment.sequenceTotal,
       attackInput: refresh.segment,
+      ...(!refresh.timingReady
+        ? { attackInputLegacyStatus: ATTACK_INPUT_LEGACY_UNRESOLVED }
+        : {}),
     };
     if (!sameValue(action, next)) changed = true;
     return next;
@@ -349,6 +367,7 @@ function findPristineAttackInputGroups(actions, refreshes) {
         group.some(
           (action, index) =>
             Number(action.attackSequenceIndex) !== index + 1 ||
+            !refreshes.get(action.id)?.timingReady ||
             !refreshes.get(action.id)?.durationWasDefault
         )
       ) {

@@ -1526,7 +1526,7 @@ test('[m1d-demo-milestone] replays the visible three-person demo through every p
     '示例方案 · 预览数据'
   );
   await expectDemoMilestoneState(page, { resourceFrameIndex: 288 });
-  await expect(page.locator('.action-item')).toHaveCount(17);
+  await expect(page.locator('.action-item')).toHaveCount(14);
   await expect(
     page.locator('.action-item[data-action-id="demo-kibo-2-event"]')
   ).toBeVisible();
@@ -1546,7 +1546,7 @@ test('[m1d-demo-milestone] replays the visible three-person demo through every p
     .locator('.action-item[data-action-id="demo-actor-2-energy"]')
     .getByTestId('workbench-copy-action')
     .click();
-  await expect(page.locator('.action-item')).toHaveCount(18);
+  await expect(page.locator('.action-item')).toHaveCount(15);
   await expect(
     page.locator(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
@@ -1679,11 +1679,11 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   );
   await expect(insertedAction).toHaveAttribute('data-lane-id', 'actor-101010');
 
-  await expect(
-    timeline.locator(
-      '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0002"]'
-    )
-  ).toHaveCount(0);
+  const insertedActionNodes = timeline.locator(
+    '[data-testid="workbench-timeline-state-curve-node"][data-action-id="action-0002"]'
+  );
+  await expect(insertedActionNodes.first()).toBeVisible();
+  expect(await insertedActionNodes.count()).toBeGreaterThan(0);
   const reviewedEvent = timeline
     .locator(
       '[data-testid="workbench-timeline-state-curve"]:not([data-track-key^="tuningMark:"]) [data-testid="workbench-timeline-state-curve-node"][data-action-id^="action-0001"]'
@@ -2645,7 +2645,7 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
     '[data-testid="workbench-skill-entry"][data-skill-id="10900112"][data-action-kind="star-skill"]'
   );
   const kiboSource = page.locator(
-    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500003"][data-skill-id="50000302"]'
+    '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500003"][data-skill-id="502019"]'
   );
   await dragLocatorTo(page, actorSource, actorLane, {
     targetPosition: { x: 120, y: 82 },
@@ -2659,7 +2659,7 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
     )
     .last();
   const sourceKiboAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="50000302"]'
+    '[data-testid="workbench-timeline-action"][data-skill-id="502019"]'
   );
   const sourceActionIds = [
     await sourceActorAction.getAttribute('data-action-id'),
@@ -2722,7 +2722,7 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
     '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
   );
   const insertedKiboActions = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="50000302"]'
+    '[data-testid="workbench-timeline-action"][data-skill-id="502019"]'
   );
   await expect(insertedActorActions).toHaveCount(1);
   await expect(insertedKiboActions).toHaveCount(1);
@@ -2792,9 +2792,33 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
   });
   await expect(workbench).toHaveAttribute(
     'data-action-placement-status',
+    'adjustable'
+  );
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(6);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '3');
+  await beginPointerDragTo(page, fragmentInsert, actorLane, {
+    targetPosition: overlappingTarget,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
+    'adjustable'
+  );
+  await page.mouse.up();
+  await expect(timelineActions).toHaveCount(8);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '4');
+  await beginPointerDragTo(page, fragmentInsert, actorLane, {
+    targetPosition: overlappingTarget,
+  });
+  await expect(workbench).toHaveAttribute(
+    'data-action-placement-status',
     'blocked'
   );
   await page.mouse.up();
+  await expect(timelineActions).toHaveCount(8);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timelineActions).toHaveCount(6);
+  await page.getByTestId('workbench-undo-edit').click();
   await expect(timelineActions).toHaveCount(4);
   await page.getByTestId('workbench-undo-edit').click();
   await expect(timelineActions).toHaveCount(2);
@@ -2924,8 +2948,43 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     .getByTestId('workbench-enemy-initial-toughness-input')
     .fill('0.01');
   await closeInspectorIfVisible(page);
+  const verifiedMechanicsPackage = JSON.parse(
+    await readFile(
+      'src/data/generated/verified-combat-mechanics-package.json',
+      'utf8'
+    )
+  );
+  const pangAttackInput = verifiedMechanicsPackage.actionMappings
+    .find(
+      mapping =>
+        mapping.ownerKind === 'actor' &&
+        mapping.ownerId === 101007 &&
+        mapping.actionKind === 'normal-attack'
+    )
+    .attackInputSegments.find(segment => segment.sequenceIndex === 3);
+  expect(pangAttackInput).toMatchObject({
+    controlSkillId: 10100703,
+    durationStatus: 'applied',
+    durationFrames: 31,
+  });
+  const pangActionDraft = {
+    id: 'm6-pang-a3',
+    type: 'skill',
+    skillId: 10100701,
+    actorCharacterId: 101007,
+    level: 1,
+    actionVariantIndex: 0,
+    damageSegmentIndex: 0,
+    startMs: frameToMs(60),
+    durationMs: frameToMs(pangAttackInput.durationFrames),
+    attackGroupId: 'm6-pang-a3',
+    attackSequenceIndex: pangAttackInput.sequenceIndex,
+    attackSequenceTotal: pangAttackInput.sequenceTotal,
+    attackInput: pangAttackInput,
+    note: 'M6 回归：已确认的芃芃 A3 独立输入段。',
+  };
   await page.getByTestId('workbench-save-draft').click();
-  await page.evaluate(() => {
+  await page.evaluate(pangAction => {
     const storageKey = 'promilia-axis-tool:workbench-draft:v17';
     const draft = JSON.parse(window.localStorage.getItem(storageKey));
     const initialRuntimeState = {
@@ -2948,12 +3007,15 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
         Array.isArray(value.actionDrafts)
       ) {
         value.initialRuntimeState = initialRuntimeState;
+        if (!value.actionDrafts.some(action => action.id === pangAction.id)) {
+          value.actionDrafts.push(pangAction);
+        }
       }
       Object.values(value).forEach(applyToScenarioDrafts);
     };
     applyToScenarioDrafts(draft);
     window.localStorage.setItem(storageKey, JSON.stringify(draft));
-  });
+  }, pangActionDraft);
   const reloadedPackageResponse = page.waitForResponse(
     response =>
       response.url().includes('verified-combat-mechanics-package') &&
@@ -2977,16 +3039,10 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
     '[data-testid="workbench-kibo-action-entry"][data-kibo-id="500469"][data-skill-id="50046903"]'
   );
   await expect(pangSource).toBeVisible();
+  await expect(pangSource).toHaveAttribute('data-timing-status', 'unresolved');
+  await expect(pangSource).toBeDisabled();
   await expect(heavySource).toBeVisible();
 
-  await dragLocatorTo(
-    page,
-    pangSource,
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
-    ),
-    { targetPosition: { x: 90, y: 82 } }
-  );
   await dragLocatorTo(
     page,
     heavySource,
@@ -2999,16 +3055,14 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   const pangActions = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10100701"]'
   );
-  const pangBreakAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10100701"][data-attack-sequence-index="2"]'
-  );
   const pangAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10100701"][data-attack-sequence-index="3"]'
   );
+  const pangBreakAction = pangAction;
   const heavyAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="50046903"]'
   );
-  await expect(pangActions).toHaveCount(4);
+  await expect(pangActions).toHaveCount(1);
   await expect(pangBreakAction).toHaveCount(1);
   await expect(pangAction).toHaveCount(1);
   await expect(heavyAction).toHaveCount(1);
@@ -3942,7 +3996,7 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   ).toMatchObject({
     type: 'kiboEvent',
     actorCharacterId: 101003,
-    eventType: 'activation',
+    eventType: 'signature',
   });
   expect(
     exported.actionDrafts.find(action => action.id === 'action-0003')
@@ -4991,6 +5045,11 @@ test('[stage-12c-analysis-report-reproducibility] audits exact, drifted, and inc
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/#/workbench');
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-runtime-diagnostics-revision',
+    '1',
+    { timeout: 60_000 }
+  );
 
   await page.getByTestId('workbench-export-contribution-report').click();
   const reportDialog = page.getByTestId('workbench-analysis-report');
@@ -6415,7 +6474,7 @@ async function expectM2ActorLoadoutDirect(page, characterId, config) {
 function getSingleSkillActionEntry(page) {
   return page
     .locator(
-      '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"]'
+      '[data-testid="workbench-skill-entry"][data-timing-status="applied"]:not([data-action-kind="normal-attack"])'
     )
     .first();
 }

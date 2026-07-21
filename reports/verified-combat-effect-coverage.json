@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-effect-coverage",
   "status": "verified-combat-effect-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "91d8bc5dc98d05e67134ece031636e84499e620076a2efa2132fcf0562ecbde9",
+  "packageHash": "84d64c752b498070731bb077b21e261033c21328a4a3c4206f1a1d82dd05f8c6",
   "sourceDenominator": {
     "kind": "current-client-public-action-control-battle-element-graph",
     "actionCount": 562,
@@ -45,17 +45,17 @@
       "effect-trigger-frame-missing": 761,
       "heal-formula-not-literal-function-5": 62,
       "inject-wrapper-classified-through-child-edges": 1208,
-      "judgment-state-machine-deferred-to-m8-c": 80,
+      "judgment-condition-runtime-unimplemented": 80,
       "nested-damage-trigger-lifecycle-not-expanded": 384,
       "nested-effect-wrapper-semantics-unresolved": 846,
-      "pack-state-machine-deferred-to-m8-c": 163,
+      "pack-lifecycle-runtime-unimplemented": 163,
       "property-change-type-not-battle-property": 1,
       "property-conditions-not-expanded": 27,
       "property-formula-not-literal-function-5": 420,
       "shield-formula-not-literal-function-5": 10,
       "sp-formula-not-literal-function-5": 84,
       "sp-recover-type-not-direct-sp": 10,
-      "stack-state-machine-deferred-to-m8-c": 18,
+      "stack-lifecycle-runtime-unimplemented": 18,
       "tuning-consume-judgment-missing": 6,
       "tuning-consume-mark-identity-ambiguous": 38,
       "tuning-consume-success-branch-unresolved": 6,
@@ -18936,7 +18936,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:-6306117166253533009:73"
@@ -18957,7 +18957,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:-7507593869761046353:31"
@@ -18978,7 +18978,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:-8481772359022405457:63"
@@ -18999,7 +18999,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:1042452924652329135:10"
@@ -19020,7 +19020,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:1252672818781362351:18"
@@ -19041,7 +19041,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:1636705774540626095:14"
@@ -19062,7 +19062,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:1947121932661495983:28"
@@ -19083,7 +19083,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:4325371654609836207:97"
@@ -19104,7 +19104,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:6106248477738735791:27"
@@ -19125,7 +19125,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:7625208599955904687:22"
@@ -19146,7 +19146,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:7792805066673100975:39"
@@ -19167,7 +19167,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:8128757892247853231:7"
@@ -19188,7 +19188,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:8817142936925247663:51"
@@ -19209,7 +19209,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-2837190147473904746:9215148273922021551:85"
@@ -19846,7 +19846,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-7712343618768282172:-5991834736318408529:38"
@@ -19867,7 +19867,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:-7712343618768282172:-7659317450779256657:104"
@@ -19976,7 +19976,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:4494506159002420388:-5770588700024563537:127"
@@ -19997,7 +19997,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:4494506159002420388:1640794548429789359:58"
@@ -20212,7 +20212,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:-1002243780367035863:-1674458398536497915:187"
@@ -20233,7 +20233,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:-1002243780367035863:-7816708822157556475:157"
@@ -20254,7 +20254,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:-1002243780367035863:2140723853000574213:214"
@@ -20275,7 +20275,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:-1002243780367035863:674406243774629125:240"
@@ -20472,7 +20472,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:6830706963819079250:-8782351489199373051:171"
@@ -20493,7 +20493,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:6830706963819079250:3161126821006279941:229"
@@ -20514,7 +20514,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:6830706963819079250:7958657243353449733:201"
@@ -20535,7 +20535,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:6830706963819079250:8589360612015277317:252"
@@ -20732,7 +20732,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:5931632259475456445:-9050912802254682875:261"
@@ -20862,7 +20862,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50"
@@ -20994,7 +20994,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:-6326209782415091882:225"
@@ -21015,7 +21015,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219"
@@ -21036,7 +21036,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231"
@@ -21123,7 +21123,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -21145,7 +21145,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -21167,7 +21167,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -21297,7 +21297,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -21341,7 +21341,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -21406,7 +21406,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272"
@@ -21427,7 +21427,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-6717776740476971178:284"
@@ -21448,7 +21448,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278"
@@ -22327,7 +22327,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10200112:0:-1376346479596612847:4184090208652367294:1"
@@ -22391,7 +22391,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -22710,7 +22710,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10200112:1:8119560528469492373:-7853792555447673522:4"
@@ -23093,7 +23093,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10200113:0:-1376346479596612847:-9099779021348353365:243"
@@ -23157,7 +23157,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -23998,7 +23998,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300203:3:4460567758519354701:-5774689639772653403:26"
@@ -24019,7 +24019,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -24339,7 +24339,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300213:0:-8725062263845393396:2818728561424649950:173"
@@ -24360,7 +24360,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300213:0:-8725062263845393396:8489770418213277406:237"
@@ -24425,7 +24425,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300213:0:-6187686510236149564:-1358196052883222818:300"
@@ -24446,7 +24446,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300213:0:-6187686510236149564:2083420758843707102:284"
@@ -24467,7 +24467,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -24489,7 +24489,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -26161,7 +26161,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700213:0:-8162268947497707053:-7379670190087882269:150"
@@ -26182,7 +26182,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700213:0:-8162268947497707053:-7448755903733450269:144"
@@ -26245,7 +26245,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -26618,7 +26618,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:2:3172462709797538628:-294496756060942192:105"
     },
@@ -26638,7 +26638,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:2:3172462709797538628:6158940457563061717:207"
     },
@@ -26808,7 +26808,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:2:-3610696954518353029:-294496756060942192:105"
     },
@@ -26828,7 +26828,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:2:-3610696954518353029:6158940457563061717:207"
     },
@@ -27096,7 +27096,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700310:2:4310270459467820517:-294496756060942192:105"
@@ -27117,7 +27117,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700310:2:4310270459467820517:6158940457563061717:207"
@@ -27180,7 +27180,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:4:3172462709797538628:-294496756060942192:105"
     },
@@ -27200,7 +27200,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:4:3172462709797538628:6158940457563061717:207"
     },
@@ -27370,7 +27370,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:4:-3610696954518353029:-294496756060942192:105"
     },
@@ -27390,7 +27390,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10700310:4:-3610696954518353029:6158940457563061717:207"
     },
@@ -27658,7 +27658,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700310:4:4310270459467820517:-294496756060942192:105"
@@ -27679,7 +27679,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700310:4:4310270459467820517:6158940457563061717:207"
@@ -28115,7 +28115,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700313:0:-791585436174880656:-4258445867092657750:151"
@@ -28243,7 +28243,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700313:0:-4200875456852599081:-4258445867092657750:151"
@@ -28458,7 +28458,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -28699,7 +28699,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800112:0:-4643639711478347961:-2858144684643943284:57"
@@ -28764,7 +28764,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -28852,7 +28852,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -28896,7 +28896,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -29321,7 +29321,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800113:0:4529303421024168114:866039684609963169:98"
@@ -29364,7 +29364,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -29430,7 +29430,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c"
+        "judgment-condition-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10800113:0:-1822534463770343586:-7862101168306621279:128"
     },
@@ -29492,7 +29492,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800113:0:-1085330686087474031:-7862101168306621279:128"
@@ -29703,7 +29703,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800213:0:-6386280185465362281:1232590546087931134:192"
@@ -29831,7 +29831,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800213:0:-777045592153766770:1232590546087931134:192"
@@ -30106,7 +30106,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800312:0:8516728629623983322:4494663983184070748:0"
@@ -30867,7 +30867,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-5619192640262567577:60"
@@ -30888,7 +30888,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-6793160401530779289:5"
@@ -30909,7 +30909,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-8332496925969938073:20"
@@ -31035,7 +31035,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900113:0:4475751446751874795:8524185735560706053:183"
@@ -31078,7 +31078,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900113:0:6963696584413796673:8524185735560706053:183"
@@ -31121,7 +31121,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -31209,7 +31209,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -31253,7 +31253,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -31632,7 +31632,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900213:0:774438940057857446:-7354643402567700720:0"
@@ -31739,7 +31739,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100121:0:6747089720136425884:2971013481890434938:52"
@@ -31971,7 +31971,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11200113:0:-4310182546344143382:-2901575126267093131:128"
@@ -32036,7 +32036,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11200113:0:-7212963066810547935:2617385811689971573:191"
@@ -32143,7 +32143,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -32729,7 +32729,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -32792,7 +32792,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -32926,7 +32926,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -33057,7 +33057,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -34517,7 +34517,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -34605,7 +34605,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -34651,7 +34651,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -36605,7 +36605,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -36693,7 +36693,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -36739,7 +36739,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -37475,7 +37475,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:19900313:0:-2410283886205705283:6113066284804000116:94"
@@ -37606,7 +37606,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:19900313:0:-3716053188594440235:6113066284804000116:94"
@@ -38116,7 +38116,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c"
+        "pack-lifecycle-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:50000404:0:-1651805957758632139:-5184444208471098806:22"
     },
@@ -38136,7 +38136,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50000404:0:-1651805957758632139:-8455841360313927094:22"
@@ -38838,7 +38838,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50002504:0:8476430784875623376:-5781860675468547128:24"
@@ -38924,7 +38924,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50002616:0:6244696034100177482:-9022680043213736257:70"
@@ -38987,7 +38987,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50002616:0:3725321258941856625:6220003759654188735:73"
@@ -39871,7 +39871,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50005202:0:8615804911080372207:-2645199256095148424:26"
@@ -40001,7 +40001,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50005302:0:2286594013099709878:1558653952008290368:120"
@@ -41363,7 +41363,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-ally-unresolved"
       ],
       "sourceIdentity": "battle-effect:50009305:0:8582971159979835870:2080458921280300658:22"
@@ -41743,7 +41743,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50011001:0:3777855098118877645:4707004601905056310:15"
@@ -41806,7 +41806,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50011001:0:-4991905786481659563:7239028029767682614:18"
@@ -43196,7 +43196,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -43305,7 +43305,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -43434,7 +43434,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -44007,7 +44007,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -44096,7 +44096,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50018702:0:-2673056595590339436:7461259708995238459:46"
@@ -44473,7 +44473,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:50020901:0:-8162268947497707053:2906786533890401990:30"
@@ -44515,7 +44515,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -44893,7 +44893,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50023101:0:5431822164439788790:6578224695550283028:30"
@@ -45338,7 +45338,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:50025801:0:-8162268947497707053:5823144417875342633:20"
@@ -45380,7 +45380,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -45509,7 +45509,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:50025901:0:-8162268947497707053:1253480908907901455:21"
@@ -45551,7 +45551,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -45680,7 +45680,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:50026001:0:-8162268947497707053:-7180960442829654523:45"
@@ -45722,7 +45722,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -46704,7 +46704,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50032201:0:1165662098393435212:-5463759245268230839:20"
@@ -46788,7 +46788,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50032301:0:-5385952649961569505:-4173528685311389985:15"
@@ -46874,7 +46874,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50032401:0:-7541488883509288788:-898950829177068725:20"
@@ -47316,7 +47316,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c"
+        "pack-lifecycle-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:50036001:0:140981005147286201:4147017625709388447:206"
     },
@@ -47357,7 +47357,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -48329,7 +48329,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50046903:0:-8974535134279819913:2556701570609920955:0"
@@ -48413,7 +48413,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "battle-effect:50047001:0:-5844234428157234317:-2546761663400048158:0"
@@ -48497,7 +48497,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100701:0:6866271494981459896:-4353062353330321246:5"
@@ -57095,7 +57095,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300201:3:4460567758519354701:8674841978468049964:26"
@@ -57116,7 +57116,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -57935,7 +57935,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300202:3:4460567758519354701:-4996826262836372537:26"
@@ -57956,7 +57956,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -58835,7 +58835,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300204:2:4460567758519354701:-6305840928975797075:29"
@@ -58856,7 +58856,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -60443,7 +60443,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:-4198429380706307040:-854098807413289327:13"
@@ -60464,7 +60464,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -60508,7 +60508,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -60574,7 +60574,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -60662,7 +60662,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -60684,7 +60684,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -60730,7 +60730,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -60799,7 +60799,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -60891,7 +60891,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -60936,7 +60936,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -61005,7 +61005,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -61096,7 +61096,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61164,7 +61164,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -61255,7 +61255,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61321,7 +61321,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:-4717928479518477389:-854098807413289327:13"
@@ -61342,7 +61342,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -61386,7 +61386,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -61452,7 +61452,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61474,7 +61474,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -61520,7 +61520,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -61589,7 +61589,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61634,7 +61634,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61723,7 +61723,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:963067093454898123:-854098807413289327:13"
@@ -61788,7 +61788,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -61876,7 +61876,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61944,7 +61944,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -62080,7 +62080,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -62214,7 +62214,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:5222445263880226089:-854098807413289327:13"
@@ -62455,7 +62455,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -62741,7 +62741,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -62993,7 +62993,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -63512,7 +63512,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64051,7 +64051,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:-7587397208932996433:-854098807413289327:13"
@@ -64072,7 +64072,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -64116,7 +64116,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -64159,7 +64159,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -64225,7 +64225,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64247,7 +64247,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -64293,7 +64293,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -64338,7 +64338,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -64407,7 +64407,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64452,7 +64452,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64517,7 +64517,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64606,7 +64606,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:3015413247602579683:-854098807413289327:13"
@@ -64693,7 +64693,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -64737,7 +64737,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -64867,7 +64867,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64958,7 +64958,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -65004,7 +65004,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -65206,7 +65206,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65251,7 +65251,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65513,7 +65513,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:-4539090972426934065:-854098807413289327:13"
@@ -65534,7 +65534,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -65622,7 +65622,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -65688,7 +65688,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65710,7 +65710,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -65802,7 +65802,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -65871,7 +65871,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65960,7 +65960,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66049,7 +66049,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:-1009658800668423806:-854098807413289327:13"
@@ -66092,7 +66092,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -66180,7 +66180,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66225,7 +66225,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -66339,7 +66339,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66495,7 +66495,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700305:0:8821658759994224323:-854098807413289327:13"
@@ -66516,7 +66516,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -66560,7 +66560,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -66626,7 +66626,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "stack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66648,7 +66648,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -66694,7 +66694,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
@@ -66763,7 +66763,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66808,7 +66808,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -67045,7 +67045,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900104:0:-6711007604037179960:2505213732361599632:29"
@@ -73208,7 +73208,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100101:4:4447210314696871891:-3307273129238963617:60"
@@ -73229,7 +73229,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100101:4:4447210314696871891:-6122676425533638217:60"
@@ -73422,7 +73422,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -73444,7 +73444,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -73592,7 +73592,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -73614,7 +73614,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -76578,7 +76578,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100101:6:4447210314696871891:-3307273129238963617:60"
@@ -76599,7 +76599,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100101:6:4447210314696871891:-6122676425533638217:60"
@@ -76792,7 +76792,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -76814,7 +76814,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -76962,7 +76962,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -76984,7 +76984,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -77196,7 +77196,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:1:2736461665040744179:-7257281946517058351:0"
@@ -77217,7 +77217,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:1:2736461665040744179:1415546572980998750:0"
@@ -77238,7 +77238,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:1:2736461665040744179:3916411433401207124:0"
@@ -77259,7 +77259,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:1:2736461665040744179:900376816293112508:0"
@@ -77478,7 +77478,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:1:-6854257270333387269:7223635516548639420:25"
@@ -77499,7 +77499,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:1:-6854257270333387269:7406443706558042718:25"
@@ -78452,7 +78452,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:2:2736461665040744179:-7257281946517058351:0"
@@ -78473,7 +78473,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:2:2736461665040744179:1415546572980998750:0"
@@ -78494,7 +78494,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:2:2736461665040744179:3916411433401207124:0"
@@ -78515,7 +78515,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:2:2736461665040744179:900376816293112508:0"
@@ -78734,7 +78734,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:2:-6854257270333387269:7223635516548639420:25"
@@ -78755,7 +78755,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:2:-6854257270333387269:7406443706558042718:25"
@@ -79708,7 +79708,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:3:2736461665040744179:-7257281946517058351:0"
@@ -79729,7 +79729,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:3:2736461665040744179:1415546572980998750:0"
@@ -79750,7 +79750,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:3:2736461665040744179:3916411433401207124:0"
@@ -79771,7 +79771,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:3:2736461665040744179:900376816293112508:0"
@@ -80032,7 +80032,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:3:-9093750736607486055:4133773777828302033:25"
@@ -80053,7 +80053,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:3:-9093750736607486055:8177276613316331860:25"
@@ -80246,7 +80246,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -80268,7 +80268,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -80416,7 +80416,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -80438,7 +80438,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -81238,7 +81238,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:4:2736461665040744179:-7257281946517058351:0"
@@ -81259,7 +81259,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:4:2736461665040744179:1415546572980998750:0"
@@ -81280,7 +81280,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:4:2736461665040744179:3916411433401207124:0"
@@ -81301,7 +81301,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:4:2736461665040744179:900376816293112508:0"
@@ -81562,7 +81562,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:4:-9093750736607486055:4133773777828302033:25"
@@ -81583,7 +81583,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "judgment-state-machine-deferred-to-m8-c",
+        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11100102:4:-9093750736607486055:8177276613316331860:25"
@@ -81776,7 +81776,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -81798,7 +81798,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -81946,7 +81946,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -81968,7 +81968,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "pack-state-machine-deferred-to-m8-c",
+        "pack-lifecycle-runtime-unimplemented",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],

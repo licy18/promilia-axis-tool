@@ -45,8 +45,13 @@ describe('workbench normal attack input chain', () => {
     expect(new Set(drafts.map(draft => draft.attackGroupId)).size).toBe(1);
   });
 
-  it('derives four- and three-input chains from current client controls', () => {
-    expect(createChain(findNormalAttack(101007), 101007)).toHaveLength(4);
+  it('blocks ambiguous input chains while keeping confirmed chains editable', () => {
+    const unresolved = findNormalAttack(101007);
+    expect(unresolved.attackInputSegments).toHaveLength(4);
+    expect(
+      unresolved.attackInputSegments.map(segment => segment.durationFrames)
+    ).toEqual([null, 31, 31, null]);
+    expect(createChain(unresolved, 101007)).toEqual([]);
     expect(createChain(findNormalAttack(108003), 108003)).toHaveLength(3);
   });
 
@@ -166,6 +171,35 @@ describe('workbench normal attack input chain', () => {
     expect(migration.actions[0]).toMatchObject({
       id: 'legacy-unknown',
       attackInputLegacyStatus: ATTACK_INPUT_LEGACY_UNRESOLVED,
+    });
+  });
+
+  it('keeps a legacy aggregate block when its input chain has unresolved timing', () => {
+    const mapping = findNormalAttack(101007);
+    const migration = migrateLegacyAttackInputActionDrafts(
+      [
+        {
+          id: 'legacy-ambiguous-chain',
+          type: 'skill',
+          skillId: mapping.sourceSkillId,
+          actorCharacterId: 101007,
+          startMs: 0,
+          durationMs: frameToMs(1),
+        },
+      ],
+      { resolveMapping: () => mapping }
+    );
+
+    expect(migration).toMatchObject({
+      changed: true,
+      unresolvedActionIds: ['legacy-ambiguous-chain'],
+      actions: [
+        {
+          id: 'legacy-ambiguous-chain',
+          durationMs: frameToMs(1),
+          attackInputLegacyStatus: ATTACK_INPUT_LEGACY_UNRESOLVED,
+        },
+      ],
     });
   });
 });

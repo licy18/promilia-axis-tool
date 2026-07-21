@@ -1,4 +1,3 @@
-import { frameToMs } from './timebase';
 import { getSkillActionVariants } from './skillDamageSegments';
 import {
   createSkillLogicModel,
@@ -31,19 +30,6 @@ export const AZPR_ACTION_KIND_LABELS = Object.freeze({
   'perfect-parry': '完美招架',
 });
 
-export const AZPR_ACTION_DEFAULT_DURATION_FRAMES = Object.freeze({
-  'normal-attack': 60,
-  'charged-attack': 72,
-  'dodge-attack': 36,
-  'plunging-attack': 66,
-  'star-skill': 90,
-  'star-combo': 84,
-  ultimate: 120,
-  'star-carry': 54,
-  'limit-counter': 48,
-  'perfect-parry': 42,
-});
-
 export function getSkillActionCatalog(skills = [], level = 1) {
   const entries = [];
   for (const skill of skills) {
@@ -57,7 +43,6 @@ export function getSkillActionCatalog(skills = [], level = 1) {
         continue;
       }
 
-      const durationFrames = AZPR_ACTION_DEFAULT_DURATION_FRAMES[kind] ?? 60;
       entries.push({
         id: `${skill.id}:${variant.index}`,
         kind,
@@ -73,8 +58,10 @@ export function getSkillActionCatalog(skills = [], level = 1) {
         rawValue: variant.rawValue,
         multiplier: variant.multiplier,
         hitModel: variant.hitModel,
-        durationFrames,
-        durationMs: frameToMs(durationFrames),
+        durationFrames: null,
+        durationMs: null,
+        timingStatus: 'unresolved',
+        timingReasons: ['verified-action-timing-not-loaded'],
         cooldownMs: cooldown?.durationMs ?? null,
         cooldownSourceKind: cooldown?.sourceKind ?? null,
         sourceVariant: variant,

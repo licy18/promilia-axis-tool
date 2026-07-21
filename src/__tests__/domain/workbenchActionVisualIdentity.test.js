@@ -41,4 +41,14 @@ describe('workbench action visual identity', () => {
     expect(resolveWorkbenchActionIconUrl('folder/skill.png')).toBeNull();
     expect(resolveWorkbenchActionIconUrl('skill.svg')).toBeNull();
   });
+
+  it('keeps unresolved duration out of the persisted visual identity', () => {
+    expect(
+      resolveWorkbenchActionVisualIdentity({
+        type: 'skill',
+        name: '未解析动作',
+        actionKind: 'skill',
+      }).durationFrames
+    ).toBeNull();
+  });
 });

@@ -272,6 +272,12 @@ export function createSkillAction({
   damageSegmentIndex = 0,
   actionVariantIndex = damageSegmentIndex,
   durationMs = null,
+  durationFrames = null,
+  timingSource = null,
+  timingStatus = null,
+  timingReasons = [],
+  timingSourceIdentity = null,
+  needsTimingData = null,
   note = '',
   insertion = null,
   generationBatch = null,
@@ -342,8 +348,15 @@ export function createSkillAction({
     logicModel,
     statusGeneration: statusGeneration.descriptor,
     timing: {
-      needsTimingData: Boolean(skill.needsTimingData),
-      source: skill.timingSource ?? 'unknown',
+      needsTimingData:
+        needsTimingData == null
+          ? Boolean(skill.needsTimingData)
+          : Boolean(needsTimingData),
+      source: timingSource ?? skill.timingSource ?? 'unknown',
+      status: timingStatus,
+      reasons: normalizeTextArray(timingReasons),
+      sourceIdentity: textOrNull(timingSourceIdentity),
+      durationFrames: positiveIntegerOrNull(durationFrames),
       animationTimeMs: durationMs,
       damageTicks: [],
       cancelWindows: [],
@@ -481,7 +494,11 @@ export function createKiboEventAction({
   startMs = 0,
   durationMs = 600,
   eventType = 'activation',
+  durationFrames = null,
   timingSource = null,
+  timingStatus = null,
+  timingReasons = [],
+  timingSourceIdentity = null,
   needsTimingData = true,
   note = '奇波事件标记',
   insertion = null,
@@ -507,6 +524,10 @@ export function createKiboEventAction({
           timing: {
             needsTimingData: Boolean(needsTimingData),
             source: String(timingSource).trim(),
+            status: textOrNull(timingStatus),
+            reasons: normalizeTextArray(timingReasons),
+            sourceIdentity: textOrNull(timingSourceIdentity),
+            durationFrames: positiveIntegerOrNull(durationFrames),
             animationTimeMs: durationMs,
             damageTicks: [],
             cancelWindows: [],
@@ -1742,6 +1763,26 @@ function isObject(value) {
 
 function isPositiveNumber(value) {
   return Number.isFinite(value) && value > 0;
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function textOrNull(value) {
+  const text = String(value ?? '').trim();
+  return text || null;
+}
+
+function normalizeTextArray(values) {
+  return [
+    ...new Set(
+      (Array.isArray(values) ? values : [])
+        .map(value => textOrNull(value))
+        .filter(Boolean)
+    ),
+  ];
 }
 
 function createStableId(prefix) {

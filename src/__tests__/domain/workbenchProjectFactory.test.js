@@ -3,6 +3,7 @@ import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diag
 import {
   DEFAULT_WORKBENCH_SELECTION,
   DEFAULT_WORKBENCH_TEAM_SLOTS,
+  createWorkbenchActionDraft,
   createWorkbenchProject,
   getWorkbenchGameData,
   getWorkbenchLoadoutOptions,
@@ -31,6 +32,41 @@ afterAll(() => {
 });
 
 describe('workbench project actor configuration', () => {
+  it('preserves verified timing identity from a catalog draft through compilation', () => {
+    const draft = createWorkbenchActionDraft({
+      id: 'verified-timing-action',
+      skillId: 10900112,
+      actorCharacterId: 109001,
+      durationMs: 1416.6666666666667,
+      durationFrames: 85,
+      timingSource: 'skill-control-player-resource-map',
+      timingStatus: 'applied',
+      timingReasons: ['verified-action-occupancy'],
+      timingSourceIdentity: 'skill-control:10900112:player:1:occupancy',
+      needsTimingData: false,
+    });
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actions: [draft],
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(draft).toMatchObject({
+      durationFrames: 85,
+      timingStatus: 'applied',
+      timingSourceIdentity: 'skill-control:10900112:player:1:occupancy',
+      needsTimingData: false,
+    });
+    expect(project.actions[0].timing).toMatchObject({
+      durationFrames: 85,
+      source: 'skill-control-player-resource-map',
+      status: 'applied',
+      reasons: ['verified-action-occupancy'],
+      sourceIdentity: 'skill-control:10900112:player:1:occupancy',
+      needsTimingData: false,
+    });
+    expect(scenario.actions[0].timing).toEqual(project.actions[0].timing);
+  });
+
   it('keeps the action kind when a team-slot remap changes the owner', () => {
     const [action] = normalizeWorkbenchActionDrafts(
       [
