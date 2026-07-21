@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import audit from '../../../reports/verified-combat-mechanics-audit.json';
 import actionCoverage from '../../../reports/verified-combat-action-coverage.json';
+import effectCoverage from '../../../reports/verified-combat-effect-coverage.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
 import {
@@ -26,15 +27,19 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 7,
+      packageVersion: 8,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
         candidateActionCount: 562,
         classifiedActionCount: 562,
-        appliedActionBindingCount: 352,
-        appliedHitBindingCount: 1175,
-        unresolvedActionCount: 244,
+        appliedActionBindingCount: 417,
+        appliedHitBindingCount: 1332,
+        appliedEffectBindingCount: 50,
+        verifiedZeroEffectBindingCount: 2,
+        unresolvedEffectBindingCount: 3150,
+        battleEffectNodeCount: 3673,
+        unresolvedActionCount: 181,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
@@ -45,8 +50,8 @@ describe('verified combat mechanics package', () => {
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
-        appliedAttackInputSegmentCount: 49,
-        unresolvedAttackInputSegmentCount: 46,
+        appliedAttackInputSegmentCount: 51,
+        unresolvedAttackInputSegmentCount: 44,
         appliedAttackInputTimingCount: 63,
         unresolvedAttackInputTimingCount: 32,
       },
@@ -85,6 +90,15 @@ describe('verified combat mechanics package', () => {
           },
         },
       },
+      battleEffectCatalog: {
+        status: 'verified-battle-effect-node-catalog-ready',
+        summary: {
+          nodeCount: 3673,
+          appliedNodeCount: 169,
+          verifiedZeroNodeCount: 855,
+          unresolvedNodeCount: 2649,
+        },
+      },
       spUnitContract: {
         valueUnit: 'absolute-sp-points',
         actor: {
@@ -100,6 +114,31 @@ describe('verified combat mechanics package', () => {
       },
     });
     expect(mechanicsPackage.packageHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(effectCoverage.summary).toMatchObject({
+      effectBindingCount: 3202,
+      appliedEffectBindingCount: 50,
+      verifiedZeroEffectBindingCount: 2,
+      unresolvedEffectBindingCount: 3150,
+      bindingKindCounts: {
+        damage: 445,
+        inject: 1264,
+        judgment: 80,
+        pack: 163,
+        'property-change': 999,
+        shield: 10,
+        sp: 89,
+        stack: 152,
+      },
+      dimensions: expect.objectContaining({
+        damage: expect.any(Object),
+        toughness: expect.any(Object),
+        sp: expect.any(Object),
+        hp: expect.any(Object),
+        shield: expect.any(Object),
+        dynamicProperty: expect.objectContaining({ applied: 50 }),
+        mark: expect.any(Object),
+      }),
+    });
     expect(
       mechanicsPackage.actionBindings
         .filter(binding => binding.actionKind === 'normal-attack')

@@ -57,6 +57,16 @@ const ACTION_COVERAGE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-combat-action-coverage.md'
 );
+const EFFECT_COVERAGE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-combat-effect-coverage.json'
+);
+const EFFECT_COVERAGE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-combat-effect-coverage.md'
+);
 const CALCULATOR_PATH = path.join(
   FORMULA_ROOT,
   'combat-formula-calculator.mjs'
@@ -199,8 +209,13 @@ async function main() {
       .flatMap(control => control.elementRefs.map(ref => ref.elementIdHint))
       .filter(Number.isInteger)
   );
-  const { indexedElements, indexedElementsById, nonzeroRecoveryElements } =
-    await loadElementIndex(wantedPathIds, wantedElementIds);
+  const {
+    indexedElements,
+    indexedElementsById,
+    allIndexedElements,
+    allIndexedElementsById,
+    nonzeroRecoveryElements,
+  } = await loadElementIndex(wantedPathIds, wantedElementIds);
   const formulas = new Map(
     readJson(path.join(NEW_TABLE_ROOT, 'element_formula.json')).rows.map(
       row => [Number(row.id), row.functionOutput ?? null]
@@ -214,6 +229,8 @@ async function main() {
       control,
       indexedElements,
       indexedElementsById,
+      allIndexedElements,
+      allIndexedElementsById,
       formulas,
       overridesBySkillAndElement,
       skillLogicById,
@@ -281,6 +298,7 @@ async function main() {
     controlBindings,
     nonzeroRecoveryElements,
   });
+  const effectCoverage = createEffectCoverageReport(packageValue);
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
@@ -290,6 +308,11 @@ async function main() {
     [AUDIT_OUTPUT, `${JSON.stringify(audit, null, 2)}\n`],
     [ACTION_COVERAGE_JSON_OUTPUT, `${JSON.stringify(coverage, null, 2)}\n`],
     [ACTION_COVERAGE_MARKDOWN_OUTPUT, createActionCoverageMarkdown(coverage)],
+    [
+      EFFECT_COVERAGE_JSON_OUTPUT,
+      `${JSON.stringify(effectCoverage, null, 2)}\n`,
+    ],
+    [EFFECT_COVERAGE_MARKDOWN_OUTPUT, createEffectCoverageMarkdown(effectCoverage)],
   ];
   const drift = outputs.filter(([filePath, content]) =>
     fs.existsSync(filePath) ? readText(filePath) !== content : true
@@ -320,6 +343,8 @@ async function main() {
         controlCount: controls.length,
         appliedActionBindingCount: packageValue.actionBindings.length,
         appliedHitBindingCount: packageValue.summary.appliedHitBindingCount,
+        appliedEffectBindingCount:
+          packageValue.summary.appliedEffectBindingCount,
         unresolvedActionCount: packageValue.summary.unresolvedActionCount,
         verifiedZeroActionCount: packageValue.summary.verifiedZeroActionCount,
         appliedEnemyProfileCount: packageValue.summary.appliedEnemyProfileCount,
@@ -892,16 +917,77 @@ function collectBehaviorTriggers(directory, mainFilePath, elementRefs) {
     const referencedPathIds = collectReferencedPathIds(value);
     for (const pathId of referencedPathIds) {
       if (!wanted.has(pathId)) continue;
+      const target = resolveBehaviorElementTarget(value, pathId);
       triggers.get(pathId).push({
         behaviorPathId: path.basename(name, '.json').split('__').at(-1),
         startFrame: integerOrNull(value.startFrame),
         frameCount: integerOrNull(value.frameCount),
         behaviorIndex: integerOrNull(value.behaviorIndex),
         timelineGroupIndex: integerOrNull(value.timelineGroupIndex),
+        targetCode: target.code,
+        targetKind: target.kind,
+        targetSourceField: target.sourceField,
+        sourceIdentity: `${relativeExternalPath(filePath)}#startFrame|${target.sourceField ?? 'target-unresolved'}`,
       });
     }
   }
   return triggers;
+}
+
+function resolveBehaviorElementTarget(value, pathId) {
+  if (
+    arrayContainsPathId(value?.toOwnElementDatas, pathId) ||
+    arrayContainsPathId(value?.toOwnElements, pathId)
+  ) {
+    return {
+      code: 4,
+      kind: 'source-owner',
+      sourceField: 'toOwnElementDatas',
+    };
+  }
+  if (arrayContainsPathId(value?.elementDataList, pathId)) {
+    return createBehaviorTarget(
+      integerOrNull(value.directInjectTargetType),
+      'directInjectTargetType'
+    );
+  }
+  if (arrayContainsPathId(value?.elementIdDatas, pathId)) {
+    return createBehaviorTarget(
+      integerOrNull(value.targetType),
+      'targetType'
+    );
+  }
+  return {
+    code: null,
+    kind: 'unresolved',
+    sourceField: null,
+  };
+}
+
+function createBehaviorTarget(code, sourceField) {
+  return {
+    code,
+    kind:
+      code === 1
+        ? 'enemy'
+        : code === 4
+          ? 'source-owner'
+          : code === 2
+            ? 'ally-unresolved'
+            : code === 3
+              ? 'any-unresolved'
+              : 'unresolved',
+    sourceField,
+  };
+}
+
+function arrayContainsPathId(values, pathId) {
+  return (values ?? []).some(value => {
+    if (value && typeof value === 'object') {
+      return String(value.m_PathID ?? '') === pathId;
+    }
+    return String(value ?? '') === pathId;
+  });
 }
 
 function collectReferencedPathIds(value) {
@@ -922,13 +1008,18 @@ function collectReferencedPathIds(value) {
 async function loadElementIndex(wantedPathIds, wantedElementIds) {
   const indexedElements = new Map();
   const indexedElementsById = new Map();
+  const allIndexedElements = new Map();
+  const allIndexedElementsById = new Map();
   const nonzeroRecoveryElements = [];
   const input = fs.createReadStream(ELEMENT_INDEX_PATH, { encoding: 'utf8' });
   const lines = readline.createInterface({ input, crlfDelay: Infinity });
   for await (const line of lines) {
     if (!line.trim()) continue;
     const record = JSON.parse(
-      line.replace(/("path_id"\s*:\s*)(-?\d+)/, '$1"$2"')
+      line.replace(
+        /("(?:path_id|m_PathID)"\s*:\s*)(-?\d+)/g,
+        '$1"$2"'
+      )
     );
     const indexed = {
       asset: record.asset ?? null,
@@ -936,16 +1027,17 @@ async function loadElementIndex(wantedPathIds, wantedElementIds) {
       name: record.name ?? null,
       typetree: record.typetree ?? null,
     };
+    appendMapArray(allIndexedElements, indexed.pathId, indexed);
+    const allElementId = integerOrNull(record.typetree?.elementConfigId);
+    if (allElementId != null) {
+      appendMapArray(allIndexedElementsById, allElementId, indexed);
+    }
     if (wantedPathIds.has(indexed.pathId)) {
-      const entries = indexedElements.get(indexed.pathId) ?? [];
-      entries.push(indexed);
-      indexedElements.set(indexed.pathId, entries);
+      appendMapArray(indexedElements, indexed.pathId, indexed);
     }
     const elementId = integerOrNull(record.typetree?.elementConfigId);
     if (wantedElementIds.has(elementId)) {
-      const entries = indexedElementsById.get(elementId) ?? [];
-      entries.push(indexed);
-      indexedElementsById.set(elementId, entries);
+      appendMapArray(indexedElementsById, elementId, indexed);
     }
     const recoverSp = finiteNumberOrNull(record.typetree?.recoverSP);
     const petRecoverSp = finiteNumberOrNull(record.typetree?.petRecoverSP);
@@ -964,11 +1056,19 @@ async function loadElementIndex(wantedPathIds, wantedElementIds) {
   return {
     indexedElements,
     indexedElementsById,
+    allIndexedElements,
+    allIndexedElementsById,
     nonzeroRecoveryElements: dedupeBy(
       nonzeroRecoveryElements,
       entry => `${entry.pathId}|${entry.elementId}`
     ),
   };
+}
+
+function appendMapArray(map, key, value) {
+  const entries = map.get(key) ?? [];
+  entries.push(value);
+  map.set(key, entries);
 }
 
 function indexLevelOverrides(rows) {
@@ -993,6 +1093,8 @@ function createControlBinding({
   control,
   indexedElements,
   indexedElementsById,
+  allIndexedElements,
+  allIndexedElementsById,
   formulas,
   overridesBySkillAndElement,
   skillLogicById,
@@ -1145,6 +1247,14 @@ function createControlBinding({
   });
   const players = control.value.skillControlData?.skillPlayers ?? [];
   const resourceMaps = control.value.skillResourceMaps ?? [];
+  const effectGraph = createControlEffectGraph({
+    control,
+    allIndexedElements,
+    allIndexedElementsById,
+    formulas,
+    overridesBySkillAndElement,
+  });
+  const effects = createControlRuntimeEffects({ effectGraph, control });
   const variantCount = Math.max(players.length, resourceMaps.length);
   const variants = Array.from({ length: variantCount }, (_, mapIndex) => {
     const player = players[mapIndex] ?? null;
@@ -1163,6 +1273,13 @@ function createControlBinding({
       runnableElementCount: variantElements.filter(
         element => element.classification === 'applied'
       ).length,
+      effectNodeCount: effectGraph
+        .filter(root => root.mapIndex === mapIndex)
+        .reduce((sum, root) => sum + root.nodes.length, 0),
+      runnableEffectCount: effects.filter(
+        effect =>
+          effect.mapIndex === mapIndex && effect.classification === 'applied'
+      ).length,
       indirectReferences: collectIndirectResourceReferences(resourceMap),
       sourceIdentity: `${relativeExternalPath(control.filePath)}#skillControlData.skillPlayers[${mapIndex}]|skillResourceMaps[${mapIndex}]`,
     };
@@ -1180,7 +1297,694 @@ function createControlBinding({
     logic: createControlSkillLogic(skillLogicById.get(control.skillId)),
     variants,
     elements,
+    effectGraph,
+    effects,
   };
+}
+
+function createControlEffectGraph({
+  control,
+  allIndexedElements,
+  allIndexedElementsById,
+  formulas,
+  overridesBySkillAndElement,
+}) {
+  return control.elementRefs.map(ref => {
+    const rootResolution = resolveIndexedElementReference({
+      reference: ref,
+      elementsByPathId: allIndexedElements,
+      elementsById: allIndexedElementsById,
+    });
+    const nodes = [];
+    const edges = [];
+    const visited = new Set();
+    if (rootResolution.record) {
+      visit(rootResolution.record, null, null, 0);
+    }
+    return {
+      graphIdentity: [
+        control.skillId,
+        ref.mapIndex,
+        ref.referenceKind,
+        ref.elementIndex,
+        ref.pathId ?? `element-${ref.elementIdHint}`,
+      ].join('|'),
+      controlSkillId: control.skillId,
+      mapIndex: ref.mapIndex,
+      referenceKind: ref.referenceKind,
+      elementIndex: ref.elementIndex,
+      rootPathId: ref.pathId ?? rootResolution.record?.pathId ?? null,
+      rootElementId:
+        integerOrNull(rootResolution.record?.typetree?.elementConfigId) ??
+        ref.elementIdHint,
+      sourceIdentity: `${relativeExternalPath(control.filePath)}#${ref.sourceIdentity}`,
+      sourceStatus: rootResolution.status,
+      nodes,
+      edges,
+      appliedNodeCount: nodes.filter(node => node.classification === 'applied')
+        .length,
+      verifiedZeroNodeCount: nodes.filter(
+        node => node.classification === 'verified-zero'
+      ).length,
+      unresolvedNodeCount: nodes.filter(
+        node => node.classification === 'unresolved'
+      ).length,
+    };
+
+    function visit(record, parentIdentity, relation, depth) {
+      const nodeIdentity = `element:${record.pathId}`;
+      if (parentIdentity) {
+        edges.push({
+          from: parentIdentity,
+          to: nodeIdentity,
+          relation,
+          status: 'verified-battle-element-reference-resolved',
+        });
+      }
+      if (visited.has(nodeIdentity) || depth > 12) return;
+      visited.add(nodeIdentity);
+      const node = createBattleEffectGraphNode({
+        record,
+        controlSkillId: control.skillId,
+        formulas,
+        overridesBySkillAndElement,
+        depth,
+      });
+      nodes.push(node);
+      for (const childReference of collectBattleElementChildReferences(
+        record.typetree
+      )) {
+        const childResolution = resolveIndexedElementReference({
+          reference: childReference,
+          elementsByPathId: allIndexedElements,
+          elementsById: allIndexedElementsById,
+        });
+        if (!childResolution.record) {
+          edges.push({
+            from: nodeIdentity,
+            to:
+              childReference.pathId ??
+              `element:${childReference.elementIdHint ?? 'unresolved'}`,
+            relation: childReference.relation,
+            status: childResolution.status,
+          });
+          continue;
+        }
+        visit(
+          childResolution.record,
+          nodeIdentity,
+          childReference.relation,
+          depth + 1
+        );
+      }
+    }
+  });
+}
+
+function resolveIndexedElementReference({
+  reference,
+  elementsByPathId,
+  elementsById,
+}) {
+  const candidates = reference.pathId
+    ? (elementsByPathId.get(String(reference.pathId)) ?? [])
+    : (elementsById.get(Number(reference.elementIdHint)) ?? []);
+  const unique = dedupeBy(
+    candidates,
+    candidate =>
+      `${candidate.pathId}|${candidate.typetree?.elementConfigId}|${candidate.typetree?.m_Name ?? ''}`
+  );
+  return {
+    record: unique.length === 1 ? unique[0] : null,
+    status:
+      unique.length === 1
+        ? 'verified-battle-element-source-unique'
+        : unique.length > 1
+          ? 'battle-element-source-ambiguous'
+          : 'battle-element-source-missing',
+  };
+}
+
+function collectBattleElementChildReferences(tree = {}) {
+  const references = [];
+  const pathFields = [
+    'injectElementDataList',
+    'notDelElementDataList',
+    'triggerEffectList',
+    'zeroEffectList',
+    'finishEffectList',
+    'additionalHitElementDataList',
+    'injectElementDataList_1',
+    'injectElementDataList_2',
+    'injectElementDataEffects',
+    'layerInfoList',
+  ];
+  for (const field of pathFields) {
+    for (const pathId of collectNestedPathIds(tree[field])) {
+      references.push({ pathId, elementIdHint: null, relation: field });
+    }
+  }
+  const idFields = [
+    'sustainElement',
+    'injectElementList',
+    'notDelElementList',
+  ];
+  for (const field of idFields) {
+    const values = Array.isArray(tree[field]) ? tree[field] : [tree[field]];
+    for (const value of values) {
+      const elementIdHint = integerOrNull(value);
+      if (elementIdHint == null || elementIdHint <= 0) continue;
+      references.push({ pathId: null, elementIdHint, relation: field });
+    }
+  }
+  return dedupeBy(
+    references,
+    reference =>
+      `${reference.relation}|${reference.pathId ?? ''}|${reference.elementIdHint ?? ''}`
+  );
+}
+
+function collectNestedPathIds(value) {
+  const result = new Set();
+  walk(value);
+  return [...result];
+  function walk(node) {
+    if (!node || typeof node !== 'object') return;
+    if (/^-?\d+$/.test(String(node.m_PathID ?? ''))) {
+      result.add(String(node.m_PathID));
+      return;
+    }
+    for (const child of Object.values(node)) walk(child);
+  }
+}
+
+function createBattleEffectGraphNode({
+  record,
+  controlSkillId,
+  formulas,
+  overridesBySkillAndElement,
+  depth,
+}) {
+  const tree = record.typetree ?? {};
+  const elementId = integerOrNull(tree.elementConfigId);
+  const kind = resolveBattleElementKind(tree);
+  const baseValues =
+    tree.formulaParams?.formulaParamValues ?? tree.functionParams ?? [];
+  const baseFunctionId = integerOrNull(
+    tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+  );
+  const commonFunctionId = integerOrNull(
+    tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+  );
+  const levelOverrides =
+    overridesBySkillAndElement.get(`${controlSkillId}:${elementId}`) ?? [];
+  const effectiveParamsByLevel = Object.fromEntries(
+    Array.from({ length: 12 }, (_, index) => {
+      const level = index + 1;
+      const override = levelOverrides.find(row => row.level === level);
+      return [level, applyLevelOverride(baseValues, override?.valueParam)];
+    })
+  );
+  const classification = classifyBattleEffectNode({
+    tree,
+    kind,
+    commonFunctionId,
+    baseFunctionId,
+    valueByLevel: Object.fromEntries(
+      Object.entries(effectiveParamsByLevel).map(([level, values]) => [
+        level,
+        finiteNumberOrNull(values?.[0]),
+      ])
+    ),
+    depth,
+  });
+  return {
+    nodeIdentity: `element:${record.pathId}`,
+    pathId: record.pathId,
+    elementId,
+    name: tree.elementName ?? tree.m_Name ?? record.name ?? null,
+    kind,
+    depth,
+    sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
+    sourceScriptPathId: String(tree.m_Script?.m_PathID ?? '') || null,
+    formula: {
+      commonFunctionId,
+      commonExpression: formulas.get(commonFunctionId) ?? null,
+      baseFunctionId,
+      baseExpression: formulas.get(baseFunctionId) ?? null,
+      valueByLevel: Object.fromEntries(
+        Object.entries(effectiveParamsByLevel).map(([level, values]) => [
+          level,
+          finiteNumberOrNull(values?.[0]),
+        ])
+      ),
+    },
+    lifecycle: {
+      durationMs: finiteNumberOrNull(tree.time ?? tree.duration),
+      combineType: integerOrNull(tree.combineType),
+      combineNumber: integerOrNull(tree.combineNumber),
+      maxCount: integerOrNull(tree.maxCount),
+      mutuallyExclusiveId: integerOrNull(tree.mutuallyExclusiveId),
+      isLasting: Number(tree.isLasting) === 1,
+      frequencyType: integerOrNull(tree.frequencyType),
+      frequency: integerOrNull(tree.frequency),
+      tags: (tree.types ?? []).map(Number).filter(Number.isFinite),
+    },
+    propertyChange:
+      kind === 'property-change'
+        ? {
+            changeType: integerOrNull(tree.changeType),
+            attributeId: integerOrNull(tree.attributeID),
+            calculateType: integerOrNull(tree.calculateType),
+            defaultPropertyTags: (tree.defaultPropertyTags ?? []).map(Number),
+            hasConditions:
+              (tree.defaultConditions ?? []).length > 0 ||
+              (tree.changePeopertyConditionArrayDatas ?? []).length > 0,
+          }
+        : null,
+    directSp:
+      kind === 'sp'
+        ? {
+            recoverType: integerOrNull(tree.recoverType),
+            recoverTagType: integerOrNull(tree.recoverTagType),
+            shareType: integerOrNull(tree.shareType),
+            petShareType: integerOrNull(tree.petShareType),
+            mainPetShareType: integerOrNull(tree.mainPetShareType),
+            enhanceable: Number(tree.enhanceable) === 1,
+          }
+        : null,
+    damage:
+      kind === 'damage'
+        ? {
+            damageType: integerOrNull(tree.damageType),
+            elementalType: integerOrNull(
+              tree.damageElementalType ?? tree.elementalType
+            ),
+          }
+        : null,
+    shield:
+      kind === 'shield'
+        ? {
+            calculateType: integerOrNull(tree.calculateType),
+            shieldParams: (tree.shieldParams ?? []).map(Number),
+            teamShield: Number(tree.teamShield) === 1,
+          }
+        : null,
+    dimensions: classification.dimensions,
+    classification: classification.status,
+    reasons: classification.reasons,
+    status: `verified-battle-effect-node-${classification.status}`,
+    applied: classification.status === 'applied',
+  };
+}
+
+function resolveBattleElementKind(tree) {
+  if (Object.hasOwn(tree, 'damageType')) return 'damage';
+  if (Object.hasOwn(tree, 'attributeID')) return 'property-change';
+  if (Object.hasOwn(tree, 'recoverType')) return 'sp';
+  if (Object.hasOwn(tree, 'shieldParams')) return 'shield';
+  if (Object.hasOwn(tree, 'judgmentType')) return 'judgment';
+  if (Object.hasOwn(tree, 'sustainElement')) return 'pack';
+  if (Object.hasOwn(tree, 'layerInfoList')) return 'stack';
+  if (Object.hasOwn(tree, 'injectElementDataList')) return 'inject';
+  return 'other';
+}
+
+function classifyBattleEffectNode({
+  tree,
+  kind,
+  commonFunctionId,
+  baseFunctionId,
+  valueByLevel,
+  depth,
+}) {
+  const dimensions = Object.fromEntries(
+    [
+      'damage',
+      'toughness',
+      'sp',
+      'hp',
+      'shield',
+      'dynamicProperty',
+      'mark',
+    ].map(key => [
+      key,
+      createDimensionClassification('verified-zero', [
+        `element-kind-${kind}-does-not-write-${key}`,
+      ]),
+    ])
+  );
+  const reasons = [];
+  const literalValues = Object.values(valueByLevel).filter(
+    value => value != null
+  );
+  const literalReady =
+    commonFunctionId === 1 &&
+    baseFunctionId === 5 &&
+    literalValues.length === 12;
+  const literalZero = literalReady && literalValues.every(value => value === 0);
+
+  if (kind === 'property-change') {
+    if (!literalReady) reasons.push('property-formula-not-literal-function-5');
+    if (integerOrNull(tree.changeType) !== 0) {
+      reasons.push('property-change-type-not-battle-property');
+    }
+    if (![0, 1, 2].includes(integerOrNull(tree.calculateType))) {
+      reasons.push('property-calculate-type-not-dynamic-bucket');
+    }
+    if (
+      (tree.defaultConditions ?? []).length > 0 ||
+      (tree.changePeopertyConditionArrayDatas ?? []).length > 0
+    ) {
+      reasons.push('property-conditions-not-expanded');
+    }
+    if (![null, 0].includes(integerOrNull(tree.frequencyType))) {
+      reasons.push('property-frequency-not-single-application');
+    }
+    dimensions.dynamicProperty = createDimensionClassification(
+      reasons.length ? 'unresolved' : literalZero ? 'verified-zero' : 'applied',
+      reasons,
+      'formulaParams.formulaParamValues[0]'
+    );
+  } else if (kind === 'sp') {
+    if (integerOrNull(tree.recoverType) !== 0) {
+      reasons.push('sp-recover-type-not-direct-sp');
+    }
+    if (!literalReady) reasons.push('sp-formula-not-literal-function-5');
+    dimensions.sp = createDimensionClassification(
+      reasons.length ? 'unresolved' : literalZero ? 'verified-zero' : 'applied',
+      reasons,
+      'formulaParams.formulaParamValues[0]'
+    );
+  } else if (kind === 'damage' && Number(tree.damageType) === 5) {
+    if (!literalReady) reasons.push('heal-formula-not-literal-function-5');
+    dimensions.hp = createDimensionClassification(
+      reasons.length ? 'unresolved' : literalZero ? 'verified-zero' : 'applied',
+      reasons,
+      'formulaParams.formulaParamValues[0]'
+    );
+  } else if (
+    kind === 'shield' ||
+    (kind === 'damage' && Number(tree.damageType) === 11)
+  ) {
+    if (!literalReady) reasons.push('shield-formula-not-literal-function-5');
+    dimensions.shield = createDimensionClassification(
+      reasons.length ? 'unresolved' : literalZero ? 'verified-zero' : 'applied',
+      reasons,
+      'formulaParams.formulaParamValues[0]'
+    );
+  } else if (kind === 'damage') {
+    if (depth > 0) {
+      reasons.push('nested-damage-trigger-lifecycle-not-expanded');
+      dimensions.damage = createDimensionClassification(
+        'unresolved',
+        reasons,
+        'damageType'
+      );
+    }
+  } else if (['pack', 'stack', 'judgment'].includes(kind)) {
+    reasons.push(`${kind}-state-machine-deferred-to-m8-c`);
+    dimensions.mark = createDimensionClassification(
+      'unresolved',
+      reasons,
+      'elementConfigId'
+    );
+  } else if (kind === 'inject') {
+    reasons.push('inject-wrapper-classified-through-child-edges');
+  } else {
+    reasons.push('battle-element-kind-not-calculator-supported');
+  }
+
+  const statuses = Object.values(dimensions).map(dimension => dimension.status);
+  const status = statuses.includes('applied')
+    ? 'applied'
+    : statuses.includes('unresolved') || reasons.length > 0
+      ? 'unresolved'
+      : 'verified-zero';
+  return { status, reasons: dedupeBy(reasons, value => value), dimensions };
+}
+
+function createControlRuntimeEffects({ effectGraph, control }) {
+  return effectGraph.flatMap(root => {
+    const runtimeNodes = root.nodes.filter(node => {
+      if (
+        [
+          'property-change',
+          'sp',
+          'shield',
+          'pack',
+          'stack',
+          'judgment',
+          'inject',
+        ].includes(node.kind)
+      ) {
+        return true;
+      }
+      if (node.kind !== 'damage') return false;
+      return [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0;
+    });
+    const triggers = root.rootPathId
+      ? (control.behaviorTriggers.get(root.rootPathId) ?? [])
+      : [];
+    const effectiveTriggers = triggers.length > 0 ? triggers : [null];
+    return runtimeNodes.flatMap(node =>
+      effectiveTriggers.map((trigger, triggerIndex) =>
+        createControlRuntimeEffectBinding({
+          root,
+          node,
+          trigger,
+          triggerIndex,
+        })
+      )
+    );
+  });
+}
+
+function createControlRuntimeEffectBinding({
+  root,
+  node,
+  trigger,
+  triggerIndex,
+}) {
+  const relationPath = resolveEffectGraphRelationPath(root, node.nodeIdentity);
+  const ancestorNodes = relationPath
+    .map(edge => root.nodes.find(candidate => candidate.nodeIdentity === edge.from))
+    .filter(Boolean);
+  const target =
+    node.kind === 'sp'
+      ? {
+          kind: 'source-owner',
+          code: null,
+          sourceIdentity: `${node.sourceIdentity}|SpElement.Execute.source`,
+        }
+      : {
+          kind: trigger?.targetKind ?? 'unresolved',
+          code: trigger?.targetCode ?? null,
+          sourceIdentity: trigger?.sourceIdentity ?? null,
+        };
+  const reasons = [...node.reasons];
+  if (!trigger || !Number.isInteger(trigger.startFrame)) {
+    reasons.push('effect-trigger-frame-missing');
+  }
+  if (!['source-owner', 'enemy'].includes(target.kind)) {
+    reasons.push(
+      target.kind
+        ? `effect-target-${target.kind}`
+        : 'effect-target-unresolved'
+    );
+  }
+  if (
+    node.depth > 0 &&
+    relationPath.some(
+      edge =>
+        !['injectElementDataList', 'notDelElementDataList'].includes(
+          edge.relation
+        )
+    )
+  ) {
+    reasons.push('nested-effect-wrapper-semantics-unresolved');
+  }
+  const stack = resolveEffectStackContract(node.lifecycle);
+  reasons.push(...stack.reasons);
+  const effectiveDurationMs = resolveEffectDurationMs(node, ancestorNodes);
+  if (
+    node.kind === 'property-change' &&
+    effectiveDurationMs === 0
+  ) {
+    reasons.push('property-duration-zero-unresolved');
+  }
+  const valueByLevel = node.formula.valueByLevel;
+  const blockingReasons = dedupeBy(
+    reasons.filter(
+      reason =>
+        !reason.endsWith('-does-not-write-damage') &&
+        !reason.endsWith('-does-not-write-toughness') &&
+        !reason.endsWith('-does-not-write-sp') &&
+        !reason.endsWith('-does-not-write-hp') &&
+        !reason.endsWith('-does-not-write-shield') &&
+        !reason.endsWith('-does-not-write-dynamicProperty') &&
+        !reason.endsWith('-does-not-write-mark')
+    ),
+    value => value
+  );
+  const baseApplied = node.classification === 'applied';
+  const classification =
+    baseApplied && blockingReasons.length === 0
+      ? 'applied'
+      : node.classification === 'verified-zero' &&
+          blockingReasons.length === 0
+        ? 'verified-zero'
+        : 'unresolved';
+  const dimensions = Object.fromEntries(
+    Object.entries(node.dimensions).map(([key, dimension]) => [
+      key,
+      baseApplied && dimension.status === 'applied' && classification !== 'applied'
+        ? createDimensionClassification(
+            'unresolved',
+            blockingReasons,
+            dimension.sourceField
+          )
+        : dimension,
+    ])
+  );
+  return {
+    effectIdentity: [
+      root.graphIdentity,
+      node.nodeIdentity,
+      trigger?.startFrame ?? 'unresolved-frame',
+      triggerIndex,
+    ].join('|'),
+    graphIdentity: root.graphIdentity,
+    controlSkillId: root.controlSkillId,
+    mapIndex: root.mapIndex,
+    rootElementId: root.rootElementId,
+    rootPathId: root.rootPathId,
+    elementId: node.elementId,
+    pathId: node.pathId,
+    name: node.name,
+    kind: node.kind,
+    depth: node.depth,
+    relationPath,
+    trigger,
+    target,
+    lifecycle: {
+      durationMs: effectiveDurationMs,
+      stackMode: stack.mode,
+      stackDelta: 1,
+      maxStacks: stack.maxStacks,
+      instanceScope: stack.instanceScope,
+      combineType: node.lifecycle.combineType,
+      mutuallyExclusiveId: node.lifecycle.mutuallyExclusiveId,
+      tags: node.lifecycle.tags,
+    },
+    propertyChange:
+      node.propertyChange && {
+        ...node.propertyChange,
+        bucket:
+          node.propertyChange.calculateType === 0
+            ? 'dynamicForce'
+            : node.propertyChange.calculateType === 1
+            ? 'dynamicExtra'
+            : node.propertyChange.calculateType === 2
+              ? 'dynamicPercent'
+              : 'unresolved',
+        valueByLevel,
+      },
+    directSp:
+      node.directSp && {
+        ...node.directSp,
+        valueByLevel,
+      },
+    heal:
+      node.kind === 'damage' && node.damage?.damageType === 5
+        ? { valueByLevel }
+        : null,
+    shield:
+      (node.kind === 'shield' || node.damage?.damageType === 11) && {
+        ...node.shield,
+        valueByLevel,
+      },
+    formula: {
+      commonFunctionId: node.formula.commonFunctionId,
+      baseFunctionId: node.formula.baseFunctionId,
+      commonExpression: node.formula.commonExpression,
+      baseExpression: node.formula.baseExpression,
+    },
+    sourceIdentity: `battle-effect:${root.controlSkillId}:${root.mapIndex}:${node.pathId}:${trigger?.behaviorPathId ?? 'unresolved'}:${trigger?.startFrame ?? 'unresolved'}`,
+    dimensions,
+    classification,
+    reasons: blockingReasons,
+    status: `verified-action-effect-binding-${classification}`,
+    confidence: classification === 'applied' ? 'high' : classification,
+    applied: classification === 'applied',
+  };
+}
+
+function resolveEffectGraphRelationPath(root, targetIdentity) {
+  if (targetIdentity === `element:${root.rootPathId}`) return [];
+  const edgeByTarget = new Map(root.edges.map(edge => [edge.to, edge]));
+  const result = [];
+  const visited = new Set();
+  let cursor = targetIdentity;
+  while (edgeByTarget.has(cursor) && !visited.has(cursor)) {
+    visited.add(cursor);
+    const edge = edgeByTarget.get(cursor);
+    result.unshift(edge);
+    cursor = edge.from;
+  }
+  return result;
+}
+
+function resolveEffectDurationMs(node, ancestors) {
+  const own = finiteNumberOrNull(node.lifecycle.durationMs);
+  if (own != null && own >= 0) return own;
+  const inherited = [...ancestors]
+    .reverse()
+    .map(ancestor => finiteNumberOrNull(ancestor.lifecycle.durationMs))
+    .find(value => value != null && value > 0);
+  return inherited ?? null;
+}
+
+function resolveEffectStackContract(lifecycle) {
+  const combineType = integerOrNull(lifecycle.combineType);
+  if (combineType === 1) {
+    return {
+      mode: 'replace',
+      maxStacks: 1,
+      instanceScope: 'source-action',
+      reasons: [],
+    };
+  }
+  if ([0, 3].includes(combineType)) {
+    return {
+      mode: 'replace',
+      maxStacks: 1,
+      instanceScope: 'target-effect',
+      reasons: [],
+    };
+  }
+  if (combineType === 4) {
+    const maxStacks =
+      positiveIntegerOrNull(lifecycle.maxCount) ??
+      positiveIntegerOrNull(lifecycle.combineNumber);
+    return {
+      mode: 'stack',
+      maxStacks: maxStacks ?? 1,
+      instanceScope: 'target-effect',
+      reasons: maxStacks ? [] : ['effect-stack-maximum-unresolved'],
+    };
+  }
+  return {
+    mode: 'refresh',
+    maxStacks: 1,
+    instanceScope: 'target-effect',
+    reasons: ['effect-combine-semantics-unresolved'],
+  };
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
 
 function classifyHitDimensions({ tree, uniqueElement, formulaReady }) {
@@ -1803,18 +2607,38 @@ function createPackage({
 }) {
   const preparedControlBindings = controlBindings.map(binding => {
     const hits = createControlRuntimeHits(binding);
+    const appliedEffectCount = binding.effects.filter(
+      effect => effect.classification === 'applied'
+    ).length;
     return {
       ...binding,
       hits,
-      status: hits.length
+      status: hits.length || appliedEffectCount
         ? 'verified-skill-control-mechanics-binding-applied'
         : 'verified-skill-control-mechanics-binding-unresolved',
-      confidence: hits.length ? 'high' : 'unresolved',
-      applied: hits.length > 0,
+      confidence: hits.length || appliedEffectCount ? 'high' : 'unresolved',
+      applied: hits.length > 0 || appliedEffectCount > 0,
     };
   });
   const preparedControlBySkillId = new Map(
     preparedControlBindings.map(binding => [binding.controlSkillId, binding])
+  );
+  const battleEffectNodes = dedupeBy(
+    preparedControlBindings.flatMap(binding =>
+      binding.effectGraph.flatMap(root =>
+        root.nodes.map(node => ({
+          ...node,
+          catalogIdentity: createBattleEffectCatalogIdentity(
+            binding.controlSkillId,
+            node.nodeIdentity
+          ),
+          dimensions: createPublishedEffectDimensions(node.dimensions),
+        }))
+      )
+    ),
+    node => node.catalogIdentity
+  ).sort((left, right) =>
+    left.catalogIdentity.localeCompare(right.catalogIdentity)
   );
   const actionMappings = candidates.map(candidate => {
     const mapping = createActionMapping(
@@ -1880,6 +2704,9 @@ function createPackage({
         mapping.controlVariantSourceIdentity,
       controlFrameRate: binding.controlFrameRate ?? mapping.controlFrameRate,
       hitCount: binding.hitCount ?? mapping.runtimeHitCount,
+      effectCount: binding.effectCount ?? mapping.runtimeEffectCount ?? 0,
+      selectedEffectIdentities:
+        binding.selectedEffectIdentities ?? mapping.selectedEffectIdentities ?? [],
       ...(mapping.actionKind === 'normal-attack'
         ? {
             attackSequenceIndex: binding.sequenceIndex,
@@ -1966,13 +2793,14 @@ function createPackage({
       spUnitContract,
       mechanismEvidence,
       staticPropertyCatalog,
+      battleEffectNodes,
     })
   );
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 7,
+    packageVersion: 8,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -1995,11 +2823,32 @@ function createPackage({
       completeFormulaInputsRequired: true,
       unresolvedBindingsApplied: false,
       cultivationEffectsApplied: false,
+      verifiedLiteralBattleEffectsApplied: true,
+      unsupportedEffectFunctionsRemainUnresolved: true,
       randomBranchesRequirePersistedRolls: true,
       spValueUnit: 'absolute-sp-points',
     },
     spUnitContract,
     staticPropertyCatalog,
+    battleEffectCatalog: {
+      schemaVersion: 1,
+      kind: 'azpr-verified-battle-effect-node-catalog',
+      status: 'verified-battle-effect-node-catalog-ready',
+      nodes: battleEffectNodes,
+      summary: {
+        nodeCount: battleEffectNodes.length,
+        kindCounts: countValues(battleEffectNodes.map(node => node.kind)),
+        appliedNodeCount: battleEffectNodes.filter(
+          node => node.classification === 'applied'
+        ).length,
+        verifiedZeroNodeCount: battleEffectNodes.filter(
+          node => node.classification === 'verified-zero'
+        ).length,
+        unresolvedNodeCount: battleEffectNodes.filter(
+          node => node.classification === 'unresolved'
+        ).length,
+      },
+    },
     actionMappings,
     actionBindings,
     controlBindings: packagedControlBindings,
@@ -2027,6 +2876,30 @@ function createPackage({
         (sum, binding) => sum + binding.hits.length,
         0
       ),
+      appliedEffectBindingCount: packagedControlBindings.reduce(
+        (sum, binding) =>
+          sum +
+          binding.effects.filter(effect => effect.classification === 'applied')
+            .length,
+        0
+      ),
+      verifiedZeroEffectBindingCount: packagedControlBindings.reduce(
+        (sum, binding) =>
+          sum +
+          binding.effects.filter(
+            effect => effect.classification === 'verified-zero'
+          ).length,
+        0
+      ),
+      unresolvedEffectBindingCount: packagedControlBindings.reduce(
+        (sum, binding) =>
+          sum +
+          binding.effects.filter(
+            effect => effect.classification === 'unresolved'
+          ).length,
+        0
+      ),
+      battleEffectNodeCount: battleEffectNodes.length,
       kiboProfileCount: kiboProfiles.length,
       actorProfileCount: actorProfiles.length,
       enemyProfileCount: enemyProfiles.length,
@@ -2150,13 +3023,49 @@ function createPublishedControlBinding(binding) {
       bulletElementReferenceCount: variant.bulletElementReferenceCount,
       elementCount: variant.elementCount,
       runnableElementCount: variant.runnableElementCount,
+      effectNodeCount: variant.effectNodeCount,
+      runnableEffectCount: variant.runnableEffectCount,
       sourceIdentity: variant.sourceIdentity,
     })),
     hits: binding.hits,
+    effects: binding.effects.map(createPublishedRuntimeEffectBinding),
+    effectGraph: binding.effectGraph.map(root => ({
+      ...root,
+      nodeIdentities: root.nodes.map(node =>
+        createBattleEffectCatalogIdentity(
+          binding.controlSkillId,
+          node.nodeIdentity
+        )
+      ),
+      nodes: undefined,
+    })),
     status: binding.status,
     confidence: binding.confidence,
     applied: binding.applied,
   };
+}
+
+function createBattleEffectCatalogIdentity(controlSkillId, nodeIdentity) {
+  return `${controlSkillId}|${nodeIdentity}`;
+}
+
+function createPublishedRuntimeEffectBinding(effect) {
+  return {
+    ...effect,
+    dimensions: createPublishedEffectDimensions(effect.dimensions),
+  };
+}
+
+function createPublishedEffectDimensions(dimensions) {
+  return Object.fromEntries(
+    Object.entries(dimensions ?? {}).map(([dimension, value]) => [
+      dimension,
+      {
+        status: value.status,
+        sourceField: value.sourceField ?? null,
+      },
+    ])
+  );
 }
 
 function createAttackInputSegments(candidate, controlBySkillId) {
@@ -2174,6 +3083,7 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       control
     );
     const selectedHitIdentities = mapping.selectedHitIdentities ?? [];
+    const selectedEffectIdentities = mapping.selectedEffectIdentities ?? [];
     const timing = resolveAttackInputSegmentTiming(
       control,
       mapping.selectedSubSkillIndex,
@@ -2215,7 +3125,10 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       linkTimingStatus: timing.linkTimingStatus,
       linkTimingReasons: timing.linkTimingReasons,
       selectedHitIdentities,
+      selectedEffectIdentities,
       hitCount: mapping.runtimeHitCount ?? 0,
+      effectCount: mapping.runtimeEffectCount ?? 0,
+      effectDimensionSummary: mapping.effectDimensionSummary,
       classification: mapping.classification,
       reasons: mapping.reasons ?? [],
       sourceIdentity: `${input.sourceIdentity}|${control?.sourcePath ?? 'skill-control-missing'}`,
@@ -2428,6 +3341,7 @@ function createActionMapping(candidate, control) {
       linked: false,
       runtimeReady: false,
       runtimeHitCount: 0,
+      runtimeEffectCount: 0,
       classification: 'unresolved',
       reasons: [
         control ? 'public-control-link-unresolved' : 'skill-control-missing',
@@ -2444,6 +3358,7 @@ function createActionMapping(candidate, control) {
       linked: true,
       runtimeReady: false,
       runtimeHitCount: 0,
+      runtimeEffectCount: 0,
       classification: 'unresolved',
       reasons: variantResolution.reasons,
       dimensionSummary: summarizeDimensions(
@@ -2457,6 +3372,12 @@ function createActionMapping(candidate, control) {
   );
   const runtimeHits = control.hits.filter(
     hit => hit.mapIndex === selectedSubSkillIndex
+  );
+  const runtimeEffects = control.effects.filter(
+    effect => effect.mapIndex === selectedSubSkillIndex
+  );
+  const appliedEffects = runtimeEffects.filter(
+    effect => effect.classification === 'applied'
   );
   const spCost = finiteNumberOrNull(control.logic?.spCost);
   const hasAppliedCost = spCost != null && spCost > 0;
@@ -2472,17 +3393,18 @@ function createActionMapping(candidate, control) {
       element => element.classification === 'verified-zero'
     );
   const classification =
-    blockingUnresolved.length > 0
-      ? 'unresolved'
-      : runtimeHits.length > 0 || hasAppliedCost
-        ? 'applied'
-        : allRelevantZero && spCost === 0
-          ? 'verified-zero'
-          : 'unresolved';
+    runtimeHits.length > 0 || hasAppliedCost || appliedEffects.length > 0
+      ? 'applied'
+      : allRelevantZero && spCost === 0
+        ? 'verified-zero'
+        : 'unresolved';
   const unresolvedReasons = dedupeBy(
-    blockingUnresolved
-      .filter(element => element.classification === 'unresolved')
-      .flatMap(element => element.issues),
+    [
+      ...blockingUnresolved.flatMap(element => element.issues),
+      ...runtimeEffects
+        .filter(effect => effect.classification === 'unresolved')
+        .flatMap(effect => effect.reasons),
+    ],
     value => value
   );
   if (classification === 'unresolved' && unresolvedReasons.length === 0) {
@@ -2499,12 +3421,34 @@ function createActionMapping(candidate, control) {
     linked: true,
     runtimeReady: classification === 'applied',
     runtimeHitCount: runtimeHits.length,
+    runtimeEffectCount: appliedEffects.length,
     selectedElementCount: selectedElements.length,
     selectedHitIdentities: runtimeHits.map(hit => hit.hitIdentity),
+    selectedEffectIdentities: runtimeEffects.map(effect => effect.effectIdentity),
     classification,
+    complete: unresolvedReasons.length === 0,
     reasons: unresolvedReasons,
     dimensionSummary: summarizeDimensions(selectedElements),
+    effectDimensionSummary: summarizeEffectDimensions(runtimeEffects),
   };
+}
+
+function summarizeEffectDimensions(effects) {
+  const result = {};
+  for (const dimension of [
+    'damage',
+    'toughness',
+    'sp',
+    'hp',
+    'shield',
+    'dynamicProperty',
+    'mark',
+  ]) {
+    result[dimension] = countValues(
+      effects.map(effect => effect.dimensions?.[dimension]?.status)
+    );
+  }
+  return result;
 }
 
 function resolveControlVariant(control, candidate) {
@@ -2953,6 +3897,12 @@ function createAudit({
       uniqueControlBindingCount: packageValue.summary.uniqueControlBindingCount,
       uniqueControlHitBindingCount:
         packageValue.summary.uniqueControlHitBindingCount,
+      appliedEffectBindingCount:
+        packageValue.summary.appliedEffectBindingCount,
+      verifiedZeroEffectBindingCount:
+        packageValue.summary.verifiedZeroEffectBindingCount,
+      unresolvedEffectBindingCount:
+        packageValue.summary.unresolvedEffectBindingCount,
       unresolvedActionBindingCount: unresolved.length,
       enemyProfileCount: packageValue.summary.enemyProfileCount,
       appliedEnemyProfileCount: packageValue.summary.appliedEnemyProfileCount,
@@ -3367,6 +4317,161 @@ function createActionCoverageMarkdown(report) {
     '',
     '> `unresolved` 不会进入运行时，也不会被写成 0；完整逐项原因见同名 JSON 报告。'
   );
+  return `${lines.join('\n')}\n`;
+}
+
+function createEffectCoverageReport(packageValue) {
+  const effectByIdentity = new Map(
+    packageValue.controlBindings.flatMap(binding =>
+      binding.effects.map(effect => [effect.effectIdentity, effect])
+    )
+  );
+  const actions = packageValue.actionMappings.map(mapping => {
+    const selectedIdentities = new Set([
+      ...(mapping.selectedEffectIdentities ?? []),
+      ...(mapping.attackInputSegments ?? []).flatMap(
+        segment => segment.selectedEffectIdentities ?? []
+      ),
+    ]);
+    const effects = [...selectedIdentities]
+      .map(identity => effectByIdentity.get(identity))
+      .filter(Boolean);
+    return {
+      actionIdentity: mapping.identity,
+      ownerKind: mapping.ownerKind,
+      ownerId: mapping.ownerId,
+      ownerName: mapping.ownerName,
+      actionKind: mapping.actionKind,
+      sourceSkillId: mapping.sourceSkillId,
+      sourceSkillName: mapping.sourceSkillName,
+      effectBindingCount: effects.length,
+      appliedEffectCount: effects.filter(
+        effect => effect.classification === 'applied'
+      ).length,
+      verifiedZeroEffectCount: effects.filter(
+        effect => effect.classification === 'verified-zero'
+      ).length,
+      unresolvedEffectCount: effects.filter(
+        effect => effect.classification === 'unresolved'
+      ).length,
+      dimensions: Object.fromEntries(
+        [
+          'damage',
+          'toughness',
+          'sp',
+          'hp',
+          'shield',
+          'dynamicProperty',
+          'mark',
+        ].map(dimension => [
+          dimension,
+          countValues(
+            effects.map(effect => effect.dimensions?.[dimension]?.status)
+          ),
+        ])
+      ),
+      effectIdentities: effects.map(effect => effect.effectIdentity),
+    };
+  });
+  const effects = [...effectByIdentity.values()];
+  const unresolved = effects
+    .filter(effect => effect.classification === 'unresolved')
+    .map(effect => ({
+      effectIdentity: effect.effectIdentity,
+      controlSkillId: effect.controlSkillId,
+      mapIndex: effect.mapIndex,
+      elementId: effect.elementId,
+      kind: effect.kind,
+      dimensions: Object.fromEntries(
+        Object.entries(effect.dimensions ?? {}).map(([dimension, value]) => [
+          dimension,
+          value.status,
+        ])
+      ),
+      reasons: effect.reasons,
+      sourceIdentity: effect.sourceIdentity,
+    }));
+  const graphNodes = packageValue.battleEffectCatalog?.nodes ?? [];
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-combat-effect-coverage',
+    status: 'verified-combat-effect-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    sourceDenominator: {
+      kind: 'current-client-public-action-control-battle-element-graph',
+      actionCount: actions.length,
+      controlCount: packageValue.controlBindings.length,
+      directRootCount: packageValue.controlBindings.reduce(
+        (sum, binding) => sum + binding.effectGraph.length,
+        0
+      ),
+      graphNodeCount: graphNodes.length,
+    },
+    summary: {
+      effectBindingCount: effects.length,
+      appliedEffectBindingCount: effects.filter(
+        effect => effect.classification === 'applied'
+      ).length,
+      verifiedZeroEffectBindingCount: effects.filter(
+        effect => effect.classification === 'verified-zero'
+      ).length,
+      unresolvedEffectBindingCount: unresolved.length,
+      kindCounts: countValues(graphNodes.map(node => node.kind)),
+      bindingKindCounts: countValues(effects.map(effect => effect.kind)),
+      unresolvedReasonCounts: countValues(
+        unresolved.flatMap(effect => effect.reasons)
+      ),
+      dimensions: Object.fromEntries(
+        [
+          'damage',
+          'toughness',
+          'sp',
+          'hp',
+          'shield',
+          'dynamicProperty',
+          'mark',
+        ].map(dimension => [
+          dimension,
+          countValues(
+            effects.map(effect => effect.dimensions?.[dimension]?.status)
+          ),
+        ])
+      ),
+    },
+    actions,
+    unresolved,
+  };
+}
+
+function createEffectCoverageMarkdown(report) {
+  const lines = [
+    '# M8-B Battle 效果覆盖',
+    '',
+    `- 包：\`${report.packageId}\``,
+    `- 公开动作：${report.sourceDenominator.actionCount}`,
+    `- 控制：${report.sourceDenominator.controlCount}`,
+    `- 直接元素根：${report.sourceDenominator.directRootCount}`,
+    `- 效果图节点：${report.sourceDenominator.graphNodeCount}`,
+    `- 效果绑定：${report.summary.effectBindingCount}`,
+    `- 可计算：${report.summary.appliedEffectBindingCount}`,
+    `- 明确零：${report.summary.verifiedZeroEffectBindingCount}`,
+    `- 未解析：${report.summary.unresolvedEffectBindingCount}`,
+    '',
+    '## 元素类型',
+    '',
+    ...Object.entries(report.summary.kindCounts).map(
+      ([kind, count]) => `- ${kind}: ${count}`
+    ),
+    '',
+    '## 未解析原因',
+    '',
+    ...Object.entries(report.summary.unresolvedReasonCounts).map(
+      ([reason, count]) => `- ${reason}: ${count}`
+    ),
+    '',
+    '> 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。',
+  ];
   return `${lines.join('\n')}\n`;
 }
 

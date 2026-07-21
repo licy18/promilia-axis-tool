@@ -9,7 +9,11 @@ import {
 } from './actionExecutionPlan';
 import { createControlledActorTimeline } from '../runtime/controlledActorTimeline';
 import { createActionEffectRelationGraph } from '../runtime/actionEffectRelationGraph';
-import { createVerifiedCombatRuntime } from '../mechanics/verifiedCombatRuntime';
+import {
+  createVerifiedCombatRuntime,
+  isVerifiedCombatMechanicsScenario,
+} from '../mechanics/verifiedCombatRuntime';
+import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattleEffectGeneration';
 
 export function simulateScenario(
   scenario,
@@ -41,11 +45,12 @@ export function simulateScenario(
     scenario,
     actionExecutionPlan,
   });
-  let verifiedCombatRuntime = createVerifiedCombatRuntime({
+  let runtimeBundle = createVerifiedRuntimeBundle({
     scenario,
     actionExecutionPlan,
     controlledActorTimeline,
   });
+  let verifiedCombatRuntime = runtimeBundle.verifiedCombatRuntime;
   const verifiedExecutionBlocks = verifiedCombatRuntime.executionBlocks ?? [];
   if (verifiedExecutionBlocks.length > 0) {
     actionRuleDiagnostics = applyVerifiedResourceExecutionBlocks({
@@ -60,12 +65,13 @@ export function simulateScenario(
       scenario,
       actionExecutionPlan,
     });
+    runtimeBundle = createVerifiedRuntimeBundle({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+    });
     verifiedCombatRuntime = attachVerifiedExecutionBlocks(
-      createVerifiedCombatRuntime({
-        scenario,
-        actionExecutionPlan,
-        controlledActorTimeline,
-      }),
+      runtimeBundle.verifiedCombatRuntime,
       verifiedExecutionBlocks
     );
   }
@@ -196,10 +202,7 @@ export function simulateScenario(
     eventLog.push(...verifiedCombatRuntime.eventLog);
   }
 
-  const effectTimeline = createEffectRuntimeTimeline({
-    scenario,
-    actionExecutionPlan,
-  });
+  const effectTimeline = runtimeBundle.effectTimeline;
   const actionEffectRelationGraph = createActionEffectRelationGraph({
     scenario,
     effectTimeline,
@@ -231,9 +234,33 @@ export function simulateScenario(
     controlledActorTimeline,
     actionEffectRelationGraph,
     verifiedCombatRuntime,
+    verifiedBattleEffectGeneration: runtimeBundle.effectGeneration,
     kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
     threeValueMechanicsAdapterRegistry,
   });
+}
+
+function createVerifiedRuntimeBundle({
+  scenario,
+  actionExecutionPlan,
+  controlledActorTimeline,
+}) {
+  const effectGeneration = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedBattleEffectGeneration({ scenario, actionExecutionPlan })
+    : null;
+  const effectTimeline = createEffectRuntimeTimeline({
+    scenario,
+    actionExecutionPlan,
+    generatedCommands: effectGeneration?.effectCommands ?? [],
+  });
+  const verifiedCombatRuntime = createVerifiedCombatRuntime({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+    effectGeneration,
+    effectTimeline,
+  });
+  return { effectGeneration, effectTimeline, verifiedCombatRuntime };
 }
 
 function applyVerifiedResourceExecutionBlocks({

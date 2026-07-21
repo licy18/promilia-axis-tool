@@ -45,6 +45,7 @@ export const EFFECT_OPERATIONS = Object.freeze({
 
 export const EFFECT_TARGET_KINDS = Object.freeze({
   ACTOR: 'actor',
+  KIBO: 'kibo',
   ENEMY: 'enemy',
 });
 

@@ -499,10 +499,17 @@ function createRuntimeOutputConsistency({
     effectTimelineSummaryActiveCount:
       effectTimeline?.summary?.activeEffectCount === activeEffectCount,
     effectTimelineCalculatorIsolation:
-      effectTimeline?.summary?.calculatorAppliedEffectCount === 0 &&
-      (effectTimeline?.events ?? []).every(
-        event => event.appliedToCalculators === false
-      ),
+      effectTimeline?.summary?.calculatorAppliedEffectCount ===
+        (effectTimeline?.events ?? []).filter(
+          event => event.appliedToCalculators === true
+        ).length &&
+      (effectTimeline?.events ?? [])
+        .filter(event => event.appliedToCalculators === true)
+        .every(
+          event =>
+            event.sourceStatus === 'verified-battle-effect-generated' ||
+            event.sourceStatus === 'effect-inherited-from-cycle-boundary'
+        ),
     summaryExecutionPlanCounts:
       summary.executionPlanActionCount === executionPlanActionCount &&
       summary.executionPlanExecutedActionCount ===

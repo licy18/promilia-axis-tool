@@ -8,6 +8,7 @@ const packageUrl = new URL(
 let installedPackage = null;
 let packagePromise = null;
 let controlBindingBySkillId = new Map();
+let effectBindingByIdentity = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
   if (installedPackage) return installedPackage;
@@ -41,6 +42,11 @@ export function installVerifiedCombatMechanicsPackage(value) {
   controlBindingBySkillId = new Map(
     value.controlBindings.map(binding => [binding.controlSkillId, binding])
   );
+  effectBindingByIdentity = new Map(
+    value.controlBindings.flatMap(binding =>
+      (binding.effects ?? []).map(effect => [effect.effectIdentity, effect])
+    )
+  );
   return value;
 }
 
@@ -70,6 +76,7 @@ export function clearInstalledVerifiedCombatMechanicsPackage() {
   installedPackage = null;
   packagePromise = null;
   controlBindingBySkillId = new Map();
+  effectBindingByIdentity = new Map();
 }
 
 export function resolveVerifiedCombatActionMechanics(action = {}) {
@@ -122,6 +129,7 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
         actionBinding,
         controlBinding: partialControlBinding,
         hits: [],
+        effects: resolveSelectedEffects(actionBinding, partialControlBinding),
         reasons: actionBinding.reasons ?? [],
         complete: false,
         ready: true,
@@ -150,8 +158,12 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
       (!selectedHitIdentities.size ||
         selectedHitIdentities.has(hit.hitIdentity))
   );
+  const effects = resolveSelectedEffects(actionBinding, controlBinding);
   const hasAppliedCost = Number(controlBinding?.logic?.spCost) > 0;
-  if (!controlBinding || (!hits.length && !hasAppliedCost)) {
+  const hasAppliedEffect = effects.some(
+    effect => effect.classification === 'applied'
+  );
+  if (!controlBinding || (!hits.length && !hasAppliedCost && !hasAppliedEffect)) {
     return createUnresolvedActionMechanics(
       action,
       'verified-control-binding-missing',
@@ -168,10 +180,29 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     actionBinding,
     controlBinding,
     hits,
+    effects,
     complete: true,
+    effectCoverageComplete: actionBinding.complete !== false,
+    reasons: actionBinding.reasons ?? [],
     ready: true,
     applied: true,
   };
+}
+
+function resolveSelectedEffects(actionBinding, controlBinding) {
+  const selectedEffectIdentities = new Set(
+    actionBinding?.selectedEffectIdentities ?? []
+  );
+  if (selectedEffectIdentities.size === 0) return [];
+  return [...selectedEffectIdentities]
+    .map(
+      identity =>
+        effectBindingByIdentity.get(identity) ??
+        (controlBinding?.effects ?? []).find(
+          effect => effect.effectIdentity === identity
+        )
+    )
+    .filter(Boolean);
 }
 
 export function createVerifiedCombatActionBindingIdentity({
@@ -247,6 +278,28 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   }
   if (!Array.isArray(value?.controlBindings)) {
     issues.push('control-bindings-missing');
+  }
+  if (
+    value?.packageVersion < 8 ||
+    value?.battleEffectCatalog?.status !==
+      'verified-battle-effect-node-catalog-ready' ||
+    !Array.isArray(value?.battleEffectCatalog?.nodes) ||
+    value.battleEffectCatalog.nodes.some(
+      node =>
+        !node.catalogIdentity ||
+        !['applied', 'verified-zero', 'unresolved'].includes(
+          node.classification
+        )
+    ) ||
+    value.controlBindings.some(binding =>
+      (binding.effectGraph ?? []).some(
+        root =>
+          !Array.isArray(root.nodeIdentities) ||
+          Object.hasOwn(root, 'nodes')
+      )
+    )
+  ) {
+    issues.push('battle-effect-catalog-invalid');
   }
   if (!hasValidAttackInputChains(value)) {
     issues.push('attack-input-segments-invalid');

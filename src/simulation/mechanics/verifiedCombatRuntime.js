@@ -4,6 +4,8 @@ import {
 } from '../../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
+import { resolveActiveEffectsAt } from '../runtime/effectRuntimeTimeline';
+import { EFFECT_TARGET_KINDS } from '../../domain/projectSchema';
 import {
   calculateAutoSp,
   calculateHitSp,
@@ -50,6 +52,8 @@ export function createVerifiedCombatRuntime({
   scenario,
   actionExecutionPlan,
   controlledActorTimeline,
+  effectGeneration = null,
+  effectTimeline = null,
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
@@ -80,7 +84,9 @@ export function createVerifiedCombatRuntime({
     if (![ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action.type)) {
       continue;
     }
-    const resolution = resolveVerifiedCombatActionMechanics(action);
+    const resolution =
+      effectGeneration?.actionResolutionById?.get(action.id) ??
+      resolveVerifiedCombatActionMechanics(action);
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
     const spCost = numberOrNull(
@@ -114,6 +120,31 @@ export function createVerifiedCombatRuntime({
     }
   }
 
+  for (const directSpEvent of effectGeneration?.directSpEvents ?? []) {
+    descriptors.push({
+      kind: 'direct-sp',
+      timeMs: directSpEvent.timeMs,
+      action: directSpEvent.action,
+      directEvent: directSpEvent,
+    });
+  }
+  for (const directHpEvent of effectGeneration?.directHpEvents ?? []) {
+    descriptors.push({
+      kind: 'direct-heal',
+      timeMs: directHpEvent.timeMs,
+      action: directHpEvent.action,
+      directEvent: directHpEvent,
+    });
+  }
+  for (const shieldEvent of effectGeneration?.shieldEvents ?? []) {
+    descriptors.push({
+      kind: 'direct-shield',
+      timeMs: shieldEvent.timeMs,
+      action: shieldEvent.action,
+      directEvent: shieldEvent,
+    });
+  }
+
   const durationMs = nonNegativeNumber(scenario?.time?.durationMs);
   for (
     let timeMs = FIXED_STEP_MS;
@@ -125,7 +156,11 @@ export function createVerifiedCombatRuntime({
   }
   descriptors.sort(compareDescriptors);
 
-  const state = createRuntimeState({ scenario, mechanicsPackage });
+  const state = createRuntimeState({
+    scenario,
+    mechanicsPackage,
+    effectTimeline,
+  });
   const initialState = createFinalState(state, 0);
   const damageEvents = [];
   const resourceEvents = [];
@@ -184,6 +219,25 @@ export function createVerifiedCombatRuntime({
       });
       continue;
     }
+    if (descriptor.kind === 'direct-sp') {
+      applyDirectSpDescriptor({
+        descriptor,
+        state,
+        resourceEvents,
+        kiboResourceEvents,
+      });
+      continue;
+    }
+    if (descriptor.kind === 'direct-heal') {
+      const event = applyDirectHealDescriptor({ descriptor, state });
+      if (event) eventLog.push(event);
+      continue;
+    }
+    if (descriptor.kind === 'direct-shield') {
+      const event = applyDirectShieldDescriptor({ descriptor, state });
+      if (event) eventLog.push(event);
+      continue;
+    }
     if (descriptor.kind === 'hit') {
       const hitResult = applyHitDescriptor({
         descriptor,
@@ -235,6 +289,8 @@ export function createVerifiedCombatRuntime({
     kiboResourceEvents,
     eventLog,
     executionBlocks,
+    effectGeneration,
+    effectTimeline,
     initialState,
     finalState: createFinalState(state, durationMs),
     summary: {
@@ -269,13 +325,29 @@ export function createVerifiedCombatRuntime({
         event => event.payload.shieldState?.absorbed > 0
       ).length,
       resourceBlockedActionCount: executionBlocks.length,
+      generatedEffectCommandCount:
+        effectGeneration?.summary?.effectCommandCount ?? 0,
+      directSpEventCount:
+        effectGeneration?.summary?.directSpEventCount ?? 0,
       applied: true,
     },
     applied: true,
   };
 }
 
-function createRuntimeState({ scenario, mechanicsPackage }) {
+function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
+  const attributeDefinitionById = new Map(
+    (mechanicsPackage.staticPropertyCatalog?.attributeDefinitions ?? []).map(
+      definition => [Number(definition.id), definition]
+    )
+  );
+  const attributeIdByKey = new Map(
+    [...attributeDefinitionById.values()].flatMap(definition =>
+      [definition.key, definition.tableKey]
+        .filter(Boolean)
+        .map(key => [String(key), Number(definition.id)])
+    )
+  );
   const actorProfileById = new Map(
     (mechanicsPackage.ownerProfiles?.actor ?? []).map(profile => [
       Number(profile.characterId),
@@ -307,6 +379,10 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
         {
           actor,
           profile,
+          attributesById: createActorRuntimeAttributeMap(
+            actor,
+            attributeDefinitionById
+          ),
           current: clampNumber(
             inherited?.currentValue ?? actor.initialSp ?? 0,
             0,
@@ -368,6 +444,7 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
       actorId: actor?.id ?? group.actorId ?? null,
       kiboId,
       profile,
+      attributesById: new Map(profile?.attributesById ?? []),
       current: clampNumber(
         inherited?.currentValue ?? 0,
         0,
@@ -422,11 +499,32 @@ function createRuntimeState({ scenario, mechanicsPackage }) {
   const recoveryDelayRemainingMs = numberOrNull(
     inheritedEnemy?.recoveryDelayRemainingMs
   );
+  const actorVitals = new Map(
+    [...actorEnergy.values()].map(entry => {
+      const maximumHp = positiveNumber(
+        entry.attributesById.get(5) ?? entry.actor.stats?.maxHp,
+        1
+      );
+      return [
+        entry.actor.id,
+        {
+          actorId: entry.actor.id,
+          currentHp: maximumHp,
+          maximumHp,
+          valueShields: [],
+        },
+      ];
+    })
+  );
   return {
     actorEnergy,
+    actorVitals,
     kiboEnergy,
     kiboProfileById,
     slotIdByActorId,
+    attributeDefinitionById,
+    attributeIdByKey,
+    effectTimeline,
     nextRuntimeSequenceIndex: 0,
     enemy: {
       enemyId: Number.isInteger(enemyId) ? enemyId : null,
@@ -473,6 +571,10 @@ function createStaticKiboRuntimeProfile(staticKibo) {
     ...staticKibo.resourceProfile,
     kiboId: staticKibo.kiboId,
     attack: staticKibo.stats?.attack ?? null,
+    attributesById: [...attributes.entries()].map(([id, attribute]) => [
+      id,
+      attribute.rawValue,
+    ]),
     criticalRateBasisPoints: attributes.get(7)?.rawValue ?? null,
     criticalDamageBasisPoints: attributes.get(8)?.rawValue ?? null,
     damageUpBasisPoints: attributes.get(21)?.rawValue ?? null,
@@ -490,6 +592,241 @@ function createStaticKiboRuntimeProfile(staticKibo) {
     status: staticKibo.status,
     applied: staticKibo.ready === true,
   };
+}
+
+function createActorRuntimeAttributeMap(actor, attributeDefinitionById) {
+  const compiled = actor?.verifiedStaticProperties?.attributes ?? [];
+  if (compiled.length > 0) {
+    return new Map(
+      compiled.map(attribute => [
+        Number(attribute.id),
+        Number(attribute.rawValue),
+      ])
+    );
+  }
+  const idByKey = new Map(
+    [...attributeDefinitionById.values()].flatMap(definition =>
+      [definition.key, definition.tableKey]
+        .filter(Boolean)
+        .map(key => [String(key), Number(definition.id)])
+    )
+  );
+  return new Map(
+    (actor?.baseAttributes ?? [])
+      .map(attribute => [
+        idByKey.get(String(attribute.key)),
+        Number(attribute.value),
+      ])
+      .filter(([id, value]) => Number.isInteger(id) && Number.isFinite(value))
+  );
+}
+
+function resolveRuntimeAttribute({
+  state,
+  targetKind,
+  targetId,
+  timeMs,
+  attributeId,
+  baseRaw,
+  propertyTags = [],
+}) {
+  const normalizedAttributeId = Number(attributeId);
+  const normalizedBase = numberOrNull(baseRaw);
+  if (!Number.isInteger(normalizedAttributeId) || normalizedBase == null) {
+    return {
+      attributeId: normalizedAttributeId,
+      value: normalizedBase,
+      baseRaw: normalizedBase,
+      dynamicBaseRaw: 0,
+      dynamicPercentRaw: 0,
+      dynamicExtraRaw: 0,
+      dynamicForceRaw: null,
+      appliedEffects: [],
+      ready: false,
+    };
+  }
+  const activeEffects = resolveActiveEffectsAt(state.effectTimeline, timeMs, {
+    targetKind,
+    targetId,
+    calculatorOnly: true,
+  });
+  const modifiers = activeEffects.flatMap(effect =>
+    (effect.modifiers ?? [])
+      .filter(
+        modifier =>
+          modifier.kind === 'battle-property' &&
+          Number(modifier.attributeId) === normalizedAttributeId &&
+          propertyTagsMatch(modifier.propertyTags, propertyTags)
+      )
+      .map(modifier => ({
+        ...modifier,
+        effectId: effect.effectId,
+        effectName: effect.effectName,
+        stacks: effect.stacks,
+        valueRaw:
+          modifier.bucket === 'dynamicForce'
+            ? Number(modifier.valueRaw)
+            : Number(modifier.valueRaw) * Number(effect.stacks ?? 1),
+      }))
+  );
+  const dynamicForceModifiers = modifiers.filter(
+    modifier => modifier.bucket === 'dynamicForce'
+  );
+  if (dynamicForceModifiers.length > 1) {
+    return {
+      attributeId: normalizedAttributeId,
+      value: null,
+      baseRaw: normalizedBase,
+      dynamicBaseRaw: 0,
+      dynamicPercentRaw: 0,
+      dynamicExtraRaw: 0,
+      dynamicForceRaw: null,
+      appliedEffects: modifiers,
+      formula: 'force override conflict',
+      status: 'verified-dynamic-force-conflict-unresolved',
+      sourceIdentity: modifiers.map(modifier => modifier.sourceIdentity),
+      ready: false,
+    };
+  }
+  const dynamicForceRaw = dynamicForceModifiers[0]?.valueRaw ?? null;
+  const dynamicPercentRaw = sumNumbers(
+    modifiers
+      .filter(modifier => modifier.bucket === 'dynamicPercent')
+      .map(modifier => modifier.valueRaw)
+  );
+  const dynamicExtraRaw = sumNumbers(
+    modifiers
+      .filter(modifier => modifier.bucket === 'dynamicExtra')
+      .map(modifier => modifier.valueRaw)
+  );
+  const multipliedRaw = qMul(
+    qFromFloat(normalizedBase),
+    qFromFloat(1 + dynamicPercentRaw / 10000)
+  );
+  let value =
+    dynamicForceRaw == null
+      ? qToNumber(multipliedRaw + qFromFloat(dynamicExtraRaw))
+      : dynamicForceRaw;
+  const definition = state.attributeDefinitionById.get(normalizedAttributeId);
+  if (numberOrNull(definition?.minimum) != null) {
+    value = Math.max(value, Number(definition.minimum));
+  }
+  if (numberOrNull(definition?.maximum) != null) {
+    value = Math.min(value, Number(definition.maximum));
+  }
+  return {
+    attributeId: normalizedAttributeId,
+    value: roundValue(value),
+    baseRaw: normalizedBase,
+    dynamicBaseRaw: 0,
+    dynamicPercentRaw,
+    dynamicExtraRaw,
+    dynamicForceRaw,
+    appliedEffects: modifiers,
+    formula:
+      dynamicForceRaw == null
+        ? '((S+DB)*(1+DP)+DE)*ratio'
+        : 'forceValue',
+    sourceIdentity: modifiers.map(modifier => modifier.sourceIdentity),
+    ready: true,
+  };
+}
+
+function resolveActorRuntimeAttribute({
+  state,
+  actorState,
+  timeMs,
+  attributeId,
+  fallbackRaw = null,
+}) {
+  return resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId: actorState?.actor?.id,
+    timeMs,
+    attributeId,
+    baseRaw: actorState?.attributesById?.get(Number(attributeId)) ?? fallbackRaw,
+  });
+}
+
+function resolveActorRuntimeRatio(options) {
+  return basisPoints(resolveActorRuntimeAttribute(options).value);
+}
+
+function resolveKiboRuntimeRatio({
+  state,
+  kiboState,
+  timeMs,
+  attributeId,
+  fallbackRaw = null,
+}) {
+  return basisPoints(
+    resolveRuntimeAttribute({
+      state,
+      targetKind: EFFECT_TARGET_KINDS.KIBO,
+      targetId: kiboState?.actorId,
+      timeMs,
+      attributeId,
+      baseRaw:
+        kiboState?.attributesById?.get(Number(attributeId)) ?? fallbackRaw,
+    }).value
+  );
+}
+
+function resolveKiboRatioAttribute({
+  state,
+  kiboState,
+  action,
+  timeMs,
+  attributeId,
+  fallbackBasisPoints = null,
+}) {
+  if (!Number.isInteger(Number(attributeId))) {
+    return {
+      attributeId: Number(attributeId),
+      value: 0,
+      appliedEffects: [],
+      ready: false,
+    };
+  }
+  return resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.KIBO,
+    targetId: action.actorId,
+    timeMs,
+    attributeId,
+    baseRaw:
+      kiboState?.attributesById?.get(Number(attributeId)) ??
+      fallbackBasisPoints,
+  });
+}
+
+function propertyTagsMatch(modifierTags = [], queryTags = []) {
+  const required = new Set((modifierTags ?? []).map(Number));
+  if (required.size === 0) return true;
+  const available = new Set((queryTags ?? []).map(Number));
+  return [...required].some(tag => available.has(tag));
+}
+
+function collectDynamicPropertyTrace(results) {
+  return (results ?? [])
+    .filter(result => result && typeof result === 'object')
+    .filter(result => (result.appliedEffects ?? []).length > 0)
+    .map(result => ({
+      attributeId: result.attributeId,
+      baseRaw: result.baseRaw,
+      dynamicBaseRaw: result.dynamicBaseRaw,
+      dynamicPercentRaw: result.dynamicPercentRaw,
+      dynamicExtraRaw: result.dynamicExtraRaw,
+      dynamicForceRaw: result.dynamicForceRaw,
+      value: result.value,
+      effects: result.appliedEffects,
+      formula: result.formula,
+    }));
+}
+
+function sumNumbers(values) {
+  return (values ?? []).reduce((sum, value) => sum + (Number(value) || 0), 0);
 }
 
 function applyWeaknessStateDescriptor({ descriptor, scenario, state }) {
@@ -796,7 +1133,7 @@ function applyAutoSpDescriptor({
   );
   for (const actorState of state.actorEnergy.values()) {
     const background = controlled?.actorId !== actorState.actor.id;
-    const source = createActorSpSource(actorState.actor, actorState.profile);
+    const source = createActorSpSource(actorState, state, descriptor.timeMs);
     const remaining = Math.max(0, actorState.max - actorState.current);
     if (remaining <= 0) continue;
     const result = calculateAutoSp({
@@ -838,7 +1175,7 @@ function applyAutoSpDescriptor({
 
   for (const kiboState of state.kiboEnergy.values()) {
     const background = controlled?.actorId !== kiboState.actorId;
-    const source = createKiboSpSource(kiboState.profile);
+    const source = createKiboSpSource(kiboState, state, descriptor.timeMs);
     if (!source.applied) continue;
     const remaining = Math.max(0, kiboState.max - kiboState.current);
     if (remaining <= 0) continue;
@@ -875,16 +1212,299 @@ function applyAutoSpDescriptor({
   }
 }
 
+function applyDirectSpDescriptor({
+  descriptor,
+  state,
+  resourceEvents,
+  kiboResourceEvents,
+}) {
+  const directEvent = descriptor.directEvent;
+  const directSp = directEvent.effect.directSp;
+  if (directEvent.target.kind === EFFECT_TARGET_KINDS.ACTOR) {
+    const sourceState = state.actorEnergy.get(directEvent.target.id);
+    if (!sourceState) return;
+    const source = createActorSpSource(
+      sourceState,
+      state,
+      descriptor.timeMs
+    );
+    const baseValue = applyDirectSpEnhancement(
+      directEvent.value,
+      directSp.enhanceable,
+      source.spGetUp
+    );
+    const actorShare = directSpShareRatio(directSp.shareType);
+    for (const recipient of state.actorEnergy.values()) {
+      const share = recipient === sourceState ? 1 : actorShare;
+      if (share <= 0) continue;
+      const change = applyClampedResourceChange(
+        recipient,
+        multiplyQ16(baseValue, share)
+      );
+      if (change === 0) continue;
+      appendRuntimeEvent(
+        resourceEvents,
+        createActorResourceEvent({
+          timeMs: descriptor.timeMs,
+          action: directEvent.action,
+          actorId: recipient.actor.id,
+          actorName: recipient.actor.name,
+          resourceState: recipient,
+          change,
+          reason:
+            recipient === sourceState
+              ? 'verified-direct-sp'
+              : 'verified-direct-sp-shared',
+          confidence: 'verified',
+          hitKey: `${directEvent.eventIdentity}|actor|${recipient.actor.id}`,
+          elementId: directEvent.effect.elementId,
+          source: createDirectSpSource({
+            directEvent,
+            source,
+            baseValue,
+            share,
+          }),
+        }),
+        state
+      );
+    }
+    applyDirectSpToKibos({
+      descriptor,
+      state,
+      directEvent,
+      source,
+      baseValue,
+      kiboResourceEvents,
+      sourceKiboState: [...state.kiboEnergy.values()].find(
+        entry => entry.actorId === sourceState.actor.id
+      ),
+    });
+    return;
+  }
+
+  if (directEvent.target.kind !== EFFECT_TARGET_KINDS.KIBO) return;
+  const sourceKiboState = [...state.kiboEnergy.values()].find(
+    entry => entry.actorId === directEvent.target.id
+  );
+  if (!sourceKiboState) return;
+  const source = createKiboSpSource(
+    sourceKiboState,
+    state,
+    descriptor.timeMs
+  );
+  const baseValue = applyDirectSpEnhancement(
+    directEvent.value,
+    directSp.enhanceable,
+    source.spGetUp
+  );
+  applyDirectSpToKibos({
+    descriptor,
+    state,
+    directEvent,
+    source,
+    baseValue,
+    kiboResourceEvents,
+    sourceKiboState,
+  });
+}
+
+function applyDirectSpToKibos({
+  descriptor,
+  state,
+  directEvent,
+  source,
+  baseValue,
+  kiboResourceEvents,
+  sourceKiboState,
+}) {
+  const directSp = directEvent.effect.directSp;
+  for (const recipient of state.kiboEnergy.values()) {
+    const share =
+      recipient === sourceKiboState
+        ? 1
+        : recipient.actorId === directEvent.actorId
+          ? directSpShareRatio(directSp.mainPetShareType)
+          : directSpShareRatio(directSp.petShareType);
+    if (share <= 0) continue;
+    const change = applyClampedResourceChange(
+      recipient,
+      multiplyQ16(baseValue, share)
+    );
+    if (change === 0) continue;
+    appendRuntimeEvent(
+      kiboResourceEvents,
+      createKiboResourceEvent({
+        timeMs: descriptor.timeMs,
+        action: directEvent.action,
+        kiboState: recipient,
+        change,
+        reason:
+          recipient === sourceKiboState
+            ? 'verified-direct-sp'
+            : 'verified-direct-sp-shared',
+        hitKey: `${directEvent.eventIdentity}|kibo|${recipient.slotId}`,
+        elementId: directEvent.effect.elementId,
+        source: createDirectSpSource({
+          directEvent,
+          source,
+          baseValue,
+          share,
+        }),
+      }),
+      state
+    );
+  }
+}
+
+function applyDirectSpEnhancement(value, enhanceable, spGetUp) {
+  return enhanceable
+    ? multiplyQ16(value, 1 + Number(spGetUp || 0))
+    : roundValue(value);
+}
+
+function directSpShareRatio(shareType) {
+  if (Number(shareType) === 1) return 0.5;
+  if (Number(shareType) === 2) return 1;
+  return 0;
+}
+
+function createDirectSpSource({ directEvent, source, baseValue, share }) {
+  return {
+    packageId: directEvent.resolution.packageId,
+    sourceIdentity: directEvent.sourceIdentity,
+    share,
+    formula: {
+      route: 'direct-SpElement',
+      rawValue: directEvent.value,
+      enhanceable: directEvent.effect.directSp.enhanceable,
+      sourceSpGetUp: source.spGetUp,
+      valueAfterSourceEnhancement: baseValue,
+      share,
+      appliedToCalculators: true,
+    },
+  };
+}
+
+function applyDirectHealDescriptor({ descriptor, state }) {
+  const directEvent = descriptor.directEvent;
+  if (directEvent.target.kind === EFFECT_TARGET_KINDS.ENEMY) {
+    const before = state.enemy.hp;
+    state.enemy.hp = clampNumber(
+      state.enemy.hp + directEvent.value,
+      0,
+      state.enemy.maxHp
+    );
+    return createDirectVitalEvent({
+      type: 'VERIFIED_DIRECT_HEAL',
+      descriptor,
+      before,
+      after: state.enemy.hp,
+      maximum: state.enemy.maxHp,
+    });
+  }
+  const vital = state.actorVitals.get(directEvent.target.id);
+  if (!vital) return null;
+  const before = vital.currentHp;
+  vital.currentHp = clampNumber(
+    vital.currentHp + directEvent.value,
+    0,
+    vital.maximumHp
+  );
+  return createDirectVitalEvent({
+    type: 'VERIFIED_DIRECT_HEAL',
+    descriptor,
+    before,
+    after: vital.currentHp,
+    maximum: vital.maximumHp,
+  });
+}
+
+function applyDirectShieldDescriptor({ descriptor, state }) {
+  const directEvent = descriptor.directEvent;
+  if (directEvent.target.kind === EFFECT_TARGET_KINDS.ENEMY) {
+    state.enemy.valueShields.push({
+      raw: String(qFromFloat(directEvent.value)),
+      sourceIdentity: directEvent.sourceIdentity,
+    });
+    return createDirectVitalEvent({
+      type: 'VERIFIED_DIRECT_SHIELD',
+      descriptor,
+      before: 0,
+      after: directEvent.value,
+      maximum: null,
+    });
+  }
+  const vital = state.actorVitals.get(directEvent.target.id);
+  if (!vital) return null;
+  vital.valueShields.push({
+    value: directEvent.value,
+    sourceIdentity: directEvent.sourceIdentity,
+  });
+  return createDirectVitalEvent({
+    type: 'VERIFIED_DIRECT_SHIELD',
+    descriptor,
+    before: 0,
+    after: directEvent.value,
+    maximum: null,
+  });
+}
+
+function createDirectVitalEvent({
+  type,
+  descriptor,
+  before,
+  after,
+  maximum,
+}) {
+  const directEvent = descriptor.directEvent;
+  return {
+    type,
+    timeMs: descriptor.timeMs,
+    actionId: directEvent.actionId,
+    actorId: directEvent.actorId,
+    targetId: directEvent.target.id,
+    payload: {
+      before: roundValue(before),
+      change: roundValue(after - before),
+      after: roundValue(after),
+      maximum: maximum == null ? null : roundValue(maximum),
+      effectIdentity: directEvent.effect.effectIdentity,
+      sourceIdentity: directEvent.sourceIdentity,
+      appliedToCalculators: true,
+    },
+  };
+}
+
 function applyHitDescriptor({ descriptor, scenario, state }) {
   const { action, resolution, hit } = descriptor;
-  const source = resolveHitSource({ action, resolution, hit, state });
+  const source = resolveHitSource({
+    action,
+    resolution,
+    hit,
+    state,
+    timeMs: descriptor.timeMs,
+  });
   const ratioBasisPoints = resolveHitRatio(hit, action);
   const enemy = state.enemy;
   const enemyProfile = enemy.profile;
-  const targetDefense = numberOrNull(scenario?.enemy?.stats?.physicalDefense);
-  const targetMagicDefense = numberOrNull(
-    scenario?.enemy?.stats?.magicalDefense
-  );
+  const targetDefenseResult = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: scenario?.enemy?.id,
+    timeMs: descriptor.timeMs,
+    attributeId: 3,
+    baseRaw: scenario?.enemy?.stats?.physicalDefense,
+  });
+  const targetMagicDefenseResult = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: scenario?.enemy?.id,
+    timeMs: descriptor.timeMs,
+    attributeId: 4,
+    baseRaw: scenario?.enemy?.stats?.magicalDefense,
+  });
+  const targetDefense = numberOrNull(targetDefenseResult.value);
+  const targetMagicDefense = numberOrNull(targetMagicDefenseResult.value);
   let inputIssue = null;
   if (!source.ready) inputIssue = source.status;
   else if (!enemyProfile?.applied) {
@@ -928,7 +1548,9 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
     attackerElementUp: source.elementDamageUp,
     targetElementDefense: resolveEnemyElementDefense(
       scenario.enemy,
-      hit.damage.elementalType
+      hit.damage.elementalType,
+      state,
+      descriptor.timeMs
     ),
     physicalRatio: basisPoints(hit.damage.physicalRatioBasisPoints),
     magicRatio: basisPoints(hit.damage.magicRatioBasisPoints),
@@ -1056,6 +1678,13 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
         pathId: hit.pathId,
         attack: source.attack,
         attackSource: source.sourceIdentity,
+        dynamicPropertyTrace: {
+          source: source.dynamicPropertyTrace ?? [],
+          target: collectDynamicPropertyTrace([
+            targetDefenseResult,
+            targetMagicDefenseResult,
+          ]),
+        },
         rawDamage: hpDamage,
         toughnessDamage,
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
@@ -1156,22 +1785,26 @@ function applyHitRecovery({
   hitRecoveryAtByIdentity.set(intervalIdentity, descriptor.timeMs);
 
   const sourceActorId = action.actorId;
+  const sourceActorState = state.actorEnergy.get(sourceActorId);
+  const sourceActor = sourceActorState
+    ? createActorSpSource(sourceActorState, state, descriptor.timeMs)
+    : null;
   if (recoverSp > 0) {
+    if (!sourceActorState || !sourceActor) return;
+    const formula = calculateHitSp({
+      recoverSp,
+      pet: false,
+      spGetUp: sourceActor.spGetUp,
+      spGetUpAttack: sourceActor.spGetUpAttack,
+      maximumSp: Number.MAX_SAFE_INTEGER,
+      recoverInterval: intervalMs,
+    });
     const actorRecipients = [...state.actorEnergy.values()].sort(
       (left, right) =>
         Number(right.actor.id === sourceActorId) -
         Number(left.actor.id === sourceActorId)
     );
     for (const actorState of actorRecipients) {
-      const source = createActorSpSource(actorState.actor, actorState.profile);
-      const formula = calculateHitSp({
-        recoverSp,
-        pet: false,
-        spGetUp: source.spGetUp,
-        spGetUpAttack: source.spGetUpAttack,
-        maximumSp: Number.MAX_SAFE_INTEGER,
-        recoverInterval: intervalMs,
-      });
       const share = actorState.actor.id === sourceActorId ? 1 : 0.5;
       const desired = multiplyQ16(formula.value, share);
       const change = applyClampedResourceChange(actorState, desired);
@@ -1200,7 +1833,7 @@ function applyHitRecovery({
           source: {
             ...resolution,
             formula,
-            sourceIdentity: source.sourceIdentity,
+            sourceIdentity: sourceActor.sourceIdentity,
             recoverIntervalIdentity: intervalIdentity,
             share,
           },
@@ -1211,17 +1844,25 @@ function applyHitRecovery({
   }
 
   if (petRecoverSp <= 0) return;
+  const sourceKiboState =
+    findKiboStateByAction(state, action) ??
+    [...state.kiboEnergy.values()].find(
+      entry => entry.actorId === sourceActorId
+    );
+  const source =
+    resolution.actionBinding.ownerKind === 'kibo'
+      ? createKiboSpSource(sourceKiboState, state, descriptor.timeMs)
+      : sourceActor;
+  if (!source.applied) return;
+  const formula = calculateHitSp({
+    petRecoverSp,
+    pet: true,
+    spGetUp: source.spGetUp,
+    spGetUpAttack: source.spGetUpAttack,
+    maximumSp: Number.MAX_SAFE_INTEGER,
+    recoverInterval: intervalMs,
+  });
   for (const kiboState of state.kiboEnergy.values()) {
-    const source = createKiboSpSource(kiboState.profile);
-    if (!source.applied) continue;
-    const formula = calculateHitSp({
-      petRecoverSp,
-      pet: true,
-      spGetUp: source.spGetUp,
-      spGetUpAttack: source.spGetUpAttack,
-      maximumSp: Number.MAX_SAFE_INTEGER,
-      recoverInterval: intervalMs,
-    });
     const share = 1;
     const change = applyClampedResourceChange(
       kiboState,
@@ -1253,11 +1894,75 @@ function applyHitRecovery({
   }
 }
 
-function resolveHitSource({ action, resolution, hit, state }) {
+function resolveHitSource({ action, resolution, hit, state, timeMs }) {
   if (resolution.actionBinding.ownerKind === 'kibo') {
     const kiboState = findKiboStateByAction(state, action);
     const profile = kiboState?.profile;
-    const attack = numberOrNull(profile?.attack);
+    const attackResult = resolveRuntimeAttribute({
+      state,
+      targetKind: EFFECT_TARGET_KINDS.KIBO,
+      targetId: action.actorId,
+      timeMs,
+      attributeId: 1,
+      baseRaw:
+        kiboState?.attributesById?.get(1) ?? numberOrNull(profile?.attack),
+    });
+    const attack = numberOrNull(attackResult.value);
+    const criticalRateResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 7,
+      fallbackBasisPoints: profile?.criticalRateBasisPoints,
+    });
+    const criticalDamageResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 8,
+      fallbackBasisPoints: profile?.criticalDamageBasisPoints,
+    });
+    const damageUpResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 21,
+      fallbackBasisPoints: profile?.damageUpBasisPoints,
+    });
+    const physicalDamageUpResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 25,
+      fallbackBasisPoints: profile?.physicalDamageUpBasisPoints,
+    });
+    const magicDamageUpResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 27,
+      fallbackBasisPoints: profile?.magicDamageUpBasisPoints,
+    });
+    const elementAttributeId =
+      ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[
+        Number(hit?.damage?.elementalType)
+      ];
+    const elementDamageUpResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: elementAttributeId,
+      fallbackBasisPoints:
+        profile?.elementDamageUpBasisPointsByType?.[
+          Number(hit?.damage?.elementalType)
+        ],
+    });
     return {
       ready: attack != null,
       status:
@@ -1265,21 +1970,80 @@ function resolveHitSource({ action, resolution, hit, state }) {
           ? 'verified-kibo-base-attack-missing'
           : 'verified-kibo-base-profile-ready',
       attack,
-      criticalRate: basisPoints(profile?.criticalRateBasisPoints),
-      criticalDamage: basisPoints(profile?.criticalDamageBasisPoints, 1),
-      damageUp: basisPoints(profile?.damageUpBasisPoints),
-      physicalDamageUp: basisPoints(profile?.physicalDamageUpBasisPoints),
-      magicDamageUp: basisPoints(profile?.magicDamageUpBasisPoints),
-      elementDamageUp: basisPoints(
-        profile?.elementDamageUpBasisPointsByType?.[
-          Number(hit?.damage?.elementalType)
-        ]
-      ),
+      criticalRate: basisPoints(criticalRateResult.value),
+      criticalDamage: basisPoints(criticalDamageResult.value, 1),
+      damageUp: basisPoints(damageUpResult.value),
+      physicalDamageUp: basisPoints(physicalDamageUpResult.value),
+      magicDamageUp: basisPoints(magicDamageUpResult.value),
+      elementDamageUp: basisPoints(elementDamageUpResult.value),
+      dynamicPropertyTrace: collectDynamicPropertyTrace([
+        attackResult,
+        criticalRateResult,
+        criticalDamageResult,
+        damageUpResult,
+        physicalDamageUpResult,
+        magicDamageUpResult,
+        elementDamageUpResult,
+      ]),
       sourceIdentity: profile?.sourceIdentity ?? null,
     };
   }
   const actor = action.actor;
-  const attack = numberOrNull(actor?.stats?.attack);
+  const actorState = state.actorEnergy.get(action.actorId);
+  const attackResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 1,
+    fallbackRaw: actor?.stats?.attack,
+  });
+  const criticalRateResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 7,
+    fallbackRaw: ratioToRaw(actor?.stats?.critRate, 0),
+  });
+  const criticalDamageResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 8,
+    fallbackRaw: ratioToRaw(actor?.stats?.critDamage, 10000),
+  });
+  const damageUpResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 21,
+    fallbackRaw: ratioToRaw(actor?.stats?.damageAmplification, 0),
+  });
+  const physicalDamageUpResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 25,
+    fallbackRaw: getAttribute(actor, 'PHYSICAL_SHOOTDMGUP'),
+  });
+  const magicDamageUpResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 27,
+    fallbackRaw: getAttribute(actor, 'MAGIC_SHOOTDMGDUP'),
+  });
+  const elementDamageUpResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId:
+      ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[
+        Number(hit?.damage?.elementalType)
+      ],
+    fallbackRaw:
+      resolveActorElementDamageUp(actor, hit?.damage?.elementalType) * 10000,
+  });
+  const attack = numberOrNull(attackResult.value);
   return {
     ready: attack != null,
     status:
@@ -1287,17 +2051,21 @@ function resolveHitSource({ action, resolution, hit, state }) {
         ? 'verified-actor-panel-attack-missing'
         : 'verified-actor-panel-profile-ready',
     attack,
-    criticalRate: numberOrNull(actor?.stats?.critRate) ?? 0,
-    criticalDamage: numberOrNull(actor?.stats?.critDamage) ?? 1,
-    damageUp: numberOrNull(actor?.stats?.damageAmplification) ?? 0,
-    physicalDamageUp: basisPoints(
-      getAttribute(actor, 'PHYSICAL_SHOOTDMGUP')
-    ),
-    magicDamageUp: basisPoints(getAttribute(actor, 'MAGIC_SHOOTDMGDUP')),
-    elementDamageUp: resolveActorElementDamageUp(
-      actor,
-      hit?.damage?.elementalType
-    ),
+    criticalRate: basisPoints(criticalRateResult.value),
+    criticalDamage: basisPoints(criticalDamageResult.value, 1),
+    damageUp: basisPoints(damageUpResult.value),
+    physicalDamageUp: basisPoints(physicalDamageUpResult.value),
+    magicDamageUp: basisPoints(magicDamageUpResult.value),
+    elementDamageUp: basisPoints(elementDamageUpResult.value),
+    dynamicPropertyTrace: collectDynamicPropertyTrace([
+      attackResult,
+      criticalRateResult,
+      criticalDamageResult,
+      damageUpResult,
+      physicalDamageUpResult,
+      magicDamageUpResult,
+      elementDamageUpResult,
+    ]),
     sourceIdentity: actor?.stats?.source ?? 'compiled-actor-stats',
   };
 }
@@ -1330,39 +2098,95 @@ function resolveCriticalBranch(action, hit, source) {
   };
 }
 
-function createActorSpSource(actor, profile) {
+function createActorSpSource(actorState, state, timeMs) {
+  const actor = actorState.actor;
+  const profile = actorState.profile;
   return {
-    sprSec: basisPoints(
-      profile?.sprSecBasisPoints ?? getAttribute(actor, 'SPR_SEC')
-    ),
-    sprSecBack: basisPoints(
-      profile?.sprSecBackBasisPoints ?? getAttribute(actor, 'SPR_SEC_BACK')
-    ),
-    spGetUp: basisPoints(
-      profile?.spGetUpBasisPoints ?? getAttribute(actor, 'SPGETUP')
-    ),
-    spRetAuto: basisPoints(
-      profile?.spRetAutoBasisPoints ??
+    applied: actorState != null,
+    sprSec: resolveActorRuntimeRatio({
+      state,
+      actorState,
+      timeMs,
+      attributeId: 110,
+      fallbackRaw: profile?.sprSecBasisPoints ?? getAttribute(actor, 'SPR_SEC'),
+    }),
+    sprSecBack: resolveActorRuntimeRatio({
+      state,
+      actorState,
+      timeMs,
+      attributeId: 226,
+      fallbackRaw:
+        profile?.sprSecBackBasisPoints ?? getAttribute(actor, 'SPR_SEC_BACK'),
+    }),
+    spGetUp: resolveActorRuntimeRatio({
+      state,
+      actorState,
+      timeMs,
+      attributeId: 105,
+      fallbackRaw: profile?.spGetUpBasisPoints ?? getAttribute(actor, 'SPGETUP'),
+    }),
+    spRetAuto: resolveActorRuntimeRatio({
+      state,
+      actorState,
+      timeMs,
+      attributeId: 227,
+      fallbackRaw:
+        profile?.spRetAutoBasisPoints ??
         getAttribute(actor, 'SPRET_AUTO') ??
-        getAttribute(actor, 'SPGETUP_AUTO')
-    ),
-    spGetUpAttack: basisPoints(
-      profile?.spGetUpAttackBasisPoints ?? getAttribute(actor, 'SPGETUP_ATK')
-    ),
+        getAttribute(actor, 'SPGETUP_AUTO'),
+    }),
+    spGetUpAttack: resolveActorRuntimeRatio({
+      state,
+      actorState,
+      timeMs,
+      attributeId: 228,
+      fallbackRaw:
+        profile?.spGetUpAttackBasisPoints ?? getAttribute(actor, 'SPGETUP_ATK'),
+    }),
     sourceIdentity: profile?.sourceIdentity ?? null,
   };
 }
 
-function createKiboSpSource(profile) {
+function createKiboSpSource(kiboState, state, timeMs) {
+  const profile = kiboState?.profile;
   return {
     applied: profile?.applied === true,
-    sprSec: basisPoints(profile?.sprSecBasisPoints),
-    sprSecBack: basisPoints(profile?.sprSecBackBasisPoints),
-    spGetUp: basisPoints(profile?.spGetUpBasisPoints),
-    spRetAuto: basisPoints(
-      profile?.spRetAutoBasisPoints ?? profile?.spGetUpAutoBasisPoints
-    ),
-    spGetUpAttack: basisPoints(profile?.spGetUpAttackBasisPoints),
+    sprSec: resolveKiboRuntimeRatio({
+      state,
+      kiboState,
+      timeMs,
+      attributeId: 110,
+      fallbackRaw: profile?.sprSecBasisPoints,
+    }),
+    sprSecBack: resolveKiboRuntimeRatio({
+      state,
+      kiboState,
+      timeMs,
+      attributeId: 226,
+      fallbackRaw: profile?.sprSecBackBasisPoints,
+    }),
+    spGetUp: resolveKiboRuntimeRatio({
+      state,
+      kiboState,
+      timeMs,
+      attributeId: 105,
+      fallbackRaw: profile?.spGetUpBasisPoints,
+    }),
+    spRetAuto: resolveKiboRuntimeRatio({
+      state,
+      kiboState,
+      timeMs,
+      attributeId: 227,
+      fallbackRaw:
+        profile?.spRetAutoBasisPoints ?? profile?.spGetUpAutoBasisPoints,
+    }),
+    spGetUpAttack: resolveKiboRuntimeRatio({
+      state,
+      kiboState,
+      timeMs,
+      attributeId: 228,
+      fallbackRaw: profile?.spGetUpAttackBasisPoints,
+    }),
     sourceIdentity: profile?.sourceIdentity ?? null,
   };
 }
@@ -1481,11 +2305,32 @@ function updateShieldState(enemy, damageResult, input) {
   }
 }
 
-function resolveEnemyElementDefense(enemy, elementalType) {
+function resolveEnemyElementDefense(enemy, elementalType, state, timeMs) {
   const row = (enemy?.elementDefenses ?? []).find(
     item => Number(item.elementId) === Number(elementalType)
   );
-  return basisPoints(row?.effectiveValue);
+  const keyByElement = {
+    0: 'NORMAL_DEFENSE',
+    1: 'FIRE_DEFENSE',
+    2: 'WIND_DEFENSE',
+    3: 'EARTH_DEFENSE',
+    4: 'WOOD_DEFENSE',
+    5: 'ICE_DEFENSE',
+    6: 'WATER_DEFENSE',
+    7: 'ELEC_DEFENSE',
+    8: 'LIGHT_DEFENSE',
+    9: 'DARK_DEFENSE',
+  };
+  const attributeId = state.attributeIdByKey.get(keyByElement[elementalType]);
+  const result = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: enemy?.id,
+    timeMs,
+    attributeId,
+    baseRaw: row?.effectiveValue,
+  });
+  return basisPoints(result.value);
 }
 
 function resolveActorElementDamageUp(actor, elementalType) {
@@ -1681,6 +2526,12 @@ function createFinalState(state, timeMs = 0) {
       maxValue: entry.max,
       valueUnit: 'absolute-sp-points',
     })),
+    actorVitals: [...state.actorVitals.values()].map(entry => ({
+      actorId: entry.actorId,
+      currentHp: roundValue(entry.currentHp),
+      maximumHp: roundValue(entry.maximumHp),
+      valueShields: entry.valueShields.map(shield => ({ ...shield })),
+    })),
     kiboEnergy: [...state.kiboEnergy.values()].map(entry => ({
       slotId: entry.slotId,
       actorId: entry.actorId,
@@ -1763,13 +2614,21 @@ function basisPoints(value, fallback = 0) {
   return number == null ? fallback : number / 10000;
 }
 
+function ratioToRaw(value, fallbackRaw = 0) {
+  const number = numberOrNull(value);
+  return number == null ? fallbackRaw : number * 10000;
+}
+
 function compareDescriptors(left, right) {
   const priority = {
     'action-cost': 0,
     'weakness-state-tick': 1,
-    hit: 2,
-    'manual-resource': 3,
-    'auto-sp-tick': 4,
+    'direct-sp': 2,
+    'direct-heal': 2,
+    'direct-shield': 2,
+    hit: 3,
+    'manual-resource': 4,
+    'auto-sp-tick': 5,
   };
   return (
     left.timeMs - right.timeMs ||

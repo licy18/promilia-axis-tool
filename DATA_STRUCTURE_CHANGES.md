@@ -27632,3 +27632,9 @@ inputTrigger
 `verified-combat-mechanics-package.json` 升级为 package v7，新增 `mechanismEvidence` 和 `staticPropertyCatalog`。前者记录统一知识索引、6 份机器事实快照及其版本、来源 identity、SHA256、字节数和结构验证；后者保存角色等级/星赐/好感度、灵子、饰品装备、属性定义，以及奇波物种/成长/爱好/悟性/亲密度/继承的静态来源。`identityAudit` 独立记录 Workbench 与 verified 集合的并集分类，未暴露或非当前公开身份不会被删除或补造 profile。
 
 Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel`；loadout 新增 `soulessenceLevel / soulessenceRank / equipmentLevels` 及 `kiboConfig.level / hobbyId / intimacyLevel / comprehensionByAttribute`。旧项目缺少字段时由现有规范化入口补默认配置，项目 schemaVersion 不升级；方案复制、本地草稿、JSON、分享链接和 PNG 保存这些输入。`AzPrVerifiedStaticProperties` 编译结果、逐来源明细和角色到奇波继承均为运行时派生值，不写入项目载体。灵子 effect 与饰品套装技能继续标为动态 `unapplied`，不会混入战前静态 EB/EP/EE。
+
+## 445. Verified Battle effect graph and dynamic property runtime v1
+
+`verified-combat-mechanics-package.json` 升级为 package v8。新增全局 `battleEffectCatalog.nodes[]`，以 `controlSkillId + nodeIdentity` 保存完整 Battle Damage、PropertyChange、Sp、Heal/Shield、Inject、Pack、Judgment、Stack 关系节点；`controlBindings[].effectGraph[]` 只保存稳定 `nodeIdentities`，动作 mapping 通过 `selectedEffectIdentities` 选择运行时绑定，避免复制图节点。每个绑定按伤害、韧性、SP、生命、护盾、动态属性和印记逐维记录 `applied / verified-zero / unresolved`、来源字段与原因。
+
+新增非持久化 `AzPrVerifiedBattleEffectGeneration`，从标准 action 与 execution plan 派生 verified effect commands 和直接 SP/生命/护盾事件；`AzPrEffectRuntimeTimeline` 仅允许 `verified-battle-effect-generated` 且来源 identity 完整的命令进入 calculator，并使用独立 `verified-calculator` instance scope 与手工追踪状态隔离。`AzPrVerifiedCombatRuntime` 在命中时查询活动效果，按客户端动态 Force 或 `((S+DB)*(1+DP)+DE)*ratio` 顺序读取属性；命中局部参数不回写面板。派生 generation、效果状态、动态属性 trace 和计算结果不进入项目 schema，五载体继续保存动作与配置真相并在回载时重建。

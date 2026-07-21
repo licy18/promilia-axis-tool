@@ -23,12 +23,13 @@ export const EFFECT_RUNTIME_EVENT_TYPES = Object.freeze({
 export function createActionEffectRuntimeInput({
   scenario = {},
   actionExecutionPlan = null,
+  generatedCommands = [],
 } = {}) {
   const validationIssues = [];
   const executionPlanByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
   );
-  const inputCommands = (scenario.actions ?? []).flatMap(
+  const projectCommands = (scenario.actions ?? []).flatMap(
     (action, actionIndex) =>
       (action.effectCommands ?? []).map((command, commandIndex) => ({
         action,
@@ -36,8 +37,30 @@ export function createActionEffectRuntimeInput({
         command,
         commandIndex,
         executionEntry: executionPlanByActionId.get(action.id) ?? null,
+        generated: false,
       }))
   );
+  const actionIndexById = new Map(
+    (scenario.actions ?? []).map((action, index) => [action.id, index])
+  );
+  const actionById = new Map(
+    (scenario.actions ?? []).map(action => [action.id, action])
+  );
+  const verifiedCommands = (generatedCommands ?? []).map(
+    (command, commandIndex) => {
+      const action = actionById.get(command.sourceActionId) ?? null;
+      return {
+        action,
+        actionIndex: actionIndexById.get(command.sourceActionId) ?? -1,
+        command,
+        commandIndex,
+        executionEntry:
+          executionPlanByActionId.get(command.sourceActionId) ?? null,
+        generated: true,
+      };
+    }
+  );
+  const inputCommands = [...projectCommands, ...verifiedCommands];
   const executableInputCommands = inputCommands.filter(
     entry => entry.executionEntry?.execute !== false
   );
@@ -92,7 +115,9 @@ export function createActionEffectRuntimeInput({
         (sum, command) => sum + command.modifiers.length,
         0
       ),
-      calculatorAppliedCommandCount: 0,
+      calculatorAppliedCommandCount: commands.filter(
+        command => command.appliedToCalculators
+      ).length,
       applied: true,
     },
     applied: true,
@@ -103,10 +128,15 @@ export function createEffectRuntimeTimeline({
   scenario = {},
   effectInput = null,
   actionExecutionPlan = null,
+  generatedCommands = [],
 } = {}) {
   const input =
     effectInput ??
-    createActionEffectRuntimeInput({ scenario, actionExecutionPlan });
+    createActionEffectRuntimeInput({
+      scenario,
+      actionExecutionPlan,
+      generatedCommands,
+    });
   const activeByInstanceKey = new Map();
   const events = [];
   let peakActiveEffectCount = 0;
@@ -210,34 +240,76 @@ export function createEffectRuntimeTimeline({
       actorTargetEventCount: events.filter(
         event => event.targetKind === EFFECT_TARGET_KINDS.ACTOR
       ).length,
+      kiboTargetEventCount: events.filter(
+        event => event.targetKind === EFFECT_TARGET_KINDS.KIBO
+      ).length,
       enemyTargetEventCount: events.filter(
         event => event.targetKind === EFFECT_TARGET_KINDS.ENEMY
       ).length,
       effectIds: uniqueValues(events.map(event => event.effectId)),
       targetIds: uniqueValues(events.map(event => event.targetId)),
-      calculatorAppliedEffectCount: 0,
+      calculatorAppliedEffectCount: events.filter(
+        event => event.appliedToCalculators
+      ).length,
       applied: true,
     },
     applied: true,
   };
 }
 
+export function resolveActiveEffectsAt(
+  timeline,
+  timeMs,
+  { targetKind = null, targetId = null, calculatorOnly = false } = {}
+) {
+  const activeByInstanceKey = new Map();
+  for (const event of timeline?.events ?? []) {
+    if (Number(event.timeMs) > Number(timeMs)) break;
+    if (event.after?.active) {
+      activeByInstanceKey.set(event.instanceKey, event.after);
+    } else {
+      activeByInstanceKey.delete(event.instanceKey);
+    }
+  }
+  return sortEffectStates([...activeByInstanceKey.values()]).filter(effect => {
+    if (targetKind && effect.targetKind !== targetKind) return false;
+    if (targetId != null && String(effect.targetId) !== String(targetId)) {
+      return false;
+    }
+    return !calculatorOnly || effect.appliedToCalculators === true;
+  });
+}
+
 function isInheritedEffectTargetAvailable(effect, scenario) {
   if (effect.targetKind === EFFECT_TARGET_KINDS.ENEMY) {
-    return effect.targetId === scenario?.enemy?.id;
+    return String(effect.targetId) === String(scenario?.enemy?.id);
   }
-  if (effect.targetKind === EFFECT_TARGET_KINDS.ACTOR) {
-    return (scenario?.actors ?? []).some(actor => actor.id === effect.targetId);
+  if (
+    [EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+      effect.targetKind
+    )
+  ) {
+    return (scenario?.actors ?? []).some(
+      actor => String(actor.id) === String(effect.targetId)
+    );
   }
   return false;
 }
 
 function createInheritedRuntimeEffectState(effect) {
   const remainingDurationMs = strictNumberOrNull(effect.remainingDurationMs);
+  const appliedToCalculators = isVerifiedCalculatorEffectState(effect);
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-runtime-active-effect',
-    instanceKey: effect.instanceKey,
+    instanceKey: appliedToCalculators
+      ? createEffectInstanceKey({
+          targetKind: effect.targetKind,
+          targetId: effect.targetId,
+          effectId: effect.effectId,
+          calculatorScope: true,
+        })
+      : effect.instanceKey,
     effectId: effect.effectId,
     effectName: effect.effectName,
     sourceActionId: effect.sourceActionId ?? null,
@@ -263,14 +335,40 @@ function createInheritedRuntimeEffectState(effect) {
       ? effect.modifiers.map(modifier => ({ ...modifier }))
       : [],
     sourceStatus: 'effect-inherited-from-cycle-boundary',
-    appliedToCalculators: false,
+    appliedToCalculators,
     active: true,
   };
 }
 
+function isVerifiedCalculatorEffectState(effect) {
+  if (effect?.appliedToCalculators !== true) return false;
+  if (
+    ![
+      'verified-battle-effect-generated',
+      'effect-inherited-from-cycle-boundary',
+    ].includes(effect.sourceStatus)
+  ) {
+    return false;
+  }
+  return Boolean(
+    effect.sourceIdentity?.packageId &&
+      effect.sourceIdentity?.effectIdentity &&
+      effect.sourceIdentity?.actionBindingIdentity
+  );
+}
+
 function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
-  const { action, actionIndex, command, commandIndex, executionEntry } = entry;
-  const commandPath = `scenario.actions[${actionIndex}].effectCommands[${commandIndex}]`;
+  const {
+    action,
+    actionIndex,
+    command,
+    commandIndex,
+    executionEntry,
+    generated,
+  } = entry;
+  const commandPath = generated
+    ? `generatedCommands[${commandIndex}]`
+    : `scenario.actions[${actionIndex}].effectCommands[${commandIndex}]`;
   const effectId = String(command?.effectId ?? '').trim();
   const targetId = String(command?.targetId ?? '').trim();
   if (!effectId || !targetId) {
@@ -320,6 +418,12 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     return null;
   }
 
+  const appliedToCalculators =
+    generated === true &&
+    command.generatedVerified === true &&
+    command.sourceStatus === 'verified-battle-effect-generated' &&
+    command.appliedToCalculators === true;
+
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-action-effect-runtime-command',
@@ -342,6 +446,7 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
       targetKind: command.targetKind,
       targetId,
       effectId,
+      calculatorScope: appliedToCalculators,
     }),
     timeMs: roundEffectValue(timeMs),
     frameIndex: msToFrame(timeMs, strictNumberOrNull(scenario.time?.fps) ?? 60),
@@ -358,7 +463,7 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     modifiers: Array.isArray(command.modifiers)
       ? command.modifiers.map(modifier => ({ ...modifier }))
       : [],
-    appliedToCalculators: false,
+    appliedToCalculators,
     sourceCommand: command,
     sourceActionIndex: actionIndex,
     sourceCommandIndex: commandIndex,
@@ -488,7 +593,7 @@ function createRuntimeEffectState(command) {
     confidence: command.confidence,
     trackingStatus: command.trackingStatus,
     sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
-    appliedToCalculators: false,
+    appliedToCalculators: command.appliedToCalculators === true,
     active: true,
   };
 }
@@ -520,7 +625,9 @@ function refreshRuntimeEffectState(existing, command) {
     sourceIdentity:
       cloneSourceIdentity(command.sourceIdentity) ??
       cloneSourceIdentity(existing.sourceIdentity),
-    appliedToCalculators: false,
+    appliedToCalculators:
+      command.appliedToCalculators === true ||
+      existing.appliedToCalculators === true,
   };
 }
 
@@ -609,7 +716,7 @@ function createEffectRuntimeEvent({
     modifiers: (command?.modifiers ?? state?.modifiers ?? []).map(modifier => ({
       ...modifier,
     })),
-    appliedToCalculators: false,
+    appliedToCalculators: state?.appliedToCalculators === true,
     payload: {
       effectId: state?.effectId ?? command?.effectId ?? null,
       effectName: state?.effectName ?? command?.effectName ?? null,
@@ -618,7 +725,7 @@ function createEffectRuntimeEvent({
       stackBefore,
       stackAfter,
       expiresAtMs: after?.expiresAtMs ?? null,
-      appliedToCalculators: false,
+      appliedToCalculators: state?.appliedToCalculators === true,
       trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
     },
     applied: true,
@@ -642,8 +749,20 @@ function cloneSourceIdentity(value) {
     : null;
 }
 
-function createEffectInstanceKey({ targetKind, targetId, effectId }) {
-  return [targetKind, targetId, effectId].map(createEffectIdPart).join('|');
+function createEffectInstanceKey({
+  targetKind,
+  targetId,
+  effectId,
+  calculatorScope = false,
+}) {
+  return [
+    targetKind,
+    targetId,
+    effectId,
+    ...(calculatorScope ? ['verified-calculator'] : []),
+  ]
+    .map(createEffectIdPart)
+    .join('|');
 }
 
 function createEffectIdPart(value) {

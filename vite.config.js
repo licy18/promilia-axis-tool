@@ -23,6 +23,14 @@ export default defineConfig({
         manualChunks(id) {
           if (
             [
+              '/simulation/mechanics/verifiedCombatRuntime.js',
+              '/simulation/mechanics/verifiedBattleEffectGeneration.js',
+            ].some(modulePath => id.endsWith(modulePath))
+          ) {
+            return 'verified-combat-runtime';
+          }
+          if (
+            [
               '/simulation/mechanics/verifiedCombatStaticProperties.js',
               '/simulation/mechanics/threeValueMechanismConfiguration.js',
             ].some(modulePath => id.endsWith(modulePath))

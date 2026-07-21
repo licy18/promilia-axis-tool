@@ -304,7 +304,7 @@ describe('verified combat mechanics runtime', () => {
       )?.payload
     ).toMatchObject({
       kiboId: 500001,
-      change: 1.860519,
+      change: 1.859985,
     });
     expect(result.verifiedCombatRuntime.finalState.enemy.hp).toBeLessThan(
       result.verifiedCombatRuntime.initialState.enemy.hp
@@ -519,7 +519,7 @@ describe('verified combat mechanics runtime', () => {
     ).toBe(false);
   });
 
-  it('uses recipient SP attributes and one DamageElement interval for Pangpang hit recovery', () => {
+  it('uses source SP attributes and one DamageElement interval for Pangpang hit recovery', () => {
     const result = simulateVerifiedAcceptanceScenario({ includeKibo: false });
     const hitEvents = result.verifiedCombatRuntime.resourceEvents.filter(
       event =>
@@ -563,15 +563,15 @@ describe('verified combat mechanics runtime', () => {
     ).toEqual(
       expect.objectContaining({
         payload: expect.objectContaining({
-          beforeValue: 0.041657,
-          change: 4.161102,
-          afterValue: 4.202759,
+          beforeValue: 0.041656,
+          change: 4.159897,
+          afterValue: 4.201553,
           maxValue: 100,
           share: 1,
           recoverIntervalIdentity: 'damage-element:-9212100609153088879',
           formula: expect.objectContaining({
-            raw: '272702',
-            value: 4.161102294921875,
+            raw: '272623',
+            value: 4.1598968505859375,
             trace: expect.arrayContaining([
               expect.objectContaining({
                 name: 'pet_recover_sp',

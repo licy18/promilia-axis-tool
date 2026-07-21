@@ -12,6 +12,7 @@ import { runSimulation } from '../../simulation';
 import {
   createActionEffectRuntimeInput,
   createEffectRuntimeTimeline,
+  resolveActiveEffectsAt,
 } from '../../simulation/runtime/effectRuntimeTimeline';
 import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
@@ -181,6 +182,64 @@ describe('effect runtime timeline', () => {
     );
   });
 
+  it('inherits calculator authority only from a complete verified source identity', () => {
+    const baseEffect = {
+      instanceKey: 'actor|actor-001|effect-verified',
+      effectId: 'effect-verified',
+      effectName: '循环效果',
+      sourceActorId: 'actor-001',
+      targetKind: EFFECT_TARGET_KINDS.ACTOR,
+      targetId: 'actor-001',
+      remainingDurationMs: 1000,
+      stacks: 1,
+      maxStacks: 1,
+      modifiers: [],
+      appliedToCalculators: true,
+    };
+    const forged = createEffectRuntimeTimeline({
+      scenario: {
+        time: { durationMs: 500, fps: 60 },
+        actors: [{ id: 'actor-001' }],
+        actions: [],
+        initialRuntimeState: {
+          activeEffects: [
+            {
+              ...baseEffect,
+              sourceStatus: 'project-configured-effect-command',
+            },
+          ],
+        },
+      },
+    });
+    const verified = createEffectRuntimeTimeline({
+      scenario: {
+        time: { durationMs: 500, fps: 60 },
+        actors: [{ id: 'actor-001' }],
+        actions: [],
+        initialRuntimeState: {
+          activeEffects: [
+            {
+              ...baseEffect,
+              sourceStatus: 'verified-battle-effect-generated',
+              sourceIdentity: {
+                packageId: 'verified-package',
+                actionBindingIdentity: 'verified-action',
+                effectIdentity: 'verified-effect',
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(forged.events[0].appliedToCalculators).toBe(false);
+    expect(verified.events[0]).toMatchObject({
+      instanceKey: 'actor|actor-001|effect-verified|verified-calculator',
+      sourceStatus: 'effect-inherited-from-cycle-boundary',
+      appliedToCalculators: true,
+    });
+  });
+
   it('publishes effectTimeline as a standard runtime output without changing three values', () => {
     const project = createEffectOnlyProject();
     const result = runSimulation(project, createEmptyGameData());
@@ -252,6 +311,96 @@ describe('effect runtime timeline', () => {
       effectEventCount: 2,
       activeEffectCount: 0,
     });
+  });
+
+  it('keeps generated calculator effects isolated from project tracking commands', () => {
+    const generatedAction = {
+      id: 'generated-action',
+      name: '可信效果来源',
+      actorId: 'actor-001',
+      startMs: 0,
+      effectCommands: [],
+    };
+    const trackingAction = createScenarioEffectAction({
+      id: 'tracking-action',
+      startMs: 500,
+      command: createEffectCommand({
+        id: 'tracking-refresh',
+        effectId: 'shared-effect-id',
+        effectName: '手工追踪效果',
+        operation: EFFECT_OPERATIONS.REFRESH,
+        targetKind: EFFECT_TARGET_KINDS.ACTOR,
+        targetId: 'actor-001',
+        durationMs: 3000,
+        modifiers: [
+          {
+            kind: 'battle-property',
+            attributeId: 1,
+            bucket: 'dynamicExtra',
+            valueRaw: 999999,
+          },
+        ],
+      }),
+    });
+    const scenario = {
+      time: { durationMs: 4000, fps: 60 },
+      actors: [{ id: 'actor-001' }],
+      actions: [generatedAction, trackingAction],
+    };
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      generatedCommands: [
+        {
+          id: 'verified-command',
+          sourceActionId: generatedAction.id,
+          sourceActorId: generatedAction.actorId,
+          effectId: 'shared-effect-id',
+          effectName: '可信效果',
+          operation: EFFECT_OPERATIONS.APPLY,
+          targetKind: EFFECT_TARGET_KINDS.ACTOR,
+          targetId: 'actor-001',
+          timeMs: 0,
+          durationMs: 2000,
+          stackMode: EFFECT_STACK_MODES.REFRESH,
+          maxStacks: 1,
+          modifiers: [
+            {
+              kind: 'battle-property',
+              attributeId: 1,
+              bucket: 'dynamicExtra',
+              valueRaw: 100,
+            },
+          ],
+          sourceStatus: 'verified-battle-effect-generated',
+          generatedVerified: true,
+          appliedToCalculators: true,
+        },
+      ],
+    });
+
+    const calculatorEffects = resolveActiveEffectsAt(timeline, 1000, {
+      targetKind: EFFECT_TARGET_KINDS.ACTOR,
+      targetId: 'actor-001',
+      calculatorOnly: true,
+    });
+    expect(calculatorEffects).toHaveLength(1);
+    expect(calculatorEffects[0]).toMatchObject({
+      instanceKey: 'actor|actor-001|shared-effect-id|verified-calculator',
+      effectName: '可信效果',
+      modifiers: [expect.objectContaining({ valueRaw: 100 })],
+      appliedToCalculators: true,
+    });
+    expect(timeline.summary).toMatchObject({
+      activeEffectCount: 0,
+      calculatorAppliedEffectCount: 2,
+    });
+    expect(
+      timeline.events.some(
+        event =>
+          event.effectName === '手工追踪效果' &&
+          event.appliedToCalculators === true
+      )
+    ).toBe(false);
   });
 
   it('rejects effect commands that bypass the calculator isolation boundary', () => {

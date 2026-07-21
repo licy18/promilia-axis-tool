@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "75dc7015e26d5879504267fab4f851144c5314e11ff0fb58a29a69763a73bc54",
+  "packageHash": "1366c171672c6ab9d75f92975053d1f0489f8341fe063e61ce5a6721e7e844e3",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1274,18 +1274,21 @@
     "classifiedActionCount": 562,
     "foundControlCount": 577,
     "indexedElementPathCount": 2172,
-    "appliedActionBindingCount": 352,
-    "appliedHitBindingCount": 1175,
-    "uniqueControlBindingCount": 446,
-    "uniqueControlHitBindingCount": 2518,
-    "unresolvedActionBindingCount": 244,
+    "appliedActionBindingCount": 417,
+    "appliedHitBindingCount": 1332,
+    "uniqueControlBindingCount": 452,
+    "uniqueControlHitBindingCount": 2545,
+    "appliedEffectBindingCount": 50,
+    "verifiedZeroEffectBindingCount": 2,
+    "unresolvedEffectBindingCount": 3150,
+    "unresolvedActionBindingCount": 181,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 1724,
-      "2": 235,
-      "3": 339,
-      "4": 216,
+      "1": 1739,
+      "2": 236,
+      "3": 347,
+      "4": 219,
       "5": 4
     }
   },
@@ -1363,20 +1366,11 @@
       "controlSkillId": 10100327,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|101007|10100713|0|10100713",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100713,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10100713,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1389,7 +1383,11 @@
       "controlSkillId": 10100727,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1421,38 +1419,6 @@
       "applied": false
     },
     {
-      "identity": "actor|101010|10101012|0|10101012",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101012,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10101012,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|101010|10101013|0|10101013",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "sourceSkillId": 10101013,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10101013,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|101010|10101021|0|10101021",
       "ownerKind": "actor",
       "ownerId": 101010,
@@ -1465,7 +1431,17 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "property-formula-not-literal-function-5",
+        "property-conditions-not-expanded",
+        "effect-trigger-frame-missing",
+        "judgment-state-machine-deferred-to-m8-c",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "pack-state-machine-deferred-to-m8-c",
+        "sp-formula-not-literal-function-5"
       ],
       "applied": false
     },
@@ -1478,7 +1454,11 @@
       "controlSkillId": 10101027,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1530,7 +1510,14 @@
       "controlSkillId": 10300212,
       "status": "unresolved",
       "reasons": [
-        "trigger-frame-missing"
+        "trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "stack-state-machine-deferred-to-m8-c",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "property-formula-not-literal-function-5"
       ],
       "applied": false
     },
@@ -1556,7 +1543,11 @@
       "controlSkillId": 10300227,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded"
       ],
       "applied": false
     },
@@ -1596,7 +1587,13 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "stack-state-machine-deferred-to-m8-c",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "applied": false
     },
@@ -1654,20 +1651,6 @@
       "applied": false
     },
     {
-      "identity": "actor|107001|10700121|2|10700125",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700121,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10700125,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|107001|10700121|4|10700127",
       "ownerKind": "actor",
       "ownerId": 107001,
@@ -1676,7 +1659,11 @@
       "controlSkillId": 10700127,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1720,22 +1707,6 @@
       "applied": false
     },
     {
-      "identity": "actor|107002|10700213|0|10700213",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "sourceSkillId": 10700213,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700213,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "trigger-frame-missing"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|107002|10700222|0|10700222",
       "ownerKind": "actor",
       "ownerId": 107002,
@@ -1746,7 +1717,9 @@
       "reasons": [
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "heal-formula-not-literal-function-5",
+        "effect-target-any-unresolved"
       ],
       "applied": false
     },
@@ -1772,7 +1745,10 @@
       "controlSkillId": 10700227,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "applied": false
     },
@@ -1798,7 +1774,11 @@
       "controlSkillId": 10700327,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1816,35 +1796,6 @@
       "applied": false
     },
     {
-      "identity": "actor|108001|10800112|0|10800112",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800112,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800112,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800113|0|10800113",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800113,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800113,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|108001|10800121|2|10800127",
       "ownerKind": "actor",
       "ownerId": 108001,
@@ -1853,7 +1804,11 @@
       "controlSkillId": 10800127,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1893,21 +1848,9 @@
       "controlSkillId": 10800212,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|108002|10800213|0|10800213",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800213,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800213,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1925,19 +1868,6 @@
       "applied": false
     },
     {
-      "identity": "actor|108002|10800222|1|10800225",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800222,
-      "actionVariantIndex": 1,
-      "controlSkillId": 10800225,
-      "status": "unresolved",
-      "reasons": [
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|108002|10800222|2|10800227",
       "ownerKind": "actor",
       "ownerId": 108002,
@@ -1946,7 +1876,11 @@
       "controlSkillId": 10800227,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -1978,20 +1912,6 @@
       "applied": false
     },
     {
-      "identity": "actor|108003|10800313|0|10800313",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800313,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800313,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|108003|10800322|0|10800322",
       "ownerKind": "actor",
       "ownerId": 108003,
@@ -2001,7 +1921,12 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "stack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2014,7 +1939,11 @@
       "controlSkillId": 10800327,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2032,21 +1961,6 @@
       "applied": false
     },
     {
-      "identity": "actor|108005|10800513|0|10800513",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800513,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10800513,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|108005|10800522|2|10800527",
       "ownerKind": "actor",
       "ownerId": 108005,
@@ -2055,23 +1969,11 @@
       "controlSkillId": 10800527,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900113|0|10900113",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900113,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10900113,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2084,7 +1986,11 @@
       "controlSkillId": 10900127,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2110,7 +2016,11 @@
       "controlSkillId": 10900227,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2154,20 +2064,6 @@
       "applied": false
     },
     {
-      "identity": "actor|111001|11100121|0|11100121",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100121,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11100121,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|111001|11100121|2|11100127",
       "ownerKind": "actor",
       "ownerId": 111001,
@@ -2176,7 +2072,11 @@
       "controlSkillId": 11100127,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2190,19 +2090,6 @@
       "status": "unresolved",
       "reasons": [
         "multiple-control-variants-without-root-selection"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200113|0|11200113",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200113,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11200113,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2241,7 +2128,11 @@
       "controlSkillId": 11200127,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2258,7 +2149,12 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "effect-combine-semantics-unresolved",
+        "heal-formula-not-literal-function-5"
       ],
       "applied": false
     },
@@ -2302,23 +2198,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|112002|11200213|0|11200213",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "sourceSkillId": 11200213,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11200213,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "projectile-impact-frame-runtime-dependent",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "stack-state-machine-deferred-to-m8-c",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "heal-formula-not-literal-function-5"
       ],
       "applied": false
     },
@@ -2331,7 +2217,14 @@
       "controlSkillId": 11200222,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-ally-unresolved",
+        "property-formula-not-literal-function-5",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "stack-state-machine-deferred-to-m8-c",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "applied": false
     },
@@ -2358,7 +2251,11 @@
       "controlSkillId": 11200227,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2376,22 +2273,6 @@
       "applied": false
     },
     {
-      "identity": "actor|199001|19900113|0|19900113",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900113,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900113,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|199001|19900122|2|19900127",
       "ownerKind": "actor",
       "ownerId": 199001,
@@ -2400,7 +2281,11 @@
       "controlSkillId": 19900127,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2418,22 +2303,6 @@
       "applied": false
     },
     {
-      "identity": "actor|199002|19900213|0|19900213",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900213,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900213,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|199002|19900222|2|19900227",
       "ownerKind": "actor",
       "ownerId": 199002,
@@ -2442,7 +2311,11 @@
       "controlSkillId": 19900227,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
       ],
       "applied": false
     },
@@ -2456,22 +2329,6 @@
       "status": "unresolved",
       "reasons": [
         "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900313|0|19900313",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900313,
-      "actionVariantIndex": 0,
-      "controlSkillId": 19900313,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "applied": false
     },
@@ -2498,35 +2355,6 @@
       "status": "unresolved",
       "reasons": [
         "multiple-control-variants-without-root-selection"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500001|50000102|0|50000102",
-      "ownerKind": "kibo",
-      "ownerId": 500001,
-      "sourceSkillId": 50000102,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50000102,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500002|50000202|0|50000202",
-      "ownerKind": "kibo",
-      "ownerId": 500002,
-      "sourceSkillId": 50000202,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50000202,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "applied": false
     },
@@ -2559,21 +2387,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500003|50000302|0|50000302",
-      "ownerKind": "kibo",
-      "ownerId": 500003,
-      "sourceSkillId": 50000302,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50000302,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500003|502019|0|502019",
       "ownerKind": "kibo",
       "ownerId": 500003,
@@ -2598,22 +2411,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500004|50000404|0|50000404",
-      "ownerKind": "kibo",
-      "ownerId": 500004,
-      "sourceSkillId": 50000404,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50000404,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "applied": false
     },
@@ -2786,20 +2583,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500026|50002616|0|50002616",
-      "ownerKind": "kibo",
-      "ownerId": 500026,
-      "sourceSkillId": 50002616,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50002616,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500026|505006|0|505006",
       "ownerKind": "kibo",
       "ownerId": 500026,
@@ -2810,21 +2593,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500035|50003503|0|50003503",
-      "ownerKind": "kibo",
-      "ownerId": 500035,
-      "sourceSkillId": 50003503,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50003503,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "applied": false
     },
@@ -2871,40 +2639,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500038|50003801|0|50003801",
-      "ownerKind": "kibo",
-      "ownerId": 500038,
-      "sourceSkillId": 50003801,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50003801,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500038|501003|0|501003",
       "ownerKind": "kibo",
       "ownerId": 500038,
       "sourceSkillId": 501003,
       "actionVariantIndex": 0,
       "controlSkillId": 501003,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500039|50003901|0|50003901",
-      "ownerKind": "kibo",
-      "ownerId": 500039,
-      "sourceSkillId": 50003901,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50003901,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -2997,20 +2737,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500046|50004604|0|50004604",
-      "ownerKind": "kibo",
-      "ownerId": 500046,
-      "sourceSkillId": 50004604,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50004604,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500046|505013|0|505013",
       "ownerKind": "kibo",
       "ownerId": 500046,
@@ -3025,40 +2751,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500047|50004705|0|50004705",
-      "ownerKind": "kibo",
-      "ownerId": 500047,
-      "sourceSkillId": 50004705,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50004705,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500047|505014|0|505014",
       "ownerKind": "kibo",
       "ownerId": 500047,
       "sourceSkillId": 505014,
       "actionVariantIndex": 0,
       "controlSkillId": 505014,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500048|50004805|0|50004805",
-      "ownerKind": "kibo",
-      "ownerId": 500048,
-      "sourceSkillId": 50004805,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50004805,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -3103,20 +2801,8 @@
       "controlSkillId": 506008,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500053|50005302|0|50005302",
-      "ownerKind": "kibo",
-      "ownerId": 500053,
-      "sourceSkillId": 50005302,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50005302,
-      "status": "unresolved",
-      "reasons": [
-        "projectile-impact-frame-runtime-dependent"
+        "shield-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -3129,7 +2815,8 @@
       "controlSkillId": 506008,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "shield-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -3140,20 +2827,6 @@
       "sourceSkillId": 507001,
       "actionVariantIndex": 0,
       "controlSkillId": 507001,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500058|50005801|0|50005801",
-      "ownerKind": "kibo",
-      "ownerId": 500058,
-      "sourceSkillId": 50005801,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50005801,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -3176,19 +2849,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500066|50006601|0|50006601",
-      "ownerKind": "kibo",
-      "ownerId": 500066,
-      "sourceSkillId": 50006601,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50006601,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500066|502004|0|502004",
       "ownerKind": "kibo",
       "ownerId": 500066,
@@ -3201,7 +2861,12 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "pack-state-machine-deferred-to-m8-c",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "applied": false
     },
@@ -3248,20 +2913,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500081|50008102|0|50008102",
-      "ownerKind": "kibo",
-      "ownerId": 500081,
-      "sourceSkillId": 50008102,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50008102,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500081|503007|0|503007",
       "ownerKind": "kibo",
       "ownerId": 500081,
@@ -3271,35 +2922,11 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500081|50008104|0|50008104",
-      "ownerKind": "kibo",
-      "ownerId": 500081,
-      "sourceSkillId": 50008104,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50008104,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500082|50008201|0|50008201",
-      "ownerKind": "kibo",
-      "ownerId": 500082,
-      "sourceSkillId": 50008201,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50008201,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "property-formula-not-literal-function-5"
       ],
       "applied": false
     },
@@ -3313,7 +2940,9 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -3328,36 +2957,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500085|50008503|0|50008503",
-      "ownerKind": "kibo",
-      "ownerId": 500085,
-      "sourceSkillId": 50008503,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50008503,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500093|50009305|0|50009305",
-      "ownerKind": "kibo",
-      "ownerId": 500093,
-      "sourceSkillId": 50009305,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50009305,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "applied": false
     },
@@ -3398,7 +2997,8 @@
       "controlSkillId": 502010,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -3411,7 +3011,8 @@
       "controlSkillId": 502010,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -3541,20 +3142,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500126|50012602|0|50012602",
-      "ownerKind": "kibo",
-      "ownerId": 500126,
-      "sourceSkillId": 50012602,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50012602,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500126|504012|0|504012",
       "ownerKind": "kibo",
       "ownerId": 500126,
@@ -3569,40 +3156,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500127|50012702|0|50012702",
-      "ownerKind": "kibo",
-      "ownerId": 500127,
-      "sourceSkillId": 50012702,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50012702,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500127|504012|0|504012",
       "ownerKind": "kibo",
       "ownerId": 500127,
       "sourceSkillId": 504012,
       "actionVariantIndex": 0,
       "controlSkillId": 504012,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500128|50012802|0|50012802",
-      "ownerKind": "kibo",
-      "ownerId": 500128,
-      "sourceSkillId": 50012802,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50012802,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -3681,20 +3240,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500138|50013801|0|50013801",
-      "ownerKind": "kibo",
-      "ownerId": 500138,
-      "sourceSkillId": 50013801,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50013801,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500138|501001|0|501001",
       "ownerKind": "kibo",
       "ownerId": 500138,
@@ -3709,40 +3254,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500139|50013901|0|50013901",
-      "ownerKind": "kibo",
-      "ownerId": 500139,
-      "sourceSkillId": 50013901,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50013901,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500139|506005|0|506005",
       "ownerKind": "kibo",
       "ownerId": 500139,
       "sourceSkillId": 506005,
       "actionVariantIndex": 0,
       "controlSkillId": 506005,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500140|50014001|0|50014001",
-      "ownerKind": "kibo",
-      "ownerId": 500140,
-      "sourceSkillId": 50014001,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50014001,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -3877,20 +3394,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500157|50015702|0|50015702",
-      "ownerKind": "kibo",
-      "ownerId": 500157,
-      "sourceSkillId": 50015702,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50015702,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500157|501005|0|501005",
       "ownerKind": "kibo",
       "ownerId": 500157,
@@ -3911,20 +3414,6 @@
       "sourceSkillId": 50015704,
       "actionVariantIndex": 0,
       "controlSkillId": 50015704,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500158|50015802|0|50015802",
-      "ownerKind": "kibo",
-      "ownerId": 500158,
-      "sourceSkillId": 50015802,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50015802,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -4059,20 +3548,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500185|50018502|0|50018502",
-      "ownerKind": "kibo",
-      "ownerId": 500185,
-      "sourceSkillId": 50018502,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50018502,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500185|504009|0|504009",
       "ownerKind": "kibo",
       "ownerId": 500185,
@@ -4083,19 +3558,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500186|50018602|0|50018602",
-      "ownerKind": "kibo",
-      "ownerId": 500186,
-      "sourceSkillId": 50018602,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50018602,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing"
       ],
       "applied": false
     },
@@ -4128,43 +3590,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500209|50020901|0|50020901",
-      "ownerKind": "kibo",
-      "ownerId": 500209,
-      "sourceSkillId": 50020901,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50020901,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500213|509001|0|509001",
       "ownerKind": "kibo",
       "ownerId": 500213,
       "sourceSkillId": 509001,
       "actionVariantIndex": 0,
       "controlSkillId": 509001,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500220|50022001|0|50022001",
-      "ownerKind": "kibo",
-      "ownerId": 500220,
-      "sourceSkillId": 50022001,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50022001,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -4215,23 +3646,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500258|50025801|0|50025801",
-      "ownerKind": "kibo",
-      "ownerId": 500258,
-      "sourceSkillId": 50025801,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50025801,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500258|505001|0|505001",
       "ownerKind": "kibo",
       "ownerId": 500258,
@@ -4241,40 +3655,6 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500259|50025901|0|50025901",
-      "ownerKind": "kibo",
-      "ownerId": 500259,
-      "sourceSkillId": 50025901,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50025901,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500260|50026001|0|50026001",
-      "ownerKind": "kibo",
-      "ownerId": 500260,
-      "sourceSkillId": 50026001,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50026001,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent"
       ],
       "applied": false
@@ -4322,20 +3702,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500304|50030401|0|50030401",
-      "ownerKind": "kibo",
-      "ownerId": 500304,
-      "sourceSkillId": 50030401,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50030401,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500304|504012|0|504012",
       "ownerKind": "kibo",
       "ownerId": 500304,
@@ -4363,40 +3729,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500305|50030501|0|50030501",
-      "ownerKind": "kibo",
-      "ownerId": 500305,
-      "sourceSkillId": 50030501,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50030501,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500305|504020|0|504020",
       "ownerKind": "kibo",
       "ownerId": 500305,
       "sourceSkillId": 504020,
       "actionVariantIndex": 0,
       "controlSkillId": 504020,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500306|50030601|0|50030601",
-      "ownerKind": "kibo",
-      "ownerId": 500306,
-      "sourceSkillId": 50030601,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50030601,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -4419,20 +3757,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500313|50031302|0|50031302",
-      "ownerKind": "kibo",
-      "ownerId": 500313,
-      "sourceSkillId": 50031302,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50031302,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500313|501016|0|501016",
       "ownerKind": "kibo",
       "ownerId": 500313,
@@ -4447,53 +3771,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500322|50032201|0|50032201",
-      "ownerKind": "kibo",
-      "ownerId": 500322,
-      "sourceSkillId": 50032201,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50032201,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500322|504001|0|504001",
       "ownerKind": "kibo",
       "ownerId": 500322,
       "sourceSkillId": 504001,
       "actionVariantIndex": 0,
       "controlSkillId": 504001,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500323|50032301|0|50032301",
-      "ownerKind": "kibo",
-      "ownerId": 500323,
-      "sourceSkillId": 50032301,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50032301,
-      "status": "unresolved",
-      "reasons": [
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500324|50032401|0|50032401",
-      "ownerKind": "kibo",
-      "ownerId": 500324,
-      "sourceSkillId": 50032401,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50032401,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
@@ -4566,23 +3849,7 @@
       "controlSkillId": 505011,
       "status": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500360|50036001|0|50036001",
-      "ownerKind": "kibo",
-      "ownerId": 500360,
-      "sourceSkillId": 50036001,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50036001,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -4643,23 +3910,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500399|50039901|0|50039901",
-      "ownerKind": "kibo",
-      "ownerId": 500399,
-      "sourceSkillId": 50039901,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50039901,
-      "status": "unresolved",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500399|502007|0|502007",
       "ownerKind": "kibo",
       "ownerId": 500399,
@@ -4674,40 +3924,12 @@
       "applied": false
     },
     {
-      "identity": "kibo|500467|50046701|0|50046701",
-      "ownerKind": "kibo",
-      "ownerId": 500467,
-      "sourceSkillId": 50046701,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50046701,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500467|506001|0|506001",
       "ownerKind": "kibo",
       "ownerId": 500467,
       "sourceSkillId": 506001,
       "actionVariantIndex": 0,
       "controlSkillId": 506001,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500468|50046801|0|50046801",
-      "ownerKind": "kibo",
-      "ownerId": 500468,
-      "sourceSkillId": 50046801,
-      "actionVariantIndex": 0,
-      "controlSkillId": 50046801,
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",

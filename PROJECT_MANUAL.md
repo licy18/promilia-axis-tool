@@ -1620,6 +1620,12 @@ M8 拆分为 M8-A（机器证据包与静态属性编译）、M8-B（全动作 B
 
 完整发布守门通过 110 个测试文件、618 条测试和 49/49 production preview；总 JavaScript gzip 696,976B，Workbench 主块 369,521B。下一步为 M8-B：从完整 Battle 配置生成全动作效果图，并让已验证动态属性生命周期改变后续动作结算。
 
+### M8-B 全动作效果与动态属性运行时已完成（2026-07-21）
+
+唯一同步入口现递归生成完整 Battle 效果图，并将 562 个公开动作关联到 3,202 条动作级效果绑定。逐维审计覆盖 Damage、PropertyChange、Sp、Heal、Shield、Inject、Pack、Judgment、Stack 及印记容器；50 条来源完整的动态属性绑定正式计算，其余均以 `verified-zero / unresolved` 和结构化原因保留。统一 generation、effect runtime 与 verified combat runtime 已接通真实生命周期和后续命中重算，阻塞动作、手工追踪效果及来源不完整的循环状态不能越过 calculator 边界。
+
+发布守门通过 111 个测试文件、622 条测试和 49/49 production preview；总 JavaScript gzip 702,741B，Workbench 主块 362,616B。下一步为 M8-C：以现有效果图驱动队伍印记获取、逐层到期、消费和九属性调谐，不扩展未闭环回调。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
