@@ -1446,6 +1446,7 @@ export function projectSimulationResult({
   kiboResourceEvents = [],
   verifiedCombatRuntime = null,
   verifiedBattleEffectGeneration = null,
+  verifiedTuningMarkGeneration = null,
   effectTimeline,
   actionRuleDiagnostics,
   actionExecutionPlan,
@@ -1608,6 +1609,7 @@ export function projectSimulationResult({
     kiboResourceTimeline,
     verifiedCombatRuntime,
     verifiedBattleEffectGeneration,
+    verifiedTuningMarkGeneration,
     effectTimeline: runtimeOutputs.effectTimeline,
     controlledActorTimeline: runtimeOutputs.controlledActorTimeline,
     actionEffectRelationGraph: runtimeOutputs.actionEffectRelationGraph,
@@ -1619,9 +1621,8 @@ export function projectSimulationResult({
       totalProjectedToughnessDamage,
       totalSelfEnergyDelta,
       selfEnergyDeltaByActor,
-      projectedHitCount: damageTimeline.filter(
-        event => !event.stateEventKind
-      ).length,
+      projectedHitCount: damageTimeline.filter(event => !event.stateEventKind)
+        .length,
       resourceEventCount: resourceTimeline.length,
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,

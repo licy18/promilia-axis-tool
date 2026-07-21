@@ -175,8 +175,8 @@ describe('verified combat project replay consistency', () => {
         ])
       )
     ).toEqual({
-      'verified-replay-han-star': 7,
-      'verified-replay-pangpang-combo': 1,
+      'verified-replay-han-star': 8,
+      'verified-replay-pangpang-combo': 2,
       'verified-replay-muyin-charged': 3,
       'verified-replay-wind-kibo': 6,
       'verified-replay-wind-kibo-combo': 1,
@@ -217,7 +217,9 @@ describe('verified combat project replay consistency', () => {
           null,
         ],
       ],
+      tuningMarkEventCount: expect.any(Number),
     });
+    expect(signatures[0].tuningMarkEventCount).toBeGreaterThan(0);
     for (const signature of signatures.slice(1)) {
       expect(signature).toEqual(signatures[0]);
     }
@@ -558,6 +560,21 @@ function createVerifiedReplaySignature(draft) {
       event.payload.rawDamage,
       event.payload.toughnessDamage,
     ]),
+    tuningMarkEventCount:
+      result.verifiedCombatRuntime.tuningMarkRuntime?.events?.length ?? 0,
+    tuningMarkSignature: (
+      result.verifiedCombatRuntime.tuningMarkRuntime?.events ?? []
+    ).map(event => [
+      event.kind,
+      event.timeMs,
+      event.markId,
+      event.before,
+      event.delta,
+      event.after,
+      event.actionId,
+    ]),
+    finalTuningMarkState:
+      result.verifiedCombatRuntime.tuningMarkRuntime?.finalState ?? [],
     finalState: result.verifiedCombatRuntime.finalState,
     spUnitSignature: {
       actorMaximums: result.verifiedCombatRuntime.finalState.actorEnergy

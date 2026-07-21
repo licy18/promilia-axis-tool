@@ -26,6 +26,7 @@ describe('cycle boundary inheritance projection', () => {
         inheritedKiboEnergyCount: 1,
         inheritedControlledActorId: 'actor-2',
         inheritedEffectCount: 1,
+        inheritedTuningMarkLayerCount: 2,
         clearedRuntimeSampleCaptureCount: 1,
       },
       applied: true,
@@ -74,6 +75,17 @@ describe('cycle boundary inheritance projection', () => {
           effectId: 'focus',
           remainingDurationMs: 500,
           stacks: 2,
+        },
+      ],
+      tuningMarks: [
+        {
+          markId: 150,
+          profileKey: 'fire',
+          heldReadyRemainingMs: 4700,
+          layers: [
+            { remainingDurationMs: 19000 },
+            { remainingDurationMs: 19500 },
+          ],
         },
       ],
     });
@@ -377,6 +389,42 @@ function createRuntimeOutputs() {
           },
         },
       ],
+      tuningMarkRuntime: {
+        initialState: [
+          {
+            markId: 150,
+            profileKey: 'fire',
+            elementName: '火',
+            heldReadyRemainingMs: 0,
+            layers: [
+              {
+                remainingDurationMs: 20000,
+                sourceActionId: 'initial-fire',
+                sourceActorId: 'actor-1',
+                sourceIdentity: { source: 'initial-fire' },
+              },
+            ],
+          },
+        ],
+        events: [
+          {
+            kind: 'acquire',
+            timeMs: 500,
+            markId: 150,
+            actionId: 'action-before',
+            actorId: 'actor-1',
+            layerIds: ['fire-layer-2'],
+            sourceIdentity: { source: 'action-before' },
+          },
+          {
+            kind: 'held-trigger',
+            timeMs: 700,
+            markId: 150,
+            heldReadyAtMs: 5700,
+            layerIds: [],
+          },
+        ],
+      },
     },
   };
 }

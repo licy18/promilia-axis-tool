@@ -3,19 +3,19 @@
   "kind": "azpr-verified-combat-effect-coverage",
   "status": "verified-combat-effect-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "1366c171672c6ab9d75f92975053d1f0489f8341fe063e61ce5a6721e7e844e3",
+  "packageHash": "91d8bc5dc98d05e67134ece031636e84499e620076a2efa2132fcf0562ecbde9",
   "sourceDenominator": {
     "kind": "current-client-public-action-control-battle-element-graph",
     "actionCount": 562,
-    "controlCount": 452,
-    "directRootCount": 3428,
+    "controlCount": 453,
+    "directRootCount": 3433,
     "graphNodeCount": 3673
   },
   "summary": {
-    "effectBindingCount": 3202,
-    "appliedEffectBindingCount": 50,
+    "effectBindingCount": 3208,
+    "appliedEffectBindingCount": 125,
     "verifiedZeroEffectBindingCount": 2,
-    "unresolvedEffectBindingCount": 3150,
+    "unresolvedEffectBindingCount": 3081,
     "kindCounts": {
       "damage": 1116,
       "inject": 358,
@@ -28,26 +28,26 @@
       "stack": 109
     },
     "bindingKindCounts": {
-      "damage": 445,
+      "damage": 446,
       "inject": 1264,
       "judgment": 80,
       "pack": 163,
-      "property-change": 999,
+      "property-change": 1003,
       "shield": 10,
       "sp": 89,
-      "stack": 152
+      "stack": 153
     },
     "unresolvedReasonCounts": {
       "effect-combine-semantics-unresolved": 3,
       "effect-target-ally-unresolved": 14,
       "effect-target-any-unresolved": 59,
-      "effect-target-unresolved": 2735,
-      "effect-trigger-frame-missing": 759,
+      "effect-target-unresolved": 2607,
+      "effect-trigger-frame-missing": 761,
       "heal-formula-not-literal-function-5": 62,
-      "inject-wrapper-classified-through-child-edges": 1264,
+      "inject-wrapper-classified-through-child-edges": 1208,
       "judgment-state-machine-deferred-to-m8-c": 80,
-      "nested-damage-trigger-lifecycle-not-expanded": 383,
-      "nested-effect-wrapper-semantics-unresolved": 894,
+      "nested-damage-trigger-lifecycle-not-expanded": 384,
+      "nested-effect-wrapper-semantics-unresolved": 846,
       "pack-state-machine-deferred-to-m8-c": 163,
       "property-change-type-not-battle-property": 1,
       "property-conditions-not-expanded": 27,
@@ -55,36 +55,43 @@
       "shield-formula-not-literal-function-5": 10,
       "sp-formula-not-literal-function-5": 84,
       "sp-recover-type-not-direct-sp": 10,
-      "stack-state-machine-deferred-to-m8-c": 152
+      "stack-state-machine-deferred-to-m8-c": 18,
+      "tuning-consume-judgment-missing": 6,
+      "tuning-consume-mark-identity-ambiguous": 38,
+      "tuning-consume-success-branch-unresolved": 6,
+      "tuning-mark-max-mismatch": 45,
+      "tuning-mark-relation-notDelElementDataList-unresolved": 9,
+      "tuning-mark-relation-triggerEffectList-unresolved": 1
     },
     "dimensions": {
       "damage": {
-        "unresolved": 383,
-        "verified-zero": 2819
+        "unresolved": 384,
+        "verified-zero": 2824
       },
       "toughness": {
-        "verified-zero": 3202
+        "verified-zero": 3208
       },
       "sp": {
         "unresolved": 89,
-        "verified-zero": 3113
+        "verified-zero": 3119
       },
       "hp": {
         "unresolved": 62,
-        "verified-zero": 3140
+        "verified-zero": 3146
       },
       "shield": {
         "unresolved": 10,
-        "verified-zero": 3192
+        "verified-zero": 3198
       },
       "dynamicProperty": {
         "applied": 50,
-        "unresolved": 947,
-        "verified-zero": 2205
+        "unresolved": 951,
+        "verified-zero": 2207
       },
       "mark": {
-        "unresolved": 395,
-        "verified-zero": 2807
+        "applied": 122,
+        "unresolved": 330,
+        "verified-zero": 2756
       }
     }
   },
@@ -206,9 +213,9 @@
       "sourceSkillId": 10100312,
       "sourceSkillName": "花照夜",
       "effectBindingCount": 14,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 2,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 14,
+      "unresolvedEffectCount": 12,
       "dimensions": {
         "damage": {
           "unresolved": 2,
@@ -231,7 +238,7 @@
           "verified-zero": 11
         },
         "mark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 12
         }
       },
@@ -284,9 +291,9 @@
       "sourceSkillId": 10100313,
       "sourceSkillName": "沐星雨",
       "effectBindingCount": 16,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 3,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 16,
+      "unresolvedEffectCount": 13,
       "dimensions": {
         "damage": {
           "unresolved": 3,
@@ -309,7 +316,7 @@
           "verified-zero": 8
         },
         "mark": {
-          "unresolved": 3,
+          "applied": 3,
           "verified-zero": 13
         }
       },
@@ -341,9 +348,9 @@
       "sourceSkillId": 10100322,
       "sourceSkillName": "缚风烟",
       "effectBindingCount": 9,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 9,
+      "unresolvedEffectCount": 8,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -366,7 +373,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 8
         }
       },
@@ -888,9 +895,9 @@
       "sourceSkillId": 10101012,
       "sourceSkillName": "落花影",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 4,
@@ -912,8 +919,9 @@
           "verified-zero": 7
         },
         "mark": {
+          "applied": 2,
           "unresolved": 1,
-          "verified-zero": 6
+          "verified-zero": 4
         }
       },
       "effectIdentities": [
@@ -958,9 +966,9 @@
       "sourceSkillId": 10101013,
       "sourceSkillName": "世间缘",
       "effectBindingCount": 49,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 6,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 49,
+      "unresolvedEffectCount": 43,
       "dimensions": {
         "damage": {
           "unresolved": 14,
@@ -984,8 +992,9 @@
           "verified-zero": 44
         },
         "mark": {
-          "unresolved": 13,
-          "verified-zero": 36
+          "applied": 9,
+          "unresolved": 12,
+          "verified-zero": 28
         }
       },
       "effectIdentities": [
@@ -1150,9 +1159,9 @@
       "sourceSkillId": 10200101,
       "sourceSkillName": "风翼枪术",
       "effectBindingCount": 9,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 9,
+      "unresolvedEffectCount": 8,
       "dimensions": {
         "damage": {
           "unresolved": 2,
@@ -1176,7 +1185,8 @@
           "verified-zero": 6
         },
         "mark": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 7
         }
       },
@@ -1369,9 +1379,9 @@
       "sourceSkillId": 10200113,
       "sourceSkillName": "绝境高墙",
       "effectBindingCount": 24,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 3,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 24,
+      "unresolvedEffectCount": 21,
       "dimensions": {
         "damage": {
           "unresolved": 6,
@@ -1394,7 +1404,8 @@
           "verified-zero": 16
         },
         "mark": {
-          "unresolved": 6,
+          "applied": 3,
+          "unresolved": 3,
           "verified-zero": 18
         }
       },
@@ -1611,9 +1622,9 @@
       "sourceSkillId": 10300213,
       "sourceSkillName": "封印，解除！",
       "effectBindingCount": 25,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 2,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 25,
+      "unresolvedEffectCount": 23,
       "dimensions": {
         "damage": {
           "unresolved": 6,
@@ -1636,8 +1647,9 @@
           "verified-zero": 22
         },
         "mark": {
+          "applied": 2,
           "unresolved": 6,
-          "verified-zero": 19
+          "verified-zero": 17
         }
       },
       "effectIdentities": [
@@ -1677,9 +1689,9 @@
       "sourceSkillId": 10300221,
       "sourceSkillName": "一瞬的灼热",
       "effectBindingCount": 6,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 6,
+      "unresolvedEffectCount": 5,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -1702,7 +1714,7 @@
           "verified-zero": 2
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
@@ -1795,7 +1807,8 @@
           "verified-zero": 12
         },
         "mark": {
-          "unresolved": 4,
+          "applied": 2,
+          "unresolved": 2,
           "verified-zero": 18
         }
       },
@@ -2035,7 +2048,8 @@
           "verified-zero": 12
         },
         "mark": {
-          "unresolved": 4,
+          "applied": 2,
+          "unresolved": 2,
           "verified-zero": 18
         }
       },
@@ -2971,8 +2985,9 @@
           "verified-zero": 12
         },
         "mark": {
+          "applied": 2,
           "unresolved": 3,
-          "verified-zero": 20
+          "verified-zero": 18
         }
       },
       "effectIdentities": [
@@ -3211,9 +3226,9 @@
       "sourceSkillId": 10800112,
       "sourceSkillName": "跃空行枪",
       "effectBindingCount": 24,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 2,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 24,
+      "unresolvedEffectCount": 22,
       "dimensions": {
         "damage": {
           "unresolved": 4,
@@ -3237,8 +3252,9 @@
           "verified-zero": 18
         },
         "mark": {
-          "unresolved": 5,
-          "verified-zero": 19
+          "applied": 3,
+          "unresolved": 4,
+          "verified-zero": 17
         }
       },
       "effectIdentities": [
@@ -3300,9 +3316,9 @@
       "sourceSkillId": 10800113,
       "sourceSkillName": "灼焰烈舞",
       "effectBindingCount": 22,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 2,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 22,
+      "unresolvedEffectCount": 20,
       "dimensions": {
         "damage": {
           "unresolved": 5,
@@ -3326,8 +3342,9 @@
           "verified-zero": 16
         },
         "mark": {
+          "applied": 2,
           "unresolved": 4,
-          "verified-zero": 18
+          "verified-zero": 16
         }
       },
       "effectIdentities": [
@@ -3611,9 +3628,9 @@
       "sourceSkillId": 10800213,
       "sourceSkillName": "万灵的誓约",
       "effectBindingCount": 18,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 18,
+      "unresolvedEffectCount": 17,
       "dimensions": {
         "damage": {
           "unresolved": 3,
@@ -3636,8 +3653,9 @@
           "verified-zero": 10
         },
         "mark": {
-          "unresolved": 3,
-          "verified-zero": 15
+          "applied": 3,
+          "unresolved": 2,
+          "verified-zero": 13
         }
       },
       "effectIdentities": [
@@ -3971,20 +3989,44 @@
       "actionKind": "star-carry",
       "sourceSkillId": 10800322,
       "sourceSkillName": "唤雷箭",
-      "effectBindingCount": 0,
-      "appliedEffectCount": 0,
+      "effectBindingCount": 6,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 0,
+      "unresolvedEffectCount": 5,
       "dimensions": {
-        "damage": {},
-        "toughness": {},
-        "sp": {},
-        "hp": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "mark": {}
+        "damage": {
+          "unresolved": 1,
+          "verified-zero": 5
+        },
+        "toughness": {
+          "verified-zero": 6
+        },
+        "sp": {
+          "verified-zero": 6
+        },
+        "hp": {
+          "verified-zero": 6
+        },
+        "shield": {
+          "verified-zero": 6
+        },
+        "dynamicProperty": {
+          "unresolved": 4,
+          "verified-zero": 2
+        },
+        "mark": {
+          "applied": 1,
+          "verified-zero": 5
+        }
       },
-      "effectIdentities": []
+      "effectIdentities": [
+        "10800322|0|elements|0|-3809486317990090417|element:-3809486317990090417|37|0",
+        "10800322|0|elements|0|-3809486317990090417|element:-637110086033006477|37|0",
+        "10800322|0|elements|0|-3809486317990090417|element:-1715488869977622004|37|0",
+        "10800322|0|elements|0|-3809486317990090417|element:-7783775984244194322|37|0",
+        "10800322|0|elements|1|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
+        "10800322|0|elements|2|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0"
+      ]
     },
     {
       "actionIdentity": "actor|108003|10800322|1|10800325",
@@ -4350,9 +4392,9 @@
       "sourceSkillId": 10900101,
       "sourceSkillName": "哈库茵剑舞",
       "effectBindingCount": 13,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 13,
+      "unresolvedEffectCount": 12,
       "dimensions": {
         "damage": {
           "unresolved": 3,
@@ -4375,7 +4417,8 @@
           "verified-zero": 7
         },
         "mark": {
-          "unresolved": 3,
+          "applied": 1,
+          "unresolved": 2,
           "verified-zero": 10
         }
       },
@@ -4559,9 +4602,9 @@
       "sourceSkillId": 10900113,
       "sourceSkillName": "绽华章之舞",
       "effectBindingCount": 15,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 15,
+      "unresolvedEffectCount": 14,
       "dimensions": {
         "damage": {
           "unresolved": 3,
@@ -4584,8 +4627,9 @@
           "verified-zero": 15
         },
         "mark": {
+          "applied": 2,
           "unresolved": 5,
-          "verified-zero": 10
+          "verified-zero": 8
         }
       },
       "effectIdentities": [
@@ -5396,9 +5440,9 @@
       "sourceSkillId": 11200112,
       "sourceSkillName": "女仆的问候礼",
       "effectBindingCount": 6,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 6,
+      "unresolvedEffectCount": 5,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -5421,7 +5465,7 @@
           "verified-zero": 2
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
@@ -5491,8 +5535,9 @@
           "verified-zero": 10
         },
         "mark": {
+          "applied": 2,
           "unresolved": 3,
-          "verified-zero": 23
+          "verified-zero": 21
         }
       },
       "effectIdentities": [
@@ -5807,8 +5852,9 @@
           "verified-zero": 18
         },
         "mark": {
+          "applied": 2,
           "unresolved": 4,
-          "verified-zero": 19
+          "verified-zero": 17
         }
       },
       "effectIdentities": [
@@ -6107,9 +6153,9 @@
       "sourceSkillId": 19900113,
       "sourceSkillName": "终将归于星海",
       "effectBindingCount": 79,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 5,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 79,
+      "unresolvedEffectCount": 74,
       "dimensions": {
         "damage": {
           "unresolved": 20,
@@ -6133,7 +6179,8 @@
           "verified-zero": 54
         },
         "mark": {
-          "unresolved": 21,
+          "applied": 5,
+          "unresolved": 16,
           "verified-zero": 58
         }
       },
@@ -6466,9 +6513,9 @@
       "sourceSkillId": 19900213,
       "sourceSkillName": "终将归于星海",
       "effectBindingCount": 79,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 5,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 79,
+      "unresolvedEffectCount": 74,
       "dimensions": {
         "damage": {
           "unresolved": 20,
@@ -6492,7 +6539,8 @@
           "verified-zero": 54
         },
         "mark": {
-          "unresolved": 21,
+          "applied": 5,
+          "unresolved": 16,
           "verified-zero": 58
         }
       },
@@ -6806,9 +6854,9 @@
       "sourceSkillId": 19900313,
       "sourceSkillName": "呼拉拉猛锤",
       "effectBindingCount": 18,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 18,
+      "unresolvedEffectCount": 17,
       "dimensions": {
         "damage": {
           "unresolved": 3,
@@ -6831,8 +6879,9 @@
           "verified-zero": 9
         },
         "mark": {
+          "applied": 2,
           "unresolved": 2,
-          "verified-zero": 16
+          "verified-zero": 14
         }
       },
       "effectIdentities": [
@@ -8005,9 +8054,9 @@
       "sourceSkillId": 50002504,
       "sourceSkillName": "拉加冲锋",
       "effectBindingCount": 10,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 10,
+      "unresolvedEffectCount": 9,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -8030,7 +8079,8 @@
           "verified-zero": 4
         },
         "mark": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 8
         }
       },
@@ -9625,9 +9675,9 @@
       "sourceSkillId": 50005701,
       "sourceSkillName": "猪突猛进",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -9650,7 +9700,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
@@ -9806,9 +9856,9 @@
       "sourceSkillId": 50006401,
       "sourceSkillName": "柔风飞刃",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -9831,7 +9881,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -9898,9 +9948,9 @@
       "sourceSkillId": 50006501,
       "sourceSkillName": "风锐翼展",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -9923,7 +9973,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -10332,9 +10382,9 @@
       "sourceSkillId": 50008102,
       "sourceSkillName": "碎冰寒矛",
       "effectBindingCount": 9,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 9,
+      "unresolvedEffectCount": 8,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -10357,7 +10407,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 8
         }
       },
@@ -10445,9 +10495,9 @@
       "sourceSkillId": 50008201,
       "sourceSkillName": "雷冠之力",
       "effectBindingCount": 10,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 10,
+      "unresolvedEffectCount": 9,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -10470,7 +10520,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 9
         }
       },
@@ -10542,9 +10592,9 @@
       "sourceSkillId": 50008303,
       "sourceSkillName": "火热跃击",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -10567,7 +10617,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -10634,9 +10684,9 @@
       "sourceSkillId": 50008403,
       "sourceSkillName": "炎火跃击",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -10659,7 +10709,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -10726,9 +10776,9 @@
       "sourceSkillId": 50008503,
       "sourceSkillName": "炽火陨星",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -10751,7 +10801,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -12762,9 +12812,9 @@
       "sourceSkillId": 50013801,
       "sourceSkillName": "宝石飞射",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -12787,7 +12837,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -12854,9 +12904,9 @@
       "sourceSkillId": 50013901,
       "sourceSkillName": "赤晶飞射",
       "effectBindingCount": 9,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 1,
-      "unresolvedEffectCount": 8,
+      "unresolvedEffectCount": 7,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -12879,7 +12929,7 @@
           "verified-zero": 5
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 8
         }
       },
@@ -12950,9 +13000,9 @@
       "sourceSkillId": 50014001,
       "sourceSkillName": "炎晶爆袭",
       "effectBindingCount": 9,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 1,
-      "unresolvedEffectCount": 8,
+      "unresolvedEffectCount": 7,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -12975,7 +13025,7 @@
           "verified-zero": 5
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 8
         }
       },
@@ -14093,9 +14143,9 @@
       "sourceSkillId": 50017901,
       "sourceSkillName": "音波",
       "effectBindingCount": 5,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -14118,7 +14168,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
@@ -14185,9 +14235,9 @@
       "sourceSkillId": 50018001,
       "sourceSkillName": "喧哗音波",
       "effectBindingCount": 6,
-      "appliedEffectCount": 1,
+      "appliedEffectCount": 2,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -14211,7 +14261,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
@@ -14279,9 +14329,9 @@
       "sourceSkillId": 50018101,
       "sourceSkillName": "汹涌音波",
       "effectBindingCount": 12,
-      "appliedEffectCount": 7,
+      "appliedEffectCount": 8,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -14305,7 +14355,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 11
         }
       },
@@ -15108,9 +15158,9 @@
       "sourceSkillId": 50023101,
       "sourceSkillName": "霸主奔袭",
       "effectBindingCount": 10,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 10,
+      "unresolvedEffectCount": 9,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -15133,7 +15183,8 @@
           "verified-zero": 4
         },
         "mark": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 8
         }
       },
@@ -15205,9 +15256,9 @@
       "sourceSkillId": 50024401,
       "sourceSkillName": "哞哞拳",
       "effectBindingCount": 6,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 6,
+      "unresolvedEffectCount": 5,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -15230,7 +15281,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
@@ -15298,9 +15349,9 @@
       "sourceSkillId": 50024501,
       "sourceSkillName": "焰牛冲拳",
       "effectBindingCount": 6,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 6,
+      "unresolvedEffectCount": 5,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -15323,7 +15374,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
@@ -15391,9 +15442,9 @@
       "sourceSkillId": 50024601,
       "sourceSkillName": "烈焰冲拳",
       "effectBindingCount": 6,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 6,
+      "unresolvedEffectCount": 5,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -15416,7 +15467,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
@@ -16045,9 +16096,9 @@
       "sourceSkillId": 50029601,
       "sourceSkillName": "雷霆穿梭",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -16070,7 +16121,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
@@ -16139,9 +16190,9 @@
       "sourceSkillId": 50030401,
       "sourceSkillName": "风旋",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -16164,7 +16215,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
@@ -16233,9 +16284,9 @@
       "sourceSkillId": 50030501,
       "sourceSkillName": "大风旋",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -16258,7 +16309,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
@@ -16327,9 +16378,9 @@
       "sourceSkillId": 50030601,
       "sourceSkillName": "与风共舞",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -16352,7 +16403,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
@@ -16781,9 +16832,9 @@
       "sourceSkillId": 50035401,
       "sourceSkillName": "下压",
       "effectBindingCount": 8,
-      "appliedEffectCount": 3,
+      "appliedEffectCount": 4,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -16807,7 +16858,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 7
         }
       },
@@ -16877,9 +16928,9 @@
       "sourceSkillId": 50035501,
       "sourceSkillName": "暗影下压",
       "effectBindingCount": 13,
-      "appliedEffectCount": 8,
+      "appliedEffectCount": 9,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 4,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -16903,7 +16954,7 @@
           "verified-zero": 3
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 12
         }
       },
@@ -17250,9 +17301,9 @@
       "sourceSkillId": 50036801,
       "sourceSkillName": "符之乐声",
       "effectBindingCount": 7,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 7,
+      "unresolvedEffectCount": 6,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -17276,7 +17327,7 @@
           "verified-zero": 5
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
@@ -17345,9 +17396,9 @@
       "sourceSkillId": 50036901,
       "sourceSkillName": "呱乐演奏",
       "effectBindingCount": 14,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 14,
+      "unresolvedEffectCount": 13,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -17371,7 +17422,7 @@
           "verified-zero": 12
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 13
         }
       },
@@ -17447,9 +17498,9 @@
       "sourceSkillId": 50037001,
       "sourceSkillName": "风暴音域",
       "effectBindingCount": 13,
-      "appliedEffectCount": 0,
+      "appliedEffectCount": 1,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 13,
+      "unresolvedEffectCount": 12,
       "dimensions": {
         "damage": {
           "unresolved": 1,
@@ -17473,7 +17524,7 @@
           "verified-zero": 11
         },
         "mark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 12
         }
       },
@@ -18156,48 +18207,6 @@
       "sourceIdentity": "battle-effect:10100312:0:-3716196104709416648:935768788960962096:94"
     },
     {
-      "effectIdentity": "10100312|0|elements|3|-1498771669867596146|element:-1498771669867596146|70|0",
-      "controlSkillId": 10100312,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70"
-    },
-    {
-      "effectIdentity": "10100312|0|elements|3|-1498771669867596146|element:-1498771669867596146|63|1",
-      "controlSkillId": 10100312,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63"
-    },
-    {
       "effectIdentity": "10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
       "controlSkillId": 10100312,
       "mapIndex": 0,
@@ -18306,69 +18315,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100312:0:466374251647106866:unresolved:unresolved"
-    },
-    {
-      "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:-1498771669867596146|207|0",
-      "controlSkillId": 10100313,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:-1498771669867596146:-6215383830795215380:207"
-    },
-    {
-      "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:-1498771669867596146|223|1",
-      "controlSkillId": 10100313,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:-1498771669867596146:2700200137312345580:223"
-    },
-    {
-      "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:-1498771669867596146|193|2",
-      "controlSkillId": 10100313,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:-1498771669867596146:6998348329063063020:193"
     },
     {
       "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
@@ -18756,27 +18702,6 @@
       "sourceIdentity": "battle-effect:10100322:0:-15343624725538709:unresolved:unresolved"
     },
     {
-      "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:-1498771669867596146|57|0",
-      "controlSkillId": 10100322,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100322:0:-1498771669867596146:-5797025868792535592:57"
-    },
-    {
       "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
       "controlSkillId": 10100322,
       "mapIndex": 0,
@@ -18884,48 +18809,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100711:0:5447754402450284170:-7726117596917382362:34"
-    },
-    {
-      "effectIdentity": "10100712|1|elements|4|-1498771669867596146|element:-1498771669867596146|38|0",
-      "controlSkillId": 10100712,
-      "mapIndex": 1,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100712:1:-1498771669867596146:-9024578504815764059:38"
-    },
-    {
-      "effectIdentity": "10100712|1|elements|4|-1498771669867596146|element:-1498771669867596146|58|1",
-      "controlSkillId": 10100712,
-      "mapIndex": 1,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100712:1:-1498771669867596146:9058851595432140197:58"
     },
     {
       "effectIdentity": "10100712|1|elements|4|-1498771669867596146|element:3879285143630828198|38|0",
@@ -20985,28 +20868,6 @@
       "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50"
     },
     {
-      "effectIdentity": "10101012|0|elements|3|-8630062226069243067|element:1781318263043700654|50|0",
-      "controlSkillId": 10101012,
-      "mapIndex": 0,
-      "elementId": 999,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101012:0:1781318263043700654:3857329302774606883:50"
-    },
-    {
       "effectIdentity": "10101012|0|elements|3|-8630062226069243067|element:9155281695412256774|50|0",
       "controlSkillId": 10101012,
       "mapIndex": 0,
@@ -21063,12 +20924,13 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10101012:0:1781318263043700654:unresolved:unresolved"
     },
@@ -21178,72 +21040,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231"
-    },
-    {
-      "effectIdentity": "10101013|0|elements|5|-5107736885784262990|element:4731523060341306954|225|0",
-      "controlSkillId": 10101013,
-      "mapIndex": 0,
-      "elementId": 799,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:4731523060341306954:-6326209782415091882:225"
-    },
-    {
-      "effectIdentity": "10101013|0|elements|5|-5107736885784262990|element:4731523060341306954|219|1",
-      "controlSkillId": 10101013,
-      "mapIndex": 0,
-      "elementId": 799,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:4731523060341306954:6463115307445065558:219"
-    },
-    {
-      "effectIdentity": "10101013|0|elements|5|-5107736885784262990|element:4731523060341306954|231|2",
-      "controlSkillId": 10101013,
-      "mapIndex": 0,
-      "elementId": 799,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:4731523060341306954:962689896015664982:231"
     },
     {
       "effectIdentity": "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|225|0",
@@ -21453,12 +21249,13 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10101013:0:4731523060341306954:unresolved:unresolved"
     },
@@ -21657,72 +21454,6 @@
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278"
     },
     {
-      "effectIdentity": "10101013|0|elements|12|-8630062226069243067|element:1781318263043700654|272|0",
-      "controlSkillId": 10101013,
-      "mapIndex": 0,
-      "elementId": 999,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:1781318263043700654:-1947040752449218730:272"
-    },
-    {
-      "effectIdentity": "10101013|0|elements|12|-8630062226069243067|element:1781318263043700654|284|1",
-      "controlSkillId": 10101013,
-      "mapIndex": 0,
-      "elementId": 999,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:1781318263043700654:-6717776740476971178:284"
-    },
-    {
-      "effectIdentity": "10101013|0|elements|12|-8630062226069243067|element:1781318263043700654|278|2",
-      "controlSkillId": 10101013,
-      "mapIndex": 0,
-      "elementId": 999,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:1781318263043700654:4819247235648853846:278"
-    },
-    {
       "effectIdentity": "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|272|0",
       "controlSkillId": 10101013,
       "mapIndex": 0,
@@ -21867,12 +21598,13 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10101013:0:1781318263043700654:unresolved:unresolved"
     },
@@ -21977,11 +21709,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:1474042154774785480:-1058249236301801642:272"
     },
@@ -22044,9 +21775,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10101013:0:1474042154774785480:unresolved:unresolved"
     },
@@ -23113,69 +22842,6 @@
       "sourceIdentity": "battle-effect:10200113:0:1318664144613157792:5790785966890863275:211"
     },
     {
-      "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|220|0",
-      "controlSkillId": 10200113,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:1474042154774785480:-6639102421339288917:220"
-    },
-    {
-      "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|216|1",
-      "controlSkillId": 10200113,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:1474042154774785480:1384799686497127083:216"
-    },
-    {
-      "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|211|2",
-      "controlSkillId": 10200113,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:1474042154774785480:5790785966890863275:211"
-    },
-    {
       "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:-8148787786042882084|220|0",
       "controlSkillId": 10200113,
       "mapIndex": 0,
@@ -23320,9 +22986,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10200113:0:1474042154774785480:unresolved:unresolved"
     },
@@ -24340,28 +24004,6 @@
       "sourceIdentity": "battle-effect:10300203:3:4460567758519354701:-5774689639772653403:26"
     },
     {
-      "effectIdentity": "10300203|3|elements|15|4460567758519354701|element:2917355649561243897|26|0",
-      "controlSkillId": 10300203,
-      "mapIndex": 3,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300203:3:2917355649561243897:-5774689639772653403:26"
-    },
-    {
       "effectIdentity": "10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
       "controlSkillId": 10300203,
       "mapIndex": 3,
@@ -24810,50 +24452,6 @@
       "sourceIdentity": "battle-effect:10300213:0:-6187686510236149564:2083420758843707102:284"
     },
     {
-      "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:2917355649561243897|300|0",
-      "controlSkillId": 10300213,
-      "mapIndex": 0,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300213:0:2917355649561243897:-1358196052883222818:300"
-    },
-    {
-      "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:2917355649561243897|284|1",
-      "controlSkillId": 10300213,
-      "mapIndex": 0,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300213:0:2917355649561243897:2083420758843707102:284"
-    },
-    {
       "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0",
       "controlSkillId": 10300213,
       "mapIndex": 0,
@@ -24984,27 +24582,6 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300213:0:-310946560669858520:2083420758843707102:284"
-    },
-    {
-      "effectIdentity": "10300221|0|elements|6|-3809486317990090417|element:-3809486317990090417|54|0",
-      "controlSkillId": 10300221,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300221:0:-3809486317990090417:-8618896082664585117:54"
     },
     {
       "effectIdentity": "10300221|0|elements|6|-3809486317990090417|element:-637110086033006477|54|0",
@@ -25358,12 +24935,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700103:4:1474042154774785480:unresolved:unresolved"
     },
@@ -25449,9 +25025,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700103:4:1474042154774785480:unresolved:unresolved"
     },
@@ -25599,12 +25173,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700103:4:1474042154774785480:unresolved:unresolved"
     },
@@ -25690,9 +25263,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700103:4:1474042154774785480:unresolved:unresolved"
     },
@@ -25861,12 +25432,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700125:0:1474042154774785480:unresolved:unresolved"
     },
@@ -25952,9 +25522,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700125:0:1474042154774785480:unresolved:unresolved"
     },
@@ -26102,12 +25670,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700125:0:1474042154774785480:unresolved:unresolved"
     },
@@ -26193,9 +25760,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700125:0:1474042154774785480:unresolved:unresolved"
     },
@@ -26514,7 +26079,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10700213:0:-669846950425800112:-7379670190087882269:150"
     },
@@ -26534,7 +26099,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10700213:0:-669846950425800112:-7448755903733450269:144"
     },
@@ -27322,11 +26887,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:2:-3161718249097424629:-294496756060942192:105"
     },
@@ -27343,11 +26907,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:2:-3161718249097424629:6158940457563061717:207"
     },
@@ -27448,11 +27011,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:2:2120617582505955581:-294496756060942192:105"
     },
@@ -27469,11 +27031,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:2:2120617582505955581:6158940457563061717:207"
     },
@@ -27888,11 +27449,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:4:-3161718249097424629:-294496756060942192:105"
     },
@@ -27909,11 +27469,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:4:-3161718249097424629:6158940457563061717:207"
     },
@@ -28014,11 +27573,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:4:2120617582505955581:-294496756060942192:105"
     },
@@ -28035,11 +27593,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700310:4:2120617582505955581:6158940457563061717:207"
     },
@@ -28366,8 +27923,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10700312:0:3107436379383955232:1644698194068564309:94"
     },
@@ -28387,8 +27943,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10700312:0:3107436379383955232:91506138625206613:21"
     },
@@ -28794,12 +28349,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700313:0:-3161718249097424629:-4258445867092657750:151"
     },
@@ -28860,12 +28413,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10700313:0:2120617582505955581:-4258445867092657750:151"
     },
@@ -29067,27 +28618,6 @@
       "sourceIdentity": "battle-effect:10800111:0:-9093709159289348414:-1080958378078126548:36"
     },
     {
-      "effectIdentity": "10800112|0|elements|3|-1498771669867596146|element:-1498771669867596146|19|0",
-      "controlSkillId": 10800112,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10800112:0:-1498771669867596146:-4811424248036098932:19"
-    },
-    {
       "effectIdentity": "10800112|0|elements|3|-1498771669867596146|element:3879285143630828198|19|0",
       "controlSkillId": 10800112,
       "mapIndex": 0,
@@ -29197,28 +28727,6 @@
       "sourceIdentity": "battle-effect:10800112:0:2712608818535314887:-2858144684643943284:57"
     },
     {
-      "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:4731523060341306954|57|0",
-      "controlSkillId": 10800112,
-      "mapIndex": 0,
-      "elementId": 799,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10800112:0:4731523060341306954:-2858144684643943284:57"
-    },
-    {
       "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:-7412029037550756065|57|0",
       "controlSkillId": 10800112,
       "mapIndex": 0,
@@ -29296,12 +28804,13 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10800112:0:4731523060341306954:unresolved:unresolved"
     },
@@ -29840,28 +29349,6 @@
       "sourceIdentity": "battle-effect:10800113:0:-6706578554276400778:866039684609963169:98"
     },
     {
-      "effectIdentity": "10800113|0|elements|9|4529303421024168114|element:2917355649561243897|98|0",
-      "controlSkillId": 10800113,
-      "mapIndex": 0,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10800113:0:2917355649561243897:866039684609963169:98"
-    },
-    {
       "effectIdentity": "10800113|0|elements|9|4529303421024168114|element:8913920234485900029|98|0",
       "controlSkillId": 10800113,
       "mapIndex": 0,
@@ -29967,27 +29454,6 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800113:0:7588284416417690088:-7862101168306621279:128"
-    },
-    {
-      "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:4731523060341306954|128|0",
-      "controlSkillId": 10800113,
-      "mapIndex": 0,
-      "elementId": 799,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10800113:0:4731523060341306954:-7862101168306621279:128"
     },
     {
       "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:-7412029037550756065|128|0",
@@ -30383,12 +29849,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10800213:0:-3161718249097424629:1232590546087931134:192"
     },
@@ -30449,12 +29913,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:10800213:0:-3481476500606266500:1232590546087931134:192"
     },
@@ -30479,27 +29941,6 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10800213:0:5756437106006428564:1232590546087931134:192"
-    },
-    {
-      "effectIdentity": "10800213|0|elements|5|3273457016050714061|element:3273457016050714061|198|0",
-      "controlSkillId": 10800213,
-      "mapIndex": 0,
-      "elementId": 350,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10800213:0:3273457016050714061:1544801171461926142:198"
     },
     {
       "effectIdentity": "10800213|0|elements|5|3273457016050714061|element:2800522390746114838|198|0",
@@ -30811,9 +30252,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10800313:0:-3809486317990090417:unresolved:unresolved"
     },
@@ -30942,9 +30381,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10800313:0:-3809486317990090417:unresolved:unresolved"
     },
@@ -31058,6 +30495,112 @@
       "sourceIdentity": "battle-effect:10800313:0:-7783775984244194322:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10800322|0|elements|0|-3809486317990090417|element:-637110086033006477|37|0",
+      "controlSkillId": 10800322,
+      "mapIndex": 0,
+      "elementId": 251,
+      "kind": "damage",
+      "dimensions": {
+        "damage": "unresolved",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10800322:0:-637110086033006477:-1452338477606785728:37"
+    },
+    {
+      "effectIdentity": "10800322|0|elements|0|-3809486317990090417|element:-1715488869977622004|37|0",
+      "controlSkillId": 10800322,
+      "mapIndex": 0,
+      "elementId": 253,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10800322:0:-1715488869977622004:-1452338477606785728:37"
+    },
+    {
+      "effectIdentity": "10800322|0|elements|0|-3809486317990090417|element:-7783775984244194322|37|0",
+      "controlSkillId": 10800322,
+      "mapIndex": 0,
+      "elementId": 252,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10800322:0:-7783775984244194322:-1452338477606785728:37"
+    },
+    {
+      "effectIdentity": "10800322|0|elements|1|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
+      "controlSkillId": 10800322,
+      "mapIndex": 0,
+      "elementId": 253,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10800322:0:-1715488869977622004:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10800322|0|elements|2|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0",
+      "controlSkillId": 10800322,
+      "mapIndex": 0,
+      "elementId": 252,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10800322:0:-7783775984244194322:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10800511|0|elements|2|8990644880748261242|element:8990644880748261242|36|0",
       "controlSkillId": 10800511,
       "mapIndex": 0,
@@ -31094,8 +30637,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10800512:0:2699138840966960245:-5605965116330814636:7"
     },
@@ -31115,7 +30657,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10800512:0:2699138840966960245:7923966755146224468:86"
     },
@@ -31178,8 +30720,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10800513:0:2699138840966960245:-1749281156480092854:230"
     },
@@ -31199,8 +30740,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10800513:0:2699138840966960245:4631865431631148362:1"
     },
@@ -31285,8 +30825,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10800522:0:2699138840966960245:-4728433768250754161:19"
     },
@@ -31545,28 +31084,6 @@
       "sourceIdentity": "battle-effect:10900113:0:6963696584413796673:8524185735560706053:183"
     },
     {
-      "effectIdentity": "10900113|0|elements|8|6963696584413796673|element:4731523060341306954|183|0",
-      "controlSkillId": 10900113,
-      "mapIndex": 0,
-      "elementId": 799,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900113:0:4731523060341306954:8524185735560706053:183"
-    },
-    {
       "effectIdentity": "10900113|0|elements|8|6963696584413796673|element:-7412029037550756065|183|0",
       "controlSkillId": 10900113,
       "mapIndex": 0,
@@ -31644,12 +31161,13 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10900113:0:4731523060341306954:unresolved:unresolved"
     },
@@ -32050,8 +31568,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10900213:0:-8695654341717050083:5728861529979170576:156"
     },
@@ -32136,9 +31653,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch",
+        "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900213:0:-8695654341717050083:-7354643402567700720:0"
     },
@@ -32332,27 +31848,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:11200111:0:1066013211372865379:7368334432187597594:37"
-    },
-    {
-      "effectIdentity": "11200112|0|elements|3|-3809486317990090417|element:-3809486317990090417|27|0",
-      "controlSkillId": 11200112,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:11200112:0:-3809486317990090417:5182973323990506066:27"
     },
     {
       "effectIdentity": "11200112|0|elements|3|-3809486317990090417|element:-637110086033006477|27|0",
@@ -32603,12 +32098,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11200113:0:536980873299289094:2617385811689971573:191"
     },
@@ -32669,12 +32162,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11200113:0:-2413896801629279110:2617385811689971573:191"
     },
@@ -33585,13 +33076,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:11200213:0:1781318263043700654:unresolved:unresolved"
     },
@@ -33654,13 +33143,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:11200213:0:-1242046641952436421:unresolved:unresolved"
     },
@@ -34239,27 +33726,6 @@
       "sourceIdentity": "battle-effect:19900113:0:6164331469746081753:6298034758687496659:140"
     },
     {
-      "effectIdentity": "19900113|0|elements|9|6164331469746081753|element:-1498771669867596146|140|0",
-      "controlSkillId": 19900113,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900113:0:-1498771669867596146:6298034758687496659:140"
-    },
-    {
       "effectIdentity": "19900113|0|elements|9|6164331469746081753|element:3879285143630828198|140|0",
       "controlSkillId": 19900113,
       "mapIndex": 0,
@@ -34319,9 +33785,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-1498771669867596146:unresolved:unresolved"
     },
@@ -34415,27 +33879,6 @@
       "sourceIdentity": "battle-effect:19900113:0:-1329856183780981067:6298034758687496659:140"
     },
     {
-      "effectIdentity": "19900113|0|elements|12|-1329856183780981067|element:-3809486317990090417|140|0",
-      "controlSkillId": 19900113,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900113:0:-3809486317990090417:6298034758687496659:140"
-    },
-    {
       "effectIdentity": "19900113|0|elements|12|-1329856183780981067|element:-637110086033006477|140|0",
       "controlSkillId": 19900113,
       "mapIndex": 0,
@@ -34515,9 +33958,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-3809486317990090417:unresolved:unresolved"
     },
@@ -34652,27 +34093,6 @@
       "sourceIdentity": "battle-effect:19900113:0:-1156211791305095863:6298034758687496659:140"
     },
     {
-      "effectIdentity": "19900113|0|elements|16|-1156211791305095863|element:3273457016050714061|140|0",
-      "controlSkillId": 19900113,
-      "mapIndex": 0,
-      "elementId": 350,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900113:0:3273457016050714061:6298034758687496659:140"
-    },
-    {
       "effectIdentity": "19900113|0|elements|16|-1156211791305095863|element:2800522390746114838|140|0",
       "controlSkillId": 19900113,
       "mapIndex": 0,
@@ -34752,9 +34172,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:3273457016050714061:unresolved:unresolved"
     },
@@ -34889,27 +34307,6 @@
       "sourceIdentity": "battle-effect:19900113:0:-4681911869225594217:6298034758687496659:140"
     },
     {
-      "effectIdentity": "19900113|0|elements|20|-4681911869225594217|element:-5819740171084359278|140|0",
-      "controlSkillId": 19900113,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900113:0:-5819740171084359278:6298034758687496659:140"
-    },
-    {
       "effectIdentity": "19900113|0|elements|20|-4681911869225594217|element:5879350489537660978|140|0",
       "controlSkillId": 19900113,
       "mapIndex": 0,
@@ -34969,9 +34366,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-5819740171084359278:unresolved:unresolved"
     },
@@ -35080,8 +34475,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-669846950425800112:6298034758687496659:140"
     },
@@ -35167,9 +34561,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-669846950425800112:unresolved:unresolved"
     },
@@ -35346,8 +34739,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900113:0:2699138840966960245:6298034758687496659:140"
     },
@@ -35389,9 +34781,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:2699138840966960245:unresolved:unresolved"
     },
@@ -35438,27 +34829,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:19900113:0:1926755712068365056:6298034758687496659:140"
-    },
-    {
-      "effectIdentity": "19900113|0|elements|29|1926755712068365056|element:1474042154774785480|140|0",
-      "controlSkillId": 19900113,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900113:0:1474042154774785480:6298034758687496659:140"
     },
     {
       "effectIdentity": "19900113|0|elements|29|1926755712068365056|element:-8148787786042882084|140|0",
@@ -35519,9 +34889,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:1474042154774785480:unresolved:unresolved"
     },
@@ -35628,8 +34996,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900113:0:3107436379383955232:6298034758687496659:140"
     },
@@ -35715,9 +35082,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:3107436379383955232:unresolved:unresolved"
     },
@@ -35827,8 +35193,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-8695654341717050083:6298034758687496659:140"
     },
@@ -35892,9 +35257,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900113:0:-8695654341717050083:unresolved:unresolved"
     },
@@ -36450,27 +35814,6 @@
       "sourceIdentity": "battle-effect:19900213:0:430806063872214672:-1202975419862149807:140"
     },
     {
-      "effectIdentity": "19900213|0|elements|9|430806063872214672|element:-1498771669867596146|140|0",
-      "controlSkillId": 19900213,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900213:0:-1498771669867596146:-1202975419862149807:140"
-    },
-    {
       "effectIdentity": "19900213|0|elements|9|430806063872214672|element:3879285143630828198|140|0",
       "controlSkillId": 19900213,
       "mapIndex": 0,
@@ -36530,9 +35873,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-1498771669867596146:unresolved:unresolved"
     },
@@ -36626,27 +35967,6 @@
       "sourceIdentity": "battle-effect:19900213:0:2553555903625778462:-1202975419862149807:140"
     },
     {
-      "effectIdentity": "19900213|0|elements|12|2553555903625778462|element:-3809486317990090417|140|0",
-      "controlSkillId": 19900213,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900213:0:-3809486317990090417:-1202975419862149807:140"
-    },
-    {
       "effectIdentity": "19900213|0|elements|12|2553555903625778462|element:-637110086033006477|140|0",
       "controlSkillId": 19900213,
       "mapIndex": 0,
@@ -36726,9 +36046,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-3809486317990090417:unresolved:unresolved"
     },
@@ -36863,27 +36181,6 @@
       "sourceIdentity": "battle-effect:19900213:0:2994814463335611432:-1202975419862149807:140"
     },
     {
-      "effectIdentity": "19900213|0|elements|16|2994814463335611432|element:3273457016050714061|140|0",
-      "controlSkillId": 19900213,
-      "mapIndex": 0,
-      "elementId": 350,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900213:0:3273457016050714061:-1202975419862149807:140"
-    },
-    {
       "effectIdentity": "19900213|0|elements|16|2994814463335611432|element:2800522390746114838|140|0",
       "controlSkillId": 19900213,
       "mapIndex": 0,
@@ -36963,9 +36260,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:3273457016050714061:unresolved:unresolved"
     },
@@ -37100,27 +36395,6 @@
       "sourceIdentity": "battle-effect:19900213:0:2528085625560718856:-1202975419862149807:140"
     },
     {
-      "effectIdentity": "19900213|0|elements|20|2528085625560718856|element:-5819740171084359278|140|0",
-      "controlSkillId": 19900213,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900213:0:-5819740171084359278:-1202975419862149807:140"
-    },
-    {
       "effectIdentity": "19900213|0|elements|20|2528085625560718856|element:5879350489537660978|140|0",
       "controlSkillId": 19900213,
       "mapIndex": 0,
@@ -37180,9 +36454,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-5819740171084359278:unresolved:unresolved"
     },
@@ -37291,8 +36563,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-669846950425800112:-1202975419862149807:140"
     },
@@ -37378,9 +36649,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-669846950425800112:unresolved:unresolved"
     },
@@ -37557,8 +36827,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900213:0:2699138840966960245:-1202975419862149807:140"
     },
@@ -37600,9 +36869,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:2699138840966960245:unresolved:unresolved"
     },
@@ -37649,27 +36917,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-3368562751268641133:-1202975419862149807:140"
-    },
-    {
-      "effectIdentity": "19900213|0|elements|29|-3368562751268641133|element:1474042154774785480|140|0",
-      "controlSkillId": 19900213,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900213:0:1474042154774785480:-1202975419862149807:140"
     },
     {
       "effectIdentity": "19900213|0|elements|29|-3368562751268641133|element:-8148787786042882084|140|0",
@@ -37730,9 +36977,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:1474042154774785480:unresolved:unresolved"
     },
@@ -37839,8 +37084,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900213:0:3107436379383955232:-1202975419862149807:140"
     },
@@ -37926,9 +37170,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:3107436379383955232:unresolved:unresolved"
     },
@@ -38038,8 +37281,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-8695654341717050083:-1202975419862149807:140"
     },
@@ -38103,9 +37345,8 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900213:0:-8695654341717050083:unresolved:unresolved"
     },
@@ -38192,8 +37433,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:19900312:0:2699138840966960245:71988219715143689:34"
     },
@@ -38394,28 +37634,6 @@
       "sourceIdentity": "battle-effect:19900313:0:-8393843991760036466:6113066284804000116:94"
     },
     {
-      "effectIdentity": "19900313|0|elements|3|-3716053188594440235|element:-1242046641952436421|94|0",
-      "controlSkillId": 19900313,
-      "mapIndex": 0,
-      "elementId": 699,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:19900313:0:-1242046641952436421:6113066284804000116:94"
-    },
-    {
       "effectIdentity": "19900313|0|elements|3|-3716053188594440235|element:1920742622307174111|94|0",
       "controlSkillId": 19900313,
       "mapIndex": 0,
@@ -38494,12 +37712,13 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:19900313:0:-1242046641952436421:unresolved:unresolved"
     },
@@ -39499,26 +38718,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50002404:0:1988742326999447811:896037161625091480:0"
-    },
-    {
-      "effectIdentity": "50002504|0|elements|3|-3809486317990090417|element:-3809486317990090417|25|0",
-      "controlSkillId": 50002504,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50002504:0:-3809486317990090417:6009805772854045640:25"
     },
     {
       "effectIdentity": "50002504|0|elements|3|-3809486317990090417|element:-637110086033006477|25|0",
@@ -40917,26 +40116,6 @@
       "sourceIdentity": "battle-effect:50005302:0:1988742326999447811:3057128450379382848:0"
     },
     {
-      "effectIdentity": "50005701|0|elements|3|-3809486317990090417|element:-3809486317990090417|15|0",
-      "controlSkillId": 50005701,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50005701:0:-3809486317990090417:-4223019212685348435:15"
-    },
-    {
       "effectIdentity": "50005701|0|elements|3|-3809486317990090417|element:-637110086033006477|15|0",
       "controlSkillId": 50005701,
       "mapIndex": 0,
@@ -41102,26 +40281,6 @@
       "sourceIdentity": "battle-effect:50005801:0:1988742326999447811:-4789391490219030530:0"
     },
     {
-      "effectIdentity": "50006401|0|elements|3|1474042154774785480|element:1474042154774785480|10|0",
-      "controlSkillId": 50006401,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50006401:0:1474042154774785480:4402142640337939145:10"
-    },
-    {
       "effectIdentity": "50006401|0|elements|3|1474042154774785480|element:-8148787786042882084|10|0",
       "controlSkillId": 50006401,
       "mapIndex": 0,
@@ -41203,26 +40362,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50006401:0:1988742326999447811:6737969572638124745:0"
-    },
-    {
-      "effectIdentity": "50006501|0|elements|3|1474042154774785480|element:1474042154774785480|10|0",
-      "controlSkillId": 50006501,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50006501:0:1474042154774785480:5385879966089870899:10"
     },
     {
       "effectIdentity": "50006501|0|elements|3|1474042154774785480|element:-8148787786042882084|10|0",
@@ -41561,26 +40700,6 @@
       "sourceIdentity": "battle-effect:50007201:0:1988742326999447811:-8091311005337116989:0"
     },
     {
-      "effectIdentity": "50008102|0|elements|1|3273457016050714061|element:3273457016050714061|34|0",
-      "controlSkillId": 50008102,
-      "mapIndex": 0,
-      "elementId": 350,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50008102:0:3273457016050714061:-515869109541519990:34"
-    },
-    {
       "effectIdentity": "50008102|0|elements|1|3273457016050714061|element:2800522390746114838|34|0",
       "controlSkillId": 50008102,
       "mapIndex": 0,
@@ -41850,26 +40969,6 @@
       "sourceIdentity": "battle-effect:50008201:0:-865955988639024667:3963609452991897202:40"
     },
     {
-      "effectIdentity": "50008201|0|elements|5|-3809486317990090417|element:-3809486317990090417|40|0",
-      "controlSkillId": 50008201,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50008201:0:-3809486317990090417:6639141133218176626:40"
-    },
-    {
       "effectIdentity": "50008201|0|elements|5|-3809486317990090417|element:-637110086033006477|40|0",
       "controlSkillId": 50008201,
       "mapIndex": 0,
@@ -41994,26 +41093,6 @@
       "sourceIdentity": "battle-effect:50008201:0:1988742326999447811:2399225849248898674:0"
     },
     {
-      "effectIdentity": "50008303|0|elements|2|-1498771669867596146|element:-1498771669867596146|60|0",
-      "controlSkillId": 50008303,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50008303:0:-1498771669867596146:775533558535771002:60"
-    },
-    {
       "effectIdentity": "50008303|0|elements|2|-1498771669867596146|element:3879285143630828198|60|0",
       "controlSkillId": 50008303,
       "mapIndex": 0,
@@ -42099,26 +41178,6 @@
       "sourceIdentity": "battle-effect:50008303:0:1988742326999447811:-3793949762617126022:0"
     },
     {
-      "effectIdentity": "50008403|0|elements|2|-1498771669867596146|element:-1498771669867596146|55|0",
-      "controlSkillId": 50008403,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50008403:0:-1498771669867596146:7393265999743269205:55"
-    },
-    {
       "effectIdentity": "50008403|0|elements|2|-1498771669867596146|element:3879285143630828198|55|0",
       "controlSkillId": 50008403,
       "mapIndex": 0,
@@ -42202,26 +41261,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50008403:0:1988742326999447811:7207767480002656597:0"
-    },
-    {
-      "effectIdentity": "50008503|0|elements|3|-1498771669867596146|element:-1498771669867596146|55|0",
-      "controlSkillId": 50008503,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50008503:0:-1498771669867596146:-3824688842805338678:55"
     },
     {
       "effectIdentity": "50008503|0|elements|3|-1498771669867596146|element:3879285143630828198|55|0",
@@ -42496,7 +41535,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50009701:0:3107436379383955232:-6723254537718434358:19"
     },
@@ -42600,7 +41639,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50009801:0:3107436379383955232:3389798349356000801:19"
     },
@@ -43337,7 +42376,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50013302:0:2699138840966960245:-3725196461093587660:15"
     },
@@ -43441,7 +42480,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50013402:0:2699138840966960245:8084801088826676566:19"
     },
@@ -43572,26 +42611,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50013402:0:3302770672892953419:unresolved:unresolved"
-    },
-    {
-      "effectIdentity": "50013801|0|elements|0|-1498771669867596146|element:-1498771669867596146|24|0",
-      "controlSkillId": 50013801,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50013801:0:-1498771669867596146:-9142579522523831375:24"
     },
     {
       "effectIdentity": "50013801|0|elements|0|-1498771669867596146|element:3879285143630828198|24|0",
@@ -43741,26 +42760,6 @@
       "sourceIdentity": "battle-effect:50013901:0:-5523815794237323230:unresolved:unresolved"
     },
     {
-      "effectIdentity": "50013901|0|elements|3|-1498771669867596146|element:-1498771669867596146|20|0",
-      "controlSkillId": 50013901,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50013901:0:-1498771669867596146:1649528041683017682:20"
-    },
-    {
       "effectIdentity": "50013901|0|elements|3|-1498771669867596146|element:3879285143630828198|20|0",
       "controlSkillId": 50013901,
       "mapIndex": 0,
@@ -43906,26 +42905,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50014001:0:5721382546086726511:unresolved:unresolved"
-    },
-    {
-      "effectIdentity": "50014001|0|elements|4|-1498771669867596146|element:-1498771669867596146|20|0",
-      "controlSkillId": 50014001,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50014001:0:-1498771669867596146:4163381846031767197:20"
     },
     {
       "effectIdentity": "50014001|0|elements|4|-1498771669867596146|element:3879285143630828198|20|0",
@@ -44633,26 +43612,6 @@
       "sourceIdentity": "battle-effect:50017502:0:1988742326999447811:-5370546024595838805:0"
     },
     {
-      "effectIdentity": "50017901|0|elements|2|-5819740171084359278|element:-5819740171084359278|20|0",
-      "controlSkillId": 50017901,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50017901:0:-5819740171084359278:-5158382884600791274:20"
-    },
-    {
       "effectIdentity": "50017901|0|elements|2|-5819740171084359278|element:5879350489537660978|20|0",
       "controlSkillId": 50017901,
       "mapIndex": 0,
@@ -44738,26 +43697,6 @@
       "sourceIdentity": "battle-effect:50017901:0:1988742326999447811:-2715577692894183658:0"
     },
     {
-      "effectIdentity": "50018001|0|elements|5|-5819740171084359278|element:-5819740171084359278|20|0",
-      "controlSkillId": 50018001,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50018001:0:-5819740171084359278:8553437805385337881:20"
-    },
-    {
       "effectIdentity": "50018001|0|elements|5|-5819740171084359278|element:5879350489537660978|20|0",
       "controlSkillId": 50018001,
       "mapIndex": 0,
@@ -44841,26 +43780,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50018001:0:1988742326999447811:8718273890918386713:0"
-    },
-    {
-      "effectIdentity": "50018101|0|elements|8|-5819740171084359278|element:-5819740171084359278|22|0",
-      "controlSkillId": 50018101,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50018101:0:-5819740171084359278:4029750847080770082:22"
     },
     {
       "effectIdentity": "50018101|0|elements|8|-5819740171084359278|element:5879350489537660978|22|0",
@@ -45430,7 +44349,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50020601:0:-8695654341717050083:-3636217749283143666:27"
     },
@@ -45513,7 +44432,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50020901:0:-669846950425800112:2906786533890401990:30"
     },
@@ -45856,26 +44775,6 @@
       "sourceIdentity": "battle-effect:50022001:0:-3249999372761889973:unresolved:unresolved"
     },
     {
-      "effectIdentity": "50023101|0|elements|1|-3809486317990090417|element:-3809486317990090417|31|0",
-      "controlSkillId": 50023101,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50023101:0:-3809486317990090417:-3826826054095467244:31"
-    },
-    {
       "effectIdentity": "50023101|0|elements|1|-3809486317990090417|element:-637110086033006477|31|0",
       "controlSkillId": 50023101,
       "mapIndex": 0,
@@ -46086,26 +44985,6 @@
       "sourceIdentity": "battle-effect:50024401:0:7084666871629760389:3197953810201689489:20"
     },
     {
-      "effectIdentity": "50024401|0|elements|3|-1498771669867596146|element:-1498771669867596146|20|0",
-      "controlSkillId": 50024401,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50024401:0:-1498771669867596146:1418349633233599889:20"
-    },
-    {
       "effectIdentity": "50024401|0|elements|3|-1498771669867596146|element:3879285143630828198|20|0",
       "controlSkillId": 50024401,
       "mapIndex": 0,
@@ -46210,26 +45089,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50024501:0:7084666871629760389:5246223288171983893:20"
-    },
-    {
-      "effectIdentity": "50024501|0|elements|6|-1498771669867596146|element:-1498771669867596146|20|0",
-      "controlSkillId": 50024501,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50024501:0:-1498771669867596146:4142553228803929109:20"
     },
     {
       "effectIdentity": "50024501|0|elements|6|-1498771669867596146|element:3879285143630828198|20|0",
@@ -46338,26 +45197,6 @@
       "sourceIdentity": "battle-effect:50024601:0:-3760322537156129882:5260900240585249285:38"
     },
     {
-      "effectIdentity": "50024601|0|elements|6|-1498771669867596146|element:-1498771669867596146|38|0",
-      "controlSkillId": 50024601,
-      "mapIndex": 0,
-      "elementId": 150,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50024601:0:-1498771669867596146:-3258454503344713211:38"
-    },
-    {
       "effectIdentity": "50024601|0|elements|6|-1498771669867596146|element:3879285143630828198|38|0",
       "controlSkillId": 50024601,
       "mapIndex": 0,
@@ -46458,7 +45297,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50025801:0:-669846950425800112:5823144417875342633:20"
     },
@@ -46629,7 +45468,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50025901:0:-669846950425800112:1253480908907901455:21"
     },
@@ -46800,7 +45639,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50026001:0:-669846950425800112:-7180960442829654523:45"
     },
@@ -46971,7 +45810,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50026102:0:3107436379383955232:-7996161052184388557:17"
     },
@@ -47075,7 +45914,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50026202:0:3107436379383955232:-2644726517788476127:25"
     },
@@ -47179,7 +46018,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50026302:0:3107436379383955232:7407187804618604323:49"
     },
@@ -47266,26 +46105,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50026302:0:1988742326999447811:-2557414700669157597:0"
-    },
-    {
-      "effectIdentity": "50029601|0|elements|3|-3809486317990090417|element:-3809486317990090417|20|0",
-      "controlSkillId": 50029601,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50029601:0:-3809486317990090417:8691455388425763567:20"
     },
     {
       "effectIdentity": "50029601|0|elements|3|-3809486317990090417|element:-637110086033006477|20|0",
@@ -47410,26 +46229,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50029601:0:1988742326999447811:-2371580615062799633:0"
-    },
-    {
-      "effectIdentity": "50030401|0|elements|3|1474042154774785480|element:1474042154774785480|20|0",
-      "controlSkillId": 50030401,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50030401:0:1474042154774785480:5901576345985182238:20"
     },
     {
       "effectIdentity": "50030401|0|elements|3|1474042154774785480|element:-8148787786042882084|20|0",
@@ -47557,26 +46356,6 @@
       "sourceIdentity": "battle-effect:50030401:0:523561715722940228:unresolved:unresolved"
     },
     {
-      "effectIdentity": "50030501|0|elements|5|1474042154774785480|element:1474042154774785480|20|0",
-      "controlSkillId": 50030501,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50030501:0:1474042154774785480:-581218004216812084:20"
-    },
-    {
       "effectIdentity": "50030501|0|elements|5|1474042154774785480|element:-8148787786042882084|20|0",
       "controlSkillId": 50030501,
       "mapIndex": 0,
@@ -47700,26 +46479,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50030501:0:523561715722940228:unresolved:unresolved"
-    },
-    {
-      "effectIdentity": "50030601|0|elements|5|1474042154774785480|element:1474042154774785480|20|0",
-      "controlSkillId": 50030601,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50030601:0:1474042154774785480:4898334892299257211:20"
     },
     {
       "effectIdentity": "50030601|0|elements|5|1474042154774785480|element:-8148787786042882084|20|0",
@@ -47862,7 +46621,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50031302:0:-8695654341717050083:-2443111864475448051:21"
     },
@@ -48186,26 +46945,6 @@
       "sourceIdentity": "battle-effect:50032401:0:1988742326999447811:2013898389696062283:0"
     },
     {
-      "effectIdentity": "50035401|0|elements|3|-5819740171084359278|element:-5819740171084359278|13|0",
-      "controlSkillId": 50035401,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50035401:0:-5819740171084359278:-3349947281397282728:13"
-    },
-    {
       "effectIdentity": "50035401|0|elements|3|-5819740171084359278|element:5879350489537660978|13|0",
       "controlSkillId": 50035401,
       "mapIndex": 0,
@@ -48289,26 +47028,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:50035401:0:1988742326999447811:2636782109654485080:0"
-    },
-    {
-      "effectIdentity": "50035501|0|elements|6|-5819740171084359278|element:-5819740171084359278|30|0",
-      "controlSkillId": 50035501,
-      "mapIndex": 0,
-      "elementId": 450,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50035501:0:-5819740171084359278:4414725018443570245:30"
     },
     {
       "effectIdentity": "50035501|0|elements|6|-5819740171084359278|element:5879350489537660978|30|0",
@@ -48709,26 +47428,6 @@
       "sourceIdentity": "battle-effect:50036801:0:2042947505409386188:-1678112463600124018:153"
     },
     {
-      "effectIdentity": "50036801|0|elements|2|1474042154774785480|element:1474042154774785480|37|0",
-      "controlSkillId": 50036801,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50036801:0:1474042154774785480:8708314100570161038:37"
-    },
-    {
       "effectIdentity": "50036801|0|elements|2|1474042154774785480|element:-8148787786042882084|37|0",
       "controlSkillId": 50036801,
       "mapIndex": 0,
@@ -49015,26 +47714,6 @@
       "sourceIdentity": "battle-effect:50036901:0:6154567363517775236:-59462460653264925:426"
     },
     {
-      "effectIdentity": "50036901|0|elements|5|1474042154774785480|element:1474042154774785480|34|0",
-      "controlSkillId": 50036901,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50036901:0:1474042154774785480:-2225226644313628701:34"
-    },
-    {
       "effectIdentity": "50036901|0|elements|5|1474042154774785480|element:-8148787786042882084|34|0",
       "controlSkillId": 50036901,
       "mapIndex": 0,
@@ -49280,26 +47959,6 @@
       "sourceIdentity": "battle-effect:50037001:0:5109627244992527663:-7756679808514483239:336"
     },
     {
-      "effectIdentity": "50037001|0|elements|5|1474042154774785480|element:1474042154774785480|14|0",
-      "controlSkillId": 50037001,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:50037001:0:1474042154774785480:4778205394774891481:14"
-    },
-    {
       "effectIdentity": "50037001|0|elements|5|1474042154774785480|element:-8148787786042882084|14|0",
       "controlSkillId": 50037001,
       "mapIndex": 0,
@@ -49398,7 +48057,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50039901:0:3107436379383955232:-5314120926753074713:85"
     },
@@ -49546,7 +48205,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50046701:0:2699138840966960245:-9125421755373096539:20"
     },
@@ -49608,7 +48267,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:50046801:0:2699138840966960245:4016846636397297791:20"
     },
@@ -57436,26 +56095,6 @@
       "sourceIdentity": "battle-effect:10101004:0:3408929118427374243:unresolved:unresolved"
     },
     {
-      "effectIdentity": "10101005|0|elements|2|1474042154774785480|element:1474042154774785480|31|0",
-      "controlSkillId": 10101005,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c"
-      ],
-      "sourceIdentity": "battle-effect:10101005:0:1474042154774785480:-119715824990577950:31"
-    },
-    {
       "effectIdentity": "10101005|0|elements|2|1474042154774785480|element:-8148787786042882084|31|0",
       "controlSkillId": 10101005,
       "mapIndex": 0,
@@ -57559,27 +56198,6 @@
       "sourceIdentity": "battle-effect:10200105:0:7991633998808797407:-4997239008310081901:20"
     },
     {
-      "effectIdentity": "10200105|0|elements|3|7991633998808797407|element:1474042154774785480|20|0",
-      "controlSkillId": 10200105,
-      "mapIndex": 0,
-      "elementId": 750,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200105:0:1474042154774785480:-4997239008310081901:20"
-    },
-    {
       "effectIdentity": "10200105|0|elements|3|7991633998808797407|element:-8148787786042882084|20|0",
       "controlSkillId": 10200105,
       "mapIndex": 0,
@@ -57638,9 +56256,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10200105:0:1474042154774785480:unresolved:unresolved"
     },
@@ -58485,28 +57101,6 @@
       "sourceIdentity": "battle-effect:10300201:3:4460567758519354701:8674841978468049964:26"
     },
     {
-      "effectIdentity": "10300201|3|elements|15|4460567758519354701|element:2917355649561243897|26|0",
-      "controlSkillId": 10300201,
-      "mapIndex": 3,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300201:3:2917355649561243897:8674841978468049964:26"
-    },
-    {
       "effectIdentity": "10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
       "controlSkillId": 10300201,
       "mapIndex": 3,
@@ -59345,28 +57939,6 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300202:3:4460567758519354701:-4996826262836372537:26"
-    },
-    {
-      "effectIdentity": "10300202|3|elements|15|4460567758519354701|element:2917355649561243897|26|0",
-      "controlSkillId": 10300202,
-      "mapIndex": 3,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300202:3:2917355649561243897:-4996826262836372537:26"
     },
     {
       "effectIdentity": "10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
@@ -60269,28 +58841,6 @@
       "sourceIdentity": "battle-effect:10300204:2:4460567758519354701:-6305840928975797075:29"
     },
     {
-      "effectIdentity": "10300204|2|elements|13|4460567758519354701|element:2917355649561243897|29|0",
-      "controlSkillId": 10300204,
-      "mapIndex": 2,
-      "elementId": 199,
-      "kind": "inject",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
-      },
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10300204:2:2917355649561243897:-6305840928975797075:29"
-    },
-    {
       "effectIdentity": "10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0",
       "controlSkillId": 10300204,
       "mapIndex": 2,
@@ -60707,12 +59257,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700101:0:1474042154774785480:unresolved:unresolved"
     },
@@ -60798,9 +59347,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700101:0:1474042154774785480:unresolved:unresolved"
     },
@@ -60948,12 +59495,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700101:0:1474042154774785480:unresolved:unresolved"
     },
@@ -61039,9 +59585,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700101:0:1474042154774785480:unresolved:unresolved"
     },
@@ -61357,12 +59901,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700102:4:1474042154774785480:unresolved:unresolved"
     },
@@ -61448,9 +59991,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700102:4:1474042154774785480:unresolved:unresolved"
     },
@@ -61598,12 +60139,11 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
+        "mark": "applied"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700102:4:1474042154774785480:unresolved:unresolved"
     },
@@ -61689,9 +60229,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10700102:4:1474042154774785480:unresolved:unresolved"
     },
@@ -68556,27 +67094,6 @@
       "sourceIdentity": "battle-effect:10900105:0:5485634636675905737:7759936102957048157:47"
     },
     {
-      "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-3809486317990090417|47|0",
-      "controlSkillId": 10900105,
-      "mapIndex": 0,
-      "elementId": 250,
-      "kind": "stack",
-      "dimensions": {
-        "damage": "verified-zero",
-        "toughness": "verified-zero",
-        "sp": "verified-zero",
-        "hp": "verified-zero",
-        "shield": "verified-zero",
-        "dynamicProperty": "verified-zero",
-        "mark": "unresolved"
-      },
-      "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47"
-    },
-    {
       "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
       "controlSkillId": 10900105,
       "mapIndex": 0,
@@ -68656,9 +67173,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10900105:0:-3809486317990090417:unresolved:unresolved"
     },
@@ -68787,8 +67302,7 @@
         "mark": "unresolved"
       },
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "battle-effect:10900205:0:3107436379383955232:-3996458123653040967:26"
     },
@@ -74821,12 +73335,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:4:4731523060341306954:-3307273129238963617:60"
     },
@@ -74843,12 +73355,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:4:4731523060341306954:-6122676425533638217:60"
     },
@@ -74995,12 +73505,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:4:536980873299289094:-3307273129238963617:60"
     },
@@ -75017,12 +73525,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:4:536980873299289094:-6122676425533638217:60"
     },
@@ -78199,12 +76705,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:6:4731523060341306954:-3307273129238963617:60"
     },
@@ -78221,12 +76725,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:6:4731523060341306954:-6122676425533638217:60"
     },
@@ -78373,12 +76875,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:6:536980873299289094:-3307273129238963617:60"
     },
@@ -78395,12 +76895,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100101:6:536980873299289094:-6122676425533638217:60"
     },
@@ -81661,12 +80159,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:3:4731523060341306954:4133773777828302033:25"
     },
@@ -81683,12 +80179,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:3:4731523060341306954:8177276613316331860:25"
     },
@@ -81835,12 +80329,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:3:536980873299289094:4133773777828302033:25"
     },
@@ -81857,12 +80349,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:3:536980873299289094:8177276613316331860:25"
     },
@@ -83199,12 +81689,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:4:4731523060341306954:4133773777828302033:25"
     },
@@ -83221,12 +81709,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:4:4731523060341306954:8177276613316331860:25"
     },
@@ -83373,12 +81859,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:4:536980873299289094:4133773777828302033:25"
     },
@@ -83395,12 +81879,10 @@
         "hp": "verified-zero",
         "shield": "verified-zero",
         "dynamicProperty": "verified-zero",
-        "mark": "verified-zero"
+        "mark": "applied"
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-consume-mark-identity-ambiguous"
       ],
       "sourceIdentity": "battle-effect:11100102:4:536980873299289094:8177276613316331860:25"
     },

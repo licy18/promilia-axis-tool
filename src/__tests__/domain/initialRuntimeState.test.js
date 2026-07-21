@@ -70,7 +70,7 @@ describe('initial runtime state', () => {
     });
 
     expect(state).toMatchObject({
-      schemaVersion: 3,
+      schemaVersion: 4,
       contractName: 'AzPrInitialRuntimeState',
       status: 'initial-runtime-state-inherited',
       source: {
@@ -137,7 +137,7 @@ describe('initial runtime state', () => {
         },
       })
     ).toMatchObject({
-      schemaVersion: 3,
+      schemaVersion: 4,
       status: 'initial-runtime-state-ready',
       controlledActor: {
         actorId: 'actor-2',

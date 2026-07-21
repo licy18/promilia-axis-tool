@@ -163,7 +163,10 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
   const hasAppliedEffect = effects.some(
     effect => effect.classification === 'applied'
   );
-  if (!controlBinding || (!hits.length && !hasAppliedCost && !hasAppliedEffect)) {
+  if (
+    !controlBinding ||
+    (!hits.length && !hasAppliedCost && !hasAppliedEffect)
+  ) {
     return createUnresolvedActionMechanics(
       action,
       'verified-control-binding-missing',
@@ -280,7 +283,7 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('control-bindings-missing');
   }
   if (
-    value?.packageVersion < 8 ||
+    value?.packageVersion < 9 ||
     value?.battleEffectCatalog?.status !==
       'verified-battle-effect-node-catalog-ready' ||
     !Array.isArray(value?.battleEffectCatalog?.nodes) ||
@@ -294,12 +297,30 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     value.controlBindings.some(binding =>
       (binding.effectGraph ?? []).some(
         root =>
-          !Array.isArray(root.nodeIdentities) ||
-          Object.hasOwn(root, 'nodes')
+          !Array.isArray(root.nodeIdentities) || Object.hasOwn(root, 'nodes')
       )
     )
   ) {
     issues.push('battle-effect-catalog-invalid');
+  }
+  if (
+    value?.tuningMechanicsCatalog?.status !==
+      'verified-tuning-mechanics-catalog-ready' ||
+    !Array.isArray(value?.tuningMechanicsCatalog?.profiles) ||
+    value.tuningMechanicsCatalog.profiles.length !== 9 ||
+    new Set(
+      value.tuningMechanicsCatalog.profiles.map(profile => profile.markId)
+    ).size !== 9 ||
+    value.tuningMechanicsCatalog.profiles.some(
+      profile =>
+        profile.applied !== true ||
+        profile.maxStacks !== 5 ||
+        profile.layerDurationMs !== 20_000 ||
+        profile.heldReadyMs !== 5_000 ||
+        !profile.overlimitPacket?.sourceIdentity
+    )
+  ) {
+    issues.push('tuning-mechanics-catalog-invalid');
   }
   if (!hasValidAttackInputChains(value)) {
     issues.push('attack-input-segments-invalid');

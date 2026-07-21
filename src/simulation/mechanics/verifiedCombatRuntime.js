@@ -19,6 +19,7 @@ import {
   qFromFloat,
   qMul,
   qToNumber,
+  tuningMarkBaseRaw,
 } from './verifiedCombatFormulaRuntime';
 
 export const VERIFIED_COMBAT_MECHANICS_PROFILE_ID =
@@ -53,6 +54,7 @@ export function createVerifiedCombatRuntime({
   actionExecutionPlan,
   controlledActorTimeline,
   effectGeneration = null,
+  tuningGeneration = null,
   effectTimeline = null,
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
@@ -142,6 +144,14 @@ export function createVerifiedCombatRuntime({
       timeMs: shieldEvent.timeMs,
       action: shieldEvent.action,
       directEvent: shieldEvent,
+    });
+  }
+  for (const tuningEvent of tuningGeneration?.combatEvents ?? []) {
+    descriptors.push({
+      kind: 'tuning-combat',
+      timeMs: tuningEvent.timeMs,
+      action: tuningEvent.action,
+      tuningEvent,
     });
   }
 
@@ -264,6 +274,21 @@ export function createVerifiedCombatRuntime({
         resourceEvents,
         kiboResourceEvents,
       });
+      continue;
+    }
+    if (descriptor.kind === 'tuning-combat') {
+      const tuningResult = applyTuningCombatDescriptor({
+        descriptor,
+        scenario,
+        state,
+        controlledActorTimeline,
+        resourceEvents,
+      });
+      if (tuningResult?.damageEvent) {
+        appendRuntimeEvent(damageEvents, tuningResult.damageEvent, state);
+        eventLog.push(tuningResult.damageEvent);
+      }
+      if (tuningResult?.event) eventLog.push(tuningResult.event);
     }
   }
 
@@ -290,6 +315,16 @@ export function createVerifiedCombatRuntime({
     eventLog,
     executionBlocks,
     effectGeneration,
+    tuningGeneration,
+    tuningMarkRuntime: tuningGeneration
+      ? {
+          events: tuningGeneration.events,
+          initialState: tuningGeneration.initialState,
+          finalState: tuningGeneration.finalState,
+          unresolved: tuningGeneration.unresolved,
+          summary: tuningGeneration.summary,
+        }
+      : null,
     effectTimeline,
     initialState,
     finalState: createFinalState(state, durationMs),
@@ -327,8 +362,9 @@ export function createVerifiedCombatRuntime({
       resourceBlockedActionCount: executionBlocks.length,
       generatedEffectCommandCount:
         effectGeneration?.summary?.effectCommandCount ?? 0,
-      directSpEventCount:
-        effectGeneration?.summary?.directSpEventCount ?? 0,
+      directSpEventCount: effectGeneration?.summary?.directSpEventCount ?? 0,
+      tuningMarkEventCount: tuningGeneration?.summary?.markEventCount ?? 0,
+      tuningCombatEventCount: tuningGeneration?.summary?.combatEventCount ?? 0,
       applied: true,
     },
     applied: true,
@@ -435,21 +471,14 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
     const inherited = scenario?.initialRuntimeState?.kiboEnergyBySlot?.find(
       entry => entry.slotId === slotId && Number(entry.kiboId) === kiboId
     );
-    const max = positiveNumber(
-      profile?.effectiveMaxSp ?? profile?.maxSp,
-      100
-    );
+    const max = positiveNumber(profile?.effectiveMaxSp ?? profile?.maxSp, 100);
     kiboEnergy.set(slotId, {
       slotId,
       actorId: actor?.id ?? group.actorId ?? null,
       kiboId,
       profile,
       attributesById: new Map(profile?.attributesById ?? []),
-      current: clampNumber(
-        inherited?.currentValue ?? 0,
-        0,
-        max
-      ),
+      current: clampNumber(inherited?.currentValue ?? 0, 0, max),
       max,
     });
   }
@@ -475,9 +504,7 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
   const configuredEnemyToughness = Math.max(
     0,
     Number(
-      scenario?.enemy?.stats?.initialToughness ??
-        enemyProfile?.maxWeakness ??
-        0
+      scenario?.enemy?.stats?.initialToughness ?? enemyProfile?.maxWeakness ?? 0
     )
   );
   const enemyMaxToughness = Math.max(
@@ -724,9 +751,7 @@ function resolveRuntimeAttribute({
     dynamicForceRaw,
     appliedEffects: modifiers,
     formula:
-      dynamicForceRaw == null
-        ? '((S+DB)*(1+DP)+DE)*ratio'
-        : 'forceValue',
+      dynamicForceRaw == null ? '((S+DB)*(1+DP)+DE)*ratio' : 'forceValue',
     sourceIdentity: modifiers.map(modifier => modifier.sourceIdentity),
     ready: true,
   };
@@ -745,7 +770,8 @@ function resolveActorRuntimeAttribute({
     targetId: actorState?.actor?.id,
     timeMs,
     attributeId,
-    baseRaw: actorState?.attributesById?.get(Number(attributeId)) ?? fallbackRaw,
+    baseRaw:
+      actorState?.attributesById?.get(Number(attributeId)) ?? fallbackRaw,
   });
 }
 
@@ -856,9 +882,7 @@ function applyWeaknessStateDescriptor({ descriptor, scenario, state }) {
       phase === 'normal'
         ? enemy.maxToughness
         : clampNumber(formula.value, 0, enemy.maxToughness);
-    recovered = roundValue(
-      Math.max(0, targetToughness - enemy.toughness)
-    );
+    recovered = roundValue(Math.max(0, targetToughness - enemy.toughness));
     enemy.toughness = roundValue(enemy.toughness + recovered);
     stateEventKind =
       phase === 'normal'
@@ -923,9 +947,7 @@ function createWeaknessStateEvent({
   stateEventKind,
 }) {
   const after = createEnemyStateSnapshot(enemy);
-  const hitKey = `verified-${stateEventKind}-${timeToFrame(
-    descriptor.timeMs
-  )}`;
+  const hitKey = `verified-${stateEventKind}-${timeToFrame(descriptor.timeMs)}`;
   const sourceIdentity = [
     enemy.profile.sourceIdentity,
     enemy.lastToughnessBindingIdentity,
@@ -1223,11 +1245,7 @@ function applyDirectSpDescriptor({
   if (directEvent.target.kind === EFFECT_TARGET_KINDS.ACTOR) {
     const sourceState = state.actorEnergy.get(directEvent.target.id);
     if (!sourceState) return;
-    const source = createActorSpSource(
-      sourceState,
-      state,
-      descriptor.timeMs
-    );
+    const source = createActorSpSource(sourceState, state, descriptor.timeMs);
     const baseValue = applyDirectSpEnhancement(
       directEvent.value,
       directSp.enhanceable,
@@ -1287,11 +1305,7 @@ function applyDirectSpDescriptor({
     entry => entry.actorId === directEvent.target.id
   );
   if (!sourceKiboState) return;
-  const source = createKiboSpSource(
-    sourceKiboState,
-    state,
-    descriptor.timeMs
-  );
+  const source = createKiboSpSource(sourceKiboState, state, descriptor.timeMs);
   const baseValue = applyDirectSpEnhancement(
     directEvent.value,
     directSp.enhanceable,
@@ -1449,13 +1463,7 @@ function applyDirectShieldDescriptor({ descriptor, state }) {
   });
 }
 
-function createDirectVitalEvent({
-  type,
-  descriptor,
-  before,
-  after,
-  maximum,
-}) {
+function createDirectVitalEvent({ type, descriptor, before, after, maximum }) {
   const directEvent = descriptor.directEvent;
   return {
     type,
@@ -1470,6 +1478,297 @@ function createDirectVitalEvent({
       maximum: maximum == null ? null : roundValue(maximum),
       effectIdentity: directEvent.effect.effectIdentity,
       sourceIdentity: directEvent.sourceIdentity,
+      appliedToCalculators: true,
+    },
+  };
+}
+
+function applyTuningCombatDescriptor({
+  descriptor,
+  scenario,
+  state,
+  controlledActorTimeline,
+  resourceEvents,
+}) {
+  const tuningEvent = descriptor.tuningEvent;
+  if (tuningEvent.kind === 'periodic-heal') {
+    return {
+      event: applyTuningPeriodicHeal({
+        tuningEvent,
+        state,
+        controlledActorTimeline,
+      }),
+    };
+  }
+  if (tuningEvent.kind === 'overlimit-direct-sp') {
+    const actorState = state.actorEnergy.get(tuningEvent.actorId);
+    if (!actorState) return null;
+    const requestedChange =
+      Number(tuningEvent.template?.valuePerMark) *
+      Number(tuningEvent.markCount);
+    const change = applyClampedResourceChange(actorState, requestedChange);
+    if (change !== 0) {
+      appendRuntimeEvent(
+        resourceEvents,
+        createActorResourceEvent({
+          timeMs: tuningEvent.timeMs,
+          action: tuningEvent.action,
+          actorId: tuningEvent.actorId,
+          actorName: actorState.actor?.name,
+          resourceState: actorState,
+          change,
+          reason: 'tuning-overlimit-direct-sp',
+          confidence: 'verified',
+          hitKey: tuningEvent.eventIdentity,
+          source: {
+            sourceIdentity: tuningEvent.sourceIdentity,
+            formula: {
+              expression: 'consumedMarks * spPerConsumedMark',
+              consumedMarks: tuningEvent.markCount,
+              spPerConsumedMark: tuningEvent.template?.valuePerMark,
+              noShare: true,
+              noEnhancement: true,
+            },
+          },
+        }),
+        state
+      );
+    }
+    return null;
+  }
+
+  const action = tuningEvent.action;
+  const resolution = tuningEvent.resolution;
+  const template = tuningEvent.template;
+  if (!action || !resolution || !template) return null;
+  const source = resolveHitSource({
+    action,
+    resolution,
+    hit: { damage: template },
+    state,
+    timeMs: tuningEvent.timeMs,
+  });
+  if (!source.ready || !state.enemy.profile?.applied) {
+    return {
+      event: {
+        type: 'VERIFIED_TUNING_COMBAT_UNRESOLVED',
+        timeMs: tuningEvent.timeMs,
+        actionId: action.id,
+        actorId: action.actorId,
+        payload: {
+          reason: source.status,
+          eventIdentity: tuningEvent.eventIdentity,
+          sourceIdentity: tuningEvent.sourceIdentity,
+          appliedToCalculators: false,
+        },
+      },
+    };
+  }
+
+  const enemy = state.enemy;
+  const enemyProfile = enemy.profile;
+  const stateBefore = createEnemyStateSnapshot(enemy);
+  const realDamage = ['held-true-damage', 'overlimit-true-damage'].includes(
+    tuningEvent.kind
+  );
+  const markMode = tuningEvent.kind.startsWith('held-') ? 'held' : 'consumed';
+  const commonInput = {
+    attack: source.attack,
+    overlimitCoefficientRaw: template.coefficientRaw,
+    markCoefficientRaw: template.coefficientRaw,
+    ...(markMode === 'held'
+      ? { heldMarks: tuningEvent.markCount }
+      : { consumedMarks: tuningEvent.markCount }),
+    attackerDamageUp: source.damageUp,
+    targetDamageDown: 0,
+    skillTags: [],
+    hitLocationRatio: 1,
+    mastery: source.mastery,
+    attackerLevel: positiveNumber(action.level, 1),
+    masteryConstant: [
+      0,
+      0,
+      Number(
+        getInstalledVerifiedCombatMechanicsPackage()?.tuningMechanicsCatalog
+          ?.mastery?.configuredConstant ?? 0.002
+      ),
+    ],
+    levelPressure: 1,
+    restraintDelta: 0,
+    miscellaneous: 1,
+    inWeakState: enemy.inBreak,
+    breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
+    outputType: template.damageType,
+    outputElement: template.elementalType,
+    currentHp: enemy.hp,
+    minimumRemainingHp: 0,
+    valueShields: enemy.valueShields,
+    hitCountShields: enemy.hitCountShields,
+  };
+  const damageResult = realDamage
+    ? calculateRealDamage({
+        ...commonInput,
+        baseRaw: tuningMarkBaseRaw(
+          source.attack,
+          tuningEvent.markCount,
+          template.coefficientRaw
+        ),
+      })
+    : calculateStackOverLimitDamage(commonInput);
+  updateShieldState(enemy, damageResult, commonInput);
+  const hpDamage = Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
+  const toughnessBefore = enemy.toughness;
+  const weaknessResult = calculateWeaknessDamage({
+    pure: false,
+    attack: source.attack,
+    ratioBasisPoints: template.coefficientRaw,
+    outputDamageRaw: damageResult.preShieldRaw ?? damageResult.raw,
+    outputType: template.damageType,
+    inWeakState: enemy.inBreak,
+    worldEventConflictPer: 1,
+    typeMultiplier: resolveRuntimeWeaknessTypeMultiplier({
+      enemyProfile,
+      damage: template,
+      state,
+      scenario,
+      timeMs: tuningEvent.timeMs,
+    }),
+    elementMultiplier: resolveWeaknessElementMultiplier(enemyProfile, {
+      damage: template,
+    }),
+    weaknessSkillDamageUp: 1,
+    weakBreakDamageRateBasisPoints:
+      template.weakBreakDamageRateBasisPoints ?? 0,
+    maximum: positiveNumberOrNull(enemyProfile.weaknessDamageMaximum),
+    minimum: positiveNumberOrNull(enemyProfile.weaknessDamageMinimum),
+  });
+  const toughnessDamage = Math.min(
+    enemy.toughness,
+    Math.max(0, Number(weaknessResult.deducted ?? 0))
+  );
+  enemy.hp = roundValue(enemy.hp - hpDamage);
+  enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  const breakTriggered =
+    !enemy.inBreak && toughnessBefore > 0 && enemy.toughness <= 0;
+  if (toughnessDamage > 0) {
+    enemy.lastToughnessSourceActionId = action.id;
+    enemy.lastToughnessSourceActorId = action.actorId;
+    enemy.lastToughnessBindingIdentity = resolution.actionBinding.identity;
+  }
+  if (breakTriggered) {
+    enemy.inBreak = true;
+    enemy.breakStartedAtMs = tuningEvent.timeMs;
+    enemy.breakPhase = 'linear_recovery';
+    enemy.normalRecoveryEligibleAtMs = null;
+  } else if (!enemy.inBreak && toughnessDamage > 0) {
+    enemy.normalRecoveryEligibleAtMs =
+      tuningEvent.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
+  }
+  const stateAfter = createEnemyStateSnapshot(enemy);
+  const hitKey = `verified-${tuningEvent.eventIdentity}`;
+  return {
+    damageEvent: {
+      type: 'VERIFIED_TUNING_DAMAGE',
+      timeMs: roundValue(tuningEvent.timeMs),
+      actionId: action.id,
+      actorId: action.actorId,
+      targetId: scenario.enemy.id,
+      hitKey,
+      hitIndex: null,
+      hitSkillId: resolution.actionBinding.controlSkillId,
+      payload: {
+        verifiedCombat: true,
+        tuningMechanics: true,
+        tuningKind: tuningEvent.kind,
+        profileKey: tuningEvent.profile.key,
+        markId: tuningEvent.profile.markId,
+        markCount: tuningEvent.markCount,
+        elementId: template.elementConfigId,
+        attack: source.attack,
+        mastery: source.mastery,
+        rawDamage: hpDamage,
+        toughnessDamage,
+        hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
+        toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
+        formulaVersion: 'azpr-verified-q16.16-20260718',
+        formulaBreakdown: {
+          version: 'azpr-verified-tuning-damage-v1',
+          status: 'verified-tuning-formula-applied',
+          expression: damageResult.mode,
+          result: hpDamage,
+          verifiedResult: damageResult,
+          weaknessResult,
+          sourceIdentity: tuningEvent.sourceIdentity,
+          appliedLayerKeys: ['verifiedTuningMechanics'],
+          unappliedLayerKeys: ['unverifiedCallbacks'],
+        },
+        segment: {
+          index: 0,
+          label: `${tuningEvent.profile.element}调谐`,
+          multiplier:
+            (Number(template.coefficientRaw) * tuningEvent.markCount) / 10_000,
+          elementId: template.elementConfigId,
+        },
+        hitKey,
+        confidence: 'verified',
+        precision: 'q16.16-runtime-integerized',
+        timingAccuracy: 'authoritative-battle-effect-frame',
+        breakState: {
+          before: toughnessBefore,
+          after: enemy.toughness,
+          maximum: enemy.maxToughness,
+          triggered: breakTriggered,
+          inBreak: enemy.inBreak,
+        },
+        stateTransaction: {
+          before: stateBefore,
+          delta: {
+            enemyHp: roundValue(-hpDamage),
+            enemyToughness: roundValue(-toughnessDamage),
+          },
+          after: stateAfter,
+        },
+        sourceIdentity: tuningEvent.sourceIdentity,
+        appliedToCalculators: true,
+      },
+    },
+  };
+}
+
+function applyTuningPeriodicHeal({
+  tuningEvent,
+  state,
+  controlledActorTimeline,
+}) {
+  const controlledActor = resolveControlledActorAt(
+    controlledActorTimeline,
+    tuningEvent.timeMs
+  );
+  const vital = state.actorVitals.get(controlledActor?.actorId);
+  if (!vital) return null;
+  const ratioPerMark = Number(tuningEvent.profile.heldEffect?.perMark);
+  const requested = vital.maximumHp * ratioPerMark * tuningEvent.markCount;
+  const before = vital.currentHp;
+  vital.currentHp = clampNumber(
+    vital.currentHp + requested,
+    0,
+    vital.maximumHp
+  );
+  const change = roundValue(vital.currentHp - before);
+  return {
+    type: 'VERIFIED_TUNING_PERIODIC_HEAL',
+    timeMs: tuningEvent.timeMs,
+    actionId: tuningEvent.actionId,
+    actorId: controlledActor.actorId,
+    payload: {
+      profileKey: tuningEvent.profile.key,
+      markId: tuningEvent.profile.markId,
+      markCount: tuningEvent.markCount,
+      beforeValue: before,
+      change,
+      afterValue: vital.currentHp,
+      maxValue: vital.maximumHp,
+      sourceIdentity: tuningEvent.sourceIdentity,
       appliedToCalculators: true,
     },
   };
@@ -1535,11 +1834,13 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
     targetMagicDefense:
       targetMagicDefense *
       positiveNumber(scenario?.enemy?.defenseMultiplier, 1),
-    physicalPenetrationBasisPoints: normalizePenetration(
-      hit.damage.physicalPenetrationBasisPoints
+    physicalPenetrationBasisPoints: combinePenetrationBasisPoints(
+      hit.damage.physicalPenetrationBasisPoints,
+      source.physicalPenetrationBasisPoints
     ),
-    magicPenetrationBasisPoints: normalizePenetration(
-      hit.damage.magicPenetrationBasisPoints
+    magicPenetrationBasisPoints: combinePenetrationBasisPoints(
+      hit.damage.magicPenetrationBasisPoints,
+      source.magicPenetrationBasisPoints
     ),
     elementCalculationFactor: basisPoints(
       hit.damage.elementCalculationFactorBasisPoints,
@@ -1568,9 +1869,7 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
     restraintDelta: 0,
     miscellaneous: 1,
     inWeakState: enemy.inBreak,
-    breakDamageUp: basisPoints(
-      enemyProfile.breakDamageUpBasisPoints
-    ),
+    breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
     outputType: hit.damage.damageType,
     outputElement: hit.damage.elementalType,
     currentHp: enemy.hp,
@@ -1590,12 +1889,14 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
   updateShieldState(enemy, damageResult, damageInput);
   const hpDamage = Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
   const toughnessBefore = enemy.toughness;
-  const preShieldHpDamageRaw =
-    damageResult.preShieldRaw ?? damageResult.raw;
-  const weaknessTypeMultiplier = resolveWeaknessTypeMultiplier(
+  const preShieldHpDamageRaw = damageResult.preShieldRaw ?? damageResult.raw;
+  const weaknessTypeMultiplier = resolveRuntimeWeaknessTypeMultiplier({
     enemyProfile,
-    hit
-  );
+    damage: hit.damage,
+    state,
+    scenario,
+    timeMs: descriptor.timeMs,
+  });
   const weaknessElementMultiplier = resolveWeaknessElementMultiplier(
     enemyProfile,
     hit
@@ -1688,10 +1989,7 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
         rawDamage: hpDamage,
         toughnessDamage,
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
-        toughnessLossPercent: ratioOrZero(
-          toughnessDamage,
-          enemy.maxToughness
-        ),
+        toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
         formulaVersion: 'azpr-verified-q16.16-20260718',
         formulaBreakdown: {
           version: 'azpr-verified-combat-hit-v1',
@@ -1949,9 +2247,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
       fallbackBasisPoints: profile?.magicDamageUpBasisPoints,
     });
     const elementAttributeId =
-      ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[
-        Number(hit?.damage?.elementalType)
-      ];
+      ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[Number(hit?.damage?.elementalType)];
     const elementDamageUpResult = resolveKiboRatioAttribute({
       state,
       kiboState,
@@ -1962,6 +2258,30 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
         profile?.elementDamageUpBasisPointsByType?.[
           Number(hit?.damage?.elementalType)
         ],
+    });
+    const physicalPenetrationResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 29,
+      fallbackBasisPoints: 0,
+    });
+    const magicPenetrationResult = resolveKiboRatioAttribute({
+      state,
+      kiboState,
+      action,
+      timeMs,
+      attributeId: 30,
+      fallbackBasisPoints: 0,
+    });
+    const masteryResult = resolveRuntimeAttribute({
+      state,
+      targetKind: EFFECT_TARGET_KINDS.KIBO,
+      targetId: action.actorId,
+      timeMs,
+      attributeId: 229,
+      baseRaw: kiboState?.attributesById?.get(229) ?? 0,
     });
     return {
       ready: attack != null,
@@ -1976,6 +2296,11 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
       physicalDamageUp: basisPoints(physicalDamageUpResult.value),
       magicDamageUp: basisPoints(magicDamageUpResult.value),
       elementDamageUp: basisPoints(elementDamageUpResult.value),
+      physicalPenetrationBasisPoints:
+        numberOrNull(physicalPenetrationResult.value) ?? 0,
+      magicPenetrationBasisPoints:
+        numberOrNull(magicPenetrationResult.value) ?? 0,
+      mastery: numberOrNull(masteryResult.value) ?? 0,
       dynamicPropertyTrace: collectDynamicPropertyTrace([
         attackResult,
         criticalRateResult,
@@ -1984,6 +2309,9 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
         physicalDamageUpResult,
         magicDamageUpResult,
         elementDamageUpResult,
+        physicalPenetrationResult,
+        magicPenetrationResult,
+        masteryResult,
       ]),
       sourceIdentity: profile?.sourceIdentity ?? null,
     };
@@ -2037,11 +2365,30 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     actorState,
     timeMs,
     attributeId:
-      ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[
-        Number(hit?.damage?.elementalType)
-      ],
+      ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[Number(hit?.damage?.elementalType)],
     fallbackRaw:
       resolveActorElementDamageUp(actor, hit?.damage?.elementalType) * 10000,
+  });
+  const physicalPenetrationResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 29,
+    fallbackRaw: getAttribute(actor, 'PERPIERCING') ?? 0,
+  });
+  const magicPenetrationResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 30,
+    fallbackRaw: getAttribute(actor, 'PERMPIERCING') ?? 0,
+  });
+  const masteryResult = resolveActorRuntimeAttribute({
+    state,
+    actorState,
+    timeMs,
+    attributeId: 229,
+    fallbackRaw: getAttribute(actor, 'MASTERY') ?? 0,
   });
   const attack = numberOrNull(attackResult.value);
   return {
@@ -2057,6 +2404,11 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     physicalDamageUp: basisPoints(physicalDamageUpResult.value),
     magicDamageUp: basisPoints(magicDamageUpResult.value),
     elementDamageUp: basisPoints(elementDamageUpResult.value),
+    physicalPenetrationBasisPoints:
+      numberOrNull(physicalPenetrationResult.value) ?? 0,
+    magicPenetrationBasisPoints:
+      numberOrNull(magicPenetrationResult.value) ?? 0,
+    mastery: numberOrNull(masteryResult.value) ?? 0,
     dynamicPropertyTrace: collectDynamicPropertyTrace([
       attackResult,
       criticalRateResult,
@@ -2065,6 +2417,9 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
       physicalDamageUpResult,
       magicDamageUpResult,
       elementDamageUpResult,
+      physicalPenetrationResult,
+      magicPenetrationResult,
+      masteryResult,
     ]),
     sourceIdentity: actor?.stats?.source ?? 'compiled-actor-stats',
   };
@@ -2123,7 +2478,8 @@ function createActorSpSource(actorState, state, timeMs) {
       actorState,
       timeMs,
       attributeId: 105,
-      fallbackRaw: profile?.spGetUpBasisPoints ?? getAttribute(actor, 'SPGETUP'),
+      fallbackRaw:
+        profile?.spGetUpBasisPoints ?? getAttribute(actor, 'SPGETUP'),
     }),
     spRetAuto: resolveActorRuntimeRatio({
       state,
@@ -2349,14 +2705,27 @@ function resolveActorElementDamageUp(actor, elementalType) {
   return basisPoints(getAttribute(actor, keyByElement[elementalType]));
 }
 
-function resolveWeaknessTypeMultiplier(enemyProfile, hit) {
-  const physical = Number(hit.damage.physicalRatioBasisPoints) > 0;
-  return basisPoints(
-    physical
-      ? enemyProfile?.typeMultipliersBasisPoints?.physical
-      : enemyProfile?.typeMultipliersBasisPoints?.magic,
-    1
-  );
+function resolveRuntimeWeaknessTypeMultiplier({
+  enemyProfile,
+  damage,
+  state,
+  scenario,
+  timeMs,
+}) {
+  const physical = Number(damage?.physicalRatioBasisPoints) > 0;
+  const attributeId = physical ? 202 : 203;
+  const baseRaw = physical
+    ? enemyProfile?.typeMultipliersBasisPoints?.physical
+    : enemyProfile?.typeMultipliersBasisPoints?.magic;
+  const result = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: scenario?.enemy?.id,
+    timeMs,
+    attributeId,
+    baseRaw,
+  });
+  return basisPoints(result.value, 1);
 }
 
 function resolveWeaknessElementMultiplier(enemyProfile, hit) {
@@ -2385,9 +2754,7 @@ function resolveHitRatio(hit, action) {
 function findKiboStateByAction(state, action) {
   const slotId = state.slotIdByActorId.get(String(action.actorId));
   const entry = slotId ? state.kiboEnergy.get(slotId) : null;
-  const expectedKiboId = Number(
-    action.kiboId ?? action.actor?.loadout?.kiboId
-  );
+  const expectedKiboId = Number(action.kiboId ?? action.actor?.loadout?.kiboId);
   if (!entry || Number(entry.kiboId) !== expectedKiboId) return null;
   return entry;
 }
@@ -2413,14 +2780,10 @@ function createResourceExecutionBlock({
     slotId: resourceState?.slotId ?? null,
     kiboId: resourceState?.kiboId ?? null,
     timeMs: roundValue(descriptor.timeMs),
-    requiredValue:
-      requiredValue == null ? null : roundValue(requiredValue),
+    requiredValue: requiredValue == null ? null : roundValue(requiredValue),
     currentValue:
-      resourceState?.current == null
-        ? null
-        : roundValue(resourceState.current),
-    maxValue:
-      resourceState?.max == null ? null : roundValue(resourceState.max),
+      resourceState?.current == null ? null : roundValue(resourceState.current),
+    maxValue: resourceState?.max == null ? null : roundValue(resourceState.max),
     valueUnit: 'absolute-sp-points',
     reason,
     sourceIdentity: resolution.controlBinding?.logic?.sourceIdentity ?? null,
@@ -2463,14 +2826,10 @@ function createEnemyStateSnapshot(enemy) {
     breakPhase:
       enemy.breakPhase ?? (enemy.inBreak ? 'linear_recovery' : 'normal'),
     breakStartedAtMs: numberOrNull(enemy.breakStartedAtMs),
-    normalRecoveryEligibleAtMs: numberOrNull(
-      enemy.normalRecoveryEligibleAtMs
-    ),
-    lastToughnessSourceActionId:
-      enemy.lastToughnessSourceActionId ?? null,
+    normalRecoveryEligibleAtMs: numberOrNull(enemy.normalRecoveryEligibleAtMs),
+    lastToughnessSourceActionId: enemy.lastToughnessSourceActionId ?? null,
     lastToughnessSourceActorId: enemy.lastToughnessSourceActorId ?? null,
-    lastToughnessBindingIdentity:
-      enemy.lastToughnessBindingIdentity ?? null,
+    lastToughnessBindingIdentity: enemy.lastToughnessBindingIdentity ?? null,
     valueShields: normalizeValueShields(enemy.valueShields),
     hitCountShields: normalizeHitCountShields(enemy.hitCountShields),
   };
@@ -2586,6 +2945,14 @@ function normalizePenetration(value) {
   return number == null || number < 0 ? 0 : number;
 }
 
+function combinePenetrationBasisPoints(...values) {
+  return clampNumber(
+    values.reduce((sum, value) => sum + normalizePenetration(value), 0),
+    0,
+    10_000
+  );
+}
+
 function normalizeValueShields(values) {
   return (Array.isArray(values) ? values : []).map(value => {
     const normalized =
@@ -2627,6 +2994,7 @@ function compareDescriptors(left, right) {
     'direct-heal': 2,
     'direct-shield': 2,
     hit: 3,
+    'tuning-combat': 4,
     'manual-resource': 4,
     'auto-sp-tick': 5,
   };

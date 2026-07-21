@@ -3,12 +3,12 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：562
 - 已关联：562
-- 可运行：381
+- 可运行：382
 - 明确零：0
-- 未解析：181
+- 未解析：180
 - 真实命中节点：1174
-- 公开动作变体：592（未解析 211）
-- 非零回能元素：667（未关联 492）
+- 公开动作变体：592（未解析 210）
+- 非零回能元素：667（未关联 491）
 - 普攻输入链：20 条 / 95 个输入段（可运行 51，未解析 44）
 - 普攻输入时序：已确认 63，未确认 32
 
@@ -47,7 +47,7 @@
 | actor | normal-attack | 20 | 20 | 15 | 0 | 5 | 86 |
 | actor | perfect-parry | 20 | 20 | 0 | 0 | 20 | 0 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
-| actor | star-carry | 17 | 17 | 8 | 0 | 9 | 42 |
+| actor | star-carry | 17 | 17 | 9 | 0 | 8 | 42 |
 | actor | star-combo | 20 | 20 | 18 | 0 | 2 | 18 |
 | actor | star-skill | 20 | 20 | 14 | 0 | 6 | 114 |
 | actor | ultimate | 20 | 20 | 18 | 0 | 2 | 123 |
@@ -64,17 +64,17 @@
 - `actor|101007|10100721|2|10100727` 芃芃 / perfect-parry / 来打我啊！: pack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|101010|10101001|0|10101003` 涂山小玉 / normal-attack / 画扇春: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|101010|10101001|2|10101010` 涂山小玉 / charged-attack / 画扇春: multiple-control-variants-without-root-selection
-- `actor|101010|10101021|0|10101021` 涂山小玉 / star-carry / 驭仙风: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-target-unresolved, property-formula-not-literal-function-5, property-conditions-not-expanded, effect-trigger-frame-missing, judgment-state-machine-deferred-to-m8-c, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, pack-state-machine-deferred-to-m8-c, sp-formula-not-literal-function-5
+- `actor|101010|10101021|0|10101021` 涂山小玉 / star-carry / 驭仙风: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-target-unresolved, property-formula-not-literal-function-5, property-conditions-not-expanded, effect-trigger-frame-missing, judgment-state-machine-deferred-to-m8-c, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, pack-state-machine-deferred-to-m8-c, sp-formula-not-literal-function-5, tuning-consume-judgment-missing, tuning-consume-mark-identity-ambiguous, tuning-consume-success-branch-unresolved
 - `actor|101010|10101021|2|10101027` 涂山小玉 / perfect-parry / 驭仙风: pack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|102001|10200101|1|10200110` 莉莉 / charged-attack / 风翼枪术: multiple-control-variants-without-root-selection
 - `actor|102001|10200122|2|10200127` 莉莉 / perfect-parry / 骑士加护: multiple-control-variants-without-root-selection
 - `actor|103002|10300201|0|10300203` 红宝石 / normal-attack / 灵感的火花: multiple-control-variants-without-root-selection
-- `actor|103002|10300212|0|10300212` 红宝石 / star-skill / 艺术的舞曲: trigger-frame-missing, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, stack-state-machine-deferred-to-m8-c, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, property-formula-not-literal-function-5
+- `actor|103002|10300212|0|10300212` 红宝石 / star-skill / 艺术的舞曲: trigger-frame-missing, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, property-formula-not-literal-function-5
 - `actor|103002|10300221|1|10300225` 红宝石 / limit-counter / 一瞬的灼热: multiple-control-variants-without-root-selection
 - `actor|103002|10300221|2|10300227` 红宝石 / perfect-parry / 一瞬的灼热: pack-state-machine-deferred-to-m8-c, effect-trigger-frame-missing, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded
 - `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: multiple-control-variants-without-root-selection
 - `actor|107001|10700101|4|10700110` 西芙莉雅 / charged-attack / 疾风之箭: multiple-control-variants-without-root-selection
-- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, stack-state-machine-deferred-to-m8-c, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
+- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
 - `actor|107001|10700112|0|10700112` 西芙莉雅 / star-skill / 穿流之舞: multiple-control-variants-without-root-selection
 - `actor|107001|10700112|4|10700126` 西芙莉雅 / star-combo / 穿流之舞: multiple-control-variants-without-root-selection
 - `actor|107001|10700113|0|10700113` 西芙莉雅 / ultimate / 烈风回旋曲: multiple-root-player-skill-variants
@@ -97,7 +97,6 @@
 - `actor|108002|10800222|2|10800227` 璐璐卡 / perfect-parry / 幽浪之声: pack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|108003|10800301|1|10800310` 米蒂 / charged-attack / 破空箭: multiple-control-variants-without-root-selection
 - `actor|108003|10800301|6|10800315` 米蒂 / dodge-attack / 破空箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|108003|10800322|0|10800322` 米蒂 / star-carry / 唤雷箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, stack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, effect-trigger-frame-missing
 - `actor|108003|10800322|2|10800327` 米蒂 / perfect-parry / 唤雷箭: pack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|108005|10800501|1|10800510` 卡塔露 / charged-attack / 坚盾乱打: multiple-control-variants-without-root-selection
 - `actor|108005|10800522|2|10800527` 卡塔露 / perfect-parry / 不屈者: pack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
@@ -115,8 +114,8 @@
 - `actor|112002|11200201|0|11200203` 艾妮丝 / normal-attack / 慈爱的惩戒: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, effect-combine-semantics-unresolved, heal-formula-not-literal-function-5
 - `actor|112002|11200201|1|11200210` 艾妮丝 / charged-attack / 慈爱的惩戒: multiple-root-player-skill-variants
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|112002|11200212|0|11200212` 艾妮丝 / star-skill / 不许捣乱哦: base-function-unverified, trigger-frame-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, stack-state-machine-deferred-to-m8-c, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, heal-formula-not-literal-function-5
-- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: inject-wrapper-classified-through-child-edges, effect-target-ally-unresolved, property-formula-not-literal-function-5, effect-trigger-frame-missing, effect-target-unresolved, stack-state-machine-deferred-to-m8-c, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
+- `actor|112002|11200212|0|11200212` 艾妮丝 / star-skill / 不许捣乱哦: base-function-unverified, trigger-frame-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, heal-formula-not-literal-function-5
+- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: inject-wrapper-classified-through-child-edges, effect-target-ally-unresolved, property-formula-not-literal-function-5, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|2|11200227` 艾妮丝 / perfect-parry / 后勤保障: pack-state-machine-deferred-to-m8-c, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|199001|19900101|1|19900110` 女主角 / charged-attack / 跃动之星: multiple-root-player-skill-variants
@@ -241,7 +240,7 @@
 
 ## 未关联非零回能元素
 
-- linked-only-to-unresolved-public-action: 16
+- linked-only-to-unresolved-public-action: 15
 - not-referenced-by-public-action-control: 400
 - referenced-only-by-unselected-control-variant: 76
 

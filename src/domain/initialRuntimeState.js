@@ -1,4 +1,4 @@
-export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 3;
+export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 4;
 export const INITIAL_RUNTIME_STATE_CONTRACT_NAME = 'AzPrInitialRuntimeState';
 
 export function normalizeInitialRuntimeState(value, defaults = {}) {
@@ -22,12 +22,14 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
   const activeEffects = normalizeInitialActiveEffects(
     sourceValue.activeEffects
   );
+  const tuningMarks = normalizeInitialTuningMarks(sourceValue.tuningMarks);
   if (
     !controlledActor &&
     !enemy &&
     selfEnergyByActor.length === 0 &&
     kiboEnergyBySlot.length === 0 &&
-    activeEffects.length === 0
+    activeEffects.length === 0 &&
+    tuningMarks.length === 0
   ) {
     return null;
   }
@@ -45,6 +47,7 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     selfEnergyByActor,
     kiboEnergyBySlot,
     activeEffects,
+    tuningMarks,
     applied: true,
   };
 }
@@ -110,15 +113,11 @@ function normalizeInitialEnemyState(value) {
     toughness,
     inBreak,
     breakElapsedMs: inBreak ? (breakElapsedMs ?? 0) : 0,
-    recoveryDelayRemainingMs: inBreak
-      ? 0
-      : recoveryDelayRemainingMs,
+    recoveryDelayRemainingMs: inBreak ? 0 : recoveryDelayRemainingMs,
     lastToughnessSourceActionId: optionalText(
       value.lastToughnessSourceActionId
     ),
-    lastToughnessSourceActorId: optionalText(
-      value.lastToughnessSourceActorId
-    ),
+    lastToughnessSourceActorId: optionalText(value.lastToughnessSourceActorId),
     lastToughnessBindingIdentity: optionalText(
       value.lastToughnessBindingIdentity
     ),
@@ -291,6 +290,44 @@ function normalizeInitialActiveEffects(values) {
         sourceStatus: 'effect-inherited-from-cycle-boundary',
         appliedToCalculators: false,
         active: true,
+      },
+    ];
+  });
+}
+
+function normalizeInitialTuningMarks(values) {
+  const usedMarkIds = new Set();
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const markId = positiveIntegerOrNull(value?.markId);
+    if (!markId || usedMarkIds.has(markId)) return [];
+    const layers = (Array.isArray(value?.layers) ? value.layers : []).flatMap(
+      layer => {
+        const remainingDurationMs = nonNegativeNumberOrNull(
+          layer?.remainingDurationMs
+        );
+        if (remainingDurationMs == null || remainingDurationMs <= 0) return [];
+        return [
+          {
+            remainingDurationMs,
+            sourceActionId: optionalText(layer?.sourceActionId),
+            sourceActorId: optionalText(layer?.sourceActorId),
+            sourceIdentity: cloneObject(layer?.sourceIdentity),
+          },
+        ];
+      }
+    );
+    if (layers.length === 0) return [];
+    usedMarkIds.add(markId);
+    return [
+      {
+        markId,
+        profileKey: optionalText(value?.profileKey),
+        elementName: optionalText(value?.elementName),
+        layers: layers.slice(0, 5),
+        heldReadyRemainingMs:
+          nonNegativeNumberOrNull(value?.heldReadyRemainingMs) ?? 0,
+        valueUnit: 'mark-stacks',
+        baselineStatus: 'baseline-inherited-from-cycle-boundary',
       },
     ];
   });

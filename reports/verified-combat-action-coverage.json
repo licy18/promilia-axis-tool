@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "1366c171672c6ab9d75f92975053d1f0489f8341fe063e61ce5a6721e7e844e3",
+  "packageHash": "91d8bc5dc98d05e67134ece031636e84499e620076a2efa2132fcf0562ecbde9",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -20,9 +20,9 @@
     "directoryActionCount": 562,
     "classifiedActionCount": 562,
     "linkedActionCount": 562,
-    "runnableActionCount": 381,
+    "runnableActionCount": 382,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 181,
+    "unresolvedActionCount": 180,
     "hitNodeCount": 1174,
     "dimensions": {
       "hp": {
@@ -47,12 +47,12 @@
       }
     },
     "controlVariantCount": 908,
-    "unresolvedControlVariantCount": 536,
+    "unresolvedControlVariantCount": 535,
     "nonzeroRecoveryElementCount": 667,
-    "unresolvedNonzeroRecoveryElementCount": 492,
+    "unresolvedNonzeroRecoveryElementCount": 491,
     "unresolvedReferenceCount": 2320,
     "publicVariantCount": 592,
-    "unresolvedPublicVariantCount": 211,
+    "unresolvedPublicVariantCount": 210,
     "attackInputChainCount": 20,
     "attackInputSegmentCount": 95,
     "appliedAttackInputSegmentCount": 51,
@@ -265,9 +265,9 @@
       "directoryActionCount": 17,
       "classifiedActionCount": 17,
       "linkedActionCount": 17,
-      "runnableActionCount": 8,
+      "runnableActionCount": 9,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 9,
+      "unresolvedActionCount": 8,
       "hitNodeCount": 42,
       "dimensions": {
         "hp": {
@@ -955,9 +955,9 @@
       "directoryActionCount": 10,
       "classifiedActionCount": 10,
       "linkedActionCount": 10,
-      "runnableActionCount": 6,
+      "runnableActionCount": 7,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 4,
+      "unresolvedActionCount": 3,
       "hitNodeCount": 22,
       "dimensions": {
         "hp": {
@@ -6374,10 +6374,13 @@
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
-        "sp-formula-not-literal-function-5"
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ]
     },
     {
@@ -6490,7 +6493,6 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -6602,7 +6604,7 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ]
@@ -7106,32 +7108,6 @@
       ]
     },
     {
-      "identity": "actor|108003|10800322|0|10800322",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "ownerName": "米蒂",
-      "actionKind": "star-carry",
-      "sourceSkillId": 10800322,
-      "sourceSkillName": "唤雷箭",
-      "controlSkillId": 10800322,
-      "publicVariants": [
-        {
-          "index": 0,
-          "label": "星携技",
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800322].level.labels[0]"
-        }
-      ],
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing"
-      ]
-    },
-    {
       "identity": "actor|108003|10800322|2|10800327",
       "ownerKind": "actor",
       "ownerId": 108003,
@@ -7569,7 +7545,7 @@
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
@@ -7597,7 +7573,7 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ]
@@ -57961,9 +57937,8 @@
       "classification": "applied",
       "reasons": [
         "inject-wrapper-classified-through-child-edges",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing"
@@ -57994,9 +57969,8 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
@@ -58020,7 +57994,6 @@
         "effect-target-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -58368,9 +58341,11 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "judgment-state-machine-deferred-to-m8-c",
         "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
         "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101012].level.labels[0]"
@@ -58405,14 +58380,17 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "judgment-state-machine-deferred-to-m8-c",
         "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
         "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
         "effect-trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges",
         "effect-combine-semantics-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "property-formula-not-literal-function-5",
         "property-conditions-not-expanded"
       ],
@@ -58440,10 +58418,13 @@
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
-        "sp-formula-not-literal-function-5"
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101021].level.labels[0]"
     },
@@ -58587,7 +58568,6 @@
       "reasons": [
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -58697,7 +58677,6 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -58749,9 +58728,8 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -58837,7 +58815,7 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -58951,7 +58929,7 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -59085,7 +59063,7 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "effect-target-any-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -59277,9 +59255,9 @@
       "classification": "applied",
       "reasons": [
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
@@ -59316,6 +59294,7 @@
         "effect-trigger-frame-missing",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5",
+        "tuning-consume-mark-identity-ambiguous",
         "pack-state-machine-deferred-to-m8-c"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700313].level.labels[0]"
@@ -59454,16 +59433,18 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
-        "inject-wrapper-classified-through-child-edges",
         "pack-state-machine-deferred-to-m8-c",
-        "sp-formula-not-literal-function-5"
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800112].level.labels[0]"
     },
@@ -59693,9 +59674,9 @@
         "inject-wrapper-classified-through-child-edges",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
+        "tuning-consume-mark-identity-ambiguous",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "property-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800213].level.labels[0]"
     },
@@ -59887,7 +59868,6 @@
         "projectile-impact-frame-runtime-dependent",
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "effect-trigger-frame-missing",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
@@ -59903,13 +59883,12 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "星携技",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -60015,9 +59994,9 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800512].level.labels[0]"
@@ -60049,9 +60028,9 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
@@ -60068,9 +60047,9 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800522].level.labels[0]"
@@ -60213,9 +60192,11 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
         "pack-state-machine-deferred-to-m8-c",
         "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
         "effect-trigger-frame-missing",
         "sp-recover-type-not-direct-sp"
       ],
@@ -60416,10 +60397,11 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-state-machine-deferred-to-m8-c"
+        "pack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900213].level.labels[0]"
     },
@@ -60747,9 +60729,8 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -60787,6 +60768,7 @@
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "tuning-consume-mark-identity-ambiguous",
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200113].level.labels[0]"
@@ -60944,7 +60926,7 @@
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
@@ -60986,6 +60968,7 @@
         "inject-wrapper-classified-through-child-edges",
         "heal-formula-not-literal-function-5",
         "judgment-state-machine-deferred-to-m8-c",
+        "tuning-consume-mark-identity-ambiguous",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -61007,7 +60990,7 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -61168,12 +61151,12 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "property-conditions-not-expanded",
+        "tuning-mark-max-mismatch",
         "pack-state-machine-deferred-to-m8-c",
         "heal-formula-not-literal-function-5"
       ],
@@ -61331,12 +61314,12 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "property-conditions-not-expanded",
+        "tuning-mark-max-mismatch",
         "pack-state-machine-deferred-to-m8-c",
         "heal-formula-not-literal-function-5"
       ],
@@ -61487,9 +61470,9 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900312].level.labels[0]"
@@ -61528,7 +61511,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded"
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900313].level.labels[0]"
     },
@@ -62165,7 +62151,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -63030,7 +63015,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -63123,7 +63107,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -63172,7 +63155,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -63410,7 +63392,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -63472,7 +63453,6 @@
         "projectile-impact-frame-runtime-dependent",
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -63522,7 +63502,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -63572,7 +63551,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -63621,7 +63599,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -63809,7 +63786,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -63858,7 +63835,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -64594,7 +64571,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -64643,7 +64620,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -64692,7 +64669,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -64748,7 +64724,6 @@
         "effect-target-any-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -64801,7 +64776,6 @@
         "effect-target-any-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -65423,7 +65397,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -65473,7 +65446,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -65523,7 +65495,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -65729,7 +65700,7 @@
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -65777,7 +65748,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -65962,7 +65933,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66016,7 +65986,6 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66066,7 +66035,6 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66113,7 +66081,6 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66163,7 +66130,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -66219,7 +66186,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -66272,7 +66239,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -66320,7 +66287,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -66369,7 +66336,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -66418,7 +66385,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -66467,7 +66434,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66515,7 +66481,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66568,7 +66533,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66619,7 +66583,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -66670,7 +66633,7 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -66869,7 +66832,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -66919,7 +66881,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -67116,7 +67077,6 @@
       "classification": "applied",
       "reasons": [
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -67168,7 +67128,6 @@
       "reasons": [
         "sp-recover-type-not-direct-sp",
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -67219,7 +67178,6 @@
       "reasons": [
         "sp-recover-type-not-direct-sp",
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -67273,7 +67231,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -67326,7 +67284,7 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -67376,7 +67334,7 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -67577,9 +67535,8 @@
       "classification": "applied",
       "reasons": [
         "inject-wrapper-classified-through-child-edges",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing"
@@ -67610,9 +67567,8 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
@@ -67636,7 +67592,6 @@
         "effect-target-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -67998,9 +67953,11 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "judgment-state-machine-deferred-to-m8-c",
         "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
         "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/skill_control_10101012__-2381657275272288454.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -68035,14 +67992,17 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "judgment-state-machine-deferred-to-m8-c",
         "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
         "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
         "effect-trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges",
         "effect-combine-semantics-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "property-formula-not-literal-function-5",
         "property-conditions-not-expanded"
       ],
@@ -68070,10 +68030,13 @@
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
-        "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
-        "sp-formula-not-literal-function-5"
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68267,7 +68230,6 @@
       "reasons": [
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -68436,7 +68398,6 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -68488,9 +68449,8 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -68687,7 +68647,7 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -68819,7 +68779,7 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -68986,7 +68946,7 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "effect-target-any-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -69181,9 +69141,9 @@
       "classification": "applied",
       "reasons": [
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
@@ -69246,6 +69206,7 @@
         "effect-trigger-frame-missing",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5",
+        "tuning-consume-mark-identity-ambiguous",
         "pack-state-machine-deferred-to-m8-c"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700313.asset/MonoBehaviour/skill_control_10700313__-8866097631418451983.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -69443,16 +69404,18 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
-        "inject-wrapper-classified-through-child-edges",
         "pack-state-machine-deferred-to-m8-c",
-        "sp-formula-not-literal-function-5"
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -69702,9 +69665,9 @@
         "inject-wrapper-classified-through-child-edges",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
+        "tuning-consume-mark-identity-ambiguous",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "property-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800213.asset/MonoBehaviour/skill_control_10800213__2713514196818492109.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -69877,7 +69840,6 @@
         "projectile-impact-frame-runtime-dependent",
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "effect-trigger-frame-missing",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
@@ -69893,13 +69855,12 @@
       "actionIdentities": [
         "actor|108003|10800322|0|10800322"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -70029,9 +69990,9 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800512.asset/MonoBehaviour/skill_control_10800512__739684842055435993.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -70063,9 +70024,9 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
@@ -70082,9 +70043,9 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800522.asset/MonoBehaviour/skill_control_10800522__8256323534925806707.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -70227,9 +70188,11 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
         "pack-state-machine-deferred-to-m8-c",
         "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
         "effect-trigger-frame-missing",
         "sp-recover-type-not-direct-sp"
       ],
@@ -70396,10 +70359,11 @@
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-state-machine-deferred-to-m8-c"
+        "pack-state-machine-deferred-to-m8-c",
+        "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900213.asset/MonoBehaviour/skill_control_10900213__8734496154904828250.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70776,9 +70740,8 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -70816,6 +70779,7 @@
         "effect-trigger-frame-missing",
         "judgment-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "tuning-consume-mark-identity-ambiguous",
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -71017,7 +70981,7 @@
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
@@ -71059,6 +71023,7 @@
         "inject-wrapper-classified-through-child-edges",
         "heal-formula-not-literal-function-5",
         "judgment-state-machine-deferred-to-m8-c",
+        "tuning-consume-mark-identity-ambiguous",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -71080,7 +71045,7 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -71237,12 +71202,12 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "property-conditions-not-expanded",
+        "tuning-mark-max-mismatch",
         "pack-state-machine-deferred-to-m8-c",
         "heal-formula-not-literal-function-5"
       ],
@@ -71396,12 +71361,12 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "property-conditions-not-expanded",
+        "tuning-mark-max-mismatch",
         "pack-state-machine-deferred-to-m8-c",
         "heal-formula-not-literal-function-5"
       ],
@@ -71533,9 +71498,9 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
-        "effect-target-unresolved",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900312.asset/MonoBehaviour/skill_control_19900312__7991412169588548834.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -71574,7 +71539,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded"
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900313.asset/MonoBehaviour/skill_control_19900313__-3472649091528756862.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -72563,7 +72531,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -73799,7 +73766,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74023,7 +73989,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74152,7 +74117,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74661,7 +74625,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74788,7 +74751,6 @@
         "projectile-impact-frame-runtime-dependent",
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74903,7 +74865,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -74937,7 +74898,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -75052,7 +75012,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -75431,7 +75390,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -75546,7 +75505,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -76176,7 +76135,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -76209,7 +76168,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -76245,7 +76204,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -76285,7 +76243,6 @@
         "effect-target-any-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -76404,7 +76361,6 @@
         "effect-target-any-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -76982,7 +76938,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -77016,7 +76971,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -77050,7 +77004,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -77438,7 +77391,7 @@
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -77551,7 +77504,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -77852,7 +77805,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -77890,7 +77842,6 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -77924,7 +77875,6 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -78037,7 +77987,6 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-unresolved",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -78074,7 +78023,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -78114,7 +78063,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -78154,7 +78103,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-state-machine-deferred-to-m8-c",
@@ -78189,7 +78138,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -78222,7 +78171,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -78255,7 +78204,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -78369,7 +78318,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -78404,7 +78352,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -78452,7 +78399,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -78487,7 +78433,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -78604,7 +78549,7 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -78820,7 +78765,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -78867,7 +78811,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
@@ -79107,7 +79050,6 @@
       "classification": "applied",
       "reasons": [
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -79143,7 +79085,6 @@
       "reasons": [
         "sp-recover-type-not-direct-sp",
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -79178,7 +79119,6 @@
       "reasons": [
         "sp-recover-type-not-direct-sp",
         "sp-formula-not-literal-function-5",
-        "stack-state-machine-deferred-to-m8-c",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -79216,7 +79156,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -79253,7 +79193,7 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -79287,7 +79227,7 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "stack-state-machine-deferred-to-m8-c",
+        "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -89157,26 +89097,24 @@
       "petRecoverSp": 22799,
       "recoverIntervalMs": 9999,
       "sourceIdentity": "battle-element-assets.jsonl#path_id=3119281351545429633",
-      "classification": "unresolved",
+      "classification": "applied",
       "actionReferences": [
         {
           "actionIdentity": "actor|108003|10800322|0|10800322",
-          "classification": "unresolved",
+          "classification": "applied",
           "controlSkillId": 10800322,
           "subSkillIndex": 0,
           "selected": true
         },
         {
           "actionIdentity": "actor|108003|10800322|0|10800322",
-          "classification": "unresolved",
+          "classification": "applied",
           "controlSkillId": 10800322,
           "subSkillIndex": 0,
           "selected": true
         }
       ],
-      "reasons": [
-        "linked-only-to-unresolved-public-action"
-      ]
+      "reasons": []
     },
     {
       "pathId": "3125775124573671242",
@@ -94255,7 +94193,7 @@
             "10200105|0|elements|5|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
           ],
           "hitCount": 5,
-          "effectCount": 0,
+          "effectCount": 1,
           "effectDimensionSummary": {
             "damage": {
               "unresolved": 2,
@@ -94279,7 +94217,8 @@
               "verified-zero": 6
             },
             "mark": {
-              "unresolved": 2,
+              "applied": 1,
+              "unresolved": 1,
               "verified-zero": 7
             }
           },
@@ -94288,7 +94227,6 @@
             "sp-formula-not-literal-function-5",
             "inject-wrapper-classified-through-child-edges",
             "effect-target-unresolved",
-            "stack-state-machine-deferred-to-m8-c",
             "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved",
             "effect-trigger-frame-missing"
@@ -94680,7 +94618,8 @@
               "verified-zero": 12
             },
             "mark": {
-              "unresolved": 4,
+              "applied": 2,
+              "unresolved": 2,
               "verified-zero": 18
             }
           },
@@ -94691,7 +94630,7 @@
             "inject-wrapper-classified-through-child-edges",
             "effect-trigger-frame-missing",
             "effect-target-unresolved",
-            "stack-state-machine-deferred-to-m8-c",
+            "tuning-mark-relation-notDelElementDataList-unresolved",
             "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved"
           ],
@@ -97775,7 +97714,7 @@
             "10900105|0|elements|10|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0"
           ],
           "hitCount": 10,
-          "effectCount": 0,
+          "effectCount": 1,
           "effectDimensionSummary": {
             "damage": {
               "unresolved": 2,
@@ -97798,7 +97737,8 @@
               "verified-zero": 5
             },
             "mark": {
-              "unresolved": 2,
+              "applied": 1,
+              "unresolved": 1,
               "verified-zero": 9
             }
           },
@@ -97806,7 +97746,6 @@
           "reasons": [
             "inject-wrapper-classified-through-child-edges",
             "effect-target-unresolved",
-            "stack-state-machine-deferred-to-m8-c",
             "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved",
             "effect-trigger-frame-missing"
@@ -98224,9 +98163,9 @@
           },
           "classification": "applied",
           "reasons": [
-            "stack-state-machine-deferred-to-m8-c",
-            "effect-target-unresolved",
+            "tuning-mark-max-mismatch",
             "nested-damage-trigger-lifecycle-not-expanded",
+            "effect-target-unresolved",
             "nested-effect-wrapper-semantics-unresolved",
             "property-formula-not-literal-function-5",
             "inject-wrapper-classified-through-child-edges",

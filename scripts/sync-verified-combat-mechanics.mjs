@@ -170,6 +170,7 @@ async function main() {
   const evidence = readJson(EVIDENCE_PATH);
   validateEvidence(evidence, validation);
   const mechanismEvidence = createMechanismEvidenceManifest();
+  const overlimitMechanics = readJson(OVERLIMIT_MECHANICS_PATH);
   const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
   const kiboCatalog = readJson(
     path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json')
@@ -216,6 +217,11 @@ async function main() {
     allIndexedElementsById,
     nonzeroRecoveryElements,
   } = await loadElementIndex(wantedPathIds, wantedElementIds);
+  const tuningMechanicsCatalog = createTuningMechanicsCatalog({
+    snapshot: overlimitMechanics,
+    allIndexedElements,
+    allIndexedElementsById,
+  });
   const formulas = new Map(
     readJson(path.join(NEW_TABLE_ROOT, 'element_formula.json')).rows.map(
       row => [Number(row.id), row.functionOutput ?? null]
@@ -234,6 +240,7 @@ async function main() {
       formulas,
       overridesBySkillAndElement,
       skillLogicById,
+      tuningMechanicsCatalog,
     })
   );
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
@@ -282,6 +289,7 @@ async function main() {
     enemyProfiles,
     spUnitContract,
     staticPropertyCatalog,
+    tuningMechanicsCatalog,
   });
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
@@ -312,7 +320,10 @@ async function main() {
       EFFECT_COVERAGE_JSON_OUTPUT,
       `${JSON.stringify(effectCoverage, null, 2)}\n`,
     ],
-    [EFFECT_COVERAGE_MARKDOWN_OUTPUT, createEffectCoverageMarkdown(effectCoverage)],
+    [
+      EFFECT_COVERAGE_MARKDOWN_OUTPUT,
+      createEffectCoverageMarkdown(effectCoverage),
+    ],
   ];
   const drift = outputs.filter(([filePath, content]) =>
     fs.existsSync(filePath) ? readText(filePath) !== content : true
@@ -952,10 +963,7 @@ function resolveBehaviorElementTarget(value, pathId) {
     );
   }
   if (arrayContainsPathId(value?.elementIdDatas, pathId)) {
-    return createBehaviorTarget(
-      integerOrNull(value.targetType),
-      'targetType'
-    );
+    return createBehaviorTarget(integerOrNull(value.targetType), 'targetType');
   }
   return {
     code: null,
@@ -1016,10 +1024,7 @@ async function loadElementIndex(wantedPathIds, wantedElementIds) {
   for await (const line of lines) {
     if (!line.trim()) continue;
     const record = JSON.parse(
-      line.replace(
-        /("(?:path_id|m_PathID)"\s*:\s*)(-?\d+)/g,
-        '$1"$2"'
-      )
+      line.replace(/("(?:path_id|m_PathID)"\s*:\s*)(-?\d+)/g, '$1"$2"')
     );
     const indexed = {
       asset: record.asset ?? null,
@@ -1098,6 +1103,7 @@ function createControlBinding({
   formulas,
   overridesBySkillAndElement,
   skillLogicById,
+  tuningMechanicsCatalog,
 }) {
   const elements = control.elementRefs.map(ref => {
     const indexed = ref.pathId
@@ -1253,6 +1259,7 @@ function createControlBinding({
     allIndexedElementsById,
     formulas,
     overridesBySkillAndElement,
+    tuningMechanicsCatalog,
   });
   const effects = createControlRuntimeEffects({ effectGraph, control });
   const variantCount = Math.max(players.length, resourceMaps.length);
@@ -1308,6 +1315,7 @@ function createControlEffectGraph({
   allIndexedElementsById,
   formulas,
   overridesBySkillAndElement,
+  tuningMechanicsCatalog,
 }) {
   return control.elementRefs.map(ref => {
     const rootResolution = resolveIndexedElementReference({
@@ -1369,6 +1377,7 @@ function createControlEffectGraph({
         formulas,
         overridesBySkillAndElement,
         depth,
+        tuningMechanicsCatalog,
       });
       nodes.push(node);
       for (const childReference of collectBattleElementChildReferences(
@@ -1444,11 +1453,7 @@ function collectBattleElementChildReferences(tree = {}) {
       references.push({ pathId, elementIdHint: null, relation: field });
     }
   }
-  const idFields = [
-    'sustainElement',
-    'injectElementList',
-    'notDelElementList',
-  ];
+  const idFields = ['sustainElement', 'injectElementList', 'notDelElementList'];
   for (const field of idFields) {
     const values = Array.isArray(tree[field]) ? tree[field] : [tree[field]];
     for (const value of values) {
@@ -1484,6 +1489,7 @@ function createBattleEffectGraphNode({
   formulas,
   overridesBySkillAndElement,
   depth,
+  tuningMechanicsCatalog,
 }) {
   const tree = record.typetree ?? {};
   const elementId = integerOrNull(tree.elementConfigId);
@@ -1495,6 +1501,10 @@ function createBattleEffectGraphNode({
   );
   const commonFunctionId = integerOrNull(
     tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+  );
+  const tuningProfile = resolveTuningProfileForBattleElement(
+    tuningMechanicsCatalog,
+    { kind, elementId }
   );
   const levelOverrides =
     overridesBySkillAndElement.get(`${controlSkillId}:${elementId}`) ?? [];
@@ -1517,6 +1527,7 @@ function createBattleEffectGraphNode({
       ])
     ),
     depth,
+    tuningMechanicsCatalog,
   });
   return {
     nodeIdentity: `element:${record.pathId}`,
@@ -1590,6 +1601,43 @@ function createBattleEffectGraphNode({
             teamShield: Number(tree.teamShield) === 1,
           }
         : null,
+    tuningMark:
+      kind === 'stack' && tuningProfile
+        ? createTuningMarkNodeContract(tree, tuningProfile)
+        : null,
+    tuningOverlimit:
+      kind === 'inject' && tuningProfile
+        ? {
+            profileKey: tuningProfile.key,
+            element: tuningProfile.element,
+            markId: tuningProfile.markId,
+            packetElementId: tuningProfile.overlimitPacket.elementId,
+            sourceIdentity: tuningProfile.overlimitPacket.sourceIdentity,
+          }
+        : null,
+    judgment:
+      kind === 'judgment'
+        ? {
+            judgmentType: integerOrNull(tree.judgmentType),
+            consume: Number(tree.consume) === 1,
+            consumeMode: integerOrNull(tree.consumeMode),
+            consumeLayerNum: integerOrNull(tree.consumeLayerNum),
+            consumeLayerMaxNum: integerOrNull(tree.consumeLayerMaxNum),
+            markElementIds: (tree.elementArr ?? [])
+              .map(Number)
+              .filter(Number.isInteger),
+            canConsume: Number(tree.canConsume) === 1,
+            checkTarget: integerOrNull(tree.checkTarget),
+            executeTarget: integerOrNull(tree.executeTarget),
+            insufficientPathIds: collectNestedPathIds(
+              tree.injectElementDataList_1
+            ),
+            sufficientPathIds: collectNestedPathIds(
+              tree.injectElementDataList_2
+            ),
+            effectPathIds: collectNestedPathIds(tree.injectElementDataEffects),
+          }
+        : null,
     dimensions: classification.dimensions,
     classification: classification.status,
     reasons: classification.reasons,
@@ -1617,6 +1665,7 @@ function classifyBattleEffectNode({
   baseFunctionId,
   valueByLevel,
   depth,
+  tuningMechanicsCatalog,
 }) {
   const dimensions = Object.fromEntries(
     [
@@ -1643,6 +1692,11 @@ function classifyBattleEffectNode({
     baseFunctionId === 5 &&
     literalValues.length === 12;
   const literalZero = literalReady && literalValues.every(value => value === 0);
+  const elementId = integerOrNull(tree.elementConfigId);
+  const tuningProfile = resolveTuningProfileForBattleElement(
+    tuningMechanicsCatalog,
+    { kind, elementId }
+  );
 
   if (kind === 'property-change') {
     if (!literalReady) reasons.push('property-formula-not-literal-function-5');
@@ -1702,6 +1756,20 @@ function classifyBattleEffectNode({
         'damageType'
       );
     }
+  } else if (kind === 'stack' && tuningProfile) {
+    const tuningMark = createTuningMarkNodeContract(tree, tuningProfile);
+    if (!tuningMark.applied) reasons.push(...tuningMark.reasons);
+    dimensions.mark = createDimensionClassification(
+      tuningMark.applied ? 'applied' : 'unresolved',
+      tuningMark.reasons,
+      'elementConfigId|layerInfoList|additionalHitRefreshTime'
+    );
+  } else if (kind === 'inject' && tuningProfile) {
+    dimensions.mark = createDimensionClassification(
+      'applied',
+      [],
+      'elementConfigId|notDelElementDataList'
+    );
   } else if (['pack', 'stack', 'judgment'].includes(kind)) {
     reasons.push(`${kind}-state-machine-deferred-to-m8-c`);
     dimensions.mark = createDimensionClassification(
@@ -1741,7 +1809,9 @@ function createControlRuntimeEffects({ effectGraph, control }) {
         return true;
       }
       if (node.kind !== 'damage') return false;
-      return [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0;
+      return (
+        [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0
+      );
     });
     const triggers = root.rootPathId
       ? (control.behaviorTriggers.get(root.rootPathId) ?? [])
@@ -1768,10 +1838,18 @@ function createControlRuntimeEffectBinding({
 }) {
   const relationPath = resolveEffectGraphRelationPath(root, node.nodeIdentity);
   const ancestorNodes = relationPath
-    .map(edge => root.nodes.find(candidate => candidate.nodeIdentity === edge.from))
+    .map(edge =>
+      root.nodes.find(candidate => candidate.nodeIdentity === edge.from)
+    )
     .filter(Boolean);
+  const tuningBinding = resolveTuningEffectBindingContract({
+    node,
+    relationPath,
+    ancestorNodes,
+  });
   const target =
-    node.kind === 'sp'
+    tuningBinding?.target ??
+    (node.kind === 'sp'
       ? {
           kind: 'source-owner',
           code: null,
@@ -1781,19 +1859,28 @@ function createControlRuntimeEffectBinding({
           kind: trigger?.targetKind ?? 'unresolved',
           code: trigger?.targetCode ?? null,
           sourceIdentity: trigger?.sourceIdentity ?? null,
-        };
-  const reasons = [...node.reasons];
+        });
+  const reasons = [
+    ...node.reasons.filter(
+      reason =>
+        !tuningBinding ||
+        ![
+          'stack-state-machine-deferred-to-m8-c',
+          'inject-wrapper-classified-through-child-edges',
+        ].includes(reason)
+    ),
+    ...(tuningBinding?.reasons ?? []),
+  ];
   if (!trigger || !Number.isInteger(trigger.startFrame)) {
     reasons.push('effect-trigger-frame-missing');
   }
-  if (!['source-owner', 'enemy'].includes(target.kind)) {
+  if (!['source-owner', 'enemy', 'team-tuning-pool'].includes(target.kind)) {
     reasons.push(
-      target.kind
-        ? `effect-target-${target.kind}`
-        : 'effect-target-unresolved'
+      target.kind ? `effect-target-${target.kind}` : 'effect-target-unresolved'
     );
   }
   if (
+    !tuningBinding &&
     node.depth > 0 &&
     relationPath.some(
       edge =>
@@ -1804,13 +1891,17 @@ function createControlRuntimeEffectBinding({
   ) {
     reasons.push('nested-effect-wrapper-semantics-unresolved');
   }
-  const stack = resolveEffectStackContract(node.lifecycle);
+  const stack = tuningBinding
+    ? {
+        mode: 'stack',
+        maxStacks: tuningBinding.maxStacks ?? 1,
+        instanceScope: 'team-tuning-pool',
+        reasons: [],
+      }
+    : resolveEffectStackContract(node.lifecycle);
   reasons.push(...stack.reasons);
   const effectiveDurationMs = resolveEffectDurationMs(node, ancestorNodes);
-  if (
-    node.kind === 'property-change' &&
-    effectiveDurationMs === 0
-  ) {
+  if (node.kind === 'property-change' && effectiveDurationMs === 0) {
     reasons.push('property-duration-zero-unresolved');
   }
   const valueByLevel = node.formula.valueByLevel;
@@ -1827,18 +1918,20 @@ function createControlRuntimeEffectBinding({
     ),
     value => value
   );
-  const baseApplied = node.classification === 'applied';
+  const baseApplied =
+    node.classification === 'applied' && tuningBinding?.applied !== false;
   const classification =
     baseApplied && blockingReasons.length === 0
       ? 'applied'
-      : node.classification === 'verified-zero' &&
-          blockingReasons.length === 0
+      : node.classification === 'verified-zero' && blockingReasons.length === 0
         ? 'verified-zero'
         : 'unresolved';
   const dimensions = Object.fromEntries(
     Object.entries(node.dimensions).map(([key, dimension]) => [
       key,
-      baseApplied && dimension.status === 'applied' && classification !== 'applied'
+      baseApplied &&
+      dimension.status === 'applied' &&
+      classification !== 'applied'
         ? createDimensionClassification(
             'unresolved',
             blockingReasons,
@@ -1877,33 +1970,34 @@ function createControlRuntimeEffectBinding({
       mutuallyExclusiveId: node.lifecycle.mutuallyExclusiveId,
       tags: node.lifecycle.tags,
     },
-    propertyChange:
-      node.propertyChange && {
-        ...node.propertyChange,
-        bucket:
-          node.propertyChange.calculateType === 0
-            ? 'dynamicForce'
-            : node.propertyChange.calculateType === 1
+    propertyChange: node.propertyChange && {
+      ...node.propertyChange,
+      bucket:
+        node.propertyChange.calculateType === 0
+          ? 'dynamicForce'
+          : node.propertyChange.calculateType === 1
             ? 'dynamicExtra'
             : node.propertyChange.calculateType === 2
               ? 'dynamicPercent'
               : 'unresolved',
-        valueByLevel,
-      },
-    directSp:
-      node.directSp && {
-        ...node.directSp,
-        valueByLevel,
-      },
+      valueByLevel,
+    },
+    directSp: node.directSp && {
+      ...node.directSp,
+      valueByLevel,
+    },
     heal:
       node.kind === 'damage' && node.damage?.damageType === 5
         ? { valueByLevel }
         : null,
-    shield:
-      (node.kind === 'shield' || node.damage?.damageType === 11) && {
-        ...node.shield,
-        valueByLevel,
-      },
+    shield: (node.kind === 'shield' || node.damage?.damageType === 11) && {
+      ...node.shield,
+      valueByLevel,
+    },
+    tuningMark:
+      tuningBinding?.kind === 'acquire' ? tuningBinding.contract : null,
+    tuningOverlimit:
+      tuningBinding?.kind === 'consume' ? tuningBinding.contract : null,
     formula: {
       commonFunctionId: node.formula.commonFunctionId,
       baseFunctionId: node.formula.baseFunctionId,
@@ -1917,6 +2011,94 @@ function createControlRuntimeEffectBinding({
     status: `verified-action-effect-binding-${classification}`,
     confidence: classification === 'applied' ? 'high' : classification,
     applied: classification === 'applied',
+  };
+}
+
+function resolveTuningEffectBindingContract({
+  node,
+  relationPath,
+  ancestorNodes,
+}) {
+  if (node.tuningMark) {
+    const unsafeRelations = relationPath
+      .map(edge => edge.relation)
+      .filter(relation => relation !== 'injectElementDataList');
+    const reasons = [
+      ...(node.tuningMark.reasons ?? []),
+      ...unsafeRelations.map(
+        relation => `tuning-mark-relation-${relation}-unresolved`
+      ),
+    ];
+    return {
+      kind: 'acquire',
+      target: {
+        kind: 'team-tuning-pool',
+        code: node.tuningMark.markId,
+        sourceIdentity: node.tuningMark.sourceIdentity,
+      },
+      maxStacks: node.tuningMark.maxStacks,
+      contract: {
+        ...node.tuningMark,
+        stackDelta: 1,
+      },
+      reasons: dedupeBy(reasons, value => value),
+      applied: node.tuningMark.applied && reasons.length === 0,
+    };
+  }
+  if (!node.tuningOverlimit) return null;
+
+  const judgmentNode = [...ancestorNodes]
+    .reverse()
+    .find(candidate => candidate.judgment);
+  const judgment = judgmentNode?.judgment ?? null;
+  const markIds = [
+    ...new Set(
+      (judgment?.markElementIds ?? []).map(Number).filter(Number.isInteger)
+    ),
+  ];
+  const judgmentEdge = judgmentNode
+    ? relationPath.find(edge => edge.from === judgmentNode.nodeIdentity)
+    : null;
+  const reasons = [];
+  if (!judgment) reasons.push('tuning-consume-judgment-missing');
+  if (judgment && !judgment.consume) {
+    reasons.push('tuning-consume-disabled');
+  }
+  if (
+    markIds.length !== 1 ||
+    markIds[0] !== Number(node.tuningOverlimit.markId)
+  ) {
+    reasons.push('tuning-consume-mark-identity-ambiguous');
+  }
+  if (
+    !judgmentEdge ||
+    !['injectElementDataList_2', 'injectElementDataEffects'].includes(
+      judgmentEdge.relation
+    )
+  ) {
+    reasons.push('tuning-consume-success-branch-unresolved');
+  }
+  const minimumStacks = positiveIntegerOrNull(judgment?.consumeLayerNum) ?? 1;
+  const configuredMaximum = positiveIntegerOrNull(judgment?.consumeLayerMaxNum);
+  return {
+    kind: 'consume',
+    target: {
+      kind: 'enemy',
+      code: null,
+      sourceIdentity: node.tuningOverlimit.sourceIdentity,
+    },
+    maxStacks: configuredMaximum ?? 5,
+    contract: {
+      ...node.tuningOverlimit,
+      minimumStacks,
+      maximumStacks: configuredMaximum,
+      consumeMode: integerOrNull(judgment?.consumeMode),
+      judgmentElementId: integerOrNull(judgmentNode?.elementId),
+      judgmentPathId: judgmentNode?.pathId ?? null,
+      judgmentSourceIdentity: judgmentNode?.sourceIdentity ?? null,
+    },
+    reasons: dedupeBy(reasons, value => value),
+    applied: reasons.length === 0,
   };
 }
 
@@ -2162,6 +2344,352 @@ function createMechanismEvidenceManifest() {
   };
 }
 
+function createTuningMechanicsCatalog({
+  snapshot,
+  allIndexedElements,
+  allIndexedElementsById,
+}) {
+  const records = dedupeBy([...allIndexedElements.values()].flat(), record =>
+    String(record.pathId)
+  );
+  const recordByPathId = new Map(
+    records.map(record => [String(record.pathId), record])
+  );
+  const containersById = new Map(
+    (snapshot.markContainers ?? []).map(container => [
+      Number(container.elementConfigId),
+      container,
+    ])
+  );
+  const standardTemplatesById = new Map(
+    (snapshot.standardTemplates ?? []).map(template => [
+      Number(template.elementConfigId),
+      template,
+    ])
+  );
+  const heldTemplatesByMarkId = new Map();
+  for (const template of snapshot.heldTuningDamageTemplates ?? []) {
+    const markId = Number(template.markElementId);
+    heldTemplatesByMarkId.set(markId, [
+      ...(heldTemplatesByMarkId.get(markId) ?? []),
+      createPublishedTuningDamageTemplate(template),
+    ]);
+  }
+
+  const profiles = (snapshot.tuningProfiles ?? []).map(profile => {
+    const markId = Number(profile.markId);
+    const container = containersById.get(markId);
+    if (!container) {
+      throw new Error(`verified tuning container missing: ${markId}`);
+    }
+    const packetRecord = resolveTuningOverlimitPacketRecord({
+      profile,
+      records,
+      recordByPathId,
+    });
+    const layerComponentIds = [
+      ...new Set(
+        (container.layers ?? []).flatMap(layer =>
+          (layer.linkedElementIds ?? []).map(Number).filter(Number.isInteger)
+        )
+      ),
+    ];
+    const discoveredPersistentModifiers = layerComponentIds.flatMap(
+      componentId => {
+        const candidates = dedupeBy(
+          allIndexedElementsById.get(componentId) ?? [],
+          record => String(record.pathId)
+        );
+        if (candidates.length !== 1) return [];
+        const record = candidates[0];
+        const tree = record.typetree ?? {};
+        const attributeId = integerOrNull(tree.attributeID);
+        const calculateType = integerOrNull(tree.calculateType);
+        const valueRaw = finiteNumberOrNull(
+          tree.formulaParams?.formulaParamValues?.[0] ??
+            tree.functionParams?.[0]
+        );
+        if (
+          attributeId == null ||
+          attributeId <= 0 ||
+          valueRaw == null ||
+          ![0, 1, 2].includes(calculateType) ||
+          (tree.defaultConditions ?? []).length > 0 ||
+          (tree.changePeopertyConditionArrayDatas ?? []).length > 0
+        ) {
+          return [];
+        }
+        return [
+          {
+            componentId,
+            attributeId,
+            bucket: resolveDynamicPropertyBucket(calculateType),
+            valueRaw,
+            propertyTags: (tree.defaultPropertyTags ?? []).map(Number),
+            sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
+            status: 'verified-tuning-persistent-modifier-ready',
+            applied: true,
+          },
+        ];
+      }
+    );
+    const persistentModifiers = resolveTuningPersistentModifiers({
+      profile,
+      discovered: discoveredPersistentModifiers,
+    });
+    const layerDurations = [
+      ...new Set(
+        (container.layers ?? [])
+          .map(layer => Number(layer.disperseSeconds) * 1000)
+          .filter(Number.isFinite)
+      ),
+    ];
+    if (layerDurations.length !== 1) {
+      throw new Error(`verified tuning layer duration ambiguous: ${markId}`);
+    }
+    const overlimitTemplate = standardTemplatesById.get(
+      Number(profile.primaryDamageId)
+    );
+    if (!overlimitTemplate) {
+      throw new Error(`verified tuning damage template missing: ${markId}`);
+    }
+    return {
+      key: String(profile.key),
+      element: String(profile.element),
+      markId,
+      maxStacks: Number(container.maxMarks),
+      layerDurationMs: layerDurations[0],
+      heldReadyMs: Number(container.additionalHitRefreshSeconds) * 1000,
+      layerComponentIds,
+      additionalHitComponentIds: (container.additionalHitElements ?? [])
+        .map(component => Number(component.elementConfigId))
+        .filter(Number.isInteger),
+      persistentModifiers,
+      heldDamageTemplates: heldTemplatesByMarkId.get(markId) ?? [],
+      heldEffect: profile.heldEffect ?? null,
+      overlimitDamage: {
+        ...profile.overlimitDamage,
+        template: createPublishedTuningDamageTemplate(overlimitTemplate),
+      },
+      overlimitExtra: profile.overlimitExtra ?? null,
+      overlimitPacket: {
+        elementId: Number(packetRecord.typetree.elementConfigId),
+        pathId: String(packetRecord.pathId),
+        sourceIdentity: `battle-element-assets.jsonl#path_id=${packetRecord.pathId}`,
+      },
+      sourceIdentity: [
+        `combat-overlimit-mechanics-20260718.json#tuningProfiles[key=${profile.key}]`,
+        `combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=${markId}]`,
+        `battle-element-assets.jsonl#path_id=${packetRecord.pathId}`,
+      ].join('|'),
+      status: 'verified-tuning-profile-ready',
+      applied: true,
+    };
+  });
+  if (
+    profiles.length !== 9 ||
+    new Set(profiles.map(profile => profile.markId)).size !== 9 ||
+    profiles.some(
+      profile =>
+        profile.maxStacks !== 5 ||
+        profile.layerDurationMs !== 20_000 ||
+        profile.heldReadyMs !== 5_000 ||
+        profile.heldDamageTemplates.length === 0
+    )
+  ) {
+    throw new Error('verified tuning profile coverage invalid');
+  }
+  return {
+    schemaVersion: 1,
+    contractName: 'AzPrVerifiedTuningMechanicsCatalog',
+    status: 'verified-tuning-mechanics-catalog-ready',
+    valueUnit: 'mark-stacks',
+    mastery: {
+      propertyId: Number(snapshot.mastery?.propertyId),
+      q16Raw: Number(snapshot.mastery?.q16Raw),
+      configuredConstant: Number(snapshot.mastery?.configuredConstant),
+      sourceIdentity: 'combat-overlimit-mechanics-20260718.json#mastery',
+    },
+    profiles,
+    summary: {
+      profileCount: profiles.length,
+      markContainerCount: profiles.length,
+      persistentModifierCount: profiles.reduce(
+        (sum, profile) => sum + profile.persistentModifiers.length,
+        0
+      ),
+      heldDamageTemplateCount: profiles.reduce(
+        (sum, profile) => sum + profile.heldDamageTemplates.length,
+        0
+      ),
+      overlimitPacketCount: profiles.length,
+      applied: true,
+    },
+    sourceIdentity: 'combat-overlimit-mechanics-20260718.json',
+    applied: true,
+  };
+}
+
+function resolveTuningOverlimitPacketRecord({
+  profile,
+  records,
+  recordByPathId,
+}) {
+  const primaryDamageId = Number(profile.primaryDamageId);
+  const candidates = records.filter(record => {
+    const tree = record.typetree ?? {};
+    if (resolveBattleElementKind(tree) !== 'inject') return false;
+    const childIds = collectBattleElementChildReferences(tree)
+      .map(reference => {
+        if (reference.pathId) {
+          const child = recordByPathId.get(String(reference.pathId));
+          return integerOrNull(child?.typetree?.elementConfigId);
+        }
+        return integerOrNull(reference.elementIdHint);
+      })
+      .filter(Number.isInteger);
+    return childIds.includes(primaryDamageId);
+  });
+  if (candidates.length !== 1) {
+    throw new Error(
+      `verified tuning overlimit packet not unique: ${profile.key} (${candidates.length})`
+    );
+  }
+  return candidates[0];
+}
+
+function resolveTuningPersistentModifiers({ profile, discovered }) {
+  const heldEffect = profile.heldEffect ?? {};
+  const declaredAttributeIds = [
+    ...(heldEffect.attributeIds ?? []),
+    heldEffect.attributeId,
+  ]
+    .map(Number)
+    .filter(value => Number.isInteger(value) && value > 0);
+  const declaredRaw = finiteNumberOrNull(heldEffect.rawPerMark);
+  if (declaredAttributeIds.length === 0 || declaredRaw == null) {
+    return discovered;
+  }
+  const discoveredByAttributeId = new Map(
+    discovered.map(modifier => [modifier.attributeId, modifier])
+  );
+  return [...new Set(declaredAttributeIds)].map(
+    attributeId =>
+      discoveredByAttributeId.get(attributeId) ?? {
+        componentId: integerOrNull(heldEffect.componentId),
+        attributeId,
+        bucket:
+          heldEffect.unit === 'percent' ? 'dynamicPercent' : 'dynamicExtra',
+        valueRaw: declaredRaw,
+        propertyTags: [],
+        sourceIdentity: `combat-overlimit-mechanics-20260718.json#tuningProfiles[key=${profile.key}].heldEffect`,
+        status: 'verified-tuning-persistent-modifier-ready',
+        applied: true,
+      }
+  );
+}
+
+function createPublishedTuningDamageTemplate(template = {}) {
+  return {
+    elementConfigId: integerOrNull(template.elementConfigId),
+    damageType: integerOrNull(template.damageType),
+    elementalType: integerOrNull(
+      template.damageElementalType ?? template.elementalType
+    ),
+    coefficientRaw: integerOrNull(
+      template.attackCoefficientRaw ?? template.heldMarkCoefficientRaw
+    ),
+    weakBreakDamageRateBasisPoints: integerOrNull(template.weakBreakDamageRate),
+    physicalPenetrationBasisPoints: integerOrNull(template.armerPenetration),
+    magicPenetrationBasisPoints: integerOrNull(template.magicPenetration),
+    elementCalculationFactorBasisPoints: integerOrNull(
+      template.elementCalFactor
+    ),
+    physicalRatioBasisPoints: integerOrNull(template.physicalRatio),
+    magicRatioBasisPoints: integerOrNull(template.magicRatio),
+    usesTuningStrength: template.usesTuningStrength !== false,
+    sourceIdentity: `combat-overlimit-mechanics-20260718.json#elementConfigId=${template.elementConfigId}`,
+  };
+}
+
+function resolveDynamicPropertyBucket(calculateType) {
+  if (calculateType === 0) return 'dynamicForce';
+  if (calculateType === 1) return 'dynamicExtra';
+  if (calculateType === 2) return 'dynamicPercent';
+  return 'unresolved';
+}
+
+function resolveTuningProfileForBattleElement(
+  tuningMechanicsCatalog,
+  { kind, elementId }
+) {
+  if (!tuningMechanicsCatalog || elementId == null) return null;
+  if (kind === 'stack') {
+    return (
+      tuningMechanicsCatalog.profiles.find(
+        profile => profile.markId === Number(elementId)
+      ) ?? null
+    );
+  }
+  if (kind === 'inject') {
+    return (
+      tuningMechanicsCatalog.profiles.find(
+        profile => profile.overlimitPacket.elementId === Number(elementId)
+      ) ?? null
+    );
+  }
+  return null;
+}
+
+function createTuningMarkNodeContract(tree, profile) {
+  const layers = tree.layerInfoList ?? [];
+  const maxStacks = Math.max(
+    0,
+    ...layers.map(layer => integerOrNull(layer.layerCnt) ?? 0)
+  );
+  const durationValues = [
+    ...new Set(
+      layers
+        .map(layer =>
+          fixedQ16SecondsToMs(layer.layerDisperseTime?._serializedValue)
+        )
+        .filter(value => value != null)
+    ),
+  ];
+  const layerDurationMs =
+    durationValues.length === 1 ? durationValues[0] : null;
+  const heldReadyMs = Number(tree.additionalHitRefreshTime) * 1000;
+  const reasons = [];
+  if (maxStacks !== profile.maxStacks) reasons.push('tuning-mark-max-mismatch');
+  if (layerDurationMs !== profile.layerDurationMs) {
+    reasons.push('tuning-mark-layer-duration-mismatch');
+  }
+  if (heldReadyMs !== profile.heldReadyMs) {
+    reasons.push('tuning-mark-held-ready-mismatch');
+  }
+  return {
+    profileKey: profile.key,
+    element: profile.element,
+    markId: profile.markId,
+    maxStacks,
+    layerDurationMs,
+    heldReadyMs,
+    layerComponentIds: profile.layerComponentIds,
+    additionalHitComponentIds: profile.additionalHitComponentIds,
+    sourceIdentity: profile.sourceIdentity,
+    reasons,
+    status: reasons.length
+      ? 'verified-tuning-mark-node-unresolved'
+      : 'verified-tuning-mark-node-ready',
+    applied: reasons.length === 0,
+  };
+}
+
+function fixedQ16SecondsToMs(value) {
+  const raw = finiteNumberOrNull(value);
+  return raw == null ? null : Math.round((raw / 65_536) * 1000);
+}
+
 function createStaticPropertyCatalog({
   tables,
   templateRows,
@@ -2206,7 +2734,9 @@ function createStaticPropertyCatalog({
     };
   });
   const actorLevelGrowth = (templateHeroRows ?? [])
-    .filter(row => Number(row.type) === 1 && Number.isInteger(Number(row.level)))
+    .filter(
+      row => Number(row.type) === 1 && Number.isInteger(Number(row.level))
+    )
     .map(row => ({
       level: Number(row.level),
       templateId: Number(row.baseAttribute),
@@ -2294,18 +2824,18 @@ function createStaticPropertyCatalog({
       applied: levels.length > 0,
     };
   });
-  const mainRowsByGroup = groupBy(
-    tables.accessory_main ?? [],
-    row => String(row.groupId)
+  const mainRowsByGroup = groupBy(tables.accessory_main ?? [], row =>
+    String(row.groupId)
   );
-  const subRowsByGroup = groupBy(
-    tables.accessory_sub_parameter ?? [],
-    row => String(row.groupId)
+  const subRowsByGroup = groupBy(tables.accessory_sub_parameter ?? [], row =>
+    String(row.groupId)
   );
   const equipmentProfiles = (tables.accessory ?? []).map(item => {
     const mainGroupId = parseAttributeEntries(item.mainAttr)[0]?.id ?? null;
     const mainRows = mainRowsByGroup.get(String(mainGroupId)) ?? [];
-    const mainLevels = [...groupBy(mainRows, row => String(row.level)).entries()]
+    const mainLevels = [
+      ...groupBy(mainRows, row => String(row.level)).entries(),
+    ]
       .map(([level, rows]) => ({
         level: Number(level),
         attributes: rows
@@ -2313,7 +2843,9 @@ function createStaticPropertyCatalog({
             id: Number(row.battleInfo),
             value: Number(row.value),
           }))
-          .filter(entry => Number.isFinite(entry.id) && Number.isFinite(entry.value)),
+          .filter(
+            entry => Number.isFinite(entry.id) && Number.isFinite(entry.value)
+          ),
         sourceIdentity: `NewTable/accessory_main.rows[groupId=${mainGroupId},level=${level}]`,
       }))
       .sort((left, right) => left.level - right.level);
@@ -2463,8 +2995,7 @@ function createStaticPropertyCatalog({
       ],
       actorCoreLevel:
         'integrate(hero-level-growth * actor-template-factor / 10000)',
-      kiboCoreLevel:
-        'integrate(kibo-level-growth * species-factor / 10000)',
+      kiboCoreLevel: 'integrate(kibo-level-growth * species-factor / 10000)',
       kiboPanel:
         'round(integrate(kibo-level-base*hobby*comprehension)+hero-inheritance)',
       integrate: 'floor(round(value*10000)/10000)',
@@ -2604,6 +3135,7 @@ function createPackage({
   enemyProfiles,
   spUnitContract,
   staticPropertyCatalog,
+  tuningMechanicsCatalog,
 }) {
   const preparedControlBindings = controlBindings.map(binding => {
     const hits = createControlRuntimeHits(binding);
@@ -2613,9 +3145,10 @@ function createPackage({
     return {
       ...binding,
       hits,
-      status: hits.length || appliedEffectCount
-        ? 'verified-skill-control-mechanics-binding-applied'
-        : 'verified-skill-control-mechanics-binding-unresolved',
+      status:
+        hits.length || appliedEffectCount
+          ? 'verified-skill-control-mechanics-binding-applied'
+          : 'verified-skill-control-mechanics-binding-unresolved',
       confidence: hits.length || appliedEffectCount ? 'high' : 'unresolved',
       applied: hits.length > 0 || appliedEffectCount > 0,
     };
@@ -2706,7 +3239,9 @@ function createPackage({
       hitCount: binding.hitCount ?? mapping.runtimeHitCount,
       effectCount: binding.effectCount ?? mapping.runtimeEffectCount ?? 0,
       selectedEffectIdentities:
-        binding.selectedEffectIdentities ?? mapping.selectedEffectIdentities ?? [],
+        binding.selectedEffectIdentities ??
+        mapping.selectedEffectIdentities ??
+        [],
       ...(mapping.actionKind === 'normal-attack'
         ? {
             attackSequenceIndex: binding.sequenceIndex,
@@ -2793,6 +3328,7 @@ function createPackage({
       spUnitContract,
       mechanismEvidence,
       staticPropertyCatalog,
+      tuningMechanicsCatalog,
       battleEffectNodes,
     })
   );
@@ -2800,7 +3336,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 8,
+    packageVersion: 9,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -2830,6 +3366,7 @@ function createPackage({
     },
     spUnitContract,
     staticPropertyCatalog,
+    tuningMechanicsCatalog,
     battleEffectCatalog: {
       schemaVersion: 1,
       kind: 'azpr-verified-battle-effect-node-catalog',
@@ -3424,7 +3961,9 @@ function createActionMapping(candidate, control) {
     runtimeEffectCount: appliedEffects.length,
     selectedElementCount: selectedElements.length,
     selectedHitIdentities: runtimeHits.map(hit => hit.hitIdentity),
-    selectedEffectIdentities: runtimeEffects.map(effect => effect.effectIdentity),
+    selectedEffectIdentities: runtimeEffects.map(
+      effect => effect.effectIdentity
+    ),
     classification,
     complete: unresolvedReasons.length === 0,
     reasons: unresolvedReasons,
@@ -3765,7 +4304,9 @@ function createSpUnitRuntimeSource(contract) {
 
 function runtimeLiteral(value) {
   if (typeof value !== 'string') return JSON.stringify(value);
-  return `'${value.replaceAll('\\', '\\\\').replaceAll('\'', '\\\'')}'`;
+  return `'${value
+    .replaceAll('\\', '\\\\')
+    .replaceAll(String.fromCharCode(39), String.fromCharCode(92, 39))}'`;
 }
 
 function createEnemyProfiles({ profiles, templateRows }) {
@@ -3897,8 +4438,7 @@ function createAudit({
       uniqueControlBindingCount: packageValue.summary.uniqueControlBindingCount,
       uniqueControlHitBindingCount:
         packageValue.summary.uniqueControlHitBindingCount,
-      appliedEffectBindingCount:
-        packageValue.summary.appliedEffectBindingCount,
+      appliedEffectBindingCount: packageValue.summary.appliedEffectBindingCount,
       verifiedZeroEffectBindingCount:
         packageValue.summary.verifiedZeroEffectBindingCount,
       unresolvedEffectBindingCount:
@@ -4524,8 +5064,11 @@ function createBrowserRuntimeSource(source) {
       'qRatio(input.spRetAuto ?? input.spGetUpAuto),'
     )
     .replace(
-      'raw = applyFactor(raw, bonus, \'auto_sp_bonus\', trace);',
-      'raw = applyFactor(raw, bonus, \'auto_sp_bonus\', trace, { attributeKeys: [\'SPGETUP\', \'SPRET_AUTO\'], legacyAlias: input.spRetAuto == null && input.spGetUpAuto != null ? \'SPGETUP_AUTO\' : null });'
+      // Generated source contains nested single-quoted runtime literals.
+      // eslint-disable-next-line quotes
+      `raw = applyFactor(raw, bonus, 'auto_sp_bonus', trace);`,
+      // eslint-disable-next-line quotes
+      `raw = applyFactor(raw, bonus, 'auto_sp_bonus', trace, { attributeKeys: ['SPGETUP', 'SPRET_AUTO'], legacyAlias: input.spRetAuto == null && input.spGetUpAuto != null ? 'SPGETUP_AUTO' : null });`
     )
     .trimEnd();
   return [

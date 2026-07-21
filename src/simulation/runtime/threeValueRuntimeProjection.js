@@ -508,6 +508,7 @@ function createRuntimeOutputConsistency({
         .every(
           event =>
             event.sourceStatus === 'verified-battle-effect-generated' ||
+            event.sourceStatus === 'verified-tuning-mark-generated' ||
             event.sourceStatus === 'effect-inherited-from-cycle-boundary'
         ),
     summaryExecutionPlanCounts:

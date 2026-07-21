@@ -14,6 +14,7 @@ import {
   isVerifiedCombatMechanicsScenario,
 } from '../mechanics/verifiedCombatRuntime';
 import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattleEffectGeneration';
+import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
 
 export function simulateScenario(
   scenario,
@@ -235,6 +236,7 @@ export function simulateScenario(
     actionEffectRelationGraph,
     verifiedCombatRuntime,
     verifiedBattleEffectGeneration: runtimeBundle.effectGeneration,
+    verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
     kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
     threeValueMechanicsAdapterRegistry,
   });
@@ -248,19 +250,35 @@ function createVerifiedRuntimeBundle({
   const effectGeneration = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedBattleEffectGeneration({ scenario, actionExecutionPlan })
     : null;
+  const tuningGeneration = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedTuningMarkGeneration({
+        scenario,
+        actionExecutionPlan,
+        effectGeneration,
+      })
+    : null;
   const effectTimeline = createEffectRuntimeTimeline({
     scenario,
     actionExecutionPlan,
-    generatedCommands: effectGeneration?.effectCommands ?? [],
+    generatedCommands: [
+      ...(effectGeneration?.effectCommands ?? []),
+      ...(tuningGeneration?.effectCommands ?? []),
+    ],
   });
   const verifiedCombatRuntime = createVerifiedCombatRuntime({
     scenario,
     actionExecutionPlan,
     controlledActorTimeline,
     effectGeneration,
+    tuningGeneration,
     effectTimeline,
   });
-  return { effectGeneration, effectTimeline, verifiedCombatRuntime };
+  return {
+    effectGeneration,
+    tuningGeneration,
+    effectTimeline,
+    verifiedCombatRuntime,
+  };
 }
 
 function applyVerifiedResourceExecutionBlocks({

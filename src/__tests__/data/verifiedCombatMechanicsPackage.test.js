@@ -27,19 +27,19 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 8,
+      packageVersion: 9,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
         candidateActionCount: 562,
         classifiedActionCount: 562,
-        appliedActionBindingCount: 417,
+        appliedActionBindingCount: 418,
         appliedHitBindingCount: 1332,
-        appliedEffectBindingCount: 50,
+        appliedEffectBindingCount: 125,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 3150,
+        unresolvedEffectBindingCount: 3081,
         battleEffectNodeCount: 3673,
-        unresolvedActionCount: 181,
+        unresolvedActionCount: 180,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
@@ -94,9 +94,18 @@ describe('verified combat mechanics package', () => {
         status: 'verified-battle-effect-node-catalog-ready',
         summary: {
           nodeCount: 3673,
-          appliedNodeCount: 169,
+          appliedNodeCount: 265,
           verifiedZeroNodeCount: 855,
-          unresolvedNodeCount: 2649,
+          unresolvedNodeCount: 2553,
+        },
+      },
+      tuningMechanicsCatalog: {
+        status: 'verified-tuning-mechanics-catalog-ready',
+        summary: {
+          profileCount: 9,
+          markContainerCount: 9,
+          heldDamageTemplateCount: 10,
+          overlimitPacketCount: 9,
         },
       },
       spUnitContract: {
@@ -114,20 +123,36 @@ describe('verified combat mechanics package', () => {
       },
     });
     expect(mechanicsPackage.packageHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(
+      mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+        profile => profile.key === 'dark'
+      ).persistentModifiers
+    ).toEqual(
+      expect.arrayContaining(
+        [51, 52, 53, 54, 55, 56, 57, 58, 59, 60].map(attributeId =>
+          expect.objectContaining({ attributeId, valueRaw: 81 })
+        )
+      )
+    );
+    expect(
+      mechanicsPackage.tuningMechanicsCatalog.profiles
+        .flatMap(profile => profile.persistentModifiers)
+        .some(modifier => modifier.attributeId === 0)
+    ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      effectBindingCount: 3202,
-      appliedEffectBindingCount: 50,
+      effectBindingCount: 3208,
+      appliedEffectBindingCount: 125,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 3150,
+      unresolvedEffectBindingCount: 3081,
       bindingKindCounts: {
-        damage: 445,
+        damage: 446,
         inject: 1264,
         judgment: 80,
         pack: 163,
-        'property-change': 999,
+        'property-change': 1003,
         shield: 10,
         sp: 89,
-        stack: 152,
+        stack: 153,
       },
       dimensions: expect.objectContaining({
         damage: expect.any(Object),

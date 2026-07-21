@@ -88,6 +88,9 @@ export function projectCycleBoundaryInheritance({
       inheritedControlledActorId:
         initialRuntimeState?.controlledActor?.actorId ?? null,
       inheritedEffectCount: initialRuntimeState?.activeEffects?.length ?? 0,
+      inheritedTuningMarkLayerCount: (
+        initialRuntimeState?.tuningMarks ?? []
+      ).reduce((sum, mark) => sum + mark.layers.length, 0),
       clearedRuntimeSampleCaptureCount:
         draft.runtimeSampleCaptures?.length ?? 0,
     },
@@ -182,8 +185,7 @@ export function createInitialRuntimeStateAtBoundary({
         verifiedEnemyState?.lastToughnessSourceActorId ?? null,
       lastToughnessBindingIdentity:
         verifiedEnemyState?.lastToughnessBindingIdentity ?? null,
-      profileSourceIdentity:
-        verifiedEnemyState?.profileSourceIdentity ?? null,
+      profileSourceIdentity: verifiedEnemyState?.profileSourceIdentity ?? null,
     },
     selfEnergyByActor: [...energyStateByActor.values()],
     kiboEnergyBySlot,
@@ -191,6 +193,85 @@ export function createInitialRuntimeStateAtBoundary({
       runtimeOutputs?.effectTimeline?.events,
       boundaryTimeMs
     ),
+    tuningMarks: createInheritedTuningMarksAtBoundary({
+      tuningMarkRuntime:
+        runtimeOutputs?.verifiedCombatRuntime?.tuningMarkRuntime,
+      boundaryTimeMs,
+    }),
+  });
+}
+
+function createInheritedTuningMarksAtBoundary({
+  tuningMarkRuntime,
+  boundaryTimeMs,
+}) {
+  const initialByMarkId = new Map(
+    (tuningMarkRuntime?.initialState ?? []).map(state => [
+      Number(state.markId),
+      {
+        ...cloneValue(state),
+        layers: (state.layers ?? []).map((layer, index) => ({
+          id: `initial|${state.markId}|${index}`,
+          expiresAtMs: nonNegativeNumber(layer.remainingDurationMs),
+          sourceActionId: layer.sourceActionId ?? null,
+          sourceActorId: layer.sourceActorId ?? null,
+          sourceIdentity: cloneValue(layer.sourceIdentity),
+        })),
+        heldReadyAtMs: nonNegativeNumber(state.heldReadyRemainingMs),
+      },
+    ])
+  );
+  for (const event of tuningMarkRuntime?.events ?? []) {
+    if (!isBeforeBoundary(event.timeMs, boundaryTimeMs)) continue;
+    const state = initialByMarkId.get(Number(event.markId));
+    if (!state) continue;
+    if (event.kind === 'held-trigger') {
+      state.heldReadyAtMs = Number(event.heldReadyAtMs) || 0;
+    } else if (event.kind === 'acquire') {
+      for (const [index, layerId] of (event.layerIds ?? []).entries()) {
+        state.layers.push({
+          id: layerId,
+          expiresAtMs: Number(event.timeMs) + 20_000,
+          sourceActionId: event.actionId ?? null,
+          sourceActorId: event.actorId ?? null,
+          sourceIdentity: cloneValue(event.sourceIdentity),
+          order: index,
+        });
+      }
+    } else {
+      const removedIds = new Set(event.layerIds ?? []);
+      state.layers = state.layers.filter(layer => !removedIds.has(layer.id));
+    }
+  }
+  return [...initialByMarkId.values()].flatMap(state => {
+    const layers = state.layers.flatMap(layer => {
+      const remainingDurationMs = roundValue(
+        Number(layer.expiresAtMs) - boundaryTimeMs
+      );
+      return remainingDurationMs > 0
+        ? [
+            {
+              remainingDurationMs,
+              sourceActionId: layer.sourceActionId,
+              sourceActorId: layer.sourceActorId,
+              sourceIdentity: layer.sourceIdentity,
+            },
+          ]
+        : [];
+    });
+    if (layers.length === 0) return [];
+    return [
+      {
+        markId: state.markId,
+        profileKey: state.profileKey,
+        elementName: state.elementName,
+        layers,
+        heldReadyRemainingMs: Math.max(
+          0,
+          Number(state.heldReadyAtMs) - boundaryTimeMs
+        ),
+      },
+    ];
   });
 }
 
@@ -216,11 +297,9 @@ function createVerifiedEnemyStateAtBoundary({
         : null,
     valueShields: cloneValue(initial.valueShields ?? []),
     hitCountShields: cloneValue(initial.hitCountShields ?? []),
-    lastToughnessSourceActionId:
-      initial.lastToughnessSourceActionId ?? null,
+    lastToughnessSourceActionId: initial.lastToughnessSourceActionId ?? null,
     lastToughnessSourceActorId: initial.lastToughnessSourceActorId ?? null,
-    lastToughnessBindingIdentity:
-      initial.lastToughnessBindingIdentity ?? null,
+    lastToughnessBindingIdentity: initial.lastToughnessBindingIdentity ?? null,
     profileSourceIdentity: initial.profileSourceIdentity ?? null,
   };
   const events = [...(verifiedCombatRuntime.damageEvents ?? [])].sort(
@@ -264,12 +343,9 @@ function createVerifiedEnemyStateAtBoundary({
         : null,
     valueShields: cloneValue(state.valueShields ?? []),
     hitCountShields: cloneValue(state.hitCountShields ?? []),
-    lastToughnessSourceActionId:
-      state.lastToughnessSourceActionId ?? null,
-    lastToughnessSourceActorId:
-      state.lastToughnessSourceActorId ?? null,
-    lastToughnessBindingIdentity:
-      state.lastToughnessBindingIdentity ?? null,
+    lastToughnessSourceActionId: state.lastToughnessSourceActionId ?? null,
+    lastToughnessSourceActorId: state.lastToughnessSourceActorId ?? null,
+    lastToughnessBindingIdentity: state.lastToughnessBindingIdentity ?? null,
     profileSourceIdentity: state.profileSourceIdentity ?? null,
   };
 }
@@ -416,6 +492,7 @@ function createProjectionResult({
       shiftedBoundaryCount: 0,
       inheritedEnergyActorCount: 0,
       inheritedEffectCount: 0,
+      inheritedTuningMarkLayerCount: 0,
       clearedRuntimeSampleCaptureCount: 0,
       ...summary,
     },

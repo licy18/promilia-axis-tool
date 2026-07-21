@@ -264,7 +264,8 @@ describe('verified combat mechanics runtime', () => {
         'verified-wind-kibo-active',
       ].map(actionId => {
         const events = result.verifiedCombatRuntime.damageEvents.filter(
-          event => event.actionId === actionId
+          event =>
+            event.actionId === actionId && event.type === 'VERIFIED_COMBAT_HIT'
         );
         return [
           actionId,
@@ -281,12 +282,23 @@ describe('verified combat mechanics runtime', () => {
     );
     expect(damageTotals).toEqual({
       'verified-han-star-skill': { hitCount: 7, hp: 224, toughness: 157 },
-      'verified-muyin-charged': { hitCount: 3, hp: 189, toughness: 185 },
+      'verified-muyin-charged': { hitCount: 3, hp: 191, toughness: 188 },
       'verified-wind-kibo-active': {
         hitCount: 6,
-        hp: 624,
+        hp: 630,
         toughness: 126,
       },
+    });
+    expect(
+      result.verifiedCombatRuntime.damageEvents.find(
+        event =>
+          event.actionId === 'verified-han-star-skill' &&
+          event.type === 'VERIFIED_TUNING_DAMAGE'
+      )?.payload
+    ).toMatchObject({
+      tuningMechanics: true,
+      profileKey: 'fire',
+      markCount: 1,
     });
     const hanActorRecovery = result.verifiedCombatRuntime.resourceEvents.filter(
       event =>

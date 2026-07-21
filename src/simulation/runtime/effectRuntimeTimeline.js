@@ -345,6 +345,7 @@ function isVerifiedCalculatorEffectState(effect) {
   if (
     ![
       'verified-battle-effect-generated',
+      'verified-tuning-mark-generated',
       'effect-inherited-from-cycle-boundary',
     ].includes(effect.sourceStatus)
   ) {
@@ -352,8 +353,8 @@ function isVerifiedCalculatorEffectState(effect) {
   }
   return Boolean(
     effect.sourceIdentity?.packageId &&
-      effect.sourceIdentity?.effectIdentity &&
-      effect.sourceIdentity?.actionBindingIdentity
+    effect.sourceIdentity?.effectIdentity &&
+    effect.sourceIdentity?.actionBindingIdentity
   );
 }
 
@@ -421,7 +422,10 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
   const appliedToCalculators =
     generated === true &&
     command.generatedVerified === true &&
-    command.sourceStatus === 'verified-battle-effect-generated' &&
+    [
+      'verified-battle-effect-generated',
+      'verified-tuning-mark-generated',
+    ].includes(command.sourceStatus) &&
     command.appliedToCalculators === true;
 
   return {
@@ -433,9 +437,9 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
       command.id ?? `${action.id}|effect-command|${commandIndex}`
     ),
     sourceActionId: command.sourceActionId ?? action.id ?? null,
-    sourceActionName: command.sourceActionName ?? action.name ?? null,
-    sourceActorId: command.sourceActorId ?? action.actorId ?? null,
-    sourceActorName: command.sourceActorName ?? action.actor?.name ?? null,
+    sourceActionName: command.sourceActionName ?? action?.name ?? null,
+    sourceActorId: command.sourceActorId ?? action?.actorId ?? null,
+    sourceActorName: command.sourceActorName ?? action?.actor?.name ?? null,
     effectId,
     effectName: String(command.effectName ?? effectId),
     operation: command.operation,
