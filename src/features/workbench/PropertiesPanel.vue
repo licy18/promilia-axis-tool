@@ -28,6 +28,64 @@
     </div>
 
     <div
+      v-if="verifiedMechanicsTrace"
+      class="verified-mechanics-trace"
+      :class="`status-${verifiedMechanicsTrace.status}`"
+      :data-trace-status="verifiedMechanicsTrace.status"
+      :data-binding-identity="verifiedMechanicsTrace.bindingIdentity"
+      :data-runtime-hit-count="verifiedMechanicsTrace.runtimeHitCount"
+      :data-runtime-effect-count="
+        verifiedMechanicsTrace.runtimeEffectEventCount
+      "
+      :data-runtime-tuning-count="
+        verifiedMechanicsTrace.runtimeTuningEventCount
+      "
+      data-testid="workbench-verified-mechanics-trace"
+    >
+      <div class="verified-mechanics-trace-title">
+        <span>动作数值溯源</span>
+        <strong>{{ verifiedMechanicsTrace.statusLabel }}</strong>
+      </div>
+      <ol class="verified-mechanics-trace-chain">
+        <li
+          v-for="step in verifiedMechanicsTrace.steps"
+          :key="step.key"
+          :class="{ applied: step.applied }"
+          :data-trace-step="step.key"
+          data-testid="workbench-verified-mechanics-trace-step"
+        >
+          <span>{{ step.label }}</span>
+          <strong>{{ step.value }}</strong>
+          <small>{{ step.detail }}</small>
+        </li>
+      </ol>
+      <p
+        v-if="verifiedMechanicsTrace.unresolved.length"
+        class="verified-mechanics-trace-unresolved"
+        data-testid="workbench-verified-mechanics-trace-unresolved"
+      >
+        {{ verifiedMechanicsTrace.unresolved.join(' · ') }}
+      </p>
+      <details
+        v-if="verifiedMechanicsTrace.sourceRows.length"
+        class="verified-mechanics-trace-sources"
+      >
+        <summary>
+          来源 {{ verifiedMechanicsTrace.sourceRows.length }} 项 · 包
+          {{ formatSourceHash(verifiedMechanicsTrace.packageHash) }}
+        </summary>
+        <div
+          v-for="(source, sourceIndex) in verifiedMechanicsTrace.sourceRows"
+          :key="`${source.label}-${sourceIndex}`"
+          data-testid="workbench-verified-mechanics-source-row"
+        >
+          <span>{{ source.label }}</span>
+          <code>{{ source.identity }}</code>
+        </div>
+      </details>
+    </div>
+
+    <div
       v-if="selectedAction.attackInput"
       class="logic-source"
       data-testid="workbench-attack-input-segment-source"
@@ -814,6 +872,7 @@ import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
 import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
+import { createVerifiedActionMechanicsTrace } from './verifiedActionMechanicsTrace';
 
 const props = defineProps({
   selection: {
@@ -839,6 +898,10 @@ const props = defineProps({
   selectedAction: {
     type: Object,
     required: true,
+  },
+  verifiedCombatRuntime: {
+    type: Object,
+    default: null,
   },
   durationMs: {
     type: Number,
@@ -874,6 +937,18 @@ const emit = defineEmits([
 
 const frameStepMs = WORKBENCH_FRAME_MS;
 const workbenchFrameRate = WORKBENCH_FPS;
+const verifiedMechanicsTrace = computed(() =>
+  createVerifiedActionMechanicsTrace({
+    action: props.selectedAction,
+    scenario: { actors: props.actors },
+    verifiedCombatRuntime: props.verifiedCombatRuntime,
+  })
+);
+
+function formatSourceHash(value) {
+  const text = String(value ?? '');
+  return text ? text.slice(0, 10) : '未提供';
+}
 
 const effectCommands = computed(
   () => props.selectedAction.effectCommands ?? []
@@ -1614,6 +1689,111 @@ h2 {
 .action-identity-copy small {
   color: #9aa6ae;
   font-size: 11px;
+}
+
+.verified-mechanics-trace {
+  display: grid;
+  gap: 8px;
+  margin: 10px 14px 0;
+  padding-block: 10px;
+  border-block: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.verified-mechanics-trace-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #aeb8be;
+  font-size: 12px;
+}
+
+.verified-mechanics-trace-title strong {
+  color: #79c7b9;
+}
+
+.verified-mechanics-trace.status-partial
+  .verified-mechanics-trace-title
+  strong {
+  color: #e0bc72;
+}
+
+.verified-mechanics-trace.status-unresolved
+  .verified-mechanics-trace-title
+  strong {
+  color: #dc858b;
+}
+
+.verified-mechanics-trace-chain {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verified-mechanics-trace-chain li {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 0.7fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.verified-mechanics-trace-chain li:last-child {
+  border-bottom: 0;
+}
+
+.verified-mechanics-trace-chain span,
+.verified-mechanics-trace-chain small {
+  color: #849098;
+  font-size: 10px;
+}
+
+.verified-mechanics-trace-chain strong {
+  overflow: hidden;
+  color: #d7dfe2;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verified-mechanics-trace-chain li.applied strong {
+  color: #e8f5f1;
+}
+
+.verified-mechanics-trace-unresolved {
+  margin: 0;
+  padding-left: 8px;
+  border-left: 2px solid #c96f78;
+  color: #d8a2a6;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.verified-mechanics-trace-sources summary {
+  color: #9ba6ad;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.verified-mechanics-trace-sources > div {
+  display: grid;
+  gap: 3px;
+  padding: 6px 0;
+}
+
+.verified-mechanics-trace-sources span {
+  color: #7f8b92;
+  font-size: 9px;
+}
+
+.verified-mechanics-trace-sources code {
+  color: #b9c5c8;
+  font-size: 9px;
+  overflow-wrap: anywhere;
 }
 
 .control-grid,

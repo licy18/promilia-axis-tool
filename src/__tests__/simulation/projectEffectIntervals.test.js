@@ -95,7 +95,13 @@ describe('effect interval projection', () => {
             targetName: '训练假人',
             actionId: 'action-mark',
             stackAfter: 1,
-            after: createState({ stacks: 1, maxStacks: 1, expiresAtMs: null }),
+            appliedToCalculators: true,
+            after: createState({
+              stacks: 1,
+              maxStacks: 1,
+              expiresAtMs: null,
+              appliedToCalculators: true,
+            }),
           }),
           createEvent({
             eventId: 'focus-expired',
@@ -123,7 +129,13 @@ describe('effect interval projection', () => {
             targetName: '训练假人',
             actionId: 'action-remove',
             stackBefore: 1,
-            before: createState({ stacks: 1, maxStacks: 1, expiresAtMs: null }),
+            appliedToCalculators: true,
+            before: createState({
+              stacks: 1,
+              maxStacks: 1,
+              expiresAtMs: null,
+              appliedToCalculators: true,
+            }),
           }),
         ],
       },
@@ -141,6 +153,7 @@ describe('effect interval projection', () => {
         enemyTargetIntervalCount: 1,
         completedIntervalCount: 2,
         activeAtScenarioEndCount: 0,
+        calculatorAppliedIntervalCount: 1,
         appliedToCalculators: false,
       },
     });
@@ -169,6 +182,7 @@ describe('effect interval projection', () => {
       endMs: 2500,
       terminationType: 'EFFECT_REMOVED',
       sourceActionIds: ['action-mark', 'action-remove'],
+      appliedToCalculators: true,
     });
   });
 
@@ -249,7 +263,12 @@ function createEvent(overrides) {
   };
 }
 
-function createState({ stacks, maxStacks = 1, expiresAtMs }) {
+function createState({
+  stacks,
+  maxStacks = 1,
+  expiresAtMs,
+  appliedToCalculators = false,
+}) {
   return {
     active: true,
     stacks,
@@ -257,6 +276,6 @@ function createState({ stacks, maxStacks = 1, expiresAtMs }) {
     expiresAtMs,
     tags: [],
     modifiers: [],
-    appliedToCalculators: false,
+    appliedToCalculators,
   };
 }

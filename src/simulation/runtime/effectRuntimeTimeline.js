@@ -427,6 +427,8 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
       'verified-tuning-mark-generated',
     ].includes(command.sourceStatus) &&
     command.appliedToCalculators === true;
+  const sourceActionId = command.sourceActionId ?? action?.id ?? null;
+  const commandOwnerIdentity = sourceActionId ?? 'generated-global';
 
   return {
     schemaVersion: 1,
@@ -434,9 +436,9 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     contractName: ACTION_EFFECT_COMMAND_CONTRACT_NAME,
     status: 'action-effect-runtime-command-ready',
     commandId: String(
-      command.id ?? `${action.id}|effect-command|${commandIndex}`
+      command.id ?? `${commandOwnerIdentity}|effect-command|${commandIndex}`
     ),
-    sourceActionId: command.sourceActionId ?? action.id ?? null,
+    sourceActionId,
     sourceActionName: command.sourceActionName ?? action?.name ?? null,
     sourceActorId: command.sourceActorId ?? action?.actorId ?? null,
     sourceActorName: command.sourceActorName ?? action?.actor?.name ?? null,

@@ -73,6 +73,7 @@ export default defineConfig({
               '/domain/workbenchLayout.js',
               '/domain/workbenchProjectFileReceiver.js',
               '/features/workbench/runtimeEffectReview.js',
+              '/features/workbench/verifiedActionMechanicsTrace.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {
             return 'workbench-secondary-ui';

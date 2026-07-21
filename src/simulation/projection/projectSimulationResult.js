@@ -4,6 +4,7 @@ import {
   createSelfEnergyDeltaSummaryByActor,
   createThreeValueRuntimeProjection,
 } from '../runtime/threeValueRuntimeProjection';
+import { projectVerifiedTuningMarkCurves } from './projectVerifiedTuningMarkCurves';
 
 const DEFAULT_SKILL_ASSET_EVIDENCE_PATH =
   'src/data/generated/skill-asset-evidence.json';
@@ -1496,6 +1497,10 @@ export function projectSimulationResult({
     verifiedCombatRuntime,
   });
   const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
+  const tuningMarkCurveProjection = projectVerifiedTuningMarkCurves({
+    tuningMarkRuntime: verifiedCombatRuntime?.tuningMarkRuntime,
+    durationMs: scenario.time.durationMs,
+  });
   const damageTimeline = damageEvents.map(event => ({
     eventType: event.type,
     stateEventKind: event.payload.stateEventKind ?? null,
@@ -1610,6 +1615,7 @@ export function projectSimulationResult({
     verifiedCombatRuntime,
     verifiedBattleEffectGeneration,
     verifiedTuningMarkGeneration,
+    tuningMarkCurveProjection,
     effectTimeline: runtimeOutputs.effectTimeline,
     controlledActorTimeline: runtimeOutputs.controlledActorTimeline,
     actionEffectRelationGraph: runtimeOutputs.actionEffectRelationGraph,

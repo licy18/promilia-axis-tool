@@ -6,6 +6,9 @@
     :data-cycle-boundary-count="cycleBoundaries.length"
     :data-selected-cycle-boundary-id="selectedCycleBoundaryId"
     :data-effect-interval-count="effectIntervals.length"
+    :data-tuning-mark-track-count="
+      tuningMarkCurveProjection.visibleTracks.length
+    "
     :data-selected-effect-interval-id="selectedEffectIntervalId"
     :data-box-selection-mode="boxSelectionMode ? 'true' : 'false'"
     :data-flow-selected-state-curve-point-id="flowSelectedStateCurvePointId"
@@ -402,6 +405,13 @@
               </small>
             </span>
           </template>
+          <template v-else-if="lane.kind === 'tuning-mark-empty'">
+            <i class="lane-curve-mark" aria-hidden="true" />
+            <span class="lane-subtrack-copy">
+              <strong>队伍印记</strong>
+              <small>暂无已验证印记变化</small>
+            </span>
+          </template>
           <template v-else>
             <span>{{ lane.name }}</span>
             <small>{{ lane.detail }}</small>
@@ -622,6 +632,7 @@
               v-if="lane.curve"
               class="timeline-state-curve"
               :class="`curve-${lane.curve.trackKey}`"
+              :style="timelineCurveStyle(lane)"
               :data-track-key="lane.curve.trackKey"
               :data-actor-id="lane.curve.actorId || ''"
               :data-initial-value="lane.curve.initialValue"
@@ -657,16 +668,16 @@
                 :key="point.id"
                 class="timeline-state-curve-node"
                 :class="{
-                  selected: point.statePointIds.includes(
-                    flowSelectedStateCurvePointId
-                  ),
+                  selected: isTimelineCurveNodeSelected(lane, point),
                 }"
                 type="button"
                 :style="runtimeCurveNodeStyle(point)"
-                :title="formatRuntimeCurveNodeTitle(point)"
-                :aria-label="formatRuntimeCurveNodeTitle(point)"
+                :title="formatTimelineCurveNodeTitle(lane, point)"
+                :aria-label="formatTimelineCurveNodeTitle(lane, point)"
                 :data-action-id="point.actionId"
                 :data-hit-key="point.hitKey"
+                :data-mark-id="lane.curve.markId || ''"
+                :data-event-kinds="point.eventKinds?.join(',') || ''"
                 :data-state-point-id="point.statePointId"
                 :data-state-point-ids="point.statePointIds.join(',')"
                 :data-runtime-focus-source="
@@ -680,7 +691,7 @@
                 :data-current-value="point.currentValue"
                 data-testid="workbench-timeline-state-curve-node"
                 @pointerdown.stop
-                @click.stop="selectRuntimeCurveBreakpoint(point)"
+                @click.stop="selectTimelineCurveNode(lane, point)"
               />
             </div>
             <button
@@ -1005,6 +1016,8 @@ const TIMELINE_LANE_MIN_HEIGHT_PX = 100;
 const TIMELINE_ACTOR_LANE_MIN_HEIGHT_PX = 164;
 const TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX = 64;
 const TIMELINE_CURVE_LANE_HEIGHT_PX = 44;
+const TIMELINE_TUNING_MARK_LANE_HEIGHT_PX = 28;
+const TIMELINE_TUNING_MARK_EMPTY_HEIGHT_PX = 36;
 const TIMELINE_ACTION_TOP_PX = 29;
 const TIMELINE_ACTOR_ACTION_TOP_PX = 61;
 const TIMELINE_ACTION_HEIGHT_PX = 42;
@@ -1117,6 +1130,16 @@ const props = defineProps({
     default: () => ({
       enemy: { points: [] },
       resources: { curvesByActor: [], curvesByKibo: [] },
+    }),
+  },
+  tuningMarkCurveProjection: {
+    type: Object,
+    default: () => ({
+      status: 'verified-tuning-mark-curves-unavailable',
+      tracks: [],
+      visibleTracks: [],
+      summary: { profileCount: 0, visibleTrackCount: 0 },
+      applied: false,
     }),
   },
   controlledActorTimeline: {
@@ -1634,6 +1657,7 @@ const timelineLanes = computed(() => {
     interval => interval.targetKind === 'enemy'
   );
   const enemyGroup = createTimelineEnemyGroup(enemyEffectIntervals);
+  const tuningMarkLanes = createTimelineTuningMarkLanes();
   const enemyLane = enemyGroup.eventLane;
   const systemLane = createEmptyTimelineLane({
     id: 'system',
@@ -1653,6 +1677,7 @@ const timelineLanes = computed(() => {
     enemyGroup.eventLane,
     enemyGroup.hpCurveLane,
     enemyGroup.toughnessCurveLane,
+    ...tuningMarkLanes,
     systemLane,
   ];
   const allLanesById = new Map(allLanes.map(lane => [lane.id, lane]));
@@ -2048,6 +2073,66 @@ function createTimelineEnemyGroup(effectIntervals) {
         fallbackMaxValue: maxToughness || null,
       }),
     }),
+  };
+}
+
+function createTimelineTuningMarkLanes() {
+  const tracks = props.tuningMarkCurveProjection?.visibleTracks ?? [];
+  if (tracks.length === 0) {
+    return props.tuningMarkCurveProjection?.applied
+      ? [
+          createEmptyTimelineLane({
+            id: 'tuning-mark-empty',
+            kind: 'tuning-mark-empty',
+            type: 'tuning-mark',
+            name: '队伍印记',
+            detail: '暂无已验证印记变化',
+            editable: false,
+            identity: { accentColor: '#8f9aa3' },
+          }),
+        ]
+      : [];
+  }
+  return tracks.map((track, index) =>
+    createEmptyTimelineLane({
+      id: `tuning-mark-${track.markId}`,
+      kind: 'tuning-mark-curve',
+      type: 'curve',
+      name: track.label,
+      detail: index === 0 ? '队伍印记' : '队伍共享',
+      editable: false,
+      identity: {
+        kind: 'tuning-mark',
+        markId: track.markId,
+        profileKey: track.profileKey,
+        accentColor: track.color,
+      },
+      curve: createTimelineTuningMarkCurve(track),
+    })
+  );
+}
+
+function createTimelineTuningMarkCurve(track) {
+  const cursorValue = track.valueAtTime(timelineCursor.value.timeMs);
+  return {
+    trackKey: track.trackKey,
+    curveKind: 'tuning-mark',
+    markId: track.markId,
+    profileKey: track.profileKey,
+    elementName: track.elementName,
+    color: track.color,
+    initialValue: track.initialValue,
+    currentValue: track.currentValue,
+    cursorValue,
+    cursorYPercent: 100 - (cursorValue / track.maxValue) * 100,
+    maxValue: track.maxValue,
+    pointCount: track.semanticNodeCount,
+    displayPointCount: track.displayPointCount,
+    simulationPointCount: track.simulationPointCount,
+    semanticNodes: track.semanticNodes,
+    stepPoints: track.linePoints
+      .map(point => `${point.xPercent},${point.yPercent}`)
+      .join(' '),
   };
 }
 
@@ -2528,6 +2613,12 @@ function getTimelineCooldownAreaBottom(lane) {
 }
 
 function getTimelineLaneHeight(lane) {
+  if (lane.kind === 'tuning-mark-curve') {
+    return TIMELINE_TUNING_MARK_LANE_HEIGHT_PX;
+  }
+  if (lane.kind === 'tuning-mark-empty') {
+    return TIMELINE_TUNING_MARK_EMPTY_HEIGHT_PX;
+  }
   if (lane.type === 'curve') return TIMELINE_CURVE_LANE_HEIGHT_PX;
   if (lane.type === 'kibo' && lane.actions.length === 0) {
     return TIMELINE_EMPTY_KIBO_LANE_HEIGHT_PX;
@@ -2729,6 +2820,21 @@ function resolveActionLaneId(action) {
   );
 }
 
+function selectTimelineCurveNode(lane, point) {
+  if (lane?.curve?.curveKind === 'tuning-mark') {
+    if (point.actionId) {
+      emit('select-action', { actionId: point.actionId, mode: 'replace' });
+    }
+    emitTimelineFrame({
+      frameIndex: point.frameIndex,
+      timeMs: point.timeMs,
+      source: 'timeline-tuning-mark-curve',
+    });
+    return;
+  }
+  selectRuntimeCurveBreakpoint(point);
+}
+
 function selectRuntimeCurveBreakpoint(point) {
   const timelineFrame = {
     frameIndex: point.frameIndex,
@@ -2754,11 +2860,43 @@ function selectRuntimeCurveBreakpoint(point) {
   emitTimelineFrame(timelineFrame);
 }
 
+function isTimelineCurveNodeSelected(lane, point) {
+  if (lane?.curve?.curveKind === 'tuning-mark') {
+    return Boolean(
+      point.actionId &&
+      point.actionId === flowSelectedActionId.value &&
+      Number(point.frameIndex) === Number(timelineCursor.value.frameIndex)
+    );
+  }
+  return point.statePointIds.includes(flowSelectedStateCurvePointId.value);
+}
+
 function runtimeCurveNodeStyle(point) {
   return {
     left: `${point.xPercent}%`,
     top: `${point.yPercent}%`,
   };
+}
+
+function timelineCurveStyle(lane) {
+  return lane?.curve?.color ? { color: lane.curve.color } : {};
+}
+
+function formatTimelineCurveNodeTitle(lane, point) {
+  if (lane?.curve?.curveKind !== 'tuning-mark') {
+    return formatRuntimeCurveNodeTitle(point);
+  }
+  const kindLabels = {
+    acquire: '获取',
+    consume: '消耗',
+    expire: '到期',
+  };
+  const eventText = (point.eventKinds ?? [])
+    .map(kind => kindLabels[kind] ?? kind)
+    .join(' / ');
+  return `${point.frameIndex}F · ${lane.curve.elementName}印记${eventText ? ` ${eventText}` : ''} · ${formatCompactNumber(
+    point.beforeValue
+  )} -> ${formatCompactNumber(point.afterValue)}`;
 }
 
 function formatRuntimeCurveNodeTitle(point) {
@@ -4601,6 +4739,25 @@ h2 {
   color: #a6b7ff;
 }
 
+.lane-label[data-lane-kind='tuning-mark-curve'],
+.lane-label[data-lane-kind='tuning-mark-empty'] {
+  gap: 7px;
+  padding: 2px 9px 2px 14px;
+  border-color: rgba(184, 171, 132, 0.24);
+  background: #191b1c;
+  color: var(--lane-accent);
+}
+
+.lane-label[data-lane-kind='tuning-mark-curve'] strong,
+.lane-label[data-lane-kind='tuning-mark-empty'] strong {
+  font-size: 11px;
+}
+
+.lane-label[data-lane-kind='tuning-mark-curve'] small,
+.lane-label[data-lane-kind='tuning-mark-empty'] small {
+  font-size: 9px;
+}
+
 .lane-row {
   position: relative;
   min-height: 110px;
@@ -4659,6 +4816,19 @@ h2 {
       transparent 10%
     ),
     #11171d;
+}
+
+.lane-row[data-lane-kind='tuning-mark-curve'],
+.lane-row[data-lane-kind='tuning-mark-empty'] {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(184, 171, 132, 0.05) 0,
+      rgba(184, 171, 132, 0.05) 1px,
+      transparent 1px,
+      transparent 10%
+    ),
+    #151819;
 }
 
 .timeline-state-curve {
@@ -4722,6 +4892,17 @@ h2 {
 
 .timeline-state-curve.curve-kiboEnergyChange {
   color: #70d6b7;
+}
+
+.lane-row[data-lane-kind='tuning-mark-curve'] .timeline-state-curve {
+  inset: 4px 0;
+}
+
+.lane-row[data-lane-kind='tuning-mark-curve'] .timeline-state-curve-node {
+  width: 7px;
+  height: 7px;
+  border-width: 1px;
+  border-color: #151819;
 }
 
 .action-block {

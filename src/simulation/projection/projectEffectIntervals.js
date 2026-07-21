@@ -123,6 +123,9 @@ export function projectEffectRuntimeIntervals({
       persistentIntervalCount: visibleIntervals.filter(
         interval => interval.persistent
       ).length,
+      calculatorAppliedIntervalCount: visibleIntervals.filter(
+        interval => interval.appliedToCalculators
+      ).length,
       appliedToCalculators: false,
     },
     appliedToCalculators: false,
@@ -226,6 +229,12 @@ function finalizeEffectInterval(
   );
   const lastEvent = lifecycleEvents[lifecycleEvents.length - 1] ?? null;
   const lastState = lastEvent?.after ?? lastEvent?.before ?? null;
+  const appliedToCalculators = lifecycleEvents.some(
+    event =>
+      event.appliedToCalculators === true ||
+      event.after?.appliedToCalculators === true ||
+      event.before?.appliedToCalculators === true
+  );
   const persistent = activeAtScenarioEnd && lastState?.expiresAtMs == null;
   return {
     schemaVersion: 1,
@@ -272,7 +281,7 @@ function finalizeEffectInterval(
     refreshCount: lifecycleEvents.filter(
       event => event.type === EFFECT_RUNTIME_EVENT_TYPES.REFRESHED
     ).length,
-    appliedToCalculators: false,
+    appliedToCalculators,
   };
 }
 

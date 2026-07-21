@@ -47,12 +47,24 @@ const M2_LOADOUT_CONFIGS = [
     },
   },
 ];
+const M8D_TUNING_MARK_PROFILES = [
+  { markId: 150, profileKey: 'fire' },
+  { markId: 850, profileKey: 'water' },
+  { markId: 350, profileKey: 'ice' },
+  { markId: 750, profileKey: 'wind' },
+  { markId: 550, profileKey: 'wood' },
+  { markId: 650, profileKey: 'earth' },
+  { markId: 250, profileKey: 'thunder' },
+  { markId: 950, profileKey: 'light' },
+  { markId: 450, profileKey: 'dark' },
+];
 
 test.beforeEach(async ({ page }, testInfo) => {
   if (
     testInfo.title.includes('[m1d-demo-milestone]') ||
     testInfo.title.includes('[m6-verified-combat-workflow]') ||
-    testInfo.title.includes('[m7-catalog-runtime-workflow]')
+    testInfo.title.includes('[m7-catalog-runtime-workflow]') ||
+    testInfo.title.includes('[m8d-verified-mechanics-ui]')
   ) {
     return;
   }
@@ -1100,9 +1112,7 @@ test('[m8a-static-loadout] recompiles actor and kibo panels after direct equipme
   await actorLoadout
     .getByTestId('workbench-actor-star-gift-rank-input')
     .fill('2');
-  await actorLoadout
-    .getByTestId('workbench-actor-star-gift-rank-input')
-    .blur();
+  await actorLoadout.getByTestId('workbench-actor-star-gift-rank-input').blur();
   await actorLoadout.getByTestId('workbench-kibo-intimacy-input').fill('5');
   await actorLoadout.getByTestId('workbench-kibo-intimacy-input').blur();
 
@@ -1151,6 +1161,221 @@ test('[m8a-static-loadout] recompiles actor and kibo panels after direct equipme
   await expect(
     restoredActorLoadout.getByTestId('workbench-kibo-intimacy-input')
   ).toHaveValue('5');
+});
+
+test('[m8d-verified-mechanics-ui] reviews real tuning marks and the action mechanics chain on the shared timeline', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const packageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.goto('/#/workbench');
+  await packageResponse;
+  await page.getByTestId('workbench-scenario-add').click();
+  await page.getByTestId('workbench-save-draft').click();
+  await page.evaluate(
+    ({ storageKey, profiles }) => {
+      const draft = JSON.parse(window.localStorage.getItem(storageKey));
+      const tuningMarks = profiles
+        .filter(profile => profile.profileKey !== 'fire')
+        .map(profile => ({
+          ...profile,
+          heldReadyRemainingMs: 60_000,
+          layers: [
+            {
+              remainingDurationMs: 25_000,
+              sourceIdentity: {
+                sourceKind: 'm8d-standard-vector',
+                profileKey: profile.profileKey,
+              },
+            },
+          ],
+        }));
+      const applyToScenarioDrafts = value => {
+        if (!value || typeof value !== 'object') return;
+        if (
+          Array.isArray(value.actorConfigs) &&
+          Array.isArray(value.actionDrafts)
+        ) {
+          value.initialRuntimeState = {
+            ...(value.initialRuntimeState ?? {}),
+            controlledActor: {
+              actorId: 'actor-101003',
+              characterId: 101003,
+            },
+            tuningMarks,
+          };
+        }
+        Object.values(value).forEach(applyToScenarioDrafts);
+      };
+      applyToScenarioDrafts(draft);
+      window.localStorage.setItem(storageKey, JSON.stringify(draft));
+    },
+    {
+      storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+      profiles: M8D_TUNING_MARK_PROFILES,
+    }
+  );
+
+  const reloadedPackageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.reload();
+  await reloadedPackageResponse;
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await openActorInspector(page, 101003);
+  await expect(
+    page
+      .locator(
+        '[data-testid="workbench-actor-loadout"][data-character-id="101003"]'
+      )
+      .getByTestId('workbench-verified-static-property-panel')
+  ).toHaveAttribute(
+    'data-property-status',
+    'verified-static-actor-properties-ready',
+    { timeout: 60_000 }
+  );
+  await closeInspectorIfVisible(page);
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  const source = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
+  );
+  await expect(source).toBeVisible();
+  await dragLocatorTo(
+    page,
+    source,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+    ),
+    { targetPosition: { x: 160, y: 82 } }
+  );
+
+  const action = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
+  );
+  await expect(action).toHaveCount(1);
+  const actionId = await action.getAttribute('data-action-id');
+  expect(actionId).toBeTruthy();
+  const tuningLanes = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="tuning-mark-curve"]'
+  );
+  await expect(timeline).toHaveAttribute('data-tuning-mark-track-count', '9');
+  await expect(tuningLanes).toHaveCount(9);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve')
+  ).toHaveCount(17);
+
+  const fireLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"]'
+  );
+  const fireAcquisitions = fireLane.locator(
+    `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${actionId}"][data-event-kinds*="acquire"]`
+  );
+  await expect(fireAcquisitions).toHaveCount(2);
+  const firstAcquisition = fireAcquisitions.first();
+  await expectTimelineCurveNodeFrameAlignment(timeline, firstAcquisition);
+
+  const verifiedIntervals = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${actionId}"]`
+  );
+  await expect(verifiedIntervals.first()).toBeVisible();
+  await expect(
+    timeline
+      .locator(
+        `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${actionId}"][data-applied-to-calculators="true"]`
+      )
+      .first()
+  ).toBeVisible();
+
+  await firstAcquisition.click();
+  const acquisitionFrame =
+    await firstAcquisition.getAttribute('data-frame-index');
+  await expect(timeline).toHaveAttribute(
+    'data-flow-selected-action-id',
+    actionId
+  );
+  await expect(timeline).toHaveAttribute(
+    'data-cursor-frame-index',
+    acquisitionFrame
+  );
+  const trace = page.getByTestId('workbench-verified-mechanics-trace');
+  await expect(trace).toBeVisible();
+  await expect(trace).toHaveAttribute('data-binding-identity', /10100312/u);
+  await expect
+    .poll(async () =>
+      Number(await trace.getAttribute('data-runtime-hit-count'))
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(async () =>
+      Number(await trace.getAttribute('data-runtime-tuning-count'))
+    )
+    .toBeGreaterThan(0);
+  await expect(
+    trace.getByTestId('workbench-verified-mechanics-trace-step')
+  ).toHaveCount(5);
+  await expect(trace).toContainText('动作数值溯源');
+  await expect(trace).toContainText('属性快照');
+  await expect(trace).toContainText('命中结果');
+  await expect(trace).toContainText('印记');
+
+  const acquisitionFrameBeforeMove = Number(acquisitionFrame);
+  await action.press('ArrowRight');
+  await expect
+    .poll(async () =>
+      Number(await fireAcquisitions.first().getAttribute('data-frame-index'))
+    )
+    .toBe(acquisitionFrameBeforeMove + 1);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(fireAcquisitions.first()).toHaveAttribute(
+    'data-frame-index',
+    String(acquisitionFrameBeforeMove)
+  );
+
+  await page.getByTestId('workbench-timeline-zoom-input').evaluate(element => {
+    element.value = '2';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await fireLane.scrollIntoViewIfNeeded();
+  await expectTimelineCurveNodeFrameAlignment(timeline, firstAcquisition);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m8d-verified-mechanics-desktop.png',
+  });
+
+  await page.getByTestId('workbench-save-draft').click();
+  const restoredPackageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.reload();
+  await restoredPackageResponse;
+  await expect(timeline).toHaveAttribute('data-tuning-mark-track-count', '9');
+  await expect(fireAcquisitions).toHaveCount(2);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await fireLane.scrollIntoViewIfNeeded();
+  await expectTimelineCurveNodeFrameAlignment(timeline, firstAcquisition);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m8d-verified-mechanics-narrow.png',
+  });
 });
 
 test('[six-resource-capture-import] packages, imports, and replays six owner-specific resource captures', async ({
@@ -1468,7 +1693,7 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   ).toHaveCount(0);
   const reviewedEvent = timeline
     .locator(
-      '[data-testid="workbench-timeline-state-curve-node"][data-action-id^="action-0001"]'
+      '[data-testid="workbench-timeline-state-curve"]:not([data-track-key^="tuningMark:"]) [data-testid="workbench-timeline-state-curve-node"][data-action-id^="action-0001"]'
     )
     .last();
   await expect(reviewedEvent).toBeVisible();
@@ -2682,7 +2907,9 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   await expect(workbench).toHaveAttribute('data-energy-curve-count', '6');
   await expect(
-    timeline.getByTestId('workbench-timeline-state-curve')
+    timeline.locator(
+      '[data-testid="workbench-timeline-state-curve"]:not([data-track-key^="tuningMark:"])'
+    )
   ).toHaveCount(8);
 
   await page.getByTestId('workbench-scenario-add').click();
@@ -5906,9 +6133,14 @@ async function expectTimelineRowsAligned(timeline) {
     ];
     const rowRects = rows.map(row => row.getBoundingClientRect());
     const labelRects = labels.map(label => label.getBoundingClientRect());
+    const tuningRowCount = rows.filter(row =>
+      String(row.dataset.laneKind ?? '').startsWith('tuning-mark-')
+    ).length;
     return {
       rowCount: rows.length,
       labelCount: labels.length,
+      baseRowCount: rows.length - tuningRowCount,
+      tuningRowCount,
       rowsSeparated: rowRects.every(
         (rect, index) =>
           index === 0 || rect.top >= rowRects[index - 1].bottom - 0.5
@@ -5918,12 +6150,10 @@ async function expectTimelineRowsAligned(timeline) {
       ),
     };
   });
-  expect(alignment).toEqual({
-    rowCount: 15,
-    labelCount: 15,
-    rowsSeparated: true,
-    labelsAligned: true,
-  });
+  expect(alignment.baseRowCount).toBeGreaterThanOrEqual(15);
+  expect(alignment.labelCount).toBe(alignment.rowCount);
+  expect(alignment.rowsSeparated).toBe(true);
+  expect(alignment.labelsAligned).toBe(true);
 }
 
 async function expectTimelineTrackReadability(timeline) {
@@ -6003,7 +6233,11 @@ async function readVerifiedPanelValue(panel, label) {
     .first()
     .locator('strong')
     .textContent();
-  return Number(String(text ?? '').replaceAll(',', '').trim());
+  return Number(
+    String(text ?? '')
+      .replaceAll(',', '')
+      .trim()
+  );
 }
 
 async function changeM2TeamSlot(page, slotIndex, characterId) {
@@ -6188,7 +6422,7 @@ async function expectM2ActorLoadoutDirect(page, characterId, config) {
 function getSingleSkillActionEntry(page) {
   return page
     .locator(
-      '[data-testid="workbench-skill-entry"][data-attack-input-count="0"]'
+      '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"]'
     )
     .first();
 }
@@ -6319,7 +6553,9 @@ async function expectDemoMilestoneState(page, { resourceFrameIndex }) {
   ).toHaveCount(3);
   await expect(kiboEnergyCurves).toHaveCount(3);
   await expect(
-    timeline.getByTestId('workbench-timeline-state-curve')
+    timeline.locator(
+      '[data-testid="workbench-timeline-state-curve"]:not([data-track-key^="tuningMark:"])'
+    )
   ).toHaveCount(8);
   await expect(resourceBreakpoint).toHaveAttribute(
     'data-frame-index',
@@ -6555,6 +6791,26 @@ async function expectVerifiedCombatPointAlignment(
         (laneBox.width * ((Number(hitOffsetFrames) * 1000) / 60)) / durationMs;
       const pointCenter = pointBox.x + pointBox.width / 2;
       return Math.abs(pointCenter - actionBox.x - expectedOffset);
+    })
+    .toBeLessThanOrEqual(1.5);
+}
+
+async function expectTimelineCurveNodeFrameAlignment(timeline, node) {
+  await expect
+    .poll(async () => {
+      const [nodeBox, laneBox] = await Promise.all([
+        node.boundingBox(),
+        timeline.getByTestId('workbench-timeline-lane').boundingBox(),
+      ]);
+      const durationMs = Number(
+        await timeline.getAttribute('data-duration-ms')
+      );
+      const timeMs = Number(await node.getAttribute('data-time-ms'));
+      if (!nodeBox || !laneBox || !durationMs || !Number.isFinite(timeMs)) {
+        return Number.POSITIVE_INFINITY;
+      }
+      const expectedCenter = laneBox.x + (laneBox.width * timeMs) / durationMs;
+      return Math.abs(nodeBox.x + nodeBox.width / 2 - expectedCenter);
     })
     .toBeLessThanOrEqual(1.5);
 }

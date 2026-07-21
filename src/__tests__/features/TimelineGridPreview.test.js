@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import { serializeWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
+import { projectVerifiedTuningMarkCurves } from '../../simulation/projection/projectVerifiedTuningMarkCurves';
 
 function readStyleNumber(style, property) {
   return Number(
@@ -80,14 +81,14 @@ describe('TimelineGridPreview', () => {
       '[data-testid="workbench-action-placement-ghost"]'
     );
     expect(
-      wrapper.get(
-        '[data-testid="workbench-action-placement-request-guide"]'
-      ).text()
+      wrapper
+        .get('[data-testid="workbench-action-placement-request-guide"]')
+        .text()
     ).toBe('30F');
     expect(
-      wrapper.get(
-        '[data-testid="workbench-action-placement-suggested-guide"]'
-      ).text()
+      wrapper
+        .get('[data-testid="workbench-action-placement-suggested-guide"]')
+        .text()
     ).toBe('60F');
     expect(ghost.attributes()).toMatchObject({
       'data-action-id': 'action-a',
@@ -340,14 +341,10 @@ describe('TimelineGridPreview', () => {
     });
 
     expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-runtime-event-marker"]'
-      )
+      wrapper.findAll('[data-testid="workbench-timeline-runtime-event-marker"]')
     ).toHaveLength(0);
     expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-state-curve-marker"]'
-      )
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
     ).toHaveLength(0);
     expect(
       wrapper.findAll(
@@ -933,6 +930,100 @@ describe('TimelineGridPreview', () => {
         )
         .attributes('points')
     ).toBe('0,100 100,100');
+  });
+
+  it('renders involved team marks as compact curves on the shared timeline', async () => {
+    const initialState = [
+      [150, 'fire', '火', 0],
+      [850, 'water', '水', 0],
+      [350, 'ice', '冰', 0],
+      [750, 'wind', '风', 2],
+      [550, 'wood', '木', 0],
+      [650, 'earth', '地', 0],
+      [250, 'thunder', '雷', 0],
+      [950, 'light', '光', 0],
+      [450, 'dark', '暗', 0],
+    ].map(([markId, profileKey, elementName, currentValue]) => ({
+      markId,
+      profileKey,
+      elementName,
+      currentValue,
+      maxValue: 5,
+      valueUnit: 'mark-stacks',
+    }));
+    const tuningMarkCurveProjection = projectVerifiedTuningMarkCurves({
+      durationMs: 30_000,
+      tuningMarkRuntime: {
+        initialState,
+        events: [
+          {
+            eventIdentity: 'fire-acquire',
+            kind: 'acquire',
+            markId: 150,
+            actionId: 'action-a',
+            timeMs: 1_000,
+            frameIndex: 60,
+            before: 0,
+            after: 1,
+            sourceIdentity: { path: 'Battle/fire' },
+          },
+          {
+            eventIdentity: 'wind-consume',
+            kind: 'consume',
+            markId: 750,
+            actionId: 'action-b',
+            timeMs: 2_000,
+            frameIndex: 120,
+            before: 2,
+            after: 0,
+            sourceIdentity: { path: 'Battle/wind' },
+          },
+        ],
+      },
+    });
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        durationMs: 30_000,
+        tuningMarkCurveProjection,
+      }),
+    });
+
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-tuning-mark-track-count')
+    ).toBe('2');
+    expect(
+      wrapper.findAll('[data-lane-kind="tuning-mark-curve"]')
+    ).toHaveLength(4);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"] [data-testid="workbench-timeline-state-curve-line"]'
+        )
+        .attributes('points')
+    ).toBe('0,100 3.3333333333333335,100 3.3333333333333335,80 100,80');
+
+    const fireNode = wrapper.get(
+      '[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"] [data-testid="workbench-timeline-state-curve-node"]'
+    );
+    expect(fireNode.attributes()).toMatchObject({
+      'data-action-id': 'action-a',
+      'data-mark-id': '150',
+      'data-event-kinds': 'acquire',
+      'data-frame-index': '60',
+    });
+    await fireNode.trigger('click');
+    expect(wrapper.emitted('select-action')?.at(-1)?.[0]).toEqual({
+      actionId: 'action-a',
+      mode: 'replace',
+    });
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject(
+      {
+        frameIndex: 60,
+        source: 'timeline-tuning-mark-curve',
+      }
+    );
   });
 
   it('renders controlled actor intervals and follows the exact-frame cursor state', async () => {

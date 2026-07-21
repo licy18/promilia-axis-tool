@@ -403,6 +403,52 @@ describe('effect runtime timeline', () => {
     ).toBe(false);
   });
 
+  it('accepts inherited verified commands without a source action', () => {
+    const scenario = {
+      time: { durationMs: 2000, fps: 60 },
+      actors: [{ id: 'actor-001' }],
+      actions: [],
+    };
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      generatedCommands: [
+        {
+          sourceActionId: null,
+          effectId: 'inherited-team-mark',
+          effectName: '继承印记',
+          operation: EFFECT_OPERATIONS.APPLY,
+          targetKind: EFFECT_TARGET_KINDS.ACTOR,
+          targetId: 'actor-001',
+          timeMs: 0,
+          durationMs: null,
+          stackMode: EFFECT_STACK_MODES.REPLACE,
+          stackDelta: 1,
+          maxStacks: 5,
+          modifiers: [],
+          sourceStatus: 'verified-tuning-mark-generated',
+          generatedVerified: true,
+          appliedToCalculators: true,
+        },
+      ],
+    });
+
+    expect(timeline.input.commands).toEqual([
+      expect.objectContaining({
+        commandId: 'generated-global|effect-command|0',
+        sourceActionId: null,
+        effectId: 'inherited-team-mark',
+        appliedToCalculators: true,
+      }),
+    ]);
+    expect(
+      resolveActiveEffectsAt(timeline, 1000, {
+        targetKind: EFFECT_TARGET_KINDS.ACTOR,
+        targetId: 'actor-001',
+        calculatorOnly: true,
+      })
+    ).toHaveLength(1);
+  });
+
   it('rejects effect commands that bypass the calculator isolation boundary', () => {
     const project = createEffectOnlyProject();
     project.actions[0].effectCommands[0].appliedToCalculators = true;

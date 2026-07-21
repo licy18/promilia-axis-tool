@@ -218,8 +218,10 @@ describe('verified combat project replay consistency', () => {
         ],
       ],
       tuningMarkEventCount: expect.any(Number),
+      tuningMarkCurveCount: expect.any(Number),
     });
     expect(signatures[0].tuningMarkEventCount).toBeGreaterThan(0);
+    expect(signatures[0].tuningMarkCurveCount).toBeGreaterThan(0);
     for (const signature of signatures.slice(1)) {
       expect(signature).toEqual(signatures[0]);
     }
@@ -575,6 +577,23 @@ function createVerifiedReplaySignature(draft) {
     ]),
     finalTuningMarkState:
       result.verifiedCombatRuntime.tuningMarkRuntime?.finalState ?? [],
+    tuningMarkCurveCount:
+      result.tuningMarkCurveProjection?.visibleTracks?.length ?? 0,
+    tuningMarkCurveSignature: (
+      result.tuningMarkCurveProjection?.visibleTracks ?? []
+    ).map(track => [
+      track.markId,
+      track.initialValue,
+      track.currentValue,
+      track.linePoints.map(point => [point.timeMs, point.value]),
+      track.semanticNodes.map(node => [
+        node.frameIndex,
+        node.beforeValue,
+        node.afterValue,
+        node.actionId,
+        node.eventKinds,
+      ]),
+    ]),
     finalState: result.verifiedCombatRuntime.finalState,
     spUnitSignature: {
       actorMaximums: result.verifiedCombatRuntime.finalState.actorEnergy

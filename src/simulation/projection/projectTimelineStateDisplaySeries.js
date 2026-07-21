@@ -9,10 +9,7 @@ const METRIC_KEY_BY_TRACK = Object.freeze({
   kiboEnergyChange: 'kiboEnergy',
 });
 
-const DECREASE_TRACKS = new Set([
-  'enemyHpDamage',
-  'enemyToughnessDamage',
-]);
+const DECREASE_TRACKS = new Set(['enemyHpDamage', 'enemyToughnessDamage']);
 
 export function projectTimelineStateDisplaySeries({
   trackKey,
@@ -151,6 +148,8 @@ export function projectTimelineStateDisplaySeries({
 }
 
 function resolvePointAfterValue({ point, trackKey, currentValue }) {
+  const explicitAfterValue = finiteNumberOrNull(point.afterValue);
+  if (explicitAfterValue != null) return explicitAfterValue;
   const metricKey = METRIC_KEY_BY_TRACK[trackKey];
   const snapshotValue = finiteNumberOrNull(
     point.stateSnapshot?.after?.[metricKey]?.currentValue

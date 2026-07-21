@@ -463,6 +463,9 @@
             simulationResult.threeValueCurveFramework
           "
           :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"
+          :tuning-mark-curve-projection="
+            simulationResult.tuningMarkCurveProjection
+          "
           :controlled-actor-timeline="
             simulationResult.runtimeOutputs.controlledActorTimeline
           "
@@ -795,6 +798,7 @@
             :skills="workbenchSeed.gameData.skills"
             :enemies="gameData.enemies"
             :selected-action="selectedAction"
+            :verified-combat-runtime="simulationResult.verifiedCombatRuntime"
             :duration-ms="scenario.time.durationMs"
             :action-edit-focus="actionEditFocus"
             :action-edit-result-context="actionEditResultContext"
@@ -951,6 +955,9 @@
         :actions="scenario.actions"
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"
+        :tuning-mark-curve-projection="
+          simulationResult.tuningMarkCurveProjection
+        "
         :controlled-actor-timeline="
           simulationResult.runtimeOutputs.controlledActorTimeline
         "
