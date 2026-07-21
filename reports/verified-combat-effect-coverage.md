@@ -5,10 +5,10 @@
 - 控制：453
 - 直接元素根：3433
 - 效果图节点：3673
-- 效果绑定：3208
+- 效果绑定：3335
 - 可计算：125
 - 明确零：2
-- 未解析：3081
+- 未解析：3208
 
 ## 元素类型
 
@@ -24,20 +24,20 @@
 
 ## 未解析原因
 
-- effect-combine-semantics-unresolved: 3
+- effect-combine-semantics-unresolved: 4
 - effect-target-ally-unresolved: 14
 - effect-target-any-unresolved: 59
-- effect-target-unresolved: 2607
-- effect-trigger-frame-missing: 761
+- effect-target-unresolved: 2733
+- effect-trigger-frame-missing: 778
 - heal-formula-not-literal-function-5: 62
-- inject-wrapper-classified-through-child-edges: 1208
+- inject-wrapper-classified-through-child-edges: 1320
 - judgment-condition-runtime-unimplemented: 80
-- nested-damage-trigger-lifecycle-not-expanded: 384
-- nested-effect-wrapper-semantics-unresolved: 846
-- pack-lifecycle-runtime-unimplemented: 163
+- nested-damage-trigger-lifecycle-not-expanded: 385
+- nested-effect-wrapper-semantics-unresolved: 972
+- pack-lifecycle-runtime-unimplemented: 166
 - property-change-type-not-battle-property: 1
 - property-conditions-not-expanded: 27
-- property-formula-not-literal-function-5: 420
+- property-formula-not-literal-function-5: 428
 - shield-formula-not-literal-function-5: 10
 - sp-formula-not-literal-function-5: 84
 - sp-recover-type-not-direct-sp: 10
@@ -46,7 +46,8 @@
 - tuning-consume-mark-identity-ambiguous: 38
 - tuning-consume-success-branch-unresolved: 6
 - tuning-mark-max-mismatch: 45
-- tuning-mark-relation-notDelElementDataList-unresolved: 9
+- tuning-mark-relation-elementDataList-unresolved: 1
+- tuning-mark-relation-notDelElementDataList-unresolved: 10
 - tuning-mark-relation-triggerEffectList-unresolved: 1
 
 > 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。

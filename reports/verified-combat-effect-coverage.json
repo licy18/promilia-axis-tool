@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-effect-coverage",
   "status": "verified-combat-effect-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "84d64c752b498070731bb077b21e261033c21328a4a3c4206f1a1d82dd05f8c6",
+  "packageHash": "11c54d033123df9702eafc3425081e136fde2a5ea6d18feece9800b82a22444a",
   "sourceDenominator": {
     "kind": "current-client-public-action-control-battle-element-graph",
     "actionCount": 562,
@@ -12,10 +12,10 @@
     "graphNodeCount": 3673
   },
   "summary": {
-    "effectBindingCount": 3208,
+    "effectBindingCount": 3335,
     "appliedEffectBindingCount": 125,
     "verifiedZeroEffectBindingCount": 2,
-    "unresolvedEffectBindingCount": 3081,
+    "unresolvedEffectBindingCount": 3208,
     "kindCounts": {
       "damage": 1116,
       "inject": 358,
@@ -28,30 +28,30 @@
       "stack": 109
     },
     "bindingKindCounts": {
-      "damage": 446,
-      "inject": 1264,
+      "damage": 447,
+      "inject": 1376,
       "judgment": 80,
-      "pack": 163,
-      "property-change": 1003,
+      "pack": 166,
+      "property-change": 1013,
       "shield": 10,
       "sp": 89,
-      "stack": 153
+      "stack": 154
     },
     "unresolvedReasonCounts": {
-      "effect-combine-semantics-unresolved": 3,
+      "effect-combine-semantics-unresolved": 4,
       "effect-target-ally-unresolved": 14,
       "effect-target-any-unresolved": 59,
-      "effect-target-unresolved": 2607,
-      "effect-trigger-frame-missing": 761,
+      "effect-target-unresolved": 2733,
+      "effect-trigger-frame-missing": 778,
       "heal-formula-not-literal-function-5": 62,
-      "inject-wrapper-classified-through-child-edges": 1208,
+      "inject-wrapper-classified-through-child-edges": 1320,
       "judgment-condition-runtime-unimplemented": 80,
-      "nested-damage-trigger-lifecycle-not-expanded": 384,
-      "nested-effect-wrapper-semantics-unresolved": 846,
-      "pack-lifecycle-runtime-unimplemented": 163,
+      "nested-damage-trigger-lifecycle-not-expanded": 385,
+      "nested-effect-wrapper-semantics-unresolved": 972,
+      "pack-lifecycle-runtime-unimplemented": 166,
       "property-change-type-not-battle-property": 1,
       "property-conditions-not-expanded": 27,
-      "property-formula-not-literal-function-5": 420,
+      "property-formula-not-literal-function-5": 428,
       "shield-formula-not-literal-function-5": 10,
       "sp-formula-not-literal-function-5": 84,
       "sp-recover-type-not-direct-sp": 10,
@@ -60,38 +60,39 @@
       "tuning-consume-mark-identity-ambiguous": 38,
       "tuning-consume-success-branch-unresolved": 6,
       "tuning-mark-max-mismatch": 45,
-      "tuning-mark-relation-notDelElementDataList-unresolved": 9,
+      "tuning-mark-relation-elementDataList-unresolved": 1,
+      "tuning-mark-relation-notDelElementDataList-unresolved": 10,
       "tuning-mark-relation-triggerEffectList-unresolved": 1
     },
     "dimensions": {
       "damage": {
-        "unresolved": 384,
-        "verified-zero": 2824
+        "unresolved": 385,
+        "verified-zero": 2950
       },
       "toughness": {
-        "verified-zero": 3208
+        "verified-zero": 3335
       },
       "sp": {
         "unresolved": 89,
-        "verified-zero": 3119
+        "verified-zero": 3246
       },
       "hp": {
         "unresolved": 62,
-        "verified-zero": 3146
+        "verified-zero": 3273
       },
       "shield": {
         "unresolved": 10,
-        "verified-zero": 3198
+        "verified-zero": 3325
       },
       "dynamicProperty": {
         "applied": 50,
-        "unresolved": 951,
-        "verified-zero": 2207
+        "unresolved": 961,
+        "verified-zero": 2324
       },
       "mark": {
-        "applied": 122,
-        "unresolved": 330,
-        "verified-zero": 2756
+        "applied": 123,
+        "unresolved": 333,
+        "verified-zero": 2879
       }
     }
   },
@@ -593,34 +594,35 @@
       "actionKind": "star-combo",
       "sourceSkillId": 10100712,
       "sourceSkillName": "蛟龙戏珠",
-      "effectBindingCount": 1,
+      "effectBindingCount": 2,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 1,
+      "unresolvedEffectCount": 2,
       "dimensions": {
         "damage": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "toughness": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "sp": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "hp": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "shield": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "dynamicProperty": {
-          "unresolved": 1
+          "unresolved": 2
         },
         "mark": {
-          "verified-zero": 1
+          "verified-zero": 2
         }
       },
       "effectIdentities": [
+        "10100726|0|elements|2|6940975287966815526|element:5425475631875380505|0|0",
         "10100726|0|elements|4|5425475631875380505|element:5425475631875380505|unresolved-frame|0"
       ]
     },
@@ -632,34 +634,34 @@
       "actionKind": "ultimate",
       "sourceSkillId": 10100713,
       "sourceSkillName": "猛虎扑食",
-      "effectBindingCount": 28,
+      "effectBindingCount": 29,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 28,
+      "unresolvedEffectCount": 29,
       "dimensions": {
         "damage": {
           "unresolved": 18,
-          "verified-zero": 10
+          "verified-zero": 11
         },
         "toughness": {
-          "verified-zero": 28
+          "verified-zero": 29
         },
         "sp": {
-          "verified-zero": 28
+          "verified-zero": 29
         },
         "hp": {
-          "verified-zero": 28
+          "verified-zero": 29
         },
         "shield": {
-          "verified-zero": 28
+          "verified-zero": 29
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "unresolved": 2,
           "verified-zero": 27
         },
         "mark": {
           "unresolved": 9,
-          "verified-zero": 19
+          "verified-zero": 20
         }
       },
       "effectIdentities": [
@@ -690,6 +692,7 @@
         "10100713|0|elements|9|5931632259475456445|element:5931632259475456445|261|0",
         "10100713|0|elements|9|5931632259475456445|element:-3509674667830873503|261|0",
         "10100713|0|elements|9|5931632259475456445|element:547076300214135521|261|0",
+        "10100713|0|elements|12|6940975287966815526|element:5425475631875380505|0|0",
         "10100713|0|elements|14|5425475631875380505|element:5425475631875380505|unresolved-frame|0"
       ]
     },
@@ -724,34 +727,35 @@
       "actionKind": "limit-counter",
       "sourceSkillId": 10100721,
       "sourceSkillName": "来打我啊！",
-      "effectBindingCount": 1,
+      "effectBindingCount": 2,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 1,
+      "unresolvedEffectCount": 2,
       "dimensions": {
         "damage": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "toughness": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "sp": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "hp": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "shield": {
-          "verified-zero": 1
+          "verified-zero": 2
         },
         "dynamicProperty": {
-          "unresolved": 1
+          "unresolved": 2
         },
         "mark": {
-          "verified-zero": 1
+          "verified-zero": 2
         }
       },
       "effectIdentities": [
+        "10100725|0|elements|3|6940975287966815526|element:5425475631875380505|0|0",
         "10100725|0|elements|5|5425475631875380505|element:5425475631875380505|unresolved-frame|0"
       ]
     },
@@ -965,36 +969,36 @@
       "actionKind": "ultimate",
       "sourceSkillId": 10101013,
       "sourceSkillName": "世间缘",
-      "effectBindingCount": 49,
+      "effectBindingCount": 56,
       "appliedEffectCount": 6,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 43,
+      "unresolvedEffectCount": 50,
       "dimensions": {
         "damage": {
-          "unresolved": 14,
-          "verified-zero": 35
+          "unresolved": 15,
+          "verified-zero": 41
         },
         "toughness": {
-          "verified-zero": 49
+          "verified-zero": 56
         },
         "sp": {
           "unresolved": 6,
-          "verified-zero": 43
+          "verified-zero": 50
         },
         "hp": {
-          "verified-zero": 49
+          "verified-zero": 56
         },
         "shield": {
-          "verified-zero": 49
+          "verified-zero": 56
         },
         "dynamicProperty": {
-          "unresolved": 5,
-          "verified-zero": 44
+          "unresolved": 6,
+          "verified-zero": 50
         },
         "mark": {
-          "applied": 9,
+          "applied": 10,
           "unresolved": 12,
-          "verified-zero": 28
+          "verified-zero": 34
         }
       },
       "effectIdentities": [
@@ -1035,11 +1039,18 @@
         "10101013|0|elements|13|1781318263043700654|element:1781318263043700654|unresolved-frame|0",
         "10101013|0|elements|13|1781318263043700654|element:9155281695412256774|unresolved-frame|0",
         "10101013|0|elements|13|1781318263043700654|element:-2721791746389150347|unresolved-frame|0",
+        "10101013|0|elements|18|-4364670297239232442|element:4329849906773849220|264|0",
+        "10101013|0|elements|18|-4364670297239232442|element:-1458914462506140012|264|0",
+        "10101013|0|elements|18|-4364670297239232442|element:1474042154774785480|264|0",
+        "10101013|0|elements|18|-4364670297239232442|element:-8148787786042882084|264|0",
+        "10101013|0|elements|18|-4364670297239232442|element:-4529113272733101309|264|0",
         "10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
         "10101013|0|elements|21|-1458914462506140012|element:-1458914462506140012|272|0",
+        "10101013|0|elements|21|-1458914462506140012|element:4329849906773849220|272|0",
         "10101013|0|elements|21|-1458914462506140012|element:1474042154774785480|272|0",
         "10101013|0|elements|21|-1458914462506140012|element:-8148787786042882084|272|0",
         "10101013|0|elements|21|-1458914462506140012|element:-4529113272733101309|272|0",
+        "10101013|0|elements|24|4874764405196817692|element:4329849906773849220|unresolved-frame|0",
         "10101013|0|elements|26|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
         "10101013|0|elements|26|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
         "10101013|0|elements|26|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
@@ -1781,44 +1792,46 @@
       "actionKind": "normal-attack",
       "sourceSkillId": 10700101,
       "sourceSkillName": "疾风之箭",
-      "effectBindingCount": 22,
+      "effectBindingCount": 26,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 22,
+      "unresolvedEffectCount": 26,
       "dimensions": {
         "damage": {
           "unresolved": 4,
-          "verified-zero": 18
+          "verified-zero": 22
         },
         "toughness": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "sp": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "hp": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "dynamicProperty": {
           "unresolved": 10,
-          "verified-zero": 12
+          "verified-zero": 16
         },
         "mark": {
           "applied": 2,
           "unresolved": 2,
-          "verified-zero": 18
+          "verified-zero": 22
         }
       },
       "effectIdentities": [
         "10700101|0|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
         "10700101|0|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0",
+        "10700101|0|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
         "10700101|0|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
         "10700101|0|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
         "10700101|0|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
         "10700101|0|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "10700101|0|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
         "10700101|0|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
         "10700101|0|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
         "10700101|0|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
@@ -1826,10 +1839,12 @@
         "10700101|0|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
         "10700101|0|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
         "10700101|0|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "10700101|0|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
         "10700101|0|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
         "10700101|0|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
         "10700101|0|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
         "10700101|0|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "10700101|0|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
         "10700101|0|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
         "10700101|0|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
         "10700101|0|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
@@ -2022,44 +2037,46 @@
       "actionKind": "limit-counter",
       "sourceSkillId": 10700121,
       "sourceSkillName": "余音之痕",
-      "effectBindingCount": 22,
+      "effectBindingCount": 26,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 22,
+      "unresolvedEffectCount": 26,
       "dimensions": {
         "damage": {
           "unresolved": 4,
-          "verified-zero": 18
+          "verified-zero": 22
         },
         "toughness": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "sp": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "hp": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 26
         },
         "dynamicProperty": {
           "unresolved": 10,
-          "verified-zero": 12
+          "verified-zero": 16
         },
         "mark": {
           "applied": 2,
           "unresolved": 2,
-          "verified-zero": 18
+          "verified-zero": 22
         }
       },
       "effectIdentities": [
         "10700125|0|elements|5|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
         "10700125|0|elements|7|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0",
+        "10700125|0|elements|7|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
         "10700125|0|elements|7|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
         "10700125|0|elements|7|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
         "10700125|0|elements|7|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
         "10700125|0|elements|7|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "10700125|0|elements|8|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
         "10700125|0|elements|9|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
         "10700125|0|elements|10|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
         "10700125|0|elements|10|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
@@ -2067,10 +2084,12 @@
         "10700125|0|elements|11|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
         "10700125|0|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
         "10700125|0|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "10700125|0|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
         "10700125|0|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
         "10700125|0|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
         "10700125|0|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
         "10700125|0|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "10700125|0|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
         "10700125|0|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
         "10700125|0|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
         "10700125|0|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
@@ -13609,37 +13628,40 @@
       "actionKind": "signature",
       "sourceSkillId": 50016402,
       "sourceSkillName": "雷灵旋律",
-      "effectBindingCount": 5,
+      "effectBindingCount": 8,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 8,
       "dimensions": {
         "damage": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "toughness": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "sp": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "hp": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 1,
-          "verified-zero": 4
+          "unresolved": 2,
+          "verified-zero": 6
         },
         "mark": {
-          "unresolved": 1,
-          "verified-zero": 4
+          "unresolved": 2,
+          "verified-zero": 6
         }
       },
       "effectIdentities": [
         "50016402|0|elements|0|-1132277507405898446|element:-1132277507405898446|25|0",
+        "50016402|0|elements|1|9121180571482841516|element:-1132277507405898446|19|0",
+        "50016402|0|elements|1|9121180571482841516|element:8625481570876038590|19|0",
+        "50016402|0|elements|1|9121180571482841516|element:-496739374473862968|19|0",
         "50016402|0|elements|2|8625481570876038590|element:8625481570876038590|unresolved-frame|0",
         "50016402|0|elements|2|8625481570876038590|element:-496739374473862968|unresolved-frame|0",
         "50016402|0|elements|3|-496739374473862968|element:-496739374473862968|unresolved-frame|0",
@@ -13700,37 +13722,40 @@
       "actionKind": "signature",
       "sourceSkillId": 50016502,
       "sourceSkillName": "雷鸣协奏",
-      "effectBindingCount": 5,
+      "effectBindingCount": 8,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 5,
+      "unresolvedEffectCount": 8,
       "dimensions": {
         "damage": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "toughness": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "sp": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "hp": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 1,
-          "verified-zero": 4
+          "unresolved": 2,
+          "verified-zero": 6
         },
         "mark": {
-          "unresolved": 1,
-          "verified-zero": 4
+          "unresolved": 2,
+          "verified-zero": 6
         }
       },
       "effectIdentities": [
         "50016502|0|elements|0|5568982190650990164|element:5568982190650990164|20|0",
+        "50016502|0|elements|1|-8243872611084112176|element:5568982190650990164|19|0",
+        "50016502|0|elements|1|-8243872611084112176|element:6948676613996668368|19|0",
+        "50016502|0|elements|1|-8243872611084112176|element:-6417056166153703994|19|0",
         "50016502|0|elements|2|6948676613996668368|element:6948676613996668368|unresolved-frame|0",
         "50016502|0|elements|2|6948676613996668368|element:-6417056166153703994|unresolved-frame|0",
         "50016502|0|elements|3|-6417056166153703994|element:-6417056166153703994|unresolved-frame|0",
@@ -13791,38 +13816,42 @@
       "actionKind": "signature",
       "sourceSkillId": 50016602,
       "sourceSkillName": "雷音乐章",
-      "effectBindingCount": 6,
+      "effectBindingCount": 10,
       "appliedEffectCount": 0,
       "verifiedZeroEffectCount": 0,
-      "unresolvedEffectCount": 6,
+      "unresolvedEffectCount": 10,
       "dimensions": {
         "damage": {
-          "verified-zero": 6
+          "verified-zero": 10
         },
         "toughness": {
-          "verified-zero": 6
+          "verified-zero": 10
         },
         "sp": {
-          "verified-zero": 6
+          "verified-zero": 10
         },
         "hp": {
-          "verified-zero": 6
+          "verified-zero": 10
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 10
         },
         "dynamicProperty": {
-          "unresolved": 2,
-          "verified-zero": 4
+          "unresolved": 4,
+          "verified-zero": 6
         },
         "mark": {
-          "unresolved": 1,
-          "verified-zero": 5
+          "unresolved": 2,
+          "verified-zero": 8
         }
       },
       "effectIdentities": [
         "50016602|0|elements|0|6843594723615366262|element:6843594723615366262|25|0",
         "50016602|0|elements|1|5160876354291224776|element:5160876354291224776|25|0",
+        "50016602|0|elements|2|1618173458753791238|element:5160876354291224776|24|0",
+        "50016602|0|elements|2|1618173458753791238|element:6843594723615366262|24|0",
+        "50016602|0|elements|2|1618173458753791238|element:-7030512612692369635|24|0",
+        "50016602|0|elements|2|1618173458753791238|element:3289066979933117087|24|0",
         "50016602|0|elements|3|-7030512612692369635|element:-7030512612692369635|unresolved-frame|0",
         "50016602|0|elements|3|-7030512612692369635|element:3289066979933117087|unresolved-frame|0",
         "50016602|0|elements|4|3289066979933117087|element:3289066979933117087|unresolved-frame|0",
@@ -18768,6 +18797,28 @@
       "sourceIdentity": "battle-effect:10100322:0:466374251647106866:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10100710|1|elements|7|6940975287966815526|element:5425475631875380505|0|0",
+      "controlSkillId": 10100710,
+      "mapIndex": 1,
+      "elementId": 1,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10100710:1:5425475631875380505:-4553326235886350452:0"
+    },
+    {
       "effectIdentity": "10100710|1|elements|9|5425475631875380505|element:5425475631875380505|unresolved-frame|0",
       "controlSkillId": 10100710,
       "mapIndex": 1,
@@ -20153,6 +20204,28 @@
       "sourceIdentity": "battle-effect:10100712:2:-3412296371162262918:1252672818781362351:18"
     },
     {
+      "effectIdentity": "10100712|2|elements|17|6940975287966815526|element:5425475631875380505|0|0",
+      "controlSkillId": 10100712,
+      "mapIndex": 2,
+      "elementId": 1,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10100712:2:5425475631875380505:3972458721660639407:0"
+    },
+    {
       "effectIdentity": "10100712|2|elements|19|5425475631875380505|element:5425475631875380505|unresolved-frame|0",
       "controlSkillId": 10100712,
       "mapIndex": 2,
@@ -20173,6 +20246,28 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100712:2:5425475631875380505:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10100726|0|elements|2|6940975287966815526|element:5425475631875380505|0|0",
+      "controlSkillId": 10100726,
+      "mapIndex": 0,
+      "elementId": 1,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10100726:0:5425475631875380505:1248024956874811343:0"
     },
     {
       "effectIdentity": "10100726|0|elements|4|5425475631875380505|element:5425475631875380505|unresolved-frame|0",
@@ -20782,6 +20877,28 @@
       "sourceIdentity": "battle-effect:10100713:0:547076300214135521:-9050912802254682875:261"
     },
     {
+      "effectIdentity": "10100713|0|elements|12|6940975287966815526|element:5425475631875380505|0|0",
+      "controlSkillId": 10100713,
+      "mapIndex": 0,
+      "elementId": 1,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10100713:0:5425475631875380505:-778377737020635899:0"
+    },
+    {
       "effectIdentity": "10100713|0|elements|14|5425475631875380505|element:5425475631875380505|unresolved-frame|0",
       "controlSkillId": 10100713,
       "mapIndex": 0,
@@ -20802,6 +20919,28 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10100713:0:5425475631875380505:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10100725|0|elements|3|6940975287966815526|element:5425475631875380505|0|0",
+      "controlSkillId": 10100725,
+      "mapIndex": 0,
+      "elementId": 1,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10100725:0:5425475631875380505:-831243409530850247:0"
     },
     {
       "effectIdentity": "10100725|0|elements|5|5425475631875380505|element:5425475631875380505|unresolved-frame|0",
@@ -21653,6 +21792,115 @@
       "sourceIdentity": "battle-effect:10101013:0:-2721791746389150347:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:4329849906773849220|264|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 101010115,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:4329849906773849220:-6673499874988910762:264"
+    },
+    {
+      "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:-1458914462506140012|264|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 101010129,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "effect-combine-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-1458914462506140012:-6673499874988910762:264"
+    },
+    {
+      "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:1474042154774785480|264|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 750,
+      "kind": "stack",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "applied"
+      },
+      "reasons": [
+        "tuning-mark-relation-elementDataList-unresolved",
+        "tuning-mark-relation-notDelElementDataList-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:1474042154774785480:-6673499874988910762:264"
+    },
+    {
+      "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:-8148787786042882084|264|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 752,
+      "kind": "damage",
+      "dimensions": {
+        "damage": "unresolved",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-8148787786042882084:-6673499874988910762:264"
+    },
+    {
+      "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:-4529113272733101309|264|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 751,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-4529113272733101309:-6673499874988910762:264"
+    },
+    {
       "effectIdentity": "10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
       "controlSkillId": 10101013,
       "mapIndex": 0,
@@ -21695,6 +21943,28 @@
         "effect-combine-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-1458914462506140012:-1058249236301801642:272"
+    },
+    {
+      "effectIdentity": "10101013|0|elements|21|-1458914462506140012|element:4329849906773849220|272|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 101010115,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:4329849906773849220:-1058249236301801642:272"
     },
     {
       "effectIdentity": "10101013|0|elements|21|-1458914462506140012|element:1474042154774785480|272|0",
@@ -21758,6 +22028,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-4529113272733101309:-1058249236301801642:272"
+    },
+    {
+      "effectIdentity": "10101013|0|elements|24|4874764405196817692|element:4329849906773849220|unresolved-frame|0",
+      "controlSkillId": 10101013,
+      "mapIndex": 0,
+      "elementId": 101010115,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:4329849906773849220:unresolved:unresolved"
     },
     {
       "effectIdentity": "10101013|0|elements|26|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
@@ -23230,6 +23523,138 @@
       "sourceIdentity": "battle-effect:10200113:0:3453877457087294926:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300203,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:1:3663436943335475859:28307586741003142:0"
+    },
+    {
+      "effectIdentity": "10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300203,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:1:3663436943335475859:2975752204161737821:0"
+    },
+    {
+      "effectIdentity": "10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300203,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:1:3663436943335475859:8682986315989514405:0"
+    },
+    {
+      "effectIdentity": "10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300203,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:1:6226025878936021619:28307586741003142:0"
+    },
+    {
+      "effectIdentity": "10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300203,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:1:6226025878936021619:2975752204161737821:0"
+    },
+    {
+      "effectIdentity": "10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300203,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:1:6226025878936021619:8682986315989514405:0"
+    },
+    {
       "effectIdentity": "10300203|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300203,
       "mapIndex": 1,
@@ -23481,6 +23906,138 @@
       "sourceIdentity": "battle-effect:10300203:1:-8301357918827043072:1223338482048131974:3"
     },
     {
+      "effectIdentity": "10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300203,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:2:3663436943335475859:28307586741003142:0"
+    },
+    {
+      "effectIdentity": "10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300203,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:2:3663436943335475859:2975752204161737821:0"
+    },
+    {
+      "effectIdentity": "10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300203,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:2:3663436943335475859:8682986315989514405:0"
+    },
+    {
+      "effectIdentity": "10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300203,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:2:6226025878936021619:28307586741003142:0"
+    },
+    {
+      "effectIdentity": "10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300203,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:2:6226025878936021619:2975752204161737821:0"
+    },
+    {
+      "effectIdentity": "10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300203,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:2:6226025878936021619:8682986315989514405:0"
+    },
+    {
       "effectIdentity": "10300203|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300203,
       "mapIndex": 2,
@@ -23730,6 +24287,138 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300203:2:-8301357918827043072:1223338482048131974:3"
+    },
+    {
+      "effectIdentity": "10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300203,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:3663436943335475859:28307586741003142:0"
+    },
+    {
+      "effectIdentity": "10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300203,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:3663436943335475859:2975752204161737821:0"
+    },
+    {
+      "effectIdentity": "10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300203,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:3663436943335475859:8682986315989514405:0"
+    },
+    {
+      "effectIdentity": "10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300203,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:6226025878936021619:28307586741003142:0"
+    },
+    {
+      "effectIdentity": "10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300203,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:6226025878936021619:2975752204161737821:0"
+    },
+    {
+      "effectIdentity": "10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300203,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:6226025878936021619:8682986315989514405:0"
     },
     {
       "effectIdentity": "10300203|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
@@ -24902,6 +25591,29 @@
       "sourceIdentity": "battle-effect:10700103:4:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700103|4|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700103,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700103:4:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700103|4|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700103,
       "mapIndex": 4,
@@ -24987,6 +25699,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700103:4:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700103|4|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700103,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700103:4:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700103|4|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
@@ -25140,6 +25875,29 @@
       "sourceIdentity": "battle-effect:10700103:4:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700103|4|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700103,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700103:4:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700103|4|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700103,
       "mapIndex": 4,
@@ -25225,6 +25983,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700103:4:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700103|4|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700103,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700103:4:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700103|4|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
@@ -25399,6 +26180,29 @@
       "sourceIdentity": "battle-effect:10700125:0:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700125|0|elements|7|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700125,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700125:0:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700125|0|elements|7|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700125,
       "mapIndex": 0,
@@ -25484,6 +26288,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700125:0:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700125|0|elements|8|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700125,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700125:0:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700125|0|elements|9|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
@@ -25637,6 +26464,29 @@
       "sourceIdentity": "battle-effect:10700125:0:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700125|0|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700125,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700125:0:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700125|0|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700125,
       "mapIndex": 0,
@@ -25722,6 +26572,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700125:0:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700125|0|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700125,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700125:0:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700125|0|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
@@ -43181,6 +44054,72 @@
       "sourceIdentity": "battle-effect:50016402:0:-1132277507405898446:4926170371624505393:25"
     },
     {
+      "effectIdentity": "50016402|0|elements|1|9121180571482841516|element:-1132277507405898446|19|0",
+      "controlSkillId": 50016402,
+      "mapIndex": 0,
+      "elementId": 500164004,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016402:0:-1132277507405898446:-382386788982943695:19"
+    },
+    {
+      "effectIdentity": "50016402|0|elements|1|9121180571482841516|element:8625481570876038590|19|0",
+      "controlSkillId": 50016402,
+      "mapIndex": 0,
+      "elementId": 500164006,
+      "kind": "pack",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "unresolved"
+      },
+      "reasons": [
+        "pack-lifecycle-runtime-unimplemented",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016402:0:8625481570876038590:-382386788982943695:19"
+    },
+    {
+      "effectIdentity": "50016402|0|elements|1|9121180571482841516|element:-496739374473862968|19|0",
+      "controlSkillId": 50016402,
+      "mapIndex": 0,
+      "elementId": 500164007,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016402:0:-496739374473862968:-382386788982943695:19"
+    },
+    {
       "effectIdentity": "50016402|0|elements|2|8625481570876038590|element:8625481570876038590|unresolved-frame|0",
       "controlSkillId": 50016402,
       "mapIndex": 0,
@@ -43288,6 +44227,72 @@
         "effect-target-ally-unresolved"
       ],
       "sourceIdentity": "battle-effect:50016502:0:5568982190650990164:-6089199775519952465:20"
+    },
+    {
+      "effectIdentity": "50016502|0|elements|1|-8243872611084112176|element:5568982190650990164|19|0",
+      "controlSkillId": 50016502,
+      "mapIndex": 0,
+      "elementId": 500165002,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016502:0:5568982190650990164:7631965854993002927:19"
+    },
+    {
+      "effectIdentity": "50016502|0|elements|1|-8243872611084112176|element:6948676613996668368|19|0",
+      "controlSkillId": 50016502,
+      "mapIndex": 0,
+      "elementId": 500165005,
+      "kind": "pack",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "unresolved"
+      },
+      "reasons": [
+        "pack-lifecycle-runtime-unimplemented",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016502:0:6948676613996668368:7631965854993002927:19"
+    },
+    {
+      "effectIdentity": "50016502|0|elements|1|-8243872611084112176|element:-6417056166153703994|19|0",
+      "controlSkillId": 50016502,
+      "mapIndex": 0,
+      "elementId": 500165006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016502:0:-6417056166153703994:7631965854993002927:19"
     },
     {
       "effectIdentity": "50016502|0|elements|2|6948676613996668368|element:6948676613996668368|unresolved-frame|0",
@@ -43417,6 +44422,93 @@
         "effect-target-ally-unresolved"
       ],
       "sourceIdentity": "battle-effect:50016602:0:5160876354291224776:-6160241424669667739:25"
+    },
+    {
+      "effectIdentity": "50016602|0|elements|2|1618173458753791238|element:5160876354291224776|24|0",
+      "controlSkillId": 50016602,
+      "mapIndex": 0,
+      "elementId": 500166003,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016602:0:5160876354291224776:8701986710837530213:24"
+    },
+    {
+      "effectIdentity": "50016602|0|elements|2|1618173458753791238|element:6843594723615366262|24|0",
+      "controlSkillId": 50016602,
+      "mapIndex": 0,
+      "elementId": 500166002,
+      "kind": "property-change",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "unresolved",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016602:0:6843594723615366262:8701986710837530213:24"
+    },
+    {
+      "effectIdentity": "50016602|0|elements|2|1618173458753791238|element:-7030512612692369635|24|0",
+      "controlSkillId": 50016602,
+      "mapIndex": 0,
+      "elementId": 500166006,
+      "kind": "pack",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "unresolved"
+      },
+      "reasons": [
+        "pack-lifecycle-runtime-unimplemented",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016602:0:-7030512612692369635:8701986710837530213:24"
+    },
+    {
+      "effectIdentity": "50016602|0|elements|2|1618173458753791238|element:3289066979933117087|24|0",
+      "controlSkillId": 50016602,
+      "mapIndex": 0,
+      "elementId": 500166007,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:50016602:0:3289066979933117087:8701986710837530213:24"
     },
     {
       "effectIdentity": "50016602|0|elements|3|-7030512612692369635|element:-7030512612692369635|unresolved-frame|0",
@@ -56327,6 +57419,138 @@
       "sourceIdentity": "battle-effect:10200105:0:-4529113272733101309:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300201,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:1:3663436943335475859:-4466651111794072532:0"
+    },
+    {
+      "effectIdentity": "10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300201,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:1:3663436943335475859:4168474814757765775:0"
+    },
+    {
+      "effectIdentity": "10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300201,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:1:3663436943335475859:5535908167720225823:0"
+    },
+    {
+      "effectIdentity": "10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300201,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:1:6226025878936021619:-4466651111794072532:0"
+    },
+    {
+      "effectIdentity": "10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300201,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:1:6226025878936021619:4168474814757765775:0"
+    },
+    {
+      "effectIdentity": "10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300201,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:1:6226025878936021619:5535908167720225823:0"
+    },
+    {
       "effectIdentity": "10300201|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300201,
       "mapIndex": 1,
@@ -56578,6 +57802,138 @@
       "sourceIdentity": "battle-effect:10300201:1:-8301357918827043072:4549103858088051343:3"
     },
     {
+      "effectIdentity": "10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300201,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:2:3663436943335475859:-4466651111794072532:0"
+    },
+    {
+      "effectIdentity": "10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300201,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:2:3663436943335475859:4168474814757765775:0"
+    },
+    {
+      "effectIdentity": "10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300201,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:2:3663436943335475859:5535908167720225823:0"
+    },
+    {
+      "effectIdentity": "10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300201,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:2:6226025878936021619:-4466651111794072532:0"
+    },
+    {
+      "effectIdentity": "10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300201,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:2:6226025878936021619:4168474814757765775:0"
+    },
+    {
+      "effectIdentity": "10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300201,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:2:6226025878936021619:5535908167720225823:0"
+    },
+    {
       "effectIdentity": "10300201|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300201,
       "mapIndex": 2,
@@ -56827,6 +58183,138 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300201:2:-8301357918827043072:4549103858088051343:3"
+    },
+    {
+      "effectIdentity": "10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300201,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:3663436943335475859:-4466651111794072532:0"
+    },
+    {
+      "effectIdentity": "10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300201,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:3663436943335475859:4168474814757765775:0"
+    },
+    {
+      "effectIdentity": "10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300201,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:3663436943335475859:5535908167720225823:0"
+    },
+    {
+      "effectIdentity": "10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300201,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:6226025878936021619:-4466651111794072532:0"
+    },
+    {
+      "effectIdentity": "10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300201,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:6226025878936021619:4168474814757765775:0"
+    },
+    {
+      "effectIdentity": "10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300201,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:6226025878936021619:5535908167720225823:0"
     },
     {
       "effectIdentity": "10300201|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
@@ -57167,6 +58655,138 @@
       "sourceIdentity": "battle-effect:10300201:3:-310946560669858520:8674841978468049964:26"
     },
     {
+      "effectIdentity": "10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300202,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:1:3663436943335475859:-1305692138374085803:0"
+    },
+    {
+      "effectIdentity": "10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300202,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:1:3663436943335475859:-568653254920070201:0"
+    },
+    {
+      "effectIdentity": "10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300202,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:1:3663436943335475859:1803843296392014934:0"
+    },
+    {
+      "effectIdentity": "10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300202,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:1:6226025878936021619:-1305692138374085803:0"
+    },
+    {
+      "effectIdentity": "10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300202,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:1:6226025878936021619:-568653254920070201:0"
+    },
+    {
+      "effectIdentity": "10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300202,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:1:6226025878936021619:1803843296392014934:0"
+    },
+    {
       "effectIdentity": "10300202|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300202,
       "mapIndex": 1,
@@ -57418,6 +59038,138 @@
       "sourceIdentity": "battle-effect:10300202:1:-8301357918827043072:1945755192680858453:3"
     },
     {
+      "effectIdentity": "10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300202,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:2:3663436943335475859:-1305692138374085803:0"
+    },
+    {
+      "effectIdentity": "10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300202,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:2:3663436943335475859:-568653254920070201:0"
+    },
+    {
+      "effectIdentity": "10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300202,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:2:3663436943335475859:1803843296392014934:0"
+    },
+    {
+      "effectIdentity": "10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300202,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:2:6226025878936021619:-1305692138374085803:0"
+    },
+    {
+      "effectIdentity": "10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300202,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:2:6226025878936021619:-568653254920070201:0"
+    },
+    {
+      "effectIdentity": "10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300202,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:2:6226025878936021619:1803843296392014934:0"
+    },
+    {
       "effectIdentity": "10300202|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300202,
       "mapIndex": 2,
@@ -57667,6 +59419,138 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300202:2:-8301357918827043072:1945755192680858453:3"
+    },
+    {
+      "effectIdentity": "10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300202,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:3663436943335475859:-1305692138374085803:0"
+    },
+    {
+      "effectIdentity": "10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300202,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:3663436943335475859:-568653254920070201:0"
+    },
+    {
+      "effectIdentity": "10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300202,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:3663436943335475859:1803843296392014934:0"
+    },
+    {
+      "effectIdentity": "10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300202,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:6226025878936021619:-1305692138374085803:0"
+    },
+    {
+      "effectIdentity": "10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300202,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:6226025878936021619:-568653254920070201:0"
+    },
+    {
+      "effectIdentity": "10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300202,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:6226025878936021619:1803843296392014934:0"
     },
     {
       "effectIdentity": "10300202|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
@@ -58007,6 +59891,182 @@
       "sourceIdentity": "battle-effect:10300202:3:-310946560669858520:-4996826262836372537:26"
     },
     {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:3663436943335475859:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:3663436943335475859:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:3663436943335475859:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:3663436943335475859:7307621539445855302:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:6226025878936021619:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:6226025878936021619:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:6226025878936021619:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 0,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:0:6226025878936021619:7307621539445855302:0"
+    },
+    {
       "effectIdentity": "10300204|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300204,
       "mapIndex": 0,
@@ -58276,6 +60336,182 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300204:0:4227003560910032429:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:3663436943335475859:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:3663436943335475859:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:3663436943335475859:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:3663436943335475859:7307621539445855302:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:6226025878936021619:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:6226025878936021619:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:6226025878936021619:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 1,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:1:6226025878936021619:7307621539445855302:0"
     },
     {
       "effectIdentity": "10300204|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
@@ -58549,6 +60785,182 @@
       "sourceIdentity": "battle-effect:10300204:1:-8301357918827043072:6151587402252719464:3"
     },
     {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:3663436943335475859:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:3663436943335475859:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:3663436943335475859:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:3663436943335475859:7307621539445855302:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:6226025878936021619:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:6226025878936021619:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:6226025878936021619:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:6226025878936021619:7307621539445855302:0"
+    },
+    {
       "effectIdentity": "10300204|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300204,
       "mapIndex": 2,
@@ -58591,6 +61003,28 @@
         "effect-target-unresolved"
       ],
       "sourceIdentity": "battle-effect:10300204:2:6226025878936021619:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10300204|2|elements|3|7702275877312494544|element:-8301357918827043072|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 2,
+      "elementId": 103002279,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:-8301357918827043072:-3436032383153191763:0"
     },
     {
       "effectIdentity": "10300204|2|elements|6|-8301357918827043072|element:-8301357918827043072|3|0",
@@ -58907,6 +61341,182 @@
       "sourceIdentity": "battle-effect:10300204:2:-310946560669858520:-6305840928975797075:29"
     },
     {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:3663436943335475859:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:3663436943335475859:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:3663436943335475859:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:3663436943335475859:7307621539445855302:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:6226025878936021619:-243149956882255032:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|1",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:6226025878936021619:3540093518933148845:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|2",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:6226025878936021619:7071336793222845800:0"
+    },
+    {
+      "effectIdentity": "10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|3",
+      "controlSkillId": 10300204,
+      "mapIndex": 3,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:3:6226025878936021619:7307621539445855302:0"
+    },
+    {
       "effectIdentity": "10300204|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300204,
       "mapIndex": 3,
@@ -59136,6 +61746,50 @@
       "sourceIdentity": "battle-effect:10300204:3:4227003560910032429:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10300205|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+      "controlSkillId": 10300205,
+      "mapIndex": 0,
+      "elementId": 103002047,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300205:0:3663436943335475859:1927560234949684376:0"
+    },
+    {
+      "effectIdentity": "10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+      "controlSkillId": 10300205,
+      "mapIndex": 0,
+      "elementId": 103002087,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300205:0:6226025878936021619:1927560234949684376:0"
+    },
+    {
       "effectIdentity": "10300205|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
       "controlSkillId": 10300205,
       "mapIndex": 0,
@@ -59224,6 +61878,29 @@
       "sourceIdentity": "battle-effect:10700101:0:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700101|0|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700101,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700101:0:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700101|0|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700101,
       "mapIndex": 0,
@@ -59309,6 +61986,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700101:0:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700101|0|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700101,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700101:0:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700101|0|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
@@ -59462,6 +62162,29 @@
       "sourceIdentity": "battle-effect:10700101:0:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700101|0|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700101,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700101:0:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700101|0|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700101,
       "mapIndex": 0,
@@ -59547,6 +62270,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700101:0:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700101|0|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700101,
+      "mapIndex": 0,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700101:0:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700101|0|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
@@ -59868,6 +62614,29 @@
       "sourceIdentity": "battle-effect:10700102:4:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700102|4|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700102,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700102:4:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700102|4|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700102,
       "mapIndex": 4,
@@ -59953,6 +62722,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700102:4:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700102|4|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700102,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700102:4:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700102|4|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
@@ -60106,6 +62898,29 @@
       "sourceIdentity": "battle-effect:10700102:4:-5198070001380788731:unresolved:unresolved"
     },
     {
+      "effectIdentity": "10700102|4|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700102,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700102:4:1072632683368959996:unresolved:unresolved"
+    },
+    {
       "effectIdentity": "10700102|4|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
       "controlSkillId": 10700102,
       "mapIndex": 4,
@@ -60191,6 +63006,29 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10700102:4:-4529113272733101309:unresolved:unresolved"
+    },
+    {
+      "effectIdentity": "10700102|4|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+      "controlSkillId": 10700102,
+      "mapIndex": 4,
+      "elementId": 107001006,
+      "kind": "inject",
+      "dimensions": {
+        "damage": "verified-zero",
+        "toughness": "verified-zero",
+        "sp": "verified-zero",
+        "hp": "verified-zero",
+        "shield": "verified-zero",
+        "dynamicProperty": "verified-zero",
+        "mark": "verified-zero"
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10700102:4:1072632683368959996:unresolved:unresolved"
     },
     {
       "effectIdentity": "10700102|4|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",

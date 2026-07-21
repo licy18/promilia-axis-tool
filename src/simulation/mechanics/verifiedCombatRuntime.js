@@ -56,6 +56,7 @@ export function createVerifiedCombatRuntime({
   effectGeneration = null,
   tuningGeneration = null,
   effectTimeline = null,
+  actionVariantRuntime = null,
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
@@ -87,6 +88,7 @@ export function createVerifiedCombatRuntime({
       continue;
     }
     const resolution =
+      actionVariantRuntime?.actionResolutionById?.get(action.id) ??
       effectGeneration?.actionResolutionById?.get(action.id) ??
       resolveVerifiedCombatActionMechanics(action);
     actionResolutionById.set(action.id, resolution);
@@ -177,8 +179,11 @@ export function createVerifiedCombatRuntime({
   const kiboResourceEvents = [];
   const eventLog = [];
   const hitRecoveryAtByIdentity = new Map();
-  const blockedActionIds = new Set();
-  const executionBlocks = [];
+  const executionBlocks = [...(actionVariantRuntime?.executionBlocks ?? [])];
+  const blockedActionIds = new Set(
+    executionBlocks.map(block => block.actionId)
+  );
+  eventLog.push(...(actionVariantRuntime?.eventLog ?? []));
 
   for (const descriptor of descriptors) {
     if (descriptor.timeMs > durationMs) continue;
@@ -325,6 +330,8 @@ export function createVerifiedCombatRuntime({
           summary: tuningGeneration.summary,
         }
       : null,
+    actionVariantRuntime,
+    specialResourceRuntime: actionVariantRuntime,
     effectTimeline,
     initialState,
     finalState: createFinalState(state, durationMs),
@@ -360,6 +367,10 @@ export function createVerifiedCombatRuntime({
         event => event.payload.shieldState?.absorbed > 0
       ).length,
       resourceBlockedActionCount: executionBlocks.length,
+      specialResourceEventCount:
+        actionVariantRuntime?.summary?.resourceEventCount ?? 0,
+      changedVariantCount:
+        actionVariantRuntime?.summary?.changedVariantCount ?? 0,
       generatedEffectCommandCount:
         effectGeneration?.summary?.effectCommandCount ?? 0,
       directSpEventCount: effectGeneration?.summary?.directSpEventCount ?? 0,

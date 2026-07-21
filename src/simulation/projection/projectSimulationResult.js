@@ -1448,6 +1448,7 @@ export function projectSimulationResult({
   verifiedCombatRuntime = null,
   verifiedBattleEffectGeneration = null,
   verifiedTuningMarkGeneration = null,
+  verifiedActionVariantRuntime = null,
   effectTimeline,
   actionRuleDiagnostics,
   actionExecutionPlan,
@@ -1496,7 +1497,10 @@ export function projectSimulationResult({
     actionEffectRelationGraph,
     verifiedCombatRuntime,
   });
-  const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
+  const runtimeOutputs = attachVerifiedSpecialResourceCurves(
+    threeValueRuntimeProjection.runtimeOutputs,
+    verifiedActionVariantRuntime?.curves ?? []
+  );
   const tuningMarkCurveProjection = projectVerifiedTuningMarkCurves({
     tuningMarkRuntime: verifiedCombatRuntime?.tuningMarkRuntime,
     durationMs: scenario.time.durationMs,
@@ -1615,6 +1619,7 @@ export function projectSimulationResult({
     verifiedCombatRuntime,
     verifiedBattleEffectGeneration,
     verifiedTuningMarkGeneration,
+    verifiedActionVariantRuntime,
     tuningMarkCurveProjection,
     effectTimeline: runtimeOutputs.effectTimeline,
     controlledActorTimeline: runtimeOutputs.controlledActorTimeline,
@@ -1672,6 +1677,31 @@ export function projectSimulationResult({
         'Confirmed rule-blocked actions are excluded from action results, effect commands, generation deltas, and runtime outputs; unresolved conditions remain executable.',
       ],
     },
+  };
+}
+
+function attachVerifiedSpecialResourceCurves(runtimeOutputs, curves) {
+  if (!Array.isArray(curves) || curves.length === 0) return runtimeOutputs;
+  const stateCurves = runtimeOutputs?.stateCurves ?? {};
+  const resourceCurves =
+    runtimeOutputs?.resourceCurves ?? runtimeOutputs?.resources ?? {};
+  const resources = stateCurves.resources ?? resourceCurves;
+  const projectedResourceCurves = {
+    ...resourceCurves,
+    curvesBySpecialResource: curves,
+  };
+  const projectedStateResources = {
+    ...resources,
+    curvesBySpecialResource: curves,
+  };
+  return {
+    ...runtimeOutputs,
+    stateCurves: {
+      ...stateCurves,
+      resources: projectedStateResources,
+    },
+    resourceCurves: projectedResourceCurves,
+    resources: projectedResourceCurves,
   };
 }
 

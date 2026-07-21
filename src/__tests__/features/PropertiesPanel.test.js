@@ -88,6 +88,7 @@ describe('PropertiesPanel', () => {
         .findAll('[data-testid="workbench-verified-mechanics-trace-step"]')
         .map(item => item.attributes('data-trace-step'))
     ).toEqual([
+      'action-variant',
       'action-binding',
       'effects',
       'property-snapshot',

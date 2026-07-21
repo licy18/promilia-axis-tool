@@ -67,10 +67,30 @@ describe('initial runtime state', () => {
           sourceIdentity: { skillId: 10100322, elementConfigId: 101003141 },
         },
       ],
+      specialResourcesByActor: [
+        {
+          actorId: 'actor-1',
+          characterId: 101010,
+          actorName: '涂山小玉',
+          resourceIdentity: 'actor:101010:element:101010115',
+          resourceName: '爆发状态叠层',
+          currentValue: 32,
+          maxValue: 100,
+          activeStates: [
+            {
+              elementId: 101010129,
+              name: '爆发状态buff',
+              remainingDurationMs: 6400,
+              sourceActionId: 'jade-ultimate',
+              sourceIdentity: 'battle-element:101010129',
+            },
+          ],
+        },
+      ],
     });
 
     expect(state).toMatchObject({
-      schemaVersion: 4,
+      schemaVersion: 5,
       contractName: 'AzPrInitialRuntimeState',
       status: 'initial-runtime-state-inherited',
       source: {
@@ -123,6 +143,23 @@ describe('initial runtime state', () => {
           appliedToCalculators: false,
         },
       ],
+      specialResourcesByActor: [
+        {
+          actorId: 'actor-1',
+          characterId: 101010,
+          resourceIdentity: 'actor:101010:element:101010115',
+          currentValue: 32,
+          maxValue: 100,
+          activeStates: [
+            {
+              elementId: 101010129,
+              remainingDurationMs: 6400,
+              sourceActionId: 'jade-ultimate',
+            },
+          ],
+          baselineStatus: 'baseline-inherited-from-cycle-boundary',
+        },
+      ],
       applied: true,
     });
   });
@@ -137,7 +174,7 @@ describe('initial runtime state', () => {
         },
       })
     ).toMatchObject({
-      schemaVersion: 4,
+      schemaVersion: 5,
       status: 'initial-runtime-state-ready',
       controlledActor: {
         actorId: 'actor-2',
@@ -149,6 +186,7 @@ describe('initial runtime state', () => {
       selfEnergyByActor: [],
       kiboEnergyBySlot: [],
       activeEffects: [],
+      specialResourcesByActor: [],
     });
   });
 

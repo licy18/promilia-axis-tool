@@ -1,4 +1,4 @@
-export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 4;
+export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 5;
 export const INITIAL_RUNTIME_STATE_CONTRACT_NAME = 'AzPrInitialRuntimeState';
 
 export function normalizeInitialRuntimeState(value, defaults = {}) {
@@ -23,13 +23,17 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     sourceValue.activeEffects
   );
   const tuningMarks = normalizeInitialTuningMarks(sourceValue.tuningMarks);
+  const specialResourcesByActor = normalizeInitialSpecialResourceStates(
+    sourceValue.specialResourcesByActor
+  );
   if (
     !controlledActor &&
     !enemy &&
     selfEnergyByActor.length === 0 &&
     kiboEnergyBySlot.length === 0 &&
     activeEffects.length === 0 &&
-    tuningMarks.length === 0
+    tuningMarks.length === 0 &&
+    specialResourcesByActor.length === 0
   ) {
     return null;
   }
@@ -48,6 +52,7 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     kiboEnergyBySlot,
     activeEffects,
     tuningMarks,
+    specialResourcesByActor,
     applied: true,
   };
 }
@@ -183,6 +188,56 @@ function normalizeInitialKiboEnergyStates(values) {
         currentValue,
         maxValue: nonNegativeNumberOrNull(value?.maxValue),
         valueUnit: 'sp',
+        baselineStatus: 'baseline-inherited-from-cycle-boundary',
+      },
+    ];
+  });
+}
+
+function normalizeInitialSpecialResourceStates(values) {
+  const usedKeys = new Set();
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const actorId = optionalText(value?.actorId);
+    const resourceIdentity = optionalText(value?.resourceIdentity);
+    const currentValue = nonNegativeNumberOrNull(value?.currentValue);
+    const key = `${actorId}|${resourceIdentity}`;
+    if (
+      !actorId ||
+      !resourceIdentity ||
+      currentValue == null ||
+      usedKeys.has(key)
+    ) {
+      return [];
+    }
+    usedKeys.add(key);
+    return [
+      {
+        actorId,
+        characterId: numberOrNull(value?.characterId),
+        actorName: optionalText(value?.actorName),
+        resourceIdentity,
+        resourceName: optionalText(value?.resourceName),
+        currentValue,
+        maxValue: nonNegativeNumberOrNull(value?.maxValue),
+        activeStates: (Array.isArray(value?.activeStates)
+          ? value.activeStates
+          : []
+        ).flatMap(state => {
+          const elementId = positiveIntegerOrNull(state?.elementId);
+          const remainingDurationMs = nonNegativeNumberOrNull(
+            state?.remainingDurationMs
+          );
+          if (!elementId || remainingDurationMs === 0) return [];
+          return [
+            {
+              elementId,
+              name: optionalText(state?.name),
+              remainingDurationMs,
+              sourceActionId: optionalText(state?.sourceActionId),
+              sourceIdentity: state?.sourceIdentity ?? null,
+            },
+          ];
+        }),
         baselineStatus: 'baseline-inherited-from-cycle-boundary',
       },
     ];

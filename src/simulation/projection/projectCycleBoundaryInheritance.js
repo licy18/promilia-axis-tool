@@ -91,6 +91,8 @@ export function projectCycleBoundaryInheritance({
       inheritedTuningMarkLayerCount: (
         initialRuntimeState?.tuningMarks ?? []
       ).reduce((sum, mark) => sum + mark.layers.length, 0),
+      inheritedSpecialResourceCount:
+        initialRuntimeState?.specialResourcesByActor?.length ?? 0,
       clearedRuntimeSampleCaptureCount:
         draft.runtimeSampleCaptures?.length ?? 0,
     },
@@ -198,6 +200,70 @@ export function createInitialRuntimeStateAtBoundary({
         runtimeOutputs?.verifiedCombatRuntime?.tuningMarkRuntime,
       boundaryTimeMs,
     }),
+    specialResourcesByActor: createInheritedSpecialResourcesAtBoundary({
+      specialResourceRuntime:
+        runtimeOutputs?.verifiedCombatRuntime?.specialResourceRuntime,
+      boundaryTimeMs,
+    }),
+  });
+}
+
+function createInheritedSpecialResourcesAtBoundary({
+  specialResourceRuntime,
+  boundaryTimeMs,
+}) {
+  if (!specialResourceRuntime?.ready) return [];
+  return (specialResourceRuntime.curves ?? []).map(curve => {
+    let currentValue = Number(curve.initialValue) || 0;
+    for (const point of [...(curve.points ?? [])].sort(
+      (left, right) =>
+        nonNegativeNumber(left.timeMs) - nonNegativeNumber(right.timeMs)
+    )) {
+      if (!isBeforeBoundary(point.timeMs, boundaryTimeMs)) break;
+      currentValue = finiteNumberOrNull(point.afterValue) ?? currentValue;
+    }
+    const activeStates = new Map();
+    for (const event of [...(specialResourceRuntime.stateEvents ?? [])].sort(
+      (left, right) =>
+        nonNegativeNumber(left.timeMs) - nonNegativeNumber(right.timeMs) ||
+        nonNegativeNumber(left.runtimeSequenceIndex) -
+          nonNegativeNumber(right.runtimeSequenceIndex)
+    )) {
+      if (event.actorId !== curve.actorId) continue;
+      if (!isBeforeBoundary(event.timeMs, boundaryTimeMs)) break;
+      const elementId = Number(event.payload?.stateElementId);
+      if (!Number.isInteger(elementId)) continue;
+      if (event.payload.operation === 'transform') {
+        const durationMs = finiteNumberOrNull(event.payload.stateDurationMs);
+        activeStates.set(elementId, {
+          elementId,
+          name: event.payload.stateName ?? null,
+          expiresAtMs:
+            durationMs == null ? null : Number(event.timeMs) + durationMs,
+          sourceActionId: event.actionId ?? null,
+          sourceIdentity: cloneValue(event.payload.sourceIdentity),
+        });
+      } else {
+        activeStates.delete(elementId);
+      }
+    }
+    return {
+      actorId: curve.actorId,
+      characterId: curve.characterId,
+      actorName: curve.actorName,
+      resourceIdentity: curve.resourceIdentity,
+      resourceName: curve.resourceName,
+      currentValue,
+      maxValue: curve.maxValue,
+      activeStates: [...activeStates.values()].flatMap(state => {
+        const remainingDurationMs =
+          state.expiresAtMs == null
+            ? null
+            : roundValue(state.expiresAtMs - boundaryTimeMs);
+        if (remainingDurationMs != null && remainingDurationMs <= 0) return [];
+        return [{ ...state, remainingDurationMs, expiresAtMs: undefined }];
+      }),
+    };
   });
 }
 
@@ -493,6 +559,7 @@ function createProjectionResult({
       inheritedEnergyActorCount: 0,
       inheritedEffectCount: 0,
       inheritedTuningMarkLayerCount: 0,
+      inheritedSpecialResourceCount: 0,
       clearedRuntimeSampleCaptureCount: 0,
       ...summary,
     },

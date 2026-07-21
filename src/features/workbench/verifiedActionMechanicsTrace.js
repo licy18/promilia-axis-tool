@@ -12,16 +12,24 @@ export function createVerifiedActionMechanicsTrace({
     event =>
       event.actionId === action.id && event.type === 'VERIFIED_COMBAT_HIT'
   );
-  const resourceEvents = [
+  const spResourceEvents = [
     ...(verifiedCombatRuntime.resourceEvents ?? []),
     ...(verifiedCombatRuntime.kiboResourceEvents ?? []),
   ].filter(event => event.actionId === action.id);
+  const specialResourceEvents = (
+    verifiedCombatRuntime.specialResourceRuntime?.resourceEvents ?? []
+  ).filter(event => event.actionId === action.id);
+  const resourceEvents = [...spResourceEvents, ...specialResourceEvents];
   const effectEvents = (
     verifiedCombatRuntime.effectTimeline?.events ?? []
   ).filter(event => event.actionId === action.id);
   const tuningEvents = (
     verifiedCombatRuntime.tuningMarkRuntime?.events ?? []
   ).filter(event => event.actionId === action.id);
+  const variantSelection =
+    verifiedCombatRuntime.specialResourceRuntime?.selectionByActionId?.get?.(
+      action.id
+    ) ?? null;
   const dynamicPropertyRows = collectDynamicPropertyRows(hitEvents);
   const staticProperties = actor?.verifiedStaticProperties ?? null;
   const staticKiboProperties = actor?.verifiedStaticKiboProperties ?? null;
@@ -30,6 +38,8 @@ export function createVerifiedActionMechanicsTrace({
     hitEvents,
     effectEvents,
     tuningEvents,
+    specialResourceEvents,
+    variantSelection,
     staticProperties,
     staticKiboProperties,
   });
@@ -44,8 +54,11 @@ export function createVerifiedActionMechanicsTrace({
   const toughnessDamage = sumNumbers(
     hitEvents.map(event => event.payload?.toughnessDamage)
   );
-  const resourceDelta = sumNumbers(
-    resourceEvents.map(event => event.payload?.change)
+  const spResourceDelta = sumNumbers(
+    spResourceEvents.map(event => event.payload?.change)
+  );
+  const specialResourceDelta = sumNumbers(
+    specialResourceEvents.map(event => event.payload?.change)
   );
 
   return {
@@ -68,12 +81,27 @@ export function createVerifiedActionMechanicsTrace({
     dynamicPropertyCount: dynamicPropertyRows.length,
     hitEvents,
     resourceEvents,
+    spResourceEvents,
+    specialResourceEvents,
+    specialResourceDelta,
     effectEvents,
     tuningEvents,
     dynamicPropertyRows,
     sourceRows,
     unresolved,
     steps: [
+      {
+        key: 'action-variant',
+        label: '动作形态',
+        value:
+          variantSelection?.selectedSubSkillIndex == null
+            ? '默认形态'
+            : `subskill ${variantSelection.selectedSubSkillIndex}`,
+        detail: variantSelection?.sourceKind ?? 'action-mapping-selection',
+        applied:
+          variantSelection?.status ===
+          'verified-action-variant-selection-ready',
+      },
       {
         key: 'action-binding',
         label: '动作',
@@ -103,9 +131,30 @@ export function createVerifiedActionMechanicsTrace({
         value: `${hitEvents.length} 个命中`,
         detail: `HP -${formatNumber(hpDamage)} · 韧性 -${formatNumber(
           toughnessDamage
-        )} · SP ${formatSigned(resourceDelta)}`,
-        applied: hitEvents.length > 0 || resourceEvents.length > 0,
+        )} · SP ${formatSigned(spResourceDelta)}`,
+        applied: hitEvents.length > 0 || spResourceEvents.length > 0,
       },
+      ...(specialResourceEvents.length > 0
+        ? [
+            {
+              key: 'special-resource',
+              label:
+                specialResourceEvents[0]?.payload?.resourceName ?? '角色资源',
+              value:
+                specialResourceEvents.length > 0
+                  ? `${formatSigned(specialResourceDelta)} · ${specialResourceEvents.length} 个事件`
+                  : '本动作无资源变化',
+              detail:
+                variantSelection?.selectedSubSkillIndex == null
+                  ? '默认动作形态'
+                  : `实际形态 subskill ${variantSelection.selectedSubSkillIndex}`,
+              applied:
+                specialResourceEvents.length > 0 ||
+                variantSelection?.status ===
+                  'verified-action-variant-selection-ready',
+            },
+          ]
+        : []),
       {
         key: 'runtime-state',
         label: '状态',
@@ -153,6 +202,7 @@ function createSourceRows({
   hitEvents,
   effectEvents,
   tuningEvents,
+  specialResourceEvents,
   staticProperties,
   staticKiboProperties,
 }) {
@@ -172,6 +222,9 @@ function createSourceRows({
     ),
     ...tuningEvents.map((event, index) =>
       createSourceRow(`印记 ${index + 1}`, event.sourceIdentity)
+    ),
+    ...specialResourceEvents.map((event, index) =>
+      createSourceRow(`角色资源 ${index + 1}`, event.payload?.sourceIdentity)
     ),
   ].filter(Boolean);
   const seen = new Set();

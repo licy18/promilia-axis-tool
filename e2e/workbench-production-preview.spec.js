@@ -143,6 +143,11 @@ test('[stage-9a-timeline-topology] renders three actor groups and eight state cu
     timeline.getByTestId('workbench-timeline-state-curve')
   ).toHaveCount(8);
   await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-special-resource-curve"]'
+    )
+  ).toHaveCount(0);
+  await expect(
     timeline.locator('[data-testid="workbench-timeline-state-curve-line"]')
   ).toHaveCount(8);
   await expect(
@@ -1071,7 +1076,12 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   ).toHaveCount(3);
   await expect(
     timeline.getByTestId('workbench-timeline-state-curve')
-  ).toHaveCount(8);
+  ).toHaveCount(9);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-special-resource-curve"]'
+    )
+  ).toHaveCount(1);
 
   await closeInspectorIfVisible(page);
   await page.setViewportSize({ width: 390, height: 900 });
@@ -1319,8 +1329,9 @@ test('[m8d-verified-mechanics-ui] reviews real tuning marks and the action mecha
     .toBeGreaterThan(0);
   await expect(
     trace.getByTestId('workbench-verified-mechanics-trace-step')
-  ).toHaveCount(5);
+  ).toHaveCount(6);
   await expect(trace).toContainText('动作数值溯源');
+  await expect(trace).toContainText('动作形态');
   await expect(trace).toContainText('属性快照');
   await expect(trace).toContainText('命中结果');
   await expect(trace).toContainText('印记');
@@ -1770,8 +1781,11 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
   const kiboEnergyRows = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
   );
+  const specialResourceRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="actor-special-resource-curve"]'
+  );
   const stateCurves = timeline.getByTestId('workbench-timeline-state-curve');
-  const expectEmptyTimeline = async () => {
+  const expectEmptyTimeline = async (expectedSpecialResourceCount = 0) => {
     await expect(timelineActions).toHaveCount(0);
     await expect(
       timeline.locator(
@@ -1780,7 +1794,8 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     ).toHaveCount(0);
     await expect(actorEnergyRows).toHaveCount(3);
     await expect(kiboEnergyRows).toHaveCount(3);
-    await expect(stateCurves).toHaveCount(8);
+    await expect(specialResourceRows).toHaveCount(expectedSpecialResourceCount);
+    await expect(stateCurves).toHaveCount(8 + expectedSpecialResourceCount);
     expect(
       await timeline
         .locator(
@@ -1836,7 +1851,7 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     );
   }
   await selectM2Enemy(page, '300071');
-  await expectEmptyTimeline();
+  await expectEmptyTimeline(1);
 
   await openActorInspector(page, 101003);
   await closeInspectorIfVisible(page);
@@ -1934,7 +1949,7 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
   while ((await deleteButtons.count()) > 0) {
     await deleteButtons.first().click();
   }
-  await expectEmptyTimeline();
+  await expectEmptyTimeline(1);
 
   await page
     .getByTestId('workbench-import-project-file')

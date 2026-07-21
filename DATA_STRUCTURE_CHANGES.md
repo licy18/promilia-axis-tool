@@ -27642,3 +27642,11 @@ Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel
 ## 446. Effect interval timeline display authority
 
 `AzPrEffectIntervalProjection` 新增 `timelineIntervals[]`，并继续由 `intervals[]` 保存完整运行时审计集合。队伍调谐印记为了作用于各角色而展开的 calculator 目标副本使用 `tuning-mark-resource-mirror` tag；这些副本保留在 `intervals[]`、效果 runtime 和来源溯源中，但不进入 `timelineIntervals[]`，其唯一时间轴显示事实由 `AzPrVerifiedTuningMarkCurveProjection` 的队伍印记资源轴承担。独立 Buff、减益、持有效果和敌人效果仍进入两套集合。该投影不持久化，项目 schema 与五载体格式不升级。
+
+## 447. Verified action variant and special resource runtime v1
+
+`verified-combat-mechanics-package.json` 升级为 package v11，新增 `actionVariantControlBindings[]`、`actionVariantGraph` 与 `specialResourceCatalog`。变体边记录 source/target control 与 subskill、relation type、输入命令、决策帧、条件、持续窗口及唯一 Battle source identity；资源 profile 和 operation 记录 owner、element、容量、初值、gain/consume/clear/transform/expire、触发帧、等级值与 applied/unresolved 原因。公开动作分母不因 support control 扩大，缺失静态 element identity、包装关系或运行时碰撞帧不会被写成 0 或默认动作。
+
+新增非持久化 `AzPrVerifiedActionVariantRuntime`。它按 execution plan 和时间顺序读取当前资源与活动状态，在输入决策帧选择唯一实际 subskill，并把选择结果交给既有 Battle effect generation 与 verified combat runtime；资源不足或变体歧义在命中、CD、效果和三值结算前阻止执行。特殊资源事件声明 `appliedToActionVariantRuntime = true`、`appliedToCalculators = false`，不会被误计入角色/奇波 SP 或直接改写 HP/韧性。
+
+`AzPrInitialRuntimeState` 升级为 v5，新增 `specialResourcesByActor[]` 及其剩余 active state duration。循环边界使用严格边界前语义继承资源值和状态剩余时间；方案复制、本地草稿、JSON、分享链接与 PNG 仍只保存既有项目输入并由运行时确定性重建。`runtimeOutputs.resourceCurves`、`resources` 与 `stateCurves.resources` 共享 `curvesBySpecialResource[]` 投影；只有队伍中存在已确认 profile 时生成对应阶梯轴，项目 schemaVersion 不升级。

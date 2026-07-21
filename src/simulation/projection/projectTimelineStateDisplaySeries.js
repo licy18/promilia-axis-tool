@@ -185,7 +185,10 @@ function resolveContinuousPointKind(point) {
 }
 
 function isSemanticZeroDeltaPoint(point) {
-  return String(point.hitKey ?? '').startsWith('verified-break-exit-');
+  return (
+    point.semantic === true ||
+    String(point.hitKey ?? '').startsWith('verified-break-exit-')
+  );
 }
 
 function simplifyContinuousRun(run, maxValue) {
@@ -253,6 +256,7 @@ function createSemanticCandidate({
     actionId: point.actionId ?? '',
     hitKey: point.hitKey ?? '',
     hitKeys: point.hitKey ? [point.hitKey] : [],
+    eventKinds: point.operation ? [point.operation] : [],
     timeMs,
     frameIndex: finiteNumber(point.frameIndex, 0),
     beforeValue,
@@ -278,6 +282,7 @@ function clusterSemanticCandidates(candidates, clusterWindowMs) {
       previous.sourceDeltaIds.push(...candidate.sourceDeltaIds);
       previous.statePointIds.push(...candidate.statePointIds);
       previous.hitKeys.push(...candidate.hitKeys);
+      previous.eventKinds.push(...candidate.eventKinds);
       previous.statePointId = candidate.statePointId || previous.statePointId;
       previous.hitKey = candidate.hitKey || previous.hitKey;
       previous.timeMs = candidate.timeMs;
@@ -303,6 +308,7 @@ function clusterSemanticCandidates(candidates, clusterWindowMs) {
     sourceDeltaIds: uniqueValues(cluster.sourceDeltaIds),
     statePointIds: uniqueValues(cluster.statePointIds),
     hitKeys: uniqueValues(cluster.hitKeys),
+    eventKinds: uniqueValues(cluster.eventKinds),
   }));
 }
 

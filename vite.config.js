@@ -25,6 +25,7 @@ export default defineConfig({
             [
               '/simulation/mechanics/verifiedCombatRuntime.js',
               '/simulation/mechanics/verifiedBattleEffectGeneration.js',
+              '/simulation/mechanics/verifiedActionVariantRuntime.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {
             return 'verified-combat-runtime';
@@ -39,9 +40,10 @@ export default defineConfig({
             return 'verified-combat-configuration';
           }
           if (
-            id.endsWith(
-              '/simulation/projection/projectTimelineStateDisplaySeries.js'
-            )
+            [
+              '/simulation/projection/projectCycleBoundaryInheritance.js',
+              '/simulation/projection/projectTimelineStateDisplaySeries.js',
+            ].some(modulePath => id.endsWith(modulePath))
           ) {
             return 'workbench-timeline-projection';
           }

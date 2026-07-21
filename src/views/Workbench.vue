@@ -466,6 +466,7 @@
           :tuning-mark-curve-projection="
             simulationResult.tuningMarkCurveProjection
           "
+          :verified-combat-runtime="simulationResult.verifiedCombatRuntime"
           :controlled-actor-timeline="
             simulationResult.runtimeOutputs.controlledActorTimeline
           "
@@ -958,6 +959,7 @@
         :tuning-mark-curve-projection="
           simulationResult.tuningMarkCurveProjection
         "
+        :verified-combat-runtime="simulationResult.verifiedCombatRuntime"
         :controlled-actor-timeline="
           simulationResult.runtimeOutputs.controlledActorTimeline
         "

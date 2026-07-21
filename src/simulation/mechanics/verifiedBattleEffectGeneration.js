@@ -12,6 +12,7 @@ export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
 export function createVerifiedBattleEffectGeneration({
   scenario = {},
   actionExecutionPlan = null,
+  actionResolutionById: suppliedActionResolutionById = null,
 } = {}) {
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
@@ -28,7 +29,9 @@ export function createVerifiedBattleEffectGeneration({
     if (![ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action.type)) {
       continue;
     }
-    const resolution = resolveVerifiedCombatActionMechanics(action);
+    const resolution =
+      suppliedActionResolutionById?.get(action.id) ??
+      resolveVerifiedCombatActionMechanics(action);
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
     for (const effect of resolution.effects ?? []) {
@@ -283,7 +286,9 @@ function createUnresolvedEffect(action, effect, reasons = []) {
     effectIdentity: effect.effectIdentity,
     kind: effect.kind,
     dimensions: effect.dimensions,
-    reasons: [...new Set([...(effect.reasons ?? []), ...reasons.filter(Boolean)])],
+    reasons: [
+      ...new Set([...(effect.reasons ?? []), ...reasons.filter(Boolean)]),
+    ],
     sourceIdentity: effect.sourceIdentity,
     status: 'verified-battle-effect-generation-unresolved',
     applied: false,

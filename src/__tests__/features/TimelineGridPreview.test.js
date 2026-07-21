@@ -1026,6 +1026,77 @@ describe('TimelineGridPreview', () => {
     );
   });
 
+  it('renders a special resource lane only for the owning actor and locates its source action', async () => {
+    const runtimeStateCurves = createRuntimeTimelineStateCurves();
+    runtimeStateCurves.resources.curvesBySpecialResource = [
+      {
+        trackKey: 'specialResource:actor-a:103002047',
+        actorId: 'actor-a',
+        characterId: 103002,
+        resourceIdentity: 'actor:103002:element:103002047',
+        resourceName: '子弹',
+        elementId: 103002047,
+        initialValue: 0,
+        currentValue: 6,
+        maxValue: 12,
+        stateMetric: { initialValue: 0, currentValue: 6, maxValue: 12 },
+        points: [
+          {
+            sourceDeltaId: 'ruby-bullet-gain',
+            actionId: 'action-a',
+            actorId: 'actor-a',
+            trackKey: 'specialResource:actor-a:103002047',
+            timeMs: 1000,
+            frameIndex: 60,
+            beforeValue: 0,
+            afterValue: 6,
+            delta: 6,
+            operation: 'gain',
+            semantic: true,
+          },
+        ],
+      },
+    ];
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({ runtimeStateCurves }),
+    });
+
+    const labels = wrapper.findAll(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-special-resource-curve"]'
+    );
+    expect(labels).toHaveLength(1);
+    expect(labels[0].attributes('data-actor-id')).toBe('actor-a');
+    expect(labels[0].text()).toContain('子弹');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-special-resource-curve"][data-actor-id="actor-b"]'
+        )
+        .exists()
+    ).toBe(false);
+
+    const node = wrapper.get(
+      '[data-testid="workbench-timeline-row"][data-lane-id="special-resource-actor-a-103002047"] [data-testid="workbench-timeline-state-curve-node"]'
+    );
+    expect(node.attributes()).toMatchObject({
+      'data-action-id': 'action-a',
+      'data-frame-index': '60',
+      'data-event-kinds': 'gain',
+    });
+    expect(node.attributes('title')).toContain('子弹 获取');
+    await node.trigger('click');
+    expect(wrapper.emitted('select-action')?.at(-1)?.[0]).toEqual({
+      actionId: 'action-a',
+      mode: 'replace',
+    });
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject(
+      {
+        frameIndex: 60,
+        source: 'timeline-special-resource-curve',
+      }
+    );
+  });
+
   it('renders controlled actor intervals and follows the exact-frame cursor state', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

@@ -9,6 +9,7 @@ let installedPackage = null;
 let packagePromise = null;
 let controlBindingBySkillId = new Map();
 let effectBindingByIdentity = new Map();
+let specialResourceProfileByOwnerId = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
   if (installedPackage) return installedPackage;
@@ -39,13 +40,23 @@ export function installVerifiedCombatMechanicsPackage(value) {
     );
   }
   installedPackage = value;
+  const allControlBindings = [
+    ...value.controlBindings,
+    ...(value.actionVariantControlBindings ?? []),
+  ];
   controlBindingBySkillId = new Map(
-    value.controlBindings.map(binding => [binding.controlSkillId, binding])
+    allControlBindings.map(binding => [binding.controlSkillId, binding])
   );
   effectBindingByIdentity = new Map(
-    value.controlBindings.flatMap(binding =>
+    allControlBindings.flatMap(binding =>
       (binding.effects ?? []).map(effect => [effect.effectIdentity, effect])
     )
+  );
+  specialResourceProfileByOwnerId = new Map(
+    (value.specialResourceCatalog?.profiles ?? []).map(profile => [
+      Number(profile.ownerId),
+      profile,
+    ])
   );
   return value;
 }
@@ -72,14 +83,30 @@ export function getVerifiedCombatActionInputMapping(action = {}) {
   };
 }
 
+export function getVerifiedSpecialResourceProfile(characterId) {
+  return specialResourceProfileByOwnerId.get(Number(characterId)) ?? null;
+}
+
+export function getVerifiedActionVariantGraph() {
+  return installedPackage?.actionVariantGraph ?? null;
+}
+
+export function getVerifiedSpecialResourceCatalog() {
+  return installedPackage?.specialResourceCatalog ?? null;
+}
+
 export function clearInstalledVerifiedCombatMechanicsPackage() {
   installedPackage = null;
   packagePromise = null;
   controlBindingBySkillId = new Map();
   effectBindingByIdentity = new Map();
+  specialResourceProfileByOwnerId = new Map();
 }
 
-export function resolveVerifiedCombatActionMechanics(action = {}) {
+export function resolveVerifiedCombatActionMechanics(
+  action = {},
+  { selectedSubSkillIndex = null, selectionSource = null } = {}
+) {
   if (!installedPackage) {
     return createUnresolvedActionMechanics(
       action,
@@ -110,7 +137,22 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
       }
     );
   }
-  const actionBinding = resolvedActionBinding.binding;
+  const dynamicBinding = applySelectedSubSkillOverride({
+    action,
+    actionMapping,
+    actionBinding: resolvedActionBinding.binding,
+    selectedSubSkillIndex,
+    selectionSource,
+  });
+  if (!dynamicBinding.binding) {
+    return createUnresolvedActionMechanics(action, dynamicBinding.reason, {
+      owner,
+      actionBinding: resolvedActionBinding.binding,
+      selectedSubSkillIndex,
+      reasons: dynamicBinding.reasons ?? [],
+    });
+  }
+  const actionBinding = dynamicBinding.binding;
   const actionTimingStatus = actionBinding.attackInputSegment
     ? actionBinding.attackInputSegment.durationStatus
     : actionBinding.timingStatus;
@@ -207,6 +249,121 @@ export function resolveVerifiedCombatActionMechanics(action = {}) {
     reasons: actionBinding.reasons ?? [],
     ready: true,
     applied: true,
+    variantSelection: actionBinding.variantSelection ?? null,
+  };
+}
+
+function applySelectedSubSkillOverride({
+  action,
+  actionMapping,
+  actionBinding,
+  selectedSubSkillIndex,
+  selectionSource,
+}) {
+  if (selectedSubSkillIndex == null) return { binding: actionBinding };
+  const subSkillIndex = Number(selectedSubSkillIndex);
+  const controlBinding = controlBindingBySkillId.get(
+    actionBinding.controlSkillId
+  );
+  const variant = (controlBinding?.variants ?? []).find(
+    item => Number(item.subSkillIndex) === subSkillIndex
+  );
+  if (!variant) {
+    return {
+      binding: null,
+      reason: 'verified-action-selected-variant-missing',
+      reasons: ['selected-control-subskill-index-missing'],
+    };
+  }
+  const timingCandidates = actionBinding.attackInputSegment
+    ? actionBinding.attackInputSegment.variantTimings
+    : actionMapping.actionTiming?.variantTimings;
+  const timing = (timingCandidates ?? []).find(
+    item => Number(item.subSkillIndex) === subSkillIndex
+  );
+  if (timing?.occupancy?.status !== 'applied') {
+    return {
+      binding: null,
+      reason: 'verified-action-selected-variant-duration-unresolved',
+      reasons: timing?.occupancy?.reasons ?? [
+        'selected-control-player-variant-duration-unresolved',
+      ],
+    };
+  }
+  const hits = (controlBinding?.hits ?? []).filter(
+    hit => Number(hit.mapIndex) === subSkillIndex
+  );
+  const effects = (controlBinding?.effects ?? []).filter(
+    effect => Number(effect.mapIndex) === subSkillIndex
+  );
+  const hasAppliedCost = Number(controlBinding?.logic?.spCost) > 0;
+  const hasAppliedEffect = effects.some(
+    effect => effect.classification === 'applied'
+  );
+  const classification =
+    hits.length > 0 || hasAppliedCost || hasAppliedEffect
+      ? 'applied'
+      : effects.length > 0 &&
+          effects.every(effect => effect.classification === 'verified-zero')
+        ? 'verified-zero'
+        : 'unresolved';
+  const variantSelection = {
+    selectedSubSkillIndex: subSkillIndex,
+    defaultSubSkillIndex: actionBinding.selectedSubSkillIndex,
+    changed:
+      Number(actionBinding.selectedSubSkillIndex) !== Number(subSkillIndex),
+    sourceKind:
+      selectionSource?.sourceKind ?? 'verified-action-variant-runtime',
+    sourceIdentity:
+      selectionSource?.sourceIdentity ?? variant.sourceIdentity ?? null,
+    decisionFrame: Number(selectionSource?.decisionFrame) || 0,
+    status: 'verified-action-variant-selected',
+  };
+  return {
+    binding: {
+      ...actionBinding,
+      selectedSubSkillIndex: subSkillIndex,
+      ...(actionBinding.attackInputSegment
+        ? {
+            attackInputSegment: {
+              ...actionBinding.attackInputSegment,
+              selectedSubSkillIndex: subSkillIndex,
+              playerSkillId: variant.playerSkillId ?? null,
+              resourceMapIndex: variant.resourceMapIndex ?? null,
+              durationFrames: timing.occupancy.durationFrames,
+              effectiveDurationFrames: timing.occupancy.durationFrames,
+              durationStatus: 'applied',
+              durationBasis: timing.occupancy.sourceKind,
+              durationSourceIdentity: timing.occupancy.sourceIdentity,
+              classification,
+              reasons: [],
+            },
+          }
+        : {}),
+      selectedHitIdentities: hits.map(hit => hit.hitIdentity),
+      selectedEffectIdentities: effects.map(effect => effect.effectIdentity),
+      runtimeHitCount: hits.length,
+      runtimeEffectCount: effects.filter(
+        effect => effect.classification === 'applied'
+      ).length,
+      classification,
+      runtimeReady: classification === 'applied',
+      timingStatus: 'applied',
+      actionTiming: {
+        ...(actionBinding.actionTiming ?? actionMapping.actionTiming),
+        status: 'applied',
+        selectedSubSkillIndex: subSkillIndex,
+        occupancy: timing.occupancy,
+        input: timing.input,
+        sourceIdentity: timing.occupancy.sourceIdentity,
+        reasons: [],
+      },
+      variantSelection,
+      actualDurationFrames: timing.occupancy.durationFrames,
+      actualDurationMs:
+        (Number(timing.occupancy.durationFrames) * 1000) /
+        (Number(timing.frameRate) || 60),
+    },
   };
 }
 
@@ -300,8 +457,11 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   if (!Array.isArray(value?.controlBindings)) {
     issues.push('control-bindings-missing');
   }
+  if (!Array.isArray(value?.actionVariantControlBindings)) {
+    issues.push('action-variant-control-bindings-missing');
+  }
   if (
-    value?.packageVersion < 10 ||
+    value?.packageVersion < 11 ||
     value?.battleEffectCatalog?.status !==
       'verified-battle-effect-node-catalog-ready' ||
     !Array.isArray(value?.battleEffectCatalog?.nodes) ||
@@ -312,7 +472,10 @@ export function validateVerifiedCombatMechanicsPackage(value) {
           node.classification
         )
     ) ||
-    value.controlBindings.some(binding =>
+    [
+      ...(value?.controlBindings ?? []),
+      ...(value?.actionVariantControlBindings ?? []),
+    ].some(binding =>
       (binding.effectGraph ?? []).some(
         root =>
           !Array.isArray(root.nodeIdentities) || Object.hasOwn(root, 'nodes')
@@ -320,6 +483,29 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     )
   ) {
     issues.push('battle-effect-catalog-invalid');
+  }
+  if (
+    value?.specialResourceCatalog?.status !==
+      'verified-special-resource-catalog-ready' ||
+    !Array.isArray(value.specialResourceCatalog.profiles) ||
+    value.specialResourceCatalog.profiles.some(
+      profile =>
+        profile.applied !== true ||
+        !profile.resourceIdentity ||
+        !(Number(profile.capacity) > 0)
+    ) ||
+    !Array.isArray(value.specialResourceCatalog.operationBindings)
+  ) {
+    issues.push('special-resource-catalog-invalid');
+  }
+  if (
+    value?.actionVariantGraph?.status !==
+      'verified-action-variant-graph-ready' ||
+    !Array.isArray(value.actionVariantGraph.nodes) ||
+    !Array.isArray(value.actionVariantGraph.edges) ||
+    !Array.isArray(value.actionVariantGraph.defaultSelections)
+  ) {
+    issues.push('action-variant-graph-invalid');
   }
   if (
     value?.tuningMechanicsCatalog?.status !==

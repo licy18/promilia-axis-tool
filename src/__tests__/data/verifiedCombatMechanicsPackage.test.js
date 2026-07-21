@@ -3,6 +3,7 @@ import audit from '../../../reports/verified-combat-mechanics-audit.json';
 import actionCoverage from '../../../reports/verified-combat-action-coverage.json';
 import actionTimingCoverage from '../../../reports/verified-combat-action-timing-coverage.json';
 import effectCoverage from '../../../reports/verified-combat-effect-coverage.json';
+import variantResourceCoverage from '../../../reports/verified-action-variant-resource-coverage.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
 import {
@@ -28,7 +29,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 10,
+      packageVersion: 11,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -38,7 +39,12 @@ describe('verified combat mechanics package', () => {
         appliedHitBindingCount: 1310,
         appliedEffectBindingCount: 125,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 3081,
+        unresolvedEffectBindingCount: 3208,
+        actionVariantSupportControlBindingCount: 25,
+        specialResourceProfileCount: 2,
+        specialResourceOperationCount: 43,
+        actionVariantNodeCount: 79,
+        actionVariantEdgeCount: 85,
         battleEffectNodeCount: 3673,
         unresolvedActionCount: 189,
         actorProfileCount: 20,
@@ -141,19 +147,19 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      effectBindingCount: 3208,
+      effectBindingCount: 3335,
       appliedEffectBindingCount: 125,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 3081,
+      unresolvedEffectBindingCount: 3208,
       bindingKindCounts: {
-        damage: 446,
-        inject: 1264,
+        damage: 447,
+        inject: 1376,
         judgment: 80,
-        pack: 163,
-        'property-change': 1003,
+        pack: 166,
+        'property-change': 1013,
         shield: 10,
         sp: 89,
-        stack: 153,
+        stack: 154,
       },
       dimensions: expect.objectContaining({
         damage: expect.any(Object),
@@ -205,6 +211,48 @@ describe('verified combat mechanics package', () => {
       applied: true,
     });
     expect(spUnitContract).toEqual(mechanicsPackage.spUnitContract);
+    expect(mechanicsPackage.specialResourceCatalog).toMatchObject({
+      status: 'verified-special-resource-catalog-ready',
+      summary: {
+        profileCount: 2,
+        appliedProfileCount: 2,
+        operationCount: 71,
+        appliedOperationCount: 43,
+        unresolvedOperationCount: 28,
+        unresolvedOwnerCount: 1,
+      },
+      profiles: expect.arrayContaining([
+        expect.objectContaining({
+          ownerId: 101010,
+          elementId: 101010115,
+          capacity: 100,
+          initialValue: 0,
+        }),
+        expect.objectContaining({
+          ownerId: 103002,
+          elementId: 103002047,
+          name: '子弹',
+          capacity: 12,
+          initialValue: 0,
+        }),
+      ]),
+    });
+    expect(mechanicsPackage.actionVariantGraph).toMatchObject({
+      status: 'verified-action-variant-graph-ready',
+      summary: {
+        ownerCount: 2,
+        nodeCount: 79,
+        edgeCount: 318,
+        appliedEdgeCount: 85,
+        unresolvedEdgeCount: 233,
+      },
+    });
+    expect(variantResourceCoverage.summary).toMatchObject({
+      profileCount: 2,
+      appliedProfileCount: 2,
+      appliedOperationCount: 43,
+      appliedEdgeCount: 85,
+    });
     expect(
       mechanicsPackage.ownerProfiles.actor.find(
         profile => profile.characterId === 101007

@@ -75,7 +75,7 @@
 - `actor|103002|10300221|2|10300227` 红宝石 / perfect-parry / 一瞬的灼热: pack-lifecycle-runtime-unimplemented, effect-trigger-frame-missing, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded
 - `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: multiple-control-variants-without-root-selection, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|4|10700110` 西芙莉雅 / charged-attack / 疾风之箭: multiple-control-variants-without-root-selection
-- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
+- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-damage-trigger-lifecycle-not-expanded
 - `actor|107001|10700112|0|10700112` 西芙莉雅 / star-skill / 穿流之舞: multiple-control-variants-without-root-selection
 - `actor|107001|10700112|4|10700126` 西芙莉雅 / star-combo / 穿流之舞: multiple-control-variants-without-root-selection
 - `actor|107001|10700113|0|10700113` 西芙莉雅 / ultimate / 烈风回旋曲: multiple-root-player-skill-variants
@@ -122,7 +122,7 @@
 - `actor|112002|11200201|1|11200210` 艾妮丝 / charged-attack / 慈爱的惩戒: multiple-root-player-skill-variants, control-player-variant-duration-not-invariant
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200212|0|11200212` 艾妮丝 / star-skill / 不许捣乱哦: base-function-unverified, trigger-frame-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, heal-formula-not-literal-function-5
-- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: inject-wrapper-classified-through-child-edges, effect-target-ally-unresolved, property-formula-not-literal-function-5, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
+- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: inject-wrapper-classified-through-child-edges, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, property-formula-not-literal-function-5, effect-target-ally-unresolved, effect-trigger-frame-missing, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|2|11200227` 艾妮丝 / perfect-parry / 后勤保障: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|199001|19900101|0|19900103` 女主角 / normal-attack / 跃动之星: normal-attack-input-segment-duration-unresolved

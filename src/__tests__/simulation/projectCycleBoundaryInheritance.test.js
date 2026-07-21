@@ -27,6 +27,7 @@ describe('cycle boundary inheritance projection', () => {
         inheritedControlledActorId: 'actor-2',
         inheritedEffectCount: 1,
         inheritedTuningMarkLayerCount: 2,
+        inheritedSpecialResourceCount: 1,
         clearedRuntimeSampleCaptureCount: 1,
       },
       applied: true,
@@ -85,6 +86,23 @@ describe('cycle boundary inheritance projection', () => {
           layers: [
             { remainingDurationMs: 19000 },
             { remainingDurationMs: 19500 },
+          ],
+        },
+      ],
+      specialResourcesByActor: [
+        {
+          actorId: 'actor-1',
+          characterId: 101,
+          resourceIdentity: 'actor:101:element:100047',
+          resourceName: '角色资源',
+          currentValue: 6,
+          maxValue: 12,
+          activeStates: [
+            {
+              elementId: 100129,
+              remainingDurationMs: 1600,
+              sourceActionId: 'action-before',
+            },
           ],
         },
       ],
@@ -422,6 +440,39 @@ function createRuntimeOutputs() {
             markId: 150,
             heldReadyAtMs: 5700,
             layerIds: [],
+          },
+        ],
+      },
+      specialResourceRuntime: {
+        ready: true,
+        curves: [
+          {
+            actorId: 'actor-1',
+            characterId: 101,
+            actorName: '末音',
+            resourceIdentity: 'actor:101:element:100047',
+            resourceName: '角色资源',
+            initialValue: 0,
+            maxValue: 12,
+            points: [
+              { timeMs: 500, afterValue: 6 },
+              { timeMs: 1000, afterValue: 12 },
+            ],
+          },
+        ],
+        stateEvents: [
+          {
+            timeMs: 600,
+            runtimeSequenceIndex: 0,
+            actorId: 'actor-1',
+            actionId: 'action-before',
+            payload: {
+              operation: 'transform',
+              stateElementId: 100129,
+              stateName: '强化状态',
+              stateDurationMs: 2000,
+              sourceIdentity: 'battle-element:100129',
+            },
           },
         ],
       },

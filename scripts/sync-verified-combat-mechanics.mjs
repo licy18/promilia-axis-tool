@@ -67,6 +67,16 @@ const ACTION_TIMING_COVERAGE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-combat-action-timing-coverage.md'
 );
+const ACTION_VARIANT_RESOURCE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-action-variant-resource-coverage.json'
+);
+const ACTION_VARIANT_RESOURCE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-action-variant-resource-coverage.md'
+);
 const EFFECT_COVERAGE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -165,6 +175,11 @@ const STATIC_PROPERTY_TABLE_PATHS = Object.freeze(
   )
 );
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
+const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
+  layerControl: '-7197581663443823049',
+  immuneElement: '-6202966891751637497',
+  switchSkillIndex: '4215197971971398012',
+});
 const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
   'charged-attack': ['ground', 2],
   'star-skill': ['ground', 3],
@@ -192,6 +207,8 @@ async function main() {
     path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json')
   );
   const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
+  const specialResourceIdentityDiscovery =
+    discoverSpecialResourceIdentityHints(characterCatalog);
   const skillLogicRows = readJson(SKILL_LOGIC_PATH).rows;
   const skillLogicById = new Map(
     skillLogicRows.map(row => [Number(row.skillId), row])
@@ -203,7 +220,7 @@ async function main() {
     petRows: readJson(PET_PATH).rows,
     skillLogicById,
   });
-  const controlIds = new Set([
+  const publicControlIds = new Set([
     ...candidates.map(candidate => candidate.controlSkillId),
     ...candidates.flatMap(candidate =>
       (candidate.attackInputControls ?? []).map(
@@ -211,6 +228,18 @@ async function main() {
       )
     ),
     ...(evidence.samples ?? []).map(sample => Number(sample.skillId)),
+  ]);
+  const controlIds = new Set([
+    ...publicControlIds,
+    ...(characterCatalog?.items ?? [])
+      .filter(character =>
+        specialResourceIdentityDiscovery.ownerIds.has(Number(character.id))
+      )
+      .flatMap(character =>
+        (character.skillSlots ?? [])
+          .filter(slot => slot.group !== 'passive')
+          .map(slot => Number(slot.skillId))
+      ),
   ]);
   const controls = [...controlIds]
     .filter(Number.isInteger)
@@ -259,6 +288,21 @@ async function main() {
       tuningMechanicsCatalog,
     })
   );
+  const publicControlBindings = controlBindings.filter(binding =>
+    publicControlIds.has(binding.controlSkillId)
+  );
+  const supportControlBindings = controlBindings.filter(
+    binding => !publicControlIds.has(binding.controlSkillId)
+  );
+  const specialResourceCatalog = createSpecialResourceCatalog({
+    discovery: specialResourceIdentityDiscovery,
+    controlBindings,
+  });
+  const actionVariantGraph = createActionVariantGraph({
+    candidates,
+    controlBindings,
+    specialResourceCatalog,
+  });
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
   const spUnitContract = createSpUnitContract({
     templateRows,
@@ -299,16 +343,19 @@ async function main() {
     validation,
     mechanismEvidence,
     candidates,
-    controlBindings,
+    controlBindings: publicControlBindings,
+    supportControlBindings,
     kiboProfiles,
     actorProfiles,
     enemyProfiles,
     spUnitContract,
     staticPropertyCatalog,
     tuningMechanicsCatalog,
+    specialResourceCatalog,
+    actionVariantGraph,
   });
   const semanticEffectCatalog = createSemanticEffectCatalog({
-    controlBindings,
+    controlBindings: publicControlBindings,
     packageValue,
     battleTargetTypeContract,
   });
@@ -332,6 +379,8 @@ async function main() {
     packageValue,
     semanticEffectCatalog
   );
+  const actionVariantResourceCoverage =
+    createActionVariantResourceCoverageReport(packageValue);
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
@@ -356,6 +405,16 @@ async function main() {
     [
       EFFECT_COVERAGE_MARKDOWN_OUTPUT,
       createEffectCoverageMarkdown(effectCoverage),
+    ],
+    [
+      ACTION_VARIANT_RESOURCE_JSON_OUTPUT,
+      `${JSON.stringify(actionVariantResourceCoverage, null, 2)}\n`,
+    ],
+    [
+      ACTION_VARIANT_RESOURCE_MARKDOWN_OUTPUT,
+      createActionVariantResourceCoverageMarkdown(
+        actionVariantResourceCoverage
+      ),
     ],
   ];
   const drift = outputs.filter(([filePath, content]) =>
@@ -471,6 +530,711 @@ function validateEvidence(evidence, validation) {
   ) {
     throw new Error('combat formula evidence is not in verified 18/18 state');
   }
+}
+
+function discoverSpecialResourceIdentityHints(characterCatalog) {
+  const publicCharacterById = new Map(
+    (characterCatalog?.items ?? []).map(character => [
+      Number(character.id),
+      character,
+    ])
+  );
+  const source = readText(IL2CPP_DUMP_PATH);
+  const hints = [];
+  const unresolvedOwners = [];
+  const classPattern =
+    /public class ModuleChargingSkill(\d+)\s*:[^{]+\{([\s\S]*?)(?=\n\})/g;
+  for (const match of source.matchAll(classPattern)) {
+    const classOwnerId = Number(match[1]);
+    const body = match[2];
+    const constants = [
+      ...body.matchAll(/private const int\s+([\w]+)\s*=\s*(\d+)\s*;/g),
+    ].map(value => ({ field: value[1], value: Number(value[2]) }));
+    const ownerConstant = constants.find(value =>
+      /hero.*id/i.test(value.field)
+    );
+    const ownerId = ownerConstant?.value ?? classOwnerId;
+    const character = publicCharacterById.get(ownerId);
+    if (!character) continue;
+    const elementConstants = constants.filter(value =>
+      /elementid$/i.test(value.field)
+    );
+    if (elementConstants.length === 0) {
+      unresolvedOwners.push({
+        ownerId,
+        ownerName: character.name ?? null,
+        moduleClass: `ModuleChargingSkill${classOwnerId}`,
+        reason: 'charging-module-has-no-static-element-identity',
+        sourceIdentity: `${relativeExternalPath(IL2CPP_DUMP_PATH)}#ModuleChargingSkill${classOwnerId}`,
+      });
+      continue;
+    }
+    const primary =
+      elementConstants.find(value => /acc/i.test(value.field)) ??
+      elementConstants.find(value => /burst/i.test(value.field)) ??
+      elementConstants[0];
+    hints.push({
+      ownerId,
+      ownerName: character.name ?? null,
+      moduleClass: `ModuleChargingSkill${classOwnerId}`,
+      primaryElementId: primary.value,
+      primaryElementField: primary.field,
+      stateElements: elementConstants
+        .filter(value => value !== primary)
+        .map(value => ({ elementId: value.value, field: value.field })),
+      sourceIdentity: `${relativeExternalPath(IL2CPP_DUMP_PATH)}#ModuleChargingSkill${classOwnerId}.${primary.field}`,
+    });
+  }
+  return {
+    ownerIds: new Set(hints.map(hint => hint.ownerId)),
+    hints,
+    unresolvedOwners,
+    sourceIdentity: relativeExternalPath(IL2CPP_DUMP_PATH),
+  };
+}
+
+function createSpecialResourceCatalog({ discovery, controlBindings }) {
+  const evidenceSources = new Map();
+  const profiles = (discovery?.hints ?? [])
+    .map(hint => {
+      const primaryAsset = readBattleElementAsset(hint.primaryElementId);
+      if (!primaryAsset) {
+        return {
+          ownerId: hint.ownerId,
+          ownerName: hint.ownerName,
+          resourceIdentity: `actor:${hint.ownerId}:element:${hint.primaryElementId}`,
+          elementId: hint.primaryElementId,
+          status: 'unresolved-special-resource-element-asset-missing',
+          reasons: ['special-resource-element-asset-missing'],
+          applied: false,
+        };
+      }
+      registerEvidenceSource(evidenceSources, primaryAsset);
+      const stateElements = hint.stateElements
+        .map(state => {
+          const asset = readBattleElementAsset(state.elementId);
+          if (!asset) return null;
+          registerEvidenceSource(evidenceSources, asset);
+          return {
+            elementId: state.elementId,
+            field: state.field,
+            pathId: asset.pathId,
+            name: asset.tree.elementName ?? asset.tree.m_Name ?? null,
+            durationMs: finiteNumberOrNull(
+              asset.tree.time ?? asset.tree.duration
+            ),
+            combineType: integerOrNull(asset.tree.combineType),
+            sourceIdentity: asset.sourceIdentity,
+          };
+        })
+        .filter(Boolean);
+      const capacity = resolveSpecialResourceCapacity(primaryAsset.tree);
+      const applied = Number.isFinite(capacity) && capacity > 0;
+      return {
+        ownerId: hint.ownerId,
+        ownerName: hint.ownerName,
+        resourceIdentity: `actor:${hint.ownerId}:element:${hint.primaryElementId}`,
+        elementId: hint.primaryElementId,
+        pathId: primaryAsset.pathId,
+        name: resolveSpecialResourceDisplayName(primaryAsset.tree),
+        sourceName: primaryAsset.tree.elementName ?? primaryAsset.tree.m_Name,
+        capacity: applied ? capacity : null,
+        initialValue: 0,
+        initialValueStatus: 'verified-scenario-initial-element-layer-zero',
+        initialValueSourceIdentity:
+          'AzPrVerifiedSpecialResourceRuntime#empty-runtime-element-state',
+        combineType: integerOrNull(primaryAsset.tree.combineType),
+        stateElements,
+        moduleClass: hint.moduleClass,
+        sourceIdentity: [hint.sourceIdentity, primaryAsset.sourceIdentity].join(
+          '|'
+        ),
+        status: applied
+          ? 'verified-special-resource-profile-ready'
+          : 'unresolved-special-resource-capacity',
+        reasons: applied ? [] : ['special-resource-capacity-unresolved'],
+        applied,
+      };
+    })
+    .sort((left, right) => left.ownerId - right.ownerId);
+  const operationBindings = createSpecialResourceOperationBindings({
+    profiles: profiles.filter(profile => profile.applied),
+    controlBindings,
+  });
+  const unresolvedOwners = [
+    ...(discovery?.unresolvedOwners ?? []),
+    ...profiles
+      .filter(profile => !profile.applied)
+      .map(profile => ({
+        ownerId: profile.ownerId,
+        ownerName: profile.ownerName,
+        reason: profile.reasons?.[0] ?? profile.status,
+        sourceIdentity: profile.sourceIdentity ?? null,
+      })),
+  ];
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-special-resource-catalog',
+    status: 'verified-special-resource-catalog-ready',
+    profiles,
+    operationBindings,
+    unresolvedOwners,
+    evidenceSources: [...evidenceSources.values()].sort((left, right) =>
+      left.id.localeCompare(right.id)
+    ),
+    summary: {
+      profileCount: profiles.length,
+      appliedProfileCount: profiles.filter(profile => profile.applied).length,
+      operationCount: operationBindings.length,
+      appliedOperationCount: operationBindings.filter(
+        operation => operation.applied
+      ).length,
+      unresolvedOperationCount: operationBindings.filter(
+        operation => !operation.applied
+      ).length,
+      unresolvedOwnerCount: unresolvedOwners.length,
+    },
+  };
+}
+
+function readBattleElementAsset(elementId) {
+  const directory = path.join(
+    BATTLE_ROOT,
+    'Element',
+    `ast_${elementId}.asset`,
+    'MonoBehaviour'
+  );
+  if (!fs.existsSync(directory)) return null;
+  const candidates = fs
+    .readdirSync(directory)
+    .filter(fileName => fileName.endsWith('.json'))
+    .map(fileName => {
+      const filePath = path.join(directory, fileName);
+      return { filePath, tree: readJson(filePath) };
+    })
+    .filter(candidate => Number(candidate.tree.elementConfigId) === elementId);
+  if (candidates.length !== 1) return null;
+  const { filePath, tree } = candidates[0];
+  const pathId = path.basename(filePath, '.json').split('__').at(-1);
+  return {
+    elementId,
+    pathId,
+    filePath,
+    tree,
+    sourceIdentity: `${relativeExternalPath(filePath)}#elementConfigId=${elementId}`,
+    sha256: sha256File(filePath),
+    bytes: fs.statSync(filePath).size,
+  };
+}
+
+function registerEvidenceSource(target, asset) {
+  target.set(asset.filePath, {
+    id: `special-resource-element-${asset.elementId}`,
+    sourceIdentity: relativeExternalPath(asset.filePath),
+    sha256: asset.sha256,
+    bytes: asset.bytes,
+  });
+}
+
+function resolveSpecialResourceCapacity(tree = {}) {
+  const combineType = Number(tree.combineType);
+  const combineNumber = Number(tree.combineNumber);
+  if (
+    combineType === 4 &&
+    Number.isFinite(combineNumber) &&
+    combineNumber > 0
+  ) {
+    return combineNumber;
+  }
+  if (combineType === 5) return 1;
+  return null;
+}
+
+function resolveSpecialResourceDisplayName(tree = {}) {
+  const description = String(tree.describe ?? '').trim();
+  const countedObject = description.match(/^\d+\s*发(.+)$/)?.[1]?.trim();
+  if (countedObject) return countedObject;
+  return String(tree.elementName ?? tree.m_Name ?? '角色资源')
+    .replace(/^buff资源\s*/i, '')
+    .replace(/\s+pre_[\w_]+$/i, '')
+    .replace(/buff$/i, '')
+    .trim();
+}
+
+function createSpecialResourceOperationBindings({ profiles, controlBindings }) {
+  const profileByOwnerId = new Map(
+    profiles.map(profile => [profile.ownerId, profile])
+  );
+  const bindings = [];
+  for (const control of controlBindings ?? []) {
+    const ownerId = resolveControlOwnerId(
+      control.controlSkillId,
+      profileByOwnerId.keys()
+    );
+    const profile = profileByOwnerId.get(ownerId);
+    if (!profile) continue;
+    const stateByPathId = new Map(
+      profile.stateElements.map(state => [String(state.pathId), state])
+    );
+    for (const root of control.effectGraph ?? []) {
+      const triggers = createSemanticRootTriggerContracts(control, root);
+      const nodeByIdentity = new Map(
+        root.nodes.map(node => [node.nodeIdentity, node])
+      );
+      for (const node of root.nodes) {
+        const mechanic = node.mechanic;
+        const targetPaths = new Set(
+          (mechanic?.targetPathIds ?? []).map(String)
+        );
+        if (targetPaths.has(String(profile.pathId))) {
+          if (mechanic.kind === 'layer-control') {
+            appendSpecialResourceOperationBindings(bindings, {
+              profile,
+              control,
+              root,
+              node,
+              triggers,
+              operation: 'gain',
+              amountByLevel: node.formula?.valueByLevel ?? {},
+              requiredValue: null,
+            });
+          } else if (
+            mechanic.kind === 'immune-element' &&
+            mechanic.immuneType === 1
+          ) {
+            appendSpecialResourceOperationBindings(bindings, {
+              profile,
+              control,
+              root,
+              node,
+              triggers,
+              operation: mechanic.immuneLayerType === 0 ? 'consume' : 'clear',
+              amountByLevel: null,
+              requiredValue: mechanic.immuneLayerType === 0 ? 1 : 0,
+            });
+          }
+        }
+        for (const [statePathId, state] of stateByPathId) {
+          if (
+            targetPaths.has(statePathId) &&
+            mechanic?.kind === 'immune-element' &&
+            mechanic.immuneType === 1
+          ) {
+            appendSpecialResourceOperationBindings(bindings, {
+              profile,
+              control,
+              root,
+              node,
+              triggers,
+              operation: 'transform-remove',
+              state,
+              amountByLevel: null,
+              requiredValue: 0,
+            });
+          }
+        }
+      }
+      const rootNode = nodeByIdentity.get(`element:${root.rootPathId}`);
+      if (rootNode && String(root.rootPathId) === String(profile.pathId)) {
+        appendSpecialResourceOperationBindings(bindings, {
+          profile,
+          control,
+          root,
+          node: rootNode,
+          triggers,
+          operation: 'gain',
+          amountByLevel: { 1: 1 },
+          requiredValue: null,
+        });
+      }
+      const state = stateByPathId.get(String(root.rootPathId));
+      if (rootNode && state) {
+        appendSpecialResourceOperationBindings(bindings, {
+          profile,
+          control,
+          root,
+          node: rootNode,
+          triggers,
+          operation: 'transform',
+          state,
+          amountByLevel: { 1: 1 },
+          requiredValue: null,
+        });
+      }
+    }
+  }
+  return dedupeBy(bindings, binding => binding.operationIdentity).sort(
+    (left, right) =>
+      left.ownerId - right.ownerId ||
+      left.controlSkillId - right.controlSkillId ||
+      left.subSkillIndex - right.subSkillIndex ||
+      (left.triggerFrame ?? Number.MAX_SAFE_INTEGER) -
+        (right.triggerFrame ?? Number.MAX_SAFE_INTEGER) ||
+      left.operationIdentity.localeCompare(right.operationIdentity)
+  );
+}
+
+function appendSpecialResourceOperationBindings(
+  target,
+  {
+    profile,
+    control,
+    root,
+    node,
+    triggers,
+    operation,
+    state = null,
+    amountByLevel,
+    requiredValue,
+  }
+) {
+  for (const trigger of triggers) {
+    const applied =
+      trigger.resolution === 'static-resolved' &&
+      Number.isInteger(trigger.startFrame) &&
+      (operation !== 'gain' ||
+        Object.values(amountByLevel ?? {}).some(value =>
+          Number.isFinite(value)
+        ));
+    const operationIdentity = [
+      profile.resourceIdentity,
+      control.controlSkillId,
+      root.mapIndex,
+      node.pathId,
+      operation,
+      state?.elementId ?? '',
+      trigger.startFrame ?? 'missing',
+    ].join('|');
+    target.push({
+      operationIdentity,
+      ownerId: profile.ownerId,
+      resourceIdentity: profile.resourceIdentity,
+      controlSkillId: control.controlSkillId,
+      subSkillIndex: root.mapIndex,
+      operation,
+      amountByLevel,
+      requiredValue,
+      stateElementId: state?.elementId ?? null,
+      stateName: state?.name ?? null,
+      stateDurationMs: state?.durationMs ?? null,
+      triggerFrame: Number.isInteger(trigger.startFrame)
+        ? trigger.startFrame
+        : null,
+      frameRate: control.frameRate ?? 60,
+      behaviorPathId: trigger.behaviorPathId,
+      sourceElementId: node.elementId,
+      sourcePathId: node.pathId,
+      sourceIdentity: [
+        root.sourceIdentity,
+        node.sourceIdentity,
+        node.mechanic?.sourceIdentity,
+        trigger.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: applied
+        ? 'verified-special-resource-operation-ready'
+        : 'unresolved-special-resource-operation',
+      reasons: applied ? [] : trigger.reasons,
+      applied,
+    });
+  }
+}
+
+function resolveControlOwnerId(controlSkillId, ownerIds) {
+  const control = String(controlSkillId ?? '');
+  const matches = [...ownerIds].filter(ownerId =>
+    control.startsWith(String(ownerId))
+  );
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function createActionVariantGraph({
+  candidates,
+  controlBindings,
+  specialResourceCatalog,
+}) {
+  const profiles = specialResourceCatalog.profiles.filter(
+    profile => profile.applied
+  );
+  const ownerIds = profiles.map(profile => profile.ownerId);
+  const profileByOwnerId = new Map(
+    profiles.map(profile => [profile.ownerId, profile])
+  );
+  const controlBySkillId = new Map(
+    controlBindings.map(control => [control.controlSkillId, control])
+  );
+  const actionKindsByControl = new Map();
+  const publicActionsByControl = new Map();
+  for (const candidate of candidates ?? []) {
+    if (!ownerIds.includes(candidate.ownerId)) continue;
+    appendMapArray(
+      actionKindsByControl,
+      candidate.controlSkillId,
+      candidate.actionKind
+    );
+    appendMapArray(publicActionsByControl, candidate.controlSkillId, {
+      ownerId: candidate.ownerId,
+      sourceSkillId: candidate.sourceSkillId,
+      actionKind: candidate.actionKind,
+      actionVariantIndex: candidate.actionVariantIndex,
+    });
+    for (const segment of candidate.attackInputControls ?? []) {
+      appendMapArray(
+        actionKindsByControl,
+        segment.controlSkillId,
+        'normal-attack'
+      );
+      appendMapArray(publicActionsByControl, segment.controlSkillId, {
+        ownerId: candidate.ownerId,
+        sourceSkillId: candidate.sourceSkillId,
+        actionKind: 'normal-attack',
+        actionVariantIndex: candidate.actionVariantIndex,
+        attackSequenceIndex: segment.sequenceIndex,
+      });
+    }
+  }
+  const nodes = [];
+  const defaultSelections = [];
+  for (const control of controlBindings) {
+    const ownerId = resolveControlOwnerId(control.controlSkillId, ownerIds);
+    if (!profileByOwnerId.has(ownerId)) continue;
+    for (const variant of control.variants ?? []) {
+      nodes.push({
+        nodeIdentity: createActionVariantNodeIdentity(
+          ownerId,
+          control.controlSkillId,
+          variant.subSkillIndex
+        ),
+        ownerId,
+        controlSkillId: control.controlSkillId,
+        subSkillIndex: variant.subSkillIndex,
+        playerSkillId: variant.playerSkillId,
+        actionKinds: dedupeBy(
+          actionKindsByControl.get(control.controlSkillId) ?? [],
+          value => value
+        ),
+        publicActions: dedupeBy(
+          publicActionsByControl.get(control.controlSkillId) ?? [],
+          value => JSON.stringify(value)
+        ),
+        frameCounts: variant.frameCounts,
+        sourceIdentity: variant.sourceIdentity,
+        status: 'verified-action-variant-node-ready',
+      });
+    }
+    const defaultVariant = (control.variants ?? []).find(
+      variant => variant.subSkillIndex === 0
+    );
+    if (defaultVariant) {
+      defaultSelections.push({
+        ownerId,
+        controlSkillId: control.controlSkillId,
+        subSkillIndex: 0,
+        decisionFrame: 0,
+        sourceIdentity: `${defaultVariant.sourceIdentity}|client-skill-sub-index-default=0`,
+        status: 'verified-default-subskill-selection-ready',
+        applied: true,
+      });
+    }
+  }
+  const nodeIdentities = new Set(nodes.map(node => node.nodeIdentity));
+  const switchBindings = [];
+  for (const control of controlBindings) {
+    const ownerId = resolveControlOwnerId(control.controlSkillId, ownerIds);
+    const profile = profileByOwnerId.get(ownerId);
+    if (!profile) continue;
+    const stateByElementId = new Map(
+      profile.stateElements.map(state => [state.elementId, state])
+    );
+    for (const root of control.effectGraph ?? []) {
+      const triggers = createSemanticRootTriggerContracts(control, root);
+      const rootState = stateByElementId.get(root.rootElementId) ?? null;
+      for (const node of root.nodes ?? []) {
+        if (node.mechanic?.kind !== 'switch-skill-index') continue;
+        const relationPath = resolveEffectGraphRelationPath(
+          root,
+          node.nodeIdentity
+        );
+        const isDirectRoot = node.nodeIdentity === `element:${root.rootPathId}`;
+        const isStateLifecycleChild =
+          Boolean(rootState) &&
+          relationPath.length > 0 &&
+          relationPath.every(edge =>
+            ['injectElementDataList', 'notDelElementDataList'].includes(
+              edge.relation
+            )
+          );
+        const relationResolved = isDirectRoot || isStateLifecycleChild;
+        const targetControlSkillId = node.mechanic.targetControlSkillId;
+        const targetSubSkillIndex = node.mechanic.targetSubSkillIndex;
+        const targetIdentity = createActionVariantNodeIdentity(
+          ownerId,
+          targetControlSkillId,
+          targetSubSkillIndex
+        );
+        const durationMs =
+          positiveFiniteNumberOrNull(node.mechanic.durationMs) ??
+          positiveFiniteNumberOrNull(rootState?.durationMs);
+        const requiredResourceOperation =
+          specialResourceCatalog.operationBindings.find(
+            operation =>
+              operation.ownerId === ownerId &&
+              operation.controlSkillId === targetControlSkillId &&
+              operation.subSkillIndex === targetSubSkillIndex &&
+              operation.operation === 'consume' &&
+              operation.applied
+          ) ?? null;
+        for (const trigger of triggers) {
+          const applied =
+            trigger.resolution === 'static-resolved' &&
+            Number.isInteger(trigger.startFrame) &&
+            nodeIdentities.has(targetIdentity) &&
+            durationMs != null &&
+            relationResolved;
+          switchBindings.push({
+            edgeIdentity: [
+              createActionVariantNodeIdentity(
+                ownerId,
+                control.controlSkillId,
+                root.mapIndex
+              ),
+              targetIdentity,
+              node.pathId,
+              trigger.startFrame ?? 'missing',
+            ].join('->'),
+            ownerId,
+            from: createActionVariantNodeIdentity(
+              ownerId,
+              control.controlSkillId,
+              root.mapIndex
+            ),
+            to: targetIdentity,
+            parentIdentity: root.graphIdentity,
+            sourceRelationPath: relationPath.map(edge => ({
+              relation: edge.relation,
+              from: edge.from,
+              to: edge.to,
+            })),
+            relationType: 'input-derived',
+            inputCommand:
+              (actionKindsByControl.get(targetControlSkillId) ?? [])[0] ??
+              'skill-input',
+            sourceControlSkillId: control.controlSkillId,
+            sourceSubSkillIndex: root.mapIndex,
+            targetControlSkillId,
+            targetSubSkillIndex,
+            skillSlot: node.mechanic.skillSlot,
+            sourceElementId: node.elementId,
+            sourcePathId: node.pathId,
+            activationFrame: Number.isInteger(trigger.startFrame)
+              ? trigger.startFrame
+              : null,
+            decisionFrame: 0,
+            durationMs,
+            condition: rootState
+              ? {
+                  kind: 'resource-state-active',
+                  resourceIdentity: profile.resourceIdentity,
+                  stateElementId: rootState.elementId,
+                  stateName: rootState.name,
+                  sourceIdentity: rootState.sourceIdentity,
+                }
+              : requiredResourceOperation
+                ? {
+                    kind: 'resource-at-least',
+                    resourceIdentity: profile.resourceIdentity,
+                    value: requiredResourceOperation.requiredValue,
+                    sourceIdentity: requiredResourceOperation.sourceIdentity,
+                  }
+                : null,
+            sourceIdentity: [
+              root.sourceIdentity,
+              node.sourceIdentity,
+              node.mechanic.sourceIdentity,
+              trigger.sourceIdentity,
+            ]
+              .filter(Boolean)
+              .join('|'),
+            status: applied
+              ? 'verified-action-variant-edge-ready'
+              : 'unresolved-action-variant-edge',
+            reasons: applied
+              ? []
+              : dedupeBy(
+                  [
+                    ...trigger.reasons,
+                    ...(nodeIdentities.has(targetIdentity)
+                      ? []
+                      : ['switch-target-control-variant-missing']),
+                    ...(durationMs == null
+                      ? ['switch-duration-unresolved']
+                      : []),
+                    ...(relationResolved
+                      ? []
+                      : ['switch-wrapper-relation-unresolved']),
+                  ],
+                  value => value
+                ),
+            applied,
+          });
+        }
+      }
+    }
+  }
+  const dedupedSwitchBindings = dedupeBy(
+    switchBindings,
+    binding => binding.edgeIdentity
+  ).sort(
+    (left, right) =>
+      left.ownerId - right.ownerId ||
+      left.sourceControlSkillId - right.sourceControlSkillId ||
+      (left.activationFrame ?? Number.MAX_SAFE_INTEGER) -
+        (right.activationFrame ?? Number.MAX_SAFE_INTEGER) ||
+      left.edgeIdentity.localeCompare(right.edgeIdentity)
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-action-variant-graph',
+    status: 'verified-action-variant-graph-ready',
+    nodes,
+    edges: dedupedSwitchBindings,
+    defaultSelections,
+    policy: {
+      inputDerivedVariantsAreIndependentInputs: true,
+      sameInputStateTransformSelectsOneVariant: true,
+      automaticFollowUpsRequireExplicitBattleEvidence: true,
+      descriptionsDoNotSelectVariants: true,
+    },
+    summary: {
+      ownerCount: new Set(nodes.map(node => node.ownerId)).size,
+      nodeCount: nodes.length,
+      edgeCount: dedupedSwitchBindings.length,
+      appliedEdgeCount: dedupedSwitchBindings.filter(edge => edge.applied)
+        .length,
+      unresolvedEdgeCount: dedupedSwitchBindings.filter(edge => !edge.applied)
+        .length,
+      resourceConditionEdgeCount: dedupedSwitchBindings.filter(
+        edge => edge.condition?.resourceIdentity
+      ).length,
+      automaticEdgeCount: dedupedSwitchBindings.filter(
+        edge => edge.relationType === 'automatic'
+      ).length,
+    },
+  };
+}
+
+function createActionVariantNodeIdentity(
+  ownerId,
+  controlSkillId,
+  subSkillIndex
+) {
+  return `actor:${ownerId}|control:${controlSkillId}|sub:${subSkillIndex}`;
+}
+
+function positiveFiniteNumberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
 }
 
 function createActionCandidates({
@@ -1749,6 +2513,7 @@ function collectBattleElementChildReferences(tree = {}) {
   const references = [];
   const pathFields = [
     'injectElementDataList',
+    'elementDataList',
     'notDelElementDataList',
     'triggerEffectList',
     'zeroEffectList',
@@ -1817,6 +2582,7 @@ function createBattleEffectGraphNode({
     tuningMechanicsCatalog,
     { kind, elementId }
   );
+  const mechanic = createBattleMechanicNodeContract(tree);
   const levelOverrides =
     overridesBySkillAndElement.get(`${controlSkillId}:${elementId}`) ?? [];
   const effectiveParamsByLevel = Object.fromEntries(
@@ -1849,6 +2615,7 @@ function createBattleEffectGraphNode({
     depth,
     sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
     sourceScriptPathId: String(tree.m_Script?.m_PathID ?? '') || null,
+    mechanic,
     formula: {
       commonFunctionId,
       commonExpression: formulas.get(commonFunctionId) ?? null,
@@ -1955,6 +2722,44 @@ function createBattleEffectGraphNode({
     status: `verified-battle-effect-node-${classification.status}`,
     applied: classification.status === 'applied',
   };
+}
+
+function createBattleMechanicNodeContract(tree = {}) {
+  const sourceScriptPathId = String(tree.m_Script?.m_PathID ?? '');
+  if (sourceScriptPathId === BATTLE_MECHANIC_SCRIPT_PATH_IDS.layerControl) {
+    return {
+      kind: 'layer-control',
+      amountByLevelSource: 'formulaParams.formulaParamValues[0]',
+      targetPathIds: collectNestedPathIds(tree.injectElementDataList),
+      injectType: integerOrNull(tree.injectType),
+      status: 'verified-layer-control-contract-ready',
+      sourceIdentity: `IL2CPP:${sourceScriptPathId}|injectElementDataList|formulaParams.formulaParamValues[0]`,
+    };
+  }
+  if (sourceScriptPathId === BATTLE_MECHANIC_SCRIPT_PATH_IDS.immuneElement) {
+    return {
+      kind: 'immune-element',
+      immuneType: integerOrNull(tree.immuneType),
+      immuneLayerType: integerOrNull(tree.immuneLayerType),
+      destroySelf: integerOrNull(tree.destroySelf),
+      targetPathIds: collectNestedPathIds(tree.elementDataList),
+      status: 'verified-immune-element-contract-ready',
+      sourceIdentity: `IL2CPP:${sourceScriptPathId}|immuneType|immuneLayerType|elementDataList`,
+    };
+  }
+  if (sourceScriptPathId === BATTLE_MECHANIC_SCRIPT_PATH_IDS.switchSkillIndex) {
+    return {
+      kind: 'switch-skill-index',
+      targetControlSkillId: integerOrNull(tree.skillID),
+      targetSubSkillIndex: integerOrNull(tree.subSkillIndex),
+      skillSlot: integerOrNull(tree.skillSlot),
+      durationMs: finiteNumberOrNull(tree.duration ?? tree.time),
+      switchOriginalSkill: Number(tree.switchOriginalSkill) === 1,
+      status: 'verified-switch-skill-index-contract-ready',
+      sourceIdentity: `IL2CPP:${sourceScriptPathId}|skillID|subSkillIndex|duration`,
+    };
+  }
+  return null;
 }
 
 function resolveBattleElementKind(tree) {
@@ -3445,14 +4250,17 @@ function createPackage({
   mechanismEvidence,
   candidates,
   controlBindings,
+  supportControlBindings,
   kiboProfiles,
   actorProfiles,
   enemyProfiles,
   spUnitContract,
   staticPropertyCatalog,
   tuningMechanicsCatalog,
+  specialResourceCatalog,
+  actionVariantGraph,
 }) {
-  const preparedControlBindings = controlBindings.map(binding => {
+  const prepareControlBinding = binding => {
     const hits = createControlRuntimeHits(binding);
     const appliedEffectCount = binding.effects.filter(
       effect => effect.classification === 'applied'
@@ -3467,9 +4275,15 @@ function createPackage({
       confidence: hits.length || appliedEffectCount ? 'high' : 'unresolved',
       applied: hits.length > 0 || appliedEffectCount > 0,
     };
-  });
+  };
+  const preparedControlBindings = controlBindings.map(prepareControlBinding);
+  const preparedSupportControlBindings = supportControlBindings.map(
+    prepareControlBinding
+  );
   const preparedControlBySkillId = new Map(
-    preparedControlBindings.map(binding => [binding.controlSkillId, binding])
+    [...preparedControlBindings, ...preparedSupportControlBindings].map(
+      binding => [binding.controlSkillId, binding]
+    )
   );
   const battleEffectNodes = dedupeBy(
     preparedControlBindings.flatMap(binding =>
@@ -3598,6 +4412,25 @@ function createPackage({
   const packagedControlBindings = preparedControlBindings
     .filter(binding => publishedControlSkillIds.has(binding.controlSkillId))
     .map(createPublishedControlBinding);
+  const supportControlSkillIds = new Set([
+    ...(specialResourceCatalog.operationBindings ?? [])
+      .map(operation => operation.controlSkillId)
+      .filter(Number.isInteger),
+    ...(actionVariantGraph.nodes ?? [])
+      .map(node => node.controlSkillId)
+      .filter(Number.isInteger),
+  ]);
+  const packagedControlSkillIds = new Set(
+    packagedControlBindings.map(binding => binding.controlSkillId)
+  );
+  const packagedSupportControlBindings = dedupeBy(
+    [...preparedControlBindings, ...preparedSupportControlBindings].filter(
+      binding =>
+        supportControlSkillIds.has(binding.controlSkillId) &&
+        !packagedControlSkillIds.has(binding.controlSkillId)
+    ),
+    binding => binding.controlSkillId
+  ).map(createPublishedControlBinding);
   const sourceFiles = [
     ['calculator', CALCULATOR_PATH],
     ['validator', VALIDATOR_PATH],
@@ -3637,6 +4470,7 @@ function createPackage({
     sha256: sha256File(filePath),
     bytes: fs.statSync(filePath).size,
   }));
+  sourceFiles.push(...(specialResourceCatalog.evidenceSources ?? []));
   const packageHash = sha256(
     JSON.stringify({
       region: evidence.region,
@@ -3645,6 +4479,7 @@ function createPackage({
       actionMappings,
       actionBindings,
       controlBindings: packagedControlBindings,
+      actionVariantControlBindings: packagedSupportControlBindings,
       actorProfiles,
       kiboProfiles,
       enemyProfiles,
@@ -3653,13 +4488,15 @@ function createPackage({
       staticPropertyCatalog,
       tuningMechanicsCatalog,
       battleEffectNodes,
+      specialResourceCatalog,
+      actionVariantGraph,
     })
   );
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 10,
+    packageVersion: 11,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -3690,6 +4527,8 @@ function createPackage({
     spUnitContract,
     staticPropertyCatalog,
     tuningMechanicsCatalog,
+    specialResourceCatalog,
+    actionVariantGraph,
     battleEffectCatalog: {
       schemaVersion: 1,
       kind: 'azpr-verified-battle-effect-node-catalog',
@@ -3712,6 +4551,7 @@ function createPackage({
     actionMappings,
     actionBindings,
     controlBindings: packagedControlBindings,
+    actionVariantControlBindings: packagedSupportControlBindings,
     ownerProfiles: {
       actor: actorProfiles,
       kibo: kiboProfiles,
@@ -3732,6 +4572,8 @@ function createPackage({
         mapping => mapping.classification === 'unresolved'
       ).length,
       uniqueControlBindingCount: packagedControlBindings.length,
+      actionVariantSupportControlBindingCount:
+        packagedSupportControlBindings.length,
       uniqueControlHitBindingCount: packagedControlBindings.reduce(
         (sum, binding) => sum + binding.hits.length,
         0
@@ -3760,6 +4602,12 @@ function createPackage({
         0
       ),
       battleEffectNodeCount: battleEffectNodes.length,
+      specialResourceProfileCount:
+        specialResourceCatalog.summary.appliedProfileCount,
+      specialResourceOperationCount:
+        specialResourceCatalog.summary.appliedOperationCount,
+      actionVariantNodeCount: actionVariantGraph.summary.nodeCount,
+      actionVariantEdgeCount: actionVariantGraph.summary.appliedEdgeCount,
       kiboProfileCount: kiboProfiles.length,
       actorProfileCount: actorProfiles.length,
       enemyProfileCount: enemyProfiles.length,
@@ -6341,6 +7189,109 @@ function createActionCoverageMarkdown(report) {
   lines.push(
     '',
     '> `unresolved` 不会进入运行时，也不会被写成 0；完整逐项原因见同名 JSON 报告。'
+  );
+  return `${lines.join('\n')}\n`;
+}
+
+function createActionVariantResourceCoverageReport(packageValue) {
+  const catalog = packageValue.specialResourceCatalog;
+  const graph = packageValue.actionVariantGraph;
+  const owners = catalog.profiles.map(profile => {
+    const operations = catalog.operationBindings.filter(
+      operation => operation.ownerId === profile.ownerId
+    );
+    const edges = graph.edges.filter(edge => edge.ownerId === profile.ownerId);
+    return {
+      ownerId: profile.ownerId,
+      ownerName: profile.ownerName,
+      resourceIdentity: profile.resourceIdentity,
+      resourceName: profile.name,
+      capacity: profile.capacity,
+      initialValue: profile.initialValue,
+      stateElements: profile.stateElements,
+      operationSummary: countValues(
+        operations.map(operation =>
+          operation.applied
+            ? operation.operation
+            : `unresolved:${operation.operation}`
+        )
+      ),
+      actionVariantSummary: {
+        total: edges.length,
+        applied: edges.filter(edge => edge.applied).length,
+        unresolved: edges.filter(edge => !edge.applied).length,
+        resourceConditioned: edges.filter(
+          edge => edge.condition?.resourceIdentity
+        ).length,
+      },
+      unresolvedOperations: operations.filter(operation => !operation.applied),
+      unresolvedVariantEdges: edges.filter(edge => !edge.applied),
+    };
+  });
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-action-variant-resource-coverage',
+    status: 'verified-action-variant-resource-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    summary: {
+      ...catalog.summary,
+      ...graph.summary,
+    },
+    owners,
+    unresolvedOwners: catalog.unresolvedOwners,
+  };
+}
+
+function createActionVariantResourceCoverageMarkdown(report) {
+  const lines = [
+    '# Verified Action Variant And Resource Coverage',
+    '',
+    `- Package: \`${report.packageId}\``,
+    `- Resource profiles: ${report.summary.appliedProfileCount}/${report.summary.profileCount}`,
+    `- Resource operations: ${report.summary.appliedOperationCount}/${report.summary.operationCount}`,
+    `- Variant edges: ${report.summary.appliedEdgeCount}/${report.summary.edgeCount}`,
+    `- Variant nodes: ${report.summary.nodeCount}`,
+    '',
+    '| Owner | Resource | Capacity | Operations | Variant edges |',
+    '| --- | --- | ---: | --- | ---: |',
+    ...report.owners.map(owner => {
+      const operations = Object.entries(owner.operationSummary)
+        .map(([key, value]) => `${key}=${value}`)
+        .join(', ');
+      return `| ${owner.ownerName ?? owner.ownerId} (${owner.ownerId}) | ${owner.resourceName} | ${owner.capacity ?? 'unresolved'} | ${operations || '-'} | ${owner.actionVariantSummary.applied}/${owner.actionVariantSummary.total} |`;
+    }),
+    '',
+    '## Unresolved summary',
+    '',
+  ];
+  const unresolved = [
+    ...report.unresolvedOwners.map(owner => ({
+      identity: `owner:${owner.ownerId}`,
+      reasons: [owner.reason],
+    })),
+    ...report.owners.flatMap(owner => [
+      ...owner.unresolvedOperations.map(operation => ({
+        identity: operation.operationIdentity,
+        reasons: operation.reasons,
+      })),
+      ...owner.unresolvedVariantEdges.map(edge => ({
+        identity: edge.edgeIdentity,
+        reasons: edge.reasons,
+      })),
+    ]),
+  ];
+  const reasonCounts = countValues(
+    unresolved.flatMap(item => item.reasons ?? ['unresolved'])
+  );
+  lines.push(
+    ...(unresolved.length
+      ? Object.entries(reasonCounts).map(
+          ([reason, count]) => `- ${reason}: ${count}`
+        )
+      : ['- None.']),
+    '',
+    'Complete unresolved identities and source evidence are retained in `verified-action-variant-resource-coverage.json`.'
   );
   return `${lines.join('\n')}\n`;
 }

@@ -1142,6 +1142,10 @@ const props = defineProps({
       applied: false,
     }),
   },
+  verifiedCombatRuntime: {
+    type: Object,
+    default: null,
+  },
   controlledActorTimeline: {
     type: Object,
     default: () => ({
@@ -1670,6 +1674,7 @@ const timelineLanes = computed(() => {
   const allLanes = [
     ...actorGroups.flatMap(group => [
       group.actionLane,
+      ...group.specialResourceLanes,
       group.energyCurveLane,
       group.kiboLane,
       group.kiboEnergyCurveLane,
@@ -1758,6 +1763,9 @@ function createTimelineActorGroups() {
     const kibo = props.kibos.find(
       item => Number(item.id) === Number(topology.kiboLane?.kiboId)
     );
+    const specialResourceCurves = (
+      props.runtimeStateCurves?.resources?.curvesBySpecialResource ?? []
+    ).filter(curve => curve.actorId === actor.id);
     return {
       actionLane: createEmptyTimelineLane({
         id: topology.actionLane?.laneId ?? actor.id,
@@ -1769,6 +1777,33 @@ function createTimelineActorGroups() {
         editable: true,
         identity,
       }),
+      specialResourceLanes: specialResourceCurves.map(curve =>
+        createEmptyTimelineLane({
+          id: `special-resource-${actor.id}-${curve.elementId}`,
+          kind: 'actor-special-resource-curve',
+          type: 'curve',
+          actorId: actor.id,
+          name: curve.resourceName,
+          detail: actor.name,
+          editable: false,
+          identity: {
+            ...identity,
+            kind: 'special-resource',
+            resourceIdentity: curve.resourceIdentity,
+            accentColor: identity.accentColor,
+          },
+          curve: createTimelineStateCurve({
+            trackKey: curve.trackKey,
+            actorId: actor.id,
+            curveKind: 'special-resource',
+            resourceIdentity: curve.resourceIdentity,
+            resourceName: curve.resourceName,
+            color: identity.accentColor,
+            fallbackInitialValue: curve.initialValue,
+            fallbackMaxValue: curve.maxValue,
+          }),
+        })
+      ),
       kiboLane: createEmptyTimelineLane({
         id: topology.kiboLane?.laneId ?? `kibo-fallback-${index + 1}`,
         kind: 'actor-kibo',
@@ -2176,6 +2211,10 @@ function createTimelineStateCurve({
   actorId = '',
   slotId = '',
   kiboId = null,
+  curveKind = null,
+  resourceIdentity = null,
+  resourceName = null,
+  color = null,
   fallbackInitialValue = 0,
   fallbackMaxValue = null,
 }) {
@@ -2183,6 +2222,10 @@ function createTimelineStateCurve({
     actorId,
     slotId,
     kiboId,
+    curveKind,
+    resourceIdentity,
+    resourceName,
+    color,
   });
   const stateMetric = runtimeCurve?.stateMetric ?? null;
   const initialValue = numberOrZero(
@@ -2208,6 +2251,10 @@ function createTimelineStateCurve({
     actorId,
     slotId,
     kiboId,
+    curveKind,
+    resourceIdentity,
+    resourceName,
+    color,
     initialValue,
     currentValue: displaySeries.currentValue,
     cursorValue,
@@ -2224,6 +2271,13 @@ function createTimelineStateCurve({
 }
 
 function resolveRuntimeStateCurve(trackKey, { actorId, slotId, kiboId }) {
+  if (String(trackKey).startsWith('specialResource:')) {
+    return (
+      props.runtimeStateCurves?.resources?.curvesBySpecialResource?.find(
+        curve => curve.trackKey === trackKey && curve.actorId === actorId
+      ) ?? null
+    );
+  }
   if (trackKey === 'selfEnergyChange') {
     return (
       props.runtimeStateCurves?.resources?.curvesByActor?.find(
@@ -2404,12 +2458,23 @@ function formatActionPlacementPreviewTitle(action) {
 function getTimelineActionWidthPercent(action, leftPercent = 0) {
   const durationMs = Math.max(
     MIN_ACTION_DURATION_MS,
-    Number(action.durationMs) || DEFAULT_TIMELINE_ACTION_DURATION_MS
+    resolveTimelineActionDurationMs(action)
   );
   return clampPercent(
     (durationMs / props.durationMs) * 100,
     0,
     Math.max(0, 100 - leftPercent)
+  );
+}
+
+function resolveTimelineActionDurationMs(action) {
+  const resolution = props.verifiedCombatRuntime?.actionResolutionById?.get?.(
+    action.id
+  );
+  return (
+    Number(resolution?.actionBinding?.actualDurationMs) ||
+    Number(action.durationMs) ||
+    DEFAULT_TIMELINE_ACTION_DURATION_MS
   );
 }
 
@@ -2821,14 +2886,17 @@ function resolveActionLaneId(action) {
 }
 
 function selectTimelineCurveNode(lane, point) {
-  if (lane?.curve?.curveKind === 'tuning-mark') {
+  if (['tuning-mark', 'special-resource'].includes(lane?.curve?.curveKind)) {
     if (point.actionId) {
       emit('select-action', { actionId: point.actionId, mode: 'replace' });
     }
     emitTimelineFrame({
       frameIndex: point.frameIndex,
       timeMs: point.timeMs,
-      source: 'timeline-tuning-mark-curve',
+      source:
+        lane.curve.curveKind === 'special-resource'
+          ? 'timeline-special-resource-curve'
+          : 'timeline-tuning-mark-curve',
     });
     return;
   }
@@ -2861,7 +2929,7 @@ function selectRuntimeCurveBreakpoint(point) {
 }
 
 function isTimelineCurveNodeSelected(lane, point) {
-  if (lane?.curve?.curveKind === 'tuning-mark') {
+  if (['tuning-mark', 'special-resource'].includes(lane?.curve?.curveKind)) {
     return Boolean(
       point.actionId &&
       point.actionId === flowSelectedActionId.value &&
@@ -2883,6 +2951,22 @@ function timelineCurveStyle(lane) {
 }
 
 function formatTimelineCurveNodeTitle(lane, point) {
+  if (lane?.curve?.curveKind === 'special-resource') {
+    const operationLabels = {
+      gain: '获取',
+      consume: '消耗',
+      clear: '清空',
+      transform: '转化',
+      'transform-remove': '退出形态',
+      expire: '到期',
+    };
+    const operations = (point.eventKinds ?? [])
+      .map(kind => operationLabels[kind] ?? kind)
+      .join(' / ');
+    return `${point.frameIndex}F · ${lane.curve.resourceName}${operations ? ` ${operations}` : ''} · ${formatCompactNumber(
+      point.beforeValue
+    )} -> ${formatCompactNumber(point.afterValue)}`;
+  }
   if (lane?.curve?.curveKind !== 'tuning-mark') {
     return formatRuntimeCurveNodeTitle(point);
   }

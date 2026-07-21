@@ -15,6 +15,7 @@ import {
 } from '../mechanics/verifiedCombatRuntime';
 import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattleEffectGeneration';
 import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
+import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
 
 export function simulateScenario(
   scenario,
@@ -237,6 +238,7 @@ export function simulateScenario(
     verifiedCombatRuntime,
     verifiedBattleEffectGeneration: runtimeBundle.effectGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
+    verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
     kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
     threeValueMechanicsAdapterRegistry,
   });
@@ -247,8 +249,15 @@ function createVerifiedRuntimeBundle({
   actionExecutionPlan,
   controlledActorTimeline,
 }) {
+  const actionVariantRuntime = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedActionVariantRuntime({ scenario, actionExecutionPlan })
+    : null;
   const effectGeneration = isVerifiedCombatMechanicsScenario(scenario)
-    ? createVerifiedBattleEffectGeneration({ scenario, actionExecutionPlan })
+    ? createVerifiedBattleEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+      })
     : null;
   const tuningGeneration = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedTuningMarkGeneration({
@@ -272,8 +281,10 @@ function createVerifiedRuntimeBundle({
     effectGeneration,
     tuningGeneration,
     effectTimeline,
+    actionVariantRuntime,
   });
   return {
+    actionVariantRuntime,
     effectGeneration,
     tuningGeneration,
     effectTimeline,
@@ -303,7 +314,9 @@ function applyVerifiedResourceExecutionBlocks({
     message:
       block.status === 'unresolved'
         ? `${block.actionName} 的已验证资源消耗来源或作用对象不完整`
-        : `${block.actionName} 需要 SP ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`,
+        : block.resourceName
+          ? `${block.actionName} 需要${block.resourceName} ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`
+          : `${block.actionName} 需要 SP ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`,
     source: {
       sourceKind: block.sourceKind,
       sourceStatus: block.reason,

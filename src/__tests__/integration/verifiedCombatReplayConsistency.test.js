@@ -22,6 +22,7 @@ import {
   createWorkbenchActionDraft,
   createWorkbenchProject,
   getWorkbenchGameData,
+  normalizeWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
 import {
   createWorkbenchProjectPngMetadata,
@@ -277,6 +278,63 @@ describe('verified combat project replay consistency', () => {
       expect(signature).toEqual(runtimeSignatures[0]);
     }
   });
+
+  it('rebuilds the selected variant and special resource curve across all five project carriers', async () => {
+    const source = createSpecialResourceReplayDraft();
+    const duplicated = duplicateWorkbenchScenario(
+      source.scenarioWorkspace,
+      source.scenarioWorkspace.activeScenarioId,
+      source
+    );
+    const storage = createMemoryStorage();
+    saveWorkbenchDraft(storage, source);
+    const local = loadWorkbenchDraft(storage);
+    const json = parseWorkbenchProjectFile(
+      serializeWorkbenchProjectFile(source, EXPORTED_AT)
+    );
+    const share = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(source, EXPORTED_AT)
+    );
+    const png = await embedWorkbenchProjectInPng(
+      new Uint8Array(Buffer.from(ONE_PIXEL_PNG_BASE64, 'base64')),
+      createWorkbenchProjectPngMetadata(source, EXPORTED_AT)
+    );
+    const pngDraft = await parseWorkbenchProjectPng(png);
+    const signatures = [
+      duplicated.scenario.draft,
+      local,
+      json,
+      share,
+      pngDraft,
+    ].map(createVerifiedReplaySignature);
+
+    expect(signatures[0]).toMatchObject({
+      variantSelectionSignature: [
+        [
+          'verified-replay-jade-charged',
+          10101010,
+          2,
+          'verified-active-switch-skill-index-window',
+        ],
+      ],
+      specialResourceEventSignature: [
+        ['verified-replay-jade-charged', 0, 'clear', 24, 0],
+        ['verified-replay-jade-charged', 0, 'transform', 0, 0],
+        ['verified-replay-jade-charged', 10000, 'expire', 0, 0],
+      ],
+      specialResourceCurveSignature: [
+        ['actor-101010', 'actor:101010:element:101010115', 24, 0, 100],
+      ],
+    });
+    expect(
+      signatures[0].damageSignature.filter(
+        event => event[0] === 'verified-replay-jade-charged'
+      ).length
+    ).toBeGreaterThan(0);
+    for (const signature of signatures.slice(1)) {
+      expect(signature).toEqual(signatures[0]);
+    }
+  });
 });
 
 function createAttackInputReplayDraft() {
@@ -498,6 +556,66 @@ function createCrossCatalogReplayDraft() {
   );
 }
 
+function createSpecialResourceReplayDraft() {
+  const base = createDefaultWorkbenchDraftState();
+  const teamSlots = [
+    { slotId: 'team-slot-1', position: 0, characterId: 101010 },
+    { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+    { slotId: 'team-slot-3', position: 2, characterId: 101003 },
+  ];
+  const selection = {
+    ...base.selection,
+    characterId: 101010,
+    secondaryCharacterId: 101007,
+  };
+  return createWorkbenchDraftSnapshot(
+    {
+      ...base,
+      selection,
+      teamSlots,
+      actorConfigs: normalizeWorkbenchActorConfigs([], selection, teamSlots),
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+      actionDrafts: [
+        createWorkbenchActionDraft({
+          id: 'verified-replay-jade-charged',
+          type: 'skill',
+          actorCharacterId: 101010,
+          skillId: 10101001,
+          actionVariantIndex: 2,
+          startMs: 0,
+          durationMs: 1000,
+        }),
+      ],
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: 'actor-101010',
+            characterId: 101010,
+            actorName: '涂山小玉',
+            resourceIdentity: 'actor:101010:element:101010115',
+            resourceName: '爆发状态叠层',
+            currentValue: 24,
+            maxValue: 100,
+            activeStates: [
+              {
+                elementId: 101010129,
+                name: '爆发状态buff',
+                remainingDurationMs: 3000,
+                sourceActionId: 'previous-cycle-ultimate',
+                sourceIdentity: 'battle-element:101010129',
+              },
+            ],
+          },
+        ],
+      },
+      runtimeSampleCaptures: [],
+      selectedActionId: 'verified-replay-jade-charged',
+    },
+    EXPORTED_AT
+  );
+}
+
 function createVerifiedReplaySignature(draft) {
   const project = createWorkbenchProject(draft.selection, {
     teamSlots: draft.teamSlots,
@@ -593,6 +711,32 @@ function createVerifiedReplaySignature(draft) {
         node.actionId,
         node.eventKinds,
       ]),
+    ]),
+    variantSelectionSignature: (
+      result.verifiedCombatRuntime.specialResourceRuntime?.selections ?? []
+    ).map(selection => [
+      selection.actionId,
+      selection.controlSkillId,
+      selection.selectedSubSkillIndex,
+      selection.sourceKind,
+    ]),
+    specialResourceEventSignature: (
+      result.verifiedCombatRuntime.specialResourceRuntime?.resourceEvents ?? []
+    ).map(event => [
+      event.actionId,
+      event.timeMs,
+      event.payload.operation,
+      event.payload.beforeValue,
+      event.payload.afterValue,
+    ]),
+    specialResourceCurveSignature: (
+      resources.curvesBySpecialResource ?? []
+    ).map(curve => [
+      curve.actorId,
+      curve.resourceIdentity,
+      curve.initialValue,
+      curve.currentValue,
+      curve.maxValue,
     ]),
     finalState: result.verifiedCombatRuntime.finalState,
     spUnitSignature: {
