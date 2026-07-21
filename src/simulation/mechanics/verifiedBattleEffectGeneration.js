@@ -5,6 +5,7 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
@@ -34,84 +35,96 @@ export function createVerifiedBattleEffectGeneration({
       resolveVerifiedCombatActionMechanics(action);
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
-    for (const effect of resolution.effects ?? []) {
+    for (const effect of resolution.semanticEffects ??
+      resolution.effects ??
+      []) {
+      if (effect.role && effect.role !== 'gameplay-effect') continue;
+      if (effect.tuningMark || effect.tuningOverlimit) continue;
       if (effect.classification !== 'applied') {
         unresolved.push(createUnresolvedEffect(action, effect));
         continue;
       }
-      const target = resolveEffectTarget({ action, effect, scenario });
+      const targets = resolveEffectTargets({ action, effect, scenario });
       const timeMs = resolveEffectTimeMs(action, effect, resolution);
-      const value = resolveEffectValue(action, effect, resolution);
-      if (!target || timeMs == null || value == null) {
+      const formulaResult = resolveEffectValue(action, effect, resolution);
+      const value = formulaResult.value;
+      if (targets.length === 0 || timeMs == null || value == null) {
         unresolved.push(
           createUnresolvedEffect(action, effect, [
-            !target ? 'generated-effect-target-unresolved' : null,
+            targets.length === 0 ? 'generated-effect-target-unresolved' : null,
             timeMs == null ? 'generated-effect-time-unresolved' : null,
             value == null ? 'generated-effect-value-unresolved' : null,
+            formulaResult.reason,
           ])
         );
         continue;
       }
-      if (effect.propertyChange) {
-        effectCommands.push(
-          createPropertyEffectCommand({
-            action,
-            effect,
-            target,
-            timeMs,
-            value,
-            resolution,
-          })
+      for (const target of targets) {
+        if (effect.propertyChange) {
+          effectCommands.push(
+            createPropertyEffectCommand({
+              action,
+              effect,
+              target,
+              timeMs,
+              value,
+              formulaResult,
+              resolution,
+            })
+          );
+          continue;
+        }
+        if (effect.directSp) {
+          directSpEvents.push(
+            createDirectEvent({
+              kind: 'direct-sp',
+              action,
+              effect,
+              target,
+              timeMs,
+              value,
+              formulaResult,
+              resolution,
+            })
+          );
+          continue;
+        }
+        if (effect.heal) {
+          directHpEvents.push(
+            createDirectEvent({
+              kind: 'direct-heal',
+              action,
+              effect,
+              target,
+              timeMs,
+              value,
+              formulaResult,
+              resolution,
+            })
+          );
+          continue;
+        }
+        if (effect.shield) {
+          shieldEvents.push(
+            createDirectEvent({
+              kind: 'direct-shield',
+              action,
+              effect,
+              target,
+              timeMs,
+              value,
+              formulaResult,
+              resolution,
+            })
+          );
+          continue;
+        }
+        unresolved.push(
+          createUnresolvedEffect(action, effect, [
+            'generated-effect-runtime-kind-unresolved',
+          ])
         );
-        continue;
       }
-      if (effect.directSp) {
-        directSpEvents.push(
-          createDirectEvent({
-            kind: 'direct-sp',
-            action,
-            effect,
-            target,
-            timeMs,
-            value,
-            resolution,
-          })
-        );
-        continue;
-      }
-      if (effect.heal) {
-        directHpEvents.push(
-          createDirectEvent({
-            kind: 'direct-heal',
-            action,
-            effect,
-            target,
-            timeMs,
-            value,
-            resolution,
-          })
-        );
-        continue;
-      }
-      if (effect.shield) {
-        shieldEvents.push(
-          createDirectEvent({
-            kind: 'direct-shield',
-            action,
-            effect,
-            target,
-            timeMs,
-            value,
-            resolution,
-          })
-        );
-        continue;
-      }
-      unresolved.push(
-        createUnresolvedEffect(action, effect, [
-          'generated-effect-runtime-kind-unresolved',
-        ])
-      );
     }
   }
 
@@ -153,10 +166,12 @@ function createPropertyEffectCommand({
   target,
   timeMs,
   value,
+  formulaResult,
   resolution,
 }) {
+  const effectIdentity = resolveEffectIdentity(effect);
   return {
-    id: `verified-effect|${action.id}|${effect.effectIdentity}`,
+    id: `verified-effect|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: action.actorId,
@@ -173,14 +188,14 @@ function createPropertyEffectCommand({
     maxStacks: effect.lifecycle?.maxStacks ?? 1,
     tags: effect.lifecycle?.tags ?? [],
     sourceStatus: 'verified-battle-effect-generated',
-    confidence: effect.confidence,
+    confidence: effect.confidence ?? 'high',
     trackingStatus: 'applied',
     sourceIdentity: {
       packageId: resolution.packageId,
       packageHash: resolution.packageHash,
       actionBindingIdentity: resolution.actionBinding.identity,
-      effectIdentity: effect.effectIdentity,
-      sourceIdentity: effect.sourceIdentity,
+      effectIdentity,
+      sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
     },
     modifiers: [
       {
@@ -188,8 +203,10 @@ function createPropertyEffectCommand({
         attributeId: effect.propertyChange.attributeId,
         bucket: effect.propertyChange.bucket,
         valueRaw: value,
+        formulaResult,
         propertyTags: effect.propertyChange.defaultPropertyTags ?? [],
-        sourceIdentity: effect.sourceIdentity,
+        sourceIdentity:
+          effect.sourceIdentity ?? effect.sourceIdentities ?? null,
       },
     ],
     appliedToCalculators: true,
@@ -211,13 +228,15 @@ function createDirectEvent({
   target,
   timeMs,
   value,
+  formulaResult,
   resolution,
 }) {
+  const effectIdentity = resolveEffectIdentity(effect);
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-battle-direct-effect',
     status: 'verified-battle-direct-effect-ready',
-    eventIdentity: `${kind}|${action.id}|${effect.effectIdentity}`,
+    eventIdentity: `${kind}|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
     kind,
     timeMs,
     action,
@@ -225,24 +244,48 @@ function createDirectEvent({
     actorId: action.actorId,
     target,
     value,
+    formulaResult,
     effect,
     resolution,
-    sourceIdentity: effect.sourceIdentity,
+    sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
     appliedToCalculators: true,
     applied: true,
   };
 }
 
-function resolveEffectTarget({ action, effect, scenario }) {
+function resolveEffectTargets({ action, effect, scenario }) {
   if (effect.target?.kind === 'enemy') {
     return scenario.enemy?.id
-      ? { kind: EFFECT_TARGET_KINDS.ENEMY, id: scenario.enemy.id }
-      : null;
+      ? [{ kind: EFFECT_TARGET_KINDS.ENEMY, id: scenario.enemy.id }]
+      : [];
   }
-  if (effect.target?.kind !== 'source-owner') return null;
-  return action.type === ACTION_TYPES.KIBO_EVENT
-    ? { kind: EFFECT_TARGET_KINDS.KIBO, id: action.actorId }
-    : { kind: EFFECT_TARGET_KINDS.ACTOR, id: action.actorId };
+  if (
+    ['source-owner', 'owner-actor', 'controlling-actor', 'player'].includes(
+      effect.target?.kind
+    )
+  ) {
+    return [
+      action.type === ACTION_TYPES.KIBO_EVENT &&
+      effect.target?.kind === 'source-owner'
+        ? { kind: EFFECT_TARGET_KINDS.KIBO, id: action.actorId }
+        : { kind: EFFECT_TARGET_KINDS.ACTOR, id: action.actorId },
+    ];
+  }
+  if (effect.target?.kind === 'team-actors') {
+    return (scenario.actors ?? []).map(actor => ({
+      kind: EFFECT_TARGET_KINDS.ACTOR,
+      id: actor.id,
+    }));
+  }
+  if (effect.target?.kind === 'team-kibos') {
+    return (scenario.actors ?? [])
+      .filter(actor => Number(actor.loadout?.kiboId) > 0)
+      .map(actor => ({
+        kind: EFFECT_TARGET_KINDS.KIBO,
+        id: actor.id,
+      }));
+  }
+  return [];
 }
 
 function resolveEffectTimeMs(action, effect, resolution) {
@@ -253,20 +296,13 @@ function resolveEffectTimeMs(action, effect, resolution) {
 }
 
 function resolveEffectValue(action, effect, resolution) {
-  const values =
-    effect.propertyChange?.valueByLevel ??
-    effect.directSp?.valueByLevel ??
-    effect.heal?.valueByLevel ??
-    effect.shield?.valueByLevel;
-  if (!values) return null;
   const level = clampInteger(
     action.level ?? resolution.actionBinding?.controlVariantSkillLevel,
     1,
     12,
     1
   );
-  const value = Number(values[level] ?? values[String(level)]);
-  return Number.isFinite(value) ? value : null;
+  return evaluateVerifiedBattleEffectFormula({ effect, level });
 }
 
 function normalizeDuration(value) {
@@ -283,16 +319,20 @@ function normalizeStackMode(value) {
 function createUnresolvedEffect(action, effect, reasons = []) {
   return {
     actionId: action.id,
-    effectIdentity: effect.effectIdentity,
+    effectIdentity: resolveEffectIdentity(effect),
     kind: effect.kind,
     dimensions: effect.dimensions,
     reasons: [
       ...new Set([...(effect.reasons ?? []), ...reasons.filter(Boolean)]),
     ],
-    sourceIdentity: effect.sourceIdentity,
+    sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
     status: 'verified-battle-effect-generation-unresolved',
     applied: false,
   };
+}
+
+function resolveEffectIdentity(effect) {
+  return effect.semanticIdentity ?? effect.effectIdentity;
 }
 
 function clampInteger(value, minimum, maximum, fallback) {

@@ -29,7 +29,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 11,
+      packageVersion: 12,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -61,6 +61,9 @@ describe('verified combat mechanics package', () => {
         unresolvedAttackInputSegmentCount: 47,
         appliedAttackInputTimingCount: 64,
         unresolvedAttackInputTimingCount: 31,
+        semanticEffectCount: 3122,
+        semanticGameplayEffectCount: 1583,
+        semanticAppliedEffectCount: 379,
       },
       mechanismEvidence: {
         contractName: 'AzPrVerifiedMechanismEvidenceManifest',
@@ -106,6 +109,9 @@ describe('verified combat mechanics package', () => {
           unresolvedNodeCount: 2553,
         },
       },
+      semanticEffectCatalog: {
+        status: 'verified-semantic-battle-effect-runtime-catalog-ready',
+      },
       tuningMechanicsCatalog: {
         status: 'verified-tuning-mechanics-catalog-ready',
         summary: {
@@ -147,6 +153,17 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
+      semanticEffectCount: 3122,
+      semanticGameplayEffectCount: 1583,
+      semanticStructuralCount: 1539,
+      semanticAppliedCount: 379,
+      semanticVerifiedZeroCount: 2,
+      semanticUnresolvedCount: 1202,
+      semanticPlacementCounts: {
+        'runtime-dependent': 83,
+        'static-evidence-gap': 366,
+        'static-resolved': 1134,
+      },
       effectBindingCount: 3335,
       appliedEffectBindingCount: 125,
       verifiedZeroEffectBindingCount: 2,
@@ -247,6 +264,7 @@ describe('verified combat mechanics package', () => {
         unresolvedEdgeCount: 233,
       },
     });
+    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1351);
     expect(variantResourceCoverage.summary).toMatchObject({
       profileCount: 2,
       appliedProfileCount: 2,
@@ -623,6 +641,52 @@ describe('verified combat mechanics package', () => {
     expect(resolution.hits.every(hit => hit.mapIndex === 0)).toBe(true);
     expect(resolution.hits.length).toBeLessThan(
       resolution.controlBinding.hits.length
+    );
+  });
+
+  it('hydrates deduplicated semantic effects for the selected action variant', () => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    const resolution = resolveVerifiedCombatActionMechanics({
+      id: 'fire-kibo-signature',
+      type: 'kiboEvent',
+      skillId: 50003901,
+      actionVariantIndex: 0,
+      kiboId: 500039,
+      actor: {
+        characterId: 101007,
+        loadout: { kiboId: 500039 },
+      },
+    });
+
+    expect(mechanicsPackage.semanticEffectCatalog.summary).toMatchObject({
+      fullSemanticEffectCount: 3122,
+      runtimeEffectCount: 304,
+      runtimeFormulaCount: 55,
+    });
+    expect(
+      mechanicsPackage.semanticEffectCatalog.semanticEffects.every(
+        effect =>
+          effect.role === 'gameplay-effect' &&
+          effect.classification === 'applied' &&
+          effect.placementResolution === 'static-resolved'
+      )
+    ).toBe(true);
+    expect(resolution.semanticEffects).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          role: 'gameplay-effect',
+          classification: 'applied',
+          target: expect.objectContaining({ kind: 'team-actors' }),
+          formula: expect.objectContaining({
+            commonFunctionId: 1,
+            baseFunctionId: 5,
+            parameterSets: expect.any(Array),
+          }),
+        }),
+        expect.objectContaining({
+          target: expect.objectContaining({ kind: 'team-kibos' }),
+        }),
+      ])
     );
   });
 

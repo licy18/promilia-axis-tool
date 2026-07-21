@@ -359,6 +359,26 @@ async function main() {
     packageValue,
     battleTargetTypeContract,
   });
+  packageValue.semanticEffectCatalog = createSemanticEffectRuntimeCatalog(
+    semanticEffectCatalog
+  );
+  packageValue.packageHash = sha256(
+    JSON.stringify({
+      basePackageHash: packageValue.packageHash,
+      semanticEffectCatalog,
+    })
+  );
+  packageValue.summary.semanticEffectCount =
+    semanticEffectCatalog.semanticEffects.length;
+  packageValue.summary.semanticGameplayEffectCount =
+    semanticEffectCatalog.semanticEffects.filter(
+      effect => effect.role === 'gameplay-effect'
+    ).length;
+  packageValue.summary.semanticAppliedEffectCount =
+    semanticEffectCatalog.semanticEffects.filter(
+      effect =>
+        effect.role === 'gameplay-effect' && effect.classification === 'applied'
+    ).length;
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
     packageValue,
@@ -1985,7 +2005,11 @@ function classifyBattleTargetMember(enumName, enumMember) {
     return (
       {
         Enemy: targetMember('enemy'),
-        Ally: targetMember('ally'),
+        Ally: targetMember(
+          'ally',
+          'runtime-dependent',
+          'runtime-target-selection-ally'
+        ),
         Any: targetMember(
           'any',
           'runtime-dependent',
@@ -2592,6 +2616,9 @@ function createBattleEffectGraphNode({
       return [level, applyLevelOverride(baseValues, override?.valueParam)];
     })
   );
+  const formulaParameterContract = createFormulaParameterContract(
+    effectiveParamsByLevel
+  );
   const classification = classifyBattleEffectNode({
     tree,
     kind,
@@ -2621,6 +2648,7 @@ function createBattleEffectGraphNode({
       commonExpression: formulas.get(commonFunctionId) ?? null,
       baseFunctionId,
       baseExpression: formulas.get(baseFunctionId) ?? null,
+      ...formulaParameterContract,
       valueByLevel: Object.fromEntries(
         Object.entries(effectiveParamsByLevel).map(([level, values]) => [
           level,
@@ -2722,6 +2750,24 @@ function createBattleEffectGraphNode({
     status: `verified-battle-effect-node-${classification.status}`,
     applied: classification.status === 'applied',
   };
+}
+
+function createFormulaParameterContract(paramsByLevel) {
+  const parameterSets = [];
+  const setIndexByValue = new Map();
+  const levelParameterSetIndices = [];
+  for (let level = 1; level <= 12; level += 1) {
+    const values = paramsByLevel[level] ?? paramsByLevel[String(level)] ?? [];
+    const key = JSON.stringify(values);
+    let setIndex = setIndexByValue.get(key);
+    if (setIndex == null) {
+      setIndex = parameterSets.length;
+      setIndexByValue.set(key, setIndex);
+      parameterSets.push(values);
+    }
+    levelParameterSetIndices.push(setIndex);
+  }
+  return { parameterSets, levelParameterSetIndices };
 }
 
 function createBattleMechanicNodeContract(tree = {}) {
@@ -4290,6 +4336,11 @@ function createPackage({
       binding.effectGraph.flatMap(root =>
         root.nodes.map(node => ({
           ...node,
+          formula: {
+            ...node.formula,
+            parameterSets: undefined,
+            levelParameterSetIndices: undefined,
+          },
           catalogIdentity: createBattleEffectCatalogIdentity(
             binding.controlSkillId,
             node.nodeIdentity
@@ -4496,7 +4547,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 11,
+    packageVersion: 12,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -4842,13 +4893,69 @@ function createSemanticEffectCatalog({
         numeric: true,
       })
     );
+  const formulas = dedupeBy(
+    semanticEffects.map(effect => ({
+      formulaIdentity: createSemanticFormulaIdentity(effect),
+      controlSkillId: effect.controlSkillId,
+      pathId: effect.pathId,
+      sourceIdentities: effect.sourceIdentities,
+      formula: effect.formula,
+    })),
+    entry => entry.formulaIdentity
+  ).sort((left, right) =>
+    left.formulaIdentity.localeCompare(right.formulaIdentity, 'en', {
+      numeric: true,
+    })
+  );
+  const publishedEffects = semanticEffects.map(effect => ({
+    ...effect,
+    formulaIdentity: createSemanticFormulaIdentity(effect),
+    formula: undefined,
+  }));
   return {
     schemaVersion: 1,
     kind: 'azpr-semantic-battle-effect-catalog',
     status: 'verified-semantic-battle-effect-catalog-ready',
     targetTypeContract: battleTargetTypeContract,
-    semanticEffects,
+    formulas,
+    semanticEffects: publishedEffects,
   };
+}
+
+function createSemanticEffectRuntimeCatalog(catalog) {
+  const semanticEffects = catalog.semanticEffects.filter(
+    effect =>
+      effect.classification === 'applied' &&
+      effect.role === 'gameplay-effect' &&
+      !effect.tuningMark &&
+      !effect.tuningOverlimit &&
+      Boolean(
+        effect.propertyChange || effect.directSp || effect.heal || effect.shield
+      )
+  );
+  const formulaIdentities = new Set(
+    semanticEffects.map(effect => effect.formulaIdentity)
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-semantic-battle-effect-runtime-catalog',
+    status: 'verified-semantic-battle-effect-runtime-catalog-ready',
+    targetTypeContract: catalog.targetTypeContract,
+    formulas: catalog.formulas.filter(entry =>
+      formulaIdentities.has(entry.formulaIdentity)
+    ),
+    semanticEffects,
+    summary: {
+      fullSemanticEffectCount: catalog.semanticEffects.length,
+      runtimeEffectCount: semanticEffects.length,
+      runtimeFormulaCount: formulaIdentities.size,
+      sourceKind: catalog.kind,
+    },
+  };
+}
+
+function createSemanticFormulaIdentity(effect) {
+  return `battle-effect-formula:${effect.controlSkillId}:${effect.mapIndex}:${effect.pathId}`;
 }
 
 function isRuntimeEffectGraphNode(node) {
@@ -4985,11 +5092,14 @@ function createSemanticEffectCandidate({
     target,
   });
   const resolution = resolveSemanticPlacementResolution({ trigger, target });
-  const classification = resolveSemanticMechanicClassification(
+  const classification = resolveSemanticMechanicClassification({
     role,
     node,
-    rawEffects
-  );
+    rawEffects,
+    reasons,
+    placementResolution: resolution,
+  });
+  const stack = resolveEffectStackContract(node.lifecycle);
   return {
     semanticKey,
     semanticIdentity: `semantic-effect:${semanticKey}`,
@@ -5020,7 +5130,36 @@ function createSemanticEffectCandidate({
       tags: node.lifecycle.tags,
       combineType: node.lifecycle.combineType,
       maxCount: node.lifecycle.maxCount,
+      stackMode: stack.mode,
+      stackDelta: 1,
+      maxStacks: stack.maxStacks,
+      instanceScope: stack.instanceScope,
     },
+    mechanic: node.mechanic,
+    formula: node.formula,
+    formulaRuntime: createSemanticFormulaRuntimeContract(node),
+    propertyChange: node.propertyChange && {
+      ...node.propertyChange,
+      bucket:
+        node.propertyChange.calculateType === 0
+          ? 'dynamicForce'
+          : node.propertyChange.calculateType === 1
+            ? 'dynamicExtra'
+            : node.propertyChange.calculateType === 2
+              ? 'dynamicPercent'
+              : 'unresolved',
+    },
+    directSp: node.directSp && {
+      ...node.directSp,
+    },
+    heal: node.kind === 'damage' && node.damage?.damageType === 5 ? {} : null,
+    shield: (node.kind === 'shield' || node.damage?.damageType === 11) && {
+      ...node.shield,
+    },
+    damage: node.damage,
+    tuningMark: node.tuningMark,
+    tuningOverlimit: node.tuningOverlimit,
+    judgment: node.judgment,
     classification,
     dimensions: createPublishedEffectDimensions(node.dimensions),
     reasons,
@@ -5048,6 +5187,36 @@ function classifySemanticEffectRole(node, root) {
   if (['inject', 'pack'].includes(node.kind)) return 'wrapper';
   if (node.kind === 'stack' && hasChildren) return 'wrapper';
   return 'gameplay-effect';
+}
+
+function createSemanticFormulaRuntimeContract(node) {
+  const commonFunctionId = Number(node.formula?.commonFunctionId);
+  const baseFunctionId = Number(node.formula?.baseFunctionId);
+  if (commonFunctionId === 1 && baseFunctionId === 5) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'literal-a-with-common-ratio',
+      evaluator: 'q16.16-literal-a-times-g',
+      status: 'applied',
+      applied: true,
+    };
+  }
+  if ([119, 107205, 107207].includes(baseFunctionId)) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'verified-tuning-state-formula',
+      evaluator: 'verified-tuning-mark-runtime',
+      status: 'delegated',
+      applied: false,
+    };
+  }
+  return {
+    registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+    family: `unsupported-${commonFunctionId || 0}-${baseFunctionId || 0}`,
+    evaluator: null,
+    status: 'unresolved',
+    applied: false,
+  };
 }
 
 function resolveSemanticEffectTarget(node, trigger, rawEffects) {
@@ -5147,9 +5316,20 @@ function resolveSemanticPlacementResolution({ trigger, target }) {
   return 'static-resolved';
 }
 
-function resolveSemanticMechanicClassification(role, node, rawEffects) {
+function resolveSemanticMechanicClassification({
+  role,
+  node,
+  rawEffects,
+  reasons,
+  placementResolution,
+}) {
   if (role !== 'gameplay-effect') return 'structural';
-  if (rawEffects.some(effect => effect.classification === 'applied')) {
+  if (placementResolution !== 'static-resolved') return 'unresolved';
+  if (reasons.length > 0) return 'unresolved';
+  if (
+    node.classification === 'applied' ||
+    rawEffects.some(effect => effect.classification === 'applied')
+  ) {
     return 'applied';
   }
   if (
@@ -7296,7 +7476,7 @@ function createActionVariantResourceCoverageMarkdown(report) {
   return `${lines.join('\n')}\n`;
 }
 
-function createEffectCoverageReport(packageValue) {
+function createEffectCoverageReport(packageValue, semanticEffectCatalog) {
   const effectByIdentity = new Map(
     packageValue.controlBindings.flatMap(binding =>
       binding.effects.map(effect => [effect.effectIdentity, effect])
@@ -7368,8 +7548,35 @@ function createEffectCoverageReport(packageValue) {
       sourceIdentity: effect.sourceIdentity,
     }));
   const graphNodes = packageValue.battleEffectCatalog?.nodes ?? [];
+  const semanticEffects = semanticEffectCatalog?.semanticEffects ?? [];
+  const semanticGameplayEffects = semanticEffects.filter(
+    effect => effect.role === 'gameplay-effect'
+  );
+  const semanticUnresolved = semanticGameplayEffects.filter(
+    effect => effect.classification === 'unresolved'
+  );
+  for (const action of actions) {
+    const actionSemanticEffects = semanticGameplayEffects.filter(effect =>
+      effect.publicActions.some(
+        reference => reference.actionIdentity === action.actionIdentity
+      )
+    );
+    action.semanticEffectCount = actionSemanticEffects.length;
+    action.semanticAppliedEffectCount = actionSemanticEffects.filter(
+      effect => effect.classification === 'applied'
+    ).length;
+    action.semanticVerifiedZeroEffectCount = actionSemanticEffects.filter(
+      effect => effect.classification === 'verified-zero'
+    ).length;
+    action.semanticUnresolvedEffectCount = actionSemanticEffects.filter(
+      effect => effect.classification === 'unresolved'
+    ).length;
+    action.semanticEffectIdentities = actionSemanticEffects.map(
+      effect => effect.semanticIdentity
+    );
+  }
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'azpr-verified-combat-effect-coverage',
     status: 'verified-combat-effect-coverage-ready',
     packageId: packageValue.packageId,
@@ -7382,9 +7589,43 @@ function createEffectCoverageReport(packageValue) {
         (sum, binding) => sum + binding.effectGraph.length,
         0
       ),
+      rawReferenceEdgeCount: packageValue.controlBindings.reduce(
+        (sum, binding) =>
+          sum +
+          binding.effectGraph.reduce(
+            (edgeSum, root) => edgeSum + (root.edges?.length ?? 0),
+            0
+          ),
+        0
+      ),
       graphNodeCount: graphNodes.length,
+      semanticEffectCount: semanticEffects.length,
+      semanticGameplayEffectCount: semanticGameplayEffects.length,
     },
     summary: {
+      semanticEffectCount: semanticEffects.length,
+      semanticGameplayEffectCount: semanticGameplayEffects.length,
+      semanticStructuralCount:
+        semanticEffects.length - semanticGameplayEffects.length,
+      semanticAppliedCount: semanticGameplayEffects.filter(
+        effect => effect.classification === 'applied'
+      ).length,
+      semanticVerifiedZeroCount: semanticGameplayEffects.filter(
+        effect => effect.classification === 'verified-zero'
+      ).length,
+      semanticUnresolvedCount: semanticUnresolved.length,
+      semanticPlacementCounts: countValues(
+        semanticGameplayEffects.map(effect => effect.placementResolution)
+      ),
+      semanticKindCounts: countValues(
+        semanticGameplayEffects.map(effect => effect.kind)
+      ),
+      semanticFormulaFamilyCounts: countValues(
+        semanticGameplayEffects.map(effect => effect.formulaRuntime?.family)
+      ),
+      semanticUnresolvedReasonCounts: countValues(
+        semanticUnresolved.flatMap(effect => effect.reasons)
+      ),
       effectBindingCount: effects.length,
       appliedEffectBindingCount: effects.filter(
         effect => effect.classification === 'applied'
@@ -7415,6 +7656,7 @@ function createEffectCoverageReport(packageValue) {
         ])
       ),
     },
+    semanticEffects,
     actions,
     unresolved,
   };
@@ -7422,13 +7664,35 @@ function createEffectCoverageReport(packageValue) {
 
 function createEffectCoverageMarkdown(report) {
   const lines = [
-    '# M8-B Battle 效果覆盖',
+    '# M9-C Battle 语义效果覆盖',
     '',
     `- 包：\`${report.packageId}\``,
     `- 公开动作：${report.sourceDenominator.actionCount}`,
     `- 控制：${report.sourceDenominator.controlCount}`,
     `- 直接元素根：${report.sourceDenominator.directRootCount}`,
+    `- 原始引用边：${report.sourceDenominator.rawReferenceEdgeCount}`,
     `- 效果图节点：${report.sourceDenominator.graphNodeCount}`,
+    `- 去重语义效果：${report.summary.semanticEffectCount}`,
+    `- 最终玩法效果：${report.summary.semanticGameplayEffectCount}`,
+    `- 结构包装/条件：${report.summary.semanticStructuralCount}`,
+    `- 语义可计算：${report.summary.semanticAppliedCount}`,
+    `- 语义明确零：${report.summary.semanticVerifiedZeroCount}`,
+    `- 语义未解析：${report.summary.semanticUnresolvedCount}`,
+    '',
+    '## 语义放置',
+    '',
+    ...Object.entries(report.summary.semanticPlacementCounts).map(
+      ([status, count]) => `- ${status}: ${count}`
+    ),
+    '',
+    '## 公式族',
+    '',
+    ...Object.entries(report.summary.semanticFormulaFamilyCounts).map(
+      ([family, count]) => `- ${family}: ${count}`
+    ),
+    '',
+    '## 原始边审计',
+    '',
     `- 效果绑定：${report.summary.effectBindingCount}`,
     `- 可计算：${report.summary.appliedEffectBindingCount}`,
     `- 明确零：${report.summary.verifiedZeroEffectBindingCount}`,
@@ -7442,7 +7706,7 @@ function createEffectCoverageMarkdown(report) {
     '',
     '## 未解析原因',
     '',
-    ...Object.entries(report.summary.unresolvedReasonCounts).map(
+    ...Object.entries(report.summary.semanticUnresolvedReasonCounts).map(
       ([reason, count]) => `- ${reason}: ${count}`
     ),
     '',

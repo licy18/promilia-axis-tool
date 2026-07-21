@@ -15,9 +15,7 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
-import {
-  createActionExecutionPlan,
-} from '../../simulation/engine/actionExecutionPlan';
+import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
 import { createVerifiedBattleEffectGeneration } from '../../simulation/mechanics/verifiedBattleEffectGeneration';
 import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createActionRuleDiagnostics } from '../../simulation/runtime/actionRuleDiagnostics';
@@ -79,24 +77,53 @@ describe('verified Battle effect generation', () => {
     });
     const integrated = simulateScenario(scenario);
 
-    expect(generation.effectCommands).toEqual([
-      expect.objectContaining({
-        sourceActionId: 'fire-kibo-signature',
-        targetKind: 'kibo',
-        targetId: 'actor-101007',
-        timeMs: 0,
-        durationMs: 16000,
-        appliedToCalculators: true,
-        modifiers: [
-          expect.objectContaining({
-            kind: 'battle-property',
-            attributeId: 52,
-            bucket: 'dynamicExtra',
-            valueRaw: 216,
-          }),
-        ],
-      }),
-    ]);
+    expect(generation.effectCommands).toHaveLength(4);
+    expect(generation.effectCommands).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceActionId: 'fire-kibo-signature',
+          targetKind: 'actor',
+          targetId: 'actor-101007',
+          timeMs: 0,
+          durationMs: 16000,
+          appliedToCalculators: true,
+          modifiers: [
+            expect.objectContaining({
+              kind: 'battle-property',
+              attributeId: 52,
+              bucket: 'dynamicExtra',
+              valueRaw: 216,
+              formulaResult: expect.objectContaining({
+                family: 'literal-a-with-common-ratio',
+                value: 216,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          sourceActionId: 'fire-kibo-signature',
+          targetKind: 'kibo',
+          targetId: 'actor-101007',
+          timeMs: 0,
+          durationMs: 16000,
+          appliedToCalculators: true,
+          modifiers: [
+            expect.objectContaining({
+              kind: 'battle-property',
+              attributeId: 52,
+              bucket: 'dynamicExtra',
+              valueRaw: 216,
+            }),
+          ],
+        }),
+      ])
+    );
+    expect(
+      generation.effectCommands
+        .filter(command => command.targetKind === 'actor')
+        .map(command => command.targetId)
+        .sort()
+    ).toEqual(['actor-101003', 'actor-101007', 'actor-109001']);
     expect(
       resolveActiveEffectsAt(timeline, 1000, {
         targetKind: 'kibo',
@@ -116,15 +143,15 @@ describe('verified Battle effect generation', () => {
     const baselineDamage = sumDamage(withoutEffect, 'fire-kibo-signature');
     expect(appliedDamage).toBeGreaterThan(baselineDamage);
     expect(integrated.verifiedBattleEffectGeneration.summary).toMatchObject({
-      effectCommandCount: 1,
-      generatedCount: 1,
+      effectCommandCount: 4,
+      generatedCount: 4,
     });
     expect(integrated.effectTimeline.summary).toMatchObject({
-      calculatorAppliedEffectCount: 2,
+      calculatorAppliedEffectCount: 8,
     });
-    expect(sumDamage(integrated.verifiedCombatRuntime, 'fire-kibo-signature')).toBe(
-      appliedDamage
-    );
+    expect(
+      sumDamage(integrated.verifiedCombatRuntime, 'fire-kibo-signature')
+    ).toBe(appliedDamage);
     expect(
       withEffect.damageEvents.flatMap(
         event => event.payload.dynamicPropertyTrace.source

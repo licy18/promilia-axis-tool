@@ -9,6 +9,8 @@ let installedPackage = null;
 let packagePromise = null;
 let controlBindingBySkillId = new Map();
 let effectBindingByIdentity = new Map();
+let semanticEffectByRawIdentity = new Map();
+let semanticFormulaByIdentity = new Map();
 let specialResourceProfileByOwnerId = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
@@ -52,6 +54,26 @@ export function installVerifiedCombatMechanicsPackage(value) {
       (binding.effects ?? []).map(effect => [effect.effectIdentity, effect])
     )
   );
+  semanticEffectByRawIdentity = new Map();
+  semanticFormulaByIdentity = new Map(
+    (value.semanticEffectCatalog?.formulas ?? []).map(entry => [
+      entry.formulaIdentity,
+      entry.formula,
+    ])
+  );
+  for (const sourceEffect of value.semanticEffectCatalog?.semanticEffects ??
+    []) {
+    const effect = {
+      ...sourceEffect,
+      formula:
+        semanticFormulaByIdentity.get(sourceEffect.formulaIdentity) ?? null,
+    };
+    for (const identity of effect.rawEffectIdentities ?? []) {
+      const effects = semanticEffectByRawIdentity.get(identity) ?? [];
+      effects.push(effect);
+      semanticEffectByRawIdentity.set(identity, effects);
+    }
+  }
   specialResourceProfileByOwnerId = new Map(
     (value.specialResourceCatalog?.profiles ?? []).map(profile => [
       Number(profile.ownerId),
@@ -100,6 +122,8 @@ export function clearInstalledVerifiedCombatMechanicsPackage() {
   packagePromise = null;
   controlBindingBySkillId = new Map();
   effectBindingByIdentity = new Map();
+  semanticEffectByRawIdentity = new Map();
+  semanticFormulaByIdentity = new Map();
   specialResourceProfileByOwnerId = new Map();
 }
 
@@ -190,6 +214,7 @@ export function resolveVerifiedCombatActionMechanics(
         controlBinding: partialControlBinding,
         hits: [],
         effects: resolveSelectedEffects(actionBinding, partialControlBinding),
+        semanticEffects: resolveSelectedSemanticEffects(actionBinding),
         reasons: actionBinding.reasons ?? [],
         complete: false,
         ready: true,
@@ -219,6 +244,7 @@ export function resolveVerifiedCombatActionMechanics(
         selectedHitIdentities.has(hit.hitIdentity))
   );
   const effects = resolveSelectedEffects(actionBinding, controlBinding);
+  const semanticEffects = resolveSelectedSemanticEffects(actionBinding);
   const hasAppliedCost = Number(controlBinding?.logic?.spCost) > 0;
   const hasAppliedEffect = effects.some(
     effect => effect.classification === 'applied'
@@ -244,6 +270,7 @@ export function resolveVerifiedCombatActionMechanics(
     controlBinding,
     hits,
     effects,
+    semanticEffects,
     complete: true,
     effectCoverageComplete: actionBinding.complete !== false,
     reasons: actionBinding.reasons ?? [],
@@ -383,6 +410,20 @@ function resolveSelectedEffects(actionBinding, controlBinding) {
     .filter(Boolean);
 }
 
+function resolveSelectedSemanticEffects(actionBinding) {
+  const selectedEffectIdentities = new Set(
+    actionBinding?.selectedEffectIdentities ?? []
+  );
+  const semanticEffects = [...selectedEffectIdentities].flatMap(
+    identity => semanticEffectByRawIdentity.get(identity) ?? []
+  );
+  return [
+    ...new Map(
+      semanticEffects.map(effect => [effect.semanticIdentity, effect])
+    ).values(),
+  ];
+}
+
 export function createVerifiedCombatActionBindingIdentity({
   ownerKind,
   ownerId,
@@ -461,7 +502,7 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('action-variant-control-bindings-missing');
   }
   if (
-    value?.packageVersion < 11 ||
+    value?.packageVersion < 12 ||
     value?.battleEffectCatalog?.status !==
       'verified-battle-effect-node-catalog-ready' ||
     !Array.isArray(value?.battleEffectCatalog?.nodes) ||
@@ -483,6 +524,32 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     )
   ) {
     issues.push('battle-effect-catalog-invalid');
+  }
+  if (
+    value?.semanticEffectCatalog?.status !==
+      'verified-semantic-battle-effect-runtime-catalog-ready' ||
+    !Array.isArray(value?.semanticEffectCatalog?.semanticEffects) ||
+    !Array.isArray(value?.semanticEffectCatalog?.formulas) ||
+    value.semanticEffectCatalog.summary?.runtimeEffectCount !==
+      value.semanticEffectCatalog.semanticEffects.length ||
+    value.semanticEffectCatalog.summary?.runtimeFormulaCount !==
+      value.semanticEffectCatalog.formulas.length ||
+    value.semanticEffectCatalog.formulas.some(
+      entry => !entry.formulaIdentity || !entry.formula
+    ) ||
+    value.semanticEffectCatalog.semanticEffects.some(
+      effect =>
+        !effect.semanticIdentity ||
+        effect.role !== 'gameplay-effect' ||
+        effect.classification !== 'applied' ||
+        effect.placementResolution !== 'static-resolved' ||
+        !effect.formulaIdentity ||
+        !value.semanticEffectCatalog.formulas.some(
+          entry => entry.formulaIdentity === effect.formulaIdentity
+        )
+    )
+  ) {
+    issues.push('semantic-effect-catalog-invalid');
   }
   if (
     value?.specialResourceCatalog?.status !==

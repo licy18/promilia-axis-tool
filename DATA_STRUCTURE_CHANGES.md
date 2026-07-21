@@ -27650,3 +27650,9 @@ Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel
 新增非持久化 `AzPrVerifiedActionVariantRuntime`。它按 execution plan 和时间顺序读取当前资源与活动状态，在输入决策帧选择唯一实际 subskill，并把选择结果交给既有 Battle effect generation 与 verified combat runtime；资源不足或变体歧义在命中、CD、效果和三值结算前阻止执行。特殊资源事件声明 `appliedToActionVariantRuntime = true`、`appliedToCalculators = false`，不会被误计入角色/奇波 SP 或直接改写 HP/韧性。
 
 `AzPrInitialRuntimeState` 升级为 v5，新增 `specialResourcesByActor[]` 及其剩余 active state duration。循环边界使用严格边界前语义继承资源值和状态剩余时间；方案复制、本地草稿、JSON、分享链接与 PNG 仍只保存既有项目输入并由运行时确定性重建。`runtimeOutputs.resourceCurves`、`resources` 与 `stateCurves.resources` 共享 `curvesBySpecialResource[]` 投影；只有队伍中存在已确认 profile 时生成对应阶梯轴，项目 schemaVersion 不升级。
+
+## 448. Semantic Battle effect catalog and formula registry v1
+
+`verified-combat-mechanics-package.json` 升级为 package v12。完整同步审计先把 raw Battle graph 归一为 `semanticEffects[]`，每条记录稳定保存 `semanticIdentity / controlSkillId / mapIndex / pathId / relationPath / trigger / target / lifecycle / formulaIdentity / rawEffectIdentities / publicActions / classification / reasons`；wrapper、条件边和逐目标计算副本不再与最终玩法效果共用分母。完整 3,122 条语义记录保留在覆盖报告，生产包只发布当前可安全运行的精简目录，不能用精简数量代替覆盖结论。
+
+公式参数按 `controlSkillId + mapIndex + pathId` 生成唯一 `formulaIdentity`，并使用 `parameterSets[] / levelParameterSetIndices[]` 去重 1-12 级向量。`AzPrVerifiedBattleEffectFormulaRegistry` 当前只执行机器证据确认的 `function_2=5` 字面 A 与公共 G 比例的 Q16.16 路线；调谐函数委托既有 M8 状态机，其余函数族返回结构化 unresolved。运行时由动作当前实际变体的 `selectedEffectIdentities` 反查语义效果，按静态 target 展开实际接收者，再交给原有 effect timeline；该投影不新增项目字段，五载体仍从动作、队伍和 verified package 重建。
