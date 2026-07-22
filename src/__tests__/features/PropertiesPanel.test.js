@@ -198,6 +198,134 @@ describe('PropertiesPanel', () => {
       },
     });
   });
+
+  it('changes an input-controlled charge tier as one semantic action edit', async () => {
+    const actionId = 'charged-action';
+    const options = [
+      {
+        selectorIdentity: 'actor:107003|control:10700310|public-variant:1',
+        label: '重击1',
+        publicVariantIndex: 1,
+        subSkillIndex: 0,
+        durationFrames: 160,
+        chargeTier: 1,
+        sourceIdentity: 'Battle/control:10700310/player:0',
+        resolutionStatus: 'applied',
+      },
+      {
+        selectorIdentity: 'actor:107003|control:10700310|public-variant:3',
+        label: '重击3一段',
+        publicVariantIndex: 3,
+        subSkillIndex: 2,
+        durationFrames: 416,
+        chargeTier: 3,
+        sourceIdentity: 'Battle/control:10700310/player:2',
+        resolutionStatus: 'applied',
+      },
+    ];
+    const wrapper = mount(PropertiesPanel, {
+      props: {
+        selection: { characterId: 107003, enemyId: 208001 },
+        characters: [{ id: 107003, name: '测试角色' }],
+        actors: [{ id: 'actor-107003', characterId: 107003, name: '测试角色' }],
+        skills: [{ id: 10700301, name: '普通攻击' }],
+        enemies: [{ id: 208001, name: '训练敌人' }],
+        selectedAction: {
+          id: actionId,
+          type: 'skill',
+          name: '重击1',
+          actorId: 'actor-107003',
+          skillId: 10700301,
+          actionVariantIndex: 1,
+          startMs: 0,
+          durationMs: (160 * 1000) / 60,
+          effectCommands: [],
+        },
+        durationMs: 30_000,
+        verifiedCombatRuntime: {
+          enabled: true,
+          actionResolutionById: new Map([
+            [
+              actionId,
+              {
+                status: 'verified-ready',
+                actionBinding: {
+                  identity: 'actor|107003|charged',
+                  controlSkillId: 10700310,
+                },
+                hits: [],
+                effects: [],
+                reasons: [],
+                ready: true,
+                complete: true,
+                applied: true,
+              },
+            ],
+          ]),
+          damageEvents: [],
+          resourceEvents: [],
+          kiboResourceEvents: [],
+          effectTimeline: { events: [] },
+          tuningMarkRuntime: { events: [], unresolved: [] },
+          specialResourceRuntime: {
+            resourceEvents: [],
+            selectionByActionId: new Map([
+              [
+                actionId,
+                {
+                  actionId,
+                  actorId: 'actor-107003',
+                  ownerId: 107003,
+                  controlSkillId: 10700310,
+                  selectedSubSkillIndex: 0,
+                  controlSource: 'input-controlled',
+                  contractIdentity:
+                    'actor:107003|control:10700310|derived-control',
+                  contractResolutionStatus: 'applied',
+                  inputSelector: {
+                    kind: 'charge-tier',
+                    mode: 'hold',
+                    holdRange: { minimumHoldMs: 250 },
+                    resolutionStatus: 'applied',
+                    options,
+                  },
+                  inputSelectionStatus: 'selected',
+                  selectedInputIdentity: options[0].selectorIdentity,
+                  sourceKind: 'workbench-semantic-input-variant',
+                  status: 'verified-action-variant-selection-ready',
+                },
+              ],
+            ]),
+          },
+        },
+      },
+    });
+
+    const buttons = wrapper.findAll(
+      '[data-testid="workbench-action-variant-option"]'
+    );
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0].attributes('aria-pressed')).toBe('true');
+    await buttons[1].trigger('click');
+
+    const patch = wrapper.emitted('update-action')?.at(-1)?.[0];
+    expect(patch).toMatchObject({
+      variantInputSelection: {
+        selectorIdentity: options[1].selectorIdentity,
+        selectorKind: 'charge-tier',
+        publicVariantIndex: 3,
+        chargeTier: 3,
+        mode: 'hold',
+      },
+      controlSubSkillIndex: 2,
+      actionVariantIndex: 3,
+      damageSegmentIndex: 3,
+      durationFrames: 416,
+      timingStatus: 'applied',
+      needsTimingData: false,
+    });
+    expect(patch.durationMs).toBeCloseTo((416 * 1000) / 60, 5);
+  });
 });
 
 function createHit({ hp, toughness, attack }) {

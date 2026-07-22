@@ -27,6 +27,44 @@
       </span>
     </div>
 
+    <section
+      v-if="variantControlModel"
+      class="variant-control"
+      :data-control-source="variantControlModel.controlSource"
+      :data-resolution-status="variantControlModel.contractResolutionStatus"
+      data-testid="workbench-action-variant-control"
+    >
+      <div class="variant-control-heading">
+        <span>{{ editableVariantInput ? '输入形态' : '实际分支' }}</span>
+        <strong>{{ selectedVariantLabel }}</strong>
+      </div>
+      <div
+        v-if="editableVariantInput"
+        class="variant-control-options"
+        role="group"
+        aria-label="动作输入形态"
+        data-testid="workbench-action-variant-options"
+      >
+        <button
+          v-for="option in editableVariantInput.options"
+          :key="option.selectorIdentity"
+          type="button"
+          :aria-pressed="isVariantInputSelected(option)"
+          :class="{ selected: isVariantInputSelected(option) }"
+          :title="formatVariantInputOptionTitle(option)"
+          :data-selector-identity="option.selectorIdentity"
+          :data-duration-frames="option.durationFrames"
+          data-testid="workbench-action-variant-option"
+          @click="selectVariantInputOption(option)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+      <small>
+        {{ variantControlDetail }}
+      </small>
+    </section>
+
     <ActionHitOverrideList
       v-if="verifiedMechanicsTrace?.hitBindings?.length"
       :hit-bindings="verifiedMechanicsTrace.hitBindings"
@@ -881,6 +919,7 @@ import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel
 import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { createVerifiedActionMechanicsTrace } from './verifiedActionMechanicsTrace';
+import { createActionVariantInputSelection } from '../../domain/actionVariantInputSelection';
 
 const ActionHitOverrideList = defineAsyncComponent(
   () => import('./ActionHitOverrideList.vue')
@@ -956,6 +995,38 @@ const verifiedMechanicsTrace = computed(() =>
     verifiedCombatRuntime: props.verifiedCombatRuntime,
   })
 );
+const variantControlModel = computed(
+  () => verifiedMechanicsTrace.value?.variantSelection ?? null
+);
+const editableVariantInput = computed(() => {
+  const input = verifiedMechanicsTrace.value?.variantInput;
+  return input?.resolutionStatus === 'applied' && input.options?.length > 1
+    ? input
+    : null;
+});
+const selectedVariantLabel = computed(() => {
+  const selectedOption =
+    verifiedMechanicsTrace.value?.variantInput?.selectedOption;
+  if (selectedOption?.label) return selectedOption.label;
+  const selectedSubSkillIndex =
+    variantControlModel.value?.selectedSubSkillIndex;
+  return selectedSubSkillIndex == null
+    ? '条件尚未解析'
+    : `subskill ${selectedSubSkillIndex}`;
+});
+const variantControlDetail = computed(() => {
+  const model = variantControlModel.value;
+  if (!model) return '';
+  if (editableVariantInput.value) {
+    const hold = editableVariantInput.value.holdRange;
+    const holdText =
+      editableVariantInput.value.mode === 'hold'
+        ? `长按${hold?.minimumHoldMs ? `至少 ${hold.minimumHoldMs}ms` : ''}`
+        : '短按';
+    return `${holdText} · 选择后按来源帧长重建命中与效果`;
+  }
+  return `${formatVariantControlSource(model.sourceKind)} · ${model.contractResolutionStatus}`;
+});
 
 function formatSourceHash(value) {
   const text = String(value ?? '');
@@ -1010,6 +1081,56 @@ function updateHitWillHit(hitIdentity, willHit) {
       [hitIdentity]: { willHit: Boolean(willHit) },
     },
   });
+}
+
+function isVariantInputSelected(option) {
+  return (
+    option?.selectorIdentity ===
+    verifiedMechanicsTrace.value?.variantInput?.selectedInputIdentity
+  );
+}
+
+function selectVariantInputOption(option) {
+  const input = editableVariantInput.value;
+  if (!input || !option || isVariantInputSelected(option)) return;
+  emit('update-action', {
+    variantInputSelection: createActionVariantInputSelection({
+      selector: input,
+      option,
+    }),
+    controlSubSkillIndex: option.subSkillIndex,
+    actionVariantIndex: option.publicVariantIndex,
+    damageSegmentIndex: option.publicVariantIndex,
+    durationFrames: option.durationFrames,
+    durationMs: frameToMs(option.durationFrames),
+    timingSource: 'verified-control-player-variant',
+    timingStatus: 'applied',
+    timingReasons: [],
+    timingSourceIdentity: option.sourceIdentity,
+    needsTimingData: false,
+    actionScheduling: null,
+  });
+}
+
+function formatVariantInputOptionTitle(option) {
+  const duration = Number(option?.durationFrames);
+  return `${option?.label ?? '动作形态'}${duration > 0 ? ` · ${duration}F` : ''}`;
+}
+
+function formatVariantControlSource(sourceKind) {
+  if (sourceKind === 'verified-active-switch-skill-index-window') {
+    return '资源/状态在输入帧自动选择';
+  }
+  if (sourceKind === 'workbench-semantic-input-variant') {
+    return '用户输入选择';
+  }
+  if (sourceKind === 'workbench-public-action-input-variant') {
+    return '公开动作输入选择';
+  }
+  if (sourceKind === 'legacy-workbench-explicit-subskill') {
+    return '旧项目输入选择已兼容';
+  }
+  return sourceKind || '默认动作分支';
 }
 
 function formatGeneratedEffectSource(command) {
@@ -1710,6 +1831,69 @@ h2 {
 .action-identity-copy small {
   color: #9aa6ae;
   font-size: 11px;
+}
+
+.variant-control {
+  display: grid;
+  gap: 7px;
+  margin: 10px 14px 0;
+  padding: 9px 0;
+  border-block: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.variant-control-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  color: #97a4aa;
+  font-size: 11px;
+}
+
+.variant-control-heading strong {
+  color: #e6efed;
+  font-size: 11px;
+}
+
+.variant-control-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.variant-control-options button {
+  min-width: 0;
+  min-height: 28px;
+  padding: 4px 6px;
+  overflow: hidden;
+  border: 1px solid rgba(164, 181, 187, 0.3);
+  border-radius: 3px;
+  background: #151b20;
+  color: #b8c2c6;
+  font: inherit;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.variant-control-options button:hover,
+.variant-control-options button:focus-visible {
+  border-color: #79c7b9;
+  color: #eef7f5;
+  outline: none;
+}
+
+.variant-control-options button.selected {
+  border-color: #79c7b9;
+  background: rgba(74, 130, 120, 0.22);
+  color: #e7f5f2;
+}
+
+.variant-control > small {
+  color: #849198;
+  font-size: 10px;
+  line-height: 1.45;
 }
 
 .verified-mechanics-trace {

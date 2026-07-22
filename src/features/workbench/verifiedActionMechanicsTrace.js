@@ -30,6 +30,11 @@ export function createVerifiedActionMechanicsTrace({
     verifiedCombatRuntime.specialResourceRuntime?.selectionByActionId?.get?.(
       action.id
     ) ?? null;
+  const selectedInputOption =
+    variantSelection?.inputSelector?.options?.find(
+      option =>
+        option.selectorIdentity === variantSelection.selectedInputIdentity
+    ) ?? null;
   const dynamicPropertyRows = collectDynamicPropertyRows(hitEvents);
   const staticProperties = actor?.verifiedStaticProperties ?? null;
   const staticKiboProperties = actor?.verifiedStaticKiboProperties ?? null;
@@ -103,6 +108,18 @@ export function createVerifiedActionMechanicsTrace({
     spResourceEvents,
     specialResourceEvents,
     specialResourceDelta,
+    variantSelection,
+    variantInput: variantSelection?.inputSelector
+      ? {
+          ...variantSelection.inputSelector,
+          selectedInputIdentity: variantSelection.selectedInputIdentity,
+          selectedOption: selectedInputOption,
+          selectionStatus: variantSelection.inputSelectionStatus,
+          controlSource: variantSelection.controlSource,
+          contractIdentity: variantSelection.contractIdentity,
+          contractResolutionStatus: variantSelection.contractResolutionStatus,
+        }
+      : null,
     effectEvents,
     tuningEvents,
     dynamicPropertyRows,
@@ -113,9 +130,10 @@ export function createVerifiedActionMechanicsTrace({
         key: 'action-variant',
         label: '动作形态',
         value:
-          variantSelection?.selectedSubSkillIndex == null
+          selectedInputOption?.label ??
+          (variantSelection?.selectedSubSkillIndex == null
             ? '默认形态'
-            : `subskill ${variantSelection.selectedSubSkillIndex}`,
+            : `subskill ${variantSelection.selectedSubSkillIndex}`),
         detail: variantSelection?.sourceKind ?? 'action-mapping-selection',
         applied:
           variantSelection?.status ===

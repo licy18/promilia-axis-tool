@@ -27662,3 +27662,9 @@ Workbench 角色配置新增可选 `cultivation.starGiftRank / favorabilityLevel
 唯一 verified-combat 同步入口新增 `reports/verified-public-runtime-coverage.json` 与同名 Markdown 摘要。报告不进入生产运行包，也不升级项目 schema；它把现有动作、时长、效果、变体与特殊资源覆盖聚合到固定的 562 个公开动作、20 名角色和 122 只奇波分母。每个动作保存 owner/action/control identity、运行状态、占轴来源、变体与特殊资源状态，以及敌人 HP/韧性、角色 SP、奇波 SP、治疗、护盾、动态属性和印记逐维计数。
 
 未解析动作只允许归为 `runtime-dependent / static-evidence-gap / runtime-and-evidence-gap`，出现未分类原因会让 `audit:verified-combat` 失败。非零回能元素另按 `applied-current-public-action / current-public-action-unresolved / public-unselected-control-variant / outside-current-public-action-catalog` 分账，目录外元素与未选变体不再计入当前产品动作缺口。该报告只保存可从 verified package 与覆盖审计重建的派生事实，不持久化运行时曲线或项目结果。
+
+## 450. Semantic action input selection v1
+
+`actionVariantGraph` 升级为 v2，并以 `derivedControlContracts[]` 覆盖公开角色动作的多 player、subskill、resourceMap 与 EventBridge 候选。合同分别保存 input/resource/state/automatic/combined 控制源、输入决策帧、可选档位、资源和状态条件、来源 identity 与解析状态；客户端默认 subskill 只作为来源事实，不等于动作实例的实际选择。
+
+Workbench skill/kibo action 新增可选 `variantInputSelection`：`schemaVersion / selectorIdentity / selectorKind / publicVariantIndex / chargeTier / mode`。它只持久化用户选择的输入语义，不复制 subskill 来源图或运行时结果；实际 subskill、时长、命中和效果由当前 verified package 在输入帧重建。旧项目继续读取 `controlSubSkillIndex` 作为兼容输入，新写入使用稳定 selector identity；方案、草稿、片段、JSON、分享链接和 PNG 均沿既有载体保存该字段，项目 schemaVersion 不升级。

@@ -49,6 +49,7 @@ import {
 import { resolveActorEffectiveMaxSp } from './spUnitContract';
 import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
 import { normalizeActionHitOverrides } from './actionHitOverrides';
+import { normalizeActionVariantInputSelection } from './actionVariantInputSelection';
 import { normalizeCombatScenario } from './combatScenario';
 import { normalizeWorkbenchActionSchedulingContract } from './workbenchActionScheduling';
 
@@ -193,6 +194,7 @@ export function createWorkbenchActionDraft({
   timingSourceIdentity = null,
   needsTimingData = null,
   controlSubSkillIndex = null,
+  variantInputSelection = null,
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
@@ -269,6 +271,9 @@ export function createWorkbenchActionDraft({
     reason,
     eventType,
     controlSubSkillIndex: nonNegativeIntegerOrNull(controlSubSkillIndex),
+    variantInputSelection: normalizeActionVariantInputSelection(
+      variantInputSelection
+    ),
     actionScheduling:
       normalizeWorkbenchActionSchedulingContract(actionScheduling),
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
@@ -876,6 +881,7 @@ export function normalizeWorkbenchActionDrafts(
           timingSourceIdentity: draft.timingSourceIdentity,
           needsTimingData: draft.needsTimingData,
           controlSubSkillIndex: draft.controlSubSkillIndex,
+          variantInputSelection: draft.variantInputSelection,
           actionScheduling: draft.actionScheduling,
           sourceEvidenceStatus: draft.sourceEvidenceStatus,
           scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
@@ -927,6 +933,7 @@ export function normalizeWorkbenchActionDrafts(
         timingSourceIdentity: draft.timingSourceIdentity,
         needsTimingData: draft.needsTimingData,
         controlSubSkillIndex: draft.controlSubSkillIndex,
+        variantInputSelection: draft.variantInputSelection,
         actionScheduling: draft.actionScheduling,
         sourceEvidenceStatus: draft.sourceEvidenceStatus,
         scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
@@ -1071,6 +1078,7 @@ function createProjectActionFromDraft(
       timingSourceIdentity: draft.timingSourceIdentity,
       needsTimingData: draft.needsTimingData,
       controlSubSkillIndex: draft.controlSubSkillIndex,
+      variantInputSelection: draft.variantInputSelection,
       actionScheduling: draft.actionScheduling,
       sourceEvidenceStatus: draft.sourceEvidenceStatus,
       scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
@@ -1100,6 +1108,7 @@ function createProjectActionFromDraft(
     timingSourceIdentity: draft.timingSourceIdentity,
     needsTimingData: draft.needsTimingData,
     controlSubSkillIndex: draft.controlSubSkillIndex,
+    variantInputSelection: draft.variantInputSelection,
     actionScheduling: draft.actionScheduling,
     sourceEvidenceStatus: draft.sourceEvidenceStatus,
     scenarioRuntimeStatus: draft.scenarioRuntimeStatus,

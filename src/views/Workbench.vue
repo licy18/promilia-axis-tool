@@ -989,6 +989,7 @@ import {
 } from 'vue';
 import {
   getVerifiedCombatActionMapping,
+  getVerifiedDerivedControlContract,
   loadVerifiedCombatMechanicsPackage,
 } from '../data/verifiedCombatMechanicsPackage';
 import { getWorkbenchLoadoutDetailCatalogSnapshot } from '../data/workbenchLoadoutDetailCatalog';
@@ -1077,6 +1078,7 @@ import {
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import { normalizeInitialRuntimeState } from '../domain/initialRuntimeState';
 import { normalizeCombatScenario } from '../domain/combatScenario';
+import { createActionVariantInputSelection } from '../domain/actionVariantInputSelection';
 import {
   createWorkbenchTimelineBatchLaneMovePlan,
   createWorkbenchTimelineEntry,
@@ -3090,7 +3092,11 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
       actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
       damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
       durationMs: scheduling.durationMs,
-      ...createActionTimingDraftFields(actionEntry, scheduling),
+      ...createActionTimingDraftFields(
+        actionEntry,
+        scheduling,
+        actorCharacterId
+      ),
       note:
         actionEntry.note ??
         `${actionEntry.label ?? '动作'}：${actionEntry.rawValue ?? '倍率待补'}；真实动作帧等待 asset 或运行时捕获补充。`,
@@ -3404,7 +3410,11 @@ async function addKiboEventAction(entry = null) {
     eventType: entry?.eventType ?? 'activation',
     name: entry?.label ?? '',
     icon: entry?.icon ?? null,
-    ...createActionTimingDraftFields(entry, scheduling),
+    ...createActionTimingDraftFields(
+      entry,
+      scheduling,
+      actionLibraryCharacterId.value
+    ),
     note: entry?.note ?? '奇波事件标记；效果未接入 calculator。',
   });
 }
@@ -3567,7 +3577,11 @@ function createTimelineEntryDraftRequest({
       actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
       damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
       durationMs: scheduling.durationMs,
-      ...createActionTimingDraftFields(actionEntry, scheduling),
+      ...createActionTimingDraftFields(
+        actionEntry,
+        scheduling,
+        actorCharacterId
+      ),
       note:
         actionEntry.note ??
         (actionEntry.label ?? '动作') +
@@ -3627,7 +3641,7 @@ function createTimelineEntryDraftRequest({
       eventType: entry.eventType ?? 'activation',
       name: entry.label ?? '',
       icon: entry.icon ?? null,
-      ...createActionTimingDraftFields(entry),
+      ...createActionTimingDraftFields(entry, undefined, actorCharacterId),
       note: entry.note ?? '奇波事件标记；效果未接入 calculator。',
     });
   } else if (entry.type === ACTION_TYPES.ENEMY_EVENT) {
@@ -3658,9 +3672,14 @@ function createTimelineEntryDraftRequest({
 
 function createActionTimingDraftFields(
   entry,
-  scheduling = resolveWorkbenchActionScheduling(entry)
+  scheduling = resolveWorkbenchActionScheduling(entry),
+  actorCharacterId = null
 ) {
   const planning = scheduling.status === 'planning';
+  const variantInputSelection = resolveInitialVariantInputSelection(
+    entry,
+    actorCharacterId
+  );
   return {
     durationFrames: planning ? null : (entry?.durationFrames ?? null),
     timingSource: planning ? scheduling.kind : (entry?.timingSource ?? null),
@@ -3673,11 +3692,56 @@ function createActionTimingDraftFields(
     needsTimingData: planning || (entry?.needsTimingData ?? true),
     controlSubSkillIndex:
       scheduling.selectedSubSkillIndex ?? entry?.controlSubSkillIndex ?? null,
+    variantInputSelection,
     actionScheduling: entry?.actionScheduling ?? null,
     sourceEvidenceStatus: entry?.sourceEvidenceStatus ?? null,
     scenarioRuntimeStatus: entry?.scenarioRuntimeStatus ?? null,
     hitOverrides: entry?.hitOverrides ?? null,
   };
+}
+
+function resolveInitialVariantInputSelection(entry, actorCharacterId) {
+  const characterId = Number(
+    actorCharacterId ??
+      entry?.actorCharacterId ??
+      actionLibraryCharacterId.value
+  );
+  const mapping = getVerifiedCombatActionMapping({
+    type: entry?.type ?? ACTION_TYPES.SKILL,
+    actor: { characterId },
+    skillId: entry?.skillId,
+    actionVariantIndex:
+      entry?.actionVariantIndex ?? entry?.damageSegmentIndex ?? 0,
+    damageSegmentIndex:
+      entry?.actionVariantIndex ?? entry?.damageSegmentIndex ?? 0,
+    attackInput: entry?.attackInput ?? null,
+    attackSequenceIndex: entry?.attackSequenceIndex ?? null,
+  });
+  if (!mapping) return null;
+  const controlSkillId =
+    mapping.actionKind === 'normal-attack'
+      ? Number(entry?.attackInput?.controlSkillId)
+      : Number(mapping.controlSkillId);
+  const contract = getVerifiedDerivedControlContract({
+    ownerKind: mapping.ownerKind ?? 'actor',
+    ownerId: mapping.ownerId,
+    controlSkillId,
+  });
+  if (contract?.inputSelector?.resolutionStatus !== 'applied') return null;
+  const publicVariantIndex = Number(
+    entry?.actionVariantIndex ?? entry?.damageSegmentIndex
+  );
+  const option = contract.inputSelector.options?.find(
+    candidate =>
+      Number(candidate.publicVariantIndex) === publicVariantIndex &&
+      candidate.resolutionStatus === 'applied'
+  );
+  return option
+    ? createActionVariantInputSelection({
+        selector: contract.inputSelector,
+        option,
+      })
+    : null;
 }
 
 async function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {

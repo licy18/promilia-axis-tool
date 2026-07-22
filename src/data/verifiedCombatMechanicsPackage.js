@@ -14,6 +14,7 @@ let effectBindingByIdentity = new Map();
 let semanticEffectByRawIdentity = new Map();
 let semanticFormulaByIdentity = new Map();
 let specialResourceProfileByOwnerId = new Map();
+let derivedControlContractByOwnerAndControl = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
   if (installedPackage) return installedPackage;
@@ -82,6 +83,14 @@ export function installVerifiedCombatMechanicsPackage(value) {
       profile,
     ])
   );
+  derivedControlContractByOwnerAndControl = new Map(
+    (value.actionVariantGraph?.derivedControlContracts ?? []).map(contract => [
+      `${contract.ownerKind ?? 'actor'}|${Number(contract.ownerId)}|${Number(
+        contract.controlSkillId
+      )}`,
+      contract,
+    ])
+  );
   return value;
 }
 
@@ -115,6 +124,40 @@ export function getVerifiedActionVariantGraph() {
   return installedPackage?.actionVariantGraph ?? null;
 }
 
+export function getVerifiedDerivedControlContract({
+  ownerKind = 'actor',
+  ownerId = null,
+  controlSkillId = null,
+} = {}) {
+  const normalizedOwnerId = Number(ownerId);
+  const normalizedControlSkillId = Number(controlSkillId);
+  if (
+    !Number.isInteger(normalizedOwnerId) ||
+    !Number.isInteger(normalizedControlSkillId)
+  ) {
+    return null;
+  }
+  return (
+    derivedControlContractByOwnerAndControl.get(
+      `${ownerKind}|${normalizedOwnerId}|${normalizedControlSkillId}`
+    ) ?? null
+  );
+}
+
+export function getVerifiedDerivedControlContractForAction(action = {}) {
+  const mapping = getVerifiedCombatActionMapping(action);
+  if (!mapping) return null;
+  const controlSkillId =
+    mapping.actionKind === 'normal-attack'
+      ? Number(action.attackInput?.controlSkillId)
+      : Number(mapping.controlSkillId);
+  return getVerifiedDerivedControlContract({
+    ownerKind: mapping.ownerKind ?? 'actor',
+    ownerId: mapping.ownerId,
+    controlSkillId,
+  });
+}
+
 export function getVerifiedSpecialResourceCatalog() {
   return installedPackage?.specialResourceCatalog ?? null;
 }
@@ -127,6 +170,7 @@ export function clearInstalledVerifiedCombatMechanicsPackage() {
   semanticEffectByRawIdentity = new Map();
   semanticFormulaByIdentity = new Map();
   specialResourceProfileByOwnerId = new Map();
+  derivedControlContractByOwnerAndControl = new Map();
 }
 
 export function resolveVerifiedCombatActionMechanics(

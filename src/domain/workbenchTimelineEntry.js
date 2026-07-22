@@ -1,6 +1,7 @@
 import { ACTION_TYPES } from './projectSchema';
 import { normalizeAttackInputSegments } from './workbenchAttackInputChain';
 import { resolveWorkbenchActionScheduling } from './workbenchActionScheduling';
+import { normalizeActionVariantInputSelection } from './actionVariantInputSelection';
 
 export const WORKBENCH_TIMELINE_LANE_KINDS = Object.freeze({
   ACTOR_ACTION: 'actor-action',
@@ -55,6 +56,9 @@ export function createWorkbenchTimelineEntry(source = {}) {
     actionScheduling: source.actionScheduling ?? null,
     controlSubSkillIndex:
       scheduling.selectedSubSkillIndex ?? source.controlSubSkillIndex ?? null,
+    variantInputSelection: normalizeActionVariantInputSelection(
+      source.variantInputSelection
+    ),
     sourceEvidenceStatus: source.sourceEvidenceStatus ?? null,
     scenarioRuntimeStatus: source.scenarioRuntimeStatus ?? null,
     hitOverrides: source.hitOverrides ?? null,

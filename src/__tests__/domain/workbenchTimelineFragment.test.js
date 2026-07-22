@@ -91,6 +91,11 @@ describe('workbench timeline fragment', () => {
     expect(skillSource).not.toHaveProperty('generationBatch');
     expect(skillSource).not.toHaveProperty('statusGeneration');
     expect(skillSource.note).toBe('保留作者备注');
+    expect(skillSource.variantInputSelection).toMatchObject({
+      selectorIdentity: 'actor:test|control:test|public-variant:2',
+      publicVariantIndex: 2,
+      chargeTier: 2,
+    });
     expect(skillSource.effectCommands).toEqual([
       expect.objectContaining({ effectId: 'manual-fragment-effect' }),
     ]);
@@ -342,6 +347,13 @@ function createFragmentContext() {
       note: ['保留作者备注', '约束辅助：已从 0ms 调整到 500ms。'].join('\n'),
       insertion: { autoDelayed: true, requestedStartMs: 0 },
       generationBatch: { batchId: 'old-batch' },
+      variantInputSelection: {
+        selectorIdentity: 'actor:test|control:test|public-variant:2',
+        selectorKind: 'charge-tier',
+        publicVariantIndex: 2,
+        chargeTier: 2,
+        mode: 'hold',
+      },
       effectCommands: [
         {
           id: 'manual-old-id',

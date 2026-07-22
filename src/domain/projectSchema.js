@@ -13,6 +13,7 @@ import {
 } from './spUnitContract';
 import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
 import { normalizeActionHitOverrides } from './actionHitOverrides';
+import { normalizeActionVariantInputSelection } from './actionVariantInputSelection';
 import { normalizeCombatScenario } from './combatScenario';
 import { normalizeWorkbenchActionSchedulingContract } from './workbenchActionScheduling';
 
@@ -284,6 +285,7 @@ export function createSkillAction({
   timingSourceIdentity = null,
   needsTimingData = null,
   controlSubSkillIndex = null,
+  variantInputSelection = null,
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
@@ -352,6 +354,9 @@ export function createSkillAction({
       Number(actionVariantIndex ?? damageSegmentIndex) || 0
     ),
     controlSubSkillIndex: nonNegativeIntegerOrNull(controlSubSkillIndex),
+    variantInputSelection: normalizeActionVariantInputSelection(
+      variantInputSelection
+    ),
     actionScheduling:
       normalizeWorkbenchActionSchedulingContract(actionScheduling),
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
@@ -517,6 +522,7 @@ export function createKiboEventAction({
   timingSourceIdentity = null,
   needsTimingData = true,
   controlSubSkillIndex = null,
+  variantInputSelection = null,
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
@@ -541,6 +547,9 @@ export function createKiboEventAction({
     durationMs,
     eventType,
     controlSubSkillIndex: nonNegativeIntegerOrNull(controlSubSkillIndex),
+    variantInputSelection: normalizeActionVariantInputSelection(
+      variantInputSelection
+    ),
     actionScheduling:
       normalizeWorkbenchActionSchedulingContract(actionScheduling),
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),

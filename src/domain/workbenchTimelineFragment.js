@@ -18,6 +18,7 @@ import {
   WORKBENCH_TIMELINE_LANE_KINDS,
 } from './workbenchTimelineEntry';
 import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
+import { normalizeActionVariantInputSelection } from './actionVariantInputSelection';
 
 export const WORKBENCH_TIMELINE_FRAGMENT_CONTRACT_NAME =
   'AzPrWorkbenchTimelineFragment';
@@ -500,6 +501,9 @@ function createFragmentActionSource(action, actorConfig) {
     eventType: normalizeText(action.eventType) ?? 'phase',
     note: stripAutoPlacementNote(action.note),
     effectCommands: cloneManualEffectCommands(action.effectCommands),
+    variantInputSelection: normalizeActionVariantInputSelection(
+      action.variantInputSelection
+    ),
     ...normalizeAttackInputActionFields(action),
   };
   if (type === ACTION_TYPES.KIBO_EVENT) {
@@ -633,6 +637,9 @@ function normalizeFragmentActionSource(source) {
     eventType: normalizeText(source.eventType) ?? 'phase',
     note: stripAutoPlacementNote(source.note),
     effectCommands: cloneManualEffectCommands(source.effectCommands),
+    variantInputSelection: normalizeActionVariantInputSelection(
+      source.variantInputSelection
+    ),
     ...normalizeAttackInputActionFields(source),
   };
   if (source.type === ACTION_TYPES.KIBO_EVENT) {

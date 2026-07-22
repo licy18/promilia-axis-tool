@@ -18,6 +18,7 @@ import { createVerifiedActionVariantRuntime } from '../../simulation/mechanics/v
 
 const RUBY_ID = 103002;
 const JADE_ID = 101010;
+const CHARGED_INPUT_OWNER_ID = 107003;
 const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
@@ -35,6 +36,50 @@ afterEach(() => {
 });
 
 describe('verified action variant and special resource runtime', () => {
+  it('resolves a semantic charge-tier selection without using array order', () => {
+    const action = createActorAction({
+      id: 'charge-tier-three',
+      characterId: CHARGED_INPUT_OWNER_ID,
+      skillId: 10700301,
+      actionVariantIndex: 1,
+      startMs: 0,
+      variantInputSelection: {
+        schemaVersion: 1,
+        selectorIdentity: 'actor:107003|control:10700310|public-variant:3',
+        selectorKind: 'charge-tier',
+        publicVariantIndex: 3,
+        chargeTier: 3,
+        mode: 'hold',
+      },
+    });
+    const runtime = runVariantRuntime({
+      actors: [action.actor],
+      actions: [action],
+      durationMs: 10_000,
+    });
+
+    expect(runtime.selectionByActionId.get(action.id)).toMatchObject({
+      ownerId: CHARGED_INPUT_OWNER_ID,
+      controlSkillId: 10700310,
+      selectedSubSkillIndex: 2,
+      selectedInputIdentity: 'actor:107003|control:10700310|public-variant:3',
+      sourceKind: 'workbench-semantic-input-variant',
+      actualDurationFrames: 416,
+      status: 'verified-action-variant-selection-ready',
+    });
+    expect(runtime.actionResolutionById.get(action.id)).toMatchObject({
+      ready: true,
+      actionBinding: {
+        selectedSubSkillIndex: 2,
+        actualDurationFrames: 416,
+        variantSelection: {
+          selectedSubSkillIndex: 2,
+          sourceKind: 'workbench-semantic-input-variant',
+        },
+      },
+    });
+  });
+
   it('uses Ruby source frames for gains and blocks a consuming input before execution', () => {
     const ultimate = createActorAction({
       id: 'ruby-ultimate',
@@ -394,6 +439,7 @@ function createActorAction({
   actionVariantIndex = 0,
   startMs = 0,
   attackInput = null,
+  variantInputSelection = null,
 }) {
   const actor = {
     id: `actor-${characterId}`,
@@ -411,6 +457,7 @@ function createActorAction({
     actionVariantIndex,
     startMs,
     durationMs: 1000,
+    variantInputSelection,
     ...(attackInput
       ? {
           attackGroupId: `${id}-group`,

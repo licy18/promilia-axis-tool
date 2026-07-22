@@ -77,6 +77,13 @@ describe('workbench project actor configuration', () => {
       timingStatus: 'unresolved',
       needsTimingData: true,
       controlSubSkillIndex: 0,
+      variantInputSelection: {
+        selectorIdentity: 'actor:109001|control:10900112|public-variant:0',
+        selectorKind: 'charge-tier',
+        publicVariantIndex: 0,
+        chargeTier: 1,
+        mode: 'hold',
+      },
       actionScheduling: {
         status: 'planning',
         kind: 'source-animation-planning-duration',
@@ -102,6 +109,14 @@ describe('workbench project actor configuration', () => {
     });
     expect(project.actions[0]).toMatchObject({
       controlSubSkillIndex: 0,
+      variantInputSelection: {
+        schemaVersion: 1,
+        selectorIdentity: 'actor:109001|control:10900112|public-variant:0',
+        selectorKind: 'charge-tier',
+        publicVariantIndex: 0,
+        chargeTier: 1,
+        mode: 'hold',
+      },
       actionScheduling: {
         kind: 'source-animation-planning-duration',
         planningDurationFrames: 171,
@@ -115,6 +130,9 @@ describe('workbench project actor configuration', () => {
     expect(scenario.combatScenario).toEqual(project.combatScenario);
     expect(scenario.actions[0].hitOverrides).toEqual(
       project.actions[0].hitOverrides
+    );
+    expect(scenario.actions[0].variantInputSelection).toEqual(
+      project.actions[0].variantInputSelection
     );
   });
 

@@ -1,9 +1,14 @@
 import {
   getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMapping,
+  getVerifiedDerivedControlContract,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import {
+  normalizeActionVariantInputSelection,
+  resolveActionVariantInputOption,
+} from '../../domain/actionVariantInputSelection';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -301,6 +306,11 @@ export function createVerifiedActionVariantRuntime({
         scenarioActor?.characterId ??
         actorState?.profile?.ownerId
     );
+    const derivedControlContract = getVerifiedDerivedControlContract({
+      ownerKind: mapping?.ownerKind ?? 'actor',
+      ownerId: characterId,
+      controlSkillId,
+    });
     let selectedSubSkillIndex = mapping?.selectedSubSkillIndex ?? null;
     let selectionSource = null;
 
@@ -336,6 +346,44 @@ export function createVerifiedActionVariantRuntime({
       const defaultSelection = defaultSelectionByControl.get(
         `${characterId}|${controlSkillId}`
       );
+      const inputSelection = resolveDerivedInputSelection({
+        action,
+        contract: derivedControlContract,
+      });
+      if (inputSelection.status === 'invalid') {
+        const block = createInputVariantExecutionBlock({
+          action,
+          actorState,
+          controlSkillId,
+          contract: derivedControlContract,
+          inputSelection,
+        });
+        executionBlocks.push(block);
+        actionResolutionById.set(action.id, {
+          ...resolveVerifiedCombatActionMechanics(action, {
+            combatScenario: scenario.combatScenario,
+          }),
+          ready: false,
+          applied: false,
+          status: block.reason,
+          reasons: block.reasons,
+        });
+        selectionByActionId.set(
+          action.id,
+          createVariantSelectionRecord({
+            action,
+            characterId,
+            controlSkillId,
+            contract: derivedControlContract,
+            inputSelection,
+            selectedSubSkillIndex: null,
+            selectionSource: null,
+            resolution: null,
+            status: block.reason,
+          })
+        );
+        continue;
+      }
       const explicitSubSkillIndex = Number.isInteger(
         Number(action.controlSubSkillIndex)
       )
@@ -343,8 +391,11 @@ export function createVerifiedActionVariantRuntime({
         : null;
       selectedSubSkillIndex =
         activeSelection.binding?.targetSubSkillIndex ??
+        inputSelection.option?.subSkillIndex ??
         explicitSubSkillIndex ??
-        defaultSelection?.subSkillIndex ??
+        (derivedControlContract?.inputSelector?.resolutionStatus === 'applied'
+          ? null
+          : defaultSelection?.subSkillIndex) ??
         selectedSubSkillIndex;
       selectionSource = activeSelection.binding
         ? {
@@ -352,19 +403,25 @@ export function createVerifiedActionVariantRuntime({
             sourceIdentity: activeSelection.binding.sourceIdentity,
             decisionFrame: activeSelection.binding.decisionFrame,
           }
-        : explicitSubSkillIndex != null
+        : inputSelection.option
           ? {
-              sourceKind: 'workbench-explicit-input-variant',
-              sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
-              decisionFrame: 0,
+              sourceKind: inputSelection.sourceKind,
+              sourceIdentity: inputSelection.option.sourceIdentity,
+              decisionFrame: derivedControlContract?.decisionFrame ?? 0,
             }
-          : defaultSelection
+          : explicitSubSkillIndex != null
             ? {
-                sourceKind: 'verified-client-default-subskill-index',
-                sourceIdentity: defaultSelection.sourceIdentity,
-                decisionFrame: defaultSelection.decisionFrame,
+                sourceKind: 'workbench-explicit-input-variant',
+                sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
+                decisionFrame: 0,
               }
-            : null;
+            : defaultSelection
+              ? {
+                  sourceKind: 'verified-client-default-subskill-index',
+                  sourceIdentity: defaultSelection.sourceIdentity,
+                  decisionFrame: defaultSelection.decisionFrame,
+                }
+              : null;
     }
 
     const resolution = resolveVerifiedCombatActionMechanics(action, {
@@ -373,32 +430,22 @@ export function createVerifiedActionVariantRuntime({
       combatScenario: scenario.combatScenario,
     });
     actionResolutionById.set(action.id, resolution);
-    selectionByActionId.set(action.id, {
-      actionId: action.id,
-      actorId: action.actorId,
-      ownerId: characterId || null,
-      controlSkillId,
-      selectedSubSkillIndex,
-      sourceKind: selectionSource?.sourceKind ?? 'action-mapping-selection',
-      sourceIdentity:
-        selectionSource?.sourceIdentity ??
-        resolution.actionBinding?.bindingSourceIdentity ??
-        null,
-      decisionFrame: selectionSource?.decisionFrame ?? 0,
-      actualDurationFrames:
-        resolution.actionBinding?.actualDurationFrames ??
-        resolution.actionBinding?.actionTiming?.occupancy?.durationFrames ??
-        null,
-      actualDurationMs:
-        resolution.actionBinding?.actualDurationMs ??
-        framesToMs(
-          resolution.actionBinding?.actionTiming?.occupancy?.durationFrames,
-          resolution.controlBinding?.frameRate
-        ),
-      status: resolution.ready
-        ? 'verified-action-variant-selection-ready'
-        : 'unresolved-action-variant-selection',
-    });
+    selectionByActionId.set(
+      action.id,
+      createVariantSelectionRecord({
+        action,
+        characterId,
+        controlSkillId,
+        contract: derivedControlContract,
+        inputSelection: resolveDerivedInputSelection({
+          action,
+          contract: derivedControlContract,
+        }),
+        selectedSubSkillIndex,
+        selectionSource,
+        resolution,
+      })
+    );
     if (!resolution.ready || !actorState || !Number.isInteger(controlSkillId)) {
       continue;
     }
@@ -532,6 +579,140 @@ export function createVerifiedActionVariantRuntime({
     },
     ready: true,
     applied: true,
+  };
+}
+
+function resolveDerivedInputSelection({ action, contract } = {}) {
+  const selector = contract?.inputSelector;
+  if (selector?.resolutionStatus !== 'applied') {
+    return { status: 'not-required', option: null, selection: null };
+  }
+  const requested = normalizeActionVariantInputSelection(
+    action?.variantInputSelection
+  );
+  if (requested) {
+    const option = resolveActionVariantInputOption(contract, requested);
+    return option
+      ? {
+          status: 'selected',
+          option,
+          selection: requested,
+          sourceKind: 'workbench-semantic-input-variant',
+        }
+      : {
+          status: 'invalid',
+          option: null,
+          selection: requested,
+          reason: 'selected-input-variant-not-in-current-contract',
+        };
+  }
+
+  const publicVariantIndex = Number(action?.actionVariantIndex);
+  const publicOption = selector.options?.find(
+    option => Number(option.publicVariantIndex) === publicVariantIndex
+  );
+  if (publicOption) {
+    return {
+      status: 'selected',
+      option: publicOption,
+      selection: null,
+      sourceKind: 'workbench-public-action-input-variant',
+    };
+  }
+
+  const legacySubSkillIndex = Number(action?.controlSubSkillIndex);
+  const legacyOption = Number.isInteger(legacySubSkillIndex)
+    ? selector.options?.find(
+        option => Number(option.subSkillIndex) === legacySubSkillIndex
+      )
+    : null;
+  if (legacyOption) {
+    return {
+      status: 'selected',
+      option: legacyOption,
+      selection: null,
+      sourceKind: 'legacy-workbench-explicit-subskill',
+    };
+  }
+
+  return {
+    status: 'invalid',
+    option: null,
+    selection: null,
+    reason: 'input-variant-selection-required',
+  };
+}
+
+function createVariantSelectionRecord({
+  action,
+  characterId,
+  controlSkillId,
+  contract,
+  inputSelection,
+  selectedSubSkillIndex,
+  selectionSource,
+  resolution,
+  status = null,
+}) {
+  const selector = contract?.inputSelector;
+  return {
+    actionId: action.id,
+    actorId: action.actorId,
+    ownerId: characterId || null,
+    controlSkillId,
+    selectedSubSkillIndex,
+    controlSource: contract?.controlSource ?? 'single-variant',
+    contractIdentity: contract?.contractIdentity ?? null,
+    contractResolutionStatus: contract?.resolutionStatus ?? 'applied',
+    inputSelector:
+      selector == null
+        ? null
+        : {
+            kind: selector.kind,
+            mode: selector.mode,
+            holdRange: selector.holdRange ?? null,
+            resolutionStatus: selector.resolutionStatus,
+            options: (selector.options ?? []).map(option => ({
+              selectorIdentity: option.selectorIdentity,
+              label: option.label,
+              publicVariantIndex: option.publicVariantIndex,
+              subSkillIndex: option.subSkillIndex,
+              playerSkillId: option.playerSkillId,
+              durationFrames: option.durationFrames,
+              chargeTier: option.chargeTier,
+              sourceIdentity: option.sourceIdentity,
+              resolutionStatus: option.resolutionStatus,
+            })),
+          },
+    inputSelectionStatus: inputSelection?.status ?? 'not-required',
+    selectedInputIdentity:
+      inputSelection?.option?.selectorIdentity ??
+      inputSelection?.selection?.selectorIdentity ??
+      null,
+    selectionReason:
+      selectionSource?.sourceKind ?? inputSelection?.reason ?? null,
+    sourceKind: selectionSource?.sourceKind ?? 'action-mapping-selection',
+    sourceIdentity:
+      selectionSource?.sourceIdentity ??
+      resolution?.actionBinding?.bindingSourceIdentity ??
+      null,
+    decisionFrame:
+      selectionSource?.decisionFrame ?? contract?.decisionFrame ?? 0,
+    actualDurationFrames:
+      resolution?.actionBinding?.actualDurationFrames ??
+      resolution?.actionBinding?.actionTiming?.occupancy?.durationFrames ??
+      null,
+    actualDurationMs:
+      resolution?.actionBinding?.actualDurationMs ??
+      framesToMs(
+        resolution?.actionBinding?.actionTiming?.occupancy?.durationFrames,
+        resolution?.controlBinding?.frameRate
+      ),
+    status:
+      status ??
+      (resolution?.ready
+        ? 'verified-action-variant-selection-ready'
+        : 'unresolved-action-variant-selection'),
   };
 }
 
@@ -724,6 +905,33 @@ function createVariantExecutionBlock({
     requiredValue: null,
     currentValue: actorState.current,
     maxValue: actorState.profile.capacity,
+  };
+}
+
+function createInputVariantExecutionBlock({
+  action,
+  actorState,
+  controlSkillId,
+  contract,
+  inputSelection,
+}) {
+  return {
+    code: 'VERIFIED_ACTION_INPUT_VARIANT_REQUIRED',
+    status: 'unresolved',
+    reason: 'verified-action-input-variant-unresolved',
+    reasons: [inputSelection?.reason ?? 'input-variant-selection-required'],
+    sourceKind: 'azpr-verified-action-variant-runtime',
+    sourceIdentity: contract?.sourceIdentity ?? [],
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    controlSkillId,
+    resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
+    resourceName: actorState?.profile?.name ?? null,
+    requiredValue: null,
+    currentValue: actorState?.current ?? null,
+    maxValue: actorState?.profile?.capacity ?? null,
   };
 }
 
