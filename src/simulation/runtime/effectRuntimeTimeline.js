@@ -7,6 +7,7 @@ import {
   createActionEffectRelationId,
   resolveActionEffectRelationKind,
 } from './actionEffectRelationGraph';
+import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
 
 export const ACTION_EFFECT_COMMAND_CONTRACT_NAME = 'AzPrActionEffectCommand';
 export const EFFECT_RUNTIME_TIMELINE_CONTRACT_NAME =
@@ -299,6 +300,10 @@ function isInheritedEffectTargetAvailable(effect, scenario) {
 function createInheritedRuntimeEffectState(effect) {
   const remainingDurationMs = strictNumberOrNull(effect.remainingDurationMs);
   const appliedToCalculators = isVerifiedCalculatorEffectState(effect);
+  const effectDisplay = createEffectSourceDisplayLabel({
+    sourceText: effect.effectName,
+    sourceIdentity: effect.sourceIdentity,
+  });
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-runtime-active-effect',
@@ -311,7 +316,9 @@ function createInheritedRuntimeEffectState(effect) {
         })
       : effect.instanceKey,
     effectId: effect.effectId,
-    effectName: effect.effectName,
+    effectName: effectDisplay.displayLabel,
+    rawSourceName: effect.rawSourceName ?? effectDisplay.rawSourceName,
+    sourceNameStatus: effect.sourceNameStatus ?? effectDisplay.sourceNameStatus,
     sourceActionId: effect.sourceActionId ?? null,
     sourceActorId: effect.sourceActorId ?? null,
     sourceActorName: effect.sourceActorName ?? null,
@@ -429,6 +436,10 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     command.appliedToCalculators === true;
   const sourceActionId = command.sourceActionId ?? action?.id ?? null;
   const commandOwnerIdentity = sourceActionId ?? 'generated-global';
+  const effectDisplay = createEffectSourceDisplayLabel({
+    sourceText: command.effectName,
+    sourceIdentity: command.sourceIdentity,
+  });
 
   return {
     schemaVersion: 1,
@@ -443,7 +454,13 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     sourceActorId: command.sourceActorId ?? action?.actorId ?? null,
     sourceActorName: command.sourceActorName ?? action?.actor?.name ?? null,
     effectId,
-    effectName: String(command.effectName ?? effectId),
+    effectName:
+      effectDisplay.sourceNameStatus === 'source-name-missing'
+        ? String(effectId)
+        : effectDisplay.displayLabel,
+    rawSourceName: command.rawSourceName ?? effectDisplay.rawSourceName,
+    sourceNameStatus:
+      command.sourceNameStatus ?? effectDisplay.sourceNameStatus,
     operation: command.operation,
     targetKind: command.targetKind,
     targetId,

@@ -6,6 +6,7 @@ import { ACTION_TYPES } from '../../domain/projectSchema';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 import { resolveActiveEffectsAt } from '../runtime/effectRuntimeTimeline';
 import { EFFECT_TARGET_KINDS } from '../../domain/projectSchema';
+import { createCombatSourceDisplayLabel } from '../../domain/sourceDisplayText';
 import {
   calculateAutoSp,
   calculateHitSp,
@@ -2037,7 +2038,12 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
         },
         segment: {
           index: hit.hitIndex - 1,
-          label: hit.name || `命中 ${hit.hitIndex}`,
+          label: createCombatSourceDisplayLabel({
+            sourceText: hit.displayLabel ?? hit.name,
+            referenceKind: hit.referenceKind,
+            sequence: hit.hitIndex,
+            sourceIdentity: hit.sourceIdentity,
+          }).displayLabel,
           multiplier: ratioBasisPoints / 10000,
           elementId: hit.elementId,
         },

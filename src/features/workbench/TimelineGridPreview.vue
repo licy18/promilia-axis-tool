@@ -192,6 +192,24 @@
         >
           前台 · {{ controlledActorAtCursor?.actorName ?? '未配置' }}
         </output>
+        <label class="timeline-duration-control">
+          <span>轴长</span>
+          <select
+            :value="durationMs"
+            data-testid="workbench-timeline-duration-select"
+            aria-label="时间轴总时长"
+            title="时间轴总时长"
+            @change="handleTimelineDurationChange"
+          >
+            <option
+              v-for="option in WORKBENCH_TIMELINE_DURATION_OPTIONS_MS"
+              :key="option"
+              :value="option"
+            >
+              {{ option / 1000 }}s
+            </option>
+          </select>
+        </label>
         <button
           class="icon-control"
           type="button"
@@ -249,7 +267,13 @@
           :style="timelineTrackStyle"
           data-testid="workbench-timeline-scale-track"
         >
-          <span v-for="tick in ticks" :key="tick.timeMs">{{ tick.label }}</span>
+          <span
+            v-for="tick in ticks"
+            :key="tick.timeMs"
+            :style="{ left: `${tick.leftPercent}%` }"
+            data-testid="workbench-timeline-scale-tick"
+            >{{ tick.label }}</span
+          >
           <i
             class="timeline-scale-cursor"
             :style="timelineCursorStyle"
@@ -1046,6 +1070,11 @@ import {
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
 import { isSwitchTriggeredDerivedAction } from '../../simulation/generation/switchTriggeredActionGeneration';
+import {
+  WORKBENCH_TIMELINE_BASE_PIXELS_PER_SECOND,
+  WORKBENCH_TIMELINE_DURATION_OPTIONS_MS,
+  createWorkbenchTimelineTicks,
+} from '../../domain/workbenchTimelineDuration';
 
 const TimelineOperationAxis = defineAsyncComponent(
   () => import('./TimelineOperationAxis.vue')
@@ -1358,6 +1387,7 @@ const emit = defineEmits([
   'step-timeline-frame',
   'update-playback-rate',
   'update-playback-range-mode',
+  'update-duration',
   'dispatch-flow-action',
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
@@ -1414,13 +1444,10 @@ const placementPreviewSuggestedFrameLabel = computed(() => {
 });
 
 const ticks = computed(() => {
-  const durationSeconds = props.durationMs / 1000;
-  return [0, 0.25, 0.5, 0.75, 1].map(ratio => {
-    const seconds = Math.round(durationSeconds * ratio);
-    return {
-      timeMs: seconds * 1000,
-      label: `${seconds}s`,
-    };
+  return createWorkbenchTimelineTicks({
+    durationMs: props.durationMs,
+    pixelsPerSecond: WORKBENCH_TIMELINE_BASE_PIXELS_PER_SECOND,
+    zoom: timelineZoom.value,
   });
 });
 const timelineCursor = computed(() => {
@@ -1637,8 +1664,12 @@ const cycleSectionHighlightStyle = computed(() => {
   };
 });
 const timelineTrackStyle = computed(() => ({
-  width: `${timelineZoom.value * 100}%`,
-  '--timeline-mobile-min-width': `${900 * timelineZoom.value}px`,
+  width: `${
+    (props.durationMs / 1000) *
+    WORKBENCH_TIMELINE_BASE_PIXELS_PER_SECOND *
+    timelineZoom.value
+  }px`,
+  minWidth: '100%',
 }));
 const actionsById = computed(
   () => new Map(props.actions.map(action => [action.id, action]))
@@ -3707,6 +3738,16 @@ function setTimelineZoom(value) {
   timelineZoom.value = clampNumber(Number(value), MIN_ZOOM, MAX_ZOOM);
 }
 
+function handleTimelineDurationChange(event) {
+  const select = event?.target;
+  emit('update-duration', Number(select?.value));
+  void nextTick().then(() => {
+    if (select?.isConnected) {
+      select.value = String(props.durationMs);
+    }
+  });
+}
+
 function synchronizeTimelineScroll(source) {
   const sourceElement =
     source === 'scale' ? scaleViewportRef.value : timelineViewportRef.value;
@@ -4326,6 +4367,27 @@ h2 {
   text-align: right;
 }
 
+.timeline-duration-control {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 4px;
+  color: #8f9aa3;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.timeline-duration-control select {
+  height: 24px;
+  padding: 0 18px 0 6px;
+  border: 1px solid rgba(121, 199, 185, 0.3);
+  border-radius: 3px;
+  background: #151d22;
+  color: #d7e2e5;
+  font: inherit;
+  font-size: 11px;
+}
+
 .timeline-scale {
   flex: 0 0 auto;
   display: grid;
@@ -4362,6 +4424,10 @@ h2 {
   overflow-y: hidden;
 }
 
+.timeline-viewport {
+  overflow-x: scroll;
+}
+
 .scale-viewport {
   scrollbar-width: none;
 }
@@ -4379,8 +4445,7 @@ h2 {
 
 .scale-track {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  height: 18px;
   min-width: 100%;
 }
 
@@ -4396,11 +4461,18 @@ h2 {
 }
 
 .scale-track span {
-  text-align: center;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  transform: translateX(-50%);
 }
 
-.scale-track span:last-child {
-  text-align: right;
+.scale-track span:first-child {
+  transform: none;
+}
+
+.scale-track span:last-of-type {
+  transform: translateX(-100%);
 }
 
 .timeline-shell {
@@ -5695,12 +5767,6 @@ h2 {
 
   .timeline-shell {
     grid-template-columns: 132px minmax(0, 1fr);
-  }
-
-  .scale-track,
-  .operation-axis-slot,
-  .timeline-lane {
-    min-width: var(--timeline-mobile-min-width);
   }
 
   .lane-label {

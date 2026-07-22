@@ -17,6 +17,42 @@ import {
 import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 describe('effect runtime timeline', () => {
+  it('keeps corrupt source names auditable without publishing them as effect labels', () => {
+    const timeline = createEffectRuntimeTimeline({
+      scenario: {
+        time: { durationMs: 2000, fps: 60 },
+        actors: [{ id: 'actor-001' }],
+        actions: [],
+        initialRuntimeState: {
+          activeEffects: [
+            {
+              instanceKey: 'actor|actor-001|effect-corrupt',
+              effectId: 'effect-corrupt',
+              effectName: '\uFFFD\uFFFD buff',
+              targetKind: 'actor',
+              targetId: 'actor-001',
+              remainingDurationMs: 750,
+              stacks: 1,
+              maxStacks: 1,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(timeline.events[0]).toMatchObject({
+      effectName: '状态效果 1',
+      after: {
+        effectName: '状态效果 1',
+        rawSourceName: '\uFFFD\uFFFD buff',
+        sourceNameStatus: 'corrupt-source-encoding',
+      },
+    });
+    expect(JSON.stringify(timeline.activeEffects)).not.toContain(
+      '"effectName":"\uFFFD'
+    );
+  });
+
   it('starts from inherited active effects and expires them by remaining duration', () => {
     const timeline = createEffectRuntimeTimeline({
       scenario: {

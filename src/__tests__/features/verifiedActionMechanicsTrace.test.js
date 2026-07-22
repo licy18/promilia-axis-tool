@@ -136,6 +136,65 @@ describe('verified action mechanics trace', () => {
     });
   });
 
+  it('uses semantic hit labels when Battle source names contain corrupt text', () => {
+    const trace = createVerifiedActionMechanicsTrace({
+      action: {
+        id: 'corrupt-hit-action',
+        actorId: 'actor-a',
+        type: 'skill',
+        name: '普通攻击',
+      },
+      verifiedCombatRuntime: {
+        enabled: true,
+        actionResolutionById: new Map([
+          [
+            'corrupt-hit-action',
+            {
+              ready: true,
+              complete: true,
+              applied: true,
+              actionBinding: { identity: 'actor|a|normal' },
+              hits: [],
+              allHits: [
+                {
+                  hitIdentity: 'direct-hit',
+                  name: '�չ� hit1',
+                  referenceKind: 'elements',
+                  trigger: { startFrame: 12 },
+                },
+                {
+                  hitIdentity: 'projectile-hit',
+                  name: '�ӵ� hit2',
+                  referenceKind: 'bulletElements',
+                  trigger: { impactFrame: 18 },
+                },
+              ],
+              effects: [],
+              reasons: [],
+            },
+          ],
+        ]),
+        damageEvents: [],
+        resourceEvents: [],
+        kiboResourceEvents: [],
+        effectTimeline: { events: [] },
+        tuningMarkRuntime: { events: [], unresolved: [] },
+      },
+    });
+
+    expect(trace.hitBindings).toEqual([
+      expect.objectContaining({
+        label: '命中 1',
+        sourceNameStatus: 'corrupt-source-encoding',
+      }),
+      expect.objectContaining({
+        label: '弹体 2',
+        sourceNameStatus: 'corrupt-source-encoding',
+      }),
+    ]);
+    expect(trace.hitBindings.map(hit => hit.label).join('')).not.toContain('�');
+  });
+
   it('keeps character special resources separate from SP in the trace', () => {
     const trace = createVerifiedActionMechanicsTrace({
       action: {

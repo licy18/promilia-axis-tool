@@ -6,6 +6,7 @@ import {
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
+import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
 
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
@@ -172,6 +173,11 @@ function createPropertyEffectCommand({
   resolution,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
+  const effectDisplay = createEffectSourceDisplayLabel({
+    sourceText: effect.displayLabel ?? effect.name,
+    effectKind: effect.kind,
+    sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities,
+  });
   return {
     id: `verified-effect|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
     sourceActionId: action.id,
@@ -179,7 +185,12 @@ function createPropertyEffectCommand({
     sourceActorId: action.actorId,
     sourceActorName: action.actor?.name ?? null,
     effectId: createRuntimeEffectId(action, effect),
-    effectName: effect.name || `属性 ${effect.propertyChange.attributeId}`,
+    effectName:
+      effectDisplay.sourceNameStatus === 'source-name-missing'
+        ? `属性 ${effect.propertyChange.attributeId}`
+        : effectDisplay.displayLabel,
+    rawSourceName: effect.rawSourceName ?? effectDisplay.rawSourceName,
+    sourceNameStatus: effect.sourceNameStatus ?? effectDisplay.sourceNameStatus,
     operation: EFFECT_OPERATIONS.APPLY,
     targetKind: target.kind,
     targetId: String(target.id),

@@ -5165,7 +5165,7 @@ describe('first vertical slice simulation', () => {
       ])
     ).toEqual([
       [109001, 0, 96],
-      [101003, 96, 1800],
+      [101003, 96, 7200],
     ]);
     expect(result.eventLog.map(event => event.type)).not.toContain(
       'DAMAGE_SKIPPED'

@@ -29,7 +29,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 13,
+      packageVersion: 14,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -942,6 +942,69 @@ describe('verified combat mechanics package', () => {
         validation: { ...mechanicsPackage.validation, failed: 1 },
       })
     ).toThrow(/package-validation-invalid/);
+  });
+
+  it('publishes the incrementally resynced Battle source names', () => {
+    const source = mechanicsPackage.sourceFiles.find(
+      item => item.id === 'battle-element-index'
+    );
+    const nodes = mechanicsPackage.battleEffectCatalog.nodes;
+
+    expect(source).toMatchObject({
+      sha256: '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
+      bytes: 43759616,
+    });
+    expect(nodes.find(node => node.elementId === 101003087)).toMatchObject({
+      rawSourceName: '普攻1 子弹hit1',
+      sourceNameStatus: 'source-name-ready',
+      displayLabel: '普攻1 子弹hit1',
+    });
+    expect(nodes.find(node => node.elementId === 600014)).toMatchObject({
+      rawSourceName: '【正式】宠物通用技能震屏（弱）',
+      sourceNameStatus: 'source-name-ready',
+      displayLabel: '【正式】宠物通用技能震屏（弱）',
+    });
+    expect(nodes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          rawSourceName: '普攻2|第1段伤害',
+          sourceNameStatus: 'source-name-ready',
+          displayLabel: '普攻2|第1段伤害',
+        }),
+      ])
+    );
+  });
+
+  it('rejects corrupt source text from published display labels', () => {
+    const bindingIndex = mechanicsPackage.controlBindings.findIndex(
+      binding => binding.hits.length > 0
+    );
+    const binding = mechanicsPackage.controlBindings[bindingIndex];
+    const corruptPackage = {
+      ...mechanicsPackage,
+      controlBindings: mechanicsPackage.controlBindings.map((item, index) =>
+        index === bindingIndex
+          ? {
+              ...item,
+              hits: item.hits.map((hit, hitIndex) =>
+                hitIndex === 0
+                  ? { ...hit, displayLabel: '\uFFFD\uFFFD hit 1' }
+                  : hit
+              ),
+            }
+          : item
+      ),
+    };
+
+    expect(
+      validateVerifiedCombatMechanicsPackage(corruptPackage)
+    ).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining([
+        'published-source-display-label-invalid',
+      ]),
+    });
+    expect(binding.hits[0].displayLabel).not.toContain('\uFFFD');
   });
 
   it('rejects packages that lose the enemy Break profile source', () => {

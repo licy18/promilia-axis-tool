@@ -11,6 +11,26 @@ function readStyleNumber(style, property) {
 }
 
 describe('TimelineGridPreview', () => {
+  it('uses duration-aware track width, readable ticks, and emits duration changes', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({ durationMs: 120_000 }),
+    });
+
+    const track = wrapper.get('[data-testid="workbench-timeline-scale-track"]');
+    expect(track.attributes('style')).toContain('width: 2880px');
+    const ticks = track.findAll(
+      '[data-testid="workbench-timeline-scale-tick"]'
+    );
+    expect(ticks[0].text()).toBe('0s');
+    expect(ticks.at(-1).text()).toBe('120s');
+    expect(ticks.some(tick => tick.text() === '60s')).toBe(true);
+
+    await wrapper
+      .get('[data-testid="workbench-timeline-duration-select"]')
+      .setValue('180000');
+    expect(wrapper.emitted('update-duration')?.at(-1)?.[0]).toBe(180_000);
+  });
+
   it('exposes free and constraint-assisted placement as an explicit mode choice', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

@@ -1,6 +1,7 @@
 import { normalizeAttackInputSegments } from '../domain/workbenchAttackInputChain';
 import { resolveActionHitWillHit } from '../domain/actionHitOverrides';
 import { normalizeCombatScenario } from '../domain/combatScenario';
+import { isSourceDisplayTextSafe } from '../domain/sourceDisplayText';
 
 const packageUrl = new URL(
   './generated/verified-combat-mechanics-package.json',
@@ -826,6 +827,12 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   ) {
     issues.push('kibo-sp-profiles-invalid');
   }
+  if (
+    Number(value?.packageVersion) >= 14 &&
+    !hasSafePublishedSourceDisplayLabels(value)
+  ) {
+    issues.push('published-source-display-label-invalid');
+  }
   return {
     valid: issues.length === 0,
     status: issues.length
@@ -833,6 +840,32 @@ export function validateVerifiedCombatMechanicsPackage(value) {
       : 'verified-combat-mechanics-package-valid',
     issues,
   };
+}
+
+function hasSafePublishedSourceDisplayLabels(value) {
+  const hits = [
+    ...(value?.controlBindings ?? []),
+    ...(value?.actionVariantControlBindings ?? []),
+  ].flatMap(binding => binding.hits ?? []);
+  const specialResources = value?.specialResourceCatalog?.profiles ?? [];
+  const published = [
+    ...hits,
+    ...(value?.battleEffectCatalog?.nodes ?? []),
+    ...(value?.semanticEffectCatalog?.semanticEffects ?? []),
+    ...specialResources,
+    ...specialResources.flatMap(profile => profile.stateElements ?? []),
+  ];
+  return published.every(
+    entry =>
+      typeof entry?.displayLabel === 'string' &&
+      entry.displayLabel.length > 0 &&
+      isSourceDisplayTextSafe(entry.displayLabel) &&
+      [
+        'source-name-ready',
+        'source-name-missing',
+        'corrupt-source-encoding',
+      ].includes(entry.sourceNameStatus)
+  );
 }
 
 function resolveActionOwner(action) {

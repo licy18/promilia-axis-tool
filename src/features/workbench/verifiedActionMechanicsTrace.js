@@ -1,3 +1,5 @@
+import { createCombatSourceDisplayLabel } from '../../domain/sourceDisplayText';
+
 export function createVerifiedActionMechanicsTrace({
   action = null,
   scenario = null,
@@ -80,22 +82,28 @@ export function createVerifiedActionMechanicsTrace({
     controlSkillId: resolution?.actionBinding?.controlSkillId ?? null,
     hitBindingCount: resolution?.hits?.length ?? 0,
     hitBindings: (resolution?.allHits ?? resolution?.hits ?? []).map(
-      (hit, index) => ({
-        identity: hit.hitIdentity,
-        label:
-          hit.name ||
-          (hit.referenceKind === 'bulletElements'
-            ? `弹体 ${index + 1}`
-            : `命中 ${index + 1}`),
-        frame: Number(hit.trigger?.impactFrame ?? hit.trigger?.startFrame),
-        sourceKind:
-          hit.referenceKind === 'bulletElements' ? 'projectile' : 'direct',
-        sourceEvidenceStatus: hit.sourceEvidenceStatus ?? 'applied',
-        scenarioRuntimeStatus: hit.scenarioRuntimeStatus ?? 'source-verified',
-        willHit: !(resolution?.disabledHitIdentities ?? []).includes(
-          hit.hitIdentity
-        ),
-      })
+      (hit, index) => {
+        const display = createCombatSourceDisplayLabel({
+          sourceText: hit.displayLabel ?? hit.name,
+          referenceKind: hit.referenceKind,
+          sequence: hit.hitIndex ?? index + 1,
+          sourceIdentity: hit.sourceIdentity,
+        });
+        return {
+          identity: hit.hitIdentity,
+          label: display.displayLabel,
+          rawSourceName: hit.rawSourceName ?? display.rawSourceName,
+          sourceNameStatus: hit.sourceNameStatus ?? display.sourceNameStatus,
+          frame: Number(hit.trigger?.impactFrame ?? hit.trigger?.startFrame),
+          sourceKind:
+            hit.referenceKind === 'bulletElements' ? 'projectile' : 'direct',
+          sourceEvidenceStatus: hit.sourceEvidenceStatus ?? 'applied',
+          scenarioRuntimeStatus: hit.scenarioRuntimeStatus ?? 'source-verified',
+          willHit: !(resolution?.disabledHitIdentities ?? []).includes(
+            hit.hitIdentity
+          ),
+        };
+      }
     ),
     disabledHitCount: resolution?.disabledHitIdentities?.length ?? 0,
     effectBindingCount: resolution?.effects?.length ?? 0,

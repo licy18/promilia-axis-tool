@@ -16,6 +16,34 @@ import {
 } from '../../domain/workbenchDraftStorage';
 
 describe('workbench draft storage project files', () => {
+  it('stores 120 seconds by default and preserves explicit project durations', () => {
+    const defaultDraft = createWorkbenchScenarioDraftSnapshot({
+      actionDrafts: [],
+    });
+    const customProject = createWorkbenchProjectFileSnapshot({
+      durationMs: 180_000,
+      actionDrafts: [],
+    });
+    const explicitThirtySeconds = parseWorkbenchProjectFile({
+      ...customProject,
+      durationMs: 30_000,
+      scenarioWorkspace: {
+        ...customProject.scenarioWorkspace,
+        scenarios: customProject.scenarioWorkspace.scenarios.map(scenario => ({
+          ...scenario,
+          draft: { ...scenario.draft, durationMs: 30_000 },
+        })),
+      },
+    });
+
+    expect(defaultDraft.durationMs).toBe(120_000);
+    expect(customProject.durationMs).toBe(180_000);
+    expect(customProject.scenarioWorkspace.scenarios[0].draft.durationMs).toBe(
+      180_000
+    );
+    expect(explicitThirtySeconds.durationMs).toBe(30_000);
+  });
+
   it('migrates legacy 600ms switches without shifting later absolute start frames', () => {
     const legacy = createWorkbenchProjectFileSnapshot({
       selection: {
@@ -881,6 +909,7 @@ describe('workbench draft storage project files', () => {
 
     expect(loadWorkbenchDraft(storageAdapter)).toMatchObject({
       schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      durationMs: 120_000,
       enemyConfig: {
         level: 88,
         toughnessMultiplier: 1,

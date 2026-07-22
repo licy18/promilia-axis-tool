@@ -339,6 +339,7 @@ describe('verified combat project replay consistency', () => {
 
 function createAttackInputReplayDraft() {
   const base = createDefaultWorkbenchDraftState();
+  base.durationMs = 30_000;
   const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
     item => item.ownerId === 109001 && item.actionKind === 'normal-attack'
   );
@@ -385,6 +386,7 @@ function createAttackInputActionSignature(draft) {
 
 function createVerifiedReplayDraft() {
   const base = createDefaultWorkbenchDraftState();
+  base.durationMs = 30_000;
   const actorConfigs = base.actorConfigs.map(config =>
     Number(config.characterId) === 101007
       ? {
@@ -456,6 +458,7 @@ function createAttackInputFields(segment) {
 
 function createCrossCatalogReplayDraft() {
   const base = createDefaultWorkbenchDraftState();
+  base.durationMs = 30_000;
   const actorConfigs = base.actorConfigs.map(config => ({
     ...config,
     initialSp: 0,
@@ -558,6 +561,7 @@ function createCrossCatalogReplayDraft() {
 
 function createSpecialResourceReplayDraft() {
   const base = createDefaultWorkbenchDraftState();
+  base.durationMs = 30_000;
   const teamSlots = [
     { slotId: 'team-slot-1', position: 0, characterId: 101010 },
     { slotId: 'team-slot-2', position: 1, characterId: 101007 },
@@ -618,6 +622,7 @@ function createSpecialResourceReplayDraft() {
 
 function createVerifiedReplaySignature(draft) {
   const project = createWorkbenchProject(draft.selection, {
+    durationMs: draft.durationMs,
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,

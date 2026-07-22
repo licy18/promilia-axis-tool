@@ -36,6 +36,7 @@ export function createBasicWorkbenchDraftFixture() {
     },
   ];
   const scenarioDraft = {
+    durationMs: 30_000,
     selection,
     teamSlots,
     enemyConfig,

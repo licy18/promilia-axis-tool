@@ -119,6 +119,7 @@ describe('switch-triggered star-carry replay consistency', () => {
 
 function createSwitchReplayDraft() {
   const base = createDefaultWorkbenchDraftState();
+  base.durationMs = 30_000;
   const teamSlots = [
     { slotId: 'team-slot-1', position: 0, characterId: 101003 },
     { slotId: 'team-slot-2', position: 1, characterId: 101007 },
@@ -163,6 +164,7 @@ function createSwitchReplayDraft() {
 
 function createSwitchReplaySignature(draft) {
   const project = createWorkbenchProject(draft.selection, {
+    durationMs: draft.durationMs,
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,

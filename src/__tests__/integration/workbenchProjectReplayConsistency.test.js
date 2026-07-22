@@ -367,6 +367,7 @@ describe('Workbench project replay consistency', () => {
 
 function createReplaySourceState() {
   const state = createDefaultWorkbenchDraftState();
+  state.durationMs = 180_000;
   const replayEffectTargetId = `enemy-${state.selection.enemyId}`;
   state.actionDrafts[0].effectCommands = [
     {
@@ -613,6 +614,7 @@ function createReplaySignature(draft) {
       );
       return {
         scenarioId: scenario.id,
+        durationMs: replay.durationMs,
         requestedProfileId: replay.mechanicsProfileSelection.requestedProfileId,
         resolvedProfileId: replay.mechanicsProfileSelection.resolvedProfileId,
         runtimeBinding: replay.runtimeBinding,
@@ -624,6 +626,7 @@ function createReplaySignature(draft) {
 
 function createScenarioReplaySignature(draft, configurationLibrary) {
   const project = createWorkbenchProject(draft.selection, {
+    durationMs: draft.durationMs,
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,
@@ -644,6 +647,7 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
   const result = simulateScenario(scenario);
   const runtimeProjection = result.threeValueRuntimeProjection;
   return {
+    durationMs: project.time.durationMs,
     timelineTopology: scenario.sourceProject.metadata.timelineTopology,
     actionTopology: scenario.actions.map(action => ({
       actionId: action.id,

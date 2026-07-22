@@ -6,6 +6,11 @@ import path from 'node:path';
 import readline from 'node:readline';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import {
+  createCombatSourceDisplayLabel,
+  createEffectSourceDisplayLabel,
+  isSourceDisplayTextSafe,
+} from '../src/domain/sourceDisplayText.js';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
@@ -431,6 +436,7 @@ async function main() {
       effect =>
         effect.role === 'gameplay-effect' && effect.classification === 'applied'
     ).length;
+  assertPublishedDisplayLabels(packageValue);
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
     packageValue,
@@ -717,15 +723,23 @@ function createSpecialResourceCatalog({ discovery, controlBindings }) {
       }
       registerEvidenceSource(evidenceSources, primaryAsset);
       const stateElements = hint.stateElements
-        .map(state => {
+        .map((state, stateIndex) => {
           const asset = readBattleElementAsset(state.elementId);
           if (!asset) return null;
           registerEvidenceSource(evidenceSources, asset);
+          const displayName = createEffectSourceDisplayLabel({
+            sourceText: asset.tree.elementName ?? asset.tree.m_Name,
+            sequence: stateIndex + 1,
+            sourceIdentity: asset.sourceIdentity,
+          });
           return {
             elementId: state.elementId,
             field: state.field,
             pathId: asset.pathId,
-            name: asset.tree.elementName ?? asset.tree.m_Name ?? null,
+            name: displayName.displayLabel,
+            displayLabel: displayName.displayLabel,
+            rawSourceName: displayName.rawSourceName,
+            sourceNameStatus: displayName.sourceNameStatus,
             durationMs: finiteNumberOrNull(
               asset.tree.time ?? asset.tree.duration
             ),
@@ -736,13 +750,23 @@ function createSpecialResourceCatalog({ discovery, controlBindings }) {
         .filter(Boolean);
       const capacity = resolveSpecialResourceCapacity(primaryAsset.tree);
       const applied = Number.isFinite(capacity) && capacity > 0;
+      const rawResourceName = resolveSpecialResourceDisplayName(
+        primaryAsset.tree
+      );
+      const displayName = createEffectSourceDisplayLabel({
+        sourceText: rawResourceName,
+        sourceIdentity: primaryAsset.sourceIdentity,
+      });
       return {
         ownerId: hint.ownerId,
         ownerName: hint.ownerName,
         resourceIdentity: `actor:${hint.ownerId}:element:${hint.primaryElementId}`,
         elementId: hint.primaryElementId,
         pathId: primaryAsset.pathId,
-        name: resolveSpecialResourceDisplayName(primaryAsset.tree),
+        name: displayName.displayLabel,
+        displayLabel: displayName.displayLabel,
+        rawSourceName: rawResourceName,
+        sourceNameStatus: displayName.sourceNameStatus,
         sourceName: primaryAsset.tree.elementName ?? primaryAsset.tree.m_Name,
         capacity: applied ? capacity : null,
         initialValue: 0,
@@ -3309,6 +3333,12 @@ function createControlBinding({
       ],
       value => value
     );
+    const sourceName = createCombatSourceDisplayLabel({
+      sourceText: tree?.elementName ?? tree?.m_Name,
+      referenceKind: ref.referenceKind,
+      sequence: Number(ref.elementIndex) + 1,
+      sourceIdentity: `${relativeExternalPath(control.filePath)}#${ref.sourceIdentity}`,
+    });
     return {
       elementId: Number.isInteger(elementId) ? elementId : null,
       pathId: ref.pathId ?? indexedRecord?.pathId ?? null,
@@ -3316,6 +3346,9 @@ function createControlBinding({
       referenceKind: ref.referenceKind,
       elementIndex: ref.elementIndex,
       name: tree?.elementName ?? tree?.m_Name ?? null,
+      rawSourceName: sourceName.rawSourceName,
+      sourceNameStatus: sourceName.sourceNameStatus,
+      displayLabel: sourceName.displayLabel,
       sourceIdentity: `${relativeExternalPath(control.filePath)}#${ref.sourceIdentity}|battle-element-assets.jsonl#${ref.pathId ? `path_id=${ref.pathId}` : `elementConfigId=${ref.elementIdHint}`}`,
       sourceAsset: indexedRecord?.asset ?? null,
       formula: {
@@ -3648,11 +3681,20 @@ function createBattleEffectGraphNode({
     depth,
     tuningMechanicsCatalog,
   });
+  const rawSourceName = tree.elementName ?? tree.m_Name ?? record.name ?? null;
+  const sourceName = createEffectSourceDisplayLabel({
+    sourceText: rawSourceName,
+    effectKind: kind,
+    sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
+  });
   return {
     nodeIdentity: `element:${record.pathId}`,
     pathId: record.pathId,
     elementId,
-    name: tree.elementName ?? tree.m_Name ?? record.name ?? null,
+    name: rawSourceName,
+    rawSourceName: sourceName.rawSourceName,
+    sourceNameStatus: sourceName.sourceNameStatus,
+    displayLabel: sourceName.displayLabel,
     kind,
     depth,
     sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
@@ -4136,6 +4178,9 @@ function createControlRuntimeEffectBinding({
     elementId: node.elementId,
     pathId: node.pathId,
     name: node.name,
+    rawSourceName: node.rawSourceName,
+    sourceNameStatus: node.sourceNameStatus,
+    displayLabel: node.displayLabel,
     kind: node.kind,
     depth: node.depth,
     relationPath,
@@ -5720,7 +5765,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 13,
+    packageVersion: 14,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -5964,6 +6009,9 @@ function createControlRuntimeHits(control) {
         referenceKind: element.referenceKind,
         elementIndex: element.elementIndex,
         name: element.name,
+        rawSourceName: element.rawSourceName,
+        sourceNameStatus: element.sourceNameStatus,
+        displayLabel: element.displayLabel,
         sourceIdentity: element.sourceIdentity,
         formula: element.formula,
         damage: element.damage,
@@ -5975,6 +6023,39 @@ function createControlRuntimeHits(control) {
         hitIdentity,
       };
     });
+}
+
+function assertPublishedDisplayLabels(packageValue) {
+  const displayLabels = [
+    ...(packageValue.controlBindings ?? []).flatMap(binding =>
+      (binding.hits ?? []).map(hit => hit.displayLabel)
+    ),
+    ...(packageValue.actionVariantControlBindings ?? []).flatMap(binding =>
+      (binding.hits ?? []).map(hit => hit.displayLabel)
+    ),
+    ...(packageValue.battleEffectCatalog?.nodes ?? []).map(
+      node => node.displayLabel
+    ),
+    ...(packageValue.semanticEffectCatalog?.semanticEffects ?? []).map(
+      effect => effect.displayLabel
+    ),
+    ...(packageValue.specialResourceCatalog?.profiles ?? []).flatMap(
+      profile => [
+        profile.displayLabel,
+        ...(profile.stateElements ?? []).map(state => state.displayLabel),
+      ]
+    ),
+  ].filter(value => value != null && value !== '');
+  const corruptLabels = displayLabels.filter(
+    value => !isSourceDisplayTextSafe(value)
+  );
+  if (corruptLabels.length > 0) {
+    throw new Error(
+      `verified combat display label guard failed: ${corruptLabels
+        .slice(0, 3)
+        .join(' | ')}`
+    );
+  }
 }
 
 function createPublishedControlBinding(binding) {
@@ -6318,6 +6399,9 @@ function createSemanticEffectCandidate({
     elementId: node.elementId,
     pathId: node.pathId,
     name: node.name,
+    rawSourceName: node.rawSourceName,
+    sourceNameStatus: node.sourceNameStatus,
+    displayLabel: node.displayLabel,
     kind: node.kind,
     role,
     conditional: relationPath.some(edge =>

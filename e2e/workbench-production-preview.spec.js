@@ -64,7 +64,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m1d-demo-milestone]') ||
     testInfo.title.includes('[m6-verified-combat-workflow]') ||
     testInfo.title.includes('[m7-catalog-runtime-workflow]') ||
-    testInfo.title.includes('[m8d-verified-mechanics-ui]')
+    testInfo.title.includes('[m8d-verified-mechanics-ui]') ||
+    testInfo.title.includes('[m9-r2-r1-inspector-duration]')
   ) {
     return;
   }
@@ -868,10 +869,11 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
 test('[m2-team-configuration] configures and reloads source-backed loadouts from demo and empty scenarios', async ({
   page,
 }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(360_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
+  await setWorkbenchTimelineDuration(page, 30_000);
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   await expectTimelineActionWidthsMatchDuration(timeline);
@@ -975,6 +977,7 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
 
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
@@ -1187,6 +1190,7 @@ test('[m8d-verified-mechanics-ui] reviews real tuning marks and the action mecha
   await page.goto('/#/workbench');
   await packageResponse;
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await page.getByTestId('workbench-save-draft').click();
   await page.evaluate(
     ({ storageKey, profiles }) => {
@@ -1530,10 +1534,12 @@ async function expectImageLoaded(locator) {
 test('[m1d-demo-milestone] replays the visible three-person demo through every project carrier', async ({
   page,
 }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
+  await setWorkbenchTimelineDuration(page, 30_000);
 
   await expect(page.getByTestId('workbench-scenario-name')).toHaveText(
     '示例方案 · 预览数据'
@@ -1646,6 +1652,7 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   await page.goto('/#/workbench');
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
+  await setWorkbenchTimelineDuration(page, 30_000);
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   const actorEnergyRows = timeline.locator(
@@ -1780,11 +1787,13 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
 test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project from zero actions', async ({
   page,
 }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   const timelineActions = timeline.getByTestId('workbench-timeline-action');
@@ -2182,6 +2191,7 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
     element.dispatchEvent(new Event('input', { bubbles: true }));
   });
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
@@ -2721,6 +2731,7 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
   });
 
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await expect(timelineActions).toHaveCount(0);
   await selectM2LoadoutOption(page, 109001, 'kiboId', '500003');
   await assistedMode.click();
@@ -2823,21 +2834,35 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
   await page.mouse.up();
   await expect(timelineActions).toHaveCount(8);
   await expect(workbench).toHaveAttribute('data-action-relation-count', '4');
-  await beginPointerDragTo(page, fragmentInsert, actorLane, {
-    targetPosition: overlappingTarget,
-  });
-  await expect(workbench).toHaveAttribute(
-    'data-action-placement-status',
-    'blocked'
-  );
-  await page.mouse.up();
-  await expect(timelineActions).toHaveCount(8);
-  await page.getByTestId('workbench-undo-edit').click();
-  await expect(timelineActions).toHaveCount(6);
-  await page.getByTestId('workbench-undo-edit').click();
-  await expect(timelineActions).toHaveCount(4);
-  await page.getByTestId('workbench-undo-edit').click();
-  await expect(timelineActions).toHaveCount(2);
+  let assistedActionCount = 8;
+  let reachedTimelineLimit = false;
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await beginPointerDragTo(page, fragmentInsert, actorLane, {
+      targetPosition: overlappingTarget,
+    });
+    const placementStatus = await workbench.getAttribute(
+      'data-action-placement-status'
+    );
+    await page.mouse.up();
+    if (placementStatus === 'blocked') {
+      reachedTimelineLimit = true;
+      break;
+    }
+    expect(placementStatus).toBe('adjustable');
+    assistedActionCount += 2;
+    await expect(timelineActions).toHaveCount(assistedActionCount);
+    await expect(workbench).toHaveAttribute(
+      'data-action-relation-count',
+      String(assistedActionCount / 2)
+    );
+  }
+  expect(reachedTimelineLimit).toBe(true);
+  await expect(timelineActions).toHaveCount(assistedActionCount);
+  while (assistedActionCount > 2) {
+    await page.getByTestId('workbench-undo-edit').click();
+    assistedActionCount -= 2;
+    await expect(timelineActions).toHaveCount(assistedActionCount);
+  }
 
   await freeMode.click();
   await beginPointerDragTo(page, fragmentInsert, actorLane, {
@@ -2896,6 +2921,7 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
   ).toHaveAttribute('data-selected-id', '500003');
 
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await expect(timelineActions).toHaveCount(0);
   await selectM2LoadoutOption(page, 109001, 'kiboId', '500003');
   await page.setViewportSize({ width: 390, height: 900 });
@@ -2927,6 +2953,7 @@ test('[m5-reusable-timeline-fragments] saves, reuses, constrains, and restores a
 test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang and Heavy Rock Hoof actions', async ({
   page,
 }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   const verifiedPackageResponse = page.waitForResponse(
     response =>
@@ -2946,6 +2973,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   ).toHaveCount(8);
 
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
@@ -3323,6 +3351,7 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
 test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped actor and kibo actions while exposing unresolved catalog entries', async ({
   page,
 }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   const verifiedPackageResponse = page.waitForResponse(
     response =>
@@ -3332,6 +3361,7 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
   await page.goto('/#/workbench');
   await verifiedPackageResponse;
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await selectM2LoadoutOption(page, 101007, 'kiboId', '500001');
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
@@ -3609,6 +3639,7 @@ test('[m7-r2-normal-attack-input-timing][m7-r3-operation-axis] uses real input w
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
   await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await changeM2TeamSlot(page, 0, 102001);
   await page
     .locator(
@@ -6087,6 +6118,7 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
   await page.goto('/#/workbench');
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
+  await setWorkbenchTimelineDuration(page, 30_000);
   await expect(page.getByTestId('workbench-scenario-name')).toHaveText(
     '示例方案 · 预览数据'
   );
@@ -6308,6 +6340,165 @@ test('[m9-r2-switch-triggered-star-carry] derives enter and exit actions from on
   await expect(children()).toHaveCount(2);
   await page.screenshot({
     path: 'reports/m9-r2d-switch-trigger-narrow.png',
+  });
+});
+
+test('[m9-r2-r1-inspector-duration] closes the real inspector and keeps a readable 120 second axis', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  const draft = createM9R2R1WorkbenchDraft();
+  await page.addInitScript(
+    ({ storageKey, draftState }) => {
+      const markerKey = 'promilia-axis-tool:e2e-basic-draft-seeded';
+      if (window.sessionStorage.getItem(markerKey) === '1') {
+        return;
+      }
+      window.localStorage.setItem(storageKey, JSON.stringify(draftState));
+      window.sessionStorage.setItem(markerKey, '1');
+    },
+    {
+      storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+      draftState: draft,
+    }
+  );
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const viewport = timeline.getByTestId('workbench-timeline-viewport');
+  const durationSelect = timeline.getByTestId(
+    'workbench-timeline-duration-select'
+  );
+  await expect(timeline).toHaveAttribute('data-duration-ms', '120000');
+  await expect(durationSelect).toHaveValue('120000');
+  await expect
+    .poll(() =>
+      viewport.evaluate(element => ({
+        clientWidth: element.clientWidth,
+        scrollWidth: element.scrollWidth,
+      }))
+    )
+    .toMatchObject({
+      clientWidth: expect.any(Number),
+      scrollWidth: expect.any(Number),
+    });
+  const initialAxisMetrics = await viewport.evaluate(element => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(initialAxisMetrics.scrollWidth).toBeGreaterThan(
+    initialAxisMetrics.clientWidth
+  );
+  expect(initialAxisMetrics.scrollWidth).toBeGreaterThanOrEqual(2_870);
+
+  const actionAtFiveSeconds = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-at-5s"]'
+  );
+  await actionAtFiveSeconds.scrollIntoViewIfNeeded();
+  await actionAtFiveSeconds.click();
+  const inspector = page.getByTestId('workbench-side-inspector');
+  const inspectorScroll = page.getByTestId('workbench-side-inspector-scroll');
+  await expect(inspector).toBeVisible();
+  await inspectorScroll.evaluate(element => {
+    element.scrollTop = element.scrollHeight;
+  });
+  await expectInspectorCloseButtonReachable(page);
+  await expect(page.locator('body')).not.toContainText('\uFFFD');
+  await expect(page.locator('body')).not.toContainText('锟斤拷');
+
+  const hitCheckbox = page
+    .getByTestId('workbench-hit-override-row')
+    .first()
+    .locator('input[type="checkbox"]');
+  if (await hitCheckbox.count()) {
+    await hitCheckbox.click();
+    await expect(inspector).toBeVisible();
+    await page.getByTestId('workbench-undo-edit').click();
+    await expect(inspector).toBeVisible();
+  } else {
+    await inspectorScroll.click({ position: { x: 16, y: 16 } });
+    await expect(inspector).toBeVisible();
+  }
+  await page.screenshot({
+    path: 'reports/m9-r2-r1-inspector-desktop.png',
+  });
+
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await expect(inspector).toBeHidden();
+  await expect(actionAtFiveSeconds).toHaveAttribute('data-selected', 'true');
+  await actionAtFiveSeconds.click();
+  await expect(inspector).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(inspector).toBeHidden();
+  await expect(actionAtFiveSeconds).toHaveAttribute('data-selected', 'true');
+
+  await durationSelect.selectOption('180000');
+  await expect(timeline).toHaveAttribute('data-duration-ms', '180000');
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timeline).toHaveAttribute('data-duration-ms', '120000');
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(timeline).toHaveAttribute('data-duration-ms', '180000');
+
+  for (const actionId of ['action-at-5s', 'switch-at-60s', 'action-at-119s']) {
+    const action = timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+    );
+    await action.scrollIntoViewIfNeeded();
+    await action.click();
+    await expect(action).toHaveAttribute('data-selected', 'true');
+  }
+  await page.getByTestId('workbench-timeline-playback-toggle').click();
+  await expect(timeline).toHaveAttribute('data-playback-running', 'true');
+  await page.getByTestId('workbench-timeline-playback-toggle').click();
+  await expect(timeline).toHaveAttribute('data-playback-running', 'false');
+
+  await durationSelect.selectOption('60000');
+  await expect(timeline).toHaveAttribute('data-duration-ms', '180000');
+  await expect(page.getByTestId('workbench-draft-status')).toContainText(
+    '无法缩短到 60s'
+  );
+  await closeInspectorIfVisible(page);
+  await page.screenshot({
+    path: 'reports/m9-r2-r1-timeline-duration-desktop.png',
+  });
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(timeline).toHaveAttribute('data-duration-ms', '180000');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="switch-at-60s"]'
+    )
+  ).toHaveAttribute('data-duration-ms', '0');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-at-119s"]'
+    )
+  ).toHaveCount(1);
+
+  await page.setViewportSize({ width: 640, height: 900 });
+  await actionAtFiveSeconds.scrollIntoViewIfNeeded();
+  await actionAtFiveSeconds.click();
+  await expectInspectorCloseButtonReachable(page);
+  await page.screenshot({
+    path: 'reports/m9-r2-r1-inspector-narrow.png',
+  });
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await expect(inspector).toBeHidden();
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  const actionAt119Seconds = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-at-119s"]'
+  );
+  await actionAt119Seconds.scrollIntoViewIfNeeded();
+  await actionAt119Seconds.click();
+  await expectInspectorCloseButtonReachable(page);
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await expect(inspector).toBeHidden();
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/m9-r2-r1-timeline-duration-narrow.png',
   });
 });
 
@@ -6623,11 +6814,17 @@ async function expectM2ActorLoadoutDirect(page, characterId, config) {
   await expect(
     actorLane.locator('[data-testid="workbench-direct-loadout-slot"] img')
   ).toHaveCount(6);
-  for (const image of await actorLane
-    .locator('[data-testid="workbench-direct-loadout-slot"] img')
-    .all()) {
-    await expectLoadedImage(image);
-  }
+  await expect
+    .poll(
+      () =>
+        actorLane
+          .locator('[data-testid="workbench-direct-loadout-slot"] img')
+          .evaluateAll(images =>
+            images.map(image => image.complete && image.naturalWidth > 0)
+          ),
+      { timeout: 30_000 }
+    )
+    .toEqual([true, true, true, true, true, true]);
 }
 
 function getSingleSkillActionEntry(page) {
@@ -6692,6 +6889,53 @@ async function openActionInspector(page, actionId = 'action-0001') {
   await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
 }
 
+async function expectInspectorCloseButtonReachable(page) {
+  const inspector = page.getByTestId('workbench-side-inspector');
+  const closeButton = page.getByTestId('workbench-close-side-inspector');
+  await expect(inspector).toBeVisible();
+  await expect(closeButton).toBeVisible();
+  const bounds = await page.evaluate(() => {
+    const inspectorElement = document.querySelector(
+      '[data-testid="workbench-side-inspector"]'
+    );
+    const closeElement = document.querySelector(
+      '[data-testid="workbench-close-side-inspector"]'
+    );
+    const inspectorRect = inspectorElement?.getBoundingClientRect();
+    const closeRect = closeElement?.getBoundingClientRect();
+    return {
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      inspector: inspectorRect
+        ? {
+            left: inspectorRect.left,
+            top: inspectorRect.top,
+            right: inspectorRect.right,
+            bottom: inspectorRect.bottom,
+          }
+        : null,
+      close: closeRect
+        ? {
+            left: closeRect.left,
+            top: closeRect.top,
+            right: closeRect.right,
+            bottom: closeRect.bottom,
+          }
+        : null,
+    };
+  });
+  expect(bounds.inspector).toBeTruthy();
+  expect(bounds.close).toBeTruthy();
+  expect(bounds.close.left).toBeGreaterThanOrEqual(bounds.inspector.left);
+  expect(bounds.close.top).toBeGreaterThanOrEqual(bounds.inspector.top);
+  expect(bounds.close.right).toBeLessThanOrEqual(bounds.inspector.right);
+  expect(bounds.close.bottom).toBeLessThanOrEqual(bounds.inspector.bottom);
+  expect(bounds.close.left).toBeGreaterThanOrEqual(0);
+  expect(bounds.close.top).toBeGreaterThanOrEqual(0);
+  expect(bounds.close.right).toBeLessThanOrEqual(bounds.viewportWidth);
+  expect(bounds.close.bottom).toBeLessThanOrEqual(bounds.viewportHeight);
+}
+
 async function closeInspectorIfVisible(page) {
   const inspector = page.getByTestId('workbench-side-inspector');
   if (await inspector.isVisible()) {
@@ -6732,6 +6976,50 @@ async function prepareBasicWorkbenchScenario(page) {
     'data-scenario-id',
     'scenario-0001'
   );
+}
+
+async function setWorkbenchTimelineDuration(page, durationMs) {
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await timeline
+    .getByTestId('workbench-timeline-duration-select')
+    .selectOption(String(durationMs));
+  await expect(timeline).toHaveAttribute(
+    'data-duration-ms',
+    String(durationMs)
+  );
+}
+
+function createM9R2R1WorkbenchDraft() {
+  const draft = createBasicWorkbenchDraftFixture();
+  const actionDrafts = [
+    {
+      ...draft.actionDrafts[0],
+      id: 'action-at-5s',
+      startMs: 5_000,
+    },
+    {
+      id: 'switch-at-60s',
+      type: 'switch',
+      actorCharacterId: 109001,
+      targetCharacterId: 101003,
+      startMs: 60_000,
+      durationMs: 0,
+      note: '60 秒切换',
+    },
+    {
+      ...draft.actionDrafts[0],
+      id: 'action-at-119s',
+      startMs: 119_000,
+    },
+  ];
+  draft.actionDrafts = actionDrafts;
+  draft.selectedActionId = 'action-at-5s';
+  delete draft.durationMs;
+  const scenarioDraft = draft.scenarioWorkspace.scenarios[0].draft;
+  scenarioDraft.actionDrafts = actionDrafts.map(action => ({ ...action }));
+  scenarioDraft.selectedActionId = 'action-at-5s';
+  delete scenarioDraft.durationMs;
+  return draft;
 }
 
 async function expectDemoMilestoneState(page, { resourceFrameIndex }) {

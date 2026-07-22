@@ -1,5 +1,7 @@
 import { EFFECT_RUNTIME_EVENT_TYPES } from '../runtime/effectRuntimeTimeline';
 
+import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
+
 export const EFFECT_INTERVAL_PROJECTION_CONTRACT_NAME =
   'AzPrEffectIntervalProjection';
 
@@ -145,12 +147,31 @@ function createOpenEffectInterval(event, intervalIndex, requestedStartMs) {
     requestedStartMs,
     finiteNumberOrDefault(event.timeMs, 0)
   );
+  const sourceEffectName =
+    event.effectName ?? event.after?.effectName ?? event.before?.effectName;
+  const effectDisplay = createEffectSourceDisplayLabel({
+    sourceText: sourceEffectName,
+    sequence: intervalIndex,
+    sourceIdentity:
+      event.sourceIdentity ??
+      event.after?.sourceIdentity ??
+      event.before?.sourceIdentity,
+  });
   const interval = {
     intervalId: `${event.instanceKey}|interval-${intervalIndex}`,
     instanceKey: event.instanceKey,
     effectId: event.effectId ?? event.after?.effectId ?? event.before?.effectId,
-    effectName:
-      event.effectName ?? event.after?.effectName ?? event.before?.effectName,
+    effectName: effectDisplay.displayLabel,
+    rawSourceName:
+      event.rawSourceName ??
+      event.after?.rawSourceName ??
+      event.before?.rawSourceName ??
+      effectDisplay.rawSourceName,
+    sourceNameStatus:
+      event.sourceNameStatus ??
+      event.after?.sourceNameStatus ??
+      event.before?.sourceNameStatus ??
+      effectDisplay.sourceNameStatus,
     icon: event.icon ?? event.after?.icon ?? event.before?.icon ?? null,
     confidence:
       event.confidence ??
@@ -202,7 +223,10 @@ function appendEffectIntervalEvent(interval, event) {
   if (event.actorId && !interval.sourceActorIds.includes(event.actorId)) {
     interval.sourceActorIds.push(event.actorId);
   }
-  interval.effectName = event.effectName || interval.effectName;
+  interval.effectName = createEffectSourceDisplayLabel({
+    sourceText: event.effectName || interval.effectName,
+    sourceIdentity: event.sourceIdentity,
+  }).displayLabel;
   interval.icon = event.icon || interval.icon;
   interval.confidence = event.confidence || interval.confidence;
   interval.trackingStatus = event.trackingStatus || interval.trackingStatus;
@@ -258,6 +282,8 @@ function finalizeEffectInterval(
     instanceKey: interval.instanceKey,
     effectId: interval.effectId,
     effectName: interval.effectName || interval.effectId,
+    rawSourceName: interval.rawSourceName ?? null,
+    sourceNameStatus: interval.sourceNameStatus ?? null,
     icon: interval.icon ?? null,
     confidence: interval.confidence ?? null,
     trackingStatus: interval.trackingStatus ?? null,

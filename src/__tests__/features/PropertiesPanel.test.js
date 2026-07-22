@@ -114,7 +114,10 @@ describe('PropertiesPanel', () => {
     const hits = [
       {
         hitIdentity: 'control:10100303|hit:1',
-        name: '弹体 1',
+        name: '普攻1 子弹hit1',
+        rawSourceName: '普攻1 子弹hit1',
+        sourceNameStatus: 'source-name-ready',
+        displayLabel: '普攻1 子弹hit1',
         referenceKind: 'bulletElements',
         sourceEvidenceStatus: 'runtime-dependent',
         scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
@@ -122,7 +125,10 @@ describe('PropertiesPanel', () => {
       },
       {
         hitIdentity: 'control:10100303|hit:2',
-        name: '弹体 2',
+        name: '普攻2|第1段伤害',
+        rawSourceName: '普攻2|第1段伤害',
+        sourceNameStatus: 'source-name-ready',
+        displayLabel: '普攻2|第1段伤害',
         referenceKind: 'bulletElements',
         sourceEvidenceStatus: 'runtime-dependent',
         scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
@@ -147,7 +153,20 @@ describe('PropertiesPanel', () => {
           hitOverrides: {
             'control:10100303|hit:2': { willHit: false },
           },
-          effectCommands: [],
+          effectCommands: [
+            {
+              id: 'effect-600014',
+              effectId: '600014',
+              effectName: '【正式】宠物通用技能震屏（弱）',
+              sourceStatus: 'generated-from-azpr-action-status-catalog',
+              trackingStatus: 'unapplied',
+              appliedToCalculators: false,
+              offsetMs: 0,
+              durationMs: null,
+              targetKind: 'enemy',
+              sourceIdentity: {},
+            },
+          ],
         },
         durationMs: 30_000,
         verifiedCombatRuntime: {
@@ -186,9 +205,15 @@ describe('PropertiesPanel', () => {
 
     const rows = wrapper.findAll('[data-testid="workbench-hit-override-row"]');
     expect(rows).toHaveLength(2);
+    expect(rows[0].text()).toContain('普攻1 子弹hit1');
     expect(rows[0].text()).toContain('13F');
     expect(rows[0].text()).toContain('零距离');
+    expect(rows[1].text()).toContain('普攻2|第1段伤害');
     expect(rows[1].get('input').element.checked).toBe(false);
+    expect(
+      wrapper.get('[data-testid="workbench-effect-command-row"]').text()
+    ).toContain('【正式】宠物通用技能震屏（弱）');
+    expect(wrapper.text()).not.toContain('\uFFFD');
 
     await rows[0].get('input').setValue(false);
     expect(wrapper.emitted('update-action')?.at(-1)?.[0]).toEqual({

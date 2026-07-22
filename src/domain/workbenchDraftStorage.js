@@ -34,6 +34,7 @@ import {
   AZPR_DEFAULT_EFFECTIVE_MAX_SP,
   scaleLegacyNormalizedSpValue,
 } from './spUnitContract';
+import { normalizeWorkbenchTimelineDuration } from './workbenchTimelineDuration';
 
 export const WORKBENCH_DRAFT_SCHEMA_VERSION = 17;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
@@ -272,6 +273,7 @@ export function createWorkbenchDraftSnapshot(
 }
 
 export function createWorkbenchScenarioDraftSnapshot({
+  durationMs,
   selection,
   teamSlots,
   actorConfigs,
@@ -287,6 +289,7 @@ export function createWorkbenchScenarioDraftSnapshot({
   runtimeSampleCaptures,
   selectedActionId,
 } = {}) {
+  const normalizedDurationMs = normalizeWorkbenchTimelineDuration(durationMs);
   const normalizedTeamSlots = normalizeWorkbenchTeamSlots(teamSlots, selection);
   const normalizedSelection = normalizeWorkbenchSelection(
     selection,
@@ -312,6 +315,7 @@ export function createWorkbenchScenarioDraftSnapshot({
     : (normalizedActions[0]?.id ?? '');
 
   return {
+    durationMs: normalizedDurationMs,
     selection: normalizedSelection,
     teamSlots: normalizedTeamSlots,
     actorConfigs: normalizedActorConfigs,
@@ -328,7 +332,10 @@ export function createWorkbenchScenarioDraftSnapshot({
       actionRelations,
       normalizedActions
     ),
-    cycleBoundaries: normalizeWorkbenchCycleBoundaries(cycleBoundaries),
+    cycleBoundaries: normalizeWorkbenchCycleBoundaries(
+      cycleBoundaries,
+      normalizedDurationMs
+    ),
     initialRuntimeState: normalizeInitialRuntimeState(initialRuntimeState, {
       controlledActor: {
         actorId: `actor-${normalizedTeamSlots[0].characterId}`,

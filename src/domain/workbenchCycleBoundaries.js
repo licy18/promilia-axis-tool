@@ -1,7 +1,9 @@
 import { createCycleBoundary } from './projectSchema';
 import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
+import { DEFAULT_WORKBENCH_TIMELINE_DURATION_MS } from './workbenchTimelineDuration';
 
-export const DEFAULT_WORKBENCH_DURATION_MS = 30000;
+export const DEFAULT_WORKBENCH_DURATION_MS =
+  DEFAULT_WORKBENCH_TIMELINE_DURATION_MS;
 
 export function normalizeWorkbenchCycleBoundaries(
   cycleBoundaries = [],

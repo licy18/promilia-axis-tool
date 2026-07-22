@@ -801,7 +801,7 @@ describe('Workbench view', () => {
     expect(text).toContain('能量候选');
     expect(text).toContain('5点 · 2,399-3,000 · raw-field');
     expect(text).toContain('候选时间曲线');
-    expect(text).toContain('60fps · 30s0f');
+    expect(text).toContain('60fps · 120s0f');
     expect(text).toContain('0s12f-3s4f · 2,500-13,000 · raw-param');
     expect(text).toContain('0s12f-3s4f · 7,000 · raw-field');
     expect(text).toContain('0s12f-3s4f · 2,399-3,000 · raw-field');
@@ -9595,16 +9595,16 @@ describe('Workbench view', () => {
       y: 0,
       left: 0,
       top: 0,
-      right: 600,
+      right: 2880,
       bottom: 600,
-      width: 600,
+      width: 2880,
       height: 600,
       toJSON: () => ({}),
     });
     timelineLane.element.dispatchEvent(
       new MouseEvent('click', {
         bubbles: true,
-        clientX: 300,
+        clientX: 360,
         clientY: 300,
       })
     );
@@ -9915,10 +9915,10 @@ describe('Workbench view', () => {
       '[data-testid="workbench-timeline-lane"]'
     ).element;
     lane.getBoundingClientRect = () => ({
-      width: 600,
+      width: 2880,
       height: 210,
       left: 0,
-      right: 600,
+      right: 2880,
       top: 0,
       bottom: 210,
       x: 0,
@@ -9936,9 +9936,9 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-timeline-action"]')
       .element.dispatchEvent(pointerDown);
     await nextTick();
-    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 169 }));
+    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 182.8 }));
     await nextTick();
-    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 169 }));
+    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 182.8 }));
     await nextTick();
 
     expect(
@@ -9962,10 +9962,10 @@ describe('Workbench view', () => {
       '[data-testid="workbench-timeline-lane"]'
     ).element;
     lane.getBoundingClientRect = () => ({
-      width: 600,
+      width: 5760,
       height: 210,
       left: 0,
-      right: 600,
+      right: 5760,
       top: 0,
       bottom: 210,
       x: 0,
@@ -9983,12 +9983,12 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-timeline-lane"]')
         .attributes('style')
-    ).toContain('width: 200%');
+    ).toContain('width: 5760px');
     expect(
       wrapper
         .find('[data-testid="workbench-timeline-scale-track"]')
         .attributes('style')
-    ).toContain('width: 200%');
+    ).toContain('width: 5760px');
 
     await wrapper
       .find('[data-testid="workbench-add-wait-action"]')
@@ -10004,9 +10004,9 @@ describe('Workbench view', () => {
     Object.defineProperty(pointerDown, 'pointerId', { value: 2 });
     handle.dispatchEvent(pointerDown);
     await nextTick();
-    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 140 }));
+    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 196 }));
     await nextTick();
-    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 140 }));
+    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 196 }));
     await nextTick();
 
     expect(
@@ -10727,17 +10727,17 @@ describe('Workbench view', () => {
     await addSingleSkillActionFromLibrary(wrapper);
     const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
     lane.element.getBoundingClientRect = () => ({
-      width: 600,
+      width: 2880,
       height: 240,
       left: 0,
-      right: 600,
+      right: 2880,
       top: 0,
       bottom: 240,
       x: 0,
       y: 0,
       toJSON: () => {},
     });
-    await lane.trigger('contextmenu', { clientX: 20, clientY: 80 });
+    await lane.trigger('contextmenu', { clientX: 24, clientY: 80 });
     document
       .querySelector(
         '[data-testid="workbench-action-context-add-cycle-boundary"]'
@@ -10808,17 +10808,17 @@ describe('Workbench view', () => {
     );
     const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
     lane.element.getBoundingClientRect = () => ({
-      width: 600,
+      width: 2880,
       height: 240,
       left: 0,
-      right: 600,
+      right: 2880,
       top: 0,
       bottom: 240,
       x: 0,
       y: 0,
       toJSON: () => {},
     });
-    await lane.trigger('contextmenu', { clientX: 20, clientY: 80 });
+    await lane.trigger('contextmenu', { clientX: 24, clientY: 80 });
     document
       .querySelector(
         '[data-testid="workbench-action-context-add-cycle-boundary"]'
