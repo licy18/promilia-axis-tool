@@ -7,6 +7,7 @@ import {
 import { parseDamageSegments } from '../mechanics/damage';
 import { compileVerifiedStaticActorProperties } from '../mechanics/verifiedCombatStaticProperties';
 import { createThreeValueHpOperandSourceBinding } from '../mechanics/threeValueHpOperandSourceBinding';
+import { normalizeCombatScenario } from '../../domain/combatScenario';
 import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
 import { resolveThreeValueMechanicsProfile } from '../mechanics/threeValueMechanicsProfile';
 import {
@@ -202,6 +203,7 @@ export function compileProject(
     initialRuntimeState: project.initialRuntimeState
       ? JSON.parse(JSON.stringify(project.initialRuntimeState))
       : null,
+    combatScenario: normalizeCombatScenario(project.combatScenario),
     diagnostics: {
       validationWarnings: validation.warnings,
       missingTimingActionIds: actions

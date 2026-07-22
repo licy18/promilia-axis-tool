@@ -184,6 +184,7 @@ const STATIC_PROPERTY_TABLE_PATHS = Object.freeze(
     ])
   )
 );
+const bulletInjectionContractCache = new Map();
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
 const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
   layerControl: '-7197581663443823049',
@@ -317,6 +318,7 @@ async function main() {
     candidates,
     controlBindings,
     specialResourceCatalog,
+    allIndexedElements,
   });
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
   const spUnitContract = createSpUnitContract({
@@ -1003,11 +1005,18 @@ function createActionVariantGraph({
   candidates,
   controlBindings,
   specialResourceCatalog,
+  allIndexedElements,
 }) {
   const profiles = specialResourceCatalog.profiles.filter(
     profile => profile.applied
   );
-  const ownerIds = profiles.map(profile => profile.ownerId);
+  const ownerIds = [
+    ...new Set(
+      (candidates ?? [])
+        .map(candidate => Number(candidate.ownerId))
+        .filter(Number.isInteger)
+    ),
+  ];
   const profileByOwnerId = new Map(
     profiles.map(profile => [profile.ownerId, profile])
   );
@@ -1017,7 +1026,6 @@ function createActionVariantGraph({
   const actionKindsByControl = new Map();
   const publicActionsByControl = new Map();
   for (const candidate of candidates ?? []) {
-    if (!ownerIds.includes(candidate.ownerId)) continue;
     appendMapArray(
       actionKindsByControl,
       candidate.controlSkillId,
@@ -1028,6 +1036,8 @@ function createActionVariantGraph({
       sourceSkillId: candidate.sourceSkillId,
       actionKind: candidate.actionKind,
       actionVariantIndex: candidate.actionVariantIndex,
+      publicVariants: candidate.publicVariants ?? [],
+      sourceIdentity: candidate.bindingSourceIdentity ?? null,
     });
     for (const segment of candidate.attackInputControls ?? []) {
       appendMapArray(
@@ -1041,6 +1051,8 @@ function createActionVariantGraph({
         actionKind: 'normal-attack',
         actionVariantIndex: candidate.actionVariantIndex,
         attackSequenceIndex: segment.sequenceIndex,
+        publicVariants: candidate.publicVariants ?? [],
+        sourceIdentity: segment.sourceIdentity ?? null,
       });
     }
   }
@@ -1048,7 +1060,7 @@ function createActionVariantGraph({
   const defaultSelections = [];
   for (const control of controlBindings) {
     const ownerId = resolveControlOwnerId(control.controlSkillId, ownerIds);
-    if (!profileByOwnerId.has(ownerId)) continue;
+    if (!Number.isInteger(ownerId)) continue;
     for (const variant of control.variants ?? []) {
       nodes.push({
         nodeIdentity: createActionVariantNodeIdentity(
@@ -1093,9 +1105,8 @@ function createActionVariantGraph({
   for (const control of controlBindings) {
     const ownerId = resolveControlOwnerId(control.controlSkillId, ownerIds);
     const profile = profileByOwnerId.get(ownerId);
-    if (!profile) continue;
     const stateByElementId = new Map(
-      profile.stateElements.map(state => [state.elementId, state])
+      (profile?.stateElements ?? []).map(state => [state.elementId, state])
     );
     for (const root of control.effectGraph ?? []) {
       const triggers = createSemanticRootTriggerContracts(control, root);
@@ -1185,7 +1196,7 @@ function createActionVariantGraph({
             condition: rootState
               ? {
                   kind: 'resource-state-active',
-                  resourceIdentity: profile.resourceIdentity,
+                  resourceIdentity: profile?.resourceIdentity ?? null,
                   stateElementId: rootState.elementId,
                   stateName: rootState.name,
                   sourceIdentity: rootState.sourceIdentity,
@@ -1193,7 +1204,7 @@ function createActionVariantGraph({
               : requiredResourceOperation
                 ? {
                     kind: 'resource-at-least',
-                    resourceIdentity: profile.resourceIdentity,
+                    resourceIdentity: profile?.resourceIdentity ?? null,
                     value: requiredResourceOperation.requiredValue,
                     sourceIdentity: requiredResourceOperation.sourceIdentity,
                   }
@@ -1243,6 +1254,14 @@ function createActionVariantGraph({
         (right.activationFrame ?? Number.MAX_SAFE_INTEGER) ||
       left.edgeIdentity.localeCompare(right.edgeIdentity)
   );
+  const conditionDiscoveries = createActionVariantConditionDiscoveries({
+    controlBindings,
+    publicActionsByControl,
+    defaultSelections,
+    switchBindings: dedupedSwitchBindings,
+    specialResourceCatalog,
+    allIndexedElements,
+  });
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-action-variant-graph',
@@ -1250,6 +1269,7 @@ function createActionVariantGraph({
     nodes,
     edges: dedupedSwitchBindings,
     defaultSelections,
+    conditionDiscoveries,
     policy: {
       inputDerivedVariantsAreIndependentInputs: true,
       sameInputStateTransformSelectsOneVariant: true,
@@ -1267,11 +1287,293 @@ function createActionVariantGraph({
       resourceConditionEdgeCount: dedupedSwitchBindings.filter(
         edge => edge.condition?.resourceIdentity
       ).length,
+      modeledOwnerCount: new Set(
+        dedupedSwitchBindings
+          .filter(edge => edge.applied)
+          .map(edge => edge.ownerId)
+      ).size,
       automaticEdgeCount: dedupedSwitchBindings.filter(
         edge => edge.relationType === 'automatic'
       ).length,
+      conditionDiscoveryCount: conditionDiscoveries.length,
+      conditionDiscoveryStatusCounts: countValues(
+        conditionDiscoveries.map(discovery => discovery.status)
+      ),
     },
   };
+}
+
+function createActionVariantConditionDiscoveries({
+  controlBindings,
+  publicActionsByControl,
+  defaultSelections,
+  switchBindings,
+  specialResourceCatalog,
+  allIndexedElements,
+}) {
+  const multiVariantControlIds = new Set(
+    controlBindings
+      .filter(control => (control.variants ?? []).length > 1)
+      .map(control => Number(control.controlSkillId))
+  );
+  const globalCandidatesByControl = discoverGlobalVariantConditionCandidates({
+    allIndexedElements,
+    targetControlIds: multiVariantControlIds,
+  });
+  const profileByOwnerId = new Map(
+    (specialResourceCatalog.profiles ?? []).map(profile => [
+      Number(profile.ownerId),
+      profile,
+    ])
+  );
+  const discoveries = [];
+
+  for (const control of controlBindings) {
+    if ((control.variants ?? []).length <= 1) continue;
+    const publicActions =
+      publicActionsByControl.get(control.controlSkillId) ?? [];
+    const ownerGroups = groupBy(publicActions, action =>
+      Number(action.ownerId)
+    );
+    for (const [rawOwnerId, ownerActions] of ownerGroups) {
+      const ownerId = Number(rawOwnerId);
+      if (!Number.isInteger(ownerId)) continue;
+      const edges = switchBindings.filter(
+        edge =>
+          Number(edge.ownerId) === ownerId &&
+          Number(edge.targetControlSkillId) === Number(control.controlSkillId)
+      );
+      const appliedEdges = edges.filter(edge => edge.applied);
+      const unresolvedEdges = edges.filter(edge => !edge.applied);
+      const globalCandidates =
+        globalCandidatesByControl.get(Number(control.controlSkillId)) ?? [];
+      const profile = profileByOwnerId.get(ownerId) ?? null;
+      const resourceEdges = edges.filter(
+        edge => edge.condition?.resourceIdentity
+      );
+      const publicVariants = dedupeBy(
+        ownerActions.flatMap(action => action.publicVariants ?? []),
+        variant => `${variant.index}|${variant.label}|${variant.sourceIdentity}`
+      );
+      const defaultSelection = defaultSelections.find(
+        selection =>
+          Number(selection.ownerId) === ownerId &&
+          Number(selection.controlSkillId) === Number(control.controlSkillId)
+      );
+      const status = classifyVariantConditionDiscovery({
+        appliedEdges,
+        unresolvedEdges,
+      });
+      const identity = `actor:${ownerId}|control:${control.controlSkillId}|variant-condition-discovery`;
+      discoveries.push({
+        identity,
+        ownerId,
+        controlSkillId: Number(control.controlSkillId),
+        actionKinds: dedupeBy(
+          ownerActions.map(action => action.actionKind),
+          value => value
+        ),
+        publicActions: dedupeBy(ownerActions, action =>
+          [
+            action.sourceSkillId,
+            action.actionKind,
+            action.actionVariantIndex,
+            action.attackSequenceIndex ?? '',
+          ].join('|')
+        ),
+        publicVariants,
+        variantCount: control.variants.length,
+        variantDurations: control.variants.map(variant => ({
+          subSkillIndex: variant.subSkillIndex,
+          playerSkillId: variant.playerSkillId,
+          frameCounts: variant.frameCounts,
+          sourceIdentity: variant.sourceIdentity,
+        })),
+        defaultSelection: defaultSelection ?? null,
+        status,
+        sourceFamilies: [
+          {
+            kind: 'skillsub-logic',
+            status: control.logic?.applied
+              ? 'checked-no-subskill-selector'
+              : 'static-evidence-gap',
+            inputTriggerType: control.logic?.inputTriggerType ?? null,
+            holdTriggerTimeMs: control.logic?.holdTriggerTimeMs ?? null,
+            sourceIdentity: control.logic?.sourceIdentity ?? null,
+          },
+          {
+            kind: 'public-skill-slots-and-labels',
+            status:
+              publicVariants.length > 1
+                ? 'candidate-labels-only'
+                : 'checked-no-distinct-public-input-variant',
+            variants: publicVariants,
+            sourceIdentities: ownerActions
+              .map(action => action.sourceIdentity)
+              .filter(Boolean),
+          },
+          {
+            kind: 'battle-switch-relations',
+            status:
+              appliedEdges.length > 0
+                ? unresolvedEdges.length > 0
+                  ? 'partially-applied'
+                  : 'applied'
+                : unresolvedEdges.length > 0 || globalCandidates.length > 0
+                  ? 'candidate-not-yet-modeled'
+                  : 'checked-no-relation-found',
+            appliedEdgeCount: appliedEdges.length,
+            unresolvedEdgeCount: unresolvedEdges.length,
+            edges: edges.map(edge => ({
+              edgeIdentity: edge.edgeIdentity,
+              targetSubSkillIndex: edge.targetSubSkillIndex,
+              condition: edge.condition,
+              reasons: edge.reasons,
+              sourceIdentity: edge.sourceIdentity,
+              applied: edge.applied,
+            })),
+            globalCandidates,
+          },
+          {
+            kind: 'resource-state-judgment',
+            status: resourceEdges.some(edge => edge.applied)
+              ? 'applied'
+              : profile || resourceEdges.length > 0
+                ? 'candidate-not-yet-modeled'
+                : 'checked-no-resource-condition-found',
+            resourceIdentity: profile?.resourceIdentity ?? null,
+            stateElementIds: (profile?.stateElements ?? []).map(
+              state => state.elementId
+            ),
+            edgeCount: resourceEdges.length,
+            sourceIdentity: profile?.sourceIdentity ?? null,
+          },
+          {
+            kind: 'input-hold-chain',
+            status: control.variants.some(
+              variant => (variant.eventBridges ?? []).length > 0
+            )
+              ? 'candidate-input-relations-found'
+              : 'checked-no-variant-selecting-input-relation',
+            inputTrigger: createControlInputTrigger(control.logic),
+            variants: control.variants.map(variant => ({
+              subSkillIndex: variant.subSkillIndex,
+              eventBridgeCount: (variant.eventBridges ?? []).length,
+              targetControlSkillIds: [
+                ...new Set(
+                  (variant.eventBridges ?? [])
+                    .map(bridge => integerOrNull(bridge.targetControlSkillId))
+                    .filter(Number.isInteger)
+                ),
+              ],
+              sourceIdentity: variant.sourceIdentity,
+            })),
+          },
+        ],
+        reasons:
+          status === 'variant-condition-not-yet-modeled'
+            ? ['variant-condition-source-families-audited-not-yet-modeled']
+            : dedupeBy(
+                unresolvedEdges.flatMap(edge => edge.reasons ?? []),
+                value => value
+              ),
+      });
+    }
+  }
+
+  return discoveries.sort(
+    (left, right) =>
+      left.ownerId - right.ownerId ||
+      left.controlSkillId - right.controlSkillId ||
+      left.identity.localeCompare(right.identity)
+  );
+}
+
+function discoverGlobalVariantConditionCandidates({
+  allIndexedElements,
+  targetControlIds,
+}) {
+  const result = new Map();
+  const records = dedupeBy(
+    [...(allIndexedElements?.values() ?? [])].flat(),
+    record => String(record.pathId)
+  );
+  for (const record of records) {
+    const tree = record.typetree ?? {};
+    const sourceIdentity = `battle-element-assets.jsonl#path_id=${record.pathId}`;
+    const scriptPathId = String(tree.m_Script?.m_PathID ?? '');
+    if (scriptPathId === BATTLE_MECHANIC_SCRIPT_PATH_IDS.switchSkillIndex) {
+      const targetControlSkillId = integerOrNull(tree.skillID);
+      const targetSubSkillIndex = integerOrNull(tree.subSkillIndex);
+      if (
+        targetControlIds.has(targetControlSkillId) &&
+        targetSubSkillIndex != null
+      ) {
+        appendMapArray(result, targetControlSkillId, {
+          kind: 'verified-switch-skill-index-element-candidate',
+          elementId: integerOrNull(tree.elementConfigId),
+          targetSubSkillIndex,
+          durationMs: finiteNumberOrNull(tree.duration ?? tree.time),
+          sourceIdentity,
+          status: 'candidate-not-yet-linked-to-public-action-lifecycle',
+        });
+      }
+    }
+    for (const [effectIndex, effect] of (
+      tree.triggerEffectList ?? []
+    ).entries()) {
+      const targetControlSkillId =
+        integerOrNull(effect.effectType) === 1
+          ? integerOrNull(effect.param1)
+          : null;
+      const targetSubSkillIndex = integerOrNull(effect.param3);
+      if (
+        !targetControlIds.has(targetControlSkillId) ||
+        targetSubSkillIndex == null
+      ) {
+        continue;
+      }
+      appendMapArray(result, targetControlSkillId, {
+        kind: 'legacy-trigger-effect-variant-candidate',
+        elementId: integerOrNull(tree.elementConfigId),
+        targetSubSkillIndex,
+        triggerType: integerOrNull(tree.triggerType),
+        triggerConditions: tree.triggerConditionList ?? [],
+        sourceIdentity: `${sourceIdentity}#triggerEffectList[${effectIndex}]`,
+        status: 'candidate-semantics-not-yet-modeled',
+      });
+    }
+  }
+  for (const [controlSkillId, candidates] of result) {
+    result.set(
+      controlSkillId,
+      dedupeBy(
+        candidates,
+        candidate =>
+          `${candidate.kind}|${candidate.elementId}|${candidate.targetSubSkillIndex}|${candidate.sourceIdentity}`
+      )
+    );
+  }
+  return result;
+}
+
+function classifyVariantConditionDiscovery({ appliedEdges, unresolvedEdges }) {
+  if (appliedEdges.length > 0 && unresolvedEdges.length > 0) {
+    return 'partially-resolved';
+  }
+  if (appliedEdges.length > 0) return 'resolved';
+  if (unresolvedEdges.length === 0) {
+    return 'variant-condition-not-yet-modeled';
+  }
+  const categories = new Set(
+    unresolvedEdges
+      .flatMap(edge => edge.reasons ?? [])
+      .map(classifyProductGapReason)
+  );
+  if (categories.size === 1 && categories.has('runtime-dependent')) {
+    return 'runtime-dependent';
+  }
+  return 'static-evidence-gap';
 }
 
 function createActionVariantNodeIdentity(
@@ -1600,12 +1902,14 @@ function findSkillControl(skillId, battleTargetTypeContract) {
       Number(value.skillControlData?.skillId) === skillId
     ) {
       const elementRefs = collectElementRefs(value);
+      const bulletLaunches = collectBulletLaunchContracts(directory, value);
       return {
         skillId,
         directory,
         filePath,
         value,
         elementRefs,
+        bulletLaunches,
         playerEventBridges: collectSkillPlayerEventBridges(directory, value),
         behaviorTriggers: collectBehaviorTriggers(
           directory,
@@ -1622,6 +1926,191 @@ function findSkillControl(skillId, battleTargetTypeContract) {
     }
   }
   return null;
+}
+
+function collectBulletLaunchContracts(directory, skillControl) {
+  const objectFiles = createUnityObjectFileIndex(directory);
+  const frameRate =
+    positiveNumberOrNull(skillControl.skillControlData?.framePerSecond) ?? 60;
+  const launches = [];
+  for (const [subSkillIndex, player] of (
+    skillControl.skillControlData?.skillPlayers ?? []
+  ).entries()) {
+    for (const [trackIndex, trackRef] of (
+      player.skillTrackDatas ?? []
+    ).entries()) {
+      const track = readReferencedUnityObject(objectFiles, trackRef);
+      for (const [behaviorLineIndex, behaviorLine] of (
+        track?.value?.behaviorlineControl ?? []
+      ).entries()) {
+        for (const behaviorRef of behaviorLine.behaviorList ?? []) {
+          const behavior = readReferencedUnityObject(objectFiles, behaviorRef);
+          const configs = behavior?.value?.bulletShootDataConfigs;
+          const startFrame = integerOrNull(behavior?.value?.startFrame);
+          if (!Array.isArray(configs) || startFrame == null || startFrame < 0) {
+            continue;
+          }
+          for (const [configIndex, config] of configs.entries()) {
+            const repeatCount = Math.max(
+              1,
+              integerOrNull(config.bulletCount) ?? 1
+            );
+            for (const [bulletIndex, bullet] of (
+              config.bullets ?? []
+            ).entries()) {
+              const bulletId = positiveIntegerOrNull(bullet?.bulletId);
+              const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
+              if (!bulletId) continue;
+              const injection = readBulletInjectionContract(bulletId);
+              for (
+                let repeatIndex = 0;
+                repeatIndex < repeatCount;
+                repeatIndex += 1
+              ) {
+                for (const [elementIndex, element] of (
+                  injection.elements ?? []
+                ).entries()) {
+                  const delayFrames = Math.round((delayMs / 1000) * frameRate);
+                  const launchFrame = startFrame + delayFrames;
+                  launches.push({
+                    subSkillIndex,
+                    trackIndex,
+                    behaviorLineIndex,
+                    behaviorPathId: behavior.pathId,
+                    configIndex,
+                    bulletIndex,
+                    repeatIndex,
+                    elementIndex,
+                    bulletId,
+                    elementId: element.elementId,
+                    startFrame,
+                    delayMs,
+                    delayFrames,
+                    launchFrame,
+                    targetType: injection.targetType,
+                    targetKind:
+                      injection.targetType === 1
+                        ? 'skill-target'
+                        : 'runtime-target',
+                    launchIdentity: [
+                      `control:${skillControl.skillControlData.skillId}`,
+                      `sub:${subSkillIndex}`,
+                      `behavior:${behavior.pathId}`,
+                      `config:${configIndex}`,
+                      `bullet:${bulletId}:${bulletIndex}:${repeatIndex}`,
+                      `element:${element.elementId}:${elementIndex}`,
+                    ].join('|'),
+                    sourceIdentity: [
+                      `${relativeExternalPath(behavior.filePath)}#startFrame|bulletShootDataConfigs[${configIndex}].bullets[${bulletIndex}]`,
+                      injection.sourceIdentity,
+                      element.sourceIdentity,
+                    ]
+                      .filter(Boolean)
+                      .join('|'),
+                    status:
+                      injection.targetType === 1
+                        ? 'verified-projectile-launch-ready'
+                        : 'runtime-projectile-target-dependent',
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return dedupeBy(launches, launch => launch.launchIdentity).sort(
+    (left, right) =>
+      left.subSkillIndex - right.subSkillIndex ||
+      left.launchFrame - right.launchFrame ||
+      left.launchIdentity.localeCompare(right.launchIdentity)
+  );
+}
+
+function readBulletInjectionContract(bulletId) {
+  if (bulletInjectionContractCache.has(bulletId)) {
+    return bulletInjectionContractCache.get(bulletId);
+  }
+  const directory = path.join(
+    BATTLE_ROOT,
+    'BulletList',
+    `ast_bullet_${bulletId}.asset`,
+    'MonoBehaviour'
+  );
+  if (!fs.existsSync(directory)) {
+    const missing = {
+      bulletId,
+      targetType: null,
+      elements: [],
+      sourceIdentity: null,
+      status: 'bullet-asset-missing',
+    };
+    bulletInjectionContractCache.set(bulletId, missing);
+    return missing;
+  }
+  const candidates = fs
+    .readdirSync(directory)
+    .filter(name => name.endsWith('.json'))
+    .map(name => path.join(directory, name));
+  let selected = null;
+  for (const filePath of candidates) {
+    const value = readUnityJson(filePath);
+    if (!Array.isArray(value?.bulletLogicObjects)) continue;
+    selected = { filePath, value };
+    break;
+  }
+  const elements = [];
+  if (selected) {
+    walkUnityObject(selected.value, (value, objectPath) => {
+      if (
+        Number(value?.actionType) !== 0 ||
+        !Array.isArray(value?.actionElementParameter?.elementInfos)
+      ) {
+        return;
+      }
+      for (const [
+        index,
+        info,
+      ] of value.actionElementParameter.elementInfos.entries()) {
+        const elementId = positiveIntegerOrNull(info?.elementId);
+        if (!elementId) continue;
+        elements.push({
+          elementId,
+          sourceIdentity: `${relativeExternalPath(selected.filePath)}#${objectPath}.actionElementParameter.elementInfos[${index}].elementId`,
+        });
+      }
+    });
+  }
+  const contract = {
+    bulletId,
+    targetType: integerOrNull(selected?.value?.bulletTargetType),
+    elements: dedupeBy(elements, element => element.sourceIdentity),
+    sourceIdentity: selected
+      ? `${relativeExternalPath(selected.filePath)}#bulletTargetType|bulletLogicObjects`
+      : null,
+    status:
+      selected && elements.length
+        ? 'verified-bullet-injection-contract-ready'
+        : 'bullet-injection-contract-unresolved',
+  };
+  bulletInjectionContractCache.set(bulletId, contract);
+  return contract;
+}
+
+function walkUnityObject(value, visitor, pathParts = []) {
+  if (!value || typeof value !== 'object') return;
+  visitor(value, pathParts.join('.'));
+  for (const [key, child] of Object.entries(value)) {
+    if (!child || typeof child !== 'object') continue;
+    if (Array.isArray(child)) {
+      child.forEach((entry, index) =>
+        walkUnityObject(entry, visitor, [...pathParts, `${key}[${index}]`])
+      );
+    } else {
+      walkUnityObject(child, visitor, [...pathParts, key]);
+    }
+  }
 }
 
 function collectElementRefs(skillControl) {
@@ -2249,6 +2738,33 @@ function createControlBinding({
       value => `${value.behaviorPathId}|${value.startFrame}`
     ).filter(trigger => Number.isInteger(trigger.startFrame));
     const elementId = Number(tree?.elementConfigId);
+    const scenarioTriggers =
+      ref.referenceKind === 'bulletElements' && Number.isInteger(elementId)
+        ? (control.bulletLaunches ?? [])
+            .filter(
+              launch =>
+                launch.subSkillIndex === ref.mapIndex &&
+                launch.elementId === elementId &&
+                launch.targetKind === 'skill-target'
+            )
+            .map(launch => ({
+              kind: 'projectile-zero-distance-impact',
+              behaviorPathId: launch.behaviorPathId,
+              startFrame: launch.launchFrame,
+              launchFrame: launch.launchFrame,
+              travelFrames: 0,
+              impactFrame: launch.launchFrame,
+              frameCount: 1,
+              bulletId: launch.bulletId,
+              bulletIndex: launch.bulletIndex,
+              repeatIndex: launch.repeatIndex,
+              launchIdentity: launch.launchIdentity,
+              targetKind: 'enemy',
+              sourceEvidenceStatus: 'runtime-dependent',
+              scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+              sourceIdentity: launch.sourceIdentity,
+            }))
+        : [];
     const baseValues =
       tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
     const baseFunctionId = Number(
@@ -2315,6 +2831,12 @@ function createControlBinding({
         : triggers.length > 0 && allDimensionsVerifiedZero
           ? 'verified-zero'
           : 'unresolved';
+    const scenarioClassification =
+      scenarioTriggers.length > 0 && runtimeDimensionReady
+        ? 'applied'
+        : scenarioTriggers.length > 0 && allDimensionsVerifiedZero
+          ? 'verified-zero'
+          : classification;
     const unresolvedReasons = dedupeBy(
       [
         ...issues,
@@ -2372,7 +2894,9 @@ function createControlBinding({
       threeValueRelevant,
       dimensions,
       triggers,
+      scenarioTriggers,
       classification,
+      scenarioClassification,
       status: `verified-action-hit-binding-${classification}`,
       confidence: classification === 'applied' ? 'high' : classification,
       issues: unresolvedReasons,
@@ -4385,9 +4909,28 @@ function createPackage({
   );
   const actionMappings = candidates.map(candidate => {
     const control = preparedControlBySkillId.get(candidate.controlSkillId);
-    const mechanicsMapping = createActionMapping(candidate, control);
+    const defaultSelection = findDefaultActionVariantSelection(
+      actionVariantGraph,
+      candidate.ownerId,
+      candidate.controlSkillId
+    );
+    const variantConditionDiscovery = findActionVariantConditionDiscovery(
+      actionVariantGraph,
+      candidate.ownerId,
+      candidate.controlSkillId
+    );
+    const mechanicsMapping = createActionMapping(candidate, control, {
+      defaultSelection,
+      variantModelStatus: classifyActionVariantModelStatus({
+        graph: actionVariantGraph,
+        ownerId: candidate.ownerId,
+        controlSkillId: candidate.controlSkillId,
+        control,
+      }),
+      variantConditionDiscovery,
+    });
     if (candidate.actionKind !== 'normal-attack') {
-      return attachActionTimingContract(
+      const withTiming = attachActionTimingContract(
         mechanicsMapping,
         createPublicActionTimingContract({
           candidate,
@@ -4395,16 +4938,28 @@ function createPackage({
           control,
         })
       );
+      return attachActionSchedulingContract({
+        mapping: withTiming,
+        control,
+        defaultSelection,
+      });
     }
     const attackInputSegments = createAttackInputSegments(
       candidate,
-      preparedControlBySkillId
+      preparedControlBySkillId,
+      actionVariantGraph
     );
     const actionTiming =
       createAttackInputChainTimingContract(attackInputSegments);
-    const mapping = attachActionTimingContract(mechanicsMapping, actionTiming);
+    const mapping = attachActionSchedulingContract({
+      mapping: attachActionTimingContract(mechanicsMapping, actionTiming),
+      control,
+      defaultSelection,
+    });
     return {
       ...mapping,
+      actionScheduling:
+        createAttackInputChainSchedulingContract(attackInputSegments),
       attackInputChainStatus:
         attackInputSegments.length > 0
           ? 'verified-attack-input-chain-classified'
@@ -4754,13 +5309,31 @@ function createPackage({
 function createControlRuntimeHits(control) {
   const indexByMap = new Map();
   return (control?.elements ?? [])
-    .filter(element => element.classification === 'applied')
-    .flatMap(element =>
-      element.triggers.map(trigger => ({
-        ...element,
-        trigger,
-      }))
+    .filter(
+      element =>
+        element.classification === 'applied' ||
+        element.scenarioClassification === 'applied'
     )
+    .flatMap(element => [
+      ...(element.classification === 'applied'
+        ? element.triggers.map(trigger => ({
+            ...element,
+            trigger,
+            sourceEvidenceStatus: 'applied',
+            scenarioRuntimeStatus: 'source-verified',
+          }))
+        : []),
+      ...(element.scenarioClassification === 'applied'
+        ? (element.scenarioTriggers ?? []).map(trigger => ({
+            ...element,
+            trigger,
+            sourceEvidenceStatus:
+              trigger.sourceEvidenceStatus ?? 'runtime-dependent',
+            scenarioRuntimeStatus:
+              trigger.scenarioRuntimeStatus ?? 'scenario-assumed-zero-distance',
+          }))
+        : []),
+    ])
     .sort(
       (left, right) =>
         left.mapIndex - right.mapIndex ||
@@ -4770,15 +5343,26 @@ function createControlRuntimeHits(control) {
     .map(element => {
       const hitIndex = (indexByMap.get(element.mapIndex) ?? 0) + 1;
       indexByMap.set(element.mapIndex, hitIndex);
-      const hitIdentity = [
-        control.controlSkillId,
-        element.mapIndex,
-        element.referenceKind,
-        element.elementIndex,
-        element.pathId,
-        element.trigger.startFrame,
-        hitIndex,
-      ].join('|');
+      const hitIdentity = element.trigger.launchIdentity
+        ? [
+            control.controlSkillId,
+            element.mapIndex,
+            'projectile',
+            element.elementId,
+            element.trigger.bulletId,
+            element.trigger.bulletIndex,
+            element.trigger.repeatIndex,
+            element.trigger.launchIdentity,
+          ].join('|')
+        : [
+            control.controlSkillId,
+            element.mapIndex,
+            element.referenceKind,
+            element.elementIndex,
+            element.pathId,
+            element.trigger.startFrame,
+            hitIndex,
+          ].join('|');
       return {
         elementId: element.elementId,
         pathId: element.pathId,
@@ -4791,6 +5375,8 @@ function createControlRuntimeHits(control) {
         damage: element.damage,
         energy: element.energy,
         trigger: element.trigger,
+        sourceEvidenceStatus: element.sourceEvidenceStatus,
+        scenarioRuntimeStatus: element.scenarioRuntimeStatus,
         hitIndex,
         hitIdentity,
       };
@@ -5810,23 +6396,153 @@ function createUnresolvedActionTimingContract({
 
 function attachActionTimingContract(mapping, actionTiming) {
   const mechanicsClassification = mapping.classification;
-  const timingReady = actionTiming.status === 'applied';
   return {
     ...mapping,
     mechanicsClassification,
     actionTiming,
     timingStatus: actionTiming.status,
-    classification: timingReady ? mechanicsClassification : 'unresolved',
-    runtimeReady: timingReady && mapping.runtimeReady,
-    complete: timingReady && mapping.complete,
+    classification: mechanicsClassification,
+    runtimeReady: mapping.runtimeReady,
+    complete: mapping.complete,
     reasons: dedupeBy(
-      [
-        ...(mapping.reasons ?? []),
-        ...(timingReady ? [] : actionTiming.reasons),
-      ],
+      [...(mapping.reasons ?? []), ...(actionTiming.reasons ?? [])],
       value => value
     ),
   };
+}
+
+function attachActionSchedulingContract({
+  mapping,
+  control,
+  defaultSelection,
+}) {
+  const actionScheduling = createActionSchedulingContract({
+    actionTiming: mapping.actionTiming,
+    control,
+    defaultSelection,
+    variantModelStatus: mapping.variantModelStatus,
+  });
+  return {
+    ...mapping,
+    schedulable: Boolean(mapping.controlSkillId && control),
+    actionScheduling,
+    sourceEvidenceStatus:
+      mapping.sourceEvidenceStatus ??
+      mapping.mechanicsClassification ??
+      mapping.classification,
+    scenarioRuntimeStatus:
+      mapping.scenarioRuntimeStatus ??
+      (mapping.runtimeReady
+        ? 'scenario-runtime-ready'
+        : 'scenario-runtime-unresolved'),
+  };
+}
+
+function createActionSchedulingContract({
+  actionTiming,
+  control,
+  defaultSelection,
+  variantModelStatus = 'resolved',
+}) {
+  const selectedSubSkillIndex =
+    nonNegativeIntegerOrNull(actionTiming?.selectedSubSkillIndex) ??
+    nonNegativeIntegerOrNull(defaultSelection?.subSkillIndex);
+  const selectedTiming = (actionTiming?.variantTimings ?? []).find(
+    timing => timing.subSkillIndex === selectedSubSkillIndex
+  );
+  const exactTiming =
+    actionTiming?.status === 'applied'
+      ? actionTiming
+      : selectedTiming?.occupancy?.status === 'applied'
+        ? selectedTiming
+        : null;
+  const exactOccupancy = exactTiming?.occupancy;
+  if (positiveIntegerOrNull(exactOccupancy?.durationFrames)) {
+    return {
+      status: 'exact',
+      kind: 'exact-selected-variant-occupancy',
+      durationFrames: exactOccupancy.durationFrames,
+      planningDurationFrames: null,
+      selectedSubSkillIndex,
+      sourceIdentity: exactOccupancy.sourceIdentity,
+      sourceStatus: 'verified-input-occupancy',
+      variantModelStatus,
+      reasons: [],
+    };
+  }
+  const animation = selectedTiming?.animation;
+  if (
+    animation?.status === 'applied' &&
+    positiveIntegerOrNull(animation.durationFrames)
+  ) {
+    return {
+      status: 'planning',
+      kind: 'source-animation-planning-duration',
+      durationFrames: null,
+      planningDurationFrames: animation.durationFrames,
+      selectedSubSkillIndex,
+      sourceIdentity: animation.sourceIdentity,
+      sourceStatus: 'verified-animation-duration',
+      variantModelStatus,
+      reasons: actionTiming?.reasons ?? [],
+    };
+  }
+  return {
+    status: 'planning',
+    kind: 'generic-planning-duration',
+    durationFrames: null,
+    planningDurationFrames: 30,
+    selectedSubSkillIndex,
+    sourceIdentity: control?.sourcePath ?? null,
+    sourceStatus: 'unresolved-control-identity',
+    variantModelStatus: 'unresolved-control-identity',
+    reasons: actionTiming?.reasons ?? ['skill-control-player-variant-missing'],
+  };
+}
+
+function findDefaultActionVariantSelection(graph, ownerId, controlSkillId) {
+  return (
+    graph?.defaultSelections?.find(
+      selection =>
+        Number(selection.ownerId) === Number(ownerId) &&
+        Number(selection.controlSkillId) === Number(controlSkillId)
+    ) ?? null
+  );
+}
+
+function findActionVariantConditionDiscovery(graph, ownerId, controlSkillId) {
+  return (
+    graph?.conditionDiscoveries?.find(
+      discovery =>
+        Number(discovery.ownerId) === Number(ownerId) &&
+        Number(discovery.controlSkillId) === Number(controlSkillId)
+    ) ?? null
+  );
+}
+
+function classifyActionVariantModelStatus({
+  graph,
+  ownerId,
+  controlSkillId,
+  control,
+}) {
+  if ((control?.variants ?? []).length <= 1) return 'resolved';
+  const discovery = findActionVariantConditionDiscovery(
+    graph,
+    ownerId,
+    controlSkillId
+  );
+  if (discovery?.status) return discovery.status;
+  const edges = (graph?.edges ?? []).filter(
+    edge =>
+      Number(edge.ownerId) === Number(ownerId) &&
+      Number(edge.targetControlSkillId) === Number(controlSkillId)
+  );
+  const appliedCount = edges.filter(edge => edge.applied).length;
+  const unresolvedCount = edges.length - appliedCount;
+  if (appliedCount > 0 && unresolvedCount > 0) return 'partially-resolved';
+  if (appliedCount > 0) return 'resolved';
+  return 'variant-condition-not-yet-modeled';
 }
 
 function createAttackInputChainTimingContract(segments) {
@@ -5870,10 +6586,94 @@ function createAttackInputChainTimingContract(segments) {
   };
 }
 
-function createAttackInputSegments(candidate, controlBySkillId) {
+function createAttackInputChainSchedulingContract(segments) {
+  const schedulings = (segments ?? [])
+    .map(segment => segment.actionScheduling)
+    .filter(Boolean);
+  if (!segments.length || schedulings.length !== segments.length) {
+    return {
+      status: 'planning',
+      kind: 'generic-planning-duration',
+      durationFrames: null,
+      planningDurationFrames: 30,
+      selectedSubSkillIndex: null,
+      sourceIdentity: null,
+      sourceStatus: 'unresolved-control-identity',
+      variantModelStatus: 'unresolved-control-identity',
+      reasons: ['normal-attack-input-segment-control-identity-unresolved'],
+    };
+  }
+  const totalFrames = schedulings.reduce(
+    (sum, scheduling, index) =>
+      sum +
+      Number(
+        scheduling.durationFrames ?? scheduling.planningDurationFrames ?? 0
+      ) +
+      Number(segments[index]?.defaultLinkDelayFrames ?? 0),
+    0
+  );
+  const hasGeneric = schedulings.some(
+    scheduling => scheduling.kind === 'generic-planning-duration'
+  );
+  const hasSourcePlanning = schedulings.some(
+    scheduling => scheduling.kind === 'source-animation-planning-duration'
+  );
+  const hasPlanning = schedulings.some(
+    scheduling => scheduling.status === 'planning'
+  );
+  const variantStatuses = new Set(
+    schedulings.map(scheduling => scheduling.variantModelStatus)
+  );
+  const variantModelStatus = variantStatuses.has('partially-resolved')
+    ? 'partially-resolved'
+    : variantStatuses.has('variant-condition-not-yet-modeled')
+      ? 'variant-condition-not-yet-modeled'
+      : variantStatuses.has('static-evidence-gap')
+        ? 'static-evidence-gap'
+        : variantStatuses.has('runtime-dependent')
+          ? 'runtime-dependent'
+          : 'resolved';
+  return {
+    status: hasPlanning ? 'planning' : 'exact',
+    kind: hasPlanning
+      ? hasSourcePlanning
+        ? 'source-animation-planning-duration'
+        : 'generic-planning-duration'
+      : 'exact-selected-variant-occupancy',
+    durationFrames: hasPlanning ? null : totalFrames,
+    planningDurationFrames: hasPlanning ? totalFrames : null,
+    selectedSubSkillIndex: null,
+    sourceIdentity: schedulings
+      .map(scheduling => scheduling.sourceIdentity)
+      .filter(Boolean)
+      .join('|'),
+    sourceStatus: hasPlanning
+      ? hasSourcePlanning
+        ? 'verified-animation-duration'
+        : 'unresolved-control-identity'
+      : 'verified-input-occupancy',
+    variantModelStatus,
+    containsGenericFallback: hasGeneric,
+    reasons: dedupeBy(
+      schedulings.flatMap(scheduling => scheduling.reasons ?? []),
+      value => value
+    ),
+  };
+}
+
+function createAttackInputSegments(
+  candidate,
+  controlBySkillId,
+  actionVariantGraph
+) {
   const inputs = candidate.attackInputControls ?? [];
   const segments = inputs.map((input, segmentIndex) => {
     const control = controlBySkillId.get(input.controlSkillId);
+    const defaultSelection = findDefaultActionVariantSelection(
+      actionVariantGraph,
+      candidate.ownerId,
+      input.controlSkillId
+    );
     const mapping = createActionMapping(
       {
         ...candidate,
@@ -5882,7 +6682,21 @@ function createAttackInputSegments(candidate, controlBySkillId) {
         bindingSourceIdentity: input.sourceIdentity,
         attackInputControls: undefined,
       },
-      control
+      control,
+      {
+        defaultSelection,
+        variantModelStatus: classifyActionVariantModelStatus({
+          graph: actionVariantGraph,
+          ownerId: candidate.ownerId,
+          controlSkillId: input.controlSkillId,
+          control,
+        }),
+        variantConditionDiscovery: findActionVariantConditionDiscovery(
+          actionVariantGraph,
+          candidate.ownerId,
+          input.controlSkillId
+        ),
+      }
     );
     const selectedHitIdentities = mapping.selectedHitIdentities ?? [];
     const selectedEffectIdentities = mapping.selectedEffectIdentities ?? [];
@@ -5896,6 +6710,12 @@ function createAttackInputSegments(candidate, controlBySkillId) {
     );
     const mechanicsClassification = mapping.classification;
     const timingReady = timing.status === 'applied';
+    const actionScheduling = createActionSchedulingContract({
+      actionTiming: timing.actionTiming,
+      control,
+      defaultSelection,
+      variantModelStatus: mapping.variantModelStatus,
+    });
     return {
       identity: `${mapping.identity}|attack-input-${input.sequenceIndex}`,
       sequenceIndex: input.sequenceIndex,
@@ -5903,6 +6723,10 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       label: `A${input.sequenceIndex}`,
       controlSkillId: input.controlSkillId,
       selectedSubSkillIndex: mapping.selectedSubSkillIndex,
+      schedulable: mapping.schedulable,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
+      variantConditionDiscovery: mapping.variantConditionDiscovery,
       playerSkillId:
         control?.variants?.find(
           variant => variant.subSkillIndex === mapping.selectedSubSkillIndex
@@ -5923,6 +6747,9 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       durationStatus: timing.status,
       durationBasis: timing.durationBasis,
       durationSourceIdentity: timing.sourceIdentity,
+      actionScheduling,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
       defaultLinkDelayFrames: timing.effectiveDurationFrames == null ? null : 0,
       linkWindow: timing.linkWindow,
       linkWindows: timing.linkWindows,
@@ -5936,8 +6763,8 @@ function createAttackInputSegments(candidate, controlBySkillId) {
       effectCount: mapping.runtimeEffectCount ?? 0,
       effectDimensionSummary: mapping.effectDimensionSummary,
       mechanicsClassification,
-      classification: timingReady ? mechanicsClassification : 'unresolved',
-      runtimeReady: timingReady && mapping.runtimeReady,
+      classification: mechanicsClassification,
+      runtimeReady: mapping.runtimeReady,
       reasons: dedupeBy(
         [...(mapping.reasons ?? []), ...(timingReady ? [] : timing.reasons)],
         value => value
@@ -6077,7 +6904,19 @@ function resolveNormalAttackInputOccupancy({
     windows,
     nextControlSkillId
   );
-  const linkWindow = matchingWindows[0] ?? null;
+  const finalHitFrame = hits.at(-1)?.frame ?? null;
+  const linkWindow =
+    matchingWindows.find(
+      window => finalHitFrame == null || window.startFrame >= finalHitFrame
+    ) ??
+    matchingWindows.find(window => {
+      const occupancyEndFrame = Math.max(
+        window.startFrame,
+        finalHitFrame ?? window.startFrame
+      );
+      return occupancyEndFrame <= window.endFrame;
+    }) ??
+    null;
   if (!linkWindow) {
     return createUnresolvedOccupancy(
       nextControlSkillId
@@ -6089,7 +6928,6 @@ function resolveNormalAttackInputOccupancy({
       }
     );
   }
-  const finalHitFrame = hits.at(-1)?.frame ?? null;
   const occupancyEndFrame = Math.max(
     linkWindow.startFrame,
     finalHitFrame ?? linkWindow.startFrame
@@ -6129,7 +6967,7 @@ function selectNormalAttackInputWindows(windows, nextControlSkillId) {
   return (windows ?? []).filter(window =>
     nextControlSkillId
       ? window.targetControlSkillId === nextControlSkillId
-      : window.allowAttack
+      : window.kind === 'attack-reopen-window'
   );
 }
 
@@ -6143,7 +6981,15 @@ function resolveDefaultFrameCount(frameCounts) {
   return values.find(value => value.key === 0) ?? values[0] ?? null;
 }
 
-function createActionMapping(candidate, control) {
+function createActionMapping(
+  candidate,
+  control,
+  {
+    defaultSelection = null,
+    variantModelStatus = 'resolved',
+    variantConditionDiscovery = null,
+  } = {}
+) {
   const identity = createBindingIdentity(candidate);
   const base = {
     identity,
@@ -6164,6 +7010,9 @@ function createActionMapping(candidate, control) {
       candidate.controlVariantSourceIdentity ?? null,
     controlFrameRate: control?.frameRate ?? 60,
     inputTrigger: createControlInputTrigger(control?.logic),
+    schedulable: Boolean(candidate.bindingEligible && control),
+    variantModelStatus,
+    variantConditionDiscovery,
   };
   if (!candidate.bindingEligible || !control) {
     return {
@@ -6174,13 +7023,17 @@ function createActionMapping(candidate, control) {
       runtimeHitCount: 0,
       runtimeEffectCount: 0,
       classification: 'unresolved',
+      sourceEvidenceStatus: 'static-evidence-gap',
+      scenarioRuntimeStatus: 'scenario-runtime-unresolved',
       reasons: [
         control ? 'public-control-link-unresolved' : 'skill-control-missing',
       ],
       dimensionSummary: createEmptyDimensionSummary('unresolved'),
     };
   }
-  const variantResolution = resolveControlVariant(control, candidate);
+  const variantResolution = resolveControlVariant(control, candidate, {
+    defaultSelection,
+  });
   if (!variantResolution.applied) {
     return {
       ...base,
@@ -6191,6 +7044,8 @@ function createActionMapping(candidate, control) {
       runtimeHitCount: 0,
       runtimeEffectCount: 0,
       classification: 'unresolved',
+      sourceEvidenceStatus: 'static-evidence-gap',
+      scenarioRuntimeStatus: 'scenario-runtime-unresolved',
       reasons: variantResolution.reasons,
       dimensionSummary: summarizeDimensions(
         control.elements.filter(element => element.mapIndex != null)
@@ -6203,6 +7058,12 @@ function createActionMapping(candidate, control) {
   );
   const runtimeHits = control.hits.filter(
     hit => hit.mapIndex === selectedSubSkillIndex
+  );
+  const sourceRuntimeHits = runtimeHits.filter(
+    hit => hit.sourceEvidenceStatus === 'applied'
+  );
+  const scenarioRuntimeHits = runtimeHits.filter(
+    hit => hit.scenarioRuntimeStatus === 'scenario-assumed-zero-distance'
   );
   const runtimeEffects = control.effects.filter(
     effect => effect.mapIndex === selectedSubSkillIndex
@@ -6225,6 +7086,12 @@ function createActionMapping(candidate, control) {
     );
   const classification =
     runtimeHits.length > 0 || hasAppliedCost || appliedEffects.length > 0
+      ? 'applied'
+      : allRelevantZero && spCost === 0
+        ? 'verified-zero'
+        : 'unresolved';
+  const sourceClassification =
+    sourceRuntimeHits.length > 0 || hasAppliedCost || appliedEffects.length > 0
       ? 'applied'
       : allRelevantZero && spCost === 0
         ? 'verified-zero'
@@ -6259,6 +7126,21 @@ function createActionMapping(candidate, control) {
       effect => effect.effectIdentity
     ),
     classification,
+    sourceEvidenceStatus:
+      sourceClassification === 'applied'
+        ? 'applied'
+        : scenarioRuntimeHits.length > 0
+          ? 'runtime-dependent'
+          : sourceClassification === 'verified-zero'
+            ? 'verified-zero'
+            : 'static-evidence-gap',
+    scenarioRuntimeStatus:
+      scenarioRuntimeHits.length > 0
+        ? 'scenario-assumed-zero-distance'
+        : classification === 'applied'
+          ? 'source-verified'
+          : 'scenario-runtime-unresolved',
+    scenarioResolvedHitCount: scenarioRuntimeHits.length,
     complete: unresolvedReasons.length === 0,
     reasons: unresolvedReasons,
     dimensionSummary: summarizeDimensions(selectedElements),
@@ -6284,7 +7166,11 @@ function summarizeEffectDimensions(effects) {
   return result;
 }
 
-function resolveControlVariant(control, candidate) {
+function resolveControlVariant(
+  control,
+  candidate,
+  { defaultSelection = null } = {}
+) {
   const variants = control?.variants ?? [];
   if (variants.length === 1) {
     return {
@@ -6334,6 +7220,21 @@ function resolveControlVariant(control, candidate) {
       status: 'applied',
       kind: 'unique-root-player-skill-variant',
       sourceIdentity: rootMatches[0].sourceIdentity,
+      reasons: [],
+      applied: true,
+    };
+  }
+  const defaultVariant = variants.find(
+    variant =>
+      Number(variant.subSkillIndex) === Number(defaultSelection?.subSkillIndex)
+  );
+  if (defaultVariant) {
+    return {
+      subSkillIndex: defaultVariant.subSkillIndex,
+      status: 'applied',
+      kind: 'verified-client-default-subskill-index',
+      sourceIdentity:
+        defaultSelection.sourceIdentity ?? defaultVariant.sourceIdentity,
       reasons: [],
       applied: true,
     };
@@ -6775,6 +7676,9 @@ function createActionTimingCoverageReport(packageValue) {
       sourceSkillName: mapping.sourceSkillName,
       controlSkillId: mapping.controlSkillId,
       timing: mapping.actionTiming,
+      scheduling: mapping.actionScheduling,
+      variantModelStatus: mapping.variantModelStatus,
+      variantConditionDiscovery: mapping.variantConditionDiscovery,
       sourceIdentity: mapping.bindingSourceIdentity,
     })
   );
@@ -6793,6 +7697,9 @@ function createActionTimingCoverageReport(packageValue) {
         sequenceIndex: segment.sequenceIndex,
         sequenceTotal: segment.sequenceTotal,
         timing: segment.actionTiming,
+        scheduling: segment.actionScheduling,
+        variantModelStatus: segment.actionScheduling?.variantModelStatus,
+        variantConditionDiscovery: segment.variantConditionDiscovery,
         sourceIdentity: segment.sourceIdentity,
       })
     )
@@ -6857,6 +7764,35 @@ function createActionTimingCoverageReport(packageValue) {
     row => Number(row.durationFrames) > 600
   );
   const unresolvedRows = timingRows.filter(row => row.status !== 'applied');
+  const schedulingRows = [...actionTimings, ...attackInputSegments];
+  const schedulingKindCounts = countValues(
+    schedulingRows.map(row => row.schedulingKind)
+  );
+  const variantConditionDiscoveries =
+    packageValue.actionVariantGraph?.conditionDiscoveries ?? [];
+  const variantConditionFocus = variantConditionDiscoveries.filter(
+    discovery => {
+      const mappings = packageValue.actionMappings.filter(
+        mapping =>
+          mapping.actionKind !== 'normal-attack' &&
+          Number(mapping.ownerId) === Number(discovery.ownerId) &&
+          Number(mapping.controlSkillId) === Number(discovery.controlSkillId) &&
+          mapping.controlVariantResolution?.kind ===
+            'verified-client-default-subskill-index'
+      );
+      return mappings.some(mapping => {
+        const durations = [
+          ...new Set(
+            (mapping.variantConditionDiscovery?.variantDurations ?? [])
+              .flatMap(variant => variant.frameCounts ?? [])
+              .map(frame => positiveIntegerOrNull(frame.frameCount))
+              .filter(Boolean)
+          ),
+        ];
+        return durations.length > 1;
+      });
+    }
+  );
   const byOwnerActionKindSourceStatus = [
     ...groupBy(
       actionTimings,
@@ -6917,19 +7853,43 @@ function createActionTimingCoverageReport(packageValue) {
       unresolvedReasonCounts: countValues(
         unresolvedRows.flatMap(row => row.reasons)
       ),
+      schedulingKindCounts,
+      exactSelectedVariantOccupancyCount:
+        schedulingKindCounts['exact-selected-variant-occupancy'] ?? 0,
+      sourceAnimationPlanningDurationCount:
+        schedulingKindCounts['source-animation-planning-duration'] ?? 0,
+      genericPlanningDurationCount:
+        schedulingKindCounts['generic-planning-duration'] ?? 0,
+      unresolvedControlIdentityCount: schedulingRows.filter(
+        row => row.variantModelStatus === 'unresolved-control-identity'
+      ).length,
+      variantModelStatusCounts: countValues(
+        schedulingRows.map(row => row.variantModelStatus)
+      ),
+      variantConditionDiscoveryStatusCounts: countValues(
+        variantConditionDiscoveries.map(discovery => discovery.status)
+      ),
+      variantConditionFocusCount: variantConditionFocus.length,
     },
     byOwnerActionKindSourceStatus,
     actions: actionTimings,
     attackInputSegments,
     publicVariants,
     controlVariants,
+    variantConditionDiscoveries,
+    variantConditionFocus,
     unresolved: unresolvedRows,
     oneFrame: oneFrameRows,
     abnormalLong: abnormalLongRows,
   };
 }
 
-function createActionTimingCoverageRow({ timing, ...identity }) {
+function createActionTimingCoverageRow({
+  timing,
+  scheduling,
+  variantModelStatus,
+  ...identity
+}) {
   const occupancy = timing?.occupancy ?? null;
   return {
     ...identity,
@@ -6953,6 +7913,17 @@ function createActionTimingCoverageRow({ timing, ...identity }) {
     hitFrames: (timing?.hits ?? []).map(hit => hit.frame),
     windows: timing?.windows ?? [],
     cooldown: timing?.cooldown ?? null,
+    schedulingStatus: scheduling?.status ?? 'planning',
+    schedulingKind: scheduling?.kind ?? 'generic-planning-duration',
+    planningDurationFrames: scheduling?.planningDurationFrames ?? null,
+    schedulingDurationFrames: scheduling?.durationFrames ?? null,
+    schedulingSourceIdentity: scheduling?.sourceIdentity ?? null,
+    schedulingSourceStatus: scheduling?.sourceStatus ?? null,
+    variantModelStatus:
+      scheduling?.variantModelStatus ??
+      variantModelStatus ??
+      'unresolved-control-identity',
+    variantConditionDiscovery: identity.variantConditionDiscovery ?? null,
   };
 }
 
@@ -6961,12 +7932,21 @@ function createActionTimingCoverageMarkdown(report) {
     '# M9-A 全动作时长与输入占轴审计',
     '',
     `- 包：\`${report.packageId}\``,
-    `- 公开动作：${report.sourceDenominator.publicActionCount}（已确认 ${report.summary.appliedActionCount}，未解析 ${report.summary.unresolvedActionCount}）`,
-    `- 公开变体：${report.sourceDenominator.publicVariantCount}（已确认 ${report.summary.appliedPublicVariantCount}，未解析 ${report.summary.unresolvedPublicVariantCount}）`,
-    `- 普攻输入段：${report.sourceDenominator.normalAttackInputSegmentCount}（已确认 ${report.summary.appliedAttackInputSegmentCount}，未解析 ${report.summary.unresolvedAttackInputSegmentCount}）`,
+    `- 公开动作：${report.sourceDenominator.publicActionCount}（来源占轴已确认 ${report.summary.appliedActionCount}，尚未确认 ${report.summary.unresolvedActionCount}；公开动作均按独立 schedulable 合同判断）`,
+    `- 公开变体：${report.sourceDenominator.publicVariantCount}（来源占轴已确认 ${report.summary.appliedPublicVariantCount}，尚未确认 ${report.summary.unresolvedPublicVariantCount}）`,
+    `- 普攻输入段：${report.sourceDenominator.normalAttackInputSegmentCount}（输入占轴已确认 ${report.summary.appliedAttackInputSegmentCount}，尚未确认 ${report.summary.unresolvedAttackInputSegmentCount}）`,
     `- SkillControl/player 变体：${report.sourceDenominator.controlPlayerVariantCount}`,
     `- 一帧占轴：${report.summary.oneFrameCount}`,
     `- 异常长占轴（>600f）：${report.summary.abnormalLongCount}`,
+    `- 精确选中变体占轴：${report.summary.exactSelectedVariantOccupancyCount}`,
+    `- 来源动画规划长度：${report.summary.sourceAnimationPlanningDurationCount}`,
+    `- 通用规划长度：${report.summary.genericPlanningDurationCount}`,
+    `- control 身份未解析：${report.summary.unresolvedControlIdentityCount}`,
+    `- 变体条件发现：${Object.entries(
+      report.summary.variantConditionDiscoveryStatusCounts
+    )
+      .map(([status, count]) => `${status} ${count}`)
+      .join(' / ')}`,
     '',
     '## Owner / 动作类型 / 来源状态',
     '',
@@ -6977,7 +7957,22 @@ function createActionTimingCoverageMarkdown(report) {
         `| ${row.ownerKind} | ${row.actionKind} | ${row.sourceKind} | ${row.status} | ${row.count} |`
     ),
     '',
-    '## 未解析占轴',
+    '## 多变体条件发现',
+    '',
+    '| Owner | 动作类型 | Control | 状态 | 已审计来源 |',
+    '| --- | --- | ---: | --- | --- |',
+    ...report.variantConditionFocus.map(discovery => {
+      const action = report.actions.find(
+        row =>
+          Number(row.ownerId) === Number(discovery.ownerId) &&
+          Number(row.controlSkillId) === Number(discovery.controlSkillId)
+      );
+      return `| ${action?.ownerName ?? discovery.ownerId} | ${discovery.actionKinds.join(' / ')} | ${discovery.controlSkillId} | ${discovery.status} | ${discovery.sourceFamilies.map(source => source.kind).join(' / ')} |`;
+    }),
+    '',
+    '> `variant-condition-not-yet-modeled` 表示条件来源已进入发现审计、但尚未形成可执行选择边；它不是“证据证明无法解析”。只有完成来源链审计后，才会区分 `static-evidence-gap` 或 `runtime-dependent`。',
+    '',
+    '## 尚未确认的输入占轴',
     '',
   ];
   if (report.unresolved.length === 0) {
@@ -7054,7 +8049,10 @@ function createActionCoverageReport({
         left.ownerId - right.ownerId
     );
   const unresolvedActions = packageValue.actionMappings
-    .filter(mapping => mapping.classification === 'unresolved')
+    .filter(
+      mapping =>
+        !['applied', 'verified-zero'].includes(mapping.sourceEvidenceStatus)
+    )
     .map(mapping => ({
       identity: mapping.identity,
       ownerKind: mapping.ownerKind,
@@ -7066,6 +8064,8 @@ function createActionCoverageReport({
       controlSkillId: mapping.controlSkillId,
       publicVariants: mapping.publicVariants,
       reasons: mapping.reasons,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
     }));
   const unresolvedReferences = packageValue.actionMappings.flatMap(mapping => {
     const control = controlBySkillId.get(mapping.controlSkillId);
@@ -7087,6 +8087,7 @@ function createActionCoverageReport({
         elementId: element.elementId,
         referenceKind: element.referenceKind,
         threeValueRelevant: element.threeValueRelevant,
+        scenarioClassification: element.scenarioClassification,
         reasons: element.issues,
         sourceIdentity: element.sourceIdentity,
       }));
@@ -7153,7 +8154,8 @@ function createActionCoverageReport({
       const references = publicPathReferences.get(element.pathId) ?? [];
       references.push({
         actionIdentity: mapping.identity,
-        classification: mapping.classification,
+        classification: element.classification,
+        scenarioClassification: element.scenarioClassification,
         controlSkillId: mapping.controlSkillId,
         subSkillIndex: element.mapIndex,
         selected: mapping.selectedSubSkillIndex === element.mapIndex,
@@ -7169,9 +8171,17 @@ function createActionCoverageReport({
     const appliedReferences = selectedReferences.filter(
       reference => reference.classification === 'applied'
     );
+    const scenarioAppliedReferences = selectedReferences.filter(
+      reference =>
+        reference.classification === 'applied' ||
+        reference.scenarioClassification === 'applied'
+    );
     return {
       ...element,
       classification: appliedReferences.length ? 'applied' : 'unresolved',
+      scenarioClassification: scenarioAppliedReferences.length
+        ? 'applied'
+        : 'unresolved',
       actionReferences: selectedReferences.length
         ? selectedReferences
         : references,
@@ -7241,6 +8251,40 @@ function createActionCoverageReport({
       nonzeroRecoveryElementCount: nonzeroRecoveryCoverage.length,
       unresolvedNonzeroRecoveryElementCount: nonzeroRecoveryCoverage.filter(
         element => element.classification === 'unresolved'
+      ).length,
+      scenarioResolvedNonzeroRecoveryElementCount:
+        nonzeroRecoveryCoverage.filter(
+          element => element.scenarioClassification === 'applied'
+        ).length,
+      scenarioResolvedProjectileHitCount: packageValue.controlBindings.reduce(
+        (sum, control) =>
+          sum +
+          control.hits.filter(
+            hit =>
+              hit.scenarioRuntimeStatus === 'scenario-assumed-zero-distance'
+          ).length,
+        0
+      ),
+      disabledScenarioHitCount: 0,
+      unresolvedProjectileLaunchCount: unresolvedReferences.filter(
+        reference =>
+          reference.referenceKind === 'bulletElements' &&
+          reference.scenarioClassification !== 'applied' &&
+          reference.reasons.includes(
+            'projectile-impact-frame-runtime-dependent'
+          )
+      ).length,
+      unresolvedProjectileFormulaCount: unresolvedReferences.filter(
+        reference =>
+          reference.referenceKind === 'bulletElements' &&
+          reference.reasons.some(reason =>
+            reason.includes('function-unverified')
+          )
+      ).length,
+      unresolvedProjectileTargetCount: unresolvedReferences.filter(
+        reference =>
+          reference.referenceKind === 'bulletElements' &&
+          reference.reasons.some(reason => reason.includes('target'))
       ).length,
       unresolvedReferenceCount: unresolvedReferences.length,
       publicVariantCount: publicVariantCoverage.length,
@@ -7318,6 +8362,19 @@ function createCoverageSummary({
     linkedActionCount: mappings.filter(mapping => mapping.linked).length,
     runnableActionCount: mappings.filter(mapping => mapping.runtimeReady)
       .length,
+    sourceAppliedActionCount: mappings.filter(
+      mapping => mapping.sourceEvidenceStatus === 'applied'
+    ).length,
+    sourceRuntimeDependentActionCount: mappings.filter(
+      mapping => mapping.sourceEvidenceStatus === 'runtime-dependent'
+    ).length,
+    sourceStaticEvidenceGapActionCount: mappings.filter(
+      mapping => mapping.sourceEvidenceStatus === 'static-evidence-gap'
+    ).length,
+    scenarioResolvedActionCount: mappings.filter(
+      mapping =>
+        mapping.scenarioRuntimeStatus === 'scenario-assumed-zero-distance'
+    ).length,
     verifiedZeroActionCount: mappings.filter(
       mapping => mapping.classification === 'verified-zero'
     ).length,
@@ -7339,12 +8396,17 @@ function createActionCoverageMarkdown(report) {
     `- 包：\`${report.packageId}\``,
     `- 公开动作分母：${report.summary.directoryActionCount}`,
     `- 已关联：${report.summary.linkedActionCount}`,
-    `- 可运行：${report.summary.runnableActionCount}`,
+    `- 场景可运行：${report.summary.runnableActionCount}`,
+    `- 来源静态可应用：${report.summary.sourceAppliedActionCount}`,
+    `- 来源运行时依赖：${report.summary.sourceRuntimeDependentActionCount}`,
+    `- 零距离场景补全：${report.summary.scenarioResolvedActionCount}`,
+    `- 来源静态证据缺口：${report.summary.sourceStaticEvidenceGapActionCount}`,
     `- 明确零：${report.summary.verifiedZeroActionCount}`,
     `- 未解析：${report.summary.unresolvedActionCount}`,
     `- 真实命中节点：${report.summary.hitNodeCount}`,
     `- 公开动作变体：${report.summary.publicVariantCount}（未解析 ${report.summary.unresolvedPublicVariantCount}）`,
     `- 非零回能元素：${report.summary.nonzeroRecoveryElementCount}（未关联 ${report.summary.unresolvedNonzeroRecoveryElementCount}）`,
+    `- 零距离投射物命中：${report.summary.scenarioResolvedProjectileHitCount}（仍缺发射帧 ${report.summary.unresolvedProjectileLaunchCount}、仍缺公式 ${report.summary.unresolvedProjectileFormulaCount}、仍缺目标 ${report.summary.unresolvedProjectileTargetCount}）`,
     `- 普攻输入链：${report.summary.attackInputChainCount} 条 / ${report.summary.attackInputSegmentCount} 个输入段（可运行 ${report.summary.appliedAttackInputSegmentCount}，未解析 ${report.summary.unresolvedAttackInputSegmentCount}）`,
     `- 普攻输入时序：已确认 ${report.summary.appliedAttackInputTimingCount}，未确认 ${report.summary.unresolvedAttackInputTimingCount}`,
     '',
@@ -7798,11 +8860,22 @@ function createPublicRuntimeCoverageReport({
       selectedSubSkillIndex: mapping.selectedSubSkillIndex,
       runtimeStatus,
       runnable: Boolean(mapping.runtimeReady),
+      schedulable: mapping.schedulable !== false,
+      sourceEvidenceStatus:
+        mapping.sourceEvidenceStatus ?? 'static-evidence-gap',
+      scenarioRuntimeStatus:
+        mapping.scenarioRuntimeStatus ?? 'scenario-runtime-unresolved',
       mechanicsClassification: mapping.mechanicsClassification,
       timing: {
         status: timing?.status ?? mapping.timingStatus ?? 'unresolved',
         durationFrames: timing?.durationFrames ?? null,
         sourceKind: timing?.sourceKind ?? null,
+        schedulingKind: mapping.actionScheduling?.kind ?? null,
+        planningDurationFrames:
+          mapping.actionScheduling?.planningDurationFrames ?? null,
+        variantModelStatus:
+          mapping.actionScheduling?.variantModelStatus ??
+          mapping.variantModelStatus,
       },
       variants: summarizeProductVariantEdges(variantEdges),
       specialResource: resourceProfile
@@ -7939,11 +9012,15 @@ function createPublicRuntimeCoverageReport({
   };
   const gatePassed = Object.values(gateChecks).every(Boolean);
   if (!gatePassed) {
+    const unclassifiedSummary = unclassifiedUnresolvedActions
+      .slice(0, 8)
+      .map(action => `${action.identity}:${action.reasons.join('|')}`)
+      .join('; ');
     throw new Error(
       `M9 public runtime coverage gate failed: ${Object.entries(gateChecks)
         .filter(([, passed]) => !passed)
         .map(([name]) => name)
-        .join(', ')}`
+        .join(', ')}${unclassifiedSummary ? ` [${unclassifiedSummary}]` : ''}`
     );
   }
   return {
@@ -7960,6 +9037,19 @@ function createPublicRuntimeCoverageReport({
       actorOwnerCount,
       kiboOwnerCount,
       runnableActionCount: actions.filter(action => action.runnable).length,
+      sourceAppliedActionCount: actions.filter(
+        action => action.sourceEvidenceStatus === 'applied'
+      ).length,
+      sourceRuntimeDependentActionCount: actions.filter(
+        action => action.sourceEvidenceStatus === 'runtime-dependent'
+      ).length,
+      sourceStaticEvidenceGapActionCount: actions.filter(
+        action => action.sourceEvidenceStatus === 'static-evidence-gap'
+      ).length,
+      scenarioResolvedActionCount: actions.filter(
+        action =>
+          action.scenarioRuntimeStatus === 'scenario-assumed-zero-distance'
+      ).length,
       verifiedZeroActionCount: actions.filter(
         action => action.runtimeStatus === 'verified-zero'
       ).length,
@@ -8029,6 +9119,9 @@ function classifyProductActionGap(reasons) {
   if (!reasons.length) return { status: 'unclassified-gap' };
   const categories = new Set(reasons.map(classifyProductGapReason));
   if (categories.has('unclassified')) return { status: 'unclassified-gap' };
+  if (categories.has('not-yet-modeled')) {
+    return { status: 'variant-condition-not-yet-modeled' };
+  }
   if (
     categories.has('runtime-dependent') &&
     categories.has('static-evidence-gap')
@@ -8043,6 +9136,7 @@ function classifyProductActionGap(reasons) {
 }
 
 function classifyProductGapReason(reason) {
+  if (/not-yet-modeled/.test(reason)) return 'not-yet-modeled';
   if (
     /(runtime-dependent|projectile-(impact|collision)|runtime-target|runtime-trigger|runtime-selection|random-target)/.test(
       reason
@@ -8051,7 +9145,7 @@ function classifyProductGapReason(reason) {
     return 'runtime-dependent';
   }
   if (
-    /(missing|unresolved|incomplete|unverified|not-invariant|no-runnable|not-expanded|evidence-gap|ambiguous|mismatch|unsupported|without-root-selection|multiple-root|classified-through|not-literal)/.test(
+    /(missing|unresolved|incomplete|unverified|not-invariant|no-runnable|not-expanded|evidence-gap|ambiguous|mismatch|unsupported|without-root-selection|multiple-root|classified-through|not-literal|has-no-resource-map|has-no-three-value|control-identity)/.test(
       reason
     )
   ) {
@@ -8067,7 +9161,11 @@ function createPublicRuntimeCoverageMarkdown(report) {
     '',
     `- 包：\`${report.packageId}\``,
     `- 固定产品分母：${report.summary.publicActionCount} 个公开动作 / ${report.summary.actorOwnerCount} 名角色 / ${report.summary.kiboOwnerCount} 只奇波`,
-    `- 可运行：${report.summary.runnableActionCount}`,
+    `- 场景可运行：${report.summary.runnableActionCount}`,
+    `- 来源静态可应用：${report.summary.sourceAppliedActionCount}`,
+    `- 来源运行时依赖：${report.summary.sourceRuntimeDependentActionCount}`,
+    `- 零距离场景补全：${report.summary.scenarioResolvedActionCount}`,
+    `- 来源静态证据缺口：${report.summary.sourceStaticEvidenceGapActionCount}`,
     `- 明确零：${report.summary.verifiedZeroActionCount}`,
     `- 未解析：${report.summary.unresolvedActionCount}（未分类 ${report.summary.unclassifiedUnresolvedActionCount}）`,
     `- 角色核心动作：${report.summary.actorCoreRunnableCount}/${report.summary.actorCoreActionCount} 可运行`,

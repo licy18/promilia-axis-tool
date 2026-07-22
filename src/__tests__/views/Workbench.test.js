@@ -27,7 +27,7 @@ import {
   getSkillActionCatalog,
 } from '../../domain/workbenchProjectFactory';
 import { WORKBENCH_LAYOUT_STORAGE_KEY } from '../../domain/workbenchLayout';
-import { frameToMs } from '../../domain/timebase';
+import { frameToMs, msToFrame } from '../../domain/timebase';
 import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
 import ActionLibraryPanel from '../../features/workbench/ActionLibraryPanel.vue';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
@@ -7815,6 +7815,75 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('.action-item[data-action-id="action-0003"]').text()
     ).toContain('4s0f');
+  });
+
+  it('uses source planning for unresolved chain segments and the selected charged variant occupancy', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await findActionLibraryActorButton(wrapper, 101010).trigger('click');
+    await settleWorkbenchAsyncPanels();
+
+    const normal = findActionLibraryEntry(wrapper, 'normal-attack');
+    const charged = findActionLibraryEntry(wrapper, 'charged-attack');
+    expect(normal.attributes('disabled')).toBeUndefined();
+    expect(charged.attributes('disabled')).toBeUndefined();
+    expect(normal.attributes('data-scheduling-status')).toBe('planning');
+    expect(charged.attributes('data-scheduling-status')).toBe('verified');
+
+    await normal.trigger('click');
+    await charged.trigger('click');
+    await nextTick();
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    const actorDrafts = savedDraft.actionDrafts.filter(
+      action => Number(action.actorCharacterId) === 101010
+    );
+    const normalDrafts = actorDrafts
+      .filter(action => action.attackGroupId)
+      .sort(
+        (left, right) => left.attackSequenceIndex - right.attackSequenceIndex
+      );
+    const chargedDraft = actorDrafts.find(
+      action => Number(action.actionVariantIndex) === 2
+    );
+
+    expect(normalDrafts).toHaveLength(5);
+    expect(normalDrafts.map(action => action.attackSequenceIndex)).toEqual([
+      1, 2, 3, 4, 5,
+    ]);
+    expect(normalDrafts.map(action => msToFrame(action.durationMs))).toEqual([
+      20, 35, 47, 30, 240,
+    ]);
+    expect(normalDrafts.map(action => action.timingStatus)).toEqual([
+      'applied',
+      'applied',
+      'applied',
+      'applied',
+      'unresolved',
+    ]);
+    expect(chargedDraft).toMatchObject({
+      durationFrames: 310,
+      timingStatus: 'applied',
+      needsTimingData: false,
+      actionScheduling: {
+        kind: 'exact-selected-variant-occupancy',
+        selectedSubSkillIndex: 0,
+        variantModelStatus: 'partially-resolved',
+      },
+    });
+    expect(msToFrame(chargedDraft.durationMs)).toBe(310);
   });
 
   it('rebuilds the workbench project when the selected character changes', async () => {

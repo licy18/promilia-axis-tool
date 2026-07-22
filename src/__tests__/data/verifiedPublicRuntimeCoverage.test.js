@@ -32,13 +32,16 @@ describe('M9 public runtime coverage', () => {
 
   it('keeps every unresolved public action explicit and source-scoped', () => {
     expect(coverage.summary).toMatchObject({
-      runnableActionCount: 373,
+      runnableActionCount: 455,
+      sourceAppliedActionCount: 403,
+      sourceRuntimeDependentActionCount: 52,
+      scenarioResolvedActionCount: 62,
       verifiedZeroActionCount: 0,
-      unresolvedActionCount: 189,
+      unresolvedActionCount: 107,
       unclassifiedUnresolvedActionCount: 0,
       unresolvedStatusCounts: {
-        'runtime-and-evidence-gap': 118,
-        'static-evidence-gap': 71,
+        'runtime-and-evidence-gap': 72,
+        'static-evidence-gap': 35,
       },
     });
     expect(
@@ -67,16 +70,16 @@ describe('M9 public runtime coverage', () => {
   it('separates current public recovery gaps from variants and catalog-external elements', () => {
     expect(coverage.summary.nonzeroRecoveryElementCount).toBe(667);
     expect(coverage.summary.recoveryScopeCounts).toEqual({
-      'applied-current-public-action': 153,
-      'current-public-action-unresolved': 38,
+      'applied-current-public-action': 200,
+      'current-public-action-unresolved': 37,
       'outside-current-public-action-catalog': 400,
-      'public-unselected-control-variant': 76,
+      'public-unselected-control-variant': 30,
     });
     expect(
       coverage.recoveryCoverage.filter(
         item => item.productScope === 'current-public-action-unresolved'
       )
-    ).toHaveLength(38);
+    ).toHaveLength(37);
     expect(
       coverage.actions.every(action =>
         [

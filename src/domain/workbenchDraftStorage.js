@@ -18,6 +18,7 @@ import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
 import { normalizeWorkbenchCycleBoundaries } from './workbenchCycleBoundaries';
 import { normalizeWorkbenchScenarioWorkspace } from './workbenchScenarioWorkspace';
 import { normalizeInitialRuntimeState } from './initialRuntimeState';
+import { normalizeCombatScenario } from './combatScenario';
 import {
   normalizeWorkbenchConfigurationSelection,
   normalizeWorkbenchConfigurationWorkspace,
@@ -282,6 +283,7 @@ export function createWorkbenchScenarioDraftSnapshot({
   actionRelations,
   cycleBoundaries,
   initialRuntimeState,
+  combatScenario,
   runtimeSampleCaptures,
   selectedActionId,
 } = {}) {
@@ -333,6 +335,7 @@ export function createWorkbenchScenarioDraftSnapshot({
         characterId: normalizedTeamSlots[0].characterId,
       },
     }),
+    combatScenario: normalizeCombatScenario(combatScenario),
     runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
       runtimeSampleCaptures
     ),
@@ -509,9 +512,7 @@ function migrateLegacyRuntimeSpEntry(entry) {
   if (!legacyNormalized) return entry;
   return {
     ...entry,
-    currentValue: scaleLegacyNormalizedSpValue(
-      entry.currentValue
-    ),
+    currentValue: scaleLegacyNormalizedSpValue(entry.currentValue),
     maxValue: AZPR_DEFAULT_EFFECTIVE_MAX_SP,
     valueUnit: 'absolute-sp-points',
   };

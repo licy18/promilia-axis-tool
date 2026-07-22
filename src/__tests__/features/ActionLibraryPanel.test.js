@@ -5,6 +5,7 @@ import {
   clearInstalledVerifiedCombatMechanicsPackage,
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
+import { getSkillsForCharacter } from '../../domain/workbenchProjectFactory';
 import ActionLibraryPanel from '../../features/workbench/ActionLibraryPanel.vue';
 
 describe('ActionLibraryPanel', () => {
@@ -136,6 +137,59 @@ describe('ActionLibraryPanel', () => {
       clientY: 24,
     });
     expect(wrapper.emitted('begin-timeline-entry-drag')).toBeUndefined();
+  });
+
+  it('keeps public actions with unresolved occupancy available for planning', async () => {
+    const props = createActionLibraryProps();
+    props.actor = {
+      ...props.actor,
+      id: 'actor-101010',
+      characterId: 101010,
+      name: '涂山小玉',
+      loadout: { kiboId: null },
+    };
+    props.actors = [props.actor];
+    props.activeActorCharacterId = 101010;
+    props.skills = getSkillsForCharacter(101010);
+    props.kibos = [];
+    const wrapper = mount(ActionLibraryPanel, { props });
+    const normal = wrapper.get(
+      '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"]'
+    );
+    const charged = wrapper.get(
+      '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"]'
+    );
+
+    expect(normal.attributes('data-timing-status')).toBe('unresolved');
+    expect(normal.attributes('data-scheduling-status')).toBe('planning');
+    expect(normal.attributes('disabled')).toBeUndefined();
+    expect(normal.attributes('data-drag-enabled')).toBe('true');
+    expect(normal.text()).toContain('动画规划 372f');
+
+    expect(charged.attributes('data-timing-status')).toBe('applied');
+    expect(charged.attributes('data-scheduling-status')).toBe('verified');
+    expect(charged.attributes('disabled')).toBeUndefined();
+    expect(charged.attributes('data-drag-enabled')).toBe('true');
+    expect(charged.text()).toContain('310f');
+    expect(charged.attributes('title')).toContain('变体条件已部分解析');
+
+    await dispatchPointerDown(wrapper, normal, {
+      button: 0,
+      pointerId: 31,
+      clientX: 12,
+      clientY: 24,
+    });
+    expect(
+      wrapper.emitted('begin-timeline-entry-drag')?.at(-1)?.[0]
+    ).toMatchObject({
+      entry: {
+        type: 'skill',
+        timingStatus: 'unresolved',
+        schedulingStatus: 'planning',
+        schedulingKind: 'source-animation-planning-duration',
+        planningDurationFrames: 372,
+      },
+    });
   });
 
   it('saves and reuses compatible fragments through the compact library view', async () => {

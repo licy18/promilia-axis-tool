@@ -45,6 +45,9 @@ describe('Workbench PNG project', () => {
       })
     );
     state.selectedActionId = 'action-0002';
+    state.actionDrafts[0].hitOverrides = {
+      'control:10900101|hit:2': { willHit: false },
+    };
     state.initialRuntimeState = createPngInheritedState();
     state.runtimeSampleCaptures = [
       {
@@ -100,6 +103,9 @@ describe('Workbench PNG project', () => {
       teamSlots: state.teamSlots,
       enemyConfig: state.enemyConfig,
       selectedActionId: 'action-0002',
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: true },
+      },
       initialRuntimeState: {
         source: { sourceScenarioId: 'scenario-png-source' },
         enemy: { hp: { currentValue: 800 } },
@@ -125,6 +131,9 @@ describe('Workbench PNG project', () => {
       'action-0001',
       'action-0002',
     ]);
+    expect(imported.actionDrafts[0].hitOverrides).toEqual({
+      'control:10900101|hit:2': { willHit: false },
+    });
     expect(createWorkbenchProjectPngFileName(metadata)).toBe(
       'promilia-workbench-2026-07-10-2actions.png'
     );

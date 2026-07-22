@@ -48,6 +48,9 @@ import {
 } from './actionStatusGeneration';
 import { resolveActorEffectiveMaxSp } from './spUnitContract';
 import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
+import { normalizeActionHitOverrides } from './actionHitOverrides';
+import { normalizeCombatScenario } from './combatScenario';
+import { normalizeWorkbenchActionSchedulingContract } from './workbenchActionScheduling';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -189,6 +192,11 @@ export function createWorkbenchActionDraft({
   timingReasons = [],
   timingSourceIdentity = null,
   needsTimingData = null,
+  controlSubSkillIndex = null,
+  actionScheduling = null,
+  sourceEvidenceStatus = null,
+  scenarioRuntimeStatus = null,
+  hitOverrides = null,
   note = '',
   insertion = null,
   generationBatch = null,
@@ -260,6 +268,12 @@ export function createWorkbenchActionDraft({
     change: Number(change) || 0,
     reason,
     eventType,
+    controlSubSkillIndex: nonNegativeIntegerOrNull(controlSubSkillIndex),
+    actionScheduling:
+      normalizeWorkbenchActionSchedulingContract(actionScheduling),
+    sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
+    scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
+    hitOverrides: normalizeActionHitOverrides(hitOverrides),
     ...(hasTimingContract
       ? {
           durationFrames: positiveIntegerOrNull(durationFrames),
@@ -495,19 +509,19 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
 export function normalizeWorkbenchCultivation(cultivation = {}) {
   return {
     starGiftRank: clampNumber(cultivation?.starGiftRank, 0, 7, 0),
-    favorabilityLevel: clampNumber(
-      cultivation?.favorabilityLevel,
-      0,
-      10,
-      0
-    ),
+    favorabilityLevel: clampNumber(cultivation?.favorabilityLevel, 0, 10, 0),
   };
 }
 
 export function normalizeWorkbenchKiboConfig(config = {}) {
   const source = config ?? {};
   return {
-    level: clampNumber(source.level, 1, 100, DEFAULT_WORKBENCH_KIBO_CONFIG.level),
+    level: clampNumber(
+      source.level,
+      1,
+      100,
+      DEFAULT_WORKBENCH_KIBO_CONFIG.level
+    ),
     hobbyId: clampNumber(
       source.hobbyId,
       1,
@@ -682,6 +696,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
         },
       }
     ),
+    combatScenario: normalizeCombatScenario(actionPatch.combatScenario),
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',
@@ -860,6 +875,11 @@ export function normalizeWorkbenchActionDrafts(
           timingReasons: draft.timingReasons,
           timingSourceIdentity: draft.timingSourceIdentity,
           needsTimingData: draft.needsTimingData,
+          controlSubSkillIndex: draft.controlSubSkillIndex,
+          actionScheduling: draft.actionScheduling,
+          sourceEvidenceStatus: draft.sourceEvidenceStatus,
+          scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+          hitOverrides: draft.hitOverrides,
           note: draft.note,
           insertion: draft.insertion,
           generationBatch: draft.generationBatch,
@@ -906,6 +926,11 @@ export function normalizeWorkbenchActionDrafts(
         timingReasons: draft.timingReasons,
         timingSourceIdentity: draft.timingSourceIdentity,
         needsTimingData: draft.needsTimingData,
+        controlSubSkillIndex: draft.controlSubSkillIndex,
+        actionScheduling: draft.actionScheduling,
+        sourceEvidenceStatus: draft.sourceEvidenceStatus,
+        scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+        hitOverrides: draft.hitOverrides,
         note: draft.note,
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
@@ -1045,6 +1070,11 @@ function createProjectActionFromDraft(
       timingReasons: draft.timingReasons,
       timingSourceIdentity: draft.timingSourceIdentity,
       needsTimingData: draft.needsTimingData,
+      controlSubSkillIndex: draft.controlSubSkillIndex,
+      actionScheduling: draft.actionScheduling,
+      sourceEvidenceStatus: draft.sourceEvidenceStatus,
+      scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+      hitOverrides: draft.hitOverrides,
       note: draft.note || '奇波事件标记',
       insertion: draft.insertion,
       effectCommands,
@@ -1069,6 +1099,11 @@ function createProjectActionFromDraft(
     timingReasons: draft.timingReasons,
     timingSourceIdentity: draft.timingSourceIdentity,
     needsTimingData: draft.needsTimingData,
+    controlSubSkillIndex: draft.controlSubSkillIndex,
+    actionScheduling: draft.actionScheduling,
+    sourceEvidenceStatus: draft.sourceEvidenceStatus,
+    scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+    hitOverrides: draft.hitOverrides,
     level: draft.level,
     actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
     damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
@@ -1281,9 +1316,12 @@ function clampNumber(value, min, max, fallback) {
 function optionalClampedInteger(value, min, max) {
   if (value == null || value === '') return null;
   const number = Number(value);
-  return Number.isInteger(number)
-    ? Math.min(max, Math.max(min, number))
-    : null;
+  return Number.isInteger(number) ? Math.min(max, Math.max(min, number)) : null;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : null;
 }
 
 function normalizeCatalogId(value, catalog) {

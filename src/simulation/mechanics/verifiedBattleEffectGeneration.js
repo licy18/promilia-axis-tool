@@ -32,7 +32,9 @@ export function createVerifiedBattleEffectGeneration({
     }
     const resolution =
       suppliedActionResolutionById?.get(action.id) ??
-      resolveVerifiedCombatActionMechanics(action);
+      resolveVerifiedCombatActionMechanics(action, {
+        combatScenario: scenario.combatScenario,
+      });
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
     for (const effect of resolution.semanticEffects ??

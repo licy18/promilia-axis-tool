@@ -35,18 +35,18 @@ describe('verified combat mechanics package', () => {
       summary: {
         candidateActionCount: 562,
         classifiedActionCount: 562,
-        appliedActionBindingCount: 415,
-        appliedHitBindingCount: 1310,
-        appliedEffectBindingCount: 125,
+        appliedActionBindingCount: 513,
+        appliedHitBindingCount: 1830,
+        appliedEffectBindingCount: 131,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 3208,
-        actionVariantSupportControlBindingCount: 25,
+        unresolvedEffectBindingCount: 3702,
+        actionVariantSupportControlBindingCount: 68,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 43,
-        actionVariantNodeCount: 79,
-        actionVariantEdgeCount: 85,
+        actionVariantNodeCount: 670,
+        actionVariantEdgeCount: 93,
         battleEffectNodeCount: 3673,
-        unresolvedActionCount: 189,
+        unresolvedActionCount: 107,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
@@ -57,13 +57,13 @@ describe('verified combat mechanics package', () => {
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
-        appliedAttackInputSegmentCount: 48,
-        unresolvedAttackInputSegmentCount: 47,
-        appliedAttackInputTimingCount: 64,
-        unresolvedAttackInputTimingCount: 31,
-        semanticEffectCount: 3122,
-        semanticGameplayEffectCount: 1583,
-        semanticAppliedEffectCount: 379,
+        appliedAttackInputSegmentCount: 76,
+        unresolvedAttackInputSegmentCount: 19,
+        appliedAttackInputTimingCount: 77,
+        unresolvedAttackInputTimingCount: 18,
+        semanticEffectCount: 3559,
+        semanticGameplayEffectCount: 1816,
+        semanticAppliedEffectCount: 397,
       },
       mechanismEvidence: {
         contractName: 'AzPrVerifiedMechanismEvidenceManifest',
@@ -153,30 +153,30 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      semanticEffectCount: 3122,
-      semanticGameplayEffectCount: 1583,
-      semanticStructuralCount: 1539,
-      semanticAppliedCount: 379,
+      semanticEffectCount: 3559,
+      semanticGameplayEffectCount: 1816,
+      semanticStructuralCount: 1743,
+      semanticAppliedCount: 397,
       semanticVerifiedZeroCount: 2,
-      semanticUnresolvedCount: 1202,
+      semanticUnresolvedCount: 1417,
       semanticPlacementCounts: {
-        'runtime-dependent': 83,
-        'static-evidence-gap': 366,
-        'static-resolved': 1134,
+        'runtime-dependent': 107,
+        'static-evidence-gap': 427,
+        'static-resolved': 1282,
       },
-      effectBindingCount: 3335,
-      appliedEffectBindingCount: 125,
+      effectBindingCount: 3835,
+      appliedEffectBindingCount: 131,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 3208,
+      unresolvedEffectBindingCount: 3702,
       bindingKindCounts: {
-        damage: 447,
-        inject: 1376,
-        judgment: 80,
-        pack: 166,
-        'property-change': 1013,
+        damage: 559,
+        inject: 1538,
+        judgment: 112,
+        pack: 222,
+        'property-change': 1123,
         shield: 10,
-        sp: 89,
-        stack: 154,
+        sp: 104,
+        stack: 167,
       },
       dimensions: expect.objectContaining({
         damage: expect.any(Object),
@@ -257,19 +257,19 @@ describe('verified combat mechanics package', () => {
     expect(mechanicsPackage.actionVariantGraph).toMatchObject({
       status: 'verified-action-variant-graph-ready',
       summary: {
-        ownerCount: 2,
-        nodeCount: 79,
-        edgeCount: 318,
-        appliedEdgeCount: 85,
-        unresolvedEdgeCount: 233,
+        ownerCount: 142,
+        nodeCount: 670,
+        edgeCount: 337,
+        appliedEdgeCount: 93,
+        unresolvedEdgeCount: 244,
       },
     });
-    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1351);
+    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1564);
     expect(variantResourceCoverage.summary).toMatchObject({
       profileCount: 2,
       appliedProfileCount: 2,
       appliedOperationCount: 43,
-      appliedEdgeCount: 85,
+      appliedEdgeCount: 93,
     });
     expect(
       mechanicsPackage.ownerProfiles.actor.find(
@@ -437,25 +437,30 @@ describe('verified combat mechanics package', () => {
     expect(resolved.hits).toHaveLength(6);
     expect(resolved.hits.every(hit => hit.mapIndex === 0)).toBe(true);
 
-    const unresolvedChain = mechanicsPackage.actionMappings.find(
+    const scenarioChain = mechanicsPackage.actionMappings.find(
       mapping =>
         mapping.ownerId === 103002 && mapping.actionKind === 'normal-attack'
     );
-    const unresolvedSegment = unresolvedChain.attackInputSegments[0];
+    const scenarioSegment = scenarioChain.attackInputSegments[0];
     expect(
       resolveVerifiedCombatActionMechanics({
         id: 'ruby-normal-attack-a1',
         type: 'skill',
-        skillId: unresolvedChain.sourceSkillId,
-        attackSequenceIndex: unresolvedSegment.sequenceIndex,
-        attackInput: unresolvedSegment,
+        skillId: scenarioChain.sourceSkillId,
+        attackSequenceIndex: scenarioSegment.sequenceIndex,
+        attackInput: scenarioSegment,
         actor: { characterId: 103002 },
       })
     ).toMatchObject({
-      ready: false,
-      applied: false,
-      status: 'verified-action-duration-unresolved',
-      hits: [],
+      ready: true,
+      applied: true,
+      status: 'verified-combat-action-mechanics-ready',
+      hits: [
+        expect.objectContaining({
+          sourceEvidenceStatus: 'runtime-dependent',
+          scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        }),
+      ],
     });
   });
 
@@ -468,10 +473,14 @@ describe('verified combat mechanics package', () => {
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 527,
-        unresolvedActionCount: 35,
-        appliedAttackInputSegmentCount: 64,
-        unresolvedAttackInputSegmentCount: 31,
+        appliedActionCount: 553,
+        unresolvedActionCount: 9,
+        appliedAttackInputSegmentCount: 77,
+        unresolvedAttackInputSegmentCount: 18,
+        exactSelectedVariantOccupancyCount: 630,
+        sourceAnimationPlanningDurationCount: 26,
+        genericPlanningDurationCount: 1,
+        variantConditionFocusCount: 22,
         oneFrameCount: 0,
       },
       oneFrame: [],
@@ -481,7 +490,7 @@ describe('verified combat mechanics package', () => {
     const jade = findNormalAttackMapping(101010);
     expect(
       ruby.attackInputSegments.map(segment => segment.durationFrames)
-    ).toEqual([null, null, null, null, null]);
+    ).toEqual([15, 23, null, null, 44]);
     expect(
       ruby.attackInputSegments.map(segment =>
         segment.variantTimings.map(variant => variant.occupancy.durationFrames)
@@ -491,16 +500,141 @@ describe('verified combat mechanics package', () => {
       [23, null, null, null],
       [null, null, null, null],
       [null, null, null, null, 33],
-      [44, 43, 74],
+      [44, 56, 74],
     ]);
     expect(
       jade.attackInputSegments.map(segment => segment.durationFrames)
-    ).toEqual([null, null, 47, null, null]);
+    ).toEqual([20, 35, 47, 30, null]);
     expect(
       [...ruby.attackInputSegments, ...jade.attackInputSegments]
         .filter(segment => segment.durationStatus === 'unresolved')
         .every(segment => segment.durationFrames == null)
     ).toBe(true);
+
+    const genericPlanning = [
+      ...actionTimingCoverage.actions,
+      ...actionTimingCoverage.attackInputSegments,
+    ].filter(row => row.schedulingKind === 'generic-planning-duration');
+    expect(genericPlanning).toEqual([
+      expect.objectContaining({
+        ownerId: 107002,
+        controlSkillId: 10700205,
+        sequenceIndex: 5,
+        planningDurationFrames: 30,
+        variantModelStatus: 'unresolved-control-identity',
+      }),
+    ]);
+    expect(
+      actionTimingCoverage.attackInputSegments.find(
+        segment => segment.ownerId === 111001 && segment.sequenceIndex === 5
+      )
+    ).toMatchObject({
+      durationFrames: 58,
+      sourceKind: 'attack-reopen-window',
+      schedulingKind: 'exact-selected-variant-occupancy',
+    });
+
+    const jadeCharged = mechanicsPackage.actionMappings.find(
+      action =>
+        action.ownerId === 101010 && action.actionKind === 'charged-attack'
+    );
+    expect(jadeCharged).toMatchObject({
+      selectedSubSkillIndex: 0,
+      variantModelStatus: 'partially-resolved',
+      controlVariantResolution: {
+        kind: 'verified-client-default-subskill-index',
+      },
+      actionScheduling: {
+        kind: 'exact-selected-variant-occupancy',
+        durationFrames: 310,
+        selectedSubSkillIndex: 0,
+      },
+    });
+    expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
+      ownerCount: 142,
+      nodeCount: 670,
+      modeledOwnerCount: 4,
+      conditionDiscoveryCount: 154,
+      conditionDiscoveryStatusCounts: {
+        'partially-resolved': 6,
+        resolved: 2,
+        'static-evidence-gap': 4,
+        'variant-condition-not-yet-modeled': 142,
+      },
+    });
+    expect(
+      mechanicsPackage.actionVariantGraph.edges.some(
+        edge =>
+          edge.ownerId === 101010 &&
+          edge.targetControlSkillId === 10101010 &&
+          edge.targetSubSkillIndex === 2 &&
+          edge.applied
+      )
+    ).toBe(true);
+
+    const reviewedNonNormalControls = [
+      10101010, 10200110, 10200127, 10700215, 10700212, 10700226, 10700225,
+      10700321, 10800110, 10800210, 10800310, 10800510, 11100110, 11100113,
+      11200110, 11200125, 11200210, 19900110, 19900210, 19900321, 19900327,
+      50030404,
+    ];
+    expect(
+      actionTimingCoverage.variantConditionFocus
+        .map(discovery => discovery.controlSkillId)
+        .sort((left, right) => left - right)
+    ).toEqual(
+      [...reviewedNonNormalControls].sort((left, right) => left - right)
+    );
+    const reviewedDiscoveries = reviewedNonNormalControls.map(controlSkillId =>
+      mechanicsPackage.actionVariantGraph.conditionDiscoveries.find(
+        discovery => discovery.controlSkillId === controlSkillId
+      )
+    );
+    expect(reviewedDiscoveries.every(Boolean)).toBe(true);
+    expect(reviewedDiscoveries[0]).toMatchObject({
+      ownerId: 101010,
+      controlSkillId: 10101010,
+      status: 'partially-resolved',
+      defaultSelection: { subSkillIndex: 0 },
+      sourceFamilies: expect.arrayContaining([
+        expect.objectContaining({ kind: 'skillsub-logic' }),
+        expect.objectContaining({ kind: 'public-skill-slots-and-labels' }),
+        expect.objectContaining({ kind: 'battle-switch-relations' }),
+        expect.objectContaining({
+          kind: 'resource-state-judgment',
+          status: 'applied',
+        }),
+        expect.objectContaining({ kind: 'input-hold-chain' }),
+      ]),
+    });
+    expect(
+      reviewedDiscoveries
+        .slice(1)
+        .every(
+          discovery => discovery.status === 'variant-condition-not-yet-modeled'
+        )
+    ).toBe(true);
+    const liliChargedDiscovery = reviewedDiscoveries.find(
+      discovery => discovery.controlSkillId === 10200110
+    );
+    expect(
+      liliChargedDiscovery.sourceFamilies.find(
+        source => source.kind === 'battle-switch-relations'
+      )
+    ).toMatchObject({
+      status: 'candidate-not-yet-modeled',
+      globalCandidates: expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'legacy-trigger-effect-variant-candidate',
+          targetSubSkillIndex: 2,
+        }),
+      ]),
+    });
+    expect(
+      actionTimingCoverage.unresolved.some(row =>
+        row.reasons.includes('control-player-variant-duration-not-invariant')
+      )
+    ).toBe(false);
 
     const representativeIdentities = [
       'actor|101007|10100701|1|10100710',
@@ -644,6 +778,94 @@ describe('verified combat mechanics package', () => {
     );
   });
 
+  it('resolves zero-distance projectiles and applies hit overrides per stable hit identity', () => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    const normal = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerId === 101003 && mapping.actionKind === 'normal-attack'
+    );
+    const segment = normal.attackInputSegments.find(
+      item => item.controlSkillId === 10100303
+    );
+    const baseAction = {
+      id: 'han-projectile-a3',
+      type: 'skill',
+      skillId: normal.sourceSkillId,
+      attackSequenceIndex: segment.sequenceIndex,
+      attackInput: segment,
+      actor: { characterId: 101003 },
+    };
+    const resolved = resolveVerifiedCombatActionMechanics(baseAction);
+    expect(resolved.hits).toHaveLength(3);
+    expect(resolved.hits.map(hit => hit.trigger.impactFrame)).toEqual([
+      13, 16, 19,
+    ]);
+    expect(
+      resolved.hits.every(
+        hit =>
+          hit.sourceEvidenceStatus === 'runtime-dependent' &&
+          hit.scenarioRuntimeStatus === 'scenario-assumed-zero-distance' &&
+          hit.trigger.travelFrames === 0 &&
+          hit.trigger.impactFrame === hit.trigger.launchFrame
+      )
+    ).toBe(true);
+    expect(new Set(resolved.hits.map(hit => hit.hitIdentity)).size).toBe(3);
+
+    const disabledIdentity = resolved.hits[1].hitIdentity;
+    const overridden = resolveVerifiedCombatActionMechanics({
+      ...baseAction,
+      hitOverrides: { [disabledIdentity]: { willHit: false } },
+    });
+    expect(overridden.allHits).toHaveLength(3);
+    expect(overridden.disabledHitIdentities).toEqual([disabledIdentity]);
+    expect(overridden.hits.map(hit => hit.trigger.impactFrame)).toEqual([
+      13, 19,
+    ]);
+    const outsideZeroDistanceScenario = resolveVerifiedCombatActionMechanics(
+      baseAction,
+      {
+        combatScenario: {
+          projectile: { targetDistance: 1, defaultWillHit: true },
+        },
+      }
+    );
+    expect(outsideZeroDistanceScenario.hits).toEqual([]);
+    expect(
+      outsideZeroDistanceScenario.scenarioUnavailableHitIdentities
+    ).toHaveLength(3);
+
+    const mixedMapping = mechanicsPackage.actionMappings.find(
+      mapping => mapping.identity === 'actor|111001|11100121|0|11100121'
+    );
+    const mixed = resolveVerifiedCombatActionMechanics({
+      id: 'falanta-mixed-hit',
+      type: 'skill',
+      skillId: mixedMapping.sourceSkillId,
+      actionVariantIndex: mixedMapping.actionVariantIndex,
+      actor: { characterId: mixedMapping.ownerId },
+    });
+    const projectile = mixed.hits.find(
+      hit => hit.referenceKind === 'bulletElements'
+    );
+    const directIdentities = mixed.hits
+      .filter(hit => hit.referenceKind !== 'bulletElements')
+      .map(hit => hit.hitIdentity);
+    const mixedOverride = resolveVerifiedCombatActionMechanics({
+      id: 'falanta-mixed-hit',
+      type: 'skill',
+      skillId: mixedMapping.sourceSkillId,
+      actionVariantIndex: mixedMapping.actionVariantIndex,
+      actor: { characterId: mixedMapping.ownerId },
+      hitOverrides: { [projectile.hitIdentity]: { willHit: false } },
+    });
+    expect(mixedOverride.hits.map(hit => hit.hitIdentity)).toEqual(
+      expect.arrayContaining(directIdentities)
+    );
+    expect(
+      mixedOverride.hits.some(hit => hit.hitIdentity === projectile.hitIdentity)
+    ).toBe(false);
+  });
+
   it('hydrates deduplicated semantic effects for the selected action variant', () => {
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
     const resolution = resolveVerifiedCombatActionMechanics({
@@ -659,9 +881,9 @@ describe('verified combat mechanics package', () => {
     });
 
     expect(mechanicsPackage.semanticEffectCatalog.summary).toMatchObject({
-      fullSemanticEffectCount: 3122,
-      runtimeEffectCount: 304,
-      runtimeFormulaCount: 55,
+      fullSemanticEffectCount: 3559,
+      runtimeEffectCount: 316,
+      runtimeFormulaCount: 63,
     });
     expect(
       mechanicsPackage.semanticEffectCatalog.semanticEffects.every(

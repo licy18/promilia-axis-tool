@@ -187,17 +187,12 @@
           :data-cooldown-ms="entry.cooldownMs ?? ''"
           :data-mechanics-classification="entry.mechanicsClassification"
           :data-timing-status="entry.timingStatus"
+          :data-scheduling-status="entry.schedulingStatus"
           :data-attack-input-count="entry.attackInputSegments?.length ?? 0"
           :title="entry.mechanicsTooltip"
-          :disabled="
-            entry.mechanicsClassification === 'loading' ||
-            entry.timingStatus !== 'applied'
-          "
+          :disabled="entry.mechanicsClassification === 'loading'"
           data-entry-type="skill"
-          :data-drag-enabled="
-            entry.mechanicsClassification !== 'loading' &&
-            entry.timingStatus === 'applied'
-          "
+          :data-drag-enabled="entry.mechanicsClassification !== 'loading'"
           @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
           @click="$emit('add-skill-action', entry)"
         >
@@ -237,10 +232,11 @@
           :data-cooldown-ms="entry.cooldownMs ?? ''"
           :data-mechanics-classification="entry.mechanicsClassification"
           :data-timing-status="entry.timingStatus"
+          :data-scheduling-status="entry.schedulingStatus"
           :title="entry.mechanicsTooltip"
-          :disabled="entry.timingStatus !== 'applied'"
+          :disabled="entry.mechanicsClassification === 'loading'"
           data-entry-type="kiboEvent"
-          :data-drag-enabled="entry.timingStatus === 'applied'"
+          :data-drag-enabled="entry.mechanicsClassification !== 'loading'"
           @pointerdown="beginKiboTimelineEntryDrag($event, entry)"
           @click="$emit('add-kibo-event-action', entry)"
         >
@@ -531,6 +527,7 @@ import { computed, reactive, ref } from 'vue';
 import { Collection, EditPen } from '@element-plus/icons-vue';
 import WorkbenchTimelineFragmentLibrary from './WorkbenchTimelineFragmentLibrary.vue';
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import { resolveWorkbenchActionScheduling } from '../../domain/workbenchActionScheduling';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
 import { resolveWorkbenchActionIconUrl } from '../../domain/workbenchActionVisualIdentity';
@@ -647,7 +644,9 @@ const actionEntries = computed(() => {
 });
 const defaultTimelineSkillEntry = computed(
   () =>
-    actionEntries.value.find(entry => entry.timingStatus === 'applied') ?? null
+    actionEntries.value.find(
+      entry => entry.mechanicsClassification !== 'loading'
+    ) ?? null
 );
 const kiboTimelineEntries = computed(() =>
   (activeKibo.value?.actions ?? []).map(action =>
@@ -673,8 +672,9 @@ const kiboTimelineEntries = computed(() =>
 );
 const defaultKiboTimelineEntry = computed(
   () =>
-    kiboTimelineEntries.value.find(entry => entry.timingStatus === 'applied') ??
-    null
+    kiboTimelineEntries.value.find(
+      entry => entry.mechanicsClassification !== 'loading'
+    ) ?? null
 );
 
 function beginDefaultSkillDrag(event) {
@@ -1047,7 +1047,9 @@ function formatActionTiming(entry) {
   const durationMs = Number(entry.durationMs);
   return entry.timingStatus === 'applied' && durationMs > 0
     ? `${msToFrame(durationMs)}f ${formatFrameTime(durationMs)}`
-    : '时长未解析';
+    : entry.schedulingKind === 'source-animation-planning-duration'
+      ? `动画规划 ${entry.planningDurationFrames}f`
+      : `通用规划 ${entry.planningDurationFrames ?? 30}f`;
 }
 
 function annotateMechanicsCoverage(entry, type) {
@@ -1068,6 +1070,26 @@ function annotateMechanicsCoverage(entry, type) {
     timingStatus === 'applied'
       ? Number(actionTiming?.occupancy?.durationFrames) || null
       : null;
+  const scheduling = resolveWorkbenchActionScheduling({
+    timingStatus,
+    durationFrames,
+    actionScheduling: mapping?.actionScheduling,
+  });
+  const variantModelStatus = scheduling.variantModelStatus;
+  const coverageMessages = [
+    timingStatus !== 'applied'
+      ? `可排轴；${formatActionTiming({
+          timingStatus,
+          durationMs: scheduling.durationMs,
+          schedulingKind: scheduling.kind,
+          planningDurationFrames: scheduling.planningDurationFrames,
+        })}，不回写为 verified 时长`
+      : '',
+    formatVariantModelStatus(variantModelStatus),
+    mechanicsClassification === 'unresolved'
+      ? `三值未完整：${(mapping?.reasons ?? []).join('、')}`
+      : '',
+  ].filter(Boolean);
   return {
     ...entry,
     durationFrames,
@@ -1080,13 +1102,30 @@ function annotateMechanicsCoverage(entry, type) {
     timingSourceIdentity:
       actionTiming?.occupancy?.sourceIdentity ?? actionTiming?.sourceIdentity,
     needsTimingData: timingStatus !== 'applied',
+    schedulingStatus: scheduling.status,
+    schedulingKind: scheduling.kind,
+    planningDurationFrames: scheduling.planningDurationFrames ?? null,
+    actionScheduling: mapping?.actionScheduling ?? null,
+    controlSubSkillIndex: scheduling.selectedSubSkillIndex,
+    sourceEvidenceStatus:
+      mapping?.sourceEvidenceStatus ?? mapping?.classification ?? 'unresolved',
+    scenarioRuntimeStatus:
+      mapping?.scenarioRuntimeStatus ?? mapping?.classification ?? 'unresolved',
     attackInputSegments: mapping?.attackInputSegments ?? [],
     mechanicsClassification,
-    mechanicsTooltip:
-      mechanicsClassification === 'unresolved'
-        ? `三值未完整：${(mapping?.reasons ?? []).join('、')}`
-        : null,
+    mechanicsTooltip: coverageMessages.join('；') || null,
   };
+}
+
+function formatVariantModelStatus(status) {
+  if (status === 'partially-resolved') return '变体条件已部分解析';
+  if (status === 'variant-condition-not-yet-modeled') {
+    return '变体条件尚未纳入运行时模型';
+  }
+  if (status === 'static-evidence-gap') return '仍有静态证据缺口';
+  if (status === 'runtime-dependent') return '分支依赖运行时状态';
+  if (status === 'unresolved-control-identity') return 'control 身份仍待确认';
+  return '';
 }
 
 function formatMechanicsCoverage(entry) {

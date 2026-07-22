@@ -2,40 +2,44 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 固定产品分母：562 个公开动作 / 20 名角色 / 122 只奇波
-- 可运行：373
+- 场景可运行：455
+- 来源静态可应用：403
+- 来源运行时依赖：52
+- 零距离场景补全：62
+- 来源静态证据缺口：107
 - 明确零：0
-- 未解析：189（未分类 0）
-- 角色核心动作：38/60 可运行
-- 奇波 active / break / signature：254/366 可运行
+- 未解析：107（未分类 0）
+- 角色核心动作：55/60 可运行
+- 奇波 active / break / signature：300/366 可运行
 
 ## 未解析边界
 
-- runtime-and-evidence-gap: 118
-- static-evidence-gap: 71
+- runtime-and-evidence-gap: 72
+- static-evidence-gap: 35
 
 ## 非零命中回能元素
 
-- 当前公开动作已应用：153
-- 当前公开动作因动作证据缺口未应用：38
-- 仅属于公开动作未选 control 变体：76
+- 当前公开动作已应用：200
+- 当前公开动作因动作证据缺口未应用：37
+- 仅属于公开动作未选 control 变体：30
 - 不属于当前公开动作目录：400
 
 ## Owner / 动作类型
 
 | Owner | 动作类型 | 分母 | 可运行 | 运行时依赖 | 证据缺口 | 混合缺口 |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| actor | charged-attack | 19 | 4 | 0 | 14 | 1 |
-| actor | dodge-attack | 20 | 15 | 0 | 1 | 4 |
-| actor | limit-counter | 20 | 15 | 0 | 3 | 2 |
-| actor | normal-attack | 20 | 6 | 0 | 11 | 3 |
+| actor | charged-attack | 19 | 13 | 0 | 4 | 2 |
+| actor | dodge-attack | 20 | 16 | 0 | 0 | 4 |
+| actor | limit-counter | 20 | 19 | 0 | 0 | 1 |
+| actor | normal-attack | 20 | 18 | 0 | 0 | 2 |
 | actor | perfect-parry | 20 | 0 | 0 | 20 | 0 |
 | actor | plunging-attack | 20 | 20 | 0 | 0 | 0 |
-| actor | star-carry | 17 | 9 | 0 | 6 | 2 |
-| actor | star-combo | 20 | 18 | 0 | 2 | 0 |
-| actor | star-skill | 20 | 14 | 0 | 5 | 1 |
-| actor | ultimate | 20 | 18 | 0 | 2 | 0 |
-| kibo | active | 122 | 22 | 0 | 5 | 95 |
-| kibo | break | 122 | 110 | 0 | 2 | 10 |
+| actor | star-carry | 17 | 12 | 0 | 3 | 2 |
+| actor | star-combo | 20 | 20 | 0 | 0 | 0 |
+| actor | star-skill | 20 | 17 | 0 | 2 | 1 |
+| actor | ultimate | 20 | 20 | 0 | 0 | 0 |
+| kibo | active | 122 | 66 | 0 | 5 | 51 |
+| kibo | break | 122 | 112 | 0 | 1 | 9 |
 | kibo | signature | 122 | 122 | 0 | 0 | 0 |
 
 ## 发布守门

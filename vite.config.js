@@ -23,6 +23,16 @@ export default defineConfig({
         manualChunks(id) {
           if (
             [
+              '/domain/actionHitOverrides.js',
+              '/domain/combatScenario.js',
+              '/domain/timebase.js',
+              '/domain/workbenchActionScheduling.js',
+            ].some(modulePath => id.endsWith(modulePath))
+          ) {
+            return 'workbench-core-contracts';
+          }
+          if (
+            [
               '/simulation/mechanics/verifiedCombatRuntime.js',
               '/simulation/mechanics/verifiedBattleEffectGeneration.js',
               '/simulation/mechanics/verifiedActionVariantRuntime.js',

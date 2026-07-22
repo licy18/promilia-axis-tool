@@ -74,6 +74,25 @@ export function createVerifiedActionMechanicsTrace({
     bindingIdentity: resolution?.actionBinding?.identity ?? '',
     controlSkillId: resolution?.actionBinding?.controlSkillId ?? null,
     hitBindingCount: resolution?.hits?.length ?? 0,
+    hitBindings: (resolution?.allHits ?? resolution?.hits ?? []).map(
+      (hit, index) => ({
+        identity: hit.hitIdentity,
+        label:
+          hit.name ||
+          (hit.referenceKind === 'bulletElements'
+            ? `弹体 ${index + 1}`
+            : `命中 ${index + 1}`),
+        frame: Number(hit.trigger?.impactFrame ?? hit.trigger?.startFrame),
+        sourceKind:
+          hit.referenceKind === 'bulletElements' ? 'projectile' : 'direct',
+        sourceEvidenceStatus: hit.sourceEvidenceStatus ?? 'applied',
+        scenarioRuntimeStatus: hit.scenarioRuntimeStatus ?? 'source-verified',
+        willHit: !(resolution?.disabledHitIdentities ?? []).includes(
+          hit.hitIdentity
+        ),
+      })
+    ),
+    disabledHitCount: resolution?.disabledHitIdentities?.length ?? 0,
     effectBindingCount: resolution?.effects?.length ?? 0,
     runtimeHitCount: hitEvents.length,
     runtimeEffectEventCount: effectEvents.length,

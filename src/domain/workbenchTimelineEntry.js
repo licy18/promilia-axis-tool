@@ -1,5 +1,6 @@
 import { ACTION_TYPES } from './projectSchema';
 import { normalizeAttackInputSegments } from './workbenchAttackInputChain';
+import { resolveWorkbenchActionScheduling } from './workbenchActionScheduling';
 
 export const WORKBENCH_TIMELINE_LANE_KINDS = Object.freeze({
   ACTOR_ACTION: 'actor-action',
@@ -28,6 +29,7 @@ export function createWorkbenchTimelineEntry(source = {}) {
     return null;
   }
 
+  const scheduling = resolveWorkbenchActionScheduling(source);
   return {
     type,
     skillId: positiveIntegerOrNull(source.skillId),
@@ -47,6 +49,15 @@ export function createWorkbenchTimelineEntry(source = {}) {
     timingReasons: normalizeTextArray(source.timingReasons),
     timingSourceIdentity: textOrNull(source.timingSourceIdentity),
     needsTimingData: Boolean(source.needsTimingData),
+    schedulingStatus: scheduling.status,
+    schedulingKind: scheduling.kind,
+    planningDurationFrames: scheduling.planningDurationFrames ?? null,
+    actionScheduling: source.actionScheduling ?? null,
+    controlSubSkillIndex:
+      scheduling.selectedSubSkillIndex ?? source.controlSubSkillIndex ?? null,
+    sourceEvidenceStatus: source.sourceEvidenceStatus ?? null,
+    scenarioRuntimeStatus: source.scenarioRuntimeStatus ?? null,
+    hitOverrides: source.hitOverrides ?? null,
     rawValue: source.rawValue ?? null,
     note: textOrNull(source.note),
     attackInputSegments: normalizeAttackInputSegments(

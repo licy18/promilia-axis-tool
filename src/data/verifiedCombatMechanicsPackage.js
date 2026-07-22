@@ -1,4 +1,6 @@
 import { normalizeAttackInputSegments } from '../domain/workbenchAttackInputChain';
+import { resolveActionHitWillHit } from '../domain/actionHitOverrides';
+import { normalizeCombatScenario } from '../domain/combatScenario';
 
 const packageUrl = new URL(
   './generated/verified-combat-mechanics-package.json',
@@ -129,7 +131,11 @@ export function clearInstalledVerifiedCombatMechanicsPackage() {
 
 export function resolveVerifiedCombatActionMechanics(
   action = {},
-  { selectedSubSkillIndex = null, selectionSource = null } = {}
+  {
+    selectedSubSkillIndex = null,
+    selectionSource = null,
+    combatScenario = null,
+  } = {}
 ) {
   if (!installedPackage) {
     return createUnresolvedActionMechanics(
@@ -165,7 +171,8 @@ export function resolveVerifiedCombatActionMechanics(
     action,
     actionMapping,
     actionBinding: resolvedActionBinding.binding,
-    selectedSubSkillIndex,
+    selectedSubSkillIndex:
+      selectedSubSkillIndex ?? action.controlSubSkillIndex ?? null,
     selectionSource,
   });
   if (!dynamicBinding.binding) {
@@ -177,24 +184,6 @@ export function resolveVerifiedCombatActionMechanics(
     });
   }
   const actionBinding = dynamicBinding.binding;
-  const actionTimingStatus = actionBinding.attackInputSegment
-    ? actionBinding.attackInputSegment.durationStatus
-    : actionBinding.timingStatus;
-  if (actionTimingStatus !== 'applied') {
-    return createUnresolvedActionMechanics(
-      action,
-      'verified-action-duration-unresolved',
-      {
-        owner,
-        actionBinding,
-        reasons:
-          actionBinding.attackInputSegment?.linkTimingReasons ??
-          actionBinding.actionTiming?.reasons ??
-          actionBinding.reasons ??
-          [],
-      }
-    );
-  }
   if (actionBinding?.classification !== 'applied') {
     const partialControlBinding = controlBindingBySkillId.get(
       actionBinding?.controlSkillId
@@ -237,21 +226,62 @@ export function resolveVerifiedCombatActionMechanics(
   const selectedHitIdentities = new Set(
     actionBinding.selectedHitIdentities ?? []
   );
-  const hits = (controlBinding?.hits ?? []).filter(
+  const allHits = (controlBinding?.hits ?? []).filter(
     hit =>
       hit.mapIndex === actionBinding.selectedSubSkillIndex &&
       (!selectedHitIdentities.size ||
         selectedHitIdentities.has(hit.hitIdentity))
   );
-  const effects = resolveSelectedEffects(actionBinding, controlBinding);
-  const semanticEffects = resolveSelectedSemanticEffects(actionBinding);
+  const normalizedScenario = normalizeCombatScenario(
+    combatScenario ?? action.combatScenario
+  );
+  const scenarioEligibleHits = allHits.filter(
+    hit =>
+      hit.scenarioRuntimeStatus !== 'scenario-assumed-zero-distance' ||
+      normalizedScenario.projectile.targetDistance === 0
+  );
+  const hits = scenarioEligibleHits.filter(hit =>
+    resolveActionHitWillHit(
+      action,
+      hit.hitIdentity,
+      hit.referenceKind === 'bulletElements'
+        ? normalizedScenario.projectile.defaultWillHit
+        : true
+    )
+  );
+  const scenarioUnavailableHitIdentities = allHits
+    .filter(hit => !scenarioEligibleHits.includes(hit))
+    .map(hit => hit.hitIdentity);
+  const disabledHitIdentities = allHits
+    .filter(
+      hit =>
+        !resolveActionHitWillHit(
+          action,
+          hit.hitIdentity,
+          hit.referenceKind === 'bulletElements'
+            ? normalizedScenario.projectile.defaultWillHit
+            : true
+        )
+    )
+    .map(hit => hit.hitIdentity);
+  const suppressedHitIdentities = new Set([
+    ...disabledHitIdentities,
+    ...scenarioUnavailableHitIdentities,
+  ]);
+  const suppressedHits = allHits.filter(hit =>
+    suppressedHitIdentities.has(hit.hitIdentity)
+  );
+  const effects = resolveSelectedEffects(actionBinding, controlBinding).filter(
+    effect => !isEffectTriggeredByDisabledHit(effect, suppressedHits)
+  );
+  const semanticEffects = resolveSemanticEffectsForRawEffects(effects);
   const hasAppliedCost = Number(controlBinding?.logic?.spCost) > 0;
   const hasAppliedEffect = effects.some(
     effect => effect.classification === 'applied'
   );
   if (
     !controlBinding ||
-    (!hits.length && !hasAppliedCost && !hasAppliedEffect)
+    (!allHits.length && !hasAppliedCost && !hasAppliedEffect)
   ) {
     return createUnresolvedActionMechanics(
       action,
@@ -269,6 +299,9 @@ export function resolveVerifiedCombatActionMechanics(
     actionBinding,
     controlBinding,
     hits,
+    allHits,
+    disabledHitIdentities,
+    scenarioUnavailableHitIdentities,
     effects,
     semanticEffects,
     complete: true,
@@ -278,6 +311,34 @@ export function resolveVerifiedCombatActionMechanics(
     applied: true,
     variantSelection: actionBinding.variantSelection ?? null,
   };
+}
+
+function isEffectTriggeredByDisabledHit(effect, disabledHits) {
+  const effectPathId = String(effect?.pathId ?? '');
+  const effectFrame = frameOrNull(effect?.trigger?.startFrame);
+  if (!effectPathId || effectFrame == null) return false;
+  return disabledHits.some(
+    hit =>
+      String(hit?.pathId ?? '') === effectPathId &&
+      frameOrNull(hit?.trigger?.impactFrame ?? hit?.trigger?.startFrame) ===
+        effectFrame
+  );
+}
+
+function frameOrNull(value) {
+  const frame = Number(value);
+  return Number.isFinite(frame) && frame >= 0 ? frame : null;
+}
+
+function resolveSemanticEffectsForRawEffects(effects) {
+  const semanticEffects = effects.flatMap(
+    effect => semanticEffectByRawIdentity.get(effect.effectIdentity) ?? []
+  );
+  return [
+    ...new Map(
+      semanticEffects.map(effect => [effect.semanticIdentity, effect])
+    ).values(),
+  ];
 }
 
 function applySelectedSubSkillOverride({
@@ -308,11 +369,23 @@ function applySelectedSubSkillOverride({
   const timing = (timingCandidates ?? []).find(
     item => Number(item.subSkillIndex) === subSkillIndex
   );
-  if (timing?.occupancy?.status !== 'applied') {
+  if (!timing) {
+    return {
+      binding: null,
+      reason: 'verified-action-selected-variant-timing-missing',
+      reasons: ['selected-control-player-variant-timing-missing'],
+    };
+  }
+  const exactTiming = timing.occupancy?.status === 'applied';
+  const planningDurationFrames = Number(
+    action?.actionScheduling?.planningDurationFrames ??
+      timing.animation?.durationFrames
+  );
+  if (!exactTiming && !(planningDurationFrames > 0)) {
     return {
       binding: null,
       reason: 'verified-action-selected-variant-duration-unresolved',
-      reasons: timing?.occupancy?.reasons ?? [
+      reasons: timing.occupancy?.reasons ?? [
         'selected-control-player-variant-duration-unresolved',
       ],
     };
@@ -357,11 +430,21 @@ function applySelectedSubSkillOverride({
               selectedSubSkillIndex: subSkillIndex,
               playerSkillId: variant.playerSkillId ?? null,
               resourceMapIndex: variant.resourceMapIndex ?? null,
-              durationFrames: timing.occupancy.durationFrames,
-              effectiveDurationFrames: timing.occupancy.durationFrames,
-              durationStatus: 'applied',
-              durationBasis: timing.occupancy.sourceKind,
-              durationSourceIdentity: timing.occupancy.sourceIdentity,
+              durationFrames: exactTiming
+                ? timing.occupancy.durationFrames
+                : null,
+              effectiveDurationFrames: exactTiming
+                ? timing.occupancy.durationFrames
+                : null,
+              durationStatus: exactTiming ? 'applied' : 'unresolved',
+              durationBasis: exactTiming
+                ? timing.occupancy.sourceKind
+                : 'source-animation-planning-duration',
+              durationSourceIdentity:
+                timing.occupancy.sourceIdentity ??
+                timing.animation?.sourceIdentity ??
+                null,
+              actionScheduling: action.actionScheduling ?? null,
               classification,
               reasons: [],
             },
@@ -375,20 +458,27 @@ function applySelectedSubSkillOverride({
       ).length,
       classification,
       runtimeReady: classification === 'applied',
-      timingStatus: 'applied',
+      timingStatus: exactTiming ? 'applied' : 'unresolved',
       actionTiming: {
         ...(actionBinding.actionTiming ?? actionMapping.actionTiming),
-        status: 'applied',
+        status: exactTiming ? 'applied' : 'unresolved',
         selectedSubSkillIndex: subSkillIndex,
         occupancy: timing.occupancy,
+        animation: timing.animation,
         input: timing.input,
-        sourceIdentity: timing.occupancy.sourceIdentity,
-        reasons: [],
+        sourceIdentity:
+          timing.occupancy.sourceIdentity ?? timing.animation?.sourceIdentity,
+        reasons: exactTiming ? [] : (timing.occupancy?.reasons ?? []),
       },
       variantSelection,
-      actualDurationFrames: timing.occupancy.durationFrames,
+      actualDurationFrames: exactTiming
+        ? timing.occupancy.durationFrames
+        : planningDurationFrames,
       actualDurationMs:
-        (Number(timing.occupancy.durationFrames) * 1000) /
+        (Number(
+          exactTiming ? timing.occupancy.durationFrames : planningDurationFrames
+        ) *
+          1000) /
         (Number(timing.frameRate) || 60),
     },
   };

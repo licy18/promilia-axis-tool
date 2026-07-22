@@ -86,6 +86,9 @@ describe('workbench draft storage project files', () => {
               startMs: 0,
               durationMs: 1000,
               level: 1,
+              hitOverrides: {
+                'control:10900101|hit:2': { willHit: false },
+              },
             },
             {
               id: 'action-0002',
@@ -127,6 +130,9 @@ describe('workbench draft storage project files', () => {
             { id: 'cycle-boundary-0002', timeMs: 2200 },
           ],
           initialRuntimeState: createInheritedState(),
+          combatScenario: {
+            projectile: { targetDistance: 0, defaultWillHit: true },
+          },
           runtimeSampleCaptures: [
             {
               schemaVersion: 1,
@@ -225,6 +231,9 @@ describe('workbench draft storage project files', () => {
         selfEnergyByActor: [{ actorId: 'actor-109001', currentValue: 35 }],
         activeEffects: [{ effectId: 'focus', remainingDurationMs: 750 }],
       },
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: true },
+      },
       scenarioWorkspace: {
         schemaVersion: 1,
         activeScenarioId: 'scenario-0001',
@@ -280,6 +289,9 @@ describe('workbench draft storage project files', () => {
         enemy: { toughness: { currentValue: 60 } },
         activeEffects: [{ effectId: 'focus' }],
       },
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: true },
+      },
       actionRelations: [
         expect.objectContaining({
           id: 'relation-0001',
@@ -295,6 +307,12 @@ describe('workbench draft storage project files', () => {
     });
     expect(shared.initialRuntimeState).toEqual(imported.initialRuntimeState);
     expect(imported.actionDrafts).toHaveLength(3);
+    expect(imported.actionDrafts[0].hitOverrides).toEqual({
+      'control:10900101|hit:2': { willHit: false },
+    });
+    expect(shared.actionDrafts[0].hitOverrides).toEqual(
+      imported.actionDrafts[0].hitOverrides
+    );
     expect(imported.actionDrafts[2]).toMatchObject({
       type: 'kiboEvent',
       name: '迅风刃',
@@ -445,6 +463,9 @@ describe('workbench draft storage project files', () => {
       enemyConfig: {
         toughnessMultiplier: 1,
         initialToughnessRatio: 1,
+      },
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: true },
       },
       scenarioWorkspace: {
         activeScenarioId: 'scenario-0001',
@@ -740,9 +761,7 @@ describe('workbench draft storage project files', () => {
         ],
       },
     });
-    expect(
-      migrated.scenarioWorkspace.scenarios[0].draft.actorConfigs
-    ).toEqual(
+    expect(migrated.scenarioWorkspace.scenarios[0].draft.actorConfigs).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ characterId: 109001, initialSp: 25 }),
         expect.objectContaining({ characterId: 101003, initialSp: 100 }),

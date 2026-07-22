@@ -901,11 +901,13 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
     )
     .click();
   await expect(page.getByTestId('workbench-loadout-picker')).toBeHidden();
-  await expect(
-    timeline.locator(
-      '[data-testid="workbench-timeline-action"][data-lane-id="actor-101010"]'
-    )
-  ).toHaveCount(migratedDemoActionCount);
+  const migratedTargetActions = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-lane-id="actor-101010"]'
+  );
+  await expect
+    .poll(() => migratedTargetActions.count())
+    .toBeGreaterThanOrEqual(migratedDemoActionCount);
+  await expect(migratedDemoActions).toHaveCount(0);
   await expect(
     page.locator(
       '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
@@ -1537,7 +1539,8 @@ test('[m1d-demo-milestone] replays the visible three-person demo through every p
     '示例方案 · 预览数据'
   );
   await expectDemoMilestoneState(page, { resourceFrameIndex: 288 });
-  await expect(page.locator('.action-item')).toHaveCount(14);
+  const demoActionCount = await page.locator('.action-item').count();
+  expect(demoActionCount).toBe(17);
   await expect(
     page.locator('.action-item[data-action-id="demo-kibo-2-event"]')
   ).toBeVisible();
@@ -1557,7 +1560,7 @@ test('[m1d-demo-milestone] replays the visible three-person demo through every p
     .locator('.action-item[data-action-id="demo-actor-2-energy"]')
     .getByTestId('workbench-copy-action')
     .click();
-  await expect(page.locator('.action-item')).toHaveCount(15);
+  await expect(page.locator('.action-item')).toHaveCount(demoActionCount + 1);
   await expect(
     page.locator(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
@@ -1695,12 +1698,22 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   );
   await expect(insertedActionNodes.first()).toBeVisible();
   expect(await insertedActionNodes.count()).toBeGreaterThan(0);
-  const reviewedEvent = timeline
-    .locator(
-      '[data-testid="workbench-timeline-state-curve"]:not([data-track-key^="tuningMark:"]) [data-testid="workbench-timeline-state-curve-node"][data-action-id^="action-0001"]'
-    )
-    .last();
-  await expect(reviewedEvent).toBeVisible();
+  const reviewedEvents = timeline.locator(
+    '[data-testid="workbench-timeline-state-curve"]:not([data-track-key^="tuningMark:"]) [data-testid="workbench-timeline-state-curve-node"][data-action-id^="action-0001"]'
+  );
+  await expect(reviewedEvents.first()).toBeVisible();
+  const clickableEventIndex = await reviewedEvents.evaluateAll(nodes =>
+    nodes.findIndex(node => {
+      const bounds = node.getBoundingClientRect();
+      const hitTarget = document.elementFromPoint(
+        bounds.left + bounds.width / 2,
+        bounds.top + bounds.height / 2
+      );
+      return hitTarget === node || node.contains(hitTarget);
+    })
+  );
+  expect(clickableEventIndex).toBeGreaterThanOrEqual(0);
+  const reviewedEvent = reviewedEvents.nth(clickableEventIndex);
   const reviewedActionId = await reviewedEvent.getAttribute('data-action-id');
   const reviewedFrameIndex = Number(
     await reviewedEvent.getAttribute('data-frame-index')
@@ -1892,11 +1905,16 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
   const resourceAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-action-type="resource"]'
   );
+  const skillAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-type="skill"]'
+  );
   const kiboAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-action-type="kiboEvent"]'
   );
+  const skillActionId = await skillAction.getAttribute('data-action-id');
   const resourceActionId = await resourceAction.getAttribute('data-action-id');
   const kiboActionId = await kiboAction.getAttribute('data-action-id');
+  expect(skillActionId).toBeTruthy();
   expect(resourceActionId).toBeTruthy();
   expect(kiboActionId).toBeTruthy();
   await expect(resourceAction).toHaveAttribute('data-lane-id', 'actor-101003');
@@ -1913,11 +1931,11 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     ).toHaveCount(0);
   }
   for (const laneId of ['enemy-hp-curve', 'enemy-toughness-curve']) {
-    await expect(
-      curve(laneId).locator(
-        '[data-testid="workbench-timeline-state-curve-node"][data-action-id]:not([data-action-id=""])'
-      )
-    ).toHaveCount(0);
+    const skillNodes = curve(laneId).locator(
+      `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${skillActionId}"]`
+    );
+    await expect(skillNodes.first()).toBeVisible();
+    expect(await skillNodes.count()).toBeGreaterThan(0);
   }
 
   await page.getByTestId('workbench-save-draft').click();
@@ -3055,7 +3073,12 @@ test('[m6-verified-combat-workflow] drives eight curves from verified Pangpang a
   );
   await expect(pangSource).toBeVisible();
   await expect(pangSource).toHaveAttribute('data-timing-status', 'unresolved');
-  await expect(pangSource).toBeDisabled();
+  await expect(pangSource).toHaveAttribute(
+    'data-scheduling-status',
+    'planning'
+  );
+  await expect(pangSource).toBeEnabled();
+  await expect(pangSource).toHaveAttribute('title', /可排轴/);
   await expect(heavySource).toBeVisible();
 
   await dragLocatorTo(
@@ -3339,17 +3362,19 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     );
 
   await selectActorLibrary(101003).click();
-  const unresolvedHanNormal = page.locator(
+  const hanNormal = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10100301"][data-action-kind="normal-attack"]'
   );
   const hanStar = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
   );
-  await expect(unresolvedHanNormal).toHaveAttribute(
+  await expect(hanNormal).toHaveAttribute(
     'data-mechanics-classification',
-    'unresolved'
+    'applied'
   );
-  await expect(unresolvedHanNormal).toContainText('三值未完整');
+  await expect(hanNormal).toHaveAttribute('data-timing-status', 'applied');
+  await expect(hanNormal).toHaveAttribute('data-attack-input-count', '5');
+  await expect(hanNormal).toBeEnabled();
   await expect(hanStar).toHaveAttribute(
     'data-mechanics-classification',
     'applied'

@@ -90,7 +90,9 @@ export function createVerifiedCombatRuntime({
     const resolution =
       actionVariantRuntime?.actionResolutionById?.get(action.id) ??
       effectGeneration?.actionResolutionById?.get(action.id) ??
-      resolveVerifiedCombatActionMechanics(action);
+      resolveVerifiedCombatActionMechanics(action, {
+        combatScenario: scenario.combatScenario,
+      });
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
     const spCost = numberOrNull(

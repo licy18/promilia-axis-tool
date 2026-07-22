@@ -29,6 +29,9 @@ export function createVerifiedActionVariantRuntime({
       .filter(profile => profile.applied)
       .map(profile => [Number(profile.ownerId), profile])
   );
+  const actorById = new Map(
+    (scenario?.actors ?? []).map(actor => [String(actor.id), actor])
+  );
   const actorStateById = new Map();
   for (const actor of scenario?.actors ?? []) {
     const profile = profileByCharacterId.get(Number(actor.characterId));
@@ -292,20 +295,25 @@ export function createVerifiedActionVariantRuntime({
     const mapping = getVerifiedCombatActionMapping(action);
     const controlSkillId = resolveActionControlSkillId(action, mapping);
     const actorState = actorStateById.get(action.actorId);
+    const scenarioActor = actorById.get(String(action.actorId));
     const characterId = Number(
-      action.actor?.characterId ?? actorState?.profile?.ownerId
+      action.actor?.characterId ??
+        scenarioActor?.characterId ??
+        actorState?.profile?.ownerId
     );
     let selectedSubSkillIndex = mapping?.selectedSubSkillIndex ?? null;
     let selectionSource = null;
 
-    if (actorState && Number.isInteger(controlSkillId)) {
-      const activeSelection = resolveActiveSwitchSelection({
-        activeSwitchWindows,
-        actorId: action.actorId,
-        controlSkillId,
-        timeMs: actionTimeMs,
-        actionKind: mapping?.actionKind,
-      });
+    if (Number.isInteger(controlSkillId)) {
+      const activeSelection = actorState
+        ? resolveActiveSwitchSelection({
+            activeSwitchWindows,
+            actorId: action.actorId,
+            controlSkillId,
+            timeMs: actionTimeMs,
+            actionKind: mapping?.actionKind,
+          })
+        : { status: 'none', binding: null };
       if (activeSelection.status === 'ambiguous') {
         const block = createVariantExecutionBlock({
           action,
@@ -315,7 +323,9 @@ export function createVerifiedActionVariantRuntime({
         });
         executionBlocks.push(block);
         actionResolutionById.set(action.id, {
-          ...resolveVerifiedCombatActionMechanics(action),
+          ...resolveVerifiedCombatActionMechanics(action, {
+            combatScenario: scenario.combatScenario,
+          }),
           ready: false,
           applied: false,
           status: block.reason,
@@ -326,8 +336,14 @@ export function createVerifiedActionVariantRuntime({
       const defaultSelection = defaultSelectionByControl.get(
         `${characterId}|${controlSkillId}`
       );
+      const explicitSubSkillIndex = Number.isInteger(
+        Number(action.controlSubSkillIndex)
+      )
+        ? Number(action.controlSubSkillIndex)
+        : null;
       selectedSubSkillIndex =
         activeSelection.binding?.targetSubSkillIndex ??
+        explicitSubSkillIndex ??
         defaultSelection?.subSkillIndex ??
         selectedSubSkillIndex;
       selectionSource = activeSelection.binding
@@ -336,18 +352,25 @@ export function createVerifiedActionVariantRuntime({
             sourceIdentity: activeSelection.binding.sourceIdentity,
             decisionFrame: activeSelection.binding.decisionFrame,
           }
-        : defaultSelection
+        : explicitSubSkillIndex != null
           ? {
-              sourceKind: 'verified-client-default-subskill-index',
-              sourceIdentity: defaultSelection.sourceIdentity,
-              decisionFrame: defaultSelection.decisionFrame,
+              sourceKind: 'workbench-explicit-input-variant',
+              sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
+              decisionFrame: 0,
             }
-          : null;
+          : defaultSelection
+            ? {
+                sourceKind: 'verified-client-default-subskill-index',
+                sourceIdentity: defaultSelection.sourceIdentity,
+                decisionFrame: defaultSelection.decisionFrame,
+              }
+            : null;
     }
 
     const resolution = resolveVerifiedCombatActionMechanics(action, {
       selectedSubSkillIndex,
       selectionSource,
+      combatScenario: scenario.combatScenario,
     });
     actionResolutionById.set(action.id, resolution);
     selectionByActionId.set(action.id, {

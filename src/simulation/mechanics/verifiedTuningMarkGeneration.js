@@ -73,7 +73,9 @@ export function createVerifiedTuningMarkGeneration({
     }
     const resolution =
       effectGeneration?.actionResolutionById?.get(action.id) ??
-      resolveVerifiedCombatActionMechanics(action);
+      resolveVerifiedCombatActionMechanics(action, {
+        combatScenario: scenario.combatScenario,
+      });
     if (!resolution?.ready) continue;
     for (const effect of resolution.effects ?? []) {
       if (effect.classification !== 'applied') continue;

@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { flushPromises, mount } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 
 describe('PropertiesPanel', () => {
@@ -34,7 +34,18 @@ describe('PropertiesPanel', () => {
                   identity: 'actor|101007|skill',
                   controlSkillId: 10100703,
                 },
-                hits: [{}, {}],
+                hits: [
+                  {
+                    hitIdentity: 'hit-1',
+                    referenceKind: 'elements',
+                    trigger: { startFrame: 10 },
+                  },
+                  {
+                    hitIdentity: 'hit-2',
+                    referenceKind: 'elements',
+                    trigger: { startFrame: 20 },
+                  },
+                ],
                 effects: [{}],
                 reasons: [],
                 ready: true,
@@ -97,6 +108,95 @@ describe('PropertiesPanel', () => {
     ]);
     expect(trace.text()).toContain('HP -200 · 韧性 -30 · SP +5.2299');
     expect(trace.text()).toContain('包 1234567890');
+  });
+
+  it('edits each stable hit identity without collapsing the whole action', async () => {
+    const hits = [
+      {
+        hitIdentity: 'control:10100303|hit:1',
+        name: '弹体 1',
+        referenceKind: 'bulletElements',
+        sourceEvidenceStatus: 'runtime-dependent',
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        trigger: { launchFrame: 13, impactFrame: 13 },
+      },
+      {
+        hitIdentity: 'control:10100303|hit:2',
+        name: '弹体 2',
+        referenceKind: 'bulletElements',
+        sourceEvidenceStatus: 'runtime-dependent',
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        trigger: { launchFrame: 16, impactFrame: 16 },
+      },
+    ];
+    const wrapper = mount(PropertiesPanel, {
+      props: {
+        selection: { characterId: 101003, enemyId: 208001 },
+        characters: [{ id: 101003, name: '寒悠悠' }],
+        actors: [{ id: 'actor-han', characterId: 101003, name: '寒悠悠' }],
+        skills: [{ id: 10100301, name: '普通攻击' }],
+        enemies: [{ id: 208001, name: '训练敌人' }],
+        selectedAction: {
+          id: 'action-han-a3',
+          type: 'skill',
+          name: 'A3',
+          actorId: 'actor-han',
+          skillId: 10100301,
+          startMs: 0,
+          durationMs: 1_000,
+          hitOverrides: {
+            'control:10100303|hit:2': { willHit: false },
+          },
+          effectCommands: [],
+        },
+        durationMs: 30_000,
+        verifiedCombatRuntime: {
+          enabled: true,
+          actionResolutionById: new Map([
+            [
+              'action-han-a3',
+              {
+                status: 'verified-ready',
+                actionBinding: {
+                  identity: 'actor|101003|normal-a3',
+                  controlSkillId: 10100303,
+                },
+                hits: [hits[0]],
+                allHits: hits,
+                disabledHitIdentities: ['control:10100303|hit:2'],
+                effects: [],
+                reasons: ['projectile-impact-frame-runtime-dependent'],
+                ready: true,
+                complete: false,
+                applied: true,
+              },
+            ],
+          ]),
+          damageEvents: [],
+          resourceEvents: [],
+          kiboResourceEvents: [],
+          effectTimeline: { events: [] },
+          tuningMarkRuntime: { events: [], unresolved: [] },
+        },
+      },
+    });
+
+    await vi.dynamicImportSettled();
+    await flushPromises();
+
+    const rows = wrapper.findAll('[data-testid="workbench-hit-override-row"]');
+    expect(rows).toHaveLength(2);
+    expect(rows[0].text()).toContain('13F');
+    expect(rows[0].text()).toContain('零距离');
+    expect(rows[1].get('input').element.checked).toBe(false);
+
+    await rows[0].get('input').setValue(false);
+    expect(wrapper.emitted('update-action')?.at(-1)?.[0]).toEqual({
+      hitOverrides: {
+        'control:10100303|hit:1': { willHit: false },
+        'control:10100303|hit:2': { willHit: false },
+      },
+    });
   });
 });
 

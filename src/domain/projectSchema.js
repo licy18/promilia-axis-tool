@@ -12,6 +12,9 @@ import {
   createActorSpResourceProfile,
 } from './spUnitContract';
 import { normalizeAttackInputActionFields } from './workbenchAttackInputChain';
+import { normalizeActionHitOverrides } from './actionHitOverrides';
+import { normalizeCombatScenario } from './combatScenario';
+import { normalizeWorkbenchActionSchedulingContract } from './workbenchActionScheduling';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -93,6 +96,7 @@ export function createProject({
   actionRelations = [],
   cycleBoundaries = [],
   initialRuntimeState = null,
+  combatScenario = null,
   metadata = {},
 } = {}) {
   const now = new Date().toISOString();
@@ -120,6 +124,7 @@ export function createProject({
       createCycleBoundary(boundary)
     ),
     initialRuntimeState: normalizeInitialRuntimeState(initialRuntimeState),
+    combatScenario: normalizeCombatScenario(combatScenario),
     resources: [],
     buffs: [],
     loadouts: actors.map(actor => actor.loadout).filter(Boolean),
@@ -278,6 +283,11 @@ export function createSkillAction({
   timingReasons = [],
   timingSourceIdentity = null,
   needsTimingData = null,
+  controlSubSkillIndex = null,
+  actionScheduling = null,
+  sourceEvidenceStatus = null,
+  scenarioRuntimeStatus = null,
+  hitOverrides = null,
   note = '',
   insertion = null,
   generationBatch = null,
@@ -341,6 +351,12 @@ export function createSkillAction({
       0,
       Number(actionVariantIndex ?? damageSegmentIndex) || 0
     ),
+    controlSubSkillIndex: nonNegativeIntegerOrNull(controlSubSkillIndex),
+    actionScheduling:
+      normalizeWorkbenchActionSchedulingContract(actionScheduling),
+    sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
+    scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
+    hitOverrides: normalizeActionHitOverrides(hitOverrides),
     cooldownMs: skill.cooldownMs,
     spCost: skill.spCost,
     elementId: skill.elementId,
@@ -500,6 +516,11 @@ export function createKiboEventAction({
   timingReasons = [],
   timingSourceIdentity = null,
   needsTimingData = true,
+  controlSubSkillIndex = null,
+  actionScheduling = null,
+  sourceEvidenceStatus = null,
+  scenarioRuntimeStatus = null,
+  hitOverrides = null,
   note = '奇波事件标记',
   insertion = null,
   effectCommands = [],
@@ -519,6 +540,12 @@ export function createKiboEventAction({
     startMs,
     durationMs,
     eventType,
+    controlSubSkillIndex: nonNegativeIntegerOrNull(controlSubSkillIndex),
+    actionScheduling:
+      normalizeWorkbenchActionSchedulingContract(actionScheduling),
+    sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
+    scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
+    hitOverrides: normalizeActionHitOverrides(hitOverrides),
     ...(timingSource
       ? {
           timing: {
@@ -1768,6 +1795,11 @@ function isPositiveNumber(value) {
 function positiveIntegerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : null;
 }
 
 function textOrNull(value) {

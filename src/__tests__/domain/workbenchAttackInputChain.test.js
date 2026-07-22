@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+  resolveVerifiedCombatActionMechanics,
+} from '../../data/verifiedCombatMechanicsPackage';
+import {
   ATTACK_INPUT_LEGACY_UNRESOLVED,
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
@@ -45,14 +50,115 @@ describe('workbench normal attack input chain', () => {
     expect(new Set(drafts.map(draft => draft.attackGroupId)).size).toBe(1);
   });
 
-  it('blocks ambiguous input chains while keeping confirmed chains editable', () => {
+  it('keeps ambiguous input chains schedulable without promoting unknown timing', () => {
     const unresolved = findNormalAttack(101007);
     expect(unresolved.attackInputSegments).toHaveLength(4);
     expect(
       unresolved.attackInputSegments.map(segment => segment.durationFrames)
-    ).toEqual([null, 31, 31, null]);
-    expect(createChain(unresolved, 101007)).toEqual([]);
+    ).toEqual([null, 31, 31, 65]);
+    const planningChain = createChain(unresolved, 101007);
+    expect(planningChain).toHaveLength(4);
+    expect(planningChain.map(draft => msToFrame(draft.durationMs))).toEqual([
+      199, 31, 31, 65,
+    ]);
+    expect(planningChain.map(draft => draft.timingStatus)).toEqual([
+      'unresolved',
+      'applied',
+      'applied',
+      'applied',
+    ]);
+    expect(planningChain.map(draft => draft.needsTimingData)).toEqual([
+      true,
+      false,
+      false,
+      false,
+    ]);
+    expect(planningChain[0]).toMatchObject({
+      durationFrames: null,
+      timingSource: 'source-animation-planning-duration',
+      actionScheduling: {
+        planningDurationFrames: 199,
+        sourceStatus: 'verified-animation-duration',
+      },
+      attackInput: {
+        sequenceIndex: 1,
+        durationFrames: null,
+        durationStatus: 'unresolved',
+      },
+    });
     expect(createChain(findNormalAttack(108003), 108003)).toHaveLength(3);
+  });
+
+  it('keeps generic planning free of fabricated hits while source-timed projectiles remain runnable', () => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    const [sourceTimedProjectile] = createChain(
+      findNormalAttack(101007),
+      101007
+    );
+    const projectileResolution = resolveVerifiedCombatActionMechanics({
+      ...sourceTimedProjectile,
+      actor: { id: 'actor-101007', characterId: 101007 },
+    });
+    expect(projectileResolution).toMatchObject({
+      status: 'verified-combat-action-mechanics-ready',
+      ready: true,
+      applied: true,
+    });
+    expect(projectileResolution.hits.length).toBeGreaterThan(0);
+    expect(projectileResolution.hits[0]).toMatchObject({
+      sourceEvidenceStatus: 'runtime-dependent',
+      scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+    });
+
+    const misaA5 = createChain(findNormalAttack(107002), 107002)[4];
+    expect(misaA5.actionScheduling).toMatchObject({
+      kind: 'generic-planning-duration',
+      planningDurationFrames: 30,
+    });
+    const unresolvedResolution = resolveVerifiedCombatActionMechanics({
+      ...misaA5,
+      actor: { id: 'actor-107002', characterId: 107002 },
+    });
+    expect(unresolvedResolution).toMatchObject({
+      ready: false,
+      applied: false,
+    });
+    expect(unresolvedResolution.hits ?? []).toEqual([]);
+    clearInstalledVerifiedCombatMechanicsPackage();
+  });
+
+  it('migrates an untouched legacy 30F placeholder to its source animation duration', () => {
+    const mapping = findNormalAttack(101007);
+    const [currentA1] = createChain(mapping, 101007);
+    const legacyA1 = {
+      ...currentA1,
+      durationMs: frameToMs(30),
+      actionScheduling: null,
+      attackInput: {
+        ...currentA1.attackInput,
+        actionScheduling: null,
+      },
+    };
+    const refreshed = migrateLegacyAttackInputActionDrafts([legacyA1], {
+      resolveMapping: () => mapping,
+    });
+
+    expect(refreshed.actions[0]).toMatchObject({
+      durationMs: frameToMs(199),
+      durationFrames: null,
+      timingSource: 'source-animation-planning-duration',
+      needsTimingData: true,
+      actionScheduling: {
+        kind: 'source-animation-planning-duration',
+        planningDurationFrames: 199,
+      },
+    });
+
+    const edited = migrateLegacyAttackInputActionDrafts(
+      [{ ...legacyA1, durationMs: frameToMs(45) }],
+      { resolveMapping: () => mapping }
+    );
+    expect(msToFrame(edited.actions[0].durationMs)).toBe(45);
   });
 
   it('migrates one legacy aggregate block to editable siblings without reusing its hits', () => {
@@ -174,7 +280,7 @@ describe('workbench normal attack input chain', () => {
     });
   });
 
-  it('keeps a legacy aggregate block when its input chain has unresolved timing', () => {
+  it('migrates a uniquely identified legacy chain while preserving unresolved segment timing', () => {
     const mapping = findNormalAttack(101007);
     const migration = migrateLegacyAttackInputActionDrafts(
       [
@@ -190,17 +296,21 @@ describe('workbench normal attack input chain', () => {
       { resolveMapping: () => mapping }
     );
 
-    expect(migration).toMatchObject({
-      changed: true,
-      unresolvedActionIds: ['legacy-ambiguous-chain'],
-      actions: [
-        {
-          id: 'legacy-ambiguous-chain',
-          durationMs: frameToMs(1),
-          attackInputLegacyStatus: ATTACK_INPUT_LEGACY_UNRESOLVED,
-        },
-      ],
-    });
+    expect(migration.changed).toBe(true);
+    expect(migration.unresolvedActionIds).toEqual([]);
+    expect(migration.actions).toHaveLength(4);
+    expect(migration.actions.map(action => action.attackSequenceIndex)).toEqual(
+      [1, 2, 3, 4]
+    );
+    expect(migration.actions.map(action => action.timingStatus)).toEqual([
+      'unresolved',
+      'applied',
+      'applied',
+      'applied',
+    ]);
+    expect(
+      migration.actions.some(action => action.attackInputLegacyStatus)
+    ).toBe(false);
   });
 });
 

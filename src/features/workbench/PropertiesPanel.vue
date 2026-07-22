@@ -27,6 +27,13 @@
       </span>
     </div>
 
+    <ActionHitOverrideList
+      v-if="verifiedMechanicsTrace?.hitBindings?.length"
+      :hit-bindings="verifiedMechanicsTrace.hitBindings"
+      :disabled-count="verifiedMechanicsTrace.disabledHitCount"
+      @change="updateHitWillHit"
+    />
+
     <div
       v-if="verifiedMechanicsTrace"
       class="verified-mechanics-trace"
@@ -853,7 +860,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, defineAsyncComponent } from 'vue';
 import { Aim, Delete, Minus, Operation, Plus } from '@element-plus/icons-vue';
 import {
   EFFECT_OPERATIONS,
@@ -861,6 +868,7 @@ import {
   EFFECT_TARGET_KINDS,
   createEffectCommand,
 } from '../../domain/projectSchema';
+
 import {
   WORKBENCH_FPS,
   WORKBENCH_FRAME_MS,
@@ -873,6 +881,10 @@ import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel
 import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { createVerifiedActionMechanicsTrace } from './verifiedActionMechanicsTrace';
+
+const ActionHitOverrideList = defineAsyncComponent(
+  () => import('./ActionHitOverrideList.vue')
+);
 
 const props = defineProps({
   selection: {
@@ -989,6 +1001,15 @@ function formatAttackInputWindow(attackInput) {
         ? '等待衔接'
         : '输入衔接';
   return `${window.startFrame}-${window.endFrame}F · ${mode}`;
+}
+
+function updateHitWillHit(hitIdentity, willHit) {
+  emit('update-action', {
+    hitOverrides: {
+      ...(props.selectedAction.hitOverrides ?? {}),
+      [hitIdentity]: { willHit: Boolean(willHit) },
+    },
+  });
 }
 
 function formatGeneratedEffectSource(command) {

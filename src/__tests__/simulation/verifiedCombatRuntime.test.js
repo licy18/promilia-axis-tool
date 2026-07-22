@@ -38,6 +38,17 @@ const PANGPANG_NORMAL_MAPPING =
 const PANGPANG_ATTACK_INPUT = PANGPANG_NORMAL_MAPPING.attackInputSegments.find(
   segment => segment.sequenceIndex === 3
 );
+const HAN_YOUYOU_CHARACTER_ID = 101003;
+const HAN_YOUYOU_NORMAL_MAPPING =
+  verifiedCombatMechanicsPackage.actionMappings.find(
+    mapping =>
+      mapping.ownerId === HAN_YOUYOU_CHARACTER_ID &&
+      mapping.actionKind === 'normal-attack'
+  );
+const HAN_YOUYOU_PROJECTILE_INPUT =
+  HAN_YOUYOU_NORMAL_MAPPING.attackInputSegments.find(
+    segment => segment.controlSkillId === 10100303
+  );
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -324,6 +335,46 @@ describe('verified combat mechanics runtime', () => {
     expect(
       result.verifiedCombatRuntime.finalState.enemy.toughness
     ).toBeLessThan(result.verifiedCombatRuntime.initialState.enemy.toughness);
+  });
+
+  it('removes only the disabled zero-distance projectile hit and its three-value nodes', () => {
+    const baseline = simulateHanProjectileInput();
+    const baselineRuntime = baseline.verifiedCombatRuntime;
+    const resolution = baselineRuntime.actionResolutionById.get(
+      'verified-han-projectile-a3'
+    );
+    const baselineHits = baselineRuntime.damageEvents.filter(
+      event => event.actionId === 'verified-han-projectile-a3'
+    );
+    expect(
+      baselineHits.map(event => Math.round(event.timeMs * 1000) / 1000)
+    ).toEqual([216.667, 266.667, 316.667]);
+    expect(
+      baselineHits.every(
+        event =>
+          event.payload.rawDamage > 0 && event.payload.toughnessDamage > 0
+      )
+    ).toBe(true);
+
+    for (const [index, hit] of resolution.allHits.entries()) {
+      const result = simulateHanProjectileInput({
+        [hit.hitIdentity]: { willHit: false },
+      });
+      const runtime = result.verifiedCombatRuntime;
+      const remainingHits = runtime.damageEvents.filter(
+        event => event.actionId === 'verified-han-projectile-a3'
+      );
+      expect(remainingHits).toHaveLength(2);
+      expect(remainingHits.map(event => event.timeMs)).toEqual(
+        baselineHits
+          .filter((_, hitIndex) => hitIndex !== index)
+          .map(event => event.timeMs)
+      );
+      expect(
+        runtime.actionResolutionById.get('verified-han-projectile-a3')
+          .disabledHitIdentities
+      ).toEqual([hit.hitIdentity]);
+    }
   });
 
   it('moves and removes only the selected normal attack input and its hit nodes', () => {
@@ -1153,6 +1204,38 @@ function simulateVerifiedAcceptanceScenario({
   });
   const scenario = compileProject(project, getWorkbenchGameData());
   return simulateScenario(scenario);
+}
+
+function simulateHanProjectileInput(hitOverrides = {}) {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const actorConfigs = createDefaultWorkbenchActorConfigs(
+    DEFAULT_WORKBENCH_SELECTION
+  ).map(config => ({ ...config, initialSp: 0 }));
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    durationMs: 2000,
+    teamSlots,
+    actorConfigs,
+    actions: [
+      createWorkbenchActionDraft({
+        id: 'verified-han-projectile-a3',
+        type: 'skill',
+        actorCharacterId: HAN_YOUYOU_CHARACTER_ID,
+        skillId: HAN_YOUYOU_NORMAL_MAPPING.sourceSkillId,
+        actionVariantIndex: 0,
+        startMs: 0,
+        durationMs: 1000,
+        attackGroupId: 'han-projectile-chain',
+        attackSequenceIndex: HAN_YOUYOU_PROJECTILE_INPUT.sequenceIndex,
+        attackSequenceTotal: HAN_YOUYOU_PROJECTILE_INPUT.sequenceTotal,
+        attackInput: HAN_YOUYOU_PROJECTILE_INPUT,
+        actionScheduling: HAN_YOUYOU_PROJECTILE_INPUT.actionScheduling,
+        hitOverrides,
+      }),
+    ],
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return simulateScenario(compileProject(project, getWorkbenchGameData()));
 }
 
 function simulateCrossCatalogScenario() {

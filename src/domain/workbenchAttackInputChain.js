@@ -1,4 +1,5 @@
 import { frameToMs, msToFrame, snapMsToFrame } from './timebase';
+import { resolveWorkbenchActionScheduling } from './workbenchActionScheduling';
 
 export const ATTACK_INPUT_CHAIN_SOURCE = 'normal-attack-input-chain';
 export const ATTACK_INPUT_LEGACY_UNRESOLVED = 'legacy-unresolved-duration';
@@ -64,15 +65,7 @@ export function createWorkbenchAttackInputChainDrafts({
   createdAt = null,
 } = {}) {
   const segments = normalizeAttackInputSegments(entry?.attackInputSegments);
-  if (
-    !segments.length ||
-    segments.some(
-      segment =>
-        segment.durationStatus !== 'applied' ||
-        !positiveIntegerOrNull(segment.durationFrames)
-    ) ||
-    typeof createActionId !== 'function'
-  ) {
+  if (!segments.length || typeof createActionId !== 'function') {
     return [];
   }
   const actionIds = segments.map((segment, index) =>
@@ -83,8 +76,19 @@ export function createWorkbenchAttackInputChainDrafts({
   let cursorMs = Math.max(0, snapMsToFrame(Number(startMs) || 0));
   return segments.map((segment, index) => {
     const actionId = actionIds[index];
-    const durationMs = frameToMs(segment.durationFrames);
+    const scheduling = resolveWorkbenchActionScheduling({
+      timingStatus: segment.durationStatus,
+      durationFrames: segment.durationFrames,
+      actionScheduling: segment.actionScheduling,
+    });
+    const durationMs = scheduling.durationMs;
     const linkDelayFrames = segment.defaultLinkDelayFrames;
+    const timingReady = scheduling.status === 'verified';
+    const timingReasons = normalizeTextArray([
+      ...(segment.linkTimingReasons ?? []),
+      ...(segment.reasons ?? []),
+      ...(timingReady ? [] : ['planning-duration-not-authoritative']),
+    ]);
     const action = {
       ...(baseDraft ?? {}),
       id: actionId,
@@ -96,7 +100,20 @@ export function createWorkbenchAttackInputChainDrafts({
       damageSegmentIndex: Math.max(0, Number(entry?.actionVariantIndex) || 0),
       startMs: cursorMs,
       durationMs,
-      note: `普通攻击 ${segment.label} · control ${segment.controlSkillId} · ${segment.hitCount} 个命中绑定`,
+      durationFrames: scheduling.durationFrames,
+      timingSource: timingReady ? segment.durationBasis : scheduling.kind,
+      timingStatus: timingReady ? 'applied' : 'unresolved',
+      timingReasons,
+      timingSourceIdentity: segment.durationSourceIdentity,
+      needsTimingData: !timingReady,
+      controlSubSkillIndex:
+        scheduling.selectedSubSkillIndex ?? segment.selectedSubSkillIndex,
+      actionScheduling: segment.actionScheduling,
+      sourceEvidenceStatus: segment.sourceEvidenceStatus,
+      scenarioRuntimeStatus: segment.scenarioRuntimeStatus,
+      note: timingReady
+        ? `普通攻击 ${segment.label} · control ${segment.controlSkillId} · ${segment.hitCount} 个命中绑定`
+        : `普通攻击 ${segment.label} · control ${segment.controlSkillId} · ${formatPlanningDuration(scheduling)}；来源证据与场景结算分开追踪`,
       generationBatch: {
         batchId: groupId,
         source: ATTACK_INPUT_CHAIN_SOURCE,
@@ -237,6 +254,9 @@ function normalizeAttackInputSegment(segment) {
     durationStatus: normalizeText(segment.durationStatus) ?? 'unresolved',
     durationBasis: normalizeText(segment.durationBasis),
     durationSourceIdentity: normalizeText(segment.durationSourceIdentity),
+    actionScheduling: normalizeActionScheduling(segment.actionScheduling),
+    sourceEvidenceStatus: normalizeText(segment.sourceEvidenceStatus),
+    scenarioRuntimeStatus: normalizeText(segment.scenarioRuntimeStatus),
     defaultLinkDelayFrames: nonNegativeIntegerOrNull(
       segment.defaultLinkDelayFrames
     ),
@@ -249,6 +269,35 @@ function normalizeAttackInputSegment(segment) {
     reasons: normalizeTextArray(segment.reasons),
     sourceIdentity: normalizeText(segment.sourceIdentity),
   };
+}
+
+function normalizeActionScheduling(value) {
+  const scheduling = resolveWorkbenchActionScheduling({
+    actionScheduling: value,
+  });
+  if (!value || typeof value !== 'object') return null;
+  return {
+    status: scheduling.status === 'verified' ? 'exact' : 'planning',
+    kind: scheduling.kind,
+    durationFrames:
+      scheduling.status === 'verified' ? scheduling.durationFrames : null,
+    planningDurationFrames:
+      scheduling.status === 'planning'
+        ? scheduling.planningDurationFrames
+        : null,
+    selectedSubSkillIndex: scheduling.selectedSubSkillIndex,
+    sourceIdentity: scheduling.sourceIdentity,
+    sourceStatus: normalizeText(value.sourceStatus),
+    variantModelStatus: scheduling.variantModelStatus,
+    reasons: normalizeTextArray(value.reasons),
+  };
+}
+
+function formatPlanningDuration(scheduling) {
+  if (scheduling.kind === 'source-animation-planning-duration') {
+    return `来源动画规划 ${scheduling.planningDurationFrames}F`;
+  }
+  return `通用规划 ${scheduling.planningDurationFrames}F`;
 }
 
 function normalizeLinkWindow(value) {
@@ -284,17 +333,30 @@ function refreshAttackInputActionDrafts(actions, resolveMapping) {
         item.controlSkillId === Number(action.attackInput.controlSkillId)
     );
     if (!segment) continue;
+    const previousScheduling = resolveWorkbenchActionScheduling({
+      timingStatus: action.timingStatus ?? action.attackInput.durationStatus,
+      durationFrames:
+        action.durationFrames ??
+        action.attackInput.effectiveDurationFrames ??
+        action.attackInput.durationFrames,
+      actionScheduling:
+        action.actionScheduling ?? action.attackInput.actionScheduling,
+    });
+    const nextScheduling = resolveWorkbenchActionScheduling({
+      timingStatus: segment.durationStatus,
+      durationFrames: segment.durationFrames,
+      actionScheduling: segment.actionScheduling,
+    });
     const oldDefaultFrames =
       positiveIntegerOrNull(action.attackInput.effectiveDurationFrames) ??
-      positiveIntegerOrNull(action.attackInput.durationFrames);
+      positiveIntegerOrNull(action.attackInput.durationFrames) ??
+      msToFrame(previousScheduling.durationMs);
     const durationWasDefault =
-      oldDefaultFrames != null &&
+      oldDefaultFrames > 0 &&
       Math.abs(msToFrame(action.durationMs) - oldDefaultFrames) <= 1;
     refreshes.set(action.id, {
       segment,
-      timingReady:
-        segment.durationStatus === 'applied' &&
-        positiveIntegerOrNull(segment.durationFrames) != null,
+      scheduling: nextScheduling,
       durationWasDefault,
       oldDefaultFrames,
     });
@@ -304,19 +366,37 @@ function refreshAttackInputActionDrafts(actions, resolveMapping) {
   const refreshedActions = actions.map(action => {
     const refresh = refreshes.get(action.id);
     if (!refresh) return action;
-    const durationFrames =
-      refresh.segment.effectiveDurationFrames ?? refresh.segment.durationFrames;
+    const timingReady = refresh.scheduling.status === 'verified';
     const next = {
       ...action,
-      ...(refresh.timingReady && refresh.durationWasDefault
-        ? { durationMs: frameToMs(durationFrames) }
+      ...(refresh.durationWasDefault
+        ? {
+            durationMs: refresh.scheduling.durationMs,
+            durationFrames: timingReady
+              ? refresh.scheduling.durationFrames
+              : null,
+            timingSource: timingReady
+              ? refresh.segment.durationBasis
+              : refresh.scheduling.kind,
+            timingStatus: timingReady ? 'applied' : 'unresolved',
+            timingReasons: normalizeTextArray([
+              ...(refresh.segment.linkTimingReasons ?? []),
+              ...(refresh.segment.reasons ?? []),
+              ...(timingReady ? [] : ['planning-duration-not-authoritative']),
+            ]),
+            timingSourceIdentity: refresh.segment.durationSourceIdentity,
+            needsTimingData: !timingReady,
+            controlSubSkillIndex:
+              refresh.scheduling.selectedSubSkillIndex ??
+              refresh.segment.selectedSubSkillIndex,
+            actionScheduling: refresh.segment.actionScheduling,
+            sourceEvidenceStatus: refresh.segment.sourceEvidenceStatus,
+            scenarioRuntimeStatus: refresh.segment.scenarioRuntimeStatus,
+          }
         : {}),
       attackSequenceIndex: refresh.segment.sequenceIndex,
       attackSequenceTotal: refresh.segment.sequenceTotal,
       attackInput: refresh.segment,
-      ...(!refresh.timingReady
-        ? { attackInputLegacyStatus: ATTACK_INPUT_LEGACY_UNRESOLVED }
-        : {}),
     };
     if (!sameValue(action, next)) changed = true;
     return next;
@@ -367,7 +447,6 @@ function findPristineAttackInputGroups(actions, refreshes) {
         group.some(
           (action, index) =>
             Number(action.attackSequenceIndex) !== index + 1 ||
-            !refreshes.get(action.id)?.timingReady ||
             !refreshes.get(action.id)?.durationWasDefault
         )
       ) {

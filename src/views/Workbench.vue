@@ -1074,7 +1074,9 @@ import {
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
 } from '../domain/workbenchAttackInputChain';
+import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import { normalizeInitialRuntimeState } from '../domain/initialRuntimeState';
+import { normalizeCombatScenario } from '../domain/combatScenario';
 import {
   createWorkbenchTimelineBatchLaneMovePlan,
   createWorkbenchTimelineEntry,
@@ -1315,6 +1317,9 @@ const actionRelations = ref([...initialDraft.actionRelations]);
 const cycleBoundaries = ref([...initialDraft.cycleBoundaries]);
 const initialRuntimeState = ref(
   cloneWorkbenchHistoryValue(initialDraft.initialRuntimeState)
+);
+const combatScenario = ref(
+  normalizeCombatScenario(initialDraft.combatScenario)
 );
 const scenarioWorkspace = ref(
   cloneWorkbenchHistoryValue(initialDraft.scenarioWorkspace)
@@ -1773,14 +1778,14 @@ const timelineEntryCatalog = computed(() => {
   );
   const defaultSkillEntry =
     skillEntries.find(
-      entry => entry.kind !== 'normal-attack' && isActionEntryTimingReady(entry)
-    ) ?? skillEntries.find(isActionEntryTimingReady);
+      entry => entry.kind !== 'normal-attack' && isActionEntrySchedulable(entry)
+    ) ?? skillEntries.find(isActionEntrySchedulable);
   const kiboId = Number(actionLibraryActor.value?.loadout?.kiboId) || null;
   const defaultKiboEntry = (kiboActionsById.value.get(kiboId) ?? [])
     .map(entry =>
       normalizeKiboActionEntryInput(entry, kiboId, actorCharacterId)
     )
-    .find(isActionEntryTimingReady);
+    .find(isActionEntrySchedulable);
   return [
     defaultSkillEntry
       ? createWorkbenchTimelineEntry({
@@ -3041,10 +3046,11 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
     actionEntryOrSkillId,
     actorCharacterId
   );
-  if (!isActionEntryTimingReady(actionEntry)) {
-    draftStatus.value = formatUnresolvedActionTimingMessage(actionEntry);
+  if (!isActionEntrySchedulable(actionEntry)) {
+    draftStatus.value = formatUnschedulableActionMessage(actionEntry);
     return false;
   }
+  const scheduling = resolveWorkbenchActionScheduling(actionEntry);
   const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
   const requestedStartMs =
@@ -3083,8 +3089,8 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
       level,
       actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
       damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
-      durationMs: actionEntry.durationMs,
-      ...createActionTimingDraftFields(actionEntry),
+      durationMs: scheduling.durationMs,
+      ...createActionTimingDraftFields(actionEntry, scheduling),
       note:
         actionEntry.note ??
         `${actionEntry.label ?? '动作'}：${actionEntry.rawValue ?? '倍率待补'}；真实动作帧等待 asset 或运行时捕获补充。`,
@@ -3372,8 +3378,8 @@ function addResourceAction() {
 }
 
 async function addKiboEventAction(entry = null) {
-  if (!isActionEntryTimingReady(entry)) {
-    draftStatus.value = formatUnresolvedActionTimingMessage(entry);
+  if (!isActionEntrySchedulable(entry)) {
+    draftStatus.value = formatUnschedulableActionMessage(entry);
     return false;
   }
   if (entry?.eventType === 'break') {
@@ -3386,18 +3392,19 @@ async function addKiboEventAction(entry = null) {
       startMs: resolveInsertStartMs(resolveInsertIndex()),
     });
   }
+  const scheduling = resolveWorkbenchActionScheduling(entry);
   addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.KIBO_EVENT,
     kiboId: entry?.kiboId ?? actionLibraryActor.value?.loadout?.kiboId,
     skillId: entry?.skillId ?? selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
-    durationMs: entry.durationMs,
+    durationMs: scheduling.durationMs,
     level: selectedDraft.value.level,
     eventType: entry?.eventType ?? 'activation',
     name: entry?.label ?? '',
     icon: entry?.icon ?? null,
-    ...createActionTimingDraftFields(entry),
+    ...createActionTimingDraftFields(entry, scheduling),
     note: entry?.note ?? '奇波事件标记；效果未接入 calculator。',
   });
 }
@@ -3540,9 +3547,9 @@ function createTimelineEntryDraftRequest({
   let attackInputDrafts = [];
   if (entry.type === ACTION_TYPES.SKILL) {
     const actionEntry = normalizeActionEntryInput(entry, actorCharacterId);
-    if (!isActionEntryTimingReady(actionEntry)) {
+    if (!isActionEntrySchedulable(actionEntry)) {
       return {
-        blockedMessage: formatUnresolvedActionTimingMessage(actionEntry),
+        blockedMessage: formatUnschedulableActionMessage(actionEntry),
         targetLane,
         actorCharacterId,
         requestedStartMs,
@@ -3551,6 +3558,7 @@ function createTimelineEntryDraftRequest({
     }
     const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
     const level = resolveSkillInsertLevel(actorCharacterId, skill);
+    const scheduling = resolveWorkbenchActionScheduling(actionEntry);
     draftPatch = {
       id: actionId,
       skillId: skill.id,
@@ -3558,8 +3566,8 @@ function createTimelineEntryDraftRequest({
       level,
       actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
       damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
-      durationMs: actionEntry.durationMs,
-      ...createActionTimingDraftFields(actionEntry),
+      durationMs: scheduling.durationMs,
+      ...createActionTimingDraftFields(actionEntry, scheduling),
       note:
         actionEntry.note ??
         (actionEntry.label ?? '动作') +
@@ -3578,16 +3586,17 @@ function createTimelineEntryDraftRequest({
   } else {
     if (
       entry.type === ACTION_TYPES.KIBO_EVENT &&
-      !isActionEntryTimingReady(entry)
+      !isActionEntrySchedulable(entry)
     ) {
       return {
-        blockedMessage: formatUnresolvedActionTimingMessage(entry),
+        blockedMessage: formatUnschedulableActionMessage(entry),
         targetLane,
         actorCharacterId,
         requestedStartMs,
         draftPatches: [],
       };
     }
+    const scheduling = resolveWorkbenchActionScheduling(entry);
     draftPatch = {
       id: actionId,
       type: entry.type,
@@ -3595,7 +3604,7 @@ function createTimelineEntryDraftRequest({
       actorCharacterId,
       durationMs:
         entry.type === ACTION_TYPES.KIBO_EVENT
-          ? entry.durationMs
+          ? scheduling.durationMs
           : (entry.durationMs ?? 600),
       level: selectedDraft.value.level,
     };
@@ -3647,14 +3656,27 @@ function createTimelineEntryDraftRequest({
   };
 }
 
-function createActionTimingDraftFields(entry) {
+function createActionTimingDraftFields(
+  entry,
+  scheduling = resolveWorkbenchActionScheduling(entry)
+) {
+  const planning = scheduling.status === 'planning';
   return {
-    durationFrames: entry?.durationFrames ?? null,
-    timingSource: entry?.timingSource ?? null,
-    timingStatus: entry?.timingStatus ?? null,
-    timingReasons: entry?.timingReasons ?? [],
+    durationFrames: planning ? null : (entry?.durationFrames ?? null),
+    timingSource: planning ? scheduling.kind : (entry?.timingSource ?? null),
+    timingStatus: planning ? 'unresolved' : (entry?.timingStatus ?? null),
+    timingReasons: [
+      ...(entry?.timingReasons ?? []),
+      ...(planning ? ['planning-duration-not-authoritative'] : []),
+    ],
     timingSourceIdentity: entry?.timingSourceIdentity ?? null,
-    needsTimingData: entry?.needsTimingData ?? true,
+    needsTimingData: planning || (entry?.needsTimingData ?? true),
+    controlSubSkillIndex:
+      scheduling.selectedSubSkillIndex ?? entry?.controlSubSkillIndex ?? null,
+    actionScheduling: entry?.actionScheduling ?? null,
+    sourceEvidenceStatus: entry?.sourceEvidenceStatus ?? null,
+    scenarioRuntimeStatus: entry?.scenarioRuntimeStatus ?? null,
+    hitOverrides: entry?.hitOverrides ?? null,
   };
 }
 
@@ -5063,6 +5085,7 @@ function createWorkbenchProjectFromDraft(draft) {
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,
     initialRuntimeState: draft.initialRuntimeState,
+    combatScenario: draft.combatScenario,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
   });
 }
@@ -5086,6 +5109,7 @@ function createCurrentWorkbenchProjectForActions(
     actionRelations: relations,
     cycleBoundaries: cycleBoundaries.value,
     initialRuntimeState: initialRuntimeState.value,
+    combatScenario: combatScenario.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
   });
 }
@@ -5221,6 +5245,7 @@ function getCurrentWorkbenchScenarioState() {
     actionRelations: actionRelations.value,
     cycleBoundaries: cycleBoundaries.value,
     initialRuntimeState: initialRuntimeState.value,
+    combatScenario: combatScenario.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
     selectedActionId: selectedActionId.value,
   };
@@ -5792,6 +5817,7 @@ function applyWorkbenchScenarioDraftState(draft) {
   initialRuntimeState.value = cloneWorkbenchHistoryValue(
     draft.initialRuntimeState
   );
+  combatScenario.value = normalizeCombatScenario(draft.combatScenario);
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     draft.runtimeSampleCaptures
   );
@@ -6048,6 +6074,7 @@ function createWorkbenchHistorySnapshot() {
       actionRelations: actionRelations.value,
       cycleBoundaries: cycleBoundaries.value,
       initialRuntimeState: initialRuntimeState.value,
+      combatScenario: combatScenario.value,
       runtimeSampleCaptures: runtimeSampleCaptures.value,
       selectedActionId: selectedActionId.value,
     },
@@ -6066,6 +6093,7 @@ function createWorkbenchHistorySnapshot() {
     actionRelations: draftSnapshot.actionRelations,
     cycleBoundaries: draftSnapshot.cycleBoundaries,
     initialRuntimeState: draftSnapshot.initialRuntimeState,
+    combatScenario: draftSnapshot.combatScenario,
     runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
     selectedActionIds: selectedActionIds.value,
@@ -6132,6 +6160,7 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   initialRuntimeState.value = cloneWorkbenchHistoryValue(
     snapshot.initialRuntimeState
   );
+  combatScenario.value = normalizeCombatScenario(snapshot.combatScenario);
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures
   );
@@ -8055,6 +8084,11 @@ function applyVerifiedActionTiming(entry, mapping) {
     timingStatus === 'applied'
       ? Number(actionTiming?.occupancy?.durationFrames) || null
       : null;
+  const scheduling = resolveWorkbenchActionScheduling({
+    timingStatus,
+    durationFrames,
+    actionScheduling: mapping?.actionScheduling,
+  });
   return {
     ...entry,
     durationFrames,
@@ -8069,22 +8103,30 @@ function applyVerifiedActionTiming(entry, mapping) {
       actionTiming?.sourceIdentity ??
       null,
     needsTimingData: timingStatus !== 'applied',
+    schedulingStatus: scheduling.status,
+    schedulingKind: scheduling.kind,
+    planningDurationFrames: scheduling.planningDurationFrames ?? null,
+    actionScheduling: mapping?.actionScheduling ?? null,
+    controlSubSkillIndex: scheduling.selectedSubSkillIndex,
+    sourceEvidenceStatus:
+      mapping?.sourceEvidenceStatus ?? mapping?.classification ?? 'unresolved',
+    scenarioRuntimeStatus:
+      mapping?.scenarioRuntimeStatus ?? mapping?.classification ?? 'unresolved',
     attackInputSegments: mapping?.attackInputSegments ?? [],
     mechanicsClassification: mapping?.classification ?? 'unresolved',
   };
 }
 
-function isActionEntryTimingReady(entry) {
+function isActionEntrySchedulable(entry) {
   return (
-    entry?.timingStatus === 'applied' &&
-    Number.isFinite(Number(entry.durationMs)) &&
-    Number(entry.durationMs) > 0
+    entry?.mechanicsClassification !== 'loading' &&
+    Number.isInteger(Number(entry?.skillId)) &&
+    Number(entry.skillId) > 0
   );
 }
 
-function formatUnresolvedActionTimingMessage(entry) {
-  const reasons = (entry?.timingReasons ?? []).filter(Boolean);
-  return `${entry?.label ?? entry?.name ?? '动作'}占轴时长未解析，不能加入时间轴${reasons.length ? `：${reasons.join('、')}` : ''}`;
+function formatUnschedulableActionMessage(entry) {
+  return `${entry?.label ?? entry?.name ?? '动作'}的公开目录映射尚未加载，暂时不能加入时间轴`;
 }
 
 function resolveSkillInsertLevel(actorCharacterId, skill) {

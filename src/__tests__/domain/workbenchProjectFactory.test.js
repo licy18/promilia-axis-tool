@@ -67,6 +67,57 @@ describe('workbench project actor configuration', () => {
     expect(scenario.actions[0].timing).toEqual(project.actions[0].timing);
   });
 
+  it('preserves the planning, projectile scenario, and per-hit override contracts through compilation', () => {
+    const draft = createWorkbenchActionDraft({
+      id: 'scenario-hit-action',
+      skillId: 10900112,
+      actorCharacterId: 109001,
+      durationMs: 2_850,
+      durationFrames: null,
+      timingStatus: 'unresolved',
+      needsTimingData: true,
+      controlSubSkillIndex: 0,
+      actionScheduling: {
+        status: 'planning',
+        kind: 'source-animation-planning-duration',
+        planningDurationFrames: 171,
+        selectedSubSkillIndex: 0,
+        sourceIdentity: 'skill-control:10900112:animation:0',
+        sourceStatus: 'verified-animation-duration',
+        variantModelStatus: 'variant-condition-not-yet-modeled',
+      },
+      sourceEvidenceStatus: 'runtime-dependent',
+      scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+      hitOverrides: {
+        'control:10900112|hit:2': { willHit: false },
+      },
+    });
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actions: [draft],
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(project.combatScenario).toEqual({
+      projectile: { targetDistance: 0, defaultWillHit: true },
+    });
+    expect(project.actions[0]).toMatchObject({
+      controlSubSkillIndex: 0,
+      actionScheduling: {
+        kind: 'source-animation-planning-duration',
+        planningDurationFrames: 171,
+      },
+      sourceEvidenceStatus: 'runtime-dependent',
+      scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+      hitOverrides: {
+        'control:10900112|hit:2': { willHit: false },
+      },
+    });
+    expect(scenario.combatScenario).toEqual(project.combatScenario);
+    expect(scenario.actions[0].hitOverrides).toEqual(
+      project.actions[0].hitOverrides
+    );
+  });
+
   it('keeps the action kind when a team-slot remap changes the owner', () => {
     const [action] = normalizeWorkbenchActionDrafts(
       [
