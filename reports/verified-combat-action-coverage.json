@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "49a5a94042fda335d0066232d7f575de72e77f5fdd2ea600e1accd6329dabd9e",
+  "packageHash": "350219dcf6ea62c63ec04bb10caf893ffe1b4056dc0a4a09a40a954d88269acb",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -103221,6 +103221,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:101007|control:10100701|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 101007,
             "controlSkillId": 10100701,
             "actionKinds": [
@@ -103228,6 +103229,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 101007,
                 "sourceSkillId": 10100701,
                 "actionKind": "normal-attack",
@@ -103394,19 +103396,31 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100703
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100701.asset/MonoBehaviour/skill_control_10100701__-6382935359032632452.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100704
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100701.asset/MonoBehaviour/skill_control_10100701__-6382935359032632452.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100703
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100701.asset/MonoBehaviour/skill_control_10100701__-6382935359032632452.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   }
                 ]
@@ -105180,6 +105194,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:101007|control:10100704|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 101007,
             "controlSkillId": 10100704,
             "actionKinds": [
@@ -105187,6 +105202,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 101007,
                 "sourceSkillId": 10100701,
                 "actionKind": "normal-attack",
@@ -105360,37 +105376,66 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100705,
+                      10100704
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100705,
+                      10100704
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100705,
+                      10100704
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100705,
+                      10100704
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   },
                   {
                     "subSkillIndex": 4,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100705,
+                      10100704
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json#skillControlData.skillPlayers[4]|skillResourceMaps[4]"
                   },
                   {
                     "subSkillIndex": 5,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10100705
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json#skillControlData.skillPlayers[5]|skillResourceMaps[5]"
                   }
                 ]
@@ -108114,6 +108159,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:101010|control:10101001|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 101010,
             "controlSkillId": 10101001,
             "actionKinds": [
@@ -108121,6 +108167,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 101010,
                 "sourceSkillId": 10101001,
                 "actionKind": "normal-attack",
@@ -108335,19 +108382,34 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101002
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/skill_control_10101001__2695099335427283981.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101004
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/skill_control_10101001__2695099335427283981.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101002
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/skill_control_10101001__2695099335427283981.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   }
                 ]
@@ -109400,6 +109462,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:101010|control:10101002|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 101010,
             "controlSkillId": 10101002,
             "actionKinds": [
@@ -109407,6 +109470,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 101010,
                 "sourceSkillId": 10101001,
                 "actionKind": "normal-attack",
@@ -109537,13 +109601,23 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101003
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/skill_control_10101002__-4146708321741339576.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101003
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/skill_control_10101002__-4146708321741339576.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -110772,6 +110846,7 @@
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "variantConditionDiscovery": {
             "identity": "actor:101010|control:10101004|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 101010,
             "controlSkillId": 10101004,
             "actionKinds": [
@@ -110779,6 +110854,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 101010,
                 "sourceSkillId": 10101001,
                 "actionKind": "normal-attack",
@@ -110909,13 +110985,23 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101005
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101005
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -111767,6 +111853,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:101010|control:10101005|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 101010,
             "controlSkillId": 10101005,
             "actionKinds": [
@@ -111774,6 +111861,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 101010,
                 "sourceSkillId": 10101001,
                 "actionKind": "normal-attack",
@@ -111904,13 +111992,24 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 6,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101010,
+                      10101042
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 6,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10101042
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 4,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -115504,6 +115603,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:103002|control:10300201|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 103002,
             "controlSkillId": 10300201,
             "actionKinds": [
@@ -115511,6 +115611,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 103002,
                 "sourceSkillId": 10300201,
                 "actionKind": "normal-attack",
@@ -116574,25 +116675,41 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300202
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   }
                 ]
@@ -118209,6 +118326,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:103002|control:10300202|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 103002,
             "controlSkillId": 10300202,
             "actionKinds": [
@@ -118216,6 +118334,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 103002,
                 "sourceSkillId": 10300201,
                 "actionKind": "normal-attack",
@@ -119338,25 +119457,41 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300203
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   }
                 ]
@@ -120973,6 +121108,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:103002|control:10300203|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 103002,
             "controlSkillId": 10300203,
             "actionKinds": [
@@ -120980,6 +121116,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 103002,
                 "sourceSkillId": 10300201,
                 "actionKind": "normal-attack",
@@ -120999,6 +121136,7 @@
                 "sourceIdentity": "characters.items[id=103002].skillSlots[group=backup,skillId=10300203]"
               },
               {
+                "ownerKind": "actor",
                 "ownerId": 103002,
                 "sourceSkillId": 10300201,
                 "actionKind": "normal-attack",
@@ -122124,25 +122262,41 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   }
                 ]
@@ -123848,6 +124002,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:103002|control:10300204|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 103002,
             "controlSkillId": 10300204,
             "actionKinds": [
@@ -123855,6 +124010,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 103002,
                 "sourceSkillId": 10300201,
                 "actionKind": "normal-attack",
@@ -125222,31 +125378,49 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 3,
                     "targetControlSkillIds": [],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   },
                   {
                     "subSkillIndex": 4,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300205
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillControlData.skillPlayers[4]|skillResourceMaps[4]"
                   }
                 ]
@@ -127249,6 +127423,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:103002|control:10300205|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 103002,
             "controlSkillId": 10300205,
             "actionKinds": [
@@ -127256,6 +127431,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 103002,
                 "sourceSkillId": 10300201,
                 "actionKind": "normal-attack",
@@ -127407,19 +127583,31 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300243
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300205.asset/MonoBehaviour/skill_control_10300205__8622352564572962458.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300205
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300205.asset/MonoBehaviour/skill_control_10300205__8622352564572962458.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10300201
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300205.asset/MonoBehaviour/skill_control_10300205__8622352564572962458.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   }
                 ]
@@ -129069,6 +129257,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:107001|control:10700102|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 107001,
             "controlSkillId": 10700102,
             "actionKinds": [
@@ -129076,6 +129265,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 107001,
                 "sourceSkillId": 10700101,
                 "actionKind": "normal-attack",
@@ -129222,31 +129412,60 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700141,
+                      10700102
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700110,
+                      10700102
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700141,
+                      10700102
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700141,
+                      10700102
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   },
                   {
                     "subSkillIndex": 4,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700110,
+                      10700103
+                    ],
+                    "inputControlledBridgeCount": 2,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillControlData.skillPlayers[4]|skillResourceMaps[4]"
                   }
                 ]
@@ -130614,6 +130833,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:107001|control:10700103|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 107001,
             "controlSkillId": 10700103,
             "actionKinds": [
@@ -130621,6 +130841,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 107001,
                 "sourceSkillId": 10700101,
                 "actionKind": "normal-attack",
@@ -130635,6 +130856,7 @@
                 "sourceIdentity": "characters.items[id=107001].skillSlots[group=backup,skillId=10700103]"
               },
               {
+                "ownerKind": "actor",
                 "ownerId": 107001,
                 "sourceSkillId": 10700101,
                 "actionKind": "normal-attack",
@@ -130782,31 +131004,59 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700141,
+                      10700103
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700110,
+                      10700103
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700141,
+                      10700103
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700145,
+                      10700141,
+                      10700103
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   },
                   {
                     "subSkillIndex": 4,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700110
+                    ],
+                    "inputControlledBridgeCount": 1,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillControlData.skillPlayers[4]|skillResourceMaps[4]"
                   }
                 ]
@@ -136448,6 +136698,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:107003|control:10700304|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 107003,
             "controlSkillId": 10700304,
             "actionKinds": [
@@ -136455,6 +136706,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 107003,
                 "sourceSkillId": 10700301,
                 "actionKind": "normal-attack",
@@ -136568,13 +136820,21 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700310
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700304.asset/MonoBehaviour/skill_control_10700304__-2240797215813957322.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10700310
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700304.asset/MonoBehaviour/skill_control_10700304__-2240797215813957322.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -139646,6 +139906,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:108001|control:10800104|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 108001,
             "controlSkillId": 10800104,
             "actionKinds": [
@@ -139653,6 +139914,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 108001,
                 "sourceSkillId": 10800101,
                 "actionKind": "normal-attack",
@@ -139774,13 +140036,21 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10800105
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800104.asset/MonoBehaviour/skill_control_10800104__7436455009395492884.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10800105
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800104.asset/MonoBehaviour/skill_control_10800104__7436455009395492884.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -146619,6 +146889,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:109001|control:10900101|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 109001,
             "controlSkillId": 10900101,
             "actionKinds": [
@@ -146626,6 +146897,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 109001,
                 "sourceSkillId": 10900101,
                 "actionKind": "normal-attack",
@@ -146743,13 +147015,20 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      10900102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 2,
                     "targetControlSkillIds": [],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -150517,6 +150796,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:109002|control:10900202|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 109002,
             "controlSkillId": 10900202,
             "actionKinds": [
@@ -150524,6 +150804,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 109002,
                 "sourceSkillId": 10900201,
                 "actionKind": "normal-attack",
@@ -150660,19 +150941,31 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10900202
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900202.asset/MonoBehaviour/skill_control_10900202__-3996533033420155545.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10900203
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900202.asset/MonoBehaviour/skill_control_10900202__-3996533033420155545.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      10900203
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900202.asset/MonoBehaviour/skill_control_10900202__-3996533033420155545.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   }
                 ]
@@ -153522,6 +153815,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:111001|control:11100101|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 111001,
             "controlSkillId": 11100101,
             "actionKinds": [
@@ -153529,6 +153823,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 111001,
                 "sourceSkillId": 11100101,
                 "actionKind": "normal-attack",
@@ -153823,43 +154118,74 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100102,
+                      11100105
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100104,
+                      11100102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100101
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   },
                   {
                     "subSkillIndex": 4,
                     "eventBridgeCount": 5,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100104,
+                      11100102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[4]|skillResourceMaps[4]"
                   },
                   {
                     "subSkillIndex": 5,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100101
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[5]|skillResourceMaps[5]"
                   },
                   {
                     "subSkillIndex": 6,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour/skill_control_11100101__9138560497959454099.json#skillControlData.skillPlayers[6]|skillResourceMaps[6]"
                   }
                 ]
@@ -158697,6 +159023,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:111001|control:11100102|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 111001,
             "controlSkillId": 11100102,
             "actionKinds": [
@@ -158704,6 +159031,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 111001,
                 "sourceSkillId": 11100101,
                 "actionKind": "normal-attack",
@@ -158882,31 +159210,44 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100103,
+                      11100105
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 2,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100102.asset/MonoBehaviour/skill_control_11100102__2599903452955644173.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
                     "targetControlSkillIds": [],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100102.asset/MonoBehaviour/skill_control_11100102__2599903452955644173.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   },
                   {
                     "subSkillIndex": 2,
                     "eventBridgeCount": 3,
                     "targetControlSkillIds": [],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100102.asset/MonoBehaviour/skill_control_11100102__2599903452955644173.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
                   },
                   {
                     "subSkillIndex": 3,
                     "eventBridgeCount": 3,
                     "targetControlSkillIds": [],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100102.asset/MonoBehaviour/skill_control_11100102__2599903452955644173.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
                   },
                   {
                     "subSkillIndex": 4,
                     "eventBridgeCount": 3,
                     "targetControlSkillIds": [],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 0,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100102.asset/MonoBehaviour/skill_control_11100102__2599903452955644173.json#skillControlData.skillPlayers[4]|skillResourceMaps[4]"
                   }
                 ]
@@ -162514,6 +162855,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:111001|control:11100105|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 111001,
             "controlSkillId": 11100105,
             "actionKinds": [
@@ -162521,6 +162863,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 111001,
                 "sourceSkillId": 11100101,
                 "actionKind": "normal-attack",
@@ -162660,13 +163003,21 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100101
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100105.asset/MonoBehaviour/skill_control_11100105__4654364052066999994.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 4,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      11100101
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100105.asset/MonoBehaviour/skill_control_11100105__4654364052066999994.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -163852,6 +164203,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:112001|control:11200101|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 112001,
             "controlSkillId": 11200101,
             "actionKinds": [
@@ -163859,6 +164211,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 112001,
                 "sourceSkillId": 11200101,
                 "actionKind": "normal-attack",
@@ -163972,13 +164325,23 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      11200102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/skill_control_11200101__7595468804470346376.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      80102,
+                      11200102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 3,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/skill_control_11200101__7595468804470346376.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -168646,6 +169009,7 @@
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "variantConditionDiscovery": {
             "identity": "actor:199001|control:19900101|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 199001,
             "controlSkillId": 19900101,
             "actionKinds": [
@@ -168653,6 +169017,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 199001,
                 "sourceSkillId": 19900101,
                 "actionKind": "normal-attack",
@@ -168782,13 +169147,21 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      19900102
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 2,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      19900103
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -171597,6 +171970,7 @@
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "variantConditionDiscovery": {
             "identity": "actor:199002|control:19900201|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 199002,
             "controlSkillId": 19900201,
             "actionKinds": [
@@ -171604,6 +171978,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 199002,
                 "sourceSkillId": 19900201,
                 "actionKind": "normal-attack",
@@ -171733,13 +172108,21 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      19900202
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/skill_control_19900201__604713875932161423.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 2,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      19900203
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/skill_control_19900201__604713875932161423.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]
@@ -175521,6 +175904,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "variantConditionDiscovery": {
             "identity": "actor:199003|control:19900303|variant-condition-discovery",
+            "ownerKind": "actor",
             "ownerId": 199003,
             "controlSkillId": 19900303,
             "actionKinds": [
@@ -175528,6 +175912,7 @@
             ],
             "publicActions": [
               {
+                "ownerKind": "actor",
                 "ownerId": 199003,
                 "sourceSkillId": 19900301,
                 "actionKind": "normal-attack",
@@ -175542,6 +175927,7 @@
                 "sourceIdentity": "characters.items[id=199003].skillSlots[group=backup,skillId=19900303]"
               },
               {
+                "ownerKind": "actor",
                 "ownerId": 199003,
                 "sourceSkillId": 19900301,
                 "actionKind": "normal-attack",
@@ -175664,13 +176050,21 @@
                   {
                     "subSkillIndex": 0,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      19900304
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900303.asset/MonoBehaviour/skill_control_19900303__4134506418897585269.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
                   },
                   {
                     "subSkillIndex": 1,
                     "eventBridgeCount": 3,
-                    "targetControlSkillIds": [],
+                    "targetControlSkillIds": [
+                      19900304
+                    ],
+                    "inputControlledBridgeCount": 0,
+                    "automaticBridgeCount": 1,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900303.asset/MonoBehaviour/skill_control_19900303__4134506418897585269.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
                   }
                 ]

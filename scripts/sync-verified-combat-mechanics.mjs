@@ -77,6 +77,16 @@ const ACTION_VARIANT_RESOURCE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-action-variant-resource-coverage.md'
 );
+const DERIVED_CONTROL_COVERAGE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-derived-control-coverage.json'
+);
+const DERIVED_CONTROL_COVERAGE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-derived-control-coverage.md'
+);
 const EFFECT_COVERAGE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -418,6 +428,8 @@ async function main() {
   );
   const actionVariantResourceCoverage =
     createActionVariantResourceCoverageReport(packageValue);
+  const derivedControlCoverage =
+    createDerivedControlCoverageReport(packageValue);
   const publicRuntimeCoverage = createPublicRuntimeCoverageReport({
     packageValue,
     actionCoverage: coverage,
@@ -459,6 +471,14 @@ async function main() {
       createActionVariantResourceCoverageMarkdown(
         actionVariantResourceCoverage
       ),
+    ],
+    [
+      DERIVED_CONTROL_COVERAGE_JSON_OUTPUT,
+      `${JSON.stringify(derivedControlCoverage, null, 2)}\n`,
+    ],
+    [
+      DERIVED_CONTROL_COVERAGE_MARKDOWN_OUTPUT,
+      createDerivedControlCoverageMarkdown(derivedControlCoverage),
     ],
     [
       PUBLIC_RUNTIME_COVERAGE_JSON_OUTPUT,
@@ -1032,6 +1052,7 @@ function createActionVariantGraph({
       candidate.actionKind
     );
     appendMapArray(publicActionsByControl, candidate.controlSkillId, {
+      ownerKind: candidate.ownerKind,
       ownerId: candidate.ownerId,
       sourceSkillId: candidate.sourceSkillId,
       actionKind: candidate.actionKind,
@@ -1046,6 +1067,7 @@ function createActionVariantGraph({
         'normal-attack'
       );
       appendMapArray(publicActionsByControl, segment.controlSkillId, {
+        ownerKind: candidate.ownerKind,
         ownerId: candidate.ownerId,
         sourceSkillId: candidate.sourceSkillId,
         actionKind: 'normal-attack',
@@ -1262,14 +1284,22 @@ function createActionVariantGraph({
     specialResourceCatalog,
     allIndexedElements,
   });
+  const derivedControlContracts = createDerivedControlContracts({
+    controlBindings,
+    publicActionsByControl,
+    defaultSelections,
+    switchBindings: dedupedSwitchBindings,
+    conditionDiscoveries,
+  });
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'azpr-verified-action-variant-graph',
     status: 'verified-action-variant-graph-ready',
     nodes,
     edges: dedupedSwitchBindings,
     defaultSelections,
     conditionDiscoveries,
+    derivedControlContracts,
     policy: {
       inputDerivedVariantsAreIndependentInputs: true,
       sameInputStateTransformSelectsOneVariant: true,
@@ -1299,8 +1329,395 @@ function createActionVariantGraph({
       conditionDiscoveryStatusCounts: countValues(
         conditionDiscoveries.map(discovery => discovery.status)
       ),
+      derivedControlContractCount: derivedControlContracts.length,
+      derivedControlOwnerCount: new Set(
+        derivedControlContracts.map(contract => contract.ownerId)
+      ).size,
+      derivedControlSourceCounts: countValues(
+        derivedControlContracts.map(contract => contract.controlSource)
+      ),
+      derivedControlResolutionStatusCounts: countValues(
+        derivedControlContracts.map(contract => contract.resolutionStatus)
+      ),
     },
   };
+}
+
+function createDerivedControlContracts({
+  controlBindings,
+  publicActionsByControl,
+  defaultSelections,
+  switchBindings,
+  conditionDiscoveries,
+}) {
+  const publicControlIds = new Set(
+    [...publicActionsByControl.keys()].map(Number).filter(Number.isInteger)
+  );
+  const discoveriesByOwnerControl = new Map(
+    conditionDiscoveries.map(discovery => [
+      `${discovery.ownerId}|${discovery.controlSkillId}`,
+      discovery,
+    ])
+  );
+  const contracts = [];
+
+  for (const control of controlBindings) {
+    const publicActions =
+      publicActionsByControl.get(control.controlSkillId) ?? [];
+    const actorActions = publicActions.filter(
+      action => action.ownerKind === 'actor'
+    );
+    if (actorActions.length === 0) continue;
+    const ownerGroups = groupBy(actorActions, action => Number(action.ownerId));
+    for (const [rawOwnerId, ownerActions] of ownerGroups) {
+      const ownerId = Number(rawOwnerId);
+      if (!Number.isInteger(ownerId)) continue;
+      const incomingEdges = switchBindings.filter(
+        edge =>
+          Number(edge.ownerId) === ownerId &&
+          Number(edge.targetControlSkillId) === Number(control.controlSkillId)
+      );
+      const outgoingEdges = switchBindings.filter(
+        edge =>
+          Number(edge.ownerId) === ownerId &&
+          Number(edge.sourceControlSkillId) === Number(control.controlSkillId)
+      );
+      const eventBridgeRelations = (control.variants ?? []).flatMap(variant =>
+        (variant.eventBridges ?? [])
+          .filter(
+            bridge =>
+              publicControlIds.has(Number(bridge.targetSkillId)) ||
+              bridge.baseOnInput ||
+              bridge.inputToIndex
+          )
+          .map(bridge => ({
+            sourceSubSkillIndex: variant.subSkillIndex,
+            targetControlSkillId: positiveIntegerOrNull(bridge.targetSkillId),
+            targetSubSkillIndex:
+              bridge.baseOnInput || bridge.inputToIndex
+                ? nonNegativeIntegerOrNull(bridge.skillIndex)
+                : null,
+            startFrame: bridge.startFrame,
+            endFrame: bridge.endFrame,
+            baseOnInput: bridge.baseOnInput,
+            inputToIndex: bridge.inputToIndex,
+            bridgeType: bridge.bridgeType,
+            continuousAttackType: bridge.continuousAttackType,
+            sourceIdentity: bridge.sourceIdentity,
+          }))
+      );
+      if (
+        (control.variants ?? []).length <= 1 &&
+        incomingEdges.length === 0 &&
+        outgoingEdges.length === 0 &&
+        eventBridgeRelations.length === 0
+      ) {
+        continue;
+      }
+
+      const discovery = discoveriesByOwnerControl.get(
+        `${ownerId}|${control.controlSkillId}`
+      );
+      const publicVariants = dedupeBy(
+        ownerActions.flatMap(action => action.publicVariants ?? []),
+        variant => `${variant.index}|${variant.label}|${variant.sourceIdentity}`
+      ).sort((left, right) => Number(left.index) - Number(right.index));
+      const variants = (control.variants ?? []).map(variant => ({
+        subSkillIndex: variant.subSkillIndex,
+        playerSkillId: variant.playerSkillId,
+        durationFrames:
+          resolveDefaultFrameCount(variant.frameCounts)?.frameCount ?? null,
+        sourceIdentity: variant.sourceIdentity,
+      }));
+      const inputTrigger = createControlInputTrigger(control.logic);
+      const inputSelector = createDerivedInputSelector({
+        ownerId,
+        controlSkillId: control.controlSkillId,
+        actionKinds: dedupeBy(
+          ownerActions.map(action => action.actionKind),
+          value => value
+        ),
+        publicVariants,
+        variants,
+        inputTrigger,
+        eventBridgeRelations,
+      });
+      const resourceConditions = dedupeBy(
+        incomingEdges
+          .filter(edge => edge.condition?.kind === 'resource-at-least')
+          .map(edge => ({
+            targetSubSkillIndex: edge.targetSubSkillIndex,
+            ...edge.condition,
+            edgeIdentity: edge.edgeIdentity,
+            applied: edge.applied,
+          })),
+        condition =>
+          `${condition.edgeIdentity}|${condition.targetSubSkillIndex}`
+      );
+      const stateConditions = dedupeBy(
+        incomingEdges
+          .filter(edge => edge.condition?.kind === 'resource-state-active')
+          .map(edge => ({
+            targetSubSkillIndex: edge.targetSubSkillIndex,
+            ...edge.condition,
+            edgeIdentity: edge.edgeIdentity,
+            applied: edge.applied,
+          })),
+        condition =>
+          `${condition.edgeIdentity}|${condition.targetSubSkillIndex}`
+      );
+      const predecessorConditions = dedupeBy(
+        incomingEdges
+          .filter(edge => !edge.condition)
+          .map(edge => ({
+            kind: 'prior-action-switch-window',
+            sourceControlSkillId: edge.sourceControlSkillId,
+            sourceSubSkillIndex: edge.sourceSubSkillIndex,
+            targetSubSkillIndex: edge.targetSubSkillIndex,
+            activationFrame: edge.activationFrame,
+            durationMs: edge.durationMs,
+            edgeIdentity: edge.edgeIdentity,
+            sourceIdentity: edge.sourceIdentity,
+            applied: edge.applied,
+          })),
+        condition => condition.edgeIdentity
+      );
+      const automaticFollowUps = [];
+      const candidateSources = [];
+      if (inputSelector || eventBridgeRelations.length > 0) {
+        candidateSources.push('input-controlled');
+      }
+      if (resourceConditions.length > 0) {
+        candidateSources.push('resource-controlled');
+      }
+      if (stateConditions.length > 0 || predecessorConditions.length > 0) {
+        candidateSources.push('state-controlled');
+      }
+      if (automaticFollowUps.length > 0) {
+        candidateSources.push('automatic-follow-up');
+      }
+      const controlSources = dedupeBy(candidateSources, value => value);
+      const controlSource =
+        controlSources.length > 1
+          ? 'combined'
+          : (controlSources[0] ?? 'not-yet-modeled');
+      const resolutionStatus = resolveDerivedControlStatus({
+        discovery,
+        inputSelector,
+        inputRelations: eventBridgeRelations,
+        incomingEdges,
+        automaticFollowUps,
+        controlSources,
+      });
+      const defaultSelection = defaultSelections.find(
+        selection =>
+          Number(selection.ownerId) === ownerId &&
+          Number(selection.controlSkillId) === Number(control.controlSkillId)
+      );
+      contracts.push({
+        contractIdentity: `actor:${ownerId}|control:${control.controlSkillId}|derived-control`,
+        ownerKind: 'actor',
+        ownerId,
+        controlSkillId: Number(control.controlSkillId),
+        actionKinds: dedupeBy(
+          ownerActions.map(action => action.actionKind),
+          value => value
+        ),
+        publicActions: ownerActions,
+        controlSource,
+        candidateControlSources: controlSources,
+        decisionFrame: 0,
+        inputSelector,
+        inputRelations: eventBridgeRelations,
+        holdRange: inputSelector?.holdRange ?? null,
+        chargeTier: inputSelector?.options ?? [],
+        resourceCondition: resourceConditions,
+        resourceCost: resourceConditions.map(condition => ({
+          resourceIdentity: condition.resourceIdentity,
+          value: condition.value,
+          targetSubSkillIndex: condition.targetSubSkillIndex,
+          sourceIdentity: condition.sourceIdentity,
+        })),
+        stateCondition: [...stateConditions, ...predecessorConditions],
+        automaticFollowUps,
+        selectedSubSkillIndex: null,
+        defaultSelection: defaultSelection ?? null,
+        variants,
+        sourceIdentity: dedupeBy(
+          [
+            control.sourcePath,
+            control.logic?.sourceIdentity,
+            ...publicVariants.map(variant => variant.sourceIdentity),
+            ...incomingEdges.map(edge => edge.sourceIdentity),
+            ...outgoingEdges.map(edge => edge.sourceIdentity),
+            ...eventBridgeRelations.map(relation => relation.sourceIdentity),
+          ].filter(Boolean),
+          value => value
+        ),
+        resolutionStatus,
+        reasons: createDerivedControlReasons({
+          discovery,
+          inputSelector,
+          inputRelations: eventBridgeRelations,
+          controlSources,
+          automaticFollowUps,
+        }),
+      });
+    }
+  }
+
+  return contracts.sort(
+    (left, right) =>
+      left.ownerId - right.ownerId ||
+      left.controlSkillId - right.controlSkillId ||
+      left.contractIdentity.localeCompare(right.contractIdentity)
+  );
+}
+
+function createDerivedInputSelector({
+  ownerId,
+  controlSkillId,
+  actionKinds,
+  publicVariants,
+  variants,
+  inputTrigger,
+  eventBridgeRelations,
+}) {
+  const chargedHoldCandidate =
+    actionKinds.includes('charged-attack') &&
+    inputTrigger?.mode === 'hold' &&
+    publicVariants.length > 1;
+  const bridgeInputCandidate = eventBridgeRelations.some(
+    relation => relation.baseOnInput || relation.inputToIndex
+  );
+  if (!chargedHoldCandidate && !bridgeInputCandidate) return null;
+
+  const orderedMappingReady =
+    chargedHoldCandidate &&
+    publicVariants.length === variants.length &&
+    publicVariants.length > 1;
+  const options = orderedMappingReady
+    ? publicVariants.map((variant, index) => ({
+        selectorIdentity: `actor:${ownerId}|control:${controlSkillId}|public-variant:${variant.index}`,
+        label: variant.label,
+        publicVariantIndex: variant.index,
+        subSkillIndex: variants[index].subSkillIndex,
+        playerSkillId: variants[index].playerSkillId,
+        durationFrames: variants[index].durationFrames,
+        chargeTier: index + 1,
+        sourceIdentity: [
+          variant.sourceIdentity,
+          variants[index].sourceIdentity,
+          inputTrigger.sourceIdentity,
+        ].join('|'),
+        resolutionStatus: 'applied',
+      }))
+    : publicVariants.map((variant, index) => ({
+        selectorIdentity: `actor:${ownerId}|control:${controlSkillId}|public-variant:${variant.index}`,
+        label: variant.label,
+        publicVariantIndex: variant.index,
+        subSkillIndex: null,
+        playerSkillId: null,
+        durationFrames: null,
+        chargeTier: index + 1,
+        sourceIdentity: variant.sourceIdentity,
+        resolutionStatus: 'not-yet-modeled',
+      }));
+  return {
+    kind: chargedHoldCandidate ? 'charge-tier' : 'follow-up-input',
+    mode: inputTrigger?.mode ?? 'press',
+    holdRange:
+      inputTrigger?.mode === 'hold'
+        ? {
+            minimumHoldMs: inputTrigger.holdTriggerTimeMs,
+            maximumHoldMs: null,
+            sourceIdentity: inputTrigger.sourceIdentity,
+            resolutionStatus: 'partially-resolved',
+          }
+        : null,
+    options,
+    eventBridgeRelations,
+    sourceIdentity: dedupeBy(
+      [
+        inputTrigger?.sourceIdentity,
+        ...eventBridgeRelations.map(relation => relation.sourceIdentity),
+      ].filter(Boolean),
+      value => value
+    ),
+    resolutionStatus: orderedMappingReady ? 'applied' : 'not-yet-modeled',
+  };
+}
+
+function resolveDerivedControlStatus({
+  discovery,
+  inputSelector,
+  inputRelations,
+  incomingEdges,
+  automaticFollowUps,
+  controlSources,
+}) {
+  const statuses = [];
+  if (inputSelector) statuses.push(inputSelector.resolutionStatus);
+  if (!inputSelector && inputRelations.length > 0) {
+    statuses.push('partially-resolved');
+  }
+  if (incomingEdges.length > 0) {
+    statuses.push(
+      incomingEdges.every(edge => edge.applied)
+        ? 'applied'
+        : incomingEdges.some(edge => edge.applied)
+          ? 'partially-resolved'
+          : normalizeDerivedControlResolutionStatus(discovery?.status)
+    );
+  }
+  if (automaticFollowUps.length > 0) statuses.push('not-yet-modeled');
+  if (controlSources.length === 0) {
+    return normalizeDerivedControlResolutionStatus(discovery?.status);
+  }
+  if (statuses.every(status => status === 'applied')) return 'applied';
+  if (
+    statuses.some(
+      status => status === 'applied' || status === 'partially-resolved'
+    )
+  ) {
+    return 'partially-resolved';
+  }
+  if (statuses.includes('runtime-dependent')) return 'runtime-dependent';
+  if (statuses.includes('static-evidence-gap')) return 'static-evidence-gap';
+  return 'not-yet-modeled';
+}
+
+function normalizeDerivedControlResolutionStatus(status) {
+  return status === 'variant-condition-not-yet-modeled' || !status
+    ? 'not-yet-modeled'
+    : status;
+}
+
+function createDerivedControlReasons({
+  discovery,
+  inputSelector,
+  inputRelations,
+  controlSources,
+  automaticFollowUps,
+}) {
+  return dedupeBy(
+    [
+      ...(discovery?.reasons ?? []),
+      ...(controlSources.length === 0
+        ? ['derived-control-source-not-yet-modeled']
+        : []),
+      ...(inputSelector?.resolutionStatus === 'not-yet-modeled'
+        ? ['input-selector-to-subskill-relation-not-yet-modeled']
+        : []),
+      ...(!inputSelector && inputRelations.length > 0
+        ? ['event-bridge-input-semantics-partially-modeled']
+        : []),
+      ...(automaticFollowUps.length > 0
+        ? ['automatic-follow-up-runtime-not-yet-modeled']
+        : []),
+    ],
+    value => value
+  );
 }
 
 function createActionVariantConditionDiscoveries({
@@ -1367,6 +1784,7 @@ function createActionVariantConditionDiscoveries({
       const identity = `actor:${ownerId}|control:${control.controlSkillId}|variant-condition-discovery`;
       discoveries.push({
         identity,
+        ownerKind: ownerActions[0]?.ownerKind ?? 'unknown',
         ownerId,
         controlSkillId: Number(control.controlSkillId),
         actionKinds: dedupeBy(
@@ -1462,10 +1880,19 @@ function createActionVariantConditionDiscoveries({
               targetControlSkillIds: [
                 ...new Set(
                   (variant.eventBridges ?? [])
-                    .map(bridge => integerOrNull(bridge.targetControlSkillId))
-                    .filter(Number.isInteger)
+                    .map(bridge => positiveIntegerOrNull(bridge.targetSkillId))
+                    .filter(value => value != null)
                 ),
               ],
+              inputControlledBridgeCount: (variant.eventBridges ?? []).filter(
+                bridge => bridge.baseOnInput || bridge.inputToIndex
+              ).length,
+              automaticBridgeCount: (variant.eventBridges ?? []).filter(
+                bridge =>
+                  positiveIntegerOrNull(bridge.targetSkillId) != null &&
+                  !bridge.baseOnInput &&
+                  !bridge.inputToIndex
+              ).length,
               sourceIdentity: variant.sourceIdentity,
             })),
           },
@@ -8564,6 +8991,161 @@ function createActionVariantResourceCoverageMarkdown(report) {
       : ['- None.']),
     '',
     'Complete unresolved identities and source evidence are retained in `verified-action-variant-resource-coverage.json`.'
+  );
+  return `${lines.join('\n')}\n`;
+}
+
+function createDerivedControlCoverageReport(packageValue) {
+  const contracts =
+    packageValue.actionVariantGraph?.derivedControlContracts ?? [];
+  const contractIdentities = new Set(
+    contracts.map(contract => contract.contractIdentity)
+  );
+  const multiVariantCandidates = (
+    packageValue.actionVariantGraph?.conditionDiscoveries ?? []
+  ).filter(discovery => discovery.ownerKind === 'actor');
+  const omittedMultiVariantCandidates = multiVariantCandidates.filter(
+    discovery =>
+      !contractIdentities.has(
+        `actor:${discovery.ownerId}|control:${discovery.controlSkillId}|derived-control`
+      )
+  );
+  const publicActionIdentities = new Set(
+    contracts.flatMap(contract =>
+      (contract.publicActions ?? []).map(action =>
+        [
+          action.ownerId,
+          action.sourceSkillId,
+          action.actionKind,
+          action.actionVariantIndex,
+          action.attackSequenceIndex ?? '',
+        ].join('|')
+      )
+    )
+  );
+  const byOwnerActionKind = [
+    ...groupBy(contracts, contract => {
+      const actionKinds = contract.actionKinds?.length
+        ? contract.actionKinds
+        : ['unclassified'];
+      return `${contract.ownerId}|${actionKinds.join('+')}`;
+    }).entries(),
+  ]
+    .map(([key, rows]) => {
+      const [ownerId, actionKinds] = key.split('|');
+      return {
+        ownerId: Number(ownerId),
+        actionKinds: actionKinds.split('+'),
+        controlCount: rows.length,
+        controlSourceCounts: countValues(rows.map(row => row.controlSource)),
+        resolutionStatusCounts: countValues(
+          rows.map(row => row.resolutionStatus)
+        ),
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.ownerId - right.ownerId ||
+        left.actionKinds.join('+').localeCompare(right.actionKinds.join('+'))
+    );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-derived-control-coverage',
+    status: 'verified-derived-control-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    sourceDenominator: {
+      kind: 'current-client-public-actor-derived-control-candidates',
+      actorOwnerCount: new Set(contracts.map(contract => contract.ownerId))
+        .size,
+      publicActionCount: publicActionIdentities.size,
+      controlCount: contracts.length,
+      multiVariantControlCount: multiVariantCandidates.length,
+      controlPlayerVariantCount: contracts.reduce(
+        (sum, contract) => sum + (contract.variants?.length ?? 0),
+        0
+      ),
+    },
+    summary: {
+      controlSourceCounts: countValues(
+        contracts.map(contract => contract.controlSource)
+      ),
+      candidateControlSourceCounts: countValues(
+        contracts.flatMap(contract => contract.candidateControlSources ?? [])
+      ),
+      resolutionStatusCounts: countValues(
+        contracts.map(contract => contract.resolutionStatus)
+      ),
+      inputSelectorCount: contracts.filter(contract => contract.inputSelector)
+        .length,
+      appliedInputSelectorCount: contracts.filter(
+        contract => contract.inputSelector?.resolutionStatus === 'applied'
+      ).length,
+      resourceControlledCount: contracts.filter(contract =>
+        contract.candidateControlSources?.includes('resource-controlled')
+      ).length,
+      stateControlledCount: contracts.filter(contract =>
+        contract.candidateControlSources?.includes('state-controlled')
+      ).length,
+      automaticFollowUpCount: contracts.filter(contract =>
+        contract.candidateControlSources?.includes('automatic-follow-up')
+      ).length,
+      silentOmissionCount: omittedMultiVariantCandidates.length,
+    },
+    byOwnerActionKind,
+    controls: contracts,
+    omittedMultiVariantCandidates,
+    unresolved: contracts.filter(
+      contract => contract.resolutionStatus !== 'applied'
+    ),
+  };
+}
+
+function createDerivedControlCoverageMarkdown(report) {
+  const lines = [
+    '# M9-R2 全角色派生控制覆盖',
+    '',
+    `- 包：\`${report.packageId}\``,
+    `- 固定分母：${report.sourceDenominator.actorOwnerCount} 名角色 / ${report.sourceDenominator.publicActionCount} 个公开动作引用 / ${report.sourceDenominator.controlCount} 个派生 control / ${report.sourceDenominator.controlPlayerVariantCount} 个 player/resourceMap 变体`,
+    `- 控制源：${Object.entries(report.summary.controlSourceCounts)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('，')}`,
+    `- 解析状态：${Object.entries(report.summary.resolutionStatusCounts)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('，')}`,
+    `- 输入选择器：${report.summary.appliedInputSelectorCount}/${report.summary.inputSelectorCount} 已建立明确 public variant → subskill 关系`,
+    `- 静默遗漏：${report.summary.silentOmissionCount}`,
+    '',
+    '## Owner / 动作类型',
+    '',
+    '| Owner | 动作类型 | control | 控制源 | 解析状态 |',
+    '| ---: | --- | ---: | --- | --- |',
+    ...report.byOwnerActionKind.map(
+      row =>
+        `| ${row.ownerId} | ${row.actionKinds.join(' / ')} | ${row.controlCount} | ${Object.entries(
+          row.controlSourceCounts
+        )
+          .map(([key, value]) => `${key}=${value}`)
+          .join('<br>')} | ${Object.entries(row.resolutionStatusCounts)
+          .map(([key, value]) => `${key}=${value}`)
+          .join('<br>')} |`
+    ),
+    '',
+    '## 待收口合同',
+    '',
+  ];
+  if (report.unresolved.length === 0) {
+    lines.push('- 无。');
+  } else {
+    for (const contract of report.unresolved) {
+      lines.push(
+        `- \`${contract.contractIdentity}\` ${contract.actionKinds.join(' / ')}：${contract.resolutionStatus}；${contract.reasons.join(', ') || '来源已分类，运行时尚未接入'}`
+      );
+    }
+  }
+  lines.push(
+    '',
+    '> `not-yet-modeled` 表示实现覆盖尚未完成；`static-evidence-gap` 与 `runtime-dependent` 才表示证据或运行时输入边界。完整条件、变体时长和 source identity 见同名 JSON。'
   );
   return `${lines.join('\n')}\n`;
 }
