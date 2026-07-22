@@ -29,7 +29,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 12,
+      packageVersion: 13,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -45,6 +45,9 @@ describe('verified combat mechanics package', () => {
         specialResourceOperationCount: 43,
         actionVariantNodeCount: 670,
         actionVariantEdgeCount: 93,
+        switchTriggerProfileCount: 20,
+        appliedSwitchTriggerProfileCount: 17,
+        unresolvedSwitchTriggerProfileCount: 3,
         battleEffectNodeCount: 3673,
         unresolvedActionCount: 107,
         actorProfileCount: 20,

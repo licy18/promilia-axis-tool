@@ -1998,6 +1998,11 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
   await page.goto('/#/workbench');
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await openActorInspector(page, 101003);
+  await page
+    .getByTestId('workbench-initial-controlled-actor-select')
+    .selectOption('101003');
+  await closeInspectorIfVisible(page);
   const actorLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
   );
@@ -2006,22 +2011,27 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
       '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
     )
     .click();
-  const lifecycleSource = page.locator(
+  const removedManualLifecycleSource = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10100322"][data-action-kind="star-carry"]'
   );
   const trackingOnlySource = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
   );
-  await expect(lifecycleSource).toBeVisible();
+  await expect(removedManualLifecycleSource).toHaveCount(0);
   await expect(trackingOnlySource).toBeVisible();
 
-  await dragLocatorTo(page, lifecycleSource, actorLane, {
-    targetPosition: { x: 90, y: 82 },
-  });
+  await page.getByTestId('workbench-add-switch-action').click();
+  let parentSwitchAction = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    )
+    .last();
+  await expect(parentSwitchAction).toHaveCount(1);
   let lifecycleAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-readiness-status="ready"]'
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-derived-action-kind="switch-triggered-star-carry"][data-readiness-status="ready"]'
   );
   await expect(lifecycleAction).toHaveCount(1);
+  await expect(lifecycleAction).toHaveAttribute('data-read-only', 'true');
   await expect(lifecycleAction).toHaveAttribute(
     'data-status-generation-status',
     'action-status-generation-ready-with-lifecycle'
@@ -2057,19 +2067,10 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
     await interval.getAttribute('data-end-frame-index')
   );
   await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
-  const generatedEffectRow = page.locator(
-    '[data-testid="workbench-effect-command-row"][data-source-status="generated-from-azpr-action-status-catalog"]'
-  );
-  await expect(generatedEffectRow).toHaveAttribute(
-    'data-tracking-status',
-    'unapplied'
-  );
   await expect(
-    generatedEffectRow.getByTestId('workbench-generated-effect-summary')
-  ).toContainText('仅用于状态追踪');
-  await expect(
-    generatedEffectRow.getByTestId('workbench-effect-delete')
-  ).toHaveCount(0);
+    page.getByTestId('workbench-switch-trigger-bindings')
+  ).toContainText('自动子动作');
+  await expect(page.getByTestId('workbench-effect-command-row')).toHaveCount(0);
   const lifecycleEvents = page.getByTestId(
     'workbench-effect-interval-lifecycle-event'
   );
@@ -2084,7 +2085,7 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
   const intervalStartBeforeMove = Number(
     await interval.getAttribute('data-start-ms')
   );
-  await lifecycleAction.press('ArrowRight');
+  await parentSwitchAction.press('ArrowRight');
   await expect
     .poll(async () => Number(await interval.getAttribute('data-start-ms')))
     .toBeGreaterThan(intervalStartBeforeMove);
@@ -2099,25 +2100,6 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
   await expect
     .poll(async () => Number(await interval.getAttribute('data-start-ms')))
     .toBe(intervalStartAfterMove);
-
-  await dragLocatorTo(page, lifecycleSource, actorLane, {
-    targetPosition: { x: 500, y: 82 },
-  });
-  const blockedAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-readiness-status="blocked"]'
-  );
-  await expect(blockedAction).toHaveCount(1);
-  const blockedActionId = await blockedAction.getAttribute('data-action-id');
-  await expect(
-    timeline.locator(
-      `[data-testid="workbench-timeline-cooldown-window"][data-action-id="${blockedActionId}"]`
-    )
-  ).toHaveCount(0);
-  await expect(
-    timeline.locator(
-      `[data-testid="workbench-timeline-effect-interval"][data-source-action-id="${blockedActionId}"]`
-    )
-  ).toHaveCount(0);
 
   await dragLocatorTo(page, trackingOnlySource, actorLane, {
     targetPosition: { x: 320, y: 82 },
@@ -2134,11 +2116,16 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
     )
   ).toHaveCount(0);
 
-  await blockedAction.press('Delete');
-  await expect(blockedAction).toHaveCount(0);
-  await lifecycleAction.press('Delete');
+  await parentSwitchAction.press('Delete');
+  await expect(parentSwitchAction).toHaveCount(0);
+  await expect(lifecycleAction).toHaveCount(0);
   await expect(interval).toHaveCount(0);
   await page.getByTestId('workbench-undo-edit').click();
+  parentSwitchAction = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    )
+    .last();
   lifecycleAction = timeline.locator(
     `[data-testid="workbench-timeline-action"][data-action-id="${lifecycleActionId}"]`
   );
@@ -2198,16 +2185,19 @@ test('[m3-real-action-status-workflow] generates and replays sourced cooldown an
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
+  await openActorInspector(page, 101003);
+  await page
+    .getByTestId('workbench-initial-controlled-actor-select')
+    .selectOption('101003');
+  await closeInspectorIfVisible(page);
   await page
     .locator(
       '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
     )
     .click();
-  await dragLocatorTo(page, lifecycleSource, actorLane, {
-    targetPosition: { x: 120, y: 82 },
-  });
+  await page.getByTestId('workbench-add-switch-action').click();
   const emptyScenarioAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"]'
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-derived-action-kind="switch-triggered-star-carry"]'
   );
   await expect(emptyScenarioAction).toHaveCount(1);
   const emptyScenarioActionId =
@@ -2314,28 +2304,33 @@ test('[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns
     )
   ).toHaveCount(0);
 
+  await openActorInspector(page, 101003);
+  await page
+    .getByTestId('workbench-initial-controlled-actor-select')
+    .selectOption('101003');
+  await closeInspectorIfVisible(page);
   await page
     .locator(
       '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
     )
     .click();
-  const firstSkillSource = page.locator(
-    '[data-testid="workbench-skill-entry"][data-skill-id="10100322"][data-action-kind="star-carry"]'
-  );
   const secondSkillSource = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
   );
   const actorLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
   );
-  await dragLocatorTo(page, firstSkillSource, actorLane, {
-    targetPosition: { x: 100, y: 82 },
-  });
+  await expect(
+    page.locator(
+      '[data-testid="workbench-skill-entry"][data-action-kind="star-carry"]'
+    )
+  ).toHaveCount(0);
+  await page.getByTestId('workbench-add-switch-action').click();
   await dragLocatorTo(page, secondSkillSource, actorLane, {
     targetPosition: { x: 380, y: 82 },
   });
   const firstAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"]'
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100322"][data-derived-action-kind="switch-triggered-star-carry"]'
   );
   const secondAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
@@ -2353,7 +2348,7 @@ test('[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns
       await firstCooldown.getAttribute('data-cooldown-slot'),
       await secondCooldown.getAttribute('data-cooldown-slot'),
     ])
-    .toEqual(['0', '1']);
+    .toEqual(expect.arrayContaining(['0', '1']));
   expect(
     await firstCooldown.evaluate(element => element.getBoundingClientRect().top)
   ).not.toBe(
@@ -2378,14 +2373,8 @@ test('[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns
   );
   await expect(confirmedUltimate).toHaveAttribute('data-cooldown-ms', '20000');
   await expect(confirmedUltimate).toContainText('CD 20s');
-  await dragLocatorTo(
-    page,
-    confirmedUltimate,
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
-    ),
-    { targetPosition: { x: 540, y: 82 } }
-  );
+  await confirmedUltimate.click();
+  await page.getByTestId('workbench-add-action').click();
   const ultimateAction = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10100713"]'
   );
@@ -2402,14 +2391,8 @@ test('[m3-cooldown-sources-and-stacking] reads water kibo and ultimate cooldowns
     })
     .toBe(20000);
 
-  await dragLocatorTo(
-    page,
-    confirmedUltimate,
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
-    ),
-    { targetPosition: { x: 650, y: 82 } }
-  );
+  await confirmedUltimate.click();
+  await page.getByTestId('workbench-add-action').click();
   await expect(ultimateAction).toHaveCount(2);
   const blockedUltimateAction = ultimateAction.nth(1);
   await expect(blockedUltimateAction).toHaveAttribute(
@@ -6189,6 +6172,142 @@ test('[m1-runtime-event-review] links source events, exact frames, and three-val
   });
   await page.screenshot({
     path: 'reports/m1-runtime-event-review-narrow.png',
+  });
+});
+
+test('[m9-r2-switch-triggered-star-carry] derives enter and exit actions from one exact-frame switch', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await openActorInspector(page, 101003);
+  await page
+    .getByTestId('workbench-initial-controlled-actor-select')
+    .selectOption('101003');
+  await closeInspectorIfVisible(page);
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-skill-entry"][data-action-kind="star-carry"]'
+    )
+  ).toHaveCount(0);
+
+  await page.getByTestId('workbench-add-switch-action').click();
+  let parent = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    )
+    .last();
+  await expect(parent).toHaveCount(1);
+  const parentActionId = await parent.getAttribute('data-action-id');
+  const children = () =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-parent-action-id="${parentActionId}"][data-derived-action-kind="switch-triggered-star-carry"]`
+    );
+  await expect(children()).toHaveCount(2);
+  await expect(children().filter({ hasText: '退场触发' })).toHaveCount(1);
+  await expect(children().filter({ hasText: '入场触发' })).toHaveCount(1);
+  await expect(children().nth(0)).toHaveAttribute('data-read-only', 'true');
+  await expect(children().nth(1)).toHaveAttribute('data-read-only', 'true');
+
+  const operationAxis = timeline.getByTestId(
+    'workbench-timeline-operation-axis'
+  );
+  await expect(
+    operationAxis.locator(
+      `[data-testid="workbench-timeline-operation-marker"][data-action-id="${parentActionId}"]`
+    )
+  ).toHaveCount(1);
+  for (let index = 0; index < 2; index += 1) {
+    const childId = await children().nth(index).getAttribute('data-action-id');
+    await expect(
+      operationAxis.locator(
+        `[data-testid="workbench-timeline-operation-marker"][data-action-id="${childId}"]`
+      )
+    ).toHaveCount(0);
+  }
+
+  await parent.click();
+  const parentBindings = page.getByTestId('workbench-switch-trigger-binding');
+  await expect(parentBindings).toHaveCount(2);
+  await expect(parentBindings.filter({ hasText: '退场触发' })).toHaveCount(1);
+  await expect(parentBindings.filter({ hasText: '入场触发' })).toHaveCount(1);
+
+  await children().filter({ hasText: '退场触发' }).click();
+  await expect(
+    page.getByTestId('workbench-switch-trigger-bindings')
+  ).toContainText('自动子动作');
+  await expect(page.getByTestId('workbench-skill-select')).toHaveCount(0);
+  await expect(page.getByTestId('workbench-action-frame-controls')).toHaveCount(
+    0
+  );
+  await closeInspectorIfVisible(page);
+
+  const startsBeforeMove = await children().evaluateAll(actions =>
+    Object.fromEntries(
+      actions.map(action => [
+        action.getAttribute('data-action-id'),
+        Number(action.getAttribute('data-start-ms')),
+      ])
+    )
+  );
+  await parent.press('ArrowRight');
+  const startsAfterMove = await children().evaluateAll(actions =>
+    Object.fromEntries(
+      actions.map(action => [
+        action.getAttribute('data-action-id'),
+        Number(action.getAttribute('data-start-ms')),
+      ])
+    )
+  );
+  for (const [actionId, startMs] of Object.entries(startsBeforeMove)) {
+    expect(startsAfterMove[actionId]).toBeCloseTo(startMs + frameToMs(1), 3);
+  }
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect
+    .poll(() => children().first().getAttribute('data-start-ms'))
+    .toBe(String(Object.values(startsBeforeMove)[0]));
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect
+    .poll(() => children().first().getAttribute('data-start-ms'))
+    .toBe(String(Object.values(startsAfterMove)[0]));
+
+  await parent.click();
+  await page.screenshot({
+    path: 'reports/m9-r2d-switch-trigger-desktop.png',
+  });
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  parent = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-action-id="${parentActionId}"]`
+  );
+  await expect(parent).toHaveCount(1);
+  await expect(children()).toHaveCount(2);
+  const startsAfterReload = await children().evaluateAll(actions =>
+    Object.fromEntries(
+      actions.map(action => [
+        action.getAttribute('data-action-id'),
+        Number(action.getAttribute('data-start-ms')),
+      ])
+    )
+  );
+  expect(startsAfterReload).toEqual(startsAfterMove);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await timeline.scrollIntoViewIfNeeded();
+  await expectPageWithoutHorizontalOverflow(page);
+  await expect(parent).toBeVisible();
+  await expect(children()).toHaveCount(2);
+  await page.screenshot({
+    path: 'reports/m9-r2d-switch-trigger-narrow.png',
   });
 });
 

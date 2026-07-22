@@ -1,5 +1,10 @@
 import { Buffer } from 'node:buffer';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   createDefaultWorkbenchDraftState,
   createWorkbenchDraftSnapshot,
@@ -14,6 +19,7 @@ import {
   createWorkbenchActionDraft,
   createWorkbenchProject,
   getWorkbenchGameData,
+  normalizeWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
 import { getWorkbenchGameDataCompatibilityReport } from '../../domain/workbenchGameDataCatalog';
 import {
@@ -29,8 +35,12 @@ const ONE_PIXEL_PNG_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
 const EXPORTED_AT = '2026-07-14T12:00:00.000Z';
 const ACTION_ID = 'm3-real-action-status';
+const DERIVED_ACTION_ID = `${ACTION_ID}--on-exit--actor-101003--star-carry`;
 
 describe('generated action status project replay', () => {
+  beforeEach(() => installVerifiedCombatMechanicsPackage(mechanicsPackage));
+  afterEach(() => clearInstalledVerifiedCombatMechanicsPackage());
+
   it('replays one catalog-generated lifecycle identically through all five project carriers', async () => {
     const source = createStatusReplaySource();
     const duplicated = duplicateWorkbenchScenario(
@@ -80,7 +90,7 @@ describe('generated action status project replay', () => {
       },
       generatedCommands: [
         {
-          commandId: `${ACTION_ID}-generated-status-buff-101003141-57-0`,
+          commandId: `${DERIVED_ACTION_ID}-generated-status-buff-101003141-57-0`,
           effectId: 'buff-101003141',
           offsetMs: 950,
           durationMs: 8000,
@@ -133,18 +143,43 @@ describe('generated action status project replay', () => {
 
 function createStatusReplaySource() {
   const state = createDefaultWorkbenchDraftState();
-  state.actionDrafts = [
-    createWorkbenchActionDraft({
-      id: ACTION_ID,
-      skillId: 10100322,
-      actorCharacterId: 101003,
-      actionVariantIndex: 0,
-      startMs: 2000,
-      durationMs: 1200,
-    }),
+  const teamSlots = [
+    { slotId: 'team-slot-1', position: 0, characterId: 101003 },
+    { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+    { slotId: 'team-slot-3', position: 2, characterId: 109001 },
   ];
-  state.selectedActionId = ACTION_ID;
-  return createWorkbenchDraftSnapshot(state, EXPORTED_AT);
+  const selection = {
+    ...state.selection,
+    characterId: 101003,
+    secondaryCharacterId: 101007,
+    tertiaryCharacterId: 109001,
+  };
+  return createWorkbenchDraftSnapshot(
+    {
+      ...state,
+      selection,
+      teamSlots,
+      actorConfigs: normalizeWorkbenchActorConfigs([], selection, teamSlots),
+      actionDrafts: [
+        createWorkbenchActionDraft({
+          id: ACTION_ID,
+          type: 'switch',
+          actorCharacterId: 101003,
+          targetCharacterId: 101007,
+          startMs: 2000,
+          durationMs: 0,
+        }),
+      ],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-101003',
+          characterId: 101003,
+        },
+      },
+      selectedActionId: ACTION_ID,
+    },
+    EXPORTED_AT
+  );
 }
 
 function createStatusReplaySignature(draft, configurationLibrary) {
@@ -165,9 +200,9 @@ function createStatusReplaySignature(draft, configurationLibrary) {
   });
   const scenario = compileProject(project, getWorkbenchGameData());
   const result = simulateScenario(scenario);
-  const action = scenario.actions.find(item => item.id === ACTION_ID);
+  const action = scenario.actions.find(item => item.id === DERIVED_ACTION_ID);
   const execution = result.actionExecutionPlan.actions.find(
-    item => item.actionId === ACTION_ID
+    item => item.actionId === DERIVED_ACTION_ID
   );
 
   return {
@@ -186,7 +221,7 @@ function createStatusReplaySignature(draft, configurationLibrary) {
     },
     cooldownWindows:
       result.actionRuleDiagnostics.readinessTimeline.cooldownWindows
-        .filter(window => window.actionId === ACTION_ID)
+        .filter(window => window.actionId === DERIVED_ACTION_ID)
         .map(window => ({
           startMs: window.startMs,
           endMs: window.endMs,
@@ -194,7 +229,7 @@ function createStatusReplaySignature(draft, configurationLibrary) {
           trackingStatus: window.trackingStatus,
         })),
     lifecycleEvents: result.effectTimeline.events
-      .filter(event => event.actionId === ACTION_ID)
+      .filter(event => event.actionId === DERIVED_ACTION_ID)
       .map(event => ({
         type: event.type,
         timeMs: event.timeMs,
@@ -203,7 +238,7 @@ function createStatusReplaySignature(draft, configurationLibrary) {
         appliedToCalculators: event.appliedToCalculators,
       })),
     relationEdges: result.actionEffectRelationGraph.edges
-      .filter(edge => edge.commandActionId === ACTION_ID)
+      .filter(edge => edge.commandActionId === DERIVED_ACTION_ID)
       .map(edge => ({
         status: edge.status,
         targetTimeMs: edge.targetTimeMs,

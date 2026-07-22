@@ -9,12 +9,14 @@ const packageUrl = new URL(
 
 let installedPackage = null;
 let packagePromise = null;
+let actionMappingByIdentity = new Map();
 let controlBindingBySkillId = new Map();
 let effectBindingByIdentity = new Map();
 let semanticEffectByRawIdentity = new Map();
 let semanticFormulaByIdentity = new Map();
 let specialResourceProfileByOwnerId = new Map();
 let derivedControlContractByOwnerAndControl = new Map();
+let switchTriggerProfileByOwnerAndPhase = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
   if (installedPackage) return installedPackage;
@@ -45,6 +47,9 @@ export function installVerifiedCombatMechanicsPackage(value) {
     );
   }
   installedPackage = value;
+  actionMappingByIdentity = new Map(
+    value.actionMappings.map(mapping => [mapping.identity, mapping])
+  );
   const allControlBindings = [
     ...value.controlBindings,
     ...(value.actionVariantControlBindings ?? []),
@@ -91,6 +96,12 @@ export function installVerifiedCombatMechanicsPackage(value) {
       contract,
     ])
   );
+  switchTriggerProfileByOwnerAndPhase = new Map(
+    (value.switchTriggerCatalog?.profiles ?? []).map(profile => [
+      `${Number(profile.ownerId)}|${profile.triggerPhase}`,
+      profile,
+    ])
+  );
   return value;
 }
 
@@ -102,6 +113,10 @@ export function getVerifiedCombatActionMapping(action = {}) {
   if (!installedPackage) return null;
   const candidates = findActionMappings(action);
   return candidates.length === 1 ? candidates[0] : null;
+}
+
+export function getVerifiedCombatActionMappingByIdentity(identity) {
+  return actionMappingByIdentity.get(String(identity ?? '')) ?? null;
 }
 
 export function getVerifiedCombatActionInputMapping(action = {}) {
@@ -162,15 +177,38 @@ export function getVerifiedSpecialResourceCatalog() {
   return installedPackage?.specialResourceCatalog ?? null;
 }
 
+export function getVerifiedSwitchTriggerCatalog() {
+  return installedPackage?.switchTriggerCatalog ?? null;
+}
+
+export function getVerifiedSwitchTriggerProfile(ownerId, triggerPhase = null) {
+  const normalizedOwnerId = Number(ownerId);
+  if (!Number.isInteger(normalizedOwnerId)) return null;
+  if (triggerPhase) {
+    return (
+      switchTriggerProfileByOwnerAndPhase.get(
+        `${normalizedOwnerId}|${triggerPhase}`
+      ) ?? null
+    );
+  }
+  return (
+    installedPackage?.switchTriggerCatalog?.profiles?.find(
+      profile => Number(profile.ownerId) === normalizedOwnerId
+    ) ?? null
+  );
+}
+
 export function clearInstalledVerifiedCombatMechanicsPackage() {
   installedPackage = null;
   packagePromise = null;
+  actionMappingByIdentity = new Map();
   controlBindingBySkillId = new Map();
   effectBindingByIdentity = new Map();
   semanticEffectByRawIdentity = new Map();
   semanticFormulaByIdentity = new Map();
   specialResourceProfileByOwnerId = new Map();
   derivedControlContractByOwnerAndControl = new Map();
+  switchTriggerProfileByOwnerAndPhase = new Map();
 }
 
 export function resolveVerifiedCombatActionMechanics(
@@ -636,7 +674,7 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('action-variant-control-bindings-missing');
   }
   if (
-    value?.packageVersion < 12 ||
+    value?.packageVersion < 13 ||
     value?.battleEffectCatalog?.status !==
       'verified-battle-effect-node-catalog-ready' ||
     !Array.isArray(value?.battleEffectCatalog?.nodes) ||
@@ -707,6 +745,30 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     !Array.isArray(value.actionVariantGraph.defaultSelections)
   ) {
     issues.push('action-variant-graph-invalid');
+  }
+  if (
+    value?.switchTriggerCatalog?.status !==
+      'verified-switch-trigger-catalog-ready' ||
+    !Array.isArray(value.switchTriggerCatalog.profiles) ||
+    value.switchTriggerCatalog.profiles.length !== 20 ||
+    value.switchTriggerCatalog.summary?.profileCount !== 20 ||
+    value.switchTriggerCatalog.summary?.appliedProfileCount !== 17 ||
+    value.switchTriggerCatalog.summary?.unresolvedProfileCount !== 3 ||
+    value.switchTriggerCatalog.summary?.onEnterProfileCount !== 11 ||
+    value.switchTriggerCatalog.summary?.onExitProfileCount !== 9 ||
+    value.switchTriggerCatalog.profiles.some(
+      profile =>
+        !['on-enter', 'on-exit'].includes(profile.triggerPhase) ||
+        ![201, 203].includes(Number(profile.skillSlot)) ||
+        !profile.sourceIdentity ||
+        !Array.isArray(profile.sourceIdentities) ||
+        profile.sourceIdentities.length < 3 ||
+        (profile.applied === true && !profile.starCarryActionIdentity) ||
+        (profile.applied !== true &&
+          profile.resolutionStatus !== 'static-evidence-gap')
+    )
+  ) {
+    issues.push('switch-trigger-catalog-invalid');
   }
   if (
     value?.tuningMechanicsCatalog?.status !==

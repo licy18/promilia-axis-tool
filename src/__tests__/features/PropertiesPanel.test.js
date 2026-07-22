@@ -326,6 +326,100 @@ describe('PropertiesPanel', () => {
     });
     expect(patch.durationMs).toBeCloseTo((416 * 1000) / 60, 5);
   });
+
+  it('shows switch trigger bindings while keeping generated star-carry children read-only', () => {
+    const binding = {
+      contractName: 'AzPrSwitchTriggerBinding',
+      bindingId: 'switch-1|on-enter|actor-b',
+      switchEventId: 'switch-1',
+      triggerPhase: 'on-enter',
+      sourceOwnerId: 'actor-a',
+      targetOwnerId: 'actor-b',
+      starCarryOwnerId: 'actor-b',
+      starCarryOwnerName: '苃苃',
+      sourceSkillId: 10100721,
+      triggerFrame: 90,
+      conditions: [],
+      sourceIdentity: 'hero:101007|slot:203|skill:10100721',
+      resolutionStatus: 'applied',
+    };
+    const baseProps = {
+      selection: { characterId: 101003, enemyId: 208001 },
+      characters: [
+        { id: 101003, name: '寒悠悠' },
+        { id: 101007, name: '苃苃' },
+      ],
+      actors: [
+        { id: 'actor-a', characterId: 101003, name: '寒悠悠' },
+        { id: 'actor-b', characterId: 101007, name: '苃苃' },
+      ],
+      skills: [{ id: 10100721, name: '入场星携技' }],
+      enemies: [{ id: 208001, name: '训练敌人' }],
+      durationMs: 30_000,
+    };
+    const parent = mount(PropertiesPanel, {
+      props: {
+        ...baseProps,
+        selectedAction: {
+          id: 'switch-1',
+          type: 'switch',
+          name: '切人',
+          actorId: 'actor-a',
+          targetActorId: 'actor-b',
+          startMs: 1500,
+          durationMs: 0,
+          switchTriggerBindings: [binding],
+        },
+      },
+    });
+    const parentBinding = parent.get(
+      '[data-testid="workbench-switch-trigger-binding"]'
+    );
+    expect(parentBinding.attributes()).toMatchObject({
+      'data-trigger-phase': 'on-enter',
+      'data-resolution-status': 'applied',
+      'data-source-skill-id': '10100721',
+    });
+    expect(parentBinding.text()).toContain('入场触发');
+    expect(parentBinding.text()).toContain('寒悠悠 -> 苃苃 · 90F');
+
+    const child = mount(PropertiesPanel, {
+      props: {
+        ...baseProps,
+        selectedAction: {
+          id: 'switch-1-on-enter-actor-b',
+          type: 'skill',
+          name: '入场星携技',
+          actorId: 'actor-b',
+          skillId: 10100721,
+          startMs: 1500,
+          durationMs: 1200,
+          parentActionId: 'switch-1',
+          readOnly: true,
+          derivedAction: {
+            kind: 'switch-triggered-star-carry',
+            parentActionId: 'switch-1',
+            readOnly: true,
+          },
+          switchTriggerBinding: binding,
+          effectCommands: [],
+        },
+      },
+    });
+
+    expect(
+      child.get('[data-testid="workbench-switch-trigger-bindings"]').text()
+    ).toContain('自动子动作');
+    expect(child.find('[data-testid="workbench-skill-select"]').exists()).toBe(
+      false
+    );
+    expect(
+      child.find('[data-testid="workbench-action-frame-controls"]').exists()
+    ).toBe(false);
+    expect(child.find('[data-testid="workbench-note-input"]').exists()).toBe(
+      false
+    );
+  });
 });
 
 function createHit({ hp, toughness, attack }) {

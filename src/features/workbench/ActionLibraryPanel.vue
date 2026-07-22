@@ -413,6 +413,7 @@
             'ready-with-unresolved-conditions',
         }"
         :data-action-id="action.id"
+        :data-read-only="isActionReadOnly(action) ? 'true' : 'false'"
         :data-selected="selectedActionIdSet.has(action.id) ? 'true' : 'false'"
         :data-readiness-status="getActionReadiness(action).status"
         :data-readiness-executable="
@@ -424,10 +425,10 @@
         "
         tabindex="0"
         @click="selectActionFromEvent($event, action.id)"
-        @contextmenu.prevent="openActionContextMenu($event, action.id)"
+        @contextmenu.prevent="openEditableActionContextMenu($event, action)"
         @keydown.enter.prevent="selectActionFromEvent($event, action.id)"
-        @keydown.delete.prevent="deleteActionSelection(action.id)"
-        @keydown.backspace.prevent="deleteActionSelection(action.id)"
+        @keydown.delete.prevent="deleteEditableActionSelection(action)"
+        @keydown.backspace.prevent="deleteEditableActionSelection(action)"
       >
         <div class="action-main">
           <span class="action-name">{{ action.name }}</span>
@@ -440,7 +441,7 @@
             {{ formatActionReadiness(action) }}
           </span>
         </div>
-        <div class="action-tools">
+        <div v-if="!isActionReadOnly(action)" class="action-tools">
           <button
             v-if="getActionResultEditCommand(action).actionId === action.id"
             class="tool-button action-result-edit-button"
@@ -825,6 +826,11 @@ function openActionContextMenu(event, actionId) {
   });
 }
 
+function openEditableActionContextMenu(event, action) {
+  if (isActionReadOnly(action)) return;
+  openActionContextMenu(event, action.id);
+}
+
 function deleteActionSelection(actionId) {
   const actionIds = selectedActionIdSet.value.has(actionId)
     ? props.selectedActionIds
@@ -833,6 +839,15 @@ function deleteActionSelection(actionId) {
     emit('select-action', { actionId, mode: 'replace' });
   }
   emit('delete-selected-actions', { actionIds });
+}
+
+function deleteEditableActionSelection(action) {
+  if (isActionReadOnly(action)) return;
+  deleteActionSelection(action.id);
+}
+
+function isActionReadOnly(action) {
+  return Boolean(action?.readOnly || action?.derivedAction?.readOnly);
 }
 
 function focusBatchResult(batch) {

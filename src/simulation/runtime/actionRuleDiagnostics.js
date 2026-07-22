@@ -1,6 +1,8 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
+import { getVerifiedCombatActionMapping } from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
+import { isSwitchTriggeredDerivedAction } from '../generation/switchTriggeredActionGeneration';
 
 export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
   'AzPrActionRuleDiagnostics';
@@ -22,6 +24,7 @@ export const ACTION_RULE_CODES = Object.freeze({
   JOINT_ATTACK_KIBO_REQUIRED: 'joint-attack-kibo-required',
   JOINT_ATTACK_PAIR_MISSING: 'joint-attack-pair-missing',
   JOINT_ATTACK_FRAME_MISMATCH: 'joint-attack-frame-mismatch',
+  STAR_CARRY_SWITCH_TRIGGER_REQUIRED: 'star-carry-switch-trigger-required',
 });
 
 export const ACTION_RULE_STATUSES = Object.freeze({
@@ -41,6 +44,7 @@ export function createActionRuleDiagnostics({
   const diagnostics = [
     ...createLaneOverlapDiagnostics(actions),
     ...createSwitchFrameConflictDiagnostics(actions, scenario.time?.fps),
+    ...createStandaloneStarCarryDiagnostics(actions),
     ...cooldownEvaluation.diagnostics,
     ...createSkillSpPreconditionDiagnostics(
       actions,
@@ -85,7 +89,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 13,
+      ruleCount: 14,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -123,6 +127,10 @@ export function createActionRuleDiagnostics({
           ACTION_RULE_CODES.JOINT_ATTACK_FRAME_MISMATCH,
         ].includes(item.code)
       ).length,
+      standaloneStarCarryViolationCount: diagnostics.filter(
+        item =>
+          item.code === ACTION_RULE_CODES.STAR_CARRY_SWITCH_TRIGGER_REQUIRED
+      ).length,
       readinessStatus: readinessTimeline.status,
       readinessActionCount: readinessTimeline.summary.actionCount,
       cooldownWindowCount: readinessTimeline.summary.cooldownWindowCount,
@@ -132,6 +140,44 @@ export function createActionRuleDiagnostics({
     },
     appliedToSimulationResults: false,
   };
+}
+
+function createStandaloneStarCarryDiagnostics(actions) {
+  return actions
+    .filter(
+      action =>
+        action.type === ACTION_TYPES.SKILL &&
+        action.actionKind === 'star-carry' &&
+        !isSwitchTriggeredDerivedAction(action)
+    )
+    .map(action => ({
+      schemaVersion: 1,
+      id: createDiagnosticId(
+        ACTION_RULE_CODES.STAR_CARRY_SWITCH_TRIGGER_REQUIRED,
+        action.id
+      ),
+      code: ACTION_RULE_CODES.STAR_CARRY_SWITCH_TRIGGER_REQUIRED,
+      ruleKey: 'verified-switch-triggered-star-carry-only',
+      status: ACTION_RULE_STATUSES.VIOLATED,
+      severity: 'error',
+      actionId: action.id,
+      actionIds: [action.id],
+      actionName: action.name ?? action.id,
+      actorId: action.actorId ?? null,
+      actorName: action.actor?.name ?? null,
+      timeMs: Number(action.startMs) || 0,
+      message: `${action.name ?? '星携技'} 只能由已验证的入场或退场切人事件触发`,
+      source: {
+        sourceKind: 'azpr-verified-switch-trigger-catalog',
+        sourceStatus: 'standalone-star-carry-release-not-supported',
+        fieldPaths: [
+          'action.actionKind',
+          'action.switchTriggerBinding',
+          'action.derivedAction.kind',
+        ],
+      },
+      appliedToSimulationResults: true,
+    }));
 }
 
 function createJointAttackDiagnostics(actions, actors, fps = 60) {
@@ -683,7 +729,9 @@ function createSkillCooldownEvaluation(
       cooldownCount: evaluation.effective.chargeCount,
       evaluation,
     };
-    const key = `${ownerKind}|${ownerId}|${action.skillId}`;
+    const cooldownIdentity =
+      cooldown.source?.subSkillId ?? action.skillId;
+    const key = `${ownerKind}|${ownerId}|${cooldownIdentity}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
     const chargesBefore = cloneCooldownCharges(state.charges);
@@ -934,6 +982,43 @@ function createSkillSpPreconditionDiagnostics(actions, actors, scenario) {
 }
 
 function createSkillCooldownRequirement(action) {
+  const verifiedActionMapping = getVerifiedCombatActionMapping(action);
+  const verifiedControlSkillId = Number(verifiedActionMapping?.controlSkillId);
+  const verifiedCooldown = verifiedActionMapping?.actionTiming?.cooldown;
+  const verifiedCooldownMs = Number(verifiedCooldown?.cooldownMs);
+  if (
+    Number.isInteger(verifiedControlSkillId) &&
+    verifiedControlSkillId !== Number(action.skillId) &&
+    verifiedCooldown?.status === 'applied' &&
+    Number.isFinite(verifiedCooldownMs)
+  ) {
+    if (verifiedCooldownMs <= 0) {
+      return null;
+    }
+    const cooldownCount = Math.max(
+      1,
+      Math.trunc(Number(verifiedCooldown.chargeCount) || 1)
+    );
+    return {
+      cooldownMs: verifiedCooldownMs,
+      cooldownCount,
+      source: {
+        sourceKind: 'azpr-verified-action-control-cooldown',
+        sourceStatus: 'confirmed-control-variant-cooldown',
+        fieldPath: verifiedCooldown.sourceIdentity ?? null,
+        cooldownCount,
+        subSkillId: verifiedControlSkillId,
+      },
+      sourceIdentity: {
+        sourceKind: 'azpr-verified-action-control-cooldown',
+        sourceStatus: 'confirmed-control-variant-cooldown',
+        subSkillId: verifiedControlSkillId,
+        durationFieldPath: verifiedCooldown.sourceIdentity ?? null,
+        actionBindingIdentity: verifiedActionMapping.identity,
+      },
+      confidence: 'confirmed-structured-data',
+    };
+  }
   const generatedCooldown = action.statusGeneration?.cooldown;
   const generatedDurationMs = Number(generatedCooldown?.durationMs);
   if (

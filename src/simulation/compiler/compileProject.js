@@ -5,6 +5,7 @@ import {
   validateProject,
 } from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
+import { createSwitchTriggeredActionGeneration } from '../generation/switchTriggeredActionGeneration';
 import { compileVerifiedStaticActorProperties } from '../mechanics/verifiedCombatStaticProperties';
 import { createThreeValueHpOperandSourceBinding } from '../mechanics/threeValueHpOperandSourceBinding';
 import { normalizeCombatScenario } from '../../domain/combatScenario';
@@ -159,7 +160,8 @@ export function compileProject(
     ])
   );
 
-  const actions = project.actions
+  const team = compileTeam(project.team, actorsById);
+  const baseActions = project.actions
     .map(action =>
       compileAction(
         action,
@@ -170,6 +172,32 @@ export function compileProject(
       )
     )
     .sort((a, b) => a.startMs - b.startMs || a.id.localeCompare(b.id));
+  const switchTriggerGeneration = createSwitchTriggeredActionGeneration({
+    actions: baseActions,
+    actors,
+    team,
+    initialRuntimeState: project.initialRuntimeState,
+    time: project.time,
+    skillsById,
+    targetId: enemy.id,
+  });
+  const baseActionsWithSwitchBindings = baseActions.map(action => ({
+    ...action,
+    ...(action.type === ACTION_TYPES.SWITCH
+      ? {
+          switchTriggerBindings: [
+            ...(switchTriggerGeneration.bindingBySwitchEventId[action.id] ??
+              []),
+          ],
+        }
+      : {}),
+  }));
+  const derivedActions = switchTriggerGeneration.actions.map(action =>
+    compileAction(action, actorsById, enemy, skillsById)
+  );
+  const actions = [...baseActionsWithSwitchBindings, ...derivedActions].sort(
+    (a, b) => a.startMs - b.startMs || a.id.localeCompare(b.id)
+  );
 
   return {
     schemaVersion: 1,
@@ -183,7 +211,7 @@ export function compileProject(
     time: {
       ...project.time,
     },
-    team: compileTeam(project.team, actorsById),
+    team,
     actors,
     enemy,
     mechanismConfiguration,
@@ -194,6 +222,7 @@ export function compileProject(
     gameDataCatalog,
     gameDataCompatibility,
     actions,
+    switchTriggerGeneration,
     actionRelations: (project.actionRelations ?? []).map(relation => ({
       ...relation,
     })),

@@ -87,6 +87,16 @@ const DERIVED_CONTROL_COVERAGE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-derived-control-coverage.md'
 );
+const SWITCH_TRIGGER_COVERAGE_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-switch-trigger-coverage.json'
+);
+const SWITCH_TRIGGER_COVERAGE_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'verified-switch-trigger-coverage.md'
+);
 const EFFECT_COVERAGE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -216,6 +226,20 @@ const M9_PRODUCT_DENOMINATOR = Object.freeze({
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
+const SWITCH_SKILL_SLOT_CONTRACTS = Object.freeze([
+  Object.freeze({
+    slot: 201,
+    triggerPhase: 'on-exit',
+    enumName: 'ExitSkill',
+    label: '退场',
+  }),
+  Object.freeze({
+    slot: 203,
+    triggerPhase: 'on-enter',
+    enumName: 'EnterSkill',
+    label: '入场',
+  }),
+]);
 const options = parseArgs(process.argv.slice(2));
 
 await main();
@@ -380,6 +404,7 @@ async function main() {
     tuningMechanicsCatalog,
     specialResourceCatalog,
     actionVariantGraph,
+    characterCatalog,
   });
   const semanticEffectCatalog = createSemanticEffectCatalog({
     controlBindings: publicControlBindings,
@@ -430,6 +455,7 @@ async function main() {
     createActionVariantResourceCoverageReport(packageValue);
   const derivedControlCoverage =
     createDerivedControlCoverageReport(packageValue);
+  const switchTriggerCoverage = createSwitchTriggerCoverageReport(packageValue);
   const publicRuntimeCoverage = createPublicRuntimeCoverageReport({
     packageValue,
     actionCoverage: coverage,
@@ -479,6 +505,14 @@ async function main() {
     [
       DERIVED_CONTROL_COVERAGE_MARKDOWN_OUTPUT,
       createDerivedControlCoverageMarkdown(derivedControlCoverage),
+    ],
+    [
+      SWITCH_TRIGGER_COVERAGE_JSON_OUTPUT,
+      `${JSON.stringify(switchTriggerCoverage, null, 2)}\n`,
+    ],
+    [
+      SWITCH_TRIGGER_COVERAGE_MARKDOWN_OUTPUT,
+      createSwitchTriggerCoverageMarkdown(switchTriggerCoverage),
     ],
     [
       PUBLIC_RUNTIME_COVERAGE_JSON_OUTPUT,
@@ -5271,6 +5305,127 @@ function parseIntegerList(value) {
     .filter(Number.isInteger);
 }
 
+function createSwitchTriggerCatalog({ characterCatalog, actionMappings }) {
+  const il2cppSource = readText(IL2CPP_DUMP_PATH);
+  for (const contract of SWITCH_SKILL_SLOT_CONTRACTS) {
+    const enumPattern = new RegExp(
+      `ESkillSlotType\\s+${contract.enumName}\\s*=\\s*${contract.slot}`
+    );
+    if (!enumPattern.test(il2cppSource)) {
+      throw new Error(
+        `verified switch skill slot enum missing: ${contract.enumName}=${contract.slot}`
+      );
+    }
+  }
+
+  const starCarryMappings = actionMappings.filter(
+    mapping =>
+      mapping.ownerKind === 'actor' && mapping.actionKind === 'star-carry'
+  );
+  const profiles = (characterCatalog?.items ?? [])
+    .map(character => {
+      const ownerId = Number(character.id);
+      const slots = (character.skillSlots ?? [])
+        .map(slot => ({ ...slot, slot: Number(slot.slot) }))
+        .filter(slot =>
+          SWITCH_SKILL_SLOT_CONTRACTS.some(
+            contract => contract.slot === slot.slot
+          )
+        );
+      const slot = slots.length === 1 ? slots[0] : null;
+      const phaseContract = SWITCH_SKILL_SLOT_CONTRACTS.find(
+        contract => contract.slot === slot?.slot
+      );
+      const sourceSkillId = Number(slot?.skillId);
+      const mappings = starCarryMappings.filter(
+        mapping =>
+          Number(mapping.ownerId) === ownerId &&
+          Number(mapping.sourceSkillId) === sourceSkillId
+      );
+      const mapping = mappings.length === 1 ? mappings[0] : null;
+      const reasons = [];
+      if (slots.length === 0) {
+        reasons.push('public-switch-skill-slot-missing');
+      } else if (slots.length > 1) {
+        reasons.push('public-switch-skill-slot-ambiguous');
+      }
+      if (slot && mappings.length === 0) {
+        reasons.push('star-carry-action-mapping-missing');
+      } else if (mappings.length > 1) {
+        reasons.push('star-carry-action-mapping-ambiguous');
+      }
+      const applied = Boolean(slot && phaseContract && mapping);
+      const sourceIdentity = slot
+        ? `characters.items[id=${ownerId}].skillSlots[slot=${slot.slot},skillId=${sourceSkillId}]`
+        : `characters.items[id=${ownerId}].skillSlots`;
+      const sourceIdentities = [
+        sourceIdentity,
+        `${relativeExternalPath(STATIC_PROPERTY_TABLE_PATHS.hero)}#rows[id=${ownerId}].skillList[slot=${slot?.slot ?? 'missing'}]`,
+        `${relativeExternalPath(IL2CPP_DUMP_PATH)}#ESkillSlotType.${phaseContract?.enumName ?? 'Unknown'}=${slot?.slot ?? 'missing'}`,
+        ...(mapping?.bindingSourceIdentity
+          ? [mapping.bindingSourceIdentity]
+          : []),
+      ];
+      return {
+        profileIdentity: `actor:${ownerId}|switch-trigger:${phaseContract?.triggerPhase ?? 'unresolved'}|skill:${Number.isInteger(sourceSkillId) ? sourceSkillId : 'missing'}`,
+        ownerKind: 'actor',
+        ownerId,
+        ownerName: character.name ?? null,
+        triggerPhase: phaseContract?.triggerPhase ?? null,
+        triggerLabel: phaseContract?.label ?? null,
+        skillSlot: slot?.slot ?? null,
+        sourceSkillId: Number.isInteger(sourceSkillId) ? sourceSkillId : null,
+        starCarryActionIdentity: mapping?.identity ?? null,
+        controlSkillId: mapping?.controlSkillId ?? null,
+        actionVariantIndex: mapping?.actionVariantIndex ?? null,
+        triggerFrameOffset: 0,
+        conditions: [],
+        manualReleaseStatus: 'switch-trigger-only',
+        mechanicsClassification: mapping?.classification ?? 'unresolved',
+        mechanicsReasons: [...(mapping?.reasons ?? [])],
+        sourceIdentity,
+        sourceIdentities: [...new Set(sourceIdentities.filter(Boolean))],
+        resolutionStatus: applied ? 'applied' : 'static-evidence-gap',
+        reasons,
+        applied,
+      };
+    })
+    .sort((left, right) => left.ownerId - right.ownerId);
+  const appliedProfiles = profiles.filter(profile => profile.applied);
+  const unresolvedProfiles = profiles.filter(profile => !profile.applied);
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-switch-trigger-catalog',
+    contractName: 'AzPrVerifiedSwitchTriggerCatalog',
+    status: 'verified-switch-trigger-catalog-ready',
+    sourceKind: 'azpr-hero-skill-slot-and-il2cpp-switch-enum',
+    profiles,
+    summary: {
+      profileCount: profiles.length,
+      appliedProfileCount: appliedProfiles.length,
+      unresolvedProfileCount: unresolvedProfiles.length,
+      onEnterProfileCount: profiles.filter(
+        profile => profile.triggerPhase === 'on-enter'
+      ).length,
+      onExitProfileCount: profiles.filter(
+        profile => profile.triggerPhase === 'on-exit'
+      ).length,
+      appliedOnEnterProfileCount: appliedProfiles.filter(
+        profile => profile.triggerPhase === 'on-enter'
+      ).length,
+      appliedOnExitProfileCount: appliedProfiles.filter(
+        profile => profile.triggerPhase === 'on-exit'
+      ).length,
+      switchTriggeredOnlyCount: profiles.filter(
+        profile => profile.manualReleaseStatus === 'switch-trigger-only'
+      ).length,
+      reasonCounts: countValues(
+        unresolvedProfiles.flatMap(profile => profile.reasons)
+      ),
+    },
+  };
+}
+
 function createPackage({
   evidence,
   validation,
@@ -5286,6 +5441,7 @@ function createPackage({
   tuningMechanicsCatalog,
   specialResourceCatalog,
   actionVariantGraph,
+  characterCatalog,
 }) {
   const prepareControlBinding = binding => {
     const hits = createControlRuntimeHits(binding);
@@ -5453,6 +5609,10 @@ function createPackage({
       applied: true,
     }));
   });
+  const switchTriggerCatalog = createSwitchTriggerCatalog({
+    characterCatalog,
+    actionMappings,
+  });
   const publishedControlSkillIds = new Set(
     actionMappings
       .filter(mapping => {
@@ -5553,13 +5713,14 @@ function createPackage({
       battleEffectNodes,
       specialResourceCatalog,
       actionVariantGraph,
+      switchTriggerCatalog,
     })
   );
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 12,
+    packageVersion: 13,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -5592,6 +5753,7 @@ function createPackage({
     tuningMechanicsCatalog,
     specialResourceCatalog,
     actionVariantGraph,
+    switchTriggerCatalog,
     battleEffectCatalog: {
       schemaVersion: 1,
       kind: 'azpr-verified-battle-effect-node-catalog',
@@ -5671,6 +5833,11 @@ function createPackage({
         specialResourceCatalog.summary.appliedOperationCount,
       actionVariantNodeCount: actionVariantGraph.summary.nodeCount,
       actionVariantEdgeCount: actionVariantGraph.summary.appliedEdgeCount,
+      switchTriggerProfileCount: switchTriggerCatalog.summary.profileCount,
+      appliedSwitchTriggerProfileCount:
+        switchTriggerCatalog.summary.appliedProfileCount,
+      unresolvedSwitchTriggerProfileCount:
+        switchTriggerCatalog.summary.unresolvedProfileCount,
       kiboProfileCount: kiboProfiles.length,
       actorProfileCount: actorProfiles.length,
       enemyProfileCount: enemyProfiles.length,
@@ -9146,6 +9313,62 @@ function createDerivedControlCoverageMarkdown(report) {
   lines.push(
     '',
     '> `not-yet-modeled` 表示实现覆盖尚未完成；`static-evidence-gap` 与 `runtime-dependent` 才表示证据或运行时输入边界。完整条件、变体时长和 source identity 见同名 JSON。'
+  );
+  return `${lines.join('\n')}\n`;
+}
+
+function createSwitchTriggerCoverageReport(packageValue) {
+  const catalog = packageValue.switchTriggerCatalog;
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-verified-switch-trigger-coverage',
+    status: 'verified-switch-trigger-coverage-ready',
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    sourceDenominator: {
+      kind: 'current-client-public-actor-switch-skill-slots',
+      actorOwnerCount: catalog.summary.profileCount,
+      switchSkillSlotCount: catalog.summary.profileCount,
+      onEnterSlotCount: catalog.summary.onEnterProfileCount,
+      onExitSlotCount: catalog.summary.onExitProfileCount,
+    },
+    summary: { ...catalog.summary },
+    profiles: catalog.profiles,
+    unresolvedProfiles: catalog.profiles.filter(profile => !profile.applied),
+  };
+}
+
+function createSwitchTriggerCoverageMarkdown(report) {
+  const lines = [
+    '# M9-R2 星携技切人触发覆盖',
+    '',
+    `- 包：\`${report.packageId}\``,
+    `- 固定分母：${report.sourceDenominator.actorOwnerCount} 名公开角色 / ${report.sourceDenominator.onEnterSlotCount} 个入场槽 / ${report.sourceDenominator.onExitSlotCount} 个退场槽`,
+    `- 可确定派生：${report.summary.appliedProfileCount}/${report.summary.profileCount}`,
+    `- 静态证据缺口：${report.summary.unresolvedProfileCount}`,
+    '',
+    '| 角色 | 阶段 | 技能槽 | 技能 | 触发绑定 | 机制状态 |',
+    '| --- | --- | ---: | ---: | --- | --- |',
+    ...report.profiles.map(
+      profile =>
+        `| ${profile.ownerName ?? profile.ownerId} (${profile.ownerId}) | ${profile.triggerLabel ?? '待确认'} | ${profile.skillSlot ?? '-'} | ${profile.sourceSkillId ?? '-'} | ${profile.resolutionStatus} | ${profile.mechanicsClassification} |`
+    ),
+    '',
+    '## 静态证据缺口',
+    '',
+  ];
+  if (report.unresolvedProfiles.length === 0) {
+    lines.push('- 无。');
+  } else {
+    for (const profile of report.unresolvedProfiles) {
+      lines.push(
+        `- \`${profile.profileIdentity}\`：${profile.reasons.join(', ')}`
+      );
+    }
+  }
+  lines.push(
+    '',
+    '> 入场/退场阶段来自 `hero.skillList` 的 201/203 槽位与客户端 `ESkillSlotType` 枚举；动作机制自身的 applied/unresolved 状态单独保留，不因切人触发关系成立而升级。'
   );
   return `${lines.join('\n')}\n`;
 }

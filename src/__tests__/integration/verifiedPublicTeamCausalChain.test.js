@@ -38,7 +38,6 @@ describe('M9 public team causal chain', () => {
         .filter(action => action.execute)
         .map(action => action.actionId)
     );
-
     for (const actionId of [
       'han-star-skill',
       'ruby-ultimate',
@@ -196,7 +195,7 @@ function simulateTeam({ includeFireKiboAction }) {
       characterId: RUBY_ID,
       skillId: 10300213,
       actionKind: 'ultimate',
-      startMs: 8000,
+      startMs: 11300,
     }),
     ...(includeFireKiboAction
       ? [
@@ -214,7 +213,7 @@ function simulateTeam({ includeFireKiboAction }) {
       id: 'switch-to-jade',
       fromCharacterId: RUBY_ID,
       toCharacterId: JADE_ID,
-      startMs: 18500,
+      startMs: 19500,
     }),
     createSkillAction({
       id: 'jade-limit-counter',
@@ -222,14 +221,14 @@ function simulateTeam({ includeFireKiboAction }) {
       skillId: 10101021,
       actionKind: 'limit-counter',
       actionVariantIndex: 1,
-      startMs: 19000,
+      startMs: 24500,
     }),
     createSkillAction({
       id: 'jade-ultimate',
       characterId: JADE_ID,
       skillId: 10101013,
       actionKind: 'ultimate',
-      startMs: 24000,
+      startMs: 29300,
     }),
     createSkillAction({
       id: 'jade-charged-variant',
@@ -238,11 +237,11 @@ function simulateTeam({ includeFireKiboAction }) {
       actionKind: 'charged-attack',
       actionVariantIndex: 2,
       selectedSubSkillIndex: 2,
-      startMs: 32000,
+      startMs: 37000,
     }),
   ];
   const project = createWorkbenchProject(selection, {
-    durationMs: 40000,
+    durationMs: 45000,
     teamSlots,
     actorConfigs,
     actions,

@@ -5,6 +5,41 @@
       <h2>属性</h2>
     </div>
 
+    <section
+      v-if="isSwitchAction || isReadOnlyDerivedAction"
+      class="switch-trigger-bindings"
+      :data-binding-count="switchTriggerBindings.length"
+      data-testid="workbench-switch-trigger-bindings"
+    >
+      <div class="switch-trigger-heading">
+        <span>切人触发</span>
+        <strong>{{
+          isReadOnlyDerivedAction ? '自动子动作' : '绑定结果'
+        }}</strong>
+      </div>
+      <div
+        v-for="binding in switchTriggerBindings"
+        :key="binding.bindingId"
+        class="switch-trigger-binding"
+        :class="`status-${binding.resolutionStatus}`"
+        :data-trigger-phase="binding.triggerPhase || ''"
+        :data-resolution-status="binding.resolutionStatus"
+        :data-source-skill-id="binding.sourceSkillId || ''"
+        data-testid="workbench-switch-trigger-binding"
+      >
+        <div>
+          <strong>{{ formatSwitchTriggerPhase(binding) }}</strong>
+          <span>{{ binding.starCarryOwnerName || '未绑定角色' }}</span>
+        </div>
+        <small>{{ formatSwitchTriggerRoute(binding) }}</small>
+        <small>{{ formatSwitchTriggerCondition(binding) }}</small>
+        <code>{{ binding.sourceIdentity }}</code>
+      </div>
+      <p v-if="switchTriggerBindings.length === 0">
+        本次切人没有匹配到入场或退场星携技槽位。
+      </p>
+    </section>
+
     <div class="action-identity" data-testid="workbench-action-identity">
       <img
         v-if="selectedActionIdentity.iconUrl"
@@ -66,7 +101,9 @@
     </section>
 
     <ActionHitOverrideList
-      v-if="verifiedMechanicsTrace?.hitBindings?.length"
+      v-if="
+        verifiedMechanicsTrace?.hitBindings?.length && !isReadOnlyDerivedAction
+      "
       :hit-bindings="verifiedMechanicsTrace.hitBindings"
       :disabled-count="verifiedMechanicsTrace.disabledHitCount"
       @change="updateHitWillHit"
@@ -192,7 +229,7 @@
       </div>
     </div>
 
-    <div class="control-grid">
+    <div v-if="!isReadOnlyDerivedAction" class="control-grid">
       <label
         data-testid="workbench-action-edit-control"
         data-edit-field="skillId"
@@ -240,7 +277,7 @@
       </label>
     </div>
 
-    <div class="action-controls">
+    <div v-if="!isReadOnlyDerivedAction" class="action-controls">
       <div
         v-if="runtimeResultReturnDisplayContext"
         class="action-result-return"
@@ -519,6 +556,7 @@
     </div>
 
     <div
+      v-if="!isReadOnlyDerivedAction"
       class="effect-editor"
       :data-effect-command-count="effectCommands.length"
       data-testid="workbench-effect-editor"
@@ -881,6 +919,7 @@
     </div>
 
     <label
+      v-if="!isReadOnlyDerivedAction"
       class="note-control"
       data-testid="workbench-action-edit-control"
       data-edit-field="note"
@@ -928,6 +967,7 @@ import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workb
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { createVerifiedActionMechanicsTrace } from './verifiedActionMechanicsTrace';
 import { createActionVariantInputSelection } from '../../domain/actionVariantInputSelection';
+import { isSwitchTriggeredDerivedAction } from '../../simulation/generation/switchTriggeredActionGeneration';
 
 const ActionHitOverrideList = defineAsyncComponent(
   () => import('./ActionHitOverrideList.vue')
@@ -987,6 +1027,15 @@ const props = defineProps({
 const selectedActionIdentity = computed(() =>
   resolveWorkbenchActionVisualIdentity(props.selectedAction)
 );
+const isReadOnlyDerivedAction = computed(() =>
+  isSwitchTriggeredDerivedAction(props.selectedAction)
+);
+const switchTriggerBindings = computed(() => {
+  if (props.selectedAction?.switchTriggerBinding) {
+    return [props.selectedAction.switchTriggerBinding];
+  }
+  return props.selectedAction?.switchTriggerBindings ?? [];
+});
 
 const emit = defineEmits([
   'update-selection',
@@ -1007,11 +1056,40 @@ const variantControlModel = computed(
   () => verifiedMechanicsTrace.value?.variantSelection ?? null
 );
 const editableVariantInput = computed(() => {
+  if (isReadOnlyDerivedAction.value) return null;
   const input = verifiedMechanicsTrace.value?.variantInput;
   return input?.resolutionStatus === 'applied' && input.options?.length > 1
     ? input
     : null;
 });
+
+function formatSwitchTriggerPhase(binding) {
+  if (binding.triggerPhase === 'on-enter') return '入场触发';
+  if (binding.triggerPhase === 'on-exit') return '退场触发';
+  return '未生成子动作';
+}
+
+function formatSwitchTriggerRoute(binding) {
+  const source = resolveActorName(binding.sourceOwnerId);
+  const target = resolveActorName(binding.targetOwnerId);
+  return `${source} -> ${target} · ${binding.triggerFrame ?? 0}F`;
+}
+
+function formatSwitchTriggerCondition(binding) {
+  if (binding.resolutionStatus !== 'applied') {
+    return `未触发：${(binding.reasons ?? []).join('、') || binding.resolutionStatus}`;
+  }
+  if (binding.conditions?.length) {
+    return `条件：${binding.conditions.map(item => item.label ?? item.identity).join('、')}`;
+  }
+  return `无额外条件 · 技能 ${binding.sourceSkillId}`;
+}
+
+function resolveActorName(actorId) {
+  return (
+    props.actors.find(actor => actor.id === actorId)?.name ?? actorId ?? '未知'
+  );
+}
 const selectedVariantLabel = computed(() => {
   const selectedOption =
     verifiedMechanicsTrace.value?.variantInput?.selectedOption;
@@ -1795,6 +1873,62 @@ function resolveCharacterName(characterId) {
 h2 {
   margin: 0;
   font-size: 15px;
+}
+
+.switch-trigger-bindings {
+  display: grid;
+  gap: 8px;
+  margin: 10px 14px 0;
+  padding: 10px;
+  border: 1px solid rgba(242, 179, 102, 0.24);
+  border-radius: 4px;
+  background: rgba(52, 42, 31, 0.42);
+}
+
+.switch-trigger-heading,
+.switch-trigger-binding > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.switch-trigger-heading,
+.switch-trigger-binding span,
+.switch-trigger-binding small,
+.switch-trigger-bindings p {
+  color: #a9b3b8;
+  font-size: 11px;
+}
+
+.switch-trigger-heading strong,
+.switch-trigger-binding strong {
+  color: #f2b366;
+  font-size: 11px;
+}
+
+.switch-trigger-binding {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.switch-trigger-binding code {
+  overflow: hidden;
+  color: #78858b;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.switch-trigger-binding:not(.status-applied) strong {
+  color: #e28787;
+}
+
+.switch-trigger-bindings p {
+  margin: 0;
 }
 
 .action-identity {

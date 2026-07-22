@@ -39,7 +39,7 @@ export function getSkillActionCatalog(skills = [], level = 1) {
     );
     for (const variant of variants) {
       const kind = inferCatalogActionKind(variant, skill);
-      if (!kind) {
+      if (!kind || kind === 'star-carry') {
         continue;
       }
 

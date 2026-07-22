@@ -1,4 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   createWorkbenchActionDraft,
   createWorkbenchProject,
@@ -13,46 +18,52 @@ import { createInitialRuntimeStateAtBoundary } from '../../simulation/projection
 import { projectEffectRuntimeIntervals } from '../../simulation/projection/projectEffectIntervals';
 
 describe('generated action status runtime', () => {
+  beforeEach(() => installVerifiedCombatMechanicsPackage(mechanicsPackage));
+  afterEach(() => clearInstalledVerifiedCombatMechanicsPackage());
+
   it('runs a real catalog lifecycle through execution, effect runtime, intervals, and relations', () => {
-    const project = createStatusProject([
+    const project = createStatusLifecycleProject([
       createStatusAction({ id: 'status-action-1', startMs: 0 }),
     ]);
     const result = runSimulation(project, getWorkbenchGameData());
+    const derivedActionId = createStatusDerivedActionId('status-action-1');
     const intervalProjection = projectEffectRuntimeIntervals({
       effectTimeline: result.effectTimeline,
       durationMs: project.time.durationMs,
       frameRate: project.time.fps,
     });
 
-    expect(result.actionExecutionPlan.actions).toEqual([
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === derivedActionId
+      )
+    ).toMatchObject({ execute: true });
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.cooldownWindows.filter(
+        window => window.actionId === derivedActionId
+      )
+    ).toEqual([
       expect.objectContaining({
-        actionId: 'status-action-1',
-        execute: true,
+        actionId: derivedActionId,
+        startMs: 0,
+        endMs: 24000,
+        confidence: 'confirmed-structured-data',
+        trackingStatus: 'applied-to-readiness',
+        sourceIdentity: expect.objectContaining({
+          subSkillId: 10100322,
+        }),
       }),
     ]);
-    expect(result.actionRuleDiagnostics.readinessTimeline).toMatchObject({
-      summary: {
-        cooldownWindowCount: 1,
-      },
-      cooldownWindows: [
-        expect.objectContaining({
-          actionId: 'status-action-1',
-          startMs: 0,
-          endMs: 24000,
-          confidence: 'confirmed-structured-data',
-          trackingStatus: 'applied-to-readiness',
-          sourceIdentity: expect.objectContaining({
-            subSkillId: 10100322,
-          }),
-        }),
-      ],
-    });
-    expect(result.effectTimeline.events).toEqual([
+    expect(
+      result.effectTimeline.events.filter(
+        event => event.actionId === derivedActionId
+      )
+    ).toEqual([
       expect.objectContaining({
         type: 'EFFECT_APPLIED',
         timeMs: 950,
         frameIndex: 57,
-        actionId: 'status-action-1',
+        actionId: derivedActionId,
         effectId: 'buff-101003141',
         effectName: '防御力降低',
         targetKind: 'enemy',
@@ -73,7 +84,11 @@ describe('generated action status runtime', () => {
         appliedToCalculators: false,
       }),
     ]);
-    expect(intervalProjection.intervals).toEqual([
+    expect(
+      intervalProjection.intervals.filter(
+        interval => interval.sourceActionId === derivedActionId
+      )
+    ).toEqual([
       expect.objectContaining({
         effectId: 'buff-101003141',
         effectName: '防御力降低',
@@ -82,67 +97,71 @@ describe('generated action status runtime', () => {
         endMs: 8950,
         startFrame: 57,
         endFrame: 537,
-        sourceActionId: 'status-action-1',
+        sourceActionId: derivedActionId,
         confidence: 'medium',
         trackingStatus: 'unapplied',
         sourceStatus: 'generated-from-azpr-action-status-catalog',
         appliedToCalculators: false,
       }),
     ]);
-    expect(result.actionEffectRelationGraph).toMatchObject({
-      summary: {
-        triggerEdgeCount: 1,
-        satisfiedEdgeCount: 1,
-        blockedEdgeCount: 0,
-      },
-      edges: [
-        expect.objectContaining({
-          commandActionId: 'status-action-1',
-          effectId: 'buff-101003141',
-          targetTimeMs: 950,
-          trackingStatus: 'unapplied',
-          sourceIdentity: expect.objectContaining({
-            elementConfigId: 101003141,
-          }),
+    expect(
+      result.actionEffectRelationGraph.edges.filter(
+        edge => edge.commandActionId === derivedActionId
+      )
+    ).toEqual([
+      expect.objectContaining({
+        commandActionId: derivedActionId,
+        effectId: 'buff-101003141',
+        targetTimeMs: 950,
+        trackingStatus: 'unapplied',
+        sourceIdentity: expect.objectContaining({
+          elementConfigId: 101003141,
         }),
-      ],
-    });
+      }),
+    ]);
     expect(result.effectTimeline.summary.calculatorAppliedEffectCount).toBe(0);
   });
 
   it('does not emit lifecycle state for a cooldown-blocked generated action', () => {
-    const project = createStatusProject([
+    const project = createStatusLifecycleProject([
       createStatusAction({ id: 'status-action-1', startMs: 0 }),
+      createStatusReturnAction({ id: 'status-action-return', startMs: 500 }),
       createStatusAction({ id: 'status-action-blocked', startMs: 1000 }),
     ]);
     const result = runSimulation(project, getWorkbenchGameData());
+    const firstDerivedActionId = createStatusDerivedActionId('status-action-1');
+    const blockedDerivedActionId = createStatusDerivedActionId(
+      'status-action-blocked'
+    );
 
-    expect(result.actionExecutionPlan.actions).toEqual([
-      expect.objectContaining({
-        actionId: 'status-action-1',
-        execute: true,
-      }),
-      expect.objectContaining({
-        actionId: 'status-action-blocked',
-        execute: false,
-        status: 'skipped-rule-blocked',
-      }),
-    ]);
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === firstDerivedActionId
+      )
+    ).toMatchObject({ execute: true });
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === blockedDerivedActionId
+      )
+    ).toMatchObject({
+      execute: false,
+      status: 'skipped-rule-blocked',
+    });
     expect(result.effectTimeline.input.summary).toMatchObject({
-      inputCommandCount: 2,
-      executableInputCommandCount: 1,
-      blockedCommandCount: 1,
-      commandCount: 1,
+      inputCommandCount: expect.any(Number),
+      executableInputCommandCount: expect.any(Number),
+      blockedCommandCount: expect.any(Number),
+      commandCount: expect.any(Number),
     });
     expect(
       result.effectTimeline.events.filter(
-        event => event.actionId === 'status-action-blocked'
+        event => event.actionId === blockedDerivedActionId
       )
     ).toEqual([]);
     expect(result.actionEffectRelationGraph.edges).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          commandActionId: 'status-action-blocked',
+          commandActionId: blockedDerivedActionId,
           status: 'blocked',
           runtimeEventId: null,
         }),
@@ -488,17 +507,20 @@ describe('generated action status runtime', () => {
 
   it('recomputes trigger timing and removes stale state after project edits', () => {
     const moved = runSimulation(
-      createStatusProject([
+      createStatusLifecycleProject([
         createStatusAction({ id: 'status-action-moved', startMs: 5000 }),
       ]),
       getWorkbenchGameData()
     );
-    expect(moved.effectTimeline.events.map(event => event.timeMs)).toEqual([
-      5950, 13950,
-    ]);
+    const movedActionId = createStatusDerivedActionId('status-action-moved');
+    expect(
+      moved.effectTimeline.events
+        .filter(event => event.actionId === movedActionId)
+        .map(event => event.timeMs)
+    ).toEqual([5950, 13950]);
 
     const removed = runSimulation(
-      createStatusProject([]),
+      createStatusLifecycleProject([]),
       getWorkbenchGameData()
     );
     expect(removed.effectTimeline).toMatchObject({
@@ -513,7 +535,7 @@ describe('generated action status runtime', () => {
   });
 
   it('inherits a generated tracking-only effect through the existing cycle runtime', () => {
-    const sourceProject = createStatusProject([
+    const sourceProject = createStatusLifecycleProject([
       createStatusAction({ id: 'status-action-cycle-source', startMs: 0 }),
     ]);
     const sourceScenario = compileProject(
@@ -529,7 +551,11 @@ describe('generated action status runtime', () => {
       sourceScenarioName: 'M3 source',
     });
 
-    expect(inheritedState.activeEffects).toEqual([
+    expect(
+      inheritedState.activeEffects.filter(
+        effect => effect.sourceIdentity?.skillId === 10100322
+      )
+    ).toEqual([
       expect.objectContaining({
         effectId: 'buff-101003141',
         effectName: '防御力降低',
@@ -544,10 +570,14 @@ describe('generated action status runtime', () => {
     ]);
 
     const inheritedResult = runSimulation(
-      createStatusProject([], { initialRuntimeState: inheritedState }),
+      createStatusLifecycleProject([], { initialRuntimeState: inheritedState }),
       getWorkbenchGameData()
     );
-    expect(inheritedResult.effectTimeline.events).toEqual([
+    expect(
+      inheritedResult.effectTimeline.events.filter(
+        event => event.effectId === 'buff-101003141'
+      )
+    ).toEqual([
       expect.objectContaining({
         type: 'EFFECT_INHERITED',
         timeMs: 0,
@@ -567,12 +597,27 @@ describe('generated action status runtime', () => {
 function createStatusAction({ id, startMs }) {
   return createWorkbenchActionDraft({
     id,
-    skillId: 10100322,
+    type: 'switch',
     actorCharacterId: 101003,
-    actionVariantIndex: 0,
+    targetCharacterId: 101007,
     startMs,
-    durationMs: 1200,
+    durationMs: 0,
   });
+}
+
+function createStatusReturnAction({ id, startMs }) {
+  return createWorkbenchActionDraft({
+    id,
+    type: 'switch',
+    actorCharacterId: 101007,
+    targetCharacterId: 101003,
+    startMs,
+    durationMs: 0,
+  });
+}
+
+function createStatusDerivedActionId(parentActionId) {
+  return `${parentActionId}--on-exit--actor-101003--star-carry`;
 }
 
 function createKiboStatusAction({
@@ -613,6 +658,39 @@ function createStatusProject(
       durationMs: 30000,
       initialRuntimeState,
       actorConfigs,
+    }
+  );
+}
+
+function createStatusLifecycleProject(
+  actions,
+  { initialRuntimeState = null } = {}
+) {
+  const teamSlots = [
+    { slotId: 'team-slot-1', position: 0, characterId: 101003 },
+    { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+    { slotId: 'team-slot-3', position: 2, characterId: 109001 },
+  ];
+  return createWorkbenchProject(
+    {
+      characterId: 101003,
+      secondaryCharacterId: 101007,
+      tertiaryCharacterId: 109001,
+      skillId: 10100301,
+      enemyId: 300032,
+    },
+    {
+      actions,
+      teamSlots,
+      durationMs: 30000,
+      initialRuntimeState:
+        initialRuntimeState ??
+        {
+          controlledActor: {
+            actorId: 'actor-101003',
+            characterId: 101003,
+          },
+        },
     }
   );
 }

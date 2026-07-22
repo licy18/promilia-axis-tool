@@ -327,6 +327,59 @@ describe('ActionLibraryPanel', () => {
       importedFile,
     ]);
   });
+
+  it('selects derived star-carry actions without exposing independent mutation commands', async () => {
+    const props = createActionLibraryProps();
+    props.actions = [
+      {
+        id: 'manual-action',
+        type: 'skill',
+        name: '星鸣技',
+        startMs: 0,
+        durationMs: 1000,
+      },
+      {
+        id: 'derived-star-carry',
+        type: 'skill',
+        name: '入场星携技',
+        startMs: 1000,
+        durationMs: 2000,
+        readOnly: true,
+        parentActionId: 'switch-1',
+        derivedAction: {
+          kind: 'switch-triggered-star-carry',
+          parentActionId: 'switch-1',
+          readOnly: true,
+        },
+      },
+    ];
+    const wrapper = mount(ActionLibraryPanel, { props });
+    const manual = wrapper.get('.action-item[data-action-id="manual-action"]');
+    const derived = wrapper.get(
+      '.action-item[data-action-id="derived-star-carry"]'
+    );
+
+    expect(manual.find('[data-testid="workbench-copy-action"]').exists()).toBe(
+      true
+    );
+    expect(derived.attributes('data-read-only')).toBe('true');
+    expect(derived.find('[data-testid="workbench-copy-action"]').exists()).toBe(
+      false
+    );
+    expect(
+      derived.find('[data-testid="workbench-delete-action"]').exists()
+    ).toBe(false);
+
+    await derived.trigger('click');
+    expect(wrapper.emitted('select-action')?.at(-1)?.[0]).toMatchObject({
+      actionId: 'derived-star-carry',
+      mode: 'replace',
+    });
+    await derived.trigger('keydown', { key: 'Delete' });
+    await derived.trigger('contextmenu', { clientX: 20, clientY: 20 });
+    expect(wrapper.emitted('delete-selected-actions')).toBeUndefined();
+    expect(wrapper.emitted('open-action-context-menu')).toBeUndefined();
+  });
 });
 
 function createActionLibraryProps() {

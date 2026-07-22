@@ -27674,3 +27674,11 @@ Workbench skill/kibo action 新增可选 `variantInputSelection`：`schemaVersio
 Workbench 切人记录统一为精确帧事件：`type/kind = switch`、`startFrame == endFrame`、`durationFrames = 0`、`durationMs = 0`。切人只在该帧改变受控角色，不保存 `effectCommands`，不占普通动作区间，也不进入动作轨碰撞、CD、HP、韧性、SP 或 Buff 生成。两个切人落在同一帧时按稳定 action identity 排序，只接受第一项并对其余项产生确定诊断，不能依赖数组顺序漂移。
 
 旧项目中的 600ms 切人由同一 project/draft 规范化入口迁移为零时长，保留原 `startFrame`，且不因时长归零移动任何后续动作。方案复制、本地草稿、JSON、分享链接和 PNG 继续保存同一事件真相；片段和历史命令也保留零时长合同。时间轴上的目标角色头像、帧标签、向下指针和固定点击热区属于非持久化 UI 投影，缩放和横向滚动后仍从事件帧重新定位。
+
+## 452. Switch-triggered star-carry generation v1
+
+`verified-combat-mechanics-package.json` 升级为 package v13，新增 `switchTriggerCatalog.profiles[]`。每个角色 profile 保存 `triggerPhase = on-enter | on-exit`、技能槽、公开技能与 control identity、触发帧偏移、条件、来源 identity 和 `applied / static-evidence-gap` 状态；当前 20 名角色全部进入目录，17 条可应用，3 条保持动作映射缺口。只由切人触发的星携技不再作为普通动作库条目。
+
+新增非持久化切人子动作生成：项目仍只保存零时长父切人事件；compiler 根据切人前后的受控角色，在同一帧生成退场角色的 `on-exit` 与入场角色的 `on-enter` 子动作。子动作使用稳定的父事件/阶段/owner identity，保留自身真实偏移、占轴、命中、CD、状态与三值来源，并标记为只读；移动、复制或删除父事件后统一重建，不会在五载体中重复持久化或产生孤儿。初始前台不生成入场子动作，同帧冲突沿父切人事件的稳定顺序拒绝。
+
+动作 readiness 的冷却状态键改为优先使用来源 control/subskill identity。公开技能根包含星携技、极限反击或完美招架等多个动作时，各变体读取自身 verified cooldown；明确为 0 的变体不再误继承根技能或星携技 CD。该调整不新增项目字段，也不改变未安装 verified package 时的原有状态生成回退。

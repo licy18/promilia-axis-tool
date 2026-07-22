@@ -1199,6 +1199,7 @@ import {
   snapMsToFrame,
 } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
+import { isSwitchTriggeredDerivedAction } from '../simulation/generation/switchTriggeredActionGeneration';
 import { createActionExecutionPlan } from '../simulation/engine/actionExecutionPlan';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 import {
@@ -6436,6 +6437,10 @@ function findActionDraftById(actionId) {
   return actionDrafts.value.find(action => action.id === actionId) ?? null;
 }
 
+function findScenarioActionById(actionId) {
+  return scenario.value.actions.find(action => action.id === actionId) ?? null;
+}
+
 function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   dismissedSideInspectorKey.value = '';
   selectedActionRelationId.value = '';
@@ -6448,7 +6453,25 @@ function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
       ? actionRequest
       : { actionId: actionRequest, mode: 'replace' };
   const actionId = String(request.actionId ?? '');
-  if (!findActionDraftById(actionId)) {
+  const draftAction = findActionDraftById(actionId);
+  const scenarioAction = findScenarioActionById(actionId);
+  if (!draftAction && !isSwitchTriggeredDerivedAction(scenarioAction)) {
+    return;
+  }
+  if (!draftAction) {
+    selectedActionIds.value = [actionId];
+    selectedActionId.value = actionId;
+    actionSelectionAnchorId.value = actionId;
+    selectTimelineFrame({
+      timeMs: scenarioAction.startMs,
+      source: 'derived-action-selection',
+    });
+    if (scenarioAction.actor?.characterId) {
+      setActionLibraryCharacterId(scenarioAction.actor.characterId);
+    }
+    if (syncRuntimeResult && shouldSyncRuntimeResultOnActionSelect()) {
+      syncRuntimeResultForSelectedAction(actionId);
+    }
     return;
   }
 
@@ -6616,11 +6639,8 @@ function selectEffectInterval({
   boxSelectionMode.value = false;
   dismissedSideInspectorKey.value = '';
   const sourceActionId = actionId || interval.sourceActionId || '';
-  if (sourceActionId && findActionDraftById(sourceActionId)) {
-    setWorkbenchActionSelection([sourceActionId], sourceActionId, {
-      anchorActionId: sourceActionId,
-    });
-    syncActionLibraryCharacterIdFromDraft(findActionDraftById(sourceActionId));
+  if (sourceActionId) {
+    selectAction(sourceActionId, { syncRuntimeResult: false });
   }
   selectTimelineFrame({
     timeMs: timeMs ?? interval.endMs,
@@ -6641,20 +6661,17 @@ function selectEffectEvent(eventId) {
     selectedEffectEventId.value = '';
     return false;
   }
+  const event = interval.lifecycleEvents.find(item => item.eventId === eventId);
+  const sourceActionId = event?.actionId || interval.sourceActionId || '';
+  if (sourceActionId) {
+    selectAction(sourceActionId, { syncRuntimeResult: false });
+  }
   selectedEffectIntervalId.value = interval.intervalId;
   selectedEffectEventId.value = eventId;
   selectedActionRelationId.value = '';
   selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   dismissedSideInspectorKey.value = '';
-  const event = interval.lifecycleEvents.find(item => item.eventId === eventId);
-  const sourceActionId = event?.actionId || interval.sourceActionId || '';
-  if (sourceActionId && findActionDraftById(sourceActionId)) {
-    setWorkbenchActionSelection([sourceActionId], sourceActionId, {
-      anchorActionId: sourceActionId,
-    });
-    syncActionLibraryCharacterIdFromDraft(findActionDraftById(sourceActionId));
-  }
   selectTimelineFrame({
     timeMs: event?.timeMs ?? interval.endMs,
     source: 'effect-lifecycle-event',
@@ -7491,7 +7508,12 @@ function selectActionFromRuntimeStatePoint(pointId) {
     pointId
   );
   const actionId = context?.row?.actionId;
-  if (!actionId || !findActionDraftById(actionId)) {
+  const scenarioAction = findScenarioActionById(actionId);
+  if (
+    !actionId ||
+    (!findActionDraftById(actionId) &&
+      !isSwitchTriggeredDerivedAction(scenarioAction))
+  ) {
     return;
   }
   if (selectedActionIds.value.includes(actionId)) {

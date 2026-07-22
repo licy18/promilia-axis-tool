@@ -7699,7 +7699,7 @@ describe('Workbench view', () => {
     });
   });
 
-  it('lists Endaxis-style combat actions instead of fancy skill names', async () => {
+  it('lists manually releasable combat actions without switch-triggered star-carry', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -7721,7 +7721,6 @@ describe('Workbench view', () => {
       '星鸣技',
       '星结合击',
       '星决技',
-      '星携技',
       '极限反击',
       '完美招架',
     ]);
@@ -7733,7 +7732,6 @@ describe('Workbench view', () => {
       'star-skill',
       'star-combo',
       'ultimate',
-      'star-carry',
       'limit-counter',
       'perfect-parry',
     ]);

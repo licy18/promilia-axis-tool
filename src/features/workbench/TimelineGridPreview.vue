@@ -785,6 +785,7 @@
                   'readiness-unresolved':
                     getActionReadiness(action).status ===
                     'ready-with-unresolved-conditions',
+                  'derived-readonly': isSwitchTriggeredDerivedAction(action),
                 },
                 `type-${action.type}`,
               ]"
@@ -804,6 +805,11 @@
               :data-readiness-status="getActionReadiness(action).status"
               :data-readiness-executable="
                 getActionReadiness(action).executable ? 'true' : 'false'
+              "
+              :data-derived-action-kind="action.derivedAction?.kind || ''"
+              :data-parent-action-id="action.parentActionId || ''"
+              :data-read-only="
+                isSwitchTriggeredDerivedAction(action) ? 'true' : 'false'
               "
               :data-status-generation-status="
                 action.statusGeneration?.status || ''
@@ -827,13 +833,15 @@
               :title="formatTimelineActionTitle(action)"
               tabindex="0"
               @click.stop="handleActionClick($event, action)"
-              @contextmenu.prevent.stop="openActionContextMenu($event, action)"
+              @contextmenu.prevent.stop="
+                openEditableActionContextMenu($event, action)
+              "
               @keydown.enter.prevent="handleActionSelect($event, action)"
-              @keydown.left.prevent="nudgeAction($event, action, -1)"
-              @keydown.right.prevent="nudgeAction($event, action, 1)"
-              @keydown.delete.prevent="deleteActionSelection(action)"
-              @keydown.backspace.prevent="deleteActionSelection(action)"
-              @pointerdown.stop="beginDrag($event, action)"
+              @keydown.left.prevent="nudgeEditableAction($event, action, -1)"
+              @keydown.right.prevent="nudgeEditableAction($event, action, 1)"
+              @keydown.delete.prevent="deleteEditableActionSelection(action)"
+              @keydown.backspace.prevent="deleteEditableActionSelection(action)"
+              @pointerdown.stop="beginEditableDrag($event, action)"
             >
               <img
                 v-if="resolveWorkbenchActionVisualIdentity(action).iconUrl"
@@ -855,7 +863,10 @@
                 }}</small>
               </span>
               <button
-                v-if="isTimelineActionResultEditVisible(action)"
+                v-if="
+                  isTimelineActionResultEditVisible(action) &&
+                  !isSwitchTriggeredDerivedAction(action)
+                "
                 class="timeline-action-result-edit-button"
                 type="button"
                 title="编辑结果"
@@ -888,6 +899,7 @@
                 推迟
               </span>
               <button
+                v-if="!isSwitchTriggeredDerivedAction(action)"
                 class="duration-handle"
                 type="button"
                 data-testid="workbench-action-duration-handle"
@@ -1033,6 +1045,7 @@ import {
 } from '../../domain/workbenchTimelineEntry';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
+import { isSwitchTriggeredDerivedAction } from '../../simulation/generation/switchTriggeredActionGeneration';
 
 const TimelineOperationAxis = defineAsyncComponent(
   () => import('./TimelineOperationAxis.vue')
@@ -2879,7 +2892,14 @@ function actionLabel(action) {
 function actionDetail(action) {
   if (action.type === 'skill' || action.type === 'kiboEvent') {
     const identity = resolveWorkbenchActionVisualIdentity(action);
-    return `${identity.typeLabel} · ${identity.durationFrames}F`;
+    const triggerLabel = isSwitchTriggeredDerivedAction(action)
+      ? action.switchTriggerBinding?.triggerPhase === 'on-enter'
+        ? '入场触发'
+        : '退场触发'
+      : null;
+    return [triggerLabel, identity.typeLabel, `${identity.durationFrames}F`]
+      .filter(Boolean)
+      .join(' · ');
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
@@ -2910,7 +2930,12 @@ function formatTimelineActionTitle(action) {
       : readiness.status === 'ready-with-unresolved-conditions'
         ? '条件待确认'
         : '可执行';
-  return `${action.name ?? action.id} · ${status}`;
+  const derived = isSwitchTriggeredDerivedAction(action)
+    ? '切人自动派生 · 只读'
+    : null;
+  return [action.name ?? action.id, derived, status]
+    .filter(Boolean)
+    .join(' · ');
 }
 
 function formatCooldownWindowTitle(window) {
@@ -3104,7 +3129,13 @@ function beginDrag(event, action) {
   window.addEventListener('pointercancel', endDrag);
 }
 
+function beginEditableDrag(event, action) {
+  if (isSwitchTriggeredDerivedAction(action)) return;
+  beginDrag(event, action);
+}
+
 function beginResize(event, action) {
+  if (isSwitchTriggeredDerivedAction(action)) return;
   if ((event.button ?? 0) !== 0) {
     return;
   }
@@ -3146,6 +3177,11 @@ function nudgeAction(event, action, direction) {
     actionIds,
     offsetMs: direction * stepMs,
   });
+}
+
+function nudgeEditableAction(event, action, direction) {
+  if (isSwitchTriggeredDerivedAction(action)) return;
+  nudgeAction(event, action, direction);
 }
 
 function handleResizeMove(event) {
@@ -3401,6 +3437,11 @@ function deleteActionSelection(action) {
   emit('delete-selected-actions', { actionIds });
 }
 
+function deleteEditableActionSelection(action) {
+  if (isSwitchTriggeredDerivedAction(action)) return;
+  deleteActionSelection(action);
+}
+
 function openActionContextMenu(event, action) {
   emit('open-action-context-menu', {
     actionId: action.id,
@@ -3408,6 +3449,11 @@ function openActionContextMenu(event, action) {
     y: event.clientY,
     targetStartMs: action.startMs,
   });
+}
+
+function openEditableActionContextMenu(event, action) {
+  if (isSwitchTriggeredDerivedAction(action)) return;
+  openActionContextMenu(event, action);
 }
 
 function openTimelineContextMenu(event) {
@@ -5293,6 +5339,19 @@ h2 {
   box-shadow:
     0 0 0 2px rgba(121, 199, 185, 0.3),
     0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.action-block.derived-readonly {
+  border-style: dashed;
+  border-color: rgba(242, 179, 102, 0.74);
+  background: #3d352b;
+  cursor: default;
+}
+
+.action-block.derived-readonly.selected {
+  box-shadow:
+    0 0 0 2px rgba(242, 179, 102, 0.24),
+    0 8px 20px rgba(0, 0, 0, 0.24);
 }
 
 .action-block.batch-selected {

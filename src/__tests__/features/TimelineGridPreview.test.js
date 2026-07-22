@@ -255,6 +255,64 @@ describe('TimelineGridPreview', () => {
     );
   });
 
+  it('renders switch-triggered star-carry children as selectable read-only actions', async () => {
+    const derivedAction = {
+      ...createAction({
+        id: 'switch-b-on-enter-actor-b',
+        name: '入场星携技',
+        actorId: 'actor-b',
+        startMs: 1500,
+      }),
+      durationMs: 1200,
+      parentActionId: 'switch-b',
+      actionKind: 'star-carry',
+      readOnly: true,
+      derivedAction: {
+        kind: 'switch-triggered-star-carry',
+        parentActionId: 'switch-b',
+        readOnly: true,
+      },
+      switchTriggerBinding: {
+        contractName: 'AzPrSwitchTriggerBinding',
+        bindingId: 'switch-b|on-enter|actor-b',
+        switchEventId: 'switch-b',
+        triggerPhase: 'on-enter',
+        resolutionStatus: 'applied',
+      },
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actions: [derivedAction],
+        selectedActionId: derivedAction.id,
+      }),
+    });
+    const block = wrapper.get(
+      `[data-testid="workbench-timeline-action"][data-action-id="${derivedAction.id}"]`
+    );
+
+    expect(block.classes()).toContain('derived-readonly');
+    expect(block.attributes()).toMatchObject({
+      'data-derived-action-kind': 'switch-triggered-star-carry',
+      'data-parent-action-id': 'switch-b',
+      'data-read-only': 'true',
+    });
+    expect(block.text()).toContain('入场触发');
+    expect(block.find('.duration-handle').exists()).toBe(false);
+
+    await block.trigger('click');
+    expect(wrapper.emitted('select-action')?.at(-1)?.[0]).toEqual({
+      actionId: derivedAction.id,
+      mode: 'replace',
+    });
+
+    await block.trigger('keydown', { key: 'Delete' });
+    await block.trigger('keydown', { key: 'ArrowRight' });
+    await block.trigger('contextmenu', { clientX: 20, clientY: 20 });
+    expect(wrapper.emitted('delete-selected-actions')).toBeUndefined();
+    expect(wrapper.emitted('shift-selected-actions')).toBeUndefined();
+    expect(wrapper.emitted('open-action-context-menu')).toBeUndefined();
+  });
+
   it('accepts action-library entries from the standard text drag payload', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps(),
