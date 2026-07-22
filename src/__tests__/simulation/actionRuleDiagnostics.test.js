@@ -174,6 +174,62 @@ describe('action rule diagnostics', () => {
     ).toBe(false);
   });
 
+  it('keeps exact-frame switches out of occupancy and resolves same-frame conflicts stably', () => {
+    const actor = createActor();
+    const createSwitch = (id, targetActorId) => ({
+      id,
+      type: 'switch',
+      name: `切人 ${id}`,
+      actorId: actor.id,
+      actor,
+      targetActorId,
+      startMs: 1000,
+      startFrame: 60,
+      endFrame: 60,
+      durationMs: 0,
+      durationFrames: 0,
+    });
+    const result = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [actor],
+        actions: [
+          createSwitch('switch-z', 'actor-3'),
+          createSkillAction({
+            id: 'skill-at-switch-frame',
+            startMs: 1000,
+            durationMs: 1000,
+          }),
+          createSwitch('switch-a', 'actor-2'),
+        ],
+      },
+    });
+
+    expect(result.summary).toMatchObject({
+      laneOverlapCount: 0,
+      switchFrameConflictCount: 1,
+    });
+    expect(result.diagnostics).toEqual([
+      expect.objectContaining({
+        code: ACTION_RULE_CODES.SWITCH_FRAME_CONFLICT,
+        actionId: 'switch-z',
+        blockingActionId: 'switch-a',
+        frameIndex: 60,
+        suggestedStartMs: frameToMs(61),
+      }),
+    ]);
+    expect(
+      result.readinessTimeline.actions.find(
+        action => action.actionId === 'switch-a'
+      )
+    ).toMatchObject({ executable: true, status: 'ready' });
+    expect(
+      result.readinessTimeline.actions.find(
+        action => action.actionId === 'switch-z'
+      )
+    ).toMatchObject({ executable: false, status: 'blocked' });
+  });
+
   it('requires an equipped kibo and a same-frame joint attack pair', () => {
     const actor = {
       ...createActor(),

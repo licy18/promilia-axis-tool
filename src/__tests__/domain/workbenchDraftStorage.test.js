@@ -16,6 +16,74 @@ import {
 } from '../../domain/workbenchDraftStorage';
 
 describe('workbench draft storage project files', () => {
+  it('migrates legacy 600ms switches without shifting later absolute start frames', () => {
+    const legacy = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101007 },
+      ],
+      actionDrafts: [
+        {
+          id: 'legacy-switch',
+          type: 'switch',
+          actorCharacterId: 109001,
+          targetCharacterId: 101003,
+          startMs: 1000,
+          durationMs: 600,
+        },
+        {
+          id: 'later-action',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 2400,
+          durationMs: 1000,
+          level: 1,
+        },
+      ],
+      selectedActionId: 'legacy-switch',
+    });
+    const activeScenario = legacy.scenarioWorkspace.scenarios.find(
+      scenario => scenario.id === legacy.scenarioWorkspace.activeScenarioId
+    );
+    for (const actionList of [
+      legacy.actionDrafts,
+      activeScenario.draft.actionDrafts,
+    ]) {
+      const switchAction = actionList.find(
+        action => action.id === 'legacy-switch'
+      );
+      switchAction.durationMs = 600;
+      delete switchAction.durationFrames;
+      delete switchAction.startFrame;
+      delete switchAction.endFrame;
+    }
+
+    const migrated = parseWorkbenchProjectFile(JSON.stringify(legacy));
+    const migratedSwitch = migrated.actionDrafts.find(
+      action => action.id === 'legacy-switch'
+    );
+    const laterAction = migrated.actionDrafts.find(
+      action => action.id === 'later-action'
+    );
+
+    expect(migratedSwitch).toMatchObject({
+      startMs: 1000,
+      startFrame: 60,
+      endFrame: 60,
+      durationMs: 0,
+      durationFrames: 0,
+    });
+    expect(laterAction.startMs).toBe(2400);
+  });
+
   it('preserves an explicit empty action list while retaining legacy fallback', () => {
     const emptyDraft = createWorkbenchScenarioDraftSnapshot({
       actionDrafts: [],

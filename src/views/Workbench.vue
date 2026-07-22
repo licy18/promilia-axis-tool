@@ -2752,11 +2752,14 @@ function updateAction(patch) {
           0,
           project.value.time.durationMs
         ),
-        durationMs: clampNumber(
-          normalizedPatch.durationMs ?? action.durationMs,
-          1,
-          project.value.time.durationMs
-        ),
+        durationMs:
+          action.type === ACTION_TYPES.SWITCH
+            ? 0
+            : clampNumber(
+                normalizedPatch.durationMs ?? action.durationMs,
+                1,
+                project.value.time.durationMs
+              ),
       });
     }
 
@@ -2970,8 +2973,11 @@ function updateActionTime({ actionId, startMs }) {
 }
 
 function updateActionDuration({ actionId, durationMs }) {
-  recordWorkbenchHistorySnapshot();
   const previousAction = findActionDraftById(actionId);
+  if (!previousAction || previousAction.type === ACTION_TYPES.SWITCH) {
+    return false;
+  }
+  recordWorkbenchHistorySnapshot();
   const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
@@ -3345,7 +3351,7 @@ function addSwitchAction() {
     type: ACTION_TYPES.SWITCH,
     skillId: selectedDraft.value.skillId,
     actorCharacterId,
-    durationMs: 600,
+    durationMs: 0,
     level: selectedDraft.value.level,
     targetCharacterId: resolveAlternateActorCharacterId(actorCharacterId),
     note: '切换至副角色',
@@ -3617,9 +3623,11 @@ function createTimelineEntryDraftRequest({
       skillId: entry.skillId ?? selectedDraft.value.skillId,
       actorCharacterId,
       durationMs:
-        entry.type === ACTION_TYPES.KIBO_EVENT
-          ? scheduling.durationMs
-          : (entry.durationMs ?? 600),
+        entry.type === ACTION_TYPES.SWITCH
+          ? 0
+          : entry.type === ACTION_TYPES.KIBO_EVENT
+            ? scheduling.durationMs
+            : (entry.durationMs ?? 600),
       level: selectedDraft.value.level,
     };
   }
@@ -7743,9 +7751,19 @@ function resolveLegacyInsertPlacement(
   draftSource
 ) {
   const laneId = resolveDraftLaneId(candidateAction);
-  const durationMs = resolveDraftDurationMs(candidateAction);
   const maxStartMs = project.value.time.durationMs;
   const requestedStartMs = clampNumber(candidateAction.startMs, 0, maxStartMs);
+  if (candidateAction.type === ACTION_TYPES.SWITCH) {
+    return {
+      autoDelayed: false,
+      conflictActionIds: [],
+      insertIndex: baseInsertIndex,
+      laneId,
+      requestedStartMs,
+      startMs: requestedStartMs,
+    };
+  }
+  const durationMs = resolveDraftDurationMs(candidateAction);
   let startMs = requestedStartMs;
   let insertIndex = baseInsertIndex;
   const conflictActionIds = new Set();
@@ -7872,7 +7890,9 @@ function resolveDraftLaneId(action) {
 }
 
 function resolveDraftDurationMs(action) {
-  return Math.max(1, Number(action.durationMs) || 1000);
+  return action?.type === ACTION_TYPES.SWITCH
+    ? 0
+    : Math.max(1, Number(action.durationMs) || 1000);
 }
 
 function compareDraftTimelineRanges(left, right) {

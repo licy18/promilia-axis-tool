@@ -1,5 +1,5 @@
 import { getAzprWorkbenchSeed } from '../data/azprGenerated';
-import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
+import { WORKBENCH_FRAME_MS, msToFrame, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
   EFFECT_OPERATIONS,
@@ -206,6 +206,8 @@ export function createWorkbenchActionDraft({
   ...attackInputFields
 } = {}) {
   const actionId = String(id ?? '').trim() || DEFAULT_WORKBENCH_ACTION_ID;
+  const isSwitchAction = type === ACTION_TYPES.SWITCH;
+  const normalizedStartMs = Math.max(0, snapMsToFrame(Number(startMs) || 0));
   const normalizedActionVariantIndex = Math.max(
     0,
     Number(actionVariantIndex ?? damageSegmentIndex) || 0
@@ -224,8 +226,9 @@ export function createWorkbenchActionDraft({
           actionVariantIndex: normalizedActionVariantIndex,
         })
       : null;
-  const resolvedEffectCommands =
-    type === ACTION_TYPES.SKILL
+  const resolvedEffectCommands = isSwitchAction
+    ? []
+    : type === ACTION_TYPES.SKILL
       ? mergeGeneratedActionStatusEffectCommands(
           effectCommands,
           statusGeneration?.effectCommands
@@ -255,11 +258,10 @@ export function createWorkbenchActionDraft({
     skillId: normalizedSkillId,
     actorCharacterId:
       Number(actorCharacterId) || DEFAULT_WORKBENCH_SELECTION.characterId,
-    startMs: Math.max(0, snapMsToFrame(Number(startMs) || 0)),
-    durationMs: Math.max(
-      WORKBENCH_FRAME_MS,
-      snapMsToFrame(Number(durationMs) || 1000)
-    ),
+    startMs: normalizedStartMs,
+    durationMs: isSwitchAction
+      ? 0
+      : Math.max(WORKBENCH_FRAME_MS, snapMsToFrame(Number(durationMs) || 1000)),
     level: Math.max(1, Number(level) || 1),
     actionVariantIndex: normalizedActionVariantIndex,
     damageSegmentIndex: normalizedActionVariantIndex,
@@ -279,16 +281,22 @@ export function createWorkbenchActionDraft({
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
     scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
     hitOverrides: normalizeActionHitOverrides(hitOverrides),
-    ...(hasTimingContract
+    ...(isSwitchAction
       ? {
-          durationFrames: positiveIntegerOrNull(durationFrames),
-          timingSource: textOrNull(timingSource),
-          timingStatus: textOrNull(timingStatus),
-          timingReasons: normalizedTimingReasons,
-          timingSourceIdentity: textOrNull(timingSourceIdentity),
-          needsTimingData: Boolean(needsTimingData),
+          startFrame: msToFrame(normalizedStartMs),
+          endFrame: msToFrame(normalizedStartMs),
+          durationFrames: 0,
         }
-      : {}),
+      : hasTimingContract
+        ? {
+            durationFrames: positiveIntegerOrNull(durationFrames),
+            timingSource: textOrNull(timingSource),
+            timingStatus: textOrNull(timingStatus),
+            timingReasons: normalizedTimingReasons,
+            timingSourceIdentity: textOrNull(timingSourceIdentity),
+            needsTimingData: Boolean(needsTimingData),
+          }
+        : {}),
     ...(type === ACTION_TYPES.KIBO_EVENT
       ? {
           kiboId: positiveIntegerOrNull(kiboId),
@@ -1004,10 +1012,8 @@ function createProjectActionFromDraft(
       targetActorId: targetActor.id,
       targetCharacterId: targetActor.characterId,
       startMs: draft.startMs,
-      durationMs: draft.durationMs,
       note: draft.note || `切换至 ${targetActor.name}`,
       insertion: draft.insertion,
-      effectCommands,
     });
   }
 

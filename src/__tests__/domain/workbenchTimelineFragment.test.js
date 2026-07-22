@@ -322,6 +322,41 @@ describe('workbench timeline fragment', () => {
       sourceKind: 'azpr-action-status-generation',
     });
   });
+
+  it('keeps switch events at zero duration through fragment instantiation', () => {
+    const context = createFragmentContext();
+    const switchAction = createWorkbenchActionDraft({
+      id: 'switch-fragment',
+      type: ACTION_TYPES.SWITCH,
+      actorCharacterId: context.teamSlots[0].characterId,
+      targetCharacterId: context.teamSlots[1].characterId,
+      startMs: frameToMs(90),
+      durationMs: 600,
+    });
+    const fragment = createWorkbenchTimelineFragment({
+      teamSlots: context.teamSlots,
+      actorConfigs: context.actorConfigs,
+      actions: [switchAction],
+      actionRelations: [],
+      selectedActionIds: [switchAction.id],
+      metadata: { id: 'fragment-switch-event', name: '切人事件' },
+    });
+    const instantiated = instantiateWorkbenchTimelineFragment(fragment, {
+      targetStartMs: frameToMs(180),
+      teamSlots: context.teamSlots,
+      actorConfigs: context.actorConfigs,
+      existingActions: [],
+      existingRelations: [],
+    });
+
+    expect(fragment.actions[0].source.durationMs).toBe(0);
+    expect(instantiated.actions[0]).toMatchObject({
+      type: ACTION_TYPES.SWITCH,
+      startMs: frameToMs(180),
+      durationMs: 0,
+      durationFrames: 0,
+    });
+  });
 });
 
 function createFragmentContext() {

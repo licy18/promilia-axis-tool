@@ -117,11 +117,14 @@ export function resolveTimelineActionLaneId(
 
 function createActionRange(action, laneId, laneName) {
   const startMs = Math.max(0, Number(action.startMs) || 0);
-  const durationMs = Math.max(
-    1,
-    Number(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) ||
-      DEFAULT_TIMELINE_ACTION_DURATION_MS
-  );
+  const durationMs =
+    action.type === 'switch'
+      ? 0
+      : Math.max(
+          1,
+          Number(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) ||
+            DEFAULT_TIMELINE_ACTION_DURATION_MS
+        );
 
   return {
     actionId: action.id,

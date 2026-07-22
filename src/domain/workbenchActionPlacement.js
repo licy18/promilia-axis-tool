@@ -377,10 +377,13 @@ function normalizeRequestedActions(actions) {
     .map(action => ({
       ...action,
       startMs: snapMsToFrame(Number(action.startMs) || 0),
-      durationMs: Math.max(
-        WORKBENCH_FRAME_MS,
-        snapMsToFrame(Number(action.durationMs) || WORKBENCH_FRAME_MS)
-      ),
+      durationMs:
+        action.type === 'switch'
+          ? 0
+          : Math.max(
+              WORKBENCH_FRAME_MS,
+              snapMsToFrame(Number(action.durationMs) || WORKBENCH_FRAME_MS)
+            ),
     }));
 }
 
@@ -424,7 +427,9 @@ function createActionGroupRange(actions) {
     ...actions.map(
       action =>
         (Number(action.startMs) || 0) +
-        Math.max(WORKBENCH_FRAME_MS, Number(action.durationMs) || 0)
+        (action.type === 'switch'
+          ? 0
+          : Math.max(WORKBENCH_FRAME_MS, Number(action.durationMs) || 0))
     )
   );
   return {

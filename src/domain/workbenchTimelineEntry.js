@@ -39,8 +39,14 @@ export function createWorkbenchTimelineEntry(source = {}) {
       0,
       Number(source.actionVariantIndex ?? source.damageSegmentIndex) || 0
     ),
-    durationFrames: positiveIntegerOrNull(source.durationFrames),
-    durationMs: positiveNumberOrNull(source.durationMs),
+    durationFrames:
+      type === ACTION_TYPES.SWITCH
+        ? 0
+        : positiveIntegerOrNull(source.durationFrames),
+    durationMs:
+      type === ACTION_TYPES.SWITCH
+        ? 0
+        : positiveNumberOrNull(source.durationMs),
     cooldownMs: positiveNumberOrNull(source.cooldownMs),
     eventType: textOrNull(source.eventType),
     icon: textOrNull(source.icon),

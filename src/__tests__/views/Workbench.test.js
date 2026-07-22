@@ -7360,6 +7360,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-add-switch-action"]')
       .trigger('click');
+    await flushPromises();
     await nextTick();
     await wrapper
       .find('.action-item[data-action-id="action-0002"]')
@@ -8545,6 +8546,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-add-switch-action"]')
       .trigger('click');
+    await flushPromises();
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
@@ -8568,6 +8570,16 @@ describe('Workbench view', () => {
       wrapper.get(
         '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
       );
+    expect(switchBlock().classes()).toContain('switch-event-marker');
+    expect(switchBlock().attributes()).toMatchObject({
+      'data-switch-event': 'true',
+      'data-duration-ms': '0',
+      'data-duration-frames': '0',
+    });
+    expect(switchBlock().find('.duration-handle').exists()).toBe(false);
+    expect(
+      wrapper.get('[data-testid="workbench-switch-event-frame"]').text()
+    ).toContain('0F');
     expect(controlledActorTimeline()).toMatchObject({
       initialActor: { characterId: 109001 },
       finalActor: { characterId: 101003 },
@@ -8625,6 +8637,51 @@ describe('Workbench view', () => {
     expect(controlledActorTimeline().initialActor.characterId).toBe(
       tertiaryCharacterId
     );
+  });
+
+  it('keeps a zero-duration switch at its requested frame inside another action range', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    await addSingleSkillActionFromLibrary(wrapper);
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('0');
+    await wrapper
+      .find('[data-testid="workbench-duration-frame-input"]')
+      .setValue('600');
+    await wrapper
+      .get(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+      )
+      .trigger('click');
+
+    const anchorAction = wrapper
+      .getComponent(TimelineGridPreview)
+      .props('actions')
+      .find(action => action.id === 'action-0001');
+    const requestedFrame =
+      msToFrame(anchorAction.startMs + anchorAction.durationMs) + 60;
+    await wrapper
+      .find('[data-testid="workbench-add-switch-action"]')
+      .trigger('click');
+    await settleWorkbenchAsyncPanels();
+
+    const marker = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    );
+    expect(marker.attributes('data-start-frame')).toBe(String(requestedFrame));
+    expect(
+      wrapper.find('[data-testid="workbench-note-input"]').element.value
+    ).not.toContain('自动推迟');
+    expect(
+      wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
+    ).toBe('0');
   });
 
   it('renders the fixed team topology and keeps annotations on a system lane', async () => {
@@ -8690,6 +8747,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-add-switch-action"]')
       .trigger('click');
+    await flushPromises();
     expect(
       wrapper
         .find(
@@ -8697,7 +8755,13 @@ describe('Workbench view', () => {
         )
         .attributes('data-lane-id')
     ).toBe('actor-109001');
-    expect(wrapper.text()).toContain('切人 -> 寒悠悠');
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('title')
+    ).toContain('切换至 寒悠悠');
 
     await wrapper
       .find('[data-testid="workbench-add-annotation-action"]')

@@ -12,7 +12,7 @@ import {
   normalizeWorkbenchActorConfigs,
   normalizeWorkbenchTeamSlots,
 } from '../../domain/workbenchProjectFactory';
-import { validateProject } from '../../domain/projectSchema';
+import { ACTION_TYPES, validateProject } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
@@ -32,6 +32,51 @@ afterAll(() => {
 });
 
 describe('workbench project actor configuration', () => {
+  it('compiles legacy switch durations as zero-duration exact-frame events', () => {
+    const sourceCharacterId = DEFAULT_WORKBENCH_TEAM_SLOTS[0].characterId;
+    const targetCharacterId = DEFAULT_WORKBENCH_TEAM_SLOTS[1].characterId;
+    const draft = createWorkbenchActionDraft({
+      id: 'switch-exact-frame',
+      type: ACTION_TYPES.SWITCH,
+      actorCharacterId: sourceCharacterId,
+      targetCharacterId,
+      startMs: 1000,
+      durationMs: 600,
+      effectCommands: [
+        {
+          id: 'legacy-switch-effect',
+          effectId: 'legacy-switch-effect',
+          effectName: '旧切人效果',
+        },
+      ],
+    });
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actions: [draft],
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(draft).toMatchObject({
+      startMs: 1000,
+      startFrame: 60,
+      endFrame: 60,
+      durationMs: 0,
+      durationFrames: 0,
+      effectCommands: [],
+    });
+    expect(project.actions[0]).toMatchObject({
+      type: ACTION_TYPES.SWITCH,
+      startMs: 1000,
+      startFrame: 60,
+      endFrame: 60,
+      durationMs: 0,
+      durationFrames: 0,
+    });
+    expect(project.actions[0].effectCommands ?? []).toEqual([]);
+    expect(scenario.actions[0]).toMatchObject(project.actions[0]);
+    expect(scenario.actions[0].effectCommands ?? []).toEqual([]);
+    expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
+  });
+
   it('preserves verified timing identity from a catalog draft through compilation', () => {
     const draft = createWorkbenchActionDraft({
       id: 'verified-timing-action',

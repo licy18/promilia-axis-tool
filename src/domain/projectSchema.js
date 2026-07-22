@@ -16,6 +16,7 @@ import { normalizeActionHitOverrides } from './actionHitOverrides';
 import { normalizeActionVariantInputSelection } from './actionVariantInputSelection';
 import { normalizeCombatScenario } from './combatScenario';
 import { normalizeWorkbenchActionSchedulingContract } from './workbenchActionScheduling';
+import { msToFrame, snapMsToFrame } from './timebase';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -396,11 +397,11 @@ export function createSwitchAction({
   targetActorId,
   targetCharacterId = null,
   startMs = 0,
-  durationMs = 600,
   note = '',
   insertion = null,
-  effectCommands = [],
 } = {}) {
+  const eventStartMs = snapMsToFrame(Math.max(0, Number(startMs) || 0));
+  const eventFrame = msToFrame(eventStartMs);
   return {
     id: id ?? createStableId('action'),
     type: ACTION_TYPES.SWITCH,
@@ -408,11 +409,14 @@ export function createSwitchAction({
     targetActorId,
     targetCharacterId,
     name: '切人',
-    startMs,
-    durationMs,
+    startMs: eventStartMs,
+    startFrame: eventFrame,
+    endFrame: eventFrame,
+    durationMs: 0,
+    durationFrames: 0,
     note,
     insertion,
-    ...createActionEffectCommandsField(effectCommands),
+    ...createActionEffectCommandsField([]),
   };
 }
 
@@ -1495,12 +1499,25 @@ function validateActions(actions, project, gameData, errors, warnings) {
           )
         );
       }
-      if (!Number.isFinite(action.durationMs) || action.durationMs <= 0) {
+      if (action.durationMs !== 0 || action.durationFrames !== 0) {
         errors.push(
           issue(
             'action.durationMs.invalid',
-            'Switch action durationMs must be positive',
+            'Switch action must be a zero-duration exact-frame event',
             `${path}.durationMs`
+          )
+        );
+      }
+      const expectedFrame = msToFrame(action.startMs);
+      if (
+        action.startFrame !== expectedFrame ||
+        action.endFrame !== expectedFrame
+      ) {
+        errors.push(
+          issue(
+            'action.frame.invalid',
+            'Switch action startFrame and endFrame must equal its start frame',
+            `${path}.startFrame`
           )
         );
       }

@@ -485,10 +485,13 @@ function createFragmentActionSource(action, actorConfig) {
         ? positiveIntegerOrNull(action.skillId)
         : Number(action.skillId) || null,
     actorCharacterId: Number(action.actorCharacterId) || null,
-    durationMs: Math.max(
-      WORKBENCH_FRAME_MS,
-      snapMsToFrame(Number(action.durationMs) || WORKBENCH_FRAME_MS)
-    ),
+    durationMs:
+      type === ACTION_TYPES.SWITCH
+        ? 0
+        : Math.max(
+            WORKBENCH_FRAME_MS,
+            snapMsToFrame(Number(action.durationMs) || WORKBENCH_FRAME_MS)
+          ),
     level: Math.max(1, Number(action.level) || 1),
     actionVariantIndex: Math.max(
       0,
@@ -624,10 +627,13 @@ function normalizeFragmentActionSource(source) {
         ? positiveIntegerOrNull(source.skillId)
         : Number(source.skillId) || null,
     actorCharacterId: positiveIntegerOrNull(source.actorCharacterId),
-    durationMs: Math.max(
-      WORKBENCH_FRAME_MS,
-      snapMsToFrame(Number(source.durationMs) || WORKBENCH_FRAME_MS)
-    ),
+    durationMs:
+      source.type === ACTION_TYPES.SWITCH
+        ? 0
+        : Math.max(
+            WORKBENCH_FRAME_MS,
+            snapMsToFrame(Number(source.durationMs) || WORKBENCH_FRAME_MS)
+          ),
     level: Math.max(1, Number(source.level) || 1),
     actionVariantIndex: Math.max(0, Number(source.actionVariantIndex) || 0),
     targetCharacterId: positiveIntegerOrNull(source.targetCharacterId),

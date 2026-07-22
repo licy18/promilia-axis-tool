@@ -734,8 +734,38 @@
               <small>{{ formatCooldownWindowStatus(window) }}</small>
             </button>
 
+            <TimelineSwitchEventMarker
+              v-for="action in timelineSwitchEvents(lane)"
+              :key="action.id"
+              :action="action"
+              :actors="actors"
+              :lane-id="lane.id"
+              :frame-index="msToFrame(action.startMs)"
+              :timeline-duration-ms="durationMs"
+              :top-px="Math.max(0, getTimelineActionTop(lane, 0) - 38)"
+              :preview-offset-ms="
+                isDraggingAction(action.id)
+                  ? (dragState?.currentOffsetMs ?? 0)
+                  : 0
+              "
+              :selected="action.id === flowSelectedActionId"
+              :multi-selected="selectedActionIdSet.has(action.id)"
+              :dragging="isDraggingAction(action.id)"
+              :cursor-active="isActionActiveAtTimelineCursor(action)"
+              :readiness="getActionReadiness(action)"
+              @click.stop="handleActionClick($event, action)"
+              @contextmenu.prevent.stop="openActionContextMenu($event, action)"
+              @keydown.enter.prevent="handleActionSelect($event, action)"
+              @keydown.space.prevent="handleActionSelect($event, action)"
+              @keydown.left.prevent="nudgeAction($event, action, -1)"
+              @keydown.right.prevent="nudgeAction($event, action, 1)"
+              @keydown.delete.prevent="deleteActionSelection(action)"
+              @keydown.backspace.prevent="deleteActionSelection(action)"
+              @pointerdown.stop="beginDrag($event, action)"
+            />
+
             <div
-              v-for="action in lane.actions"
+              v-for="action in timelineBlockActions(lane)"
               :key="action.id"
               class="action-block"
               :class="[
@@ -1006,6 +1036,9 @@ import { projectTimelineStateDisplaySeries } from '../../simulation/projection/p
 
 const TimelineOperationAxis = defineAsyncComponent(
   () => import('./TimelineOperationAxis.vue')
+);
+const TimelineSwitchEventMarker = defineAsyncComponent(
+  () => import('./TimelineSwitchEventMarker.vue')
 );
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
@@ -2456,6 +2489,7 @@ function formatActionPlacementPreviewTitle(action) {
 }
 
 function getTimelineActionWidthPercent(action, leftPercent = 0) {
+  if (action?.type === 'switch') return 0;
   const durationMs = Math.max(
     MIN_ACTION_DURATION_MS,
     resolveTimelineActionDurationMs(action)
@@ -2711,7 +2745,9 @@ function getTimelineCooldownSlotCount(lane) {
 function createTimelineActionLayout(actions) {
   const slotEndTimes = [];
   const slotByActionId = new Map();
-  const sortedActions = [...actions].sort(compareTimelineActionStart);
+  const sortedActions = timelineBlockActions({ actions }).sort(
+    compareTimelineActionStart
+  );
 
   sortedActions.forEach(action => {
     const startMs = Number(action.startMs) || 0;
@@ -2728,6 +2764,14 @@ function createTimelineActionLayout(actions) {
     })),
     slotCount: Math.max(1, slotEndTimes.length),
   };
+}
+
+function timelineBlockActions(lane) {
+  return (lane?.actions ?? []).filter(action => action.type !== 'switch');
+}
+
+function timelineSwitchEvents(lane) {
+  return (lane?.actions ?? []).filter(action => action.type === 'switch');
 }
 
 function createTimelineEffectLayout(intervals) {
@@ -2798,6 +2842,7 @@ function createTimelineCooldownLayout(windows) {
 }
 
 function getTimelineActionLayoutDurationMs(action) {
+  if (action?.type === 'switch') return 0;
   return Math.max(
     MIN_ACTION_DURATION_MS,
     Number(action.durationMs) || DEFAULT_TIMELINE_ACTION_DURATION_MS
@@ -3248,7 +3293,7 @@ function selectTimelineFrameFromPointer(event) {
   if (
     props.boxSelectionMode ||
     event.target?.closest?.(
-      '.action-block, .action-relation-hit, .cycle-boundary, .cooldown-window, .effect-interval, .timeline-state-curve-node, .timeline-frame-cursor'
+      '.action-block, .switch-event-marker, .action-relation-hit, .cycle-boundary, .cooldown-window, .effect-interval, .timeline-state-curve-node, .timeline-frame-cursor'
     )
   ) {
     return;
@@ -3333,6 +3378,9 @@ function emitTimelineFrame({
 
 function isActionActiveAtTimelineCursor(action) {
   const startMs = numberOrZero(action?.startMs);
+  if (action?.type === 'switch') {
+    return timelineCursor.value.frameIndex === msToFrame(startMs);
+  }
   const durationMs = Math.max(
     WORKBENCH_FRAME_MS,
     numberOrZero(action?.durationMs)
@@ -3499,7 +3547,7 @@ function beginBoxSelection(event) {
     !props.boxSelectionMode ||
     (event.button ?? 0) !== 0 ||
     event.target?.closest?.(
-      '.action-block, .action-relation-hit, .cooldown-window, .effect-interval'
+      '.action-block, .switch-event-marker, .action-relation-hit, .cooldown-window, .effect-interval'
     )
   ) {
     return;
@@ -5401,11 +5449,6 @@ h2 {
   font-size: 10px;
   font-weight: 700;
   line-height: 1;
-}
-
-.action-block.type-switch {
-  border-color: rgba(126, 176, 255, 0.5);
-  background: linear-gradient(180deg, #29436b 0%, #223455 100%);
 }
 
 .action-block.type-resource {

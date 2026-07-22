@@ -57,6 +57,9 @@ export default defineConfig({
           ) {
             return 'workbench-timeline-projection';
           }
+          if (id.includes('/features/workbench/TimelineGridPreview.vue')) {
+            return 'workbench-timeline-ui';
+          }
           if (
             [
               'WorkbenchAnalysisReportDialog.vue',

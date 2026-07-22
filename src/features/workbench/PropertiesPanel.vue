@@ -319,8 +319,8 @@
             </button>
           </div>
         </label>
-
         <label
+          v-if="!isSwitchAction"
           class="frame-edit-control"
           :data-edit-focused="isEditFocusField('durationMs')"
           :data-edit-focus-origin="getEditFocusOrigin('durationMs')"
@@ -365,6 +365,14 @@
             </button>
           </div>
         </label>
+        <div
+          v-else
+          class="frame-edit-control switch-event-frame-control"
+          data-testid="workbench-switch-event-frame"
+        >
+          <span>精确事件</span>
+          <strong>{{ selectedActionStartFrame }}F · 0F</strong>
+        </div>
       </div>
 
       <label
@@ -1250,7 +1258,9 @@ const selectedActionStartFrame = computed(() =>
   msToFrame(props.selectedAction.startMs ?? 0)
 );
 const selectedActionDurationFrame = computed(() =>
-  Math.max(1, msToFrame(props.selectedAction.durationMs ?? frameStepMs))
+  isSwitchAction.value
+    ? 0
+    : Math.max(1, msToFrame(props.selectedAction.durationMs ?? frameStepMs))
 );
 const maxStartFrame = computed(() => Math.max(0, msToFrame(props.durationMs)));
 const maxDurationFrame = computed(() => {

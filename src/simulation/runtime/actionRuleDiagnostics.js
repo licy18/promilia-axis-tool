@@ -10,6 +10,7 @@ const ACTION_BOUNDARY_EPSILON_MS = 0.001;
 
 export const ACTION_RULE_CODES = Object.freeze({
   LANE_OVERLAP: 'action-lane-overlap',
+  SWITCH_FRAME_CONFLICT: 'switch-frame-conflict',
   SKILL_COOLDOWN_ACTIVE: 'skill-cooldown-active',
   SKILL_SP_PRECONDITION_UNRESOLVED: 'skill-sp-precondition-unresolved',
   ATTACK_INPUT_CHAIN_INCOMPLETE: 'attack-input-chain-incomplete',
@@ -39,6 +40,7 @@ export function createActionRuleDiagnostics({
   });
   const diagnostics = [
     ...createLaneOverlapDiagnostics(actions),
+    ...createSwitchFrameConflictDiagnostics(actions, scenario.time?.fps),
     ...cooldownEvaluation.diagnostics,
     ...createSkillSpPreconditionDiagnostics(
       actions,
@@ -83,7 +85,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 12,
+      ruleCount: 13,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -94,6 +96,9 @@ export function createActionRuleDiagnostics({
       affectedActionIds,
       laneOverlapCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.LANE_OVERLAP
+      ).length,
+      switchFrameConflictCount: diagnostics.filter(
+        item => item.code === ACTION_RULE_CODES.SWITCH_FRAME_CONFLICT
       ).length,
       cooldownViolationCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE
@@ -589,6 +594,54 @@ function createLaneOverlapDiagnostics(actions) {
   return diagnostics;
 }
 
+function createSwitchFrameConflictDiagnostics(actions, fps = 60) {
+  const frameRate = Number(fps) || 60;
+  const switchesByFrame = groupByKey(
+    actions.filter(action => action.type === ACTION_TYPES.SWITCH),
+    action => msToFrame(action.startMs, frameRate)
+  );
+  const diagnostics = [];
+  switchesByFrame.forEach((switches, frameIndex) => {
+    const ordered = [...switches].sort(compareActions);
+    const accepted = ordered[0];
+    for (const action of ordered.slice(1)) {
+      diagnostics.push({
+        schemaVersion: 1,
+        id: createDiagnosticId(
+          ACTION_RULE_CODES.SWITCH_FRAME_CONFLICT,
+          action.id,
+          accepted.id
+        ),
+        code: ACTION_RULE_CODES.SWITCH_FRAME_CONFLICT,
+        ruleKey: 'single-controlled-actor-transition-per-frame',
+        status: ACTION_RULE_STATUSES.VIOLATED,
+        severity: 'error',
+        actionId: action.id,
+        actionIds: [accepted.id, action.id],
+        actionName: action.name ?? action.id,
+        actorId: action.actorId ?? null,
+        actorName: action.actor?.name ?? null,
+        blockingActionId: accepted.id,
+        blockingActionName: accepted.name ?? accepted.id,
+        timeMs: Number(action.startMs) || 0,
+        frameIndex: Number(frameIndex),
+        suggestedStartMs: Number(
+          (((Number(frameIndex) + 1) * 1000) / frameRate).toFixed(6)
+        ),
+        editFieldKey: 'startMs',
+        message: `${action.name ?? action.id} 与 ${accepted.name ?? accepted.id} 位于同一帧；按 action id 稳定保留 ${accepted.id}`,
+        source: {
+          sourceKind: 'azpr-exact-frame-switch-event-contract',
+          sourceStatus: 'project-switch-frame-conflict-confirmed',
+          fieldPaths: ['action.startMs', 'action.id'],
+        },
+        appliedToSimulationResults: true,
+      });
+    }
+  });
+  return diagnostics;
+}
+
 function createSkillCooldownEvaluation(
   actions,
   { scenario = null, cooldownEvaluationAdapter = null } = {}
@@ -953,10 +1006,7 @@ function createSkillSpRequirement(action) {
 }
 
 function isBlockingActorAction(action) {
-  return (
-    Boolean(action?.actorId) &&
-    [ACTION_TYPES.SKILL, ACTION_TYPES.SWITCH].includes(action.type)
-  );
+  return Boolean(action?.actorId) && action.type === ACTION_TYPES.SKILL;
 }
 
 function createActionRange(action) {

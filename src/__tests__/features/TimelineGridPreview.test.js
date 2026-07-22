@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import { serializeWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
@@ -183,6 +183,75 @@ describe('TimelineGridPreview', () => {
     expect(readStyleNumber(block.attributes('style'), 'width')).toBeCloseTo(
       100 / 3,
       4
+    );
+  });
+
+  it('renders a zero-duration switch as an exact-frame avatar marker instead of an action block', async () => {
+    const actors = [
+      { id: 'actor-a', characterId: 109001, name: '末音' },
+      { id: 'actor-b', characterId: 101003, name: '寒悠悠' },
+    ];
+    const switchAction = {
+      id: 'switch-b',
+      name: '切人',
+      type: 'switch',
+      actorId: 'actor-a',
+      actor: actors[0],
+      targetActorId: 'actor-b',
+      targetActor: actors[1],
+      targetCharacterId: 101003,
+      startMs: 1500,
+      startFrame: 90,
+      endFrame: 90,
+      durationMs: 0,
+      durationFrames: 0,
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actors,
+        actions: [
+          createAction({
+            id: 'action-a',
+            name: '普通攻击',
+            actorId: 'actor-a',
+            startMs: 0,
+          }),
+          switchAction,
+        ],
+        selectedActionId: 'switch-b',
+      }),
+    });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    await nextTick();
+    const marker = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    );
+
+    expect(marker.classes()).toContain('switch-event-marker');
+    expect(marker.classes()).not.toContain('action-block');
+    expect(marker.attributes()).toMatchObject({
+      'data-action-id': 'switch-b',
+      'data-start-frame': '90',
+      'data-duration-ms': '0',
+      'data-duration-frames': '0',
+      'data-target-character-id': '101003',
+    });
+    expect(readStyleNumber(marker.attributes('style'), 'left')).toBe(50);
+    expect(marker.get('.switch-event-frame-label').text()).toBe('90F');
+    expect(marker.get('.switch-event-avatar img').attributes('src')).toBe(
+      '/assets/characters/101003.png'
+    );
+    expect(marker.find('.duration-handle').exists()).toBe(false);
+    expect(wrapper.find('.action-block.type-switch').exists()).toBe(false);
+
+    await marker.trigger('click');
+    expect(wrapper.emitted('select-action')?.at(-1)?.[0]).toEqual({
+      actionId: 'switch-b',
+      mode: 'replace',
+    });
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toMatchObject(
+      { frameIndex: 90, source: 'timeline-action' }
     );
   });
 

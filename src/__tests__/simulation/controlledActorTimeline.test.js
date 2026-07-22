@@ -3,6 +3,8 @@ import {
   createControlledActorTimeline,
   resolveControlledActorAt,
 } from '../../simulation/runtime/controlledActorTimeline';
+import { createActionRuleDiagnostics } from '../../simulation/runtime/actionRuleDiagnostics';
+import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
 
 describe('controlled actor runtime timeline', () => {
   it('projects exact-frame controlled actor intervals from executed switch actions', () => {
@@ -93,6 +95,46 @@ describe('controlled actor runtime timeline', () => {
       'controlled-actor-switch-applied',
     ]);
     expect(timeline.summary.appliedTransitionCount).toBe(1);
+  });
+
+  it('applies only the stable first switch when two target changes share a frame', () => {
+    const scenario = createScenario();
+    scenario.actions = [
+      {
+        ...scenario.actions[1],
+        id: 'switch-z',
+        startMs: 1000,
+        durationMs: 0,
+      },
+      {
+        ...scenario.actions[0],
+        id: 'switch-a',
+        startMs: 1000,
+        durationMs: 0,
+      },
+    ];
+    const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+    const actionExecutionPlan = createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics,
+    });
+    const timeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+
+    expect(actionExecutionPlan.executedActionIds).toContain('switch-a');
+    expect(actionExecutionPlan.skippedActionIds).toEqual(['switch-z']);
+    expect(
+      timeline.transitions.map(transition => [
+        transition.actionId,
+        transition.status,
+      ])
+    ).toEqual([
+      ['switch-a', 'controlled-actor-switch-applied'],
+      ['switch-z', 'controlled-actor-switch-skipped'],
+    ]);
+    expect(timeline.finalActor.actorId).toBe('actor-b');
   });
 });
 

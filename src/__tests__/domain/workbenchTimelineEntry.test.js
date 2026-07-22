@@ -56,6 +56,19 @@ describe('workbench timeline entry contract', () => {
     ).toBeNull();
     expect(
       createWorkbenchTimelineEntry({
+        type: ACTION_TYPES.SWITCH,
+        durationMs: 600,
+        durationFrames: 36,
+        label: '切人',
+      })
+    ).toMatchObject({
+      type: ACTION_TYPES.SWITCH,
+      durationMs: 0,
+      durationFrames: 0,
+      label: '切人',
+    });
+    expect(
+      createWorkbenchTimelineEntry({
         type: ACTION_TYPES.KIBO_EVENT,
         kiboId: '500003',
         skillId: '50000302',
