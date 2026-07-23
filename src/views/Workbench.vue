@@ -960,6 +960,7 @@
       </header>
       <TimelineGridPreview
         class="png-export-timeline"
+        export-mode
         :actors="scenario.actors"
         :characters="workbenchSeed.gameData.characters"
         :enemy="scenario.enemy"

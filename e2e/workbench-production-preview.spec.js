@@ -66,7 +66,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m7-catalog-runtime-workflow]') ||
     testInfo.title.includes('[m8d-verified-mechanics-ui]') ||
     testInfo.title.includes('[m9-r2-r1-inspector-duration]') ||
-    testInfo.title.includes('[m9-r3-xiaoyu-mechanics]')
+    testInfo.title.includes('[m9-r3-xiaoyu-mechanics]') ||
+    testInfo.title.includes('[m9-r3-r1-timeline-layout]')
   ) {
     return;
   }
@@ -6766,6 +6767,238 @@ test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive eff
   });
 });
 
+test('[m9-r3-r1-timeline-layout] keeps team marks above actors and reserves a dedicated scrollbar rail', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  const packageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.goto('/#/workbench');
+  await packageResponse;
+  await page.getByTestId('workbench-scenario-add').click();
+  await setWorkbenchTimelineDuration(page, 120_000);
+  await page.getByTestId('workbench-save-draft').click();
+  await page.evaluate(
+    ({ storageKey, profiles }) => {
+      const draft = JSON.parse(window.localStorage.getItem(storageKey));
+      const tuningMarks = profiles
+        .filter(profile => profile.profileKey !== 'fire')
+        .map(profile => ({
+          ...profile,
+          heldReadyRemainingMs: 60_000,
+          layers: [
+            {
+              remainingDurationMs: 25_000,
+              sourceIdentity: {
+                sourceKind: 'm9-r3-r1-layout-fixture',
+                profileKey: profile.profileKey,
+              },
+            },
+          ],
+        }));
+      const applyTimelineState = value => {
+        if (!value || typeof value !== 'object') return;
+        if (
+          Array.isArray(value.actorConfigs) &&
+          Array.isArray(value.actionDrafts)
+        ) {
+          value.durationMs = 120_000;
+          value.initialRuntimeState = {
+            ...(value.initialRuntimeState ?? {}),
+            controlledActor: {
+              actorId: 'actor-101003',
+              characterId: 101003,
+            },
+            tuningMarks,
+          };
+        }
+        Object.values(value).forEach(applyTimelineState);
+      };
+      applyTimelineState(draft);
+      window.localStorage.setItem(storageKey, JSON.stringify(draft));
+    },
+    {
+      storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+      profiles: M8D_TUNING_MARK_PROFILES,
+    }
+  );
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const reloadedPackageResponse = page.waitForResponse(
+    response =>
+      response.url().includes('verified-combat-mechanics-package') &&
+      response.ok()
+  );
+  await page.reload();
+  await reloadedPackageResponse;
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  const source = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
+  );
+  await expect(source).toBeVisible();
+  await dragLocatorTo(
+    page,
+    source,
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+    ),
+    { targetPosition: { x: 240, y: 82 } }
+  );
+  const viewport = timeline.getByTestId('workbench-timeline-viewport');
+  const scaleViewport = timeline.getByTestId(
+    'workbench-timeline-scale-viewport'
+  );
+  const action = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
+  );
+  await expect(action).toHaveCount(1);
+  const actionId = await action.getAttribute('data-action-id');
+  expect(actionId).toBeTruthy();
+  const operationMarker = timeline.locator(
+    `[data-testid="workbench-timeline-operation-marker"][data-action-id="${actionId}"]`
+  );
+  const fireNode = timeline
+    .locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"] [data-testid="workbench-timeline-state-curve-node"][data-action-id="${actionId}"]`
+    )
+    .first();
+
+  await expect(timeline).toHaveAttribute('data-duration-ms', '120000');
+  await expect(timeline).toHaveAttribute('data-tuning-mark-track-count', '9');
+  await expect(operationMarker).toHaveCount(1);
+  await expect(fireNode).toBeVisible();
+  await expectTimelineScrollbarClearance(timeline);
+
+  await viewport.evaluate(element => {
+    element.scrollLeft = Math.max(
+      1,
+      Math.round((element.scrollWidth - element.clientWidth) * 0.5)
+    );
+    element.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await expect
+    .poll(async () => {
+      const timelineScroll = await viewport.evaluate(
+        element => element.scrollLeft
+      );
+      const scaleScroll = await scaleViewport.evaluate(
+        element => element.scrollLeft
+      );
+      return Math.abs(timelineScroll - scaleScroll);
+    })
+    .toBeLessThanOrEqual(1);
+  await viewport.evaluate(element => {
+    element.scrollLeft = 0;
+    element.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await expect
+    .poll(async () => {
+      const timelineScroll = await viewport.evaluate(
+        element => element.scrollLeft
+      );
+      const scaleScroll = await scaleViewport.evaluate(
+        element => element.scrollLeft
+      );
+      return Math.abs(timelineScroll - scaleScroll);
+    })
+    .toBeLessThanOrEqual(1);
+  await fireNode.click();
+  const alignedGeometry = await timeline.evaluate(
+    (element, currentActionId) => {
+      const actionElement = element.querySelector(
+        `[data-testid="workbench-timeline-action"][data-action-id="${currentActionId}"]`
+      );
+      const operationElement = element.querySelector(
+        `[data-testid="workbench-timeline-operation-marker"][data-action-id="${currentActionId}"]`
+      );
+      const nodeElement = element.querySelector(
+        `[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"] [data-testid="workbench-timeline-state-curve-node"][data-action-id="${currentActionId}"]`
+      );
+      const timelineCursor = element.querySelector(
+        '[data-testid="workbench-timeline-frame-cursor"]'
+      );
+      const scaleCursor = element.querySelector(
+        '[data-testid="workbench-timeline-scale-cursor"]'
+      );
+      const centerX = target => {
+        const rect = target.getBoundingClientRect();
+        return rect.left + rect.width / 2;
+      };
+      return {
+        actionOperationDelta: Math.abs(
+          actionElement.getBoundingClientRect().left -
+            operationElement.getBoundingClientRect().left
+        ),
+        nodeTimelineCursorDelta: Math.abs(
+          centerX(nodeElement) - centerX(timelineCursor)
+        ),
+        timelineScaleCursorDelta: Math.abs(
+          centerX(timelineCursor) - centerX(scaleCursor)
+        ),
+      };
+    },
+    actionId
+  );
+  expect(alignedGeometry.actionOperationDelta).toBeLessThanOrEqual(1);
+  expect(alignedGeometry.nodeTimelineCursorDelta).toBeLessThanOrEqual(1);
+  expect(alignedGeometry.timelineScaleCursorDelta).toBeLessThanOrEqual(1);
+
+  await timeline.getByTestId('workbench-timeline-shell').evaluate(element => {
+    element.scrollTop = 0;
+  });
+  await closeInspectorIfVisible(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m9-r3-r1-timeline-layout-desktop.png',
+  });
+
+  await setWorkbenchTimelineDuration(page, 180_000);
+  await expectTimelineScrollbarClearance(timeline);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expectTimelineScrollbarClearance(timeline);
+  await timeline.getByTestId('workbench-timeline-shell').evaluate(element => {
+    element.scrollTop = element.scrollHeight;
+  });
+  await viewport.evaluate(element => {
+    element.scrollLeft = element.scrollWidth - element.clientWidth;
+    element.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await expect
+    .poll(async () => {
+      const timelineScroll = await viewport.evaluate(
+        element => element.scrollLeft
+      );
+      const scaleScroll = await scaleViewport.evaluate(
+        element => element.scrollLeft
+      );
+      return Math.abs(timelineScroll - scaleScroll);
+    })
+    .toBeLessThanOrEqual(1);
+  await timeline.evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    window.scrollTo(
+      0,
+      Math.max(0, window.scrollY + rect.bottom - window.innerHeight)
+    );
+  });
+  await page.screenshot({
+    path: 'reports/m9-r3-r1-timeline-layout-narrow.png',
+  });
+});
+
 function formatRuntimeFrameLabel(frameIndex) {
   return `${Math.floor(frameIndex / 60)}s${frameIndex % 60}f`;
 }
@@ -6820,6 +7053,82 @@ async function expectTimelineRowsAligned(timeline) {
   expect(alignment.labelCount).toBe(alignment.rowCount);
   expect(alignment.rowsSeparated).toBe(true);
   expect(alignment.labelsAligned).toBe(true);
+}
+
+async function expectTimelineScrollbarClearance(timeline) {
+  const metrics = await timeline.evaluate(element => {
+    const labels = [
+      ...element.querySelectorAll(
+        '[data-testid="workbench-timeline-lane-label"]'
+      ),
+    ];
+    const rows = [
+      ...element.querySelectorAll('[data-testid="workbench-timeline-row"]'),
+    ];
+    const labelIds = labels.map(label => label.dataset.laneId);
+    const rowIds = rows.map(row => row.dataset.laneId);
+    const tuningRows = rows.filter(
+      row => row.dataset.laneKind === 'tuning-mark-curve'
+    );
+    const firstActorRow = rows.find(
+      row => row.dataset.laneKind === 'actor-action'
+    );
+    const lastRow = rows.at(-1);
+    const viewport = element.querySelector(
+      '[data-testid="workbench-timeline-viewport"]'
+    );
+    const labelClearance = element.querySelector(
+      '[data-testid="workbench-timeline-label-scrollbar-clearance"]'
+    );
+    const trackClearance = element.querySelector(
+      '[data-testid="workbench-timeline-track-scrollbar-clearance"]'
+    );
+    const firstTuningRect = tuningRows[0].getBoundingClientRect();
+    const lastTuningRect = tuningRows.at(-1).getBoundingClientRect();
+    const firstActorRect = firstActorRow.getBoundingClientRect();
+    const lastRowRect = lastRow.getBoundingClientRect();
+    const viewportRect = viewport.getBoundingClientRect();
+    const labelClearanceRect = labelClearance.getBoundingClientRect();
+    const trackClearanceRect = trackClearance.getBoundingClientRect();
+    const scrollbarHeight = Math.max(
+      0,
+      viewport.offsetHeight - viewport.clientHeight
+    );
+    const scrollbarTop = viewportRect.bottom - scrollbarHeight;
+    return {
+      labelIds,
+      rowIds,
+      tuningRowCount: tuningRows.length,
+      tuningBeforeActor: lastTuningRect.bottom <= firstActorRect.top + 0.5,
+      firstTuningVisible:
+        firstTuningRect.top >= viewportRect.top - 0.5 &&
+        firstTuningRect.bottom <= viewportRect.bottom + 0.5,
+      firstActorVisible:
+        firstActorRect.top >= viewportRect.top - 0.5 &&
+        firstActorRect.top < viewportRect.bottom,
+      clearanceHeight: trackClearanceRect.height,
+      clearanceTopAlignment: Math.abs(
+        trackClearanceRect.top - labelClearanceRect.top
+      ),
+      clearanceAfterLastLane:
+        trackClearanceRect.top >= lastRowRect.bottom + 2.5,
+      lastLaneScrollbarSeparation: scrollbarTop - lastRowRect.bottom,
+      scrollbarHeight,
+      hasHorizontalOverflow: viewport.scrollWidth > viewport.clientWidth,
+    };
+  });
+  expect(metrics.labelIds).toEqual(metrics.rowIds);
+  expect(metrics.tuningRowCount).toBeGreaterThan(0);
+  expect(metrics.tuningBeforeActor).toBe(true);
+  expect(metrics.firstTuningVisible).toBe(true);
+  expect(metrics.firstActorVisible).toBe(true);
+  expect(metrics.clearanceHeight).toBeGreaterThanOrEqual(18);
+  expect(metrics.clearanceHeight).toBeLessThanOrEqual(22);
+  expect(metrics.clearanceTopAlignment).toBeLessThanOrEqual(0.5);
+  expect(metrics.clearanceAfterLastLane).toBe(true);
+  expect(metrics.lastLaneScrollbarSeparation).toBeGreaterThanOrEqual(18);
+  expect(metrics.hasHorizontalOverflow).toBe(true);
+  expect(metrics.scrollbarHeight).toBeGreaterThanOrEqual(0);
 }
 
 async function expectTimelineTrackReadability(timeline) {

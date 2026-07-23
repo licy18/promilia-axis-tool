@@ -1418,6 +1418,107 @@ describe('TimelineGridPreview', () => {
     );
   });
 
+  it('keeps the shared tuning-mark group before actor lanes with mirrored lane order', () => {
+    const tuningMarkCurveProjection = projectVerifiedTuningMarkCurves({
+      durationMs: 120_000,
+      tuningMarkRuntime: {
+        initialState: [
+          {
+            markId: 150,
+            profileKey: 'fire',
+            elementName: '火',
+            currentValue: 1,
+            maxValue: 5,
+            valueUnit: 'mark-stacks',
+          },
+          {
+            markId: 750,
+            profileKey: 'wind',
+            elementName: '风',
+            currentValue: 2,
+            maxValue: 5,
+            valueUnit: 'mark-stacks',
+          },
+        ],
+        events: [],
+      },
+    });
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        durationMs: 120_000,
+        tuningMarkCurveProjection,
+      }),
+    });
+
+    const labelIds = wrapper
+      .findAll('[data-testid="workbench-timeline-lane-label"]')
+      .map(label => label.attributes('data-lane-id'));
+    const rowIds = wrapper
+      .findAll('[data-testid="workbench-timeline-row"]')
+      .map(row => row.attributes('data-lane-id'));
+    expect(labelIds).toEqual(rowIds);
+    expect(labelIds.slice(0, 2)).toEqual([
+      'tuning-mark-150',
+      'tuning-mark-750',
+    ]);
+    expect(labelIds.indexOf('tuning-mark-750')).toBeLessThan(
+      labelIds.indexOf('actor-a')
+    );
+
+    const labelClearance = wrapper.get(
+      '[data-testid="workbench-timeline-label-scrollbar-clearance"]'
+    );
+    const trackClearance = wrapper.get(
+      '[data-testid="workbench-timeline-track-scrollbar-clearance"]'
+    );
+    expect(labelClearance.attributes('aria-hidden')).toBe('true');
+    expect(trackClearance.attributes('aria-hidden')).toBe('true');
+    expect(labelClearance.attributes('data-lane-id')).toBeUndefined();
+    expect(trackClearance.attributes('data-lane-id')).toBeUndefined();
+  });
+
+  it('places the empty tuning-mark placeholder above actors and omits scrollbar clearance in exports', () => {
+    const tuningMarkCurveProjection = {
+      status: 'verified-tuning-mark-curves-ready',
+      tracks: [],
+      visibleTracks: [],
+      summary: { profileCount: 0, visibleTrackCount: 0 },
+      applied: true,
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        durationMs: 120_000,
+        tuningMarkCurveProjection,
+        exportMode: true,
+      }),
+    });
+
+    const labelIds = wrapper
+      .findAll('[data-testid="workbench-timeline-lane-label"]')
+      .map(label => label.attributes('data-lane-id'));
+    const rowIds = wrapper
+      .findAll('[data-testid="workbench-timeline-row"]')
+      .map(row => row.attributes('data-lane-id'));
+    expect(labelIds).toEqual(rowIds);
+    expect(labelIds[0]).toBe('tuning-mark-empty');
+    expect(labelIds.indexOf('tuning-mark-empty')).toBeLessThan(
+      labelIds.indexOf('actor-a')
+    );
+    expect(
+      wrapper.get('[data-testid="workbench-timeline-grid-preview"]').classes()
+    ).toContain('timeline-export-mode');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-label-scrollbar-clearance"]')
+        .exists()
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-track-scrollbar-clearance"]')
+        .exists()
+    ).toBe(false);
+  });
+
   it('renders a special resource lane only for the owning actor and locates its source action', async () => {
     const runtimeStateCurves = createRuntimeTimelineStateCurves();
     runtimeStateCurves.resources.curvesBySpecialResource = [

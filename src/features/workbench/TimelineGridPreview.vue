@@ -1,6 +1,7 @@
 <template>
   <section
     class="panel timeline-panel"
+    :class="{ 'timeline-export-mode': exportMode }"
     :data-flow-selected-action-id="flowSelectedActionId"
     :data-action-relation-count="actionRelations.length"
     :data-cycle-boundary-count="cycleBoundaries.length"
@@ -283,7 +284,7 @@
       </div>
     </div>
 
-    <div class="timeline-shell">
+    <div class="timeline-shell" data-testid="workbench-timeline-shell">
       <div class="lane-labels">
         <div
           v-for="lane in timelineLanes"
@@ -455,6 +456,12 @@
             <small>{{ lane.detail }}</small>
           </template>
         </div>
+        <div
+          v-if="!exportMode"
+          class="timeline-scrollbar-clearance label-clearance"
+          aria-hidden="true"
+          data-testid="workbench-timeline-label-scrollbar-clearance"
+        />
       </div>
 
       <div
@@ -1022,6 +1029,13 @@
             </button>
           </div>
         </div>
+        <div
+          v-if="!exportMode"
+          class="timeline-scrollbar-clearance track-clearance"
+          :style="timelineTrackStyle"
+          aria-hidden="true"
+          data-testid="workbench-timeline-track-scrollbar-clearance"
+        />
       </div>
     </div>
 
@@ -1341,6 +1355,10 @@ const props = defineProps({
   runtimeFocusSource: {
     type: String,
     default: '',
+  },
+  exportMode: {
+    type: Boolean,
+    default: false,
   },
   stateCurveFocusMode: {
     type: String,
@@ -1770,6 +1788,7 @@ const timelineLanes = computed(() => {
     editable: false,
   });
   const allLanes = [
+    ...tuningMarkLanes,
     ...actorGroups.flatMap(group => [
       group.actionLane,
       ...group.specialResourceLanes,
@@ -1780,7 +1799,6 @@ const timelineLanes = computed(() => {
     enemyGroup.eventLane,
     enemyGroup.hpCurveLane,
     enemyGroup.toughnessCurveLane,
-    ...tuningMarkLanes,
     systemLane,
   ];
   const allLanesById = new Map(allLanes.map(lane => [lane.id, lane]));
@@ -4090,6 +4108,8 @@ onBeforeUnmount(() => {
 }
 
 .timeline-panel {
+  --timeline-scrollbar-clearance-height: 20px;
+
   display: flex;
   min-height: 0;
   flex-direction: column;
@@ -4568,6 +4588,34 @@ h2 {
 
 .timeline-lane {
   position: relative;
+}
+
+.timeline-scrollbar-clearance {
+  height: var(--timeline-scrollbar-clearance-height);
+  min-height: var(--timeline-scrollbar-clearance-height);
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: #11171c;
+  pointer-events: none;
+}
+
+.timeline-scrollbar-clearance.label-clearance {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0 0 0 4px;
+}
+
+.timeline-scrollbar-clearance.track-clearance {
+  min-width: 100%;
+  margin-top: 3px;
+  border-radius: 0 0 4px;
+}
+
+.timeline-export-mode .timeline-viewport {
+  scrollbar-width: none;
+}
+
+.timeline-export-mode .timeline-viewport::-webkit-scrollbar {
+  display: none;
 }
 
 .timeline-lane.box-selection-active {
