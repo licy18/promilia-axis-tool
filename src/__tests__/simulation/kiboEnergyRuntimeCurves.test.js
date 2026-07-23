@@ -122,7 +122,7 @@ describe('kibo energy runtime curves', () => {
     ]);
   });
 
-  it('ignores petDelta and observations without exact owner or consistent values', () => {
+  it('uses the verified SP unit contract when no valid owner observation exists', () => {
     const [curve] = createKiboEnergyRuntimeCurves({
       scenario: createScenario([
         {
@@ -143,9 +143,104 @@ describe('kibo energy runtime curves', () => {
       trackingOnly: true,
       appliedToCalculators: false,
       stateMetric: {
+        valueUnit: 'sp',
         initialValue: 0,
         currentValue: 0,
-        maxValue: null,
+        maxValue: 100,
+      },
+      sourceSemantics: {
+        semanticResource: 'kibo-sp',
+        status: 'verified-kibo-sp-unit-contract-baseline',
+        valueSourceStatus: 'verified-kibo-growth-contract',
+      },
+    });
+  });
+
+  it('uses configured project initial energy as the tracking baseline without observations', () => {
+    const scenario = createScenario();
+    scenario.initialRuntimeState = {
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-109001',
+          characterId: 109001,
+          kiboId: 500001,
+          kiboName: '测试奇波',
+          currentValue: 50,
+          maxValue: 100,
+        },
+      ],
+    };
+
+    const [curve] = createKiboEnergyRuntimeCurves({ scenario });
+
+    expect(curve).toMatchObject({
+      slotId: 'team-slot-1',
+      kiboId: 500001,
+      baseline: {
+        sourceKind: 'azpr-project-initial-kibo-sp',
+        status: 'workbench-initial-kibo-energy-baseline',
+        initialValue: 50,
+        currentValue: 50,
+        maxValue: 100,
+        confirmed: true,
+      },
+      stateMetric: {
+        valueUnit: 'sp',
+        observedSourceValueUnit: 'sp',
+        initialValue: 50,
+        currentValue: 50,
+        maxValue: 100,
+      },
+      sourceSemantics: {
+        semanticResource: 'kibo-sp',
+        status: 'project-initial-kibo-sp-tracking-baseline',
+        valueSourceStatus: 'project-initial-runtime-state',
+        observation: null,
+      },
+      trackingOnly: true,
+      appliedToCalculators: false,
+    });
+  });
+
+  it('does not mix cooldown readiness observations into a configured SP baseline', () => {
+    const scenario = createScenario([
+      createObservation(),
+      createObservation({
+        eventIndex: 1,
+        frameIndex: 60,
+        timeMs: 1000,
+        cdTime: 0,
+        ready: true,
+      }),
+    ]);
+    scenario.initialRuntimeState = {
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-109001',
+          characterId: 109001,
+          kiboId: 500001,
+          currentValue: 50,
+          maxValue: 100,
+        },
+      ],
+    };
+
+    const [curve] = createKiboEnergyRuntimeCurves({ scenario });
+
+    expect(curve).toMatchObject({
+      semanticResource: 'kibo-sp',
+      pointCount: 0,
+      stateMetric: {
+        valueUnit: 'sp',
+        initialValue: 50,
+        currentValue: 50,
+        maxValue: 100,
+      },
+      sourceSemantics: {
+        status: 'project-initial-kibo-sp-tracking-baseline',
+        observation: null,
       },
     });
   });

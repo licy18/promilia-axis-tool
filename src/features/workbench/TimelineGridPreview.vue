@@ -311,7 +311,7 @@
           :tabindex="isKeyboardIdentityLane(lane) ? 0 : undefined"
           :title="
             lane.curve
-              ? `${lane.detail} · ${formatTopologyCurveCursorValue(lane.curve)}`
+              ? `${lane.detail} · ${formatTopologyCurveLaneValue(lane)}`
               : ''
           "
           data-testid="workbench-timeline-lane-label"
@@ -423,9 +423,23 @@
             <i class="lane-curve-mark" aria-hidden="true" />
             <span class="lane-subtrack-copy">
               <strong>{{ lane.name }}</strong>
-              <small>
+              <TimelineInitialEnergyInput
+                v-if="isTimelineInitialEnergyEditable(lane)"
+                :label="lane.detail"
+                :value="lane.curve.initialValue"
+                :max-value="lane.curve.maxValue"
+                :owner-kind="
+                  lane.kind === 'kibo-energy-curve' ? 'kibo' : 'actor'
+                "
+                :actor-id="lane.actorId"
+                :character-id="lane.identity?.characterId"
+                :slot-id="lane.identity?.slotId"
+                :kibo-id="lane.identity?.kiboId"
+                @commit="commitTimelineInitialEnergy(lane, $event)"
+              />
+              <small v-else>
                 {{ lane.detail }} ·
-                {{ formatTopologyCurveCursorValue(lane.curve) }}
+                {{ formatTopologyCurveLaneValue(lane) }}
               </small>
             </span>
           </template>
@@ -1070,6 +1084,7 @@ import {
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
 import { isSwitchTriggeredDerivedAction } from '../../simulation/generation/switchTriggeredActionGeneration';
+import TimelineInitialEnergyInput from './TimelineInitialEnergyInput.vue';
 import {
   WORKBENCH_TIMELINE_BASE_PIXELS_PER_SECOND,
   WORKBENCH_TIMELINE_DURATION_OPTIONS_MS,
@@ -1355,6 +1370,10 @@ const props = defineProps({
     type: Object,
     default: () => ({ actions: [], cooldownWindows: [] }),
   },
+  initialEnergyEditing: {
+    type: Boolean,
+    default: false,
+  },
   snapMs: {
     type: Number,
     default: WORKBENCH_FRAME_MS,
@@ -1397,6 +1416,7 @@ const emit = defineEmits([
   'update-action-placement-mode',
   'preview-action-placement',
   'clear-action-placement-preview',
+  'update-initial-energy',
 ]);
 const laneRef = ref(null);
 const scaleViewportRef = ref(null);
@@ -1935,8 +1955,9 @@ function createTimelineActorGroups() {
           actorId: actor.id,
           slotId: topology.kiboEnergyCurve?.slotId ?? `team-slot-${index + 1}`,
           kiboId: kibo?.id ?? null,
+          runtimeCurveEnabled: Boolean(kibo),
           fallbackInitialValue: 0,
-          fallbackMaxValue: 100,
+          fallbackMaxValue: kibo ? null : 1,
         }),
       }),
     };
@@ -2031,7 +2052,11 @@ function isDirectLoadoutLane(lane) {
 }
 
 function isKeyboardIdentityLane(lane) {
-  return isIdentityLane(lane) && !isDirectLoadoutLane(lane);
+  return (
+    isIdentityLane(lane) &&
+    !isDirectLoadoutLane(lane) &&
+    !isTimelineInitialEnergyEditable(lane)
+  );
 }
 
 function isActiveIdentityLane(lane) {
@@ -2283,6 +2308,46 @@ function formatTopologyCurveCursorValue(curve) {
   return max == null ? current : `${current} / ${formatCompactNumber(max)}`;
 }
 
+function formatTopologyCurveInitialValue(curve) {
+  const initial = formatCompactNumber(curve.initialValue);
+  const max = strictNumberOrNull(curve.maxValue);
+  return max == null ? initial : `${initial} / ${formatCompactNumber(max)}`;
+}
+
+function formatTopologyCurveLaneValue(lane) {
+  return isTimelineInitialEnergyLane(lane)
+    ? formatTopologyCurveInitialValue(lane.curve)
+    : formatTopologyCurveCursorValue(lane.curve);
+}
+
+function isTimelineInitialEnergyLane(lane) {
+  return ['actor-energy-curve', 'kibo-energy-curve'].includes(lane?.kind);
+}
+
+function isTimelineInitialEnergyEditable(lane) {
+  if (!props.initialEnergyEditing || !isTimelineInitialEnergyLane(lane)) {
+    return false;
+  }
+  if (lane.kind === 'kibo-energy-curve' && !Number(lane.identity?.kiboId)) {
+    return false;
+  }
+  return Number(lane.curve?.maxValue) > 0;
+}
+
+function commitTimelineInitialEnergy(lane, currentValue) {
+  if (!isTimelineInitialEnergyEditable(lane)) return;
+  emit('update-initial-energy', {
+    ownerKind: lane.kind === 'kibo-energy-curve' ? 'kibo' : 'actor',
+    actorId: lane.actorId,
+    characterId: lane.identity?.characterId ?? null,
+    slotId: lane.identity?.slotId ?? '',
+    kiboId: lane.identity?.kiboId ?? null,
+    kiboName: lane.identity?.kiboName ?? null,
+    currentValue,
+    maxValue: lane.curve.maxValue,
+  });
+}
+
 function createTimelineStateCurve({
   trackKey,
   actorId = '',
@@ -2292,18 +2357,21 @@ function createTimelineStateCurve({
   resourceIdentity = null,
   resourceName = null,
   color = null,
+  runtimeCurveEnabled = true,
   fallbackInitialValue = 0,
   fallbackMaxValue = null,
 }) {
-  const runtimeCurve = resolveRuntimeStateCurve(trackKey, {
-    actorId,
-    slotId,
-    kiboId,
-    curveKind,
-    resourceIdentity,
-    resourceName,
-    color,
-  });
+  const runtimeCurve = runtimeCurveEnabled
+    ? resolveRuntimeStateCurve(trackKey, {
+        actorId,
+        slotId,
+        kiboId,
+        curveKind,
+        resourceIdentity,
+        resourceName,
+        color,
+      })
+    : null;
   const stateMetric = runtimeCurve?.stateMetric ?? null;
   const initialValue = numberOrZero(
     stateMetric?.initialValue ?? fallbackInitialValue

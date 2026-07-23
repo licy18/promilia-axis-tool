@@ -505,6 +505,7 @@
           :action-placement-mode="actionPlacementMode"
           :action-placement-proposal="lastActionPlacementProposal"
           :action-placement-preview="actionPlacementPreview"
+          :initial-energy-editing="true"
           @select-action="selectAction"
           @select-identity="selectTimelineIdentity"
           @open-loadout-picker="openLoadoutPicker"
@@ -540,6 +541,7 @@
           @preview-action-placement="previewActionPlacement"
           @clear-action-placement-preview="clearActionPlacementPreview"
           @update-action-placement-mode="setActionPlacementMode"
+          @update-initial-energy="updateTimelineInitialEnergy"
         />
 
         <WorkbenchCycleSectionPanel
@@ -2920,6 +2922,123 @@ function updateActorConfig(patch = {}) {
     )
   );
   markDraftDirty();
+}
+
+function updateTimelineInitialEnergy(request = {}) {
+  if (request.ownerKind === 'actor') {
+    const actor = scenario.value.actors.find(
+      item =>
+        item.id === request.actorId ||
+        Number(item.characterId) === Number(request.characterId)
+    );
+    if (!actor) return false;
+    const curve =
+      simulationResult.value.runtimeOutputs.stateCurves.resources.curvesByActor?.find(
+        item => item.actorId === actor.id
+      );
+    const maxValue = resolveInitialEnergyMax(
+      curve?.stateMetric?.maxValue,
+      request.maxValue
+    );
+    const currentValue = normalizeInitialEnergyInput(
+      request.currentValue,
+      maxValue
+    );
+    const activeConfig = actorConfigs.value.find(
+      config => Number(config.characterId) === Number(actor.characterId)
+    );
+    if (
+      currentValue == null ||
+      Number(activeConfig?.initialSp ?? 0) === currentValue
+    ) {
+      return false;
+    }
+    updateActorConfig({
+      characterId: actor.characterId,
+      initialSp: currentValue,
+    });
+    return true;
+  }
+  if (request.ownerKind !== 'kibo') return false;
+  return updateInitialKiboEnergy(request);
+}
+
+function updateInitialKiboEnergy(request = {}) {
+  const slotId = String(request.slotId ?? '').trim();
+  const kiboId = Number(request.kiboId);
+  if (!slotId || !Number.isInteger(kiboId) || kiboId <= 0) return false;
+  const runtimeCurve =
+    simulationResult.value.runtimeOutputs.stateCurves.resources.curvesByKibo?.find(
+      curve =>
+        curve.slotId === slotId && Number(curve.kiboId) === Number(kiboId)
+    );
+  if (!runtimeCurve) return false;
+  const topologyGroup =
+    project.value.metadata.timelineTopology.actorGroups.find(
+      group => group.kiboEnergyCurve?.slotId === slotId
+    );
+  const configuredKiboId = Number(
+    topologyGroup?.kiboLane?.kiboId ?? topologyGroup?.kiboEnergyCurve?.kiboId
+  );
+  if (configuredKiboId !== kiboId) return false;
+  const actor = scenario.value.actors.find(
+    item => item.id === (runtimeCurve.actorId ?? topologyGroup?.actorId)
+  );
+  const maxValue = resolveInitialEnergyMax(
+    runtimeCurve.stateMetric?.maxValue,
+    request.maxValue
+  );
+  const currentValue = normalizeInitialEnergyInput(
+    request.currentValue,
+    maxValue
+  );
+  if (currentValue == null) return false;
+  const currentRows = initialRuntimeState.value?.kiboEnergyBySlot ?? [];
+  const currentRow = currentRows.find(
+    row => row.slotId === slotId && Number(row.kiboId) === kiboId
+  );
+  if (
+    Number(currentRow?.currentValue ?? 0) === currentValue &&
+    Number(currentRow?.maxValue ?? maxValue) === maxValue
+  ) {
+    return false;
+  }
+  const kibo = loadoutOptions.kibos.find(item => Number(item.id) === kiboId);
+  recordWorkbenchHistorySnapshot();
+  initialRuntimeState.value = normalizeInitialRuntimeState({
+    ...(initialRuntimeState.value ?? {}),
+    kiboEnergyBySlot: [
+      ...currentRows.filter(row => row.slotId !== slotId),
+      {
+        slotId,
+        actorId: actor?.id ?? runtimeCurve.actorId ?? null,
+        characterId: actor?.characterId ?? request.characterId ?? null,
+        kiboId,
+        kiboName: kibo?.name ?? request.kiboName ?? null,
+        currentValue,
+        maxValue,
+      },
+    ],
+  });
+  markDraftDirty();
+  return true;
+}
+
+function resolveInitialEnergyMax(runtimeMaxValue, projectedMaxValue) {
+  const runtimeMax = Number(runtimeMaxValue);
+  if (Number.isFinite(runtimeMax) && runtimeMax > 0) return runtimeMax;
+  const projectedMax = Number(projectedMaxValue);
+  return Number.isFinite(projectedMax) && projectedMax > 0
+    ? projectedMax
+    : null;
+}
+
+function normalizeInitialEnergyInput(value, maxValue) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || !Number.isFinite(maxValue)) return null;
+  return (
+    Math.round((clampNumber(number, 0, maxValue) + Number.EPSILON) * 100) / 100
+  );
 }
 
 function applyWorkbenchConfigurationCommand(command = {}) {

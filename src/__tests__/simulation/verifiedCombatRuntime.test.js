@@ -754,6 +754,69 @@ describe('verified combat mechanics runtime', () => {
     ).toBe(false);
   });
 
+  it('uses a configured 50 SP kibo baseline for recovery and cost readiness', () => {
+    const initialRuntimeState = {
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-3',
+          kiboId: HEAVY_ROCK_HOOF_ID,
+          currentValue: 50,
+          maxValue: 100,
+        },
+      ],
+    };
+    const recovery = simulateVerifiedAcceptanceScenario({
+      includeActor: true,
+      includeKibo: false,
+      durationMs: 1000,
+      initialRuntimeState,
+    });
+    expect(
+      recovery.verifiedCombatRuntime.initialState.kiboEnergy.find(
+        state => state.slotId === 'team-slot-3'
+      )
+    ).toMatchObject({
+      currentValue: 50,
+      maxValue: 100,
+    });
+    expect(
+      recovery.verifiedCombatRuntime.kiboResourceEvents.find(
+        event => event.actionId === 'verified-pangpang-normal'
+      )
+    ).toMatchObject({
+      payload: {
+        beforeValue: 50.041656,
+        change: 4.159897,
+        afterValue: 54.201553,
+        maxValue: 100,
+      },
+    });
+
+    const blockedCost = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: true,
+      durationMs: 1000,
+      kiboStartMs: 100,
+      initialRuntimeState,
+    });
+    expect(blockedCost.verifiedCombatRuntime.executionBlocks).toEqual([
+      expect.objectContaining({
+        actionId: 'verified-heavy-rock-hoof',
+        reason: 'verified-kibo-resource-insufficient',
+        requiredValue: 100,
+        currentValue: 50,
+        maxValue: 100,
+      }),
+    ]);
+    expect(
+      blockedCost.verifiedCombatRuntime.kiboResourceEvents.some(
+        event =>
+          event.actionId === 'verified-heavy-rock-hoof' &&
+          event.payload.reason === 'verified-skill-cost'
+      )
+    ).toBe(false);
+  });
+
   it('uses the same 100-point contract for actor ultimate readiness and diagnostics', () => {
     const full = simulateVerifiedAcceptanceScenario({
       includeActor: false,

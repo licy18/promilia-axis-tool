@@ -10051,23 +10051,75 @@ describe('Workbench view', () => {
       max: '100',
       step: '1',
     });
-    teamLoadoutPanel.vm.$emit('update-actor-config', {
-      characterId: 109001,
-      initialSp: 50,
+    const timelineActorEnergyInput = () =>
+      wrapper.get(
+        '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="109001"]'
+      );
+    const timelineKiboEnergyInput = () =>
+      wrapper.get(
+        '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="kibo"][data-team-slot-id="team-slot-1"][data-kibo-id="500001"]'
+      );
+    expect(timelineActorEnergyInput().element.value).toBe('0');
+    expect(timelineKiboEnergyInput().element.value).toBe('0');
+    await timelineActorEnergyInput().setValue('50');
+    await timelineActorEnergyInput().trigger('blur');
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    expect(timelineActorEnergyInput().element.value).toBe('0');
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    expect(timelineActorEnergyInput().element.value).toBe('50');
+    const historyCountBeforeKiboEdit = Number(
+      wrapper
+        .find('[data-testid="workbench-undo-edit"]')
+        .attributes('data-history-count')
+    );
+    await timelineKiboEnergyInput().setValue('50');
+    await timelineKiboEnergyInput().trigger('blur');
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    expect(
+      JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY))
+        .initialRuntimeState.kiboEnergyBySlot
+    ).toEqual([
+      expect.objectContaining({
+        slotId: 'team-slot-1',
+        kiboId: 500001,
+        currentValue: 50,
+        maxValue: 100,
+      }),
+    ]);
+    expect(timelineKiboEnergyInput().element.value).toBe('50');
+    expect(
+      Number(
+        wrapper
+          .find('[data-testid="workbench-undo-edit"]')
+          .attributes('data-history-count')
+      )
+    ).toBe(historyCountBeforeKiboEdit + 1);
+    expect(
+      wrapper
+        .findComponent(TimelineGridPreview)
+        .emitted('update-initial-energy')
+        ?.at(-1)?.[0]
+    ).toMatchObject({
+      ownerKind: 'kibo',
+      slotId: 'team-slot-1',
+      kiboId: 500001,
+      currentValue: 50,
+      maxValue: 100,
     });
-    await nextTick();
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
     expect(
-      wrapper.find(
-        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
-      ).element.value
-    ).toBe('');
+      wrapper
+        .findComponent(TimelineGridPreview)
+        .props('runtimeStateCurves')
+        .resources.curvesByKibo.find(
+          curve =>
+            curve.slotId === 'team-slot-1' && Number(curve.kiboId) === 500001
+        ).stateMetric.initialValue
+    ).toBe(0);
+    expect(timelineKiboEnergyInput().element.value).toBe('0');
+    expect(timelineActorEnergyInput().element.value).toBe('50');
     await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
-    expect(
-      wrapper.find(
-        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
-      ).element.value
-    ).toBe('50');
+    expect(timelineKiboEnergyInput().element.value).toBe('50');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
 
     const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
@@ -10100,6 +10152,18 @@ describe('Workbench view', () => {
           characterId: 101007,
         },
       ],
+      initialRuntimeState: {
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-1',
+            actorId: 'actor-109001',
+            characterId: 109001,
+            kiboId: 500001,
+            currentValue: 50,
+            maxValue: 100,
+          },
+        ],
+      },
     });
     expect(draft.actionDrafts).toHaveLength(2);
     expect(draft.actionDrafts[1]).toMatchObject({
@@ -10140,6 +10204,16 @@ describe('Workbench view', () => {
       ).element.value
     ).toBe('50');
     expect(
+      restored.get(
+        '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('50');
+    expect(
+      restored.get(
+        '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="kibo"][data-team-slot-id="team-slot-1"][data-kibo-id="500001"]'
+      ).element.value
+    ).toBe('50');
+    expect(
       getTimelineLoadoutSlot(restored, 109001, 'kiboId').attributes(
         'data-selected-id'
       )
@@ -10177,6 +10251,15 @@ describe('Workbench view', () => {
         'data-selected-id'
       )
     ).toBe('');
+    const unconfiguredKiboEnergyLane = restored.get(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-1"]'
+    );
+    expect(unconfiguredKiboEnergyLane.text()).toContain('槽位 1 · 0 / 1');
+    expect(
+      unconfiguredKiboEnergyLane
+        .find('[data-testid="workbench-timeline-initial-energy-input"]')
+        .exists()
+    ).toBe(false);
     expect(
       restored.find(
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'

@@ -1079,6 +1079,213 @@ describe('TimelineGridPreview', () => {
     ).toBe('0,100 100,100');
   });
 
+  it('edits independent actor and configured kibo initial energy without selecting the lane', async () => {
+    const actors = [
+      {
+        id: 'actor-a',
+        characterId: 109001,
+        name: '末音',
+        initialSp: 0,
+        stats: { maxSp: 100 },
+      },
+      {
+        id: 'actor-b',
+        characterId: 101003,
+        name: '寒悠悠',
+        initialSp: 5.75,
+        stats: { maxSp: 100 },
+      },
+      {
+        id: 'actor-c',
+        characterId: 101007,
+        name: '芃芃',
+        initialSp: 100,
+        stats: { maxSp: 100 },
+      },
+    ];
+    const actorGroups = actors.map((actor, index) => ({
+      actorId: actor.id,
+      actionLane: { laneId: actor.id },
+      kiboLane: {
+        laneId: `kibo-team-slot-${index + 1}`,
+        kiboId: index === 0 ? 500001 : index === 2 ? 500003 : null,
+      },
+      energyCurve: { laneId: `energy-${actor.id}`, actorId: actor.id },
+      kiboEnergyCurve: {
+        laneId: `kibo-energy-team-slot-${index + 1}`,
+        slotId: `team-slot-${index + 1}`,
+        actorId: actor.id,
+        kiboId: index === 0 ? 500001 : index === 2 ? 500003 : null,
+      },
+    }));
+    const actorCurve = (actor, initialValue) => ({
+      actorId: actor.id,
+      stateMetric: { initialValue, currentValue: initialValue, maxValue: 100 },
+      points: [],
+    });
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actors,
+        characters: actors.map(actor => ({
+          id: actor.characterId,
+          name: actor.name,
+        })),
+        kibos: [
+          { id: 500001, name: '测试奇波一' },
+          { id: 500003, name: '测试奇波三' },
+        ],
+        timelineTopology: {
+          actorGroups,
+          enemyGroup: {
+            eventLane: { laneId: 'enemy-events' },
+            hpCurve: { laneId: 'enemy-hp-curve' },
+            toughnessCurve: { laneId: 'enemy-toughness-curve' },
+          },
+        },
+        runtimeStateCurves: {
+          enemy: {
+            stateMetrics: {
+              hp: { initialValue: 1000, currentValue: 1000, maxValue: 1000 },
+              toughness: {
+                initialValue: 100,
+                currentValue: 100,
+                maxValue: 100,
+              },
+            },
+            points: [],
+          },
+          resources: {
+            curvesByActor: [
+              actorCurve(actors[0], 0),
+              actorCurve(actors[1], 5.75),
+              actorCurve(actors[2], 100),
+            ],
+            curvesByKibo: [
+              {
+                slotId: 'team-slot-1',
+                actorId: 'actor-a',
+                kiboId: 500001,
+                stateMetric: {
+                  initialValue: 50,
+                  currentValue: 50,
+                  maxValue: 100,
+                },
+                points: [],
+              },
+              {
+                slotId: 'team-slot-2',
+                actorId: 'actor-b',
+                kiboId: null,
+                stateMetric: {
+                  initialValue: 0,
+                  currentValue: 0,
+                  maxValue: 100,
+                },
+                points: [],
+              },
+              {
+                slotId: 'team-slot-3',
+                actorId: 'actor-c',
+                kiboId: 500003,
+                stateMetric: {
+                  initialValue: 25,
+                  currentValue: 25,
+                  maxValue: 100,
+                },
+                points: [],
+              },
+            ],
+          },
+        },
+        initialEnergyEditing: true,
+      }),
+    });
+
+    const inputs = wrapper.findAll(
+      '[data-testid="workbench-timeline-initial-energy-input"]'
+    );
+    expect(inputs).toHaveLength(5);
+    const firstActor = wrapper.get(
+      '[data-testid="workbench-timeline-initial-energy-input"][data-character-id="109001"]'
+    );
+    const secondActor = wrapper.get(
+      '[data-testid="workbench-timeline-initial-energy-input"][data-character-id="101003"]'
+    );
+    const thirdActor = wrapper.get(
+      '[data-testid="workbench-timeline-initial-energy-input"][data-character-id="101007"]'
+    );
+    const kibo = wrapper.get(
+      '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="kibo"][data-team-slot-id="team-slot-1"]'
+    );
+    const thirdSlotKibo = wrapper.get(
+      '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="kibo"][data-team-slot-id="team-slot-3"]'
+    );
+    expect(firstActor.element.value).toBe('0');
+    expect(secondActor.element.value).toBe('5.75');
+    expect(thirdActor.element.value).toBe('100');
+    expect(kibo.element.value).toBe('50');
+    expect(thirdSlotKibo.element.value).toBe('25');
+    expect(kibo.attributes()).toMatchObject({
+      type: 'number',
+      min: '0',
+      max: '100',
+      step: '0.01',
+    });
+    const unconfiguredKiboLane = wrapper.get(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-2"]'
+    );
+    expect(unconfiguredKiboLane.text()).toContain('槽位 2 · 0 / 1');
+    expect(
+      unconfiguredKiboLane
+        .find('[data-testid="workbench-timeline-initial-energy-input"]')
+        .exists()
+    ).toBe(false);
+
+    await secondActor.trigger('click');
+    await secondActor.setValue('150');
+    await secondActor.trigger('blur');
+    expect(wrapper.emitted('select-identity')).toBeUndefined();
+    expect(wrapper.emitted('update-initial-energy')?.at(-1)?.[0]).toMatchObject(
+      {
+        ownerKind: 'actor',
+        actorId: 'actor-b',
+        characterId: 101003,
+        currentValue: 100,
+        maxValue: 100,
+      }
+    );
+
+    await thirdActor.setValue('-5');
+    await thirdActor.trigger('keydown', { key: 'Enter' });
+    expect(wrapper.emitted('update-initial-energy')?.at(-1)?.[0]).toMatchObject(
+      {
+        ownerKind: 'actor',
+        actorId: 'actor-c',
+        currentValue: 0,
+      }
+    );
+    await kibo.setValue('');
+    await kibo.trigger('keydown', { key: 'Escape' });
+    expect(kibo.element.value).toBe('50');
+    await kibo.setValue('42.25');
+    await kibo.trigger('keydown', { key: 'Enter' });
+    expect(wrapper.emitted('update-initial-energy')?.at(-1)?.[0]).toMatchObject(
+      {
+        ownerKind: 'kibo',
+        actorId: 'actor-a',
+        slotId: 'team-slot-1',
+        kiboId: 500001,
+        currentValue: 42.25,
+        maxValue: 100,
+      }
+    );
+    expect(thirdSlotKibo.element.value).toBe('25');
+    expect(wrapper.emitted('select-timeline-frame')).toBeUndefined();
+    expect(
+      readStyleNumber(unconfiguredKiboLane.attributes('style'), 'height')
+    ).toBe(44);
+  });
+
   it('renders involved team marks as compact curves on the shared timeline', async () => {
     const initialState = [
       [150, 'fire', '火', 0],

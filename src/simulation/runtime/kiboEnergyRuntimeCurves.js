@@ -1,3 +1,5 @@
+import { resolveKiboEffectiveMaxSp } from '../../domain/spUnitContract';
+
 export const KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_NAME =
   'AzPrKiboEnergyRuntimeCurves';
 export const KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_VERSION = 3;
@@ -67,37 +69,88 @@ export function createKiboEnergyRuntimeCurves({
       actorId,
       kiboId,
     });
+    const inherited = scenario?.initialRuntimeState?.kiboEnergyBySlot?.find(
+      entry => entry.slotId === slotId && Number(entry.kiboId) === kiboId
+    );
     const firstObservation = observations[0];
     const lastObservation = observations.at(-1);
-    const baselineConfirmed = firstObservation?.frameIndex === 0;
-    const initialValue = baselineConfirmed
-      ? getReadinessValue(firstObservation)
-      : 0;
-    const currentValue = lastObservation
-      ? getReadinessValue(lastObservation)
-      : initialValue;
-    const maxValue = observations.length
-      ? Math.max(...observations.map(observation => observation.totalTime))
+    const observedBaselineConfirmed = firstObservation?.frameIndex === 0;
+    const inheritedBaselineConfirmed =
+      numberOrNull(inherited?.currentValue) != null;
+    const staticKiboProfile =
+      Number(actor?.verifiedStaticKiboProperties?.kiboId) === kiboId
+        ? actor.verifiedStaticKiboProperties.resourceProfile
+        : null;
+    const contractMaxValue = kiboId
+      ? (numberOrNull(staticKiboProfile?.effectiveMaxSp) ??
+        resolveKiboEffectiveMaxSp(
+          numberOrNull(staticKiboProfile?.maxSpBase) ?? undefined
+        ))
       : null;
+    const useProjectSpBaseline = inheritedBaselineConfirmed;
+    const useContractSpBaseline =
+      !useProjectSpBaseline && observations.length === 0 && contractMaxValue;
+    const useSpBaseline =
+      useProjectSpBaseline || Boolean(useContractSpBaseline);
+    const baselineConfirmed =
+      observedBaselineConfirmed || inheritedBaselineConfirmed || useSpBaseline;
+    // PetUltimateCdTime is measured in seconds and must never be mixed into SP.
+    const initialValue = useSpBaseline
+      ? (numberOrNull(inherited?.currentValue) ?? 0)
+      : observedBaselineConfirmed
+        ? getReadinessValue(firstObservation)
+        : 0;
+    const currentValue = useSpBaseline
+      ? initialValue
+      : lastObservation
+        ? getReadinessValue(lastObservation)
+        : initialValue;
+    const maxValue = useSpBaseline
+      ? (numberOrNull(inherited?.maxValue) ?? contractMaxValue)
+      : observations.length
+        ? Math.max(...observations.map(observation => observation.totalTime))
+        : null;
     const baselineStatus = kiboId
-      ? baselineConfirmed
-        ? 'runtime-observed-pet-ultimate-readiness-baseline'
-        : observations.length > 0
-          ? 'runtime-observed-pet-ultimate-readiness-baseline-unresolved'
-          : 'tracking-zero-source-semantics-confirmed-value-unresolved'
+      ? useProjectSpBaseline
+        ? 'workbench-initial-kibo-energy-baseline'
+        : useContractSpBaseline
+          ? 'verified-kibo-sp-unit-contract-default-baseline'
+          : observedBaselineConfirmed
+            ? 'runtime-observed-pet-ultimate-readiness-baseline'
+            : observations.length > 0
+              ? 'runtime-observed-pet-ultimate-readiness-baseline-unresolved'
+              : 'tracking-zero-source-semantics-confirmed-value-unresolved'
       : 'tracking-slot-unconfigured';
     const sourceSemantics = createKiboEnergySourceSemantics();
-    if (observations.length > 0) {
+    if (useProjectSpBaseline) {
+      sourceSemantics.sourceKind = 'azpr-project-initial-kibo-sp';
+      sourceSemantics.semanticResource = 'kibo-sp';
+      sourceSemantics.status = 'project-initial-kibo-sp-tracking-baseline';
+      sourceSemantics.valueSourceStatus = 'project-initial-runtime-state';
+      sourceSemantics.observation = null;
+    } else if (useContractSpBaseline) {
+      sourceSemantics.sourceKind = 'azpr-verified-sp-unit-contract';
+      sourceSemantics.semanticResource = 'kibo-sp';
+      sourceSemantics.status = 'verified-kibo-sp-unit-contract-baseline';
+      sourceSemantics.valueSourceStatus = staticKiboProfile
+        ? 'verified-static-kibo-profile'
+        : 'verified-kibo-growth-contract';
+      sourceSemantics.observation = null;
+    } else if (observations.length > 0) {
       sourceSemantics.status =
         'runtime-pet-ultimate-cooldown-observations-validated';
-      sourceSemantics.valueSourceStatus = baselineConfirmed
+      sourceSemantics.valueSourceStatus = observedBaselineConfirmed
         ? 'runtime-observed-at-frame-zero'
         : 'unresolved-before-first-observation';
     }
     const baseline = {
-      sourceKind: baselineConfirmed
-        ? 'runtime-pet-ultimate-readiness-observation'
-        : 'workbench-kibo-energy-tracking-baseline',
+      sourceKind: useProjectSpBaseline
+        ? 'azpr-project-initial-kibo-sp'
+        : useContractSpBaseline
+          ? 'azpr-verified-sp-unit-contract'
+          : observedBaselineConfirmed
+            ? 'runtime-pet-ultimate-readiness-observation'
+            : 'workbench-kibo-energy-tracking-baseline',
       status: baselineStatus,
       initialValue,
       currentValue,
@@ -105,11 +158,13 @@ export function createKiboEnergyRuntimeCurves({
       confirmed: baselineConfirmed,
       appliedToCalculators: false,
     };
-    const points = createKiboEnergyCurvePoints({
-      observations,
-      slotId,
-      kiboId,
-    });
+    const points = useSpBaseline
+      ? []
+      : createKiboEnergyCurvePoints({
+          observations,
+          slotId,
+          kiboId,
+        });
 
     return {
       schemaVersion: 1,
@@ -129,9 +184,9 @@ export function createKiboEnergyRuntimeCurves({
       stateMetric: {
         key: 'kiboEnergy',
         label: '奇波能量',
-        valueUnit: 'kibo-energy',
+        valueUnit: useSpBaseline ? 'sp' : 'kibo-energy',
         semanticResource: sourceSemantics.semanticResource,
-        observedSourceValueUnit: 'seconds',
+        observedSourceValueUnit: useSpBaseline ? 'sp' : 'seconds',
         initialValue,
         currentValue,
         maxValue,

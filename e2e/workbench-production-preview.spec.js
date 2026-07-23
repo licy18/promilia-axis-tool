@@ -6502,6 +6502,88 @@ test('[m9-r2-r1-inspector-duration] closes the real inspector and keeps a readab
   });
 });
 
+test('[m9-r2-r2-initial-energy] edits actor and configured kibo baselines directly on the timeline', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await timeline.scrollIntoViewIfNeeded();
+
+  const actorInput = timeline.locator(
+    '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="109001"]'
+  );
+  const unconfiguredKiboLane = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-1"]'
+  );
+  await expect(actorInput).toHaveAttribute('min', '0');
+  await expect(actorInput).toHaveAttribute('max', '100');
+  await expect(actorInput).toHaveAttribute('step', '0.01');
+  await expect(unconfiguredKiboLane).toContainText('槽位 1 · 0 / 1');
+  await expect(
+    unconfiguredKiboLane.getByTestId('workbench-timeline-initial-energy-input')
+  ).toHaveCount(0);
+
+  await actorInput.fill('5.75');
+  await actorInput.press('Enter');
+  await expect(actorInput).toHaveValue('5.75');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-109001"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-initial-value', '5.75');
+
+  await selectM2LoadoutOption(page, 109001, 'kiboId', '500001');
+  const kiboInput = timeline.locator(
+    '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="kibo"][data-team-slot-id="team-slot-1"][data-kibo-id="500001"]'
+  );
+  const kiboCurve = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="kibo-energy-team-slot-1"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  await expect(kiboInput).toBeVisible();
+  await expect(kiboInput).toHaveAttribute('max', '100');
+  await kiboInput.fill('50');
+  await kiboInput.press('Enter');
+  await expect(kiboInput).toHaveValue('50');
+  await expect(kiboCurve).toHaveAttribute('data-initial-value', '50');
+  await expect(kiboCurve).toHaveAttribute('data-max-value', '100');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-2"]'
+    )
+  ).toContainText('槽位 2 · 0 / 1');
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(kiboInput).toHaveValue('0');
+  await expect(kiboCurve).toHaveAttribute('data-initial-value', '0');
+  await expect(actorInput).toHaveValue('5.75');
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(kiboInput).toHaveValue('50');
+  await expect(kiboCurve).toHaveAttribute('data-initial-value', '50');
+
+  await closeInspectorIfVisible(page);
+  await page.screenshot({
+    path: 'reports/m9-r2-r2-initial-energy-desktop.png',
+  });
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(actorInput).toHaveValue('5.75');
+  await expect(kiboInput).toHaveValue('50');
+  await expect(kiboCurve).toHaveAttribute('data-initial-value', '50');
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await timeline.scrollIntoViewIfNeeded();
+  await expect(actorInput).toBeVisible();
+  await expect(kiboInput).toBeVisible();
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/m9-r2-r2-initial-energy-narrow.png',
+  });
+});
+
 function formatRuntimeFrameLabel(frameIndex) {
   return `${Math.floor(frameIndex / 60)}s${frameIndex % 60}f`;
 }
