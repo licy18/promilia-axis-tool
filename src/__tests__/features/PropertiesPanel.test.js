@@ -3,6 +3,77 @@ import { describe, expect, it, vi } from 'vitest';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 
 describe('PropertiesPanel', () => {
+  it('shows the runtime-selected variant duration instead of the base draft duration', () => {
+    const selectedAction = {
+      id: 'jade-special-charged',
+      type: 'skill',
+      name: '重击',
+      actorId: 'actor-jade',
+      skillId: 10101001,
+      startMs: 0,
+      durationMs: (310 * 1000) / 60,
+      effectCommands: [],
+    };
+    const selectedResolution = {
+      status: 'verified-ready',
+      actionBinding: {
+        identity: 'actor|101010|charged|subskill:1',
+        controlSkillId: 10101010,
+        actualDurationFrames: 230,
+        actualDurationMs: (230 * 1000) / 60,
+      },
+      hits: [],
+      effects: [],
+      reasons: [],
+      ready: true,
+      complete: true,
+      applied: true,
+    };
+    const wrapper = mount(PropertiesPanel, {
+      props: {
+        selection: { characterId: 101010, enemyId: 208001 },
+        characters: [{ id: 101010, name: '涂山小玉' }],
+        actors: [{ id: 'actor-jade', characterId: 101010, name: '涂山小玉' }],
+        skills: [{ id: 10101001, name: '画扇春' }],
+        enemies: [{ id: 208001, name: '训练敌人' }],
+        selectedAction,
+        durationMs: 30_000,
+        verifiedCombatRuntime: {
+          enabled: true,
+          actionResolutionById: new Map([
+            [
+              selectedAction.id,
+              {
+                ...selectedResolution,
+                actionBinding: {
+                  ...selectedResolution.actionBinding,
+                  actualDurationFrames: 310,
+                  actualDurationMs: (310 * 1000) / 60,
+                },
+              },
+            ],
+          ]),
+          specialResourceRuntime: {
+            actionResolutionById: new Map([
+              [selectedAction.id, selectedResolution],
+            ]),
+            selectionByActionId: new Map(),
+            resourceEvents: [],
+          },
+          damageEvents: [],
+          resourceEvents: [],
+          kiboResourceEvents: [],
+          effectTimeline: { events: [] },
+          tuningMarkRuntime: { events: [], unresolved: [] },
+        },
+      },
+    });
+
+    expect(
+      wrapper.get('[data-testid="workbench-action-identity"]').text()
+    ).toContain('230F');
+  });
+
   it('shows the verified action trace as one ordered source chain', () => {
     const wrapper = mount(PropertiesPanel, {
       props: {

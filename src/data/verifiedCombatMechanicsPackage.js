@@ -734,7 +734,23 @@ export function validateVerifiedCombatMechanicsPackage(value) {
         !profile.resourceIdentity ||
         !(Number(profile.capacity) > 0)
     ) ||
-    !Array.isArray(value.specialResourceCatalog.operationBindings)
+    !Array.isArray(value.specialResourceCatalog.operationBindings) ||
+    !Array.isArray(value.specialResourceCatalog.thresholdTransitions) ||
+    value.specialResourceCatalog.thresholdTransitions.some(
+      transition =>
+        transition.applied !== true ||
+        !(Number(transition.threshold) > 0) ||
+        !Number.isInteger(Number(transition.stateElementId))
+    ) ||
+    !Array.isArray(value.specialResourceCatalog.passiveEffects) ||
+    value.specialResourceCatalog.passiveEffects.some(
+      profile =>
+        profile.applied !== true ||
+        !Array.isArray(profile.triggerBindings) ||
+        profile.triggerBindings.length === 0 ||
+        !Array.isArray(profile.modifiers) ||
+        profile.modifiers.length === 0
+    )
   ) {
     issues.push('special-resource-catalog-invalid');
   }
@@ -743,7 +759,16 @@ export function validateVerifiedCombatMechanicsPackage(value) {
       'verified-action-variant-graph-ready' ||
     !Array.isArray(value.actionVariantGraph.nodes) ||
     !Array.isArray(value.actionVariantGraph.edges) ||
-    !Array.isArray(value.actionVariantGraph.defaultSelections)
+    !Array.isArray(value.actionVariantGraph.defaultSelections) ||
+    !Array.isArray(value.actionVariantGraph.contextEdges) ||
+    value.actionVariantGraph.contextEdges.some(edge => edge.applied !== true) ||
+    !Array.isArray(value.actionVariantGraph.attackInputChains) ||
+    value.actionVariantGraph.attackInputChains.some(
+      chain =>
+        chain.applied !== true ||
+        !Array.isArray(chain.segments) ||
+        chain.segments.length === 0
+    )
   ) {
     issues.push('action-variant-graph-invalid');
   }
@@ -854,6 +879,10 @@ function hasSafePublishedSourceDisplayLabels(value) {
     ...(value?.semanticEffectCatalog?.semanticEffects ?? []),
     ...specialResources,
     ...specialResources.flatMap(profile => profile.stateElements ?? []),
+    ...(value?.specialResourceCatalog?.passiveEffects ?? []).map(profile => ({
+      displayLabel: profile.name,
+      sourceNameStatus: 'source-name-ready',
+    })),
   ];
   return published.every(
     entry =>

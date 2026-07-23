@@ -4,11 +4,16 @@ import {
   getVerifiedDerivedControlContract,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
-import { ACTION_TYPES } from '../../domain/projectSchema';
 import {
   normalizeActionVariantInputSelection,
   resolveActionVariantInputOption,
 } from '../../domain/actionVariantInputSelection';
+import {
+  ACTION_TYPES,
+  EFFECT_OPERATIONS,
+  EFFECT_STACK_MODES,
+  EFFECT_TARGET_KINDS,
+} from '../../domain/projectSchema';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -76,13 +81,42 @@ export function createVerifiedActionVariantRuntime({
     });
   }
 
+  const thresholdTransitions = (
+    mechanicsPackage.specialResourceCatalog.thresholdTransitions ?? []
+  ).filter(transition => transition.applied);
+  const thresholdTransitionByOwnerId = new Map(
+    thresholdTransitions.map(transition => [
+      Number(transition.ownerId),
+      transition,
+    ])
+  );
+  const suppressedOperationIdentities = new Set(
+    thresholdTransitions.flatMap(
+      transition => transition.suppressedOperationIdentities ?? []
+    )
+  );
   const operations = mechanicsPackage.specialResourceCatalog.operationBindings
-    .filter(operation => operation.applied)
+    .filter(
+      operation =>
+        operation.applied &&
+        !suppressedOperationIdentities.has(operation.operationIdentity)
+    )
     .sort(compareBindings);
+  const passiveEffects = (
+    mechanicsPackage.specialResourceCatalog.passiveEffects ?? []
+  ).filter(profile => profile.applied);
   const graph = mechanicsPackage.actionVariantGraph;
   const switchBindings = graph.edges
     .filter(edge => edge.applied)
     .sort(compareBindings);
+  const contextBindings = (graph.contextEdges ?? [])
+    .filter(edge => edge.applied)
+    .sort(compareBindings);
+  const attackInputChains = (graph.attackInputChains ?? [])
+    .filter(chain => chain.applied)
+    .sort((left, right) =>
+      String(left.chainIdentity).localeCompare(String(right.chainIdentity))
+    );
   const defaultSelectionByControl = new Map(
     graph.defaultSelections.map(selection => [
       `${selection.ownerId}|${selection.controlSkillId}`,
@@ -109,11 +143,35 @@ export function createVerifiedActionVariantRuntime({
   const resourceEvents = [];
   const stateEvents = [];
   const variantEvents = [];
+  const effectCommands = [];
   const executionBlocks = [];
+  const lastResolvedActionByActorId = new Map();
   let runtimeSequenceIndex = 0;
 
   for (const [actorId, state] of actorStateById) {
     for (const activeState of state.activeStates.values()) {
+      const transition = thresholdTransitionByOwnerId.get(
+        Number(state.profile.ownerId)
+      );
+      if (
+        transition &&
+        Number(transition.stateElementId) === Number(activeState.elementId)
+      ) {
+        effectCommands.push(
+          createStateEffectCommand({
+            mechanicsPackage,
+            actorState: state,
+            actorId,
+            sourceActionId: activeState.sourceActionId,
+            timeMs: 0,
+            durationMs: activeState.expiresAtMs,
+            transition,
+            sourceIdentity:
+              activeState.sourceIdentity ?? transition.sourceIdentity,
+            operation: EFFECT_OPERATIONS.APPLY,
+          })
+        );
+      }
       if (activeState.expiresAtMs != null) {
         pendingEvents.push({
           kind: 'state-expire',
@@ -164,10 +222,156 @@ export function createVerifiedActionVariantRuntime({
     }
   };
 
+  const emitResourceChange = ({
+    actorState,
+    action,
+    timeMs,
+    operation,
+    beforeValue,
+    afterValue,
+    stateElementId = null,
+    stateName = null,
+    stateDurationMs = null,
+    sourceIdentity = null,
+    eventType = 'VERIFIED_SPECIAL_RESOURCE_CHANGE',
+  }) => {
+    const event = {
+      type: eventType,
+      timeMs,
+      actionId: action?.id ?? null,
+      actorId: action?.actorId ?? actorState.actor.id,
+      runtimeSequenceIndex: runtimeSequenceIndex++,
+      payload: {
+        resource: 'special-resource',
+        resourceIdentity: actorState.profile.resourceIdentity,
+        resourceName: actorState.profile.name,
+        ownerCharacterId: actorState.profile.ownerId,
+        operation,
+        beforeValue,
+        change: afterValue - beforeValue,
+        afterValue,
+        currentValue: afterValue,
+        maxValue: actorState.profile.capacity,
+        stateElementId,
+        stateName,
+        stateDurationMs,
+        sourceIdentity,
+        confidence: 'verified',
+        appliedToActionVariantRuntime: true,
+        appliedToCalculators: false,
+      },
+    };
+    resourceEvents.push(event);
+    if (eventType === 'VERIFIED_SPECIAL_RESOURCE_STATE_CHANGE') {
+      stateEvents.push(event);
+    }
+    return event;
+  };
+
+  const enterOrRefreshState = ({
+    actorState,
+    action,
+    timeMs,
+    stateElementId,
+    stateName,
+    stateDurationMs,
+    sourceIdentity,
+    transition = null,
+  }) => {
+    const normalizedStateElementId = Number(stateElementId);
+    const previous = actorState.activeStates.get(normalizedStateElementId);
+    const durationMs = Number(stateDurationMs);
+    const expiresAtMs = durationMs > 0 ? Number(timeMs) + durationMs : null;
+    const activeState = {
+      elementId: normalizedStateElementId,
+      name: stateName,
+      appliedAtMs: previous?.appliedAtMs ?? timeMs,
+      refreshedAtMs: previous ? timeMs : null,
+      expiresAtMs,
+      sourceActionId: action?.id ?? previous?.sourceActionId ?? null,
+      sourceIdentity,
+    };
+    actorState.activeStates.set(normalizedStateElementId, activeState);
+    removeStateSwitchWindows({
+      windows: activeSwitchWindows,
+      actorId: action?.actorId ?? actorState.actor.id,
+      stateElementId: normalizedStateElementId,
+    });
+    for (const binding of switchBindings) {
+      if (
+        binding.ownerId !== actorState.profile.ownerId ||
+        binding.condition?.kind !== 'resource-state-active' ||
+        Number(binding.condition.stateElementId) !== normalizedStateElementId
+      ) {
+        continue;
+      }
+      activeSwitchWindows.push({
+        ...binding,
+        actorId: action?.actorId ?? actorState.actor.id,
+        sourceActionId: action?.id ?? previous?.sourceActionId ?? null,
+        startsAtMs: timeMs,
+        endsAtMs: expiresAtMs ?? Number.POSITIVE_INFINITY,
+      });
+    }
+    if (expiresAtMs != null) {
+      pendingEvents.push({
+        kind: 'state-expire',
+        timeMs: expiresAtMs,
+        actorId: action?.actorId ?? actorState.actor.id,
+        stateElementId: normalizedStateElementId,
+        sourceActionId: action?.id ?? previous?.sourceActionId ?? null,
+        sourceIdentity,
+        priority: 0,
+      });
+    }
+    emitResourceChange({
+      actorState,
+      action,
+      timeMs,
+      operation: previous ? 'refresh' : 'transform',
+      beforeValue: actorState.current,
+      afterValue: actorState.current,
+      stateElementId: normalizedStateElementId,
+      stateName,
+      stateDurationMs: durationMs > 0 ? durationMs : null,
+      sourceIdentity,
+      eventType: 'VERIFIED_SPECIAL_RESOURCE_STATE_CHANGE',
+    });
+    effectCommands.push(
+      createStateEffectCommand({
+        mechanicsPackage,
+        actorState,
+        actorId: action?.actorId ?? actorState.actor.id,
+        sourceActionId: action?.id ?? previous?.sourceActionId ?? null,
+        timeMs,
+        durationMs: durationMs > 0 ? durationMs : null,
+        transition: transition ?? {
+          stateElementId: normalizedStateElementId,
+          stateName,
+          sourceIdentity,
+        },
+        sourceIdentity,
+        operation: previous
+          ? EFFECT_OPERATIONS.REFRESH
+          : EFFECT_OPERATIONS.APPLY,
+      })
+    );
+  };
+
   const applyResourceOperation = descriptor => {
     const state = actorStateById.get(descriptor.action.actorId);
     if (!state) return;
     const operation = descriptor.binding;
+    const transition = thresholdTransitionByOwnerId.get(
+      Number(state.profile.ownerId)
+    );
+    if (
+      operation.operation === 'gain' &&
+      transition?.suppressGainWhileStateActive &&
+      state.activeStates.has(Number(transition.stateElementId))
+    ) {
+      return;
+    }
     const beforeValue = state.current;
     let afterValue = beforeValue;
     if (operation.operation === 'gain') {
@@ -185,63 +389,76 @@ export function createVerifiedActionVariantRuntime({
     } else if (operation.operation === 'clear') {
       afterValue = 0;
     } else if (operation.operation === 'transform') {
-      const expiresAtMs =
-        Number(operation.stateDurationMs) > 0
-          ? descriptor.timeMs + Number(operation.stateDurationMs)
-          : null;
-      state.activeStates.set(Number(operation.stateElementId), {
-        elementId: Number(operation.stateElementId),
-        name: operation.stateName,
-        appliedAtMs: descriptor.timeMs,
-        expiresAtMs,
-        sourceActionId: descriptor.action.id,
-        sourceIdentity: operation.sourceIdentity,
-      });
-      if (expiresAtMs != null) {
-        pendingEvents.push({
-          kind: 'state-expire',
-          timeMs: expiresAtMs,
-          actorId: descriptor.action.actorId,
-          stateElementId: Number(operation.stateElementId),
-          sourceActionId: descriptor.action.id,
-          sourceIdentity: operation.sourceIdentity,
-          priority: 0,
-        });
-      }
-    } else if (operation.operation === 'transform-remove') {
-      state.activeStates.delete(Number(operation.stateElementId));
-    }
-    state.current = afterValue;
-    const event = {
-      type: operation.operation.startsWith('transform')
-        ? 'VERIFIED_SPECIAL_RESOURCE_STATE_CHANGE'
-        : 'VERIFIED_SPECIAL_RESOURCE_CHANGE',
-      timeMs: descriptor.timeMs,
-      actionId: descriptor.action.id,
-      actorId: descriptor.action.actorId,
-      runtimeSequenceIndex: runtimeSequenceIndex++,
-      payload: {
-        resource: 'special-resource',
-        resourceIdentity: state.profile.resourceIdentity,
-        resourceName: state.profile.name,
-        ownerCharacterId: state.profile.ownerId,
-        operation: operation.operation,
-        beforeValue,
-        change: afterValue - beforeValue,
-        afterValue,
-        currentValue: afterValue,
-        maxValue: state.profile.capacity,
+      enterOrRefreshState({
+        actorState: state,
+        action: descriptor.action,
+        timeMs: descriptor.timeMs,
         stateElementId: operation.stateElementId,
         stateName: operation.stateName,
         stateDurationMs: operation.stateDurationMs,
         sourceIdentity: operation.sourceIdentity,
-        confidence: 'verified',
-        appliedToActionVariantRuntime: true,
-        appliedToCalculators: false,
-      },
-    };
-    if (operation.operation.startsWith('transform')) stateEvents.push(event);
-    resourceEvents.push(event);
+        transition,
+      });
+      return;
+    } else if (operation.operation === 'transform-remove') {
+      state.activeStates.delete(Number(operation.stateElementId));
+      removeStateSwitchWindows({
+        windows: activeSwitchWindows,
+        actorId: descriptor.action.actorId,
+        stateElementId: operation.stateElementId,
+      });
+    }
+    state.current = afterValue;
+    emitResourceChange({
+      actorState: state,
+      action: descriptor.action,
+      timeMs: descriptor.timeMs,
+      operation: operation.operation,
+      beforeValue,
+      afterValue,
+      stateElementId: operation.stateElementId,
+      stateName: operation.stateName,
+      stateDurationMs: operation.stateDurationMs,
+      sourceIdentity: operation.sourceIdentity,
+      eventType: operation.operation.startsWith('transform')
+        ? 'VERIFIED_SPECIAL_RESOURCE_STATE_CHANGE'
+        : 'VERIFIED_SPECIAL_RESOURCE_CHANGE',
+    });
+
+    if (
+      operation.operation === 'gain' &&
+      transition &&
+      beforeValue < Number(transition.threshold) &&
+      afterValue >= Number(transition.threshold)
+    ) {
+      const thresholdValue = state.current;
+      state.current =
+        transition.resourceOperation === 'clear' ? 0 : state.current;
+      if (state.current !== thresholdValue) {
+        emitResourceChange({
+          actorState: state,
+          action: descriptor.action,
+          timeMs: descriptor.timeMs,
+          operation: 'threshold-clear',
+          beforeValue: thresholdValue,
+          afterValue: state.current,
+          stateElementId: transition.stateElementId,
+          stateName: transition.stateName,
+          stateDurationMs: transition.stateDurationMs,
+          sourceIdentity: transition.sourceIdentity,
+        });
+      }
+      enterOrRefreshState({
+        actorState: state,
+        action: descriptor.action,
+        timeMs: descriptor.timeMs,
+        stateElementId: transition.stateElementId,
+        stateName: transition.stateName,
+        stateDurationMs: transition.stateDurationMs,
+        sourceIdentity: transition.sourceIdentity,
+        transition,
+      });
+    }
   };
 
   const applySwitchWindow = descriptor => {
@@ -264,6 +481,11 @@ export function createVerifiedActionVariantRuntime({
     const active = state?.activeStates.get(descriptor.stateElementId);
     if (!active || active.expiresAtMs !== descriptor.timeMs) return;
     state.activeStates.delete(descriptor.stateElementId);
+    removeStateSwitchWindows({
+      windows: activeSwitchWindows,
+      actorId: descriptor.actorId,
+      stateElementId: descriptor.stateElementId,
+    });
     const event = {
       type: 'VERIFIED_SPECIAL_RESOURCE_STATE_EXPIRED',
       timeMs: descriptor.timeMs,
@@ -298,7 +520,6 @@ export function createVerifiedActionVariantRuntime({
     flushPending(actionTimeMs);
     removeExpiredSwitchWindows(activeSwitchWindows, actionTimeMs);
     const mapping = getVerifiedCombatActionMapping(action);
-    const controlSkillId = resolveActionControlSkillId(action, mapping);
     const actorState = actorStateById.get(action.actorId);
     const scenarioActor = actorById.get(String(action.actorId));
     const characterId = Number(
@@ -306,6 +527,44 @@ export function createVerifiedActionVariantRuntime({
         scenarioActor?.characterId ??
         actorState?.profile?.ownerId
     );
+    const attackChainSelection = resolveAttackInputChainAction({
+      action,
+      mapping,
+      actorState,
+      attackInputChains,
+    });
+    if (attackChainSelection.status === 'blocked') {
+      const block = createAttackChainExecutionBlock({
+        action,
+        actorState,
+        chain: attackChainSelection.chain,
+      });
+      executionBlocks.push(block);
+      actionResolutionById.set(action.id, {
+        ...resolveVerifiedCombatActionMechanics(action, {
+          combatScenario: scenario.combatScenario,
+        }),
+        ready: false,
+        applied: false,
+        status: block.reason,
+        reasons: block.reasons,
+      });
+      selectionByActionId.set(action.id, {
+        actionId: action.id,
+        actorId: action.actorId,
+        ownerId: characterId || null,
+        controlSkillId: null,
+        selectedSubSkillIndex: null,
+        selectionReason: block.reason,
+        sourceKind: 'verified-active-attack-input-chain',
+        sourceIdentity: attackChainSelection.chain?.sourceIdentity ?? null,
+        status: block.reason,
+      });
+      lastResolvedActionByActorId.delete(action.actorId);
+      continue;
+    }
+    const runtimeAction = attackChainSelection.action ?? action;
+    const controlSkillId = resolveActionControlSkillId(runtimeAction, mapping);
     const derivedControlContract = getVerifiedDerivedControlContract({
       ownerKind: mapping?.ownerKind ?? 'actor',
       ownerId: characterId,
@@ -324,7 +583,20 @@ export function createVerifiedActionVariantRuntime({
             actionKind: mapping?.actionKind,
           })
         : { status: 'none', binding: null };
-      if (activeSelection.status === 'ambiguous') {
+      const contextSelection = actorState
+        ? resolveContextVariantSelection({
+            contextBindings,
+            previous: lastResolvedActionByActorId.get(action.actorId),
+            actorState,
+            controlSkillId,
+            timeMs: actionTimeMs,
+          })
+        : { status: 'none', binding: null };
+      if (
+        activeSelection.status === 'ambiguous' &&
+        !attackChainSelection.segment &&
+        !contextSelection.binding
+      ) {
         const block = createVariantExecutionBlock({
           action,
           actorState,
@@ -347,7 +619,7 @@ export function createVerifiedActionVariantRuntime({
         `${characterId}|${controlSkillId}`
       );
       const inputSelection = resolveDerivedInputSelection({
-        action,
+        action: runtimeAction,
         contract: derivedControlContract,
       });
       if (inputSelection.status === 'invalid') {
@@ -385,11 +657,13 @@ export function createVerifiedActionVariantRuntime({
         continue;
       }
       const explicitSubSkillIndex = Number.isInteger(
-        Number(action.controlSubSkillIndex)
+        Number(runtimeAction.controlSubSkillIndex)
       )
-        ? Number(action.controlSubSkillIndex)
+        ? Number(runtimeAction.controlSubSkillIndex)
         : null;
       selectedSubSkillIndex =
+        contextSelection.binding?.targetSubSkillIndex ??
+        attackChainSelection.segment?.subSkillIndex ??
         activeSelection.binding?.targetSubSkillIndex ??
         inputSelection.option?.subSkillIndex ??
         explicitSubSkillIndex ??
@@ -397,37 +671,58 @@ export function createVerifiedActionVariantRuntime({
           ? null
           : defaultSelection?.subSkillIndex) ??
         selectedSubSkillIndex;
-      selectionSource = activeSelection.binding
+      selectionSource = contextSelection.binding
         ? {
-            sourceKind: 'verified-active-switch-skill-index-window',
-            sourceIdentity: activeSelection.binding.sourceIdentity,
-            decisionFrame: activeSelection.binding.decisionFrame,
+            sourceKind: 'verified-input-context-variant',
+            sourceIdentity: contextSelection.binding.sourceIdentity,
+            decisionFrame: contextSelection.binding.decisionFrame,
+            contextActionId: contextSelection.previous?.actionId ?? null,
           }
-        : inputSelection.option
+        : attackChainSelection.segment
           ? {
-              sourceKind: inputSelection.sourceKind,
-              sourceIdentity: inputSelection.option.sourceIdentity,
-              decisionFrame: derivedControlContract?.decisionFrame ?? 0,
+              sourceKind: 'verified-active-attack-input-chain',
+              sourceIdentity: [
+                attackChainSelection.chain.sourceIdentity,
+                attackChainSelection.segment.sourceIdentity,
+              ].join('|'),
+              decisionFrame: attackChainSelection.chain.decisionFrame,
+              chainIdentity: attackChainSelection.chain.chainIdentity,
             }
-          : explicitSubSkillIndex != null
+          : activeSelection.binding
             ? {
-                sourceKind: 'workbench-explicit-input-variant',
-                sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
-                decisionFrame: 0,
+                sourceKind: 'verified-active-switch-skill-index-window',
+                sourceIdentity: activeSelection.binding.sourceIdentity,
+                decisionFrame: activeSelection.binding.decisionFrame,
               }
-            : defaultSelection
+            : inputSelection.option
               ? {
-                  sourceKind: 'verified-client-default-subskill-index',
-                  sourceIdentity: defaultSelection.sourceIdentity,
-                  decisionFrame: defaultSelection.decisionFrame,
+                  sourceKind: inputSelection.sourceKind,
+                  sourceIdentity: inputSelection.option.sourceIdentity,
+                  decisionFrame: derivedControlContract?.decisionFrame ?? 0,
                 }
-              : null;
+              : explicitSubSkillIndex != null
+                ? {
+                    sourceKind: 'workbench-explicit-input-variant',
+                    sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
+                    decisionFrame: 0,
+                  }
+                : defaultSelection
+                  ? {
+                      sourceKind: 'verified-client-default-subskill-index',
+                      sourceIdentity: defaultSelection.sourceIdentity,
+                      decisionFrame: defaultSelection.decisionFrame,
+                    }
+                  : null;
     }
 
-    const resolution = resolveVerifiedCombatActionMechanics(action, {
-      selectedSubSkillIndex,
-      selectionSource,
-      combatScenario: scenario.combatScenario,
+    const resolution = applyAttackInputChainTimingResolution({
+      resolution: resolveVerifiedCombatActionMechanics(runtimeAction, {
+        selectedSubSkillIndex,
+        selectionSource,
+        combatScenario: scenario.combatScenario,
+      }),
+      chain: attackChainSelection.chain,
+      segment: attackChainSelection.segment,
     });
     actionResolutionById.set(action.id, resolution);
     selectionByActionId.set(
@@ -438,7 +733,7 @@ export function createVerifiedActionVariantRuntime({
         controlSkillId,
         contract: derivedControlContract,
         inputSelection: resolveDerivedInputSelection({
-          action,
+          action: runtimeAction,
           contract: derivedControlContract,
         }),
         selectedSubSkillIndex,
@@ -447,6 +742,7 @@ export function createVerifiedActionVariantRuntime({
       })
     );
     if (!resolution.ready || !actorState || !Number.isInteger(controlSkillId)) {
+      lastResolvedActionByActorId.delete(action.actorId);
       continue;
     }
 
@@ -482,6 +778,7 @@ export function createVerifiedActionVariantRuntime({
         status: block.reason,
         reasons: block.reasons,
       });
+      lastResolvedActionByActorId.delete(action.actorId);
       continue;
     }
 
@@ -512,6 +809,30 @@ export function createVerifiedActionVariantRuntime({
         priority: 2,
       });
     }
+    for (const passiveProfile of passiveEffects) {
+      if (Number(passiveProfile.ownerId) !== characterId) continue;
+      for (const trigger of passiveProfile.triggerBindings ?? []) {
+        if (
+          Number(trigger.controlSkillId) !== controlSkillId ||
+          Number(trigger.subSkillIndex) !== selectedSubSkillIndex
+        ) {
+          continue;
+        }
+        effectCommands.push(
+          createPassiveEffectCommand({
+            mechanicsPackage,
+            action,
+            actorState,
+            resolution,
+            profile: passiveProfile,
+            trigger,
+            timeMs:
+              actionTimeMs +
+              framesToMs(trigger.triggerFrame, trigger.frameRate),
+          })
+        );
+      }
+    }
     flushPending(actionTimeMs);
     const selection = selectionByActionId.get(action.id);
     variantEvents.push({
@@ -521,6 +842,18 @@ export function createVerifiedActionVariantRuntime({
       actorId: action.actorId,
       runtimeSequenceIndex: runtimeSequenceIndex++,
       payload: selection,
+    });
+    lastResolvedActionByActorId.set(action.actorId, {
+      actionId: action.id,
+      actorId: action.actorId,
+      controlSkillId,
+      selectedSubSkillIndex,
+      startMs: actionTimeMs,
+      sourceIdentity:
+        resolution.actionBinding?.bindingSourceIdentity ??
+        resolution.actionBinding?.sourceIdentity ??
+        null,
+      ready: true,
     });
   }
 
@@ -547,6 +880,7 @@ export function createVerifiedActionVariantRuntime({
     resourceEvents,
     stateEvents,
     variantEvents,
+    effectCommands,
     eventLog: [...resourceEvents, ...variantEvents].sort(compareRuntimeEvents),
     executionBlocks,
     curves,
@@ -575,10 +909,267 @@ export function createVerifiedActionVariantRuntime({
       ).length,
       resourceEventCount: resourceEvents.length,
       stateEventCount: stateEvents.length,
+      effectCommandCount: effectCommands.length,
       executionBlockCount: executionBlocks.length,
     },
     ready: true,
     applied: true,
+  };
+}
+
+function resolveAttackInputChainAction({
+  action,
+  mapping,
+  actorState,
+  attackInputChains,
+}) {
+  if (
+    mapping?.actionKind !== 'normal-attack' ||
+    !actorState ||
+    !Number.isInteger(Number(action?.attackSequenceIndex))
+  ) {
+    return { status: 'not-required', action, chain: null, segment: null };
+  }
+  const matchingChains = (attackInputChains ?? []).filter(
+    chain =>
+      Number(chain.ownerId) === Number(actorState.profile.ownerId) &&
+      Number(chain.sourceSkillId) === Number(mapping.sourceSkillId) &&
+      isRuntimeConditionSatisfied(chain.stateCondition, actorState)
+  );
+  if (matchingChains.length !== 1) {
+    return { status: 'not-required', action, chain: null, segment: null };
+  }
+  const chain = matchingChains[0];
+  const sequenceIndex = Number(action.attackSequenceIndex);
+  const segment = chain.segments.find(
+    item => Number(item.sequenceIndex) === sequenceIndex
+  );
+  if (!segment) {
+    return { status: 'blocked', action, chain, segment: null };
+  }
+  const sourceSegment = mapping.attackInputSegments?.find(
+    item => Number(item.controlSkillId) === Number(segment.controlSkillId)
+  );
+  if (!sourceSegment) {
+    return { status: 'blocked', action, chain, segment: null };
+  }
+  return {
+    status: 'selected',
+    chain,
+    segment,
+    action: {
+      ...action,
+      controlSubSkillIndex: segment.subSkillIndex,
+      attackInput: {
+        ...sourceSegment,
+        selectedSubSkillIndex: segment.subSkillIndex,
+        durationFrames: segment.durationFrames,
+        effectiveDurationFrames: segment.durationFrames,
+        durationStatus: 'applied',
+        durationBasis: 'verified-attack-input-chain',
+        durationSourceIdentity: segment.sourceIdentity,
+      },
+    },
+  };
+}
+
+function applyAttackInputChainTimingResolution({ resolution, chain, segment }) {
+  if (!resolution?.actionBinding || !chain || !segment) return resolution;
+  const durationFrames = Number(segment.durationFrames);
+  if (!(durationFrames > 0)) return resolution;
+  const frameRate = Number(resolution.controlBinding?.frameRate) || FRAME_RATE;
+  const occupancy = {
+    ...(resolution.actionBinding.actionTiming?.occupancy ?? {}),
+    status: 'applied',
+    sourceKind: 'verified-attack-input-chain',
+    durationFrames,
+    startFrame: 0,
+    endFrame: durationFrames,
+    sourceIdentity: segment.sourceIdentity,
+    reasons: [],
+  };
+  return {
+    ...resolution,
+    actionBinding: {
+      ...resolution.actionBinding,
+      attackInputSegment: resolution.actionBinding.attackInputSegment
+        ? {
+            ...resolution.actionBinding.attackInputSegment,
+            selectedSubSkillIndex: segment.subSkillIndex,
+            durationFrames,
+            effectiveDurationFrames: durationFrames,
+            durationStatus: 'applied',
+            durationBasis: 'verified-attack-input-chain',
+            durationSourceIdentity: segment.sourceIdentity,
+          }
+        : resolution.actionBinding.attackInputSegment,
+      actionTiming: {
+        ...(resolution.actionBinding.actionTiming ?? {}),
+        status: 'applied',
+        selectedSubSkillIndex: segment.subSkillIndex,
+        occupancy,
+        sourceIdentity: segment.sourceIdentity,
+        reasons: [],
+      },
+      actualDurationFrames: durationFrames,
+      actualDurationMs: framesToMs(durationFrames, frameRate),
+      timingStatus: 'applied',
+      attackInputChainIdentity: chain.chainIdentity,
+    },
+  };
+}
+
+function resolveContextVariantSelection({
+  contextBindings,
+  previous,
+  actorState,
+  controlSkillId,
+  timeMs,
+}) {
+  if (!previous?.ready) {
+    return { status: 'none', binding: null, previous: null };
+  }
+  const candidates = (contextBindings ?? []).filter(binding => {
+    if (
+      Number(binding.ownerId) !== Number(actorState.profile.ownerId) ||
+      Number(binding.sourceControlSkillId) !==
+        Number(previous.controlSkillId) ||
+      Number(binding.sourceSubSkillIndex) !==
+        Number(previous.selectedSubSkillIndex) ||
+      Number(binding.targetControlSkillId) !== Number(controlSkillId) ||
+      !isRuntimeConditionSatisfied(binding.condition, actorState)
+    ) {
+      return false;
+    }
+    const frameRate = Number(binding.inputWindow?.frameRate) || FRAME_RATE;
+    const relativeFrame = Math.round(
+      ((Number(timeMs) - Number(previous.startMs)) * frameRate) / 1000
+    );
+    return (
+      relativeFrame >= Number(binding.inputWindow?.startFrame) &&
+      relativeFrame <= Number(binding.inputWindow?.endFrame)
+    );
+  });
+  if (candidates.length !== 1) {
+    return { status: 'none', binding: null, previous };
+  }
+  return {
+    status: 'selected',
+    binding: candidates[0],
+    previous,
+  };
+}
+
+function isRuntimeConditionSatisfied(condition, actorState) {
+  if (!condition) return true;
+  if (condition.kind === 'resource-state-active') {
+    return actorState.activeStates.has(Number(condition.stateElementId));
+  }
+  if (condition.kind === 'resource-state-inactive') {
+    return !actorState.activeStates.has(Number(condition.stateElementId));
+  }
+  if (condition.kind === 'resource-at-least') {
+    return actorState.current >= Number(condition.value || 0);
+  }
+  return false;
+}
+
+function createStateEffectCommand({
+  mechanicsPackage,
+  actorState,
+  actorId,
+  sourceActionId,
+  timeMs,
+  durationMs,
+  transition,
+  sourceIdentity,
+  operation,
+}) {
+  const effectIdentity = `special-resource-state:${transition.stateElementId}`;
+  return {
+    id: `verified-state|${sourceActionId ?? 'inherited'}|${effectIdentity}|${timeMs}`,
+    sourceActionId: sourceActionId ?? null,
+    sourceActionName: transition.stateName,
+    sourceActorId: actorId,
+    sourceActorName: actorState.actor.name,
+    effectId: `battle-element:${transition.stateElementId}`,
+    effectName: transition.stateName,
+    operation,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId: String(actorId),
+    targetName: actorState.actor.name,
+    timeMs,
+    durationMs,
+    stackMode: EFFECT_STACK_MODES.REPLACE,
+    stackDelta: 1,
+    maxStacks: 1,
+    tags: ['special-resource-state', 'action-variant-state'],
+    sourceStatus: 'verified-action-state-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    sourceIdentity: {
+      packageId: mechanicsPackage.packageId,
+      packageHash: mechanicsPackage.packageHash,
+      actionBindingIdentity: transition.transitionIdentity ?? effectIdentity,
+      effectIdentity,
+      sourceIdentity,
+    },
+    modifiers: [],
+    appliedToCalculators: false,
+    generatedVerified: true,
+  };
+}
+
+function createPassiveEffectCommand({
+  mechanicsPackage,
+  action,
+  actorState,
+  resolution,
+  profile,
+  trigger,
+  timeMs,
+}) {
+  const effectIdentity = profile.passiveIdentity;
+  return {
+    id: `verified-passive|${action.id}|${effectIdentity}|${trigger.triggerIdentity}`,
+    sourceActionId: action.id,
+    sourceActionName: action.name,
+    sourceActorId: action.actorId,
+    sourceActorName: action.actor?.name ?? actorState.actor.name,
+    effectId: profile.effectId,
+    effectName: profile.name,
+    operation: EFFECT_OPERATIONS.APPLY,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId: String(action.actorId),
+    targetName: action.actor?.name ?? actorState.actor.name,
+    timeMs,
+    durationMs: profile.durationMs,
+    stackMode: EFFECT_STACK_MODES.STACK,
+    stackDelta: profile.stackDelta,
+    maxStacks: profile.maxStacks,
+    tags: ['passive', `passive:${profile.skillId}`],
+    sourceStatus: 'verified-passive-effect-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    sourceIdentity: {
+      packageId: mechanicsPackage.packageId,
+      packageHash: mechanicsPackage.packageHash,
+      actionBindingIdentity: resolution.actionBinding.identity,
+      effectIdentity,
+      sourceIdentity: [profile.sourceIdentity, trigger.sourceIdentity].join(
+        '|'
+      ),
+    },
+    modifiers: profile.modifiers.map(modifier => ({
+      kind: 'battle-property',
+      attributeId: modifier.attributeId,
+      bucket: modifier.bucket,
+      valueRaw: modifier.valueRaw,
+      propertyTags: modifier.propertyTags ?? [],
+      sourceIdentity: modifier.sourceIdentity,
+    })),
+    appliedToCalculators: true,
+    generatedVerified: true,
   };
 }
 
@@ -691,6 +1282,8 @@ function createVariantSelectionRecord({
       null,
     selectionReason:
       selectionSource?.sourceKind ?? inputSelection?.reason ?? null,
+    contextActionId: selectionSource?.contextActionId ?? null,
+    attackInputChainIdentity: selectionSource?.chainIdentity ?? null,
     sourceKind: selectionSource?.sourceKind ?? 'action-mapping-selection',
     sourceIdentity:
       selectionSource?.sourceIdentity ??
@@ -935,6 +1528,42 @@ function createInputVariantExecutionBlock({
   };
 }
 
+function createAttackChainExecutionBlock({ action, actorState, chain }) {
+  return {
+    code: 'VERIFIED_ATTACK_INPUT_CHAIN_COMPLETE',
+    status: 'blocked',
+    reason: 'verified-attack-input-chain-complete',
+    reasons: ['active-attack-input-chain-has-no-segment-at-sequence-index'],
+    message: `${actorState?.actor?.name ?? action.actor?.name ?? '角色'} 当前形态的普攻链只有 ${chain?.segments?.length ?? 0} 段，A${action.attackSequenceIndex} 不执行`,
+    sourceKind: 'azpr-verified-action-variant-runtime',
+    sourceIdentity: chain?.sourceIdentity ?? null,
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    controlSkillId: null,
+    selectedSubSkillIndex: null,
+    resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
+    resourceName: actorState?.profile?.name ?? null,
+    requiredValue: null,
+    currentValue: actorState?.current ?? null,
+    maxValue: actorState?.profile?.capacity ?? null,
+  };
+}
+
+function removeStateSwitchWindows({ windows, actorId, stateElementId }) {
+  for (let index = windows.length - 1; index >= 0; index -= 1) {
+    const window = windows[index];
+    if (
+      window.actorId === actorId &&
+      window.condition?.kind === 'resource-state-active' &&
+      Number(window.condition.stateElementId) === Number(stateElementId)
+    ) {
+      windows.splice(index, 1);
+    }
+  }
+}
+
 function removeExpiredSwitchWindows(windows, timeMs) {
   for (let index = windows.length - 1; index >= 0; index -= 1) {
     if (windows[index].endsAtMs <= timeMs) windows.splice(index, 1);
@@ -992,6 +1621,7 @@ function createUnavailableRuntime(reason) {
     resourceEvents: [],
     stateEvents: [],
     variantEvents: [],
+    effectCommands: [],
     eventLog: [],
     executionBlocks: [],
     curves: [],
@@ -1001,6 +1631,7 @@ function createUnavailableRuntime(reason) {
       changedVariantCount: 0,
       resourceEventCount: 0,
       stateEventCount: 0,
+      effectCommandCount: 0,
       executionBlockCount: 0,
     },
     ready: false,

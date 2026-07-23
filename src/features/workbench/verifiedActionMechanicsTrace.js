@@ -6,7 +6,10 @@ export function createVerifiedActionMechanicsTrace({
   verifiedCombatRuntime = null,
 } = {}) {
   if (!action || !verifiedCombatRuntime?.enabled) return null;
-  const resolution = resolveActionResolution(verifiedCombatRuntime, action.id);
+  const resolution = resolveVerifiedActionRuntimeResolution(
+    verifiedCombatRuntime,
+    action.id
+  );
   const actor = (scenario?.actors ?? []).find(
     item => item.id === action.actorId
   );
@@ -211,7 +214,12 @@ export function createVerifiedActionMechanicsTrace({
   };
 }
 
-function resolveActionResolution(runtime, actionId) {
+export function resolveVerifiedActionRuntimeResolution(runtime, actionId) {
+  if (!runtime) return null;
+  const variantResolution =
+    runtime.specialResourceRuntime?.actionResolutionById?.get?.(actionId) ??
+    null;
+  if (variantResolution) return variantResolution;
   if (runtime.actionResolutionById?.get) {
     return runtime.actionResolutionById.get(actionId) ?? null;
   }

@@ -1000,6 +1000,7 @@ import {
   watch,
 } from 'vue';
 import {
+  getVerifiedActionVariantGraph,
   getVerifiedCombatActionMapping,
   getVerifiedDerivedControlContract,
   loadVerifiedCombatMechanicsPackage,
@@ -1087,6 +1088,10 @@ import {
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
 } from '../domain/workbenchAttackInputChain';
+import {
+  resolveVerifiedAttackInputChainEntry,
+  resolveVerifiedContextActionStartMs,
+} from '../domain/verifiedActionContextScheduling';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import { normalizeInitialRuntimeState } from '../domain/initialRuntimeState';
 import { normalizeCombatScenario } from '../domain/combatScenario';
@@ -3186,7 +3191,7 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
       actionLibraryActor.value?.characterId ??
       selectedDraft.value.actorCharacterId
   );
-  const actionEntry = normalizeActionEntryInput(
+  let actionEntry = normalizeActionEntryInput(
     actionEntryOrSkillId,
     actorCharacterId
   );
@@ -3197,9 +3202,19 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
   const scheduling = resolveWorkbenchActionScheduling(actionEntry);
   const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
-  const requestedStartMs =
+  const fallbackStartMs =
     insertOptions.requestedStartMs ??
     resolveInsertStartMs(resolveInsertIndex());
+  const requestedStartMs = resolveVerifiedAssistedInsertStartMs({
+    entry: actionEntry,
+    actorCharacterId,
+    fallbackStartMs,
+  });
+  actionEntry = resolveVerifiedStateSelectedActionEntry({
+    entry: actionEntry,
+    actorCharacterId,
+    timeMs: requestedStartMs,
+  });
   if (actionEntry.kind === 'star-combo') {
     return insertTimelineEntry({
       entry: createWorkbenchTimelineEntry({
@@ -3287,6 +3302,60 @@ function createAttackInputChainDraftPatches({
     },
     createdAt: new Date().toISOString(),
   });
+}
+
+function resolveVerifiedStateSelectedActionEntry({
+  entry,
+  actorCharacterId,
+  timeMs,
+} = {}) {
+  const graph = getVerifiedActionVariantGraph();
+  const actorId = resolveScenarioActorId(actorCharacterId);
+  return resolveVerifiedAttackInputChainEntry({
+    entry,
+    graph,
+    ownerId: actorCharacterId,
+    actorId,
+    timeMs,
+    effectIntervals: effectIntervalProjection.value.intervals,
+  }).entry;
+}
+
+function resolveVerifiedAssistedInsertStartMs({
+  entry,
+  actorCharacterId,
+  fallbackStartMs,
+} = {}) {
+  if (!isConstraintAssistedPlacement()) {
+    return fallbackStartMs;
+  }
+  const mapping = getVerifiedCombatActionMapping({
+    type: ACTION_TYPES.SKILL,
+    skillId: entry?.skillId,
+    actionVariantIndex:
+      entry?.actionVariantIndex ?? entry?.damageSegmentIndex ?? 0,
+    actor: { characterId: actorCharacterId },
+  });
+  const context = resolveVerifiedContextActionStartMs({
+    actions: actionDrafts.value,
+    selections:
+      simulationResult.value.verifiedActionVariantRuntime?.selections ?? [],
+    graph: getVerifiedActionVariantGraph(),
+    ownerId: actorCharacterId,
+    actorId: resolveScenarioActorId(actorCharacterId),
+    targetControlSkillId: mapping?.controlSkillId,
+    effectIntervals: effectIntervalProjection.value.intervals,
+    timelineDurationMs: project.value.time.durationMs,
+  });
+  return context?.startMs ?? fallbackStartMs;
+}
+
+function resolveScenarioActorId(actorCharacterId) {
+  return (
+    scenario.value.actors.find(
+      actor => Number(actor.characterId) === Number(actorCharacterId)
+    )?.id ?? null
+  );
 }
 
 function setActionPlacementMode(mode) {
@@ -3690,15 +3759,11 @@ function createTimelineEntryDraftRequest({
   const actorCharacterId = Number(
     targetLane.characterId ?? actionLibraryCharacterId.value
   );
-  const requestedStartMs = clampNumber(
-    startMs,
-    0,
-    project.value.time.durationMs
-  );
+  let requestedStartMs = clampNumber(startMs, 0, project.value.time.durationMs);
   let draftPatch;
   let attackInputDrafts = [];
   if (entry.type === ACTION_TYPES.SKILL) {
-    const actionEntry = normalizeActionEntryInput(entry, actorCharacterId);
+    let actionEntry = normalizeActionEntryInput(entry, actorCharacterId);
     if (!isActionEntrySchedulable(actionEntry)) {
       return {
         blockedMessage: formatUnschedulableActionMessage(actionEntry),
@@ -3708,6 +3773,16 @@ function createTimelineEntryDraftRequest({
         draftPatches: [],
       };
     }
+    requestedStartMs = resolveVerifiedAssistedInsertStartMs({
+      entry: actionEntry,
+      actorCharacterId,
+      fallbackStartMs: requestedStartMs,
+    });
+    actionEntry = resolveVerifiedStateSelectedActionEntry({
+      entry: actionEntry,
+      actorCharacterId,
+      timeMs: requestedStartMs,
+    });
     const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
     const level = resolveSkillInsertLevel(actorCharacterId, skill);
     const scheduling = resolveWorkbenchActionScheduling(actionEntry);

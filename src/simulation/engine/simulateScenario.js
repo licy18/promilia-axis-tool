@@ -270,6 +270,7 @@ function createVerifiedRuntimeBundle({
     scenario,
     actionExecutionPlan,
     generatedCommands: [
+      ...(actionVariantRuntime?.effectCommands ?? []),
       ...(effectGeneration?.effectCommands ?? []),
       ...(tuningGeneration?.effectCommands ?? []),
     ],
@@ -312,11 +313,12 @@ function applyVerifiedResourceExecutionBlocks({
     actorId: block.actorId,
     timeMs: block.timeMs,
     message:
-      block.status === 'unresolved'
+      block.message ??
+      (block.status === 'unresolved'
         ? `${block.actionName} 的已验证资源消耗来源或作用对象不完整`
         : block.resourceName
           ? `${block.actionName} 需要${block.resourceName} ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`
-          : `${block.actionName} 需要 SP ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`,
+          : `${block.actionName} 需要 SP ${block.requiredValue}，当前 ${block.currentValue}/${block.maxValue}，动作未执行`),
     source: {
       sourceKind: block.sourceKind,
       sourceStatus: block.reason,

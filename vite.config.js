@@ -36,9 +36,10 @@ export default defineConfig({
               '/simulation/mechanics/verifiedCombatRuntime.js',
               '/simulation/mechanics/verifiedBattleEffectGeneration.js',
               '/simulation/mechanics/verifiedActionVariantRuntime.js',
+              '/domain/verifiedActionContextScheduling.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {
-            return 'verified-combat-runtime';
+            return 'verified-combat';
           }
           if (
             [
@@ -47,7 +48,7 @@ export default defineConfig({
               '/simulation/mechanics/threeValueMechanismConfiguration.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {
-            return 'verified-combat-configuration';
+            return 'verified-combat';
           }
           if (
             [
@@ -55,10 +56,24 @@ export default defineConfig({
               '/simulation/projection/projectTimelineStateDisplaySeries.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {
-            return 'workbench-timeline-projection';
+            return 'workbench-ui';
           }
-          if (id.includes('/features/workbench/TimelineGridPreview.vue')) {
-            return 'workbench-timeline-ui';
+          if (
+            [
+              'TimelineGridPreview.vue',
+              'TimelineOperationAxis.vue',
+              'TimelineSwitchEventMarker.vue',
+              'ActionHitOverrideList.vue',
+            ].some(fileName =>
+              id.includes(`/features/workbench/${fileName}`)
+            ) ||
+            [
+              '/simulation/projection/projectTimelineOperationInputs.js',
+              '/domain/azprInputCommandProfile.js',
+              '/domain/workbenchJointAttackInsertion.js',
+            ].some(modulePath => id.endsWith(modulePath))
+          ) {
+            return 'workbench-ui';
           }
           if (
             [
@@ -92,7 +107,7 @@ export default defineConfig({
               '/features/workbench/verifiedActionMechanicsTrace.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {
-            return 'workbench-secondary-ui';
+            return 'workbench-ui';
           }
         },
       },

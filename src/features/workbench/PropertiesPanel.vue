@@ -965,7 +965,10 @@ import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
 import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
-import { createVerifiedActionMechanicsTrace } from './verifiedActionMechanicsTrace';
+import {
+  createVerifiedActionMechanicsTrace,
+  resolveVerifiedActionRuntimeResolution,
+} from './verifiedActionMechanicsTrace';
 import { createActionVariantInputSelection } from '../../domain/actionVariantInputSelection';
 import { isSwitchTriggeredDerivedAction } from '../../simulation/generation/switchTriggeredActionGeneration';
 
@@ -1024,9 +1027,19 @@ const props = defineProps({
   },
 });
 
-const selectedActionIdentity = computed(() =>
-  resolveWorkbenchActionVisualIdentity(props.selectedAction)
-);
+const selectedActionIdentity = computed(() => {
+  const identity = resolveWorkbenchActionVisualIdentity(props.selectedAction);
+  const resolution = resolveVerifiedActionRuntimeResolution(
+    props.verifiedCombatRuntime,
+    props.selectedAction?.id
+  );
+  const actualDurationFrames = Number(
+    resolution?.actionBinding?.actualDurationFrames
+  );
+  return Number.isInteger(actualDurationFrames) && actualDurationFrames >= 0
+    ? { ...identity, durationFrames: actualDurationFrames }
+    : identity;
+});
 const isReadOnlyDerivedAction = computed(() =>
   isSwitchTriggeredDerivedAction(props.selectedAction)
 );

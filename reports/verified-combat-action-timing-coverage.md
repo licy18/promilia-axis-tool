@@ -1,14 +1,14 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：562（来源占轴已确认 553，尚未确认 9；公开动作均按独立 schedulable 合同判断）
-- 公开变体：592（来源占轴已确认 553，尚未确认 39）
-- 普攻输入段：95（输入占轴已确认 77，尚未确认 18）
+- 公开动作：562（来源占轴已确认 554，尚未确认 8；公开动作均按独立 schedulable 合同判断）
+- 公开变体：592（来源占轴已确认 554，尚未确认 38）
+- 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
 - SkillControl/player 变体：1039
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：630
-- 来源动画规划长度：26
+- 精确选中变体占轴：632
+- 来源动画规划长度：24
 - 通用规划长度：1
 - control 身份未解析：1
 - 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 142
@@ -20,8 +20,8 @@
 | actor | charged-attack | skill-control-player-action-range | applied | 19 |
 | actor | dodge-attack | skill-control-player-action-range | applied | 20 |
 | actor | limit-counter | skill-control-player-action-range | applied | 20 |
-| actor | normal-attack | normal-attack-input-segment-chain | applied | 11 |
-| actor | normal-attack | normal-attack-input-segment-chain | unresolved | 9 |
+| actor | normal-attack | normal-attack-input-segment-chain | applied | 12 |
+| actor | normal-attack | normal-attack-input-segment-chain | unresolved | 8 |
 | actor | perfect-parry | skill-control-player-action-range | applied | 20 |
 | actor | plunging-attack | skill-control-player-action-range | applied | 20 |
 | actor | star-carry | skill-control-player-action-range | applied | 17 |
@@ -64,7 +64,6 @@
 ## 尚未确认的输入占轴
 
 - `actor|101007|10100701|0|10100703`：normal-attack-input-segment-duration-unresolved
-- `actor|101010|10101001|0|10101003`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|0|10300203`：normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|0|10700103`：normal-attack-input-segment-duration-unresolved
 - `actor|107002|10700201|0|10700203`：normal-attack-input-segment-duration-unresolved
@@ -73,7 +72,6 @@
 - `actor|109002|10900201|0|10900203`：normal-attack-input-segment-duration-unresolved
 - `actor|112002|11200201|0|11200203`：normal-attack-input-segment-duration-unresolved
 - `actor|101007|10100701|0|10100701|attack-input-1`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|101010|10101001|0|10101005|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
 - `actor|103002|10300201|0|10300203|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
 - `actor|103002|10300201|0|10300204|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
 - `actor|107001|10700101|0|10700102|attack-input-2`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable

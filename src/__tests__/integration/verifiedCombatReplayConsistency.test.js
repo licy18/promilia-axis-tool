@@ -308,24 +308,48 @@ describe('verified combat project replay consistency', () => {
       pngDraft,
     ].map(createVerifiedReplaySignature);
 
-    expect(signatures[0]).toMatchObject({
-      variantSelectionSignature: [
+    expect(signatures[0].variantSelectionSignature).toContainEqual([
+      'verified-replay-jade-charged',
+      10101010,
+      2,
+      'verified-active-switch-skill-index-window',
+    ]);
+    expect(signatures[0].specialResourceEventSignature).toEqual([
+      ['verified-replay-jade-ultimate', (264 * 1000) / 60, 'clear', 24, 0],
+      ['verified-replay-jade-ultimate', (272 * 1000) / 60, 'transform', 0, 0],
+      [
+        'verified-replay-jade-ultimate',
+        (272 * 1000) / 60 + 10_000,
+        'expire',
+        0,
+        0,
+      ],
+    ]);
+    expect(signatures[0].specialResourceCurveSignature).toEqual([
+      ['actor-101010', 'actor:101010:element:101010115', 24, 0, 100],
+    ]);
+    expect(signatures[0].jadeEffectSignature).toEqual(
+      expect.arrayContaining([
         [
-          'verified-replay-jade-charged',
-          10101010,
-          2,
-          'verified-active-switch-skill-index-window',
+          'battle-element:101010129',
+          'verified-replay-jade-ultimate',
+          4533.333,
+          1,
         ],
-      ],
-      specialResourceEventSignature: [
-        ['verified-replay-jade-charged', 0, 'clear', 24, 0],
-        ['verified-replay-jade-charged', 0, 'transform', 0, 0],
-        ['verified-replay-jade-charged', 10000, 'expire', 0, 0],
-      ],
-      specialResourceCurveSignature: [
-        ['actor-101010', 'actor:101010:element:101010115', 24, 0, 100],
-      ],
-    });
+        [
+          'battle-element:101010206',
+          'verified-replay-jade-ultimate',
+          16.667,
+          1,
+        ],
+        [
+          'battle-element:101010206',
+          'verified-replay-jade-charged',
+          6016.667,
+          2,
+        ],
+      ])
+    );
     expect(
       signatures[0].damageSignature.filter(
         event => event[0] === 'verified-replay-jade-charged'
@@ -577,18 +601,32 @@ function createSpecialResourceReplayDraft() {
       ...base,
       selection,
       teamSlots,
-      actorConfigs: normalizeWorkbenchActorConfigs([], selection, teamSlots),
+      actorConfigs: normalizeWorkbenchActorConfigs(
+        [],
+        selection,
+        teamSlots
+      ).map(config =>
+        config.characterId === 101010 ? { ...config, initialSp: 100 } : config
+      ),
       mechanicsProfileSelection:
         createVerifiedWorkbenchMechanicsProfileSelection(),
       actionDrafts: [
+        createWorkbenchActionDraft({
+          id: 'verified-replay-jade-ultimate',
+          type: 'skill',
+          actorCharacterId: 101010,
+          skillId: 10101013,
+          startMs: 0,
+          durationMs: frameToMs(327),
+        }),
         createWorkbenchActionDraft({
           id: 'verified-replay-jade-charged',
           type: 'skill',
           actorCharacterId: 101010,
           skillId: 10101001,
           actionVariantIndex: 2,
-          startMs: 0,
-          durationMs: 1000,
+          startMs: 6000,
+          durationMs: frameToMs(250),
         }),
       ],
       initialRuntimeState: {
@@ -601,15 +639,7 @@ function createSpecialResourceReplayDraft() {
             resourceName: '爆发状态叠层',
             currentValue: 24,
             maxValue: 100,
-            activeStates: [
-              {
-                elementId: 101010129,
-                name: '爆发状态buff',
-                remainingDurationMs: 3000,
-                sourceActionId: 'previous-cycle-ultimate',
-                sourceIdentity: 'battle-element:101010129',
-              },
-            ],
+            activeStates: [],
           },
         ],
       },
@@ -743,6 +773,18 @@ function createVerifiedReplaySignature(draft) {
       curve.currentValue,
       curve.maxValue,
     ]),
+    jadeEffectSignature: (result.effectTimeline?.events ?? [])
+      .filter(event =>
+        ['battle-element:101010129', 'battle-element:101010206'].includes(
+          event.effectId
+        )
+      )
+      .map(event => [
+        event.effectId,
+        event.actionId,
+        event.timeMs,
+        event.after?.stacks ?? 0,
+      ]),
     finalState: result.verifiedCombatRuntime.finalState,
     spUnitSignature: {
       actorMaximums: result.verifiedCombatRuntime.finalState.actorEnergy

@@ -1082,6 +1082,7 @@ import {
   serializeWorkbenchTimelineEntry,
 } from '../../domain/workbenchTimelineEntry';
 import { resolveWorkbenchActionVisualIdentity } from '../../domain/workbenchActionVisualIdentity';
+import { resolveVerifiedActionRuntimeResolution } from './verifiedActionMechanicsTrace';
 import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
 import { isSwitchTriggeredDerivedAction } from '../../simulation/generation/switchTriggeredActionGeneration';
 import TimelineInitialEnergyInput from './TimelineInitialEnergyInput.vue';
@@ -2614,7 +2615,8 @@ function getTimelineActionWidthPercent(action, leftPercent = 0) {
 }
 
 function resolveTimelineActionDurationMs(action) {
-  const resolution = props.verifiedCombatRuntime?.actionResolutionById?.get?.(
+  const resolution = resolveVerifiedActionRuntimeResolution(
+    props.verifiedCombatRuntime,
     action.id
   );
   return (
@@ -2957,7 +2959,7 @@ function getTimelineActionLayoutDurationMs(action) {
   if (action?.type === 'switch') return 0;
   return Math.max(
     MIN_ACTION_DURATION_MS,
-    Number(action.durationMs) || DEFAULT_TIMELINE_ACTION_DURATION_MS
+    resolveTimelineActionDurationMs(action)
   );
 }
 
@@ -2991,12 +2993,13 @@ function actionLabel(action) {
 function actionDetail(action) {
   if (action.type === 'skill' || action.type === 'kiboEvent') {
     const identity = resolveWorkbenchActionVisualIdentity(action);
+    const durationFrames = msToFrame(resolveTimelineActionDurationMs(action));
     const triggerLabel = isSwitchTriggeredDerivedAction(action)
       ? action.switchTriggerBinding?.triggerPhase === 'on-enter'
         ? '入场触发'
         : '退场触发'
       : null;
-    return [triggerLabel, identity.typeLabel, `${identity.durationFrames}F`]
+    return [triggerLabel, identity.typeLabel, `${durationFrames}F`]
       .filter(Boolean)
       .join(' · ');
   }

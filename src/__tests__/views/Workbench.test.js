@@ -7816,7 +7816,7 @@ describe('Workbench view', () => {
     ).toContain('4s0f');
   });
 
-  it('uses source planning for unresolved chain segments and the selected charged variant occupancy', async () => {
+  it('uses verified Jade A5 occupancy and snaps the derived heavy input to its context window', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     const wrapper = mount(Workbench, {
       global: {
@@ -7835,12 +7835,36 @@ describe('Workbench view', () => {
     const charged = findActionLibraryEntry(wrapper, 'charged-attack');
     expect(normal.attributes('disabled')).toBeUndefined();
     expect(charged.attributes('disabled')).toBeUndefined();
-    expect(normal.attributes('data-scheduling-status')).toBe('planning');
+    expect(normal.attributes('data-scheduling-status')).toBe('verified');
     expect(charged.attributes('data-scheduling-status')).toBe('verified');
 
+    await wrapper
+      .get(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
     await normal.trigger('click');
+    await nextTick();
     await charged.trigger('click');
     await nextTick();
+
+    const jadeActionNames = () =>
+      wrapper.findAll('.action-item .action-name').map(action => action.text());
+    const actionCountWithCharged = wrapper.findAll('.action-item').length;
+    expect(jadeActionNames()).toContain('重击');
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(jadeActionNames()).not.toContain('重击');
+    expect(wrapper.findAll('.action-item')).toHaveLength(
+      actionCountWithCharged - 1
+    );
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    await flushPromises();
+    await nextTick();
+    expect(jadeActionNames()).toContain('重击');
+    expect(wrapper.findAll('.action-item')).toHaveLength(
+      actionCountWithCharged
+    );
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -7863,15 +7887,12 @@ describe('Workbench view', () => {
       1, 2, 3, 4, 5,
     ]);
     expect(normalDrafts.map(action => msToFrame(action.durationMs))).toEqual([
-      20, 35, 47, 30, 240,
+      20, 35, 47, 30, 80,
     ]);
-    expect(normalDrafts.map(action => action.timingStatus)).toEqual([
-      'applied',
-      'applied',
-      'applied',
-      'applied',
-      'unresolved',
-    ]);
+    expect(
+      normalDrafts.every(action => action.timingStatus === 'applied')
+    ).toBe(true);
+    expect(msToFrame(chargedDraft.startMs - normalDrafts[4].startMs)).toBe(101);
     expect(chargedDraft).toMatchObject({
       durationFrames: 310,
       timingStatus: 'applied',

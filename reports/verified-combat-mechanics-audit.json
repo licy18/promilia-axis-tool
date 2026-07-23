@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "b28ac993db2d4a9eeec77147cc176366f162e714a1a6f923eb8b3b729d57fa25",
+  "packageHash": "e3a0d5d244432f17ec1b4d3baaf4b2a815e693b40db4c484152759419fe7ad3f",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1272,8 +1272,8 @@
   "sourceCoverage": {
     "candidateActionCount": 562,
     "classifiedActionCount": 562,
-    "foundControlCount": 596,
-    "indexedElementPathCount": 2200,
+    "foundControlCount": 597,
+    "indexedElementPathCount": 2201,
     "appliedActionBindingCount": 513,
     "appliedHitBindingCount": 1830,
     "uniqueControlBindingCount": 499,
@@ -1360,8 +1360,7 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "normal-attack-input-segment-duration-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "applied": false
     },

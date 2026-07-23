@@ -29,7 +29,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 14,
+      packageVersion: 15,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -40,10 +40,10 @@ describe('verified combat mechanics package', () => {
         appliedEffectBindingCount: 131,
         verifiedZeroEffectBindingCount: 2,
         unresolvedEffectBindingCount: 3702,
-        actionVariantSupportControlBindingCount: 68,
+        actionVariantSupportControlBindingCount: 69,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 43,
-        actionVariantNodeCount: 670,
+        actionVariantNodeCount: 671,
         actionVariantEdgeCount: 93,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
@@ -62,8 +62,8 @@ describe('verified combat mechanics package', () => {
         attackInputSegmentCount: 95,
         appliedAttackInputSegmentCount: 76,
         unresolvedAttackInputSegmentCount: 19,
-        appliedAttackInputTimingCount: 77,
-        unresolvedAttackInputTimingCount: 18,
+        appliedAttackInputTimingCount: 78,
+        unresolvedAttackInputTimingCount: 17,
         semanticEffectCount: 3559,
         semanticGameplayEffectCount: 1816,
         semanticAppliedEffectCount: 397,
@@ -261,7 +261,7 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 670,
+        nodeCount: 671,
         edgeCount: 337,
         appliedEdgeCount: 93,
         unresolvedEdgeCount: 244,
@@ -476,12 +476,12 @@ describe('verified combat mechanics package', () => {
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 553,
-        unresolvedActionCount: 9,
-        appliedAttackInputSegmentCount: 77,
-        unresolvedAttackInputSegmentCount: 18,
-        exactSelectedVariantOccupancyCount: 630,
-        sourceAnimationPlanningDurationCount: 26,
+        appliedActionCount: 554,
+        unresolvedActionCount: 8,
+        appliedAttackInputSegmentCount: 78,
+        unresolvedAttackInputSegmentCount: 17,
+        exactSelectedVariantOccupancyCount: 632,
+        sourceAnimationPlanningDurationCount: 24,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 22,
         oneFrameCount: 0,
@@ -503,11 +503,26 @@ describe('verified combat mechanics package', () => {
       [23, null, null, null],
       [null, null, null, null],
       [null, null, null, null, 33],
-      [44, 56, 74],
+      [44, 43, 74],
     ]);
     expect(
       jade.attackInputSegments.map(segment => segment.durationFrames)
-    ).toEqual([20, 35, 47, 30, null]);
+    ).toEqual([20, 35, 47, 30, 80]);
+    expect(jade.attackInputSegments[4]).toMatchObject({
+      durationFrames: 80,
+      durationStatus: 'applied',
+      durationBasis: 'attack-reopen-window',
+      variantTimings: [
+        expect.objectContaining({
+          subSkillIndex: 0,
+          occupancy: expect.objectContaining({ durationFrames: 80 }),
+        }),
+        expect.objectContaining({
+          subSkillIndex: 1,
+          occupancy: expect.objectContaining({ durationFrames: 72 }),
+        }),
+      ],
+    });
     expect(
       [...ruby.attackInputSegments, ...jade.attackInputSegments]
         .filter(segment => segment.durationStatus === 'unresolved')
@@ -555,7 +570,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 670,
+      nodeCount: 671,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 154,
       conditionDiscoveryStatusCounts: {
@@ -574,6 +589,127 @@ describe('verified combat mechanics package', () => {
           edge.applied
       )
     ).toBe(true);
+    expect(
+      mechanicsPackage.actionVariantGraph.contextEdges
+        .filter(edge => edge.ownerId === 101010)
+        .map(edge => ({
+          sourceSubSkillIndex: edge.sourceSubSkillIndex,
+          targetSubSkillIndex: edge.targetSubSkillIndex,
+          startFrame: edge.inputWindow.startFrame,
+          endFrame: edge.inputWindow.endFrame,
+          condition: edge.condition.kind,
+        }))
+    ).toEqual([
+      {
+        sourceSubSkillIndex: 0,
+        targetSubSkillIndex: 1,
+        startFrame: 101,
+        endFrame: 248,
+        condition: 'resource-state-inactive',
+      },
+      {
+        sourceSubSkillIndex: 1,
+        targetSubSkillIndex: 2,
+        startFrame: 72,
+        endFrame: 319,
+        condition: 'resource-state-active',
+      },
+    ]);
+    expect(
+      mechanicsPackage.actionVariantGraph.attackInputChains
+        .filter(chain => chain.ownerId === 101010)
+        .map(chain => ({
+          condition: chain.stateCondition.kind,
+          controls: chain.segments.map(segment => segment.controlSkillId),
+          subSkills: chain.segments.map(segment => segment.subSkillIndex),
+          durations: chain.segments.map(segment => segment.durationFrames),
+        }))
+    ).toEqual([
+      {
+        condition: 'resource-state-inactive',
+        controls: [10101001, 10101002, 10101003, 10101004, 10101005],
+        subSkills: [0, 0, 0, 0, 0],
+        durations: [20, 35, 47, 30, 80],
+      },
+      {
+        condition: 'resource-state-active',
+        controls: [10101001, 10101004, 10101005],
+        subSkills: [1, 1, 1],
+        durations: [72, 75, 72],
+      },
+    ]);
+    expect(
+      mechanicsPackage.specialResourceCatalog.thresholdTransitions.find(
+        transition => transition.ownerId === 101010
+      )
+    ).toMatchObject({
+      resourceIdentity: 'actor:101010:element:101010115',
+      threshold: 100,
+      comparison: 'reaches-capacity',
+      resourceOperation: 'clear',
+      suppressGainWhileStateActive: true,
+      stateElementId: 101010129,
+      stateDurationMs: 10000,
+      applied: true,
+    });
+    expect(
+      mechanicsPackage.specialResourceCatalog.passiveEffects.find(
+        passive => passive.ownerId === 101010
+      )
+    ).toMatchObject({
+      skillId: 10101061,
+      name: '玉未央',
+      durationMs: 8000,
+      stackMode: 'stack',
+      maxStacks: 4,
+      triggerBindings: expect.arrayContaining([
+        expect.objectContaining({
+          controlSkillId: 10101010,
+          subSkillIndex: 1,
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101013,
+          subSkillIndex: 0,
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101025,
+          subSkillIndex: 0,
+          triggerFrame: 61,
+          status: 'verified-passive-public-trigger-binding-ready',
+        }),
+      ]),
+      unresolvedTriggerBindings: [
+        expect.objectContaining({
+          controlSkillId: 10101027,
+          runtimeControlSkillId: 10101049,
+          status: 'static-evidence-gap',
+          reasons: [
+            'perfect-parry-public-to-runtime-control-transition-static-evidence-gap',
+          ],
+          applied: false,
+        }),
+      ],
+      modifiers: expect.arrayContaining([
+        expect.objectContaining({
+          attributeId: 1,
+          bucket: 'dynamicPercent',
+          valueRaw: 500,
+        }),
+        expect.objectContaining({
+          attributeId: 229,
+          bucket: 'dynamicPercent',
+          valueRaw: 3200,
+        }),
+      ]),
+      applied: true,
+    });
+    expect(
+      mechanicsPackage.specialResourceCatalog.passiveEffects.some(
+        passive => passive.skillId === 10101062
+      )
+    ).toBe(false);
 
     const reviewedNonNormalControls = [
       10101010, 10200110, 10200127, 10700215, 10700212, 10700226, 10700225,
@@ -951,7 +1087,8 @@ describe('verified combat mechanics package', () => {
     const nodes = mechanicsPackage.battleEffectCatalog.nodes;
 
     expect(source).toMatchObject({
-      sha256: '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
+      sha256:
+        '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
       bytes: 43759616,
     });
     expect(nodes.find(node => node.elementId === 101003087)).toMatchObject({

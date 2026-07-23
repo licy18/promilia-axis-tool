@@ -31,6 +31,44 @@ describe('TimelineGridPreview', () => {
     expect(wrapper.emitted('update-duration')?.at(-1)?.[0]).toBe(180_000);
   });
 
+  it('uses the runtime-selected variant duration for action width and text', () => {
+    const action = createAction({
+      id: 'jade-special-charged',
+      name: '重击',
+      actorId: 'actor-a',
+      startMs: 0,
+    });
+    action.durationMs = (310 * 1000) / 60;
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actions: [action],
+        durationMs: 10_000,
+        verifiedCombatRuntime: {
+          actionResolutionById: new Map([
+            [
+              action.id,
+              {
+                actionBinding: {
+                  actualDurationFrames: 230,
+                  actualDurationMs: (230 * 1000) / 60,
+                },
+              },
+            ],
+          ]),
+        },
+      }),
+    });
+
+    const block = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-action-id="jade-special-charged"]'
+    );
+    expect(block.text()).toContain('230F');
+    expect(readStyleNumber(block.attributes('style'), 'width')).toBeCloseTo(
+      (230 / 600) * 100,
+      4
+    );
+  });
+
   it('exposes free and constraint-assisted placement as an explicit mode choice', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

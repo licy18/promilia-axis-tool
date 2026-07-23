@@ -15,6 +15,7 @@ import {
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedActionVariantRuntime } from '../../simulation/mechanics/verifiedActionVariantRuntime';
+import { createEffectRuntimeTimeline } from '../../simulation/runtime/effectRuntimeTimeline';
 
 const RUBY_ID = 103002;
 const JADE_ID = 101010;
@@ -24,6 +25,16 @@ const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
 );
 const RUBY_A5 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 5
+);
+const JADE_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
+  mapping =>
+    mapping.ownerId === JADE_ID && mapping.actionKind === 'normal-attack'
+);
+const JADE_A1 = JADE_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 1
+);
+const JADE_A5 = JADE_NORMAL_MAPPING.attackInputSegments.find(
   segment => segment.sequenceIndex === 5
 );
 
@@ -261,6 +272,366 @@ describe('verified action variant and special resource runtime', () => {
     expect(runtime.summary.changedVariantCount).toBe(1);
   });
 
+  it('uses the sourced A5 occupancy and selects the derived charged variant only inside its input window', () => {
+    const a5 = createActorAction({
+      id: 'jade-a5-default',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      startMs: 0,
+      attackInput: JADE_A5,
+    });
+    const inside = createActorAction({
+      id: 'jade-special-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: Number(frameTime(101).toFixed(6)),
+    });
+    const selected = runVariantRuntime({
+      actors: [a5.actor],
+      actions: [a5, inside],
+      durationMs: 8000,
+    });
+
+    expect(selected.selectionByActionId.get(a5.id)).toMatchObject({
+      controlSkillId: 10101005,
+      selectedSubSkillIndex: 0,
+      actualDurationFrames: 80,
+    });
+    expect(selected.selectionByActionId.get(inside.id)).toMatchObject({
+      controlSkillId: 10101010,
+      selectedSubSkillIndex: 1,
+      sourceKind: 'verified-input-context-variant',
+      contextActionId: a5.id,
+      actualDurationFrames: 230,
+    });
+
+    const outside = createActorAction({
+      id: 'jade-default-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(249),
+    });
+    const notDerived = runVariantRuntime({
+      actors: [a5.actor],
+      actions: [a5, outside],
+      durationMs: 8000,
+    });
+    expect(notDerived.selectionByActionId.get(outside.id)).toMatchObject({
+      selectedSubSkillIndex: 0,
+      sourceKind: 'verified-client-default-subskill-index',
+      actualDurationFrames: 310,
+    });
+
+    const burstA5 = createActorAction({
+      id: 'jade-a5-burst',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      startMs: 0,
+      attackInput: JADE_A5,
+      attackSequenceIndex: 3,
+    });
+    const enhanced = createActorAction({
+      id: 'jade-enhanced-special-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(72),
+    });
+    const burst = runVariantRuntime({
+      actors: [burstA5.actor],
+      actions: [burstA5, enhanced],
+      durationMs: 8000,
+      initialRuntimeState: createJadeBurstInitialState({
+        actorId: burstA5.actorId,
+        remainingDurationMs: 7000,
+      }),
+    });
+    expect(burst.selectionByActionId.get(burstA5.id)).toMatchObject({
+      controlSkillId: 10101005,
+      selectedSubSkillIndex: 1,
+      sourceKind: 'verified-active-attack-input-chain',
+      attackInputChainIdentity: 'xiaoyu-burst-three-inputs',
+      actualDurationFrames: 72,
+    });
+    expect(burst.selectionByActionId.get(enhanced.id)).toMatchObject({
+      selectedSubSkillIndex: 2,
+      sourceKind: 'verified-input-context-variant',
+      contextActionId: burstA5.id,
+      actualDurationFrames: 250,
+    });
+  });
+
+  it('uses each selected Xiaoyu chain segment occupancy instead of its animation tail', () => {
+    const defaultA1 = createActorAction({
+      id: 'jade-default-a1',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      startMs: 0,
+      attackSequenceIndex: 1,
+      attackInput: JADE_A1,
+    });
+    const defaultRuntime = runVariantRuntime({
+      actors: [defaultA1.actor],
+      actions: [defaultA1],
+      durationMs: 5000,
+    });
+    expect(defaultRuntime.selectionByActionId.get(defaultA1.id)).toMatchObject({
+      selectedSubSkillIndex: 0,
+      actualDurationFrames: 20,
+      sourceKind: 'verified-active-attack-input-chain',
+    });
+
+    const burstA1 = createActorAction({
+      id: 'jade-burst-a1',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      startMs: 0,
+      attackSequenceIndex: 1,
+      attackInput: JADE_A1,
+    });
+    const burstRuntime = runVariantRuntime({
+      actors: [burstA1.actor],
+      actions: [burstA1],
+      durationMs: 5000,
+      initialRuntimeState: createJadeBurstInitialState({
+        actorId: burstA1.actorId,
+        remainingDurationMs: 4000,
+      }),
+    });
+    expect(burstRuntime.selectionByActionId.get(burstA1.id)).toMatchObject({
+      selectedSubSkillIndex: 1,
+      actualDurationFrames: 72,
+      sourceKind: 'verified-active-attack-input-chain',
+    });
+  });
+
+  it('enters burst on the exact threshold transaction and refreshes it from the ultimate source frame', () => {
+    const charged = createActorAction({
+      id: 'jade-threshold-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: 0,
+    });
+    const threshold = runVariantRuntime({
+      actors: [charged.actor],
+      actions: [charged],
+      durationMs: 12_000,
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: charged.actorId,
+            resourceIdentity: 'actor:101010:element:101010115',
+            currentValue: 95,
+          },
+        ],
+      },
+    });
+    const thresholdFrameMs = frameTime(43);
+    expect(
+      threshold.resourceEvents
+        .filter(event => event.timeMs === thresholdFrameMs)
+        .map(event => [
+          event.payload.operation,
+          event.payload.beforeValue,
+          event.payload.afterValue,
+        ])
+    ).toEqual([
+      ['gain', 95, 100],
+      ['threshold-clear', 100, 0],
+      ['transform', 0, 0],
+    ]);
+    expect(
+      threshold.resourceEvents.filter(
+        event =>
+          event.actionId === charged.id && event.payload.operation === 'gain'
+      )
+    ).toHaveLength(1);
+    expect(threshold.stateEvents[0]).toMatchObject({
+      timeMs: thresholdFrameMs,
+      payload: {
+        operation: 'transform',
+        stateElementId: 101010129,
+        stateDurationMs: 10_000,
+      },
+    });
+    expect(
+      threshold.effectCommands.find(
+        command => command.effectId === 'battle-element:101010129'
+      )
+    ).toMatchObject({
+      timeMs: thresholdFrameMs,
+      durationMs: 10_000,
+      sourceStatus: 'verified-action-state-generated',
+    });
+    const clampedThreshold = runVariantRuntime({
+      actors: [charged.actor],
+      actions: [charged],
+      durationMs: 12_000,
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: charged.actorId,
+            resourceIdentity: 'actor:101010:element:101010115',
+            currentValue: 99,
+          },
+        ],
+      },
+    });
+    expect(
+      clampedThreshold.resourceEvents
+        .filter(event => event.timeMs === thresholdFrameMs)
+        .map(event => [
+          event.payload.operation,
+          event.payload.beforeValue,
+          event.payload.afterValue,
+        ])
+    ).toEqual([
+      ['gain', 99, 100],
+      ['threshold-clear', 100, 0],
+      ['transform', 0, 0],
+    ]);
+    expect(
+      clampedThreshold.resourceEvents.filter(
+        event => event.payload.operation === 'gain'
+      )
+    ).toHaveLength(1);
+
+    const ultimate = createActorAction({
+      id: 'jade-refresh-ultimate',
+      characterId: JADE_ID,
+      skillId: 10101013,
+      startMs: 0,
+    });
+    const enteredByUltimate = runVariantRuntime({
+      actors: [ultimate.actor],
+      actions: [ultimate],
+      durationMs: 16_000,
+    });
+    expect(
+      enteredByUltimate.stateEvents.find(
+        event =>
+          event.actionId === ultimate.id &&
+          event.payload.operation === 'transform'
+      )
+    ).toMatchObject({
+      timeMs: frameTime(272),
+      payload: {
+        stateElementId: 101010129,
+        stateDurationMs: 10_000,
+      },
+    });
+    const refreshed = runVariantRuntime({
+      actors: [ultimate.actor],
+      actions: [ultimate],
+      durationMs: 16_000,
+      initialRuntimeState: createJadeBurstInitialState({
+        actorId: ultimate.actorId,
+        currentValue: 37,
+        remainingDurationMs: 6000,
+      }),
+    });
+    expect(
+      refreshed.resourceEvents.find(
+        event =>
+          event.actionId === ultimate.id && event.payload.operation === 'clear'
+      )
+    ).toMatchObject({
+      timeMs: frameTime(264),
+      payload: { beforeValue: 37, afterValue: 0 },
+    });
+    expect(
+      refreshed.stateEvents.find(
+        event =>
+          event.actionId === ultimate.id &&
+          event.payload.operation === 'refresh'
+      )
+    ).toMatchObject({
+      timeMs: frameTime(272),
+      payload: {
+        stateElementId: 101010129,
+        stateDurationMs: 10_000,
+      },
+    });
+    expect(
+      refreshed.stateEvents.some(
+        event =>
+          event.actionId === ultimate.id &&
+          event.payload.operation === 'transform-remove'
+      )
+    ).toBe(false);
+  });
+
+  it('generates Jade passive 10101061 as a four-stack calculator effect', () => {
+    const actions = Array.from({ length: 5 }, (_, index) =>
+      createActorAction({
+        id: `jade-passive-trigger-${index + 1}`,
+        characterId: JADE_ID,
+        skillId: 10101001,
+        actionVariantIndex: 2,
+        startMs: index * 1000,
+      })
+    );
+    const runtime = runVariantRuntime({
+      actors: [actions[0].actor],
+      actions,
+      durationMs: 13_000,
+    });
+    const passiveCommands = runtime.effectCommands.filter(
+      command => command.effectId === 'battle-element:101010206'
+    );
+    expect(passiveCommands).toHaveLength(5);
+    expect(passiveCommands[0]).toMatchObject({
+      effectName: '玉未央',
+      timeMs: frameTime(1),
+      durationMs: 8000,
+      maxStacks: 4,
+      sourceStatus: 'verified-passive-effect-generated',
+      appliedToCalculators: true,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 1,
+          bucket: 'dynamicPercent',
+          valueRaw: 500,
+        }),
+        expect.objectContaining({
+          attributeId: 229,
+          bucket: 'dynamicPercent',
+          valueRaw: 3200,
+        }),
+      ],
+    });
+    const effectTimeline = createEffectRuntimeTimeline({
+      scenario: {
+        time: { durationMs: 13_000, fps: 60 },
+        actors: [actions[0].actor],
+        actions,
+      },
+      actionExecutionPlan: {
+        actions: actions.map(action => ({
+          actionId: action.id,
+          execute: true,
+        })),
+      },
+      generatedCommands: runtime.effectCommands,
+    });
+    expect(
+      effectTimeline.events
+        .filter(event => event.effectId === 'battle-element:101010206')
+        .filter(event => event.after)
+        .map(event => event.after.stacks)
+    ).toEqual([1, 2, 3, 4, 4]);
+    expect(
+      effectTimeline.events.find(
+        event =>
+          event.effectId === 'battle-element:101010206' &&
+          event.type === 'EFFECT_EXPIRED'
+      )?.timeMs
+    ).toBeCloseTo(4000 + frameTime(1) + 8000, 2);
+  });
+
   it('rebuilds inherited state windows and expires them without adding empty generic lanes', () => {
     const jade = {
       id: 'actor-101010',
@@ -366,7 +737,7 @@ describe('verified action variant and special resource runtime', () => {
           {
             actorId: `actor-${JADE_ID}`,
             resourceIdentity: 'actor:101010:element:101010115',
-            currentValue: 24,
+            currentValue: 0,
             activeStates: [
               {
                 elementId: 101010129,
@@ -397,16 +768,12 @@ describe('verified action variant and special resource runtime', () => {
       },
     });
     expect(
-      result.verifiedCombatRuntime.specialResourceRuntime.resourceEvents[0]
-    ).toMatchObject({
-      timeMs: 0,
-      actionId: action.id,
-      payload: {
-        operation: 'clear',
-        beforeValue: 24,
-        afterValue: 0,
-      },
-    });
+      result.verifiedCombatRuntime.specialResourceRuntime.resourceEvents.some(
+        event =>
+          event.actionId === action.id &&
+          ['clear', 'transform'].includes(event.payload.operation)
+      )
+    ).toBe(false);
     expect(
       result.verifiedCombatRuntime.damageEvents.filter(
         event => event.actionId === action.id
@@ -418,7 +785,7 @@ describe('verified action variant and special resource runtime', () => {
       expect.objectContaining({
         actorId: `actor-${JADE_ID}`,
         characterId: JADE_ID,
-        initialValue: 24,
+        initialValue: 0,
         currentValue: 0,
         maxValue: 100,
       }),
@@ -439,6 +806,7 @@ function createActorAction({
   actionVariantIndex = 0,
   startMs = 0,
   attackInput = null,
+  attackSequenceIndex = null,
   variantInputSelection = null,
 }) {
   const actor = {
@@ -461,7 +829,7 @@ function createActorAction({
     ...(attackInput
       ? {
           attackGroupId: `${id}-group`,
-          attackSequenceIndex: attackInput.sequenceIndex,
+          attackSequenceIndex: attackSequenceIndex ?? attackInput.sequenceIndex,
           attackSequenceTotal: attackInput.sequenceTotal,
           attackInput,
         }
@@ -489,6 +857,31 @@ function runVariantRuntime({
       })),
     },
   });
+}
+
+function createJadeBurstInitialState({
+  actorId,
+  currentValue = 0,
+  remainingDurationMs,
+}) {
+  return {
+    specialResourcesByActor: [
+      {
+        actorId,
+        resourceIdentity: 'actor:101010:element:101010115',
+        currentValue,
+        activeStates: [
+          {
+            elementId: 101010129,
+            name: '爆发状态buff',
+            remainingDurationMs,
+            sourceActionId: 'previous-cycle-ultimate',
+            sourceIdentity: 'battle-element:101010129',
+          },
+        ],
+      },
+    ],
+  };
 }
 
 function frameTime(frame) {

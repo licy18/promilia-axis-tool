@@ -231,6 +231,26 @@ const M9_PRODUCT_DENOMINATOR = Object.freeze({
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
+const XIAOYU_MECHANICS = Object.freeze({
+  ownerId: 101010,
+  normalAttackSkillId: 10101001,
+  a5ControlSkillId: 10101005,
+  chargedControlSkillId: 10101010,
+  ultimateControlSkillId: 10101013,
+  passiveSkillId: 10101061,
+  resourceElementId: 101010115,
+  stateElementId: 101010129,
+  specialChargedSwitchElementId: 101010113,
+  enhancedChargedSwitchElementId: 101010116,
+  burstNormalSwitchElementId: 101010140,
+  passiveMarkerElementId: 101010205,
+  passiveWrapperElementId: 101010206,
+  passivePropertyElementId: 101010207,
+  limitCounterControlSkillId: 10101025,
+  limitCounterRuntimeControlSkillId: 10101042,
+  perfectParryControlSkillId: 10101027,
+  perfectParryRuntimeControlSkillId: 10101049,
+});
 const SWITCH_SKILL_SLOT_CONTRACTS = Object.freeze([
   Object.freeze({
     slot: 201,
@@ -296,6 +316,7 @@ async function main() {
           .map(slot => Number(slot.skillId))
       ),
   ]);
+  controlIds.add(XIAOYU_MECHANICS.passiveSkillId);
   const controls = [...controlIds]
     .filter(Number.isInteger)
     .map(skillId => findSkillControl(skillId, battleTargetTypeContract))
@@ -358,6 +379,12 @@ async function main() {
     controlBindings,
     specialResourceCatalog,
     allIndexedElements,
+  });
+  attachXiaoyuMechanicsContracts({
+    seed,
+    controlBindings,
+    specialResourceCatalog,
+    actionVariantGraph,
   });
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
   const spUnitContract = createSpUnitContract({
@@ -1398,6 +1425,556 @@ function createActionVariantGraph({
         derivedControlContracts.map(contract => contract.resolutionStatus)
       ),
     },
+  };
+}
+
+function attachXiaoyuMechanicsContracts({
+  seed,
+  controlBindings,
+  specialResourceCatalog,
+  actionVariantGraph,
+}) {
+  const controlBySkillId = new Map(
+    controlBindings.map(control => [control.controlSkillId, control])
+  );
+  const profile = specialResourceCatalog.profiles.find(
+    item => Number(item.ownerId) === XIAOYU_MECHANICS.ownerId
+  );
+  const a5Control = controlBySkillId.get(XIAOYU_MECHANICS.a5ControlSkillId);
+  const chargedControl = controlBySkillId.get(
+    XIAOYU_MECHANICS.chargedControlSkillId
+  );
+  if (!profile?.applied || !a5Control || !chargedControl) {
+    throw new Error('Xiaoyu verified mechanics source controls are missing');
+  }
+
+  const state = profile.stateElements.find(
+    item => Number(item.elementId) === XIAOYU_MECHANICS.stateElementId
+  );
+  const resourceAsset = readBattleElementAsset(
+    XIAOYU_MECHANICS.resourceElementId
+  );
+  const stateAsset = readBattleElementAsset(XIAOYU_MECHANICS.stateElementId);
+  if (!state || !resourceAsset || !stateAsset) {
+    throw new Error('Xiaoyu resource state evidence is missing');
+  }
+
+  const contextEdges = createXiaoyuChargedContextEdges({
+    a5Control,
+    state,
+  });
+  const attackInputChains = createXiaoyuAttackInputChains({
+    controlBySkillId,
+    state,
+  });
+  const thresholdTransitions = [
+    {
+      transitionIdentity: [
+        profile.resourceIdentity,
+        'threshold',
+        profile.capacity,
+        XIAOYU_MECHANICS.stateElementId,
+      ].join('|'),
+      ownerId: XIAOYU_MECHANICS.ownerId,
+      resourceIdentity: profile.resourceIdentity,
+      threshold: profile.capacity,
+      comparison: 'reaches-capacity',
+      resourceOperation: 'clear',
+      suppressGainWhileStateActive: true,
+      suppressedOperationIdentities: specialResourceCatalog.operationBindings
+        .filter(
+          operation =>
+            Number(operation.ownerId) === XIAOYU_MECHANICS.ownerId &&
+            ((Number(operation.controlSkillId) ===
+              XIAOYU_MECHANICS.chargedControlSkillId &&
+              Number(operation.subSkillIndex) === 2 &&
+              ['clear', 'transform'].includes(operation.operation)) ||
+              (Number(operation.controlSkillId) ===
+                XIAOYU_MECHANICS.ultimateControlSkillId &&
+                operation.operation === 'transform-remove'))
+        )
+        .map(operation => operation.operationIdentity)
+        .sort(),
+      stateElementId: XIAOYU_MECHANICS.stateElementId,
+      stateName: state.name,
+      stateDurationMs: state.durationMs,
+      sourceIdentity: [
+        resourceAsset.sourceIdentity,
+        `${resourceAsset.sourceIdentity}#combineType=${resourceAsset.tree.combineType};combineNumber=${resourceAsset.tree.combineNumber}`,
+        stateAsset.sourceIdentity,
+        `${stateAsset.sourceIdentity}#time=${stateAsset.tree.time}`,
+        `${relativeExternalPath(IL2CPP_DUMP_PATH)}#ModuleChargingSkill101010._accElementId|_burstElementId`,
+      ].join('|'),
+      status: 'verified-special-resource-threshold-transition-ready',
+      applied: true,
+    },
+  ];
+  const passiveEffects = [
+    createXiaoyuPassiveEffectProfile({
+      seed,
+      controlBindings,
+      controlBySkillId,
+    }),
+  ];
+
+  specialResourceCatalog.thresholdTransitions = thresholdTransitions;
+  specialResourceCatalog.passiveEffects = passiveEffects;
+  specialResourceCatalog.summary.thresholdTransitionCount =
+    thresholdTransitions.length;
+  specialResourceCatalog.summary.passiveEffectCount = passiveEffects.length;
+  specialResourceCatalog.summary.appliedPassiveEffectCount =
+    passiveEffects.filter(item => item.applied).length;
+
+  actionVariantGraph.contextEdges = contextEdges;
+  actionVariantGraph.attackInputChains = attackInputChains;
+  actionVariantGraph.summary.contextEdgeCount = contextEdges.length;
+  actionVariantGraph.summary.appliedContextEdgeCount = contextEdges.filter(
+    edge => edge.applied
+  ).length;
+  actionVariantGraph.summary.attackInputChainCount = attackInputChains.length;
+}
+
+function createXiaoyuChargedContextEdges({ a5Control, state }) {
+  const timingBySubSkill = new Map(
+    (a5Control.variants ?? []).map(variant => [
+      variant.subSkillIndex,
+      createControlVariantTimingContract({
+        control: a5Control,
+        variant,
+        actionKind: 'normal-attack',
+        occupancyResolver: resolveNormalAttackInputOccupancy,
+      }),
+    ])
+  );
+  const defaultTiming = timingBySubSkill.get(0);
+  const burstTiming = timingBySubSkill.get(1);
+  const defaultFinalHitFrame = defaultTiming?.hitEnvelope?.lastFrame;
+  const burstFinalHitFrame = burstTiming?.hitEnvelope?.lastFrame;
+  const defaultWindow = (defaultTiming?.windows ?? [])
+    .filter(
+      window =>
+        Number(window.targetControlSkillId) ===
+          XIAOYU_MECHANICS.chargedControlSkillId &&
+        (defaultFinalHitFrame == null ||
+          window.endFrame >= defaultFinalHitFrame)
+    )
+    .sort((left, right) => right.startFrame - left.startFrame)[0];
+  const burstWindow = (burstTiming?.windows ?? []).find(
+    window =>
+      window.allowAttack === true &&
+      (burstFinalHitFrame == null || window.startFrame >= burstFinalHitFrame)
+  );
+  const specialSwitch = readBattleElementAsset(
+    XIAOYU_MECHANICS.specialChargedSwitchElementId
+  );
+  const enhancedSwitch = readBattleElementAsset(
+    XIAOYU_MECHANICS.enhancedChargedSwitchElementId
+  );
+  const edges = [
+    createXiaoyuChargedContextEdge({
+      sourceSubSkillIndex: 0,
+      targetSubSkillIndex: Number(specialSwitch?.tree?.subSkillIndex),
+      window: defaultWindow,
+      switchAsset: specialSwitch,
+      condition: {
+        kind: 'resource-state-inactive',
+        resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
+        stateElementId: state.elementId,
+        stateName: state.name,
+        sourceIdentity: state.sourceIdentity,
+      },
+    }),
+    createXiaoyuChargedContextEdge({
+      sourceSubSkillIndex: 1,
+      targetSubSkillIndex: Number(enhancedSwitch?.tree?.subSkillIndex),
+      window: burstWindow,
+      switchAsset: enhancedSwitch,
+      condition: {
+        kind: 'resource-state-active',
+        resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
+        stateElementId: state.elementId,
+        stateName: state.name,
+        sourceIdentity: state.sourceIdentity,
+      },
+    }),
+  ];
+  return edges.map(edge => {
+    if (!edge.applied) {
+      throw new Error(
+        `Xiaoyu charged context edge unresolved: ${edge.reasons.join(', ')}`
+      );
+    }
+    return edge;
+  });
+}
+
+function createXiaoyuChargedContextEdge({
+  sourceSubSkillIndex,
+  targetSubSkillIndex,
+  window,
+  switchAsset,
+  condition,
+}) {
+  const switchTargetMatches =
+    Number(switchAsset?.tree?.skillID) ===
+      XIAOYU_MECHANICS.chargedControlSkillId &&
+    Number(switchAsset?.tree?.subSkillIndex) === targetSubSkillIndex;
+  const applied =
+    Number.isInteger(targetSubSkillIndex) &&
+    window != null &&
+    switchTargetMatches;
+  return {
+    edgeIdentity: [
+      `actor:${XIAOYU_MECHANICS.ownerId}`,
+      `control:${XIAOYU_MECHANICS.a5ControlSkillId}`,
+      `sub:${sourceSubSkillIndex}`,
+      `context:${window?.startFrame ?? 'missing'}-${window?.endFrame ?? 'missing'}`,
+      `control:${XIAOYU_MECHANICS.chargedControlSkillId}`,
+      `sub:${targetSubSkillIndex}`,
+    ].join('|'),
+    ownerId: XIAOYU_MECHANICS.ownerId,
+    relationType: 'input-context-derived',
+    inputCommand: 'charged-attack',
+    sourceControlSkillId: XIAOYU_MECHANICS.a5ControlSkillId,
+    sourceSubSkillIndex,
+    targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
+    targetSubSkillIndex,
+    decisionFrame: 0,
+    inputWindow: window
+      ? {
+          startFrame: window.startFrame,
+          endFrame: window.endFrame,
+          frameRate: 60,
+          sourceIdentity: window.sourceIdentity,
+        }
+      : null,
+    condition,
+    sourceIdentity: [
+      window?.sourceIdentity,
+      switchAsset?.sourceIdentity,
+      condition?.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: applied
+      ? 'verified-input-context-variant-edge-ready'
+      : 'unresolved-input-context-variant-edge',
+    reasons: [
+      ...(window ? [] : ['a5-derived-input-window-missing']),
+      ...(switchAsset ? [] : ['charged-switch-element-missing']),
+      ...(switchTargetMatches ? [] : ['charged-switch-target-mismatch']),
+    ],
+    applied,
+  };
+}
+
+function createXiaoyuAttackInputChains({ controlBySkillId, state }) {
+  const definitions = [
+    {
+      chainIdentity: 'xiaoyu-normal-default-five-inputs',
+      stateCondition: {
+        kind: 'resource-state-inactive',
+        stateElementId: state.elementId,
+      },
+      segments: [
+        [10101001, 0, 10101002],
+        [10101002, 0, 10101003],
+        [10101003, 0, 10101004],
+        [10101004, 0, 10101005],
+        [10101005, 0, null],
+      ],
+    },
+    {
+      chainIdentity: 'xiaoyu-burst-three-inputs',
+      stateCondition: {
+        kind: 'resource-state-active',
+        stateElementId: state.elementId,
+      },
+      segments: [
+        [10101001, 1, 10101004],
+        [10101004, 1, 10101005],
+        [10101005, 1, null],
+      ],
+    },
+  ];
+  return definitions.map(definition => {
+    const segments = definition.segments.map(
+      ([controlSkillId, subSkillIndex, nextControlSkillId], index) => {
+        const control = controlBySkillId.get(controlSkillId);
+        const variant = control?.variants?.find(
+          item => Number(item.subSkillIndex) === subSkillIndex
+        );
+        const timing =
+          control && variant
+            ? createControlVariantTimingContract({
+                control,
+                variant,
+                actionKind: 'normal-attack',
+                occupancyResolver: resolveNormalAttackInputOccupancy,
+                occupancyContext: { nextControlSkillId },
+              })
+            : null;
+        if (timing?.occupancy?.status !== 'applied') {
+          throw new Error(
+            `Xiaoyu attack chain timing unresolved: ${controlSkillId}/${subSkillIndex}`
+          );
+        }
+        return {
+          sequenceIndex: index + 1,
+          sequenceTotal: definition.segments.length,
+          controlSkillId,
+          subSkillIndex,
+          nextControlSkillId,
+          durationFrames: timing.occupancy.durationFrames,
+          sourceIdentity: timing.occupancy.sourceIdentity,
+          status: 'verified-attack-input-chain-segment-ready',
+          applied: true,
+        };
+      }
+    );
+    return {
+      chainIdentity: definition.chainIdentity,
+      ownerId: XIAOYU_MECHANICS.ownerId,
+      sourceSkillId: XIAOYU_MECHANICS.normalAttackSkillId,
+      decisionFrame: 0,
+      stateCondition: {
+        ...definition.stateCondition,
+        resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
+        stateName: state.name,
+        sourceIdentity: state.sourceIdentity,
+      },
+      segments,
+      sourceIdentity: segments.map(segment => segment.sourceIdentity).join('|'),
+      status: 'verified-attack-input-chain-ready',
+      applied: true,
+    };
+  });
+}
+
+function createXiaoyuPassiveEffectProfile({
+  seed,
+  controlBindings,
+  controlBySkillId,
+}) {
+  const passiveControl = controlBySkillId.get(XIAOYU_MECHANICS.passiveSkillId);
+  const marker = readBattleElementAsset(
+    XIAOYU_MECHANICS.passiveMarkerElementId
+  );
+  const wrapper = readBattleElementAsset(
+    XIAOYU_MECHANICS.passiveWrapperElementId
+  );
+  const property = readBattleElementAsset(
+    XIAOYU_MECHANICS.passivePropertyElementId
+  );
+  const triggerBindings = [];
+  for (const control of controlBindings) {
+    if (
+      resolveControlOwnerId(control.controlSkillId, [
+        XIAOYU_MECHANICS.ownerId,
+      ]) !== XIAOYU_MECHANICS.ownerId
+    ) {
+      continue;
+    }
+    for (const root of control.effectGraph ?? []) {
+      const node = root.nodes.find(
+        item =>
+          Number(item.elementId) === XIAOYU_MECHANICS.passiveWrapperElementId
+      );
+      if (!node) continue;
+      for (const trigger of createSemanticRootTriggerContracts(control, root)) {
+        if (
+          trigger.resolution !== 'static-resolved' ||
+          !Number.isInteger(trigger.startFrame)
+        ) {
+          continue;
+        }
+        triggerBindings.push({
+          triggerIdentity: [
+            XIAOYU_MECHANICS.passiveSkillId,
+            control.controlSkillId,
+            root.mapIndex,
+            trigger.startFrame,
+            node.pathId,
+          ].join('|'),
+          controlSkillId: control.controlSkillId,
+          subSkillIndex: root.mapIndex,
+          triggerFrame: trigger.startFrame,
+          frameRate: control.frameRate ?? 60,
+          sourceElementId: node.elementId,
+          sourcePathId: node.pathId,
+          sourceIdentity: [
+            root.sourceIdentity,
+            node.sourceIdentity,
+            trigger.sourceIdentity,
+          ]
+            .filter(Boolean)
+            .join('|'),
+          status: 'verified-passive-trigger-binding-ready',
+          applied: true,
+        });
+      }
+    }
+  }
+  const limitCounterControl = controlBySkillId.get(
+    XIAOYU_MECHANICS.limitCounterControlSkillId
+  );
+  const limitCounterBridge = limitCounterControl?.variants
+    ?.flatMap(variant =>
+      (variant.eventBridges ?? []).map(bridge => ({ variant, bridge }))
+    )
+    .find(
+      ({ bridge }) =>
+        Number(bridge.targetSkillId) ===
+          XIAOYU_MECHANICS.limitCounterRuntimeControlSkillId &&
+        Number(bridge.skillIndex) === 0 &&
+        Number.isInteger(bridge.startFrame)
+    );
+  const limitCounterRuntimeTrigger = triggerBindings.find(
+    trigger =>
+      Number(trigger.controlSkillId) ===
+        XIAOYU_MECHANICS.limitCounterRuntimeControlSkillId &&
+      Number(trigger.subSkillIndex) === 0
+  );
+  if (limitCounterBridge && limitCounterRuntimeTrigger) {
+    triggerBindings.push({
+      ...limitCounterRuntimeTrigger,
+      triggerIdentity: [
+        XIAOYU_MECHANICS.passiveSkillId,
+        XIAOYU_MECHANICS.limitCounterControlSkillId,
+        limitCounterBridge.variant.subSkillIndex,
+        limitCounterBridge.bridge.startFrame +
+          limitCounterRuntimeTrigger.triggerFrame,
+        'runtime-control',
+        XIAOYU_MECHANICS.limitCounterRuntimeControlSkillId,
+      ].join('|'),
+      controlSkillId: XIAOYU_MECHANICS.limitCounterControlSkillId,
+      subSkillIndex: limitCounterBridge.variant.subSkillIndex,
+      triggerFrame:
+        limitCounterBridge.bridge.startFrame +
+        limitCounterRuntimeTrigger.triggerFrame,
+      sourceIdentity: [
+        limitCounterBridge.bridge.sourceIdentity,
+        limitCounterRuntimeTrigger.sourceIdentity,
+      ].join('|'),
+      status: 'verified-passive-public-trigger-binding-ready',
+      applied: true,
+    });
+  }
+  const perfectParryRuntimeTrigger = triggerBindings.find(
+    trigger =>
+      Number(trigger.controlSkillId) ===
+      XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId
+  );
+  const unresolvedTriggerBindings = [
+    {
+      triggerIdentity: [
+        XIAOYU_MECHANICS.passiveSkillId,
+        XIAOYU_MECHANICS.perfectParryControlSkillId,
+        'runtime-control',
+        XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId,
+      ].join('|'),
+      controlSkillId: XIAOYU_MECHANICS.perfectParryControlSkillId,
+      runtimeControlSkillId: XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId,
+      status: 'static-evidence-gap',
+      reasons: [
+        'perfect-parry-public-to-runtime-control-transition-static-evidence-gap',
+      ],
+      sourceIdentity: perfectParryRuntimeTrigger
+        ? [
+            `skill_control_${XIAOYU_MECHANICS.perfectParryControlSkillId}.asset`,
+            perfectParryRuntimeTrigger.sourceIdentity,
+          ]
+            .filter(Boolean)
+            .join('|')
+        : null,
+      applied: false,
+    },
+  ];
+  const propertyChanges = (
+    property?.tree?.changePeopertyConditionArrayDatas ?? []
+  )
+    .map(entry => entry?.changeProperty)
+    .filter(Boolean)
+    .map(change => ({
+      attributeId: Number(change.attributeID),
+      bucket:
+        Number(change.calculateType) === 2 && Number(change.functionId) === 3
+          ? 'dynamicPercent'
+          : null,
+      valueRaw: Number(change.functionParams?.[0]),
+      calculateType: Number(change.calculateType),
+      functionId: Number(change.functionId),
+      propertyTags: change.propertyTags ?? [],
+      sourceIdentity: `${property?.sourceIdentity}#changePeopertyConditionArrayDatas[attributeID=${change.attributeID}]`,
+    }));
+  const applied =
+    passiveControl != null &&
+    marker != null &&
+    wrapper != null &&
+    property != null &&
+    Number(wrapper.tree.time) === 8000 &&
+    Number(wrapper.tree.combineNumber) === 4 &&
+    triggerBindings.length > 0 &&
+    propertyChanges.length === 2 &&
+    propertyChanges.every(
+      change =>
+        change.bucket === 'dynamicPercent' && Number.isFinite(change.valueRaw)
+    );
+  const skillName =
+    seed?.gameData?.skills?.find(
+      skill => Number(skill.id) === XIAOYU_MECHANICS.passiveSkillId
+    )?.name ?? '玉未央';
+  return {
+    passiveIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:passive:${XIAOYU_MECHANICS.passiveSkillId}`,
+    ownerId: XIAOYU_MECHANICS.ownerId,
+    skillId: XIAOYU_MECHANICS.passiveSkillId,
+    name: skillName,
+    effectId: `battle-element:${XIAOYU_MECHANICS.passiveWrapperElementId}`,
+    effectElementId: XIAOYU_MECHANICS.passiveWrapperElementId,
+    markerElementId: XIAOYU_MECHANICS.passiveMarkerElementId,
+    propertyElementId: XIAOYU_MECHANICS.passivePropertyElementId,
+    durationMs: Number(wrapper?.tree?.time) || null,
+    stackMode: 'stack',
+    maxStacks: Number(wrapper?.tree?.combineNumber) || null,
+    stackDelta: 1,
+    triggerBindings: dedupeBy(
+      triggerBindings,
+      trigger => trigger.triggerIdentity
+    ).sort(
+      (left, right) =>
+        left.controlSkillId - right.controlSkillId ||
+        left.subSkillIndex - right.subSkillIndex ||
+        left.triggerFrame - right.triggerFrame
+    ),
+    unresolvedTriggerBindings,
+    modifiers: propertyChanges,
+    sourceIdentity: [
+      passiveControl?.sourcePath,
+      marker?.sourceIdentity,
+      wrapper?.sourceIdentity,
+      property?.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: applied
+      ? 'verified-passive-effect-profile-ready'
+      : 'unresolved-passive-effect-profile',
+    reasons: [
+      ...(passiveControl ? [] : ['passive-skill-control-missing']),
+      ...(marker ? [] : ['passive-marker-element-missing']),
+      ...(wrapper ? [] : ['passive-wrapper-element-missing']),
+      ...(property ? [] : ['passive-property-element-missing']),
+      ...(triggerBindings.length > 0
+        ? []
+        : ['passive-trigger-bindings-missing']),
+      ...(propertyChanges.length === 2
+        ? []
+        : ['passive-property-change-count-mismatch']),
+      ...(propertyChanges.every(change => change.bucket === 'dynamicPercent')
+        ? []
+        : ['passive-property-formula-not-verified-percent']),
+    ],
+    applied,
   };
 }
 
@@ -5765,7 +6342,7 @@ function createPackage({
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 14,
+    packageVersion: 15,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -7645,7 +8222,7 @@ function selectNormalAttackInputWindows(windows, nextControlSkillId) {
   return (windows ?? []).filter(window =>
     nextControlSkillId
       ? window.targetControlSkillId === nextControlSkillId
-      : window.kind === 'attack-reopen-window'
+      : window.kind === 'attack-reopen-window' || window.allowAttack === true
   );
 }
 

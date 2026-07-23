@@ -352,6 +352,7 @@ function isVerifiedCalculatorEffectState(effect) {
   if (
     ![
       'verified-battle-effect-generated',
+      'verified-passive-effect-generated',
       'verified-tuning-mark-generated',
       'effect-inherited-from-cycle-boundary',
     ].includes(effect.sourceStatus)
@@ -431,6 +432,7 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     command.generatedVerified === true &&
     [
       'verified-battle-effect-generated',
+      'verified-passive-effect-generated',
       'verified-tuning-mark-generated',
     ].includes(command.sourceStatus) &&
     command.appliedToCalculators === true;

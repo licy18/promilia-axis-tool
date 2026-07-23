@@ -3,7 +3,7 @@
   "kind": "azpr-verified-action-variant-resource-coverage",
   "status": "verified-action-variant-resource-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "b28ac993db2d4a9eeec77147cc176366f162e714a1a6f923eb8b3b729d57fa25",
+  "packageHash": "e3a0d5d244432f17ec1b4d3baaf4b2a815e693b40db4c484152759419fe7ad3f",
   "summary": {
     "profileCount": 2,
     "appliedProfileCount": 2,
@@ -11,8 +11,11 @@
     "appliedOperationCount": 43,
     "unresolvedOperationCount": 28,
     "unresolvedOwnerCount": 1,
+    "thresholdTransitionCount": 1,
+    "passiveEffectCount": 1,
+    "appliedPassiveEffectCount": 1,
     "ownerCount": 142,
-    "nodeCount": 670,
+    "nodeCount": 671,
     "edgeCount": 337,
     "appliedEdgeCount": 93,
     "unresolvedEdgeCount": 244,
@@ -39,7 +42,10 @@
       "not-yet-modeled": 31,
       "partially-resolved": 97,
       "static-evidence-gap": 3
-    }
+    },
+    "contextEdgeCount": 2,
+    "appliedContextEdgeCount": 2,
+    "attackInputChainCount": 2
   },
   "owners": [
     {

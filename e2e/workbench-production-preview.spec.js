@@ -65,7 +65,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m6-verified-combat-workflow]') ||
     testInfo.title.includes('[m7-catalog-runtime-workflow]') ||
     testInfo.title.includes('[m8d-verified-mechanics-ui]') ||
-    testInfo.title.includes('[m9-r2-r1-inspector-duration]')
+    testInfo.title.includes('[m9-r2-r1-inspector-duration]') ||
+    testInfo.title.includes('[m9-r3-xiaoyu-mechanics]')
   ) {
     return;
   }
@@ -977,7 +978,7 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
 
   await page.getByTestId('workbench-scenario-add').click();
-  await setWorkbenchTimelineDuration(page, 30_000);
+  await setWorkbenchTimelineDuration(page, 120_000);
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
@@ -6581,6 +6582,187 @@ test('[m9-r2-r2-initial-energy] edits actor and configured kibo baselines direct
   await expectPageWithoutHorizontalOverflow(page);
   await page.screenshot({
     path: 'reports/m9-r2-r2-initial-energy-narrow.png',
+  });
+});
+
+test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive effects from real library actions', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-scenario-add').click();
+  await changeM2TeamSlot(page, 0, 101010);
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
+    )
+    .click();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101010"]'
+  );
+  const actorEnergy = timeline.locator(
+    '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="101010"]'
+  );
+  await actorEnergy.fill('100');
+  await actorEnergy.press('Enter');
+  await page
+    .locator(
+      '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+    )
+    .click();
+
+  const normalAttack = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10101001"][data-action-kind="normal-attack"]'
+  );
+  const chargedAttack = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10101001"][data-action-kind="charged-attack"]'
+  );
+  const ultimate = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10101013"][data-action-kind="ultimate"]'
+  );
+  await expect(normalAttack).toHaveAttribute('data-attack-input-count', '5');
+  await normalAttack.click();
+
+  const normalBlocks = () =>
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10101001"][data-attack-group-id]:not([data-attack-group-id=""])'
+    );
+  await expect(normalBlocks()).toHaveCount(5);
+  const defaultGroupId = await normalBlocks()
+    .first()
+    .getAttribute('data-attack-group-id');
+  const defaultA5 = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-attack-group-id="${defaultGroupId}"][data-attack-sequence-index="5"]`
+  );
+  await expect(defaultA5).toHaveAttribute(
+    'data-duration-ms',
+    String(frameToMs(80))
+  );
+
+  await chargedAttack.click();
+  const chargedBlock = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10101001"][data-attack-group-id=""]'
+  );
+  await expect(chargedBlock).toHaveCount(1);
+  const a5StartMs = Number(await defaultA5.getAttribute('data-start-ms'));
+  const chargedStartMs = Number(
+    await chargedBlock.getAttribute('data-start-ms')
+  );
+  expect(chargedStartMs - a5StartMs).toBeCloseTo(frameToMs(101), 3);
+  await chargedBlock.click();
+  await expect(
+    page.getByTestId('workbench-action-variant-control')
+  ).toContainText('subskill 1');
+  await expect(page.getByTestId('workbench-action-identity')).toContainText(
+    '230F'
+  );
+  await closeInspectorIfVisible(page);
+
+  await ultimate.click();
+  const ultimateBlock = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10101013"]'
+  );
+  await expect(ultimateBlock).toHaveCount(1);
+  await normalAttack.click();
+  await expect(normalBlocks()).toHaveCount(8);
+  const groupIds = await normalBlocks().evaluateAll(actions => [
+    ...new Set(
+      actions.map(action => action.getAttribute('data-attack-group-id'))
+    ),
+  ]);
+  expect(groupIds).toHaveLength(2);
+  const burstGroupId = groupIds.find(groupId => groupId !== defaultGroupId);
+  const burstGroup = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-attack-group-id="${burstGroupId}"]`
+  );
+  await expect(burstGroup).toHaveCount(3);
+  expect(
+    await burstGroup.evaluateAll(actions =>
+      actions
+        .sort(
+          (left, right) =>
+            Number(left.getAttribute('data-attack-sequence-index')) -
+            Number(right.getAttribute('data-attack-sequence-index'))
+        )
+        .map(action => ({
+          sequenceIndex: Number(
+            action.getAttribute('data-attack-sequence-index')
+          ),
+          durationMs: Number(action.getAttribute('data-duration-ms')),
+        }))
+    )
+  ).toEqual([
+    { sequenceIndex: 1, durationMs: frameToMs(72) },
+    { sequenceIndex: 2, durationMs: frameToMs(75) },
+    { sequenceIndex: 3, durationMs: frameToMs(72) },
+  ]);
+  for (const [index, durationFrames] of [72, 75, 72].entries()) {
+    await expect(burstGroup.nth(index)).toContainText(`${durationFrames}F`);
+  }
+  await burstGroup.first().click();
+  await expect(page.getByTestId('workbench-action-identity')).toContainText(
+    '72F'
+  );
+  await closeInspectorIfVisible(page);
+
+  const burstInterval = timeline.locator(
+    '[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101010129"]'
+  );
+  const passiveInterval = timeline.locator(
+    '[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101010206"]'
+  );
+  await expect(burstInterval).toHaveCount(1);
+  await expect(passiveInterval).toHaveCount(1);
+  await expect(burstInterval).toHaveAttribute(
+    'data-applied-to-calculators',
+    'false'
+  );
+  await expect(passiveInterval).toHaveAttribute(
+    'data-applied-to-calculators',
+    'true'
+  );
+  const ultimateStartMs = Number(
+    await ultimateBlock.getAttribute('data-start-ms')
+  );
+  expect(
+    Number(await burstInterval.getAttribute('data-start-ms')) - ultimateStartMs
+  ).toBeCloseTo(frameToMs(272), 3);
+  expect(
+    Number(await burstInterval.getAttribute('data-end-ms')) -
+      Number(await burstInterval.getAttribute('data-start-ms'))
+  ).toBeCloseTo(10_000, 3);
+
+  await actorLane.scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: 'reports/m9-r3-xiaoyu-mechanics-desktop.png',
+  });
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(normalBlocks()).toHaveCount(8);
+  await expect(burstInterval).toHaveCount(1);
+  await expect(passiveInterval).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  const burstOffsetLeft = await burstGroup
+    .first()
+    .evaluate(element => element.offsetLeft);
+  await timeline
+    .getByTestId('workbench-timeline-viewport')
+    .evaluate((element, actionOffsetLeft) => {
+      element.scrollLeft = Math.max(0, Number(actionOffsetLeft) - 80);
+      element.dispatchEvent(new Event('scroll', { bubbles: true }));
+    }, burstOffsetLeft);
+  await actorLane.scrollIntoViewIfNeeded();
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/m9-r3-xiaoyu-mechanics-narrow.png',
   });
 });
 

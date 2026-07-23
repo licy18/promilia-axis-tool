@@ -14,6 +14,7 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { projectEffectRuntimeIntervals } from '../../simulation/projection/projectEffectIntervals';
 
 const HAN_ID = 101003;
 const RUBY_ID = 103002;
@@ -145,6 +146,63 @@ describe('M9 public team causal chain', () => {
           Number(event.payload.toughnessDamage) >= 0
       )
     ).toBe(true);
+
+    const jadePassiveEvents = withBuff.effectTimeline.events.filter(
+      event => event.effectId === 'battle-element:101010206' && event.after
+    );
+    expect(
+      jadePassiveEvents.map(event => [event.actionId, event.after.stacks])
+    ).toEqual([
+      ['jade-limit-counter', 1],
+      ['jade-ultimate', 2],
+      ['jade-charged-variant', 3],
+    ]);
+    const jadeBurstInterval = projectEffectRuntimeIntervals({
+      effectTimeline: withBuff.effectTimeline,
+      durationMs: 45_000,
+      frameRate: 60,
+    }).intervals.find(
+      interval =>
+        interval.effectId === 'battle-element:101010129' &&
+        interval.targetId === `actor-${JADE_ID}`
+    );
+    expect(jadeBurstInterval).toMatchObject({
+      effectName: '爆发状态buff',
+      sourceActionId: 'jade-ultimate',
+    });
+    expect(jadeBurstInterval.startMs).toBeCloseTo(29300 + (272 * 1000) / 60, 2);
+    expect(jadeBurstInterval.endMs).toBeCloseTo(
+      29300 + (272 * 1000) / 60 + 10_000,
+      2
+    );
+    expect(
+      withBuff.verifiedCombatRuntime.damageEvents
+        .filter(event => event.actionId === 'jade-charged-variant')
+        .flatMap(event => event.payload.dynamicPropertyTrace.source)
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attributeId: 1,
+          dynamicPercentRaw: 1500,
+          effects: expect.arrayContaining([
+            expect.objectContaining({
+              effectId: 'battle-element:101010206',
+              stacks: 3,
+              valueRaw: 1500,
+            }),
+          ]),
+        }),
+      ])
+    );
+
+    const packageWithoutJadePassive = structuredClone(mechanicsPackage);
+    packageWithoutJadePassive.specialResourceCatalog.passiveEffects = [];
+    installVerifiedCombatMechanicsPackage(packageWithoutJadePassive);
+    const withoutPassive = simulateTeam({ includeFireKiboAction: true });
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    expect(sumActionDamage(withBuff, 'jade-charged-variant')).toBeGreaterThan(
+      sumActionDamage(withoutPassive, 'jade-charged-variant')
+    );
   });
 });
 

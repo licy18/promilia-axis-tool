@@ -139,7 +139,7 @@ describe('ActionLibraryPanel', () => {
     expect(wrapper.emitted('begin-timeline-entry-drag')).toBeUndefined();
   });
 
-  it('keeps public actions with unresolved occupancy available for planning', async () => {
+  it('keeps verified attack input chains available when hit evidence is incomplete', async () => {
     const props = createActionLibraryProps();
     props.actor = {
       ...props.actor,
@@ -160,11 +160,12 @@ describe('ActionLibraryPanel', () => {
       '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"]'
     );
 
-    expect(normal.attributes('data-timing-status')).toBe('unresolved');
-    expect(normal.attributes('data-scheduling-status')).toBe('planning');
+    expect(normal.attributes('data-timing-status')).toBe('applied');
+    expect(normal.attributes('data-scheduling-status')).toBe('verified');
+    expect(normal.attributes('data-attack-input-count')).toBe('5');
     expect(normal.attributes('disabled')).toBeUndefined();
     expect(normal.attributes('data-drag-enabled')).toBe('true');
-    expect(normal.text()).toContain('动画规划 372f');
+    expect(normal.text()).toContain('212f');
 
     expect(charged.attributes('data-timing-status')).toBe('applied');
     expect(charged.attributes('data-scheduling-status')).toBe('verified');
@@ -184,10 +185,22 @@ describe('ActionLibraryPanel', () => {
     ).toMatchObject({
       entry: {
         type: 'skill',
-        timingStatus: 'unresolved',
-        schedulingStatus: 'planning',
-        schedulingKind: 'source-animation-planning-duration',
-        planningDurationFrames: 372,
+        timingStatus: 'applied',
+        schedulingStatus: 'verified',
+        schedulingKind: 'exact-selected-variant-occupancy',
+        planningDurationFrames: null,
+        attackInputSegments: expect.arrayContaining([
+          expect.objectContaining({
+            sequenceIndex: 1,
+            sequenceTotal: 5,
+            durationFrames: 20,
+          }),
+          expect.objectContaining({
+            sequenceIndex: 5,
+            sequenceTotal: 5,
+            durationFrames: 80,
+          }),
+        ]),
       },
     });
   });
