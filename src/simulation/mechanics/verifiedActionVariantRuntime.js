@@ -9,6 +9,10 @@ import {
   resolveActionVariantInputOption,
 } from '../../domain/actionVariantInputSelection';
 import {
+  isFrameWithinVerifiedInputWindow,
+  projectVerifiedAttackInputChainSegment,
+} from '../../domain/verifiedActionContextScheduling';
+import {
   ACTION_TYPES,
   EFFECT_OPERATIONS,
   EFFECT_STACK_MODES,
@@ -763,6 +767,7 @@ export function createVerifiedActionVariantRuntime({
       }),
       chain: attackChainSelection.chain,
       segment: attackChainSelection.segment,
+      attackInputSegment: runtimeAction.attackInput,
     });
     actionResolutionById.set(action.id, resolution);
     selectionByActionId.set(
@@ -977,6 +982,7 @@ function resolveAttackInputChainAction({
   }
   const matchingChains = (attackInputChains ?? []).filter(
     chain =>
+      chain.applied === true &&
       Number(chain.ownerId) === Number(actorState.profile.ownerId) &&
       Number(chain.sourceSkillId) === Number(mapping.sourceSkillId) &&
       isRuntimeConditionSatisfied(chain.stateCondition, actorState)
@@ -998,6 +1004,15 @@ function resolveAttackInputChainAction({
   if (!sourceSegment) {
     return { status: 'blocked', action, chain, segment: null };
   }
+  const projectedSegment = projectVerifiedAttackInputChainSegment(
+    sourceSegment,
+    segment,
+    sequenceIndex,
+    chain.segments.length
+  );
+  if (!projectedSegment) {
+    return { status: 'blocked', action, chain, segment: null };
+  }
   return {
     status: 'selected',
     chain,
@@ -1005,20 +1020,17 @@ function resolveAttackInputChainAction({
     action: {
       ...action,
       controlSubSkillIndex: segment.subSkillIndex,
-      attackInput: {
-        ...sourceSegment,
-        selectedSubSkillIndex: segment.subSkillIndex,
-        durationFrames: segment.durationFrames,
-        effectiveDurationFrames: segment.durationFrames,
-        durationStatus: 'applied',
-        durationBasis: 'verified-attack-input-chain',
-        durationSourceIdentity: segment.sourceIdentity,
-      },
+      attackInput: projectedSegment,
     },
   };
 }
 
-function applyAttackInputChainTimingResolution({ resolution, chain, segment }) {
+function applyAttackInputChainTimingResolution({
+  resolution,
+  chain,
+  segment,
+  attackInputSegment,
+}) {
   if (!resolution?.actionBinding || !chain || !segment) return resolution;
   const durationFrames = Number(segment.durationFrames);
   if (!(durationFrames > 0)) return resolution;
@@ -1037,9 +1049,9 @@ function applyAttackInputChainTimingResolution({ resolution, chain, segment }) {
     ...resolution,
     actionBinding: {
       ...resolution.actionBinding,
-      attackInputSegment: resolution.actionBinding.attackInputSegment
+      attackInputSegment: attackInputSegment
         ? {
-            ...resolution.actionBinding.attackInputSegment,
+            ...attackInputSegment,
             selectedSubSkillIndex: segment.subSkillIndex,
             durationFrames,
             effectiveDurationFrames: durationFrames,
@@ -1091,9 +1103,9 @@ function resolveContextVariantSelection({
     const relativeFrame = Math.round(
       ((Number(timeMs) - Number(previous.startMs)) * frameRate) / 1000
     );
-    return (
-      relativeFrame >= Number(binding.inputWindow?.startFrame) &&
-      relativeFrame <= Number(binding.inputWindow?.endFrame)
+    return isFrameWithinVerifiedInputWindow(
+      relativeFrame,
+      binding.inputWindow
     );
   });
   if (candidates.length !== 1) {

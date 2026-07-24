@@ -1,4 +1,5 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import { isFrameWithinVerifiedInputWindow } from '../../domain/verifiedActionContextScheduling';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import { getVerifiedCombatActionMapping } from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
@@ -413,13 +414,14 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
         Number(nextAction.startMs) - Number(action.startMs),
         fps
       );
-      if (
-        relativeStartFrame >= linkWindow.startFrame &&
-        relativeStartFrame <= linkWindow.endFrame
-      ) {
+      if (isFrameWithinVerifiedInputWindow(relativeStartFrame, linkWindow)) {
         continue;
       }
       const tooEarly = relativeStartFrame < linkWindow.startFrame;
+      const latestStartFrame = Math.max(
+        Number(linkWindow.startFrame),
+        Number(linkWindow.endFrame) - 1
+      );
       diagnostics.push(
         createAttackInputDiagnostic({
           code: tooEarly
@@ -429,12 +431,12 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
           groupActions: [action, nextAction],
           message: tooEarly
             ? `${nextAction.name} 比 ${action.name} 的最早输入窗口提前 ${linkWindow.startFrame - relativeStartFrame}F`
-            : `${nextAction.name} 已超过 ${action.name} 的输入窗口 ${relativeStartFrame - linkWindow.endFrame}F`,
+            : `${nextAction.name} 已超过 ${action.name} 的输入窗口 ${relativeStartFrame - latestStartFrame}F`,
           extra: {
             relativeStartFrame,
             suggestedStartMs:
               Number(action.startMs) +
-              ((tooEarly ? linkWindow.startFrame : linkWindow.endFrame) *
+              ((tooEarly ? linkWindow.startFrame : latestStartFrame) *
                 1000) /
                 (Number(fps) || 60),
             editFieldKey: 'startMs',

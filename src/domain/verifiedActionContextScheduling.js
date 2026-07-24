@@ -1,5 +1,54 @@
 import { frameToMs, snapMsToFrame } from './timebase';
 
+export function projectVerifiedAttackInputChainSegment(
+  source,
+  chainSegment,
+  sequenceIndex,
+  sequenceTotal
+) {
+  if (!source || !chainSegment) return null;
+  const executionTiming = chainSegment.executionTiming ?? {};
+  const occupancy = executionTiming.occupancy ?? {};
+  const hits = executionTiming.hits ?? [];
+  const linkWindow = occupancy.linkWindow ?? null;
+  const resolvedSequenceIndex = Number(sequenceIndex) || 0;
+  const resolvedSequenceTotal = Number(sequenceTotal) || 0;
+  const durationFrames = Number(
+    occupancy.durationFrames ?? chainSegment.durationFrames
+  );
+  const subSkillIndex = Number(chainSegment.subSkillIndex);
+  const durationSourceIdentity =
+    occupancy.sourceIdentity ?? chainSegment.sourceIdentity;
+  const linkTimingApplied =
+    resolvedSequenceIndex >= resolvedSequenceTotal || linkWindow != null;
+
+  return {
+    ...source,
+    sequenceIndex: resolvedSequenceIndex,
+    sequenceTotal: resolvedSequenceTotal,
+    label: `A${resolvedSequenceIndex}`,
+    selectedSubSkillIndex: subSkillIndex,
+    effectiveDurationFrames: durationFrames,
+    durationFrames,
+    durationSourceIdentity,
+    actionScheduling: {
+      ...source.actionScheduling,
+      durationFrames,
+      selectedSubSkillIndex: subSkillIndex,
+      sourceIdentity: durationSourceIdentity,
+    },
+    linkWindow,
+    linkTimingStatus: linkTimingApplied ? 'applied' : 'unresolved',
+    linkTimingBasis: occupancy.sourceKind ?? null,
+    linkSourceIdentity:
+      linkWindow?.sourceIdentity ?? occupancy.sourceIdentity ?? null,
+    selectedHitIdentities: hits
+      .map(hit => hit?.hitIdentity)
+      .filter(Boolean),
+    hitCount: hits.length,
+  };
+}
+
 export function resolveVerifiedAttackInputChainEntry({
   entry = null,
   graph = null,
@@ -36,34 +85,12 @@ export function resolveVerifiedAttackInputChainEntry({
     if (!source) return null;
     const sequenceIndex = index + 1;
     const sequenceTotal = chain.segments.length;
-    return {
-      ...source,
-      identity: `${source.identity}|${chain.chainIdentity}|input:${sequenceIndex}`,
+    return projectVerifiedAttackInputChainSegment(
+      source,
+      chainSegment,
       sequenceIndex,
-      sequenceTotal,
-      label: `A${sequenceIndex}`,
-      selectedSubSkillIndex: chainSegment.subSkillIndex,
-      effectiveDurationFrames: chainSegment.durationFrames,
-      durationFrames: chainSegment.durationFrames,
-      durationStatus: 'applied',
-      durationBasis: 'verified-attack-input-chain',
-      durationSourceIdentity: chainSegment.sourceIdentity,
-      actionScheduling: {
-        status: 'exact',
-        kind: 'exact-selected-variant-occupancy',
-        durationFrames: chainSegment.durationFrames,
-        planningDurationFrames: null,
-        selectedSubSkillIndex: chainSegment.subSkillIndex,
-        sourceIdentity: chainSegment.sourceIdentity,
-        sourceStatus: 'verified-input-occupancy',
-        variantModelStatus: 'resolved',
-        reasons: [],
-      },
-      defaultLinkDelayFrames: 0,
-      sourceIdentity: [source.sourceIdentity, chainSegment.sourceIdentity]
-        .filter(Boolean)
-        .join('|'),
-    };
+      sequenceTotal
+    );
   });
   if (segments.some(segment => !segment)) {
     return {
@@ -171,6 +198,13 @@ export function resolveVerifiedContextActionStartMs({
       left.edge.edgeIdentity.localeCompare(right.edge.edgeIdentity)
   );
   return candidates[0] ?? null;
+}
+
+export function isFrameWithinVerifiedInputWindow(frame, window) {
+  const value = Number(frame);
+  return (
+    value >= Number(window?.startFrame) && value < Number(window?.endFrame)
+  );
 }
 
 function isRuntimeConditionSatisfied({

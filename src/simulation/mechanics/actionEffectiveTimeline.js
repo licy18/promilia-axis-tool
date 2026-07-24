@@ -7,6 +7,7 @@ export function projectScenarioEffectiveActionTimeline({
     const resolution = actionResolutionById?.get?.(action.id);
     const binding = resolution?.actionBinding ?? resolution ?? {};
     const selection = actionSelectionById?.get?.(action.id) ?? {};
+    const attackInput = binding.attackInputSegment ?? action.attackInput;
     const durationMs =
       action.type === 'switch'
         ? 0
@@ -18,6 +19,9 @@ export function projectScenarioEffectiveActionTimeline({
       ...action,
       name: binding.semanticName ?? action.name,
       durationMs,
+      attackInput,
+      attackSequenceTotal:
+        attackInput?.sequenceTotal ?? action.attackSequenceTotal,
       runtimeContextActionId: selection.contextActionId ?? null,
     };
   });

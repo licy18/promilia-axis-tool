@@ -262,6 +262,8 @@ function normalizeAttackInputSegment(segment) {
     ),
     linkWindow: normalizeLinkWindow(segment.linkWindow),
     linkTimingStatus: normalizeText(segment.linkTimingStatus) ?? 'unresolved',
+    linkTimingBasis: normalizeText(segment.linkTimingBasis),
+    linkSourceIdentity: normalizeText(segment.linkSourceIdentity),
     linkTimingReasons: normalizeTextArray(segment.linkTimingReasons),
     selectedHitIdentities: normalizeTextArray(segment.selectedHitIdentities),
     hitCount: Math.max(0, Number(segment.hitCount) || 0),
@@ -307,8 +309,12 @@ function normalizeLinkWindow(value) {
   return startFrame == null && endFrame == null
     ? null
     : {
+        ...value,
         kind: normalizeText(value.kind),
         targetControlSkillId: positiveIntegerOrNull(value.targetControlSkillId),
+        targetSubSkillIndex: nonNegativeIntegerOrNull(
+          value.targetSubSkillIndex
+        ),
         startFrame,
         endFrame,
         durationFrames: nonNegativeIntegerOrNull(value.durationFrames),

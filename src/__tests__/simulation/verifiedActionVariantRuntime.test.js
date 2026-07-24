@@ -361,7 +361,7 @@ describe('verified action variant and special resource runtime', () => {
       characterId: JADE_ID,
       skillId: 10101001,
       actionVariantIndex: 2,
-      startMs: frameTime(72),
+      startMs: frameTime(40),
     });
     const burst = runVariantRuntime({
       actors: [burstA5.actor],
@@ -519,7 +519,7 @@ describe('verified action variant and special resource runtime', () => {
           characterId: JADE_ID,
           skillId: 10101001,
           actionVariantIndex: 2,
-          startMs: frameTime(72),
+          startMs: frameTime(40),
         });
         return {
           actors: [burstA3.actor],
@@ -687,6 +687,217 @@ describe('verified action variant and special resource runtime', () => {
       actualDurationFrames: 72,
     });
   });
+
+  it.each([
+    {
+      label: '星决技',
+      createPrelude() {
+        return {
+          action: createActorAction({
+            id: 'jade-burst-from-ultimate',
+            characterId: JADE_ID,
+            skillId: 10101013,
+            startMs: 0,
+          }),
+          chainStartFrame: 300,
+          initialRuntimeState: null,
+          expectedStateFrame: 272,
+        };
+      },
+    },
+    {
+      label: '缘结值达到 100',
+      createPrelude() {
+        const action = createActorAction({
+          id: 'jade-burst-from-threshold',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          actionVariantIndex: 2,
+          startMs: 0,
+        });
+        return {
+          action,
+          chainStartFrame: 60,
+          initialRuntimeState: {
+            specialResourcesByActor: [
+              {
+                actorId: action.actorId,
+                resourceIdentity: 'actor:101010:element:101010115',
+                currentValue: 95,
+              },
+            ],
+          },
+          expectedStateFrame: 43,
+        };
+      },
+    },
+  ])(
+    'selects the verified burst A1-A3 chain and enhanced special charged form after $label enters burst',
+    ({ createPrelude }) => {
+      const {
+        action: prelude,
+        chainStartFrame,
+        initialRuntimeState,
+        expectedStateFrame,
+      } = createPrelude();
+      const burstChain = createJadeBurstChainActions({
+        startFrame: chainStartFrame,
+      });
+      const charged = createActorAction({
+        id: `${prelude.id}-enhanced-special-charged`,
+        characterId: JADE_ID,
+        skillId: 10101001,
+        actionVariantIndex: 2,
+        startMs: frameTime(chainStartFrame + 72 + 75 + 40),
+      });
+      const runtime = runVariantRuntime({
+        actors: [prelude.actor],
+        actions: [prelude, ...burstChain, charged],
+        durationMs: 20_000,
+        initialRuntimeState,
+      });
+
+      expect(
+        runtime.stateEvents.find(
+          event =>
+            event.payload.operation === 'transform' &&
+            event.payload.stateElementId === 101010129
+        )?.timeMs
+      ).toBeCloseTo(frameTime(expectedStateFrame), 6);
+      expect(
+        burstChain.map(action =>
+          runtime.selectionByActionId.get(action.id)
+        )
+      ).toEqual([
+        expect.objectContaining({
+          controlSkillId: 10101001,
+          selectedSubSkillIndex: 1,
+          actualDurationFrames: 72,
+          attackInputChainIdentity: 'xiaoyu-burst-three-inputs',
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101004,
+          selectedSubSkillIndex: 1,
+          actualDurationFrames: 75,
+          attackInputChainIdentity: 'xiaoyu-burst-three-inputs',
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101005,
+          selectedSubSkillIndex: 1,
+          actualDurationFrames: 72,
+          attackInputChainIdentity: 'xiaoyu-burst-three-inputs',
+        }),
+      ]);
+      expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
+        publicControlSkillId: 10101010,
+        controlSkillId: 10101042,
+        executionControlSkillId: 10101042,
+        selectedSubSkillIndex: 1,
+        semanticName: '强化特殊重击',
+        sourceKind: 'verified-input-context-variant',
+        contextActionId: burstChain[2].id,
+        animationDurationFrames: 205,
+        actualDurationFrames: 60,
+      });
+      const effectiveTimeline = projectScenarioEffectiveActionTimeline({
+        scenario: {
+          time: { durationMs: 20_000, fps: 60 },
+          actors: [prelude.actor],
+          actions: [prelude, ...burstChain, charged],
+          initialRuntimeState,
+        },
+        actionResolutionById: runtime.actionResolutionById,
+        actionSelectionById: runtime.selectionByActionId,
+      });
+      expect(
+        effectiveTimeline.scenario.actions
+          .filter(action => burstChain.some(item => item.id === action.id))
+          .map(action => ({
+            sequenceIndex: action.attackSequenceIndex,
+            controlSkillId: action.attackInput?.controlSkillId,
+            subSkillIndex: action.attackInput?.selectedSubSkillIndex,
+            linkTimingStatus: action.attackInput?.linkTimingStatus,
+            linkTargetControlSkillId:
+              action.attackInput?.linkWindow?.targetControlSkillId,
+          }))
+      ).toEqual([
+        {
+          sequenceIndex: 1,
+          controlSkillId: 10101001,
+          subSkillIndex: 1,
+          linkTimingStatus: 'applied',
+          linkTargetControlSkillId: 10101004,
+        },
+        {
+          sequenceIndex: 2,
+          controlSkillId: 10101004,
+          subSkillIndex: 1,
+          linkTimingStatus: 'applied',
+          linkTargetControlSkillId: 10101005,
+        },
+        {
+          sequenceIndex: 3,
+          controlSkillId: 10101005,
+          subSkillIndex: 1,
+          linkTimingStatus: 'applied',
+          linkTargetControlSkillId: 80102,
+        },
+      ]);
+    }
+  );
+
+  it.each([
+    { relativeFrame: 19, expectedControlSkillId: 10101042 },
+    { relativeFrame: 20, expectedControlSkillId: 10101010 },
+    { relativeFrame: 40, expectedControlSkillId: 10101042 },
+    { relativeFrame: 71, expectedControlSkillId: 10101042 },
+    { relativeFrame: 72, expectedControlSkillId: 10101010 },
+  ])(
+    'treats the burst A3 EventBridge windows as half-open at frame $relativeFrame',
+    ({ relativeFrame, expectedControlSkillId }) => {
+      const burstA3 = createActorAction({
+        id: `jade-burst-a3-boundary-${relativeFrame}`,
+        characterId: JADE_ID,
+        skillId: 10101001,
+        startMs: 0,
+        attackInput: JADE_A5,
+        attackSequenceIndex: 3,
+      });
+      const charged = createActorAction({
+        id: `jade-burst-charged-boundary-${relativeFrame}`,
+        characterId: JADE_ID,
+        skillId: 10101001,
+        actionVariantIndex: 2,
+        startMs: frameTime(relativeFrame),
+      });
+      const runtime = runVariantRuntime({
+        actors: [burstA3.actor],
+        actions: [burstA3, charged],
+        durationMs: 8000,
+        initialRuntimeState: createJadeBurstInitialState({
+          actorId: burstA3.actorId,
+          remainingDurationMs: 5000,
+        }),
+      });
+
+      expect(
+        runtime.selectionByActionId.get(charged.id)
+          ?.executionControlSkillId
+      ).toBe(expectedControlSkillId);
+      expect(runtime.selectionByActionId.get(charged.id)).toMatchObject(
+        expectedControlSkillId === 10101042
+          ? {
+              selectedSubSkillIndex: 1,
+              semanticName: '强化特殊重击',
+              contextActionId: burstA3.id,
+            }
+          : {
+              selectedSubSkillIndex: 2,
+              semanticName: '强化重击',
+            }
+      );
+    }
+  );
 
   it('enters burst on the exact threshold transaction and refreshes it from the ultimate source frame', () => {
     const charged = createActorAction({
@@ -1270,6 +1481,32 @@ function createJadeBurstInitialState({
       },
     ],
   };
+}
+
+function createJadeBurstChainActions({ startFrame }) {
+  const definitions = [
+    { sequenceIndex: 1, controlSkillId: 10101001, startOffsetFrames: 0 },
+    { sequenceIndex: 2, controlSkillId: 10101004, startOffsetFrames: 72 },
+    {
+      sequenceIndex: 3,
+      controlSkillId: 10101005,
+      startOffsetFrames: 72 + 75,
+    },
+  ];
+  return definitions.map(definition =>
+    createActorAction({
+      id: `jade-burst-a${definition.sequenceIndex}-${startFrame}`,
+      characterId: JADE_ID,
+      skillId: 10101001,
+      startMs: frameTime(startFrame + definition.startOffsetFrames),
+      attackInput: {
+        ...JADE_A1,
+        controlSkillId: definition.controlSkillId,
+        sequenceIndex: definition.sequenceIndex,
+      },
+      attackSequenceIndex: definition.sequenceIndex,
+    })
+  );
 }
 
 function frameTime(frame) {

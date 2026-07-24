@@ -1696,6 +1696,10 @@ M9-R3-R1 已将队伍共享印记组整体前置到角色组上方，并用不�
 
 小玉普通/强化/特殊/强化特殊重击现分别执行 `10101010/sub0`、`10101010/sub2`、`10101042/sub0`、`10101042/sub1`，`10101010/sub1` 保留为独立连续重击；最终形态由爆发状态、上一动作和派生窗口确定。21/21 个公开动作/形态已分离完整动画与有效占轴，统一 effective timeline 驱动动作宽度、辅助放置、重叠诊断和执行边界。129 个测试文件、723 条测试、真实 Workbench 聚焦流程、来源漂移、applied-source、构建与 `739,861B` 总 JS gzip 守门通过；桌面/窄屏证据为 `reports/m9-r3-r2-xiaoyu-forms-occupancy-desktop.png` 和 `reports/m9-r3-r2-xiaoyu-forms-occupancy-narrow.png`。`10101062` 继续按未实装处理。
 
+### M9-R3-R2-R1 小玉爆发普攻链回归已修复，等待产品复验（2026-07-24）
+
+爆发 A1/A2/A3 的已确认接续窗口现贯通动作草稿、readiness、实际落轴与运行时，星决技和缘结值跨 100 均选择 `10101001/04/05 sub1` 三段链且不再显示“条件待确认”。A3 后重击按 `[0,20)`、`[40,72)` 来源窗口稳定切换 `10101042/sub1` 与 `10101010/sub2`；真实动作库点击、指针拖拽、撤销/重做及保存重载均已复验。129 个测试文件、733 条测试、聚焦 production preview、构建和 verified-combat 漂移审计通过，证据为 `reports/m9-r3-r2-r1-xiaoyu-burst-chain-desktop.png` 与 `reports/m9-r3-r2-r1-xiaoyu-burst-chain-narrow.png`。总 JS gzip `740,444B`，超发布硬门槛 `444B`；本轮按范围不做包体优化，保留为发布前风险。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

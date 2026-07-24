@@ -68,6 +68,7 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m9-r2-r1-inspector-duration]') ||
     testInfo.title.includes('[m9-r3-xiaoyu-mechanics]') ||
     testInfo.title.includes('[m9-r3-r2-xiaoyu-forms-occupancy]') ||
+    testInfo.title.includes('[m9-r3-r2-r1-xiaoyu-burst-chain]') ||
     testInfo.title.includes('[m9-r3-r1-timeline-layout]')
   ) {
     return;
@@ -6587,7 +6588,7 @@ test('[m9-r2-r2-initial-energy] edits actor and configured kibo baselines direct
   });
 });
 
-test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effective overlap boundary', async ({
+test('[m9-r3-r2-xiaoyu-forms-occupancy] [m9-r3-r2-r1-xiaoyu-burst-chain] resolves every charged form, the real burst drag path, and its effective overlap boundary', async ({
   page,
 }) => {
   test.setTimeout(180_000);
@@ -6681,9 +6682,9 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effe
   const defaultA5 = timeline.locator(
     `[data-testid="workbench-timeline-action"][data-attack-group-id="${defaultGroupId}"][data-attack-sequence-index="5"]`
   );
-  await expect(defaultA5).toHaveAttribute(
-    'data-duration-ms',
-    String(frameToMs(80))
+  expect(Number(await defaultA5.getAttribute('data-duration-ms'))).toBeCloseTo(
+    frameToMs(80),
+    6
   );
 
   await chargedAttack.click();
@@ -6718,7 +6719,20 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effe
     occupancyFrames: 64,
   });
 
-  await normalAttack.click();
+  await ultimateBlock.scrollIntoViewIfNeeded();
+  const ultimateBox = await ultimateBlock.boundingBox();
+  const actorLaneBoxForBurstDrop = await actorLane.boundingBox();
+  expect(ultimateBox).toBeTruthy();
+  expect(actorLaneBoxForBurstDrop).toBeTruthy();
+  await dragLocatorTo(page, normalAttack, actorLane, {
+    targetPosition: {
+      x:
+        ultimateBox.x -
+        actorLaneBoxForBurstDrop.x +
+        ultimateBox.width / 2,
+      y: actorLaneBoxForBurstDrop.height / 2,
+    },
+  });
   await expect(normalBlocks()).toHaveCount(8);
   const groupIds = await normalBlocks().evaluateAll(actions => [
     ...new Set(
@@ -6753,6 +6767,11 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effe
   ]);
   for (const [index, durationFrames] of [72, 75, 72].entries()) {
     await expect(burstGroup.nth(index)).toContainText(`${durationFrames}F`);
+    await expect(burstGroup.nth(index)).not.toContainText('条件待确认');
+    await expect(burstGroup.nth(index)).toHaveAttribute(
+      'data-readiness-status',
+      'ready'
+    );
   }
   await burstGroup.first().click();
   await expect(page.getByTestId('workbench-action-identity')).toContainText(
@@ -6769,6 +6788,12 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effe
     subSkillIndex: 1,
     occupancyFrames: 60,
   });
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(chargedBlocks()).toHaveCount(4);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(chargedBlocks()).toHaveCount(5);
+  await expect(chargedBlocks().nth(4)).toContainText('强化特殊重击');
+  await expect(chargedBlocks().nth(4)).toContainText('60F');
 
   const burstInterval = timeline.locator(
     '[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101010129"]'
@@ -6837,7 +6862,7 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effe
   );
   await actorLane.scrollIntoViewIfNeeded();
   await page.screenshot({
-    path: 'reports/m9-r3-r2-xiaoyu-forms-occupancy-desktop.png',
+    path: 'reports/m9-r3-r2-r1-xiaoyu-burst-chain-desktop.png',
   });
   await overlapFollower.click();
   await page
@@ -6872,7 +6897,7 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effe
   await actorLane.scrollIntoViewIfNeeded();
   await expectPageWithoutHorizontalOverflow(page);
   await page.screenshot({
-    path: 'reports/m9-r3-r2-xiaoyu-forms-occupancy-narrow.png',
+    path: 'reports/m9-r3-r2-r1-xiaoyu-burst-chain-narrow.png',
   });
 });
 

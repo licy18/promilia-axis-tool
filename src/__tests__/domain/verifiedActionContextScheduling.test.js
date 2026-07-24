@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
+import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   resolveVerifiedAttackInputChainEntry,
   resolveVerifiedContextActionStartMs,
 } from '../../domain/verifiedActionContextScheduling';
 import { frameToMs } from '../../domain/timebase';
+import {
+  ACTION_RULE_CODES,
+  createActionRuleDiagnostics,
+} from '../../simulation/runtime/actionRuleDiagnostics';
 
 describe('verified action context scheduling', () => {
   it('projects the state-selected normal attack chain without persisting runtime state', () => {
@@ -65,6 +70,127 @@ describe('verified action context scheduling', () => {
       [3, 3, 10101005, 1, 72],
     ]);
     expect(entry.attackInputSegments).toHaveLength(5);
+  });
+
+  it('projects the verified burst chain link contract into ready A1-A3 drafts', () => {
+    const entry = verifiedCombatMechanicsPackage.actionMappings.find(
+      mapping =>
+        Number(mapping.ownerId) === 101010 &&
+        Number(mapping.sourceSkillId) === 10101001 &&
+        Number(mapping.actionVariantIndex) === 0
+    );
+    const resolved = resolveVerifiedAttackInputChainEntry({
+      entry: { ...entry, skillId: entry.sourceSkillId },
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 101010,
+      actorId: 'actor-jade',
+      timeMs: 1000,
+      effectIntervals: [
+        {
+          effectId: 'battle-element:101010129',
+          targetId: 'actor-jade',
+          startMs: 500,
+          endMs: 10_500,
+        },
+      ],
+    });
+
+    expect(resolved.status).toBe('selected');
+    expect(
+      resolved.entry.attackInputSegments.map(segment => ({
+        sequenceIndex: segment.sequenceIndex,
+        controlSkillId: segment.controlSkillId,
+        selectedSubSkillIndex: segment.selectedSubSkillIndex,
+        linkTimingStatus: segment.linkTimingStatus,
+        linkTimingBasis: segment.linkTimingBasis,
+        linkTargetControlSkillId: segment.linkWindow?.targetControlSkillId,
+        linkTargetSubSkillIndex: segment.linkWindow?.targetSubSkillIndex,
+        linkStartFrame: segment.linkWindow?.startFrame,
+        linkEndFrame: segment.linkWindow?.endFrame,
+      }))
+    ).toEqual([
+      {
+        sequenceIndex: 1,
+        controlSkillId: 10101001,
+        selectedSubSkillIndex: 1,
+        linkTimingStatus: 'applied',
+        linkTimingBasis: 'next-control-input-window',
+        linkTargetControlSkillId: 10101004,
+        linkTargetSubSkillIndex: 1,
+        linkStartFrame: 72,
+        linkEndFrame: 108,
+      },
+      {
+        sequenceIndex: 2,
+        controlSkillId: 10101004,
+        selectedSubSkillIndex: 1,
+        linkTimingStatus: 'applied',
+        linkTimingBasis: 'next-control-input-window',
+        linkTargetControlSkillId: 10101005,
+        linkTargetSubSkillIndex: 1,
+        linkStartFrame: 75,
+        linkEndFrame: 120,
+      },
+      {
+        sequenceIndex: 3,
+        controlSkillId: 10101005,
+        selectedSubSkillIndex: 1,
+        linkTimingStatus: 'applied',
+        linkTimingBasis: 'attack-reopen-window',
+        linkTargetControlSkillId: 80102,
+        linkTargetSubSkillIndex: 0,
+        linkStartFrame: 72,
+        linkEndFrame: 319,
+      },
+    ]);
+
+    let cursorFrame = 0;
+    const actions = resolved.entry.attackInputSegments.map(segment => {
+      const action = {
+        id: `burst-a${segment.sequenceIndex}`,
+        type: 'skill',
+        name: `A${segment.sequenceIndex}`,
+        actorId: 'actor-jade',
+        actorCharacterId: 101010,
+        skillId: 10101001,
+        startMs: frameToMs(cursorFrame),
+        durationMs: frameToMs(segment.durationFrames),
+        attackGroupId: 'burst-chain',
+        attackSequenceIndex: segment.sequenceIndex,
+        attackSequenceTotal: segment.sequenceTotal,
+        attackInput: segment,
+      };
+      cursorFrame += segment.durationFrames;
+      return action;
+    });
+    const diagnostics = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [
+          { id: 'actor-jade', characterId: 101010, name: '涂山小玉' },
+        ],
+        actions,
+      },
+    });
+
+    expect(
+      diagnostics.diagnostics.filter(
+        diagnostic =>
+          diagnostic.code ===
+          ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED
+      )
+    ).toEqual([]);
+    expect(
+      diagnostics.diagnostics.filter(diagnostic =>
+        [
+          ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY,
+          ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE,
+        ].includes(diagnostic.code)
+      )
+    ).toEqual([]);
+    expect(
+      diagnostics.readinessTimeline.actions.map(action => action.status)
+    ).toEqual(['ready', 'ready', 'ready']);
   });
 
   it('snaps a derived heavy input to the sourced A5 context window', () => {

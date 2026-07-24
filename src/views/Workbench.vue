@@ -377,10 +377,7 @@
         :actors="scenario.actors"
         :kibos="actionLibraryKibos"
         :active-actor-character-id="actionLibraryCharacterId"
-        :actions="
-          simulationResult.effectiveActionTimeline?.scenario?.actions ??
-          scenario.actions
-        "
+        :actions="effectiveScenarioActions"
         :main-flow-command-surface="mainFlowCommandSurface"
         :runtime-action-results="runtimeActionResults"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
@@ -458,7 +455,7 @@
           :timeline-topology="project.metadata.timelineTopology"
           :kibos="loadoutOptions.kibos"
           :loadout-detail-catalog="loadoutDetailCatalog"
-          :actions="scenario.actions"
+          :actions="effectiveScenarioActions"
           :timeline-entry-catalog="timelineEntryCatalog"
           :timeline-entry-default-actor-id="actionLibraryActor.id"
           :active-actor-character-id="actionLibraryCharacterId"
@@ -969,7 +966,7 @@
         :enemy="scenario.enemy"
         :timeline-topology="project.metadata.timelineTopology"
         :kibos="loadoutOptions.kibos"
-        :actions="scenario.actions"
+        :actions="effectiveScenarioActions"
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"
         :tuning-mark-curve-projection="
@@ -1506,6 +1503,11 @@ const simulationResult = computed(() => {
   void runtimeDiagnosticsRevision.value;
   return simulateScenario(scenario.value);
 });
+const effectiveScenarioActions = computed(
+  () =>
+    simulationResult.value.effectiveActionTimeline?.scenario?.actions ??
+    scenario.value.actions
+);
 const currentWorkbenchPresetSummary = computed(() => ({
   actionCount: actionDrafts.value.length,
   actorNames: scenario.value.actors.map(actor => actor.name),
@@ -1785,9 +1787,7 @@ const runtimeReviewEventRole = computed(() =>
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,
-    actions:
-      simulationResult.value.effectiveActionTimeline?.scenario?.actions ??
-      scenario.value.actions,
+    actions: effectiveScenarioActions.value,
     timelineTopology: project.value.metadata.timelineTopology,
   })
 );
@@ -1852,9 +1852,9 @@ const timelineEntryCatalog = computed(() => {
 });
 const selectedAction = computed(() => {
   return (
-    scenario.value.actions.find(
+    effectiveScenarioActions.value.find(
       action => action.id === selectedActionId.value
-    ) ?? scenario.value.actions[0]
+    ) ?? effectiveScenarioActions.value[0]
   );
 });
 const selectedDraft = computed(() => {
@@ -3203,6 +3203,7 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
     actionEntryOrSkillId,
     actorCharacterId
   );
+  const sourceActionEntry = actionEntry;
   if (!isActionEntrySchedulable(actionEntry)) {
     draftStatus.value = formatUnschedulableActionMessage(actionEntry);
     return false;
@@ -3236,21 +3237,23 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
       startMs: requestedStartMs,
     });
   }
-  const attackInputDrafts = createAttackInputChainDraftPatches({
-    entry: actionEntry,
+  const nextActionId = createNextActionId();
+  const createAttackInputDraftsAt = createAttackInputDraftFactory({
+    entry: sourceActionEntry,
     actorCharacterId,
-    skill,
     level,
-    startMs: requestedStartMs,
-    firstActionId: createNextActionId(),
+    firstActionId: nextActionId,
   });
+  const attackInputDrafts = createAttackInputDraftsAt(requestedStartMs);
   if (attackInputDrafts.length) {
-    addInsertedActionGroup(attackInputDrafts);
+    addInsertedActionGroup(attackInputDrafts, {
+      resolveAtStartMs: createAttackInputDraftsAt,
+    });
     return;
   }
   addInsertedAction(
     {
-      id: createNextActionId(),
+      id: nextActionId,
       skillId: skill.id,
       actorCharacterId,
       level,
@@ -3284,32 +3287,40 @@ function addDefaultSkillAction() {
   }
 }
 
-function createAttackInputChainDraftPatches({
+function createAttackInputDraftFactory({
   entry,
   actorCharacterId,
-  skill,
   level,
-  startMs,
   firstActionId,
 } = {}) {
-  if (!entry?.attackInputSegments?.length) return [];
-  const usedActionIds = new Set(actionDrafts.value.map(action => action.id));
-  if (firstActionId) usedActionIds.add(firstActionId);
-  return createWorkbenchAttackInputChainDrafts({
-    entry,
-    actorCharacterId,
-    skillId: skill?.id ?? entry.skillId,
-    level,
-    startMs,
-    createActionId: (_, index) => {
-      if (index === 0 && firstActionId) return firstActionId;
-      if (String(firstActionId).includes('preview')) {
-        return `${firstActionId}-a${String(index + 1).padStart(2, '0')}`;
-      }
-      return createNextActionIdFromUsedIds(usedActionIds);
-    },
-    createdAt: new Date().toISOString(),
-  });
+  const createdAt = new Date().toISOString();
+  return startMs => {
+    const selectedEntry = resolveVerifiedStateSelectedActionEntry({
+      entry,
+      actorCharacterId,
+      timeMs: startMs,
+    });
+    if (!selectedEntry?.attackInputSegments?.length) return [];
+    const usedActionIds = new Set(
+      actionDrafts.value.map(action => action.id)
+    );
+    usedActionIds.add(firstActionId);
+    return createWorkbenchAttackInputChainDrafts({
+      entry: selectedEntry,
+      actorCharacterId,
+      skillId: selectedEntry.skillId,
+      level,
+      startMs,
+      createActionId: (_, index) => {
+        if (index === 0) return firstActionId;
+        if (String(firstActionId).includes('preview')) {
+          return `${firstActionId}-a${String(index + 1).padStart(2, '0')}`;
+        }
+        return createNextActionIdFromUsedIds(usedActionIds);
+      },
+      createdAt,
+    });
+  };
 }
 
 function resolveVerifiedStateSelectedActionEntry({
@@ -3673,6 +3684,7 @@ async function insertTimelineEntry({ entry, laneId, startMs }) {
     return Boolean(
       addInsertedActionGroup(request.draftPatches, {
         actionRelations: request.actionRelations,
+        resolveAtStartMs: request.resolveDraftPatchesAtStartMs,
       })?.committed
     );
   }
@@ -3770,8 +3782,10 @@ function createTimelineEntryDraftRequest({
   let requestedStartMs = clampNumber(startMs, 0, project.value.time.durationMs);
   let draftPatch;
   let attackInputDrafts = [];
+  let resolveDraftPatchesAtStartMs = null;
   if (entry.type === ACTION_TYPES.SKILL) {
     let actionEntry = normalizeActionEntryInput(entry, actorCharacterId);
+    const sourceActionEntry = actionEntry;
     if (!isActionEntrySchedulable(actionEntry)) {
       return {
         blockedMessage: formatUnschedulableActionMessage(actionEntry),
@@ -3814,14 +3828,16 @@ function createTimelineEntryDraftRequest({
           (actionEntry.rawValue ?? '倍率待补') +
           '；真实动作帧等待 asset 或运行时捕获补充。',
     };
-    attackInputDrafts = createAttackInputChainDraftPatches({
-      entry: actionEntry,
+    const createAttackInputDraftsAt = createAttackInputDraftFactory({
+      entry: sourceActionEntry,
       actorCharacterId,
-      skill,
       level,
-      startMs: requestedStartMs,
       firstActionId: actionId,
     });
+    attackInputDrafts = createAttackInputDraftsAt(requestedStartMs);
+    if (attackInputDrafts.length) {
+      resolveDraftPatchesAtStartMs = createAttackInputDraftsAt;
+    }
   } else {
     if (
       entry.type === ACTION_TYPES.KIBO_EVENT &&
@@ -3894,6 +3910,7 @@ function createTimelineEntryDraftRequest({
           ],
     requestedStartMs,
     targetLane,
+    resolveDraftPatchesAtStartMs,
   };
 }
 
@@ -3982,22 +3999,26 @@ async function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
     clearActionPlacementPreview();
     return;
   }
-  const requestedActions = request.draftPatches.map(patch =>
-    createWorkbenchActionDraft(patch)
+  const placement = resolveActionGroupPlacement(
+    request.draftPatches.map(patch => createWorkbenchActionDraft(patch)),
+    {
+      relations: normalizeWorkbenchActionRelations(
+        [...actionRelations.value, ...(request.actionRelations ?? [])],
+        [...actionDrafts.value, ...request.draftPatches]
+      ),
+      resolveAtStartMs: request.resolveDraftPatchesAtStartMs,
+      requestedLaneId: laneId,
+    }
   );
-  const previewRelations = normalizeWorkbenchActionRelations(
-    [...actionRelations.value, ...(request.actionRelations ?? [])],
-    [...actionDrafts.value, ...requestedActions]
-  );
-  const proposal = createActionPlacementProposal({
-    requestedActions,
-    relations: previewRelations,
-    requestedLaneId: laneId,
-  });
-  lastActionPlacementProposal.value = proposal;
+  const requestedActions = placement.actions;
+  if (!requestedActions.length) {
+    clearActionPlacementPreview();
+    return;
+  }
+  lastActionPlacementProposal.value = placement.proposal;
   actionPlacementPreview.value = createActionPlacementPreviewState({
     kind: 'insert',
-    proposal,
+    proposal: placement.proposal,
     requestedActions,
     label: entry.label ?? '',
     icon: entry.icon ?? null,
@@ -7920,7 +7941,10 @@ function createNextActionIdFromUsedIds(usedActionIds) {
 
 function addInsertedActionGroup(
   actionPatches = [],
-  { actionRelations: insertedRelations = [] } = {}
+  {
+    actionRelations: insertedRelations = [],
+    resolveAtStartMs = null,
+  } = {}
 ) {
   const requestedActions = actionPatches.map(patch =>
     createWorkbenchActionDraft(patch)
@@ -7932,16 +7956,13 @@ function addInsertedActionGroup(
     [...actionRelations.value, ...insertedRelations],
     [...actionDrafts.value, ...requestedActions]
   );
-  const proposal = createActionPlacementProposal({
-    requestedActions,
+  const placement = resolveActionGroupPlacement(requestedActions, {
     relations: nextRelations,
+    resolveAtStartMs,
     requestedLaneId: resolveDraftLaneId(requestedActions[0]),
   });
+  const { proposal, committedActions } = placement;
   lastActionPlacementProposal.value = proposal;
-  const committedActions = applyConstraintAssistedProposal(
-    proposal,
-    requestedActions
-  )?.map(action => createWorkbenchActionDraft(action));
   if (!committedActions?.length) {
     return { actions: [], proposal, committed: false };
   }
@@ -7976,6 +7997,55 @@ function addInsertedActionGroup(
     proposal,
     committed: true,
   };
+}
+
+function resolveActionGroupPlacement(
+  actions,
+  { relations = [], resolveAtStartMs = null, requestedLaneId = '' } = {},
+  attempt = 0
+) {
+  if (!attempt && isConstraintAssistedPlacement() && resolveAtStartMs) {
+    const anchor = resolveActionGroupPlacement(actions.slice(0, 1), {
+      relations,
+      requestedLaneId,
+    });
+    if (!anchor.committedActions?.length) {
+      return { actions, proposal: anchor.proposal, committedActions: null };
+    }
+    actions = (resolveAtStartMs(anchor.committedActions[0].startMs) ?? []).map(
+      patch => createWorkbenchActionDraft(patch)
+    );
+  }
+  const proposal = createActionPlacementProposal({
+    requestedActions: actions,
+    relations,
+    requestedLaneId,
+  });
+  const committedActions = applyConstraintAssistedProposal(
+    proposal,
+    actions
+  )?.map(action => createWorkbenchActionDraft(action));
+  if (
+    !committedActions?.length ||
+    !resolveAtStartMs ||
+    committedActions[0].startMs === actions[0].startMs
+  ) {
+    return { actions, proposal, committedActions };
+  }
+  if (attempt >= 2) {
+    draftStatus.value = '动作形态与最终落点无法稳定解析';
+    return { actions, proposal, committedActions: null };
+  }
+  const resolvedActions = (
+    resolveAtStartMs(committedActions[0].startMs) ?? []
+  ).map(patch => createWorkbenchActionDraft(patch));
+  return resolvedActions.length
+    ? resolveActionGroupPlacement(
+        resolvedActions,
+        { relations, resolveAtStartMs, requestedLaneId },
+        attempt + 1
+      )
+    : { actions, proposal, committedActions: null };
 }
 
 function addInsertedAction(actionPatch, options = {}) {
