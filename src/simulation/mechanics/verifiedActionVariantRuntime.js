@@ -112,6 +112,9 @@ export function createVerifiedActionVariantRuntime({
   const contextBindings = (graph.contextEdges ?? [])
     .filter(edge => edge.applied)
     .sort(compareBindings);
+  const publicActionForms = (graph.publicActionForms ?? []).filter(
+    form => form.applied
+  );
   const attackInputChains = (graph.attackInputChains ?? [])
     .filter(chain => chain.applied)
     .sort((left, right) =>
@@ -564,21 +567,25 @@ export function createVerifiedActionVariantRuntime({
       continue;
     }
     const runtimeAction = attackChainSelection.action ?? action;
-    const controlSkillId = resolveActionControlSkillId(runtimeAction, mapping);
+    const publicControlSkillId = resolveActionControlSkillId(
+      runtimeAction,
+      mapping
+    );
     const derivedControlContract = getVerifiedDerivedControlContract({
       ownerKind: mapping?.ownerKind ?? 'actor',
       ownerId: characterId,
-      controlSkillId,
+      controlSkillId: publicControlSkillId,
     });
+    let executionControlSkillId = publicControlSkillId;
     let selectedSubSkillIndex = mapping?.selectedSubSkillIndex ?? null;
     let selectionSource = null;
 
-    if (Number.isInteger(controlSkillId)) {
+    if (Number.isInteger(publicControlSkillId)) {
       const activeSelection = actorState
         ? resolveActiveSwitchSelection({
             activeSwitchWindows,
             actorId: action.actorId,
-            controlSkillId,
+            controlSkillId: publicControlSkillId,
             timeMs: actionTimeMs,
             actionKind: mapping?.actionKind,
           })
@@ -588,7 +595,7 @@ export function createVerifiedActionVariantRuntime({
             contextBindings,
             previous: lastResolvedActionByActorId.get(action.actorId),
             actorState,
-            controlSkillId,
+            controlSkillId: publicControlSkillId,
             timeMs: actionTimeMs,
           })
         : { status: 'none', binding: null };
@@ -600,7 +607,7 @@ export function createVerifiedActionVariantRuntime({
         const block = createVariantExecutionBlock({
           action,
           actorState,
-          controlSkillId,
+          controlSkillId: publicControlSkillId,
           activeSelection,
         });
         executionBlocks.push(block);
@@ -616,7 +623,7 @@ export function createVerifiedActionVariantRuntime({
         continue;
       }
       const defaultSelection = defaultSelectionByControl.get(
-        `${characterId}|${controlSkillId}`
+        `${characterId}|${publicControlSkillId}`
       );
       const inputSelection = resolveDerivedInputSelection({
         action: runtimeAction,
@@ -626,7 +633,7 @@ export function createVerifiedActionVariantRuntime({
         const block = createInputVariantExecutionBlock({
           action,
           actorState,
-          controlSkillId,
+          controlSkillId: publicControlSkillId,
           contract: derivedControlContract,
           inputSelection,
         });
@@ -645,7 +652,8 @@ export function createVerifiedActionVariantRuntime({
           createVariantSelectionRecord({
             action,
             characterId,
-            controlSkillId,
+            publicControlSkillId,
+            executionControlSkillId: publicControlSkillId,
             contract: derivedControlContract,
             inputSelection,
             selectedSubSkillIndex: null,
@@ -671,12 +679,19 @@ export function createVerifiedActionVariantRuntime({
           ? null
           : defaultSelection?.subSkillIndex) ??
         selectedSubSkillIndex;
+      executionControlSkillId =
+        contextSelection.binding?.executionControlSkillId ??
+        publicControlSkillId;
       selectionSource = contextSelection.binding
         ? {
             sourceKind: 'verified-input-context-variant',
             sourceIdentity: contextSelection.binding.sourceIdentity,
             decisionFrame: contextSelection.binding.decisionFrame,
             contextActionId: contextSelection.previous?.actionId ?? null,
+            executionTiming: contextSelection.binding.executionTiming ?? null,
+            semanticIdentity:
+              contextSelection.binding.semanticIdentity ?? null,
+            semanticName: contextSelection.binding.semanticName ?? null,
           }
         : attackChainSelection.segment
           ? {
@@ -713,10 +728,35 @@ export function createVerifiedActionVariantRuntime({
                       decisionFrame: defaultSelection.decisionFrame,
                     }
                   : null;
+      const semanticForm = resolvePublicActionForm({
+        publicActionForms,
+        ownerId: characterId,
+        publicControlSkillId,
+        executionControlSkillId,
+        selectedSubSkillIndex,
+        actorState,
+      });
+      if (semanticForm) {
+        selectionSource = {
+          ...(selectionSource ?? {}),
+          sourceKind:
+            selectionSource?.sourceKind ??
+            `verified-public-action-form-${semanticForm.selectionKind}`,
+          sourceIdentity:
+            selectionSource?.sourceIdentity ?? semanticForm.sourceIdentity,
+          decisionFrame:
+            selectionSource?.decisionFrame ?? semanticForm.decisionFrame ?? 0,
+          executionTiming:
+            selectionSource?.executionTiming ?? semanticForm.executionTiming,
+          semanticIdentity: semanticForm.semanticIdentity,
+          semanticName: semanticForm.semanticName,
+        };
+      }
     }
 
     const resolution = applyAttackInputChainTimingResolution({
       resolution: resolveVerifiedCombatActionMechanics(runtimeAction, {
+        selectedControlSkillId: executionControlSkillId,
         selectedSubSkillIndex,
         selectionSource,
         combatScenario: scenario.combatScenario,
@@ -730,7 +770,8 @@ export function createVerifiedActionVariantRuntime({
       createVariantSelectionRecord({
         action,
         characterId,
-        controlSkillId,
+        publicControlSkillId,
+        executionControlSkillId,
         contract: derivedControlContract,
         inputSelection: resolveDerivedInputSelection({
           action: runtimeAction,
@@ -741,7 +782,11 @@ export function createVerifiedActionVariantRuntime({
         resolution,
       })
     );
-    if (!resolution.ready || !actorState || !Number.isInteger(controlSkillId)) {
+    if (
+      !resolution.ready ||
+      !actorState ||
+      !Number.isInteger(executionControlSkillId)
+    ) {
       lastResolvedActionByActorId.delete(action.actorId);
       continue;
     }
@@ -749,7 +794,7 @@ export function createVerifiedActionVariantRuntime({
     const selectedOperations = operations.filter(
       operation =>
         operation.ownerId === characterId &&
-        operation.controlSkillId === controlSkillId &&
+        operation.controlSkillId === executionControlSkillId &&
         operation.subSkillIndex === selectedSubSkillIndex
     );
     const requiredAtDecision = selectedOperations
@@ -765,7 +810,7 @@ export function createVerifiedActionVariantRuntime({
       const block = createResourceExecutionBlock({
         action,
         actorState,
-        controlSkillId,
+        controlSkillId: executionControlSkillId,
         selectedSubSkillIndex,
         requiredValue: requiredAtDecision,
         operations: selectedOperations,
@@ -796,7 +841,7 @@ export function createVerifiedActionVariantRuntime({
     for (const binding of switchBindings) {
       if (
         binding.ownerId !== characterId ||
-        binding.sourceControlSkillId !== controlSkillId ||
+        binding.sourceControlSkillId !== executionControlSkillId ||
         binding.sourceSubSkillIndex !== selectedSubSkillIndex
       ) {
         continue;
@@ -813,7 +858,7 @@ export function createVerifiedActionVariantRuntime({
       if (Number(passiveProfile.ownerId) !== characterId) continue;
       for (const trigger of passiveProfile.triggerBindings ?? []) {
         if (
-          Number(trigger.controlSkillId) !== controlSkillId ||
+          Number(trigger.controlSkillId) !== executionControlSkillId ||
           Number(trigger.subSkillIndex) !== selectedSubSkillIndex
         ) {
           continue;
@@ -846,7 +891,7 @@ export function createVerifiedActionVariantRuntime({
     lastResolvedActionByActorId.set(action.actorId, {
       actionId: action.id,
       actorId: action.actorId,
-      controlSkillId,
+      controlSkillId: executionControlSkillId,
       selectedSubSkillIndex,
       startMs: actionTimeMs,
       sourceIdentity:
@@ -1011,6 +1056,7 @@ function applyAttackInputChainTimingResolution({ resolution, chain, segment }) {
         sourceIdentity: segment.sourceIdentity,
         reasons: [],
       },
+      effectiveOccupancyFrames: durationFrames,
       actualDurationFrames: durationFrames,
       actualDurationMs: framesToMs(durationFrames, frameRate),
       timingStatus: 'applied',
@@ -1060,8 +1106,31 @@ function resolveContextVariantSelection({
   };
 }
 
+function resolvePublicActionForm({
+  publicActionForms,
+  ownerId,
+  publicControlSkillId,
+  executionControlSkillId,
+  selectedSubSkillIndex,
+  actorState,
+}) {
+  return (
+    (publicActionForms ?? []).find(
+      form =>
+        Number(form.ownerId) === Number(ownerId) &&
+        Number(form.publicControlSkillId) === Number(publicControlSkillId) &&
+        Number(form.executionControlSkillId) ===
+          Number(executionControlSkillId) &&
+        Number(form.executionSubSkillIndex) ===
+          Number(selectedSubSkillIndex) &&
+        isRuntimeConditionSatisfied(form.condition, actorState)
+    ) ?? null
+  );
+}
+
 function isRuntimeConditionSatisfied(condition, actorState) {
   if (!condition) return true;
+  if (condition.kind === 'always') return true;
   if (condition.kind === 'resource-state-active') {
     return actorState.activeStates.has(Number(condition.stateElementId));
   }
@@ -1237,7 +1306,8 @@ function resolveDerivedInputSelection({ action, contract } = {}) {
 function createVariantSelectionRecord({
   action,
   characterId,
-  controlSkillId,
+  publicControlSkillId,
+  executionControlSkillId,
   contract,
   inputSelection,
   selectedSubSkillIndex,
@@ -1250,8 +1320,19 @@ function createVariantSelectionRecord({
     actionId: action.id,
     actorId: action.actorId,
     ownerId: characterId || null,
-    controlSkillId,
+    publicControlSkillId,
+    controlSkillId: executionControlSkillId,
+    executionControlSkillId,
     selectedSubSkillIndex,
+    semanticIdentity:
+      selectionSource?.semanticIdentity ??
+      resolution?.actionBinding?.semanticIdentity ??
+      null,
+    semanticName:
+      selectionSource?.semanticName ??
+      resolution?.actionBinding?.semanticName ??
+      action.name ??
+      null,
     controlSource: contract?.controlSource ?? 'single-variant',
     contractIdentity: contract?.contractIdentity ?? null,
     contractResolutionStatus: contract?.resolutionStatus ?? 'applied',
@@ -1295,12 +1376,10 @@ function createVariantSelectionRecord({
       resolution?.actionBinding?.actualDurationFrames ??
       resolution?.actionBinding?.actionTiming?.occupancy?.durationFrames ??
       null,
-    actualDurationMs:
-      resolution?.actionBinding?.actualDurationMs ??
-      framesToMs(
-        resolution?.actionBinding?.actionTiming?.occupancy?.durationFrames,
-        resolution?.controlBinding?.frameRate
-      ),
+    animationDurationFrames:
+      resolution?.actionBinding?.animationDurationFrames ??
+      resolution?.actionBinding?.actionTiming?.animation?.durationFrames ??
+      null,
     status:
       status ??
       (resolution?.ready

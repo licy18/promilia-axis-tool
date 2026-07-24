@@ -44,12 +44,21 @@ import {
 } from '../../simulation/projection/projectSimulationResult';
 import Workbench from '../../views/Workbench.vue';
 
+const workbenchMechanicsProfileMockState = vi.hoisted(() => ({
+  useVerifiedProfile: false,
+  durationMs: null,
+}));
+
 vi.mock('../../domain/workbenchDraftStorage', async importOriginal => {
   const actual = await importOriginal();
   return {
     ...actual,
-    createDefaultWorkbenchDemoDraftState:
-      actual.createDefaultWorkbenchDraftState,
+    createDefaultWorkbenchDemoDraftState: () => ({
+      ...actual.createDefaultWorkbenchDraftState(),
+      ...(workbenchMechanicsProfileMockState.durationMs
+        ? { durationMs: workbenchMechanicsProfileMockState.durationMs }
+        : {}),
+    }),
   };
 });
 
@@ -60,7 +69,15 @@ vi.mock(
     return {
       ...actual,
       createVerifiedWorkbenchMechanicsProfileSelection: () =>
-        actual.normalizeWorkbenchMechanicsProfileSelection(),
+        actual.normalizeWorkbenchMechanicsProfileSelection(
+          workbenchMechanicsProfileMockState.useVerifiedProfile
+            ? {
+                profileId: actual.VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID,
+                profileVersion:
+                  actual.VERIFIED_WORKBENCH_MECHANICS_PROFILE_VERSION,
+              }
+            : undefined
+        ),
     };
   }
 );
@@ -219,6 +236,8 @@ describe('Workbench view', () => {
     document.body.innerHTML = '';
     window.localStorage.clear();
     clearInstalledVerifiedCombatMechanicsPackage();
+    workbenchMechanicsProfileMockState.useVerifiedProfile = false;
+    workbenchMechanicsProfileMockState.durationMs = null;
   });
 
   it('renders the first real-data simulation slice', async () => {
@@ -7816,8 +7835,10 @@ describe('Workbench view', () => {
     ).toContain('4s0f');
   });
 
-  it('uses verified Jade A5 occupancy and snaps the derived heavy input to its context window', async () => {
+  it('keeps the Jade charged intent while projecting the A5-derived special form and occupancy', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    workbenchMechanicsProfileMockState.durationMs = 10_000;
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -7851,17 +7872,17 @@ describe('Workbench view', () => {
     const jadeActionNames = () =>
       wrapper.findAll('.action-item .action-name').map(action => action.text());
     const actionCountWithCharged = wrapper.findAll('.action-item').length;
-    expect(jadeActionNames()).toContain('重击');
+    expect(jadeActionNames()).toContain('特殊重击');
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
     await nextTick();
-    expect(jadeActionNames()).not.toContain('重击');
+    expect(jadeActionNames()).not.toContain('特殊重击');
     expect(wrapper.findAll('.action-item')).toHaveLength(
       actionCountWithCharged - 1
     );
     await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
     await flushPromises();
     await nextTick();
-    expect(jadeActionNames()).toContain('重击');
+    expect(jadeActionNames()).toContain('特殊重击');
     expect(wrapper.findAll('.action-item')).toHaveLength(
       actionCountWithCharged
     );
@@ -7892,9 +7913,9 @@ describe('Workbench view', () => {
     expect(
       normalDrafts.every(action => action.timingStatus === 'applied')
     ).toBe(true);
-    expect(msToFrame(chargedDraft.startMs - normalDrafts[4].startMs)).toBe(101);
+    expect(msToFrame(chargedDraft.startMs - normalDrafts[4].startMs)).toBe(37);
     expect(chargedDraft).toMatchObject({
-      durationFrames: 310,
+      durationFrames: 75,
       timingStatus: 'applied',
       needsTimingData: false,
       actionScheduling: {
@@ -7903,8 +7924,33 @@ describe('Workbench view', () => {
         variantModelStatus: 'partially-resolved',
       },
     });
-    expect(msToFrame(chargedDraft.durationMs)).toBe(310);
-  });
+    expect(msToFrame(chargedDraft.durationMs)).toBe(75);
+    const setupSimulationResult =
+      wrapper.vm.$.setupState.simulationResult?.value ??
+      wrapper.vm.$.setupState.simulationResult;
+    const runtimeResolution =
+      setupSimulationResult?.verifiedActionVariantRuntime?.actionResolutionById?.get?.(
+        chargedDraft.id
+      );
+    expect([
+      ...(setupSimulationResult?.verifiedActionVariantRuntime
+        ?.actionResolutionById?.keys?.() ?? []),
+    ]).toContain(chargedDraft.id);
+    expect(runtimeResolution?.actionBinding).toMatchObject({
+      semanticName: '特殊重击',
+      publicControlSkillId: 10101010,
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 0,
+      effectiveOccupancyFrames: 90,
+    });
+    const chargedBlock = wrapper.get(
+      `[data-testid="workbench-timeline-action"][data-action-id="${chargedDraft.id}"]`
+    );
+    expect(chargedBlock.attributes('title')).toContain('特殊重击');
+    expect(chargedBlock.text()).toContain('特殊重击');
+    expect(chargedBlock.text()).toContain('90F');
+    expect(chargedBlock.text()).toContain('control 10101042/sub0');
+  }, 30000);
 
   it('rebuilds the workbench project when the selected character changes', async () => {
     const wrapper = mount(Workbench, {

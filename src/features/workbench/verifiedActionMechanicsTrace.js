@@ -70,6 +70,15 @@ export function createVerifiedActionMechanicsTrace({
   const specialResourceDelta = sumNumbers(
     specialResourceEvents.map(event => event.payload?.change)
   );
+  const actionBinding = resolution?.actionBinding;
+  const controlSkillId =
+    actionBinding?.executionControlSkillId ??
+    actionBinding?.controlSkillId ??
+    null;
+  const executionLabel =
+    controlSkillId == null
+      ? null
+      : `control ${controlSkillId}/sub${actionBinding.selectedSubSkillIndex ?? 0}`;
 
   return {
     schemaVersion: 1,
@@ -77,12 +86,11 @@ export function createVerifiedActionMechanicsTrace({
     status,
     statusLabel: traceStatusLabel(status),
     actionId: action.id,
-    actionName: action.name,
     packageId: resolution?.packageId ?? verifiedCombatRuntime.packageId ?? '',
     packageHash:
       resolution?.packageHash ?? verifiedCombatRuntime.packageHash ?? '',
-    bindingIdentity: resolution?.actionBinding?.identity ?? '',
-    controlSkillId: resolution?.actionBinding?.controlSkillId ?? null,
+    bindingIdentity: actionBinding?.identity ?? '',
+    controlSkillId,
     hitBindingCount: resolution?.hits?.length ?? 0,
     hitBindings: (resolution?.allHits ?? resolution?.hits ?? []).map(
       (hit, index) => {
@@ -141,11 +149,17 @@ export function createVerifiedActionMechanicsTrace({
         key: 'action-variant',
         label: '动作形态',
         value:
+          variantSelection?.semanticName ??
           selectedInputOption?.label ??
           (variantSelection?.selectedSubSkillIndex == null
             ? '默认形态'
             : `subskill ${variantSelection.selectedSubSkillIndex}`),
-        detail: variantSelection?.sourceKind ?? 'action-mapping-selection',
+        detail: [
+          variantSelection?.sourceKind ?? 'action-mapping-selection',
+          executionLabel,
+        ]
+          .filter(Boolean)
+          .join(' · '),
         applied:
           variantSelection?.status ===
           'verified-action-variant-selection-ready',
@@ -153,9 +167,7 @@ export function createVerifiedActionMechanicsTrace({
       {
         key: 'action-binding',
         label: '动作',
-        value: resolution?.ready
-          ? `control ${resolution.actionBinding?.controlSkillId ?? '待确认'}`
-          : '绑定未完成',
+        value: resolution?.ready ? executionLabel : '绑定未完成',
         detail: resolution?.status ?? 'runtime-resolution-missing',
         applied: resolution?.ready === true,
       },

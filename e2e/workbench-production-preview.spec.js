@@ -67,6 +67,7 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m8d-verified-mechanics-ui]') ||
     testInfo.title.includes('[m9-r2-r1-inspector-duration]') ||
     testInfo.title.includes('[m9-r3-xiaoyu-mechanics]') ||
+    testInfo.title.includes('[m9-r3-r2-xiaoyu-forms-occupancy]') ||
     testInfo.title.includes('[m9-r3-r1-timeline-layout]')
   ) {
     return;
@@ -6586,7 +6587,7 @@ test('[m9-r2-r2-initial-energy] edits actor and configured kibo baselines direct
   });
 });
 
-test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive effects from real library actions', async ({
+test('[m9-r3-r2-xiaoyu-forms-occupancy] resolves every charged form and its effective overlap boundary', async ({
   page,
 }) => {
   test.setTimeout(180_000);
@@ -6624,6 +6625,48 @@ test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive eff
   const ultimate = page.locator(
     '[data-testid="workbench-skill-entry"][data-skill-id="10101013"][data-action-kind="ultimate"]'
   );
+  const chargedBlocks = () =>
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10101001"][data-attack-group-id=""]'
+    );
+  const expectChargedForm = async (
+    block,
+    { name, controlSkillId, subSkillIndex, occupancyFrames }
+  ) => {
+    await block.click();
+    const identity = page.getByTestId('workbench-action-identity');
+    const trace = page.getByTestId('workbench-verified-mechanics-trace');
+    await expect(identity).toContainText(name);
+    await expect(identity).toContainText(`${occupancyFrames}F`);
+    await expect(
+      trace.locator('[data-trace-step="action-variant"]')
+    ).toContainText(name);
+    await expect(
+      trace.locator('[data-trace-step="action-variant"]')
+    ).toContainText(`control ${controlSkillId}/sub${subSkillIndex}`);
+    await closeInspectorIfVisible(page);
+  };
+
+  await chargedAttack.click();
+  await expect(chargedBlocks()).toHaveCount(1);
+  const ordinaryCharged = chargedBlocks().nth(0);
+  await expectChargedForm(ordinaryCharged, {
+    name: '普通重击',
+    controlSkillId: 10101010,
+    subSkillIndex: 0,
+    occupancyFrames: 75,
+  });
+
+  await chargedAttack.click();
+  await expect(chargedBlocks()).toHaveCount(2);
+  const continuousCharged = chargedBlocks().nth(1);
+  await expectChargedForm(continuousCharged, {
+    name: '连续重击',
+    controlSkillId: 10101010,
+    subSkillIndex: 1,
+    occupancyFrames: 75,
+  });
+
   await expect(normalAttack).toHaveAttribute('data-attack-input-count', '5');
   await normalAttack.click();
 
@@ -6644,29 +6687,37 @@ test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive eff
   );
 
   await chargedAttack.click();
-  const chargedBlock = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10101001"][data-attack-group-id=""]'
-  );
-  await expect(chargedBlock).toHaveCount(1);
+  await expect(chargedBlocks()).toHaveCount(3);
+  const specialCharged = chargedBlocks().nth(2);
   const a5StartMs = Number(await defaultA5.getAttribute('data-start-ms'));
-  const chargedStartMs = Number(
-    await chargedBlock.getAttribute('data-start-ms')
+  const specialStartMs = Number(
+    await specialCharged.getAttribute('data-start-ms')
   );
-  expect(chargedStartMs - a5StartMs).toBeCloseTo(frameToMs(101), 3);
-  await chargedBlock.click();
-  await expect(
-    page.getByTestId('workbench-action-variant-control')
-  ).toContainText('subskill 1');
-  await expect(page.getByTestId('workbench-action-identity')).toContainText(
-    '230F'
-  );
-  await closeInspectorIfVisible(page);
+  expect(specialStartMs - a5StartMs).toBeCloseTo(frameToMs(37), 3);
+  await expectChargedForm(specialCharged, {
+    name: '特殊重击',
+    controlSkillId: 10101042,
+    subSkillIndex: 0,
+    occupancyFrames: 90,
+  });
 
   await ultimate.click();
-  const ultimateBlock = timeline.locator(
+  const ultimateBlocks = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10101013"]'
   );
-  await expect(ultimateBlock).toHaveCount(1);
+  await expect(ultimateBlocks).toHaveCount(1);
+  const ultimateBlock = ultimateBlocks.nth(0);
+
+  await chargedAttack.click();
+  await expect(chargedBlocks()).toHaveCount(4);
+  const enhancedCharged = chargedBlocks().nth(3);
+  await expectChargedForm(enhancedCharged, {
+    name: '强化重击',
+    controlSkillId: 10101010,
+    subSkillIndex: 2,
+    occupancyFrames: 64,
+  });
+
   await normalAttack.click();
   await expect(normalBlocks()).toHaveCount(8);
   const groupIds = await normalBlocks().evaluateAll(actions => [
@@ -6709,6 +6760,16 @@ test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive eff
   );
   await closeInspectorIfVisible(page);
 
+  await chargedAttack.click();
+  await expect(chargedBlocks()).toHaveCount(5);
+  const enhancedSpecialCharged = chargedBlocks().nth(4);
+  await expectChargedForm(enhancedSpecialCharged, {
+    name: '强化特殊重击',
+    controlSkillId: 10101042,
+    subSkillIndex: 1,
+    occupancyFrames: 60,
+  });
+
   const burstInterval = timeline.locator(
     '[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101010129"]'
   );
@@ -6736,16 +6797,64 @@ test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive eff
       Number(await burstInterval.getAttribute('data-start-ms'))
   ).toBeCloseTo(10_000, 3);
 
+  await ultimate.click();
+  await expect(ultimateBlocks).toHaveCount(2);
+  const overlapFollower = ultimateBlocks.nth(1);
+  await page
+    .locator(
+      '[data-testid="workbench-action-placement-mode-option"][data-mode="free"]'
+    )
+    .click();
+  const enhancedSpecialStartFrame = Math.round(
+    (Number(await enhancedSpecialCharged.getAttribute('data-start-ms')) * 60) /
+      1000
+  );
+  const exactBoundaryFrame = enhancedSpecialStartFrame + 60;
+  await overlapFollower.click();
+  await page
+    .getByTestId('workbench-start-frame-input')
+    .fill(String(exactBoundaryFrame));
+  await expect(overlapFollower).toHaveAttribute(
+    'data-start-ms',
+    String(frameToMs(exactBoundaryFrame))
+  );
+  await expect(
+    enhancedSpecialCharged.getByTestId('workbench-action-overlap-warning')
+  ).toHaveCount(0);
+  await page
+    .getByTestId('workbench-start-frame-input')
+    .fill(String(exactBoundaryFrame - 1));
+  await expect(
+    enhancedSpecialCharged.getByTestId('workbench-action-overlap-warning')
+  ).toBeVisible();
+  await expect(
+    overlapFollower.getByTestId('workbench-action-overlap-warning')
+  ).toBeVisible();
+
+  await enhancedSpecialCharged.click();
+  await expect(page.getByTestId('workbench-action-identity')).toContainText(
+    '强化特殊重击'
+  );
   await actorLane.scrollIntoViewIfNeeded();
   await page.screenshot({
-    path: 'reports/m9-r3-xiaoyu-mechanics-desktop.png',
+    path: 'reports/m9-r3-r2-xiaoyu-forms-occupancy-desktop.png',
   });
+  await overlapFollower.click();
+  await page
+    .getByTestId('workbench-start-frame-input')
+    .fill(String(exactBoundaryFrame));
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已恢复草稿'
   );
   await expect(normalBlocks()).toHaveCount(8);
+  await expect(chargedBlocks()).toHaveCount(5);
+  await expect(chargedBlocks().nth(0)).toContainText('普通重击');
+  await expect(chargedBlocks().nth(1)).toContainText('连续重击');
+  await expect(chargedBlocks().nth(2)).toContainText('特殊重击');
+  await expect(chargedBlocks().nth(3)).toContainText('强化重击');
+  await expect(chargedBlocks().nth(4)).toContainText('强化特殊重击');
   await expect(burstInterval).toHaveCount(1);
   await expect(passiveInterval).toHaveCount(1);
 
@@ -6763,7 +6872,7 @@ test('[m9-r3-xiaoyu-mechanics] rebuilds A5 context, burst state, and passive eff
   await actorLane.scrollIntoViewIfNeeded();
   await expectPageWithoutHorizontalOverflow(page);
   await page.screenshot({
-    path: 'reports/m9-r3-xiaoyu-mechanics-narrow.png',
+    path: 'reports/m9-r3-r2-xiaoyu-forms-occupancy-narrow.png',
   });
 });
 

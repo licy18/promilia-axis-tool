@@ -93,8 +93,8 @@ describe('verified action context scheduling', () => {
       })
     ).toMatchObject({
       actionId: normalA5.id,
-      startMs: 2000 + frameToMs(101),
-      endMs: 2000 + frameToMs(248),
+      startMs: 2000 + frameToMs(37),
+      endMs: 2000 + frameToMs(102),
     });
 
     const burstA5 = {
@@ -127,9 +127,42 @@ describe('verified action context scheduling', () => {
     });
     expect(burstContext).toMatchObject({
       actionId: burstA5.id,
-      startMs: 5000 + frameToMs(72),
+      startMs: 5000,
     });
-    expect(burstContext.endMs).toBeCloseTo(5000 + frameToMs(319), 5);
+    expect(burstContext.endMs).toBeCloseTo(5000 + frameToMs(20), 5);
+
+    const ordinaryCharged = {
+      id: 'jade-ordinary-charged',
+      actorCharacterId: 101010,
+      startMs: 8000,
+    };
+    expect(
+      resolveVerifiedContextActionStartMs({
+        actions: [ordinaryCharged],
+        selections: [
+          {
+            actionId: ordinaryCharged.id,
+            controlSkillId: 10101010,
+            selectedSubSkillIndex: 0,
+          },
+        ],
+        graph,
+        ownerId: 101010,
+        actorId: 'actor-jade',
+        targetControlSkillId: 10101010,
+        effectIntervals: [],
+        timelineDurationMs: 30_000,
+      })
+    ).toMatchObject({
+      actionId: ordinaryCharged.id,
+      startMs: 8000 + frameToMs(75),
+      endMs: 8000 + frameToMs(105),
+      edge: {
+        semanticName: '连续重击',
+        executionControlSkillId: 10101010,
+        targetSubSkillIndex: 1,
+      },
+    });
   });
 });
 
@@ -213,8 +246,9 @@ function createVariantGraph() {
         sourceControlSkillId: 10101005,
         sourceSubSkillIndex: 0,
         targetControlSkillId: 10101010,
-        targetSubSkillIndex: 1,
-        inputWindow: { startFrame: 101, endFrame: 248, frameRate: 60 },
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 0,
+        inputWindow: { startFrame: 37, endFrame: 102, frameRate: 60 },
         condition: {
           kind: 'resource-state-inactive',
           stateElementId,
@@ -227,12 +261,26 @@ function createVariantGraph() {
         sourceControlSkillId: 10101005,
         sourceSubSkillIndex: 1,
         targetControlSkillId: 10101010,
-        targetSubSkillIndex: 2,
-        inputWindow: { startFrame: 72, endFrame: 319, frameRate: 60 },
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 1,
+        inputWindow: { startFrame: 0, endFrame: 20, frameRate: 60 },
         condition: {
           kind: 'resource-state-active',
           stateElementId,
         },
+        applied: true,
+      },
+      {
+        edgeIdentity: 'jade-charged-continuation',
+        ownerId: 101010,
+        sourceControlSkillId: 10101010,
+        sourceSubSkillIndex: 0,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101010,
+        targetSubSkillIndex: 1,
+        semanticName: '连续重击',
+        inputWindow: { startFrame: 75, endFrame: 105, frameRate: 60 },
+        condition: { kind: 'always' },
         applied: true,
       },
     ],

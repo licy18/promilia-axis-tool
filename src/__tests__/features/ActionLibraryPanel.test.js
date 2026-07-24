@@ -171,7 +171,7 @@ describe('ActionLibraryPanel', () => {
     expect(charged.attributes('data-scheduling-status')).toBe('verified');
     expect(charged.attributes('disabled')).toBeUndefined();
     expect(charged.attributes('data-drag-enabled')).toBe('true');
-    expect(charged.text()).toContain('310f');
+    expect(charged.text()).toContain('75f');
     expect(charged.attributes('title')).toContain('变体条件已部分解析');
 
     await dispatchPointerDown(wrapper, normal, {

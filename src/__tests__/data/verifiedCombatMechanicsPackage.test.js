@@ -3,6 +3,7 @@ import audit from '../../../reports/verified-combat-mechanics-audit.json';
 import actionCoverage from '../../../reports/verified-combat-action-coverage.json';
 import actionTimingCoverage from '../../../reports/verified-combat-action-timing-coverage.json';
 import effectCoverage from '../../../reports/verified-combat-effect-coverage.json';
+import xiaoyuActionOccupancyAudit from '../../../reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json';
 import variantResourceCoverage from '../../../reports/verified-action-variant-resource-coverage.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
@@ -439,6 +440,25 @@ describe('verified combat mechanics package', () => {
     });
     expect(resolved.hits).toHaveLength(6);
     expect(resolved.hits.every(hit => hit.mapIndex === 0)).toBe(true);
+    expect(
+      resolveVerifiedCombatActionMechanics({
+        id: 'normal-attack-a3-active-chain',
+        type: 'skill',
+        skillId: fiveInput.sourceSkillId,
+        attackSequenceIndex: segment.sequenceIndex,
+        attackInput: {
+          ...segment,
+          identity: `${segment.identity}|active-chain|input:3`,
+        },
+        actor: { characterId: 102001 },
+      })
+    ).toMatchObject({
+      ready: true,
+      actionBinding: {
+        identity: segment.identity,
+        attackInputSegment: { sequenceIndex: 3 },
+      },
+    });
 
     const scenarioChain = mechanicsPackage.actionMappings.find(
       mapping =>
@@ -564,10 +584,37 @@ describe('verified combat mechanics package', () => {
       },
       actionScheduling: {
         kind: 'exact-selected-variant-occupancy',
-        durationFrames: 310,
+        durationFrames: 75,
         selectedSubSkillIndex: 0,
       },
     });
+    expect(
+      jadeCharged.actionTiming.variantTimings.map(timing => ({
+        subSkillIndex: timing.subSkillIndex,
+        animationFrames: timing.animation.durationFrames,
+        occupancyFrames: timing.occupancy.durationFrames,
+        sourceKind: timing.occupancy.sourceKind,
+      }))
+    ).toEqual([
+      {
+        subSkillIndex: 0,
+        animationFrames: 310,
+        occupancyFrames: 75,
+        sourceKind: 'verified-specific-input-window',
+      },
+      {
+        subSkillIndex: 1,
+        animationFrames: 230,
+        occupancyFrames: 75,
+        sourceKind: 'verified-specific-input-window',
+      },
+      {
+        subSkillIndex: 2,
+        animationFrames: 250,
+        occupancyFrames: 64,
+        sourceKind: 'verified-unconditional-attack-reopen-window',
+      },
+    ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
       nodeCount: 671,
@@ -594,27 +641,120 @@ describe('verified combat mechanics package', () => {
         .filter(edge => edge.ownerId === 101010)
         .map(edge => ({
           sourceSubSkillIndex: edge.sourceSubSkillIndex,
+          targetControlSkillId: edge.targetControlSkillId,
+          executionControlSkillId: edge.executionControlSkillId,
           targetSubSkillIndex: edge.targetSubSkillIndex,
           startFrame: edge.inputWindow.startFrame,
           endFrame: edge.inputWindow.endFrame,
           condition: edge.condition.kind,
+          semanticName: edge.semanticName,
         }))
     ).toEqual([
       {
         sourceSubSkillIndex: 0,
-        targetSubSkillIndex: 1,
-        startFrame: 101,
-        endFrame: 248,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 0,
+        startFrame: 37,
+        endFrame: 102,
         condition: 'resource-state-inactive',
+        semanticName: '特殊重击',
       },
       {
         sourceSubSkillIndex: 1,
-        targetSubSkillIndex: 2,
-        startFrame: 72,
-        endFrame: 319,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 1,
+        startFrame: 0,
+        endFrame: 20,
         condition: 'resource-state-active',
+        semanticName: '强化特殊重击',
+      },
+      {
+        sourceSubSkillIndex: 1,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 1,
+        startFrame: 40,
+        endFrame: 72,
+        condition: 'resource-state-active',
+        semanticName: '强化特殊重击',
+      },
+      {
+        sourceSubSkillIndex: 0,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101010,
+        targetSubSkillIndex: 1,
+        startFrame: 75,
+        endFrame: 100,
+        condition: 'always',
+        semanticName: '连续重击',
       },
     ]);
+    expect(
+      mechanicsPackage.actionVariantGraph.publicActionForms
+        .filter(form => form.ownerId === 101010)
+        .map(form => ({
+          semanticName: form.semanticName,
+          executionControlSkillId: form.executionControlSkillId,
+          executionSubSkillIndex: form.executionSubSkillIndex,
+          animationFrames: form.executionTiming.animation.durationFrames,
+          occupancyFrames: form.executionTiming.occupancy.durationFrames,
+        }))
+    ).toEqual([
+      {
+        semanticName: '普通重击',
+        executionControlSkillId: 10101010,
+        executionSubSkillIndex: 0,
+        animationFrames: 310,
+        occupancyFrames: 75,
+      },
+      {
+        semanticName: '强化重击',
+        executionControlSkillId: 10101010,
+        executionSubSkillIndex: 2,
+        animationFrames: 250,
+        occupancyFrames: 64,
+      },
+      {
+        semanticName: '特殊重击',
+        executionControlSkillId: 10101042,
+        executionSubSkillIndex: 0,
+        animationFrames: 280,
+        occupancyFrames: 90,
+      },
+      {
+        semanticName: '强化特殊重击',
+        executionControlSkillId: 10101042,
+        executionSubSkillIndex: 1,
+        animationFrames: 205,
+        occupancyFrames: 60,
+      },
+      {
+        semanticName: '连续重击',
+        executionControlSkillId: 10101010,
+        executionSubSkillIndex: 1,
+        animationFrames: 230,
+        occupancyFrames: 75,
+      },
+    ]);
+    const xiaoyuDerivedControl = mechanicsPackage.actionVariantControlBindings.find(
+      control => control.controlSkillId === 10101042
+    );
+    expect(
+      xiaoyuDerivedControl.hits.map(hit => ({
+        subSkillIndex: hit.mapIndex,
+        elementId: hit.elementId,
+        frame: hit.trigger.startFrame,
+      }))
+    ).toEqual(
+      expect.arrayContaining([
+        { subSkillIndex: 0, elementId: 101010130, frame: 53 },
+        { subSkillIndex: 0, elementId: 101010157, frame: 53 },
+        { subSkillIndex: 1, elementId: 101010155, frame: 31 },
+        { subSkillIndex: 1, elementId: 101010156, frame: 31 },
+      ])
+    );
     expect(
       mechanicsPackage.actionVariantGraph.attackInputChains
         .filter(chain => chain.ownerId === 101010)
@@ -638,6 +778,38 @@ describe('verified combat mechanics package', () => {
         durations: [72, 75, 72],
       },
     ]);
+    expect(xiaoyuActionOccupancyAudit.summary).toEqual({
+      rowCount: 21,
+      exactOccupancyCount: 21,
+      planningOccupancyCount: 0,
+      unresolvedOccupancyCount: 0,
+      animationTailRemovedCount: 21,
+      publicActionKindCount: 10,
+    });
+    expect(
+      xiaoyuActionOccupancyAudit.rows
+        .filter(row => row.actionKind === 'charged-attack')
+        .map(row => [
+          row.semanticName,
+          row.controlSkillId,
+          row.subSkillIndex,
+          row.animationDurationFrames,
+          row.effectiveOccupancyFrames,
+        ])
+    ).toEqual([
+      ['普通重击', 10101010, 0, 310, 75],
+      ['连续重击', 10101010, 1, 230, 75],
+      ['强化重击', 10101010, 2, 250, 64],
+      ['特殊重击', 10101042, 0, 280, 90],
+      ['强化特殊重击', 10101042, 1, 205, 60],
+    ]);
+    expect(
+      xiaoyuActionOccupancyAudit.rows.every(
+        row =>
+          row.occupancyStatus === 'applied' &&
+          row.animationDurationFrames > row.effectiveOccupancyFrames
+      )
+    ).toBe(true);
     expect(
       mechanicsPackage.specialResourceCatalog.thresholdTransitions.find(
         transition => transition.ownerId === 101010

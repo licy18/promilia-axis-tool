@@ -16,14 +16,29 @@ import {
 import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattleEffectGeneration';
 import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
 import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
+import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
 
 export function simulateScenario(
-  scenario,
+  inputScenario,
   {
     threeValueMechanicsAdapterRegistry = null,
     actionCooldownEvaluationAdapter = null,
   } = {}
 ) {
+  const actionVariantPreflight = isVerifiedCombatMechanicsScenario(
+    inputScenario
+  )
+    ? createVerifiedActionVariantRuntime({
+        scenario: inputScenario,
+        actionExecutionPlan: null,
+      })
+    : null;
+  const effectiveActionTimeline = projectScenarioEffectiveActionTimeline({
+    scenario: inputScenario,
+    actionResolutionById: actionVariantPreflight?.actionResolutionById,
+    actionSelectionById: actionVariantPreflight?.selectionByActionId,
+  });
+  const scenario = effectiveActionTimeline.scenario;
   const eventLog = [
     {
       type: 'SCENARIO_START',
@@ -239,6 +254,7 @@ export function simulateScenario(
     verifiedBattleEffectGeneration: runtimeBundle.effectGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
     verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
+    effectiveActionTimeline,
     kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
     threeValueMechanicsAdapterRegistry,
   });

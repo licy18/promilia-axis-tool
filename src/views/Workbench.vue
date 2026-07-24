@@ -377,7 +377,10 @@
         :actors="scenario.actors"
         :kibos="actionLibraryKibos"
         :active-actor-character-id="actionLibraryCharacterId"
-        :actions="scenario.actions"
+        :actions="
+          simulationResult.effectiveActionTimeline?.scenario?.actions ??
+          scenario.actions
+        "
         :main-flow-command-surface="mainFlowCommandSurface"
         :runtime-action-results="runtimeActionResults"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
@@ -754,7 +757,7 @@
             data-testid="workbench-close-side-inspector"
             @click.stop="dismissSideInspector"
           >
-            <CloseBold />
+            <Close />
           </button>
         </header>
         <div
@@ -1012,7 +1015,7 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
-  CloseBold,
+  Close,
   Document,
   Download,
   EditPen,
@@ -1236,6 +1239,8 @@ import {
   DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
   createWorkbenchProfileCompatibilityReport,
 } from '../simulation/mechanics/threeValueMechanicsProfileCatalog';
+import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
+import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import {
   getProjectSimulationSkillDiagnosticsStatus,
   installProjectSimulationSkillDiagnostics,
@@ -1780,7 +1785,9 @@ const runtimeReviewEventRole = computed(() =>
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,
-    actions: scenario.value.actions,
+    actions:
+      simulationResult.value.effectiveActionTimeline?.scenario?.actions ??
+      scenario.value.actions,
     timelineTopology: project.value.metadata.timelineTopology,
   })
 );
@@ -5432,23 +5439,32 @@ function evaluateActionPlacementCandidate(
     threeValueMechanicsProfileCatalog:
       DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
   });
-  const actionRuleDiagnostics = createActionRuleDiagnostics({
+  const actionVariantRuntime = createVerifiedActionVariantRuntime({
     scenario: candidateScenario,
+    actionExecutionPlan: null,
+  });
+  const effectiveActionTimeline = projectScenarioEffectiveActionTimeline({
+    scenario: candidateScenario,
+    actionResolutionById: actionVariantRuntime.actionResolutionById,
+    actionSelectionById: actionVariantRuntime.selectionByActionId,
+  });
+  const effectiveScenario = effectiveActionTimeline.scenario;
+  const actionRuleDiagnostics = createActionRuleDiagnostics({
+    scenario: effectiveScenario,
   });
   const actionExecutionPlan = createActionExecutionPlan({
-    scenario: candidateScenario,
+    scenario: effectiveScenario,
     actionRuleDiagnostics,
   });
   const controlledActorTimeline = createControlledActorTimeline({
-    scenario: candidateScenario,
+    scenario: effectiveScenario,
     actionExecutionPlan,
   });
   return {
     sourceKind: 'workbench-compiled-action-placement-evaluation',
     actionRuleDiagnostics,
-    controlledActorTimeline,
     unresolved: createControlledActorPlacementAdvisories({
-      scenario: candidateScenario,
+      scenario: effectiveScenario,
       controlledActorTimeline,
       requestedActionIds,
     }),
@@ -8181,9 +8197,22 @@ function resolveDraftLaneId(action) {
 }
 
 function resolveDraftDurationMs(action) {
-  return action?.type === ACTION_TYPES.SWITCH
-    ? 0
-    : Math.max(1, Number(action.durationMs) || 1000);
+  if (action?.type === ACTION_TYPES.SWITCH) return 0;
+  const compiledAction = scenario.value.actions.find(
+    item => item.id === action?.id
+  );
+  const actionResolution =
+    simulationResult.value.verifiedActionVariantRuntime?.actionResolutionById?.get?.(
+      action?.id
+    ) ?? null;
+  return Math.max(
+    1,
+    Number(
+      actionResolution?.actionBinding?.actualDurationMs ??
+        compiledAction?.durationMs ??
+        action.durationMs
+    ) || 1
+  );
 }
 
 function compareDraftTimelineRanges(left, right) {

@@ -78,7 +78,7 @@
           :disabled="!canAddCycleBoundary"
           @click="runCommand('add-cycle-boundary')"
         >
-          <Flag />
+          <Aim />
           <span>添加循环边界</span>
         </button>
       </template>
@@ -112,12 +112,12 @@
 
 <script setup>
 import {
+  Aim,
   ArrowLeft,
   ArrowRight,
   CopyDocument,
   Delete,
   DocumentCopy,
-  Flag,
 } from '@element-plus/icons-vue';
 import {
   computed,

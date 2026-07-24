@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 
 describe('PropertiesPanel', () => {
-  it('shows the runtime-selected variant duration instead of the base draft duration', () => {
+  it('shows the runtime semantic form and occupancy instead of the base draft duration', () => {
     const selectedAction = {
       id: 'jade-special-charged',
       type: 'skill',
@@ -17,10 +17,16 @@ describe('PropertiesPanel', () => {
     const selectedResolution = {
       status: 'verified-ready',
       actionBinding: {
-        identity: 'actor|101010|charged|subskill:1',
-        controlSkillId: 10101010,
-        actualDurationFrames: 230,
-        actualDurationMs: (230 * 1000) / 60,
+        identity: 'actor|101010|charged|special',
+        semanticName: '特殊重击',
+        publicControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        selectedSubSkillIndex: 0,
+        animationDurationFrames: 280,
+        effectiveOccupancyFrames: 90,
+        effectiveOccupancyMs: (90 * 1000) / 60,
+        actualDurationFrames: 90,
+        actualDurationMs: (90 * 1000) / 60,
       },
       hits: [],
       effects: [],
@@ -71,7 +77,10 @@ describe('PropertiesPanel', () => {
 
     expect(
       wrapper.get('[data-testid="workbench-action-identity"]').text()
-    ).toContain('230F');
+    ).toContain('特殊重击');
+    expect(
+      wrapper.get('[data-testid="workbench-action-identity"]').text()
+    ).toContain('90F');
   });
 
   it('shows the verified action trace as one ordered source chain', () => {

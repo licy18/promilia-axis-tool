@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e3a0d5d244432f17ec1b4d3baaf4b2a815e693b40db4c484152759419fe7ad3f",
+  "packageHash": "79427a42776fe9822bb62da9ab8f442902db95b14ffc4e32cf354a91123835d9",
   "fixedProductDenominator": {
     "publicActionCount": 562,
     "actorOwnerCount": 20,
@@ -189,9 +189,10 @@
         "partially-resolved": 97,
         "static-evidence-gap": 3
       },
-      "contextEdgeCount": 2,
-      "appliedContextEdgeCount": 2,
-      "attackInputChainCount": 2
+      "contextEdgeCount": 4,
+      "appliedContextEdgeCount": 4,
+      "attackInputChainCount": 2,
+      "publicActionFormCount": 5
     }
   },
   "byOwnerActionKind": [
@@ -887,8 +888,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 260,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 120,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -976,8 +977,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 455,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 329,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31068,8 +31069,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 310,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 75,
+        "sourceKind": "verified-specific-input-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "partially-resolved"
@@ -31153,8 +31154,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 165,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 22,
+        "sourceKind": "verified-specific-input-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31213,8 +31214,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 310,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 50,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31288,8 +31289,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 260,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 120,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31377,8 +31378,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 200,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 60,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31441,8 +31442,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 455,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 329,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31539,8 +31540,8 @@
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
-        "durationFrames": 295,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 95,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31622,8 +31623,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 285,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 60,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -31698,8 +31699,8 @@
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
-        "durationFrames": 190,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 36,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -68068,8 +68069,8 @@
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
-        "durationFrames": 295,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 95,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -68151,8 +68152,8 @@
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
-        "durationFrames": 190,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 36,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"

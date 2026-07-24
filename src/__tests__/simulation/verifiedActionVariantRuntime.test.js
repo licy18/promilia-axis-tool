@@ -15,6 +15,11 @@ import {
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedActionVariantRuntime } from '../../simulation/mechanics/verifiedActionVariantRuntime';
+import { projectScenarioEffectiveActionTimeline } from '../../simulation/mechanics/actionEffectiveTimeline';
+import {
+  ACTION_RULE_CODES,
+  createActionRuleDiagnostics,
+} from '../../simulation/runtime/actionRuleDiagnostics';
 import { createEffectRuntimeTimeline } from '../../simulation/runtime/effectRuntimeTimeline';
 
 const RUBY_ID = 103002;
@@ -250,7 +255,10 @@ describe('verified action variant and special resource runtime', () => {
     });
     expect(runtime.selectionByActionId.get('jade-charged')).toMatchObject({
       controlSkillId: 10101010,
+      publicControlSkillId: 10101010,
+      executionControlSkillId: 10101010,
       selectedSubSkillIndex: 2,
+      semanticName: '强化重击',
       sourceKind: 'verified-active-switch-skill-index-window',
       status: 'verified-action-variant-selection-ready',
     });
@@ -285,7 +293,7 @@ describe('verified action variant and special resource runtime', () => {
       characterId: JADE_ID,
       skillId: 10101001,
       actionVariantIndex: 2,
-      startMs: Number(frameTime(101).toFixed(6)),
+      startMs: Number(frameTime(37).toFixed(6)),
     });
     const selected = runVariantRuntime({
       actors: [a5.actor],
@@ -299,12 +307,25 @@ describe('verified action variant and special resource runtime', () => {
       actualDurationFrames: 80,
     });
     expect(selected.selectionByActionId.get(inside.id)).toMatchObject({
-      controlSkillId: 10101010,
-      selectedSubSkillIndex: 1,
+      publicControlSkillId: 10101010,
+      controlSkillId: 10101042,
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 0,
+      semanticName: '特殊重击',
       sourceKind: 'verified-input-context-variant',
       contextActionId: a5.id,
-      actualDurationFrames: 230,
+      animationDurationFrames: 280,
+      actualDurationFrames: 90,
     });
+    expect(
+      selected.actionResolutionById.get(inside.id)?.actionBinding
+        ?.selectedHitIdentities
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('101010130'),
+        expect.stringContaining('101010157'),
+      ])
+    );
 
     const outside = createActorAction({
       id: 'jade-default-charged',
@@ -319,9 +340,12 @@ describe('verified action variant and special resource runtime', () => {
       durationMs: 8000,
     });
     expect(notDerived.selectionByActionId.get(outside.id)).toMatchObject({
+      controlSkillId: 10101010,
       selectedSubSkillIndex: 0,
+      semanticName: '普通重击',
       sourceKind: 'verified-client-default-subskill-index',
-      actualDurationFrames: 310,
+      animationDurationFrames: 310,
+      actualDurationFrames: 75,
     });
 
     const burstA5 = createActorAction({
@@ -356,12 +380,257 @@ describe('verified action variant and special resource runtime', () => {
       actualDurationFrames: 72,
     });
     expect(burst.selectionByActionId.get(enhanced.id)).toMatchObject({
-      selectedSubSkillIndex: 2,
+      publicControlSkillId: 10101010,
+      controlSkillId: 10101042,
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 1,
+      semanticName: '强化特殊重击',
       sourceKind: 'verified-input-context-variant',
       contextActionId: burstA5.id,
-      actualDurationFrames: 250,
+      animationDurationFrames: 205,
+      actualDurationFrames: 60,
     });
   });
+
+  it('keeps the right-slide continuous charged input distinct from A5-derived special charged attacks', () => {
+    const charged = createActorAction({
+      id: 'jade-ordinary-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: 0,
+    });
+    const continuous = createActorAction({
+      id: 'jade-continuous-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(75),
+    });
+    const runtime = runVariantRuntime({
+      actors: [charged.actor],
+      actions: [charged, continuous],
+      durationMs: 8000,
+    });
+
+    expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
+      controlSkillId: 10101010,
+      selectedSubSkillIndex: 0,
+      semanticName: '普通重击',
+      actualDurationFrames: 75,
+    });
+    expect(runtime.selectionByActionId.get(continuous.id)).toMatchObject({
+      publicControlSkillId: 10101010,
+      controlSkillId: 10101010,
+      executionControlSkillId: 10101010,
+      selectedSubSkillIndex: 1,
+      semanticName: '连续重击',
+      sourceKind: 'verified-input-context-variant',
+      contextActionId: charged.id,
+      animationDurationFrames: 230,
+      actualDurationFrames: 75,
+    });
+  });
+
+  it.each([
+    {
+      label: '普通重击',
+      expectedControlSkillId: 10101010,
+      expectedSubSkillIndex: 0,
+      expectedOccupancyFrames: 75,
+      createCase() {
+        const charged = createActorAction({
+          id: 'jade-boundary-ordinary',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          actionVariantIndex: 2,
+          startMs: 0,
+        });
+        return { actors: [charged.actor], actions: [charged], focus: charged };
+      },
+    },
+    {
+      label: '强化重击',
+      expectedControlSkillId: 10101010,
+      expectedSubSkillIndex: 2,
+      expectedOccupancyFrames: 64,
+      createCase() {
+        const charged = createActorAction({
+          id: 'jade-boundary-enhanced',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          actionVariantIndex: 2,
+          startMs: 0,
+        });
+        return {
+          actors: [charged.actor],
+          actions: [charged],
+          focus: charged,
+          initialRuntimeState: createJadeBurstInitialState({
+            actorId: charged.actorId,
+            remainingDurationMs: 5000,
+          }),
+        };
+      },
+    },
+    {
+      label: '特殊重击',
+      expectedControlSkillId: 10101042,
+      expectedSubSkillIndex: 0,
+      expectedOccupancyFrames: 90,
+      createCase() {
+        const a5 = createActorAction({
+          id: 'jade-boundary-a5',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          startMs: 0,
+          attackInput: JADE_A5,
+        });
+        const charged = createActorAction({
+          id: 'jade-boundary-special',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          actionVariantIndex: 2,
+          startMs: frameTime(37),
+        });
+        return {
+          actors: [a5.actor],
+          actions: [a5, charged],
+          focus: charged,
+        };
+      },
+    },
+    {
+      label: '强化特殊重击',
+      expectedControlSkillId: 10101042,
+      expectedSubSkillIndex: 1,
+      expectedOccupancyFrames: 60,
+      createCase() {
+        const burstA3 = createActorAction({
+          id: 'jade-boundary-burst-a3',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          startMs: 0,
+          attackInput: JADE_A5,
+          attackSequenceIndex: 3,
+        });
+        const charged = createActorAction({
+          id: 'jade-boundary-enhanced-special',
+          characterId: JADE_ID,
+          skillId: 10101001,
+          actionVariantIndex: 2,
+          startMs: frameTime(72),
+        });
+        return {
+          actors: [burstA3.actor],
+          actions: [burstA3, charged],
+          focus: charged,
+          initialRuntimeState: createJadeBurstInitialState({
+            actorId: burstA3.actorId,
+            remainingDurationMs: 5000,
+          }),
+        };
+      },
+    },
+  ])(
+    'uses $label effective occupancy for the authoritative overlap boundary',
+    ({
+      label,
+      expectedControlSkillId,
+      expectedSubSkillIndex,
+      expectedOccupancyFrames,
+      createCase,
+    }) => {
+      const setup = createCase();
+      const exactFollower = createActorAction({
+        id: `${setup.focus.id}-exact-follower`,
+        characterId: JADE_ID,
+        skillId: 99999901,
+        startMs:
+          Number(setup.focus.startMs) + frameTime(expectedOccupancyFrames),
+      });
+      const exactScenario = {
+        time: { durationMs: 10_000, fps: 60 },
+        actors: setup.actors,
+        actions: [...setup.actions, exactFollower],
+        initialRuntimeState: setup.initialRuntimeState,
+      };
+      const exactRuntime = createVerifiedActionVariantRuntime({
+        scenario: exactScenario,
+      });
+      const exactTimeline = projectScenarioEffectiveActionTimeline({
+        scenario: exactScenario,
+        actionResolutionById: exactRuntime.actionResolutionById,
+        actionSelectionById: exactRuntime.selectionByActionId,
+      });
+      const exactResolution = exactRuntime.selectionByActionId.get(
+        setup.focus.id
+      );
+      const exactDiagnostics = createActionRuleDiagnostics({
+        scenario: exactTimeline.scenario,
+      });
+
+      expect(exactResolution).toMatchObject({
+        semanticName: label,
+        executionControlSkillId: expectedControlSkillId,
+        selectedSubSkillIndex: expectedSubSkillIndex,
+        actualDurationFrames: expectedOccupancyFrames,
+      });
+      expect(
+        exactTimeline.scenario.actions.find(
+          action => action.id === setup.focus.id
+        )
+      ).toMatchObject({
+        name: label,
+        durationMs: frameTime(expectedOccupancyFrames),
+      });
+      expect(
+        exactDiagnostics.diagnostics.filter(
+          item =>
+            item.code === ACTION_RULE_CODES.LANE_OVERLAP &&
+            item.actionIds.includes(exactFollower.id)
+        )
+      ).toEqual([]);
+
+      const earlyFollower = {
+        ...exactFollower,
+        id: `${setup.focus.id}-early-follower`,
+        startMs:
+          Number(setup.focus.startMs) +
+          frameTime(expectedOccupancyFrames - 1),
+      };
+      const earlyScenario = {
+        ...exactScenario,
+        actions: [...setup.actions, earlyFollower],
+      };
+      const earlyRuntime = createVerifiedActionVariantRuntime({
+        scenario: earlyScenario,
+      });
+      const earlyTimeline = projectScenarioEffectiveActionTimeline({
+        scenario: earlyScenario,
+        actionResolutionById: earlyRuntime.actionResolutionById,
+        actionSelectionById: earlyRuntime.selectionByActionId,
+      });
+      const earlyDiagnostics = createActionRuleDiagnostics({
+        scenario: earlyTimeline.scenario,
+      });
+
+      expect(earlyDiagnostics.diagnostics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: ACTION_RULE_CODES.LANE_OVERLAP,
+            actionId: earlyFollower.id,
+            blockingActionId: setup.focus.id,
+            suggestedStartMs: expect.closeTo(
+              Number(setup.focus.startMs) +
+                frameTime(expectedOccupancyFrames),
+              6
+            ),
+          }),
+        ])
+      );
+    }
+  );
 
   it('uses each selected Xiaoyu chain segment occupancy instead of its animation tail', () => {
     const defaultA1 = createActorAction({
@@ -381,6 +650,12 @@ describe('verified action variant and special resource runtime', () => {
       selectedSubSkillIndex: 0,
       actualDurationFrames: 20,
       sourceKind: 'verified-active-attack-input-chain',
+    });
+    expect(
+      defaultRuntime.actionResolutionById.get(defaultA1.id)?.actionBinding
+    ).toMatchObject({
+      effectiveOccupancyFrames: 20,
+      actualDurationFrames: 20,
     });
 
     const burstA1 = createActorAction({
@@ -404,6 +679,12 @@ describe('verified action variant and special resource runtime', () => {
       selectedSubSkillIndex: 1,
       actualDurationFrames: 72,
       sourceKind: 'verified-active-attack-input-chain',
+    });
+    expect(
+      burstRuntime.actionResolutionById.get(burstA1.id)?.actionBinding
+    ).toMatchObject({
+      effectiveOccupancyFrames: 72,
+      actualDurationFrames: 72,
     });
   });
 
@@ -677,6 +958,7 @@ describe('verified action variant and special resource runtime', () => {
 
     expect(selected.curves).toHaveLength(1);
     expect(selected.selectionByActionId.get(charged.id)).toMatchObject({
+      semanticName: '强化重击',
       selectedSubSkillIndex: 2,
       sourceKind: 'verified-active-switch-skill-index-window',
     });
@@ -796,6 +1078,112 @@ describe('verified action variant and special resource runtime', () => {
     expect(result.runtimeOutputs.resources.curvesBySpecialResource).toBe(
       result.runtimeOutputs.stateCurves.resources.curvesBySpecialResource
     );
+  });
+
+  it('executes the A5-derived special charged hits and wind-mark consume exactly once', () => {
+    const teamSlots = [
+      { slotId: 'team-slot-1', position: 0, characterId: JADE_ID },
+      { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
+    ];
+    const selection = {
+      ...DEFAULT_WORKBENCH_SELECTION,
+      characterId: JADE_ID,
+      secondaryCharacterId: 101007,
+    };
+    const actorConfigs = normalizeWorkbenchActorConfigs(
+      [],
+      selection,
+      teamSlots
+    );
+    const a5 = createWorkbenchActionDraft({
+      id: 'compiled-jade-a5',
+      type: 'skill',
+      actorCharacterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 0,
+      startMs: 0,
+      durationMs: JADE_A5.durationMs,
+      attackGroupId: 'compiled-jade-chain',
+      attackSequenceIndex: 5,
+      attackSequenceTotal: 5,
+      attackInput: JADE_A5,
+    });
+    const special = createWorkbenchActionDraft({
+      id: 'compiled-jade-special-charged',
+      type: 'skill',
+      actorCharacterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(37),
+      durationMs: frameTime(310),
+    });
+    const wind = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'wind'
+    );
+    const project = createWorkbenchProject(selection, {
+      durationMs: 8000,
+      teamSlots,
+      actorConfigs,
+      actions: [a5, special],
+      initialRuntimeState: {
+        tuningMarks: [
+          {
+            markId: wind.markId,
+            profileKey: wind.key,
+            elementName: wind.element,
+            heldReadyRemainingMs: 0,
+            layers: [
+              {
+                remainingDurationMs: 7000,
+                sourceActionId: 'inherited-wind',
+                sourceActorId: `actor-${JADE_ID}`,
+                sourceIdentity: wind.sourceIdentity,
+              },
+            ],
+          },
+        ],
+      },
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+    });
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+    expect(
+      result.actionRuleDiagnostics.diagnostics.filter(
+        diagnostic =>
+          diagnostic.code === ACTION_RULE_CODES.LANE_OVERLAP &&
+          diagnostic.actionIds?.includes(special.id)
+      )
+    ).toEqual([]);
+    const resolution =
+      result.verifiedCombatRuntime.actionResolutionById.get(special.id);
+    const consumeEvents = result.verifiedTuningMarkGeneration.events.filter(
+      event => event.actionId === special.id && event.kind === 'consume'
+    );
+
+    expect(resolution.actionBinding).toMatchObject({
+      semanticName: '特殊重击',
+      publicControlSkillId: 10101010,
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 0,
+      animationDurationFrames: 280,
+      effectiveOccupancyFrames: 90,
+    });
+    expect(
+      result.verifiedCombatRuntime.damageEvents
+        .filter(event => event.actionId === special.id)
+        .map(event => event.payload.elementId)
+    ).toEqual(expect.arrayContaining([101010130, 101010157]));
+    expect(consumeEvents).toHaveLength(1);
+    expect(consumeEvents[0]).toMatchObject({
+      profileKey: 'wind',
+      before: 2,
+      delta: -1,
+      after: 1,
+    });
+    expect(consumeEvents[0].timeMs).toBeCloseTo(frameTime(90), 5);
   });
 });
 

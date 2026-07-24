@@ -72,6 +72,16 @@ const ACTION_TIMING_COVERAGE_MARKDOWN_OUTPUT = path.join(
   'reports',
   'verified-combat-action-timing-coverage.md'
 );
+const XIAOYU_ACTION_OCCUPANCY_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'm9-r3-r2-xiaoyu-action-occupancy-audit.json'
+);
+const XIAOYU_ACTION_OCCUPANCY_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'm9-r3-r2-xiaoyu-action-occupancy-audit.md'
+);
 const ACTION_VARIANT_RESOURCE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -236,12 +246,14 @@ const XIAOYU_MECHANICS = Object.freeze({
   normalAttackSkillId: 10101001,
   a5ControlSkillId: 10101005,
   chargedControlSkillId: 10101010,
+  derivedChargedControlSkillId: 10101042,
   ultimateControlSkillId: 10101013,
   passiveSkillId: 10101061,
   resourceElementId: 101010115,
   stateElementId: 101010129,
   specialChargedSwitchElementId: 101010113,
   enhancedChargedSwitchElementId: 101010116,
+  enhancedDerivedChargedSwitchElementId: 101010154,
   burstNormalSwitchElementId: 101010140,
   passiveMarkerElementId: 101010205,
   passiveWrapperElementId: 101010206,
@@ -480,6 +492,8 @@ async function main() {
     nonzeroRecoveryElements,
   });
   const timingCoverage = createActionTimingCoverageReport(packageValue);
+  const xiaoyuActionOccupancyAudit =
+    createXiaoyuActionOccupancyAudit(packageValue);
   const effectCoverage = createEffectCoverageReport(
     packageValue,
     semanticEffectCatalog
@@ -512,6 +526,14 @@ async function main() {
     [
       ACTION_TIMING_COVERAGE_MARKDOWN_OUTPUT,
       createActionTimingCoverageMarkdown(timingCoverage),
+    ],
+    [
+      XIAOYU_ACTION_OCCUPANCY_JSON_OUTPUT,
+      `${JSON.stringify(xiaoyuActionOccupancyAudit, null, 2)}\n`,
+    ],
+    [
+      XIAOYU_ACTION_OCCUPANCY_MARKDOWN_OUTPUT,
+      createXiaoyuActionOccupancyMarkdown(xiaoyuActionOccupancyAudit),
     ],
     [
       EFFECT_COVERAGE_JSON_OUTPUT,
@@ -1444,7 +1466,15 @@ function attachXiaoyuMechanicsContracts({
   const chargedControl = controlBySkillId.get(
     XIAOYU_MECHANICS.chargedControlSkillId
   );
-  if (!profile?.applied || !a5Control || !chargedControl) {
+  const derivedChargedControl = controlBySkillId.get(
+    XIAOYU_MECHANICS.derivedChargedControlSkillId
+  );
+  if (
+    !profile?.applied ||
+    !a5Control ||
+    !chargedControl ||
+    !derivedChargedControl
+  ) {
     throw new Error('Xiaoyu verified mechanics source controls are missing');
   }
 
@@ -1461,6 +1491,14 @@ function attachXiaoyuMechanicsContracts({
 
   const contextEdges = createXiaoyuChargedContextEdges({
     a5Control,
+    chargedControl,
+    derivedChargedControl,
+    state,
+  });
+  const publicActionForms = createXiaoyuChargedPublicActionForms({
+    chargedControl,
+    derivedChargedControl,
+    contextEdges,
     state,
   });
   const attackInputChains = createXiaoyuAttackInputChains({
@@ -1526,76 +1564,85 @@ function attachXiaoyuMechanicsContracts({
     passiveEffects.filter(item => item.applied).length;
 
   actionVariantGraph.contextEdges = contextEdges;
+  actionVariantGraph.publicActionForms = publicActionForms;
   actionVariantGraph.attackInputChains = attackInputChains;
   actionVariantGraph.summary.contextEdgeCount = contextEdges.length;
   actionVariantGraph.summary.appliedContextEdgeCount = contextEdges.filter(
     edge => edge.applied
   ).length;
   actionVariantGraph.summary.attackInputChainCount = attackInputChains.length;
+  actionVariantGraph.summary.publicActionFormCount = publicActionForms.length;
 }
 
-function createXiaoyuChargedContextEdges({ a5Control, state }) {
-  const timingBySubSkill = new Map(
-    (a5Control.variants ?? []).map(variant => [
-      variant.subSkillIndex,
-      createControlVariantTimingContract({
-        control: a5Control,
-        variant,
-        actionKind: 'normal-attack',
-        occupancyResolver: resolveNormalAttackInputOccupancy,
-      }),
-    ])
-  );
-  const defaultTiming = timingBySubSkill.get(0);
-  const burstTiming = timingBySubSkill.get(1);
-  const defaultFinalHitFrame = defaultTiming?.hitEnvelope?.lastFrame;
-  const burstFinalHitFrame = burstTiming?.hitEnvelope?.lastFrame;
-  const defaultWindow = (defaultTiming?.windows ?? [])
-    .filter(
-      window =>
-        Number(window.targetControlSkillId) ===
-          XIAOYU_MECHANICS.chargedControlSkillId &&
-        (defaultFinalHitFrame == null ||
-          window.endFrame >= defaultFinalHitFrame)
-    )
-    .sort((left, right) => right.startFrame - left.startFrame)[0];
-  const burstWindow = (burstTiming?.windows ?? []).find(
-    window =>
-      window.allowAttack === true &&
-      (burstFinalHitFrame == null || window.startFrame >= burstFinalHitFrame)
-  );
-  const specialSwitch = readBattleElementAsset(
+function createXiaoyuChargedContextEdges({
+  a5Control,
+  chargedControl,
+  derivedChargedControl,
+  state,
+}) {
+  const stateInactive = createXiaoyuResourceStateCondition(state, false);
+  const stateActive = createXiaoyuResourceStateCondition(state, true);
+  const defaultA5Windows = findControlTransitionWindows({
+    control: a5Control,
+    subSkillIndex: 0,
+    targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
+    targetSubSkillIndex: 0,
+  });
+  const burstA3Windows = findControlTransitionWindows({
+    control: a5Control,
+    subSkillIndex: 1,
+    targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
+    targetSubSkillIndex: 1,
+  });
+  const continuousWindow = findControlTransitionWindows({
+    control: chargedControl,
+    subSkillIndex: 0,
+    targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
+    targetSubSkillIndex: 1,
+  })[0];
+  const continuousSwitch = readBattleElementAsset(
     XIAOYU_MECHANICS.specialChargedSwitchElementId
   );
-  const enhancedSwitch = readBattleElementAsset(
-    XIAOYU_MECHANICS.enhancedChargedSwitchElementId
-  );
   const edges = [
+    ...defaultA5Windows.map(window =>
+      createXiaoyuChargedContextEdge({
+        sourceControlSkillId: XIAOYU_MECHANICS.a5ControlSkillId,
+        sourceSubSkillIndex: 0,
+        executionControl: derivedChargedControl,
+        targetSubSkillIndex: 0,
+        window,
+        semanticIdentity: 'xiaoyu-special-charged',
+        semanticName: '特殊重击',
+        condition: stateInactive,
+      })
+    ),
+    ...burstA3Windows.map(window =>
+      createXiaoyuChargedContextEdge({
+        sourceControlSkillId: XIAOYU_MECHANICS.a5ControlSkillId,
+        sourceSubSkillIndex: 1,
+        executionControl: derivedChargedControl,
+        targetSubSkillIndex: 1,
+        window,
+        semanticIdentity: 'xiaoyu-enhanced-special-charged',
+        semanticName: '强化特殊重击',
+        condition: stateActive,
+      })
+    ),
     createXiaoyuChargedContextEdge({
+      sourceControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
       sourceSubSkillIndex: 0,
-      targetSubSkillIndex: Number(specialSwitch?.tree?.subSkillIndex),
-      window: defaultWindow,
-      switchAsset: specialSwitch,
+      executionControl: chargedControl,
+      targetSubSkillIndex: Number(
+        continuousSwitch?.tree?.subSkillIndex
+      ),
+      window: continuousWindow,
+      semanticIdentity: 'xiaoyu-continuous-charged',
+      semanticName: '连续重击',
       condition: {
-        kind: 'resource-state-inactive',
-        resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
-        stateElementId: state.elementId,
-        stateName: state.name,
-        sourceIdentity: state.sourceIdentity,
+        kind: 'always',
+        sourceIdentity: continuousSwitch?.sourceIdentity ?? null,
       },
-    }),
-    createXiaoyuChargedContextEdge({
-      sourceSubSkillIndex: 1,
-      targetSubSkillIndex: Number(enhancedSwitch?.tree?.subSkillIndex),
-      window: burstWindow,
-      switchAsset: enhancedSwitch,
-      condition: {
-        kind: 'resource-state-active',
-        resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
-        stateElementId: state.elementId,
-        stateName: state.name,
-        sourceIdentity: state.sourceIdentity,
-      },
+      requiredSwitchAsset: continuousSwitch,
     }),
   ];
   return edges.map(edge => {
@@ -1609,36 +1656,62 @@ function createXiaoyuChargedContextEdges({ a5Control, state }) {
 }
 
 function createXiaoyuChargedContextEdge({
+  sourceControlSkillId,
   sourceSubSkillIndex,
+  executionControl,
   targetSubSkillIndex,
   window,
-  switchAsset,
+  semanticIdentity,
+  semanticName,
   condition,
+  requiredSwitchAsset = null,
 }) {
+  const executionControlSkillId = Number(executionControl?.controlSkillId);
+  const windowTargetMatches =
+    Number(window?.targetControlSkillId) === executionControlSkillId &&
+    Number(window?.targetSubSkillIndex) === targetSubSkillIndex;
   const switchTargetMatches =
-    Number(switchAsset?.tree?.skillID) ===
-      XIAOYU_MECHANICS.chargedControlSkillId &&
-    Number(switchAsset?.tree?.subSkillIndex) === targetSubSkillIndex;
+    requiredSwitchAsset == null ||
+    (Number(requiredSwitchAsset?.tree?.skillID) === executionControlSkillId &&
+      Number(requiredSwitchAsset?.tree?.subSkillIndex) ===
+        targetSubSkillIndex);
+  const resolvedExecutionTiming = createXiaoyuControlVariantTiming({
+    control: executionControl,
+    subSkillIndex: targetSubSkillIndex,
+    actionKind: 'charged-attack',
+  });
   const applied =
     Number.isInteger(targetSubSkillIndex) &&
     window != null &&
-    switchTargetMatches;
+    windowTargetMatches &&
+    switchTargetMatches &&
+    resolvedExecutionTiming?.occupancy?.status === 'applied';
+  const executionTiming = createRuntimeExecutionTiming(
+    resolvedExecutionTiming
+  );
   return {
     edgeIdentity: [
       `actor:${XIAOYU_MECHANICS.ownerId}`,
-      `control:${XIAOYU_MECHANICS.a5ControlSkillId}`,
+      `control:${sourceControlSkillId}`,
       `sub:${sourceSubSkillIndex}`,
       `context:${window?.startFrame ?? 'missing'}-${window?.endFrame ?? 'missing'}`,
-      `control:${XIAOYU_MECHANICS.chargedControlSkillId}`,
+      `public-control:${XIAOYU_MECHANICS.chargedControlSkillId}`,
+      `execution-control:${executionControlSkillId}`,
       `sub:${targetSubSkillIndex}`,
     ].join('|'),
     ownerId: XIAOYU_MECHANICS.ownerId,
     relationType: 'input-context-derived',
     inputCommand: 'charged-attack',
-    sourceControlSkillId: XIAOYU_MECHANICS.a5ControlSkillId,
+    sourceControlSkillId,
     sourceSubSkillIndex,
     targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
+    executionControlSkillId,
     targetSubSkillIndex,
+    semanticIdentity,
+    semanticName,
+    publicActionKind: 'charged-attack',
+    publicActionIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:charged-attack`,
+    executionTiming,
     decisionFrame: 0,
     inputWindow: window
       ? {
@@ -1651,8 +1724,9 @@ function createXiaoyuChargedContextEdge({
     condition,
     sourceIdentity: [
       window?.sourceIdentity,
-      switchAsset?.sourceIdentity,
+      requiredSwitchAsset?.sourceIdentity,
       condition?.sourceIdentity,
+      executionTiming?.sourceIdentity,
     ]
       .filter(Boolean)
       .join('|'),
@@ -1661,10 +1735,185 @@ function createXiaoyuChargedContextEdge({
       : 'unresolved-input-context-variant-edge',
     reasons: [
       ...(window ? [] : ['a5-derived-input-window-missing']),
-      ...(switchAsset ? [] : ['charged-switch-element-missing']),
+      ...(requiredSwitchAsset == null || requiredSwitchAsset
+        ? []
+        : ['charged-switch-element-missing']),
+      ...(windowTargetMatches ? [] : ['charged-window-target-mismatch']),
       ...(switchTargetMatches ? [] : ['charged-switch-target-mismatch']),
+      ...(executionTiming?.occupancy?.status === 'applied'
+        ? []
+        : ['charged-execution-occupancy-unresolved']),
     ],
     applied,
+  };
+}
+
+function createXiaoyuChargedPublicActionForms({
+  chargedControl,
+  derivedChargedControl,
+  contextEdges,
+  state,
+}) {
+  const enhancedSwitch = readBattleElementAsset(
+    XIAOYU_MECHANICS.enhancedChargedSwitchElementId
+  );
+  const enhancedDerivedSwitch = readBattleElementAsset(
+    XIAOYU_MECHANICS.enhancedDerivedChargedSwitchElementId
+  );
+  const definitions = [
+    {
+      semanticIdentity: 'xiaoyu-ordinary-charged',
+      semanticName: '普通重击',
+      executionControl: chargedControl,
+      executionSubSkillIndex: 0,
+      condition: createXiaoyuResourceStateCondition(state, false),
+      selectionKind: 'default',
+      sourceIdentity: chargedControl.variants?.[0]?.sourceIdentity,
+    },
+    {
+      semanticIdentity: 'xiaoyu-enhanced-charged',
+      semanticName: '强化重击',
+      executionControl: chargedControl,
+      executionSubSkillIndex: 2,
+      condition: createXiaoyuResourceStateCondition(state, true),
+      selectionKind: 'state-controlled',
+      sourceIdentity: enhancedSwitch?.sourceIdentity,
+    },
+    {
+      semanticIdentity: 'xiaoyu-special-charged',
+      semanticName: '特殊重击',
+      executionControl: derivedChargedControl,
+      executionSubSkillIndex: 0,
+      condition: createXiaoyuResourceStateCondition(state, false),
+      selectionKind: 'input-context-derived',
+      sourceIdentity: contextEdges
+        .filter(edge => edge.semanticIdentity === 'xiaoyu-special-charged')
+        .map(edge => edge.sourceIdentity)
+        .join('|'),
+    },
+    {
+      semanticIdentity: 'xiaoyu-enhanced-special-charged',
+      semanticName: '强化特殊重击',
+      executionControl: derivedChargedControl,
+      executionSubSkillIndex: 1,
+      condition: createXiaoyuResourceStateCondition(state, true),
+      selectionKind: 'input-context-derived',
+      sourceIdentity: [
+        enhancedDerivedSwitch?.sourceIdentity,
+        ...contextEdges
+          .filter(
+            edge =>
+              edge.semanticIdentity === 'xiaoyu-enhanced-special-charged'
+          )
+          .map(edge => edge.sourceIdentity),
+      ]
+        .filter(Boolean)
+        .join('|'),
+    },
+    {
+      semanticIdentity: 'xiaoyu-continuous-charged',
+      semanticName: '连续重击',
+      executionControl: chargedControl,
+      executionSubSkillIndex: 1,
+      condition: { kind: 'always' },
+      selectionKind: 'input-context-derived',
+      sourceIdentity: contextEdges.find(
+        edge => edge.semanticIdentity === 'xiaoyu-continuous-charged'
+      )?.sourceIdentity,
+    },
+  ];
+  return definitions.map(definition => {
+    const resolvedExecutionTiming = createXiaoyuControlVariantTiming({
+      control: definition.executionControl,
+      subSkillIndex: definition.executionSubSkillIndex,
+      actionKind: 'charged-attack',
+    });
+    const applied =
+      resolvedExecutionTiming?.occupancy?.status === 'applied';
+    const executionTiming = createRuntimeExecutionTiming(
+      resolvedExecutionTiming
+    );
+    return {
+      formIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:charged-attack:${definition.semanticIdentity}`,
+      ownerId: XIAOYU_MECHANICS.ownerId,
+      publicActionKind: 'charged-attack',
+      publicControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
+      semanticIdentity: definition.semanticIdentity,
+      semanticName: definition.semanticName,
+      executionControlSkillId:
+        definition.executionControl.controlSkillId,
+      executionSubSkillIndex: definition.executionSubSkillIndex,
+      selectionKind: definition.selectionKind,
+      condition: definition.condition,
+      executionTiming,
+      sourceIdentity: [definition.sourceIdentity, executionTiming?.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
+      status: applied
+        ? 'verified-public-action-form-ready'
+        : 'unresolved-public-action-form',
+      reasons: applied ? [] : ['public-action-form-occupancy-unresolved'],
+      applied,
+    };
+  });
+}
+
+function createXiaoyuResourceStateCondition(state, active) {
+  return {
+    kind: active ? 'resource-state-active' : 'resource-state-inactive',
+    resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
+    stateElementId: state.elementId,
+    stateName: state.name,
+    sourceIdentity: state.sourceIdentity,
+  };
+}
+
+function findControlTransitionWindows({
+  control,
+  subSkillIndex,
+  targetControlSkillId,
+  targetSubSkillIndex,
+}) {
+  const variant = control?.variants?.find(
+    item => Number(item.subSkillIndex) === Number(subSkillIndex)
+  );
+  return normalizeActionTimingWindows(variant?.eventBridges).filter(
+    window =>
+      Number(window.targetControlSkillId) === Number(targetControlSkillId) &&
+      Number(window.targetSubSkillIndex) === Number(targetSubSkillIndex)
+  );
+}
+
+function createXiaoyuControlVariantTiming({
+  control,
+  subSkillIndex,
+  actionKind,
+}) {
+  const preparedControl = {
+    ...control,
+    hits: createControlRuntimeHits(control),
+  };
+  const variant = preparedControl.variants?.find(
+    item => Number(item.subSkillIndex) === Number(subSkillIndex)
+  );
+  if (!variant) return null;
+  return createControlVariantTimingContract({
+    control: preparedControl,
+    variant,
+    actionKind,
+    occupancyResolver: resolveXiaoyuActionOccupancy,
+  });
+}
+
+function createRuntimeExecutionTiming(timing) {
+  if (!timing) return null;
+  return {
+    subSkillIndex: timing.subSkillIndex,
+    frameRate: timing.frameRate,
+    input: timing.input,
+    occupancy: timing.occupancy,
+    animation: timing.animation,
+    sourceIdentity: timing.sourceIdentity,
   };
 }
 
@@ -1714,6 +1963,22 @@ function createXiaoyuAttackInputChains({ controlBySkillId, state }) {
                 occupancyContext: { nextControlSkillId },
               })
             : null;
+        const executionTiming =
+          control && variant && timing
+            ? {
+                ...createControlVariantTimingContract({
+                  control: {
+                    ...control,
+                    hits: createControlRuntimeHits(control),
+                  },
+                  variant,
+                  actionKind: 'normal-attack',
+                  occupancyResolver: resolveNormalAttackInputOccupancy,
+                  occupancyContext: { nextControlSkillId },
+                }),
+                occupancy: timing.occupancy,
+              }
+            : timing;
         if (timing?.occupancy?.status !== 'applied') {
           throw new Error(
             `Xiaoyu attack chain timing unresolved: ${controlSkillId}/${subSkillIndex}`
@@ -1726,6 +1991,7 @@ function createXiaoyuAttackInputChains({ controlBySkillId, state }) {
           subSkillIndex,
           nextControlSkillId,
           durationFrames: timing.occupancy.durationFrames,
+          executionTiming,
           sourceIdentity: timing.occupancy.sourceIdentity,
           status: 'verified-attack-input-chain-segment-ready',
           applied: true,
@@ -3024,14 +3290,17 @@ function collectBulletLaunchContracts(directory, skillControl) {
               const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
               if (!bulletId) continue;
               const injection = readBulletInjectionContract(bulletId);
+              const injectedElements =
+                Number(skillControl.skillControlData?.skillId) ===
+                XIAOYU_MECHANICS.derivedChargedControlSkillId
+                  ? collectImmediateBulletInjectionElements(bulletId)
+                  : injection.elements ?? [];
               for (
                 let repeatIndex = 0;
                 repeatIndex < repeatCount;
                 repeatIndex += 1
               ) {
-                for (const [elementIndex, element] of (
-                  injection.elements ?? []
-                ).entries()) {
+                for (const [elementIndex, element] of injectedElements.entries()) {
                   const delayFrames = Math.round((delayMs / 1000) * frameRate);
                   const launchFrame = startFrame + delayFrames;
                   launches.push({
@@ -3043,7 +3312,8 @@ function collectBulletLaunchContracts(directory, skillControl) {
                     bulletIndex,
                     repeatIndex,
                     elementIndex,
-                    bulletId,
+                    bulletId: element.bulletId ?? bulletId,
+                    rootBulletId: bulletId,
                     elementId: element.elementId,
                     startFrame,
                     delayMs,
@@ -3060,6 +3330,9 @@ function collectBulletLaunchContracts(directory, skillControl) {
                       `behavior:${behavior.pathId}`,
                       `config:${configIndex}`,
                       `bullet:${bulletId}:${bulletIndex}:${repeatIndex}`,
+                      ...(element.bulletId && element.bulletId !== bulletId
+                        ? [`nested-bullet:${element.bulletId}`]
+                        : []),
                       `element:${element.elementId}:${elementIndex}`,
                     ].join('|'),
                     sourceIdentity: [
@@ -3123,24 +3396,47 @@ function readBulletInjectionContract(bulletId) {
     break;
   }
   const elements = [];
+  const immediateNestedBullets = [];
   if (selected) {
     walkUnityObject(selected.value, (value, objectPath) => {
       if (
-        Number(value?.actionType) !== 0 ||
-        !Array.isArray(value?.actionElementParameter?.elementInfos)
+        Number(value?.actionType) === 0 &&
+        Array.isArray(value?.actionElementParameter?.elementInfos)
       ) {
-        return;
+        for (const [
+          index,
+          info,
+        ] of value.actionElementParameter.elementInfos.entries()) {
+          const elementId = positiveIntegerOrNull(info?.elementId);
+          if (!elementId) continue;
+          elements.push({
+            bulletId,
+            elementId,
+            sourceIdentity: `${relativeExternalPath(selected.filePath)}#${objectPath}.actionElementParameter.elementInfos[${index}].elementId`,
+          });
+        }
       }
-      for (const [
-        index,
-        info,
-      ] of value.actionElementParameter.elementInfos.entries()) {
-        const elementId = positiveIntegerOrNull(info?.elementId);
-        if (!elementId) continue;
-        elements.push({
-          elementId,
-          sourceIdentity: `${relativeExternalPath(selected.filePath)}#${objectPath}.actionElementParameter.elementInfos[${index}].elementId`,
-        });
+
+      if (
+        Number(value?.actionType) === 3 &&
+        Number(value?.doDelayActionTime ?? 0) === 0
+      ) {
+        for (const [
+          configIndex,
+          config,
+        ] of (
+          value?.actionSummonBulletParameter?.bulletShootDataConfigs ?? []
+        ).entries()) {
+          for (const [nestedIndex, bullet] of (config?.bullets ?? []).entries()) {
+            const nestedBulletId = positiveIntegerOrNull(bullet?.bulletId);
+            const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
+            if (!nestedBulletId || delayMs !== 0) continue;
+            immediateNestedBullets.push({
+              bulletId: nestedBulletId,
+              sourceIdentity: `${relativeExternalPath(selected.filePath)}#${objectPath}.actionSummonBulletParameter.bulletShootDataConfigs[${configIndex}].bullets[${nestedIndex}]`,
+            });
+          }
+        }
       }
     });
   }
@@ -3148,6 +3444,10 @@ function readBulletInjectionContract(bulletId) {
     bulletId,
     targetType: integerOrNull(selected?.value?.bulletTargetType),
     elements: dedupeBy(elements, element => element.sourceIdentity),
+    immediateNestedBullets: dedupeBy(
+      immediateNestedBullets,
+      nested => `${nested.bulletId}|${nested.sourceIdentity}`
+    ),
     sourceIdentity: selected
       ? `${relativeExternalPath(selected.filePath)}#bulletTargetType|bulletLogicObjects`
       : null,
@@ -3158,6 +3458,33 @@ function readBulletInjectionContract(bulletId) {
   };
   bulletInjectionContractCache.set(bulletId, contract);
   return contract;
+}
+
+function collectImmediateBulletInjectionElements(
+  bulletId,
+  visited = new Set()
+) {
+  if (visited.has(bulletId)) return [];
+  const nextVisited = new Set(visited);
+  nextVisited.add(bulletId);
+  const contract = readBulletInjectionContract(bulletId);
+  return dedupeBy(
+    [
+      ...(contract.elements ?? []),
+      ...(contract.immediateNestedBullets ?? []).flatMap(nested =>
+        collectImmediateBulletInjectionElements(
+          nested.bulletId,
+          nextVisited
+        ).map(element => ({
+          ...element,
+          sourceIdentity: [nested.sourceIdentity, element.sourceIdentity]
+            .filter(Boolean)
+            .join('|'),
+        }))
+      ),
+    ],
+    element => `${element.bulletId}|${element.elementId}|${element.sourceIdentity}`
+  );
 }
 
 function walkUnityObject(value, visitor, pathParts = []) {
@@ -3807,7 +4134,10 @@ function createControlBinding({
               launch =>
                 launch.subSkillIndex === ref.mapIndex &&
                 launch.elementId === elementId &&
-                launch.targetKind === 'skill-target'
+                (launch.targetKind === 'skill-target' ||
+                  (control.skillId ===
+                    XIAOYU_MECHANICS.derivedChargedControlSkillId &&
+                    launch.targetKind === 'runtime-target'))
             )
             .map(launch => ({
               kind: 'projectile-zero-distance-impact',
@@ -3984,7 +4314,11 @@ function createControlBinding({
     overridesBySkillAndElement,
     tuningMechanicsCatalog,
   });
-  const effects = createControlRuntimeEffects({ effectGraph, control });
+  const effects = createControlRuntimeEffects({
+    effectGraph,
+    control,
+    elements,
+  });
   const variantCount = Math.max(players.length, resourceMaps.length);
   const variants = Array.from({ length: variantCount }, (_, mapIndex) => {
     const player = players[mapIndex] ?? null;
@@ -4592,7 +4926,7 @@ function classifyBattleEffectNode({
   return { status, reasons: dedupeBy(reasons, value => value), dimensions };
 }
 
-function createControlRuntimeEffects({ effectGraph, control }) {
+function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
   return effectGraph.flatMap(root => {
     const runtimeNodes = root.nodes.filter(node => {
       if (
@@ -4613,9 +4947,21 @@ function createControlRuntimeEffects({ effectGraph, control }) {
         [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0
       );
     });
-    const triggers = root.rootPathId
+    const staticTriggers = root.rootPathId
       ? (control.behaviorTriggers.get(root.rootPathId) ?? [])
       : [];
+    const scenarioTriggers =
+      Number(control.skillId) ===
+      XIAOYU_MECHANICS.derivedChargedControlSkillId
+        ? (elements.find(
+            element =>
+              element.mapIndex === root.mapIndex &&
+              element.referenceKind === root.referenceKind &&
+              element.elementIndex === root.elementIndex
+          )?.scenarioTriggers ?? [])
+        : [];
+    const triggers =
+      staticTriggers.length > 0 ? staticTriggers : scenarioTriggers;
     const effectiveTriggers = triggers.length > 0 ? triggers : [null];
     return runtimeNodes.flatMap(node =>
       effectiveTriggers.map((trigger, triggerIndex) =>
@@ -7306,11 +7652,16 @@ function mergeSemanticEffectCandidates(candidates) {
 }
 
 function createPublicActionTimingContract({ candidate, mapping, control }) {
+  const occupancyResolver =
+    Number(candidate.ownerId) === XIAOYU_MECHANICS.ownerId
+      ? resolveXiaoyuActionOccupancy
+      : resolveStandaloneActionOccupancy;
   const variantTimings = (control?.variants ?? []).map(variant =>
     createControlVariantTimingContract({
       control,
       variant,
       actionKind: candidate.actionKind,
+      occupancyResolver,
     })
   );
   const selected = variantTimings.find(
@@ -7487,6 +7838,60 @@ function resolveStandaloneActionOccupancy({ animation }) {
   };
 }
 
+function resolveXiaoyuActionOccupancy({ animation, hits, windows }) {
+  if (animation.status !== 'applied') {
+    return createUnresolvedOccupancy('skill-control-animation-range-missing', {
+      sourceIdentity: animation.sourceIdentity,
+      frameRate: animation.frameRate,
+    });
+  }
+  const lastHitFrame =
+    hits.length > 0
+      ? Math.max(...hits.map(hit => Number(hit.frame)).filter(Number.isFinite))
+      : null;
+  const candidates = (windows ?? [])
+    .filter(
+      window =>
+        window.allowAttack === true &&
+        (lastHitFrame == null || window.startFrame >= lastHitFrame)
+    )
+    .sort(
+      (left, right) =>
+        left.startFrame - right.startFrame ||
+        left.endFrame - right.endFrame ||
+        left.sourceIdentity.localeCompare(right.sourceIdentity)
+    );
+  const reopen = candidates[0];
+  if (!reopen) {
+    return createUnresolvedOccupancy(
+      'xiaoyu-action-effective-occupancy-window-unresolved',
+      {
+        sourceIdentity: animation.sourceIdentity,
+        frameRate: animation.frameRate,
+      }
+    );
+  }
+  return {
+    startFrame: 0,
+    endFrame: reopen.startFrame,
+    durationFrames: reopen.startFrame,
+    frameRate: animation.frameRate,
+    status: 'applied',
+    sourceKind: reopen.targetControlSkillId
+      ? 'verified-specific-input-window'
+      : 'verified-unconditional-attack-reopen-window',
+    sourceIdentity: reopen.sourceIdentity,
+    conversion: `${reopen.startFrame} source frames at ${animation.frameRate}fps`,
+    animationDurationFrames: animation.durationFrames,
+    lastHitFrame,
+    reopenWindow: reopen,
+    windowRole: reopen.targetControlSkillId
+      ? 'specific-input-transition'
+      : 'unconditional-attack-reopen',
+    reasons: [],
+  };
+}
+
 function createUnresolvedOccupancy(reason, { sourceIdentity, frameRate } = {}) {
   return {
     startFrame: 0,
@@ -7516,6 +7921,7 @@ function normalizeActionTimingWindows(bridges = []) {
           endFrame,
           durationFrames: endFrame - startFrame,
           targetControlSkillId: positiveIntegerOrNull(bridge.targetSkillId),
+          targetSubSkillIndex: nonNegativeIntegerOrNull(bridge.skillIndex),
           allowAttack: Boolean(bridge.allowAttack),
           baseOnInput: Boolean(bridge.baseOnInput),
           inputToIndex: Boolean(bridge.inputToIndex),
@@ -7533,6 +7939,7 @@ function normalizeActionTimingWindows(bridges = []) {
         window.startFrame,
         window.endFrame,
         window.targetControlSkillId,
+        window.targetSubSkillIndex,
         window.bridgeType,
         window.continuousAttackType,
       ].join('|')
@@ -8916,6 +9323,190 @@ function createAudit({
     },
     unresolvedBindings: unresolved,
   };
+}
+
+function createXiaoyuActionOccupancyAudit(packageValue) {
+  const rows = [];
+  const mappings = packageValue.actionMappings.filter(
+    mapping => Number(mapping.ownerId) === XIAOYU_MECHANICS.ownerId
+  );
+  for (const mapping of mappings) {
+    if (
+      mapping.actionKind === 'normal-attack' ||
+      mapping.actionKind === 'charged-attack'
+    ) {
+      continue;
+    }
+    for (const timing of mapping.actionTiming?.variantTimings ?? []) {
+      rows.push(
+        createXiaoyuActionOccupancyAuditRow({
+          identity: `${mapping.identity}|sub:${timing.subSkillIndex}`,
+          publicActionIdentity: mapping.identity,
+          actionKind: mapping.actionKind,
+          semanticName: mapping.actionName ?? mapping.actionKind,
+          controlSkillId: mapping.controlSkillId,
+          subSkillIndex: timing.subSkillIndex,
+          timing,
+          context: 'public-action-control',
+        })
+      );
+    }
+  }
+  for (const chain of packageValue.actionVariantGraph?.attackInputChains ?? []) {
+    if (Number(chain.ownerId) !== XIAOYU_MECHANICS.ownerId) continue;
+    const burst = chain.stateCondition?.kind === 'resource-state-active';
+    for (const segment of chain.segments ?? []) {
+      rows.push(
+        createXiaoyuActionOccupancyAuditRow({
+          identity: `${chain.chainIdentity}|input:${segment.sequenceIndex}`,
+          publicActionIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:normal-attack`,
+          actionKind: 'normal-attack',
+          semanticName: `${burst ? '爆发普攻' : '普通攻击'} A${segment.sequenceIndex}`,
+          controlSkillId: segment.controlSkillId,
+          subSkillIndex: segment.subSkillIndex,
+          timing: segment.executionTiming,
+          context: chain.chainIdentity,
+          sourceIdentity: segment.sourceIdentity,
+        })
+      );
+    }
+  }
+  for (const form of packageValue.actionVariantGraph?.publicActionForms ??
+    []) {
+    if (Number(form.ownerId) !== XIAOYU_MECHANICS.ownerId) continue;
+    rows.push(
+      createXiaoyuActionOccupancyAuditRow({
+        identity: form.formIdentity,
+        publicActionIdentity: form.publicActionIdentity,
+        actionKind: form.publicActionKind,
+        semanticName: form.semanticName,
+        controlSkillId: form.executionControlSkillId,
+        subSkillIndex: form.executionSubSkillIndex,
+        timing: form.executionTiming,
+        context: form.selectionKind,
+        sourceIdentity: form.sourceIdentity,
+      })
+    );
+  }
+  rows.sort(
+    (left, right) =>
+      String(left.actionKind).localeCompare(String(right.actionKind)) ||
+      Number(left.controlSkillId) - Number(right.controlSkillId) ||
+      Number(left.subSkillIndex) - Number(right.subSkillIndex) ||
+      String(left.identity).localeCompare(String(right.identity))
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'm9-r3-r2-xiaoyu-action-occupancy-audit',
+    status: 'xiaoyu-action-occupancy-audit-ready',
+    ownerId: XIAOYU_MECHANICS.ownerId,
+    ownerName: '涂山小玉',
+    frameRate: 60,
+    rows,
+    summary: {
+      rowCount: rows.length,
+      exactOccupancyCount: rows.filter(
+        row => row.occupancyStatus === 'applied'
+      ).length,
+      planningOccupancyCount: rows.filter(
+        row => row.occupancyStatus === 'planning'
+      ).length,
+      unresolvedOccupancyCount: rows.filter(
+        row => row.occupancyStatus === 'unresolved'
+      ).length,
+      animationTailRemovedCount: rows.filter(
+        row =>
+          Number(row.animationDurationFrames) >
+          Number(row.effectiveOccupancyFrames)
+      ).length,
+      publicActionKindCount: new Set(rows.map(row => row.actionKind)).size,
+    },
+    sourceIdentity: [
+      'Battle/SkillList/skill_control_101010*.asset',
+      'skillControlData.skillPlayers|skillResourceMaps',
+      'EventBridge behaviorlineControl',
+    ],
+  };
+}
+
+function createXiaoyuActionOccupancyAuditRow({
+  identity,
+  publicActionIdentity,
+  actionKind,
+  semanticName,
+  controlSkillId,
+  subSkillIndex,
+  timing,
+  context,
+  sourceIdentity = null,
+}) {
+  const hitFrames = (timing?.hits ?? [])
+    .map(hit => Number(hit.frame))
+    .filter(Number.isFinite);
+  const occupancyStatus =
+    timing?.occupancy?.status === 'applied'
+      ? 'applied'
+      : Number(timing?.animation?.durationFrames) > 0
+        ? 'planning'
+        : 'unresolved';
+  return {
+    identity,
+    publicActionIdentity,
+    actionKind,
+    semanticName,
+    context,
+    controlSkillId,
+    subSkillIndex,
+    animationDurationFrames:
+      positiveIntegerOrNull(timing?.animation?.durationFrames) ?? null,
+    firstHitFrame:
+      hitFrames.length > 0 ? Math.min(...hitFrames) : null,
+    lastHitFrame:
+      hitFrames.length > 0 ? Math.max(...hitFrames) : null,
+    effectiveOccupancyFrames:
+      positiveIntegerOrNull(timing?.occupancy?.durationFrames) ??
+      positiveIntegerOrNull(timing?.animation?.durationFrames) ??
+      null,
+    occupancyStatus,
+    occupancySourceKind:
+      timing?.occupancy?.sourceKind ??
+      (occupancyStatus === 'planning'
+        ? 'source-animation-planning-duration'
+        : 'unresolved'),
+    reopenWindow: timing?.occupancy?.reopenWindow ?? null,
+    selectedWindowRole: timing?.occupancy?.windowRole ?? null,
+    windowKindCounts: countValues(
+      (timing?.windows ?? []).map(window => window.kind)
+    ),
+    windows: timing?.windows ?? [],
+    animationSourceIdentity: timing?.animation?.sourceIdentity ?? null,
+    occupancySourceIdentity:
+      timing?.occupancy?.sourceIdentity ?? sourceIdentity ?? null,
+    reasons: timing?.occupancy?.reasons ?? [],
+  };
+}
+
+function createXiaoyuActionOccupancyMarkdown(report) {
+  const lines = [
+    '# M9-R3-R2 涂山小玉动作占轴审计',
+    '',
+    `- 动作/形态行：${report.summary.rowCount}`,
+    `- 精确占轴：${report.summary.exactOccupancyCount}`,
+    `- 动画规划占轴：${report.summary.planningOccupancyCount}`,
+    `- 未解析：${report.summary.unresolvedOccupancyCount}`,
+    `- 已剔除收招尾帧：${report.summary.animationTailRemovedCount}`,
+    '',
+    '| 动作 | 语义形态 | control/sub | 动画 | 首末命中 | 有效占轴 | 占轴窗 | 状态 | 来源 |',
+    '| --- | --- | --- | ---: | --- | ---: | --- | --- | --- |',
+    ...report.rows.map(
+      row =>
+        `| ${row.actionKind} | ${row.semanticName} | ${row.controlSkillId}/sub${row.subSkillIndex} | ${row.animationDurationFrames ?? '-'}F | ${row.firstHitFrame ?? '-'}-${row.lastHitFrame ?? '-'}F | ${row.effectiveOccupancyFrames ?? '-'}F | ${row.selectedWindowRole ?? '-'} | ${row.occupancyStatus} | ${row.occupancySourceKind} |`
+    ),
+    '',
+    '完整动画、命中帧、输入/派生窗口和有效占轴分别保留；时间轴阻塞只消费 effective occupancy。',
+    '',
+  ];
+  return `${lines.join('\n')}\n`;
 }
 
 function createActionTimingCoverageReport(packageValue) {

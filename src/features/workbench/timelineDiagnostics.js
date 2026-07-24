@@ -66,6 +66,12 @@ export function createTimelineDiagnostics({
         if (overlapEndMs - overlapStartMs <= TIMELINE_BOUNDARY_EPSILON_MS) {
           continue;
         }
+        if (
+          current.contextActionId === next.actionId ||
+          next.contextActionId === current.actionId
+        ) {
+          continue;
+        }
 
         overlaps.push({
           id: `${current.laneId}:${current.actionId}:${next.actionId}`,
@@ -120,11 +126,7 @@ function createActionRange(action, laneId, laneName) {
   const durationMs =
     action.type === 'switch'
       ? 0
-      : Math.max(
-          1,
-          Number(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) ||
-            DEFAULT_TIMELINE_ACTION_DURATION_MS
-        );
+      : Math.max(1, Number(action.durationMs) || 1);
 
   return {
     actionId: action.id,
@@ -134,6 +136,7 @@ function createActionRange(action, laneId, laneName) {
     startMs,
     endMs: startMs + durationMs,
     durationMs,
+    contextActionId: action.runtimeContextActionId ?? null,
   };
 }
 

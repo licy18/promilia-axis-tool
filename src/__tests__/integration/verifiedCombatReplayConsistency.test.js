@@ -93,8 +93,8 @@ describe('verified combat project replay consistency', () => {
         stateCurveCount: 8,
       },
       bindingIdentities: [
-        'actor|101007|10100701|0|10100703|attack-input-3',
-        'kibo|500469|50046903|0|50046903',
+        'actor|101007|10100701|0|10100703|attack-input-3|execution-control:10100703|sub:0',
+        'kibo|500469|50046903|0|50046903|execution-control:50046903|sub:0',
       ],
       hitEventCount: 6,
       breakTriggerCount: 1,
@@ -155,11 +155,11 @@ describe('verified combat project replay consistency', () => {
     ];
 
     expect(signatures[0].bindingIdentities).toEqual([
-      'actor|101003|10100312|0|10100312',
-      'actor|101007|10100712|2|10100726',
-      'actor|109001|10900101|1|10900110',
-      'kibo|500001|50000112|0|50000112',
-      'kibo|500001|504004|0|504004',
+      'actor|101003|10100312|0|10100312|execution-control:10100312|sub:0',
+      'actor|101007|10100712|2|10100726|execution-control:10100726|sub:0',
+      'actor|109001|10900101|1|10900110|execution-control:10900110|sub:0',
+      'kibo|500001|50000112|0|50000112|execution-control:50000112|sub:0',
+      'kibo|500001|504004|0|504004|execution-control:504004|sub:0',
     ]);
     expect(
       Object.fromEntries(

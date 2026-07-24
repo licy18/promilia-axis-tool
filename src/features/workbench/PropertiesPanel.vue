@@ -1033,12 +1033,16 @@ const selectedActionIdentity = computed(() => {
     props.verifiedCombatRuntime,
     props.selectedAction?.id
   );
+  const name =
+    resolution?.actionBinding?.semanticName ??
+    identity.name;
   const actualDurationFrames = Number(
-    resolution?.actionBinding?.actualDurationFrames
+    resolution?.actionBinding?.effectiveOccupancyFrames ??
+      resolution?.actionBinding?.actualDurationFrames
   );
   return Number.isInteger(actualDurationFrames) && actualDurationFrames >= 0
-    ? { ...identity, durationFrames: actualDurationFrames }
-    : identity;
+    ? { ...identity, name, durationFrames: actualDurationFrames }
+    : { ...identity, name };
 });
 const isReadOnlyDerivedAction = computed(() =>
   isSwitchTriggeredDerivedAction(props.selectedAction)

@@ -90,7 +90,7 @@
           title="框选动作"
           @click="$emit('toggle-box-selection-mode')"
         >
-          <Crop class="control-icon" />
+          <Aim class="control-icon" />
         </button>
         <button
           class="icon-control"
@@ -1055,12 +1055,11 @@ import {
   watch,
 } from 'vue';
 import {
+  Aim,
   ArrowLeft,
   ArrowRight,
-  ChatLineSquare,
   Clock,
   Connection,
-  Crop,
   EditPen,
   Histogram,
   Lightning,
@@ -1142,7 +1141,7 @@ const ACTION_ICON_COMPONENTS = Object.freeze({
   resource: Histogram,
   switch: Switch,
   wait: Timer,
-  annotation: ChatLineSquare,
+  annotation: EditPen,
 });
 const playbackRangeModeOptions = [
   { key: 'axis', label: '全轴' },
@@ -3005,19 +3004,28 @@ function actionLabel(action) {
   if (action.type === 'switch') {
     return `${action.name} -> ${action.targetActor?.name ?? '目标'}`;
   }
-  return resolveWorkbenchActionVisualIdentity(action).name;
+  return (
+    resolveTimelineActionRuntimeIdentity(action).name ??
+    resolveWorkbenchActionVisualIdentity(action).name
+  );
 }
 
 function actionDetail(action) {
   if (action.type === 'skill' || action.type === 'kiboEvent') {
     const identity = resolveWorkbenchActionVisualIdentity(action);
     const durationFrames = msToFrame(resolveTimelineActionDurationMs(action));
+    const { executionLabel } = resolveTimelineActionRuntimeIdentity(action);
     const triggerLabel = isSwitchTriggeredDerivedAction(action)
       ? action.switchTriggerBinding?.triggerPhase === 'on-enter'
         ? '入场触发'
         : '退场触发'
       : null;
-    return [triggerLabel, identity.typeLabel, `${durationFrames}F`]
+    return [
+      triggerLabel,
+      identity.typeLabel,
+      `${durationFrames}F`,
+      executionLabel,
+    ]
       .filter(Boolean)
       .join(' · ');
   }
@@ -3044,6 +3052,8 @@ function getActionReadiness(action) {
 
 function formatTimelineActionTitle(action) {
   const readiness = getActionReadiness(action);
+  const { name, executionLabel } =
+    resolveTimelineActionRuntimeIdentity(action);
   const status =
     readiness.status === 'blocked'
       ? '不可执行'
@@ -3053,9 +3063,25 @@ function formatTimelineActionTitle(action) {
   const derived = isSwitchTriggeredDerivedAction(action)
     ? '切人自动派生 · 只读'
     : null;
-  return [action.name ?? action.id, derived, status]
+  return [name ?? action.id, executionLabel, derived, status]
     .filter(Boolean)
     .join(' · ');
+}
+
+function resolveTimelineActionRuntimeIdentity(action) {
+  const binding = resolveVerifiedActionRuntimeResolution(
+    props.verifiedCombatRuntime,
+    action.id
+  )?.actionBinding;
+  const controlSkillId =
+    binding?.executionControlSkillId ?? binding?.controlSkillId;
+  return {
+    name: action.runtimeSemanticName ?? binding?.semanticName ?? action.name,
+    executionLabel:
+      controlSkillId == null
+        ? null
+        : `control ${controlSkillId}/sub${binding?.selectedSubSkillIndex ?? 0}`,
+  };
 }
 
 function formatCooldownWindowTitle(window) {

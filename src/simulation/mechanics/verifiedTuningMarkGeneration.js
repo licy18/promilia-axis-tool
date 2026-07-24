@@ -77,7 +77,9 @@ export function createVerifiedTuningMarkGeneration({
         combatScenario: scenario.combatScenario,
       });
     if (!resolution?.ready) continue;
-    for (const effect of resolution.effects ?? []) {
+    for (const effect of dedupeTuningRuntimeEffects(
+      resolution.effects ?? []
+    )) {
       if (effect.classification !== 'applied') continue;
       const timeMs = resolveEffectTimeMs(action, effect, resolution);
       if (timeMs == null) continue;
@@ -212,6 +214,28 @@ export function createVerifiedTuningMarkGeneration({
     },
     applied: true,
   };
+}
+
+function dedupeTuningRuntimeEffects(effects) {
+  return [
+    ...new Map(
+      effects.map(effect => {
+        const tuning = effect.tuningMark ?? effect.tuningOverlimit;
+        return [
+          tuning
+            ? [
+                effect.tuningMark ? 'acquire' : 'consume',
+                tuning.markId,
+                tuning.packetElementId ?? tuning.stackElementId ?? '',
+                effect.mapIndex,
+                effect.trigger?.startFrame ?? '',
+              ].join('|')
+            : effect.effectIdentity,
+          effect,
+        ];
+      })
+    ).values(),
+  ];
 }
 
 function installInheritedState({

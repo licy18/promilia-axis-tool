@@ -31,7 +31,7 @@ describe('TimelineGridPreview', () => {
     expect(wrapper.emitted('update-duration')?.at(-1)?.[0]).toBe(180_000);
   });
 
-  it('uses the runtime-selected variant duration for action width and text', () => {
+  it('uses the runtime semantic form and effective occupancy for action width and text', () => {
     const action = createAction({
       id: 'jade-special-charged',
       name: '重击',
@@ -49,8 +49,16 @@ describe('TimelineGridPreview', () => {
               action.id,
               {
                 actionBinding: {
-                  actualDurationFrames: 230,
-                  actualDurationMs: (230 * 1000) / 60,
+                  semanticIdentity: 'xiaoyu-charged-special',
+                  semanticName: '特殊重击',
+                  publicControlSkillId: 10101010,
+                  executionControlSkillId: 10101042,
+                  selectedSubSkillIndex: 0,
+                  animationDurationFrames: 280,
+                  effectiveOccupancyFrames: 90,
+                  actualDurationMs: (90 * 1000) / 60,
+                  actualDurationFrames: 90,
+                  actualDurationMs: (90 * 1000) / 60,
                 },
               },
             ],
@@ -62,9 +70,13 @@ describe('TimelineGridPreview', () => {
     const block = wrapper.get(
       '[data-testid="workbench-timeline-action"][data-action-id="jade-special-charged"]'
     );
-    expect(block.text()).toContain('230F');
+    expect(block.text()).toContain('特殊重击');
+    expect(block.text()).toContain('90F');
+    expect(block.text()).toContain('control 10101042/sub0');
+    expect(block.attributes('title')).toContain('特殊重击');
+    expect(block.attributes('title')).toContain('control 10101042/sub0');
     expect(readStyleNumber(block.attributes('style'), 'width')).toBeCloseTo(
-      (230 / 600) * 100,
+      (90 / 600) * 100,
       4
     );
   });

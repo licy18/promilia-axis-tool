@@ -36,6 +36,7 @@ export default defineConfig({
               '/simulation/mechanics/verifiedCombatRuntime.js',
               '/simulation/mechanics/verifiedBattleEffectGeneration.js',
               '/simulation/mechanics/verifiedActionVariantRuntime.js',
+              '/simulation/mechanics/actionEffectiveTimeline.js',
               '/domain/verifiedActionContextScheduling.js',
             ].some(modulePath => id.endsWith(modulePath))
           ) {

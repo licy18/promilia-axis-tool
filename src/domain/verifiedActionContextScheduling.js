@@ -179,7 +179,7 @@ function isRuntimeConditionSatisfied({
   timeMs,
   effectIntervals,
 }) {
-  if (!condition) return true;
+  if (!condition || condition.kind === 'always') return true;
   const stateActive = (effectIntervals ?? []).some(
     interval =>
       String(interval.effectId) ===

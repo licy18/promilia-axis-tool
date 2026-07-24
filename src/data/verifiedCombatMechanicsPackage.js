@@ -216,6 +216,7 @@ export function resolveVerifiedCombatActionMechanics(
   action = {},
   {
     selectedSubSkillIndex = null,
+    selectedControlSkillId = null,
     selectionSource = null,
     combatScenario = null,
   } = {}
@@ -254,6 +255,7 @@ export function resolveVerifiedCombatActionMechanics(
     action,
     actionMapping,
     actionBinding: resolvedActionBinding.binding,
+    selectedControlSkillId,
     selectedSubSkillIndex:
       selectedSubSkillIndex ?? action.controlSubSkillIndex ?? null,
     selectionSource,
@@ -428,13 +430,18 @@ function applySelectedSubSkillOverride({
   action,
   actionMapping,
   actionBinding,
+  selectedControlSkillId,
   selectedSubSkillIndex,
   selectionSource,
 }) {
   if (selectedSubSkillIndex == null) return { binding: actionBinding };
   const subSkillIndex = Number(selectedSubSkillIndex);
+  const publicControlSkillId = Number(actionBinding.controlSkillId);
+  const executionControlSkillId = Number(
+    selectedControlSkillId ?? publicControlSkillId
+  );
   const controlBinding = controlBindingBySkillId.get(
-    actionBinding.controlSkillId
+    executionControlSkillId
   );
   const variant = (controlBinding?.variants ?? []).find(
     item => Number(item.subSkillIndex) === subSkillIndex
@@ -446,12 +453,20 @@ function applySelectedSubSkillOverride({
       reasons: ['selected-control-subskill-index-missing'],
     };
   }
-  const timingCandidates = actionBinding.attackInputSegment
-    ? actionBinding.attackInputSegment.variantTimings
-    : actionMapping.actionTiming?.variantTimings;
-  const timing = (timingCandidates ?? []).find(
-    item => Number(item.subSkillIndex) === subSkillIndex
-  );
+  const timingCandidates =
+    executionControlSkillId === publicControlSkillId
+      ? actionBinding.attackInputSegment
+        ? actionBinding.attackInputSegment.variantTimings
+        : actionMapping.actionTiming?.variantTimings
+      : [];
+  const timing =
+    (selectionSource?.executionTiming &&
+    Number(selectionSource.executionTiming.subSkillIndex) === subSkillIndex
+      ? selectionSource.executionTiming
+      : null) ??
+    (timingCandidates ?? []).find(
+      item => Number(item.subSkillIndex) === subSkillIndex
+    );
   if (!timing) {
     return {
       binding: null,
@@ -505,7 +520,21 @@ function applySelectedSubSkillOverride({
   return {
     binding: {
       ...actionBinding,
+      identity: [
+        actionBinding.identity,
+        `execution-control:${executionControlSkillId}`,
+        `sub:${subSkillIndex}`,
+      ].join('|'),
+      publicControlSkillId,
+      controlSkillId: executionControlSkillId,
+      executionControlSkillId,
       selectedSubSkillIndex: subSkillIndex,
+      semanticIdentity: selectionSource?.semanticIdentity ?? null,
+      semanticName:
+        selectionSource?.semanticName ??
+        actionBinding.actionName ??
+        action.name ??
+        null,
       ...(actionBinding.attackInputSegment
         ? {
             attackInputSegment: {
@@ -554,6 +583,10 @@ function applySelectedSubSkillOverride({
         reasons: exactTiming ? [] : (timing.occupancy?.reasons ?? []),
       },
       variantSelection,
+      animationDurationFrames: timing.animation?.durationFrames ?? null,
+      effectiveOccupancyFrames: Number(
+        exactTiming ? timing.occupancy.durationFrames : planningDurationFrames
+      ),
       actualDurationFrames: exactTiming
         ? timing.occupancy.durationFrames
         : planningDurationFrames,
@@ -939,7 +972,9 @@ function resolveActionBinding(actionMapping, action) {
   }
   const candidates = (actionMapping.attackInputSegments ?? []).filter(
     segment =>
-      (segmentIdentity && segment.identity === segmentIdentity) ||
+      (segmentIdentity &&
+        (segment.identity === segmentIdentity ||
+          segmentIdentity.startsWith(`${segment.identity}|`))) ||
       (!segmentIdentity &&
         (!controlSkillId || segment.controlSkillId === controlSkillId) &&
         (!sequenceIndex || segment.sequenceIndex === sequenceIndex))

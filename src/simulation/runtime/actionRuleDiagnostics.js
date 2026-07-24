@@ -596,6 +596,12 @@ function createLaneOverlapDiagnostics(actions) {
         if (overlapEndMs - candidate.startMs <= ACTION_BOUNDARY_EPSILON_MS) {
           continue;
         }
+        if (
+          blocking.contextActionId === candidate.actionId ||
+          candidate.contextActionId === blocking.actionId
+        ) {
+          continue;
+        }
         diagnostics.push({
           schemaVersion: 1,
           id: createDiagnosticId(
@@ -624,7 +630,7 @@ function createLaneOverlapDiagnostics(actions) {
           editFieldKey: 'startMs',
           message: `${candidate.actionName} 与 ${blocking.actionName} 在同一角色轨重叠`,
           source: {
-            sourceKind: 'project-action-timing',
+            sourceKind: 'azpr-action-effective-timeline',
             sourceStatus: 'project-action-range-confirmed',
             fieldPaths: [
               'action.startMs',
@@ -1104,6 +1110,7 @@ function createActionRange(action) {
     actorName: action.actor?.name ?? action.actorId,
     startMs,
     endMs: startMs + durationMs,
+    contextActionId: action.runtimeContextActionId ?? null,
   };
 }
 
