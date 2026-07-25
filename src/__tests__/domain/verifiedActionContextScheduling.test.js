@@ -166,9 +166,7 @@ describe('verified action context scheduling', () => {
     const diagnostics = createActionRuleDiagnostics({
       scenario: {
         time: { fps: 60 },
-        actors: [
-          { id: 'actor-jade', characterId: 101010, name: '涂山小玉' },
-        ],
+        actors: [{ id: 'actor-jade', characterId: 101010, name: '涂山小玉' }],
         actions,
       },
     });
@@ -290,6 +288,72 @@ describe('verified action context scheduling', () => {
       },
     });
   });
+
+  it.each([
+    {
+      label: '星鸣技',
+      controlSkillId: 10101012,
+      startFrame: 86,
+      endFrame: 120,
+      executionSubSkillIndex: 0,
+    },
+    {
+      label: '星决技',
+      controlSkillId: 10101013,
+      startFrame: 295,
+      endFrame: 329,
+      executionSubSkillIndex: 1,
+    },
+    {
+      label: '极限反击',
+      controlSkillId: 10101025,
+      startFrame: 60,
+      endFrame: 96,
+      executionSubSkillIndex: 0,
+    },
+  ])(
+    'snaps a heavy input to the generated $label hidden-input window',
+    ({
+      label,
+      controlSkillId,
+      startFrame,
+      endFrame,
+      executionSubSkillIndex,
+    }) => {
+      const source = {
+        id: `jade-${label}`,
+        actorCharacterId: 101010,
+        startMs: 3000,
+      };
+      const result = resolveVerifiedContextActionStartMs({
+        actions: [source],
+        selections: [
+          {
+            actionId: source.id,
+            controlSkillId,
+            selectedSubSkillIndex: 0,
+          },
+        ],
+        graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+        ownerId: 101010,
+        actorId: 'actor-jade',
+        targetControlSkillId: 10101010,
+        effectIntervals: [],
+        timelineDurationMs: 30_000,
+      });
+
+      expect(result).toMatchObject({
+        actionId: source.id,
+        edge: {
+          sourceControlSkillId: controlSkillId,
+          executionControlSkillId: 10101042,
+          targetSubSkillIndex: executionSubSkillIndex,
+        },
+      });
+      expect(result.startMs).toBeCloseTo(3000 + frameToMs(startFrame), 5);
+      expect(result.endMs).toBeCloseTo(3000 + frameToMs(endFrame), 5);
+    }
+  );
 });
 
 function createNormalAttackEntry() {

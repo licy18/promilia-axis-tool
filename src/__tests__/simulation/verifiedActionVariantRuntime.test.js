@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import xiaoyuActionOccupancyAudit from '../../../reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json';
+import xiaoyuHiddenInputAudit from '../../../reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
@@ -12,6 +14,7 @@ import {
   getWorkbenchGameData,
   normalizeWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
+import { projectVerifiedAttackInputChainSegment } from '../../domain/verifiedActionContextScheduling';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedActionVariantRuntime } from '../../simulation/mechanics/verifiedActionVariantRuntime';
@@ -254,18 +257,19 @@ describe('verified action variant and special resource runtime', () => {
       },
     });
     expect(runtime.selectionByActionId.get('jade-charged')).toMatchObject({
-      controlSkillId: 10101010,
+      controlSkillId: 10101042,
       publicControlSkillId: 10101010,
-      executionControlSkillId: 10101010,
-      selectedSubSkillIndex: 2,
-      semanticName: '强化重击',
-      sourceKind: 'verified-active-switch-skill-index-window',
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 1,
+      semanticName: '强化特殊重击',
+      sourceKind: 'verified-input-context-variant',
+      contextActionId: 'jade-ultimate',
       status: 'verified-action-variant-selection-ready',
     });
     expect(
       runtime.actionResolutionById.get('jade-charged')?.variantSelection
     ).toMatchObject({
-      selectedSubSkillIndex: 2,
+      selectedSubSkillIndex: 1,
       changed: true,
       status: 'verified-action-variant-selected',
     });
@@ -596,8 +600,7 @@ describe('verified action variant and special resource runtime', () => {
         ...exactFollower,
         id: `${setup.focus.id}-early-follower`,
         startMs:
-          Number(setup.focus.startMs) +
-          frameTime(expectedOccupancyFrames - 1),
+          Number(setup.focus.startMs) + frameTime(expectedOccupancyFrames - 1),
       };
       const earlyScenario = {
         ...exactScenario,
@@ -622,8 +625,7 @@ describe('verified action variant and special resource runtime', () => {
             actionId: earlyFollower.id,
             blockingActionId: setup.focus.id,
             suggestedStartMs: expect.closeTo(
-              Number(setup.focus.startMs) +
-                frameTime(expectedOccupancyFrames),
+              Number(setup.focus.startMs) + frameTime(expectedOccupancyFrames),
               6
             ),
           }),
@@ -765,9 +767,7 @@ describe('verified action variant and special resource runtime', () => {
         )?.timeMs
       ).toBeCloseTo(frameTime(expectedStateFrame), 6);
       expect(
-        burstChain.map(action =>
-          runtime.selectionByActionId.get(action.id)
-        )
+        burstChain.map(action => runtime.selectionByActionId.get(action.id))
       ).toEqual([
         expect.objectContaining({
           controlSkillId: 10101001,
@@ -881,8 +881,7 @@ describe('verified action variant and special resource runtime', () => {
       });
 
       expect(
-        runtime.selectionByActionId.get(charged.id)
-          ?.executionControlSkillId
+        runtime.selectionByActionId.get(charged.id)?.executionControlSkillId
       ).toBe(expectedControlSkillId);
       expect(runtime.selectionByActionId.get(charged.id)).toMatchObject(
         expectedControlSkillId === 10101042
@@ -898,6 +897,155 @@ describe('verified action variant and special resource runtime', () => {
       );
     }
   );
+
+  it.each([
+    {
+      label: '星鸣技',
+      skillId: 10101012,
+      actionVariantIndex: 0,
+      boundaries: [
+        [85, false],
+        [86, true],
+        [119, true],
+        [120, false],
+      ],
+      expectedInsideSubSkillIndex: 0,
+      expectedInsideSemanticName: '特殊重击',
+    },
+    {
+      label: '星决技',
+      skillId: 10101013,
+      actionVariantIndex: 0,
+      boundaries: [
+        [294, false],
+        [295, true],
+        [328, true],
+        [329, false],
+      ],
+      expectedInsideSubSkillIndex: 1,
+      expectedInsideSemanticName: '强化特殊重击',
+      entersBurstBeforeWindow: true,
+    },
+    {
+      label: '极限反击',
+      skillId: 10101021,
+      actionVariantIndex: 1,
+      boundaries: [
+        [59, false],
+        [60, true],
+        [95, true],
+        [96, false],
+      ],
+      expectedInsideSubSkillIndex: 0,
+      expectedInsideSemanticName: '特殊重击',
+    },
+  ])(
+    'uses the verified $label hidden charged-input window as a half-open interval',
+    ({
+      label,
+      skillId,
+      actionVariantIndex,
+      boundaries,
+      expectedInsideSubSkillIndex,
+      expectedInsideSemanticName,
+      entersBurstBeforeWindow = false,
+    }) => {
+      for (const burstActive of [false, true]) {
+        for (const [relativeFrame, inside] of boundaries) {
+          const source = createActorAction({
+            id: `jade-${label}-source-${burstActive}-${relativeFrame}`,
+            characterId: JADE_ID,
+            skillId,
+            actionVariantIndex,
+            startMs: 0,
+          });
+          const charged = createActorAction({
+            id: `jade-${label}-charged-${burstActive}-${relativeFrame}`,
+            characterId: JADE_ID,
+            skillId: 10101001,
+            actionVariantIndex: 2,
+            startMs: frameTime(relativeFrame),
+          });
+          const runtime = runVariantRuntime({
+            actors: [source.actor],
+            actions: [source, charged],
+            durationMs: 12_000,
+            initialRuntimeState: burstActive
+              ? createJadeBurstInitialState({
+                  actorId: source.actorId,
+                  remainingDurationMs: 10_000,
+                })
+              : null,
+          });
+          const selection = runtime.selectionByActionId.get(charged.id);
+
+          expect(selection, `${label} ${relativeFrame}F`).toMatchObject(
+            inside
+              ? {
+                  executionControlSkillId: 10101042,
+                  selectedSubSkillIndex: expectedInsideSubSkillIndex,
+                  semanticName: expectedInsideSemanticName,
+                  sourceKind: 'verified-input-context-variant',
+                  contextActionId: source.id,
+                }
+              : {
+                  executionControlSkillId: 10101010,
+                  selectedSubSkillIndex:
+                    burstActive || entersBurstBeforeWindow ? 2 : 0,
+                  semanticName:
+                    burstActive || entersBurstBeforeWindow
+                      ? '强化重击'
+                      : '普通重击',
+                }
+          );
+        }
+      }
+    }
+  );
+
+  it('resolves all 21 audited Xiaoyu public execution forms with their authoritative occupancy', () => {
+    expect(xiaoyuHiddenInputAudit.publicExecutionForms).toHaveLength(21);
+    expect(xiaoyuActionOccupancyAudit.rows).toHaveLength(21);
+
+    for (const form of xiaoyuHiddenInputAudit.publicExecutionForms) {
+      const setup = createXiaoyuPublicExecutionFormCase(form);
+      const runtime = runVariantRuntime({
+        actors: [setup.focus.actor],
+        actions: setup.actions,
+        durationMs: 12_000,
+        initialRuntimeState: setup.initialRuntimeState,
+      });
+      const selection = runtime.selectionByActionId.get(setup.focus.id);
+      const occupancy = xiaoyuActionOccupancyAudit.rows.find(
+        row =>
+          Number(row.controlSkillId) === Number(form.sourceControlSkillId) &&
+          Number(row.subSkillIndex) === Number(form.sourceSubSkillIndex)
+      );
+
+      expect(occupancy, `${form.semanticName}: occupancy`).toBeTruthy();
+      expect(
+        selection?.selectedSubSkillIndex,
+        `${form.semanticName}: selected subskill`
+      ).toBe(form.sourceSubSkillIndex);
+      expect(
+        selection?.actualDurationFrames,
+        `${form.semanticName}: effective occupancy`
+      ).toBe(occupancy.effectiveOccupancyFrames);
+      const actionResolution = runtime.actionResolutionById.get(setup.focus.id);
+      expect(
+        actionResolution?.actionBinding?.schedulable,
+        `${form.semanticName}: schedulable`
+      ).toBe(true);
+      expect(
+        actionResolution?.ready,
+        `${form.semanticName}: readiness classification`
+      ).toBe(actionResolution?.actionBinding?.runtimeReady === true);
+      expect(
+        Number(selection.executionControlSkillId ?? selection.controlSkillId),
+        `${form.semanticName}: execution control`
+      ).toBe(form.sourceControlSkillId);
+    }
+  });
 
   it('enters burst on the exact threshold transaction and refreshes it from the ultimate source frame', () => {
     const charged = createActorAction({
@@ -1368,8 +1516,9 @@ describe('verified action variant and special resource runtime', () => {
           diagnostic.actionIds?.includes(special.id)
       )
     ).toEqual([]);
-    const resolution =
-      result.verifiedCombatRuntime.actionResolutionById.get(special.id);
+    const resolution = result.verifiedCombatRuntime.actionResolutionById.get(
+      special.id
+    );
     const consumeEvents = result.verifiedTuningMarkGeneration.events.filter(
       event => event.actionId === special.id && event.kind === 'consume'
     );
@@ -1507,6 +1656,141 @@ function createJadeBurstChainActions({ startFrame }) {
       attackSequenceIndex: definition.sequenceIndex,
     })
   );
+}
+
+function createXiaoyuPublicExecutionFormCase(form) {
+  const common = {
+    characterId: JADE_ID,
+    skillId: 10101001,
+  };
+  if (form.actionKind === 'normal-attack') {
+    const sequenceIndex = Number(
+      String(form.publicActionIdentity).match(/\|A(\d+)$/)?.[1]
+    );
+    const chainIdentity = String(form.publicActionIdentity).split('|A')[0];
+    const chain = mechanicsPackage.actionVariantGraph.attackInputChains.find(
+      item => item.chainIdentity === chainIdentity
+    );
+    if (!chain) {
+      throw new Error(`Missing Xiaoyu attack chain ${chainIdentity}`);
+    }
+    let nextStartFrame = 0;
+    const actions = chain.segments
+      .filter(segment => Number(segment.sequenceIndex) <= sequenceIndex)
+      .map(segment => {
+        const sourceSegment =
+          JADE_NORMAL_MAPPING.attackInputSegments.find(
+            item =>
+              Number(item.controlSkillId) === Number(segment.controlSkillId)
+          ) ?? JADE_A1;
+        const attackInput = projectVerifiedAttackInputChainSegment(
+          sourceSegment,
+          segment,
+          segment.sequenceIndex,
+          chain.segments.length
+        );
+        const action = createActorAction({
+          ...common,
+          id: `audited-${chainIdentity}-a${segment.sequenceIndex}`,
+          startMs: frameTime(nextStartFrame),
+          attackInput,
+          attackSequenceIndex: segment.sequenceIndex,
+        });
+        action.attackGroupId = `audited-${chainIdentity}`;
+        nextStartFrame += Number(segment.durationFrames);
+        return action;
+      });
+    const focus = actions.at(-1);
+    return {
+      focus,
+      actions,
+      initialRuntimeState:
+        Number(form.sourceSubSkillIndex) === 1
+          ? createJadeBurstInitialState({
+              actorId: focus.actorId,
+              remainingDurationMs: 10_000,
+            })
+          : null,
+    };
+  }
+
+  if (form.actionKind === 'charged-attack') {
+    const focus = createActorAction({
+      ...common,
+      id: `audited-${form.semanticName}`,
+      actionVariantIndex: 2,
+    });
+    if (form.semanticName === '普通重击') {
+      return { focus, actions: [focus], initialRuntimeState: null };
+    }
+    if (form.semanticName === '强化重击') {
+      return {
+        focus,
+        actions: [focus],
+        initialRuntimeState: createJadeBurstInitialState({
+          actorId: focus.actorId,
+          remainingDurationMs: 10_000,
+        }),
+      };
+    }
+    if (form.semanticName === '特殊重击') {
+      const source = createActorAction({
+        ...common,
+        id: 'audited-special-source-a5',
+        attackInput: JADE_A5,
+        attackSequenceIndex: 5,
+      });
+      focus.startMs = frameTime(37);
+      return { focus, actions: [source, focus], initialRuntimeState: null };
+    }
+    if (form.semanticName === '强化特殊重击') {
+      const source = createActorAction({
+        ...common,
+        id: 'audited-enhanced-special-source-a3',
+        attackInput: {
+          ...JADE_A5,
+          controlSkillId: 10101005,
+          selectedSubSkillIndex: 1,
+          sequenceIndex: 3,
+          sequenceTotal: 3,
+        },
+        attackSequenceIndex: 3,
+      });
+      focus.startMs = frameTime(40);
+      return {
+        focus,
+        actions: [source, focus],
+        initialRuntimeState: createJadeBurstInitialState({
+          actorId: focus.actorId,
+          remainingDurationMs: 10_000,
+        }),
+      };
+    }
+    const source = createActorAction({
+      ...common,
+      id: 'audited-continuous-source',
+      actionVariantIndex: 2,
+    });
+    focus.startMs = frameTime(75);
+    return { focus, actions: [source, focus], initialRuntimeState: null };
+  }
+
+  const mapping = mechanicsPackage.actionMappings.find(
+    item =>
+      Number(item.ownerId) === JADE_ID &&
+      String(item.actionKind) === String(form.actionKind) &&
+      Number(item.controlSkillId) === Number(form.sourceControlSkillId)
+  );
+  if (!mapping) {
+    throw new Error(`Missing Xiaoyu public mapping for ${form.semanticName}`);
+  }
+  const focus = createActorAction({
+    characterId: JADE_ID,
+    id: `audited-${form.actionKind}`,
+    skillId: mapping.sourceSkillId,
+    actionVariantIndex: mapping.actionVariantIndex,
+  });
+  return { focus, actions: [focus], initialRuntimeState: null };
 }
 
 function frameTime(frame) {

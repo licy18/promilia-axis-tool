@@ -69,6 +69,7 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m9-r3-xiaoyu-mechanics]') ||
     testInfo.title.includes('[m9-r3-r2-xiaoyu-forms-occupancy]') ||
     testInfo.title.includes('[m9-r3-r2-r1-xiaoyu-burst-chain]') ||
+    testInfo.title.includes('[m9-r3-r2-r2-xiaoyu-hidden-inputs]') ||
     testInfo.title.includes('[m9-r3-r1-timeline-layout]')
   ) {
     return;
@@ -6726,10 +6727,7 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] [m9-r3-r2-r1-xiaoyu-burst-chain] resolve
   expect(actorLaneBoxForBurstDrop).toBeTruthy();
   await dragLocatorTo(page, normalAttack, actorLane, {
     targetPosition: {
-      x:
-        ultimateBox.x -
-        actorLaneBoxForBurstDrop.x +
-        ultimateBox.width / 2,
+      x: ultimateBox.x - actorLaneBoxForBurstDrop.x + ultimateBox.width / 2,
       y: actorLaneBoxForBurstDrop.height / 2,
     },
   });
@@ -6898,6 +6896,196 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] [m9-r3-r2-r1-xiaoyu-burst-chain] resolve
   await expectPageWithoutHorizontalOverflow(page);
   await page.screenshot({
     path: 'reports/m9-r3-r2-r1-xiaoyu-burst-chain-narrow.png',
+  });
+});
+
+test('[m9-r3-r2-r2-xiaoyu-hidden-inputs] resolves verified hidden inputs, crosses a window by pointer, and preserves the result', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-scenario-add').click();
+  await changeM2TeamSlot(page, 0, 101010);
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101010"]'
+  );
+  const actorEnergy = timeline.locator(
+    '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="101010"]'
+  );
+  await actorEnergy.fill('100');
+  await actorEnergy.press('Enter');
+
+  await openActorInspector(page, 101003);
+  await page
+    .getByTestId('workbench-initial-controlled-actor-select')
+    .selectOption('101003');
+  await closeInspectorIfVisible(page);
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+    .click();
+  await page.getByTestId('workbench-add-switch-action').click();
+  const switchParent = timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    )
+    .last();
+  const switchParentId = await switchParent.getAttribute('data-action-id');
+  const xiaoyuStarCarry = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-parent-action-id="${switchParentId}"][data-derived-action-kind="switch-triggered-star-carry"][data-skill-id="10101021"]`
+  );
+  await expect(xiaoyuStarCarry).toHaveCount(1);
+  await expect(xiaoyuStarCarry).toContainText('入场触发');
+  await xiaoyuStarCarry.click();
+  await expect(
+    page
+      .getByTestId('workbench-verified-mechanics-trace')
+      .locator('[data-trace-step="action-variant"]')
+  ).toContainText('control 10101021/sub0');
+  await closeInspectorIfVisible(page);
+
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
+    )
+    .click();
+  await page
+    .locator(
+      '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+    )
+    .click();
+  const chargedAttack = page.locator(
+    '[data-testid="workbench-skill-entry"][data-skill-id="10101001"][data-action-kind="charged-attack"]'
+  );
+  const chargedBlocks = () =>
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10101001"][data-attack-group-id=""]'
+    );
+  await expect(chargedBlocks()).toHaveCount(0);
+  await chargedAttack.click();
+  await expect(chargedBlocks()).toHaveCount(1);
+  await expect(chargedBlocks().first()).toContainText('普通重击');
+  await expect(chargedBlocks().first()).toContainText('control 10101010/sub0');
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(chargedBlocks()).toHaveCount(0);
+
+  const hiddenInputCases = [
+    {
+      kind: 'star-skill',
+      skillId: 10101012,
+      windowStartFrame: 86,
+      windowEndFrame: 120,
+      semanticName: '特殊重击',
+      controlLabel: 'control 10101042/sub0',
+    },
+    {
+      kind: 'ultimate',
+      skillId: 10101013,
+      windowStartFrame: 295,
+      windowEndFrame: 329,
+      semanticName: '强化特殊重击',
+      controlLabel: 'control 10101042/sub1',
+    },
+    {
+      kind: 'limit-counter',
+      skillId: 10101021,
+      windowStartFrame: 60,
+      windowEndFrame: 96,
+      semanticName: '特殊重击',
+      controlLabel: 'control 10101042/sub0',
+    },
+  ];
+  for (const [index, hiddenInput] of hiddenInputCases.entries()) {
+    await page
+      .locator(
+        '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
+      )
+      .click();
+    await page
+      .locator(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .click();
+    await page
+      .locator(
+        `[data-testid="workbench-skill-entry"][data-skill-id="${hiddenInput.skillId}"][data-action-kind="${hiddenInput.kind}"]`
+      )
+      .click();
+    const source = timeline
+      .locator(
+        `[data-testid="workbench-timeline-action"][data-skill-id="${hiddenInput.skillId}"][data-derived-action-kind=""]`
+      )
+      .last();
+    await expect(source).toHaveCount(1);
+    await chargedAttack.click();
+    await expect(chargedBlocks()).toHaveCount(index + 1);
+    const charged = chargedBlocks().nth(index);
+    await expect(charged).toContainText(hiddenInput.semanticName);
+    await expect(charged).toContainText(hiddenInput.controlLabel);
+    const sourceStartMs = Number(await source.getAttribute('data-start-ms'));
+    const chargedStartMs = Number(await charged.getAttribute('data-start-ms'));
+    expect(chargedStartMs - sourceStartMs).toBeCloseTo(
+      frameToMs(hiddenInput.windowStartFrame),
+      3
+    );
+
+    if (hiddenInput.kind === 'star-skill') {
+      await page
+        .locator(
+          '[data-testid="workbench-action-placement-mode-option"][data-mode="free"]'
+        )
+        .click();
+      await dragTimelineActionByFrames(
+        page,
+        charged,
+        hiddenInput.windowEndFrame - hiddenInput.windowStartFrame
+      );
+      await expect
+        .poll(async () => {
+          const movedStartMs = Number(
+            await charged.getAttribute('data-start-ms')
+          );
+          return Math.round(((movedStartMs - sourceStartMs) * 60) / 1000);
+        })
+        .toBe(hiddenInput.windowEndFrame);
+      await expect(charged).toContainText('普通重击');
+      await expect(charged).toContainText('control 10101010/sub0');
+      await page.getByTestId('workbench-undo-edit').click();
+      await expect(charged).toContainText(hiddenInput.semanticName);
+      await expect(charged).toContainText(hiddenInput.controlLabel);
+    }
+  }
+
+  await chargedBlocks().last().click();
+  await expect(page.getByTestId('workbench-action-identity')).toContainText(
+    '特殊重击'
+  );
+  await actorLane.scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: 'reports/m9-r3-r2-r2-xiaoyu-hidden-inputs-desktop.png',
+  });
+  await closeInspectorIfVisible(page);
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(chargedBlocks()).toHaveCount(3);
+  await expect(chargedBlocks().nth(0)).toContainText('特殊重击');
+  await expect(chargedBlocks().nth(1)).toContainText('强化特殊重击');
+  await expect(chargedBlocks().nth(2)).toContainText('特殊重击');
+  await expect(xiaoyuStarCarry).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await actorLane.scrollIntoViewIfNeeded();
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/m9-r3-r2-r2-xiaoyu-hidden-inputs-narrow.png',
   });
 });
 
@@ -8121,6 +8309,27 @@ async function dragLocatorTo(
     sourcePosition,
     targetPosition,
   });
+  await page.mouse.up();
+}
+
+async function dragTimelineActionByFrames(page, action, frameDelta) {
+  await action.scrollIntoViewIfNeeded();
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const lane = timeline.getByTestId('workbench-timeline-lane');
+  const actionBox = await action.boundingBox();
+  const laneBox = await lane.boundingBox();
+  const durationMs = Number(await timeline.getAttribute('data-duration-ms'));
+  if (!actionBox || !laneBox || !durationMs) {
+    throw new Error('Timeline action drag geometry is unavailable');
+  }
+  const deltaX = (frameToMs(frameDelta) / durationMs) * laneBox.width;
+  const start = {
+    x: actionBox.x + Math.min(8, actionBox.width / 2),
+    y: actionBox.y + actionBox.height / 2,
+  };
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
+  await page.mouse.move(start.x + deltaX, start.y, { steps: 8 });
   await page.mouse.up();
 }
 

@@ -4,6 +4,7 @@ import actionCoverage from '../../../reports/verified-combat-action-coverage.jso
 import actionTimingCoverage from '../../../reports/verified-combat-action-timing-coverage.json';
 import effectCoverage from '../../../reports/verified-combat-effect-coverage.json';
 import xiaoyuActionOccupancyAudit from '../../../reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json';
+import xiaoyuHiddenInputAudit from '../../../reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json';
 import variantResourceCoverage from '../../../reports/verified-action-variant-resource-coverage.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
@@ -683,6 +684,36 @@ describe('verified combat mechanics package', () => {
       {
         sourceSubSkillIndex: 0,
         targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 0,
+        startFrame: 86,
+        endFrame: 120,
+        condition: 'always',
+        semanticName: '特殊重击',
+      },
+      {
+        sourceSubSkillIndex: 0,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 1,
+        startFrame: 295,
+        endFrame: 329,
+        condition: 'always',
+        semanticName: '强化特殊重击',
+      },
+      {
+        sourceSubSkillIndex: 0,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 0,
+        startFrame: 60,
+        endFrame: 96,
+        condition: 'always',
+        semanticName: '特殊重击',
+      },
+      {
+        sourceSubSkillIndex: 0,
+        targetControlSkillId: 10101010,
         executionControlSkillId: 10101010,
         targetSubSkillIndex: 1,
         startFrame: 75,
@@ -691,6 +722,23 @@ describe('verified combat mechanics package', () => {
         semanticName: '连续重击',
       },
     ]);
+    expect(
+      mechanicsPackage.actionVariantGraph.hiddenInputDerivationCatalog
+    ).toMatchObject({
+      ownerId: 101010,
+      publicExecutionFormCount: 21,
+      publicExecutionFormsCovered: 21,
+      starCarryConclusion: {
+        sourceControlSkillId: 10101021,
+        targetControlSkillId: 10101042,
+        status: 'verified-not-found-in-current-client',
+        applied: false,
+      },
+      summary: {
+        appliedContextEdgeCount: 7,
+        missingPublicExecutionFormCount: 0,
+      },
+    });
     expect(
       mechanicsPackage.actionVariantGraph.publicActionForms
         .filter(form => form.ownerId === 101010)
@@ -738,9 +786,10 @@ describe('verified combat mechanics package', () => {
         occupancyFrames: 75,
       },
     ]);
-    const xiaoyuDerivedControl = mechanicsPackage.actionVariantControlBindings.find(
-      control => control.controlSkillId === 10101042
-    );
+    const xiaoyuDerivedControl =
+      mechanicsPackage.actionVariantControlBindings.find(
+        control => control.controlSkillId === 10101042
+      );
     expect(
       xiaoyuDerivedControl.hits.map(hit => ({
         subSkillIndex: hit.mapIndex,
@@ -810,6 +859,92 @@ describe('verified combat mechanics package', () => {
           row.animationDurationFrames > row.effectiveOccupancyFrames
       )
     ).toBe(true);
+    expect(xiaoyuHiddenInputAudit.summary).toMatchObject({
+      publicExecutionFormCount: 21,
+      publicExecutionFormsCovered: 21,
+      missingPublicExecutionFormCount: 0,
+      appliedContextEdgeCount: 7,
+    });
+    expect(
+      xiaoyuHiddenInputAudit.rows
+        .filter(row => row.status === 'verified-input-context-edge-applied')
+        .map(row => [
+          row.sourceControlSkillId,
+          row.sourceSubSkillIndex,
+          row.inputWindow.startFrame,
+          row.inputWindow.endFrame,
+          row.targetControlSkillId,
+          row.targetSubSkillIndex,
+        ])
+        .sort((left, right) => left.join('|').localeCompare(right.join('|')))
+    ).toEqual([
+      [10101005, 0, 37, 102, 10101042, 0],
+      [10101005, 1, 0, 20, 10101042, 1],
+      [10101005, 1, 40, 72, 10101042, 1],
+      [10101010, 0, 75, 100, 10101010, 1],
+      [10101012, 0, 86, 120, 10101042, 0],
+      [10101013, 0, 295, 329, 10101042, 1],
+      [10101025, 0, 60, 96, 10101042, 0],
+    ]);
+    expect(xiaoyuHiddenInputAudit.rows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceControlSkillId: 10101015,
+          sourceSubSkillIndex: 0,
+          targetControlSkillId: 10101001,
+          targetSubSkillIndex: 0,
+          relationType: 'direct-control-input',
+          applied: true,
+        }),
+        expect.objectContaining({
+          sourceControlSkillId: 10101042,
+          sourceSubSkillIndex: 0,
+          targetControlSkillId: 10101003,
+          targetSubSkillIndex: 0,
+          relationType: 'direct-control-input',
+          applied: true,
+        }),
+        expect.objectContaining({
+          sourceControlSkillId: 10101042,
+          sourceSubSkillIndex: 1,
+          targetControlSkillId: 10101001,
+          targetSubSkillIndex: 1,
+          condition: expect.objectContaining({
+            kind: 'resource-state-active',
+          }),
+          applied: true,
+        }),
+        expect.objectContaining({
+          sourceControlSkillId: 10101014,
+          targetControlSkillId: 10101041,
+          targetSubSkillIndex: 0,
+          relationType: 'conditional-wrapper-trigger',
+          applied: true,
+        }),
+        expect.objectContaining({
+          sourceControlSkillId: 10101024,
+          targetControlSkillId: 10101041,
+          targetSubSkillIndex: 1,
+          relationType: 'conditional-wrapper-trigger',
+          applied: true,
+        }),
+        expect.objectContaining({
+          sourceControlSkillId: 10101041,
+          targetControlSkillId: 10101025,
+          targetSubSkillIndex: 0,
+          relationType: 'direct-control-input',
+          applied: true,
+        }),
+      ])
+    );
+    expect(xiaoyuHiddenInputAudit.starCarryConclusion).toMatchObject({
+      switchSkillSlot: 203,
+      sourceControlSkillId: 10101021,
+      directDerivedEdgeCount: 0,
+      wrapperSourceControlSkillIds: [10101014, 10101024],
+      status: 'verified-not-found-in-current-client',
+      applied: false,
+    });
     expect(
       mechanicsPackage.specialResourceCatalog.thresholdTransitions.find(
         transition => transition.ownerId === 101010

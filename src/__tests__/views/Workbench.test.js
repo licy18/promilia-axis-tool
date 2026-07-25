@@ -7933,8 +7933,8 @@ describe('Workbench view', () => {
         chargedDraft.id
       );
     expect([
-      ...(setupSimulationResult?.verifiedActionVariantRuntime
-        ?.actionResolutionById?.keys?.() ?? []),
+      ...(setupSimulationResult?.verifiedActionVariantRuntime?.actionResolutionById?.keys?.() ??
+        []),
     ]).toContain(chargedDraft.id);
     expect(runtimeResolution?.actionBinding).toMatchObject({
       semanticName: '特殊重击',
@@ -7996,8 +7996,7 @@ describe('Workbench view', () => {
     const burstDrafts = savedAfterBurstChain.actionDrafts
       .filter(
         action =>
-          Number(action.actorCharacterId) === 101010 &&
-          action.attackGroupId
+          Number(action.actorCharacterId) === 101010 && action.attackGroupId
       )
       .sort(
         (left, right) => left.attackSequenceIndex - right.attackSequenceIndex
@@ -8016,10 +8015,11 @@ describe('Workbench view', () => {
       [2, 10101004, 1, 75, 'applied'],
       [3, 10101005, 1, 72, 'applied'],
     ]);
-    const burstReadiness = readSetupValue(setupState.simulationResult)
-      .actionReadinessTimeline.actions.filter(action =>
-        burstDrafts.some(draft => draft.id === action.actionId)
-      );
+    const burstReadiness = readSetupValue(
+      setupState.simulationResult
+    ).actionReadinessTimeline.actions.filter(action =>
+      burstDrafts.some(draft => draft.id === action.actionId)
+    );
     expect(burstReadiness.map(action => action.status)).toEqual([
       'ready',
       'ready',
@@ -8060,6 +8060,130 @@ describe('Workbench view', () => {
     expect(chargedBlock.text()).toContain('60F');
     expect(chargedBlock.text()).toContain('control 10101042/sub1');
   }, 30000);
+
+  it('uses the generated Xiaoyu hidden-input windows for real assisted action-library clicks', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    workbenchMechanicsProfileMockState.durationMs = 20_000;
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await findActionLibraryActorButton(wrapper, 101010).trigger('click');
+    await settleWorkbenchAsyncPanels();
+    const jadeInitialSp = wrapper.get(
+      '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="101010"]'
+    );
+    await jadeInitialSp.setValue('100');
+    await jadeInitialSp.trigger('blur');
+    await wrapper
+      .get(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
+    const setupState = wrapper.vm.$.setupState;
+    const readSetupValue = value => value?.value ?? value;
+    const cases = [
+      {
+        kind: 'star-skill',
+        sourceSkillId: 10101012,
+        sourceControlSkillId: 10101012,
+        windowStartFrame: 86,
+        semanticName: '特殊重击',
+        executionSubSkillIndex: 0,
+        occupancyFrames: 90,
+      },
+      {
+        kind: 'ultimate',
+        sourceSkillId: 10101013,
+        sourceControlSkillId: 10101013,
+        windowStartFrame: 295,
+        semanticName: '强化特殊重击',
+        executionSubSkillIndex: 1,
+        occupancyFrames: 60,
+      },
+      {
+        kind: 'limit-counter',
+        sourceSkillId: 10101021,
+        sourceControlSkillId: 10101025,
+        windowStartFrame: 60,
+        semanticName: '特殊重击',
+        executionSubSkillIndex: 0,
+        occupancyFrames: 90,
+      },
+    ];
+
+    for (const testCase of cases) {
+      await findActionLibraryActorButton(wrapper, 101010).trigger('click');
+      await settleWorkbenchAsyncPanels();
+      const actionIdsBeforeSourceClick = new Set(
+        readSetupValue(setupState.actionDrafts).map(action => action.id)
+      );
+      await findActionLibraryEntry(wrapper, testCase.kind).trigger('click');
+      await settleWorkbenchAsyncPanels();
+      const sourceAction = readSetupValue(setupState.actionDrafts)
+        .filter(action => !actionIdsBeforeSourceClick.has(action.id))
+        .sort((left, right) => right.startMs - left.startMs)[0];
+      expect(
+        Number(sourceAction?.skillId),
+        `${testCase.kind}: source action`
+      ).toBe(testCase.sourceSkillId);
+      await findActionLibraryEntry(wrapper, 'charged-attack').trigger('click');
+      await settleWorkbenchAsyncPanels();
+      const simulation = readSetupValue(setupState.simulationResult);
+      const sourceSelection =
+        simulation.verifiedActionVariantRuntime.selections.find(
+          selection => selection.actionId === sourceAction?.id
+        );
+      const chargedSelection =
+        simulation.verifiedActionVariantRuntime.selections.find(
+          selection =>
+            selection.contextActionId === sourceSelection?.actionId &&
+            selection.semanticName === testCase.semanticName
+        );
+      expect(sourceSelection, testCase.kind).toBeTruthy();
+      expect(sourceSelection, testCase.kind).toMatchObject({
+        executionControlSkillId: testCase.sourceControlSkillId,
+        selectedSubSkillIndex: 0,
+      });
+      expect(chargedSelection, testCase.kind).toMatchObject({
+        publicControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        selectedSubSkillIndex: testCase.executionSubSkillIndex,
+        actualDurationFrames: testCase.occupancyFrames,
+        status: 'verified-action-variant-selection-ready',
+      });
+      const chargedAction = readSetupValue(setupState.actionDrafts).find(
+        action => action.id === chargedSelection.actionId
+      );
+      expect(
+        msToFrame(chargedAction.startMs - sourceAction.startMs),
+        testCase.kind
+      ).toBe(testCase.windowStartFrame);
+      const chargedBlock = wrapper.get(
+        `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
+      );
+      expect(chargedBlock.text()).toContain(testCase.semanticName);
+      expect(chargedBlock.text()).toContain(
+        `control 10101042/sub${testCase.executionSubSkillIndex}`
+      );
+
+      await wrapper
+        .find('[data-testid="workbench-undo-edit"]')
+        .trigger('click');
+      await settleWorkbenchAsyncPanels();
+      await wrapper
+        .find('[data-testid="workbench-undo-edit"]')
+        .trigger('click');
+      await settleWorkbenchAsyncPanels();
+    }
+  }, 60000);
 
   it('rebuilds a stale normal-chain drag preview after assisted placement crosses the Jade burst frame', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -8113,14 +8237,13 @@ describe('Workbench view', () => {
       )
       .find(lane => lane.text().includes('涂山小玉'));
     expect(jadeActionLane).toBeTruthy();
-    wrapper.findComponent(TimelineGridPreview).vm.$emit(
-      'insert-timeline-entry',
-      {
+    wrapper
+      .findComponent(TimelineGridPreview)
+      .vm.$emit('insert-timeline-entry', {
         entry: { ...normalEntry, type: 'skill' },
         laneId: jadeActionLane.attributes('data-lane-id'),
         startMs: ultimateDraft.startMs + frameToMs(100),
-      }
-    );
+      });
     await settleWorkbenchAsyncPanels();
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedAfterDrop = JSON.parse(
@@ -8129,8 +8252,7 @@ describe('Workbench view', () => {
     const burstDrafts = savedAfterDrop.actionDrafts
       .filter(
         action =>
-          Number(action.actorCharacterId) === 101010 &&
-          action.attackGroupId
+          Number(action.actorCharacterId) === 101010 && action.attackGroupId
       )
       .sort(
         (left, right) => left.attackSequenceIndex - right.attackSequenceIndex

@@ -82,6 +82,16 @@ const XIAOYU_ACTION_OCCUPANCY_MARKDOWN_OUTPUT = path.join(
   'reports',
   'm9-r3-r2-xiaoyu-action-occupancy-audit.md'
 );
+const XIAOYU_HIDDEN_INPUT_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'm9-r3-r2-r2-xiaoyu-hidden-input-audit.json'
+);
+const XIAOYU_HIDDEN_INPUT_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'm9-r3-r2-r2-xiaoyu-hidden-input-audit.md'
+);
 const ACTION_VARIANT_RESOURCE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -247,7 +257,9 @@ const XIAOYU_MECHANICS = Object.freeze({
   a5ControlSkillId: 10101005,
   chargedControlSkillId: 10101010,
   derivedChargedControlSkillId: 10101042,
+  starSkillControlSkillId: 10101012,
   ultimateControlSkillId: 10101013,
+  starCarryControlSkillId: 10101021,
   passiveSkillId: 10101061,
   resourceElementId: 101010115,
   stateElementId: 101010129,
@@ -258,11 +270,19 @@ const XIAOYU_MECHANICS = Object.freeze({
   passiveMarkerElementId: 101010205,
   passiveWrapperElementId: 101010206,
   passivePropertyElementId: 101010207,
+  evadeForwardControlSkillId: 10101014,
+  evadeBackControlSkillId: 10101024,
+  evadeForwardWrapperElementId: 101010042,
+  evadeBackWrapperElementId: 101010053,
+  limitCounterWrapperControlSkillId: 10101041,
   limitCounterControlSkillId: 10101025,
   limitCounterRuntimeControlSkillId: 10101042,
   perfectParryControlSkillId: 10101027,
   perfectParryRuntimeControlSkillId: 10101049,
 });
+const XIAOYU_SYSTEM_CONTROL_SKILL_IDS = new Set([
+  80102, 10800115, 10900115, 10900125,
+]);
 const SWITCH_SKILL_SLOT_CONTRACTS = Object.freeze([
   Object.freeze({
     slot: 201,
@@ -392,8 +412,9 @@ async function main() {
     specialResourceCatalog,
     allIndexedElements,
   });
-  attachXiaoyuMechanicsContracts({
+  const xiaoyuMechanicsContracts = attachXiaoyuMechanicsContracts({
     seed,
+    characterCatalog,
     controlBindings,
     specialResourceCatalog,
     actionVariantGraph,
@@ -494,6 +515,10 @@ async function main() {
   const timingCoverage = createActionTimingCoverageReport(packageValue);
   const xiaoyuActionOccupancyAudit =
     createXiaoyuActionOccupancyAudit(packageValue);
+  const xiaoyuHiddenInputAudit = createXiaoyuHiddenInputDerivationReport({
+    packageValue,
+    audit: xiaoyuMechanicsContracts.hiddenInputDerivationAudit,
+  });
   const effectCoverage = createEffectCoverageReport(
     packageValue,
     semanticEffectCatalog
@@ -534,6 +559,14 @@ async function main() {
     [
       XIAOYU_ACTION_OCCUPANCY_MARKDOWN_OUTPUT,
       createXiaoyuActionOccupancyMarkdown(xiaoyuActionOccupancyAudit),
+    ],
+    [
+      XIAOYU_HIDDEN_INPUT_JSON_OUTPUT,
+      `${JSON.stringify(xiaoyuHiddenInputAudit, null, 2)}\n`,
+    ],
+    [
+      XIAOYU_HIDDEN_INPUT_MARKDOWN_OUTPUT,
+      createXiaoyuHiddenInputMarkdown(xiaoyuHiddenInputAudit),
     ],
     [
       EFFECT_COVERAGE_JSON_OUTPUT,
@@ -1452,6 +1485,7 @@ function createActionVariantGraph({
 
 function attachXiaoyuMechanicsContracts({
   seed,
+  characterCatalog,
   controlBindings,
   specialResourceCatalog,
   actionVariantGraph,
@@ -1490,6 +1524,7 @@ function attachXiaoyuMechanicsContracts({
   }
 
   const contextEdges = createXiaoyuChargedContextEdges({
+    controlBySkillId,
     a5Control,
     chargedControl,
     derivedChargedControl,
@@ -1504,6 +1539,14 @@ function attachXiaoyuMechanicsContracts({
   const attackInputChains = createXiaoyuAttackInputChains({
     controlBySkillId,
     state,
+  });
+  const hiddenInputDerivationAudit = createXiaoyuHiddenInputDerivationAudit({
+    characterCatalog,
+    controlBySkillId,
+    actionVariantGraph,
+    attackInputChains,
+    publicActionForms,
+    contextEdges,
   });
   const thresholdTransitions = [
     {
@@ -1566,15 +1609,33 @@ function attachXiaoyuMechanicsContracts({
   actionVariantGraph.contextEdges = contextEdges;
   actionVariantGraph.publicActionForms = publicActionForms;
   actionVariantGraph.attackInputChains = attackInputChains;
+  actionVariantGraph.hiddenInputDerivationCatalog = {
+    schemaVersion: hiddenInputDerivationAudit.schemaVersion,
+    kind: 'xiaoyu-hidden-input-derivation-catalog',
+    status: hiddenInputDerivationAudit.status,
+    ownerId: hiddenInputDerivationAudit.ownerId,
+    publicExecutionFormCount:
+      hiddenInputDerivationAudit.publicExecutionFormCount,
+    publicExecutionFormsCovered:
+      hiddenInputDerivationAudit.publicExecutionFormsCovered,
+    starCarryConclusion: hiddenInputDerivationAudit.starCarryConclusion,
+    summary: hiddenInputDerivationAudit.summary,
+  };
   actionVariantGraph.summary.contextEdgeCount = contextEdges.length;
   actionVariantGraph.summary.appliedContextEdgeCount = contextEdges.filter(
     edge => edge.applied
   ).length;
   actionVariantGraph.summary.attackInputChainCount = attackInputChains.length;
   actionVariantGraph.summary.publicActionFormCount = publicActionForms.length;
+  actionVariantGraph.summary.hiddenInputAuditRowCount =
+    hiddenInputDerivationAudit.rows.length;
+  actionVariantGraph.summary.hiddenInputPublicExecutionFormCount =
+    hiddenInputDerivationAudit.publicExecutionFormCount;
+  return { hiddenInputDerivationAudit };
 }
 
 function createXiaoyuChargedContextEdges({
+  controlBySkillId,
   a5Control,
   chargedControl,
   derivedChargedControl,
@@ -1582,60 +1643,125 @@ function createXiaoyuChargedContextEdges({
 }) {
   const stateInactive = createXiaoyuResourceStateCondition(state, false);
   const stateActive = createXiaoyuResourceStateCondition(state, true);
-  const defaultA5Windows = findControlTransitionWindows({
-    control: a5Control,
-    subSkillIndex: 0,
-    targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
-    targetSubSkillIndex: 0,
+  const sourceDefinitions = [
+    {
+      sourceControl: a5Control,
+      sourceSubSkillIndex: 0,
+      targetSubSkillIndex: 0,
+      semanticIdentity: 'xiaoyu-special-charged',
+      semanticName: '特殊重击',
+      sourcePublicActionKind: 'normal-attack',
+      sourceSemanticName: '普通攻击 A5',
+      condition: stateInactive,
+      expectedWindowCount: 1,
+    },
+    {
+      sourceControl: a5Control,
+      sourceSubSkillIndex: 1,
+      targetSubSkillIndex: 1,
+      semanticIdentity: 'xiaoyu-enhanced-special-charged',
+      semanticName: '强化特殊重击',
+      sourcePublicActionKind: 'normal-attack',
+      sourceSemanticName: '爆发普攻 A3',
+      condition: stateActive,
+      expectedWindowCount: 2,
+    },
+    {
+      sourceControl: controlBySkillId.get(
+        XIAOYU_MECHANICS.starSkillControlSkillId
+      ),
+      sourceSubSkillIndex: 0,
+      targetSubSkillIndex: 0,
+      semanticIdentity: 'xiaoyu-special-charged',
+      semanticName: '特殊重击',
+      sourcePublicActionKind: 'star-skill',
+      sourceSemanticName: '星鸣技',
+      condition: { kind: 'always' },
+      expectedWindowCount: 1,
+    },
+    {
+      sourceControl: controlBySkillId.get(
+        XIAOYU_MECHANICS.ultimateControlSkillId
+      ),
+      sourceSubSkillIndex: 0,
+      targetSubSkillIndex: 1,
+      semanticIdentity: 'xiaoyu-enhanced-special-charged',
+      semanticName: '强化特殊重击',
+      sourcePublicActionKind: 'ultimate',
+      sourceSemanticName: '星决技',
+      condition: { kind: 'always' },
+      expectedWindowCount: 1,
+    },
+    {
+      sourceControl: controlBySkillId.get(
+        XIAOYU_MECHANICS.limitCounterControlSkillId
+      ),
+      sourceSubSkillIndex: 0,
+      targetSubSkillIndex: 0,
+      semanticIdentity: 'xiaoyu-special-charged',
+      semanticName: '特殊重击',
+      sourcePublicActionKind: 'limit-counter',
+      sourceSemanticName: '极限反击',
+      condition: { kind: 'always' },
+      expectedWindowCount: 1,
+    },
+  ];
+  const contextEdges = sourceDefinitions.flatMap(definition => {
+    const windows = findControlTransitionWindows({
+      control: definition.sourceControl,
+      subSkillIndex: definition.sourceSubSkillIndex,
+      targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
+      targetSubSkillIndex: definition.targetSubSkillIndex,
+    });
+    if (windows.length !== definition.expectedWindowCount) {
+      throw new Error(
+        `Xiaoyu hidden charged window count mismatch: ${definition.sourceControl?.controlSkillId}/${definition.sourceSubSkillIndex} expected ${definition.expectedWindowCount}, received ${windows.length}`
+      );
+    }
+    return windows.map(window =>
+      createXiaoyuChargedContextEdge({
+        sourceControlSkillId: definition.sourceControl.controlSkillId,
+        sourceSubSkillIndex: definition.sourceSubSkillIndex,
+        sourcePublicActionKind: definition.sourcePublicActionKind,
+        sourceSemanticName: definition.sourceSemanticName,
+        executionControl: derivedChargedControl,
+        targetSubSkillIndex: definition.targetSubSkillIndex,
+        window,
+        inputCommand: resolveXiaoyuInputCommand(window, 'charged-attack'),
+        semanticIdentity: definition.semanticIdentity,
+        semanticName: definition.semanticName,
+        condition: definition.condition,
+      })
+    );
   });
-  const burstA3Windows = findControlTransitionWindows({
-    control: a5Control,
-    subSkillIndex: 1,
-    targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
-    targetSubSkillIndex: 1,
-  });
-  const continuousWindow = findControlTransitionWindows({
+  const continuousWindows = findControlTransitionWindows({
     control: chargedControl,
     subSkillIndex: 0,
     targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
     targetSubSkillIndex: 1,
-  })[0];
+  });
+  if (continuousWindows.length !== 1) {
+    throw new Error(
+      `Xiaoyu continuous charged window count mismatch: ${continuousWindows.length}`
+    );
+  }
   const continuousSwitch = readBattleElementAsset(
     XIAOYU_MECHANICS.specialChargedSwitchElementId
   );
   const edges = [
-    ...defaultA5Windows.map(window =>
-      createXiaoyuChargedContextEdge({
-        sourceControlSkillId: XIAOYU_MECHANICS.a5ControlSkillId,
-        sourceSubSkillIndex: 0,
-        executionControl: derivedChargedControl,
-        targetSubSkillIndex: 0,
-        window,
-        semanticIdentity: 'xiaoyu-special-charged',
-        semanticName: '特殊重击',
-        condition: stateInactive,
-      })
-    ),
-    ...burstA3Windows.map(window =>
-      createXiaoyuChargedContextEdge({
-        sourceControlSkillId: XIAOYU_MECHANICS.a5ControlSkillId,
-        sourceSubSkillIndex: 1,
-        executionControl: derivedChargedControl,
-        targetSubSkillIndex: 1,
-        window,
-        semanticIdentity: 'xiaoyu-enhanced-special-charged',
-        semanticName: '强化特殊重击',
-        condition: stateActive,
-      })
-    ),
+    ...contextEdges,
     createXiaoyuChargedContextEdge({
       sourceControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
       sourceSubSkillIndex: 0,
+      sourcePublicActionKind: 'charged-attack',
+      sourceSemanticName: '普通重击',
       executionControl: chargedControl,
-      targetSubSkillIndex: Number(
-        continuousSwitch?.tree?.subSkillIndex
+      targetSubSkillIndex: Number(continuousSwitch?.tree?.subSkillIndex),
+      window: continuousWindows[0],
+      inputCommand: resolveXiaoyuInputCommand(
+        continuousWindows[0],
+        'normal-attack'
       ),
-      window: continuousWindow,
       semanticIdentity: 'xiaoyu-continuous-charged',
       semanticName: '连续重击',
       condition: {
@@ -1658,9 +1784,12 @@ function createXiaoyuChargedContextEdges({
 function createXiaoyuChargedContextEdge({
   sourceControlSkillId,
   sourceSubSkillIndex,
+  sourcePublicActionKind,
+  sourceSemanticName,
   executionControl,
   targetSubSkillIndex,
   window,
+  inputCommand,
   semanticIdentity,
   semanticName,
   condition,
@@ -1673,8 +1802,7 @@ function createXiaoyuChargedContextEdge({
   const switchTargetMatches =
     requiredSwitchAsset == null ||
     (Number(requiredSwitchAsset?.tree?.skillID) === executionControlSkillId &&
-      Number(requiredSwitchAsset?.tree?.subSkillIndex) ===
-        targetSubSkillIndex);
+      Number(requiredSwitchAsset?.tree?.subSkillIndex) === targetSubSkillIndex);
   const resolvedExecutionTiming = createXiaoyuControlVariantTiming({
     control: executionControl,
     subSkillIndex: targetSubSkillIndex,
@@ -1686,9 +1814,7 @@ function createXiaoyuChargedContextEdge({
     windowTargetMatches &&
     switchTargetMatches &&
     resolvedExecutionTiming?.occupancy?.status === 'applied';
-  const executionTiming = createRuntimeExecutionTiming(
-    resolvedExecutionTiming
-  );
+  const executionTiming = createRuntimeExecutionTiming(resolvedExecutionTiming);
   return {
     edgeIdentity: [
       `actor:${XIAOYU_MECHANICS.ownerId}`,
@@ -1701,9 +1827,17 @@ function createXiaoyuChargedContextEdge({
     ].join('|'),
     ownerId: XIAOYU_MECHANICS.ownerId,
     relationType: 'input-context-derived',
-    inputCommand: 'charged-attack',
+    inputCommand,
     sourceControlSkillId,
     sourceSubSkillIndex,
+    sourcePublicActionKind,
+    sourcePublicActionIdentity: [
+      `actor:${XIAOYU_MECHANICS.ownerId}`,
+      sourcePublicActionKind,
+      `control:${sourceControlSkillId}`,
+      `sub:${sourceSubSkillIndex}`,
+    ].join('|'),
+    sourceSemanticName,
     targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
     executionControlSkillId,
     targetSubSkillIndex,
@@ -1734,7 +1868,7 @@ function createXiaoyuChargedContextEdge({
       ? 'verified-input-context-variant-edge-ready'
       : 'unresolved-input-context-variant-edge',
     reasons: [
-      ...(window ? [] : ['a5-derived-input-window-missing']),
+      ...(window ? [] : ['context-derived-input-window-missing']),
       ...(requiredSwitchAsset == null || requiredSwitchAsset
         ? []
         : ['charged-switch-element-missing']),
@@ -1802,8 +1936,7 @@ function createXiaoyuChargedPublicActionForms({
         enhancedDerivedSwitch?.sourceIdentity,
         ...contextEdges
           .filter(
-            edge =>
-              edge.semanticIdentity === 'xiaoyu-enhanced-special-charged'
+            edge => edge.semanticIdentity === 'xiaoyu-enhanced-special-charged'
           )
           .map(edge => edge.sourceIdentity),
       ]
@@ -1828,8 +1961,7 @@ function createXiaoyuChargedPublicActionForms({
       subSkillIndex: definition.executionSubSkillIndex,
       actionKind: 'charged-attack',
     });
-    const applied =
-      resolvedExecutionTiming?.occupancy?.status === 'applied';
+    const applied = resolvedExecutionTiming?.occupancy?.status === 'applied';
     const executionTiming = createRuntimeExecutionTiming(
       resolvedExecutionTiming
     );
@@ -1840,13 +1972,15 @@ function createXiaoyuChargedPublicActionForms({
       publicControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
       semanticIdentity: definition.semanticIdentity,
       semanticName: definition.semanticName,
-      executionControlSkillId:
-        definition.executionControl.controlSkillId,
+      executionControlSkillId: definition.executionControl.controlSkillId,
       executionSubSkillIndex: definition.executionSubSkillIndex,
       selectionKind: definition.selectionKind,
       condition: definition.condition,
       executionTiming,
-      sourceIdentity: [definition.sourceIdentity, executionTiming?.sourceIdentity]
+      sourceIdentity: [
+        definition.sourceIdentity,
+        executionTiming?.sourceIdentity,
+      ]
         .filter(Boolean)
         .join('|'),
       status: applied
@@ -1877,11 +2011,37 @@ function findControlTransitionWindows({
   const variant = control?.variants?.find(
     item => Number(item.subSkillIndex) === Number(subSkillIndex)
   );
-  return normalizeActionTimingWindows(variant?.eventBridges).filter(
+  return normalizeXiaoyuControlWindows(variant?.eventBridges).filter(
     window =>
       Number(window.targetControlSkillId) === Number(targetControlSkillId) &&
       Number(window.targetSubSkillIndex) === Number(targetSubSkillIndex)
   );
+}
+
+function normalizeXiaoyuControlWindows(bridges = []) {
+  const bridgeBySourceIdentity = new Map(
+    (bridges ?? []).map(bridge => [bridge.sourceIdentity, bridge])
+  );
+  return normalizeActionTimingWindows(bridges).map(window => {
+    const source = bridgeBySourceIdentity.get(window.sourceIdentity);
+    return {
+      ...window,
+      allowedInputCommands: dedupeBy(
+        source?.allowedInputCommands ?? [],
+        value => value
+      ),
+      behaviorLineName: source?.behaviorLineName ?? null,
+    };
+  });
+}
+
+function resolveXiaoyuInputCommand(window, fallback = null) {
+  const commands = window?.allowedInputCommands ?? [];
+  if (commands.includes('charged-attack')) return 'charged-attack';
+  if (commands.includes('normal-attack')) return 'normal-attack';
+  if (commands.includes('star-skill')) return 'star-skill';
+  if (commands.includes('ultimate')) return 'ultimate';
+  return fallback;
 }
 
 function createXiaoyuControlVariantTiming({
@@ -2015,6 +2175,747 @@ function createXiaoyuAttackInputChains({ controlBySkillId, state }) {
       applied: true,
     };
   });
+}
+
+function createXiaoyuHiddenInputDerivationAudit({
+  characterCatalog,
+  controlBySkillId,
+  actionVariantGraph,
+  attackInputChains,
+  publicActionForms,
+  contextEdges,
+}) {
+  const publicExecutionForms = [
+    ...attackInputChains.flatMap(chain =>
+      chain.segments.map(segment => ({
+        publicActionIdentity: `${chain.chainIdentity}|A${segment.sequenceIndex}`,
+        actionKind: 'normal-attack',
+        semanticName: `${
+          chain.stateCondition.kind === 'resource-state-active'
+            ? '爆发普攻'
+            : '普通攻击'
+        } A${segment.sequenceIndex}`,
+        sourceControlSkillId: segment.controlSkillId,
+        sourceSubSkillIndex: segment.subSkillIndex,
+        condition: chain.stateCondition,
+        sourceIdentity: segment.sourceIdentity,
+      }))
+    ),
+    ...publicActionForms.map(form => ({
+      publicActionIdentity: form.formIdentity,
+      actionKind: form.publicActionKind,
+      semanticName: form.semanticName,
+      sourceControlSkillId: form.executionControlSkillId,
+      sourceSubSkillIndex: form.executionSubSkillIndex,
+      condition: form.condition,
+      sourceIdentity: form.sourceIdentity,
+    })),
+    ...dedupeBy(
+      (actionVariantGraph.nodes ?? [])
+        .filter(
+          node =>
+            Number(node.ownerId) === XIAOYU_MECHANICS.ownerId &&
+            (node.actionKinds ?? []).some(
+              actionKind =>
+                !['normal-attack', 'charged-attack'].includes(actionKind)
+            )
+        )
+        .flatMap(node =>
+          (node.actionKinds ?? [])
+            .filter(
+              actionKind =>
+                !['normal-attack', 'charged-attack'].includes(actionKind)
+            )
+            .map(actionKind => {
+              const publicAction = (node.publicActions ?? []).find(
+                action => action.actionKind === actionKind
+              );
+              return {
+                publicActionIdentity: [
+                  `actor:${XIAOYU_MECHANICS.ownerId}`,
+                  actionKind,
+                  `control:${node.controlSkillId}`,
+                  `sub:${node.subSkillIndex}`,
+                ].join('|'),
+                actionKind,
+                semanticName:
+                  publicAction?.publicVariants?.[0]?.label ??
+                  formatXiaoyuActionKind(actionKind),
+                sourceControlSkillId: node.controlSkillId,
+                sourceSubSkillIndex: node.subSkillIndex,
+                condition: { kind: 'always' },
+                sourceIdentity: [
+                  node.sourceIdentity,
+                  publicAction?.sourceIdentity,
+                ]
+                  .filter(Boolean)
+                  .join('|'),
+              };
+            })
+        ),
+      form => form.publicActionIdentity
+    ),
+  ];
+  const publicExecutionFormIdentities = new Set(
+    publicExecutionForms.map(form => form.publicActionIdentity)
+  );
+  if (
+    publicExecutionForms.length !== 21 ||
+    publicExecutionFormIdentities.size !== 21
+  ) {
+    throw new Error(
+      `Xiaoyu public execution form coverage mismatch: ${publicExecutionForms.length}/${publicExecutionFormIdentities.size}`
+    );
+  }
+
+  const attackChainLinkKeys = new Set(
+    attackInputChains.flatMap(chain =>
+      chain.segments.flatMap(segment => {
+        const link = segment.executionTiming?.occupancy?.linkWindow;
+        return link
+          ? [
+              createXiaoyuWindowKey({
+                sourceControlSkillId: segment.controlSkillId,
+                sourceSubSkillIndex: segment.subSkillIndex,
+                window: link,
+              }),
+            ]
+          : [];
+      })
+    )
+  );
+  const contextEdgeByWindowKey = new Map(
+    contextEdges.map(edge => [
+      createXiaoyuWindowKey({
+        sourceControlSkillId: edge.sourceControlSkillId,
+        sourceSubSkillIndex: edge.sourceSubSkillIndex,
+        window: {
+          ...edge.inputWindow,
+          targetControlSkillId: edge.executionControlSkillId,
+          targetSubSkillIndex: edge.targetSubSkillIndex,
+        },
+      }),
+      edge,
+    ])
+  );
+  const publicRows = publicExecutionForms.flatMap(form =>
+    createXiaoyuHiddenInputRowsForForm({
+      form,
+      controlBySkillId,
+      attackChainLinkKeys,
+      contextEdgeByWindowKey,
+    })
+  );
+  const wrapperRows = createXiaoyuWrapperControlRows({
+    controlBySkillId,
+    contextEdgeByWindowKey,
+    attackChainLinkKeys,
+  });
+  const character = (characterCatalog?.items ?? []).find(
+    item => Number(item.id) === XIAOYU_MECHANICS.ownerId
+  );
+  const declaredBackupControls = (character?.skillSlots ?? [])
+    .filter(slot => slot.group === 'backup')
+    .map(slot => {
+      const controlSkillId = Number(slot.skillId);
+      const control = controlBySkillId.get(controlSkillId);
+      return {
+        controlSkillId,
+        controlPresent: Boolean(control),
+        role: resolveXiaoyuBackupControlRole(controlSkillId),
+        status: control
+          ? 'verified-backup-control-source-present'
+          : 'backup-control-asset-not-present',
+        exclusionReason: control
+          ? null
+          : 'declared-backup-control-has-no-extracted-skill-control-asset',
+        sourceIdentity: `characters.items[id=${XIAOYU_MECHANICS.ownerId}].skillSlots[group=backup,skillId=${controlSkillId}]`,
+      };
+    })
+    .sort((left, right) => left.controlSkillId - right.controlSkillId);
+  const starCarryConclusion = createXiaoyuStarCarryDerivationConclusion({
+    character,
+    controlBySkillId,
+    publicRows,
+    wrapperRows,
+  });
+  const rows = [...publicRows, ...wrapperRows].sort(compareXiaoyuAuditRows);
+  const coveredPublicExecutionForms = new Set(
+    publicRows
+      .filter(row => row.sourceControlPresent)
+      .map(row => row.publicActionIdentity)
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'xiaoyu-hidden-input-derivation-audit',
+    status: 'verified-xiaoyu-hidden-input-derivation-audit-ready',
+    ownerId: XIAOYU_MECHANICS.ownerId,
+    ownerName: character?.name ?? '涂山小玉',
+    frameRate: 60,
+    publicExecutionFormCount: publicExecutionForms.length,
+    publicExecutionFormsCovered: coveredPublicExecutionForms.size,
+    publicExecutionForms,
+    rows,
+    declaredBackupControls,
+    starCarryConclusion,
+    summary: {
+      publicExecutionFormCount: publicExecutionForms.length,
+      publicExecutionFormsCovered: coveredPublicExecutionForms.size,
+      missingPublicExecutionFormCount:
+        publicExecutionForms.length - coveredPublicExecutionForms.size,
+      rowCount: rows.length,
+      publicRowCount: publicRows.length,
+      supportRowCount: wrapperRows.length,
+      appliedContextEdgeCount: contextEdges.filter(edge => edge.applied).length,
+      specifiedInputDerivationCount: rows.filter(
+        row => row.relationType === 'specified-input-derived'
+      ).length,
+      attackChainLinkCount: rows.filter(
+        row => row.relationType === 'attack-chain-link'
+      ).length,
+      directControlLinkCount: rows.filter(
+        row => row.relationType === 'direct-control-input'
+      ).length,
+      ordinaryWindowCount: rows.filter(
+        row => row.relationType === 'ordinary-cancel-or-reopen'
+      ).length,
+      systemControlExclusionCount: rows.filter(
+        row => row.relationType === 'system-or-movement-control'
+      ).length,
+      relationTypeCounts: countValues(rows.map(row => row.relationType)),
+      statusCounts: countValues(rows.map(row => row.status)),
+    },
+    sourceIdentity: dedupeBy(
+      [
+        ...publicExecutionForms.map(form => form.sourceIdentity),
+        ...rows.map(row => row.sourceIdentity),
+        ...starCarryConclusion.sourceIdentities,
+      ].filter(Boolean),
+      value => value
+    ),
+  };
+}
+
+function createXiaoyuHiddenInputRowsForForm({
+  form,
+  controlBySkillId,
+  attackChainLinkKeys,
+  contextEdgeByWindowKey,
+}) {
+  const control = controlBySkillId.get(Number(form.sourceControlSkillId));
+  const variant = control?.variants?.find(
+    item => Number(item.subSkillIndex) === Number(form.sourceSubSkillIndex)
+  );
+  const windows = normalizeXiaoyuControlWindows(variant?.eventBridges);
+  if (!control || !variant) {
+    return [
+      createXiaoyuAuditRow({
+        form,
+        sourceControlPresent: Boolean(control),
+        relationType: 'source-control-unresolved',
+        status: 'source-control-or-subskill-missing',
+        applied: false,
+        exclusionReason: 'source-control-or-subskill-missing',
+      }),
+    ];
+  }
+  if (!windows.length) {
+    return [
+      createXiaoyuAuditRow({
+        form,
+        sourceControlPresent: true,
+        relationType: 'no-control-window',
+        status: 'verified-no-hidden-input-window',
+        applied: false,
+        exclusionReason: 'no-behaviorline-control-window',
+      }),
+    ];
+  }
+  return windows.map((window, windowIndex) => {
+    const key = createXiaoyuWindowKey({
+      sourceControlSkillId: form.sourceControlSkillId,
+      sourceSubSkillIndex: form.sourceSubSkillIndex,
+      window,
+    });
+    const contextEdge = contextEdgeByWindowKey.get(key);
+    const classification = classifyXiaoyuControlWindow({
+      form,
+      window,
+      contextEdge,
+      attackChainLinked: attackChainLinkKeys.has(key),
+    });
+    return createXiaoyuAuditRow({
+      form,
+      sourceControlPresent: true,
+      window,
+      windowIndex,
+      contextEdge,
+      ...classification,
+    });
+  });
+}
+
+function createXiaoyuAuditRow({
+  form,
+  sourceControlPresent,
+  window = null,
+  windowIndex = 0,
+  contextEdge = null,
+  relationType,
+  inputCommand = null,
+  condition = null,
+  targetSemanticName = null,
+  status,
+  applied,
+  exclusionReason,
+}) {
+  return {
+    rowIdentity: [
+      form.publicActionIdentity,
+      `control:${form.sourceControlSkillId}`,
+      `sub:${form.sourceSubSkillIndex}`,
+      window
+        ? `window:${window.startFrame}-${window.endFrame}:${windowIndex}`
+        : 'window:none',
+      `target:${window?.targetControlSkillId ?? 0}`,
+      `sub:${window?.targetSubSkillIndex ?? 0}`,
+    ].join('|'),
+    publicActionIdentity: form.publicActionIdentity,
+    actionKind: form.actionKind,
+    sourceSemanticName: form.semanticName,
+    sourceControlSkillId: form.sourceControlSkillId,
+    sourceSubSkillIndex: form.sourceSubSkillIndex,
+    sourceControlPresent,
+    inputCommand,
+    inputWindow: window
+      ? {
+          startFrame: window.startFrame,
+          endFrame: window.endFrame,
+          frameRate: 60,
+          interval: '[start,end)',
+        }
+      : null,
+    condition: condition ?? form.condition ?? { kind: 'always' },
+    targetControlSkillId: window?.targetControlSkillId ?? null,
+    targetSubSkillIndex: window?.targetSubSkillIndex ?? null,
+    semanticName: targetSemanticName,
+    relationType,
+    behaviorLineName: window?.behaviorLineName ?? null,
+    allowedInputCommands: window?.allowedInputCommands ?? [],
+    evidence: {
+      bridgeType: window?.bridgeType ?? null,
+      continuousAttackType: window?.continuousAttackType ?? null,
+      allowAttack: window?.allowAttack ?? false,
+      baseOnInput: window?.baseOnInput ?? false,
+      inputToIndex: window?.inputToIndex ?? false,
+      sourceIdentity: window?.sourceIdentity ?? form.sourceIdentity,
+    },
+    sourceIdentity: [
+      form.sourceIdentity,
+      window?.sourceIdentity,
+      contextEdge?.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status,
+    applied,
+    exclusionReason: exclusionReason ?? null,
+  };
+}
+
+function classifyXiaoyuControlWindow({
+  form,
+  window,
+  contextEdge,
+  attackChainLinked,
+}) {
+  if (contextEdge) {
+    return {
+      relationType: 'specified-input-derived',
+      inputCommand: contextEdge.inputCommand,
+      condition: contextEdge.condition,
+      targetSemanticName: contextEdge.semanticName,
+      status: 'verified-input-context-edge-applied',
+      applied: true,
+      exclusionReason: null,
+    };
+  }
+  if (attackChainLinked) {
+    return {
+      relationType: 'attack-chain-link',
+      inputCommand: 'normal-attack',
+      condition: form.condition,
+      targetSemanticName: resolveXiaoyuTargetSemanticName(window),
+      status: 'verified-attack-input-chain-link-applied',
+      applied: true,
+      exclusionReason: null,
+    };
+  }
+  if (
+    XIAOYU_SYSTEM_CONTROL_SKILL_IDS.has(Number(window.targetControlSkillId))
+  ) {
+    return {
+      relationType: 'system-or-movement-control',
+      inputCommand: 'system-control',
+      condition: form.condition,
+      targetSemanticName: `系统控制 ${window.targetControlSkillId}`,
+      status: 'verified-system-control-excluded',
+      applied: false,
+      exclusionReason: 'system-or-movement-control-is-not-public-action',
+    };
+  }
+  if (window.targetControlSkillId == null) {
+    return {
+      relationType: 'ordinary-cancel-or-reopen',
+      inputCommand:
+        resolveXiaoyuInputCommand(window) ??
+        window.allowedInputCommands?.[0] ??
+        null,
+      condition: form.condition,
+      targetSemanticName: null,
+      status: 'verified-ordinary-control-window',
+      applied: false,
+      exclusionReason: 'window-does-not-select-an-action-control',
+    };
+  }
+  return {
+    relationType: 'direct-control-input',
+    inputCommand: resolveXiaoyuInputCommand(
+      window,
+      inferXiaoyuCommandForTarget(window.targetControlSkillId)
+    ),
+    condition: inferXiaoyuWindowCondition(window, form.condition),
+    targetSemanticName: resolveXiaoyuTargetSemanticName(window),
+    status: 'verified-direct-control-input-ready',
+    applied: true,
+    exclusionReason: null,
+  };
+}
+
+function createXiaoyuWrapperControlRows({
+  controlBySkillId,
+  contextEdgeByWindowKey,
+  attackChainLinkKeys,
+}) {
+  const wrapperTriggers = [
+    {
+      sourceControlSkillId: XIAOYU_MECHANICS.evadeForwardControlSkillId,
+      sourceSubSkillIndex: 0,
+      sourceSemanticName: '前向闪避系统槽',
+      elementId: XIAOYU_MECHANICS.evadeForwardWrapperElementId,
+    },
+    {
+      sourceControlSkillId: XIAOYU_MECHANICS.evadeBackControlSkillId,
+      sourceSubSkillIndex: 0,
+      sourceSemanticName: '后向闪避系统槽',
+      elementId: XIAOYU_MECHANICS.evadeBackWrapperElementId,
+    },
+  ].map(definition => {
+    const asset = readBattleElementAsset(definition.elementId);
+    const trigger = (asset?.tree?.triggerEffectList ?? []).find(
+      effect =>
+        Number(effect.effectType) === 1 &&
+        Number(effect.param1) ===
+          XIAOYU_MECHANICS.limitCounterWrapperControlSkillId
+    );
+    const targetSubSkillIndex = nonNegativeIntegerOrNull(trigger?.param3);
+    const applied = targetSubSkillIndex != null;
+    return {
+      rowIdentity: [
+        `system-slot:${definition.sourceControlSkillId}`,
+        `element:${definition.elementId}`,
+        `target:${XIAOYU_MECHANICS.limitCounterWrapperControlSkillId}`,
+        `sub:${targetSubSkillIndex ?? 'missing'}`,
+      ].join('|'),
+      publicActionIdentity: `system-slot:${definition.sourceControlSkillId}`,
+      actionKind: 'system-evade-wrapper',
+      sourceSemanticName: definition.sourceSemanticName,
+      sourceControlSkillId: definition.sourceControlSkillId,
+      sourceSubSkillIndex: definition.sourceSubSkillIndex,
+      sourceControlPresent: controlBySkillId.has(
+        definition.sourceControlSkillId
+      ),
+      inputCommand: null,
+      inputWindow: null,
+      condition: {
+        kind: 'battle-element-trigger-condition',
+        conditionParam1:
+          asset?.tree?.triggerConditionList?.[0]?.conditionParam1 ?? null,
+        conditionParam2:
+          asset?.tree?.triggerConditionList?.[0]?.conditionParam2 ?? null,
+      },
+      targetControlSkillId: XIAOYU_MECHANICS.limitCounterWrapperControlSkillId,
+      targetSubSkillIndex,
+      semanticName: '极限反击闪避包装控制',
+      relationType: 'conditional-wrapper-trigger',
+      behaviorLineName: null,
+      allowedInputCommands: [],
+      evidence: {
+        elementId: definition.elementId,
+        effectType: trigger?.effectType ?? null,
+        sourceIdentity: asset?.sourceIdentity ?? null,
+      },
+      sourceIdentity: asset?.sourceIdentity ?? null,
+      status: applied
+        ? 'verified-conditional-wrapper-trigger-ready'
+        : 'wrapper-trigger-static-evidence-gap',
+      applied,
+      exclusionReason: applied ? null : 'wrapper-trigger-target-missing',
+    };
+  });
+  const wrapperForm = {
+    publicActionIdentity: 'support-control:10101041',
+    actionKind: 'limit-counter-wrapper',
+    semanticName: '极限反击闪避包装控制',
+    sourceControlSkillId: XIAOYU_MECHANICS.limitCounterWrapperControlSkillId,
+    sourceSubSkillIndex: 0,
+    condition: { kind: 'runtime-wrapper-selection' },
+    sourceIdentity: controlBySkillId.get(
+      XIAOYU_MECHANICS.limitCounterWrapperControlSkillId
+    )?.sourcePath,
+  };
+  const wrapperControl = controlBySkillId.get(
+    XIAOYU_MECHANICS.limitCounterWrapperControlSkillId
+  );
+  const wrapperWindowRows = (wrapperControl?.variants ?? []).flatMap(variant =>
+    createXiaoyuHiddenInputRowsForForm({
+      form: {
+        ...wrapperForm,
+        publicActionIdentity: `support-control:10101041/sub${variant.subSkillIndex}`,
+        sourceSubSkillIndex: variant.subSkillIndex,
+      },
+      controlBySkillId,
+      contextEdgeByWindowKey,
+      attackChainLinkKeys,
+    })
+  );
+  const supportForms = [
+    {
+      publicActionIdentity: 'support-control:10101049/sub0',
+      actionKind: 'perfect-parry-runtime-support',
+      semanticName: '完美招架运行时包装 1',
+      sourceControlSkillId: XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId,
+      sourceSubSkillIndex: 0,
+      condition: { kind: 'runtime-support-control' },
+      sourceIdentity: controlBySkillId.get(
+        XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId
+      )?.sourcePath,
+    },
+    {
+      publicActionIdentity: 'support-control:10101049/sub1',
+      actionKind: 'perfect-parry-runtime-support',
+      semanticName: '完美招架运行时包装 2',
+      sourceControlSkillId: XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId,
+      sourceSubSkillIndex: 1,
+      condition: { kind: 'runtime-support-control' },
+      sourceIdentity: controlBySkillId.get(
+        XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId
+      )?.sourcePath,
+    },
+  ];
+  const supportRows = supportForms.flatMap(form =>
+    createXiaoyuHiddenInputRowsForForm({
+      form,
+      controlBySkillId,
+      contextEdgeByWindowKey,
+      attackChainLinkKeys,
+    })
+  );
+  return [...wrapperTriggers, ...wrapperWindowRows, ...supportRows];
+}
+
+function createXiaoyuStarCarryDerivationConclusion({
+  character,
+  controlBySkillId,
+  publicRows,
+  wrapperRows,
+}) {
+  const starCarryControl = controlBySkillId.get(
+    XIAOYU_MECHANICS.starCarryControlSkillId
+  );
+  const directEdges = [...publicRows, ...wrapperRows].filter(
+    row =>
+      Number(row.sourceControlSkillId) ===
+        XIAOYU_MECHANICS.starCarryControlSkillId &&
+      Number(row.targetControlSkillId) ===
+        XIAOYU_MECHANICS.derivedChargedControlSkillId
+  );
+  const switchSlot = (character?.skillSlots ?? []).find(
+    slot =>
+      Number(slot.slot) === 203 &&
+      Number(slot.skillId) === XIAOYU_MECHANICS.starCarryControlSkillId
+  );
+  const wrapperSources = wrapperRows.filter(
+    row =>
+      Number(row.targetControlSkillId) ===
+      XIAOYU_MECHANICS.limitCounterWrapperControlSkillId
+  );
+  const verifiedNotFound =
+    Boolean(starCarryControl) &&
+    Boolean(switchSlot) &&
+    directEdges.length === 0 &&
+    wrapperSources.every(
+      row =>
+        Number(row.sourceControlSkillId) !==
+        XIAOYU_MECHANICS.starCarryControlSkillId
+    );
+  return {
+    sourceControlSkillId: XIAOYU_MECHANICS.starCarryControlSkillId,
+    sourceSubSkillIndex: 0,
+    switchSkillSlot: 203,
+    triggerPhase: 'on-enter',
+    targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
+    directDerivedEdgeCount: directEdges.length,
+    wrapperControlSkillId: XIAOYU_MECHANICS.limitCounterWrapperControlSkillId,
+    wrapperSourceControlSkillIds: dedupeBy(
+      wrapperSources.map(row => row.sourceControlSkillId),
+      value => value
+    ).sort((left, right) => left - right),
+    conclusion:
+      '当前客户端入场槽直接执行 10101021/sub0；其 EventBridge 与效果链未发现指向 10101042。10101041 来自闪避系统槽并桥接极限反击，传闻更可能混淆了极限反击路径。',
+    sourceIdentities: dedupeBy(
+      [
+        starCarryControl?.sourcePath,
+        switchSlot
+          ? `characters.items[id=${XIAOYU_MECHANICS.ownerId}].skillSlots[slot=203,skillId=${XIAOYU_MECHANICS.starCarryControlSkillId}]`
+          : null,
+        ...wrapperSources.map(row => row.sourceIdentity),
+      ].filter(Boolean),
+      value => value
+    ),
+    status: verifiedNotFound
+      ? 'verified-not-found-in-current-client'
+      : 'star-carry-derived-input-audit-incomplete',
+    applied: false,
+    exclusionReason: verifiedNotFound
+      ? 'no-direct-or-reachable-star-carry-to-derived-charged-edge'
+      : 'star-carry-execution-chain-evidence-incomplete',
+  };
+}
+
+function inferXiaoyuWindowCondition(window, fallback) {
+  const name = String(window?.behaviorLineName ?? '');
+  if (/未爆发/.test(name)) {
+    return {
+      kind: 'resource-state-inactive',
+      stateElementId: XIAOYU_MECHANICS.stateElementId,
+      sourceIdentity: window.sourceIdentity,
+    };
+  }
+  if (/爆发/.test(name)) {
+    return {
+      kind: 'resource-state-active',
+      stateElementId: XIAOYU_MECHANICS.stateElementId,
+      sourceIdentity: window.sourceIdentity,
+    };
+  }
+  return fallback ?? { kind: 'always' };
+}
+
+function inferXiaoyuCommandForTarget(targetControlSkillId) {
+  const target = Number(targetControlSkillId);
+  if (
+    [
+      XIAOYU_MECHANICS.chargedControlSkillId,
+      XIAOYU_MECHANICS.derivedChargedControlSkillId,
+    ].includes(target)
+  ) {
+    return 'charged-attack';
+  }
+  if (
+    [
+      10101001,
+      10101002,
+      10101003,
+      10101004,
+      10101005,
+      XIAOYU_MECHANICS.limitCounterControlSkillId,
+    ].includes(target)
+  ) {
+    return 'normal-attack';
+  }
+  return null;
+}
+
+function resolveXiaoyuTargetSemanticName(window) {
+  const controlSkillId = Number(window?.targetControlSkillId);
+  const subSkillIndex = Number(window?.targetSubSkillIndex);
+  if (controlSkillId === XIAOYU_MECHANICS.derivedChargedControlSkillId) {
+    return subSkillIndex === 1 ? '强化特殊重击' : '特殊重击';
+  }
+  if (controlSkillId === XIAOYU_MECHANICS.chargedControlSkillId) {
+    return subSkillIndex === 1 ? '连续重击' : '普通重击';
+  }
+  if (controlSkillId === XIAOYU_MECHANICS.limitCounterControlSkillId) {
+    return '极限反击';
+  }
+  const normalControls = {
+    10101001: '普攻 A1',
+    10101002: '普攻 A2',
+    10101003: '普攻 A3',
+    10101004: '普攻 A4 / 爆发 A2',
+    10101005: '普攻 A5 / 爆发 A3',
+  };
+  return (
+    normalControls[controlSkillId] ??
+    `control ${controlSkillId}/sub${subSkillIndex}`
+  );
+}
+
+function createXiaoyuWindowKey({
+  sourceControlSkillId,
+  sourceSubSkillIndex,
+  window,
+}) {
+  return [
+    Number(sourceControlSkillId),
+    Number(sourceSubSkillIndex),
+    Number(window?.startFrame),
+    Number(window?.endFrame),
+    Number(window?.targetControlSkillId),
+    Number(window?.targetSubSkillIndex),
+  ].join('|');
+}
+
+function resolveXiaoyuBackupControlRole(controlSkillId) {
+  return (
+    {
+      10101002: 'normal-attack-chain',
+      10101003: 'normal-attack-chain',
+      10101004: 'normal-attack-chain',
+      10101005: 'normal-attack-chain',
+      10101041: 'limit-counter-wrapper',
+      10101042: 'derived-charged-execution',
+      10101049: 'perfect-parry-runtime-support',
+    }[controlSkillId] ?? 'declared-backup-unresolved'
+  );
+}
+
+function formatXiaoyuActionKind(actionKind) {
+  return (
+    {
+      'dodge-attack': '闪避攻击',
+      'plunging-attack': '下落攻击',
+      'star-skill': '星鸣技',
+      'star-combo': '星结合击',
+      ultimate: '星决技',
+      'star-carry': '星携技',
+      'limit-counter': '极限反击',
+      'perfect-parry': '完美招架',
+    }[actionKind] ?? actionKind
+  );
+}
+
+function compareXiaoyuAuditRows(left, right) {
+  return (
+    String(left.publicActionIdentity).localeCompare(
+      String(right.publicActionIdentity)
+    ) ||
+    Number(left.sourceSubSkillIndex) - Number(right.sourceSubSkillIndex) ||
+    Number(left.inputWindow?.startFrame ?? -1) -
+      Number(right.inputWindow?.startFrame ?? -1) ||
+    String(left.rowIdentity).localeCompare(String(right.rowIdentity))
+  );
 }
 
 function createXiaoyuPassiveEffectProfile({
@@ -3294,13 +4195,16 @@ function collectBulletLaunchContracts(directory, skillControl) {
                 Number(skillControl.skillControlData?.skillId) ===
                 XIAOYU_MECHANICS.derivedChargedControlSkillId
                   ? collectImmediateBulletInjectionElements(bulletId)
-                  : injection.elements ?? [];
+                  : (injection.elements ?? []);
               for (
                 let repeatIndex = 0;
                 repeatIndex < repeatCount;
                 repeatIndex += 1
               ) {
-                for (const [elementIndex, element] of injectedElements.entries()) {
+                for (const [
+                  elementIndex,
+                  element,
+                ] of injectedElements.entries()) {
                   const delayFrames = Math.round((delayMs / 1000) * frameRate);
                   const launchFrame = startFrame + delayFrames;
                   launches.push({
@@ -3421,13 +4325,12 @@ function readBulletInjectionContract(bulletId) {
         Number(value?.actionType) === 3 &&
         Number(value?.doDelayActionTime ?? 0) === 0
       ) {
-        for (const [
-          configIndex,
-          config,
-        ] of (
+        for (const [configIndex, config] of (
           value?.actionSummonBulletParameter?.bulletShootDataConfigs ?? []
         ).entries()) {
-          for (const [nestedIndex, bullet] of (config?.bullets ?? []).entries()) {
+          for (const [nestedIndex, bullet] of (
+            config?.bullets ?? []
+          ).entries()) {
             const nestedBulletId = positiveIntegerOrNull(bullet?.bulletId);
             const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
             if (!nestedBulletId || delayMs !== 0) continue;
@@ -3483,7 +4386,8 @@ function collectImmediateBulletInjectionElements(
         }))
       ),
     ],
-    element => `${element.bulletId}|${element.elementId}|${element.sourceIdentity}`
+    element =>
+      `${element.bulletId}|${element.elementId}|${element.sourceIdentity}`
   );
 }
 
@@ -3584,6 +4488,9 @@ function collectSkillPlayerEventBridges(directory, skillControl) {
                   allowAttack:
                     behavior.value.allowAttack === true ||
                     Number(behavior.value.allowAttack) === 1,
+                  allowedInputCommands: collectBehaviorAllowedInputCommands(
+                    behavior.value
+                  ),
                   bridgeType: integerOrNull(behavior.value.bridge),
                   continuousAttackType: integerOrNull(behavior.value.type),
                   targetSkillId: integerOrNull(behavior.value.skillId),
@@ -3602,6 +4509,21 @@ function collectSkillPlayerEventBridges(directory, skillControl) {
         );
       })
   );
+}
+
+function collectBehaviorAllowedInputCommands(value = {}) {
+  return [
+    ['allowAttack', 'normal-attack'],
+    ['allowSkill1', 'charged-attack'],
+    ['allowSkill2', 'star-skill'],
+    ['allowSkill3', 'ultimate'],
+    ['allowDodge', 'dodge'],
+    ['allowJump', 'jump'],
+    ['allowJointStrikeSkill', 'star-combo'],
+    ['allowCountermeasuresSkill', 'perfect-parry'],
+  ]
+    .filter(([field]) => value[field] === true || Number(value[field]) === 1)
+    .map(([, command]) => command);
 }
 
 function createUnityObjectFileIndex(directory) {
@@ -4951,8 +5873,7 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
       ? (control.behaviorTriggers.get(root.rootPathId) ?? [])
       : [];
     const scenarioTriggers =
-      Number(control.skillId) ===
-      XIAOYU_MECHANICS.derivedChargedControlSkillId
+      Number(control.skillId) === XIAOYU_MECHANICS.derivedChargedControlSkillId
         ? (elements.find(
             element =>
               element.mapIndex === root.mapIndex &&
@@ -9352,7 +10273,8 @@ function createXiaoyuActionOccupancyAudit(packageValue) {
       );
     }
   }
-  for (const chain of packageValue.actionVariantGraph?.attackInputChains ?? []) {
+  for (const chain of packageValue.actionVariantGraph?.attackInputChains ??
+    []) {
     if (Number(chain.ownerId) !== XIAOYU_MECHANICS.ownerId) continue;
     const burst = chain.stateCondition?.kind === 'resource-state-active';
     for (const segment of chain.segments ?? []) {
@@ -9371,8 +10293,7 @@ function createXiaoyuActionOccupancyAudit(packageValue) {
       );
     }
   }
-  for (const form of packageValue.actionVariantGraph?.publicActionForms ??
-    []) {
+  for (const form of packageValue.actionVariantGraph?.publicActionForms ?? []) {
     if (Number(form.ownerId) !== XIAOYU_MECHANICS.ownerId) continue;
     rows.push(
       createXiaoyuActionOccupancyAuditRow({
@@ -9405,9 +10326,8 @@ function createXiaoyuActionOccupancyAudit(packageValue) {
     rows,
     summary: {
       rowCount: rows.length,
-      exactOccupancyCount: rows.filter(
-        row => row.occupancyStatus === 'applied'
-      ).length,
+      exactOccupancyCount: rows.filter(row => row.occupancyStatus === 'applied')
+        .length,
       planningOccupancyCount: rows.filter(
         row => row.occupancyStatus === 'planning'
       ).length,
@@ -9459,10 +10379,8 @@ function createXiaoyuActionOccupancyAuditRow({
     subSkillIndex,
     animationDurationFrames:
       positiveIntegerOrNull(timing?.animation?.durationFrames) ?? null,
-    firstHitFrame:
-      hitFrames.length > 0 ? Math.min(...hitFrames) : null,
-    lastHitFrame:
-      hitFrames.length > 0 ? Math.max(...hitFrames) : null,
+    firstHitFrame: hitFrames.length > 0 ? Math.min(...hitFrames) : null,
+    lastHitFrame: hitFrames.length > 0 ? Math.max(...hitFrames) : null,
     effectiveOccupancyFrames:
       positiveIntegerOrNull(timing?.occupancy?.durationFrames) ??
       positiveIntegerOrNull(timing?.animation?.durationFrames) ??
@@ -9507,6 +10425,92 @@ function createXiaoyuActionOccupancyMarkdown(report) {
     '',
   ];
   return `${lines.join('\n')}\n`;
+}
+
+function createXiaoyuHiddenInputDerivationReport({ packageValue, audit }) {
+  if (
+    !audit ||
+    audit.ownerId !== XIAOYU_MECHANICS.ownerId ||
+    audit.publicExecutionFormCount !== 21 ||
+    audit.publicExecutionFormsCovered !== 21 ||
+    audit.summary?.appliedContextEdgeCount !== 7
+  ) {
+    throw new Error('Xiaoyu hidden input derivation audit is incomplete');
+  }
+  return {
+    ...audit,
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    sourceIdentity: dedupeBy(
+      [
+        ...(audit.sourceIdentity ?? []),
+        'Battle/SkillList/skill_control_101010*.asset',
+        'EventBridge behaviorlineControl[startFrame,frameCount,skillId,skillIndex]',
+        'characters.items[id=101010].skillSlots',
+      ],
+      value => value
+    ),
+  };
+}
+
+function createXiaoyuHiddenInputMarkdown(report) {
+  const appliedContextRows = report.rows.filter(
+    row => row.status === 'verified-input-context-edge-applied'
+  );
+  const formSummaries = report.publicExecutionForms.map(form => {
+    const rows = report.rows.filter(
+      row => row.publicActionIdentity === form.publicActionIdentity
+    );
+    return {
+      ...form,
+      rowCount: rows.length,
+      appliedCount: rows.filter(row => row.applied).length,
+      specifiedDerivedCount: rows.filter(
+        row => row.relationType === 'specified-input-derived'
+      ).length,
+      status: rows.some(row => row.sourceControlPresent)
+        ? 'covered'
+        : 'source-missing',
+    };
+  });
+  const lines = [
+    '# M9-R3-R2-R2 涂山小玉隐藏输入派生审计',
+    '',
+    `- 公开执行形态：${report.publicExecutionFormsCovered}/${report.publicExecutionFormCount}`,
+    `- EventBridge / 支持控制审计行：${report.summary.rowCount}`,
+    `- 已接入上下文派生边：${report.summary.appliedContextEdgeCount}`,
+    `- 普攻链直接接续：${report.summary.attackChainLinkCount}`,
+    `- 系统/移动控制排除：${report.summary.systemControlExclusionCount}`,
+    '',
+    '## 已接入指定输入派生',
+    '',
+    '| 来源动作 | source control/sub | 输入 | 半开窗口 | 目标形态 | target control/sub | 条件 |',
+    '| --- | --- | --- | --- | --- | --- | --- |',
+    ...appliedContextRows.map(
+      row =>
+        `| ${row.sourceSemanticName} | ${row.sourceControlSkillId}/sub${row.sourceSubSkillIndex} | ${row.inputCommand ?? '-'} | [${row.inputWindow.startFrame}, ${row.inputWindow.endFrame})F | ${row.semanticName} | ${row.targetControlSkillId}/sub${row.targetSubSkillIndex} | ${row.condition?.kind ?? 'always'} |`
+    ),
+    '',
+    '## 公开形态覆盖',
+    '',
+    '| 形态 | control/sub | 窗口行 | 已应用关系 | 指定派生 | 状态 |',
+    '| --- | --- | ---: | ---: | ---: | --- |',
+    ...formSummaries.map(
+      form =>
+        `| ${form.semanticName} | ${form.sourceControlSkillId}/sub${form.sourceSubSkillIndex} | ${form.rowCount} | ${form.appliedCount} | ${form.specifiedDerivedCount} | ${form.status} |`
+    ),
+    '',
+    '## 星携技核查',
+    '',
+    `- 结论：${report.starCarryConclusion.conclusion}`,
+    `- 状态：${report.starCarryConclusion.status}`,
+    `- 入场执行：10101021/sub0；直接指向 10101042 的边：${report.starCarryConclusion.directDerivedEdgeCount}`,
+    `- 10101041 来源控制：${report.starCarryConclusion.wrapperSourceControlSkillIds.join(', ') || '无'}`,
+    '',
+    '普通取消/重开窗口、普攻连段、指定输入派生、状态分支和系统控制分别保留；窗口统一采用 [startFrame, endFrame) 半开区间。',
+    '',
+  ];
+  return lines.join('\n');
 }
 
 function createActionTimingCoverageReport(packageValue) {
