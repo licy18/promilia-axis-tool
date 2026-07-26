@@ -13,15 +13,17 @@ import {
 } from '../src/domain/sourceDisplayText.js';
 import {
   createCharacterCombatOutputRecords,
-  createCharacterCombatPipelineArtifacts,
 } from './character-combat/character-combat-profile-pipeline.mjs';
 import {
-  compileCharacterCombatRecipeContracts,
-  createCharacterCombatOwnerRuntimeContracts,
   createCharacterCombatStatDependencies,
-  mergeCharacterCombatOwnerCompilations,
 } from './character-combat/character-combat-contract-compiler.mjs';
 import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
+import {
+  collectCharacterCombatRequiredControlSkillIds,
+  createCharacterCombatControlPolicyIndex,
+  createCharacterCombatProductionBuild,
+  discoverCharacterCombatRecipes,
+} from './character-combat/character-combat-production-orchestrator.mjs';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
@@ -38,11 +40,10 @@ const NEW_TABLE_ROOT = path.join(
   'NewTable'
 );
 const GENERATED_ROOT = path.join(REPO_ROOT, 'src', 'data', 'generated');
-const XIAOYU_CHARACTER_COMBAT_RECIPE_PATH = path.join(
+const CHARACTER_COMBAT_RECIPE_ROOT = path.join(
   SCRIPT_ROOT,
   'character-combat',
-  'profile-recipes',
-  '101010.json'
+  'profile-recipes'
 );
 const RUNTIME_OUTPUT = path.join(
   REPO_ROOT,
@@ -278,7 +279,15 @@ const M9_PRODUCT_DENOMINATOR = Object.freeze({
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
-const XIAOYU_PROFILE_RECIPE = readJson(XIAOYU_CHARACTER_COMBAT_RECIPE_PATH);
+const DEFAULT_CHARACTER_COMBAT_RECIPES = discoverCharacterCombatRecipes({
+  recipeRoot: CHARACTER_COMBAT_RECIPE_ROOT,
+});
+const XIAOYU_PROFILE_RECIPE = DEFAULT_CHARACTER_COMBAT_RECIPES.find(
+  recipe => recipe.goldStandard === true
+);
+if (!XIAOYU_PROFILE_RECIPE) {
+  throw new Error('gold standard character combat recipe missing');
+}
 const XIAOYU_MECHANICS = Object.freeze(
   XIAOYU_PROFILE_RECIPE.mechanicsDiscovery
 );
@@ -299,11 +308,20 @@ const SWITCH_SKILL_SLOT_CONTRACTS = Object.freeze([
     label: '入场',
   }),
 ]);
-const options = parseArgs(process.argv.slice(2));
+if (isDirectExecution()) {
+  await runCli();
+}
 
-await main();
-
-async function main() {
+export async function createVerifiedCombatMechanicsBuild({
+  recipes: recipeOverrides,
+} = {}) {
+  const recipes =
+    recipeOverrides ??
+    discoverCharacterCombatRecipes({
+      recipeRoot: CHARACTER_COMBAT_RECIPE_ROOT,
+    });
+  const controlPolicyBySkillId =
+    createCharacterCombatControlPolicyIndex(recipes);
   assertRequiredInputs();
   const validation = runCalculatorValidation();
   const evidence = readJson(EVIDENCE_PATH);
@@ -340,6 +358,7 @@ async function main() {
   ]);
   const controlIds = new Set([
     ...publicControlIds,
+    ...collectCharacterCombatRequiredControlSkillIds(recipes),
     ...(characterCatalog?.items ?? [])
       .filter(character =>
         specialResourceIdentityDiscovery.ownerIds.has(Number(character.id))
@@ -350,10 +369,15 @@ async function main() {
           .map(slot => Number(slot.skillId))
       ),
   ]);
-  controlIds.add(XIAOYU_MECHANICS.passiveSkillId);
   const controls = [...controlIds]
     .filter(Number.isInteger)
-    .map(skillId => findSkillControl(skillId, battleTargetTypeContract))
+    .map(skillId =>
+      findSkillControl(
+        skillId,
+        battleTargetTypeContract,
+        controlPolicyBySkillId.get(skillId)
+      )
+    )
     .filter(Boolean);
   const wantedPathIds = new Set(
     controls
@@ -417,114 +441,67 @@ async function main() {
   const publicCharacterIds = (characterCatalog?.items ?? [])
     .map(character => Number(character.id))
     .filter(Number.isInteger);
-  const xiaoyuOwnerCompilation = compileCharacterCombatRecipeContracts({
-    recipe: XIAOYU_PROFILE_RECIPE,
-    character: characterCatalog.items.find(
-      character => Number(character.id) === XIAOYU_MECHANICS.ownerId
-    ),
-    evidence: {
-      controls: controlBindings,
-      specialResourceProfiles: specialResourceCatalog.profiles,
-      specialResourceOperations: specialResourceCatalog.operationBindings,
-      skills: seed.gameData?.skills ?? [],
+  const characterCombatCompilerOperators = {
+    normalizeControlWindows(control, subSkillIndex) {
+      const variant = control?.variants?.find(
+        item => Number(item.subSkillIndex) === Number(subSkillIndex)
+      );
+      return normalizeControlTransitionWindows(variant?.eventBridges);
     },
-    operators: {
-      normalizeControlWindows(control, subSkillIndex) {
-        const variant = control?.variants?.find(
-          item => Number(item.subSkillIndex) === Number(subSkillIndex)
-        );
-        return normalizeControlTransitionWindows(variant?.eventBridges);
-      },
-      resolveControlVariantTiming({ control, subSkillIndex, actionKind }) {
-        const preparedControl = {
-          ...control,
-          hits: createControlRuntimeHits(control),
-        };
-        const variant = preparedControl.variants?.find(
-          item => Number(item.subSkillIndex) === Number(subSkillIndex)
-        );
-        if (!variant) return null;
-        return createControlVariantTimingContract({
-          control: preparedControl,
-          variant,
-          actionKind,
-          occupancyResolver: resolveVerifiedActionInputOccupancy,
-        });
-      },
-      resolveNormalAttackTiming({
+    resolveControlVariantTiming({ control, subSkillIndex, actionKind }) {
+      const preparedControl = {
+        ...control,
+        hits: createControlRuntimeHits(control),
+      };
+      const variant = preparedControl.variants?.find(
+        item => Number(item.subSkillIndex) === Number(subSkillIndex)
+      );
+      if (!variant) return null;
+      return createControlVariantTimingContract({
+        control: preparedControl,
+        variant,
+        actionKind,
+        occupancyResolver: resolveVerifiedActionInputOccupancy,
+      });
+    },
+    resolveNormalAttackTiming({
+      control,
+      subSkillIndex,
+      nextControlSkillId,
+    }) {
+      const variant = control?.variants?.find(
+        item => Number(item.subSkillIndex) === Number(subSkillIndex)
+      );
+      if (!variant) return null;
+      const occupancyTiming = createControlVariantTimingContract({
         control,
-        subSkillIndex,
-        nextControlSkillId,
-      }) {
-        const variant = control?.variants?.find(
-          item => Number(item.subSkillIndex) === Number(subSkillIndex)
-        );
-        if (!variant) return null;
-        const occupancyTiming = createControlVariantTimingContract({
-          control,
-          variant,
-          actionKind: 'normal-attack',
-          occupancyResolver: resolveNormalAttackInputOccupancy,
-          occupancyContext: { nextControlSkillId },
-        });
-        const preparedControl = {
-          ...control,
-          hits: createControlRuntimeHits(control),
-        };
-        const executionTiming = createControlVariantTimingContract({
-          control: preparedControl,
-          variant,
-          actionKind: 'normal-attack',
-          occupancyResolver: resolveNormalAttackInputOccupancy,
-          occupancyContext: { nextControlSkillId },
-        });
-        return {
-          ...executionTiming,
-          occupancy: occupancyTiming.occupancy,
-        };
-      },
-      readElementAsset: readBattleElementAsset,
-      createSemanticRootTriggers: createSemanticRootTriggerContracts,
-      resolveControlOwnerId(control) {
-        return resolveControlOwnerId(control?.controlSkillId, publicCharacterIds);
-      },
+        variant,
+        actionKind: 'normal-attack',
+        occupancyResolver: resolveNormalAttackInputOccupancy,
+        occupancyContext: { nextControlSkillId },
+      });
+      const preparedControl = {
+        ...control,
+        hits: createControlRuntimeHits(control),
+      };
+      const executionTiming = createControlVariantTimingContract({
+        control: preparedControl,
+        variant,
+        actionKind: 'normal-attack',
+        occupancyResolver: resolveNormalAttackInputOccupancy,
+        occupancyContext: { nextControlSkillId },
+      });
+      return {
+        ...executionTiming,
+        occupancy: occupancyTiming.occupancy,
+      };
     },
-  });
-  mergeCharacterCombatOwnerCompilations({
-    actionVariantGraph,
-    specialResourceCatalog,
-    compilations: [xiaoyuOwnerCompilation],
-  });
-  const xiaoyuHiddenInputDerivationAudit =
-    createXiaoyuHiddenInputDerivationAudit({
-      characterCatalog,
-      controlBySkillId: new Map(
-        controlBindings.map(control => [control.controlSkillId, control])
-      ),
-      actionVariantGraph,
-      attackInputChains:
-        xiaoyuOwnerCompilation.contracts.attackInputChains,
-      publicActionForms:
-        xiaoyuOwnerCompilation.contracts.publicActionForms,
-      contextEdges: xiaoyuOwnerCompilation.contracts.contextEdges,
-    });
-  actionVariantGraph.hiddenInputDerivationCatalog = {
-    schemaVersion: xiaoyuHiddenInputDerivationAudit.schemaVersion,
-    kind: 'xiaoyu-hidden-input-derivation-catalog',
-    status: xiaoyuHiddenInputDerivationAudit.status,
-    ownerId: xiaoyuHiddenInputDerivationAudit.ownerId,
-    publicExecutionFormCount:
-      xiaoyuHiddenInputDerivationAudit.publicExecutionFormCount,
-    publicExecutionFormsCovered:
-      xiaoyuHiddenInputDerivationAudit.publicExecutionFormsCovered,
-    starCarryConclusion:
-      xiaoyuHiddenInputDerivationAudit.starCarryConclusion,
-    summary: xiaoyuHiddenInputDerivationAudit.summary,
+    readElementAsset: readBattleElementAsset,
+    createSemanticRootTriggers: createSemanticRootTriggerContracts,
+    resolveControlOwnerId(control) {
+      return resolveControlOwnerId(control?.controlSkillId, publicCharacterIds);
+    },
   };
-  actionVariantGraph.summary.hiddenInputAuditRowCount =
-    xiaoyuHiddenInputDerivationAudit.rows.length;
-  actionVariantGraph.summary.hiddenInputPublicExecutionFormCount =
-    xiaoyuHiddenInputDerivationAudit.publicExecutionFormCount;
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
   const spUnitContract = createSpUnitContract({
     templateRows,
@@ -560,157 +537,173 @@ async function main() {
     propertySourceSnapshot: readJson(PROPERTY_SOURCES_PATH),
     spUnitContract,
   });
-  const packageValue = createPackage({
-    evidence,
-    validation,
-    mechanismEvidence,
-    candidates,
-    controlBindings: publicControlBindings,
-    supportControlBindings,
-    kiboProfiles,
-    actorProfiles,
-    enemyProfiles,
-    spUnitContract,
-    staticPropertyCatalog,
-    tuningMechanicsCatalog,
-    specialResourceCatalog,
-    actionVariantGraph,
-    characterCatalog,
-    characterCombatOwnerCompilations: [xiaoyuOwnerCompilation],
-  });
-  const semanticEffectCatalog = createSemanticEffectCatalog({
-    controlBindings: publicControlBindings,
-    packageValue,
-    battleTargetTypeContract,
-  });
-  packageValue.semanticEffectCatalog = createSemanticEffectRuntimeCatalog(
-    semanticEffectCatalog
-  );
-  packageValue.packageHash = sha256(
-    JSON.stringify({
-      basePackageHash: packageValue.packageHash,
-      semanticEffectCatalog,
-    })
-  );
-  packageValue.summary.semanticEffectCount =
-    semanticEffectCatalog.semanticEffects.length;
-  packageValue.summary.semanticGameplayEffectCount =
-    semanticEffectCatalog.semanticEffects.filter(
-      effect => effect.role === 'gameplay-effect'
-    ).length;
-  packageValue.summary.semanticAppliedEffectCount =
-    semanticEffectCatalog.semanticEffects.filter(
-      effect =>
-        effect.role === 'gameplay-effect' && effect.classification === 'applied'
-    ).length;
-  assertPublishedDisplayLabels(packageValue);
-  const xiaoyuReachableControlIds = new Set(
-    xiaoyuOwnerCompilation.reachableControlSkillIds
-  );
-  const xiaoyuControls = [
-    ...(packageValue.controlBindings ?? []),
-    ...(packageValue.actionVariantControlBindings ?? []),
-  ].filter(control =>
-    xiaoyuReachableControlIds.has(Number(control.controlSkillId))
-  );
-  const xiaoyuSemanticEffects = semanticEffectCatalog.semanticEffects.filter(
-    effect =>
-      (effect.owners ?? []).some(
-        owner =>
-          owner.ownerKind === 'actor' &&
-          Number(owner.ownerId) === XIAOYU_MECHANICS.ownerId
-      )
-  );
-  const xiaoyuRuntimeContracts = createCharacterCombatOwnerRuntimeContracts({
-    compilation: xiaoyuOwnerCompilation,
-    publicActions: packageValue.actionMappings.filter(
-      mapping =>
-        mapping.ownerKind === 'actor' &&
-        Number(mapping.ownerId) === XIAOYU_MECHANICS.ownerId
-    ),
-    controls: xiaoyuControls,
-    variantEdges: actionVariantGraph.edges.filter(
-      edge => Number(edge.ownerId) === XIAOYU_MECHANICS.ownerId
-    ),
-    hits: xiaoyuControls.flatMap(control =>
-      (control.hits ?? []).map(hit => ({
-        ...hit,
-        controlSkillId: control.controlSkillId,
-        frameRate: control.frameRate,
-      }))
-    ),
-    resourceProfiles: specialResourceCatalog.profiles.filter(
-      profile => Number(profile.ownerId) === XIAOYU_MECHANICS.ownerId
-    ),
-    resourceTransactions: specialResourceCatalog.operationBindings.filter(
-      operation => Number(operation.ownerId) === XIAOYU_MECHANICS.ownerId
-    ),
-    rawEffects: xiaoyuControls.flatMap(control =>
-      (control.effects ?? []).map(effect => ({
-        ...effect,
-        controlSkillId: control.controlSkillId,
-      }))
-    ),
-    semanticEffects: xiaoyuSemanticEffects,
-    switchTriggers: packageValue.switchTriggerCatalog.profiles.filter(
-      profile => Number(profile.ownerId) === XIAOYU_MECHANICS.ownerId
-    ),
-    statDependencies: createCharacterCombatStatDependencies({
-      ownerId: XIAOYU_MECHANICS.ownerId,
-      staticPropertyCatalog,
-      actorProfiles,
-      passiveEffects: xiaoyuOwnerCompilation.contracts.passiveEffects,
-      semanticEffects: xiaoyuSemanticEffects,
-    }),
-  });
-  const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
-  const xiaoyuActionOccupancyAudit =
-    createXiaoyuActionOccupancyAudit(packageValue);
-  const xiaoyuHiddenInputAudit = createXiaoyuHiddenInputDerivationReport({
-    packageValue,
-    audit: xiaoyuHiddenInputDerivationAudit,
-  });
-  const xiaoyuGoldenRuntime = await createCharacterCombatGoldenRuntime({
-    repositoryRoot: REPO_ROOT,
-    mechanicsPackage: packageValue,
-    recipe: XIAOYU_PROFILE_RECIPE,
-  });
-  const characterCombatArtifacts = createCharacterCombatPipelineArtifacts({
-    mechanicsPackage: packageValue,
+  let xiaoyuHiddenInputDerivationAudit = null;
+  let xiaoyuActionOccupancyAudit = null;
+  let xiaoyuHiddenInputAudit = null;
+  const characterCombatBuild = await createCharacterCombatProductionBuild({
+    recipes,
     characterCatalog,
     skills: seed.gameData?.skills ?? [],
-    recipes: [XIAOYU_PROFILE_RECIPE],
-    compiledOwnerContracts: [xiaoyuRuntimeContracts],
-    goldenRuntimeByOwner: new Map([
-      [XIAOYU_MECHANICS.ownerId, xiaoyuGoldenRuntime],
-    ]),
-    reportsByOwner: new Map([
-      [
-        XIAOYU_MECHANICS.ownerId,
-        {
-          actionOccupancy: xiaoyuActionOccupancyAudit,
-          hiddenInputDerivation: xiaoyuHiddenInputAudit,
-        },
-      ],
-    ]),
+    compilerEvidence: {
+      controls: controlBindings,
+      specialResourceProfiles: specialResourceCatalog.profiles,
+      specialResourceOperations: specialResourceCatalog.operationBindings,
+      skills: seed.gameData?.skills ?? [],
+    },
+    compilerOperators: characterCombatCompilerOperators,
+    actionVariantGraph,
+    specialResourceCatalog,
+    prepareCompiledOwners({ ownerCompilations }) {
+      const goldRecipe = recipes.find(recipe => recipe.goldStandard === true);
+      const goldCompilation = ownerCompilations.find(
+        compilation =>
+          Number(compilation.ownerId) === Number(goldRecipe?.ownerId)
+      );
+      if (!goldRecipe || !goldCompilation) return;
+      xiaoyuHiddenInputDerivationAudit =
+        createXiaoyuHiddenInputDerivationAudit({
+          characterCatalog,
+          controlBySkillId: new Map(
+            controlBindings.map(control => [control.controlSkillId, control])
+          ),
+          actionVariantGraph,
+          attackInputChains: goldCompilation.contracts.attackInputChains,
+          publicActionForms: goldCompilation.contracts.publicActionForms,
+          contextEdges: goldCompilation.contracts.contextEdges,
+        });
+      actionVariantGraph.hiddenInputDerivationCatalog = {
+        schemaVersion: xiaoyuHiddenInputDerivationAudit.schemaVersion,
+        kind: 'xiaoyu-hidden-input-derivation-catalog',
+        status: xiaoyuHiddenInputDerivationAudit.status,
+        ownerId: xiaoyuHiddenInputDerivationAudit.ownerId,
+        publicExecutionFormCount:
+          xiaoyuHiddenInputDerivationAudit.publicExecutionFormCount,
+        publicExecutionFormsCovered:
+          xiaoyuHiddenInputDerivationAudit.publicExecutionFormsCovered,
+        starCarryConclusion:
+          xiaoyuHiddenInputDerivationAudit.starCarryConclusion,
+        summary: xiaoyuHiddenInputDerivationAudit.summary,
+      };
+      actionVariantGraph.summary.hiddenInputAuditRowCount =
+        xiaoyuHiddenInputDerivationAudit.rows.length;
+      actionVariantGraph.summary.hiddenInputPublicExecutionFormCount =
+        xiaoyuHiddenInputDerivationAudit.publicExecutionFormCount;
+    },
+    createMechanicsPackage({ ownerCompilations }) {
+      const packageValue = createPackage({
+        evidence,
+        validation,
+        mechanismEvidence,
+        candidates,
+        controlBindings: publicControlBindings,
+        supportControlBindings,
+        kiboProfiles,
+        actorProfiles,
+        enemyProfiles,
+        spUnitContract,
+        staticPropertyCatalog,
+        tuningMechanicsCatalog,
+        specialResourceCatalog,
+        actionVariantGraph,
+        characterCatalog,
+        characterCombatOwnerCompilations: ownerCompilations,
+      });
+      const semanticEffectCatalog = createSemanticEffectCatalog({
+        controlBindings: publicControlBindings,
+        packageValue,
+        battleTargetTypeContract,
+      });
+      packageValue.semanticEffectCatalog = createSemanticEffectRuntimeCatalog(
+        semanticEffectCatalog
+      );
+      packageValue.packageHash = sha256(
+        JSON.stringify({
+          basePackageHash: packageValue.packageHash,
+          semanticEffectCatalog,
+        })
+      );
+      packageValue.summary.semanticEffectCount =
+        semanticEffectCatalog.semanticEffects.length;
+      packageValue.summary.semanticGameplayEffectCount =
+        semanticEffectCatalog.semanticEffects.filter(
+          effect => effect.role === 'gameplay-effect'
+        ).length;
+      packageValue.summary.semanticAppliedEffectCount =
+        semanticEffectCatalog.semanticEffects.filter(
+          effect =>
+            effect.role === 'gameplay-effect' &&
+            effect.classification === 'applied'
+        ).length;
+      assertPublishedDisplayLabels(packageValue);
+      return {
+        mechanicsPackage: packageValue,
+        sharedContext: { semanticEffectCatalog },
+      };
+    },
+    createStatDependenciesForOwner({
+      ownerId,
+      compilation,
+      semanticEffects,
+    }) {
+      return createCharacterCombatStatDependencies({
+        ownerId,
+        staticPropertyCatalog,
+        actorProfiles,
+        passiveEffects: compilation.contracts.passiveEffects,
+        semanticEffects,
+      });
+    },
+    createGoldenRuntimeForOwner({ recipe, mechanicsPackage }) {
+      return createCharacterCombatGoldenRuntime({
+        repositoryRoot: REPO_ROOT,
+        mechanicsPackage,
+        recipe,
+      });
+    },
+    createReportsForOwner({ recipe, mechanicsPackage }) {
+      if (recipe.goldStandard !== true) return {};
+      if (!xiaoyuHiddenInputDerivationAudit) {
+        throw new Error('gold standard hidden input audit missing');
+      }
+      xiaoyuActionOccupancyAudit =
+        createXiaoyuActionOccupancyAudit(mechanicsPackage);
+      xiaoyuHiddenInputAudit = createXiaoyuHiddenInputDerivationReport({
+        packageValue: mechanicsPackage,
+        audit: xiaoyuHiddenInputDerivationAudit,
+      });
+      return {
+        actionOccupancy: xiaoyuActionOccupancyAudit,
+        hiddenInputDerivation: xiaoyuHiddenInputAudit,
+      };
+    },
+    finalizeMechanicsPackage({ mechanicsPackage, pipelineArtifacts }) {
+      mechanicsPackage.summary.characterCombatProfileCount =
+        pipelineArtifacts.catalog.summary.compiledProfileCount;
+      mechanicsPackage.summary.characterCombatRuntimeAppliedProfileCount =
+        pipelineArtifacts.catalog.summary.runtimeAppliedProfileCount;
+      mechanicsPackage.summary.characterCombatUiVerifiedProfileCount =
+        pipelineArtifacts.catalog.summary.uiVerifiedProfileCount;
+      mechanicsPackage.summary.characterCombatCompleteProfileCount =
+        pipelineArtifacts.catalog.summary.characterCompleteCount;
+      mechanicsPackage.packageHash = sha256(
+        JSON.stringify({
+          basePackageHash: mechanicsPackage.packageHash,
+          characterCombatProfileCatalog:
+            mechanicsPackage.characterCombatProfileCatalog,
+        })
+      );
+    },
   });
-  packageValue.characterCombatProfileCatalog = characterCombatArtifacts.catalog;
-  packageValue.summary.characterCombatProfileCount =
-    characterCombatArtifacts.catalog.summary.compiledProfileCount;
-  packageValue.summary.characterCombatRuntimeAppliedProfileCount =
-    characterCombatArtifacts.catalog.summary.runtimeAppliedProfileCount;
-  packageValue.summary.characterCombatUiVerifiedProfileCount =
-    characterCombatArtifacts.catalog.summary.uiVerifiedProfileCount;
-  packageValue.summary.characterCombatCompleteProfileCount =
-    characterCombatArtifacts.catalog.summary.characterCompleteCount;
-  packageValue.packageHash = sha256(
-    JSON.stringify({
-      basePackageHash: packageValue.packageHash,
-      characterCombatProfileCatalog: packageValue.characterCombatProfileCatalog,
-    })
-  );
+  const packageValue = characterCombatBuild.mechanicsPackage;
+  const semanticEffectCatalog =
+    characterCombatBuild.sharedContext.semanticEffectCatalog;
+  const characterCombatArtifacts = characterCombatBuild.pipelineArtifacts;
+  if (!xiaoyuActionOccupancyAudit || !xiaoyuHiddenInputAudit) {
+    throw new Error('gold standard character combat reports missing');
+  }
   xiaoyuActionOccupancyAudit.packageHash = packageValue.packageHash;
   xiaoyuHiddenInputAudit.packageHash = packageValue.packageHash;
+  const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const audit = createAudit({
     packageValue,
     candidates,
@@ -834,10 +827,30 @@ async function main() {
       record => [path.resolve(REPO_ROOT, record.relativePath), record.content]
     ),
   ];
-  const drift = outputs.filter(([filePath, content]) =>
+  return {
+    ...characterCombatBuild,
+    outputs,
+    summary: {
+      packageId: packageValue.packageId,
+      candidateActionCount: candidates.length,
+      controlCount: controls.length,
+      appliedActionBindingCount: packageValue.actionBindings.length,
+      appliedHitBindingCount: packageValue.summary.appliedHitBindingCount,
+      appliedEffectBindingCount: packageValue.summary.appliedEffectBindingCount,
+      unresolvedActionCount: packageValue.summary.unresolvedActionCount,
+      verifiedZeroActionCount: packageValue.summary.verifiedZeroActionCount,
+      appliedEnemyProfileCount: packageValue.summary.appliedEnemyProfileCount,
+      validatorPassed: validation.passed,
+    },
+  };
+}
+
+async function runCli() {
+  const options = parseArgs(process.argv.slice(2));
+  const build = await createVerifiedCombatMechanicsBuild();
+  const drift = build.outputs.filter(([filePath, content]) =>
     fs.existsSync(filePath) ? readText(filePath) !== content : true
   );
-
   if (options.assertClean && drift.length > 0) {
     console.error(
       `verified combat package drift: ${drift
@@ -848,7 +861,7 @@ async function main() {
     return;
   }
   if (options.write) {
-    for (const [filePath, content] of outputs) {
+    for (const [filePath, content] of build.outputs) {
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
       fs.writeFileSync(filePath, content, 'utf8');
     }
@@ -858,22 +871,20 @@ async function main() {
     JSON.stringify(
       {
         status: drift.length ? (options.write ? 'written' : 'drift') : 'clean',
-        packageId: packageValue.packageId,
-        candidateActionCount: candidates.length,
-        controlCount: controls.length,
-        appliedActionBindingCount: packageValue.actionBindings.length,
-        appliedHitBindingCount: packageValue.summary.appliedHitBindingCount,
-        appliedEffectBindingCount:
-          packageValue.summary.appliedEffectBindingCount,
-        unresolvedActionCount: packageValue.summary.unresolvedActionCount,
-        verifiedZeroActionCount: packageValue.summary.verifiedZeroActionCount,
-        appliedEnemyProfileCount: packageValue.summary.appliedEnemyProfileCount,
-        validatorPassed: validation.passed,
-        outputs: outputs.map(([filePath]) => relativePath(filePath)),
+        ...build.summary,
+        outputs: build.outputs.map(([filePath]) => relativePath(filePath)),
       },
       null,
       2
     )
+  );
+}
+
+function isDirectExecution() {
+  if (!process.argv[1]) return false;
+  return (
+    path.resolve(process.argv[1]).toLowerCase() ===
+    fileURLToPath(import.meta.url).toLowerCase()
   );
 }
 
@@ -1403,9 +1414,6 @@ function createActionVariantGraph({
   const profileByOwnerId = new Map(
     profiles.map(profile => [profile.ownerId, profile])
   );
-  const controlBySkillId = new Map(
-    controlBindings.map(control => [control.controlSkillId, control])
-  );
   const actionKindsByControl = new Map();
   const publicActionsByControl = new Map();
   for (const candidate of candidates ?? []) {
@@ -1704,860 +1712,6 @@ function createActionVariantGraph({
       ),
     },
   };
-}
-
-function attachXiaoyuMechanicsContracts({
-  seed,
-  characterCatalog,
-  controlBindings,
-  specialResourceCatalog,
-  actionVariantGraph,
-}) {
-  const controlBySkillId = new Map(
-    controlBindings.map(control => [control.controlSkillId, control])
-  );
-  const profile = specialResourceCatalog.profiles.find(
-    item => Number(item.ownerId) === XIAOYU_MECHANICS.ownerId
-  );
-  const a5Control = controlBySkillId.get(XIAOYU_MECHANICS.a5ControlSkillId);
-  const chargedControl = controlBySkillId.get(
-    XIAOYU_MECHANICS.chargedControlSkillId
-  );
-  const derivedChargedControl = controlBySkillId.get(
-    XIAOYU_MECHANICS.derivedChargedControlSkillId
-  );
-  if (
-    !profile?.applied ||
-    !a5Control ||
-    !chargedControl ||
-    !derivedChargedControl
-  ) {
-    throw new Error('Xiaoyu verified mechanics source controls are missing');
-  }
-
-  const state = profile.stateElements.find(
-    item => Number(item.elementId) === XIAOYU_MECHANICS.stateElementId
-  );
-  const resourceAsset = readBattleElementAsset(
-    XIAOYU_MECHANICS.resourceElementId
-  );
-  const stateAsset = readBattleElementAsset(XIAOYU_MECHANICS.stateElementId);
-  if (!state || !resourceAsset || !stateAsset) {
-    throw new Error('Xiaoyu resource state evidence is missing');
-  }
-
-  const contextEdges = createXiaoyuChargedContextEdges({
-    controlBySkillId,
-    a5Control,
-    chargedControl,
-    derivedChargedControl,
-    state,
-  });
-  const publicActionForms = createXiaoyuChargedPublicActionForms({
-    chargedControl,
-    derivedChargedControl,
-    contextEdges,
-    state,
-  });
-  const attackInputChains = createXiaoyuAttackInputChains({
-    controlBySkillId,
-    state,
-  });
-  const hiddenInputDerivationAudit = createXiaoyuHiddenInputDerivationAudit({
-    characterCatalog,
-    controlBySkillId,
-    actionVariantGraph,
-    attackInputChains,
-    publicActionForms,
-    contextEdges,
-  });
-  const thresholdTransitions = [
-    {
-      transitionIdentity: [
-        profile.resourceIdentity,
-        'threshold',
-        profile.capacity,
-        XIAOYU_MECHANICS.stateElementId,
-      ].join('|'),
-      ownerId: XIAOYU_MECHANICS.ownerId,
-      resourceIdentity: profile.resourceIdentity,
-      threshold: profile.capacity,
-      comparison: 'reaches-capacity',
-      resourceOperation: 'clear',
-      suppressGainWhileStateActive: true,
-      suppressedOperationIdentities: specialResourceCatalog.operationBindings
-        .filter(
-          operation =>
-            Number(operation.ownerId) === XIAOYU_MECHANICS.ownerId &&
-            ((Number(operation.controlSkillId) ===
-              XIAOYU_MECHANICS.chargedControlSkillId &&
-              Number(operation.subSkillIndex) === 2 &&
-              ['clear', 'transform'].includes(operation.operation)) ||
-              (Number(operation.controlSkillId) ===
-                XIAOYU_MECHANICS.ultimateControlSkillId &&
-                operation.operation === 'transform-remove'))
-        )
-        .map(operation => operation.operationIdentity)
-        .sort(),
-      stateElementId: XIAOYU_MECHANICS.stateElementId,
-      stateName: state.name,
-      stateDurationMs: state.durationMs,
-      sourceIdentity: [
-        resourceAsset.sourceIdentity,
-        `${resourceAsset.sourceIdentity}#combineType=${resourceAsset.tree.combineType};combineNumber=${resourceAsset.tree.combineNumber}`,
-        stateAsset.sourceIdentity,
-        `${stateAsset.sourceIdentity}#time=${stateAsset.tree.time}`,
-        `${relativeExternalPath(IL2CPP_DUMP_PATH)}#ModuleChargingSkill101010._accElementId|_burstElementId`,
-      ].join('|'),
-      status: 'verified-special-resource-threshold-transition-ready',
-      applied: true,
-    },
-  ];
-  const passiveEffects = [
-    createXiaoyuPassiveEffectProfile({
-      seed,
-      controlBindings,
-      controlBySkillId,
-    }),
-  ];
-
-  specialResourceCatalog.thresholdTransitions = thresholdTransitions;
-  specialResourceCatalog.passiveEffects = passiveEffects;
-  specialResourceCatalog.summary.thresholdTransitionCount =
-    thresholdTransitions.length;
-  specialResourceCatalog.summary.passiveEffectCount = passiveEffects.length;
-  specialResourceCatalog.summary.appliedPassiveEffectCount =
-    passiveEffects.filter(item => item.applied).length;
-
-  actionVariantGraph.contextEdges = contextEdges;
-  actionVariantGraph.publicActionForms = publicActionForms;
-  actionVariantGraph.attackInputChains = attackInputChains;
-  actionVariantGraph.hiddenInputDerivationCatalog = {
-    schemaVersion: hiddenInputDerivationAudit.schemaVersion,
-    kind: 'xiaoyu-hidden-input-derivation-catalog',
-    status: hiddenInputDerivationAudit.status,
-    ownerId: hiddenInputDerivationAudit.ownerId,
-    publicExecutionFormCount:
-      hiddenInputDerivationAudit.publicExecutionFormCount,
-    publicExecutionFormsCovered:
-      hiddenInputDerivationAudit.publicExecutionFormsCovered,
-    starCarryConclusion: hiddenInputDerivationAudit.starCarryConclusion,
-    summary: hiddenInputDerivationAudit.summary,
-  };
-  actionVariantGraph.summary.contextEdgeCount = contextEdges.length;
-  actionVariantGraph.summary.appliedContextEdgeCount = contextEdges.filter(
-    edge => edge.applied
-  ).length;
-  actionVariantGraph.summary.attackInputChainCount = attackInputChains.length;
-  actionVariantGraph.summary.publicActionFormCount = publicActionForms.length;
-  actionVariantGraph.summary.hiddenInputAuditRowCount =
-    hiddenInputDerivationAudit.rows.length;
-  actionVariantGraph.summary.hiddenInputPublicExecutionFormCount =
-    hiddenInputDerivationAudit.publicExecutionFormCount;
-  return { hiddenInputDerivationAudit };
-}
-
-function createXiaoyuChargedContextEdges({
-  controlBySkillId,
-  a5Control,
-  chargedControl,
-  derivedChargedControl,
-  state,
-}) {
-  const stateInactive = createXiaoyuResourceStateCondition(state, false);
-  const stateActive = createXiaoyuResourceStateCondition(state, true);
-  const sourceDefinitions = [
-    {
-      sourceControl: a5Control,
-      sourceSubSkillIndex: 0,
-      targetSubSkillIndex: 0,
-      semanticIdentity: 'xiaoyu-special-charged',
-      semanticName: '特殊重击',
-      sourcePublicActionKind: 'normal-attack',
-      sourceSemanticName: '普通攻击 A5',
-      condition: stateInactive,
-      expectedWindowCount: 1,
-    },
-    {
-      sourceControl: a5Control,
-      sourceSubSkillIndex: 1,
-      targetSubSkillIndex: 1,
-      semanticIdentity: 'xiaoyu-enhanced-special-charged',
-      semanticName: '强化特殊重击',
-      sourcePublicActionKind: 'normal-attack',
-      sourceSemanticName: '爆发普攻 A3',
-      condition: stateActive,
-      expectedWindowCount: 2,
-    },
-    {
-      sourceControl: controlBySkillId.get(
-        XIAOYU_MECHANICS.starSkillControlSkillId
-      ),
-      sourceSubSkillIndex: 0,
-      targetSubSkillIndex: 0,
-      semanticIdentity: 'xiaoyu-special-charged',
-      semanticName: '特殊重击',
-      sourcePublicActionKind: 'star-skill',
-      sourceSemanticName: '星鸣技',
-      condition: { kind: 'always' },
-      expectedWindowCount: 1,
-    },
-    {
-      sourceControl: controlBySkillId.get(
-        XIAOYU_MECHANICS.ultimateControlSkillId
-      ),
-      sourceSubSkillIndex: 0,
-      targetSubSkillIndex: 1,
-      semanticIdentity: 'xiaoyu-enhanced-special-charged',
-      semanticName: '强化特殊重击',
-      sourcePublicActionKind: 'ultimate',
-      sourceSemanticName: '星决技',
-      condition: { kind: 'always' },
-      expectedWindowCount: 1,
-    },
-    {
-      sourceControl: controlBySkillId.get(
-        XIAOYU_MECHANICS.limitCounterControlSkillId
-      ),
-      sourceSubSkillIndex: 0,
-      targetSubSkillIndex: 0,
-      semanticIdentity: 'xiaoyu-special-charged',
-      semanticName: '特殊重击',
-      sourcePublicActionKind: 'limit-counter',
-      sourceSemanticName: '极限反击',
-      condition: { kind: 'always' },
-      expectedWindowCount: 1,
-    },
-  ];
-  const contextEdges = sourceDefinitions.flatMap(definition => {
-    const windows = findControlTransitionWindows({
-      control: definition.sourceControl,
-      subSkillIndex: definition.sourceSubSkillIndex,
-      targetControlSkillId: XIAOYU_MECHANICS.derivedChargedControlSkillId,
-      targetSubSkillIndex: definition.targetSubSkillIndex,
-    });
-    if (windows.length !== definition.expectedWindowCount) {
-      throw new Error(
-        `Xiaoyu hidden charged window count mismatch: ${definition.sourceControl?.controlSkillId}/${definition.sourceSubSkillIndex} expected ${definition.expectedWindowCount}, received ${windows.length}`
-      );
-    }
-    return windows.map(window =>
-      createXiaoyuChargedContextEdge({
-        sourceControl: definition.sourceControl,
-        sourceControlSkillId: definition.sourceControl.controlSkillId,
-        sourceSubSkillIndex: definition.sourceSubSkillIndex,
-        sourcePublicActionKind: definition.sourcePublicActionKind,
-        sourceSemanticName: definition.sourceSemanticName,
-        executionControl: derivedChargedControl,
-        targetSubSkillIndex: definition.targetSubSkillIndex,
-        window,
-        inputCommand: resolveXiaoyuInputCommand(window, 'charged-attack'),
-        semanticIdentity: definition.semanticIdentity,
-        semanticName: definition.semanticName,
-        condition: definition.condition,
-      })
-    );
-  });
-  const continuousWindows = findControlTransitionWindows({
-    control: chargedControl,
-    subSkillIndex: 0,
-    targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
-    targetSubSkillIndex: 1,
-  });
-  if (continuousWindows.length !== 1) {
-    throw new Error(
-      `Xiaoyu continuous charged window count mismatch: ${continuousWindows.length}`
-    );
-  }
-  const continuousSwitch = readBattleElementAsset(
-    XIAOYU_MECHANICS.specialChargedSwitchElementId
-  );
-  const edges = [
-    ...contextEdges,
-    createXiaoyuChargedContextEdge({
-      sourceControl: chargedControl,
-      sourceControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
-      sourceSubSkillIndex: 0,
-      sourcePublicActionKind: 'charged-attack',
-      sourceSemanticName: '普通重击',
-      executionControl: chargedControl,
-      targetSubSkillIndex: Number(continuousSwitch?.tree?.subSkillIndex),
-      window: continuousWindows[0],
-      inputCommand: resolveXiaoyuInputCommand(
-        continuousWindows[0],
-        'normal-attack'
-      ),
-      semanticIdentity: 'xiaoyu-continuous-charged',
-      semanticName: '连续重击',
-      condition: {
-        kind: 'always',
-        sourceIdentity: continuousSwitch?.sourceIdentity ?? null,
-      },
-      requiredSwitchAsset: continuousSwitch,
-    }),
-  ];
-  return edges.map(edge => {
-    if (!edge.applied) {
-      throw new Error(
-        `Xiaoyu charged context edge unresolved: ${edge.reasons.join(', ')}`
-      );
-    }
-    return edge;
-  });
-}
-
-function createXiaoyuChargedContextEdge({
-  sourceControl,
-  sourceControlSkillId,
-  sourceSubSkillIndex,
-  sourcePublicActionKind,
-  sourceSemanticName,
-  executionControl,
-  targetSubSkillIndex,
-  window,
-  inputCommand,
-  semanticIdentity,
-  semanticName,
-  condition,
-  requiredSwitchAsset = null,
-}) {
-  const executionControlSkillId = Number(executionControl?.controlSkillId);
-  const windowTargetMatches =
-    Number(window?.targetControlSkillId) === executionControlSkillId &&
-    Number(window?.targetSubSkillIndex) === targetSubSkillIndex;
-  const switchTargetMatches =
-    requiredSwitchAsset == null ||
-    (Number(requiredSwitchAsset?.tree?.skillID) === executionControlSkillId &&
-      Number(requiredSwitchAsset?.tree?.subSkillIndex) === targetSubSkillIndex);
-  const resolvedExecutionTiming = createXiaoyuControlVariantTiming({
-    control: executionControl,
-    subSkillIndex: targetSubSkillIndex,
-    actionKind: 'charged-attack',
-  });
-  const sourceExecutionTiming = createXiaoyuControlVariantTiming({
-    control: sourceControl,
-    subSkillIndex: sourceSubSkillIndex,
-    actionKind: sourcePublicActionKind,
-  });
-  const inputScheduling = createVerifiedContextInputSchedulingContract({
-    window,
-    sourceExecutionTiming,
-  });
-  const applied =
-    Number.isInteger(targetSubSkillIndex) &&
-    window != null &&
-    windowTargetMatches &&
-    switchTargetMatches &&
-    inputScheduling.status === 'applied' &&
-    resolvedExecutionTiming?.occupancy?.status === 'applied';
-  const executionTiming = createRuntimeExecutionTiming(resolvedExecutionTiming);
-  return {
-    edgeIdentity: [
-      `actor:${XIAOYU_MECHANICS.ownerId}`,
-      `control:${sourceControlSkillId}`,
-      `sub:${sourceSubSkillIndex}`,
-      `context:${window?.startFrame ?? 'missing'}-${window?.endFrame ?? 'missing'}`,
-      `public-control:${XIAOYU_MECHANICS.chargedControlSkillId}`,
-      `execution-control:${executionControlSkillId}`,
-      `sub:${targetSubSkillIndex}`,
-    ].join('|'),
-    ownerId: XIAOYU_MECHANICS.ownerId,
-    relationType: 'input-context-derived',
-    inputCommand,
-    sourceControlSkillId,
-    sourceSubSkillIndex,
-    sourcePublicActionKind,
-    sourcePublicActionIdentity: [
-      `actor:${XIAOYU_MECHANICS.ownerId}`,
-      sourcePublicActionKind,
-      `control:${sourceControlSkillId}`,
-      `sub:${sourceSubSkillIndex}`,
-    ].join('|'),
-    sourceSemanticName,
-    targetControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
-    executionControlSkillId,
-    targetSubSkillIndex,
-    semanticIdentity,
-    semanticName,
-    publicActionKind: 'charged-attack',
-    publicActionIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:charged-attack`,
-    executionTiming,
-    sourceExecutionTiming: createRuntimeExecutionTiming(sourceExecutionTiming),
-    decisionFrame: 0,
-    inputWindow: window
-      ? {
-          startFrame: window.startFrame,
-          endFrame: window.endFrame,
-          frameRate: 60,
-          bridgeType: window.bridgeType,
-          continuousAttackType: window.continuousAttackType,
-          interruptBehavior: window.interruptBehavior,
-          frameIndex: window.frameIndex,
-          baseOnInput: window.baseOnInput,
-          inputToIndex: window.inputToIndex,
-          allowedInputCommands: window.allowedInputCommands ?? [],
-          sourceIdentity: window.sourceIdentity,
-        }
-      : null,
-    inputScheduling,
-    condition,
-    sourceIdentity: [
-      window?.sourceIdentity,
-      requiredSwitchAsset?.sourceIdentity,
-      condition?.sourceIdentity,
-      inputScheduling.sourceIdentity,
-      executionTiming?.sourceIdentity,
-    ]
-      .filter(Boolean)
-      .join('|'),
-    status: applied
-      ? 'verified-input-context-variant-edge-ready'
-      : 'unresolved-input-context-variant-edge',
-    reasons: [
-      ...(window ? [] : ['context-derived-input-window-missing']),
-      ...(requiredSwitchAsset == null || requiredSwitchAsset
-        ? []
-        : ['charged-switch-element-missing']),
-      ...(windowTargetMatches ? [] : ['charged-window-target-mismatch']),
-      ...(switchTargetMatches ? [] : ['charged-switch-target-mismatch']),
-      ...(inputScheduling.status === 'applied' ? [] : inputScheduling.reasons),
-      ...(executionTiming?.occupancy?.status === 'applied'
-        ? []
-        : ['charged-execution-occupancy-unresolved']),
-    ],
-    applied,
-  };
-}
-
-function createVerifiedContextInputSchedulingContract({
-  window,
-  sourceExecutionTiming,
-}) {
-  const inputSemantics = classifyVerifiedEventBridgeInputSemantics(window);
-  const predecessorGenericEndFrame = nonNegativeIntegerOrNull(
-    sourceExecutionTiming?.occupancy?.durationFrames
-  );
-  const windowClassification = classifyInputWindowAgainstOccupancy({
-    window,
-    occupancyEndFrame: predecessorGenericEndFrame,
-  });
-  let canonicalInputFrame = null;
-  if (
-    predecessorGenericEndFrame != null &&
-    window &&
-    predecessorGenericEndFrame >= Number(window.startFrame) &&
-    predecessorGenericEndFrame < Number(window.endFrame)
-  ) {
-    canonicalInputFrame = predecessorGenericEndFrame;
-  } else if (
-    predecessorGenericEndFrame != null &&
-    window &&
-    predecessorGenericEndFrame === Number(window.endFrame)
-  ) {
-    canonicalInputFrame = Number(window.endFrame) - 1;
-  }
-  const semanticsApplied = inputSemantics !== 'unresolved';
-  const edgeIntentApplied =
-    semanticsApplied &&
-    canonicalInputFrame != null &&
-    canonicalInputFrame >= Number(window?.startFrame) &&
-    canonicalInputFrame < Number(window?.endFrame);
-  const immediate = ['immediate-interrupt', 'immediate-continuous'].includes(
-    inputSemantics
-  );
-  const canonicalExecutionStartFrame = edgeIntentApplied
-    ? immediate
-      ? canonicalInputFrame
-      : predecessorGenericEndFrame
-    : null;
-  const canonicalPredecessorEndFrame = canonicalExecutionStartFrame;
-  const sourceIdentity = [
-    window?.sourceIdentity,
-    sourceExecutionTiming?.occupancy?.sourceIdentity,
-    'client-runtime:EventBridgeBehavior.Start/OnEvent/Update',
-  ]
-    .filter(Boolean)
-    .join('|');
-  return {
-    schemaVersion: 1,
-    kind: 'verified-context-input-scheduling',
-    status:
-      window && sourceExecutionTiming?.occupancy?.status === 'applied'
-        ? semanticsApplied
-          ? 'applied'
-          : 'unresolved'
-        : 'unresolved',
-    inputSemantics,
-    interval: '[start,end)',
-    predecessorGenericEndFrame,
-    predecessorAnimationDurationFrames:
-      sourceExecutionTiming?.animation?.durationFrames ?? null,
-    predecessorHitEnvelope: sourceExecutionTiming?.hitEnvelope ?? null,
-    windowClassification,
-    bufferUntilFrame:
-      inputSemantics === 'buffered-until-frame'
-        ? (nonNegativeIntegerOrNull(window?.frameIndex) ??
-          predecessorGenericEndFrame)
-        : null,
-    edgeIntent: {
-      status: edgeIntentApplied ? 'applied' : 'not-applicable',
-      predecessorGenericEndFrame,
-      canonicalInputFrame,
-      canonicalExecutionStartFrame,
-      canonicalPredecessorEndFrame,
-      policy: edgeIntentApplied
-        ? immediate
-          ? 'latest-verified-immediate-input-at-or-before-generic-edge'
-          : 'verified-buffered-input-with-generic-edge-execution'
-        : 'no-verified-edge-intent-mapping',
-    },
-    sourceIdentity,
-    reasons: [
-      ...(window ? [] : ['context-input-window-missing']),
-      ...(sourceExecutionTiming?.occupancy?.status === 'applied'
-        ? []
-        : ['predecessor-effective-occupancy-unresolved']),
-      ...(semanticsApplied
-        ? []
-        : ['event-bridge-input-execution-semantics-unresolved']),
-    ],
-  };
-}
-
-function classifyVerifiedEventBridgeInputSemantics(window) {
-  if (Number(window?.bridgeType) === 3) {
-    return 'immediate-interrupt';
-  }
-  if (
-    Number(window?.bridgeType) === 0 &&
-    Number(window?.continuousAttackType) === 0
-  ) {
-    return 'buffered-until-frame';
-  }
-  if (
-    Number(window?.bridgeType) === 0 &&
-    Number(window?.continuousAttackType) === 1
-  ) {
-    return 'immediate-continuous';
-  }
-  return 'unresolved';
-}
-
-function classifyInputWindowAgainstOccupancy({ window, occupancyEndFrame }) {
-  if (!window || occupancyEndFrame == null) return 'unresolved';
-  const startFrame = Number(window.startFrame);
-  const endFrame = Number(window.endFrame);
-  if (startFrame === occupancyEndFrame) {
-    return 'window-start-equals-generic-occupancy';
-  }
-  if (startFrame < occupancyEndFrame && occupancyEndFrame < endFrame) {
-    return 'generic-occupancy-inside-window';
-  }
-  if (endFrame === occupancyEndFrame) {
-    return 'window-end-equals-generic-occupancy';
-  }
-  if (endFrame < occupancyEndFrame) {
-    return 'window-before-generic-occupancy';
-  }
-  if (startFrame > occupancyEndFrame) {
-    return 'window-after-generic-occupancy';
-  }
-  return 'unresolved';
-}
-
-function createXiaoyuChargedPublicActionForms({
-  chargedControl,
-  derivedChargedControl,
-  contextEdges,
-  state,
-}) {
-  const enhancedSwitch = readBattleElementAsset(
-    XIAOYU_MECHANICS.enhancedChargedSwitchElementId
-  );
-  const enhancedDerivedSwitch = readBattleElementAsset(
-    XIAOYU_MECHANICS.enhancedDerivedChargedSwitchElementId
-  );
-  const definitions = [
-    {
-      semanticIdentity: 'xiaoyu-ordinary-charged',
-      semanticName: '普通重击',
-      executionControl: chargedControl,
-      executionSubSkillIndex: 0,
-      condition: createXiaoyuResourceStateCondition(state, false),
-      selectionKind: 'default',
-      sourceIdentity: chargedControl.variants?.[0]?.sourceIdentity,
-    },
-    {
-      semanticIdentity: 'xiaoyu-enhanced-charged',
-      semanticName: '强化重击',
-      executionControl: chargedControl,
-      executionSubSkillIndex: 2,
-      condition: createXiaoyuResourceStateCondition(state, true),
-      selectionKind: 'state-controlled',
-      sourceIdentity: enhancedSwitch?.sourceIdentity,
-    },
-    {
-      semanticIdentity: 'xiaoyu-special-charged',
-      semanticName: '特殊重击',
-      executionControl: derivedChargedControl,
-      executionSubSkillIndex: 0,
-      condition: createXiaoyuResourceStateCondition(state, false),
-      selectionKind: 'input-context-derived',
-      sourceIdentity: contextEdges
-        .filter(edge => edge.semanticIdentity === 'xiaoyu-special-charged')
-        .map(edge => edge.sourceIdentity)
-        .join('|'),
-    },
-    {
-      semanticIdentity: 'xiaoyu-enhanced-special-charged',
-      semanticName: '强化特殊重击',
-      executionControl: derivedChargedControl,
-      executionSubSkillIndex: 1,
-      condition: createXiaoyuResourceStateCondition(state, true),
-      selectionKind: 'input-context-derived',
-      sourceIdentity: [
-        enhancedDerivedSwitch?.sourceIdentity,
-        ...contextEdges
-          .filter(
-            edge => edge.semanticIdentity === 'xiaoyu-enhanced-special-charged'
-          )
-          .map(edge => edge.sourceIdentity),
-      ]
-        .filter(Boolean)
-        .join('|'),
-    },
-    {
-      semanticIdentity: 'xiaoyu-continuous-charged',
-      semanticName: '连续重击',
-      executionControl: chargedControl,
-      executionSubSkillIndex: 1,
-      condition: { kind: 'always' },
-      selectionKind: 'input-context-derived',
-      sourceIdentity: contextEdges.find(
-        edge => edge.semanticIdentity === 'xiaoyu-continuous-charged'
-      )?.sourceIdentity,
-    },
-  ];
-  return definitions.map(definition => {
-    const resolvedExecutionTiming = createXiaoyuControlVariantTiming({
-      control: definition.executionControl,
-      subSkillIndex: definition.executionSubSkillIndex,
-      actionKind: 'charged-attack',
-    });
-    const applied = resolvedExecutionTiming?.occupancy?.status === 'applied';
-    const executionTiming = createRuntimeExecutionTiming(
-      resolvedExecutionTiming
-    );
-    return {
-      formIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:charged-attack:${definition.semanticIdentity}`,
-      ownerId: XIAOYU_MECHANICS.ownerId,
-      publicActionKind: 'charged-attack',
-      publicControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
-      semanticIdentity: definition.semanticIdentity,
-      semanticName: definition.semanticName,
-      executionControlSkillId: definition.executionControl.controlSkillId,
-      executionSubSkillIndex: definition.executionSubSkillIndex,
-      selectionKind: definition.selectionKind,
-      condition: definition.condition,
-      executionTiming,
-      sourceIdentity: [
-        definition.sourceIdentity,
-        executionTiming?.sourceIdentity,
-      ]
-        .filter(Boolean)
-        .join('|'),
-      status: applied
-        ? 'verified-public-action-form-ready'
-        : 'unresolved-public-action-form',
-      reasons: applied ? [] : ['public-action-form-occupancy-unresolved'],
-      applied,
-    };
-  });
-}
-
-function createXiaoyuResourceStateCondition(state, active) {
-  return {
-    kind: active ? 'resource-state-active' : 'resource-state-inactive',
-    resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
-    stateElementId: state.elementId,
-    stateName: state.name,
-    sourceIdentity: state.sourceIdentity,
-  };
-}
-
-function findControlTransitionWindows({
-  control,
-  subSkillIndex,
-  targetControlSkillId,
-  targetSubSkillIndex,
-}) {
-  const variant = control?.variants?.find(
-    item => Number(item.subSkillIndex) === Number(subSkillIndex)
-  );
-  return normalizeControlTransitionWindows(variant?.eventBridges).filter(
-    window =>
-      Number(window.targetControlSkillId) === Number(targetControlSkillId) &&
-      Number(window.targetSubSkillIndex) === Number(targetSubSkillIndex)
-  );
-}
-
-function normalizeControlTransitionWindows(bridges = []) {
-  const bridgeBySourceIdentity = new Map(
-    (bridges ?? []).map(bridge => [bridge.sourceIdentity, bridge])
-  );
-  return normalizeActionTimingWindows(bridges).map(window => {
-    const source = bridgeBySourceIdentity.get(window.sourceIdentity);
-    return {
-      ...window,
-      allowedInputCommands: dedupeBy(
-        source?.allowedInputCommands ?? [],
-        value => value
-      ),
-      behaviorLineName: source?.behaviorLineName ?? null,
-    };
-  });
-}
-
-function resolveXiaoyuInputCommand(window, fallback = null) {
-  const commands = window?.allowedInputCommands ?? [];
-  if (commands.includes('charged-attack')) return 'charged-attack';
-  if (commands.includes('normal-attack')) return 'normal-attack';
-  if (commands.includes('star-skill')) return 'star-skill';
-  if (commands.includes('ultimate')) return 'ultimate';
-  return fallback;
-}
-
-function createXiaoyuControlVariantTiming({
-  control,
-  subSkillIndex,
-  actionKind,
-}) {
-  const preparedControl = {
-    ...control,
-    hits: createControlRuntimeHits(control),
-  };
-  const variant = preparedControl.variants?.find(
-    item => Number(item.subSkillIndex) === Number(subSkillIndex)
-  );
-  if (!variant) return null;
-  return createControlVariantTimingContract({
-    control: preparedControl,
-    variant,
-    actionKind,
-    occupancyResolver: resolveVerifiedActionInputOccupancy,
-  });
-}
-
-function createRuntimeExecutionTiming(timing) {
-  if (!timing) return null;
-  return {
-    subSkillIndex: timing.subSkillIndex,
-    frameRate: timing.frameRate,
-    input: timing.input,
-    occupancy: timing.occupancy,
-    animation: timing.animation,
-    sourceIdentity: timing.sourceIdentity,
-  };
-}
-
-function createXiaoyuAttackInputChains({ controlBySkillId, state }) {
-  const definitions = [
-    {
-      chainIdentity: 'xiaoyu-normal-default-five-inputs',
-      stateCondition: {
-        kind: 'resource-state-inactive',
-        stateElementId: state.elementId,
-      },
-      segments: [
-        [10101001, 0, 10101002],
-        [10101002, 0, 10101003],
-        [10101003, 0, 10101004],
-        [10101004, 0, 10101005],
-        [10101005, 0, null],
-      ],
-    },
-    {
-      chainIdentity: 'xiaoyu-burst-three-inputs',
-      stateCondition: {
-        kind: 'resource-state-active',
-        stateElementId: state.elementId,
-      },
-      segments: [
-        [10101001, 1, 10101004],
-        [10101004, 1, 10101005],
-        [10101005, 1, null],
-      ],
-    },
-  ];
-  return definitions.map(definition => {
-    const segments = definition.segments.map(
-      ([controlSkillId, subSkillIndex, nextControlSkillId], index) => {
-        const control = controlBySkillId.get(controlSkillId);
-        const variant = control?.variants?.find(
-          item => Number(item.subSkillIndex) === subSkillIndex
-        );
-        const timing =
-          control && variant
-            ? createControlVariantTimingContract({
-                control,
-                variant,
-                actionKind: 'normal-attack',
-                occupancyResolver: resolveNormalAttackInputOccupancy,
-                occupancyContext: { nextControlSkillId },
-              })
-            : null;
-        const executionTiming =
-          control && variant && timing
-            ? {
-                ...createControlVariantTimingContract({
-                  control: {
-                    ...control,
-                    hits: createControlRuntimeHits(control),
-                  },
-                  variant,
-                  actionKind: 'normal-attack',
-                  occupancyResolver: resolveNormalAttackInputOccupancy,
-                  occupancyContext: { nextControlSkillId },
-                }),
-                occupancy: timing.occupancy,
-              }
-            : timing;
-        if (timing?.occupancy?.status !== 'applied') {
-          throw new Error(
-            `Xiaoyu attack chain timing unresolved: ${controlSkillId}/${subSkillIndex}`
-          );
-        }
-        return {
-          sequenceIndex: index + 1,
-          sequenceTotal: definition.segments.length,
-          controlSkillId,
-          subSkillIndex,
-          nextControlSkillId,
-          durationFrames: timing.occupancy.durationFrames,
-          executionTiming,
-          sourceIdentity: timing.occupancy.sourceIdentity,
-          status: 'verified-attack-input-chain-segment-ready',
-          applied: true,
-        };
-      }
-    );
-    return {
-      chainIdentity: definition.chainIdentity,
-      ownerId: XIAOYU_MECHANICS.ownerId,
-      sourceSkillId: XIAOYU_MECHANICS.normalAttackSkillId,
-      decisionFrame: 0,
-      stateCondition: {
-        ...definition.stateCondition,
-        resourceIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:element:${XIAOYU_MECHANICS.resourceElementId}`,
-        stateName: state.name,
-        sourceIdentity: state.sourceIdentity,
-      },
-      segments,
-      sourceIdentity: segments.map(segment => segment.sourceIdentity).join('|'),
-      status: 'verified-attack-input-chain-ready',
-      applied: true,
-    };
-  });
 }
 
 function createXiaoyuHiddenInputDerivationAudit({
@@ -3303,231 +2457,71 @@ function compareXiaoyuAuditRows(left, right) {
   );
 }
 
-function createXiaoyuPassiveEffectProfile({
-  seed,
-  controlBindings,
-  controlBySkillId,
-}) {
-  const passiveControl = controlBySkillId.get(XIAOYU_MECHANICS.passiveSkillId);
-  const marker = readBattleElementAsset(
-    XIAOYU_MECHANICS.passiveMarkerElementId
+function normalizeControlTransitionWindows(bridges = []) {
+  const bridgeBySourceIdentity = new Map(
+    (bridges ?? []).map(bridge => [bridge.sourceIdentity, bridge])
   );
-  const wrapper = readBattleElementAsset(
-    XIAOYU_MECHANICS.passiveWrapperElementId
-  );
-  const property = readBattleElementAsset(
-    XIAOYU_MECHANICS.passivePropertyElementId
-  );
-  const triggerBindings = [];
-  for (const control of controlBindings) {
-    if (
-      resolveControlOwnerId(control.controlSkillId, [
-        XIAOYU_MECHANICS.ownerId,
-      ]) !== XIAOYU_MECHANICS.ownerId
-    ) {
-      continue;
-    }
-    for (const root of control.effectGraph ?? []) {
-      const node = root.nodes.find(
-        item =>
-          Number(item.elementId) === XIAOYU_MECHANICS.passiveWrapperElementId
-      );
-      if (!node) continue;
-      for (const trigger of createSemanticRootTriggerContracts(control, root)) {
-        if (
-          trigger.resolution !== 'static-resolved' ||
-          !Number.isInteger(trigger.startFrame)
-        ) {
-          continue;
-        }
-        triggerBindings.push({
-          triggerIdentity: [
-            XIAOYU_MECHANICS.passiveSkillId,
-            control.controlSkillId,
-            root.mapIndex,
-            trigger.startFrame,
-            node.pathId,
-          ].join('|'),
-          controlSkillId: control.controlSkillId,
-          subSkillIndex: root.mapIndex,
-          triggerFrame: trigger.startFrame,
-          frameRate: control.frameRate ?? 60,
-          sourceElementId: node.elementId,
-          sourcePathId: node.pathId,
-          sourceIdentity: [
-            root.sourceIdentity,
-            node.sourceIdentity,
-            trigger.sourceIdentity,
-          ]
-            .filter(Boolean)
-            .join('|'),
-          status: 'verified-passive-trigger-binding-ready',
-          applied: true,
-        });
-      }
-    }
+  return normalizeActionTimingWindows(bridges).map(window => {
+    const source = bridgeBySourceIdentity.get(window.sourceIdentity);
+    return {
+      ...window,
+      allowedInputCommands: dedupeBy(
+        source?.allowedInputCommands ?? [],
+        value => value
+      ),
+      behaviorLineName: source?.behaviorLineName ?? null,
+    };
+  });
+}
+
+function resolveXiaoyuInputCommand(window, fallback = null) {
+  const commands = window?.allowedInputCommands ?? [];
+  if (commands.includes('charged-attack')) return 'charged-attack';
+  if (commands.includes('normal-attack')) return 'normal-attack';
+  if (commands.includes('star-skill')) return 'star-skill';
+  if (commands.includes('ultimate')) return 'ultimate';
+  return fallback;
+}
+
+function classifyVerifiedEventBridgeInputSemantics(window) {
+  if (Number(window?.bridgeType) === 3) {
+    return 'immediate-interrupt';
   }
-  const limitCounterControl = controlBySkillId.get(
-    XIAOYU_MECHANICS.limitCounterControlSkillId
-  );
-  const limitCounterBridge = limitCounterControl?.variants
-    ?.flatMap(variant =>
-      (variant.eventBridges ?? []).map(bridge => ({ variant, bridge }))
-    )
-    .find(
-      ({ bridge }) =>
-        Number(bridge.targetSkillId) ===
-          XIAOYU_MECHANICS.limitCounterRuntimeControlSkillId &&
-        Number(bridge.skillIndex) === 0 &&
-        Number.isInteger(bridge.startFrame)
-    );
-  const limitCounterRuntimeTrigger = triggerBindings.find(
-    trigger =>
-      Number(trigger.controlSkillId) ===
-        XIAOYU_MECHANICS.limitCounterRuntimeControlSkillId &&
-      Number(trigger.subSkillIndex) === 0
-  );
-  if (limitCounterBridge && limitCounterRuntimeTrigger) {
-    triggerBindings.push({
-      ...limitCounterRuntimeTrigger,
-      triggerIdentity: [
-        XIAOYU_MECHANICS.passiveSkillId,
-        XIAOYU_MECHANICS.limitCounterControlSkillId,
-        limitCounterBridge.variant.subSkillIndex,
-        limitCounterBridge.bridge.startFrame +
-          limitCounterRuntimeTrigger.triggerFrame,
-        'runtime-control',
-        XIAOYU_MECHANICS.limitCounterRuntimeControlSkillId,
-      ].join('|'),
-      controlSkillId: XIAOYU_MECHANICS.limitCounterControlSkillId,
-      subSkillIndex: limitCounterBridge.variant.subSkillIndex,
-      triggerFrame:
-        limitCounterBridge.bridge.startFrame +
-        limitCounterRuntimeTrigger.triggerFrame,
-      sourceIdentity: [
-        limitCounterBridge.bridge.sourceIdentity,
-        limitCounterRuntimeTrigger.sourceIdentity,
-      ].join('|'),
-      status: 'verified-passive-public-trigger-binding-ready',
-      applied: true,
-    });
+  if (
+    Number(window?.bridgeType) === 0 &&
+    Number(window?.continuousAttackType) === 0
+  ) {
+    return 'buffered-until-frame';
   }
-  const perfectParryRuntimeTrigger = triggerBindings.find(
-    trigger =>
-      Number(trigger.controlSkillId) ===
-      XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId
-  );
-  const unresolvedTriggerBindings = [
-    {
-      triggerIdentity: [
-        XIAOYU_MECHANICS.passiveSkillId,
-        XIAOYU_MECHANICS.perfectParryControlSkillId,
-        'runtime-control',
-        XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId,
-      ].join('|'),
-      controlSkillId: XIAOYU_MECHANICS.perfectParryControlSkillId,
-      runtimeControlSkillId: XIAOYU_MECHANICS.perfectParryRuntimeControlSkillId,
-      status: 'static-evidence-gap',
-      reasons: [
-        'perfect-parry-public-to-runtime-control-transition-static-evidence-gap',
-      ],
-      sourceIdentity: perfectParryRuntimeTrigger
-        ? [
-            `skill_control_${XIAOYU_MECHANICS.perfectParryControlSkillId}.asset`,
-            perfectParryRuntimeTrigger.sourceIdentity,
-          ]
-            .filter(Boolean)
-            .join('|')
-        : null,
-      applied: false,
-    },
-  ];
-  const propertyChanges = (
-    property?.tree?.changePeopertyConditionArrayDatas ?? []
-  )
-    .map(entry => entry?.changeProperty)
-    .filter(Boolean)
-    .map(change => ({
-      attributeId: Number(change.attributeID),
-      bucket:
-        Number(change.calculateType) === 2 && Number(change.functionId) === 3
-          ? 'dynamicPercent'
-          : null,
-      valueRaw: Number(change.functionParams?.[0]),
-      calculateType: Number(change.calculateType),
-      functionId: Number(change.functionId),
-      propertyTags: change.propertyTags ?? [],
-      sourceIdentity: `${property?.sourceIdentity}#changePeopertyConditionArrayDatas[attributeID=${change.attributeID}]`,
-    }));
-  const applied =
-    passiveControl != null &&
-    marker != null &&
-    wrapper != null &&
-    property != null &&
-    Number(wrapper.tree.time) === 8000 &&
-    Number(wrapper.tree.combineNumber) === 4 &&
-    triggerBindings.length > 0 &&
-    propertyChanges.length === 2 &&
-    propertyChanges.every(
-      change =>
-        change.bucket === 'dynamicPercent' && Number.isFinite(change.valueRaw)
-    );
-  const skillName =
-    seed?.gameData?.skills?.find(
-      skill => Number(skill.id) === XIAOYU_MECHANICS.passiveSkillId
-    )?.name ?? '玉未央';
-  return {
-    passiveIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:passive:${XIAOYU_MECHANICS.passiveSkillId}`,
-    ownerId: XIAOYU_MECHANICS.ownerId,
-    skillId: XIAOYU_MECHANICS.passiveSkillId,
-    name: skillName,
-    effectId: `battle-element:${XIAOYU_MECHANICS.passiveWrapperElementId}`,
-    effectElementId: XIAOYU_MECHANICS.passiveWrapperElementId,
-    markerElementId: XIAOYU_MECHANICS.passiveMarkerElementId,
-    propertyElementId: XIAOYU_MECHANICS.passivePropertyElementId,
-    durationMs: Number(wrapper?.tree?.time) || null,
-    stackMode: 'stack',
-    maxStacks: Number(wrapper?.tree?.combineNumber) || null,
-    stackDelta: 1,
-    triggerBindings: dedupeBy(
-      triggerBindings,
-      trigger => trigger.triggerIdentity
-    ).sort(
-      (left, right) =>
-        left.controlSkillId - right.controlSkillId ||
-        left.subSkillIndex - right.subSkillIndex ||
-        left.triggerFrame - right.triggerFrame
-    ),
-    unresolvedTriggerBindings,
-    modifiers: propertyChanges,
-    sourceIdentity: [
-      passiveControl?.sourcePath,
-      marker?.sourceIdentity,
-      wrapper?.sourceIdentity,
-      property?.sourceIdentity,
-    ]
-      .filter(Boolean)
-      .join('|'),
-    status: applied
-      ? 'verified-passive-effect-profile-ready'
-      : 'unresolved-passive-effect-profile',
-    reasons: [
-      ...(passiveControl ? [] : ['passive-skill-control-missing']),
-      ...(marker ? [] : ['passive-marker-element-missing']),
-      ...(wrapper ? [] : ['passive-wrapper-element-missing']),
-      ...(property ? [] : ['passive-property-element-missing']),
-      ...(triggerBindings.length > 0
-        ? []
-        : ['passive-trigger-bindings-missing']),
-      ...(propertyChanges.length === 2
-        ? []
-        : ['passive-property-change-count-mismatch']),
-      ...(propertyChanges.every(change => change.bucket === 'dynamicPercent')
-        ? []
-        : ['passive-property-formula-not-verified-percent']),
-    ],
-    applied,
-  };
+  if (
+    Number(window?.bridgeType) === 0 &&
+    Number(window?.continuousAttackType) === 1
+  ) {
+    return 'immediate-continuous';
+  }
+  return 'unresolved';
+}
+
+function classifyInputWindowAgainstOccupancy({ window, occupancyEndFrame }) {
+  if (!window || occupancyEndFrame == null) return 'unresolved';
+  const startFrame = Number(window.startFrame);
+  const endFrame = Number(window.endFrame);
+  if (startFrame === occupancyEndFrame) {
+    return 'window-start-equals-generic-occupancy';
+  }
+  if (startFrame < occupancyEndFrame && occupancyEndFrame < endFrame) {
+    return 'generic-occupancy-inside-window';
+  }
+  if (endFrame === occupancyEndFrame) {
+    return 'window-end-equals-generic-occupancy';
+  }
+  if (endFrame < occupancyEndFrame) {
+    return 'window-before-generic-occupancy';
+  }
+  if (startFrame > occupancyEndFrame) {
+    return 'window-after-generic-occupancy';
+  }
+  return 'unresolved';
 }
 
 function createDerivedControlContracts({
@@ -4170,7 +3164,6 @@ function discoverGlobalVariantConditionCandidates({
   }
   return result;
 }
-
 function classifyVariantConditionDiscovery({ appliedEdges, unresolvedEdges }) {
   if (appliedEdges.length > 0 && unresolvedEdges.length > 0) {
     return 'partially-resolved';
@@ -4493,7 +3486,11 @@ function scorePublicActionVariant(label, actionKind) {
   return 1;
 }
 
-function findSkillControl(skillId, battleTargetTypeContract) {
+function findSkillControl(
+  skillId,
+  battleTargetTypeContract,
+  runtimePolicy = null
+) {
   const directory = path.join(
     BATTLE_ROOT,
     'SkillList',
@@ -4516,9 +3513,14 @@ function findSkillControl(skillId, battleTargetTypeContract) {
       Number(value.skillControlData?.skillId) === skillId
     ) {
       const elementRefs = collectElementRefs(value);
-      const bulletLaunches = collectBulletLaunchContracts(directory, value);
+      const bulletLaunches = collectBulletLaunchContracts(
+        directory,
+        value,
+        runtimePolicy
+      );
       return {
         skillId,
+        runtimePolicy,
         directory,
         filePath,
         value,
@@ -4542,7 +3544,11 @@ function findSkillControl(skillId, battleTargetTypeContract) {
   return null;
 }
 
-function collectBulletLaunchContracts(directory, skillControl) {
+function collectBulletLaunchContracts(
+  directory,
+  skillControl,
+  runtimePolicy = null
+) {
   const objectFiles = createUnityObjectFileIndex(directory);
   const frameRate =
     positiveNumberOrNull(skillControl.skillControlData?.framePerSecond) ?? 60;
@@ -4577,8 +3583,7 @@ function collectBulletLaunchContracts(directory, skillControl) {
               if (!bulletId) continue;
               const injection = readBulletInjectionContract(bulletId);
               const injectedElements =
-                Number(skillControl.skillControlData?.skillId) ===
-                XIAOYU_MECHANICS.derivedChargedControlSkillId
+                runtimePolicy?.bulletInjectionMode === 'recursive-immediate'
                   ? collectImmediateBulletInjectionElements(bulletId)
                   : (injection.elements ?? []);
               for (
@@ -5445,8 +4450,8 @@ function createControlBinding({
                 launch.subSkillIndex === ref.mapIndex &&
                 launch.elementId === elementId &&
                 (launch.targetKind === 'skill-target' ||
-                  (control.skillId ===
-                    XIAOYU_MECHANICS.derivedChargedControlSkillId &&
+                  (control.runtimePolicy?.allowRuntimeTargetZeroDistance ===
+                    true &&
                     launch.targetKind === 'runtime-target'))
             )
             .map(launch => ({
@@ -5660,6 +4665,7 @@ function createControlBinding({
   });
   return {
     controlSkillId: control.skillId,
+    runtimePolicy: control.runtimePolicy,
     frameRate: finiteNumberOrNull(
       control.value.skillControlData?.framePerSecond
     ),
@@ -6261,7 +5267,7 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
       ? (control.behaviorTriggers.get(root.rootPathId) ?? [])
       : [];
     const scenarioTriggers =
-      Number(control.skillId) === XIAOYU_MECHANICS.derivedChargedControlSkillId
+      control.runtimePolicy?.runtimeEffectsUseScenarioTriggers === true
         ? (elements.find(
             element =>
               element.mapIndex === root.mapIndex &&
@@ -8303,6 +7309,7 @@ function assertPublishedDisplayLabels(packageValue) {
 function createPublishedControlBinding(binding) {
   return {
     controlSkillId: binding.controlSkillId,
+    runtimePolicy: binding.runtimePolicy ?? null,
     frameRate: binding.frameRate,
     frameCounts: binding.frameCounts,
     sourcePath: binding.sourcePath,

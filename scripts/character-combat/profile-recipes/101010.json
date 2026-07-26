@@ -33,6 +33,17 @@
     "perfectParryControlSkillId": 10101027,
     "perfectParryRuntimeControlSkillId": 10101049
   },
+  "runtimePolicies": {
+    "controlPolicies": [
+      {
+        "controlSkillId": 10101042,
+        "bulletInjectionMode": "recursive-immediate",
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101042]"
+      }
+    ]
+  },
   "compiler": {
     "timingPolicy": "verified-input-reopen",
     "reachableControlSkillIds": [

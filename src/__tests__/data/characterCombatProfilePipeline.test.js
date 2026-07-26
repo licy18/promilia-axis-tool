@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -267,6 +268,8 @@ describe('M10 character combat profile pipeline', () => {
         item => Number(item.ownerId) === 101010
       )
     ).toEqual(ownerContract.contracts.passives);
+    expect(ownerContract.contracts.effects.semantic).toHaveLength(117);
+    expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(7);
 
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
     const metadata = getVerifiedCharacterCombatProfileMetadata(101010);
@@ -383,7 +386,7 @@ describe('M10 character combat profile pipeline', () => {
   });
 
   it(
-    'keeps owner-only audits deterministic without overwriting the full package',
+    'rebuilds owner-only contracts into isolated staging without overwriting the full package',
     () => {
       const packageHashBefore = hashFile(VERIFIED_PACKAGE_PATH);
       const scriptPath = path.join(
@@ -391,18 +394,47 @@ describe('M10 character combat profile pipeline', () => {
         'scripts',
         'sync-character-combat-profile.mjs'
       );
-      const cleanRun = spawnSync(
-        process.execPath,
-        [scriptPath, '--owner', '101010', '--assert-clean'],
-        { cwd: REPO_ROOT, encoding: 'utf8' }
+      const outputRoot = fs.mkdtempSync(
+        path.join(os.tmpdir(), 'azpr-character-combat-owner-cli-')
       );
-      expect(cleanRun.status, cleanRun.stderr).toBe(0);
-      expect(cleanRun.stdout).toContain('"status": "clean"');
-      expect(cleanRun.stdout).toContain('"mode": "owner"');
-      expect(cleanRun.stdout).not.toContain(
-        'character-combat-profile-catalog.json'
-      );
-      expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
+      try {
+        const ownerRun = spawnSync(
+          process.execPath,
+          [
+            scriptPath,
+            '--owner',
+            '101010',
+            '--write',
+            '--output-root',
+            outputRoot,
+          ],
+          { cwd: REPO_ROOT, encoding: 'utf8' }
+        );
+        expect(ownerRun.status, ownerRun.stderr).toBe(0);
+        expect(ownerRun.stdout).toContain('"status": "written"');
+        expect(ownerRun.stdout).toContain('"mode": "owner"');
+        expect(ownerRun.stdout).not.toContain(
+          'character-combat-profile-catalog.json'
+        );
+        expect(
+          JSON.parse(
+            fs.readFileSync(
+              path.join(
+                outputRoot,
+                'src',
+                'data',
+                'generated',
+                'character-combat-owner-contracts',
+                '101010.json'
+              ),
+              'utf8'
+            )
+          ).contractHash
+        ).toBe(ownerContract.contractHash);
+        expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
+      } finally {
+        fs.rmSync(outputRoot, { recursive: true, force: true });
+      }
 
       const rejectedRun = spawnSync(
         process.execPath,
@@ -413,7 +445,7 @@ describe('M10 character combat profile pipeline', () => {
       expect(rejectedRun.stderr).toContain('invalid public character owner');
       expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
     },
-    30000
+    180000
   );
 
   it('keeps source, graph, runtime, and runtime-capture artifacts traceable', () => {
@@ -445,19 +477,45 @@ describe('M10 character combat profile pipeline', () => {
     });
   });
 
-  it('has no Xiaoyu contract attachment call in the production sync path', () => {
+  it('keeps Xiaoyu policy declarative and removes the old contract generator', () => {
     const syncSource = fs.readFileSync(
       path.join(REPO_ROOT, 'scripts', 'sync-verified-combat-mechanics.mjs'),
       'utf8'
     );
-    const callSites = syncSource
-      .split(/\r?\n/)
-      .filter(
-        line =>
-          line.includes('attachXiaoyuMechanicsContracts(') &&
-          !line.trimStart().startsWith('function attachXiaoyuMechanicsContracts')
+    const ownerCliSource = fs.readFileSync(
+      path.join(REPO_ROOT, 'scripts', 'sync-character-combat-profile.mjs'),
+      'utf8'
+    );
+    expect(syncSource).not.toContain('attachXiaoyuMechanicsContracts');
+    expect(syncSource).not.toContain(
+      'recipes: [XIAOYU_PROFILE_RECIPE]'
+    );
+    expect(syncSource).not.toContain(
+      'compilations: [xiaoyuOwnerCompilation]'
+    );
+    expect(syncSource).toContain('createCharacterCombatProductionBuild({');
+    for (const functionName of [
+      'findSkillControl',
+      'collectBulletLaunchContracts',
+      'createControlBinding',
+      'createControlRuntimeEffects',
+    ]) {
+      expect(readFunctionSource(syncSource, functionName)).not.toMatch(
+        /XIAOYU_MECHANICS|10101042/
       );
-    expect(callSites).toEqual([]);
+    }
+    expect(ownerCliSource).toContain('createVerifiedCombatMechanicsBuild()');
+    expect(ownerCliSource).not.toContain('character-combat-owner-contracts');
+    expect(
+      mechanicsPackage.actionVariantControlBindings.find(
+        control => Number(control.controlSkillId) === 10101042
+      )?.runtimePolicy
+    ).toMatchObject({
+      controlSkillId: 10101042,
+      bulletInjectionMode: 'recursive-immediate',
+      allowRuntimeTargetZeroDistance: true,
+      runtimeEffectsUseScenarioTriggers: true,
+    });
   });
 
   it('keeps character identities out of production runtime and UI branches', () => {
@@ -502,4 +560,11 @@ function collectSourceFiles(root) {
 
 function hashFile(filePath) {
   return createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function readFunctionSource(source, functionName) {
+  const start = source.indexOf(`function ${functionName}(`);
+  expect(start, `${functionName} source missing`).toBeGreaterThanOrEqual(0);
+  const next = source.indexOf('\nfunction ', start + 1);
+  return source.slice(start, next < 0 ? undefined : next);
 }

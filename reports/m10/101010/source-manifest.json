@@ -4,10 +4,10 @@
   "ownerId": 101010,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "db5954f22043ed11a0af61c90c63237c1bd34f40f4866f840cc43a6df9d561c6"
+    "packageHash": "d59db0483bc855241625ced4518b09049caf8e4b6cd7b808b9cdccf72ecd4021"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/101010.json",
-  "recipeHash": "b4d6bea376c6775cb8ba4f205676c810de8c0d01135bd0c7acc16baf1c1e30d6",
+  "recipeHash": "539128f6c6fbcf7c5fdfecd64a19fb4ae0237e3329b9f7b9dce2e3cac2476681",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -6690,6 +6690,13 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101042]",
+      "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101042]",
+      "identityHash": "f72376dd4c607a04df2febc35453e14d99fdfce068be0c2a7a31ae6e39909bef",
+      "sourceKind": "runtime-contract",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "characters.items[id=101010].skillSlots[group=aerial,slot=301]",
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=aerial,slot=301]",
       "identityHash": "c72ff250dac3151cf3fbf02582da97ec280cff4180a00fab31653d02f54afbc6",
@@ -6936,14 +6943,15 @@
     }
   ],
   "summary": {
-    "identityCount": 945,
+    "identityCount": 946,
     "sourceKindCounts": {
       "battle-element": 34,
       "client-code": 4,
       "new-table": 54,
       "other": 241,
+      "runtime-contract": 1,
       "skill-control": 612
     }
   },
-  "profileHash": "eda3e0ffcc2673f2e4670da8ca1a10eabcdda1a7bcad5055d5ab125c778bc22e"
+  "profileHash": "17f022747b596fe553f3f881ad03affe463fd193c0eba34a4f9326528a133e63"
 }

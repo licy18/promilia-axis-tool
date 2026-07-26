@@ -1,93 +1,42 @@
 #!/usr/bin/env node
 
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   M10_PUBLIC_CHARACTER_ORDER,
   createCharacterCombatOutputRecords,
-  createCharacterCombatPipelineArtifacts,
 } from './character-combat/character-combat-profile-pipeline.mjs';
-import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
 import {
   createCharacterCombatPublicationPlan,
   detectCharacterCombatPublicationDrift,
   selectCharacterCombatPublicationRecords,
   writeCharacterCombatOutputsAtomically,
 } from './character-combat/character-combat-publication.mjs';
+import { createVerifiedCombatMechanicsBuild } from './sync-verified-combat-mechanics.mjs';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
-const GENERATED_ROOT = path.join(REPO_ROOT, 'src', 'data', 'generated');
 const options = parseArgs(process.argv.slice(2));
 
-const mechanicsPackage = readJson(
-  path.join(GENERATED_ROOT, 'verified-combat-mechanics-package.json')
-);
-const characterCatalog = readJson(path.join(GENERATED_ROOT, 'characters.json'));
-const workbenchSeed = readJson(
-  path.join(GENERATED_ROOT, 'workbench-seed.json')
-);
-const recipePaths = fs
-  .readdirSync(path.join(SCRIPT_ROOT, 'character-combat', 'profile-recipes'))
-  .filter(fileName => fileName.endsWith('.json'))
-  .map(fileName =>
-    path.join(SCRIPT_ROOT, 'character-combat', 'profile-recipes', fileName)
-  );
-const allRecipes = recipePaths.map(readJson);
-const recipes =
-  options.ownerId == null
-    ? allRecipes
-    : allRecipes.filter(recipe => Number(recipe.ownerId) === options.ownerId);
-if (options.ownerId != null && recipes.length !== 1) {
+const build = await createVerifiedCombatMechanicsBuild();
+const recipes = build.recipes;
+if (
+  options.ownerId != null &&
+  !recipes.some(recipe => Number(recipe.ownerId) === options.ownerId)
+) {
   throw new Error(`character combat recipe missing: ${options.ownerId}`);
 }
-const compiledOwnerContracts = recipes.map(recipe =>
-  readJson(
-    path.join(
-      GENERATED_ROOT,
-      'character-combat-owner-contracts',
-      `${Number(recipe.ownerId)}.json`
-    )
-  )
-);
-const goldenRuntimeByOwner = new Map(
-  await Promise.all(
-    recipes.map(async recipe => [
-      Number(recipe.ownerId),
-      await createCharacterCombatGoldenRuntime({
-        repositoryRoot: REPO_ROOT,
-        mechanicsPackage,
-        recipe,
-      }),
-    ])
-  )
-);
-
-const reportsByOwner = new Map();
-for (const recipe of recipes) {
-  const ownerId = Number(recipe.ownerId);
-  reportsByOwner.set(ownerId, {
-    actionOccupancy: readOptionalArtifact(
-      recipe.evidenceArtifacts?.occupancyAudit
-    ),
-    hiddenInputDerivation: readOptionalArtifact(
-      recipe.evidenceArtifacts?.hiddenInputAudit
-    ),
-  });
-}
-
-const artifacts = createCharacterCombatPipelineArtifacts({
-  mechanicsPackage,
-  characterCatalog,
-  skills: workbenchSeed.gameData?.skills ?? [],
-  recipes,
-  compiledOwnerContracts,
-  goldenRuntimeByOwner,
-  reportsByOwner,
-});
+const artifacts = build.pipelineArtifacts;
+const allPublicationRecords = [
+  ...createCharacterCombatOutputRecords(artifacts),
+  {
+    relativePath:
+      'src/data/generated/verified-combat-mechanics-package.json',
+    content: `${JSON.stringify(build.mechanicsPackage, null, 2)}\n`,
+  },
+];
 const publicationRecords = selectCharacterCombatPublicationRecords({
-  records: createCharacterCombatOutputRecords(artifacts),
+  records: allPublicationRecords,
   ownerId: options.ownerId,
 });
 const outputRoot =
@@ -123,7 +72,12 @@ console.log(
       status: drift.length ? (options.write ? 'written' : 'drift') : 'clean',
       mode: options.ownerId == null ? 'all' : 'owner',
       ownerId: options.ownerId,
-      compiledProfileCount: artifacts.profiles.length,
+      compiledProfileCount:
+        options.ownerId == null
+          ? artifacts.profiles.length
+          : artifacts.profiles.filter(
+              profile => Number(profile.owner.ownerId) === options.ownerId
+            ).length,
       publicCharacterCount: artifacts.coverageManifest.summary.characterCount,
       outputs: outputs.map(([filePath]) =>
         path.relative(REPO_ROOT, filePath).replaceAll('\\', '/')
@@ -133,17 +87,6 @@ console.log(
     2
   )
 );
-
-function readOptionalArtifact(relativePath) {
-  if (!relativePath) return null;
-  const filePath = path.resolve(REPO_ROOT, relativePath);
-  if (!filePath.startsWith(`${REPO_ROOT}${path.sep}`)) {
-    throw new Error(
-      `character combat evidence path escapes repository: ${relativePath}`
-    );
-  }
-  return readJson(filePath);
-}
 
 function parseArgs(argv) {
   const parsed = {
@@ -179,8 +122,4 @@ function parseArgs(argv) {
     throw new Error('--write and --assert-clean are mutually exclusive');
   }
   return parsed;
-}
-
-function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }

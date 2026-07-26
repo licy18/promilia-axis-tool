@@ -23,7 +23,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "db5954f22043ed11a0af61c90c63237c1bd34f40f4866f840cc43a6df9d561c6",
+    "packageHash": "d59db0483bc855241625ced4518b09049caf8e4b6cd7b808b9cdccf72ecd4021",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -13990,6 +13990,7 @@
     "controls": [
       {
         "controlSkillId": 10101001,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -15050,6 +15051,7 @@
       },
       {
         "controlSkillId": 10101002,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -15761,6 +15763,7 @@
       },
       {
         "controlSkillId": 10101003,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -15900,6 +15903,7 @@
       },
       {
         "controlSkillId": 10101004,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -17110,6 +17114,7 @@
       },
       {
         "controlSkillId": 10101005,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -18613,6 +18618,7 @@
       },
       {
         "controlSkillId": 10101010,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -33840,6 +33846,7 @@
       },
       {
         "controlSkillId": 10101011,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -34103,6 +34110,7 @@
       },
       {
         "controlSkillId": 10101012,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -35571,6 +35579,7 @@
       },
       {
         "controlSkillId": 10101013,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -43244,6 +43253,7 @@
       },
       {
         "controlSkillId": 10101014,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -43431,6 +43441,7 @@
       },
       {
         "controlSkillId": 10101015,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -43685,6 +43696,7 @@
       },
       {
         "controlSkillId": 10101021,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -46963,6 +46975,7 @@
       },
       {
         "controlSkillId": 10101024,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -47134,6 +47147,7 @@
       },
       {
         "controlSkillId": 10101025,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -49442,6 +49456,7 @@
       },
       {
         "controlSkillId": 10101026,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -49590,6 +49605,7 @@
       },
       {
         "controlSkillId": 10101027,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -50180,6 +50196,7 @@
       },
       {
         "controlSkillId": 10101041,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -50249,6 +50266,14 @@
       },
       {
         "controlSkillId": 10101042,
+        "runtimePolicy": {
+          "controlSkillId": 10101042,
+          "bulletInjectionMode": "recursive-immediate",
+          "allowRuntimeTargetZeroDistance": true,
+          "runtimeEffectsUseScenarioTriggers": true,
+          "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101042]",
+          "ownerId": 101010
+        },
         "frameRate": 60,
         "frameCounts": [
           {
@@ -57645,6 +57670,7 @@
       },
       {
         "controlSkillId": 10101049,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -61108,6 +61134,7 @@
       },
       {
         "controlSkillId": 10101061,
+        "runtimePolicy": null,
         "frameRate": 60,
         "frameCounts": [
           {
@@ -127395,10 +127422,10 @@
     "sourceCompilation": {
       "compilerVersion": 1,
       "recipeIdentity": "actor:101010:character-combat-recipe:v1",
-      "recipeHash": "3668f29217123af73f69de215c3ec18d015c68b65d579fd305699d589681b3f3",
-      "compilerInputHash": "fcac306aff761c63f67f11385ecbf76042dea23d016ed8314ab9f6fdf59c08f4",
+      "recipeHash": "958d586201db0dd64a5f3168ec11b70fc352e00928eaf6a0eced6e7f4a193d08",
+      "compilerInputHash": "a5a8c5565790258cdcf9990fbed3dc3b86003603b51b503b68058eca5414f783",
       "recipeContractHash": "44ba0041eea01c245f5f42d017cc5d29bda97c07c92cb87a53ec411c8b31d955",
-      "ownerContractHash": "a294f10ab0c044b91167d67d1fb316fcb0df0913d6e91a7b5a605aa3b2e81a6c"
+      "ownerContractHash": "423f667e34aafe0327cbe649f92b2035f6d1faf91bb787b529b6c266eb766a55"
     },
     "operators": [
       "public-action-binding",
@@ -132664,7 +132691,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "b777871c108a74c7206142424a3aac6ce9d0d4cdfc72cba9ca1c49de387fd10c"
+    "deterministicInputHash": "2796ee076fcdce59df1c5a9055731bf689a2cead59a48b323acd22d86b707075"
   },
-  "profileHash": "eda3e0ffcc2673f2e4670da8ca1a10eabcdda1a7bcad5055d5ab125c778bc22e"
+  "profileHash": "17f022747b596fe553f3f881ad03affe463fd193c0eba34a4f9326528a133e63"
 }
