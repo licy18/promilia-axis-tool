@@ -260,140 +260,178 @@
           )
         }}
       </p>
-      <button
-        v-for="entry in actionResultTimeline"
-        :key="entry.actionId"
-        type="button"
-        class="action-result-row"
-        :class="{
-          selected: isActionResultRuntimeSelected(entry),
-          'current-action': isActionResultCurrentAction(entry),
-        }"
-        :data-action-id="entry.actionId"
-        :data-current-action="isActionResultCurrentAction(entry)"
-        :data-draft-dirty="draftResultStatus.dirty"
-        :data-draft-status="draftResultStatus.key"
-        :data-edit-source-field="
-          getActionResultEditSource(entry)?.fieldKey ?? ''
-        "
-        :data-edit-source-label="getActionResultEditSource(entry)?.label ?? ''"
-        :data-edit-source-summary="
-          getActionResultEditSource(entry)?.changeSummary ?? ''
-        "
-        :data-result-refresh-status="draftResultStatus.refreshKey"
-        :data-result-location-status="getActionResultLocationStatus(entry)"
-        :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
-        :data-runtime-state-point-id="
-          getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
-        "
-        :data-selected="isActionResultRuntimeSelected(entry)"
-        :data-selected-state-point-id="
-          getActionResultSelectedStatePointId(entry)
-        "
-        :data-source-delta-ids="
-          getActionResultRuntimeTrace(entry)?.sourceDeltaIds.join(',') ?? ''
-        "
-        :data-flow-action-kind="getActionResultFlowAction(entry).kind"
-        :data-flow-action-source="getActionResultFlowAction(entry).source"
-        :data-flow-action-state-point-id="
-          getActionResultFlowAction(entry).statePointId
-        "
-        data-testid="workbench-action-result-source-row"
-        :disabled="!getActionResultRuntimeTrace(entry)"
-        @click="selectActionResultRuntimePoint(entry)"
+      <WindowedList
+        v-if="actionResultTimeline.length"
+        class="action-result-window"
+        :items="actionResultTimeline"
+        :item-height="118"
+        :max-height="472"
+        :overscan="4"
+        :selected-index="selectedActionResultWindowIndex"
+        :item-key="createActionResultWindowKey"
+        data-testid="workbench-action-result-window"
       >
-        <div class="damage-row-main">
-          <span>{{ entry.actionName }}</span>
-          <small
-            v-if="isActionResultCurrentAction(entry)"
-            class="action-result-current-action"
-            data-testid="workbench-action-result-current-action"
-          >
-            正在编辑
-          </small>
-          <small
-            v-if="isActionResultCurrentAction(entry)"
-            class="action-result-draft-status"
-            data-testid="workbench-action-result-draft-status"
-          >
-            {{ draftResultStatus.resultLabel }}
-          </small>
-          <small
-            v-if="isActionResultCurrentAction(entry)"
-            class="action-result-refresh-status"
-            data-testid="workbench-action-result-refresh-status"
-          >
-            {{ draftResultStatus.refreshLabel }}
-          </small>
-          <small
-            v-if="isActionResultRuntimeSelected(entry)"
-            class="action-result-location-status"
-            data-testid="workbench-action-result-location-status"
-          >
-            当前位置已同步
-          </small>
-          <small
-            v-if="shouldShowActionResultEditSource(entry)"
-            class="action-result-edit-source"
-            role="button"
-            tabindex="0"
+        <template #default="{ item: entry }">
+          <button
+            type="button"
+            class="action-result-row"
+            :class="{
+              selected: isActionResultRuntimeSelected(entry),
+              'current-action': isActionResultCurrentAction(entry),
+            }"
+            :data-action-id="entry.actionId"
+            :data-current-action="isActionResultCurrentAction(entry)"
+            :data-draft-dirty="draftResultStatus.dirty"
+            :data-draft-status="draftResultStatus.key"
+            :data-edit-source-field="
+              getActionResultEditSource(entry)?.fieldKey ?? ''
+            "
+            :data-edit-source-label="
+              getActionResultEditSource(entry)?.label ?? ''
+            "
             :data-edit-source-summary="
               getActionResultEditSource(entry)?.changeSummary ?? ''
             "
-            data-testid="workbench-action-result-edit-source"
-            @click.stop="focusActionEditSource(entry)"
-            @keydown.enter.stop.prevent="focusActionEditSource(entry)"
-            @keydown.space.stop.prevent="focusActionEditSource(entry)"
-          >
-            {{
-              formatActionEditSourceDisplay(getActionResultEditSource(entry))
-            }}
-          </small>
-          <small>{{ formatActionResultSource(entry) }}</small>
-          <small
-            v-if="formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)"
-          >
-            {{ formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence) }}
-          </small>
-          <small
-            v-if="formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)"
-          >
-            {{ formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence) }}
-          </small>
-          <small
-            v-if="formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)"
-          >
-            {{ formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence) }}
-          </small>
-          <small
-            v-if="
-              formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)
+            :data-result-refresh-status="draftResultStatus.refreshKey"
+            :data-result-location-status="getActionResultLocationStatus(entry)"
+            :data-has-runtime-trace="
+              Boolean(getActionResultRuntimeTrace(entry))
             "
+            :data-runtime-state-point-id="
+              getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
+            "
+            :data-selected="isActionResultRuntimeSelected(entry)"
+            :data-selected-state-point-id="
+              getActionResultSelectedStatePointId(entry)
+            "
+            :data-source-delta-ids="
+              getActionResultRuntimeTrace(entry)?.sourceDeltaIds.join(',') ?? ''
+            "
+            :data-flow-action-kind="getActionResultFlowAction(entry).kind"
+            :data-flow-action-source="getActionResultFlowAction(entry).source"
+            :data-flow-action-state-point-id="
+              getActionResultFlowAction(entry).statePointId
+            "
+            data-testid="workbench-action-result-source-row"
+            :disabled="!getActionResultRuntimeTrace(entry)"
+            @click="selectActionResultRuntimePoint(entry)"
           >
-            {{
-              formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)
-            }}
-          </small>
-          <small
-            v-if="formatFormulaExecutionMatrix(entry.hpDamage?.sourceEvidence)"
-          >
-            {{ formatFormulaExecutionMatrix(entry.hpDamage?.sourceEvidence) }}
-          </small>
-          <small v-if="formatHitCandidateSummary(entry)">
-            {{ formatHitCandidateSummary(entry) }}
-          </small>
-          <small
-            v-if="getActionResultRuntimeTrace(entry)"
-            class="action-result-runtime-trace"
-            data-testid="workbench-action-result-runtime-trace"
-          >
-            {{
-              formatActionResultRuntimeTrace(getActionResultRuntimeTrace(entry))
-            }}
-          </small>
-        </div>
-        <strong>{{ formatActionResultValues(entry) }}</strong>
-      </button>
+            <div class="damage-row-main">
+              <span>{{ entry.actionName }}</span>
+              <small
+                v-if="isActionResultCurrentAction(entry)"
+                class="action-result-current-action"
+                data-testid="workbench-action-result-current-action"
+              >
+                正在编辑
+              </small>
+              <small
+                v-if="isActionResultCurrentAction(entry)"
+                class="action-result-draft-status"
+                data-testid="workbench-action-result-draft-status"
+              >
+                {{ draftResultStatus.resultLabel }}
+              </small>
+              <small
+                v-if="isActionResultCurrentAction(entry)"
+                class="action-result-refresh-status"
+                data-testid="workbench-action-result-refresh-status"
+              >
+                {{ draftResultStatus.refreshLabel }}
+              </small>
+              <small
+                v-if="isActionResultRuntimeSelected(entry)"
+                class="action-result-location-status"
+                data-testid="workbench-action-result-location-status"
+              >
+                当前位置已同步
+              </small>
+              <small
+                v-if="shouldShowActionResultEditSource(entry)"
+                class="action-result-edit-source"
+                role="button"
+                tabindex="0"
+                :data-edit-source-summary="
+                  getActionResultEditSource(entry)?.changeSummary ?? ''
+                "
+                data-testid="workbench-action-result-edit-source"
+                @click.stop="focusActionEditSource(entry)"
+                @keydown.enter.stop.prevent="focusActionEditSource(entry)"
+                @keydown.space.stop.prevent="focusActionEditSource(entry)"
+              >
+                {{
+                  formatActionEditSourceDisplay(
+                    getActionResultEditSource(entry)
+                  )
+                }}
+              </small>
+              <small>{{ formatActionResultSource(entry) }}</small>
+              <small
+                v-if="
+                  formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)
+                "
+              >
+                {{ formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence) }}
+              </small>
+              <small
+                v-if="
+                  formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)
+                "
+              >
+                {{
+                  formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)
+                }}
+              </small>
+              <small
+                v-if="
+                  formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)
+                "
+              >
+                {{
+                  formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)
+                }}
+              </small>
+              <small
+                v-if="
+                  formatFormulaCombinationPreview(
+                    entry.hpDamage?.sourceEvidence
+                  )
+                "
+              >
+                {{
+                  formatFormulaCombinationPreview(
+                    entry.hpDamage?.sourceEvidence
+                  )
+                }}
+              </small>
+              <small
+                v-if="
+                  formatFormulaExecutionMatrix(entry.hpDamage?.sourceEvidence)
+                "
+              >
+                {{
+                  formatFormulaExecutionMatrix(entry.hpDamage?.sourceEvidence)
+                }}
+              </small>
+              <small v-if="formatHitCandidateSummary(entry)">
+                {{ formatHitCandidateSummary(entry) }}
+              </small>
+              <small
+                v-if="getActionResultRuntimeTrace(entry)"
+                class="action-result-runtime-trace"
+                data-testid="workbench-action-result-runtime-trace"
+              >
+                {{
+                  formatActionResultRuntimeTrace(
+                    getActionResultRuntimeTrace(entry)
+                  )
+                }}
+              </small>
+            </div>
+            <strong>{{ formatActionResultValues(entry) }}</strong>
+          </button>
+        </template>
+      </WindowedList>
 
       <div
         v-if="selectedActionContribution"
@@ -892,45 +930,48 @@
             {{ formatStateCurveLayer(layer) }}
           </span>
         </div>
-        <ol
+        <WindowedList
           v-if="track.visiblePointRows.length"
           class="state-curve-points"
+          :items="track.visiblePointRows"
+          :item-height="64"
+          :max-height="256"
+          :overscan="3"
+          :selected-index="getSelectedStateCurvePointIndex(track)"
+          item-key="rowKey"
           data-testid="workbench-state-curve-points"
         >
-          <li
-            v-for="point in track.visiblePointRows"
-            :key="point.rowKey"
-            class="state-curve-point-row"
-            :class="{
-              selected: point.statePointId === flowSelectedStatePointId,
-            }"
-            :data-track-key="point.trackKey"
-            :data-layer-key="point.layerKey"
-            :data-participation="
-              getStateCurveLayerRole(point.layerKey).roleLabel
-            "
-            :data-action-id="point.actionId"
-            :data-frame-label="formatStateCurvePointFrame(point)"
-            :data-state-point-id="point.statePointId"
-            data-testid="workbench-state-curve-point"
-            role="button"
-            tabindex="0"
-            @click="selectStateCurvePoint(point)"
-            @keydown.enter.prevent="selectStateCurvePoint(point)"
-            @keydown.space.prevent="selectStateCurvePoint(point)"
-          >
-            <span class="state-curve-point-time">
-              {{ formatStateCurvePointFrame(point) }}
-            </span>
-            <strong>{{ formatStateCurvePointValue(point) }}</strong>
-            <em data-testid="workbench-state-curve-point-participation">
-              {{
-                getStateCurveLayerRole(point.layerKey).pointParticipationLabel
-              }}
-            </em>
-            <small>{{ formatStateCurvePointSource(point) }}</small>
-          </li>
-        </ol>
+          <template #default="{ item: point }">
+            <button
+              type="button"
+              class="state-curve-point-row"
+              :class="{
+                selected: point.statePointId === flowSelectedStatePointId,
+              }"
+              :data-track-key="point.trackKey"
+              :data-layer-key="point.layerKey"
+              :data-participation="
+                getStateCurveLayerRole(point.layerKey).roleLabel
+              "
+              :data-action-id="point.actionId"
+              :data-frame-label="formatStateCurvePointFrame(point)"
+              :data-state-point-id="point.statePointId"
+              data-testid="workbench-state-curve-point"
+              @click="selectStateCurvePoint(point)"
+            >
+              <span class="state-curve-point-time">
+                {{ formatStateCurvePointFrame(point) }}
+              </span>
+              <strong>{{ formatStateCurvePointValue(point) }}</strong>
+              <em data-testid="workbench-state-curve-point-participation">
+                {{
+                  getStateCurveLayerRole(point.layerKey).pointParticipationLabel
+                }}
+              </em>
+              <small>{{ formatStateCurvePointSource(point) }}</small>
+            </button>
+          </template>
+        </WindowedList>
       </div>
     </div>
 
@@ -1013,7 +1054,7 @@ import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
-import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
+import { getCachedWorkbenchRuntimeOutputConsumerView } from './workbenchRuntimeOutputViewCache';
 import {
   createWorkbenchMainFlowActionSurface,
   createWorkbenchRuntimeReviewOperationCommandFromSurface,
@@ -1022,6 +1063,7 @@ import {
   WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
   createWorkbenchRuntimeReviewPanelView,
 } from './workbenchFlowModel';
+import WindowedList from './WindowedList.vue';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1337,7 +1379,7 @@ const threeValueCalculatorDiagnosticRows = computed(() =>
   ].filter(Boolean)
 );
 const runtimeOutputView = computed(() =>
-  createWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
+  getCachedWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
 );
 const runtimeStatePointContexts = computed(
   () => runtimeOutputView.value.statePointContexts
@@ -1365,6 +1407,16 @@ const runtimeTraceByActionId = computed(() => {
       createActionResultRuntimeTrace(actionId, rows),
     ])
   );
+});
+const selectedActionResultWindowIndex = computed(() => {
+  const selectedRuntimeIndex = props.actionResultTimeline.findIndex(entry =>
+    isActionResultRuntimeSelected(entry)
+  );
+  if (selectedRuntimeIndex >= 0) return selectedRuntimeIndex;
+  const selectedActionIndex = props.actionResultTimeline.findIndex(
+    entry => entry.actionId === props.selectedActionId
+  );
+  return selectedActionIndex >= 0 ? selectedActionIndex : 0;
 });
 const flowPhase = computed(() => props.flowModel?.phase ?? '');
 const flowSelection = computed(
@@ -2071,6 +2123,21 @@ function createStateCurveVisiblePointRows(track, visibleLayers, trackIndex) {
       }))
     )
     .sort(compareStateCurvePointRows);
+}
+
+function getSelectedStateCurvePointIndex(track) {
+  return track.visiblePointRows.findIndex(
+    point => point.statePointId === flowSelectedStatePointId.value
+  );
+}
+
+function createActionResultWindowKey(entry, index) {
+  return [
+    entry.actionId ?? 'action',
+    entry.hitKey ?? entry.hitIndex ?? 'result',
+    entry.timeMs ?? entry.frameIndex ?? 0,
+    entry.resultIdentity ?? entry.sourceDeltaId ?? index,
+  ].join('|');
 }
 
 function selectStateCurvePoint(point) {
@@ -3467,9 +3534,12 @@ h2 {
 
 .action-result-row {
   display: grid;
+  box-sizing: border-box;
   gap: 6px;
   min-width: 0;
   width: 100%;
+  height: calc(100% - 6px);
+  overflow: hidden;
   padding: 9px 10px;
   border: 0;
   border-left: 3px solid #79c7b9;
@@ -4007,20 +4077,26 @@ h2 {
 }
 
 .state-curve-points {
-  display: grid;
-  gap: 4px;
   margin: 0;
-  padding: 2px 0 0;
-  list-style: none;
 }
 
 .state-curve-point-row {
   display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100% - 4px);
   grid-template-columns: 54px minmax(0, 1fr);
   gap: 2px 8px;
   min-width: 0;
-  padding-top: 5px;
+  padding: 5px 0 0;
   border-top: 1px solid rgba(166, 183, 255, 0.1);
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+  background: transparent;
+  color: inherit;
+  overflow: hidden;
+  text-align: left;
   cursor: pointer;
 }
 

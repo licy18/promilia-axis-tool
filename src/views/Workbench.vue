@@ -623,6 +623,28 @@
           data-testid="workbench-runtime-review-stack"
         >
           <div
+            class="runtime-review-tabs"
+            role="tablist"
+            aria-label="复盘视图"
+            data-testid="workbench-runtime-review-tabs"
+          >
+            <button
+              v-for="tab in runtimeReviewTabs"
+              :key="tab.key"
+              type="button"
+              role="tab"
+              :aria-selected="runtimeReviewActiveTab === tab.key"
+              :data-active="runtimeReviewActiveTab === tab.key"
+              :data-review-tab="tab.key"
+              data-testid="workbench-runtime-review-tab"
+              @click="setRuntimeReviewTab(tab.key)"
+            >
+              <component :is="tab.icon" />
+              <span>{{ tab.label }}</span>
+            </button>
+          </div>
+
+          <div
             v-if="runtimeReviewPrimaryOperationView.visible"
             class="runtime-review-primary-bar"
             :data-primary-operation-action-id="
@@ -664,12 +686,14 @@
           </div>
 
           <div
+            v-if="runtimeReviewActiveTab === 'resource'"
             class="resource-area"
             :data-runtime-review-role="runtimeReviewResourceRole"
             data-testid="workbench-resource-area"
           >
             <ResourceMonitorPanel
               :resource-timeline="simulationResult.resourceTimeline"
+              :duration-ms="scenario.time.durationMs"
               :runtime-projection="runtimeOutputs"
               :selected-state-curve-point-id="selectedStateCurvePointId"
               :runtime-focus-source="runtimeFocusSource"
@@ -683,6 +707,7 @@
           </div>
 
           <EventLogPanel
+            v-if="runtimeReviewActiveTab === 'event'"
             class="event-area"
             :data-runtime-review-role="runtimeReviewEventRole"
             :event-log="simulationResult.eventLog"
@@ -699,7 +724,11 @@
             @dispatch-flow-action="dispatchWorkbenchFlowAction"
           />
 
-          <div class="effect-area" data-testid="workbench-effect-area">
+          <div
+            v-if="runtimeReviewActiveTab === 'effect'"
+            class="effect-area"
+            data-testid="workbench-effect-area"
+          >
             <EffectTimelinePanel
               :effect-timeline="runtimeOutputs.effectTimeline"
               :runtime-selected-detail="runtimeSelectedDetail"
@@ -733,11 +762,12 @@
       ></div>
 
       <div
+        v-if="sideInspectorVisible"
         class="side-stack"
-        v-show="sideInspectorVisible"
         :data-flow-phase="mainFlowWorkspaceView.phase"
         :data-main-flow-inspector-mode="mainFlowWorkspaceView.inspector.mode"
         :data-inspector-selection-key="sideInspectorSelectionKey"
+        :data-active-inspector-panel="effectiveSideInspectorPanel"
         data-testid="workbench-side-inspector"
         @pointerdown.stop
         @click.stop
@@ -756,12 +786,33 @@
           >
             <Close />
           </button>
+          <nav
+            class="side-stack-tabs"
+            role="tablist"
+            aria-label="检查器视图"
+            data-testid="workbench-side-inspector-tabs"
+          >
+            <button
+              v-for="panel in sideInspectorPanelOptions"
+              :key="panel.key"
+              type="button"
+              role="tab"
+              :aria-selected="effectiveSideInspectorPanel === panel.key"
+              :data-active="effectiveSideInspectorPanel === panel.key"
+              :data-inspector-panel="panel.key"
+              data-testid="workbench-side-inspector-tab"
+              @click.stop="setSideInspectorPanel(panel.key)"
+            >
+              {{ panel.label }}
+            </button>
+          </nav>
         </header>
         <div
           class="side-stack-scroll"
           data-testid="workbench-side-inspector-scroll"
         >
           <div
+            v-if="effectiveSideInspectorPanel === 'action-rules'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.actionRules"
             data-inspector-panel-key="action-rules"
@@ -777,6 +828,7 @@
           </div>
 
           <div
+            v-if="effectiveSideInspectorPanel === 'configuration'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.configuration"
             data-inspector-panel-key="configuration"
@@ -794,7 +846,9 @@
           </div>
 
           <div
-            v-if="selectedAction"
+            v-if="
+              effectiveSideInspectorPanel === 'properties' && selectedAction
+            "
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.properties"
             data-inspector-panel-key="properties"
@@ -821,6 +875,7 @@
           </div>
 
           <div
+            v-if="effectiveSideInspectorPanel === 'enemy'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.enemy"
             data-inspector-panel-key="enemy"
@@ -838,6 +893,7 @@
           </div>
 
           <div
+            v-if="effectiveSideInspectorPanel === 'team-loadout'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.teamLoadout"
             data-inspector-panel-key="team-loadout"
@@ -860,6 +916,7 @@
           </div>
 
           <div
+            v-if="effectiveSideInspectorPanel === 'runtime-detail'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.runtimeDetail"
             data-inspector-panel-key="runtime-detail"
@@ -878,6 +935,7 @@
           </div>
 
           <div
+            v-if="effectiveSideInspectorPanel === 'analysis'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.analysis"
             data-inspector-panel-key="analysis"
@@ -1036,6 +1094,11 @@ import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchActionContextMenu from '../features/workbench/WorkbenchActionContextMenu.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
+import {
+  installWorkbenchPerformanceInstrumentation,
+  recordWorkbenchPerformanceDuration,
+  recordWorkbenchPerformanceOperation,
+} from '../features/workbench/workbenchPerformanceInstrumentation';
 import {
   createWorkbenchFlowController,
   createWorkbenchFlowPlanHandlers,
@@ -1312,6 +1375,11 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   sampled: false,
   placeholder: false,
 };
+
+function readWorkbenchPerformanceClock() {
+  return globalThis.performance?.now?.() ?? Date.now();
+}
+
 const AUTO_DELAY_NOTE_PATTERN =
   /^(?:自动推迟：同轨已有动作占用，已从|约束辅助：已从) \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createWorkbenchDraftSnapshot(
@@ -1383,13 +1451,18 @@ const stateCurveTrackFilters = ref({});
 const calculatorDiagnosticScope = ref('');
 const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
+const runtimeReviewActiveTab = ref('resource');
+const runtimeReviewTabs = Object.freeze([
+  { key: 'resource', label: '资源', icon: TrendCharts },
+  { key: 'event', label: '日志', icon: Document },
+  { key: 'effect', label: '效果', icon: Refresh },
+]);
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const selectedTimelineIdentity = ref(null);
 const loadoutPickerRequest = ref(null);
 const loadoutDetailCatalog = ref(getWorkbenchLoadoutDetailCatalogSnapshot());
-const dismissedSideInspectorKey = ref(
-  initialDraft.selectedActionId ? `action:${initialDraft.selectedActionId}` : ''
-);
+const dismissedSideInspectorKey = ref('');
+const sideInspectorActivePanel = ref('');
 const draftStatus = ref('未保存草稿');
 const projectShareUrl = ref('');
 const presetDialogVisible = ref(false);
@@ -1439,6 +1512,12 @@ const runtimeDiagnosticsRevision = ref(0);
 let runtimeDiagnosticsLoadPromise = null;
 let workbenchLayoutResizeState = null;
 let actionLibraryEntryPointerState = null;
+let actionLibraryPreviewAnimationFrameId = null;
+let actionLibraryPreviewAnimationFrameUsesTimeout = false;
+let actionLibraryPreviewRequestSequence = 0;
+let nextWorkbenchProjectIdentity = 1;
+const workbenchProjectIdentityByProject = new WeakMap();
+const timelineEntryPlacementPreviewCache = new WeakMap();
 let workbenchLayoutApi = null;
 let workbenchLayoutApiPromise = null;
 const workbenchFlowPlanController = createWorkbenchFlowPlanController({
@@ -1480,11 +1559,26 @@ const workbenchFlowController = createWorkbenchFlowController(
   })
 );
 
+const mechanicsProfileCompatibilityInput = computed(() => ({
+  mechanicsProfileSelection: mechanicsProfileSelection.value,
+  scenarioWorkspace: scenarioWorkspace.value,
+}));
 const mechanicsProfileCompatibilityReport = computed(() =>
-  createWorkbenchProfileCompatibilityReport(getWorkbenchDraftState())
+  createWorkbenchProfileCompatibilityReport(
+    mechanicsProfileCompatibilityInput.value
+  )
 );
+const gameDataCompatibilityInput = computed(() => ({
+  gameDataBinding: gameDataBinding.value,
+  configurationLibrary: configurationLibrary.value,
+  scenarioWorkspace: scenarioWorkspace.value,
+  selection: selection.value,
+  teamSlots: teamSlots.value,
+  actorConfigs: actorConfigs.value,
+  actionDrafts: actionDrafts.value,
+}));
 const gameDataCompatibilityReport = computed(() =>
-  createWorkbenchGameDataCompatibilityReport(getWorkbenchDraftState())
+  createWorkbenchGameDataCompatibilityReport(gameDataCompatibilityInput.value)
 );
 const project = computed(() =>
   createCurrentWorkbenchProjectForActions(
@@ -1494,14 +1588,28 @@ const project = computed(() =>
 );
 const scenario = computed(() => {
   void runtimeDiagnosticsRevision.value;
-  return compileProject(project.value, gameData, {
+  recordWorkbenchPerformanceOperation('authoritativeCompile');
+  const startedAt = readWorkbenchPerformanceClock();
+  const result = compileProject(project.value, gameData, {
     threeValueMechanicsProfileCatalog:
       DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
   });
+  recordWorkbenchPerformanceDuration(
+    'authoritativeCompile',
+    readWorkbenchPerformanceClock() - startedAt
+  );
+  return result;
 });
 const simulationResult = computed(() => {
   void runtimeDiagnosticsRevision.value;
-  return simulateScenario(scenario.value);
+  recordWorkbenchPerformanceOperation('authoritativeSimulation');
+  const startedAt = readWorkbenchPerformanceClock();
+  const result = simulateScenario(scenario.value);
+  recordWorkbenchPerformanceDuration(
+    'authoritativeSimulation',
+    readWorkbenchPerformanceClock() - startedAt
+  );
+  return result;
 });
 const effectiveScenarioActions = computed(
   () =>
@@ -1867,7 +1975,17 @@ const selectedDraft = computed(() => {
     }
   );
 });
+const sideInspectorActionEditId = computed(() => {
+  const actionId =
+    actionEditFocus.value?.actionId ||
+    actionEditResultContext.value?.actionId ||
+    '';
+  return actionId && actionId === selectedActionId.value ? actionId : '';
+});
 const sideInspectorSelectionKey = computed(() => {
+  if (sideInspectorActionEditId.value) {
+    return `action:${sideInspectorActionEditId.value}`;
+  }
   if (selectedStateCurvePointId.value) {
     return `runtime:${selectedStateCurvePointId.value}`;
   }
@@ -1875,17 +1993,81 @@ const sideInspectorSelectionKey = computed(() => {
   return selectedTimelineIdentity.value?.key ?? '';
 });
 const sideInspectorTitle = computed(() => {
+  if (sideInspectorActionEditId.value) {
+    return selectedAction.value?.name ?? '动作详情';
+  }
   if (selectedStateCurvePointId.value) return '运行结果';
   if (selectedActionId.value) {
     return selectedAction.value?.name ?? '动作详情';
   }
   return selectedTimelineIdentity.value?.label ?? '队伍配置';
 });
+const sideInspectorPanelOptions = computed(() => {
+  if (sideInspectorActionEditId.value) {
+    return [
+      { key: 'properties', label: '动作' },
+      { key: 'runtime-detail', label: '运行' },
+      { key: 'action-rules', label: '规则' },
+      { key: 'analysis', label: '分析' },
+    ];
+  }
+  if (selectedStateCurvePointId.value) {
+    return selectedActionId.value
+      ? [
+          { key: 'properties', label: '动作' },
+          { key: 'runtime-detail', label: '运行' },
+          { key: 'action-rules', label: '规则' },
+          { key: 'analysis', label: '分析' },
+        ]
+      : [
+          { key: 'runtime-detail', label: '运行' },
+          { key: 'analysis', label: '分析' },
+        ];
+  }
+  if (selectedActionId.value) {
+    return [
+      { key: 'properties', label: '动作' },
+      { key: 'runtime-detail', label: '运行' },
+      { key: 'action-rules', label: '规则' },
+      { key: 'analysis', label: '分析' },
+    ];
+  }
+  if (selectedTimelineIdentity.value?.kind === 'enemy') {
+    return [
+      { key: 'enemy', label: '敌人' },
+      { key: 'configuration', label: '方案' },
+      { key: 'analysis', label: '分析' },
+    ];
+  }
+  return [
+    { key: 'team-loadout', label: '队伍' },
+    { key: 'configuration', label: '方案' },
+    { key: 'analysis', label: '分析' },
+  ];
+});
+const effectiveSideInspectorPanel = computed(() => {
+  const available = sideInspectorPanelOptions.value;
+  return available.some(panel => panel.key === sideInspectorActivePanel.value)
+    ? sideInspectorActivePanel.value
+    : (available[0]?.key ?? '');
+});
 const sideInspectorVisible = computed(
   () =>
     Boolean(sideInspectorSelectionKey.value) &&
     dismissedSideInspectorKey.value !== sideInspectorSelectionKey.value
 );
+
+watch(sideInspectorSelectionKey, (nextKey, previousKey) => {
+  if (
+    nextKey &&
+    nextKey !== previousKey &&
+    !sideInspectorPanelOptions.value.some(
+      panel => panel.key === sideInspectorActivePanel.value
+    )
+  ) {
+    sideInspectorActivePanel.value = resolveDefaultSideInspectorPanel();
+  }
+});
 const workbenchHistoryView = computed(() => ({
   canUndo: undoHistoryStack.value.length > 0,
   canRedo: redoHistoryStack.value.length > 0,
@@ -1947,8 +2129,7 @@ watch(
     if (!interval.lifecycleEventIds.includes(selectedEffectEventId.value)) {
       selectedEffectEventId.value = interval.selectionEventId;
     }
-  },
-  { flush: 'sync' }
+  }
 );
 
 watch(
@@ -1973,8 +2154,7 @@ watch(
       timeMs: relation.targetTimeMs,
       source: 'action-effect-relation-refresh',
     });
-  },
-  { flush: 'sync' }
+  }
 );
 
 watch(
@@ -2008,8 +2188,7 @@ watch(
         msToFrame(scenario.value.time.durationMs)
       );
     }
-  },
-  { flush: 'sync' }
+  }
 );
 
 watch(
@@ -2308,10 +2487,14 @@ function handleActionLibraryEntryPointerMove(event) {
   const startMs = state.targetLaneId
     ? resolveActionLibraryEntryDropTime(state.targetLaneId, event.clientX)
     : 0;
-  const previewKey = state.targetLaneId + ':' + String(startMs);
+  const previewKey = createActionLibraryPlacementPreviewKey({
+    laneId: state.targetLaneId,
+    startMs,
+  });
   if (state.targetLaneId && previewKey !== state.previewKey) {
-    state.previewKey = previewKey;
-    previewActionPlacement(
+    scheduleActionLibraryPlacementPreview(
+      state,
+      previewKey,
       state.kind === 'fragment'
         ? {
             kind: 'fragment',
@@ -2328,6 +2511,8 @@ function handleActionLibraryEntryPointerMove(event) {
     );
   } else if (!state.targetLaneId) {
     state.previewKey = '';
+    state.pendingPreview = null;
+    cancelActionLibraryPlacementPreviewFrame();
     clearActionPlacementPreview();
   }
   actionLibraryTimelineEntryDrag.value = {
@@ -2378,6 +2563,8 @@ function completeActionLibraryEntryPointerDrag(event) {
 }
 
 function cancelActionLibraryEntryPointerDrag() {
+  cancelActionLibraryPlacementPreviewFrame();
+  actionLibraryPreviewRequestSequence += 1;
   actionLibraryEntryPointerState = null;
   actionLibraryTimelineEntryDrag.value = null;
   clearActionPlacementPreview();
@@ -2393,6 +2580,70 @@ function cancelActionLibraryEntryPointerDrag() {
     'pointercancel',
     cancelActionLibraryEntryPointerDrag
   );
+}
+
+function scheduleActionLibraryPlacementPreview(state, previewKey, payload) {
+  state.pendingPreview = { previewKey, payload };
+  if (actionLibraryPreviewAnimationFrameId !== null) {
+    return;
+  }
+  const flush = () => {
+    actionLibraryPreviewAnimationFrameId = null;
+    actionLibraryPreviewAnimationFrameUsesTimeout = false;
+    if (actionLibraryEntryPointerState !== state) {
+      return;
+    }
+    const pendingPreview = state.pendingPreview;
+    state.pendingPreview = null;
+    if (!pendingPreview || pendingPreview.previewKey === state.previewKey) {
+      return;
+    }
+    state.previewKey = pendingPreview.previewKey;
+    void previewActionPlacement(pendingPreview.payload);
+  };
+  if (typeof window?.requestAnimationFrame === 'function') {
+    actionLibraryPreviewAnimationFrameId = window.requestAnimationFrame(flush);
+    return;
+  }
+  actionLibraryPreviewAnimationFrameUsesTimeout = true;
+  actionLibraryPreviewAnimationFrameId = window?.setTimeout?.(flush, 0);
+}
+
+function cancelActionLibraryPlacementPreviewFrame() {
+  if (actionLibraryPreviewAnimationFrameId === null) {
+    return;
+  }
+  if (actionLibraryPreviewAnimationFrameUsesTimeout) {
+    window?.clearTimeout?.(actionLibraryPreviewAnimationFrameId);
+  } else {
+    window?.cancelAnimationFrame?.(actionLibraryPreviewAnimationFrameId);
+  }
+  actionLibraryPreviewAnimationFrameId = null;
+  actionLibraryPreviewAnimationFrameUsesTimeout = false;
+}
+
+function createActionLibraryPlacementPreviewKey({ laneId, startMs }) {
+  return [
+    getWorkbenchProjectIdentity(project.value),
+    actionPlacementMode.value,
+    runtimeDiagnosticsRevision.value,
+    kiboActionCatalogLoaded.value ? 1 : 0,
+    laneId,
+    startMs,
+  ].join(':');
+}
+
+function getWorkbenchProjectIdentity(projectSnapshot) {
+  if (!projectSnapshot || typeof projectSnapshot !== 'object') {
+    return 0;
+  }
+  if (!workbenchProjectIdentityByProject.has(projectSnapshot)) {
+    workbenchProjectIdentityByProject.set(
+      projectSnapshot,
+      nextWorkbenchProjectIdentity++
+    );
+  }
+  return workbenchProjectIdentityByProject.get(projectSnapshot);
 }
 
 function resolveActionLibraryEntryDropLaneId(clientX, clientY, entry) {
@@ -2462,6 +2713,7 @@ async function ensureWorkbenchKiboActionCatalog() {
 }
 
 onMounted(() => {
+  installWorkbenchPerformanceInstrumentation(window);
   void loadVerifiedCombatMechanicsPackage()
     .then(() => {
       migrateLegacyNormalAttackDrafts();
@@ -3301,9 +3553,7 @@ function createAttackInputDraftFactory({
       timeMs: startMs,
     });
     if (!selectedEntry?.attackInputSegments?.length) return [];
-    const usedActionIds = new Set(
-      actionDrafts.value.map(action => action.id)
-    );
+    const usedActionIds = new Set(actionDrafts.value.map(action => action.id));
     usedActionIds.add(firstActionId);
     return createWorkbenchAttackInputChainDrafts({
       entry: selectedEntry,
@@ -3989,6 +4239,45 @@ function resolveInitialVariantInputSelection(entry, actorCharacterId) {
 }
 
 async function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
+  const projectSnapshot = project.value;
+  const requestSequence = ++actionLibraryPreviewRequestSequence;
+  const cacheKey = createTimelineEntryPlacementCacheKey({
+    entry,
+    laneId,
+    startMs,
+  });
+  let projectCache = timelineEntryPlacementPreviewCache.get(projectSnapshot);
+  if (!projectCache) {
+    projectCache = new Map();
+    timelineEntryPlacementPreviewCache.set(projectSnapshot, projectCache);
+  }
+  if (!projectCache.has(cacheKey)) {
+    recordWorkbenchPerformanceOperation('placementPreviewEvaluation');
+    projectCache.set(
+      cacheKey,
+      evaluateTimelineEntryPlacementPreview({ entry, laneId, startMs })
+    );
+  }
+  const result = await projectCache.get(cacheKey);
+  if (
+    requestSequence !== actionLibraryPreviewRequestSequence ||
+    project.value !== projectSnapshot
+  ) {
+    return;
+  }
+  if (!result) {
+    clearActionPlacementPreview();
+    return;
+  }
+  lastActionPlacementProposal.value = result.proposal;
+  actionPlacementPreview.value = result.preview;
+}
+
+async function evaluateTimelineEntryPlacementPreview({
+  entry,
+  laneId,
+  startMs,
+} = {}) {
   const request = await createTimelineEntryInsertionRequest({
     entry,
     laneId,
@@ -3996,8 +4285,7 @@ async function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
     actionId: 'action-placement-preview',
   });
   if (!request || request.blockedMessage) {
-    clearActionPlacementPreview();
-    return;
+    return null;
   }
   const placement = resolveActionGroupPlacement(
     request.draftPatches.map(patch => createWorkbenchActionDraft(patch)),
@@ -4012,17 +4300,36 @@ async function previewTimelineEntryPlacement({ entry, laneId, startMs } = {}) {
   );
   const requestedActions = placement.actions;
   if (!requestedActions.length) {
-    clearActionPlacementPreview();
-    return;
+    return null;
   }
-  lastActionPlacementProposal.value = placement.proposal;
-  actionPlacementPreview.value = createActionPlacementPreviewState({
-    kind: 'insert',
+  return {
     proposal: placement.proposal,
-    requestedActions,
-    label: entry.label ?? '',
-    icon: entry.icon ?? null,
-  });
+    preview: createActionPlacementPreviewState({
+      kind: 'insert',
+      proposal: placement.proposal,
+      requestedActions,
+      label: entry.label ?? '',
+      icon: entry.icon ?? null,
+    }),
+  };
+}
+
+function createTimelineEntryPlacementCacheKey({ entry, laneId, startMs }) {
+  return [
+    actionPlacementMode.value,
+    runtimeDiagnosticsRevision.value,
+    kiboActionCatalogLoaded.value ? 1 : 0,
+    laneId,
+    startMs,
+    entry?.type ?? '',
+    entry?.skillId ?? '',
+    entry?.actionKind ?? '',
+    entry?.actionVariantIndex ?? '',
+    entry?.damageSegmentIndex ?? '',
+    entry?.kiboId ?? '',
+    entry?.targetCharacterId ?? '',
+    entry?.variantInputSelection?.optionIdentity ?? '',
+  ].join('|');
 }
 
 function previewTimelineFragmentPlacement({ fragment, laneId, startMs } = {}) {
@@ -5373,6 +5680,8 @@ function focusScenarioComparisonAction(
     editOrigin: focusSource,
     focusSource,
   };
+  sideInspectorActivePanel.value = 'properties';
+  dismissedSideInspectorKey.value = '';
   void nextTick().then(() => {
     scrollActionEditFocusIntoView();
   });
@@ -5452,6 +5761,7 @@ function evaluateActionPlacementCandidate(
   relations,
   { requestedActionIds = [] } = {}
 ) {
+  recordWorkbenchPerformanceOperation('placementCandidateEvaluation');
   const candidateProject = createCurrentWorkbenchProjectForActions(
     candidateActions,
     relations
@@ -6885,6 +7195,7 @@ function selectActionEffectRelation(relationRequest) {
   selectedEffectIntervalId.value = interval?.intervalId ?? '';
   selectedEffectEventId.value = relation.runtimeEventId ?? '';
   selectedActionEffectRelationId.value = relation.edgeId;
+  runtimeReviewActiveTab.value = 'effect';
   return true;
 }
 
@@ -6917,6 +7228,7 @@ function selectEffectInterval({
   selectedEffectEventId.value = interval.lifecycleEventIds.includes(eventId)
     ? eventId
     : interval.selectionEventId;
+  runtimeReviewActiveTab.value = 'effect';
   return true;
 }
 
@@ -6939,6 +7251,7 @@ function selectEffectEvent(eventId) {
   selectedActionEffectRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   dismissedSideInspectorKey.value = '';
+  runtimeReviewActiveTab.value = 'effect';
   selectTimelineFrame({
     timeMs: event?.timeMs ?? interval.endMs,
     source: 'effect-lifecycle-event',
@@ -7075,6 +7388,8 @@ function locateCycleSectionAction(request) {
     editOrigin: 'contribution-window',
     focusSource: 'contribution-window',
   };
+  sideInspectorActivePanel.value = 'properties';
+  dismissedSideInspectorKey.value = '';
   void nextTick().then(() => scrollActionEditFocusIntoView());
   return true;
 }
@@ -7183,6 +7498,8 @@ function editEffectSourceAction(actionId) {
     return;
   }
   selectAction(actionId, { syncRuntimeResult: false });
+  sideInspectorActivePanel.value = 'properties';
+  dismissedSideInspectorKey.value = '';
   void nextTick().then(() => {
     workbenchRoot.value
       ?.querySelector?.('[data-inspector-panel-key="properties"]')
@@ -7205,6 +7522,8 @@ function locateActionRuleDiagnostic(diagnostic) {
     editOrigin: 'rule-diagnostic',
     focusSource: 'action-rule-diagnostic',
   };
+  sideInspectorActivePanel.value = 'properties';
+  dismissedSideInspectorKey.value = '';
   void nextTick().then(() => {
     scrollActionEditFocusIntoView();
   });
@@ -7519,6 +7838,7 @@ function isRuntimeStatePointId(pointId) {
 }
 
 function focusRuntimeStateCurvePoint(pointId) {
+  runtimeReviewActiveTab.value = 'resource';
   dispatchWorkbenchFlowAction(
     mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
       source: 'state-curve-point',
@@ -7604,9 +7924,40 @@ function dispatchWorkbenchFlowActionNow(action = {}) {
     result,
     previousState: workbenchFlowDispatchState.value,
   });
+  syncSideInspectorPanelForFlowResult(result);
   scheduleActionEditFocusScroll(result);
   scheduleRuntimeSelectedDetailScroll(result);
   return result;
+}
+
+function syncSideInspectorPanelForFlowResult(result = {}) {
+  if (!result.handled) {
+    return;
+  }
+  if (
+    [
+      WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+      WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
+    ].includes(result.kind)
+  ) {
+    sideInspectorActivePanel.value = 'properties';
+    dismissedSideInspectorKey.value = '';
+    return;
+  }
+  if (
+    [
+      WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+      WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+      WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+      WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+      WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    ].includes(result.kind)
+  ) {
+    if (sideInspectorActivePanel.value !== 'analysis') {
+      sideInspectorActivePanel.value = 'runtime-detail';
+    }
+    dismissedSideInspectorKey.value = '';
+  }
 }
 
 function shouldLoadRuntimeDiagnostics(action = {}) {
@@ -7941,10 +8292,7 @@ function createNextActionIdFromUsedIds(usedActionIds) {
 
 function addInsertedActionGroup(
   actionPatches = [],
-  {
-    actionRelations: insertedRelations = [],
-    resolveAtStartMs = null,
-  } = {}
+  { actionRelations: insertedRelations = [], resolveAtStartMs = null } = {}
 ) {
   const requestedActions = actionPatches.map(patch =>
     createWorkbenchActionDraft(patch)
@@ -8428,6 +8776,26 @@ function selectTimelineIdentity(identity = {}) {
 
 function dismissSideInspector() {
   dismissedSideInspectorKey.value = sideInspectorSelectionKey.value;
+}
+
+function setRuntimeReviewTab(tabKey) {
+  if (runtimeReviewTabs.some(tab => tab.key === tabKey)) {
+    runtimeReviewActiveTab.value = tabKey;
+  }
+}
+
+function setSideInspectorPanel(panelKey) {
+  if (sideInspectorPanelOptions.value.some(panel => panel.key === panelKey)) {
+    sideInspectorActivePanel.value = panelKey;
+  }
+}
+
+function resolveDefaultSideInspectorPanel() {
+  if (selectedStateCurvePointId.value) return 'runtime-detail';
+  if (selectedActionId.value) return 'properties';
+  return selectedTimelineIdentity.value?.kind === 'enemy'
+    ? 'enemy'
+    : 'team-loadout';
 }
 
 function setActionLibraryCharacterId(characterId) {
@@ -8974,16 +9342,54 @@ function getLocalStorage() {
 
 .runtime-review-stack {
   display: grid;
-  grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: 14px;
   min-width: 0;
 }
 
 .runtime-review-stack[data-runtime-review-layout='result-check'] {
-  grid-template-columns: minmax(300px, 1.12fr) minmax(220px, 0.88fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   gap: 10px;
+}
+
+.runtime-review-tabs {
+  display: inline-flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-self: start;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  background: #171e23;
+}
+
+.runtime-review-tabs button {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #8f9aa3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.runtime-review-tabs button[data-active='true'] {
+  background: rgba(121, 199, 185, 0.15);
+  color: #e7fffa;
+}
+
+.runtime-review-tabs svg {
+  width: 14px;
+  height: 14px;
 }
 
 .runtime-review-primary-bar {
@@ -9073,6 +9479,37 @@ function getLocalStorage() {
   padding: 7px 8px 7px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   background: #0f151a;
+}
+
+.side-stack-tabs {
+  display: flex;
+  grid-column: 1 / -1;
+  min-width: 0;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.side-stack-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.side-stack-tabs button {
+  width: auto;
+  height: 26px;
+  flex: 0 0 auto;
+  padding: 0 8px;
+  border-color: transparent;
+  background: transparent;
+  color: #7f8b93;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.side-stack-tabs button[data-active='true'] {
+  border-color: rgba(121, 199, 185, 0.34);
+  background: rgba(121, 199, 185, 0.13);
+  color: #dff9f3;
 }
 
 .side-stack-header > div {

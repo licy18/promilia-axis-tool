@@ -1,0 +1,2280 @@
+{
+  "storageKey": "promilia-axis-tool:workbench-draft:v17",
+  "draft": {
+    "schemaVersion": 17,
+    "game": "azur-promilia",
+    "type": "workbench-draft",
+    "savedAt": null,
+    "gameDataBinding": {
+      "schemaVersion": 1,
+      "contractName": "AzPrWorkbenchGameDataBinding",
+      "catalogId": "azpr-workbench-game-data",
+      "catalogVersion": 1,
+      "dataVersion": "2026-07-08T03:35:51.289Z",
+      "sourceKind": "project-persisted-game-data-binding"
+    },
+    "durationMs": 120000,
+    "selection": {
+      "characterId": 101010,
+      "secondaryCharacterId": 101003,
+      "skillId": 10101001,
+      "enemyId": 300032
+    },
+    "teamSlots": [
+      {
+        "slotId": "team-slot-1",
+        "position": 0,
+        "characterId": 101010
+      },
+      {
+        "slotId": "team-slot-2",
+        "position": 1,
+        "characterId": 101003
+      },
+      {
+        "slotId": "team-slot-3",
+        "position": 2,
+        "characterId": 101007
+      }
+    ],
+    "actorConfigs": [
+      {
+        "characterId": 101010,
+        "level": 80,
+        "initialSp": 100,
+        "loadout": {
+          "kiboId": null,
+          "equipment": {
+            "weapon": null,
+            "top": null,
+            "bottom": null,
+            "earring": null,
+            "ring": null
+          },
+          "soulessenceId": null,
+          "soulessenceLevel": null,
+          "soulessenceRank": null,
+          "equipmentLevels": {
+            "weapon": null,
+            "top": null,
+            "bottom": null,
+            "earring": null,
+            "ring": null
+          },
+          "kiboConfig": {
+            "level": 80,
+            "hobbyId": 1,
+            "intimacyLevel": 1,
+            "comprehensionByAttribute": {
+              "1": 100,
+              "3": 100,
+              "4": 100,
+              "5": 100
+            }
+          }
+        },
+        "cultivation": {
+          "starGiftRank": 0,
+          "favorabilityLevel": 0
+        }
+      },
+      {
+        "characterId": 101003,
+        "level": 80,
+        "initialSp": null,
+        "loadout": {
+          "kiboId": null,
+          "equipment": {
+            "weapon": null,
+            "top": null,
+            "bottom": null,
+            "earring": null,
+            "ring": null
+          },
+          "soulessenceId": null,
+          "soulessenceLevel": null,
+          "soulessenceRank": null,
+          "equipmentLevels": {
+            "weapon": null,
+            "top": null,
+            "bottom": null,
+            "earring": null,
+            "ring": null
+          },
+          "kiboConfig": {
+            "level": 80,
+            "hobbyId": 1,
+            "intimacyLevel": 1,
+            "comprehensionByAttribute": {
+              "1": 100,
+              "3": 100,
+              "4": 100,
+              "5": 100
+            }
+          }
+        },
+        "cultivation": {
+          "starGiftRank": 0,
+          "favorabilityLevel": 0
+        }
+      },
+      {
+        "characterId": 101007,
+        "level": 80,
+        "initialSp": null,
+        "loadout": {
+          "kiboId": null,
+          "equipment": {
+            "weapon": null,
+            "top": null,
+            "bottom": null,
+            "earring": null,
+            "ring": null
+          },
+          "soulessenceId": null,
+          "soulessenceLevel": null,
+          "soulessenceRank": null,
+          "equipmentLevels": {
+            "weapon": null,
+            "top": null,
+            "bottom": null,
+            "earring": null,
+            "ring": null
+          },
+          "kiboConfig": {
+            "level": 80,
+            "hobbyId": 1,
+            "intimacyLevel": 1,
+            "comprehensionByAttribute": {
+              "1": 100,
+              "3": 100,
+              "4": 100,
+              "5": 100
+            }
+          }
+        },
+        "cultivation": {
+          "starGiftRank": 0,
+          "favorabilityLevel": 0
+        }
+      }
+    ],
+    "enemyConfig": {
+      "level": 80,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "configurationSelection": {
+      "schemaVersion": 1,
+      "actorInstanceIds": [
+        {
+          "characterId": 101010,
+          "instanceId": "actor-config-0007"
+        },
+        {
+          "characterId": 101003,
+          "instanceId": "actor-config-0005"
+        },
+        {
+          "characterId": 101007,
+          "instanceId": "actor-config-0006"
+        }
+      ],
+      "enemyInstanceId": "enemy-config-0001"
+    },
+    "mechanicsProfileSelection": {
+      "schemaVersion": 1,
+      "contractName": "AzPrWorkbenchMechanicsProfileSelection",
+      "profileId": "azpr-three-value-verified-tc-20260718",
+      "profileVersion": 1
+    },
+    "segmentSplitOptions": {
+      "intervalMs": 2000,
+      "startAfterSelectedAction": false,
+      "skipExistingSegments": false
+    },
+    "actionDrafts": [
+      {
+        "id": "action-0001",
+        "type": "skill",
+        "skillId": 10101013,
+        "actorCharacterId": 101010,
+        "startMs": 0,
+        "durationMs": 5483.333333,
+        "level": 1,
+        "actionVariantIndex": 0,
+        "damageSegmentIndex": 0,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 0,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 329,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "resolved",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "applied",
+        "scenarioRuntimeStatus": "source-verified",
+        "hitOverrides": {},
+        "durationFrames": 329,
+        "timingSource": "verified-unconditional-attack-reopen-window",
+        "timingStatus": "applied",
+        "timingReasons": [],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json",
+        "needsTimingData": false,
+        "note": "星决技：740%；真实动作帧等待 asset 或运行时捕获补充。",
+        "insertion": null,
+        "generationBatch": null,
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-with-cooldown",
+          "actionId": "action-0001",
+          "skillId": 10101013,
+          "actionVariantIndex": 0,
+          "actionKind": "ultimate",
+          "cooldown": {
+            "status": "confirmed-cooldown",
+            "durationMs": 20000,
+            "chargeCount": 1,
+            "sourceIdentity": {
+              "sourceKind": "azpr-newtable-skill-level-display",
+              "sourceStatus": "confirmed-display-cooldown-logic-zero",
+              "subSkillId": 10101013,
+              "durationFieldPath": "skill_level.rows[id=524].coolDown",
+              "chargeCountFieldPath": null
+            },
+            "applied": true
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 1,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      },
+      {
+        "id": "action-0002",
+        "type": "skill",
+        "skillId": 10101001,
+        "actorCharacterId": 101010,
+        "startMs": 6483.333333,
+        "durationMs": 1200,
+        "level": 1,
+        "actionVariantIndex": 0,
+        "damageSegmentIndex": 0,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 1,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 72,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 1,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "partially-resolved",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "applied",
+        "scenarioRuntimeStatus": "source-verified",
+        "hitOverrides": {},
+        "durationFrames": 72,
+        "timingSource": "next-control-input-window",
+        "timingStatus": "applied",
+        "timingReasons": [],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+        "needsTimingData": false,
+        "note": "普通攻击 A1 · control 10101001 · 9 个命中绑定",
+        "insertion": null,
+        "generationBatch": {
+          "batchId": "attack-group-action-0002",
+          "source": "normal-attack-input-chain",
+          "skillId": 10101001,
+          "actorCharacterId": 101010,
+          "level": 1,
+          "variantCount": 3,
+          "segmentCount": 3,
+          "createdAt": "2026-07-26T00:38:26.299Z"
+        },
+        "attackGroupId": "attack-group-action-0002",
+        "attackSequenceIndex": 1,
+        "attackSequenceTotal": 3,
+        "attackInput": {
+          "identity": "actor|101010|10101001|0|10101001|attack-input-1",
+          "sequenceIndex": 1,
+          "sequenceTotal": 3,
+          "label": "A1",
+          "controlSkillId": 10101001,
+          "selectedSubSkillIndex": 1,
+          "playerSkillId": null,
+          "resourceMapIndex": 0,
+          "animationDurationFrames": 215,
+          "animationDurationStatus": "applied",
+          "hitEndFrame": 12,
+          "effectiveDurationFrames": 72,
+          "durationFrames": 72,
+          "durationStatus": "applied",
+          "durationBasis": "next-control-input-window",
+          "durationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+          "actionScheduling": {
+            "status": "exact",
+            "kind": "exact-selected-variant-occupancy",
+            "durationFrames": 72,
+            "planningDurationFrames": null,
+            "selectedSubSkillIndex": 1,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+            "sourceStatus": "verified-input-occupancy",
+            "variantModelStatus": "partially-resolved",
+            "reasons": []
+          },
+          "sourceEvidenceStatus": "applied",
+          "scenarioRuntimeStatus": "source-verified",
+          "defaultLinkDelayFrames": 0,
+          "linkWindow": {
+            "kind": "control-transition-window",
+            "startFrame": 72,
+            "endFrame": 108,
+            "durationFrames": 36,
+            "targetControlSkillId": 10101004,
+            "targetSubSkillIndex": 1,
+            "allowAttack": false,
+            "baseOnInput": false,
+            "inputToIndex": false,
+            "bridgeType": 0,
+            "continuousAttackType": 1,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json"
+          },
+          "linkTimingStatus": "applied",
+          "linkTimingBasis": "next-control-input-window",
+          "linkSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+          "linkTimingReasons": [],
+          "selectedHitIdentities": [
+            "10101001|1|elements|1|7245988392201001564|13|1",
+            "10101001|1|elements|1|7245988392201001564|18|2",
+            "10101001|1|elements|1|7245988392201001564|23|3",
+            "10101001|1|elements|1|7245988392201001564|28|4",
+            "10101001|1|elements|1|7245988392201001564|33|5",
+            "10101001|1|elements|1|7245988392201001564|38|6",
+            "10101001|1|elements|2|-393717411505334080|55|7",
+            "10101001|1|elements|2|-393717411505334080|60|8",
+            "10101001|1|elements|2|-393717411505334080|65|9"
+          ],
+          "hitCount": 9,
+          "classification": "applied",
+          "reasons": [],
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10101001]|NewTable/skillsub_logic.rows[skillId=10101001].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/skill_control_10101001__2695099335427283981.json"
+        },
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-no-confirmed-status",
+          "actionId": "action-0002",
+          "skillId": 10101001,
+          "actionVariantIndex": 0,
+          "actionKind": "normal-attack",
+          "cooldown": {
+            "status": "no-confirmed-cooldown",
+            "durationMs": null,
+            "chargeCount": null,
+            "sourceIdentity": null,
+            "applied": false
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 0,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      },
+      {
+        "id": "action-0003",
+        "type": "skill",
+        "skillId": 10101001,
+        "actorCharacterId": 101010,
+        "startMs": 7683.333333,
+        "durationMs": 1250,
+        "level": 1,
+        "actionVariantIndex": 0,
+        "damageSegmentIndex": 0,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 1,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 75,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 1,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "variant-condition-not-yet-modeled",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "static-evidence-gap",
+        "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+        "hitOverrides": {},
+        "durationFrames": 75,
+        "timingSource": "next-control-input-window",
+        "timingStatus": "applied",
+        "timingReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent",
+          "sp-formula-not-literal-function-5",
+          "effect-trigger-frame-missing"
+        ],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+        "needsTimingData": false,
+        "note": "普通攻击 A2 · control 10101004 · 12 个命中绑定",
+        "insertion": null,
+        "generationBatch": {
+          "batchId": "attack-group-action-0002",
+          "source": "normal-attack-input-chain",
+          "skillId": 10101001,
+          "actorCharacterId": 101010,
+          "level": 1,
+          "variantCount": 3,
+          "segmentCount": 3,
+          "createdAt": "2026-07-26T00:38:26.299Z"
+        },
+        "attackGroupId": "attack-group-action-0002",
+        "attackSequenceIndex": 2,
+        "attackSequenceTotal": 3,
+        "attackInput": {
+          "identity": "actor|101010|10101001|0|10101004|attack-input-4",
+          "sequenceIndex": 2,
+          "sequenceTotal": 3,
+          "label": "A2",
+          "controlSkillId": 10101004,
+          "selectedSubSkillIndex": 1,
+          "playerSkillId": null,
+          "resourceMapIndex": 0,
+          "animationDurationFrames": 225,
+          "animationDurationStatus": "applied",
+          "hitEndFrame": 0,
+          "effectiveDurationFrames": 75,
+          "durationFrames": 75,
+          "durationStatus": "applied",
+          "durationBasis": "next-control-input-window",
+          "durationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+          "actionScheduling": {
+            "status": "exact",
+            "kind": "exact-selected-variant-occupancy",
+            "durationFrames": 75,
+            "planningDurationFrames": null,
+            "selectedSubSkillIndex": 1,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+            "sourceStatus": "verified-input-occupancy",
+            "variantModelStatus": "variant-condition-not-yet-modeled",
+            "reasons": []
+          },
+          "sourceEvidenceStatus": "static-evidence-gap",
+          "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+          "defaultLinkDelayFrames": 0,
+          "linkWindow": {
+            "kind": "control-transition-window",
+            "startFrame": 75,
+            "endFrame": 120,
+            "durationFrames": 45,
+            "targetControlSkillId": 10101005,
+            "targetSubSkillIndex": 1,
+            "allowAttack": false,
+            "baseOnInput": false,
+            "inputToIndex": false,
+            "bridgeType": 0,
+            "continuousAttackType": 1,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json"
+          },
+          "linkTimingStatus": "applied",
+          "linkTimingBasis": "next-control-input-window",
+          "linkSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+          "linkTimingReasons": [],
+          "selectedHitIdentities": [
+            "10101004|1|elements|0|-7672362046032568081|8|1",
+            "10101004|1|elements|0|-7672362046032568081|13|2",
+            "10101004|1|elements|1|-3490069646761131835|27|3",
+            "10101004|1|elements|1|-3490069646761131835|32|4",
+            "10101004|1|elements|3|-1862339442599942768|57|5",
+            "10101004|1|elements|3|-1862339442599942768|63|6",
+            "10101004|1|elements|3|-1862339442599942768|69|7",
+            "10101004|1|elements|3|-1862339442599942768|75|8",
+            "10101004|1|elements|3|-1862339442599942768|81|9",
+            "10101004|1|elements|3|-1862339442599942768|87|10",
+            "10101004|1|elements|3|-1862339442599942768|93|11",
+            "10101004|1|elements|3|-1862339442599942768|99|12"
+          ],
+          "hitCount": 12,
+          "classification": "unresolved",
+          "reasons": [
+            "trigger-frame-missing",
+            "projectile-impact-frame-runtime-dependent",
+            "sp-formula-not-literal-function-5",
+            "effect-trigger-frame-missing"
+          ],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101004]|NewTable/skillsub_logic.rows[skillId=10101004].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json"
+        },
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-no-confirmed-status",
+          "actionId": "action-0003",
+          "skillId": 10101001,
+          "actionVariantIndex": 0,
+          "actionKind": "normal-attack",
+          "cooldown": {
+            "status": "no-confirmed-cooldown",
+            "durationMs": null,
+            "chargeCount": null,
+            "sourceIdentity": null,
+            "applied": false
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 0,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      },
+      {
+        "id": "action-0004",
+        "type": "skill",
+        "skillId": 10101001,
+        "actorCharacterId": 101010,
+        "startMs": 8933.333333,
+        "durationMs": 1200,
+        "level": 1,
+        "actionVariantIndex": 0,
+        "damageSegmentIndex": 0,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 1,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 72,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 1,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "variant-condition-not-yet-modeled",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "applied",
+        "scenarioRuntimeStatus": "source-verified",
+        "hitOverrides": {},
+        "durationFrames": 72,
+        "timingSource": "attack-reopen-window",
+        "timingStatus": "applied",
+        "timingReasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+        "needsTimingData": false,
+        "note": "普通攻击 A3 · control 10101005 · 5 个命中绑定",
+        "insertion": null,
+        "generationBatch": {
+          "batchId": "attack-group-action-0002",
+          "source": "normal-attack-input-chain",
+          "skillId": 10101001,
+          "actorCharacterId": 101010,
+          "level": 1,
+          "variantCount": 3,
+          "segmentCount": 3,
+          "createdAt": "2026-07-26T00:38:26.299Z"
+        },
+        "attackGroupId": "attack-group-action-0002",
+        "attackSequenceIndex": 3,
+        "attackSequenceTotal": 3,
+        "attackInput": {
+          "identity": "actor|101010|10101001|0|10101005|attack-input-5",
+          "sequenceIndex": 3,
+          "sequenceTotal": 3,
+          "label": "A3",
+          "controlSkillId": 10101005,
+          "selectedSubSkillIndex": 1,
+          "playerSkillId": null,
+          "resourceMapIndex": 0,
+          "animationDurationFrames": 240,
+          "animationDurationStatus": "applied",
+          "hitEndFrame": 73,
+          "effectiveDurationFrames": 72,
+          "durationFrames": 72,
+          "durationStatus": "applied",
+          "durationBasis": "attack-reopen-window",
+          "durationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+          "actionScheduling": {
+            "status": "exact",
+            "kind": "exact-selected-variant-occupancy",
+            "durationFrames": 72,
+            "planningDurationFrames": null,
+            "selectedSubSkillIndex": 1,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+            "sourceStatus": "verified-input-occupancy",
+            "variantModelStatus": "variant-condition-not-yet-modeled",
+            "reasons": []
+          },
+          "sourceEvidenceStatus": "applied",
+          "scenarioRuntimeStatus": "source-verified",
+          "defaultLinkDelayFrames": 0,
+          "linkWindow": {
+            "kind": "control-transition-window",
+            "startFrame": 72,
+            "endFrame": 319,
+            "durationFrames": 247,
+            "targetControlSkillId": 80102,
+            "targetSubSkillIndex": 0,
+            "allowAttack": true,
+            "baseOnInput": false,
+            "inputToIndex": false,
+            "bridgeType": 3,
+            "continuousAttackType": 0,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json"
+          },
+          "linkTimingStatus": "applied",
+          "linkTimingBasis": "attack-reopen-window",
+          "linkSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+          "linkTimingReasons": [],
+          "selectedHitIdentities": [
+            "10101005|1|elements|2|4000396690601339399|32|1",
+            "10101005|1|elements|2|4000396690601339399|38|2",
+            "10101005|1|elements|2|4000396690601339399|44|3",
+            "10101005|1|elements|2|4000396690601339399|50|4",
+            "10101005|1|elements|2|4000396690601339399|56|5"
+          ],
+          "hitCount": 5,
+          "classification": "applied",
+          "reasons": [
+            "nested-damage-trigger-lifecycle-not-expanded",
+            "nested-effect-wrapper-semantics-unresolved",
+            "effect-trigger-frame-missing",
+            "effect-target-unresolved"
+          ],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101005]|NewTable/skillsub_logic.rows[skillId=10101005].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json"
+        },
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-no-confirmed-status",
+          "actionId": "action-0004",
+          "skillId": 10101001,
+          "actionVariantIndex": 0,
+          "actionKind": "normal-attack",
+          "cooldown": {
+            "status": "no-confirmed-cooldown",
+            "durationMs": null,
+            "chargeCount": null,
+            "sourceIdentity": null,
+            "applied": false
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 0,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      },
+      {
+        "id": "action-0005",
+        "type": "skill",
+        "skillId": 10101001,
+        "actorCharacterId": 101010,
+        "startMs": 8933.333333,
+        "durationMs": 1250,
+        "level": 1,
+        "actionVariantIndex": 2,
+        "damageSegmentIndex": 2,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 0,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 75,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "partially-resolved",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "applied",
+        "scenarioRuntimeStatus": "source-verified",
+        "hitOverrides": {},
+        "durationFrames": 75,
+        "timingSource": "verified-specific-input-window",
+        "timingStatus": "applied",
+        "timingReasons": [],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+        "needsTimingData": false,
+        "note": "重击：160%；真实动作帧等待 asset 或运行时捕获补充。",
+        "insertion": null,
+        "generationBatch": null,
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-no-confirmed-status",
+          "actionId": "action-0005",
+          "skillId": 10101001,
+          "actionVariantIndex": 2,
+          "actionKind": "charged-attack",
+          "cooldown": {
+            "status": "no-confirmed-cooldown",
+            "durationMs": null,
+            "chargeCount": null,
+            "sourceIdentity": null,
+            "applied": false
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 0,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      },
+      {
+        "id": "action-0006",
+        "type": "skill",
+        "skillId": 10101012,
+        "actorCharacterId": 101010,
+        "startMs": 11183.333333,
+        "durationMs": 2000,
+        "level": 1,
+        "actionVariantIndex": 0,
+        "damageSegmentIndex": 0,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 0,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 120,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "resolved",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "applied",
+        "scenarioRuntimeStatus": "source-verified",
+        "hitOverrides": {},
+        "durationFrames": 120,
+        "timingSource": "verified-unconditional-attack-reopen-window",
+        "timingStatus": "applied",
+        "timingReasons": [],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json",
+        "needsTimingData": false,
+        "note": "星鸣技：330%；真实动作帧等待 asset 或运行时捕获补充。",
+        "insertion": null,
+        "generationBatch": null,
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-with-cooldown",
+          "actionId": "action-0006",
+          "skillId": 10101012,
+          "actionVariantIndex": 0,
+          "actionKind": "star-skill",
+          "cooldown": {
+            "status": "confirmed-cooldown",
+            "durationMs": 16000,
+            "chargeCount": 1,
+            "sourceIdentity": {
+              "sourceKind": "azpr-newtable-skill-logic-index",
+              "sourceStatus": "confirmed-logic-cooldown",
+              "subSkillId": 10101012,
+              "durationFieldPath": "skillsub_logic.rows[skillId=10101012].coolDown",
+              "chargeCountFieldPath": "skillsub_logic.rows[skillId=10101012].coolDownCount"
+            },
+            "applied": true
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 1,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      },
+      {
+        "id": "action-0007",
+        "type": "skill",
+        "skillId": 10101001,
+        "actorCharacterId": 101010,
+        "startMs": 12616.666667,
+        "durationMs": 1250,
+        "level": 1,
+        "actionVariantIndex": 2,
+        "damageSegmentIndex": 2,
+        "targetCharacterId": 101003,
+        "resource": "sp",
+        "change": 50,
+        "reason": "manual-axis-resource",
+        "eventType": "phase",
+        "controlSubSkillIndex": 0,
+        "variantInputSelection": null,
+        "actionScheduling": {
+          "status": "exact",
+          "kind": "exact-selected-variant-occupancy",
+          "durationFrames": 75,
+          "planningDurationFrames": null,
+          "selectedSubSkillIndex": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+          "sourceStatus": "verified-input-occupancy",
+          "variantModelStatus": "partially-resolved",
+          "reasons": []
+        },
+        "sourceEvidenceStatus": "applied",
+        "scenarioRuntimeStatus": "source-verified",
+        "hitOverrides": {},
+        "durationFrames": 75,
+        "timingSource": "verified-specific-input-window",
+        "timingStatus": "applied",
+        "timingReasons": [],
+        "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+        "needsTimingData": false,
+        "note": "重击：160%；真实动作帧等待 asset 或运行时捕获补充。",
+        "insertion": null,
+        "generationBatch": null,
+        "statusGeneration": {
+          "schemaVersion": 1,
+          "contractName": "AzPrActionStatusGeneration",
+          "sourceKind": "azpr-action-status-generation",
+          "status": "action-status-generation-ready-no-confirmed-status",
+          "actionId": "action-0007",
+          "skillId": 10101001,
+          "actionVariantIndex": 2,
+          "actionKind": "charged-attack",
+          "cooldown": {
+            "status": "no-confirmed-cooldown",
+            "durationMs": null,
+            "chargeCount": null,
+            "sourceIdentity": null,
+            "applied": false
+          },
+          "effects": [],
+          "summary": {
+            "confirmedCooldownCount": 0,
+            "effectCandidateCount": 0,
+            "generatedEffectCount": 0,
+            "trackingOnlyEffectCount": 0,
+            "calculatorAppliedEffectCount": 0
+          },
+          "appliedToCalculators": false
+        },
+        "effectCommands": []
+      }
+    ],
+    "actionRelations": [],
+    "cycleBoundaries": [],
+    "initialRuntimeState": {
+      "schemaVersion": 5,
+      "sourceKind": "azpr-initial-runtime-state",
+      "contractName": "AzPrInitialRuntimeState",
+      "status": "initial-runtime-state-ready",
+      "source": {
+        "sourceScenarioId": null,
+        "sourceScenarioName": null,
+        "boundaryId": null,
+        "boundaryTimeMs": null
+      },
+      "controlledActor": {
+        "actorId": "actor-101010",
+        "characterId": 101010,
+        "actorName": "涂山小玉",
+        "baselineStatus": "baseline-project-initial-controlled-actor"
+      },
+      "enemy": null,
+      "selfEnergyByActor": [],
+      "kiboEnergyBySlot": [],
+      "activeEffects": [],
+      "tuningMarks": [],
+      "specialResourcesByActor": [],
+      "applied": true
+    },
+    "combatScenario": {
+      "projectile": {
+        "targetDistance": 0,
+        "defaultWillHit": true
+      }
+    },
+    "runtimeSampleCaptures": [],
+    "selectedActionId": "action-0007",
+    "configurationLibrary": {
+      "schemaVersion": 1,
+      "actorInstances": [
+        {
+          "id": "actor-config-0001",
+          "name": "角色配置 1",
+          "characterId": 109001,
+          "actorConfig": {
+            "characterId": 109001,
+            "level": 80,
+            "initialSp": null,
+            "loadout": {
+              "kiboId": 500001,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        },
+        {
+          "id": "actor-config-0002",
+          "name": "角色配置 1",
+          "characterId": 101003,
+          "actorConfig": {
+            "characterId": 101003,
+            "level": 80,
+            "initialSp": null,
+            "loadout": {
+              "kiboId": 500002,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        },
+        {
+          "id": "actor-config-0003",
+          "name": "角色配置 1",
+          "characterId": 101007,
+          "actorConfig": {
+            "characterId": 101007,
+            "level": 80,
+            "initialSp": null,
+            "loadout": {
+              "kiboId": 500003,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        },
+        {
+          "id": "actor-config-0004",
+          "name": "角色配置 2",
+          "characterId": 109001,
+          "actorConfig": {
+            "characterId": 109001,
+            "level": 80,
+            "initialSp": null,
+            "loadout": {
+              "kiboId": null,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        },
+        {
+          "id": "actor-config-0005",
+          "name": "角色配置 2",
+          "characterId": 101003,
+          "actorConfig": {
+            "characterId": 101003,
+            "level": 80,
+            "initialSp": null,
+            "loadout": {
+              "kiboId": null,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        },
+        {
+          "id": "actor-config-0006",
+          "name": "角色配置 2",
+          "characterId": 101007,
+          "actorConfig": {
+            "characterId": 101007,
+            "level": 80,
+            "initialSp": null,
+            "loadout": {
+              "kiboId": null,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        },
+        {
+          "id": "actor-config-0007",
+          "name": "角色配置 1",
+          "characterId": 101010,
+          "actorConfig": {
+            "characterId": 101010,
+            "level": 80,
+            "initialSp": 100,
+            "loadout": {
+              "kiboId": null,
+              "equipment": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "soulessenceId": null,
+              "soulessenceLevel": null,
+              "soulessenceRank": null,
+              "equipmentLevels": {
+                "weapon": null,
+                "top": null,
+                "bottom": null,
+                "earring": null,
+                "ring": null
+              },
+              "kiboConfig": {
+                "level": 80,
+                "hobbyId": 1,
+                "intimacyLevel": 1,
+                "comprehensionByAttribute": {
+                  "1": 100,
+                  "3": 100,
+                  "4": 100,
+                  "5": 100
+                }
+              }
+            },
+            "cultivation": {
+              "starGiftRank": 0,
+              "favorabilityLevel": 0
+            }
+          }
+        }
+      ],
+      "enemyInstances": [
+        {
+          "id": "enemy-config-0001",
+          "name": "敌人配置 1",
+          "enemyId": 300032,
+          "enemyConfig": {
+            "level": 80,
+            "hpMultiplier": 1,
+            "defenseMultiplier": 1,
+            "toughnessMultiplier": 1,
+            "initialToughnessRatio": 1,
+            "elementDefenseOverrides": {}
+          }
+        }
+      ]
+    },
+    "scenarioWorkspace": {
+      "schemaVersion": 1,
+      "activeScenarioId": "scenario-0002",
+      "scenarios": [
+        {
+          "id": "scenario-0002",
+          "name": "方案 2",
+          "draft": {
+            "durationMs": 120000,
+            "selection": {
+              "characterId": 101010,
+              "secondaryCharacterId": 101003,
+              "skillId": 10101001,
+              "enemyId": 300032
+            },
+            "teamSlots": [
+              {
+                "slotId": "team-slot-1",
+                "position": 0,
+                "characterId": 101010
+              },
+              {
+                "slotId": "team-slot-2",
+                "position": 1,
+                "characterId": 101003
+              },
+              {
+                "slotId": "team-slot-3",
+                "position": 2,
+                "characterId": 101007
+              }
+            ],
+            "actorConfigs": [
+              {
+                "characterId": 101010,
+                "level": 80,
+                "initialSp": 100,
+                "loadout": {
+                  "kiboId": null,
+                  "equipment": {
+                    "weapon": null,
+                    "top": null,
+                    "bottom": null,
+                    "earring": null,
+                    "ring": null
+                  },
+                  "soulessenceId": null,
+                  "soulessenceLevel": null,
+                  "soulessenceRank": null,
+                  "equipmentLevels": {
+                    "weapon": null,
+                    "top": null,
+                    "bottom": null,
+                    "earring": null,
+                    "ring": null
+                  },
+                  "kiboConfig": {
+                    "level": 80,
+                    "hobbyId": 1,
+                    "intimacyLevel": 1,
+                    "comprehensionByAttribute": {
+                      "1": 100,
+                      "3": 100,
+                      "4": 100,
+                      "5": 100
+                    }
+                  }
+                },
+                "cultivation": {
+                  "starGiftRank": 0,
+                  "favorabilityLevel": 0
+                }
+              },
+              {
+                "characterId": 101003,
+                "level": 80,
+                "initialSp": null,
+                "loadout": {
+                  "kiboId": null,
+                  "equipment": {
+                    "weapon": null,
+                    "top": null,
+                    "bottom": null,
+                    "earring": null,
+                    "ring": null
+                  },
+                  "soulessenceId": null,
+                  "soulessenceLevel": null,
+                  "soulessenceRank": null,
+                  "equipmentLevels": {
+                    "weapon": null,
+                    "top": null,
+                    "bottom": null,
+                    "earring": null,
+                    "ring": null
+                  },
+                  "kiboConfig": {
+                    "level": 80,
+                    "hobbyId": 1,
+                    "intimacyLevel": 1,
+                    "comprehensionByAttribute": {
+                      "1": 100,
+                      "3": 100,
+                      "4": 100,
+                      "5": 100
+                    }
+                  }
+                },
+                "cultivation": {
+                  "starGiftRank": 0,
+                  "favorabilityLevel": 0
+                }
+              },
+              {
+                "characterId": 101007,
+                "level": 80,
+                "initialSp": null,
+                "loadout": {
+                  "kiboId": null,
+                  "equipment": {
+                    "weapon": null,
+                    "top": null,
+                    "bottom": null,
+                    "earring": null,
+                    "ring": null
+                  },
+                  "soulessenceId": null,
+                  "soulessenceLevel": null,
+                  "soulessenceRank": null,
+                  "equipmentLevels": {
+                    "weapon": null,
+                    "top": null,
+                    "bottom": null,
+                    "earring": null,
+                    "ring": null
+                  },
+                  "kiboConfig": {
+                    "level": 80,
+                    "hobbyId": 1,
+                    "intimacyLevel": 1,
+                    "comprehensionByAttribute": {
+                      "1": 100,
+                      "3": 100,
+                      "4": 100,
+                      "5": 100
+                    }
+                  }
+                },
+                "cultivation": {
+                  "starGiftRank": 0,
+                  "favorabilityLevel": 0
+                }
+              }
+            ],
+            "enemyConfig": {
+              "level": 80,
+              "hpMultiplier": 1,
+              "defenseMultiplier": 1,
+              "toughnessMultiplier": 1,
+              "initialToughnessRatio": 1,
+              "elementDefenseOverrides": {}
+            },
+            "configurationSelection": {
+              "schemaVersion": 1,
+              "actorInstanceIds": [
+                {
+                  "characterId": 101010,
+                  "instanceId": "actor-config-0007"
+                },
+                {
+                  "characterId": 101003,
+                  "instanceId": "actor-config-0005"
+                },
+                {
+                  "characterId": 101007,
+                  "instanceId": "actor-config-0006"
+                }
+              ],
+              "enemyInstanceId": "enemy-config-0001"
+            },
+            "mechanicsProfileSelection": {
+              "schemaVersion": 1,
+              "contractName": "AzPrWorkbenchMechanicsProfileSelection",
+              "profileId": "azpr-three-value-verified-tc-20260718",
+              "profileVersion": 1
+            },
+            "segmentSplitOptions": {
+              "intervalMs": 2000,
+              "startAfterSelectedAction": false,
+              "skipExistingSegments": false
+            },
+            "actionDrafts": [
+              {
+                "id": "action-0001",
+                "type": "skill",
+                "skillId": 10101013,
+                "actorCharacterId": 101010,
+                "startMs": 0,
+                "durationMs": 5483.333333,
+                "level": 1,
+                "actionVariantIndex": 0,
+                "damageSegmentIndex": 0,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 0,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 329,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 0,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "resolved",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "applied",
+                "scenarioRuntimeStatus": "source-verified",
+                "hitOverrides": {},
+                "durationFrames": 329,
+                "timingSource": "verified-unconditional-attack-reopen-window",
+                "timingStatus": "applied",
+                "timingReasons": [],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json",
+                "needsTimingData": false,
+                "note": "星决技：740%；真实动作帧等待 asset 或运行时捕获补充。",
+                "insertion": null,
+                "generationBatch": null,
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-with-cooldown",
+                  "actionId": "action-0001",
+                  "skillId": 10101013,
+                  "actionVariantIndex": 0,
+                  "actionKind": "ultimate",
+                  "cooldown": {
+                    "status": "confirmed-cooldown",
+                    "durationMs": 20000,
+                    "chargeCount": 1,
+                    "sourceIdentity": {
+                      "sourceKind": "azpr-newtable-skill-level-display",
+                      "sourceStatus": "confirmed-display-cooldown-logic-zero",
+                      "subSkillId": 10101013,
+                      "durationFieldPath": "skill_level.rows[id=524].coolDown",
+                      "chargeCountFieldPath": null
+                    },
+                    "applied": true
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 1,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              },
+              {
+                "id": "action-0002",
+                "type": "skill",
+                "skillId": 10101001,
+                "actorCharacterId": 101010,
+                "startMs": 6483.333333,
+                "durationMs": 1200,
+                "level": 1,
+                "actionVariantIndex": 0,
+                "damageSegmentIndex": 0,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 1,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 72,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 1,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "partially-resolved",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "applied",
+                "scenarioRuntimeStatus": "source-verified",
+                "hitOverrides": {},
+                "durationFrames": 72,
+                "timingSource": "next-control-input-window",
+                "timingStatus": "applied",
+                "timingReasons": [],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+                "needsTimingData": false,
+                "note": "普通攻击 A1 · control 10101001 · 9 个命中绑定",
+                "insertion": null,
+                "generationBatch": {
+                  "batchId": "attack-group-action-0002",
+                  "source": "normal-attack-input-chain",
+                  "skillId": 10101001,
+                  "actorCharacterId": 101010,
+                  "level": 1,
+                  "variantCount": 3,
+                  "segmentCount": 3,
+                  "createdAt": "2026-07-26T00:38:26.299Z"
+                },
+                "attackGroupId": "attack-group-action-0002",
+                "attackSequenceIndex": 1,
+                "attackSequenceTotal": 3,
+                "attackInput": {
+                  "identity": "actor|101010|10101001|0|10101001|attack-input-1",
+                  "sequenceIndex": 1,
+                  "sequenceTotal": 3,
+                  "label": "A1",
+                  "controlSkillId": 10101001,
+                  "selectedSubSkillIndex": 1,
+                  "playerSkillId": null,
+                  "resourceMapIndex": 0,
+                  "animationDurationFrames": 215,
+                  "animationDurationStatus": "applied",
+                  "hitEndFrame": 12,
+                  "effectiveDurationFrames": 72,
+                  "durationFrames": 72,
+                  "durationStatus": "applied",
+                  "durationBasis": "next-control-input-window",
+                  "durationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+                  "actionScheduling": {
+                    "status": "exact",
+                    "kind": "exact-selected-variant-occupancy",
+                    "durationFrames": 72,
+                    "planningDurationFrames": null,
+                    "selectedSubSkillIndex": 1,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+                    "sourceStatus": "verified-input-occupancy",
+                    "variantModelStatus": "partially-resolved",
+                    "reasons": []
+                  },
+                  "sourceEvidenceStatus": "applied",
+                  "scenarioRuntimeStatus": "source-verified",
+                  "defaultLinkDelayFrames": 0,
+                  "linkWindow": {
+                    "kind": "control-transition-window",
+                    "startFrame": 72,
+                    "endFrame": 108,
+                    "durationFrames": 36,
+                    "targetControlSkillId": 10101004,
+                    "targetSubSkillIndex": 1,
+                    "allowAttack": false,
+                    "baseOnInput": false,
+                    "inputToIndex": false,
+                    "bridgeType": 0,
+                    "continuousAttackType": 1,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json"
+                  },
+                  "linkTimingStatus": "applied",
+                  "linkTimingBasis": "next-control-input-window",
+                  "linkSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json",
+                  "linkTimingReasons": [],
+                  "selectedHitIdentities": [
+                    "10101001|1|elements|1|7245988392201001564|13|1",
+                    "10101001|1|elements|1|7245988392201001564|18|2",
+                    "10101001|1|elements|1|7245988392201001564|23|3",
+                    "10101001|1|elements|1|7245988392201001564|28|4",
+                    "10101001|1|elements|1|7245988392201001564|33|5",
+                    "10101001|1|elements|1|7245988392201001564|38|6",
+                    "10101001|1|elements|2|-393717411505334080|55|7",
+                    "10101001|1|elements|2|-393717411505334080|60|8",
+                    "10101001|1|elements|2|-393717411505334080|65|9"
+                  ],
+                  "hitCount": 9,
+                  "classification": "applied",
+                  "reasons": [],
+                  "sourceIdentity": "workbench-seed.gameData.skills[id=10101001]|NewTable/skillsub_logic.rows[skillId=10101001].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/skill_control_10101001__2695099335427283981.json"
+                },
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-no-confirmed-status",
+                  "actionId": "action-0002",
+                  "skillId": 10101001,
+                  "actionVariantIndex": 0,
+                  "actionKind": "normal-attack",
+                  "cooldown": {
+                    "status": "no-confirmed-cooldown",
+                    "durationMs": null,
+                    "chargeCount": null,
+                    "sourceIdentity": null,
+                    "applied": false
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 0,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              },
+              {
+                "id": "action-0003",
+                "type": "skill",
+                "skillId": 10101001,
+                "actorCharacterId": 101010,
+                "startMs": 7683.333333,
+                "durationMs": 1250,
+                "level": 1,
+                "actionVariantIndex": 0,
+                "damageSegmentIndex": 0,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 1,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 75,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 1,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "variant-condition-not-yet-modeled",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "static-evidence-gap",
+                "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+                "hitOverrides": {},
+                "durationFrames": 75,
+                "timingSource": "next-control-input-window",
+                "timingStatus": "applied",
+                "timingReasons": [
+                  "trigger-frame-missing",
+                  "projectile-impact-frame-runtime-dependent",
+                  "sp-formula-not-literal-function-5",
+                  "effect-trigger-frame-missing"
+                ],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+                "needsTimingData": false,
+                "note": "普通攻击 A2 · control 10101004 · 12 个命中绑定",
+                "insertion": null,
+                "generationBatch": {
+                  "batchId": "attack-group-action-0002",
+                  "source": "normal-attack-input-chain",
+                  "skillId": 10101001,
+                  "actorCharacterId": 101010,
+                  "level": 1,
+                  "variantCount": 3,
+                  "segmentCount": 3,
+                  "createdAt": "2026-07-26T00:38:26.299Z"
+                },
+                "attackGroupId": "attack-group-action-0002",
+                "attackSequenceIndex": 2,
+                "attackSequenceTotal": 3,
+                "attackInput": {
+                  "identity": "actor|101010|10101001|0|10101004|attack-input-4",
+                  "sequenceIndex": 2,
+                  "sequenceTotal": 3,
+                  "label": "A2",
+                  "controlSkillId": 10101004,
+                  "selectedSubSkillIndex": 1,
+                  "playerSkillId": null,
+                  "resourceMapIndex": 0,
+                  "animationDurationFrames": 225,
+                  "animationDurationStatus": "applied",
+                  "hitEndFrame": 0,
+                  "effectiveDurationFrames": 75,
+                  "durationFrames": 75,
+                  "durationStatus": "applied",
+                  "durationBasis": "next-control-input-window",
+                  "durationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+                  "actionScheduling": {
+                    "status": "exact",
+                    "kind": "exact-selected-variant-occupancy",
+                    "durationFrames": 75,
+                    "planningDurationFrames": null,
+                    "selectedSubSkillIndex": 1,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+                    "sourceStatus": "verified-input-occupancy",
+                    "variantModelStatus": "variant-condition-not-yet-modeled",
+                    "reasons": []
+                  },
+                  "sourceEvidenceStatus": "static-evidence-gap",
+                  "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+                  "defaultLinkDelayFrames": 0,
+                  "linkWindow": {
+                    "kind": "control-transition-window",
+                    "startFrame": 75,
+                    "endFrame": 120,
+                    "durationFrames": 45,
+                    "targetControlSkillId": 10101005,
+                    "targetSubSkillIndex": 1,
+                    "allowAttack": false,
+                    "baseOnInput": false,
+                    "inputToIndex": false,
+                    "bridgeType": 0,
+                    "continuousAttackType": 1,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json"
+                  },
+                  "linkTimingStatus": "applied",
+                  "linkTimingBasis": "next-control-input-window",
+                  "linkSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json",
+                  "linkTimingReasons": [],
+                  "selectedHitIdentities": [
+                    "10101004|1|elements|0|-7672362046032568081|8|1",
+                    "10101004|1|elements|0|-7672362046032568081|13|2",
+                    "10101004|1|elements|1|-3490069646761131835|27|3",
+                    "10101004|1|elements|1|-3490069646761131835|32|4",
+                    "10101004|1|elements|3|-1862339442599942768|57|5",
+                    "10101004|1|elements|3|-1862339442599942768|63|6",
+                    "10101004|1|elements|3|-1862339442599942768|69|7",
+                    "10101004|1|elements|3|-1862339442599942768|75|8",
+                    "10101004|1|elements|3|-1862339442599942768|81|9",
+                    "10101004|1|elements|3|-1862339442599942768|87|10",
+                    "10101004|1|elements|3|-1862339442599942768|93|11",
+                    "10101004|1|elements|3|-1862339442599942768|99|12"
+                  ],
+                  "hitCount": 12,
+                  "classification": "unresolved",
+                  "reasons": [
+                    "trigger-frame-missing",
+                    "projectile-impact-frame-runtime-dependent",
+                    "sp-formula-not-literal-function-5",
+                    "effect-trigger-frame-missing"
+                  ],
+                  "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101004]|NewTable/skillsub_logic.rows[skillId=10101004].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json"
+                },
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-no-confirmed-status",
+                  "actionId": "action-0003",
+                  "skillId": 10101001,
+                  "actionVariantIndex": 0,
+                  "actionKind": "normal-attack",
+                  "cooldown": {
+                    "status": "no-confirmed-cooldown",
+                    "durationMs": null,
+                    "chargeCount": null,
+                    "sourceIdentity": null,
+                    "applied": false
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 0,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              },
+              {
+                "id": "action-0004",
+                "type": "skill",
+                "skillId": 10101001,
+                "actorCharacterId": 101010,
+                "startMs": 8933.333333,
+                "durationMs": 1200,
+                "level": 1,
+                "actionVariantIndex": 0,
+                "damageSegmentIndex": 0,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 1,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 72,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 1,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "variant-condition-not-yet-modeled",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "applied",
+                "scenarioRuntimeStatus": "source-verified",
+                "hitOverrides": {},
+                "durationFrames": 72,
+                "timingSource": "attack-reopen-window",
+                "timingStatus": "applied",
+                "timingReasons": [
+                  "nested-damage-trigger-lifecycle-not-expanded",
+                  "nested-effect-wrapper-semantics-unresolved",
+                  "effect-trigger-frame-missing",
+                  "effect-target-unresolved"
+                ],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+                "needsTimingData": false,
+                "note": "普通攻击 A3 · control 10101005 · 5 个命中绑定",
+                "insertion": null,
+                "generationBatch": {
+                  "batchId": "attack-group-action-0002",
+                  "source": "normal-attack-input-chain",
+                  "skillId": 10101001,
+                  "actorCharacterId": 101010,
+                  "level": 1,
+                  "variantCount": 3,
+                  "segmentCount": 3,
+                  "createdAt": "2026-07-26T00:38:26.299Z"
+                },
+                "attackGroupId": "attack-group-action-0002",
+                "attackSequenceIndex": 3,
+                "attackSequenceTotal": 3,
+                "attackInput": {
+                  "identity": "actor|101010|10101001|0|10101005|attack-input-5",
+                  "sequenceIndex": 3,
+                  "sequenceTotal": 3,
+                  "label": "A3",
+                  "controlSkillId": 10101005,
+                  "selectedSubSkillIndex": 1,
+                  "playerSkillId": null,
+                  "resourceMapIndex": 0,
+                  "animationDurationFrames": 240,
+                  "animationDurationStatus": "applied",
+                  "hitEndFrame": 73,
+                  "effectiveDurationFrames": 72,
+                  "durationFrames": 72,
+                  "durationStatus": "applied",
+                  "durationBasis": "attack-reopen-window",
+                  "durationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+                  "actionScheduling": {
+                    "status": "exact",
+                    "kind": "exact-selected-variant-occupancy",
+                    "durationFrames": 72,
+                    "planningDurationFrames": null,
+                    "selectedSubSkillIndex": 1,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+                    "sourceStatus": "verified-input-occupancy",
+                    "variantModelStatus": "variant-condition-not-yet-modeled",
+                    "reasons": []
+                  },
+                  "sourceEvidenceStatus": "applied",
+                  "scenarioRuntimeStatus": "source-verified",
+                  "defaultLinkDelayFrames": 0,
+                  "linkWindow": {
+                    "kind": "control-transition-window",
+                    "startFrame": 72,
+                    "endFrame": 319,
+                    "durationFrames": 247,
+                    "targetControlSkillId": 80102,
+                    "targetSubSkillIndex": 0,
+                    "allowAttack": true,
+                    "baseOnInput": false,
+                    "inputToIndex": false,
+                    "bridgeType": 3,
+                    "continuousAttackType": 0,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json"
+                  },
+                  "linkTimingStatus": "applied",
+                  "linkTimingBasis": "attack-reopen-window",
+                  "linkSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json",
+                  "linkTimingReasons": [],
+                  "selectedHitIdentities": [
+                    "10101005|1|elements|2|4000396690601339399|32|1",
+                    "10101005|1|elements|2|4000396690601339399|38|2",
+                    "10101005|1|elements|2|4000396690601339399|44|3",
+                    "10101005|1|elements|2|4000396690601339399|50|4",
+                    "10101005|1|elements|2|4000396690601339399|56|5"
+                  ],
+                  "hitCount": 5,
+                  "classification": "applied",
+                  "reasons": [
+                    "nested-damage-trigger-lifecycle-not-expanded",
+                    "nested-effect-wrapper-semantics-unresolved",
+                    "effect-trigger-frame-missing",
+                    "effect-target-unresolved"
+                  ],
+                  "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101005]|NewTable/skillsub_logic.rows[skillId=10101005].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json"
+                },
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-no-confirmed-status",
+                  "actionId": "action-0004",
+                  "skillId": 10101001,
+                  "actionVariantIndex": 0,
+                  "actionKind": "normal-attack",
+                  "cooldown": {
+                    "status": "no-confirmed-cooldown",
+                    "durationMs": null,
+                    "chargeCount": null,
+                    "sourceIdentity": null,
+                    "applied": false
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 0,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              },
+              {
+                "id": "action-0005",
+                "type": "skill",
+                "skillId": 10101001,
+                "actorCharacterId": 101010,
+                "startMs": 8933.333333,
+                "durationMs": 1250,
+                "level": 1,
+                "actionVariantIndex": 2,
+                "damageSegmentIndex": 2,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 0,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 75,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 0,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "partially-resolved",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "applied",
+                "scenarioRuntimeStatus": "source-verified",
+                "hitOverrides": {},
+                "durationFrames": 75,
+                "timingSource": "verified-specific-input-window",
+                "timingStatus": "applied",
+                "timingReasons": [],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+                "needsTimingData": false,
+                "note": "重击：160%；真实动作帧等待 asset 或运行时捕获补充。",
+                "insertion": null,
+                "generationBatch": null,
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-no-confirmed-status",
+                  "actionId": "action-0005",
+                  "skillId": 10101001,
+                  "actionVariantIndex": 2,
+                  "actionKind": "charged-attack",
+                  "cooldown": {
+                    "status": "no-confirmed-cooldown",
+                    "durationMs": null,
+                    "chargeCount": null,
+                    "sourceIdentity": null,
+                    "applied": false
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 0,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              },
+              {
+                "id": "action-0006",
+                "type": "skill",
+                "skillId": 10101012,
+                "actorCharacterId": 101010,
+                "startMs": 11183.333333,
+                "durationMs": 2000,
+                "level": 1,
+                "actionVariantIndex": 0,
+                "damageSegmentIndex": 0,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 0,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 120,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 0,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "resolved",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "applied",
+                "scenarioRuntimeStatus": "source-verified",
+                "hitOverrides": {},
+                "durationFrames": 120,
+                "timingSource": "verified-unconditional-attack-reopen-window",
+                "timingStatus": "applied",
+                "timingReasons": [],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json",
+                "needsTimingData": false,
+                "note": "星鸣技：330%；真实动作帧等待 asset 或运行时捕获补充。",
+                "insertion": null,
+                "generationBatch": null,
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-with-cooldown",
+                  "actionId": "action-0006",
+                  "skillId": 10101012,
+                  "actionVariantIndex": 0,
+                  "actionKind": "star-skill",
+                  "cooldown": {
+                    "status": "confirmed-cooldown",
+                    "durationMs": 16000,
+                    "chargeCount": 1,
+                    "sourceIdentity": {
+                      "sourceKind": "azpr-newtable-skill-logic-index",
+                      "sourceStatus": "confirmed-logic-cooldown",
+                      "subSkillId": 10101012,
+                      "durationFieldPath": "skillsub_logic.rows[skillId=10101012].coolDown",
+                      "chargeCountFieldPath": "skillsub_logic.rows[skillId=10101012].coolDownCount"
+                    },
+                    "applied": true
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 1,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              },
+              {
+                "id": "action-0007",
+                "type": "skill",
+                "skillId": 10101001,
+                "actorCharacterId": 101010,
+                "startMs": 12616.666667,
+                "durationMs": 1250,
+                "level": 1,
+                "actionVariantIndex": 2,
+                "damageSegmentIndex": 2,
+                "targetCharacterId": 101003,
+                "resource": "sp",
+                "change": 50,
+                "reason": "manual-axis-resource",
+                "eventType": "phase",
+                "controlSubSkillIndex": 0,
+                "variantInputSelection": null,
+                "actionScheduling": {
+                  "status": "exact",
+                  "kind": "exact-selected-variant-occupancy",
+                  "durationFrames": 75,
+                  "planningDurationFrames": null,
+                  "selectedSubSkillIndex": 0,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+                  "sourceStatus": "verified-input-occupancy",
+                  "variantModelStatus": "partially-resolved",
+                  "reasons": []
+                },
+                "sourceEvidenceStatus": "applied",
+                "scenarioRuntimeStatus": "source-verified",
+                "hitOverrides": {},
+                "durationFrames": 75,
+                "timingSource": "verified-specific-input-window",
+                "timingStatus": "applied",
+                "timingReasons": [],
+                "timingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json",
+                "needsTimingData": false,
+                "note": "重击：160%；真实动作帧等待 asset 或运行时捕获补充。",
+                "insertion": null,
+                "generationBatch": null,
+                "statusGeneration": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrActionStatusGeneration",
+                  "sourceKind": "azpr-action-status-generation",
+                  "status": "action-status-generation-ready-no-confirmed-status",
+                  "actionId": "action-0007",
+                  "skillId": 10101001,
+                  "actionVariantIndex": 2,
+                  "actionKind": "charged-attack",
+                  "cooldown": {
+                    "status": "no-confirmed-cooldown",
+                    "durationMs": null,
+                    "chargeCount": null,
+                    "sourceIdentity": null,
+                    "applied": false
+                  },
+                  "effects": [],
+                  "summary": {
+                    "confirmedCooldownCount": 0,
+                    "effectCandidateCount": 0,
+                    "generatedEffectCount": 0,
+                    "trackingOnlyEffectCount": 0,
+                    "calculatorAppliedEffectCount": 0
+                  },
+                  "appliedToCalculators": false
+                },
+                "effectCommands": []
+              }
+            ],
+            "actionRelations": [],
+            "cycleBoundaries": [],
+            "initialRuntimeState": {
+              "schemaVersion": 5,
+              "sourceKind": "azpr-initial-runtime-state",
+              "contractName": "AzPrInitialRuntimeState",
+              "status": "initial-runtime-state-ready",
+              "source": {
+                "sourceScenarioId": null,
+                "sourceScenarioName": null,
+                "boundaryId": null,
+                "boundaryTimeMs": null
+              },
+              "controlledActor": {
+                "actorId": "actor-101010",
+                "characterId": 101010,
+                "actorName": "涂山小玉",
+                "baselineStatus": "baseline-project-initial-controlled-actor"
+              },
+              "enemy": null,
+              "selfEnergyByActor": [],
+              "kiboEnergyBySlot": [],
+              "activeEffects": [],
+              "tuningMarks": [],
+              "specialResourcesByActor": [],
+              "applied": true
+            },
+            "combatScenario": {
+              "projectile": {
+                "targetDistance": 0,
+                "defaultWillHit": true
+              }
+            },
+            "runtimeSampleCaptures": [],
+            "selectedActionId": "action-0007"
+          }
+        }
+      ]
+    }
+  }
+}

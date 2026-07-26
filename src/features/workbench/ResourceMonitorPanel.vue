@@ -144,21 +144,23 @@
             class="runtime-curve-series"
           >
             <polyline
-              v-if="series.chartPoints.length > 1"
+              v-if="series.chartLinePoints.length > 1"
               class="runtime-curve-line"
-              :points="formatRuntimeCurvePolyline(series.chartPoints)"
+              :points="formatRuntimeCurvePolyline(series.chartLinePoints)"
               :style="{ stroke: series.color }"
               :data-series-key="series.key"
               :data-track-key="series.trackKey"
               :data-curve-mode="runtimeCurveMode"
+              :data-source-point-count="series.sourcePointCount"
+              :data-display-point-count="series.displayPointCount"
               data-testid="workbench-runtime-resource-chart-line"
             />
             <circle
-              v-for="point in series.chartPoints"
-              :key="point.statePointId"
+              v-for="point in series.chartNodePoints"
+              :key="point.nodeId ?? point.statePointId"
               class="runtime-curve-point"
               :class="{
-                selected: point.statePointId === flowSelectedStatePointId,
+                selected: runtimeCurvePointIsSelected(point),
               }"
               :cx="point.x"
               :cy="point.y"
@@ -176,16 +178,11 @@
               :data-overrun="point.overrunValue"
               :data-curve-mode="runtimeCurveMode"
               :data-state-point-id="point.statePointId"
+              :data-state-point-ids="point.statePointIds?.join(',') ?? ''"
               :data-runtime-focus-source="
-                point.statePointId === flowSelectedStatePointId
-                  ? flowRuntimeFocusSource
-                  : ''
+                runtimeCurvePointIsSelected(point) ? flowRuntimeFocusSource : ''
               "
-              :data-selected="
-                point.statePointId === flowSelectedStatePointId
-                  ? 'true'
-                  : 'false'
-              "
+              :data-selected="runtimeCurvePointIsSelected(point)"
               data-testid="workbench-runtime-resource-chart-point"
               role="button"
               tabindex="0"
@@ -373,16 +370,24 @@
       </div>
     </div>
 
-    <ol v-if="resourceTimeline.length" class="resource-list">
-      <li
-        v-for="entry in resourceTimeline"
-        :key="`${entry.actionId}-${entry.resource}-${entry.timeMs}`"
-      >
-        <span class="time">{{ entry.timeMs }}ms</span>
-        <span class="resource">{{ entry.resource.toUpperCase() }}</span>
-        <strong>{{ formatSigned(entry.change) }}</strong>
-      </li>
-    </ol>
+    <WindowedList
+      v-if="resourceTimeline.length"
+      class="resource-list"
+      data-testid="workbench-resource-timeline-window"
+      :items="resourceTimeline"
+      :item-height="42"
+      :max-height="180"
+      :overscan="3"
+      :item-key="createResourceTimelineEntryKey"
+    >
+      <template #default="{ item: entry }">
+        <div class="resource-row">
+          <span class="time">{{ entry.timeMs }}ms</span>
+          <span class="resource">{{ entry.resource.toUpperCase() }}</span>
+          <strong>{{ formatSigned(entry.change) }}</strong>
+        </div>
+      </template>
+    </WindowedList>
     <p v-else class="empty-state" data-testid="workbench-resource-empty">
       暂无资源事件
     </p>
@@ -398,7 +403,10 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
+import {
+  getCachedWorkbenchRuntimeDerivedView,
+  getCachedWorkbenchRuntimeOutputConsumerView,
+} from './workbenchRuntimeOutputViewCache';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
@@ -409,6 +417,9 @@ import {
   createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 import { createRuntimeFocusSourceView } from './runtimeFocusSource';
+import { projectTimelineStateDisplaySeries } from '../../simulation/projection/projectTimelineStateDisplaySeries';
+import { msToFrame } from '../../domain/timebase';
+import WindowedList from './WindowedList.vue';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
 const RUNTIME_CURVE_CHART_HEIGHT = 132;
@@ -466,11 +477,15 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  durationMs: {
+    type: Number,
+    default: 0,
+  },
 });
 const emit = defineEmits(['dispatch-flow-action']);
 const runtimeCurveMode = ref('delta');
 const runtimeOutputView = computed(() =>
-  createWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
+  getCachedWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
 );
 
 const resourceTotals = computed(() => {
@@ -543,9 +558,15 @@ const runtimeStatePointOrderById = computed(
 );
 
 const runtimeCurveSourceSeries = computed(() =>
-  createRuntimeCurveSourceSeries(
-    runtimeOutputView.value,
-    runtimeStatePointContextByDeltaId.value
+  getCachedWorkbenchRuntimeDerivedView(
+    props.runtimeProjection,
+    `resource-curve-source-series:${Number(props.durationMs) || 0}`,
+    runtimeView =>
+      createRuntimeCurveSourceSeries(
+        runtimeView,
+        runtimeView.statePointContextByDeltaId,
+        props.durationMs
+      )
   )
 );
 
@@ -561,7 +582,8 @@ const runtimeCurveSeries = computed(() =>
     layoutRuntimeCurveSeries(
       series,
       runtimeCurveDomain.value,
-      runtimeCurveMode.value
+      runtimeCurveMode.value,
+      flowSelectedStatePointId.value
     )
   )
 );
@@ -573,7 +595,10 @@ const runtimeCurveZeroY = computed(() =>
 const runtimeCurveNavigationPoints = computed(() =>
   runtimeCurveSourceSeries.value
     .flatMap((series, seriesIndex) =>
-      (series.points ?? []).map((point, pointIndex) => ({
+      getRuntimeCurveNavigationPoints(
+        series,
+        flowSelectedStatePointId.value
+      ).map((point, pointIndex) => ({
         ...point,
         seriesKey: series.key,
         seriesLabel: series.label,
@@ -692,6 +717,16 @@ function formatSigned(value) {
   return `${number > 0 ? '+' : ''}${number}`;
 }
 
+function createResourceTimelineEntryKey(entry, index) {
+  return [
+    entry?.actionId ?? '',
+    entry?.resource ?? '',
+    entry?.timeMs ?? 0,
+    entry?.sourceDeltaId ?? '',
+    index,
+  ].join('|');
+}
+
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
 }
@@ -714,7 +749,8 @@ function formatRuntimeActorEnergyState(actor) {
 
 function createRuntimeCurveSourceSeries(
   runtimeOutputView,
-  runtimeContextByDeltaId
+  runtimeContextByDeltaId,
+  durationMs
 ) {
   if (!runtimeOutputView?.ready) {
     return [];
@@ -732,6 +768,7 @@ function createRuntimeCurveSourceSeries(
       points: enemyStateCurve.points ?? [],
       stateMetric: enemyStateCurve.stateMetrics?.hp,
       runtimeContextByDeltaId,
+      durationMs,
     }),
     createRuntimeEnemyCurveSeries({
       key: 'enemy-toughness',
@@ -742,9 +779,15 @@ function createRuntimeCurveSourceSeries(
       points: enemyStateCurve.points ?? [],
       stateMetric: enemyStateCurve.stateMetrics?.toughness,
       runtimeContextByDeltaId,
+      durationMs,
     }),
     ...resourceCurveRows.map((actor, index) =>
-      createRuntimeEnergyCurveSeries(actor, index, runtimeContextByDeltaId)
+      createRuntimeEnergyCurveSeries(
+        actor,
+        index,
+        runtimeContextByDeltaId,
+        durationMs
+      )
     ),
   ];
 }
@@ -758,6 +801,7 @@ function createRuntimeEnemyCurveSeries({
   points,
   stateMetric,
   runtimeContextByDeltaId,
+  durationMs,
 }) {
   return createRuntimeCurveSeries({
     key,
@@ -768,10 +812,16 @@ function createRuntimeEnemyCurveSeries({
     valueField,
     stateMetric,
     runtimeContextByDeltaId,
+    durationMs,
   });
 }
 
-function createRuntimeEnergyCurveSeries(actor, index, runtimeContextByDeltaId) {
+function createRuntimeEnergyCurveSeries(
+  actor,
+  index,
+  runtimeContextByDeltaId,
+  durationMs
+) {
   return createRuntimeCurveSeries({
     key: `self-energy-${actor.actorId ?? index}`,
     trackKey: 'selfEnergyChange',
@@ -782,6 +832,7 @@ function createRuntimeEnergyCurveSeries(actor, index, runtimeContextByDeltaId) {
     valueField: 'energyDelta',
     stateMetric: actor.stateMetric,
     runtimeContextByDeltaId,
+    durationMs,
   });
 }
 
@@ -795,6 +846,7 @@ function createRuntimeCurveSeries({
   valueField,
   stateMetric = null,
   runtimeContextByDeltaId,
+  durationMs,
 }) {
   let cumulative = 0;
   const curvePoints = [...(points ?? [])]
@@ -828,6 +880,50 @@ function createRuntimeCurveSeries({
     })
     .filter(Boolean);
   const finalPoint = curvePoints[curvePoints.length - 1] ?? null;
+  const displaySeries = projectTimelineStateDisplaySeries({
+    trackKey,
+    points: curvePoints.map(point => ({
+      ...point,
+      trackKey,
+      afterValue: point.stateValue,
+    })),
+    initialValue: strictNumberOrNull(stateMetric?.initialValue) ?? 0,
+    maxValue: strictNumberOrNull(stateMetric?.maxValue),
+    durationMs: Math.max(
+      Number(durationMs) || 0,
+      curvePoints.at(-1)?.timeMs ?? 0
+    ),
+    resolveStatePointId: point => point.statePointId ?? '',
+  });
+  const pointByStatePointId = new Map(
+    curvePoints.map(point => [point.statePointId, point])
+  );
+  const semanticPoints = displaySeries.semanticNodes.map((node, index) => {
+    const sourcePoint =
+      [...(node.statePointIds ?? [])]
+        .reverse()
+        .map(statePointId => pointByStatePointId.get(statePointId))
+        .find(Boolean) ?? null;
+    return {
+      ...sourcePoint,
+      ...node,
+      delta: sourcePoint?.delta ?? node.delta,
+      nodeId: `${key}|semantic|${node.id ?? index}`,
+      frameLabel: sourcePoint?.frameLabel ?? `${msToFrame(node.timeMs)}f`,
+      stateValue: node.currentValue,
+      rawStateValue: node.currentValue,
+      plotValue: node.currentValue,
+    };
+  });
+  const displayLinePoints = displaySeries.linePoints.map((point, index) => ({
+    ...point,
+    nodeId: `${key}|line|${index}`,
+    frameIndex: msToFrame(point.timeMs),
+    frameLabel: `${msToFrame(point.timeMs)}f`,
+    stateValue: point.value,
+    rawStateValue: point.value,
+    plotValue: point.value,
+  }));
 
   return {
     key,
@@ -842,8 +938,12 @@ function createRuntimeCurveSeries({
     baselineInitialValue: stateMetric?.initialValue ?? null,
     overrunValue: stateMetric?.overrunValue ?? finalPoint?.overrunValue ?? 0,
     points: curvePoints,
+    semanticPoints,
+    displayLinePoints,
     sourcePointCount: curvePoints.length,
-    pointCount: curvePoints.length,
+    displayPointCount: displayLinePoints.length,
+    semanticPointCount: semanticPoints.length,
+    pointCount: semanticPoints.length,
     finalValue: cumulative,
     finalStateValue:
       finalPoint?.stateValue ?? stateMetric?.currentValue ?? null,
@@ -884,7 +984,7 @@ function createRuntimeCurvePointState(stateMetric, cumulative) {
 
 function createRuntimeCurveDomain(seriesRows, curveMode) {
   const points = seriesRows.flatMap(series =>
-    getRuntimeCurvePlottablePoints(series, curveMode)
+    getRuntimeCurveLinePoints(series, curveMode)
   );
   const frames = points.map(point => numberOrNull(point.frameIndex) ?? 0);
   const values = [
@@ -916,21 +1016,47 @@ function createRuntimeCurveDomain(seriesRows, curveMode) {
   };
 }
 
-function layoutRuntimeCurveSeries(series, domain, curveMode) {
-  const plottablePoints = getRuntimeCurvePlottablePoints(series, curveMode);
+function layoutRuntimeCurveSeries(
+  series,
+  domain,
+  curveMode,
+  selectedStatePointId
+) {
+  const linePoints = getRuntimeCurveLinePoints(series, curveMode);
+  const nodePoints = getRuntimeCurveNavigationPoints(
+    series,
+    selectedStatePointId
+  ).map(point => ({
+    ...point,
+    plotValue:
+      curveMode === 'state'
+        ? strictNumberOrNull(point.stateValue)
+        : numberOrZero(point.cumulative),
+  }));
   return {
     ...series,
-    pointCount: plottablePoints.length,
-    chartPoints: plottablePoints.map(point => ({
+    pointCount: nodePoints.length,
+    chartLinePoints: linePoints.map(point => ({
       ...point,
       x: scaleRuntimeCurveFrame(point.frameIndex, domain),
       y: scaleRuntimeCurveValue(point.plotValue, domain),
     })),
+    chartNodePoints: nodePoints
+      .filter(point => Number.isFinite(point.plotValue))
+      .map(point => ({
+        ...point,
+        x: scaleRuntimeCurveFrame(point.frameIndex, domain),
+        y: scaleRuntimeCurveValue(point.plotValue, domain),
+      })),
   };
 }
 
-function getRuntimeCurvePlottablePoints(series, curveMode) {
-  return (series.points ?? [])
+function getRuntimeCurveLinePoints(series, curveMode) {
+  const points =
+    curveMode === 'state'
+      ? (series.displayLinePoints ?? [])
+      : (series.semanticPoints ?? []);
+  return points
     .map(point => ({
       ...point,
       plotValue:
@@ -939,6 +1065,46 @@ function getRuntimeCurvePlottablePoints(series, curveMode) {
           : numberOrZero(point.cumulative),
     }))
     .filter(point => Number.isFinite(point.plotValue));
+}
+
+function getRuntimeCurveNavigationPoints(series, selectedStatePointId = '') {
+  const semanticPoints = [...(series.semanticPoints ?? [])];
+  if (
+    !selectedStatePointId ||
+    semanticPoints.some(point =>
+      runtimeCurvePointContainsStatePoint(point, selectedStatePointId)
+    )
+  ) {
+    return semanticPoints;
+  }
+  const selectedPoint = (series.points ?? []).find(
+    point => point.statePointId === selectedStatePointId
+  );
+  return selectedPoint
+    ? [
+        ...semanticPoints,
+        {
+          ...selectedPoint,
+          nodeId: `${series.key}|selected|${selectedStatePointId}`,
+          statePointIds: [selectedStatePointId],
+        },
+      ].sort(compareRuntimeCurvePoints)
+    : semanticPoints;
+}
+
+function runtimeCurvePointContainsStatePoint(point, statePointId) {
+  return Boolean(
+    statePointId &&
+    (point?.statePointId === statePointId ||
+      point?.statePointIds?.includes(statePointId))
+  );
+}
+
+function runtimeCurvePointIsSelected(point) {
+  return runtimeCurvePointContainsStatePoint(
+    point,
+    flowSelectedStatePointId.value
+  );
 }
 
 function scaleRuntimeCurveFrame(frameIndex, domain) {
@@ -1872,21 +2038,18 @@ h2 {
 }
 
 .resource-list {
-  display: grid;
-  gap: 8px;
-  max-height: 180px;
-  margin: 0;
-  padding: 0 14px 14px;
-  overflow: auto;
-  list-style: none;
+  margin: 0 14px 14px;
 }
 
-li {
+.resource-row {
   display: grid;
   grid-template-columns: 72px minmax(60px, 1fr) auto;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  box-sizing: border-box;
+  height: 36px;
+  margin: 3px 0;
+  padding: 7px 10px;
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.1);
   font-size: 12px;
@@ -1902,7 +2065,7 @@ li {
   font-weight: 700;
 }
 
-li strong {
+.resource-row strong {
   color: #ffffff;
 }
 

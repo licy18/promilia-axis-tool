@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
-import { flushPromises, mount } from '@vue/test-utils';
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import {
   afterAll,
+  afterEach,
   beforeAll,
   beforeEach,
   describe,
@@ -39,10 +40,16 @@ import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vu
 import WorkbenchLoadoutPicker from '../../features/workbench/WorkbenchLoadoutPicker.vue';
 import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
 import {
+  getWorkbenchPerformanceCounters,
+  resetWorkbenchPerformanceCounters,
+} from '../../features/workbench/workbenchPerformanceInstrumentation';
+import {
   installProjectSimulationSkillDiagnostics,
   resetProjectSimulationSkillDiagnostics,
 } from '../../simulation/projection/projectSimulationResult';
 import Workbench from '../../views/Workbench.vue';
+
+enableAutoUnmount(afterEach);
 
 const workbenchMechanicsProfileMockState = vi.hoisted(() => ({
   useVerifiedProfile: false,
@@ -139,6 +146,24 @@ async function settleWorkbenchAsyncPanels() {
   await nextTick();
 }
 
+async function selectRuntimeReviewTab(wrapper, tabKey) {
+  await wrapper
+    .get(
+      `[data-testid="workbench-runtime-review-tab"][data-review-tab="${tabKey}"]`
+    )
+    .trigger('click');
+  await settleWorkbenchAsyncPanels();
+}
+
+async function selectSideInspectorPanel(wrapper, panelKey) {
+  await wrapper
+    .get(
+      `[data-testid="workbench-side-inspector-tab"][data-inspector-panel="${panelKey}"]`
+    )
+    .trigger('click');
+  await settleWorkbenchAsyncPanels();
+}
+
 async function addSkillActionFromLibrary(wrapper, actionKind = 'dodge-attack') {
   const activeActor = wrapper.get(
     '[data-testid="workbench-action-library-actor"][data-active="true"]'
@@ -214,6 +239,34 @@ async function selectLoadoutFromTimeline(
   await nextTick();
 }
 
+async function selectEnemyInspector(wrapper) {
+  const enemy = workbenchSeed.gameData.enemies.find(
+    item => Number(item.id) === Number(workbenchSeed.defaults.enemyId)
+  );
+  wrapper.findComponent(TimelineGridPreview).vm.$emit('select-identity', {
+    kind: 'enemy',
+    enemyId: enemy.id,
+    label: enemy.name,
+  });
+  await nextTick();
+  await settleWorkbenchAsyncPanels();
+  await selectSideInspectorPanel(wrapper, 'enemy');
+}
+
+async function selectActorInspector(wrapper, characterId) {
+  const actor = workbenchSeed.gameData.characters.find(
+    item => Number(item.id) === Number(characterId)
+  );
+  wrapper.findComponent(TimelineGridPreview).vm.$emit('select-identity', {
+    kind: 'actor',
+    characterId: actor.id,
+    label: actor.name,
+  });
+  await nextTick();
+  await settleWorkbenchAsyncPanels();
+  await selectSideInspectorPanel(wrapper, 'team-loadout');
+}
+
 function getTimelineTeamSlot(wrapper, slotIndex) {
   return wrapper.get(
     `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-${slotIndex + 1}"]`
@@ -251,19 +304,19 @@ describe('Workbench view', () => {
       },
     });
 
-    const text = wrapper.text();
-
-    expect(text).toContain('工作台：末音 / 哈库茵剑舞 / 迅狼');
-    expect(text).toContain('末音');
-    expect(text).toContain('迅狼');
-    expect(text).toContain('哈库茵剑舞');
     const actionIdentity = wrapper.get(
       '[data-testid="workbench-action-identity"]'
     );
     expect(actionIdentity.get('img').attributes('src')).toMatch(
       /^\/assets\/actions\/tex_icon_skill_/
     );
-    expect(text).toContain('DAMAGE_PROJECTED');
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    const text = wrapper.text();
+
+    expect(text).toContain('工作台：末音 / 哈库茵剑舞 / 迅狼');
+    expect(text).toContain('末音');
+    expect(text).toContain('迅狼');
+    expect(text).toContain('哈库茵剑舞');
     expect(text).toContain('stage5-damage-layer-breakdown-v1');
     expect(text).toContain('三值来源');
     expect(text).toContain(
@@ -412,7 +465,9 @@ describe('Workbench view', () => {
     expect(
       runtimeReviewStack.findComponent(ResourceMonitorPanel).exists()
     ).toBe(true);
-    expect(runtimeReviewStack.findComponent(EventLogPanel).exists()).toBe(true);
+    expect(runtimeReviewStack.findComponent(EventLogPanel).exists()).toBe(
+      false
+    );
     const runtimeOutputs =
       runtimeReviewStack
         .findComponent(ResourceMonitorPanel)
@@ -432,9 +487,6 @@ describe('Workbench view', () => {
       },
     });
     expect(
-      runtimeReviewStack.findComponent(EventLogPanel).props('runtimeProjection')
-    ).toBe(runtimeOutputs);
-    expect(
       wrapper.findComponent(AnalysisPanel).props('runtimeProjection')
     ).toBe(runtimeOutputs);
     expect(
@@ -452,9 +504,6 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-resource-area"]')
         .attributes('data-runtime-review-role')
-    ).toBe('overview');
-    expect(
-      wrapper.find('.event-area').attributes('data-runtime-review-role')
     ).toBe('overview');
     const overviewPrimaryOperation = runtimeReviewStack.find(
       '[data-testid="workbench-runtime-review-primary-operation"]'
@@ -475,8 +524,10 @@ describe('Workbench view', () => {
     expect(sideInspector.attributes('data-main-flow-inspector-mode')).toBe(
       'action-properties'
     );
-    expect(sideInspector.attributes('style')).toContain('display: none');
-    expect(sideInspector.findComponent(PropertiesPanel).exists()).toBe(true);
+    expect(sideInspector.attributes('data-active-inspector-panel')).toBe(
+      'analysis'
+    );
+    expect(sideInspector.findComponent(PropertiesPanel).exists()).toBe(false);
     expect(sideInspector.find('.analysis-panel').exists()).toBe(true);
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
     expect(flowPanel.attributes('data-contract-name')).toBe(
@@ -611,6 +662,14 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
     ).toBe('1 日志');
+    await selectRuntimeReviewTab(wrapper, 'event');
+    expect(
+      runtimeReviewStack.findComponent(EventLogPanel).props('runtimeProjection')
+    ).toBe(runtimeOutputs);
+    expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
+    expect(
+      wrapper.find('.event-area').attributes('data-runtime-review-role')
+    ).toBe('overview');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
@@ -630,6 +689,7 @@ describe('Workbench view', () => {
       ['enemyToughnessDamage', '韧性0', 'false'],
       ['selfEnergyChange', '能量0', 'false'],
     ]);
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .findAll('[data-testid="workbench-runtime-energy-actor-row"]')
@@ -732,6 +792,10 @@ describe('Workbench view', () => {
       '[data-testid="workbench-runtime-resource-chart-point"]'
     );
     expect(runtimeCurvePoints[0].attributes('data-value')).toBe('12461');
+    const runtimeCurveStatePointId = runtimeCurvePoints[0].attributes(
+      'data-state-point-id'
+    );
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log"]').exists()
     ).toBe(true);
@@ -764,7 +828,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail-handoff"]')
         .exists()
     ).toBe(false);
-    expect(runtimeCurvePoints[0].attributes('data-state-point-id')).toBe(
+    expect(runtimeCurveStatePointId).toBe(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-state-point"]')
         .text()
@@ -986,7 +1050,10 @@ describe('Workbench view', () => {
     );
     await firstCandidatePoint.trigger('click');
     await nextTick();
-    expect(firstCandidatePoint.classes()).toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    expect(
+      wrapper.findComponent(AnalysisPanel).props('selectedStateCurvePointId')
+    ).toBe(firstCandidateStatePointId);
     expect(runtimeCurveNode.classes()).not.toContain('selected');
     await runtimeCurveNode.trigger('click');
     await nextTick();
@@ -1002,6 +1069,7 @@ describe('Workbench view', () => {
       },
     });
     expect(runtimeCurveNode.classes()).toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find(
@@ -1022,6 +1090,7 @@ describe('Workbench view', () => {
       'data-runtime-review-selected-state-point-id': appliedStatePointId,
       'data-runtime-review-source': 'state-curve-point',
     });
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const focusAllButton = wrapper.find(
       '[data-testid="workbench-state-curve-focus-all"]'
     );
@@ -1278,6 +1347,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-state-curve-view-summary"]').text()
     ).toBe('生成视角15/16点候选/采样/占位 · 全部轨道 · 全部三值点');
+    await selectRuntimeReviewTab(wrapper, 'event');
     await wrapper
       .find(
         '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="selfEnergyChange"]'
@@ -1328,6 +1398,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-row"]')
         .attributes('data-selected')
     ).toBe('true');
+    await selectRuntimeReviewTab(wrapper, 'resource');
     const actionResultCurveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
     );
@@ -1480,6 +1551,8 @@ describe('Workbench view', () => {
     );
     await actionContributionRows[0].trigger('click');
     await nextTick();
+    await selectRuntimeReviewTab(wrapper, 'event');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
@@ -1500,6 +1573,8 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
         .attributes('data-detail-source')
     ).toBe('runtime-selected-detail');
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    await selectRuntimeReviewTab(wrapper, 'resource');
     const contributionFocusedCurvePoint = wrapper.find(
       `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${appliedStatePointId}"]`
     );
@@ -1546,6 +1621,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curve-focus-selected"]')
         .classes()
     ).toContain('active');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
@@ -1578,6 +1654,231 @@ describe('Workbench view', () => {
     expect(text).toContain('low');
   });
 
+  it('unmounts heavy inspector and review panels when they are inactive', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+
+    expect(wrapper.findComponent(ResourceMonitorPanel).exists()).toBe(true);
+    expect(wrapper.findComponent(EventLogPanel).exists()).toBe(false);
+    expect(wrapper.findComponent(AnalysisPanel).exists()).toBe(false);
+
+    await wrapper
+      .get(
+        '[data-testid="workbench-runtime-review-tab"][data-review-tab="event"]'
+      )
+      .trigger('click');
+    expect(wrapper.findComponent(ResourceMonitorPanel).exists()).toBe(false);
+    expect(wrapper.findComponent(EventLogPanel).exists()).toBe(true);
+
+    await wrapper
+      .get('[data-testid="workbench-timeline-action"]')
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-side-inspector"]').exists()
+    ).toBe(true);
+    expect(wrapper.findComponent(PropertiesPanel).exists()).toBe(true);
+    expect(wrapper.findComponent(AnalysisPanel).exists()).toBe(false);
+
+    await wrapper
+      .get('[data-testid="workbench-close-side-inspector"]')
+      .trigger('click');
+    expect(
+      wrapper.find('[data-testid="workbench-side-inspector"]').exists()
+    ).toBe(false);
+    expect(wrapper.findComponent(AnalysisPanel).exists()).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it('does not compile or simulate while navigating runtime review surfaces', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    await vi.waitFor(() => {
+      expect(
+        Number(
+          wrapper
+            .get('main.workbench')
+            .attributes('data-runtime-diagnostics-revision')
+        )
+      ).toBeGreaterThan(0);
+    });
+    await nextTick();
+    resetWorkbenchPerformanceCounters();
+    const expectNoAuthoritativeRecompute = () =>
+      expect(getWorkbenchPerformanceCounters()).toMatchObject({
+        authoritativeCompile: 0,
+        authoritativeSimulation: 0,
+      });
+
+    const timeline = wrapper.findComponent(TimelineGridPreview);
+    for (let frameIndex = 1; frameIndex <= 300; frameIndex += 1) {
+      timeline.vm.$emit('select-timeline-frame', {
+        frameIndex,
+        source: 'timeline-playback',
+      });
+    }
+    await nextTick();
+    expectNoAuthoritativeRecompute();
+    await selectRuntimeReviewTab(wrapper, 'event');
+    expectNoAuthoritativeRecompute();
+    await wrapper
+      .get(
+        '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="all"]'
+      )
+      .trigger('click');
+    expectNoAuthoritativeRecompute();
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    expectNoAuthoritativeRecompute();
+    await selectRuntimeReviewTab(wrapper, 'resource');
+    expectNoAuthoritativeRecompute();
+    wrapper
+      .get('[data-testid="workbench-timeline-viewport"]')
+      .element.dispatchEvent(new Event('scroll', { bubbles: true }));
+    await nextTick();
+
+    expectNoAuthoritativeRecompute();
+    wrapper.unmount();
+  });
+
+  it('coalesces repeated library pointer previews and simulates once on commit', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    await vi.waitFor(() => {
+      expect(
+        Number(
+          wrapper
+            .get('main.workbench')
+            .attributes('data-runtime-diagnostics-revision')
+        )
+      ).toBeGreaterThan(0);
+    });
+
+    const actorLane = wrapper.get(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]'
+    ).element;
+    actorLane.getBoundingClientRect = () => ({
+      width: 7200,
+      height: 96,
+      left: 0,
+      right: 7200,
+      top: 0,
+      bottom: 96,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+    const originalElementFromPoint = document.elementFromPoint;
+    document.elementFromPoint = vi.fn(() => actorLane);
+    const animationFrames = [];
+    const originalRequestAnimationFrame = window.requestAnimationFrame;
+    const originalCancelAnimationFrame = window.cancelAnimationFrame;
+    window.requestAnimationFrame = vi.fn(callback => {
+      animationFrames.push(callback);
+      return animationFrames.length;
+    });
+    window.cancelAnimationFrame = vi.fn();
+
+    const pointerDown = new MouseEvent('pointerdown', {
+      bubbles: true,
+      cancelable: true,
+      button: 0,
+      clientX: 100,
+      clientY: 24,
+    });
+    Object.defineProperty(pointerDown, 'pointerId', { value: 77 });
+    wrapper
+      .get('[data-testid="workbench-add-switch-action"]')
+      .element.dispatchEvent(pointerDown);
+
+    resetWorkbenchPerformanceCounters();
+    for (let index = 0; index < 60; index += 1) {
+      const pointerMove = new MouseEvent('pointermove', {
+        bubbles: true,
+        cancelable: true,
+        clientX: 160 + (index % 2) * 0.1,
+        clientY: 24,
+      });
+      Object.defineProperty(pointerMove, 'pointerId', { value: 77 });
+      window.dispatchEvent(pointerMove);
+    }
+    expect(animationFrames).toHaveLength(1);
+    expect(getWorkbenchPerformanceCounters().placementPreviewEvaluation).toBe(
+      0
+    );
+    animationFrames.shift()(0);
+    await flushPromises();
+    await nextTick();
+    expect(getWorkbenchPerformanceCounters().placementPreviewEvaluation).toBe(
+      1
+    );
+
+    for (let index = 0; index < 10; index += 1) {
+      const duplicateMove = new MouseEvent('pointermove', {
+        bubbles: true,
+        cancelable: true,
+        clientX: 160,
+        clientY: 24,
+      });
+      Object.defineProperty(duplicateMove, 'pointerId', { value: 77 });
+      window.dispatchEvent(duplicateMove);
+    }
+    expect(animationFrames).toHaveLength(0);
+    expect(getWorkbenchPerformanceCounters().placementPreviewEvaluation).toBe(
+      1
+    );
+
+    resetWorkbenchPerformanceCounters();
+    const pointerUp = new MouseEvent('pointerup', {
+      bubbles: true,
+      cancelable: true,
+      clientX: 160,
+      clientY: 24,
+    });
+    Object.defineProperty(pointerUp, 'pointerId', { value: 77 });
+    window.dispatchEvent(pointerUp);
+    await flushPromises();
+    await nextTick();
+    await vi.waitFor(() => {
+      expect(getWorkbenchPerformanceCounters()).toMatchObject({
+        authoritativeCompile: 1,
+        authoritativeSimulation: 1,
+      });
+    });
+
+    document.elementFromPoint = originalElementFromPoint;
+    window.requestAnimationFrame = originalRequestAnimationFrame;
+    window.cancelAnimationFrame = originalCancelAnimationFrame;
+    wrapper.unmount();
+  });
+
   it('configures and reviews a tracking-only effect from the Workbench', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -1589,6 +1890,7 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+    await selectRuntimeReviewTab(wrapper, 'effect');
 
     expect(
       wrapper.find('[data-testid="workbench-effect-timeline-empty"]').exists()
@@ -1628,6 +1930,21 @@ describe('Workbench view', () => {
         '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
       )
     ).toHaveLength(3);
+    expect(
+      wrapper.get(
+        '[data-testid="workbench-action-relation"][data-relation-kind="effect-trigger"]'
+      )
+    ).toBeTruthy();
+    await selectRuntimeReviewTab(wrapper, 'event');
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-event-log-row"][data-effect-relation-kind="effect-trigger"]'
+        )
+        .text()
+    ).toContain('触发');
+
+    await selectRuntimeReviewTab(wrapper, 'effect');
     const effectRelation = wrapper.get(
       '[data-testid="workbench-effect-relation-row"]'
     );
@@ -1635,17 +1952,6 @@ describe('Workbench view', () => {
       'data-relation-kind': 'effect-trigger',
       'data-relation-status': 'satisfied',
     });
-    expect(
-      wrapper.get(
-        '[data-testid="workbench-action-relation"][data-relation-kind="effect-trigger"]'
-      )
-    ).toBeTruthy();
-    expect(
-      wrapper
-        .get('.event-list > li[data-effect-relation-kind="effect-trigger"]')
-        .text()
-    ).toContain('触发');
-
     await effectRelation.trigger('click');
     await nextTick();
     const selectedEffectRelationId =
@@ -1800,6 +2106,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="scenario-action-count"]').text()
     ).toContain('3/4 action');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.findAll('[data-testid="workbench-action-result-source-row"]')
     ).toHaveLength(3);
@@ -1811,6 +2118,7 @@ describe('Workbench view', () => {
         .exists()
     ).toBe(false);
 
+    await selectSideInspectorPanel(wrapper, 'action-rules');
     const rulePanel = wrapper.find(
       '[data-testid="workbench-action-rule-panel"]'
     );
@@ -1827,9 +2135,13 @@ describe('Workbench view', () => {
     await cooldownRule
       .find('[data-testid="workbench-action-rule-apply-start"]')
       .trigger('click');
-    await nextTick();
-
-    expect(rulePanel.attributes('data-violation-count')).toBe('0');
+    await selectSideInspectorPanel(wrapper, 'action-rules');
+    expect(
+      wrapper
+        .get('[data-testid="workbench-action-rule-panel"]')
+        .attributes('data-violation-count')
+    ).toBe('0');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe(suggestedStartMs);
@@ -1856,6 +2168,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="scenario-action-count"]').text()
     ).toContain('4 action');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.findAll('[data-testid="workbench-action-result-source-row"]')
     ).toHaveLength(4);
@@ -2046,10 +2359,12 @@ describe('Workbench view', () => {
         .attributes('data-inspector-panel-order')
     ).toBe('0');
     expect(
-      sideInspector
-        .find('[data-inspector-panel-key="runtime-detail"]')
-        .attributes('data-inspector-panel-order')
-    ).toBe('4');
+      sideInspector.find('[data-inspector-panel-key="runtime-detail"]').exists()
+    ).toBe(false);
+    expect(
+      sideInspector.find('[data-inspector-panel-key="action-rules"]').exists()
+    ).toBe(false);
+    await selectSideInspectorPanel(wrapper, 'action-rules');
     expect(
       sideInspector
         .find('[data-inspector-panel-key="action-rules"]')
@@ -2070,15 +2385,11 @@ describe('Workbench view', () => {
         .attributes('data-inspector-panel-order')
     ).toBe('0');
     expect(
-      sideInspector
-        .find('[data-inspector-panel-key="properties"]')
-        .attributes('data-inspector-panel-order')
-    ).toBe('2');
+      sideInspector.find('[data-inspector-panel-key="properties"]').exists()
+    ).toBe(false);
     expect(
-      sideInspector
-        .find('[data-inspector-panel-key="action-rules"]')
-        .attributes('data-inspector-panel-order')
-    ).toBe('1');
+      sideInspector.find('[data-inspector-panel-key="action-rules"]').exists()
+    ).toBe(false);
   });
 
   it('undoes and redoes action edits from the workbench nav', async () => {
@@ -2553,18 +2864,23 @@ describe('Workbench view', () => {
       'data-flow-selected-action-id': 'action-0001',
       'data-flow-selected-state-curve-point-id': selectedRuntimePointId,
     });
-    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
-      'data-flow-phase': 'runtime-result',
-      'data-flow-state-point-id': selectedRuntimePointId,
-    });
     expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject({
       'data-flow-phase': 'runtime-result',
       'data-flow-state-point-id': selectedRuntimePointId,
     });
+    expect(wrapper.find('.event-log-panel').exists()).toBe(false);
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-flow-state-point-id': selectedRuntimePointId,
+    });
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
       'data-flow-phase': 'runtime-result',
       'data-flow-state-point-id': selectedRuntimePointId,
     });
+    expect(wrapper.find('.resource-monitor-panel').exists()).toBe(false);
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail"]')
@@ -2655,6 +2971,7 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const refreshedFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -2669,13 +2986,15 @@ describe('Workbench view', () => {
     expect(editResultFlowPanel.attributes('data-flow-phase')).toBe(
       'edit-result-ready'
     );
+    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'edit-result-ready',
+    });
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-ready',
     });
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject({
-      'data-flow-phase': 'edit-result-ready',
-    });
-    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-ready',
     });
     const returnEditResultButton = editResultFlowPanel.find(
@@ -2739,6 +3058,7 @@ describe('Workbench view', () => {
     expect(returnEditResultButton.attributes('data-primary-action')).toBe(
       'true'
     );
+    await selectSideInspectorPanel(wrapper, 'properties');
     const propertiesResultReturn = wrapper.find(
       '[data-testid="workbench-action-edit-result-return"]'
     );
@@ -2752,6 +3072,7 @@ describe('Workbench view', () => {
     expect(
       propertiesResultReturn.attributes('data-origin-state-point-id')
     ).toBe(selectedRuntimePointId);
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const detailResultReturn = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail-return-result"]'
     );
@@ -2779,11 +3100,6 @@ describe('Workbench view', () => {
         status: 'refreshed-edit-result',
       },
     });
-    expect(
-      wrapper
-        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
-        .text()
-    ).toBe(refreshedStatePointId);
     expect(
       wrapper
         .find('[data-testid="workbench-flow-panel"]')
@@ -2847,25 +3163,14 @@ describe('Workbench view', () => {
       'data-flow-selected-action-id': 'action-0001',
       'data-flow-selected-state-curve-point-id': refreshedStatePointId,
     });
-    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
-      'data-flow-phase': 'edit-result-review',
-      'data-flow-state-point-id': refreshedStatePointId,
-    });
     expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-review',
       'data-flow-state-point-id': refreshedStatePointId,
     });
-    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-review',
       'data-flow-state-point-id': refreshedStatePointId,
-    });
-    expect(
-      wrapper
-        .find('[data-testid="workbench-runtime-selected-detail"]')
-        .attributes()
-    ).toMatchObject({
-      'data-flow-phase': 'edit-result-review',
-      'data-flow-edit-result-state-point-id': refreshedStatePointId,
     });
     expect(
       wrapper
@@ -2874,6 +3179,21 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected-state-point-id')
     ).toBe(refreshedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
+    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'edit-result-review',
+      'data-flow-state-point-id': refreshedStatePointId,
+    });
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail"]')
+        .attributes()
+    ).toMatchObject({
+      'data-flow-phase': 'edit-result-review',
+      'data-flow-edit-result-state-point-id': refreshedStatePointId,
+    });
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
@@ -2884,6 +3204,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-result-context-origin-state-point-id')
     ).toBe(selectedRuntimePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-return-result"]')
@@ -2924,14 +3245,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-review-stack"]')
         .attributes('data-runtime-review-layout')
     ).toBe('result-check');
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .find('[data-testid="workbench-resource-area"]')
         .attributes('data-runtime-review-role')
     ).toBe('primary');
-    expect(
-      wrapper.find('.event-area').attributes('data-runtime-review-role')
-    ).toBe('secondary');
+    expect(wrapper.find('.event-area').exists()).toBe(false);
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
@@ -2964,17 +3284,19 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
-          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedStatePointId}"]`
-        )
-        .attributes('data-selected')
-    ).toBe('true');
-    expect(
-      wrapper
-        .find(
           '[data-testid="workbench-runtime-resource-chart-selection-action-focus"]'
         )
         .text()
     ).toBe('编辑结果动作');
+
+    await selectRuntimeReviewTab(wrapper, 'event');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedStatePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-action-focus"]')
@@ -3015,6 +3337,9 @@ describe('Workbench view', () => {
     const detailActionFocus = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail-action-focus"]'
     );
+    const runtimeDetailPanel = wrapper.findComponent(
+      RuntimeSelectedDetailPanel
+    );
     expect(detailActionFocus.attributes('disabled')).toBeUndefined();
     expect(detailActionFocus.text()).toBe('编辑结果动作');
 
@@ -3022,7 +3347,7 @@ describe('Workbench view', () => {
     await nextTick();
 
     expect(
-      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+      getLastDispatchedFlowAction(wrapper, runtimeDetailPanel)
     ).toMatchObject({
       kind: 'focus-runtime-action',
       source: 'runtime-detail',
@@ -3063,6 +3388,7 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('100');
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const editFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -3100,11 +3426,18 @@ describe('Workbench view', () => {
         status: 'refreshed-edit-result',
       },
     });
-    expect(
-      wrapper
-        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
-        .text()
-    ).toBe(refreshedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
+    await vi.waitFor(() => {
+      expect(
+        wrapper.findComponent(RuntimeSelectedDetailPanel).props('detail')
+          ?.statePointId
+      ).toBe(refreshedStatePointId);
+      expect(
+        wrapper
+          .get('[data-testid="workbench-runtime-selected-detail-state-point"]')
+          .text()
+      ).toBe(refreshedStatePointId);
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-flow-panel"]')
@@ -3115,14 +3448,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-review-stack"]')
         .attributes('data-runtime-review-layout')
     ).toBe('result-check');
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .find('[data-testid="workbench-resource-area"]')
         .attributes('data-runtime-review-role')
     ).toBe('primary');
-    expect(
-      wrapper.find('.event-area').attributes('data-runtime-review-role')
-    ).toBe('secondary');
+    expect(wrapper.find('.event-area').exists()).toBe(false);
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
@@ -3172,7 +3504,7 @@ describe('Workbench view', () => {
       '.review-workspace{display:grid;grid-area:review;align-content:start;gap:14px;min-width:0;}'
     );
     expect(workbenchSource).toContain(
-      '.runtime-review-stack{display:grid;grid-template-columns:minmax(280px,0.92fr)minmax(320px,1.08fr);align-items:start;gap:14px;min-width:0;}'
+      '.runtime-review-stack{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:14px;min-width:0;}'
     );
     expect(workbenchSource).not.toContain(
       `.primary-flow${resultPhaseSelector}.runtime-review-stack{order:-1;}`
@@ -3181,7 +3513,7 @@ describe('Workbench view', () => {
       `.primary-flow${resultPhaseSelector}:is(.timeline-area,.cycle-review-area){order:1;}`
     );
     expect(workbenchSource).toContain(
-      '.runtime-review-stack[data-runtime-review-layout=\x27result-check\x27]{grid-template-columns:minmax(300px,1.12fr)minmax(220px,0.88fr);align-items:stretch;gap:10px;}'
+      '.runtime-review-stack[data-runtime-review-layout=\x27result-check\x27]{grid-template-columns:minmax(0,1fr);align-items:stretch;gap:10px;}'
     );
     expect(workbenchSource).toContain(
       '.timeline-area,.cycle-review-area,.resource-area,.event-area,.effect-area{min-width:0;}'
@@ -3242,7 +3574,7 @@ describe('Workbench view', () => {
       '.runtime-curve-legend-row{grid-template-columns:9pxminmax(0,1fr);}'
     );
     expect(eventPanelSource).toContain(
-      '@media(max-width:760px){.event-list>li,.runtime-log-row,.runtime-log-detail,.runtime-select-filters{grid-template-columns:1fr;gap:4px;}'
+      '@media(max-width:760px){.event-log-row,.runtime-log-row,.runtime-log-detail,.runtime-select-filters{grid-template-columns:1fr;gap:4px;}'
     );
     expect(eventPanelSource).toContain(
       '.runtime-track-filters{grid-template-columns:repeat(2,minmax(0,1fr));}'
@@ -3481,6 +3813,7 @@ describe('Workbench view', () => {
       'data-edit-result-state-point-id'
     );
     expect(refreshedStatePointId).toBeTruthy();
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -3488,6 +3821,7 @@ describe('Workbench view', () => {
       refreshedStatePointId
     );
     expect(actionEditFeedback.attributes('data-edit-origin')).toBe('');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const pendingRuntimeDetailPanel = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail"]'
     );
@@ -3531,6 +3865,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find(
@@ -3551,6 +3886,7 @@ describe('Workbench view', () => {
       },
     });
 
+    await selectRuntimeReviewTab(wrapper, 'event');
     const firstLogRow = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-row"]'
     );
@@ -3694,6 +4030,7 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-add-resource-action"]')
       .trigger('click');
     await nextTick();
+    await selectRuntimeReviewTab(wrapper, 'event');
 
     await wrapper
       .find('[data-testid="workbench-flow-open-runtime"]')
@@ -3732,6 +4069,7 @@ describe('Workbench view', () => {
       .setValue('1500');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const refreshedStatePointId = wrapper
       .find('[data-testid="workbench-action-edit-feedback"]')
       .attributes('data-runtime-state-point-id');
@@ -3756,6 +4094,7 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
       'action-0002'
     );
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -3828,6 +4167,7 @@ describe('Workbench view', () => {
       .setValue('6000');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const refreshedStatePointId = wrapper
       .find('[data-testid="workbench-action-edit-feedback"]')
       .attributes('data-runtime-state-point-id');
@@ -3850,6 +4190,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-flow-runtime-navigation-index"]')
         .text()
     ).toBe('2/2');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -4216,6 +4557,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(firstActionStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
@@ -4377,6 +4719,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(firstActionStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
@@ -4428,11 +4771,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
     );
@@ -4505,12 +4850,14 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(insertedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(insertedStatePointId);
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
     );
@@ -4601,17 +4948,20 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find('[data-testid="workbench-action-contribution-panel"]')
         .attributes('data-action-id')
     ).toBe('action-0003');
 
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     await wrapper
       .find('[data-testid="workbench-runtime-selected-detail-action-focus"]')
       .trigger('click');
@@ -4636,6 +4986,7 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-ready');
     expect(flowPanel.attributes('data-action-id')).toBe('action-0003');
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const dragEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -4658,22 +5009,26 @@ describe('Workbench view', () => {
 
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-review');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(refreshedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(refreshedStatePointId);
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0003"]'
     );
@@ -4792,10 +5147,12 @@ describe('Workbench view', () => {
     );
     expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('500');
 
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const shiftedStatePointId = wrapper
       .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
       .text();
@@ -4806,11 +5163,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(shiftedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(shiftedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find(
@@ -4923,6 +5282,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('.action-item[data-action-id="action-0004"]').classes()
     ).toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('4000');
@@ -4935,6 +5295,7 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('5');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('3');
 
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const copiedStatePointId = wrapper
       .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
       .text();
@@ -4945,11 +5306,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find(
@@ -5092,12 +5455,14 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(fallbackStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(fallbackStatePointId);
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -5182,6 +5547,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
     ).toBe(true);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find('[data-testid="workbench-state-curve-focus-selected"]')
@@ -5222,6 +5588,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-action-type"]').element.value
     ).toBe('等待动作');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     let actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -5288,6 +5655,7 @@ describe('Workbench view', () => {
         )
         .classes()
     ).not.toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(wrapper.find('[data-testid="workbench-level-input"]').exists()).toBe(
       true
     );
@@ -5298,6 +5666,7 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-level-input"]').setValue('2');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -5356,6 +5725,7 @@ describe('Workbench view', () => {
         .text()
     ).toBe('结果已定位');
 
+    await selectSideInspectorPanel(wrapper, 'properties');
     const levelEditControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
     );
@@ -5369,7 +5739,8 @@ describe('Workbench view', () => {
     expect(sourceTimelineAction.attributes('data-edit-focus-field')).toBe('');
     expect(sourceTimelineAction.attributes('data-edit-focus-summary')).toBe('');
 
-    const focusSourceButton = actionEditFeedback.find(
+    await selectSideInspectorPanel(wrapper, 'analysis');
+    const focusSourceButton = wrapper.find(
       '[data-testid="workbench-action-edit-feedback-focus"]'
     );
     expect(focusSourceButton.attributes()).toMatchObject({
@@ -5378,10 +5749,13 @@ describe('Workbench view', () => {
       'data-flow-action-field': 'level',
     });
 
+    const sourceAnalysisPanel = wrapper.findComponent(AnalysisPanel);
     await focusSourceButton.trigger('click');
     await nextTick();
 
-    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+    expect(
+      getLastDispatchedFlowAction(wrapper, sourceAnalysisPanel)
+    ).toMatchObject({
       kind: 'focus-edit-source',
       source: 'analysis-edit-source',
       actionId: 'action-0001',
@@ -5428,6 +5802,7 @@ describe('Workbench view', () => {
     );
     expect(sourceTimelineAction.classes()).toContain('edit-focused');
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const resultFocusButton = wrapper.find(
       '[data-testid="workbench-action-edit-feedback-result-focus"]'
     );
@@ -5452,11 +5827,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-action-contribution-panel"]')
         .attributes('data-action-id')
     ).toBe('action-0001');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(feedbackStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const focusedActionEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -5487,6 +5864,7 @@ describe('Workbench view', () => {
       .trigger('click');
     await nextTick();
 
+    await selectRuntimeReviewTab(wrapper, 'resource');
     const alternateRuntimePoint = wrapper
       .findAll('[data-testid="workbench-runtime-resource-chart-point"]')
       .find(
@@ -5561,6 +5939,7 @@ describe('Workbench view', () => {
     expect(
       jumpedBackActionEditFeedback.attributes('data-result-focus-status')
     ).toBe('focused');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -5570,6 +5949,7 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -5617,9 +5997,11 @@ describe('Workbench view', () => {
     const appliedStatePointId = appliedMarker.attributes('data-state-point-id');
 
     expect(appliedStatePointId).toBeTruthy();
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
     ).toContain('active');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-state-point"]')
@@ -5634,6 +6016,7 @@ describe('Workbench view', () => {
       .trigger('click');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find('[data-testid="workbench-state-curve-focus-selected"]')
@@ -5656,21 +6039,17 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(appliedStatePointId);
-    const logFocusedResourcePanel = wrapper.find('.resource-monitor-panel');
     const logFocusedEventPanel = wrapper.find('.event-log-panel');
     const logFocusedDetailPanel = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail"]'
     );
-    for (const panel of [
-      logFocusedResourcePanel,
-      logFocusedEventPanel,
-      logFocusedDetailPanel,
-    ]) {
+    for (const panel of [logFocusedEventPanel, logFocusedDetailPanel]) {
       expect(panel.attributes()).toMatchObject({
         'data-runtime-review-selection-status': 'selected',
         'data-runtime-review-selected-action-id': 'action-0001',
@@ -5679,6 +6058,15 @@ describe('Workbench view', () => {
         'data-runtime-review-source-kind': 'log',
       });
     }
+    await selectRuntimeReviewTab(wrapper, 'resource');
+    expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject({
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-selected-action-id': 'action-0001',
+      'data-runtime-review-selected-state-point-id': appliedStatePointId,
+      'data-runtime-review-source': 'event-log-runtime-row',
+      'data-runtime-review-source-kind': 'log',
+    });
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       logFocusedDetailPanel.attributes('data-runtime-review-detail-synced')
     ).toBe('true');
@@ -5839,11 +6227,14 @@ describe('Workbench view', () => {
         .exists()
     ).toBe(false);
 
+    const runtimeDetailComponent = wrapper.findComponent(
+      RuntimeSelectedDetailPanel
+    );
     await runtimeDetailActionFocus.trigger('click');
     await nextTick();
 
     expect(
-      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+      getLastDispatchedFlowAction(wrapper, runtimeDetailComponent)
     ).toMatchObject({
       kind: 'focus-runtime-action',
       source: 'runtime-detail',
@@ -5883,6 +6274,7 @@ describe('Workbench view', () => {
     expect(
       runtimeDetailStartControl.attributes('data-edit-focus-summary')
     ).toContain('敌人 HP');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const runtimeDetailEditContext = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail-edit-context"]'
     );
@@ -5901,6 +6293,7 @@ describe('Workbench view', () => {
     );
     expect(runtimeDetailEditContext.text()).toContain('编辑焦点已同步');
     expect(runtimeDetailEditContext.text()).toContain('结果定位');
+    await selectSideInspectorPanel(wrapper, 'properties');
     const originResultReturn = wrapper.find(
       '[data-testid="workbench-action-edit-result-return"]'
     );
@@ -5920,6 +6313,7 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const runtimeDetailEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -5945,6 +6339,7 @@ describe('Workbench view', () => {
     );
     expect(refreshedRuntimeStatePointId).toBeTruthy();
     expect(refreshedRuntimeStatePointId).not.toBe(appliedStatePointId);
+    await selectSideInspectorPanel(wrapper, 'properties');
     const refreshedResultReturn = wrapper.find(
       '[data-testid="workbench-action-edit-result-return"]'
     );
@@ -5964,6 +6359,7 @@ describe('Workbench view', () => {
     expect(refreshedResultReturnButton.attributes('data-state-point-id')).toBe(
       refreshedRuntimeStatePointId
     );
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const runtimeDetailReturnButton = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail-return-result"]'
     );
@@ -5982,10 +6378,15 @@ describe('Workbench view', () => {
     );
     expect(runtimeDetailReturnButton.text()).toBe('查看刷新结果');
 
-    await refreshedResultReturnButton.trigger('click');
+    await selectSideInspectorPanel(wrapper, 'properties');
+    const propertiesPanel = wrapper.findComponent(PropertiesPanel);
+    const activeRefreshedResultReturnButton = wrapper.find(
+      '[data-testid="workbench-action-edit-result-return-button"]'
+    );
+    await activeRefreshedResultReturnButton.trigger('click');
     await nextTick();
 
-    expect(getLastDispatchedFlowAction(wrapper, PropertiesPanel)).toMatchObject(
+    expect(getLastDispatchedFlowAction(wrapper, propertiesPanel)).toMatchObject(
       {
         kind: 'return-runtime-result',
         source: 'properties-panel',
@@ -5999,6 +6400,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedRuntimeStatePointId);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const syncedActionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -6028,6 +6430,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-action-result-detail-location-status"]')
         .text()
     ).toBe('当前位置已同步');
+    await selectRuntimeReviewTab(wrapper, 'event');
     const syncedRuntimeLogNavigation = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-navigation"]'
     );
@@ -6038,6 +6441,7 @@ describe('Workbench view', () => {
       refreshedRuntimeStatePointId
     );
     expect(syncedRuntimeLogNavigation.text()).toContain('日志已同步');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const feedbackLocationChain = wrapper.find(
       '[data-testid="workbench-action-edit-feedback-location-chain"]'
     );
@@ -6075,6 +6479,7 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-add-resource-action"]')
       .trigger('click');
     await nextTick();
+    await selectRuntimeReviewTab(wrapper, 'event');
 
     const firstLogRow = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-row"]'
@@ -6106,12 +6511,14 @@ describe('Workbench view', () => {
       .setValue('6000');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const refreshedStatePointId = wrapper
       .find('[data-testid="workbench-action-edit-feedback"]')
       .attributes('data-runtime-state-point-id');
     expect(refreshedStatePointId).toBeTruthy();
     expect(refreshedStatePointId).not.toBe(originStatePointId);
 
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     const detailReturnButton = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail-return-result"]'
     );
@@ -6127,11 +6534,14 @@ describe('Workbench view', () => {
       refreshedStatePointId
     );
 
+    const runtimeDetailComponent = wrapper.findComponent(
+      RuntimeSelectedDetailPanel
+    );
     await detailReturnButton.trigger('click');
     await nextTick();
 
     expect(
-      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+      getLastDispatchedFlowAction(wrapper, runtimeDetailComponent)
     ).toMatchObject({
       kind: 'return-runtime-result',
       source: 'runtime-detail',
@@ -6152,6 +6562,7 @@ describe('Workbench view', () => {
         .text()
     ).toBe(refreshedStatePointId);
 
+    await selectRuntimeReviewTab(wrapper, 'event');
     const logNavigation = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-navigation"]'
     );
@@ -6161,6 +6572,7 @@ describe('Workbench view', () => {
     expect(logNavigation.attributes('data-navigation-count')).toBe('2');
     expect(logNavigation.attributes('data-navigation-index')).toBe('1');
 
+    await selectRuntimeReviewTab(wrapper, 'resource');
     const curveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
     );
@@ -6170,6 +6582,7 @@ describe('Workbench view', () => {
     expect(curveSelection.attributes('data-navigation-count')).toBe('2');
     expect(curveSelection.attributes('data-navigation-index')).toBe('1');
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -6192,6 +6605,7 @@ describe('Workbench view', () => {
       },
     });
 
+    await selectRuntimeReviewTab(wrapper, 'event');
     await wrapper
       .find('[data-testid="workbench-runtime-sim-log-row"]')
       .trigger('click');
@@ -6281,6 +6695,7 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const logEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -6336,6 +6751,7 @@ describe('Workbench view', () => {
         status: 'refreshed-edit-result',
       },
     });
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -6367,6 +6783,7 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-add-resource-action"]')
       .trigger('click');
     await nextTick();
+    await selectRuntimeReviewTab(wrapper, 'event');
 
     const firstLogRow = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-row"]'
@@ -6381,11 +6798,13 @@ describe('Workbench view', () => {
       '[data-testid="workbench-runtime-sim-log-navigation"]'
     );
     expect(runtimeLogNavigation.attributes('data-navigation-index')).toBe('0');
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-navigation-index')
     ).toBe('0');
+    await selectRuntimeReviewTab(wrapper, 'event');
 
     await wrapper
       .find('[data-testid="workbench-runtime-sim-log-action-focus"]')
@@ -6397,6 +6816,7 @@ describe('Workbench view', () => {
       .setValue('6000');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const refreshedStatePointId = wrapper
       .find('[data-testid="workbench-action-edit-feedback"]')
       .attributes('data-runtime-state-point-id');
@@ -6439,6 +6859,7 @@ describe('Workbench view', () => {
     expect(returnedRuntimeLogRow.attributes('data-selected')).toBe('true');
     expect(logReturnScrollIntoView).not.toHaveBeenCalled();
 
+    await selectRuntimeReviewTab(wrapper, 'resource');
     const curveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
     );
@@ -6451,6 +6872,7 @@ describe('Workbench view', () => {
       'event-log-runtime-detail'
     );
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const actionResultRow = wrapper.find(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
@@ -6533,6 +6955,7 @@ describe('Workbench view', () => {
 
     let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-ready');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const dragEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -6565,22 +6988,26 @@ describe('Workbench view', () => {
 
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-review');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'resource');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(refreshedStatePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(refreshedStatePointId);
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const returnedEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -6679,9 +7106,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-resource-area"]')
         .attributes('data-runtime-review-role')
     ).toBe('primary');
-    expect(
-      wrapper.find('.event-area').attributes('data-runtime-review-role')
-    ).toBe('secondary');
+    expect(wrapper.find('.event-area').exists()).toBe(false);
 
     expect(
       getLastDispatchedFlowAction(wrapper, ResourceMonitorPanel)
@@ -6691,6 +7116,7 @@ describe('Workbench view', () => {
       statePointId,
       canRun: true,
     });
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find('[data-testid="workbench-state-curve-focus-selected"]')
@@ -6727,21 +7153,17 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(statePointId);
     const curveFocusedResourcePanel = wrapper.find('.resource-monitor-panel');
-    const curveFocusedEventPanel = wrapper.find('.event-log-panel');
     const curveFocusedDetailPanel = wrapper.find(
       '[data-testid="workbench-runtime-selected-detail"]'
     );
-    for (const panel of [
-      curveFocusedResourcePanel,
-      curveFocusedEventPanel,
-      curveFocusedDetailPanel,
-    ]) {
+    for (const panel of [curveFocusedResourcePanel, curveFocusedDetailPanel]) {
       expect(panel.attributes()).toMatchObject({
         'data-runtime-review-selection-status': 'selected',
         'data-runtime-review-selected-action-id': 'action-0001',
@@ -6758,6 +7180,15 @@ describe('Workbench view', () => {
       'data-runtime-review-primary-operation-enabled': 'true',
       'data-runtime-review-focus-action-enabled': 'true',
       'data-runtime-review-return-result-enabled': 'false',
+    });
+    await selectRuntimeReviewTab(wrapper, 'event');
+    expect(wrapper.find('.event-area').attributes()).toMatchObject({
+      'data-runtime-review-role': 'secondary',
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-selected-action-id': 'action-0001',
+      'data-runtime-review-selected-state-point-id': statePointId,
+      'data-runtime-review-source': 'resource-runtime-curve',
+      'data-runtime-review-source-kind': 'curve',
     });
     expect(
       wrapper
@@ -6799,6 +7230,7 @@ describe('Workbench view', () => {
         )
         .text()
     ).toBe('敌人 HP 12,461');
+    await selectRuntimeReviewTab(wrapper, 'resource');
     const runtimeCurveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
     );
@@ -6904,6 +7336,7 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find(
@@ -6911,8 +7344,12 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    await selectRuntimeReviewTab(wrapper, 'resource');
 
-    const previousButton = nextRuntimeCurveSelection.find(
+    const currentNextRuntimeCurveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    const previousButton = currentNextRuntimeCurveSelection.find(
       '[data-testid="workbench-runtime-resource-chart-selection-prev"]'
     );
     expect(previousButton.attributes('data-state-point-id')).toBe(statePointId);
@@ -6983,6 +7420,7 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const runtimeOriginFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );
@@ -7049,6 +7487,7 @@ describe('Workbench view', () => {
     await resultFocusButton.trigger('click');
     await nextTick();
 
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -7122,6 +7561,7 @@ describe('Workbench view', () => {
       'data-edit-focus-origin': 'runtime-focus',
       'data-edit-focus-source': 'workbench-flow-panel',
     });
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper
         .find('[data-testid="workbench-action-edit-feedback"]')
@@ -7143,6 +7583,7 @@ describe('Workbench view', () => {
       },
     });
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const appliedStatePoint = wrapper.find(
       '[data-testid="workbench-state-curve-point"][data-layer-key="applied"]'
     );
@@ -7160,11 +7601,13 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(statePointId);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper
         .find(
@@ -7172,6 +7615,7 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    await selectSideInspectorPanel(wrapper, 'runtime-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-track"]')
@@ -7316,6 +7760,7 @@ describe('Workbench view', () => {
     await settleWorkbenchAsyncPanels();
 
     await selectCharacterFromTimeline(wrapper, 0, 101003);
+    await selectSideInspectorPanel(wrapper, 'analysis');
 
     const text = wrapper.text();
     expect(text).toContain('寒悠悠');
@@ -7439,6 +7884,7 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+    await selectEnemyInspector(wrapper);
 
     const toughnessStat = wrapper.find(
       '[data-testid="workbench-enemy-toughness-stat"]'
@@ -7489,6 +7935,7 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+    await selectEnemyInspector(wrapper);
     const editor = wrapper.find(
       '[data-testid="workbench-enemy-element-defense-editor"]'
     );
@@ -7692,6 +8139,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('.action-item[data-action-id="action-0001"]').text()
     ).toContain('190%');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(wrapper.text()).toContain('hit绑定 0/2 · 缺口候选 1/1');
     expect(wrapper.text()).toContain('伤害元素候选 1/1');
     expect(wrapper.text()).toContain('关联等级链 1/1');
@@ -8298,6 +8746,7 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(
       `工作台：${nextCharacter.name} / ${nextSkill.name}`
     );
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
     expect(
       getTimelineTeamSlot(wrapper, 0).attributes('data-team-slot-id')
@@ -8305,6 +8754,7 @@ describe('Workbench view', () => {
     expect(
       getTimelineTeamSlot(wrapper, 1).attributes('data-character-id')
     ).toBe(String(workbenchSeed.defaults.characterId));
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-action-actor-select"]').element
         .value
@@ -8565,12 +9015,14 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-note-input"]')
       .setValue('等技能冷却');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('WAIT');
     expect(wrapper.text()).toContain('1500ms / 等技能冷却');
 
     await wrapper
       .find('[data-testid="workbench-add-annotation-action"]')
       .trigger('click');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '3 action'
     );
@@ -8582,6 +9034,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-note-input"]')
       .setValue('准备爆发');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('ANNOTATION');
     expect(wrapper.text()).toContain('准备爆发');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
@@ -8598,6 +9051,7 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+    await selectEnemyInspector(wrapper);
     const spSkill = workbenchSeed.gameData.skills.find(
       skill => Number(skill.spCost) > 0
     );
@@ -8663,6 +9117,7 @@ describe('Workbench view', () => {
         )
         .attributes('data-delta')
     ).toBe(`-${spSkill.spCost}`);
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log"]').text()
     ).toContain(`SP -${spSkill.spCost}`);
@@ -8740,7 +9195,10 @@ describe('Workbench view', () => {
     ).toContain(String(spSkill.id));
 
     const hpRuntimeCurvePoint = wrapper.find(
-      '[data-testid="workbench-runtime-resource-chart-point"][data-track-key="enemyHpDamage"]'
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-node"]'
+    );
+    const hpRuntimeStatePointId = hpRuntimeCurvePoint.attributes(
+      'data-state-point-id'
     );
     await hpRuntimeCurvePoint.trigger('click');
     await nextTick();
@@ -8762,7 +9220,7 @@ describe('Workbench view', () => {
       filteredRuntimeLogNavigation.attributes('data-navigation-status')
     ).toBe('filtered-out');
     expect(filteredRuntimeLogNavigation.attributes('data-state-point-id')).toBe(
-      hpRuntimeCurvePoint.attributes('data-state-point-id')
+      hpRuntimeStatePointId
     );
     expect(
       filteredRuntimeLogNavigation.attributes('data-navigation-index')
@@ -8799,7 +9257,7 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
-          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${hpRuntimeCurvePoint.attributes('data-state-point-id')}"]`
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${hpRuntimeStatePointId}"]`
         )
         .attributes('data-selected')
     ).toBe('true');
@@ -8810,7 +9268,7 @@ describe('Workbench view', () => {
       syncedRuntimeLogNavigation.attributes('data-navigation-status')
     ).toBe('synced');
     expect(syncedRuntimeLogNavigation.attributes('data-state-point-id')).toBe(
-      hpRuntimeCurvePoint.attributes('data-state-point-id')
+      hpRuntimeStatePointId
     );
     expect(syncedRuntimeLogNavigation.attributes('data-navigation-index')).toBe(
       '0'
@@ -8867,12 +9325,14 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-resource-sp-total"]').text()
     ).toBe('-35');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('RESOURCE_CHANGE');
     expect(wrapper.text()).toContain('SP -35 / manual-test');
 
     await wrapper
       .find('[data-testid="workbench-add-enemy-event-action"]')
       .trigger('click');
+    await selectSideInspectorPanel(wrapper, 'properties');
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '3 action'
@@ -8889,9 +9349,11 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-note-input"]')
       .setValue('进入二阶段');
 
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('ENEMY_EVENT');
     expect(wrapper.text()).toContain('phase-2 / 进入二阶段');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     const placeholderStateLayerToggle = wrapper.find(
       '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="placeholder"]'
     );
@@ -8947,9 +9409,11 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-switch-target-select"]').element
         .value
     ).toBe('101003');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('SWITCH');
     expect(wrapper.text()).toContain('末音 -> 寒悠悠');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+    await selectSideInspectorPanel(wrapper, 'properties');
     const controlledActorTimeline = () =>
       wrapper
         .getComponent(TimelineGridPreview)
@@ -9001,6 +9465,12 @@ describe('Workbench view', () => {
     );
     await selectCharacterFromTimeline(wrapper, 1, nextSecondary.id);
 
+    await wrapper
+      .find(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+      )
+      .trigger('click');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-switch-target-select"]').element
         .value
@@ -9010,6 +9480,7 @@ describe('Workbench view', () => {
     const tertiaryCharacterId = Number(
       getTimelineTeamSlot(wrapper, 2).attributes('data-character-id')
     );
+    await selectActorInspector(wrapper, workbenchSeed.defaults.characterId);
     await wrapper
       .find('[data-testid="workbench-initial-controlled-actor-select"]')
       .setValue(String(tertiaryCharacterId));
@@ -9067,6 +9538,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
     ).not.toContain('自动推迟');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('0');
@@ -9184,6 +9656,7 @@ describe('Workbench view', () => {
       },
     });
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
       '0'
     );
@@ -9196,8 +9669,10 @@ describe('Workbench view', () => {
       wrapper.findAll('[data-testid="workbench-action-overlap-warning"]')
     ).toHaveLength(0);
 
+    await selectSideInspectorPanel(wrapper, 'properties');
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('500');
 
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
       '1'
     );
@@ -9602,6 +10077,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('2000');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('0');
@@ -9622,6 +10098,7 @@ describe('Workbench view', () => {
     ).trigger('click');
     await addSingleSkillActionFromLibrary(wrapper);
 
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('7000');
@@ -9641,6 +10118,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-action-insert-delay-note"]').text()
     ).toContain('自动推迟 2000ms -> 7000ms');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
@@ -9723,6 +10201,7 @@ describe('Workbench view', () => {
         )
         .attributes('data-lane-id')
     ).toBe('enemy-events');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('0');
@@ -9798,6 +10277,7 @@ describe('Workbench view', () => {
         )
         .attributes('data-lane-id')
     ).toBe('kibo-team-slot-2');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('KIBO_EVENT');
     expect(wrapper.text()).toContain('awakening');
 
@@ -10010,6 +10490,7 @@ describe('Workbench view', () => {
         .attributes('data-flow-selected-state-curve-point-id')
     ).toBe('');
 
+    await selectRuntimeReviewTab(wrapper, 'event');
     const runtimeLogRow = wrapper.find(
       `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${runtimeStatePointId}"]`
     );
@@ -10060,6 +10541,7 @@ describe('Workbench view', () => {
     expect(workbench.attributes('data-timeline-playback-running')).toBe(
       'false'
     );
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.findComponent(EventLogPanel).props('cursorFrameIndex')).toBe(
       0
     );
@@ -10078,10 +10560,12 @@ describe('Workbench view', () => {
     });
 
     await createAutoDelayedPrimarySkillAction(wrapper);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
 
+    await selectSideInspectorPanel(wrapper, 'properties');
     await wrapper
       .find('[data-testid="workbench-note-input"]')
       .setValue(
@@ -10091,6 +10575,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
     ).toBe('手写备注');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
@@ -10123,10 +10608,12 @@ describe('Workbench view', () => {
     });
 
     await createAutoDelayedPrimarySkillAction(wrapper);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
 
+    await selectSideInspectorPanel(wrapper, 'properties');
     await wrapper
       .find('[data-testid="workbench-start-input"]')
       .setValue('4500');
@@ -10137,6 +10624,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
     ).not.toContain('自动推迟');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('0');
@@ -10186,10 +10674,12 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('3600');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
 
+    await selectSideInspectorPanel(wrapper, 'properties');
     await wrapper
       .find('[data-testid="workbench-duration-input"]')
       .setValue('1200');
@@ -10200,6 +10690,7 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
     ).not.toContain('自动推迟');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('0');
@@ -10231,6 +10722,7 @@ describe('Workbench view', () => {
 
     await createAutoDelayedPrimarySkillAction(wrapper);
     stubTimelineGeometry(wrapper);
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('1');
@@ -10247,9 +10739,11 @@ describe('Workbench view', () => {
         )
         .attributes('data-lane-id')
     ).toBe('actor-101003');
+    await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
     ).not.toContain('自动推迟');
+    await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
     ).toBe('0');
@@ -10335,6 +10829,7 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('3450');
     expect(wrapper.text()).toContain('3450ms');
+    await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
   });
 
@@ -10426,12 +10921,14 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-start-input"]')
       .setValue('2400');
+    await selectEnemyInspector(wrapper);
     await wrapper
       .find('[data-testid="workbench-enemy-level-input"]')
       .setValue('95');
     await selectLoadoutFromTimeline(wrapper, 109001, 'kiboId', 500001);
     await selectLoadoutFromTimeline(wrapper, 109001, 'weapon', 1010111);
     await selectLoadoutFromTimeline(wrapper, 109001, 'soulessenceId', 10001);
+    await selectActorInspector(wrapper, 109001);
     const teamLoadoutPanel = wrapper.findComponent(TeamLoadoutPanel);
     const initialSpInput = teamLoadoutPanel.find(
       '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
@@ -10510,6 +11007,11 @@ describe('Workbench view', () => {
     expect(timelineActorEnergyInput().element.value).toBe('50');
     await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
     expect(timelineKiboEnergyInput().element.value).toBe('50');
+    await wrapper
+      .find(
+        '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+      )
+      .trigger('click');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
 
     const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
@@ -10582,12 +11084,15 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
     );
+    await selectSideInspectorPanel(restored, 'properties');
     expect(
       restored.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('2400');
+    await selectEnemyInspector(restored);
     expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe(
       'Lv.95'
     );
+    await selectActorInspector(restored, 109001);
     expect(
       restored.find(
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
@@ -10630,9 +11135,11 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
       '1 action'
     );
+    await selectSideInspectorPanel(restored, 'properties');
     expect(
       restored.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('0');
+    await selectEnemyInspector(restored);
     expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe(
       'Lv.80'
     );
@@ -10650,6 +11157,7 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-timeline-initial-energy-input"]')
         .exists()
     ).toBe(false);
+    await selectActorInspector(restored, 109001);
     expect(
       restored.find(
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
@@ -10666,6 +11174,8 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+    await selectActorInspector(wrapper, 109001);
+    await selectSideInspectorPanel(wrapper, 'configuration');
 
     const actorSelect = () =>
       wrapper.get(
@@ -10696,14 +11206,20 @@ describe('Workbench view', () => {
 
     await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
     await nextTick();
+    await selectActorInspector(wrapper, 109001);
+    await selectSideInspectorPanel(wrapper, 'configuration');
     expect(actorSelect().element.value).toBe(originalActorInstanceId);
     expect(actorSelect().findAll('option')).toHaveLength(1);
     await wrapper.get('[data-testid="workbench-redo-edit"]').trigger('click');
     await nextTick();
+    await selectActorInspector(wrapper, 109001);
+    await selectSideInspectorPanel(wrapper, 'configuration');
     expect(actorSelect().element.value).toBe(burstActorInstanceId);
 
     await actorName().setValue('末音爆发配置');
+    await selectSideInspectorPanel(wrapper, 'team-loadout');
     await initialSpInput().setValue('0.75');
+    await selectSideInspectorPanel(wrapper, 'configuration');
     await wrapper
       .get('[data-testid="workbench-enemy-configuration-duplicate"]')
       .trigger('click');
@@ -10713,6 +11229,7 @@ describe('Workbench view', () => {
     await wrapper
       .get('[data-testid="workbench-enemy-configuration-name"]')
       .setValue('高压敌人配置');
+    await selectEnemyInspector(wrapper);
     await wrapper
       .get('[data-testid="workbench-enemy-level-input"]')
       .setValue('95');
@@ -10726,19 +11243,27 @@ describe('Workbench view', () => {
       'data-active-workspace-scenario-id': 'scenario-0002',
     });
 
+    await selectActorInspector(wrapper, 109001);
+    await selectSideInspectorPanel(wrapper, 'configuration');
     await actorSelect().setValue(originalActorInstanceId);
     await enemySelect().setValue(originalEnemyInstanceId);
     await nextTick();
+    await selectSideInspectorPanel(wrapper, 'team-loadout');
     expect(initialSpInput().element.value).toBe('');
+    await selectEnemyInspector(wrapper);
     expect(wrapper.get('[data-testid="workbench-enemy-level"]').text()).toBe(
       'Lv.80'
     );
 
     await wrapper.get('[data-scenario-id="scenario-0001"]').trigger('click');
     await nextTick();
+    await selectActorInspector(wrapper, 109001);
+    await selectSideInspectorPanel(wrapper, 'configuration');
     expect(actorSelect().element.value).toBe(burstActorInstanceId);
     expect(enemySelect().element.value).toBe(challengeEnemyInstanceId);
+    await selectSideInspectorPanel(wrapper, 'team-loadout');
     expect(initialSpInput().element.value).toBe('0.75');
+    await selectEnemyInspector(wrapper);
     expect(wrapper.get('[data-testid="workbench-enemy-level"]').text()).toBe(
       'Lv.95'
     );
@@ -11569,6 +12094,7 @@ describe('Workbench view', () => {
       .vm.$emit('delete-action', actionIds[3]);
     await nextTick();
     expect(groupRows()).toHaveLength(4);
+    await selectSideInspectorPanel(wrapper, 'action-rules');
     expect(
       wrapper
         .find(
@@ -11698,8 +12224,11 @@ function createStateCurvePanelProps() {
 }
 
 function getLastDispatchedFlowAction(wrapper, component = AnalysisPanel) {
-  const events =
-    wrapper.findComponent(component).emitted('dispatch-flow-action') ?? [];
+  const componentWrapper =
+    typeof component?.emitted === 'function'
+      ? component
+      : wrapper.findComponent(component);
+  const events = componentWrapper.emitted('dispatch-flow-action') ?? [];
   const lastEvent = events[events.length - 1];
   return lastEvent?.[0] ?? null;
 }

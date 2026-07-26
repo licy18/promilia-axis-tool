@@ -1,0 +1,680 @@
+{
+  "schemaVersion": 1,
+  "kind": "m9-r3-r3-workbench-performance",
+  "capturedAt": "2026-07-26T01:01:56.801Z",
+  "source": {
+    "baselineCommit": "cb13eef",
+    "testedRevision": "m9-r3-r3-working-tree",
+    "captureOnly": false
+  },
+  "environment": {
+    "browserName": "chromium",
+    "browserVersion": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.7827.55 Safari/537.36",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "productionPreview": true
+  },
+  "fixture": {
+    "description": "3 actors, Xiaoyu burst chain and hidden derivation, 7 actions, 120 seconds",
+    "uniqueActionCount": 7,
+    "actionIds": [
+      "action-0001",
+      "action-0002",
+      "action-0003",
+      "action-0004",
+      "action-0005",
+      "action-0006",
+      "action-0007"
+    ],
+    "actorLaneCount": 3,
+    "durationMs": 120000,
+    "curveCount": 9,
+    "maximumSimulationPointCount": 1222
+  },
+  "thresholds": {
+    "elementCount": 20000,
+    "liveNodeCount": 50000,
+    "mountedRowsPerList": 200,
+    "idleTaskDurationMs": 100,
+    "interactionP95Ms": 150,
+    "maximumLongTaskMs": 1000,
+    "pointerPreviewEvaluations": 1,
+    "authoritativeCompilePerCommit": 1,
+    "authoritativeSimulationPerCommit": 1
+  },
+  "metrics": {
+    "inspectorOpen": {
+      "elementCount": 1883,
+      "spanCount": 484,
+      "listItemCount": 7,
+      "buttonCount": 288,
+      "svgCircleCount": 9,
+      "descendants": {
+        "eventLogPanel": 269,
+        "sideInspector": 470,
+        "actionResultSources": 165,
+        "stateCurves": 253,
+        "runtimeSimLog": 192,
+        "runtimeResourceMonitor": 0
+      },
+      "mountedRows": [
+        {
+          "testId": "workbench-event-log-window",
+          "itemCount": 3760,
+          "mountedRowCount": 14
+        },
+        {
+          "testId": "workbench-runtime-sim-log-window",
+          "itemCount": 3711,
+          "mountedRowCount": 15
+        },
+        {
+          "testId": "workbench-action-result-window",
+          "itemCount": 3732,
+          "mountedRowCount": 12
+        },
+        {
+          "testId": "workbench-state-curve-points",
+          "itemCount": 50,
+          "mountedRowCount": 10
+        },
+        {
+          "testId": "workbench-state-curve-points",
+          "itemCount": 68,
+          "mountedRowCount": 10
+        },
+        {
+          "testId": "workbench-state-curve-points",
+          "itemCount": 3664,
+          "mountedRowCount": 10
+        }
+      ],
+      "maximumMountedRowCount": 15,
+      "timelineCurves": [
+        {
+          "trackKey": "specialResource:actor-101010:101010115",
+          "simulationPointCount": 3,
+          "displayPointCount": 3,
+          "semanticNodeCount": 3
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1222,
+          "displayPointCount": 11,
+          "semanticNodeCount": 11
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1221,
+          "displayPointCount": 10,
+          "semanticNodeCount": 10
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1221,
+          "displayPointCount": 10,
+          "semanticNodeCount": 10
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "enemyHpDamage",
+          "simulationPointCount": 50,
+          "displayPointCount": 14,
+          "semanticNodeCount": 14
+        },
+        {
+          "trackKey": "enemyToughnessDamage",
+          "simulationPointCount": 68,
+          "displayPointCount": 14,
+          "semanticNodeCount": 14
+        }
+      ],
+      "resourceCurves": [],
+      "playbackRunning": false,
+      "liveNodeCount": 11212,
+      "documentCount": 1,
+      "jsEventListenerCount": 685,
+      "taskDurationMs": 1629.24
+    },
+    "inspectorClosed": {
+      "elementCount": 1412,
+      "spanCount": 403,
+      "listItemCount": 0,
+      "buttonCount": 229,
+      "svgCircleCount": 9,
+      "descendants": {
+        "eventLogPanel": 269,
+        "sideInspector": 0,
+        "actionResultSources": 0,
+        "stateCurves": 0,
+        "runtimeSimLog": 192,
+        "runtimeResourceMonitor": 0
+      },
+      "mountedRows": [
+        {
+          "testId": "workbench-event-log-window",
+          "itemCount": 3760,
+          "mountedRowCount": 14
+        },
+        {
+          "testId": "workbench-runtime-sim-log-window",
+          "itemCount": 3711,
+          "mountedRowCount": 15
+        }
+      ],
+      "maximumMountedRowCount": 15,
+      "timelineCurves": [
+        {
+          "trackKey": "specialResource:actor-101010:101010115",
+          "simulationPointCount": 3,
+          "displayPointCount": 3,
+          "semanticNodeCount": 3
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1222,
+          "displayPointCount": 11,
+          "semanticNodeCount": 11
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1221,
+          "displayPointCount": 10,
+          "semanticNodeCount": 10
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1221,
+          "displayPointCount": 10,
+          "semanticNodeCount": 10
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "enemyHpDamage",
+          "simulationPointCount": 50,
+          "displayPointCount": 14,
+          "semanticNodeCount": 14
+        },
+        {
+          "trackKey": "enemyToughnessDamage",
+          "simulationPointCount": 68,
+          "displayPointCount": 14,
+          "semanticNodeCount": 14
+        }
+      ],
+      "resourceCurves": [],
+      "playbackRunning": false,
+      "liveNodeCount": 8641,
+      "documentCount": 1,
+      "jsEventListenerCount": 613,
+      "taskDurationMs": 1873.262
+    },
+    "screenshotSurface": {
+      "elementCount": 1938,
+      "spanCount": 497,
+      "listItemCount": 7,
+      "buttonCount": 293,
+      "svgCircleCount": 9,
+      "descendants": {
+        "eventLogPanel": 269,
+        "sideInspector": 482,
+        "actionResultSources": 177,
+        "stateCurves": 253,
+        "runtimeSimLog": 192,
+        "runtimeResourceMonitor": 0
+      },
+      "mountedRows": [
+        {
+          "testId": "workbench-event-log-window",
+          "itemCount": 3762,
+          "mountedRowCount": 14
+        },
+        {
+          "testId": "workbench-runtime-sim-log-window",
+          "itemCount": 3711,
+          "mountedRowCount": 15
+        },
+        {
+          "testId": "workbench-action-result-window",
+          "itemCount": 3733,
+          "mountedRowCount": 12
+        },
+        {
+          "testId": "workbench-state-curve-points",
+          "itemCount": 50,
+          "mountedRowCount": 10
+        },
+        {
+          "testId": "workbench-state-curve-points",
+          "itemCount": 68,
+          "mountedRowCount": 10
+        },
+        {
+          "testId": "workbench-state-curve-points",
+          "itemCount": 3664,
+          "mountedRowCount": 10
+        }
+      ],
+      "maximumMountedRowCount": 15,
+      "timelineCurves": [
+        {
+          "trackKey": "specialResource:actor-101010:101010115",
+          "simulationPointCount": 3,
+          "displayPointCount": 3,
+          "semanticNodeCount": 3
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1222,
+          "displayPointCount": 11,
+          "semanticNodeCount": 11
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1221,
+          "displayPointCount": 10,
+          "semanticNodeCount": 10
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "selfEnergyChange",
+          "simulationPointCount": 1221,
+          "displayPointCount": 10,
+          "semanticNodeCount": 10
+        },
+        {
+          "trackKey": "kiboEnergyChange",
+          "simulationPointCount": 0,
+          "displayPointCount": 0,
+          "semanticNodeCount": 0
+        },
+        {
+          "trackKey": "enemyHpDamage",
+          "simulationPointCount": 50,
+          "displayPointCount": 14,
+          "semanticNodeCount": 14
+        },
+        {
+          "trackKey": "enemyToughnessDamage",
+          "simulationPointCount": 68,
+          "displayPointCount": 14,
+          "semanticNodeCount": 14
+        }
+      ],
+      "resourceCurves": [],
+      "playbackRunning": false,
+      "liveNodeCount": 11459,
+      "documentCount": 1,
+      "jsEventListenerCount": 697,
+      "taskDurationMs": 3091.895
+    },
+    "idle": {
+      "durationMs": 5000,
+      "beforeElementCount": 1883,
+      "afterElementCount": 1883,
+      "elementGrowth": 0,
+      "beforeLiveNodeCount": 11212,
+      "afterLiveNodeCount": 11212,
+      "liveNodeGrowth": 0,
+      "taskDurationDeltaMs": 95.789,
+      "playbackRunning": false
+    },
+    "interactionDurationsMs": [12.7, 24.9],
+    "interactionP95Ms": 24.9,
+    "maximumLongTaskMs": 612,
+    "longTaskCount": 3,
+    "navigationCounters": {
+      "authoritativeCompile": 0,
+      "authoritativeSimulation": 0,
+      "placementPreviewEvaluation": 0,
+      "placementCandidateEvaluation": 0,
+      "durations": {
+        "authoritativeCompile": {
+          "count": 0,
+          "totalMs": 0,
+          "maximumMs": 0,
+          "latestMs": 0
+        },
+        "authoritativeSimulation": {
+          "count": 0,
+          "totalMs": 0,
+          "maximumMs": 0,
+          "latestMs": 0
+        },
+        "placementPreviewEvaluation": {
+          "count": 0,
+          "totalMs": 0,
+          "maximumMs": 0,
+          "latestMs": 0
+        },
+        "placementCandidateEvaluation": {
+          "count": 0,
+          "totalMs": 0,
+          "maximumMs": 0,
+          "latestMs": 0
+        }
+      }
+    },
+    "dragEvaluation": {
+      "available": true,
+      "pointerMoveCount": 60,
+      "previewCounters": {
+        "authoritativeCompile": 0,
+        "authoritativeSimulation": 0,
+        "placementPreviewEvaluation": 1,
+        "placementCandidateEvaluation": 1,
+        "durations": {
+          "authoritativeCompile": {
+            "count": 0,
+            "totalMs": 0,
+            "maximumMs": 0,
+            "latestMs": 0
+          },
+          "authoritativeSimulation": {
+            "count": 0,
+            "totalMs": 0,
+            "maximumMs": 0,
+            "latestMs": 0
+          },
+          "placementPreviewEvaluation": {
+            "count": 0,
+            "totalMs": 0,
+            "maximumMs": 0,
+            "latestMs": 0
+          },
+          "placementCandidateEvaluation": {
+            "count": 0,
+            "totalMs": 0,
+            "maximumMs": 0,
+            "latestMs": 0
+          }
+        }
+      },
+      "commitCounters": {
+        "authoritativeCompile": 1,
+        "authoritativeSimulation": 1,
+        "placementPreviewEvaluation": 1,
+        "placementCandidateEvaluation": 2,
+        "durations": {
+          "authoritativeCompile": {
+            "count": 1,
+            "totalMs": 0.5,
+            "maximumMs": 0.5,
+            "latestMs": 0.5
+          },
+          "authoritativeSimulation": {
+            "count": 1,
+            "totalMs": 520.3999999761581,
+            "maximumMs": 520.3999999761581,
+            "latestMs": 520.3999999761581
+          },
+          "placementPreviewEvaluation": {
+            "count": 0,
+            "totalMs": 0,
+            "maximumMs": 0,
+            "latestMs": 0
+          },
+          "placementCandidateEvaluation": {
+            "count": 0,
+            "totalMs": 0,
+            "maximumMs": 0,
+            "latestMs": 0
+          }
+        }
+      }
+    },
+    "longTasks": [
+      {
+        "startTime": 8014.6,
+        "duration": 612
+      },
+      {
+        "startTime": 912.7,
+        "duration": 562
+      },
+      {
+        "startTime": 98.8,
+        "duration": 221
+      }
+    ],
+    "phases": [
+      {
+        "name": "workbench-loaded",
+        "time": 94.6,
+        "counters": null
+      },
+      {
+        "name": "runtime-diagnostics-ready",
+        "time": 1527.4,
+        "counters": {
+          "authoritativeCompile": 3,
+          "authoritativeSimulation": 3,
+          "placementPreviewEvaluation": 0,
+          "placementCandidateEvaluation": 0,
+          "durations": {
+            "authoritativeCompile": {
+              "count": 3,
+              "totalMs": 13.599999964237213,
+              "maximumMs": 8.899999976158142,
+              "latestMs": 4.300000011920929
+            },
+            "authoritativeSimulation": {
+              "count": 3,
+              "totalMs": 524.0999999642372,
+              "maximumMs": 486.30000001192093,
+              "latestMs": 486.30000001192093
+            },
+            "placementPreviewEvaluation": {
+              "count": 0,
+              "totalMs": 0,
+              "maximumMs": 0,
+              "latestMs": 0
+            },
+            "placementCandidateEvaluation": {
+              "count": 0,
+              "totalMs": 0,
+              "maximumMs": 0,
+              "latestMs": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "fixture-ready",
+        "time": 1538.9,
+        "counters": {
+          "authoritativeCompile": 3,
+          "authoritativeSimulation": 3,
+          "placementPreviewEvaluation": 0,
+          "placementCandidateEvaluation": 0,
+          "durations": {
+            "authoritativeCompile": {
+              "count": 3,
+              "totalMs": 13.599999964237213,
+              "maximumMs": 8.899999976158142,
+              "latestMs": 4.300000011920929
+            },
+            "authoritativeSimulation": {
+              "count": 3,
+              "totalMs": 524.0999999642372,
+              "maximumMs": 486.30000001192093,
+              "latestMs": 486.30000001192093
+            },
+            "placementPreviewEvaluation": {
+              "count": 0,
+              "totalMs": 0,
+              "maximumMs": 0,
+              "latestMs": 0
+            },
+            "placementCandidateEvaluation": {
+              "count": 0,
+              "totalMs": 0,
+              "maximumMs": 0,
+              "latestMs": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "measurement-ready",
+        "time": 1933.3,
+        "counters": {
+          "authoritativeCompile": 3,
+          "authoritativeSimulation": 3,
+          "placementPreviewEvaluation": 0,
+          "placementCandidateEvaluation": 0,
+          "durations": {
+            "authoritativeCompile": {
+              "count": 3,
+              "totalMs": 13.599999964237213,
+              "maximumMs": 8.899999976158142,
+              "latestMs": 4.300000011920929
+            },
+            "authoritativeSimulation": {
+              "count": 3,
+              "totalMs": 524.0999999642372,
+              "maximumMs": 486.30000001192093,
+              "latestMs": 486.30000001192093
+            },
+            "placementPreviewEvaluation": {
+              "count": 0,
+              "totalMs": 0,
+              "maximumMs": 0,
+              "latestMs": 0
+            },
+            "placementCandidateEvaluation": {
+              "count": 0,
+              "totalMs": 0,
+              "maximumMs": 0,
+              "latestMs": 0
+            }
+          }
+        }
+      }
+    ],
+    "narrowOverflow": {
+      "overflowPx": 0,
+      "offenders": [],
+      "rootGeometry": [
+        {
+          "tag": "html",
+          "className": "",
+          "testId": "",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "left": 0,
+          "right": 390,
+          "width": 390,
+          "overflowX": "visible"
+        },
+        {
+          "tag": "body",
+          "className": "",
+          "testId": "",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "left": 0,
+          "right": 390,
+          "width": 390,
+          "overflowX": "visible"
+        },
+        {
+          "tag": "main",
+          "className": "workbench",
+          "testId": "",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "left": 0,
+          "right": 390,
+          "width": 390,
+          "overflowX": "visible"
+        },
+        {
+          "tag": "div",
+          "className": "workbench-grid",
+          "testId": "workbench-main-flow-workspace",
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "left": 0,
+          "right": 390,
+          "width": 390,
+          "overflowX": "visible"
+        },
+        {
+          "tag": "section",
+          "className": "panel timeline-panel timeline-area",
+          "testId": "workbench-timeline-grid-preview",
+          "clientWidth": 376,
+          "scrollWidth": 376,
+          "left": 6,
+          "right": 384,
+          "width": 378,
+          "overflowX": "hidden"
+        },
+        {
+          "tag": "div",
+          "className": "timeline-viewport",
+          "testId": "workbench-timeline-viewport",
+          "clientWidth": 209,
+          "scrollWidth": 2880,
+          "left": 149,
+          "right": 358,
+          "width": 209,
+          "overflowX": "scroll"
+        }
+      ]
+    }
+  },
+  "decision": {
+    "status": "passed",
+    "passed": true,
+    "failures": []
+  }
+}

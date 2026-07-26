@@ -22,23 +22,34 @@
       <h2>事件日志</h2>
     </div>
 
-    <ol class="event-list">
-      <li
-        v-for="event in eventLog"
-        :key="`${event.type}-${event.timeMs}-${event.actionId ?? 'scenario'}`"
-        :class="{ 'cursor-current': isEventAtCursor(event) }"
-        :data-cursor-current="isEventAtCursor(event) ? 'true' : 'false'"
-        :data-frame-index="msToFrame(event.timeMs)"
-        :data-effect-relation-id="event.relationId ?? ''"
-        :data-effect-relation-kind="event.relationKind ?? ''"
-      >
-        <span class="time">{{ event.timeMs }}ms</span>
-        <span class="type" :class="event.type.toLowerCase()">{{
-          event.type
-        }}</span>
-        <span class="payload">{{ formatPayload(event) }}</span>
-      </li>
-    </ol>
+    <WindowedList
+      v-if="eventLog.length"
+      class="event-list"
+      :items="eventLog"
+      :item-height="eventLogRowHeight"
+      :max-height="eventLogViewportHeight"
+      :overscan="4"
+      :item-key="createEventLogRowKey"
+      data-testid="workbench-event-log-window"
+    >
+      <template #default="{ item: event }">
+        <div
+          class="event-log-row"
+          :class="{ 'cursor-current': isEventAtCursor(event) }"
+          :data-cursor-current="isEventAtCursor(event) ? 'true' : 'false'"
+          :data-frame-index="msToFrame(event.timeMs)"
+          :data-effect-relation-id="event.relationId ?? ''"
+          :data-effect-relation-kind="event.relationKind ?? ''"
+          data-testid="workbench-event-log-row"
+        >
+          <span class="time">{{ event.timeMs }}ms</span>
+          <span class="type" :class="event.type.toLowerCase()">{{
+            event.type
+          }}</span>
+          <span class="payload">{{ formatPayload(event) }}</span>
+        </div>
+      </template>
+    </WindowedList>
 
     <div
       v-if="runtimeSimLogRows.length"
@@ -184,31 +195,42 @@
         </div>
       </div>
 
-      <ol class="runtime-log-list">
-        <li
-          v-for="(row, index) in filteredRuntimeSimLogRows"
-          :key="row.sourceDeltaId ?? `${row.eventType}-${index}`"
-          class="runtime-log-row"
-          :class="{ 'cursor-current': isRuntimeLogRowAtCursor(row) }"
-          :data-review-unit="row.reviewUnit ?? 'delta'"
-          :data-selected="isRuntimeLogRowSelected(row, index)"
-          :data-source-delta-count="row.sourceDeltaIds?.length ?? 1"
-          :data-state-point-id="getRuntimeStatePointIdByRow(row)"
-          :data-transaction-id="row.transactionId ?? ''"
-          :data-frame-index="getRuntimeLogRowFrameIndex(row)"
-          :data-cursor-current="isRuntimeLogRowAtCursor(row) ? 'true' : 'false'"
-          data-testid="workbench-runtime-sim-log-row"
-          role="button"
-          tabindex="0"
-          @click="selectRuntimeLog(index)"
-          @keydown.enter.prevent="selectRuntimeLog(index)"
-          @keydown.space.prevent="selectRuntimeLog(index)"
-        >
-          <span class="time">{{ formatRuntimeTime(row) }}</span>
-          <span class="runtime-track">{{ formatRuntimeTrack(row) }}</span>
-          <span class="payload">{{ formatRuntimePayload(row) }}</span>
-        </li>
-      </ol>
+      <WindowedList
+        ref="runtimeLogWindowRef"
+        class="runtime-log-list"
+        :items="filteredRuntimeSimLogRows"
+        :item-height="runtimeLogRowHeight"
+        :max-height="runtimeLogViewportHeight"
+        :overscan="5"
+        :selected-index="selectedRuntimeLogIndex"
+        :item-key="createRuntimeLogRowKey"
+        data-testid="workbench-runtime-sim-log-window"
+      >
+        <template #default="{ item: row, index }">
+          <button
+            type="button"
+            class="runtime-log-row"
+            :class="{ 'cursor-current': isRuntimeLogRowAtCursor(row) }"
+            :data-review-unit="row.reviewUnit ?? 'delta'"
+            :data-selected="isRuntimeLogRowSelected(row, index)"
+            :data-source-delta-count="row.sourceDeltaIds?.length ?? 1"
+            :data-state-point-id="getRuntimeStatePointIdByRow(row)"
+            :data-transaction-id="row.transactionId ?? ''"
+            :data-frame-index="getRuntimeLogRowFrameIndex(row)"
+            :data-cursor-current="
+              isRuntimeLogRowAtCursor(row) ? 'true' : 'false'
+            "
+            data-testid="workbench-runtime-sim-log-row"
+            @click="selectRuntimeLog(index)"
+            @keydown.up.prevent="selectRuntimeLogByOffset(index, -1)"
+            @keydown.down.prevent="selectRuntimeLogByOffset(index, 1)"
+          >
+            <span class="time">{{ formatRuntimeTime(row) }}</span>
+            <span class="runtime-track">{{ formatRuntimeTrack(row) }}</span>
+            <span class="payload">{{ formatRuntimePayload(row) }}</span>
+          </button>
+        </template>
+      </WindowedList>
 
       <p
         v-if="filteredRuntimeSimLogRows.length === 0"
@@ -383,7 +405,7 @@ import {
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeHitReviewRows } from './runtimeHitReviewRows';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
-import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
+import { getCachedWorkbenchRuntimeOutputConsumerView } from './workbenchRuntimeOutputViewCache';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
@@ -399,6 +421,7 @@ import {
   createRuntimeFocusSourceView,
   isRuntimeLogFocusSource,
 } from './runtimeFocusSource';
+import WindowedList from './WindowedList.vue';
 import { msToFrame } from '../../domain/timebase';
 
 const RUNTIME_LOG_SCROLL_FLOW_PHASES = new Set([
@@ -460,13 +483,18 @@ const props = defineProps({
 const emit = defineEmits(['dispatch-flow-action']);
 
 const eventLogPanelRef = ref(null);
+const runtimeLogWindowRef = ref(null);
 const selectedRuntimeLogIndex = ref(0);
+const eventLogRowHeight = 42;
+const runtimeLogRowHeight = 42;
+const eventLogViewportHeight = 250;
+const runtimeLogViewportHeight = 170;
 const runtimeReviewMode = ref('hit');
 const runtimeTrackFilter = ref('all');
 const runtimeActorFilter = ref('all');
 const runtimeActionFilter = ref('all');
 const runtimeOutputView = computed(() =>
-  createWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
+  getCachedWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
 );
 const runtimeStatePointContexts = computed(
   () => runtimeOutputView.value.statePointContexts
@@ -928,7 +956,8 @@ watch(
   () => {
     syncSelectedRuntimeLogIndexFromStatePoint(filteredRuntimeSimLogRows.value);
     scheduleSelectedRuntimeLogRowScroll();
-  }
+  },
+  { immediate: true }
 );
 
 watch(
@@ -1026,6 +1055,15 @@ function selectRuntimeLog(index) {
   selectedRuntimeLogIndex.value = index;
   const row = filteredRuntimeSimLogRows.value[index];
   dispatchRuntimeLogFlowAction(getRuntimeLogRowFlowAction(row));
+}
+
+function selectRuntimeLogByOffset(index, offset) {
+  const nextIndex = Math.min(
+    filteredRuntimeSimLogRows.value.length - 1,
+    Math.max(0, index + offset)
+  );
+  selectRuntimeLog(nextIndex);
+  runtimeLogWindowRef.value?.scrollToIndex(nextIndex);
 }
 
 function selectRuntimeLogNavigationTarget(target) {
@@ -1366,24 +1404,24 @@ function shouldScrollRuntimeLogRow(statePointId = '') {
 }
 
 function scrollRuntimeLogRowIntoView(statePointId = '') {
-  const panel = eventLogPanelRef.value;
-  if (!panel) {
-    return;
+  const index = filteredRuntimeSimLogRows.value.findIndex(row =>
+    runtimeRowHasStatePoint(row, statePointId)
+  );
+  if (index >= 0) {
+    runtimeLogWindowRef.value?.scrollToIndex(index);
   }
-  const target = Array.from(
-    panel.querySelectorAll('[data-testid="workbench-runtime-sim-log-row"]')
-  ).find(row => row.getAttribute('data-state-point-id') === statePointId);
-  const list = target?.closest?.('.runtime-log-list');
-  if (!target || !list) {
-    return;
-  }
-  const listRect = list.getBoundingClientRect();
-  const targetRect = target.getBoundingClientRect();
-  if (targetRect.top < listRect.top) {
-    list.scrollTop -= listRect.top - targetRect.top;
-  } else if (targetRect.bottom > listRect.bottom) {
-    list.scrollTop += targetRect.bottom - listRect.bottom;
-  }
+}
+
+function createEventLogRowKey(event, index) {
+  return `${event.type}-${event.timeMs}-${event.actionId ?? 'scenario'}-${index}`;
+}
+
+function createRuntimeLogRowKey(row, index) {
+  return (
+    row.sourceDeltaId ??
+    row.transactionId ??
+    `${row.eventType}-${row.frameIndex ?? row.timeMs ?? 0}-${index}`
+  );
 }
 
 function formatRuntimeTime(row) {
@@ -1713,16 +1751,12 @@ h2 {
 
 .event-list,
 .runtime-log-list {
-  display: grid;
-  gap: 8px;
   margin: 0;
-  overflow: auto;
-  list-style: none;
 }
 
 .event-list {
   max-height: 250px;
-  padding: 14px;
+  margin: 14px;
 }
 
 .event-log-panel:is(
@@ -1730,14 +1764,16 @@ h2 {
     [data-flow-phase='edit-result-review']
   )
   .event-list {
-  gap: 6px;
   max-height: 88px;
-  padding: 10px 12px;
+  margin: 10px 12px;
 }
 
-.event-list > li,
+.event-log-row,
 .runtime-log-row {
   display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100% - 6px);
   grid-template-columns: 72px minmax(116px, 160px) minmax(0, 1fr);
   align-items: center;
   gap: 10px;
@@ -1752,7 +1788,7 @@ h2 {
     [data-flow-phase='edit-result-review']
   )
   .event-list
-  > li {
+  .event-log-row {
   grid-template-columns: 58px minmax(84px, 116px) minmax(0, 1fr);
   gap: 6px;
   padding: 6px 8px;
@@ -2144,7 +2180,7 @@ h2 {
   background: rgba(121, 199, 185, 0.14);
 }
 
-.event-list > li.cursor-current,
+.event-log-row.cursor-current,
 .runtime-log-row.cursor-current {
   box-shadow: inset 3px 0 0 #79c7b9;
 }
@@ -2247,6 +2283,8 @@ h2 {
 .runtime-calculator-row strong,
 .runtime-source-row strong {
   display: block;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   color: #ffffff;
   font-size: 12px;
@@ -2483,7 +2521,7 @@ h2 {
 }
 
 @media (max-width: 760px) {
-  .event-list > li,
+  .event-log-row,
   .runtime-log-row,
   .runtime-log-detail,
   .runtime-select-filters {
@@ -2532,7 +2570,11 @@ h2 {
   .runtime-contribution-row strong,
   .runtime-calculator-row strong,
   .runtime-source-row strong {
+    width: 100%;
+    overflow-wrap: anywhere;
     text-align: left;
+    white-space: normal;
+    word-break: break-word;
   }
 
   .payload {

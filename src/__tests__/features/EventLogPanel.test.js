@@ -225,7 +225,9 @@ describe('EventLogPanel', () => {
     });
 
     expect(wrapper.attributes('data-cursor-frame-index')).toBe('12');
-    expect(wrapper.get('.event-list > li').attributes()).toMatchObject({
+    expect(
+      wrapper.get('[data-testid="workbench-event-log-row"]').attributes()
+    ).toMatchObject({
       'data-frame-index': '12',
       'data-cursor-current': 'true',
     });
@@ -238,7 +240,9 @@ describe('EventLogPanel', () => {
 
     await wrapper.setProps({ cursorFrameIndex: 13 });
     expect(
-      wrapper.get('.event-list > li').attributes('data-cursor-current')
+      wrapper
+        .get('[data-testid="workbench-event-log-row"]')
+        .attributes('data-cursor-current')
     ).toBe('false');
     expect(
       wrapper
@@ -268,12 +272,68 @@ describe('EventLogPanel', () => {
       },
     });
 
-    const row = wrapper.get('.event-list > li');
+    const row = wrapper.get('[data-testid="workbench-event-log-row"]');
     expect(row.attributes()).toMatchObject({
       'data-effect-relation-id': 'effect-relation:remove-focus',
       'data-effect-relation-kind': 'effect-consume',
     });
     expect(row.text()).toContain('消耗 专注 -> actor-a / 1 层');
+  });
+
+  it('windows large event and runtime logs while keeping an offscreen selection reachable', async () => {
+    const eventLog = Array.from({ length: 1000 }, (_, index) => ({
+      type: 'ACTION_START',
+      timeMs: index * 100,
+      actionId: `event-action-${index}`,
+      payload: {
+        actorName: '末音',
+        actionName: `动作 ${index}`,
+      },
+    }));
+    const runtimeRows = Array.from({ length: 1000 }, (_, index) =>
+      createRuntimeLogRow({
+        sourceDeltaId: `delta-${index}`,
+        actionId: `action-${index}`,
+        actionName: `动作 ${index}`,
+        frameIndex: index,
+        sequenceIndex: index,
+      })
+    );
+    const selectedStatePointId = createRuntimeStatePointContexts({
+      simLog: runtimeRows,
+    }).at(-1).statePointId;
+    const wrapper = mount(EventLogPanel, {
+      props: {
+        eventLog,
+        runtimeProjection: { simLog: runtimeRows },
+        selectedStateCurvePointId: selectedStatePointId,
+        flowModel: {
+          phase: 'runtime-result',
+        },
+      },
+      attachTo: document.body,
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(
+      wrapper.findAll('[data-testid="workbench-event-log-row"]').length
+    ).toBeGreaterThan(0);
+    expect(
+      wrapper.findAll('[data-testid="workbench-event-log-row"]').length
+    ).toBeLessThanOrEqual(200);
+    expect(
+      wrapper.findAll('[data-testid="workbench-runtime-sim-log-row"]').length
+    ).toBeLessThanOrEqual(200);
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${selectedStatePointId}"]`
+        )
+        .exists()
+    ).toBe(true);
+
+    wrapper.unmount();
   });
 });
 

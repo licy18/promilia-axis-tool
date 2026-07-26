@@ -36,6 +36,7 @@
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:production-preview": "npm run audit:applied-source-bindings:check && npm run build && playwright test --config playwright.production.config.js",
+    "test:e2e:workbench-performance": "npm run build && playwright test --config playwright.performance.config.js",
     "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
     "test:trial-release": "npm run test -- --run && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:action-status:check && npm run audit:verified-combat && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
     "test:coverage": "vitest run --coverage"
