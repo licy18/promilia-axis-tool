@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "azpr://schemas/character-combat-profile/v1",
+  "title": "Azur Promilia Character Combat Profile",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "kind",
+    "profileIdentity",
+    "profileHash",
+    "owner",
+    "sourcePackage",
+    "denominator",
+    "contracts",
+    "runtimeCompilation",
+    "coverage",
+    "unresolvedRecords",
+    "validation"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "azpr-character-combat-profile"
+    },
+    "profileIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profileHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "completionState": {
+      "enum": [
+        "not-started",
+        "evidence-indexed",
+        "profile-compiled",
+        "runtime-applied",
+        "ui-verified"
+      ]
+    },
+    "owner": {
+      "type": "object",
+      "required": [
+        "ownerKind",
+        "ownerId",
+        "ownerName"
+      ]
+    },
+    "sourcePackage": {
+      "type": "object",
+      "required": [
+        "packageId",
+        "packageHash"
+      ]
+    },
+    "denominator": {
+      "type": "object",
+      "required": [
+        "publicActionCount",
+        "reachableControlCount",
+        "executionFormCount",
+        "verifiedWindowCount"
+      ]
+    },
+    "contracts": {
+      "type": "object",
+      "required": [
+        "publicActions",
+        "actionForms",
+        "controls",
+        "timingInputEdges",
+        "hits",
+        "resourceTransactions",
+        "stateMachines",
+        "effects",
+        "passives",
+        "switchTriggers",
+        "statDependencies"
+      ]
+    },
+    "runtimeCompilation": {
+      "type": "object",
+      "required": [
+        "status",
+        "operatorContractVersion",
+        "operators",
+        "outputBindings",
+        "contractHash"
+      ]
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension",
+          "status",
+          "sourceIdentities"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "applied",
+              "runtime-evidence-required",
+              "static-evidence-gap",
+              "not-applicable"
+            ]
+          }
+        }
+      }
+    },
+    "unresolvedRecords": {
+      "type": "array"
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "status",
+        "issues"
+      ]
+    }
+  }
+}

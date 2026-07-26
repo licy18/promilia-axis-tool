@@ -12,6 +12,8 @@ import spUnitContract from '../../data/generated/verified-sp-unit-contract.json'
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionInputMapping,
+  getVerifiedCharacterCombatProfileCatalog,
+  getVerifiedCharacterCombatProfileMetadata,
   getInstalledVerifiedCombatMechanicsPackage,
   installVerifiedCombatMechanicsPackage,
   loadVerifiedCombatMechanicsPackage,
@@ -70,6 +72,8 @@ describe('verified combat mechanics package', () => {
         semanticEffectCount: 3559,
         semanticGameplayEffectCount: 1816,
         semanticAppliedEffectCount: 397,
+        characterCombatProfileCount: 1,
+        characterCombatUiVerifiedProfileCount: 1,
       },
       mechanismEvidence: {
         contractName: 'AzPrVerifiedMechanismEvidenceManifest',
@@ -140,8 +144,27 @@ describe('verified combat mechanics package', () => {
         },
         skillCost: { sourceField: 'spCost', divisor: null },
       },
+      characterCombatProfileCatalog: {
+        status: 'character-combat-profile-catalog-ready',
+        profileSchema: 'azpr://schemas/character-combat-profile/v1',
+        summary: {
+          publicCharacterCount: 20,
+          compiledProfileCount: 1,
+          uiVerifiedProfileCount: 1,
+        },
+      },
     });
     expect(mechanicsPackage.packageHash).toMatch(/^[a-f0-9]{64}$/);
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    expect(getVerifiedCharacterCombatProfileCatalog()).toBe(
+      mechanicsPackage.characterCombatProfileCatalog
+    );
+    expect(getVerifiedCharacterCombatProfileMetadata(101010)).toMatchObject({
+      ownerName: '涂山小玉',
+      completionState: 'ui-verified',
+      profileHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+      runtimeContractHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+    });
     expect(
       mechanicsPackage.tuningMechanicsCatalog.profiles.find(
         profile => profile.key === 'dark'
@@ -726,15 +749,10 @@ describe('verified combat mechanics package', () => {
     expect(
       mechanicsPackage.actionVariantGraph.contextEdges.map(edge => ({
         source: `${edge.sourceControlSkillId}/sub${edge.sourceSubSkillIndex}`,
-        window: [
-          edge.inputWindow.startFrame,
-          edge.inputWindow.endFrame,
-        ],
+        window: [edge.inputWindow.startFrame, edge.inputWindow.endFrame],
         semantics: edge.inputScheduling.inputSemantics,
-        genericEnd:
-          edge.inputScheduling.edgeIntent.predecessorGenericEndFrame,
-        canonicalInput:
-          edge.inputScheduling.edgeIntent.canonicalInputFrame,
+        genericEnd: edge.inputScheduling.edgeIntent.predecessorGenericEndFrame,
+        canonicalInput: edge.inputScheduling.edgeIntent.canonicalInputFrame,
         executionStart:
           edge.inputScheduling.edgeIntent.canonicalExecutionStartFrame,
         predecessorEnd:

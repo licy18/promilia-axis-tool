@@ -31,6 +31,12 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 1,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json"
       },
       "selectedWindowRole": "specific-input-transition",
@@ -65,6 +71,12 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 1,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_4096652098138878494__4096652098138878494.json#behaviorlineControl[0].behaviorList[pathId=1016322126273720862]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1016322126273720862__1016322126273720862.json"
       },
       "selectedWindowRole": "specific-input-transition",
@@ -99,6 +111,16 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_-1765588838506368316__-1765588838506368316.json#behaviorlineControl[0].behaviorList[pathId=-4281991163890961724]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_-4281991163890961724__-4281991163890961724.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -133,6 +155,11 @@
         "inputToIndex": false,
         "bridgeType": 0,
         "continuousAttackType": 1,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_-3909367157089604780__-3909367157089604780.json#behaviorlineControl[0].behaviorList[pathId=5116440399992220500]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_5116440399992220500__5116440399992220500.json"
       },
       "selectedWindowRole": "specific-input-transition",
@@ -167,6 +194,11 @@
         "inputToIndex": false,
         "bridgeType": 0,
         "continuousAttackType": 1,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_-8142932822560298933__-8142932822560298933.json#behaviorlineControl[0].behaviorList[pathId=562420080008210507]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_562420080008210507__562420080008210507.json"
       },
       "selectedWindowRole": "specific-input-transition",
@@ -202,6 +234,11 @@
         "inputToIndex": false,
         "bridgeType": 0,
         "continuousAttackType": 1,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7246267674440090934__-7246267674440090934.json#behaviorlineControl[0].behaviorList[pathId=4211073580757236426]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4211073580757236426__4211073580757236426.json"
       },
       "selectedWindowRole": "specific-input-transition",
@@ -223,6 +260,14 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-6866853371364295990__-6866853371364295990.json#behaviorlineControl[0].behaviorList[pathId=4707391544383519434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4707391544383519434__4707391544383519434.json"
         },
         {
@@ -237,6 +282,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-1008528241414882614__-1008528241414882614.json#behaviorlineControl[0].behaviorList[pathId=-4090788073586672950]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-4090788073586672950__-4090788073586672950.json"
         },
         {
@@ -251,6 +306,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7246267674440090934__-7246267674440090934.json#behaviorlineControl[0].behaviorList[pathId=4211073580757236426]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4211073580757236426__4211073580757236426.json"
         },
         {
@@ -265,6 +325,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7754338892306236726__-7754338892306236726.json#behaviorlineControl[0].behaviorList[pathId=-897986250524247350]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-897986250524247350__-897986250524247350.json"
         }
       ],
@@ -298,6 +369,16 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6799115387162765298__-6799115387162765298.json#behaviorlineControl[0].behaviorList[pathId=-7360650682097903602]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-7360650682097903602__-7360650682097903602.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -319,6 +400,15 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-2492287290080143346__-2492287290080143346.json#behaviorlineControl[0].behaviorList[pathId=1584060666627119118]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_1584060666627119118__1584060666627119118.json"
         },
         {
@@ -333,6 +423,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-5145301466758555634__-5145301466758555634.json#behaviorlineControl[0].behaviorList[pathId=-6857785426171701234]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6857785426171701234__-6857785426171701234.json"
         },
         {
@@ -347,6 +442,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6799115387162765298__-6799115387162765298.json#behaviorlineControl[0].behaviorList[pathId=-7360650682097903602]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-7360650682097903602__-7360650682097903602.json"
         },
         {
@@ -361,6 +466,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-8776477944309590002__-8776477944309590002.json#behaviorlineControl[0].behaviorList[pathId=-9057682781265111026]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-9057682781265111026__-9057682781265111026.json"
         }
       ],
@@ -400,6 +516,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_7177454973769386315__7177454973769386315.json#behaviorlineControl[0].behaviorList[pathId=-5730003522048784053]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5730003522048784053__-5730003522048784053.json"
         },
         {
@@ -414,6 +540,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_165341662459234635__165341662459234635.json#behaviorlineControl[0].behaviorList[pathId=2660188517265606987]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_2660188517265606987__2660188517265606987.json"
         },
         {
@@ -428,6 +559,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_3817829066322118987__3817829066322118987.json#behaviorlineControl[0].behaviorList[pathId=-4399604072245393077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-4399604072245393077__-4399604072245393077.json"
         }
       ],
@@ -467,6 +609,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_2434142348117622169__2434142348117622169.json#behaviorlineControl[0].behaviorList[pathId=4204657527139286425]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_4204657527139286425__4204657527139286425.json"
         },
         {
@@ -481,6 +633,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json"
         },
         {
@@ -495,6 +652,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3101668107587404391__-3101668107587404391.json#behaviorlineControl[0].behaviorList[pathId=-9141570374978159207]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-9141570374978159207__-9141570374978159207.json"
         }
       ],
@@ -534,6 +702,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_785893499035669866__785893499035669866.json#behaviorlineControl[0].behaviorList[pathId=2579144262318445930]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_2579144262318445930__2579144262318445930.json"
         },
         {
@@ -548,6 +726,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_7212743067276039530__7212743067276039530.json#behaviorlineControl[0].behaviorList[pathId=3067658033679914346]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_3067658033679914346__3067658033679914346.json"
         },
         {
@@ -562,6 +745,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_-7712723906466982550__-7712723906466982550.json#behaviorlineControl[0].behaviorList[pathId=765806859406169450]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_765806859406169450__765806859406169450.json"
         }
       ],
@@ -601,6 +795,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_-8159569480426374752__-8159569480426374752.json#behaviorlineControl[0].behaviorList[pathId=8528926833493883296]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_8528926833493883296__8528926833493883296.json"
         },
         {
@@ -615,6 +819,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_6626720207028828576__6626720207028828576.json#behaviorlineControl[0].behaviorList[pathId=3622866919876671904]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_3622866919876671904__3622866919876671904.json"
         },
         {
@@ -629,6 +838,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_7867676462511110560__7867676462511110560.json#behaviorlineControl[0].behaviorList[pathId=9032413204689402272]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_9032413204689402272__9032413204689402272.json"
         }
       ],
@@ -668,6 +888,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_4094405999062832736__4094405999062832736.json#behaviorlineControl[0].behaviorList[pathId=1301367704647980640]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_1301367704647980640__1301367704647980640.json"
         },
         {
@@ -682,6 +912,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-7015361169988888992__-7015361169988888992.json#behaviorlineControl[0].behaviorList[pathId=3144736292614526560]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_3144736292614526560__3144736292614526560.json"
         },
         {
@@ -696,6 +931,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-7892512117924866464__-7892512117924866464.json#behaviorlineControl[0].behaviorList[pathId=-8877966893798173088]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8877966893798173088__-8877966893798173088.json"
         }
       ],
@@ -735,6 +981,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_7655508496034137756__7655508496034137756.json#behaviorlineControl[0].behaviorList[pathId=-3691110762119068004]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3691110762119068004__-3691110762119068004.json"
         },
         {
@@ -749,6 +1005,11 @@
           "inputToIndex": false,
           "bridgeType": 0,
           "continuousAttackType": 1,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json"
         },
         {
@@ -763,6 +1024,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-2783627720146450788__-2783627720146450788.json#behaviorlineControl[0].behaviorList[pathId=-6434431746588637540]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-6434431746588637540__-6434431746588637540.json"
         }
       ],
@@ -802,6 +1074,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_7873911797226511074__7873911797226511074.json#behaviorlineControl[0].behaviorList[pathId=-3959504617737512222]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-3959504617737512222__-3959504617737512222.json"
         },
         {
@@ -816,6 +1093,15 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2390866752715121950__-2390866752715121950.json#behaviorlineControl[0].behaviorList[pathId=5283742835512613602]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_5283742835512613602__5283742835512613602.json"
         },
         {
@@ -830,6 +1116,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1980203543736195810__1980203543736195810.json#behaviorlineControl[0].behaviorList[pathId=-8554738025901679902]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8554738025901679902__-8554738025901679902.json"
         },
         {
@@ -844,6 +1135,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-315692776239424798__-315692776239424798.json#behaviorlineControl[0].behaviorList[pathId=1142011828510366434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1142011828510366434__1142011828510366434.json"
         },
         {
@@ -858,6 +1159,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-1843346426028057886__-1843346426028057886.json#behaviorlineControl[0].behaviorList[pathId=5219985846794296034]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_5219985846794296034__5219985846794296034.json"
         },
         {
@@ -872,6 +1178,16 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-7885042510705812766__-7885042510705812766.json#behaviorlineControl[0].behaviorList[pathId=3386079991831436002]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_3386079991831436002__3386079991831436002.json"
         }
       ],
@@ -911,6 +1227,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8167490790856463001__-8167490790856463001.json#behaviorlineControl[0].behaviorList[pathId=4699512701125586279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_4699512701125586279__4699512701125586279.json"
         },
         {
@@ -925,6 +1246,15 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_3842892092101291367__3842892092101291367.json#behaviorlineControl[0].behaviorList[pathId=-3517445181208466073]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-3517445181208466073__-3517445181208466073.json"
         },
         {
@@ -939,6 +1269,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8167490790856463001__-8167490790856463001.json#behaviorlineControl[1].behaviorList[pathId=-22667623548588697]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-22667623548588697__-22667623548588697.json"
         },
         {
@@ -953,6 +1288,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 8,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json"
         }
       ],
@@ -986,6 +1332,17 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -1006,6 +1363,14 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-7433729315793741630__-7433729315793741630.json#behaviorlineControl[0].behaviorList[pathId=-8941427149800482622]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-8941427149800482622__-8941427149800482622.json"
         },
         {
@@ -1020,6 +1385,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json"
         }
       ],
@@ -1053,6 +1429,17 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-5049690194762133841__-5049690194762133841.json#behaviorlineControl[0].behaviorList[pathId=834764862242754223]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_834764862242754223__834764862242754223.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -1073,6 +1460,14 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_6396620767498473135__6396620767498473135.json#behaviorlineControl[0].behaviorList[pathId=-2500383344039162193]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-2500383344039162193__-2500383344039162193.json"
         },
         {
@@ -1087,6 +1482,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-5049690194762133841__-5049690194762133841.json#behaviorlineControl[0].behaviorList[pathId=834764862242754223]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_834764862242754223__834764862242754223.json"
         },
         {
@@ -1101,6 +1507,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_6523824232135397039__6523824232135397039.json#behaviorlineControl[0].behaviorList[pathId=2606436075587505839]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_2606436075587505839__2606436075587505839.json"
         }
       ],
@@ -1134,6 +1551,17 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -1154,6 +1582,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "ultimate"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_2956373937149991601__2956373937149991601.json#behaviorlineControl[0].behaviorList[pathId=554433321886571185]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_554433321886571185__554433321886571185.json"
         },
         {
@@ -1168,6 +1601,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json"
         },
         {
@@ -1182,6 +1626,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-1650247899203806543__-1650247899203806543.json#behaviorlineControl[0].behaviorList[pathId=-7948287450012755279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7948287450012755279__-7948287450012755279.json"
         }
       ],
@@ -1215,6 +1670,17 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101026.asset/MonoBehaviour/MonoBehaviour_8909942095877914194__8909942095877914194.json#behaviorlineControl[0].behaviorList[pathId=-4550543428582687150]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101026.asset/MonoBehaviour/MonoBehaviour_-4550543428582687150__-4550543428582687150.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -1234,6 +1700,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101026.asset/MonoBehaviour/MonoBehaviour_8909942095877914194__8909942095877914194.json#behaviorlineControl[0].behaviorList[pathId=-4550543428582687150]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101026.asset/MonoBehaviour/MonoBehaviour_-4550543428582687150__-4550543428582687150.json"
         }
       ],
@@ -1267,6 +1744,17 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -1288,6 +1776,12 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "ultimate",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_2225340962660477987__2225340962660477987.json#behaviorlineControl[0].behaviorList[pathId=7111041779069479971]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_7111041779069479971__7111041779069479971.json"
         },
         {
@@ -1302,6 +1796,15 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_8670985978933799971__8670985978933799971.json#behaviorlineControl[0].behaviorList[pathId=-652029184063771613]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-652029184063771613__-652029184063771613.json"
         },
         {
@@ -1316,6 +1819,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_947864315419749411__947864315419749411.json#behaviorlineControl[0].behaviorList[pathId=-80817963508110301]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-80817963508110301__-80817963508110301.json"
         },
         {
@@ -1330,6 +1838,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json"
         }
       ],
@@ -1363,6 +1882,17 @@
         "inputToIndex": false,
         "bridgeType": 3,
         "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "allowedInputCommands": [
+          "normal-attack",
+          "charged-attack",
+          "star-skill",
+          "ultimate",
+          "dodge",
+          "jump",
+          "perfect-parry"
+        ],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
@@ -1384,6 +1914,11 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 1,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "charged-attack"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1761581173042178218__-1761581173042178218.json#behaviorlineControl[0].behaviorList[pathId=1119335550432450390]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_1119335550432450390__1119335550432450390.json"
         },
         {
@@ -1398,6 +1933,15 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-5402072086184388778__-5402072086184388778.json#behaviorlineControl[0].behaviorList[pathId=-5482493001454053546]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-5482493001454053546__-5482493001454053546.json"
         },
         {
@@ -1412,6 +1956,17 @@
           "inputToIndex": false,
           "bridgeType": 3,
           "continuousAttackType": 0,
+          "interruptBehavior": 0,
+          "frameIndex": 0,
+          "allowedInputCommands": [
+            "normal-attack",
+            "charged-attack",
+            "star-skill",
+            "ultimate",
+            "dodge",
+            "jump",
+            "perfect-parry"
+          ],
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json"
         }
       ],
@@ -1432,5 +1987,6 @@
     "Battle/SkillList/skill_control_101010*.asset",
     "skillControlData.skillPlayers|skillResourceMaps",
     "EventBridge behaviorlineControl"
-  ]
+  ],
+  "packageHash": "baa4ffde85401cb2d2165f4a589a9f0d015db80f2c0c408ab12e80945240be4d"
 }

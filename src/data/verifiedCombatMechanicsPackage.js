@@ -18,6 +18,7 @@ let semanticFormulaByIdentity = new Map();
 let specialResourceProfileByOwnerId = new Map();
 let derivedControlContractByOwnerAndControl = new Map();
 let switchTriggerProfileByOwnerAndPhase = new Map();
+let characterCombatProfileMetadataByOwnerId = new Map();
 
 export async function loadVerifiedCombatMechanicsPackage(fetchImpl = fetch) {
   if (installedPackage) return installedPackage;
@@ -103,6 +104,12 @@ export function installVerifiedCombatMechanicsPackage(value) {
       profile,
     ])
   );
+  characterCombatProfileMetadataByOwnerId = new Map(
+    (value.characterCombatProfileCatalog?.profiles ?? []).map(profile => [
+      Number(profile.ownerId),
+      profile,
+    ])
+  );
   return value;
 }
 
@@ -182,6 +189,14 @@ export function getVerifiedSwitchTriggerCatalog() {
   return installedPackage?.switchTriggerCatalog ?? null;
 }
 
+export function getVerifiedCharacterCombatProfileCatalog() {
+  return installedPackage?.characterCombatProfileCatalog ?? null;
+}
+
+export function getVerifiedCharacterCombatProfileMetadata(ownerId) {
+  return characterCombatProfileMetadataByOwnerId.get(Number(ownerId)) ?? null;
+}
+
 export function getVerifiedSwitchTriggerProfile(ownerId, triggerPhase = null) {
   const normalizedOwnerId = Number(ownerId);
   if (!Number.isInteger(normalizedOwnerId)) return null;
@@ -210,6 +225,7 @@ export function clearInstalledVerifiedCombatMechanicsPackage() {
   specialResourceProfileByOwnerId = new Map();
   derivedControlContractByOwnerAndControl = new Map();
   switchTriggerProfileByOwnerAndPhase = new Map();
+  characterCombatProfileMetadataByOwnerId = new Map();
 }
 
 export function resolveVerifiedCombatActionMechanics(
@@ -228,6 +244,8 @@ export function resolveVerifiedCombatActionMechanics(
     );
   }
   const owner = resolveActionOwner(action);
+  const characterCombatProfile =
+    characterCombatProfileMetadataByOwnerId.get(Number(owner.id)) ?? null;
   const candidates = findActionMappings(action, owner);
   if (candidates.length !== 1) {
     return createUnresolvedActionMechanics(
@@ -235,7 +253,11 @@ export function resolveVerifiedCombatActionMechanics(
       candidates.length > 1
         ? 'verified-action-binding-ambiguous'
         : 'verified-action-binding-missing',
-      { owner, candidateCount: candidates.length }
+      {
+        owner,
+        characterCombatProfile,
+        candidateCount: candidates.length,
+      }
     );
   }
   const actionMapping = candidates[0];
@@ -246,6 +268,7 @@ export function resolveVerifiedCombatActionMechanics(
       resolvedActionBinding.reason,
       {
         owner,
+        characterCombatProfile,
         actionBinding: actionMapping,
         candidateCount: resolvedActionBinding.candidateCount ?? 0,
       }
@@ -263,6 +286,7 @@ export function resolveVerifiedCombatActionMechanics(
   if (!dynamicBinding.binding) {
     return createUnresolvedActionMechanics(action, dynamicBinding.reason, {
       owner,
+      characterCombatProfile,
       actionBinding: resolvedActionBinding.binding,
       selectedSubSkillIndex,
       reasons: dynamicBinding.reasons ?? [],
@@ -284,6 +308,7 @@ export function resolveVerifiedCombatActionMechanics(
         packageId: installedPackage.packageId,
         packageHash: installedPackage.packageHash,
         owner,
+        characterCombatProfile,
         actionBinding,
         controlBinding: partialControlBinding,
         hits: [],
@@ -300,6 +325,7 @@ export function resolveVerifiedCombatActionMechanics(
       `verified-action-binding-${actionBinding?.classification ?? 'missing'}`,
       {
         owner,
+        characterCombatProfile,
         actionBinding,
         reasons: actionBinding?.reasons ?? [],
       }
@@ -371,7 +397,7 @@ export function resolveVerifiedCombatActionMechanics(
     return createUnresolvedActionMechanics(
       action,
       'verified-control-binding-missing',
-      { owner, actionBinding }
+      { owner, characterCombatProfile, actionBinding }
     );
   }
   return {
@@ -381,6 +407,7 @@ export function resolveVerifiedCombatActionMechanics(
     packageId: installedPackage.packageId,
     packageHash: installedPackage.packageHash,
     owner,
+    characterCombatProfile,
     actionBinding,
     controlBinding,
     hits,
@@ -440,9 +467,7 @@ function applySelectedSubSkillOverride({
   const executionControlSkillId = Number(
     selectedControlSkillId ?? publicControlSkillId
   );
-  const controlBinding = controlBindingBySkillId.get(
-    executionControlSkillId
-  );
+  const controlBinding = controlBindingBySkillId.get(executionControlSkillId);
   const variant = (controlBinding?.variants ?? []).find(
     item => Number(item.subSkillIndex) === subSkillIndex
   );
@@ -830,6 +855,38 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('switch-trigger-catalog-invalid');
   }
   if (
+    value?.characterCombatProfileCatalog?.status !==
+      'character-combat-profile-catalog-ready' ||
+    value.characterCombatProfileCatalog.profileSchema !==
+      'azpr://schemas/character-combat-profile/v1' ||
+    !/^[a-f0-9]{64}$/.test(
+      String(value.characterCombatProfileCatalog.sourcePackageHash ?? '')
+    ) ||
+    !Array.isArray(value.characterCombatProfileCatalog.profiles) ||
+    value.characterCombatProfileCatalog.summary?.publicCharacterCount !== 20 ||
+    value.characterCombatProfileCatalog.summary?.compiledProfileCount !==
+      value.characterCombatProfileCatalog.profiles.length ||
+    value.characterCombatProfileCatalog.summary?.uiVerifiedProfileCount !==
+      value.characterCombatProfileCatalog.profiles.filter(
+        profile => profile.completionState === 'ui-verified'
+      ).length ||
+    value.characterCombatProfileCatalog.profiles.some(
+      profile =>
+        !Number.isInteger(Number(profile.ownerId)) ||
+        !profile.profileIdentity ||
+        !/^[a-f0-9]{64}$/.test(String(profile.profileHash ?? '')) ||
+        !/^[a-f0-9]{64}$/.test(String(profile.runtimeContractHash ?? '')) ||
+        !profile.sourcePath ||
+        profile.status !== 'character-combat-profile-valid'
+    ) ||
+    value?.summary?.characterCombatProfileCount !==
+      value.characterCombatProfileCatalog.summary.compiledProfileCount ||
+    value?.summary?.characterCombatUiVerifiedProfileCount !==
+      value.characterCombatProfileCatalog.summary.uiVerifiedProfileCount
+  ) {
+    issues.push('character-combat-profile-catalog-invalid');
+  }
+  if (
     value?.tuningMechanicsCatalog?.status !==
       'verified-tuning-mechanics-catalog-ready' ||
     !Array.isArray(value?.tuningMechanicsCatalog?.profiles) ||
@@ -935,7 +992,9 @@ function resolveActionOwner(action) {
   if (action.type === 'kiboEvent' && Number.isInteger(kiboId) && kiboId > 0) {
     return { kind: 'kibo', id: kiboId };
   }
-  const characterId = Number(action.actor?.characterId);
+  const characterId = Number(
+    action.actor?.characterId ?? action.actorCharacterId
+  );
   return {
     kind: 'actor',
     id: Number.isInteger(characterId) && characterId > 0 ? characterId : null,

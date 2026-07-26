@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-catalog",
+  "status": "character-combat-profile-catalog-ready",
+  "sourcePackageHash": "66d323dab81b61dd9f8547288955c6e59947e247dfc31f7bd2ec4cd2fd56c12d",
+  "profileSchema": "azpr://schemas/character-combat-profile/v1",
+  "profiles": [
+    {
+      "ownerId": 101010,
+      "ownerName": "涂山小玉",
+      "profileIdentity": "actor:101010:character-combat-profile:v1",
+      "profileHash": "a0a39adbf43fdfc6726cb2ecc3fb9a7c1b2b30c0c649fc6ed83f2d487ec6b6e6",
+      "completionState": "ui-verified",
+      "runtimeContractHash": "b9d7031c8839c7a99f266f727ab12da0414e4be54e08a96f3d054ae264c0c325",
+      "sourcePath": "src/data/generated/character-combat-profiles/101010.json",
+      "status": "character-combat-profile-valid"
+    }
+  ],
+  "coverageManifestHash": "35de2194edc3b09fb1af65bf05e0ef31faafba9c324212261762695f7f99d1c8",
+  "summary": {
+    "publicCharacterCount": 20,
+    "compiledProfileCount": 1,
+    "uiVerifiedProfileCount": 1
+  }
+}

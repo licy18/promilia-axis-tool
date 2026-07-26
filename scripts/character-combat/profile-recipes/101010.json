@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 101010,
+  "completionState": "ui-verified",
+  "goldStandard": true,
+  "mechanicsDiscovery": {
+    "ownerId": 101010,
+    "normalAttackSkillId": 10101001,
+    "a5ControlSkillId": 10101005,
+    "chargedControlSkillId": 10101010,
+    "derivedChargedControlSkillId": 10101042,
+    "starSkillControlSkillId": 10101012,
+    "ultimateControlSkillId": 10101013,
+    "starCarryControlSkillId": 10101021,
+    "passiveSkillId": 10101061,
+    "resourceElementId": 101010115,
+    "stateElementId": 101010129,
+    "specialChargedSwitchElementId": 101010113,
+    "enhancedChargedSwitchElementId": 101010116,
+    "enhancedDerivedChargedSwitchElementId": 101010154,
+    "burstNormalSwitchElementId": 101010140,
+    "passiveMarkerElementId": 101010205,
+    "passiveWrapperElementId": 101010206,
+    "passivePropertyElementId": 101010207,
+    "evadeForwardControlSkillId": 10101014,
+    "evadeBackControlSkillId": 10101024,
+    "evadeForwardWrapperElementId": 101010042,
+    "evadeBackWrapperElementId": 101010053,
+    "limitCounterWrapperControlSkillId": 10101041,
+    "limitCounterControlSkillId": 10101025,
+    "limitCounterRuntimeControlSkillId": 10101042,
+    "perfectParryControlSkillId": 10101027,
+    "perfectParryRuntimeControlSkillId": 10101049
+  },
+  "expected": {
+    "publicActionCount": 10,
+    "publicExecutionFormCount": 21,
+    "verifiedWindowCount": 86,
+    "contextEdgeCount": 7,
+    "attackInputChainCount": 2,
+    "specialResourceProfileCount": 1,
+    "thresholdTransitionCount": 1,
+    "passiveEffectCount": 1
+  },
+  "evidenceArtifacts": {
+    "occupancyAudit": "reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json",
+    "hiddenInputAudit": "reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json"
+  },
+  "notApplicableSkills": [
+    {
+      "skillId": 10101062,
+      "reason": "client-passive-not-implemented",
+      "sourceIdentity": "product-mechanic-boundary:2026-07-23:10101062"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [101010, 101007, 101003],
+    "initialControlledCharacterId": 101010,
+    "initialActorSp": {
+      "101010": 0,
+      "101007": 0,
+      "101003": 0
+    },
+    "initialSpecialResources": [
+      {
+        "resourceIdentity": "actor:101010:element:101010115",
+        "currentValue": 95
+      }
+    ],
+    "actions": [
+      {
+        "actionKey": "threshold-charged",
+        "actionKind": "charged-attack",
+        "controlSkillId": 10101010,
+        "subSkillIndex": 0,
+        "startFrame": 0
+      },
+      {
+        "actionKey": "ultimate-refresh",
+        "actionKind": "ultimate",
+        "controlSkillId": 10101013,
+        "subSkillIndex": 0,
+        "startFrame": 600
+      },
+      {
+        "actionKey": "burst-a1",
+        "actionKind": "normal-attack",
+        "controlSkillId": 10101001,
+        "subSkillIndex": 1,
+        "startFrame": 900
+      },
+      {
+        "actionKey": "burst-a2",
+        "actionKind": "normal-attack",
+        "controlSkillId": 10101004,
+        "subSkillIndex": 1,
+        "startFrame": 972
+      },
+      {
+        "actionKey": "burst-a3",
+        "actionKind": "normal-attack",
+        "controlSkillId": 10101005,
+        "subSkillIndex": 1,
+        "startFrame": 1047
+      },
+      {
+        "actionKey": "burst-derived-charged",
+        "actionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "controlSkillId": 10101042,
+        "subSkillIndex": 1,
+        "startFrame": 1119,
+        "expectedExecutionStartFrame": 1118
+      },
+      {
+        "actionKey": "star-skill",
+        "actionKind": "star-skill",
+        "controlSkillId": 10101012,
+        "subSkillIndex": 0,
+        "startFrame": 1500
+      },
+      {
+        "actionKey": "star-derived-charged",
+        "actionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "controlSkillId": 10101042,
+        "subSkillIndex": 0,
+        "startFrame": 1620,
+        "expectedExecutionStartFrame": 1619
+      }
+    ],
+    "switchEvents": [
+      {
+        "eventKey": "switch-to-backline",
+        "startFrame": 300,
+        "sourceCharacterId": 101010,
+        "targetCharacterId": 101007
+      },
+      {
+        "eventKey": "switch-back-to-xiaoyu",
+        "startFrame": 420,
+        "sourceCharacterId": 101007,
+        "targetCharacterId": 101010
+      }
+    ],
+    "controlIntervals": [
+      {
+        "startFrame": 0,
+        "endFrame": 300,
+        "characterId": 101010
+      },
+      {
+        "startFrame": 300,
+        "endFrame": 420,
+        "characterId": 101007
+      },
+      {
+        "startFrame": 420,
+        "endFrame": 7200,
+        "characterId": 101010
+      }
+    ],
+    "assertions": {
+      "burstChainControls": [10101001, 10101004, 10101005],
+      "enhancedSpecialChargedControl": {
+        "controlSkillId": 10101042,
+        "subSkillIndex": 1
+      },
+      "teamStatPropagationRequired": true
+    }
+  }
+}

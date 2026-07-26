@@ -11,6 +11,10 @@ import {
   createEffectSourceDisplayLabel,
   isSourceDisplayTextSafe,
 } from '../src/domain/sourceDisplayText.js';
+import {
+  createCharacterCombatOutputRecords,
+  createCharacterCombatPipelineArtifacts,
+} from './character-combat/character-combat-profile-pipeline.mjs';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
@@ -27,6 +31,12 @@ const NEW_TABLE_ROOT = path.join(
   'NewTable'
 );
 const GENERATED_ROOT = path.join(REPO_ROOT, 'src', 'data', 'generated');
+const XIAOYU_CHARACTER_COMBAT_RECIPE_PATH = path.join(
+  SCRIPT_ROOT,
+  'character-combat',
+  'profile-recipes',
+  '101010.json'
+);
 const RUNTIME_OUTPUT = path.join(
   REPO_ROOT,
   'src',
@@ -261,35 +271,10 @@ const M9_PRODUCT_DENOMINATOR = Object.freeze({
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
-const XIAOYU_MECHANICS = Object.freeze({
-  ownerId: 101010,
-  normalAttackSkillId: 10101001,
-  a5ControlSkillId: 10101005,
-  chargedControlSkillId: 10101010,
-  derivedChargedControlSkillId: 10101042,
-  starSkillControlSkillId: 10101012,
-  ultimateControlSkillId: 10101013,
-  starCarryControlSkillId: 10101021,
-  passiveSkillId: 10101061,
-  resourceElementId: 101010115,
-  stateElementId: 101010129,
-  specialChargedSwitchElementId: 101010113,
-  enhancedChargedSwitchElementId: 101010116,
-  enhancedDerivedChargedSwitchElementId: 101010154,
-  burstNormalSwitchElementId: 101010140,
-  passiveMarkerElementId: 101010205,
-  passiveWrapperElementId: 101010206,
-  passivePropertyElementId: 101010207,
-  evadeForwardControlSkillId: 10101014,
-  evadeBackControlSkillId: 10101024,
-  evadeForwardWrapperElementId: 101010042,
-  evadeBackWrapperElementId: 101010053,
-  limitCounterWrapperControlSkillId: 10101041,
-  limitCounterControlSkillId: 10101025,
-  limitCounterRuntimeControlSkillId: 10101042,
-  perfectParryControlSkillId: 10101027,
-  perfectParryRuntimeControlSkillId: 10101049,
-});
+const XIAOYU_PROFILE_RECIPE = readJson(XIAOYU_CHARACTER_COMBAT_RECIPE_PATH);
+const XIAOYU_MECHANICS = Object.freeze(
+  XIAOYU_PROFILE_RECIPE.mechanicsDiscovery
+);
 const XIAOYU_SYSTEM_CONTROL_SKILL_IDS = new Set([
   80102, 10800115, 10900115, 10900125,
 ]);
@@ -508,6 +493,40 @@ async function main() {
     ).length;
   assertPublishedDisplayLabels(packageValue);
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
+  const xiaoyuActionOccupancyAudit =
+    createXiaoyuActionOccupancyAudit(packageValue);
+  const xiaoyuHiddenInputAudit = createXiaoyuHiddenInputDerivationReport({
+    packageValue,
+    audit: xiaoyuMechanicsContracts.hiddenInputDerivationAudit,
+  });
+  const characterCombatArtifacts = createCharacterCombatPipelineArtifacts({
+    mechanicsPackage: packageValue,
+    characterCatalog,
+    skills: seed.gameData?.skills ?? [],
+    recipes: [XIAOYU_PROFILE_RECIPE],
+    reportsByOwner: new Map([
+      [
+        XIAOYU_MECHANICS.ownerId,
+        {
+          actionOccupancy: xiaoyuActionOccupancyAudit,
+          hiddenInputDerivation: xiaoyuHiddenInputAudit,
+        },
+      ],
+    ]),
+  });
+  packageValue.characterCombatProfileCatalog = characterCombatArtifacts.catalog;
+  packageValue.summary.characterCombatProfileCount =
+    characterCombatArtifacts.catalog.summary.compiledProfileCount;
+  packageValue.summary.characterCombatUiVerifiedProfileCount =
+    characterCombatArtifacts.catalog.summary.uiVerifiedProfileCount;
+  packageValue.packageHash = sha256(
+    JSON.stringify({
+      basePackageHash: packageValue.packageHash,
+      characterCombatProfileCatalog: packageValue.characterCombatProfileCatalog,
+    })
+  );
+  xiaoyuActionOccupancyAudit.packageHash = packageValue.packageHash;
+  xiaoyuHiddenInputAudit.packageHash = packageValue.packageHash;
   const audit = createAudit({
     packageValue,
     candidates,
@@ -523,12 +542,6 @@ async function main() {
     nonzeroRecoveryElements,
   });
   const timingCoverage = createActionTimingCoverageReport(packageValue);
-  const xiaoyuActionOccupancyAudit =
-    createXiaoyuActionOccupancyAudit(packageValue);
-  const xiaoyuHiddenInputAudit = createXiaoyuHiddenInputDerivationReport({
-    packageValue,
-    audit: xiaoyuMechanicsContracts.hiddenInputDerivationAudit,
-  });
   const contextualInputSchedulingAudit =
     createContextualInputSchedulingAuditReport({
       packageValue,
@@ -589,9 +602,7 @@ async function main() {
     ],
     [
       CONTEXTUAL_INPUT_SCHEDULING_MARKDOWN_OUTPUT,
-      createContextualInputSchedulingMarkdown(
-        contextualInputSchedulingAudit
-      ),
+      createContextualInputSchedulingMarkdown(contextualInputSchedulingAudit),
     ],
     [
       EFFECT_COVERAGE_JSON_OUTPUT,
@@ -635,6 +646,9 @@ async function main() {
       PUBLIC_RUNTIME_COVERAGE_MARKDOWN_OUTPUT,
       createPublicRuntimeCoverageMarkdown(publicRuntimeCoverage),
     ],
+    ...createCharacterCombatOutputRecords(characterCombatArtifacts).map(
+      record => [path.resolve(REPO_ROOT, record.relativePath), record.content]
+    ),
   ];
   const drift = outputs.filter(([filePath, content]) =>
     fs.existsSync(filePath) ? readText(filePath) !== content : true
@@ -1922,9 +1936,7 @@ function createXiaoyuChargedContextEdge({
         : ['charged-switch-element-missing']),
       ...(windowTargetMatches ? [] : ['charged-window-target-mismatch']),
       ...(switchTargetMatches ? [] : ['charged-switch-target-mismatch']),
-      ...(inputScheduling.status === 'applied'
-        ? []
-        : inputScheduling.reasons),
+      ...(inputScheduling.status === 'applied' ? [] : inputScheduling.reasons),
       ...(executionTiming?.occupancy?.status === 'applied'
         ? []
         : ['charged-execution-occupancy-unresolved']),
@@ -1966,10 +1978,9 @@ function createVerifiedContextInputSchedulingContract({
     canonicalInputFrame != null &&
     canonicalInputFrame >= Number(window?.startFrame) &&
     canonicalInputFrame < Number(window?.endFrame);
-  const immediate = [
-    'immediate-interrupt',
-    'immediate-continuous',
-  ].includes(inputSemantics);
+  const immediate = ['immediate-interrupt', 'immediate-continuous'].includes(
+    inputSemantics
+  );
   const canonicalExecutionStartFrame = edgeIntentApplied
     ? immediate
       ? canonicalInputFrame
@@ -2001,8 +2012,8 @@ function createVerifiedContextInputSchedulingContract({
     windowClassification,
     bufferUntilFrame:
       inputSemantics === 'buffered-until-frame'
-        ? nonNegativeIntegerOrNull(window?.frameIndex) ??
-          predecessorGenericEndFrame
+        ? (nonNegativeIntegerOrNull(window?.frameIndex) ??
+          predecessorGenericEndFrame)
         : null,
     edgeIntent: {
       status: edgeIntentApplied ? 'applied' : 'not-applicable',
@@ -2048,10 +2059,7 @@ function classifyVerifiedEventBridgeInputSemantics(window) {
   return 'unresolved';
 }
 
-function classifyInputWindowAgainstOccupancy({
-  window,
-  occupancyEndFrame,
-}) {
+function classifyInputWindowAgainstOccupancy({ window, occupancyEndFrame }) {
   if (!window || occupancyEndFrame == null) return 'unresolved';
   const startFrame = Number(window.startFrame);
   const endFrame = Number(window.endFrame);
@@ -9046,9 +9054,7 @@ function normalizeActionTimingWindows(bridges = []) {
           continuousAttackType: nonNegativeIntegerOrNull(
             bridge.continuousAttackType
           ),
-          interruptBehavior: nonNegativeIntegerOrNull(
-            bridge.interruptBehavior
-          ),
+          interruptBehavior: nonNegativeIntegerOrNull(bridge.interruptBehavior),
           frameIndex: nonNegativeIntegerOrNull(bridge.frameIndex),
           allowedInputCommands: dedupeBy(
             bridge.allowedInputCommands ?? [],
@@ -10628,7 +10634,6 @@ function createXiaoyuActionOccupancyMarkdown(report) {
     ),
     '',
     '完整动画、命中帧、输入/派生窗口和有效占轴分别保留；时间轴阻塞只消费 effective occupancy。',
-    '',
   ];
   return `${lines.join('\n')}\n`;
 }
@@ -10841,8 +10846,7 @@ function createContextualInputSchedulingAuditReport({
       executionStartFrame: scheduling?.executionStartFrame ?? null,
       contextualPredecessorEndFrame:
         scheduling?.contextualPredecessorEndFrame ?? null,
-      edgeToEdgeBefore:
-        scheduling?.edgeToEdgeBefore ?? 'not-applicable',
+      edgeToEdgeBefore: scheduling?.edgeToEdgeBefore ?? 'not-applicable',
       edgeToEdgeAfter: scheduling?.edgeToEdgeAfter ?? 'not-applicable',
       contextEdgeIdentity: scheduling?.contextEdgeIdentity ?? null,
       schedulingStatus:
@@ -10856,9 +10860,7 @@ function createContextualInputSchedulingAuditReport({
         scheduling?.inputSchedulingSourceIdentity ?? row.sourceIdentity,
     };
   });
-  const categoryCounts = countValues(
-    rows.map(row => row.windowClassification)
-  );
+  const categoryCounts = countValues(rows.map(row => row.windowClassification));
   return {
     schemaVersion: 1,
     kind: 'verified-contextual-input-scheduling-audit',
@@ -10878,8 +10880,7 @@ function createContextualInputSchedulingAuditReport({
     rows,
     xiaoyu: {
       ownerId: XIAOYU_MECHANICS.ownerId,
-      publicExecutionFormCount:
-        xiaoyuHiddenInputAudit.publicExecutionFormCount,
+      publicExecutionFormCount: xiaoyuHiddenInputAudit.publicExecutionFormCount,
       rowCount: xiaoyuRows.length,
       expectedRowCount: 86,
       rows: xiaoyuRows,
@@ -10974,9 +10975,8 @@ function createContextualInputSchedulingAuditRow({
 }) {
   const contextScheduling = contextEdge?.inputScheduling ?? null;
   const genericOccupancyFrames =
-    nonNegativeIntegerOrNull(
-      contextScheduling?.predecessorGenericEndFrame
-    ) ?? nonNegativeIntegerOrNull(timing?.occupancy?.durationFrames);
+    nonNegativeIntegerOrNull(contextScheduling?.predecessorGenericEndFrame) ??
+    nonNegativeIntegerOrNull(timing?.occupancy?.durationFrames);
   const inputSemantics =
     contextScheduling?.inputSemantics ??
     classifyVerifiedEventBridgeInputSemantics(window);
@@ -11002,10 +11002,9 @@ function createContextualInputSchedulingAuditRow({
       : endAligned
         ? Number(window.endFrame) - 1
         : null);
-  const immediate = [
-    'immediate-interrupt',
-    'immediate-continuous',
-  ].includes(inputSemantics);
+  const immediate = ['immediate-interrupt', 'immediate-continuous'].includes(
+    inputSemantics
+  );
   const executionStartFrame =
     nonNegativeIntegerOrNull(
       contextScheduling?.edgeIntent?.canonicalExecutionStartFrame
@@ -11014,8 +11013,8 @@ function createContextualInputSchedulingAuditRow({
       ? null
       : immediate
         ? canonicalInputFrame
-        : nonNegativeIntegerOrNull(window.frameIndex) ??
-          genericOccupancyFrames);
+        : (nonNegativeIntegerOrNull(window.frameIndex) ??
+          genericOccupancyFrames));
   const contextualPredecessorEndFrame =
     nonNegativeIntegerOrNull(
       contextScheduling?.edgeIntent?.canonicalPredecessorEndFrame
@@ -11059,9 +11058,11 @@ function createContextualInputSchedulingAuditRow({
     canonicalInputFrame,
     executionStartFrame,
     contextualPredecessorEndFrame,
-    edgeToEdgeBefore: endAligned ? 'rejected-by-half-open-window' : inside
-      ? 'already-inside-source-window'
-      : 'not-applicable',
+    edgeToEdgeBefore: endAligned
+      ? 'rejected-by-half-open-window'
+      : inside
+        ? 'already-inside-source-window'
+        : 'not-applicable',
     edgeToEdgeAfter: resolvable ? 'resolved' : 'not-applicable',
     contextEdgeIdentity: contextEdge?.edgeIdentity ?? null,
     status: resolvable

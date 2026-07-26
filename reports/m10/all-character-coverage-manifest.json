@@ -1,0 +1,720 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m10-character-combat-coverage-manifest",
+  "status": "m10-character-combat-coverage-manifest-ready",
+  "sourcePackageHash": "66d323dab81b61dd9f8547288955c6e59947e247dfc31f7bd2ec4cd2fd56c12d",
+  "denominator": {
+    "sourceKind": "current-client-public-character-catalog",
+    "publicCharacterCount": 20,
+    "expectedNames": [
+      "涂山小玉",
+      "红宝石",
+      "寒悠悠",
+      "芃芃",
+      "莉莉",
+      "西芙莉雅",
+      "米砂",
+      "阿比",
+      "忒拉拉",
+      "璐璐卡",
+      "米蒂",
+      "卡塔露",
+      "末音",
+      "夏儿",
+      "法兰塔",
+      "姬瑟贝露",
+      "艾妮丝",
+      "女主角",
+      "男主角",
+      "诺诺"
+    ]
+  },
+  "policy": {
+    "states": [
+      "not-started",
+      "evidence-indexed",
+      "profile-compiled",
+      "runtime-applied",
+      "ui-verified"
+    ],
+    "oneCharacterPerReviewCommitAfterM10A": true,
+    "automaticBulkGreenIsForbidden": true,
+    "recommendedSecondProfileOwnerId": 103002,
+    "recommendedThirdProfileOwnerId": 101003
+  },
+  "rows": [
+    {
+      "ownerId": 101010,
+      "ownerName": "涂山小玉",
+      "recommendedOrder": 1,
+      "reviewBatch": "M10-A",
+      "mechanicFocus": [
+        "个人资源",
+        "状态机",
+        "派生形态",
+        "被动监听",
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "ui-verified",
+      "publicActionCount": 10,
+      "reachableFormCount": 36,
+      "indexedControlCount": 14,
+      "specialResourceCount": 1,
+      "stateMachineCount": 1,
+      "derivedEdgeCount": 34,
+      "passiveCount": 1,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 7,
+      "runtimeReadyRatio": 0.7,
+      "staticEvidenceGapCount": 3,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "personal-resource",
+        "state-machine",
+        "derived-action",
+        "passive-listener",
+        "switch-trigger"
+      ],
+      "profileIdentity": "actor:101010:character-combat-profile:v1",
+      "profileHash": "a0a39adbf43fdfc6726cb2ecc3fb9a7c1b2b30c0c649fc6ed83f2d487ec6b6e6"
+    },
+    {
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "recommendedOrder": 2,
+      "reviewBatch": "M10-B1",
+      "mechanicFocus": [
+        "弹药",
+        "个人资源",
+        "派生形态",
+        "切人/星携技",
+        "运行证据",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 9,
+      "reachableFormCount": 54,
+      "indexedControlCount": 13,
+      "specialResourceCount": 1,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 291,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 7,
+      "runtimeReadyRatio": 0.7778,
+      "staticEvidenceGapCount": 2,
+      "runtimeEvidenceRequiredCount": 1,
+      "mechanismTypes": [
+        "personal-resource",
+        "derived-action",
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 101003,
+      "ownerName": "寒悠悠",
+      "recommendedOrder": 3,
+      "reviewBatch": "M10-B2",
+      "mechanicFocus": [
+        "队伍印记/支援链",
+        "切人/星携技",
+        "运行证据",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 19,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 3,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 101007,
+      "ownerName": "芃芃",
+      "recommendedOrder": 4,
+      "reviewBatch": "M10-C1",
+      "mechanicFocus": [
+        "派生形态",
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 29,
+      "indexedControlCount": 13,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 9,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "derived-action",
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 102001,
+      "ownerName": "莉莉",
+      "recommendedOrder": 5,
+      "reviewBatch": "M10-C1",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 9,
+      "reachableFormCount": 25,
+      "indexedControlCount": 13,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8889,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 107001,
+      "ownerName": "西芙莉雅",
+      "recommendedOrder": 6,
+      "reviewBatch": "M10-C1",
+      "mechanicFocus": [
+        "派生形态",
+        "切人/星携技",
+        "运行证据",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 34,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 4,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 7,
+      "runtimeReadyRatio": 0.7,
+      "staticEvidenceGapCount": 3,
+      "runtimeEvidenceRequiredCount": 2,
+      "mechanismTypes": [
+        "derived-action",
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 107002,
+      "ownerName": "米砂",
+      "recommendedOrder": 7,
+      "reviewBatch": "M10-C1",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 22,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 7,
+      "runtimeReadyRatio": 0.7,
+      "staticEvidenceGapCount": 3,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 107003,
+      "ownerName": "阿比",
+      "recommendedOrder": 8,
+      "reviewBatch": "M10-C1",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 27,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 108001,
+      "ownerName": "忒拉拉",
+      "recommendedOrder": 9,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 25,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 108002,
+      "ownerName": "璐璐卡",
+      "recommendedOrder": 10,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "切人/星携技",
+        "运行证据",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 23,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 6,
+      "runtimeReadyRatio": 0.6,
+      "staticEvidenceGapCount": 4,
+      "runtimeEvidenceRequiredCount": 1,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 108003,
+      "ownerName": "米蒂",
+      "recommendedOrder": 11,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 16,
+      "indexedControlCount": 12,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 7,
+      "runtimeReadyRatio": 0.7,
+      "staticEvidenceGapCount": 3,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 108005,
+      "ownerName": "卡塔露",
+      "recommendedOrder": 12,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 17,
+      "indexedControlCount": 12,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 109001,
+      "ownerName": "末音",
+      "recommendedOrder": 13,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 20,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 109002,
+      "ownerName": "夏儿",
+      "recommendedOrder": 14,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 23,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 111001,
+      "ownerName": "法兰塔",
+      "recommendedOrder": 15,
+      "reviewBatch": "M10-C2",
+      "mechanicFocus": [
+        "派生形态",
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 34,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 6,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "derived-action",
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 112001,
+      "ownerName": "姬瑟贝露",
+      "recommendedOrder": 16,
+      "reviewBatch": "M10-C3",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 27,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 112002,
+      "ownerName": "艾妮丝",
+      "recommendedOrder": 17,
+      "reviewBatch": "M10-C3",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 21,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 3,
+      "runtimeReadyRatio": 0.3,
+      "staticEvidenceGapCount": 7,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 199001,
+      "ownerName": "女主角",
+      "recommendedOrder": 18,
+      "reviewBatch": "M10-C3",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 9,
+      "reachableFormCount": 20,
+      "indexedControlCount": 13,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8889,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 199002,
+      "ownerName": "男主角",
+      "recommendedOrder": 19,
+      "reviewBatch": "M10-C3",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 9,
+      "reachableFormCount": 20,
+      "indexedControlCount": 13,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-exit"
+      ],
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8889,
+      "staticEvidenceGapCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    },
+    {
+      "ownerId": 199003,
+      "ownerName": "诺诺",
+      "recommendedOrder": 20,
+      "reviewBatch": "M10-C3",
+      "mechanicFocus": [
+        "切人/星携技",
+        "静态缺口"
+      ],
+      "estimatedWorkUnits": 1,
+      "progressState": "evidence-indexed",
+      "publicActionCount": 10,
+      "reachableFormCount": 23,
+      "indexedControlCount": 14,
+      "specialResourceCount": 0,
+      "stateMachineCount": 0,
+      "derivedEdgeCount": 0,
+      "passiveCount": 0,
+      "switchRelationCount": 1,
+      "switchTriggerPhases": [
+        "on-enter"
+      ],
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
+      "runtimeEvidenceRequiredCount": 0,
+      "mechanismTypes": [
+        "switch-trigger"
+      ],
+      "profileIdentity": null,
+      "profileHash": null
+    }
+  ],
+  "summary": {
+    "characterCount": 20,
+    "progressStateCounts": {
+      "evidence-indexed": 19,
+      "ui-verified": 1
+    },
+    "totalPublicActionCount": 196,
+    "totalRuntimeReadyActionCount": 155
+  }
+}

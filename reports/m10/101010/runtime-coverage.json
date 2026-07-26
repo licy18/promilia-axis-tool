@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-runtime-coverage",
+  "ownerId": 101010,
+  "sourcePackageHash": "66d323dab81b61dd9f8547288955c6e59947e247dfc31f7bd2ec4cd2fd56c12d",
+  "actionRows": [
+    {
+      "actionIdentity": "actor|101010|10101001|0|10101003",
+      "actionKind": "normal-attack",
+      "sourceSkillId": 10101001,
+      "controlSkillIds": [
+        10101001,
+        10101002,
+        10101003,
+        10101004,
+        10101005
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "runtimeReady": false,
+      "hitCount": 46,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 2,
+          "unresolved": 3
+        },
+        "toughness": {
+          "applied": 2,
+          "unresolved": 3
+        },
+        "actorSp": {
+          "applied": 2,
+          "unresolved": 3
+        },
+        "kiboSp": {
+          "applied": 2,
+          "unresolved": 3
+        }
+      },
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101001|2|10101010",
+      "actionKind": "charged-attack",
+      "sourceSkillId": 10101001,
+      "controlSkillIds": [
+        10101010
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 25,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 3,
+          "unresolved": 11
+        },
+        "toughness": {
+          "applied": 3,
+          "unresolved": 11
+        },
+        "actorSp": {
+          "applied": 3,
+          "unresolved": 11
+        },
+        "kiboSp": {
+          "applied": 3,
+          "unresolved": 11
+        }
+      },
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "pack-lifecycle-runtime-unimplemented",
+        "property-formula-not-literal-function-5",
+        "property-conditions-not-expanded"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101001|6|10101015",
+      "actionKind": "dodge-attack",
+      "sourceSkillId": 10101001,
+      "controlSkillIds": [
+        10101015
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 3,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1
+        },
+        "toughness": {
+          "applied": 1
+        },
+        "actorSp": {
+          "applied": 1
+        },
+        "kiboSp": {
+          "applied": 1
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|101010|10101001|7|10101011",
+      "actionKind": "plunging-attack",
+      "sourceSkillId": 10101001,
+      "controlSkillIds": [
+        10101011
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 1,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 2
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 2
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 2
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 2
+        }
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101012|0|10101012",
+      "actionKind": "star-skill",
+      "sourceSkillId": 10101012,
+      "controlSkillIds": [
+        10101012
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 8,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 2,
+          "unresolved": 7
+        },
+        "toughness": {
+          "applied": 2,
+          "unresolved": 7
+        },
+        "actorSp": {
+          "applied": 2,
+          "unresolved": 5,
+          "verified-zero": 2
+        },
+        "kiboSp": {
+          "applied": 2,
+          "unresolved": 5,
+          "verified-zero": 2
+        }
+      },
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "judgment-condition-runtime-unimplemented",
+        "effect-target-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101012|1|10101026",
+      "actionKind": "star-combo",
+      "sourceSkillId": 10101012,
+      "controlSkillIds": [
+        10101026
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 1,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 1
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 1
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 1
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 1
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|101010|10101013|0|10101013",
+      "actionKind": "ultimate",
+      "sourceSkillId": 10101013,
+      "controlSkillIds": [
+        10101013
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 12,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 3,
+          "unresolved": 27
+        },
+        "toughness": {
+          "applied": 3,
+          "unresolved": 27
+        },
+        "actorSp": {
+          "unresolved": 24,
+          "verified-zero": 6
+        },
+        "kiboSp": {
+          "unresolved": 24,
+          "verified-zero": 6
+        }
+      },
+      "reasons": [
+        "base-function-unverified",
+        "trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "judgment-condition-runtime-unimplemented",
+        "effect-target-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "pack-lifecycle-runtime-unimplemented",
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "effect-trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-combine-semantics-unresolved",
+        "tuning-mark-relation-elementDataList-unresolved",
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "property-formula-not-literal-function-5",
+        "property-conditions-not-expanded"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101021|0|10101021",
+      "actionKind": "star-carry",
+      "sourceSkillId": 10101021,
+      "controlSkillIds": [
+        10101021
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "runtimeReady": false,
+      "hitCount": 0,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 4,
+          "unresolved": 14
+        },
+        "toughness": {
+          "applied": 4,
+          "unresolved": 14
+        },
+        "actorSp": {
+          "unresolved": 12,
+          "verified-zero": 6
+        },
+        "kiboSp": {
+          "unresolved": 12,
+          "verified-zero": 6
+        }
+      },
+      "reasons": [
+        "trigger-frame-missing",
+        "base-function-unverified",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "projectile-impact-frame-runtime-dependent",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "property-formula-not-literal-function-5",
+        "property-conditions-not-expanded",
+        "effect-trigger-frame-missing",
+        "judgment-condition-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "pack-lifecycle-runtime-unimplemented",
+        "sp-formula-not-literal-function-5",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101021|1|10101025",
+      "actionKind": "limit-counter",
+      "sourceSkillId": 10101021,
+      "controlSkillIds": [
+        10101025
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 8,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 4
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 4
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 4
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 4
+        }
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing"
+      ]
+    },
+    {
+      "actionIdentity": "actor|101010|10101021|2|10101027",
+      "actionKind": "perfect-parry",
+      "sourceSkillId": 10101021,
+      "controlSkillIds": [
+        10101027
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "runtimeReady": false,
+      "hitCount": 0,
+      "dimensionSummary": {
+        "hp": {
+          "unresolved": 4
+        },
+        "toughness": {
+          "unresolved": 4
+        },
+        "actorSp": {
+          "unresolved": 4
+        },
+        "kiboSp": {
+          "unresolved": 4
+        }
+      },
+      "reasons": [
+        "pack-lifecycle-runtime-unimplemented",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-trigger-frame-missing"
+      ]
+    }
+  ],
+  "summary": {
+    "actionCount": 10,
+    "runtimeReadyActionCount": 7,
+    "executionFormCount": 21,
+    "controlCount": 20,
+    "hitCount": 108,
+    "rawEffectCount": 333,
+    "semanticEffectCount": 0,
+    "resourceProfileCount": 1,
+    "resourceTransactionCount": 30,
+    "thresholdTransitionCount": 1,
+    "passiveCount": 1,
+    "switchTriggerCount": 1,
+    "coverageStatusCounts": {
+      "applied": 11,
+      "not-applicable": 1,
+      "static-evidence-gap": 8
+    }
+  },
+  "profileHash": "a0a39adbf43fdfc6726cb2ecc3fb9a7c1b2b30c0c649fc6ed83f2d487ec6b6e6"
+}
