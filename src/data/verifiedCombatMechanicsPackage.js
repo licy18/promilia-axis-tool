@@ -866,9 +866,17 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     value.characterCombatProfileCatalog.summary?.publicCharacterCount !== 20 ||
     value.characterCombatProfileCatalog.summary?.compiledProfileCount !==
       value.characterCombatProfileCatalog.profiles.length ||
+    value.characterCombatProfileCatalog.summary?.runtimeAppliedProfileCount !==
+      value.characterCombatProfileCatalog.profiles.filter(profile =>
+        ['runtime-applied', 'ui-verified'].includes(profile.pipelineMaturity)
+      ).length ||
     value.characterCombatProfileCatalog.summary?.uiVerifiedProfileCount !==
       value.characterCombatProfileCatalog.profiles.filter(
-        profile => profile.completionState === 'ui-verified'
+        profile => profile.pipelineMaturity === 'ui-verified'
+      ).length ||
+    value.characterCombatProfileCatalog.summary?.characterCompleteCount !==
+      value.characterCombatProfileCatalog.profiles.filter(
+        profile => profile.characterComplete === true
       ).length ||
     value.characterCombatProfileCatalog.profiles.some(
       profile =>
@@ -876,13 +884,24 @@ export function validateVerifiedCombatMechanicsPackage(value) {
         !profile.profileIdentity ||
         !/^[a-f0-9]{64}$/.test(String(profile.profileHash ?? '')) ||
         !/^[a-f0-9]{64}$/.test(String(profile.runtimeContractHash ?? '')) ||
+        !['profile-compiled', 'runtime-applied', 'ui-verified'].includes(
+          profile.pipelineMaturity
+        ) ||
+        !['evidence-required', 'partial', 'complete'].includes(
+          profile.combatCoverageState
+        ) ||
+        profile.completionState !== profile.pipelineMaturity ||
         !profile.sourcePath ||
         profile.status !== 'character-combat-profile-valid'
     ) ||
     value?.summary?.characterCombatProfileCount !==
       value.characterCombatProfileCatalog.summary.compiledProfileCount ||
+    value?.summary?.characterCombatRuntimeAppliedProfileCount !==
+      value.characterCombatProfileCatalog.summary.runtimeAppliedProfileCount ||
     value?.summary?.characterCombatUiVerifiedProfileCount !==
-      value.characterCombatProfileCatalog.summary.uiVerifiedProfileCount
+      value.characterCombatProfileCatalog.summary.uiVerifiedProfileCount ||
+    value?.summary?.characterCombatCompleteProfileCount !==
+      value.characterCombatProfileCatalog.summary.characterCompleteCount
   ) {
     issues.push('character-combat-profile-catalog-invalid');
   }

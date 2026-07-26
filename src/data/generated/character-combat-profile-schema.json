@@ -8,6 +8,8 @@
     "kind",
     "profileIdentity",
     "profileHash",
+    "pipelineMaturity",
+    "combatCoverageState",
     "owner",
     "sourcePackage",
     "denominator",
@@ -39,6 +41,22 @@
         "profile-compiled",
         "runtime-applied",
         "ui-verified"
+      ]
+    },
+    "pipelineMaturity": {
+      "enum": [
+        "not-started",
+        "evidence-indexed",
+        "profile-compiled",
+        "runtime-applied",
+        "ui-verified"
+      ]
+    },
+    "combatCoverageState": {
+      "enum": [
+        "evidence-required",
+        "partial",
+        "complete"
       ]
     },
     "owner": {
@@ -88,6 +106,7 @@
         "operatorContractVersion",
         "operators",
         "outputBindings",
+        "sourceCompilation",
         "contractHash"
       ]
     },

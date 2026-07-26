@@ -73,7 +73,7 @@ describe('verified combat mechanics package', () => {
         semanticGameplayEffectCount: 1816,
         semanticAppliedEffectCount: 397,
         characterCombatProfileCount: 1,
-        characterCombatUiVerifiedProfileCount: 1,
+        characterCombatUiVerifiedProfileCount: 0,
       },
       mechanismEvidence: {
         contractName: 'AzPrVerifiedMechanismEvidenceManifest',
@@ -150,7 +150,7 @@ describe('verified combat mechanics package', () => {
         summary: {
           publicCharacterCount: 20,
           compiledProfileCount: 1,
-          uiVerifiedProfileCount: 1,
+          uiVerifiedProfileCount: 0,
         },
       },
     });
@@ -161,7 +161,7 @@ describe('verified combat mechanics package', () => {
     );
     expect(getVerifiedCharacterCombatProfileMetadata(101010)).toMatchObject({
       ownerName: '涂山小玉',
-      completionState: 'ui-verified',
+      completionState: 'runtime-applied',
       profileHash: expect.stringMatching(/^[a-f0-9]{64}$/),
       runtimeContractHash: expect.stringMatching(/^[a-f0-9]{64}$/),
     });

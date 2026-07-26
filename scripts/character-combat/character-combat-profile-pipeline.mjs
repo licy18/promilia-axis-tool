@@ -14,6 +14,11 @@ export const CHARACTER_COMBAT_PROGRESS_STATES = Object.freeze([
   'runtime-applied',
   'ui-verified',
 ]);
+export const CHARACTER_COMBAT_COVERAGE_STATES = Object.freeze([
+  'evidence-required',
+  'partial',
+  'complete',
+]);
 
 export const M10_PUBLIC_CHARACTER_ORDER = Object.freeze([
   101010, 103002, 101003, 101007, 102001, 107001, 107002, 107003, 108001,
@@ -78,6 +83,8 @@ export function createCharacterCombatProfileSchema() {
       'kind',
       'profileIdentity',
       'profileHash',
+      'pipelineMaturity',
+      'combatCoverageState',
       'owner',
       'sourcePackage',
       'denominator',
@@ -104,6 +111,12 @@ export function createCharacterCombatProfileSchema() {
       },
       completionState: {
         enum: [...CHARACTER_COMBAT_PROGRESS_STATES],
+      },
+      pipelineMaturity: {
+        enum: [...CHARACTER_COMBAT_PROGRESS_STATES],
+      },
+      combatCoverageState: {
+        enum: [...CHARACTER_COMBAT_COVERAGE_STATES],
       },
       owner: {
         type: 'object',
@@ -145,6 +158,7 @@ export function createCharacterCombatProfileSchema() {
           'operatorContractVersion',
           'operators',
           'outputBindings',
+          'sourceCompilation',
           'contractHash',
         ],
       },
@@ -195,6 +209,10 @@ export function createCharacterCombatOutputRecords(artifacts) {
     const reportRoot = `reports/m10/${ownerId}`;
     records.push(
       createJsonOutput(
+        `src/data/generated/character-combat-owner-contracts/${ownerId}.json`,
+        artifact.compiledOwnerContract
+      ),
+      createJsonOutput(
         `src/data/generated/character-combat-profiles/${ownerId}.json`,
         artifact.profile
       ),
@@ -237,6 +255,8 @@ export function createCharacterCombatPipelineArtifacts({
   characterCatalog,
   skills,
   recipes = [],
+  compiledOwnerContracts = [],
+  goldenRuntimeByOwner = new Map(),
   reportsByOwner = new Map(),
 }) {
   assertMechanicsPackage(mechanicsPackage);
@@ -244,6 +264,12 @@ export function createCharacterCombatPipelineArtifacts({
   assertPublicCharacterDenominator(characters);
   const recipeByOwnerId = new Map(
     recipes.map(recipe => [Number(recipe.ownerId), recipe])
+  );
+  const compiledOwnerContractsByOwnerId = new Map(
+    compiledOwnerContracts.map(compilation => [
+      Number(compilation.ownerId),
+      compilation,
+    ])
   );
   const compiledProfiles = [];
   const ownerArtifacts = [];
@@ -255,6 +281,8 @@ export function createCharacterCombatPipelineArtifacts({
       character: characters.find(item => Number(item.id) === ownerId),
       skills,
       recipe,
+      compiledOwnerContract: compiledOwnerContractsByOwnerId.get(ownerId),
+      goldenRuntime: goldenRuntimeByOwner.get(ownerId),
       reports,
     });
     compiledProfiles.push(artifacts.profile);
@@ -280,6 +308,9 @@ export function createCharacterCombatPipelineArtifacts({
       ownerName: profile.owner.ownerName,
       profileIdentity: profile.profileIdentity,
       profileHash: profile.profileHash,
+      pipelineMaturity: profile.pipelineMaturity,
+      combatCoverageState: profile.combatCoverageState,
+      characterComplete: profile.characterComplete,
       completionState: profile.completionState,
       runtimeContractHash: profile.runtimeCompilation.contractHash,
       sourcePath: `src/data/generated/character-combat-profiles/${profile.owner.ownerId}.json`,
@@ -289,8 +320,14 @@ export function createCharacterCombatPipelineArtifacts({
     summary: {
       publicCharacterCount: characters.length,
       compiledProfileCount: compiledProfiles.length,
+      runtimeAppliedProfileCount: compiledProfiles.filter(profile =>
+        ['runtime-applied', 'ui-verified'].includes(profile.pipelineMaturity)
+      ).length,
       uiVerifiedProfileCount: compiledProfiles.filter(
-        profile => profile.completionState === 'ui-verified'
+        profile => profile.pipelineMaturity === 'ui-verified'
+      ).length,
+      characterCompleteCount: compiledProfiles.filter(
+        profile => profile.characterComplete === true
       ).length,
     },
   };
@@ -309,6 +346,8 @@ export function createCharacterCombatOwnerArtifacts({
   character,
   skills,
   recipe,
+  compiledOwnerContract,
+  goldenRuntime,
   reports = {},
 }) {
   if (!character) {
@@ -323,63 +362,51 @@ export function createCharacterCombatOwnerArtifacts({
   const sourcePackageHash =
     mechanicsPackage.characterCombatProfileCatalog?.sourcePackageHash ??
     mechanicsPackage.packageHash;
-  const publicActions = sortByIdentity(
-    (mechanicsPackage.actionMappings ?? []).filter(
-      mapping =>
-        mapping.ownerKind === 'actor' && Number(mapping.ownerId) === ownerId
-    )
-  );
-  const graph = mechanicsPackage.actionVariantGraph ?? {};
+  if (
+    !compiledOwnerContract ||
+    Number(compiledOwnerContract.ownerId) !== ownerId ||
+    compiledOwnerContract.status !==
+      'character-combat-owner-contracts-compiled'
+  ) {
+    throw new Error(
+      `character combat compiled owner contracts missing: ${ownerId}`
+    );
+  }
+  const compiledContracts = compiledOwnerContract.contracts ?? {};
+  const publicActions = sortByIdentity(compiledContracts.publicActions ?? []);
   const ownerContextEdges = sortByIdentity(
-    (graph.contextEdges ?? []).filter(edge => Number(edge.ownerId) === ownerId)
+    compiledContracts.timingInputEdges ?? []
   );
-  const ownerVariantEdges = sortByIdentity(
-    (graph.edges ?? []).filter(edge => Number(edge.ownerId) === ownerId)
-  );
+  const ownerVariantEdges = sortByIdentity(compiledContracts.variantEdges ?? []);
   const attackInputChains = sortByIdentity(
-    (graph.attackInputChains ?? []).filter(
-      chain => Number(chain.ownerId) === ownerId
-    )
+    compiledContracts.attackInputChains ?? []
   );
-  const publicActionForms = sortByIdentity(
-    (graph.publicActionForms ?? []).filter(
-      form => Number(form.ownerId) === ownerId
-    )
-  );
+  const actionForms = sortByIdentity(compiledContracts.actionForms ?? []);
   const specialResourceProfiles = sortByIdentity(
-    (mechanicsPackage.specialResourceCatalog?.profiles ?? []).filter(
-      profile => Number(profile.ownerId) === ownerId
-    )
+    compiledContracts.resourceProfiles ?? []
   );
   const resourceTransactions = sortByIdentity(
-    (mechanicsPackage.specialResourceCatalog?.operationBindings ?? []).filter(
-      operation => Number(operation.ownerId) === ownerId
-    )
+    compiledContracts.resourceTransactions ?? []
   );
   const thresholdTransitions = sortByIdentity(
-    (
-      mechanicsPackage.specialResourceCatalog?.thresholdTransitions ?? []
-    ).filter(transition => Number(transition.ownerId) === ownerId)
+    compiledContracts.stateMachines ?? []
   );
-  const passives = sortByIdentity(
-    (mechanicsPackage.specialResourceCatalog?.passiveEffects ?? []).filter(
-      passive => Number(passive.ownerId) === ownerId
-    )
-  );
+  const passives = sortByIdentity(compiledContracts.passives ?? []);
   const switchTriggers = sortByIdentity(
-    (mechanicsPackage.switchTriggerCatalog?.profiles ?? []).filter(
-      profile => Number(profile.ownerId) === ownerId
-    )
+    compiledContracts.switchTriggers ?? []
   );
+  const controls = sortByIdentity(compiledContracts.controls ?? []);
+  const hits = sortByIdentity(compiledContracts.hits ?? []);
+  const rawEffects = sortByIdentity(compiledContracts.effects?.raw ?? []);
+  const semanticEffects = sortByIdentity(
+    compiledContracts.effects?.semantic ?? []
+  );
+  const statDependencies = compiledContracts.statDependencies ?? {
+    static: [],
+    dynamic: [],
+  };
   const hiddenAudit = reports.hiddenInputDerivation ?? null;
   const occupancyAudit = reports.actionOccupancy ?? null;
-  const actionForms = createActionForms({
-    ownerId,
-    publicActions,
-    publicActionForms,
-    attackInputChains,
-    hiddenAudit,
-  });
   const reachable = discoverReachableControls({
     ownerId,
     character,
@@ -392,47 +419,7 @@ export function createCharacterCombatOwnerArtifacts({
     switchTriggers,
     hiddenAudit,
   });
-  const allControls = dedupeBy(
-    [
-      ...(mechanicsPackage.controlBindings ?? []),
-      ...(mechanicsPackage.actionVariantControlBindings ?? []),
-    ],
-    control => Number(control.controlSkillId)
-  );
-  const controls = sortByIdentity(
-    allControls.filter(control =>
-      reachable.controlIds.has(Number(control.controlSkillId))
-    )
-  );
-  const hits = controls.flatMap(control =>
-    (control.hits ?? []).map(hit => ({
-      ...hit,
-      controlSkillId: control.controlSkillId,
-      frameRate: control.frameRate,
-    }))
-  );
-  const rawEffects = controls.flatMap(control =>
-    (control.effects ?? []).map(effect => ({
-      ...effect,
-      controlSkillId: control.controlSkillId,
-    }))
-  );
-  const semanticEffects = sortByIdentity(
-    (mechanicsPackage.semanticEffectCatalog?.semanticEffects ?? []).filter(
-      effect =>
-        (effect.owners ?? []).some(
-          owner =>
-            owner.ownerKind === 'actor' && Number(owner.ownerId) === ownerId
-        )
-    )
-  );
-  const statDependencies = createStatDependencies({
-    ownerId,
-    mechanicsPackage,
-    passives,
-    semanticEffects,
-  });
-  const unresolvedRecords = createUnresolvedLedger({
+  const unresolvedLedger = createUnresolvedLedger({
     ownerId,
     publicActions,
     controls,
@@ -444,6 +431,7 @@ export function createCharacterCombatOwnerArtifacts({
     occupancyAudit,
     recipe,
   });
+  const unresolvedRecords = unresolvedLedger.records;
   const coverage = createCoverage({
     publicActions,
     actionForms,
@@ -533,11 +521,7 @@ export function createCharacterCombatOwnerArtifacts({
   const capturePlan = createRuntimeCapturePlan(unresolvedRecords, ownerId);
   const goldenFixture = createGoldenFixture({
     ownerId,
-    recipe,
-    ownerContextEdges,
-    resourceTransactions,
-    thresholdTransitions,
-    passives,
+    goldenRuntime,
     sourcePackageHash,
   });
   const denominator = {
@@ -573,11 +557,32 @@ export function createCharacterCombatOwnerArtifacts({
     switchTriggers,
     statDependencies,
   };
+  const profileIdentity = `actor:${ownerId}:character-combat-profile:v${CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION}`;
+  const runtimeCompilation = createRuntimeCompilation({
+    ownerId,
+    profileIdentity,
+    contracts,
+    sourceCompilation: compiledOwnerContract,
+  });
+  const lifecycle = deriveCharacterCombatLifecycle({
+    coverage,
+    publicActions,
+    actionForms,
+    unresolvedRecords,
+    runtimeCompilation,
+    uiVerification: recipe.uiVerification,
+  });
   const profileBase = {
     schemaVersion: CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION,
     kind: 'azpr-character-combat-profile',
-    profileIdentity: `actor:${ownerId}:character-combat-profile:v${CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION}`,
-    completionState: recipe.completionState ?? 'profile-compiled',
+    profileIdentity,
+    pipelineMaturity: lifecycle.pipelineMaturity,
+    combatCoverageState: lifecycle.combatCoverageState,
+    characterComplete: lifecycle.characterComplete,
+    maturityGates: lifecycle.gates,
+    completionState: lifecycle.pipelineMaturity,
+    targetPipelineMaturity:
+      recipe.targetPipelineMaturity ?? 'profile-compiled',
     owner: {
       ownerKind: 'actor',
       ownerId,
@@ -599,11 +604,7 @@ export function createCharacterCombatOwnerArtifacts({
     },
     denominator,
     contracts,
-    runtimeCompilation: createRuntimeCompilation({
-      ownerId,
-      profileIdentity: `actor:${ownerId}:character-combat-profile:v${CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION}`,
-      contracts,
-    }),
+    runtimeCompilation,
     coverage,
     unresolvedRecords,
     validation: {
@@ -636,6 +637,7 @@ export function createCharacterCombatOwnerArtifacts({
     );
   }
   return {
+    compiledOwnerContract,
     profile,
     sourceManifest: {
       ...sourceManifest,
@@ -658,8 +660,9 @@ export function createCharacterCombatOwnerArtifacts({
       kind: 'azpr-character-combat-unresolved-ledger',
       ownerId,
       profileHash: profile.profileHash,
-      summary: countBy(unresolvedRecords, record => record.status),
+      summary: unresolvedLedger.summary,
       records: unresolvedRecords,
+      rawRecords: unresolvedLedger.rawRecords,
     },
     capturePlan: {
       ...capturePlan,
@@ -695,6 +698,22 @@ export function validateCharacterCombatProfile({
   }
   if (!CHARACTER_COMBAT_PROGRESS_STATES.includes(profile.completionState)) {
     issues.push('completion-state-invalid');
+  }
+  if (
+    !CHARACTER_COMBAT_PROGRESS_STATES.includes(profile.pipelineMaturity) ||
+    profile.completionState !== profile.pipelineMaturity
+  ) {
+    issues.push('pipeline-maturity-invalid');
+  }
+  if (
+    !CHARACTER_COMBAT_COVERAGE_STATES.includes(
+      profile.combatCoverageState
+    ) ||
+    profile.characterComplete !==
+      (profile.combatCoverageState === 'complete' &&
+        profile.pipelineMaturity === 'ui-verified')
+  ) {
+    issues.push('combat-coverage-state-invalid');
   }
   if (
     profile.coverage.length !== COVERAGE_DIMENSIONS.length ||
@@ -746,6 +765,7 @@ export function validateCharacterCombatProfile({
     ownerId: profile.owner.ownerId,
     profileIdentity: profile.profileIdentity,
     contracts: profile.contracts,
+    sourceCompilation: profile.runtimeCompilation.sourceCompilation,
   });
   if (
     profile.runtimeCompilation?.status !==
@@ -757,6 +777,16 @@ export function validateCharacterCombatProfile({
   }
   if (goldenFixture.durationMs !== 120_000) {
     issues.push('golden-fixture-duration-invalid');
+  }
+  if (
+    goldenFixture.kind !==
+      'azpr-character-combat-authoritative-golden-runtime' ||
+    goldenFixture.status !== 'authoritative-golden-runtime-verified' ||
+    goldenFixture.validation?.passed !== true ||
+    goldenFixture.validation?.assertionCount < 1 ||
+    !/^[a-f0-9]{64}$/.test(String(goldenFixture.replayHash ?? ''))
+  ) {
+    issues.push('golden-authoritative-replay-invalid');
   }
   for (const [field, expected] of Object.entries(recipe.expected ?? {})) {
     const actual = resolveExpectedMetric(profile, field);
@@ -1630,7 +1660,75 @@ function createRuntimeCoverage({
   };
 }
 
-function createRuntimeCompilation({ ownerId, profileIdentity, contracts }) {
+function deriveCharacterCombatLifecycle({
+  coverage,
+  publicActions,
+  actionForms,
+  unresolvedRecords,
+  runtimeCompilation,
+  uiVerification,
+}) {
+  const requiredCoverageComplete = coverage.every(item =>
+    ['applied', 'not-applicable'].includes(item.status)
+  );
+  const publicActionsComplete = publicActions.every(
+    action =>
+      action.runtimeReady === true ||
+      action.classification === 'verified-zero' ||
+      action.notApplicable === true
+  );
+  const actionFormsComplete = actionForms.every(form =>
+    ['applied', 'not-applicable'].includes(form.status)
+  );
+  const gameplayGapCount = unresolvedRecords.filter(
+    record =>
+      record.impactClassification === 'gameplay-impacting' &&
+      record.status !== 'not-applicable'
+  ).length;
+  const combatCoverageState =
+    requiredCoverageComplete &&
+    publicActionsComplete &&
+    actionFormsComplete &&
+    gameplayGapCount === 0
+      ? 'complete'
+      : coverage.some(item => item.status === 'applied')
+        ? 'partial'
+        : 'evidence-required';
+  const runtimeApplied =
+    runtimeCompilation?.status ===
+      'character-combat-runtime-contract-compiled' &&
+    runtimeCompilation.outputBindings.some(binding => binding.recordCount > 0);
+  const uiVerified =
+    runtimeApplied &&
+    combatCoverageState === 'complete' &&
+    uiVerification?.status === 'passed' &&
+    typeof uiVerification.scenarioIdentity === 'string' &&
+    /^[a-f0-9]{64}$/.test(String(uiVerification.resultHash ?? ''));
+  return {
+    pipelineMaturity: uiVerified
+      ? 'ui-verified'
+      : runtimeApplied
+        ? 'runtime-applied'
+        : 'profile-compiled',
+    combatCoverageState,
+    characterComplete: uiVerified,
+    gates: {
+      requiredCoverageComplete,
+      publicActionsComplete,
+      actionFormsComplete,
+      gameplayGapCount,
+      runtimeApplied,
+      uiVerified,
+    },
+  };
+}
+
+function createRuntimeCompilation({
+  ownerId,
+  profileIdentity,
+  contracts,
+  sourceCompilation,
+}) {
   const outputBindings = [
     createRuntimeOutputBinding(
       'actionMappings',
@@ -1700,6 +1798,14 @@ function createRuntimeCompilation({ ownerId, profileIdentity, contracts }) {
     ownerId,
     profileIdentity,
     operatorContractVersion: 1,
+    sourceCompilation: {
+      compilerVersion: sourceCompilation?.compilerVersion ?? null,
+      recipeIdentity: sourceCompilation?.recipeIdentity ?? null,
+      recipeHash: sourceCompilation?.recipeHash ?? null,
+      compilerInputHash: sourceCompilation?.compilerInputHash ?? null,
+      recipeContractHash: sourceCompilation?.recipeContractHash ?? null,
+      ownerContractHash: sourceCompilation?.contractHash ?? null,
+    },
     operators: outputBindings.map(binding => binding.operator),
     outputBindings,
     contractHash: sha256Json(
@@ -1875,9 +1981,119 @@ function createUnresolvedLedger({
       forcedStatus: 'not-applicable',
     });
   }
-  return dedupeBy(records, record => record.recordIdentity).sort(
-    compareIdentity
-  );
+  const rawRecords = dedupeBy(
+    records,
+    record => record.recordIdentity
+  ).sort(compareIdentity);
+  const semanticGroups = new Map();
+  for (const record of rawRecords) {
+    const impactClassification =
+      classifyUnresolvedImpactClassification(record);
+    const canonicalKey = createUnresolvedCanonicalKey(
+      record,
+      impactClassification
+    );
+    const existing = semanticGroups.get(canonicalKey);
+    if (existing) {
+      existing.rawRecordIdentities.push(record.recordIdentity);
+      if (record.sourceIdentity) {
+        existing.sourceIdentities.push(record.sourceIdentity);
+      }
+      continue;
+    }
+    semanticGroups.set(canonicalKey, {
+      recordIdentity: `semantic-gap:${sha256Json(canonicalKey).slice(0, 20)}`,
+      ownerId,
+      sourceKind: record.sourceKind,
+      status: record.status,
+      impactClassification,
+      reasons: record.reasons,
+      sourceIdentity: record.sourceIdentity,
+      sourceIdentities: record.sourceIdentity ? [record.sourceIdentity] : [],
+      rawRecordIdentities: [record.recordIdentity],
+    });
+  }
+  const semanticRecords = [...semanticGroups.values()]
+    .map(record => ({
+      ...record,
+      sourceIdentities: [...new Set(record.sourceIdentities)].sort(),
+      rawRecordIdentities: [...new Set(record.rawRecordIdentities)].sort(),
+      rawRecordCount: new Set(record.rawRecordIdentities).size,
+    }))
+    .sort(compareIdentity);
+  return {
+    records: semanticRecords,
+    rawRecords,
+    summary: {
+      semanticRecordCount: semanticRecords.length,
+      rawRecordCount: rawRecords.length,
+      semanticStatusCounts: countBy(semanticRecords, record => record.status),
+      rawStatusCounts: countBy(rawRecords, record => record.status),
+      impactClassificationCounts: countBy(
+        semanticRecords,
+        record => record.impactClassification
+      ),
+      gameplayImpactingCount: semanticRecords.filter(
+        record => record.impactClassification === 'gameplay-impacting'
+      ).length,
+      wrapperOrDuplicateCount: semanticRecords.filter(
+        record => record.impactClassification === 'wrapper-or-duplicate'
+      ).length,
+      unreachableOrNotApplicableCount: semanticRecords.filter(record =>
+        ['unreachable', 'not-applicable'].includes(
+          record.impactClassification
+        )
+      ).length,
+    },
+  };
+}
+
+function classifyUnresolvedImpactClassification(record) {
+  if (record.status === 'not-applicable') return 'not-applicable';
+  const reasons = new Set(record.reasons ?? []);
+  if (
+    reasons.has('system-or-movement-control-is-not-public-action') ||
+    reasons.has('window-does-not-select-an-action-control')
+  ) {
+    return 'unreachable';
+  }
+  if (
+    record.sourceKind === 'effect' &&
+    [...reasons].some(reason =>
+      /wrapper-classified|nested-effect-wrapper|duplicate/i.test(reason)
+    )
+  ) {
+    return 'wrapper-or-duplicate';
+  }
+  return 'gameplay-impacting';
+}
+
+function createUnresolvedCanonicalKey(record, impactClassification) {
+  const reasonKey = [...(record.reasons ?? [])].sort().join(',');
+  if (record.sourceKind === 'effect') {
+    const match = String(record.sourceIdentity ?? '').match(
+      /^battle-effect:([^:]+):([^:]+):([^:]+):/
+    );
+    const semanticEffectIdentity = match
+      ? `${match[1]}:${match[2]}:${match[3]}`
+      : record.recordIdentity;
+    return [
+      record.ownerId,
+      record.sourceKind,
+      impactClassification,
+      semanticEffectIdentity,
+      reasonKey,
+      record.status,
+    ].join('|');
+  }
+  return [
+    record.ownerId,
+    record.sourceKind,
+    impactClassification,
+    record.recordIdentity,
+    reasonKey,
+    record.status,
+  ].join('|');
 }
 
 function createRuntimeCapturePlan(records, ownerId) {
@@ -1907,193 +2123,28 @@ function createRuntimeCapturePlan(records, ownerId) {
   };
 }
 
-function createGoldenFixture({
-  ownerId,
-  recipe,
-  ownerContextEdges,
-  resourceTransactions,
-  thresholdTransitions,
-  passives,
-  sourcePackageHash,
-}) {
-  const scenario = recipe.goldenScenario;
-  if (!scenario) {
-    throw new Error(`golden scenario missing for ${ownerId}`);
+function createGoldenFixture({ ownerId, goldenRuntime, sourcePackageHash }) {
+  if (
+    !goldenRuntime ||
+    Number(goldenRuntime.ownerId) !== Number(ownerId) ||
+    goldenRuntime.kind !==
+      'azpr-character-combat-authoritative-golden-runtime'
+  ) {
+    throw new Error(`authoritative golden runtime missing for ${ownerId}`);
   }
-  const frameRate = Number(scenario.frameRate) || 60;
-  const trace = [];
-  const actionByKey = new Map(
-    scenario.actions.map(action => [action.actionKey, action])
-  );
-  const thresholdAction = actionByKey.get('threshold-charged');
-  const firstAppliedGain = resourceTransactions
-    .filter(
-      operation =>
-        operation.applied &&
-        Number(operation.controlSkillId) ===
-          Number(thresholdAction?.controlSkillId) &&
-        Number(operation.subSkillIndex) ===
-          Number(thresholdAction?.subSkillIndex) &&
-        operation.operation === 'gain' &&
-        Number.isInteger(operation.triggerFrame)
-    )
-    .sort((left, right) => left.triggerFrame - right.triggerFrame)[0];
-  const threshold = thresholdTransitions[0];
-  if (thresholdAction && firstAppliedGain && threshold) {
-    const frame = thresholdAction.startFrame + firstAppliedGain.triggerFrame;
-    trace.push({
-      eventIdentity: 'golden:threshold-state-enter',
-      frame,
-      timeMs: frameToMs(frame, frameRate),
-      eventKind: 'special-resource-threshold-transform',
-      actionKey: thresholdAction.actionKey,
-      resourceIdentity: threshold.resourceIdentity,
-      before: 95,
-      delta: Number(firstAppliedGain.amountByLevel?.['1']),
-      threshold: threshold.threshold,
-      after: 0,
-      stateElementId: threshold.stateElementId,
-      stateDurationMs: threshold.stateDurationMs,
-      sourceIdentity: [
-        firstAppliedGain.sourceIdentity,
-        threshold.sourceIdentity,
-      ].join('|'),
-    });
-  }
-  for (const action of scenario.actions) {
-    const passive = passives[0];
-    const trigger = passive?.triggerBindings?.find(
-      item =>
-        Number(item.controlSkillId) === Number(action.controlSkillId) &&
-        Number(item.subSkillIndex) === Number(action.subSkillIndex)
+  if (
+    goldenRuntime.status !== 'authoritative-golden-runtime-verified' ||
+    goldenRuntime.validation?.passed !== true
+  ) {
+    throw new Error(
+      `authoritative golden runtime failed for ${ownerId}: ${
+        goldenRuntime.validation?.failedCount ?? 'unknown'
+      }`
     );
-    if (trigger) {
-      const frame = action.startFrame + trigger.triggerFrame;
-      trace.push({
-        eventIdentity: `golden:${action.actionKey}:passive-stack`,
-        frame,
-        timeMs: frameToMs(frame, frameRate),
-        eventKind: 'passive-stack',
-        actionKey: action.actionKey,
-        passiveIdentity: passive.passiveIdentity,
-        stackDelta: passive.stackDelta,
-        maxStacks: passive.maxStacks,
-        durationMs: passive.durationMs,
-        modifiers: passive.modifiers,
-        sourceIdentity: trigger.sourceIdentity,
-      });
-    }
-    for (const operation of resourceTransactions.filter(
-      item =>
-        item.applied &&
-        Number(item.controlSkillId) === Number(action.controlSkillId) &&
-        Number(item.subSkillIndex) === Number(action.subSkillIndex) &&
-        Number.isInteger(item.triggerFrame)
-    )) {
-      const frame = action.startFrame + operation.triggerFrame;
-      trace.push({
-        eventIdentity: `golden:${action.actionKey}:resource:${operation.operation}:${operation.triggerFrame}`,
-        frame,
-        timeMs: frameToMs(frame, frameRate),
-        eventKind: `special-resource-${operation.operation}`,
-        actionKey: action.actionKey,
-        resourceIdentity: operation.resourceIdentity,
-        stateElementId: operation.stateElementId,
-        amount: operation.amountByLevel?.['1'] ?? null,
-        sourceIdentity: operation.sourceIdentity,
-      });
-    }
   }
-  for (const action of scenario.actions.filter(
-    item => item.publicControlSkillId != null
-  )) {
-    const predecessor = scenario.actions
-      .filter(candidate => candidate.startFrame < action.startFrame)
-      .sort((left, right) => right.startFrame - left.startFrame)[0];
-    const edge = ownerContextEdges.find(
-      item =>
-        Number(item.sourceControlSkillId) ===
-          Number(predecessor?.controlSkillId) &&
-        Number(item.executionControlSkillId) ===
-          Number(action.controlSkillId) &&
-        Number(item.targetSubSkillIndex) === Number(action.subSkillIndex)
-    );
-    if (!edge) continue;
-    trace.push({
-      eventIdentity: `golden:${action.actionKey}:context-selection`,
-      frame: action.expectedExecutionStartFrame ?? action.startFrame,
-      timeMs: frameToMs(
-        action.expectedExecutionStartFrame ?? action.startFrame,
-        frameRate
-      ),
-      eventKind: 'context-action-form-selected',
-      actionKey: action.actionKey,
-      semanticIdentity: edge.semanticIdentity,
-      semanticName: edge.semanticName,
-      inputWindow: edge.inputWindow,
-      inputScheduling: edge.inputScheduling,
-      executionControlSkillId: edge.executionControlSkillId,
-      executionSubSkillIndex: edge.targetSubSkillIndex,
-      sourceIdentity: edge.sourceIdentity,
-    });
-  }
-  const cappedPassiveTrace = trace
-    .filter(event => event.eventKind === 'passive-stack')
-    .slice(0, passives[0]?.maxStacks ?? 0);
-  trace.push({
-    eventIdentity: 'golden:passive-max-stack-snapshot',
-    frame: cappedPassiveTrace.at(-1)?.frame ?? 0,
-    timeMs: cappedPassiveTrace.at(-1)?.timeMs ?? 0,
-    eventKind: 'dynamic-property-snapshot',
-    stackCount: cappedPassiveTrace.length,
-    modifiers: (passives[0]?.modifiers ?? []).map(modifier => ({
-      attributeId: modifier.attributeId,
-      perStackRaw: modifier.valueRaw,
-      totalRaw: modifier.valueRaw * cappedPassiveTrace.length,
-      bucket: modifier.bucket,
-      sourceIdentity: modifier.sourceIdentity,
-    })),
-  });
   return {
-    schemaVersion: 1,
-    kind: 'azpr-character-combat-golden-trace-fixture',
-    ownerId,
+    ...goldenRuntime,
     sourcePackageHash,
-    scenarioIdentity: scenario.scenarioIdentity,
-    durationFrames: scenario.durationFrames,
-    durationMs: frameToMs(scenario.durationFrames, frameRate),
-    frameRate,
-    teamCharacterIds: scenario.teamCharacterIds,
-    initialControlledCharacterId: scenario.initialControlledCharacterId,
-    initialActorSp: scenario.initialActorSp,
-    initialSpecialResources: scenario.initialSpecialResources,
-    controlIntervals: scenario.controlIntervals,
-    switchEvents: scenario.switchEvents ?? [],
-    actions: scenario.actions,
-    expectedTrace: trace.sort(
-      (left, right) =>
-        left.frame - right.frame ||
-        left.eventIdentity.localeCompare(right.eventIdentity)
-    ),
-    assertions: {
-      thresholdStateEntered: trace.some(
-        event => event.eventKind === 'special-resource-threshold-transform'
-      ),
-      ultimateRefreshPresent: trace.some(
-        event =>
-          event.actionKey === 'ultimate-refresh' &&
-          event.eventKind === 'special-resource-transform'
-      ),
-      burstChainControls: scenario.assertions?.burstChainControls ?? [],
-      enhancedSpecialChargedControl:
-        scenario.assertions?.enhancedSpecialChargedControl ?? null,
-      passiveMaxStacks: passives[0]?.maxStacks ?? null,
-      frontBackSpIntervalsPresent:
-        new Set(scenario.controlIntervals.map(item => item.characterId)).size >
-        1,
-      teamStatPropagationRequired:
-        scenario.assertions?.teamStatPropagationRequired === true,
-    },
   };
 }
 
@@ -2172,9 +2223,14 @@ function createAllCharacterCoverageManifest({
       mechanicFocus: route.mechanicFocus,
       estimatedWorkUnits: 1,
       progressState:
-        profile?.completionState ??
-        recipe?.completionState ??
+        profile?.pipelineMaturity ??
         (actions.length ? 'evidence-indexed' : 'not-started'),
+      targetPipelineMaturity:
+        recipe?.targetPipelineMaturity ?? 'ui-verified',
+      combatCoverageState:
+        profile?.combatCoverageState ??
+        (actions.length ? 'evidence-required' : 'evidence-required'),
+      characterComplete: profile?.characterComplete === true,
       publicActionCount: actions.length,
       reachableFormCount:
         variantNodes.length +
@@ -2323,7 +2379,9 @@ function createOwnerSummaryMarkdown({
     `- Owner: \`${profile.owner.ownerId}\``,
     `- Profile: \`${profile.profileIdentity}\``,
     `- Hash: \`${profile.profileHash}\``,
-    `- 阶段：${profile.completionState}`,
+    `- 流水线成熟度：${profile.pipelineMaturity}`,
+    `- 战斗覆盖：${profile.combatCoverageState}`,
+    `- 角色完成：${profile.characterComplete ? 'yes' : 'no'}`,
     `- 公开动作：${profile.denominator.publicActionCount}`,
     `- 执行形态：${profile.denominator.executionFormCount}`,
     `- 可达 control：${profile.denominator.reachableControlCount}`,

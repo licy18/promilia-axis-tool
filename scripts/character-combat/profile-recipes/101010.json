@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-profile-recipe",
   "ownerId": 101010,
-  "completionState": "ui-verified",
+  "targetPipelineMaturity": "ui-verified",
   "goldStandard": true,
   "mechanicsDiscovery": {
     "ownerId": 101010,
@@ -33,6 +33,323 @@
     "perfectParryControlSkillId": 10101027,
     "perfectParryRuntimeControlSkillId": 10101049
   },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      10101001,
+      10101002,
+      10101003,
+      10101004,
+      10101005,
+      10101010,
+      10101011,
+      10101012,
+      10101013,
+      10101014,
+      10101015,
+      10101021,
+      10101024,
+      10101025,
+      10101026,
+      10101027,
+      10101041,
+      10101042,
+      10101049,
+      10101061
+    ],
+    "contextInputEdges": [
+      {
+        "sourceControlSkillId": 10101005,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A5",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "xiaoyu-special-charged",
+        "semanticName": "特殊重击",
+        "inputCommand": "charged-attack",
+        "condition": {
+          "kind": "resource-state-inactive",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 10101005,
+        "sourceSubSkillIndex": 1,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "爆发普攻 A3",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "xiaoyu-enhanced-special-charged",
+        "semanticName": "强化特殊重击",
+        "inputCommand": "charged-attack",
+        "condition": {
+          "kind": "resource-state-active",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        },
+        "expectedWindowCount": 2
+      },
+      {
+        "sourceControlSkillId": 10101012,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "star-skill",
+        "sourceSemanticName": "星鸣技",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "xiaoyu-special-charged",
+        "semanticName": "特殊重击",
+        "inputCommand": "charged-attack",
+        "condition": {
+          "kind": "always"
+        },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 10101013,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "ultimate",
+        "sourceSemanticName": "星决技",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "xiaoyu-enhanced-special-charged",
+        "semanticName": "强化特殊重击",
+        "inputCommand": "charged-attack",
+        "condition": {
+          "kind": "always"
+        },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 10101025,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "limit-counter",
+        "sourceSemanticName": "极限反击",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "xiaoyu-special-charged",
+        "semanticName": "特殊重击",
+        "inputCommand": "charged-attack",
+        "condition": {
+          "kind": "always"
+        },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 10101010,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "charged-attack",
+        "sourceSemanticName": "普通重击",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101010,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "xiaoyu-continuous-charged",
+        "semanticName": "连续重击",
+        "condition": {
+          "kind": "always"
+        },
+        "requiredSwitchElementId": 101010113,
+        "expectedWindowCount": 1
+      }
+    ],
+    "publicActionForms": [
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101010,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "xiaoyu-ordinary-charged",
+        "semanticName": "普通重击",
+        "selectionKind": "default",
+        "condition": {
+          "kind": "resource-state-inactive",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        }
+      },
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101010,
+        "executionSubSkillIndex": 2,
+        "semanticIdentity": "xiaoyu-enhanced-charged",
+        "semanticName": "强化重击",
+        "selectionKind": "state-controlled",
+        "condition": {
+          "kind": "resource-state-active",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        },
+        "switchElementId": 101010116
+      },
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "xiaoyu-special-charged",
+        "semanticName": "特殊重击",
+        "selectionKind": "input-context-derived",
+        "condition": {
+          "kind": "resource-state-inactive",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        }
+      },
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101042,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "xiaoyu-enhanced-special-charged",
+        "semanticName": "强化特殊重击",
+        "selectionKind": "input-context-derived",
+        "condition": {
+          "kind": "resource-state-active",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        },
+        "switchElementId": 101010154
+      },
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 10101010,
+        "executionControlSkillId": 10101010,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "xiaoyu-continuous-charged",
+        "semanticName": "连续重击",
+        "selectionKind": "input-context-derived",
+        "condition": {
+          "kind": "always"
+        }
+      }
+    ],
+    "attackInputChains": [
+      {
+        "chainIdentity": "xiaoyu-normal-default-five-inputs",
+        "sourceSkillId": 10101001,
+        "condition": {
+          "kind": "resource-state-inactive",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        },
+        "segments": [
+          {
+            "controlSkillId": 10101001,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10101002
+          },
+          {
+            "controlSkillId": 10101002,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10101003
+          },
+          {
+            "controlSkillId": 10101003,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10101004
+          },
+          {
+            "controlSkillId": 10101004,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10101005
+          },
+          {
+            "controlSkillId": 10101005,
+            "subSkillIndex": 0,
+            "nextControlSkillId": null
+          }
+        ]
+      },
+      {
+        "chainIdentity": "xiaoyu-burst-three-inputs",
+        "sourceSkillId": 10101001,
+        "condition": {
+          "kind": "resource-state-active",
+          "resourceElementId": 101010115,
+          "stateElementId": 101010129
+        },
+        "segments": [
+          {
+            "controlSkillId": 10101001,
+            "subSkillIndex": 1,
+            "nextControlSkillId": 10101004
+          },
+          {
+            "controlSkillId": 10101004,
+            "subSkillIndex": 1,
+            "nextControlSkillId": 10101005
+          },
+          {
+            "controlSkillId": 10101005,
+            "subSkillIndex": 1,
+            "nextControlSkillId": null
+          }
+        ]
+      }
+    ],
+    "thresholdTransitions": [
+      {
+        "resourceElementId": 101010115,
+        "stateElementId": 101010129,
+        "comparison": "reaches-capacity",
+        "resourceOperation": "clear",
+        "suppressGainWhileStateActive": true,
+        "suppressedOperationSelectors": [
+          {
+            "controlSkillId": 10101010,
+            "subSkillIndex": 2,
+            "operations": ["clear", "transform"]
+          },
+          {
+            "controlSkillId": 10101013,
+            "subSkillIndex": 0,
+            "operations": ["transform-remove"]
+          }
+        ],
+        "runtimeSourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill101010._accElementId|_burstElementId"
+      }
+    ],
+    "passiveEffects": [
+      {
+        "skillId": 10101061,
+        "markerElementId": 101010205,
+        "wrapperElementId": 101010206,
+        "propertyElementId": 101010207,
+        "expectedDurationMs": 8000,
+        "expectedMaxStacks": 4,
+        "expectedModifierCount": 2,
+        "publicTriggerAliases": [
+          {
+            "publicControlSkillId": 10101025,
+            "publicSubSkillIndex": 0,
+            "runtimeControlSkillId": 10101042,
+            "runtimeSubSkillIndex": 0
+          }
+        ],
+        "unresolvedTriggerAliases": [
+          {
+            "publicControlSkillId": 10101027,
+            "runtimeControlSkillId": 10101049,
+            "reason": "perfect-parry-public-to-runtime-control-transition-static-evidence-gap"
+          }
+        ]
+      }
+    ]
+  },
   "expected": {
     "publicActionCount": 10,
     "publicExecutionFormCount": 21,
@@ -58,15 +375,33 @@
     "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
     "durationFrames": 7200,
     "frameRate": 60,
-    "teamCharacterIds": [101010, 101007, 101003],
+    "teamCharacterIds": [101010, 101003, 103002],
     "initialControlledCharacterId": 101010,
     "initialActorSp": {
-      "101010": 0,
-      "101007": 0,
-      "101003": 0
+      "101010": 100,
+      "101003": 0,
+      "103002": 100
+    },
+    "kiboByCharacterId": {
+      "101010": 500003,
+      "101003": 500469,
+      "103002": 500039
+    },
+    "initialKiboSp": {
+      "101010": 100,
+      "101003": 100,
+      "103002": 100
+    },
+    "loadoutByCharacterId": {
+      "101010": {
+        "soulessenceId": 10001,
+        "soulessenceLevel": 80,
+        "soulessenceRank": 1
+      }
     },
     "initialSpecialResources": [
       {
+        "characterId": 101010,
         "resourceIdentity": "actor:101010:element:101010115",
         "currentValue": 95
       }
@@ -74,103 +409,310 @@
     "actions": [
       {
         "actionKey": "threshold-charged",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
         "actionKind": "charged-attack",
-        "controlSkillId": 10101010,
-        "subSkillIndex": 0,
+        "actionVariantIndex": 2,
         "startFrame": 0
       },
       {
+        "actionKey": "threshold-burst-a1",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-burst-three-inputs",
+        "attackSequenceIndex": 1,
+        "startFrame": 75
+      },
+      {
+        "actionKey": "threshold-burst-a2",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-burst-three-inputs",
+        "attackSequenceIndex": 2,
+        "startFrame": 147
+      },
+      {
+        "actionKey": "threshold-burst-a3",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-burst-three-inputs",
+        "attackSequenceIndex": 3,
+        "startFrame": 222
+      },
+      {
+        "actionKey": "threshold-enhanced-special-charged",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 2,
+        "startFrame": 294
+      },
+      {
         "actionKey": "ultimate-refresh",
+        "actorCharacterId": 101010,
+        "skillId": 10101013,
         "actionKind": "ultimate",
-        "controlSkillId": 10101013,
-        "subSkillIndex": 0,
-        "startFrame": 600
+        "startFrame": 360
       },
       {
-        "actionKey": "burst-a1",
+        "actionKey": "ultimate-burst-a1",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
         "actionKind": "normal-attack",
-        "controlSkillId": 10101001,
-        "subSkillIndex": 1,
-        "startFrame": 900
+        "attackInputChainIdentity": "xiaoyu-burst-three-inputs",
+        "attackSequenceIndex": 1,
+        "startFrame": 760
       },
       {
-        "actionKey": "burst-a2",
+        "actionKey": "ultimate-burst-a2",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
         "actionKind": "normal-attack",
-        "controlSkillId": 10101004,
-        "subSkillIndex": 1,
-        "startFrame": 972
+        "attackInputChainIdentity": "xiaoyu-burst-three-inputs",
+        "attackSequenceIndex": 2,
+        "startFrame": 832
       },
       {
-        "actionKey": "burst-a3",
+        "actionKey": "ultimate-burst-a3",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
         "actionKind": "normal-attack",
-        "controlSkillId": 10101005,
-        "subSkillIndex": 1,
-        "startFrame": 1047
+        "attackInputChainIdentity": "xiaoyu-burst-three-inputs",
+        "attackSequenceIndex": 3,
+        "startFrame": 907
       },
       {
-        "actionKey": "burst-derived-charged",
+        "actionKey": "ultimate-enhanced-special-charged",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
         "actionKind": "charged-attack",
-        "publicControlSkillId": 10101010,
-        "controlSkillId": 10101042,
-        "subSkillIndex": 1,
-        "startFrame": 1119,
-        "expectedExecutionStartFrame": 1118
+        "actionVariantIndex": 2,
+        "startFrame": 979
       },
       {
-        "actionKey": "star-skill",
+        "actionKey": "jade-limit-counter",
+        "actorCharacterId": 101010,
+        "skillId": 10101021,
+        "actionKind": "limit-counter",
+        "actionVariantIndex": 1,
+        "startFrame": 700
+      },
+      {
+        "actionKey": "han-star-skill",
+        "actorCharacterId": 101003,
+        "skillId": 10100312,
         "actionKind": "star-skill",
-        "controlSkillId": 10101012,
-        "subSkillIndex": 0,
-        "startFrame": 1500
+        "startFrame": 1150
       },
       {
-        "actionKey": "star-derived-charged",
+        "actionKey": "ruby-ultimate",
+        "actorCharacterId": 103002,
+        "skillId": 10300213,
+        "actionKind": "ultimate",
+        "startFrame": 1600
+      },
+      {
+        "actionKey": "fire-kibo-signature",
+        "type": "kiboEvent",
+        "actorCharacterId": 103002,
+        "kiboId": 500039,
+        "skillId": 50003901,
+        "actionKind": "signature",
+        "startFrame": 2070
+      },
+      {
+        "actionKey": "normal-a1",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-normal-default-five-inputs",
+        "attackSequenceIndex": 1,
+        "startFrame": 2300
+      },
+      {
+        "actionKey": "normal-a2",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-normal-default-five-inputs",
+        "attackSequenceIndex": 2,
+        "startFrame": 2320
+      },
+      {
+        "actionKey": "normal-a3",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-normal-default-five-inputs",
+        "attackSequenceIndex": 3,
+        "startFrame": 2355
+      },
+      {
+        "actionKey": "normal-a4",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-normal-default-five-inputs",
+        "attackSequenceIndex": 4,
+        "startFrame": 2402
+      },
+      {
+        "actionKey": "normal-a5",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "xiaoyu-normal-default-five-inputs",
+        "attackSequenceIndex": 5,
+        "startFrame": 2432
+      },
+      {
+        "actionKey": "normal-special-charged",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
         "actionKind": "charged-attack",
-        "publicControlSkillId": 10101010,
-        "controlSkillId": 10101042,
-        "subSkillIndex": 0,
-        "startFrame": 1620,
-        "expectedExecutionStartFrame": 1619
+        "actionVariantIndex": 2,
+        "startFrame": 2512
+      },
+      {
+        "actionKey": "jade-star-skill",
+        "actorCharacterId": 101010,
+        "skillId": 10101012,
+        "actionKind": "star-skill",
+        "startFrame": 2700
+      },
+      {
+        "actionKey": "jade-star-derived-charged",
+        "actorCharacterId": 101010,
+        "skillId": 10101001,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 2,
+        "startFrame": 2820
       }
     ],
     "switchEvents": [
       {
-        "eventKey": "switch-to-backline",
-        "startFrame": 300,
+        "eventKey": "switch-to-han",
+        "startFrame": 1100,
         "sourceCharacterId": 101010,
-        "targetCharacterId": 101007
+        "targetCharacterId": 101003
+      },
+      {
+        "eventKey": "switch-to-ruby",
+        "startFrame": 1350,
+        "sourceCharacterId": 101003,
+        "targetCharacterId": 103002
       },
       {
         "eventKey": "switch-back-to-xiaoyu",
-        "startFrame": 420,
-        "sourceCharacterId": 101007,
+        "startFrame": 2200,
+        "sourceCharacterId": 103002,
         "targetCharacterId": 101010
       }
     ],
     "controlIntervals": [
       {
         "startFrame": 0,
-        "endFrame": 300,
+        "endFrame": 1100,
         "characterId": 101010
       },
       {
-        "startFrame": 300,
-        "endFrame": 420,
-        "characterId": 101007
+        "startFrame": 1100,
+        "endFrame": 1350,
+        "characterId": 101003
       },
       {
-        "startFrame": 420,
+        "startFrame": 1350,
+        "endFrame": 2200,
+        "characterId": 103002
+      },
+      {
+        "startFrame": 2200,
         "endFrame": 7200,
         "characterId": 101010
       }
     ],
-    "assertions": {
-      "burstChainControls": [10101001, 10101004, 10101005],
-      "enhancedSpecialChargedControl": {
-        "controlSkillId": 10101042,
-        "subSkillIndex": 1
+    "comparison": {
+      "comparisonIdentity": "m10-a:101010:soulessence-stat-propagation",
+      "clearLoadoutCharacterIds": [101010],
+      "compareActionKey": "jade-star-derived-charged"
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000,
+        "project.actionCount": 25,
+        "actions.blockedActionIds": [],
+        "actions.selectionByActionId.threshold-charged.controlSkillId": 10101010,
+        "actions.selectionByActionId.threshold-charged.subSkillIndex": 0,
+        "actions.selectionByActionId.threshold-burst-a1.controlSkillId": 10101001,
+        "actions.selectionByActionId.threshold-burst-a1.subSkillIndex": 1,
+        "actions.selectionByActionId.threshold-burst-a1.actualDurationFrames": 72,
+        "actions.selectionByActionId.threshold-burst-a2.controlSkillId": 10101004,
+        "actions.selectionByActionId.threshold-burst-a2.actualDurationFrames": 75,
+        "actions.selectionByActionId.threshold-burst-a3.controlSkillId": 10101005,
+        "actions.selectionByActionId.threshold-burst-a3.actualDurationFrames": 72,
+        "actions.selectionByActionId.threshold-enhanced-special-charged.semanticName": "强化特殊重击",
+        "actions.selectionByActionId.threshold-enhanced-special-charged.controlSkillId": 10101042,
+        "actions.selectionByActionId.threshold-enhanced-special-charged.subSkillIndex": 1,
+        "actions.selectionByActionId.threshold-enhanced-special-charged.actualDurationFrames": 60,
+        "actions.selectionByActionId.ultimate-burst-a1.subSkillIndex": 1,
+        "actions.selectionByActionId.ultimate-burst-a2.subSkillIndex": 1,
+        "actions.selectionByActionId.ultimate-burst-a3.subSkillIndex": 1,
+        "actions.selectionByActionId.ultimate-enhanced-special-charged.controlSkillId": 10101042,
+        "actions.selectionByActionId.ultimate-enhanced-special-charged.subSkillIndex": 1,
+        "actions.selectionByActionId.normal-special-charged.semanticName": "特殊重击",
+        "actions.selectionByActionId.normal-special-charged.controlSkillId": 10101042,
+        "actions.selectionByActionId.normal-special-charged.subSkillIndex": 0,
+        "actions.selectionByActionId.jade-star-derived-charged.semanticName": "特殊重击",
+        "actions.selectionByActionId.jade-star-derived-charged.controlSkillId": 10101042,
+        "actions.selectionByActionId.jade-star-derived-charged.subSkillIndex": 0,
+        "combat.damageEventCount": 403,
+        "combat.ownerDamageEventCount": 227,
+        "combat.ownerHitEventCount": 111,
+        "combat.ownerTotalHpDamage": 131213,
+        "combat.ownerTotalToughnessDamage": 3704,
+        "combat.enemy.initialHp": 862800,
+        "combat.enemy.finalHp": 547396,
+        "resources.thresholdClearCount": 1,
+        "resources.transformCount": 1,
+        "resources.refreshCount": 1,
+        "resources.actorSpByActorId.actor-101010.initialValue": 100,
+        "resources.actorSpByActorId.actor-101010.currentValue": 31.856216,
+        "resources.actorSpByActorId.actor-101010.autoRecovery.0.reason": "verified-auto-sp-background",
+        "resources.actorSpByActorId.actor-101010.autoRecovery.0.totalChange": 1.904298,
+        "resources.actorSpByActorId.actor-101010.autoRecovery.1.reason": "verified-auto-sp-foreground",
+        "resources.actorSpByActorId.actor-101010.autoRecovery.1.totalChange": 19.953224,
+        "resources.actorSpByActorId.actor-101010.actionTransactions.0.actionId": "ultimate-refresh",
+        "resources.actorSpByActorId.actor-101010.actionTransactions.0.reason": "verified-skill-cost",
+        "resources.actorSpByActorId.actor-101010.actionTransactions.0.beforeValue": 100,
+        "resources.actorSpByActorId.actor-101010.actionTransactions.0.change": -100,
+        "resources.actorSpByActorId.actor-101010.actionTransactions.0.afterValue": 0,
+        "resources.kiboSpBySlotId.team-slot-3.kiboId": 500039,
+        "resources.kiboSpBySlotId.team-slot-3.initialValue": 100,
+        "resources.kiboSpBySlotId.team-slot-3.currentValue": 31.908417,
+        "resources.kiboSpBySlotId.team-slot-3.actionTransactions.0.actionId": "fire-kibo-signature",
+        "resources.kiboSpBySlotId.team-slot-3.actionTransactions.0.change": -100,
+        "effects.passiveMaxStacks": 4,
+        "effects.firstPassiveMaxStackFrame": 761,
+        "effects.burstTransitions.0.frame": 43,
+        "effects.burstTransitions.0.operation": "apply",
+        "effects.burstTransitions.1.frame": 632,
+        "effects.burstTransitions.1.operation": "refresh",
+        "effects.burstTransitions.2.frame": 1232,
+        "effects.burstTransitions.2.operation": "expire",
+        "dynamicProperties.maxPercentRawByAttributeId.1": 1500,
+        "dynamicProperties.maxPercentRawByAttributeId.229": 9600,
+        "comparison.primaryDamage": 248,
+        "comparison.baselineDamage": 52,
+        "comparison.damageDelta": 196
       },
-      "teamStatPropagationRequired": true
+      "greaterThan": {
+        "combat.ownerTotalHpDamage": 0,
+        "combat.ownerTotalToughnessDamage": 0,
+        "comparison.damageDelta": 0
+      }
     }
   }
 }

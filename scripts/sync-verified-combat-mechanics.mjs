@@ -15,6 +15,13 @@ import {
   createCharacterCombatOutputRecords,
   createCharacterCombatPipelineArtifacts,
 } from './character-combat/character-combat-profile-pipeline.mjs';
+import {
+  compileCharacterCombatRecipeContracts,
+  createCharacterCombatOwnerRuntimeContracts,
+  createCharacterCombatStatDependencies,
+  mergeCharacterCombatOwnerCompilations,
+} from './character-combat/character-combat-contract-compiler.mjs';
+import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
@@ -407,13 +414,117 @@ async function main() {
     specialResourceCatalog,
     allIndexedElements,
   });
-  const xiaoyuMechanicsContracts = attachXiaoyuMechanicsContracts({
-    seed,
-    characterCatalog,
-    controlBindings,
-    specialResourceCatalog,
-    actionVariantGraph,
+  const publicCharacterIds = (characterCatalog?.items ?? [])
+    .map(character => Number(character.id))
+    .filter(Number.isInteger);
+  const xiaoyuOwnerCompilation = compileCharacterCombatRecipeContracts({
+    recipe: XIAOYU_PROFILE_RECIPE,
+    character: characterCatalog.items.find(
+      character => Number(character.id) === XIAOYU_MECHANICS.ownerId
+    ),
+    evidence: {
+      controls: controlBindings,
+      specialResourceProfiles: specialResourceCatalog.profiles,
+      specialResourceOperations: specialResourceCatalog.operationBindings,
+      skills: seed.gameData?.skills ?? [],
+    },
+    operators: {
+      normalizeControlWindows(control, subSkillIndex) {
+        const variant = control?.variants?.find(
+          item => Number(item.subSkillIndex) === Number(subSkillIndex)
+        );
+        return normalizeControlTransitionWindows(variant?.eventBridges);
+      },
+      resolveControlVariantTiming({ control, subSkillIndex, actionKind }) {
+        const preparedControl = {
+          ...control,
+          hits: createControlRuntimeHits(control),
+        };
+        const variant = preparedControl.variants?.find(
+          item => Number(item.subSkillIndex) === Number(subSkillIndex)
+        );
+        if (!variant) return null;
+        return createControlVariantTimingContract({
+          control: preparedControl,
+          variant,
+          actionKind,
+          occupancyResolver: resolveVerifiedActionInputOccupancy,
+        });
+      },
+      resolveNormalAttackTiming({
+        control,
+        subSkillIndex,
+        nextControlSkillId,
+      }) {
+        const variant = control?.variants?.find(
+          item => Number(item.subSkillIndex) === Number(subSkillIndex)
+        );
+        if (!variant) return null;
+        const occupancyTiming = createControlVariantTimingContract({
+          control,
+          variant,
+          actionKind: 'normal-attack',
+          occupancyResolver: resolveNormalAttackInputOccupancy,
+          occupancyContext: { nextControlSkillId },
+        });
+        const preparedControl = {
+          ...control,
+          hits: createControlRuntimeHits(control),
+        };
+        const executionTiming = createControlVariantTimingContract({
+          control: preparedControl,
+          variant,
+          actionKind: 'normal-attack',
+          occupancyResolver: resolveNormalAttackInputOccupancy,
+          occupancyContext: { nextControlSkillId },
+        });
+        return {
+          ...executionTiming,
+          occupancy: occupancyTiming.occupancy,
+        };
+      },
+      readElementAsset: readBattleElementAsset,
+      createSemanticRootTriggers: createSemanticRootTriggerContracts,
+      resolveControlOwnerId(control) {
+        return resolveControlOwnerId(control?.controlSkillId, publicCharacterIds);
+      },
+    },
   });
+  mergeCharacterCombatOwnerCompilations({
+    actionVariantGraph,
+    specialResourceCatalog,
+    compilations: [xiaoyuOwnerCompilation],
+  });
+  const xiaoyuHiddenInputDerivationAudit =
+    createXiaoyuHiddenInputDerivationAudit({
+      characterCatalog,
+      controlBySkillId: new Map(
+        controlBindings.map(control => [control.controlSkillId, control])
+      ),
+      actionVariantGraph,
+      attackInputChains:
+        xiaoyuOwnerCompilation.contracts.attackInputChains,
+      publicActionForms:
+        xiaoyuOwnerCompilation.contracts.publicActionForms,
+      contextEdges: xiaoyuOwnerCompilation.contracts.contextEdges,
+    });
+  actionVariantGraph.hiddenInputDerivationCatalog = {
+    schemaVersion: xiaoyuHiddenInputDerivationAudit.schemaVersion,
+    kind: 'xiaoyu-hidden-input-derivation-catalog',
+    status: xiaoyuHiddenInputDerivationAudit.status,
+    ownerId: xiaoyuHiddenInputDerivationAudit.ownerId,
+    publicExecutionFormCount:
+      xiaoyuHiddenInputDerivationAudit.publicExecutionFormCount,
+    publicExecutionFormsCovered:
+      xiaoyuHiddenInputDerivationAudit.publicExecutionFormsCovered,
+    starCarryConclusion:
+      xiaoyuHiddenInputDerivationAudit.starCarryConclusion,
+    summary: xiaoyuHiddenInputDerivationAudit.summary,
+  };
+  actionVariantGraph.summary.hiddenInputAuditRowCount =
+    xiaoyuHiddenInputDerivationAudit.rows.length;
+  actionVariantGraph.summary.hiddenInputPublicExecutionFormCount =
+    xiaoyuHiddenInputDerivationAudit.publicExecutionFormCount;
   const templateRows = readJson(TEMPLATE_VALUE_PATH).rows;
   const spUnitContract = createSpUnitContract({
     templateRows,
@@ -465,6 +576,7 @@ async function main() {
     specialResourceCatalog,
     actionVariantGraph,
     characterCatalog,
+    characterCombatOwnerCompilations: [xiaoyuOwnerCompilation],
   });
   const semanticEffectCatalog = createSemanticEffectCatalog({
     controlBindings: publicControlBindings,
@@ -492,18 +604,86 @@ async function main() {
         effect.role === 'gameplay-effect' && effect.classification === 'applied'
     ).length;
   assertPublishedDisplayLabels(packageValue);
+  const xiaoyuReachableControlIds = new Set(
+    xiaoyuOwnerCompilation.reachableControlSkillIds
+  );
+  const xiaoyuControls = [
+    ...(packageValue.controlBindings ?? []),
+    ...(packageValue.actionVariantControlBindings ?? []),
+  ].filter(control =>
+    xiaoyuReachableControlIds.has(Number(control.controlSkillId))
+  );
+  const xiaoyuSemanticEffects = semanticEffectCatalog.semanticEffects.filter(
+    effect =>
+      (effect.owners ?? []).some(
+        owner =>
+          owner.ownerKind === 'actor' &&
+          Number(owner.ownerId) === XIAOYU_MECHANICS.ownerId
+      )
+  );
+  const xiaoyuRuntimeContracts = createCharacterCombatOwnerRuntimeContracts({
+    compilation: xiaoyuOwnerCompilation,
+    publicActions: packageValue.actionMappings.filter(
+      mapping =>
+        mapping.ownerKind === 'actor' &&
+        Number(mapping.ownerId) === XIAOYU_MECHANICS.ownerId
+    ),
+    controls: xiaoyuControls,
+    variantEdges: actionVariantGraph.edges.filter(
+      edge => Number(edge.ownerId) === XIAOYU_MECHANICS.ownerId
+    ),
+    hits: xiaoyuControls.flatMap(control =>
+      (control.hits ?? []).map(hit => ({
+        ...hit,
+        controlSkillId: control.controlSkillId,
+        frameRate: control.frameRate,
+      }))
+    ),
+    resourceProfiles: specialResourceCatalog.profiles.filter(
+      profile => Number(profile.ownerId) === XIAOYU_MECHANICS.ownerId
+    ),
+    resourceTransactions: specialResourceCatalog.operationBindings.filter(
+      operation => Number(operation.ownerId) === XIAOYU_MECHANICS.ownerId
+    ),
+    rawEffects: xiaoyuControls.flatMap(control =>
+      (control.effects ?? []).map(effect => ({
+        ...effect,
+        controlSkillId: control.controlSkillId,
+      }))
+    ),
+    semanticEffects: xiaoyuSemanticEffects,
+    switchTriggers: packageValue.switchTriggerCatalog.profiles.filter(
+      profile => Number(profile.ownerId) === XIAOYU_MECHANICS.ownerId
+    ),
+    statDependencies: createCharacterCombatStatDependencies({
+      ownerId: XIAOYU_MECHANICS.ownerId,
+      staticPropertyCatalog,
+      actorProfiles,
+      passiveEffects: xiaoyuOwnerCompilation.contracts.passiveEffects,
+      semanticEffects: xiaoyuSemanticEffects,
+    }),
+  });
   const runtimeSource = createBrowserRuntimeSource(readText(CALCULATOR_PATH));
   const xiaoyuActionOccupancyAudit =
     createXiaoyuActionOccupancyAudit(packageValue);
   const xiaoyuHiddenInputAudit = createXiaoyuHiddenInputDerivationReport({
     packageValue,
-    audit: xiaoyuMechanicsContracts.hiddenInputDerivationAudit,
+    audit: xiaoyuHiddenInputDerivationAudit,
+  });
+  const xiaoyuGoldenRuntime = await createCharacterCombatGoldenRuntime({
+    repositoryRoot: REPO_ROOT,
+    mechanicsPackage: packageValue,
+    recipe: XIAOYU_PROFILE_RECIPE,
   });
   const characterCombatArtifacts = createCharacterCombatPipelineArtifacts({
     mechanicsPackage: packageValue,
     characterCatalog,
     skills: seed.gameData?.skills ?? [],
     recipes: [XIAOYU_PROFILE_RECIPE],
+    compiledOwnerContracts: [xiaoyuRuntimeContracts],
+    goldenRuntimeByOwner: new Map([
+      [XIAOYU_MECHANICS.ownerId, xiaoyuGoldenRuntime],
+    ]),
     reportsByOwner: new Map([
       [
         XIAOYU_MECHANICS.ownerId,
@@ -517,8 +697,12 @@ async function main() {
   packageValue.characterCombatProfileCatalog = characterCombatArtifacts.catalog;
   packageValue.summary.characterCombatProfileCount =
     characterCombatArtifacts.catalog.summary.compiledProfileCount;
+  packageValue.summary.characterCombatRuntimeAppliedProfileCount =
+    characterCombatArtifacts.catalog.summary.runtimeAppliedProfileCount;
   packageValue.summary.characterCombatUiVerifiedProfileCount =
     characterCombatArtifacts.catalog.summary.uiVerifiedProfileCount;
+  packageValue.summary.characterCombatCompleteProfileCount =
+    characterCombatArtifacts.catalog.summary.characterCompleteCount;
   packageValue.packageHash = sha256(
     JSON.stringify({
       basePackageHash: packageValue.packageHash,
@@ -2210,14 +2394,14 @@ function findControlTransitionWindows({
   const variant = control?.variants?.find(
     item => Number(item.subSkillIndex) === Number(subSkillIndex)
   );
-  return normalizeXiaoyuControlWindows(variant?.eventBridges).filter(
+  return normalizeControlTransitionWindows(variant?.eventBridges).filter(
     window =>
       Number(window.targetControlSkillId) === Number(targetControlSkillId) &&
       Number(window.targetSubSkillIndex) === Number(targetSubSkillIndex)
   );
 }
 
-function normalizeXiaoyuControlWindows(bridges = []) {
+function normalizeControlTransitionWindows(bridges = []) {
   const bridgeBySourceIdentity = new Map(
     (bridges ?? []).map(bridge => [bridge.sourceIdentity, bridge])
   );
@@ -2260,7 +2444,7 @@ function createXiaoyuControlVariantTiming({
     control: preparedControl,
     variant,
     actionKind,
-    occupancyResolver: resolveXiaoyuActionOccupancy,
+    occupancyResolver: resolveVerifiedActionInputOccupancy,
   });
 }
 
@@ -2605,7 +2789,7 @@ function createXiaoyuHiddenInputRowsForForm({
   const variant = control?.variants?.find(
     item => Number(item.subSkillIndex) === Number(form.sourceSubSkillIndex)
   );
-  const windows = normalizeXiaoyuControlWindows(variant?.eventBridges);
+  const windows = normalizeControlTransitionWindows(variant?.eventBridges);
   if (!control || !variant) {
     return [
       createXiaoyuAuditRow({
@@ -7535,6 +7719,7 @@ function createPackage({
   specialResourceCatalog,
   actionVariantGraph,
   characterCatalog,
+  characterCombatOwnerCompilations = [],
 }) {
   const prepareControlBinding = binding => {
     const hits = createControlRuntimeHits(binding);
@@ -7560,6 +7745,12 @@ function createPackage({
     [...preparedControlBindings, ...preparedSupportControlBindings].map(
       binding => [binding.controlSkillId, binding]
     )
+  );
+  const characterCombatCompilationByOwnerId = new Map(
+    characterCombatOwnerCompilations.map(compilation => [
+      Number(compilation.ownerId),
+      compilation,
+    ])
   );
   const battleEffectNodes = dedupeBy(
     preparedControlBindings.flatMap(binding =>
@@ -7612,6 +7803,9 @@ function createPackage({
           candidate,
           mapping: mechanicsMapping,
           control,
+          ownerCompilation: characterCombatCompilationByOwnerId.get(
+            Number(candidate.ownerId)
+          ),
         })
       );
       return attachActionSchedulingContract({
@@ -8776,10 +8970,15 @@ function mergeSemanticEffectCandidates(candidates) {
   };
 }
 
-function createPublicActionTimingContract({ candidate, mapping, control }) {
+function createPublicActionTimingContract({
+  candidate,
+  mapping,
+  control,
+  ownerCompilation,
+}) {
   const occupancyResolver =
-    Number(candidate.ownerId) === XIAOYU_MECHANICS.ownerId
-      ? resolveXiaoyuActionOccupancy
+    ownerCompilation?.timingPolicy === 'verified-input-reopen'
+      ? resolveVerifiedActionInputOccupancy
       : resolveStandaloneActionOccupancy;
   const variantTimings = (control?.variants ?? []).map(variant =>
     createControlVariantTimingContract({
@@ -8963,7 +9162,7 @@ function resolveStandaloneActionOccupancy({ animation }) {
   };
 }
 
-function resolveXiaoyuActionOccupancy({ animation, hits, windows }) {
+function resolveVerifiedActionInputOccupancy({ animation, hits, windows }) {
   if (animation.status !== 'applied') {
     return createUnresolvedOccupancy('skill-control-animation-range-missing', {
       sourceIdentity: animation.sourceIdentity,
@@ -8989,7 +9188,7 @@ function resolveXiaoyuActionOccupancy({ animation, hits, windows }) {
   const reopen = candidates[0];
   if (!reopen) {
     return createUnresolvedOccupancy(
-      'xiaoyu-action-effective-occupancy-window-unresolved',
+      'verified-action-effective-occupancy-window-unresolved',
       {
         sourceIdentity: animation.sourceIdentity,
         frameRate: animation.frameRate,

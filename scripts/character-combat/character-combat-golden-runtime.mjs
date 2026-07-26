@@ -1,0 +1,977 @@
+import crypto from 'node:crypto';
+import path from 'node:path';
+import { createServer } from 'vite';
+import { validateCharacterCombatGoldenRuntime } from './character-combat-golden-validation.mjs';
+
+const DEFAULT_FRAME_RATE = 60;
+
+export async function createCharacterCombatGoldenRuntime({
+  repositoryRoot,
+  mechanicsPackage,
+  recipe,
+} = {}) {
+  const scenarioRecipe = recipe?.goldenScenario;
+  if (!scenarioRecipe) {
+    throw new Error(`golden scenario missing for ${recipe?.ownerId}`);
+  }
+  const root = path.resolve(repositoryRoot ?? process.cwd());
+  const vite = await createServer({
+    root,
+    server: { middlewareMode: true },
+    appType: 'custom',
+    logLevel: 'silent',
+  });
+
+  try {
+    const packageModule = await vite.ssrLoadModule(
+      '/src/data/verifiedCombatMechanicsPackage.js'
+    );
+    const factory = await vite.ssrLoadModule(
+      '/src/domain/workbenchProjectFactory.js'
+    );
+    const mechanicsSelection = await vite.ssrLoadModule(
+      '/src/domain/workbenchMechanicsProfileSelection.js'
+    );
+    const contextScheduling = await vite.ssrLoadModule(
+      '/src/domain/verifiedActionContextScheduling.js'
+    );
+    const compiler = await vite.ssrLoadModule(
+      '/src/simulation/compiler/compileProject.js'
+    );
+    const engine = await vite.ssrLoadModule(
+      '/src/simulation/engine/simulateScenario.js'
+    );
+
+    packageModule.installVerifiedCombatMechanicsPackage(
+      createRuntimeInstallPackage(mechanicsPackage)
+    );
+    const primary = runGoldenScenario({
+      mechanicsPackage,
+      recipe,
+      scenarioRecipe,
+      factory,
+      mechanicsSelection,
+      contextScheduling,
+      compiler,
+      engine,
+    });
+    const comparison = runGoldenComparison({
+      mechanicsPackage,
+      recipe,
+      scenarioRecipe,
+      primary,
+      factory,
+      mechanicsSelection,
+      contextScheduling,
+      compiler,
+      engine,
+    });
+    const actual = createGoldenActualProjection({
+      ownerId: Number(recipe.ownerId),
+      scenarioRecipe,
+      result: primary.result,
+      project: primary.project,
+      comparison,
+    });
+    const validation = validateCharacterCombatGoldenRuntime({
+      actual,
+      expected: scenarioRecipe.expectedRuntime,
+    });
+    return {
+      schemaVersion: 1,
+      kind: 'azpr-character-combat-authoritative-golden-runtime',
+      status: validation.passed
+        ? 'authoritative-golden-runtime-verified'
+        : 'authoritative-golden-runtime-expectation-failed',
+      ownerId: Number(recipe.ownerId),
+      scenarioIdentity: scenarioRecipe.scenarioIdentity,
+      durationMs: Number(primary.project.time?.durationMs),
+      frameRate: Number(scenarioRecipe.frameRate) || DEFAULT_FRAME_RATE,
+      sourcePackageHash: mechanicsPackage.packageHash,
+      compilerPath: 'src/simulation/compiler/compileProject.js',
+      simulatorPath: 'src/simulation/engine/simulateScenario.js',
+      actual,
+      expected: scenarioRecipe.expectedRuntime ?? null,
+      validation,
+      replayHash: sha256Json(actual),
+    };
+  } finally {
+    await vite.close();
+  }
+}
+
+function runGoldenScenario({
+  mechanicsPackage,
+  recipe,
+  scenarioRecipe,
+  omittedActionKeys = [],
+  clearLoadoutCharacterIds = [],
+  factory,
+  mechanicsSelection,
+  contextScheduling,
+  compiler,
+  engine,
+}) {
+  const omitted = new Set(omittedActionKeys);
+  const teamSlots = createTeamSlots(scenarioRecipe);
+  const selection = {
+    ...factory.DEFAULT_WORKBENCH_SELECTION,
+    characterId: Number(scenarioRecipe.initialControlledCharacterId),
+    secondaryCharacterId:
+      Number(
+        scenarioRecipe.teamCharacterIds.find(
+          value =>
+            Number(value) !== Number(scenarioRecipe.initialControlledCharacterId)
+        )
+      ) || Number(scenarioRecipe.teamCharacterIds[1]),
+  };
+  const kiboByCharacterId = Object.fromEntries(
+    Object.entries(scenarioRecipe.kiboByCharacterId ?? {}).map(
+      ([characterId, kiboId]) => [Number(characterId), Number(kiboId)]
+    )
+  );
+  const clearedLoadoutOwners = new Set(
+    clearLoadoutCharacterIds.map(Number)
+  );
+  const actorConfigs = factory
+    .normalizeWorkbenchActorConfigs([], selection, teamSlots)
+    .map(config => ({
+      ...config,
+      initialSp: finiteNumber(
+        scenarioRecipe.initialActorSp?.[config.characterId],
+        config.initialSp
+      ),
+      loadout: {
+        ...config.loadout,
+        ...(clearedLoadoutOwners.has(Number(config.characterId))
+          ? {
+              equipment: {},
+              soulessenceId: null,
+              soulessenceLevel: null,
+              soulessenceRank: null,
+            }
+          : (scenarioRecipe.loadoutByCharacterId?.[config.characterId] ?? {})),
+        kiboId:
+          kiboByCharacterId[Number(config.characterId)] ??
+          config.loadout?.kiboId ??
+          null,
+      },
+    }));
+  const actionRows = [
+    ...(scenarioRecipe.actions ?? []),
+    ...(scenarioRecipe.switchEvents ?? []).map(event => ({
+      ...event,
+      actionKey: event.actionKey ?? event.eventKey,
+      type: 'switch',
+      actorCharacterId: event.sourceCharacterId,
+      targetCharacterId: event.targetCharacterId,
+    })),
+  ]
+    .filter(action => !omitted.has(action.actionKey))
+    .sort(
+      (left, right) =>
+        Number(left.startFrame) - Number(right.startFrame) ||
+        String(left.actionKey).localeCompare(String(right.actionKey))
+    );
+  const actions = actionRows.map(action =>
+    createGoldenActionDraft({
+      action,
+      ownerId: Number(recipe.ownerId),
+      mechanicsPackage,
+      factory,
+      contextScheduling,
+      frameRate: Number(scenarioRecipe.frameRate) || DEFAULT_FRAME_RATE,
+    })
+  );
+  const initialRuntimeState = {
+    specialResourcesByActor: (
+      scenarioRecipe.initialSpecialResources ?? []
+    ).map(resource => ({
+      ...resource,
+      actorId:
+        resource.actorId ??
+        `actor-${Number(resource.characterId ?? recipe.ownerId)}`,
+    })),
+    kiboEnergyBySlot: teamSlots
+      .filter(
+        slot => Number.isInteger(kiboByCharacterId[Number(slot.characterId)])
+      )
+      .map(slot => ({
+        slotId: slot.slotId,
+        actorId: `actor-${slot.characterId}`,
+        characterId: Number(slot.characterId),
+        kiboId: kiboByCharacterId[Number(slot.characterId)],
+        currentValue: finiteNumber(
+          scenarioRecipe.initialKiboSp?.[slot.characterId],
+          100
+        ),
+        maxValue: 100,
+      })),
+  };
+  const project = factory.createWorkbenchProject(selection, {
+    durationMs: frameToMs(
+      Number(scenarioRecipe.durationFrames),
+      Number(scenarioRecipe.frameRate) || DEFAULT_FRAME_RATE
+    ),
+    teamSlots,
+    actorConfigs,
+    actions,
+    enemyConfig: {
+      level: 80,
+      hpMultiplier: 100,
+      defenseMultiplier: 1,
+      toughnessMultiplier: 1,
+      initialToughnessRatio: 1,
+      ...(scenarioRecipe.enemyConfig ?? {}),
+    },
+    initialRuntimeState,
+    mechanicsProfileSelection:
+      mechanicsSelection.createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  const compiledScenario = compiler.compileProject(
+    project,
+    factory.getWorkbenchGameData()
+  );
+  return {
+    project,
+    compiledScenario,
+    result: engine.simulateScenario(compiledScenario),
+  };
+}
+
+function runGoldenComparison({
+  mechanicsPackage,
+  recipe,
+  scenarioRecipe,
+  primary,
+  factory,
+  mechanicsSelection,
+  contextScheduling,
+  compiler,
+  engine,
+}) {
+  const comparisonRecipe = scenarioRecipe.comparison;
+  if (!comparisonRecipe) return null;
+  const baseline = runGoldenScenario({
+    mechanicsPackage,
+    recipe,
+    scenarioRecipe,
+    omittedActionKeys: comparisonRecipe.omitActionKeys,
+    clearLoadoutCharacterIds: comparisonRecipe.clearLoadoutCharacterIds,
+    factory,
+    mechanicsSelection,
+    contextScheduling,
+    compiler,
+    engine,
+  });
+  const actionKey = String(comparisonRecipe.compareActionKey ?? '');
+  const primaryDamage = sumActionDamage(primary.result, actionKey);
+  const baselineDamage = sumActionDamage(baseline.result, actionKey);
+  return {
+    comparisonIdentity: comparisonRecipe.comparisonIdentity,
+    compareActionKey: actionKey,
+    omittedActionKeys: [...(comparisonRecipe.omitActionKeys ?? [])],
+    clearLoadoutCharacterIds: [
+      ...(comparisonRecipe.clearLoadoutCharacterIds ?? []),
+    ],
+    primaryDamage,
+    baselineDamage,
+    damageDelta: primaryDamage - baselineDamage,
+    primaryDynamicPropertySources: collectDynamicPropertySources(
+      primary.result,
+      actionKey
+    ),
+    baselineDynamicPropertySources: collectDynamicPropertySources(
+      baseline.result,
+      actionKey
+    ),
+    baselineReplayHash: sha256Json(
+      createCompactReplaySignature(baseline.result)
+    ),
+  };
+}
+
+function createGoldenActionDraft({
+  action,
+  ownerId,
+  mechanicsPackage,
+  factory,
+  contextScheduling,
+  frameRate,
+}) {
+  const actionId = String(action.actionKey);
+  const actorCharacterId = Number(action.actorCharacterId ?? ownerId);
+  const startMs = frameToMs(Number(action.startFrame), frameRate);
+  if (action.type === 'switch') {
+    return factory.createWorkbenchActionDraft({
+      id: actionId,
+      type: 'switch',
+      actorCharacterId,
+      targetCharacterId: Number(action.targetCharacterId),
+      startMs,
+      durationMs: 0,
+    });
+  }
+
+  const actionKind = String(action.actionKind);
+  const ownerKind = action.type === 'kiboEvent' ? 'kibo' : 'actor';
+  const mappingOwnerId =
+    ownerKind === 'kibo' ? Number(action.kiboId) : actorCharacterId;
+  const mapping = resolveActionMapping({
+    mechanicsPackage,
+    ownerKind,
+    ownerId: mappingOwnerId,
+    actionKind,
+    actionVariantIndex: action.actionVariantIndex,
+  });
+  if (!mapping) {
+    throw new Error(
+      `golden action mapping missing: ${actionId}/${mappingOwnerId}/${actionKind}`
+    );
+  }
+  if (action.attackInputChainIdentity) {
+    return createAttackInputDraft({
+      action,
+      actionId,
+      actorCharacterId,
+      startMs,
+      mapping,
+      mechanicsPackage,
+      factory,
+      contextScheduling,
+      frameRate,
+    });
+  }
+  const durationFrames = resolveMappingDurationFrames(
+    mapping,
+    action.selectedSubSkillIndex
+  );
+  return factory.createWorkbenchActionDraft({
+    id: actionId,
+    type: ownerKind === 'kibo' ? 'kiboEvent' : 'skill',
+    actorCharacterId,
+    kiboId: ownerKind === 'kibo' ? mappingOwnerId : null,
+    skillId: Number(action.skillId ?? mapping.sourceSkillId),
+    eventType: ownerKind === 'kibo' ? actionKind : 'phase',
+    actionVariantIndex: Number(
+      action.actionVariantIndex ?? mapping.actionVariantIndex
+    ),
+    variantInputSelection: action.variantInputSelection ?? null,
+    startMs,
+    durationMs: frameToMs(durationFrames, frameRate),
+    durationFrames,
+    timingSource: mapping.actionTiming?.occupancy?.sourceKind ?? null,
+    timingStatus: mapping.timingStatus ?? 'applied',
+    timingSourceIdentity:
+      mapping.actionTiming?.occupancy?.sourceIdentity ?? null,
+    needsTimingData: false,
+  });
+}
+
+function createAttackInputDraft({
+  action,
+  actionId,
+  actorCharacterId,
+  startMs,
+  mapping,
+  mechanicsPackage,
+  factory,
+  contextScheduling,
+  frameRate,
+}) {
+  const chain = mechanicsPackage.actionVariantGraph?.attackInputChains?.find(
+    item =>
+      item.chainIdentity === action.attackInputChainIdentity &&
+      Number(item.ownerId) === actorCharacterId
+  );
+  const sequenceIndex = Number(action.attackSequenceIndex);
+  const chainSegment = chain?.segments?.find(
+    segment => Number(segment.sequenceIndex) === sequenceIndex
+  );
+  const sourceSegment = mapping.attackInputSegments?.find(
+    segment =>
+      Number(segment.controlSkillId) === Number(chainSegment?.controlSkillId)
+  );
+  const attackInput =
+    contextScheduling.projectVerifiedAttackInputChainSegment(
+      sourceSegment,
+      chainSegment,
+      sequenceIndex,
+      chain?.segments?.length
+    );
+  if (!attackInput) {
+    throw new Error(
+      `golden attack input missing: ${actionId}/${action.attackInputChainIdentity}/A${sequenceIndex}`
+    );
+  }
+  const durationFrames = Number(attackInput.durationFrames);
+  return factory.createWorkbenchActionDraft({
+    id: actionId,
+    type: 'skill',
+    actorCharacterId,
+    skillId: Number(action.skillId ?? mapping.sourceSkillId),
+    actionVariantIndex: Number(mapping.actionVariantIndex),
+    startMs,
+    durationMs: frameToMs(durationFrames, frameRate),
+    durationFrames,
+    timingSource: attackInput.durationBasis ?? 'verified-attack-input-chain',
+    timingStatus: 'applied',
+    timingSourceIdentity: attackInput.durationSourceIdentity,
+    needsTimingData: false,
+    attackGroupId:
+      action.attackGroupId ?? `golden-${action.attackInputChainIdentity}`,
+    attackSequenceIndex: sequenceIndex,
+    attackSequenceTotal: Number(chain.segments.length),
+    attackInput,
+  });
+}
+
+function createGoldenActualProjection({
+  ownerId,
+  scenarioRecipe,
+  result,
+  project,
+  comparison,
+}) {
+  const specialRuntime = result.verifiedCombatRuntime?.specialResourceRuntime;
+  const actionSelections = [...(specialRuntime?.selectionByActionId ?? [])]
+    .map(([actionId, selection]) => ({
+      actionId,
+      semanticName: selection.semanticName ?? null,
+      controlSkillId: numberOrNull(
+        selection.executionControlSkillId ?? selection.controlSkillId
+      ),
+      subSkillIndex: numberOrNull(selection.selectedSubSkillIndex),
+      actualDurationFrames: numberOrNull(selection.actualDurationFrames),
+      sourceKind: selection.sourceKind ?? null,
+    }))
+    .sort(compareIdentity);
+  const executedActionIds = (result.actionExecutionPlan?.actions ?? [])
+    .filter(action => action.execute)
+    .map(action => action.actionId)
+    .sort();
+  const blockedActionIds = (result.actionExecutionPlan?.actions ?? [])
+    .filter(action => !action.execute)
+    .map(action => action.actionId)
+    .sort();
+  const damageTrace = (
+    result.verifiedCombatRuntime?.damageEvents ?? []
+  ).map(event => ({
+    eventId: event.id ?? event.eventId ?? null,
+    eventType: event.type ?? null,
+    actionId: event.actionId,
+    frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+    hitIdentity: event.payload?.hitIdentity ?? null,
+    rawDamage: numberOrNull(event.payload?.rawDamage),
+    hpDamage: numberOrNull(
+      event.payload?.hpDamage ?? event.payload?.rawDamage
+    ),
+    toughnessDamage: numberOrNull(event.payload?.toughnessDamage),
+    actorSpRecovery: numberOrNull(event.payload?.actorSpRecovery),
+    kiboSpRecovery: numberOrNull(event.payload?.kiboSpRecovery),
+  }));
+  const specialResourceTrace = [
+    ...(specialRuntime?.resourceEvents ?? []).map(event => ({
+      stream: 'resource',
+      event,
+    })),
+    ...(specialRuntime?.stateEvents ?? []).map(event => ({
+      stream: 'state',
+      event,
+    })),
+  ]
+    .map(({ stream, event }) => ({
+      stream,
+      eventId: event.id ?? event.eventId ?? null,
+      actionId: event.actionId ?? null,
+      frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+      operation: event.payload?.operation ?? null,
+      resourceIdentity: event.payload?.resourceIdentity ?? null,
+      stateElementId: numberOrNull(event.payload?.stateElementId),
+      beforeValue: numberOrNull(event.payload?.beforeValue),
+      change: numberOrNull(event.payload?.change),
+      afterValue: numberOrNull(event.payload?.afterValue),
+      durationMs: numberOrNull(event.payload?.stateDurationMs),
+    }))
+    .sort(compareFrameThenIdentity);
+  const effectTrace = (result.effectTimeline?.events ?? [])
+    .filter(event => {
+      const targetId = String(event.targetId ?? '');
+      return (
+        Number(event.ownerId) === ownerId ||
+        targetId === `actor-${ownerId}` ||
+        String(event.effectId ?? '').includes('101010')
+      );
+    })
+    .map(event => ({
+      eventId: event.eventId ?? event.id ?? null,
+      actionId: event.actionId ?? null,
+      frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+      effectId: event.effectId ?? null,
+      operation: event.operation ?? event.kind ?? null,
+      beforeStacks: numberOrNull(event.before?.stacks),
+      afterStacks: numberOrNull(event.after?.stacks),
+      expiresAtMs: numberOrNull(event.after?.expiresAtMs),
+    }))
+    .sort(compareFrameThenIdentity);
+  const combatRuntime = result.verifiedCombatRuntime ?? {};
+  const actorSp = summarizeVerifiedEnergyRuntime({
+    initialRows: combatRuntime.initialState?.actorEnergy,
+    finalRows: combatRuntime.finalState?.actorEnergy,
+    events: combatRuntime.resourceEvents,
+    identityField: 'actorId',
+    kind: 'actor',
+  });
+  const kiboSp = summarizeVerifiedEnergyRuntime({
+    initialRows: combatRuntime.initialState?.kiboEnergy,
+    finalRows: combatRuntime.finalState?.kiboEnergy,
+    events: combatRuntime.kiboResourceEvents,
+    identityField: 'slotId',
+    kind: 'kibo',
+  });
+  const enemy = summarizeEnemyState({
+    initial: combatRuntime.initialState?.enemy,
+    final: combatRuntime.finalState?.enemy,
+    pointCount:
+      result.runtimeOutputs?.stateCurves?.enemy?.pointCount ?? 0,
+  });
+  const ownerActionIds = new Set(
+    (project.actions ?? [])
+      .filter(
+        action =>
+          String(action.actorId ?? '') === `actor-${ownerId}` ||
+          Number(action.actor?.characterId) === ownerId
+      )
+      .map(action => action.id)
+  );
+  const ownerDamageEvents = damageTrace.filter(event =>
+    ownerActionIds.has(event.actionId)
+  );
+  const passiveTrace = effectTrace.filter(
+    event => event.effectId === 'battle-element:101010206'
+  );
+  const burstTrace = effectTrace.filter(
+    event => event.effectId === 'battle-element:101010129'
+  );
+  const ownerDynamicPropertySources = collectDynamicPropertySources(
+    result,
+    null,
+    ownerId
+  );
+
+  const actual = {
+    project: {
+      durationMs: Number(project.time?.durationMs),
+      actionCount: project.actions?.length ?? 0,
+      teamCharacterIds: project.actors.map(actor => Number(actor.characterId)),
+    },
+    actions: {
+      executedActionIds,
+      blockedActionIds,
+      selections: actionSelections,
+      selectionByActionId: Object.fromEntries(
+        actionSelections.map(selection => [
+          selection.actionId,
+          {
+            semanticName: selection.semanticName,
+            controlSkillId: selection.controlSkillId,
+            subSkillIndex: selection.subSkillIndex,
+            actualDurationFrames: selection.actualDurationFrames,
+            sourceKind: selection.sourceKind,
+          },
+        ])
+      ),
+    },
+    combat: {
+      damageEventCount: damageTrace.length,
+      ownerDamageEventCount: ownerDamageEvents.length,
+      ownerHitEventCount: ownerDamageEvents.filter(
+        event => event.eventType === 'VERIFIED_COMBAT_HIT'
+      ).length,
+      totalHpDamage: sumNumbers(damageTrace, 'hpDamage'),
+      totalToughnessDamage: sumNumbers(damageTrace, 'toughnessDamage'),
+      ownerTotalHpDamage: sumNumbers(ownerDamageEvents, 'hpDamage'),
+      ownerTotalToughnessDamage: sumNumbers(
+        ownerDamageEvents,
+        'toughnessDamage'
+      ),
+      enemy,
+    },
+    resources: {
+      actorSp,
+      kiboSp,
+      actorSpByActorId: Object.fromEntries(
+        actorSp.map(row => [row.actorId, row])
+      ),
+      kiboSpBySlotId: Object.fromEntries(
+        kiboSp.map(row => [row.slotId, row])
+      ),
+      specialResourceTrace,
+      thresholdClearCount: specialResourceTrace.filter(
+        event =>
+          event.stream === 'resource' &&
+          event.operation === 'threshold-clear'
+      ).length,
+      transformCount: specialResourceTrace.filter(
+        event => event.stream === 'state' && event.operation === 'transform'
+      ).length,
+      refreshCount: specialResourceTrace.filter(
+        event => event.stream === 'state' && event.operation === 'refresh'
+      ).length,
+    },
+    effects: {
+      passiveTrace,
+      passiveMaxStacks: Math.max(
+        0,
+        ...passiveTrace.map(event => Number(event.afterStacks) || 0)
+      ),
+      firstPassiveMaxStackFrame:
+        passiveTrace.find(event => Number(event.afterStacks) === 4)?.frame ??
+        null,
+      burstTrace,
+      burstTransitions: burstTrace.map(event => ({
+        actionId: event.actionId,
+        frame: event.frame,
+        operation: event.operation,
+        expiresAtMs: event.expiresAtMs,
+      })),
+    },
+    dynamicProperties: {
+      ownerSources: ownerDynamicPropertySources,
+      maxPercentRawByAttributeId: Object.fromEntries(
+        [...new Set(ownerDynamicPropertySources.map(row => row.attributeId))]
+          .filter(Number.isFinite)
+          .map(attributeId => [
+            attributeId,
+            Math.max(
+              ...ownerDynamicPropertySources
+                .filter(row => row.attributeId === attributeId)
+                .map(row => Number(row.dynamicPercentRaw) || 0)
+            ),
+          ])
+      ),
+    },
+    comparison,
+    trace: {
+      damage: damageTrace,
+      specialResources: specialResourceTrace,
+      effects: effectTrace,
+    },
+  };
+  actual.summaryHash = sha256Json({
+    project: actual.project,
+    actions: actual.actions,
+    combat: actual.combat,
+    resources: actual.resources,
+    effects: actual.effects,
+    dynamicProperties: actual.dynamicProperties,
+    comparison: actual.comparison,
+  });
+  return actual;
+}
+
+function summarizeVerifiedEnergyRuntime({
+  initialRows = [],
+  finalRows = [],
+  events = [],
+  identityField,
+  kind,
+}) {
+  const initialByIdentity = new Map(
+    (initialRows ?? []).map(row => [String(row[identityField]), row])
+  );
+  const finalByIdentity = new Map(
+    (finalRows ?? []).map(row => [String(row[identityField]), row])
+  );
+  const eventGroups = new Map();
+  for (const event of events ?? []) {
+    const identity = String(
+      event[identityField] ??
+        event.payload?.[identityField] ??
+        (identityField === 'slotId' ? event.payload?.slotId : event.actorId)
+    );
+    const rows = eventGroups.get(identity) ?? [];
+    rows.push(event);
+    eventGroups.set(identity, rows);
+  }
+  const identities = new Set([
+    ...initialByIdentity.keys(),
+    ...finalByIdentity.keys(),
+    ...eventGroups.keys(),
+  ]);
+  return [...identities]
+    .map(identity => {
+      const initial = initialByIdentity.get(identity) ?? {};
+      const final = finalByIdentity.get(identity) ?? {};
+      const rows = eventGroups.get(identity) ?? [];
+      const autoRecovery = aggregateEnergyEvents(
+        rows.filter(event =>
+          String(event.payload?.reason ?? '').startsWith('verified-auto-sp-')
+        )
+      );
+      const actionTransactions = rows
+        .filter(
+          event =>
+            !String(event.payload?.reason ?? '').startsWith(
+              'verified-auto-sp-'
+            )
+        )
+        .map(event => ({
+          timeMs: numberOrNull(event.timeMs),
+          actionId: event.actionId ?? null,
+          reason: event.payload?.reason ?? null,
+          beforeValue: numberOrNull(event.payload?.beforeValue),
+          change: numberOrNull(event.payload?.change),
+          afterValue: numberOrNull(event.payload?.afterValue),
+        }));
+      return {
+        kind,
+        [identityField]: identity,
+        actorId: final.actorId ?? initial.actorId ?? null,
+        kiboId: numberOrNull(final.kiboId ?? initial.kiboId),
+        initialValue: numberOrNull(initial.currentValue),
+        currentValue: numberOrNull(final.currentValue),
+        maxValue: numberOrNull(final.maxValue ?? initial.maxValue),
+        eventCount: rows.length,
+        autoRecovery,
+        actionTransactions,
+      };
+    })
+    .sort((left, right) =>
+      String(left[identityField]).localeCompare(String(right[identityField]))
+    );
+}
+
+function aggregateEnergyEvents(events) {
+  const byReason = new Map();
+  for (const event of events) {
+    const reason = String(event.payload?.reason ?? 'unknown');
+    const current = byReason.get(reason) ?? {
+      reason,
+      count: 0,
+      totalChange: 0,
+      firstTimeMs: null,
+      lastTimeMs: null,
+    };
+    current.count += 1;
+    current.totalChange += Number(event.payload?.change ?? 0);
+    current.firstTimeMs =
+      current.firstTimeMs == null
+        ? Number(event.timeMs)
+        : Math.min(current.firstTimeMs, Number(event.timeMs));
+    current.lastTimeMs =
+      current.lastTimeMs == null
+        ? Number(event.timeMs)
+        : Math.max(current.lastTimeMs, Number(event.timeMs));
+    byReason.set(reason, current);
+  }
+  return [...byReason.values()]
+    .map(row => ({
+      ...row,
+      totalChange: roundNumber(row.totalChange),
+    }))
+    .sort((left, right) => left.reason.localeCompare(right.reason));
+}
+
+function summarizeEnemyState({ initial = {}, final = {}, pointCount = 0 }) {
+  return {
+    pointCount,
+    initialHp: numberOrNull(initial.hp),
+    finalHp: numberOrNull(final.hp),
+    maxHp: numberOrNull(final.maxHp ?? initial.maxHp),
+    initialToughness: numberOrNull(initial.toughness),
+    finalToughness: numberOrNull(final.toughness),
+    maxToughness: numberOrNull(
+      final.maxToughness ?? initial.maxToughness
+    ),
+  };
+}
+
+function collectDynamicPropertySources(result, actionId = null, ownerId = null) {
+  const sources = (result.verifiedCombatRuntime?.damageEvents ?? [])
+    .filter(
+      event =>
+        (!actionId || event.actionId === actionId) &&
+        (!ownerId ||
+          String(event.actionId ?? '').startsWith('jade-') ||
+          Number(event.payload?.ownerId) === ownerId)
+    )
+    .flatMap(event => event.payload?.dynamicPropertyTrace?.source ?? [])
+    .map(source => ({
+      attributeId: numberOrNull(source.attributeId),
+      dynamicBaseRaw: numberOrNull(source.dynamicBaseRaw),
+      dynamicPercentRaw: numberOrNull(source.dynamicPercentRaw),
+      dynamicExtraRaw: numberOrNull(source.dynamicExtraRaw),
+      effectIds: (source.effects ?? [])
+        .map(effect => effect.effectId)
+        .filter(Boolean)
+        .sort(),
+    }));
+  const deduped = new Map();
+  for (const source of sources) {
+    deduped.set(JSON.stringify(source), source);
+  }
+  return [...deduped.values()].sort(
+    (left, right) =>
+      Number(left.attributeId) - Number(right.attributeId) ||
+      JSON.stringify(left).localeCompare(JSON.stringify(right))
+  );
+}
+
+function createCompactReplaySignature(result) {
+  return {
+    executedActionIds: (result.actionExecutionPlan?.actions ?? [])
+      .filter(action => action.execute)
+      .map(action => action.actionId)
+      .sort(),
+    damage: (result.verifiedCombatRuntime?.damageEvents ?? []).map(event => [
+      event.actionId,
+      event.timeMs,
+      event.payload?.rawDamage,
+      event.payload?.toughnessDamage,
+    ]),
+    specialResources: (
+      result.verifiedCombatRuntime?.specialResourceRuntime?.resourceEvents ?? []
+    ).map(event => [
+      event.actionId,
+      event.timeMs,
+      event.payload?.operation,
+      event.payload?.beforeValue,
+      event.payload?.afterValue,
+    ]),
+  };
+}
+
+function createTeamSlots(scenarioRecipe) {
+  return scenarioRecipe.teamCharacterIds.map((characterId, position) => ({
+    slotId: `team-slot-${position + 1}`,
+    position,
+    characterId: Number(characterId),
+  }));
+}
+
+function createRuntimeInstallPackage(mechanicsPackage) {
+  const value = JSON.parse(JSON.stringify(mechanicsPackage));
+  value.characterCombatProfileCatalog = {
+    schemaVersion: 1,
+    kind: 'azpr-character-combat-profile-catalog',
+    status: 'character-combat-profile-catalog-ready',
+    sourcePackageHash: value.packageHash,
+    profileSchema: 'azpr://schemas/character-combat-profile/v1',
+    profiles: [],
+    coverageManifestHash: sha256Json({
+      kind: 'golden-runtime-transient-profile-catalog',
+      sourcePackageHash: value.packageHash,
+    }),
+    summary: {
+      publicCharacterCount: 20,
+      compiledProfileCount: 0,
+      runtimeAppliedProfileCount: 0,
+      uiVerifiedProfileCount: 0,
+      characterCompleteCount: 0,
+    },
+  };
+  value.summary = {
+    ...value.summary,
+    characterCombatProfileCount: 0,
+    characterCombatRuntimeAppliedProfileCount: 0,
+    characterCombatUiVerifiedProfileCount: 0,
+    characterCombatCompleteProfileCount: 0,
+  };
+  return value;
+}
+
+function resolveActionMapping({
+  mechanicsPackage,
+  ownerKind,
+  ownerId,
+  actionKind,
+  actionVariantIndex,
+}) {
+  const candidates = mechanicsPackage.actionMappings.filter(
+    mapping =>
+      mapping.ownerKind === ownerKind &&
+      Number(mapping.ownerId) === Number(ownerId) &&
+      mapping.actionKind === actionKind
+  );
+  if (actionVariantIndex == null) return candidates[0] ?? null;
+  return (
+    candidates.find(
+      mapping =>
+        Number(mapping.actionVariantIndex) === Number(actionVariantIndex)
+    ) ?? null
+  );
+}
+
+function resolveMappingDurationFrames(mapping, selectedSubSkillIndex) {
+  const timing =
+    selectedSubSkillIndex == null
+      ? mapping.actionTiming
+      : mapping.actionTiming?.variantTimings?.find(
+          variant =>
+            Number(variant.subSkillIndex) === Number(selectedSubSkillIndex)
+        );
+  const value = Number(timing?.occupancy?.durationFrames);
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error(
+      `golden action duration missing: ${mapping.identity}/${selectedSubSkillIndex}`
+    );
+  }
+  return value;
+}
+
+function sumActionDamage(result, actionId) {
+  return (result.verifiedCombatRuntime?.damageEvents ?? [])
+    .filter(event => event.actionId === actionId)
+    .reduce((sum, event) => sum + Number(event.payload?.rawDamage ?? 0), 0);
+}
+
+function sumNumbers(rows, field) {
+  return roundNumber(
+    rows.reduce((sum, row) => sum + Number(row[field] ?? 0), 0)
+  );
+}
+
+function compareIdentity(left, right) {
+  return String(left.actionId ?? left.eventId ?? '').localeCompare(
+    String(right.actionId ?? right.eventId ?? '')
+  );
+}
+
+function compareFrameThenIdentity(left, right) {
+  return (
+    Number(left.frame ?? 0) - Number(right.frame ?? 0) ||
+    String(left.eventId ?? left.actionId ?? '').localeCompare(
+      String(right.eventId ?? right.actionId ?? '')
+    )
+  );
+}
+
+function frameToMs(frame, frameRate = DEFAULT_FRAME_RATE) {
+  return (Number(frame) * 1000) / Number(frameRate);
+}
+
+function msToFrame(timeMs, frameRate = DEFAULT_FRAME_RATE) {
+  return Math.round((Number(timeMs) * Number(frameRate)) / 1000);
+}
+
+function finiteNumber(value, fallback) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return value != null && Number.isFinite(number) ? number : null;
+}
+
+function roundNumber(value) {
+  return Math.round(Number(value) * 1_000_000) / 1_000_000;
+}
+
+function sha256Json(value) {
+  return crypto
+    .createHash('sha256')
+    .update(JSON.stringify(value))
+    .digest('hex');
+}

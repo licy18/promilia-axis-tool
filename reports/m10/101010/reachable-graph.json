@@ -4,34 +4,34 @@
   "ownerId": 101010,
   "nodes": [
     {
-      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-continuous-charged:control:undefined:sub:undefined",
+      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-continuous-charged",
       "nodeKind": "action-form",
       "semanticName": "连续重击",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-charged:control:undefined:sub:undefined",
+      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-charged",
       "nodeKind": "action-form",
       "semanticName": "强化重击",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged:control:undefined:sub:undefined",
+      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
       "nodeKind": "action-form",
       "semanticName": "强化特殊重击",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-ordinary-charged:control:undefined:sub:undefined",
+      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-ordinary-charged",
       "nodeKind": "action-form",
       "semanticName": "普通重击",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-special-charged:control:undefined:sub:undefined",
+      "nodeIdentity": "actor:101010:charged-attack:xiaoyu-special-charged",
       "nodeKind": "action-form",
       "semanticName": "特殊重击",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
       "nodeIdentity": "actor:101010:element:101010115",
@@ -46,54 +46,6 @@
       "skillId": 10101061,
       "status": "applied",
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101061.asset/MonoBehaviour/skill_control_10101061__9146928292982868331.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010205.asset/MonoBehaviour/ast_101010205__5266892164759010649.json#elementConfigId=101010205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010206.asset/MonoBehaviour/ast_101010206__601520908186242978.json#elementConfigId=101010206|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207"
-    },
-    {
-      "nodeIdentity": "actor:101010|dodge-attack|control:10101015|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "闪击",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|limit-counter|control:10101025|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "极限反击",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|perfect-parry|control:10101027|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "完美招架",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|plunging-attack|control:10101011|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "跃击",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|star-carry|control:10101021|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "星携技",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|star-combo|control:10101026|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "星结合击",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|star-skill|control:10101012|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "星鸣技",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "actor:101010|ultimate|control:10101013|sub:0:control:undefined:sub:undefined",
-      "nodeKind": "action-form",
-      "semanticName": "星决技",
-      "status": "static-evidence-gap"
     },
     {
       "nodeIdentity": "actor|101010|10101001|0|10101003",
@@ -117,10 +69,22 @@
       "status": "applied"
     },
     {
+      "nodeIdentity": "actor|101010|10101001|6|10101015:default",
+      "nodeKind": "action-form",
+      "semanticName": "闪击",
+      "status": "applied"
+    },
+    {
       "nodeIdentity": "actor|101010|10101001|7|10101011",
       "nodeKind": "public-action",
       "actionKind": "plunging-attack",
       "sourceSkillId": 10101001,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|101010|10101001|7|10101011:default",
+      "nodeKind": "action-form",
+      "semanticName": "跃击",
       "status": "applied"
     },
     {
@@ -131,10 +95,22 @@
       "status": "applied"
     },
     {
+      "nodeIdentity": "actor|101010|10101012|0|10101012:default",
+      "nodeKind": "action-form",
+      "semanticName": "星鸣技",
+      "status": "applied"
+    },
+    {
       "nodeIdentity": "actor|101010|10101012|1|10101026",
       "nodeKind": "public-action",
       "actionKind": "star-combo",
       "sourceSkillId": 10101012,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|101010|10101012|1|10101026:default",
+      "nodeKind": "action-form",
+      "semanticName": "星结合击",
       "status": "applied"
     },
     {
@@ -145,10 +121,22 @@
       "status": "applied"
     },
     {
+      "nodeIdentity": "actor|101010|10101013|0|10101013:default",
+      "nodeKind": "action-form",
+      "semanticName": "星决技",
+      "status": "applied"
+    },
+    {
       "nodeIdentity": "actor|101010|10101021|0|10101021",
       "nodeKind": "public-action",
       "actionKind": "star-carry",
       "sourceSkillId": 10101021,
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "actor|101010|10101021|0|10101021:default",
+      "nodeKind": "action-form",
+      "semanticName": "星携技",
       "status": "static-evidence-gap"
     },
     {
@@ -159,10 +147,22 @@
       "status": "applied"
     },
     {
+      "nodeIdentity": "actor|101010|10101021|1|10101025:default",
+      "nodeKind": "action-form",
+      "semanticName": "极限反击",
+      "status": "applied"
+    },
+    {
       "nodeIdentity": "actor|101010|10101021|2|10101027",
       "nodeKind": "public-action",
       "actionKind": "perfect-parry",
       "sourceSkillId": 10101021,
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "actor|101010|10101021|2|10101027:default",
+      "nodeKind": "action-form",
+      "semanticName": "完美招架",
       "status": "static-evidence-gap"
     },
     {
@@ -1424,112 +1424,82 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[slot=203,skillId=10101021]"
     },
     {
-      "nodeIdentity": "xiaoyu-burst-three-inputs|A1:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-burst-three-inputs:segment:1",
       "nodeKind": "action-form",
       "semanticName": "爆发普攻 A1",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-burst-three-inputs|A2:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-burst-three-inputs:segment:2",
       "nodeKind": "action-form",
       "semanticName": "爆发普攻 A2",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-burst-three-inputs|A3:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-burst-three-inputs:segment:3",
       "nodeKind": "action-form",
       "semanticName": "爆发普攻 A3",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-normal-default-five-inputs|A1:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-normal-default-five-inputs:segment:1",
       "nodeKind": "action-form",
       "semanticName": "普通攻击 A1",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-normal-default-five-inputs|A2:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-normal-default-five-inputs:segment:2",
       "nodeKind": "action-form",
       "semanticName": "普通攻击 A2",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-normal-default-five-inputs|A3:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-normal-default-five-inputs:segment:3",
       "nodeKind": "action-form",
       "semanticName": "普通攻击 A3",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-normal-default-five-inputs|A4:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-normal-default-five-inputs:segment:4",
       "nodeKind": "action-form",
       "semanticName": "普通攻击 A4",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
-      "nodeIdentity": "xiaoyu-normal-default-five-inputs|A5:control:undefined:sub:undefined",
+      "nodeIdentity": "xiaoyu-normal-default-five-inputs:segment:5",
       "nodeKind": "action-form",
       "semanticName": "普通攻击 A5",
-      "status": "static-evidence-gap"
+      "status": "applied"
     }
   ],
   "edges": [
     {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-continuous-charged->has-form->actor:101010:charged-attack:xiaoyu-continuous-charged:control:undefined:sub:undefined",
+      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-continuous-charged->executes-control->control:10101010",
       "from": "actor:101010:charged-attack:xiaoyu-continuous-charged",
-      "to": "actor:101010:charged-attack:xiaoyu-continuous-charged:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-continuous-charged:control:undefined:sub:undefined->executes-control->control:10101010",
-      "from": "actor:101010:charged-attack:xiaoyu-continuous-charged:control:undefined:sub:undefined",
       "to": "control:10101010",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-charged->has-form->actor:101010:charged-attack:xiaoyu-enhanced-charged:control:undefined:sub:undefined",
+      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-charged->executes-control->control:10101010",
       "from": "actor:101010:charged-attack:xiaoyu-enhanced-charged",
-      "to": "actor:101010:charged-attack:xiaoyu-enhanced-charged:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-charged:control:undefined:sub:undefined->executes-control->control:10101010",
-      "from": "actor:101010:charged-attack:xiaoyu-enhanced-charged:control:undefined:sub:undefined",
       "to": "control:10101010",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged->has-form->actor:101010:charged-attack:xiaoyu-enhanced-special-charged:control:undefined:sub:undefined",
+      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged->executes-control->control:10101042",
       "from": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
-      "to": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged:control:undefined:sub:undefined->executes-control->control:10101042",
-      "from": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged:control:undefined:sub:undefined",
       "to": "control:10101042",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-ordinary-charged->has-form->actor:101010:charged-attack:xiaoyu-ordinary-charged:control:undefined:sub:undefined",
+      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-ordinary-charged->executes-control->control:10101010",
       "from": "actor:101010:charged-attack:xiaoyu-ordinary-charged",
-      "to": "actor:101010:charged-attack:xiaoyu-ordinary-charged:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-ordinary-charged:control:undefined:sub:undefined->executes-control->control:10101010",
-      "from": "actor:101010:charged-attack:xiaoyu-ordinary-charged:control:undefined:sub:undefined",
       "to": "control:10101010",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-special-charged->has-form->actor:101010:charged-attack:xiaoyu-special-charged:control:undefined:sub:undefined",
+      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-special-charged->executes-control->control:10101042",
       "from": "actor:101010:charged-attack:xiaoyu-special-charged",
-      "to": "actor:101010:charged-attack:xiaoyu-special-charged:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010:charged-attack:xiaoyu-special-charged:control:undefined:sub:undefined->executes-control->control:10101042",
-      "from": "actor:101010:charged-attack:xiaoyu-special-charged:control:undefined:sub:undefined",
       "to": "control:10101042",
       "relation": "executes-control"
     },
@@ -1540,6 +1510,54 @@
       "relation": "threshold-transform",
       "threshold": 100,
       "status": "applied"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-burst-three-inputs:segment:1",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-burst-three-inputs:segment:1",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-burst-three-inputs:segment:2",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-burst-three-inputs:segment:2",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-burst-three-inputs:segment:3",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-burst-three-inputs:segment:3",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-normal-default-five-inputs:segment:1",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-normal-default-five-inputs:segment:1",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-normal-default-five-inputs:segment:2",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-normal-default-five-inputs:segment:2",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-normal-default-five-inputs:segment:3",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-normal-default-five-inputs:segment:3",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-normal-default-five-inputs:segment:4",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-normal-default-five-inputs:segment:4",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor:101010:normal-attack->has-form->xiaoyu-normal-default-five-inputs:segment:5",
+      "from": "actor:101010:normal-attack",
+      "to": "xiaoyu-normal-default-five-inputs:segment:5",
+      "relation": "has-form"
     },
     {
       "edgeIdentity": "actor:101010|control:10101010|sub:0->input-derived->actor:101010|control:10101010|sub:1",
@@ -1650,102 +1668,6 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-731372582710671704|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType"
     },
     {
-      "edgeIdentity": "actor:101010|dodge-attack|control:10101015|sub:0->has-form->actor:101010|dodge-attack|control:10101015|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|dodge-attack|control:10101015|sub:0",
-      "to": "actor:101010|dodge-attack|control:10101015|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|dodge-attack|control:10101015|sub:0:control:undefined:sub:undefined->executes-control->control:10101015",
-      "from": "actor:101010|dodge-attack|control:10101015|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101015",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|limit-counter|control:10101025|sub:0->has-form->actor:101010|limit-counter|control:10101025|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|limit-counter|control:10101025|sub:0",
-      "to": "actor:101010|limit-counter|control:10101025|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|limit-counter|control:10101025|sub:0:control:undefined:sub:undefined->executes-control->control:10101025",
-      "from": "actor:101010|limit-counter|control:10101025|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101025",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|perfect-parry|control:10101027|sub:0->has-form->actor:101010|perfect-parry|control:10101027|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|perfect-parry|control:10101027|sub:0",
-      "to": "actor:101010|perfect-parry|control:10101027|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|perfect-parry|control:10101027|sub:0:control:undefined:sub:undefined->executes-control->control:10101027",
-      "from": "actor:101010|perfect-parry|control:10101027|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101027",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|plunging-attack|control:10101011|sub:0->has-form->actor:101010|plunging-attack|control:10101011|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|plunging-attack|control:10101011|sub:0",
-      "to": "actor:101010|plunging-attack|control:10101011|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|plunging-attack|control:10101011|sub:0:control:undefined:sub:undefined->executes-control->control:10101011",
-      "from": "actor:101010|plunging-attack|control:10101011|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101011",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|star-carry|control:10101021|sub:0->has-form->actor:101010|star-carry|control:10101021|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|star-carry|control:10101021|sub:0",
-      "to": "actor:101010|star-carry|control:10101021|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|star-carry|control:10101021|sub:0:control:undefined:sub:undefined->executes-control->control:10101021",
-      "from": "actor:101010|star-carry|control:10101021|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101021",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|star-combo|control:10101026|sub:0->has-form->actor:101010|star-combo|control:10101026|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|star-combo|control:10101026|sub:0",
-      "to": "actor:101010|star-combo|control:10101026|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|star-combo|control:10101026|sub:0:control:undefined:sub:undefined->executes-control->control:10101026",
-      "from": "actor:101010|star-combo|control:10101026|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101026",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|star-skill|control:10101012|sub:0->has-form->actor:101010|star-skill|control:10101012|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|star-skill|control:10101012|sub:0",
-      "to": "actor:101010|star-skill|control:10101012|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|star-skill|control:10101012|sub:0:control:undefined:sub:undefined->executes-control->control:10101012",
-      "from": "actor:101010|star-skill|control:10101012|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101012",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor:101010|ultimate|control:10101013|sub:0->has-form->actor:101010|ultimate|control:10101013|sub:0:control:undefined:sub:undefined",
-      "from": "actor:101010|ultimate|control:10101013|sub:0",
-      "to": "actor:101010|ultimate|control:10101013|sub:0:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor:101010|ultimate|control:10101013|sub:0:control:undefined:sub:undefined->executes-control->control:10101013",
-      "from": "actor:101010|ultimate|control:10101013|sub:0:control:undefined:sub:undefined",
-      "to": "control:10101013",
-      "relation": "executes-control"
-    },
-    {
       "edgeIdentity": "actor|101010|10101001|0|10101003->executes-control->control:10101003",
       "from": "actor|101010|10101001|0|10101003",
       "to": "control:10101003",
@@ -1764,8 +1686,32 @@
       "relation": "executes-control"
     },
     {
+      "edgeIdentity": "actor|101010|10101001|6|10101015->has-form->actor|101010|10101001|6|10101015:default",
+      "from": "actor|101010|10101001|6|10101015",
+      "to": "actor|101010|10101001|6|10101015:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101001|6|10101015:default->executes-control->control:10101015",
+      "from": "actor|101010|10101001|6|10101015:default",
+      "to": "control:10101015",
+      "relation": "executes-control"
+    },
+    {
       "edgeIdentity": "actor|101010|10101001|7|10101011->executes-control->control:10101011",
       "from": "actor|101010|10101001|7|10101011",
+      "to": "control:10101011",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101001|7|10101011->has-form->actor|101010|10101001|7|10101011:default",
+      "from": "actor|101010|10101001|7|10101011",
+      "to": "actor|101010|10101001|7|10101011:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101001|7|10101011:default->executes-control->control:10101011",
+      "from": "actor|101010|10101001|7|10101011:default",
       "to": "control:10101011",
       "relation": "executes-control"
     },
@@ -1776,8 +1722,32 @@
       "relation": "executes-control"
     },
     {
+      "edgeIdentity": "actor|101010|10101012|0|10101012->has-form->actor|101010|10101012|0|10101012:default",
+      "from": "actor|101010|10101012|0|10101012",
+      "to": "actor|101010|10101012|0|10101012:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101012|0|10101012:default->executes-control->control:10101012",
+      "from": "actor|101010|10101012|0|10101012:default",
+      "to": "control:10101012",
+      "relation": "executes-control"
+    },
+    {
       "edgeIdentity": "actor|101010|10101012|1|10101026->executes-control->control:10101026",
       "from": "actor|101010|10101012|1|10101026",
+      "to": "control:10101026",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101012|1|10101026->has-form->actor|101010|10101012|1|10101026:default",
+      "from": "actor|101010|10101012|1|10101026",
+      "to": "actor|101010|10101012|1|10101026:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101012|1|10101026:default->executes-control->control:10101026",
+      "from": "actor|101010|10101012|1|10101026:default",
       "to": "control:10101026",
       "relation": "executes-control"
     },
@@ -1788,8 +1758,32 @@
       "relation": "executes-control"
     },
     {
+      "edgeIdentity": "actor|101010|10101013|0|10101013->has-form->actor|101010|10101013|0|10101013:default",
+      "from": "actor|101010|10101013|0|10101013",
+      "to": "actor|101010|10101013|0|10101013:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101013|0|10101013:default->executes-control->control:10101013",
+      "from": "actor|101010|10101013|0|10101013:default",
+      "to": "control:10101013",
+      "relation": "executes-control"
+    },
+    {
       "edgeIdentity": "actor|101010|10101021|0|10101021->executes-control->control:10101021",
       "from": "actor|101010|10101021|0|10101021",
+      "to": "control:10101021",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101021|0|10101021->has-form->actor|101010|10101021|0|10101021:default",
+      "from": "actor|101010|10101021|0|10101021",
+      "to": "actor|101010|10101021|0|10101021:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101021|0|10101021:default->executes-control->control:10101021",
+      "from": "actor|101010|10101021|0|10101021:default",
       "to": "control:10101021",
       "relation": "executes-control"
     },
@@ -1800,8 +1794,32 @@
       "relation": "executes-control"
     },
     {
+      "edgeIdentity": "actor|101010|10101021|1|10101025->has-form->actor|101010|10101021|1|10101025:default",
+      "from": "actor|101010|10101021|1|10101025",
+      "to": "actor|101010|10101021|1|10101025:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101021|1|10101025:default->executes-control->control:10101025",
+      "from": "actor|101010|10101021|1|10101025:default",
+      "to": "control:10101025",
+      "relation": "executes-control"
+    },
+    {
       "edgeIdentity": "actor|101010|10101021|2|10101027->executes-control->control:10101027",
       "from": "actor|101010|10101021|2|10101027",
+      "to": "control:10101027",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101021|2|10101027->has-form->actor|101010|10101021|2|10101027:default",
+      "from": "actor|101010|10101021|2|10101027",
+      "to": "actor|101010|10101021|2|10101027:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|101010|10101021|2|10101027:default->executes-control->control:10101027",
+      "from": "actor|101010|10101021|2|10101027:default",
       "to": "control:10101027",
       "relation": "executes-control"
     },
@@ -3170,98 +3188,50 @@
       "status": "applied"
     },
     {
-      "edgeIdentity": "xiaoyu-burst-three-inputs|A1->has-form->xiaoyu-burst-three-inputs|A1:control:undefined:sub:undefined",
-      "from": "xiaoyu-burst-three-inputs|A1",
-      "to": "xiaoyu-burst-three-inputs|A1:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-burst-three-inputs|A1:control:undefined:sub:undefined->executes-control->control:10101001",
-      "from": "xiaoyu-burst-three-inputs|A1:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-burst-three-inputs:segment:1->executes-control->control:10101001",
+      "from": "xiaoyu-burst-three-inputs:segment:1",
       "to": "control:10101001",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-burst-three-inputs|A2->has-form->xiaoyu-burst-three-inputs|A2:control:undefined:sub:undefined",
-      "from": "xiaoyu-burst-three-inputs|A2",
-      "to": "xiaoyu-burst-three-inputs|A2:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-burst-three-inputs|A2:control:undefined:sub:undefined->executes-control->control:10101004",
-      "from": "xiaoyu-burst-three-inputs|A2:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-burst-three-inputs:segment:2->executes-control->control:10101004",
+      "from": "xiaoyu-burst-three-inputs:segment:2",
       "to": "control:10101004",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-burst-three-inputs|A3->has-form->xiaoyu-burst-three-inputs|A3:control:undefined:sub:undefined",
-      "from": "xiaoyu-burst-three-inputs|A3",
-      "to": "xiaoyu-burst-three-inputs|A3:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-burst-three-inputs|A3:control:undefined:sub:undefined->executes-control->control:10101005",
-      "from": "xiaoyu-burst-three-inputs|A3:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-burst-three-inputs:segment:3->executes-control->control:10101005",
+      "from": "xiaoyu-burst-three-inputs:segment:3",
       "to": "control:10101005",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A1->has-form->xiaoyu-normal-default-five-inputs|A1:control:undefined:sub:undefined",
-      "from": "xiaoyu-normal-default-five-inputs|A1",
-      "to": "xiaoyu-normal-default-five-inputs|A1:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A1:control:undefined:sub:undefined->executes-control->control:10101001",
-      "from": "xiaoyu-normal-default-five-inputs|A1:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-normal-default-five-inputs:segment:1->executes-control->control:10101001",
+      "from": "xiaoyu-normal-default-five-inputs:segment:1",
       "to": "control:10101001",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A2->has-form->xiaoyu-normal-default-five-inputs|A2:control:undefined:sub:undefined",
-      "from": "xiaoyu-normal-default-five-inputs|A2",
-      "to": "xiaoyu-normal-default-five-inputs|A2:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A2:control:undefined:sub:undefined->executes-control->control:10101002",
-      "from": "xiaoyu-normal-default-five-inputs|A2:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-normal-default-five-inputs:segment:2->executes-control->control:10101002",
+      "from": "xiaoyu-normal-default-five-inputs:segment:2",
       "to": "control:10101002",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A3->has-form->xiaoyu-normal-default-five-inputs|A3:control:undefined:sub:undefined",
-      "from": "xiaoyu-normal-default-five-inputs|A3",
-      "to": "xiaoyu-normal-default-five-inputs|A3:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A3:control:undefined:sub:undefined->executes-control->control:10101003",
-      "from": "xiaoyu-normal-default-five-inputs|A3:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-normal-default-five-inputs:segment:3->executes-control->control:10101003",
+      "from": "xiaoyu-normal-default-five-inputs:segment:3",
       "to": "control:10101003",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A4->has-form->xiaoyu-normal-default-five-inputs|A4:control:undefined:sub:undefined",
-      "from": "xiaoyu-normal-default-five-inputs|A4",
-      "to": "xiaoyu-normal-default-five-inputs|A4:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A4:control:undefined:sub:undefined->executes-control->control:10101004",
-      "from": "xiaoyu-normal-default-five-inputs|A4:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-normal-default-five-inputs:segment:4->executes-control->control:10101004",
+      "from": "xiaoyu-normal-default-five-inputs:segment:4",
       "to": "control:10101004",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A5->has-form->xiaoyu-normal-default-five-inputs|A5:control:undefined:sub:undefined",
-      "from": "xiaoyu-normal-default-five-inputs|A5",
-      "to": "xiaoyu-normal-default-five-inputs|A5:control:undefined:sub:undefined",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "xiaoyu-normal-default-five-inputs|A5:control:undefined:sub:undefined->executes-control->control:10101005",
-      "from": "xiaoyu-normal-default-five-inputs|A5:control:undefined:sub:undefined",
+      "edgeIdentity": "xiaoyu-normal-default-five-inputs:segment:5->executes-control->control:10101005",
+      "from": "xiaoyu-normal-default-five-inputs:segment:5",
       "to": "control:10101005",
       "relation": "executes-control"
     }
@@ -3312,7 +3282,7 @@
   ],
   "summary": {
     "nodeCount": 193,
-    "edgeCount": 227,
+    "edgeCount": 222,
     "controlCount": 20,
     "exclusionCount": 6,
     "nodeKindCounts": {
@@ -3331,7 +3301,7 @@
       "derives-star-carry": 1,
       "emits-hit": 108,
       "executes-control": 31,
-      "has-form": 21,
+      "has-form": 16,
       "has-subskill": 30,
       "input-derived": 27,
       "resource-clear": 2,
@@ -3342,5 +3312,5 @@
       "triggers-passive": 9
     }
   },
-  "profileHash": "a0a39adbf43fdfc6726cb2ecc3fb9a7c1b2b30c0c649fc6ed83f2d487ec6b6e6"
+  "profileHash": "eda3e0ffcc2673f2e4670da8ca1a10eabcdda1a7bcad5055d5ab125c778bc22e"
 }

@@ -390,6 +390,7 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
   );
   await expect(timeline).toBeVisible();
   await expect(reviewWorkspace).toBeVisible();
+  await closeInspectorIfVisible(page);
   await expect(inspector).toBeHidden();
   await expect(actorIdentities).toHaveCount(3);
   await expect(actorIdentities.nth(0)).toContainText('末音');
@@ -819,6 +820,8 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   const resourceStatePointId = await resourceBreakpoint.getAttribute(
     'data-state-point-id'
   );
+  await openRuntimeReviewTab(page, 'event');
+  await closeInspectorIfVisible(page);
   await page
     .locator(
       '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
@@ -946,7 +949,9 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
     M2_LOADOUT_CONFIGS[2].soulessenceId
   );
   await selectM2Enemy(page, '300071');
-  await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
+  await expect(
+    (await openEnemyInspector(page)).getByTestId('workbench-enemy-name')
+  ).toHaveText('菜鸡');
   await expectLoadedImage(
     timeline.getByTestId('workbench-direct-enemy-picker').locator('img')
   );
@@ -980,7 +985,9 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   );
   await hydrateM2LoadoutCatalog(page, demoActorIds[0]);
   await expectM2TeamDirect(page, demoActorIds);
-  await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
+  await expect(
+    (await openEnemyInspector(page)).getByTestId('workbench-enemy-name')
+  ).toHaveText('菜鸡');
 
   await page.getByTestId('workbench-scenario-add').click();
   await setWorkbenchTimelineDuration(page, 120_000);
@@ -1074,7 +1081,9 @@ test('[m2-team-configuration] configures and reloads source-backed loadouts from
   );
   await hydrateM2LoadoutCatalog(page, emptyActorIds[0]);
   await expectM2TeamDirect(page, emptyActorIds);
-  await expect(page.getByTestId('workbench-enemy-name')).toHaveText('菜鸡');
+  await expect(
+    (await openEnemyInspector(page)).getByTestId('workbench-enemy-name')
+  ).toHaveText('菜鸡');
   await expect(
     timeline.locator(
       '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
@@ -1897,23 +1906,13 @@ test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project
     { targetPosition: { x: 500, y: 26 } }
   );
   await closeInspectorIfVisible(page);
-  await dragLocatorTo(
-    page,
-    page.getByTestId('workbench-kibo-action-entry').first(),
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
-    ),
-    { targetPosition: { x: 680, y: 18 } }
-  );
+  await page
+    .locator(
+      '[data-testid="workbench-kibo-action-entry"][data-skill-id="502015"]'
+    )
+    .click();
   await closeInspectorIfVisible(page);
-  await dragLocatorTo(
-    page,
-    page.getByTestId('workbench-add-enemy-event-action'),
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
-    ),
-    { targetPosition: { x: 780, y: 24 } }
-  );
+  await page.getByTestId('workbench-add-enemy-event-action').click();
   await closeInspectorIfVisible(page);
 
   await expect(timelineActions).toHaveCount(4);
@@ -3850,6 +3849,8 @@ test('[m7-r2-normal-attack-input-timing][m7-r3-operation-axis] uses real input w
   await expect(group).toHaveCount(4);
   await expect(operationMarkerFor(actionIds[3])).toHaveCount(0);
   await expect(curveNodesForAction(actionIds[3])).toHaveCount(0);
+  await actionBySequence(2).click();
+  await openActionInspectorPanel(page, 'action-rules', actionIds[2]);
   await expect(
     page.locator(
       '[data-testid="workbench-action-rule-row"][data-rule-code="attack-input-chain-incomplete"]'
@@ -4397,6 +4398,7 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
   expect(reviewFrame).toBeGreaterThanOrEqual(719);
   expect(reviewFrame).toBeLessThanOrEqual(720);
   await expect(actorEnergyCurve).toHaveAttribute('data-cursor-value', '50');
+  await openActionInspectorPanel(page, 'properties', 'action-0002');
   await page.getByTestId('workbench-start-frame-input').fill('900');
   await expect(timeline).toHaveAttribute(
     'data-cursor-frame-index',
@@ -4414,6 +4416,8 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
   const resourceStatePointId = await energyBreakpoint.getAttribute(
     'data-state-point-id'
   );
+  await openRuntimeReviewTab(page, 'event');
+  await closeInspectorIfVisible(page);
   await page
     .locator(
       '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
@@ -4591,6 +4595,7 @@ test('[stage-10d-timeline-playback] plays the full axis and loops a selected cyc
     .first();
   await hpMarker.click();
   const hpFrame = await hpMarker.getAttribute('data-frame-index');
+  await openRuntimeReviewTab(page, 'event');
   await expect(workbench).toHaveAttribute(
     'data-timeline-cursor-frame-index',
     hpFrame
@@ -4661,7 +4666,11 @@ test('[stage-10d-timeline-playback] plays the full axis and loops a selected cyc
     String(sectionStart)
   );
   await expect(
-    page.locator('.event-list > li[data-cursor-current="true"]').first()
+    page
+      .locator(
+        '[data-testid="workbench-event-log-row"][data-cursor-current="true"]'
+      )
+      .first()
   ).toBeVisible();
 
   await stepBackward.click();
@@ -4877,6 +4886,10 @@ test('[stage-11b-window-comparison] compares one cycle and opens the baseline co
   await expect(
     page.locator('.action-item[data-action-id="action-0002"]')
   ).toHaveClass(/selected/);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toHaveText(baselineStatePointId);
+  await openActionInspectorPanel(page, 'properties', 'action-0002');
   await expect(page.getByTestId('workbench-resource-change-input')).toHaveValue(
     '50'
   );
@@ -4885,9 +4898,6 @@ test('[stage-11b-window-comparison] compares one cycle and opens the baseline co
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
     )
   ).toHaveAttribute('data-edit-focus-source', 'scenario-comparison-baseline');
-  await expect(
-    page.getByTestId('workbench-runtime-selected-detail-state-point')
-  ).toHaveText(baselineStatePointId);
 });
 
 test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysis sources', async ({
@@ -5001,12 +5011,13 @@ test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysi
   await expect(
     page.locator('.action-item[data-action-id="action-0002"]')
   ).toHaveClass(/selected/);
-  await expect(page.getByTestId('workbench-resource-change-input')).toHaveValue(
-    '50'
-  );
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-state-point')
   ).toHaveText(baselineStatePointId);
+  await openActionInspectorPanel(page, 'properties', 'action-0002');
+  await expect(page.getByTestId('workbench-resource-change-input')).toHaveValue(
+    '50'
+  );
   await expect(
     page.locator(
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
@@ -5246,7 +5257,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
 }) => {
   await page.goto('/#/workbench');
   await addSingleSkillAction(page);
-  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  await setEnemyLevel(page, '91');
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
@@ -5285,9 +5296,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '91'
-  );
+  await expectEnemyLevel(page, '91');
 });
 
 test('[profile-compatibility-gate] rejects an unavailable profile without replacing the current project', async ({
@@ -5295,7 +5304,7 @@ test('[profile-compatibility-gate] rejects an unavailable profile without replac
 }, testInfo) => {
   await page.goto('/#/workbench');
   await addSingleSkillAction(page);
-  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  await setEnemyLevel(page, '91');
   const downloadPromise = page.waitForEvent('download');
   await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
@@ -5324,9 +5333,7 @@ test('[profile-compatibility-gate] rejects an unavailable profile without replac
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '91'
-  );
+  await expectEnemyLevel(page, '91');
 });
 
 test('[game-data-compatibility-gate] rejects an unavailable AzPr config reference without replacing the current project', async ({
@@ -5334,7 +5341,7 @@ test('[game-data-compatibility-gate] rejects an unavailable AzPr config referenc
 }, testInfo) => {
   await page.goto('/#/workbench');
   await addSingleSkillAction(page);
-  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  await setEnemyLevel(page, '91');
   const downloadPromise = page.waitForEvent('download');
   await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
@@ -5354,9 +5361,7 @@ test('[game-data-compatibility-gate] rejects an unavailable AzPr config referenc
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '91'
-  );
+  await expectEnemyLevel(page, '91');
 });
 
 test('[action-skill-compatibility-gate] rejects an unavailable skill before action fallback without replacing the current project', async ({
@@ -5364,7 +5369,7 @@ test('[action-skill-compatibility-gate] rejects an unavailable skill before acti
 }, testInfo) => {
   await page.goto('/#/workbench');
   await addSingleSkillAction(page);
-  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  await setEnemyLevel(page, '91');
   const downloadPromise = page.waitForEvent('download');
   await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
@@ -5384,9 +5389,7 @@ test('[action-skill-compatibility-gate] rejects an unavailable skill before acti
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '91'
-  );
+  await expectEnemyLevel(page, '91');
 });
 
 test('[configuration-instances] binds reusable simulation configs to scenarios and JSON', async ({
@@ -5394,6 +5397,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
 }) => {
   await page.goto('/#/workbench');
   await openActorInspector(page);
+  await openSideInspectorPanel(page, 'configuration');
   await expect(
     page.getByTestId('workbench-configuration-library-panel')
   ).toBeVisible();
@@ -5415,16 +5419,22 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
       '[data-testid="workbench-actor-configuration-name"][data-character-id="109001"]'
     )
     .fill('生产爆发配置');
+  await openSideInspectorPanel(page, 'team-loadout');
   await page
     .locator(
       '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
     )
     .fill('0.5');
+  await openSideInspectorPanel(page, 'configuration');
   await page.getByTestId('workbench-enemy-configuration-duplicate').click();
   const challengeEnemyInstanceId = await enemySelect.inputValue();
-  await page.getByTestId('workbench-enemy-level-input').fill('95');
+  await setEnemyLevel(page, '95');
+  await openActorInspector(page);
+  await openSideInspectorPanel(page, 'configuration');
 
   await page.getByTestId('workbench-scenario-duplicate').click();
+  await openActorInspector(page);
+  await openSideInspectorPanel(page, 'configuration');
   await actorSelect.selectOption(originalActorInstanceId);
   await enemySelect.selectOption(originalEnemyInstanceId);
   await page
@@ -5432,11 +5442,11 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
       '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0001"]'
     )
     .click();
+  await openActorInspector(page);
+  await openSideInspectorPanel(page, 'configuration');
   await expect(actorSelect).toHaveValue(burstActorInstanceId);
   await expect(enemySelect).toHaveValue(challengeEnemyInstanceId);
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '95'
-  );
+  await expectEnemyLevel(page, '95');
 
   const downloadPromise = page.waitForEvent('download');
   await clickProjectMenuCommand(page, 'workbench-export-project');
@@ -5478,7 +5488,7 @@ test('[png-project-exchange] restores production PNG metadata and lazy exporter 
 
   await page.goto('/#/workbench');
   await addSingleSkillAction(page);
-  await page.getByTestId('workbench-enemy-level-input').fill('93');
+  await setEnemyLevel(page, '93');
 
   const downloadPromise = page.waitForEvent('download');
   await clickProjectMenuCommand(page, 'workbench-export-project-png');
@@ -5503,9 +5513,7 @@ test('[png-project-exchange] restores production PNG metadata and lazy exporter 
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '93'
-  );
+  await expectEnemyLevel(page, '93');
 });
 
 test('[project-drop-recovery] restores a production project without replacing it on invalid drop', async ({
@@ -5514,7 +5522,7 @@ test('[project-drop-recovery] restores a production project without replacing it
   await page.goto('/#/workbench');
   await expect(page.getByTestId('workbench-project-drop-host')).toHaveCount(1);
   await addSingleSkillAction(page);
-  await page.getByTestId('workbench-enemy-level-input').fill('95');
+  await setEnemyLevel(page, '95');
 
   const downloadPromise = page.waitForEvent('download');
   await clickProjectMenuCommand(page, 'workbench-export-project');
@@ -5535,9 +5543,7 @@ test('[project-drop-recovery] restores a production project without replacing it
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '95'
-  );
+  await expectEnemyLevel(page, '95');
 
   await dragWorkbenchFile(page, {
     name: 'invalid.txt',
@@ -5550,9 +5556,7 @@ test('[project-drop-recovery] restores a production project without replacing it
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
-  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    '95'
-  );
+  await expectEnemyLevel(page, '95');
 });
 
 test('[multi-action-editing] copies, pastes, and reviews a selected action group', async ({
@@ -5690,6 +5694,7 @@ test('[action-effect-relations] keeps action, effect, log, and six energy tracks
   await page.getByTestId('workbench-effect-add').click();
   await page.getByTestId('workbench-effect-name-input').fill('关系测试增益');
   await page.getByTestId('workbench-effect-name-input').press('Tab');
+  await openRuntimeReviewTab(page, 'effect');
 
   const workbench = page.locator('main.workbench');
   await expect(workbench).toHaveAttribute('data-energy-curve-count', '6');
@@ -5721,10 +5726,14 @@ test('[action-effect-relations] keeps action, effect, log, and six energy tracks
       '[data-testid="workbench-action-relation"][data-relation-kind="effect-trigger"]'
     )
   ).toHaveCount(1);
+  await openRuntimeReviewTab(page, 'event');
   await expect(
-    page.locator('.event-list > li[data-effect-relation-kind="effect-trigger"]')
+    page.locator(
+      '[data-testid="workbench-event-log-row"][data-effect-relation-kind="effect-trigger"]'
+    )
   ).toContainText('触发 关系测试增益');
 
+  await openRuntimeReviewTab(page, 'effect');
   await relationRow.click();
   await expect(relationRow).toHaveAttribute('data-selected', 'true');
   await page.getByTestId('workbench-start-frame-input').fill('30');
@@ -5790,6 +5799,7 @@ test('[scenario-comparison] compares an edited axis with a snapshot and returns 
 
   await changedAction.getByTestId('workbench-comparison-locate-action').click();
   await expect(comparison).toBeHidden();
+  await openActionInspectorPanel(page, 'properties', 'action-0001');
   await expect(
     page.locator(
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
@@ -6091,6 +6101,7 @@ test('[narrow-main-flow] completes runtime review, edit, and refresh without ove
   expect(originStatePointId).toContain('action-0001');
   await expectPageWithoutHorizontalOverflow(page);
 
+  await openActionInspectorPanel(page, 'analysis', 'action-0001');
   await page.getByTestId('workbench-action-contribution-edit-action').click();
   await expect(
     page.locator(
@@ -7381,14 +7392,7 @@ test('[m9-r3-r1-timeline-layout] keeps team marks above actors and reserves a de
     '[data-testid="workbench-skill-entry"][data-skill-id="10100312"][data-action-kind="star-skill"]'
   );
   await expect(source).toBeVisible();
-  await dragLocatorTo(
-    page,
-    source,
-    timeline.locator(
-      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
-    ),
-    { targetPosition: { x: 240, y: 82 } }
-  );
+  await source.click();
   const viewport = timeline.getByTestId('workbench-timeline-viewport');
   const scaleViewport = timeline.getByTestId(
     'workbench-timeline-scale-viewport'
@@ -7731,6 +7735,76 @@ async function openActorInspector(page, characterId = 109001) {
     )
     .click();
   await expect(page.getByTestId('workbench-side-inspector')).toBeVisible();
+}
+
+async function openEnemyInspector(page) {
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-hp-curve"]'
+    )
+    .click();
+  const inspector = page.getByTestId('workbench-side-inspector');
+  await expect(inspector).toBeVisible();
+  await openSideInspectorPanel(page, 'enemy');
+  return inspector;
+}
+
+async function openSideInspectorPanel(page, panelKey) {
+  const inspector = page.getByTestId('workbench-side-inspector');
+  await expect(inspector).toBeVisible();
+  const tab = inspector.locator(
+    `[data-testid="workbench-side-inspector-tab"][data-inspector-panel="${panelKey}"]`
+  );
+  await expect(tab).toBeVisible();
+  await tab.click();
+  await expect(inspector).toHaveAttribute(
+    'data-active-inspector-panel',
+    panelKey
+  );
+  await expect(
+    inspector.locator(
+      `[data-testid="workbench-side-inspector-panel"][data-inspector-panel-key="${panelKey}"]`
+    )
+  ).toBeVisible();
+  return inspector;
+}
+
+async function openActionInspectorPanel(
+  page,
+  panelKey,
+  actionId = 'action-0001'
+) {
+  const inspector = page.getByTestId('workbench-side-inspector');
+  const panelTab = inspector.locator(
+    `[data-testid="workbench-side-inspector-tab"][data-inspector-panel="${panelKey}"]`
+  );
+  if (!(await inspector.isVisible()) || (await panelTab.count()) === 0) {
+    await openActionInspector(page, actionId);
+  }
+  return openSideInspectorPanel(page, panelKey);
+}
+
+async function openRuntimeReviewTab(page, tabKey) {
+  const tab = page.locator(
+    `[data-testid="workbench-runtime-review-tab"][data-review-tab="${tabKey}"]`
+  );
+  await expect(tab).toBeVisible();
+  await tab.click();
+  await expect(tab).toHaveAttribute('aria-selected', 'true');
+}
+
+async function setEnemyLevel(page, value) {
+  const inspector = await openEnemyInspector(page);
+  const input = inspector.getByTestId('workbench-enemy-level-input');
+  await input.fill(String(value));
+  await input.press('Tab');
+}
+
+async function expectEnemyLevel(page, value) {
+  const inspector = await openEnemyInspector(page);
+  await expect(inspector.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    String(value)
+  );
 }
 
 async function readVerifiedPanelValue(panel, label) {

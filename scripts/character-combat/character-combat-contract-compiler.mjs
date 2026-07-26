@@ -1,0 +1,1230 @@
+import crypto from 'node:crypto';
+
+export const CHARACTER_COMBAT_COMPILER_VERSION = 1;
+
+export function compileCharacterCombatRecipeContracts({
+  recipe,
+  character,
+  evidence,
+  operators,
+}) {
+  const ownerId = Number(recipe?.ownerId);
+  if (!Number.isInteger(ownerId) || ownerId <= 0) {
+    throw new Error('character combat recipe owner is invalid');
+  }
+  if (Number(character?.id) !== ownerId) {
+    throw new Error(
+      `character combat recipe owner mismatch: ${ownerId}/${character?.id}`
+    );
+  }
+  const compilerRecipe = recipe?.compiler;
+  if (!compilerRecipe || typeof compilerRecipe !== 'object') {
+    throw new Error(`character combat compiler recipe missing: ${ownerId}`);
+  }
+  const normalizedOperators = normalizeOperators(operators);
+  const controls = [...(evidence?.controls ?? [])];
+  const controlBySkillId = new Map(
+    controls.map(control => [Number(control.controlSkillId), control])
+  );
+  const resourceProfiles = (evidence?.specialResourceProfiles ?? []).filter(
+    profile => Number(profile.ownerId) === ownerId
+  );
+  const resourceOperations = (
+    evidence?.specialResourceOperations ?? []
+  ).filter(operation => Number(operation.ownerId) === ownerId);
+  const contextEdges = compileContextInputEdges({
+    ownerId,
+    definitions: compilerRecipe.contextInputEdges ?? [],
+    controlBySkillId,
+    resourceProfiles,
+    operators: normalizedOperators,
+  });
+  const publicActionForms = compilePublicActionForms({
+    ownerId,
+    definitions: compilerRecipe.publicActionForms ?? [],
+    controlBySkillId,
+    resourceProfiles,
+    contextEdges,
+    operators: normalizedOperators,
+  });
+  const attackInputChains = compileAttackInputChains({
+    ownerId,
+    definitions: compilerRecipe.attackInputChains ?? [],
+    controlBySkillId,
+    resourceProfiles,
+    operators: normalizedOperators,
+  });
+  const thresholdTransitions = compileThresholdTransitions({
+    ownerId,
+    definitions: compilerRecipe.thresholdTransitions ?? [],
+    resourceProfiles,
+    resourceOperations,
+    operators: normalizedOperators,
+  });
+  const passiveEffects = compilePassiveEffects({
+    ownerId,
+    definitions: compilerRecipe.passiveEffects ?? [],
+    controls,
+    controlBySkillId,
+    skills: evidence?.skills ?? [],
+    operators: normalizedOperators,
+  });
+  const contracts = {
+    contextEdges,
+    publicActionForms,
+    attackInputChains,
+    thresholdTransitions,
+    passiveEffects,
+  };
+  const compilerInput = {
+    ownerId,
+    characterIdentity:
+      character.sourceIdentity ?? `character-catalog:actor:${ownerId}`,
+    recipe: compilerRecipe,
+    evidenceIdentities: collectSourceIdentities([
+      controls,
+      resourceProfiles,
+      resourceOperations,
+    ]),
+  };
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-character-combat-owner-compilation',
+    compilerVersion: CHARACTER_COMBAT_COMPILER_VERSION,
+    ownerId,
+    ownerName: character.name ?? null,
+    recipeIdentity: `actor:${ownerId}:character-combat-recipe:v${Number(
+      recipe.schemaVersion
+    ) || 1}`,
+    recipeHash: sha256Json(recipe),
+    compilerInputHash: sha256Json(compilerInput),
+    timingPolicy: compilerRecipe.timingPolicy ?? 'standalone-animation',
+    reachableControlSkillIds: [
+      ...new Set(
+        (compilerRecipe.reachableControlSkillIds ?? [])
+          .map(Number)
+          .filter(Number.isInteger)
+      ),
+    ].sort((left, right) => left - right),
+    contracts,
+    contractHash: sha256Json(contracts),
+    status: 'character-combat-owner-contracts-compiled',
+    summary: {
+      contextEdgeCount: contracts.contextEdges.length,
+      publicActionFormCount: contracts.publicActionForms.length,
+      attackInputChainCount: contracts.attackInputChains.length,
+      thresholdTransitionCount: contracts.thresholdTransitions.length,
+      passiveEffectCount: contracts.passiveEffects.length,
+    },
+  };
+}
+
+export function mergeCharacterCombatOwnerCompilations({
+  actionVariantGraph,
+  specialResourceCatalog,
+  compilations,
+}) {
+  const ownerIds = new Set(compilations.map(item => Number(item.ownerId)));
+  const replaceOwnerRecords = (records, additions) =>
+    [
+      ...(records ?? []).filter(record => !ownerIds.has(Number(record.ownerId))),
+      ...additions,
+    ];
+  const contextEdges = replaceOwnerRecords(
+    actionVariantGraph.contextEdges,
+    compilations.flatMap(item => item.contracts.contextEdges)
+  );
+  const publicActionForms = replaceOwnerRecords(
+    actionVariantGraph.publicActionForms,
+    compilations.flatMap(item => item.contracts.publicActionForms)
+  );
+  const attackInputChains = replaceOwnerRecords(
+    actionVariantGraph.attackInputChains,
+    compilations.flatMap(item => item.contracts.attackInputChains)
+  );
+  const thresholdTransitions = replaceOwnerRecords(
+    specialResourceCatalog.thresholdTransitions,
+    compilations.flatMap(item => item.contracts.thresholdTransitions)
+  );
+  const passiveEffects = replaceOwnerRecords(
+    specialResourceCatalog.passiveEffects,
+    compilations.flatMap(item => item.contracts.passiveEffects)
+  );
+
+  actionVariantGraph.contextEdges = contextEdges;
+  actionVariantGraph.publicActionForms = publicActionForms;
+  actionVariantGraph.attackInputChains = attackInputChains;
+  actionVariantGraph.summary = {
+    ...(actionVariantGraph.summary ?? {}),
+    contextEdgeCount: contextEdges.length,
+    appliedContextEdgeCount: contextEdges.filter(edge => edge.applied).length,
+    publicActionFormCount: publicActionForms.length,
+    attackInputChainCount: attackInputChains.length,
+  };
+  specialResourceCatalog.thresholdTransitions = thresholdTransitions;
+  specialResourceCatalog.passiveEffects = passiveEffects;
+  specialResourceCatalog.summary = {
+    ...(specialResourceCatalog.summary ?? {}),
+    thresholdTransitionCount: thresholdTransitions.length,
+    passiveEffectCount: passiveEffects.length,
+    appliedPassiveEffectCount: passiveEffects.filter(item => item.applied)
+      .length,
+  };
+
+  return {
+    actionVariantGraph,
+    specialResourceCatalog,
+    compilations,
+  };
+}
+
+export function createCharacterCombatOwnerRuntimeContracts({
+  compilation,
+  publicActions,
+  controls,
+  variantEdges,
+  hits,
+  resourceProfiles,
+  resourceTransactions,
+  rawEffects,
+  semanticEffects,
+  switchTriggers,
+  statDependencies,
+}) {
+  const ownerId = Number(compilation.ownerId);
+  const contracts = {
+    publicActions: sortByIdentity(publicActions ?? []),
+    actionForms: createCompiledActionForms({
+      ownerId,
+      publicActions: publicActions ?? [],
+      publicActionForms: compilation.contracts.publicActionForms,
+      attackInputChains: compilation.contracts.attackInputChains,
+    }),
+    controls: sortByIdentity(controls ?? []),
+    timingInputEdges: compilation.contracts.contextEdges,
+    variantEdges: sortByIdentity(variantEdges ?? []),
+    attackInputChains: compilation.contracts.attackInputChains,
+    hits: sortByIdentity(hits ?? []),
+    resourceProfiles: sortByIdentity(resourceProfiles ?? []),
+    resourceTransactions: sortByIdentity(resourceTransactions ?? []),
+    stateMachines: compilation.contracts.thresholdTransitions,
+    effects: {
+      raw: sortByIdentity(rawEffects ?? []),
+      semantic: sortByIdentity(semanticEffects ?? []),
+    },
+    passives: compilation.contracts.passiveEffects,
+    switchTriggers: sortByIdentity(switchTriggers ?? []),
+    statDependencies: statDependencies ?? { static: [], dynamic: [] },
+  };
+  return {
+    ...compilation,
+    recipeContractHash: compilation.contractHash,
+    contracts,
+    contractHash: sha256Json(contracts),
+  };
+}
+
+export function createCharacterCombatStatDependencies({
+  ownerId,
+  staticPropertyCatalog,
+  actorProfiles,
+  passiveEffects,
+  semanticEffects,
+}) {
+  const staticActor = (staticPropertyCatalog?.actorProfiles ?? []).find(
+    profile => Number(profile.characterId) === Number(ownerId)
+  );
+  const actorSp = (actorProfiles ?? []).find(
+    profile => Number(profile.characterId) === Number(ownerId)
+  );
+  const dynamic = [
+    ...(passiveEffects ?? []).flatMap(passive =>
+      (passive.modifiers ?? []).map(modifier => ({
+        sourceKind: 'passive-dynamic-property',
+        passiveIdentity: passive.passiveIdentity,
+        ...modifier,
+        status: passive.applied ? 'applied' : 'static-evidence-gap',
+      }))
+    ),
+    ...(semanticEffects ?? [])
+      .filter(
+        effect => effect.dimensions?.dynamicProperty?.status === 'applied'
+      )
+      .map(effect => ({
+        sourceKind: 'semantic-effect-dynamic-property',
+        semanticIdentity: effect.semanticIdentity,
+        attributeId: effect.propertyChange?.attributeId ?? null,
+        bucket: effect.propertyChange?.bucket ?? null,
+        sourceIdentity: effect.sourceIdentities?.join('|') ?? null,
+        status: effect.classification,
+      })),
+  ];
+  const staticDependencies = [
+    staticActor
+      ? {
+          sourceKind: 'verified-static-actor-profile',
+          characterId: Number(ownerId),
+          sourceIdentity:
+            staticActor.sourceIdentity ??
+            `verified-static-property-catalog:actor:${ownerId}`,
+          status: 'applied',
+        }
+      : null,
+    actorSp
+      ? {
+          sourceKind: 'verified-actor-sp-profile',
+          characterId: Number(ownerId),
+          sourceIdentity:
+            actorSp.sourceIdentity ??
+            `verified-owner-profile:actor:${ownerId}`,
+          status: 'applied',
+        }
+      : null,
+  ].filter(Boolean);
+  return {
+    static: staticDependencies,
+    dynamic,
+    sourceIdentity: [
+      ...staticDependencies.map(item => item.sourceIdentity),
+      ...dynamic.map(item => item.sourceIdentity),
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+export function createCompiledActionForms({
+  ownerId,
+  publicActions,
+  publicActionForms,
+  attackInputChains,
+}) {
+  const chainForms = attackInputChains.flatMap(chain =>
+    chain.segments.map(segment => ({
+      formIdentity: `${chain.chainIdentity}:segment:${segment.sequenceIndex}`,
+      ownerId,
+      publicActionIdentity: `actor:${ownerId}:normal-attack`,
+      publicActionKind: 'normal-attack',
+      actionKind: 'normal-attack',
+      sourceSkillId: chain.sourceSkillId,
+      sourceControlSkillId: segment.controlSkillId,
+      sourceSubSkillIndex: segment.subSkillIndex,
+      executionControlSkillId: segment.controlSkillId,
+      executionSubSkillIndex: segment.subSkillIndex,
+      sequenceIndex: segment.sequenceIndex,
+      sequenceTotal: segment.sequenceTotal,
+      semanticName:
+        chain.stateCondition?.kind === 'resource-state-active'
+          ? `爆发普攻 A${segment.sequenceIndex}`
+          : `普通攻击 A${segment.sequenceIndex}`,
+      executionTiming: segment.executionTiming,
+      sourceIdentity: segment.sourceIdentity,
+      status: segment.applied ? 'applied' : 'static-evidence-gap',
+      applied: segment.applied === true,
+      reasons: segment.reasons ?? [],
+    }))
+  );
+  const coveredKinds = new Set([
+    ...chainForms.map(form => form.publicActionKind),
+    ...publicActionForms.map(form => form.publicActionKind),
+  ]);
+  const normalizedPublicActionForms = publicActionForms.map(form => ({
+    ...form,
+    status: form.applied === true ? 'applied' : 'static-evidence-gap',
+    reasons:
+      form.applied === true
+        ? []
+        : [...new Set(form.reasons ?? ['public-action-form-unresolved'])],
+  }));
+  const defaultForms = publicActions
+    .filter(action => !coveredKinds.has(action.actionKind))
+    .map(action => {
+      const applied =
+        action.classification === 'applied' ||
+        (action.schedulable !== false &&
+          action.actionScheduling?.status === 'applied');
+      return {
+        formIdentity: `${action.identity}:default`,
+        ownerId,
+        publicActionIdentity: action.identity,
+        publicActionKind: action.actionKind,
+        actionKind: action.actionKind,
+        sourceSkillId: action.sourceSkillId,
+        sourceControlSkillId: action.controlSkillId,
+        sourceSubSkillIndex: action.selectedSubSkillIndex ?? 0,
+        executionControlSkillId: action.controlSkillId,
+        executionSubSkillIndex: action.selectedSubSkillIndex ?? 0,
+        semanticName:
+          action.actionVariantLabel ??
+          action.sourceSkillName ??
+          action.actionKind,
+        executionTiming: action.executionTiming ?? null,
+        sourceIdentity:
+          action.sourceIdentity ?? action.bindingSourceIdentity ?? null,
+        status: applied ? 'applied' : 'static-evidence-gap',
+        applied,
+        reasons: applied
+          ? []
+          : [...new Set(action.reasons ?? [action.classification])].filter(
+              Boolean
+            ),
+      };
+    });
+  return dedupeBy(
+    [...chainForms, ...normalizedPublicActionForms, ...defaultForms],
+    form => form.formIdentity
+  ).sort(compareIdentity);
+}
+
+function compileContextInputEdges({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  resourceProfiles,
+  operators,
+}) {
+  return definitions.flatMap(definition => {
+    const sourceControl = requireControl(
+      controlBySkillId,
+      definition.sourceControlSkillId,
+      'context source'
+    );
+    const executionControl = requireControl(
+      controlBySkillId,
+      definition.executionControlSkillId,
+      'context execution'
+    );
+    const windows = operators
+      .normalizeControlWindows(sourceControl, definition.sourceSubSkillIndex)
+      .filter(
+        window =>
+          Number(window.targetControlSkillId) ===
+            Number(definition.executionControlSkillId) &&
+          Number(window.targetSubSkillIndex) ===
+            Number(definition.executionSubSkillIndex)
+      );
+    if (windows.length !== Number(definition.expectedWindowCount)) {
+      throw new Error(
+        `character combat context window count mismatch: ${ownerId}/${definition.sourceControlSkillId}/${definition.sourceSubSkillIndex} expected ${definition.expectedWindowCount}, received ${windows.length}`
+      );
+    }
+    const baseCondition = compileCondition(
+      definition.condition,
+      ownerId,
+      resourceProfiles,
+      operators
+    );
+    const requiredSwitchAsset = definition.requiredSwitchElementId
+      ? operators.readElementAsset(definition.requiredSwitchElementId)
+      : null;
+    const condition =
+      requiredSwitchAsset && baseCondition.kind === 'always'
+        ? {
+            ...baseCondition,
+            sourceIdentity: requiredSwitchAsset.sourceIdentity,
+          }
+        : baseCondition;
+    return windows.map(window => {
+      const executionTiming = operators.resolveControlVariantTiming({
+        control: executionControl,
+        subSkillIndex: definition.executionSubSkillIndex,
+        actionKind: definition.publicActionKind,
+      });
+      const sourceExecutionTiming = operators.resolveControlVariantTiming({
+        control: sourceControl,
+        subSkillIndex: definition.sourceSubSkillIndex,
+        actionKind: definition.sourcePublicActionKind,
+      });
+      const inputScheduling = createContextInputScheduling({
+        window,
+        sourceExecutionTiming,
+      });
+      const targetMatches =
+        Number(window.targetControlSkillId) ===
+          Number(definition.executionControlSkillId) &&
+        Number(window.targetSubSkillIndex) ===
+          Number(definition.executionSubSkillIndex);
+      const switchMatches =
+        requiredSwitchAsset == null ||
+        (Number(requiredSwitchAsset?.tree?.skillID) ===
+          Number(definition.executionControlSkillId) &&
+          Number(requiredSwitchAsset?.tree?.subSkillIndex) ===
+            Number(definition.executionSubSkillIndex));
+      const applied =
+        targetMatches &&
+        switchMatches &&
+        inputScheduling.status === 'applied' &&
+        executionTiming?.occupancy?.status === 'applied';
+      const edgeIdentity = [
+        `actor:${ownerId}`,
+        `control:${definition.sourceControlSkillId}`,
+        `sub:${definition.sourceSubSkillIndex}`,
+        `context:${window.startFrame}-${window.endFrame}`,
+        `public-control:${definition.publicControlSkillId}`,
+        `execution-control:${definition.executionControlSkillId}`,
+        `sub:${definition.executionSubSkillIndex}`,
+      ].join('|');
+      return {
+        edgeIdentity,
+        ownerId,
+        relationType: 'input-context-derived',
+        inputCommand:
+          definition.inputCommand ??
+          resolveInputCommand(window, definition.publicActionKind),
+        sourceControlSkillId: definition.sourceControlSkillId,
+        sourceSubSkillIndex: definition.sourceSubSkillIndex,
+        sourcePublicActionKind: definition.sourcePublicActionKind,
+        sourcePublicActionIdentity: [
+          `actor:${ownerId}`,
+          definition.sourcePublicActionKind,
+          `control:${definition.sourceControlSkillId}`,
+          `sub:${definition.sourceSubSkillIndex}`,
+        ].join('|'),
+        sourceSemanticName: definition.sourceSemanticName,
+        targetControlSkillId: definition.publicControlSkillId,
+        executionControlSkillId: definition.executionControlSkillId,
+        targetSubSkillIndex: definition.executionSubSkillIndex,
+        semanticIdentity: definition.semanticIdentity,
+        semanticName: definition.semanticName,
+        publicActionKind: definition.publicActionKind,
+        publicActionIdentity: `actor:${ownerId}:${definition.publicActionKind}`,
+        executionTiming: toRuntimeExecutionTiming(executionTiming),
+        sourceExecutionTiming: toRuntimeExecutionTiming(sourceExecutionTiming),
+        decisionFrame: Number(definition.decisionFrame) || 0,
+        inputWindow: {
+          startFrame: window.startFrame,
+          endFrame: window.endFrame,
+          frameRate: window.frameRate ?? 60,
+          bridgeType: window.bridgeType,
+          continuousAttackType: window.continuousAttackType,
+          interruptBehavior: window.interruptBehavior,
+          frameIndex: window.frameIndex,
+          baseOnInput: window.baseOnInput,
+          inputToIndex: window.inputToIndex,
+          allowedInputCommands: window.allowedInputCommands ?? [],
+          sourceIdentity: window.sourceIdentity,
+        },
+        inputScheduling,
+        condition,
+        sourceIdentity: [
+          window.sourceIdentity,
+          requiredSwitchAsset?.sourceIdentity,
+          condition?.sourceIdentity,
+          inputScheduling.sourceIdentity,
+          executionTiming?.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        status: applied
+          ? 'verified-input-context-variant-edge-ready'
+          : 'unresolved-input-context-variant-edge',
+        reasons: [
+          ...(targetMatches ? [] : ['context-window-target-mismatch']),
+          ...(switchMatches ? [] : ['context-switch-target-mismatch']),
+          ...(inputScheduling.status === 'applied'
+            ? []
+            : inputScheduling.reasons),
+          ...(executionTiming?.occupancy?.status === 'applied'
+            ? []
+            : ['context-execution-occupancy-unresolved']),
+        ],
+        applied,
+      };
+    });
+  });
+}
+
+function compilePublicActionForms({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  resourceProfiles,
+  contextEdges,
+  operators,
+}) {
+  return definitions.map(definition => {
+    const control = requireControl(
+      controlBySkillId,
+      definition.executionControlSkillId,
+      'public action form'
+    );
+    const timing = operators.resolveControlVariantTiming({
+      control,
+      subSkillIndex: definition.executionSubSkillIndex,
+      actionKind: definition.publicActionKind,
+    });
+    const condition = compileCondition(
+      definition.condition,
+      ownerId,
+      resourceProfiles,
+      operators
+    );
+    const switchAsset = definition.switchElementId
+      ? operators.readElementAsset(definition.switchElementId)
+      : null;
+    const contextSources = contextEdges
+      .filter(edge => edge.semanticIdentity === definition.semanticIdentity)
+      .map(edge => edge.sourceIdentity);
+    const variantSourceIdentity = control.variants?.find(
+      variant =>
+        Number(variant.subSkillIndex) ===
+        Number(definition.executionSubSkillIndex)
+    )?.sourceIdentity;
+    const definitionSources = switchAsset?.sourceIdentity
+      ? [switchAsset.sourceIdentity, ...contextSources]
+      : contextSources.length > 0
+        ? contextSources
+        : [variantSourceIdentity];
+    const applied = timing?.occupancy?.status === 'applied';
+    return {
+      formIdentity: `actor:${ownerId}:${definition.publicActionKind}:${definition.semanticIdentity}`,
+      ownerId,
+      publicActionKind: definition.publicActionKind,
+      publicControlSkillId: definition.publicControlSkillId,
+      semanticIdentity: definition.semanticIdentity,
+      semanticName: definition.semanticName,
+      executionControlSkillId: definition.executionControlSkillId,
+      executionSubSkillIndex: definition.executionSubSkillIndex,
+      selectionKind: definition.selectionKind,
+      condition,
+      executionTiming: toRuntimeExecutionTiming(timing),
+      sourceIdentity: [
+        ...definitionSources,
+        timing?.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: applied
+        ? 'verified-public-action-form-ready'
+        : 'unresolved-public-action-form',
+      reasons: applied ? [] : ['public-action-form-occupancy-unresolved'],
+      applied,
+    };
+  });
+}
+
+function compileAttackInputChains({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  resourceProfiles,
+  operators,
+}) {
+  return definitions.map(definition => {
+    const condition = compileCondition(
+      definition.condition,
+      ownerId,
+      resourceProfiles,
+      operators
+    );
+    const segments = definition.segments.map((segment, index) => {
+      const control = requireControl(
+        controlBySkillId,
+        segment.controlSkillId,
+        'attack input chain'
+      );
+      const timing = operators.resolveNormalAttackTiming({
+        control,
+        subSkillIndex: segment.subSkillIndex,
+        nextControlSkillId: segment.nextControlSkillId,
+      });
+      const applied = timing?.occupancy?.status === 'applied';
+      if (!applied) {
+        throw new Error(
+          `character combat attack input timing unresolved: ${ownerId}/${segment.controlSkillId}/${segment.subSkillIndex}`
+        );
+      }
+      return {
+        sequenceIndex: index + 1,
+        sequenceTotal: definition.segments.length,
+        controlSkillId: segment.controlSkillId,
+        subSkillIndex: segment.subSkillIndex,
+        nextControlSkillId: segment.nextControlSkillId,
+        durationFrames: timing.occupancy.durationFrames,
+        executionTiming: timing,
+        sourceIdentity: timing.occupancy.sourceIdentity,
+        status: 'verified-attack-input-chain-segment-ready',
+        applied: true,
+      };
+    });
+    return {
+      chainIdentity: definition.chainIdentity,
+      ownerId,
+      sourceSkillId: definition.sourceSkillId,
+      decisionFrame: Number(definition.decisionFrame) || 0,
+      stateCondition: condition,
+      segments,
+      sourceIdentity: segments.map(item => item.sourceIdentity).join('|'),
+      status: 'verified-attack-input-chain-ready',
+      applied: true,
+    };
+  });
+}
+
+function compileThresholdTransitions({
+  ownerId,
+  definitions,
+  resourceProfiles,
+  resourceOperations,
+  operators,
+}) {
+  return definitions.map(definition => {
+    const profile = resourceProfiles.find(
+      item => Number(item.elementId) === Number(definition.resourceElementId)
+    );
+    const state = profile?.stateElements?.find(
+      item => Number(item.elementId) === Number(definition.stateElementId)
+    );
+    const resourceAsset = operators.readElementAsset(
+      definition.resourceElementId
+    );
+    const stateAsset = operators.readElementAsset(definition.stateElementId);
+    if (!profile || !state || !resourceAsset || !stateAsset) {
+      throw new Error(
+        `character combat threshold evidence missing: ${ownerId}/${definition.resourceElementId}/${definition.stateElementId}`
+      );
+    }
+    const suppressedOperationIdentities = resourceOperations
+      .filter(operation =>
+        (definition.suppressedOperationSelectors ?? []).some(
+          selector =>
+            Number(operation.controlSkillId) ===
+              Number(selector.controlSkillId) &&
+            Number(operation.subSkillIndex) ===
+              Number(selector.subSkillIndex) &&
+            selector.operations.includes(operation.operation)
+        )
+      )
+      .map(operation => operation.operationIdentity)
+      .sort();
+    return {
+      transitionIdentity: [
+        profile.resourceIdentity,
+        'threshold',
+        profile.capacity,
+        definition.stateElementId,
+      ].join('|'),
+      ownerId,
+      resourceIdentity: profile.resourceIdentity,
+      threshold: profile.capacity,
+      comparison: definition.comparison,
+      resourceOperation: definition.resourceOperation,
+      suppressGainWhileStateActive:
+        definition.suppressGainWhileStateActive === true,
+      suppressedOperationIdentities,
+      stateElementId: definition.stateElementId,
+      stateName: state.name,
+      stateDurationMs: state.durationMs,
+      sourceIdentity: [
+        resourceAsset.sourceIdentity,
+        `${resourceAsset.sourceIdentity}#combineType=${resourceAsset.tree?.combineType};combineNumber=${resourceAsset.tree?.combineNumber}`,
+        stateAsset.sourceIdentity,
+        `${stateAsset.sourceIdentity}#time=${stateAsset.tree?.time}`,
+        definition.runtimeSourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-special-resource-threshold-transition-ready',
+      applied: true,
+    };
+  });
+}
+
+function compilePassiveEffects({
+  ownerId,
+  definitions,
+  controls,
+  controlBySkillId,
+  skills,
+  operators,
+}) {
+  return definitions.map(definition => {
+    const passiveControl = controlBySkillId.get(Number(definition.skillId));
+    const marker = operators.readElementAsset(definition.markerElementId);
+    const wrapper = operators.readElementAsset(definition.wrapperElementId);
+    const property = operators.readElementAsset(definition.propertyElementId);
+    const directTriggers = [];
+    for (const control of controls) {
+      if (Number(operators.resolveControlOwnerId(control)) !== ownerId) continue;
+      for (const root of control.effectGraph ?? []) {
+        const node = root.nodes?.find(
+          item => Number(item.elementId) === Number(definition.wrapperElementId)
+        );
+        if (!node) continue;
+        for (const trigger of operators.createSemanticRootTriggers(
+          control,
+          root
+        )) {
+          if (
+            trigger.resolution !== 'static-resolved' ||
+            !Number.isInteger(trigger.startFrame)
+          ) {
+            continue;
+          }
+          directTriggers.push({
+            triggerIdentity: [
+              definition.skillId,
+              control.controlSkillId,
+              root.mapIndex,
+              trigger.startFrame,
+              node.pathId,
+            ].join('|'),
+            controlSkillId: control.controlSkillId,
+            subSkillIndex: root.mapIndex,
+            triggerFrame: trigger.startFrame,
+            frameRate: control.frameRate ?? 60,
+            sourceElementId: node.elementId,
+            sourcePathId: node.pathId,
+            sourceIdentity: [
+              root.sourceIdentity,
+              node.sourceIdentity,
+              trigger.sourceIdentity,
+            ]
+              .filter(Boolean)
+              .join('|'),
+            status: 'verified-passive-trigger-binding-ready',
+            applied: true,
+          });
+        }
+      }
+    }
+    const aliasTriggers = (definition.publicTriggerAliases ?? []).flatMap(
+      alias => {
+        const sourceControl = controlBySkillId.get(
+          Number(alias.publicControlSkillId)
+        );
+        const runtimeTrigger = directTriggers.find(
+          trigger =>
+            Number(trigger.controlSkillId) ===
+              Number(alias.runtimeControlSkillId) &&
+            Number(trigger.subSkillIndex) ===
+              Number(alias.runtimeSubSkillIndex)
+        );
+        const bridge = operators
+          .normalizeControlWindows(sourceControl, alias.publicSubSkillIndex)
+          .find(
+            window =>
+              Number(window.targetControlSkillId) ===
+                Number(alias.runtimeControlSkillId) &&
+              Number(window.targetSubSkillIndex) ===
+                Number(alias.runtimeSubSkillIndex)
+          );
+        if (!runtimeTrigger || !bridge) return [];
+        return [
+          {
+            ...runtimeTrigger,
+            triggerIdentity: [
+              definition.skillId,
+              alias.publicControlSkillId,
+              alias.publicSubSkillIndex,
+              bridge.startFrame + runtimeTrigger.triggerFrame,
+              'runtime-control',
+              alias.runtimeControlSkillId,
+            ].join('|'),
+            controlSkillId: alias.publicControlSkillId,
+            subSkillIndex: alias.publicSubSkillIndex,
+            triggerFrame: bridge.startFrame + runtimeTrigger.triggerFrame,
+            sourceIdentity: [
+              bridge.sourceIdentity,
+              runtimeTrigger.sourceIdentity,
+            ].join('|'),
+            status: 'verified-passive-public-trigger-binding-ready',
+            applied: true,
+          },
+        ];
+      }
+    );
+    const triggerBindings = dedupeBy(
+      [...directTriggers, ...aliasTriggers],
+      item => item.triggerIdentity
+    ).sort(
+      (left, right) =>
+        left.controlSkillId - right.controlSkillId ||
+        left.subSkillIndex - right.subSkillIndex ||
+        left.triggerFrame - right.triggerFrame
+    );
+    const unresolvedTriggerBindings = (
+      definition.unresolvedTriggerAliases ?? []
+    ).map(alias => {
+      const runtimeTrigger = directTriggers.find(
+        trigger =>
+          Number(trigger.controlSkillId) ===
+          Number(alias.runtimeControlSkillId)
+      );
+      return {
+        triggerIdentity: [
+          definition.skillId,
+          alias.publicControlSkillId,
+          'runtime-control',
+          alias.runtimeControlSkillId,
+        ].join('|'),
+        controlSkillId: alias.publicControlSkillId,
+        runtimeControlSkillId: alias.runtimeControlSkillId,
+        status: 'static-evidence-gap',
+        reasons: [alias.reason],
+        sourceIdentity: runtimeTrigger
+          ? [
+              `skill_control_${alias.publicControlSkillId}.asset`,
+              runtimeTrigger.sourceIdentity,
+            ].join('|')
+          : null,
+        applied: false,
+      };
+    });
+    const modifiers = (
+      property?.tree?.changePeopertyConditionArrayDatas ?? []
+    )
+      .map(entry => entry?.changeProperty)
+      .filter(Boolean)
+      .map(change => ({
+        attributeId: Number(change.attributeID),
+        bucket:
+          Number(change.calculateType) === 2 &&
+          Number(change.functionId) === 3
+            ? 'dynamicPercent'
+            : null,
+        valueRaw: Number(change.functionParams?.[0]),
+        calculateType: Number(change.calculateType),
+        functionId: Number(change.functionId),
+        propertyTags: change.propertyTags ?? [],
+        sourceIdentity: `${property?.sourceIdentity}#changePeopertyConditionArrayDatas[attributeID=${change.attributeID}]`,
+      }));
+    const applied =
+      passiveControl != null &&
+      marker != null &&
+      wrapper != null &&
+      property != null &&
+      Number(wrapper.tree?.time) === Number(definition.expectedDurationMs) &&
+      Number(wrapper.tree?.combineNumber) ===
+        Number(definition.expectedMaxStacks) &&
+      triggerBindings.length > 0 &&
+      modifiers.length === Number(definition.expectedModifierCount) &&
+      modifiers.every(
+        modifier =>
+          modifier.bucket === 'dynamicPercent' &&
+          Number.isFinite(modifier.valueRaw)
+      );
+    return {
+      passiveIdentity: `actor:${ownerId}:passive:${definition.skillId}`,
+      ownerId,
+      skillId: definition.skillId,
+      name:
+        skills.find(skill => Number(skill.id) === Number(definition.skillId))
+          ?.name ?? `被动 ${definition.skillId}`,
+      effectId: `battle-element:${definition.wrapperElementId}`,
+      effectElementId: definition.wrapperElementId,
+      markerElementId: definition.markerElementId,
+      propertyElementId: definition.propertyElementId,
+      durationMs: Number(wrapper?.tree?.time) || null,
+      stackMode: 'stack',
+      maxStacks: Number(wrapper?.tree?.combineNumber) || null,
+      stackDelta: 1,
+      triggerBindings,
+      unresolvedTriggerBindings,
+      modifiers,
+      sourceIdentity: [
+        passiveControl?.sourcePath,
+        marker?.sourceIdentity,
+        wrapper?.sourceIdentity,
+        property?.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: applied
+        ? 'verified-passive-effect-profile-ready'
+        : 'unresolved-passive-effect-profile',
+      reasons: [
+        ...(passiveControl ? [] : ['passive-skill-control-missing']),
+        ...(marker ? [] : ['passive-marker-element-missing']),
+        ...(wrapper ? [] : ['passive-wrapper-element-missing']),
+        ...(property ? [] : ['passive-property-element-missing']),
+        ...(triggerBindings.length > 0
+          ? []
+          : ['passive-trigger-bindings-missing']),
+        ...(modifiers.length === Number(definition.expectedModifierCount)
+          ? []
+          : ['passive-property-change-count-mismatch']),
+        ...(modifiers.every(item => item.bucket === 'dynamicPercent')
+          ? []
+          : ['passive-property-formula-not-verified-percent']),
+      ],
+      applied,
+    };
+  });
+}
+
+function compileCondition(definition, ownerId, resourceProfiles, operators) {
+  if (!definition || definition.kind === 'always') {
+    return { kind: 'always' };
+  }
+  const profile = resourceProfiles.find(
+    item => Number(item.elementId) === Number(definition.resourceElementId)
+  );
+  const state = profile?.stateElements?.find(
+    item => Number(item.elementId) === Number(definition.stateElementId)
+  );
+  const stateAsset = operators.readElementAsset(definition.stateElementId);
+  if (!profile || !state) {
+    throw new Error(
+      `character combat state condition evidence missing: ${ownerId}/${definition.resourceElementId}/${definition.stateElementId}`
+    );
+  }
+  return {
+    kind: definition.kind,
+    resourceIdentity: profile.resourceIdentity,
+    stateElementId: state.elementId,
+    stateName: state.name,
+    sourceIdentity: state.sourceIdentity ?? stateAsset?.sourceIdentity ?? null,
+  };
+}
+
+function createContextInputScheduling({ window, sourceExecutionTiming }) {
+  const inputSemantics = classifyInputSemantics(window);
+  const predecessorGenericEndFrame = nonNegativeIntegerOrNull(
+    sourceExecutionTiming?.occupancy?.durationFrames
+  );
+  let canonicalInputFrame = null;
+  if (
+    predecessorGenericEndFrame != null &&
+    predecessorGenericEndFrame >= Number(window?.startFrame) &&
+    predecessorGenericEndFrame < Number(window?.endFrame)
+  ) {
+    canonicalInputFrame = predecessorGenericEndFrame;
+  } else if (
+    predecessorGenericEndFrame != null &&
+    predecessorGenericEndFrame === Number(window?.endFrame)
+  ) {
+    canonicalInputFrame = Number(window.endFrame) - 1;
+  }
+  const immediate = ['immediate-interrupt', 'immediate-continuous'].includes(
+    inputSemantics
+  );
+  const edgeIntentApplied =
+    inputSemantics !== 'unresolved' &&
+    canonicalInputFrame != null &&
+    canonicalInputFrame >= Number(window?.startFrame) &&
+    canonicalInputFrame < Number(window?.endFrame);
+  const canonicalExecutionStartFrame = edgeIntentApplied
+    ? immediate
+      ? canonicalInputFrame
+      : predecessorGenericEndFrame
+    : null;
+  return {
+    schemaVersion: 1,
+    kind: 'verified-context-input-scheduling',
+    status:
+      window && sourceExecutionTiming?.occupancy?.status === 'applied'
+        ? inputSemantics === 'unresolved'
+          ? 'unresolved'
+          : 'applied'
+        : 'unresolved',
+    inputSemantics,
+    interval: '[start,end)',
+    predecessorGenericEndFrame,
+    predecessorAnimationDurationFrames:
+      sourceExecutionTiming?.animation?.durationFrames ?? null,
+    predecessorHitEnvelope: sourceExecutionTiming?.hitEnvelope ?? null,
+    windowClassification: classifyWindowAgainstOccupancy({
+      window,
+      occupancyEndFrame: predecessorGenericEndFrame,
+    }),
+    bufferUntilFrame:
+      inputSemantics === 'buffered-until-frame'
+        ? (nonNegativeIntegerOrNull(window?.frameIndex) ??
+          predecessorGenericEndFrame)
+        : null,
+    edgeIntent: {
+      status: edgeIntentApplied ? 'applied' : 'not-applicable',
+      predecessorGenericEndFrame,
+      canonicalInputFrame,
+      canonicalExecutionStartFrame,
+      canonicalPredecessorEndFrame: canonicalExecutionStartFrame,
+      policy: edgeIntentApplied
+        ? immediate
+          ? 'latest-verified-immediate-input-at-or-before-generic-edge'
+          : 'verified-buffered-input-with-generic-edge-execution'
+        : 'no-verified-edge-intent-mapping',
+    },
+    sourceIdentity: [
+      window?.sourceIdentity,
+      sourceExecutionTiming?.occupancy?.sourceIdentity,
+      'client-runtime:EventBridgeBehavior.Start/OnEvent/Update',
+    ]
+      .filter(Boolean)
+      .join('|'),
+    reasons: [
+      ...(window ? [] : ['context-input-window-missing']),
+      ...(sourceExecutionTiming?.occupancy?.status === 'applied'
+        ? []
+        : ['predecessor-effective-occupancy-unresolved']),
+      ...(inputSemantics === 'unresolved'
+        ? ['event-bridge-input-execution-semantics-unresolved']
+        : []),
+    ],
+  };
+}
+
+function classifyInputSemantics(window) {
+  if (Number(window?.bridgeType) === 3) return 'immediate-interrupt';
+  if (
+    Number(window?.bridgeType) === 0 &&
+    Number(window?.continuousAttackType) === 0
+  ) {
+    return 'buffered-until-frame';
+  }
+  if (
+    Number(window?.bridgeType) === 0 &&
+    Number(window?.continuousAttackType) === 1
+  ) {
+    return 'immediate-continuous';
+  }
+  return 'unresolved';
+}
+
+function classifyWindowAgainstOccupancy({ window, occupancyEndFrame }) {
+  if (!window || occupancyEndFrame == null) return 'unresolved';
+  const startFrame = Number(window.startFrame);
+  const endFrame = Number(window.endFrame);
+  if (startFrame === occupancyEndFrame) {
+    return 'window-start-equals-generic-occupancy';
+  }
+  if (startFrame < occupancyEndFrame && occupancyEndFrame < endFrame) {
+    return 'generic-occupancy-inside-window';
+  }
+  if (endFrame === occupancyEndFrame) {
+    return 'window-end-equals-generic-occupancy';
+  }
+  if (endFrame < occupancyEndFrame) return 'window-before-generic-occupancy';
+  if (startFrame > occupancyEndFrame) return 'window-after-generic-occupancy';
+  return 'unresolved';
+}
+
+function normalizeOperators(operators = {}) {
+  const required = [
+    'normalizeControlWindows',
+    'resolveControlVariantTiming',
+    'resolveNormalAttackTiming',
+    'readElementAsset',
+    'createSemanticRootTriggers',
+    'resolveControlOwnerId',
+  ];
+  for (const name of required) {
+    if (typeof operators[name] !== 'function') {
+      throw new Error(`character combat compiler operator missing: ${name}`);
+    }
+  }
+  return operators;
+}
+
+function requireControl(controlBySkillId, rawId, sourceKind) {
+  const control = controlBySkillId.get(Number(rawId));
+  if (!control) {
+    throw new Error(
+      `character combat ${sourceKind} control missing: ${Number(rawId)}`
+    );
+  }
+  return control;
+}
+
+function toRuntimeExecutionTiming(timing) {
+  if (!timing) return null;
+  return {
+    subSkillIndex: timing.subSkillIndex,
+    frameRate: timing.frameRate,
+    input: timing.input,
+    occupancy: timing.occupancy,
+    animation: timing.animation,
+    sourceIdentity: timing.sourceIdentity,
+  };
+}
+
+function resolveInputCommand(window, fallback = null) {
+  const commands = window?.allowedInputCommands ?? [];
+  for (const command of [
+    'charged-attack',
+    'normal-attack',
+    'star-skill',
+    'ultimate',
+  ]) {
+    if (commands.includes(command)) return command;
+  }
+  return fallback;
+}
+
+function collectSourceIdentities(value) {
+  const identities = new Set();
+  const visit = item => {
+    if (item == null) return;
+    if (Array.isArray(item)) {
+      for (const entry of item) visit(entry);
+      return;
+    }
+    if (typeof item !== 'object') return;
+    if (typeof item.sourceIdentity === 'string' && item.sourceIdentity) {
+      identities.add(item.sourceIdentity);
+    }
+    for (const entry of Object.values(item)) visit(entry);
+  };
+  visit(value);
+  return [...identities].sort();
+}
+
+function sortByIdentity(records) {
+  return [...records].sort(compareIdentity);
+}
+
+function compareIdentity(left, right) {
+  return resolveIdentity(left).localeCompare(resolveIdentity(right));
+}
+
+function resolveIdentity(value) {
+  return String(
+    value?.identity ??
+      value?.edgeIdentity ??
+      value?.formIdentity ??
+      value?.chainIdentity ??
+      value?.transitionIdentity ??
+      value?.passiveIdentity ??
+      value?.operationIdentity ??
+      value?.hitIdentity ??
+      value?.sourceIdentity ??
+      ''
+  );
+}
+
+function dedupeBy(records, keySelector) {
+  const output = [];
+  const seen = new Set();
+  for (const record of records) {
+    const key = keySelector(record);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    output.push(record);
+  }
+  return output;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : null;
+}
+
+function sha256Json(value) {
+  return crypto
+    .createHash('sha256')
+    .update(stableStringify(value))
+    .digest('hex');
+}
+
+function stableStringify(value) {
+  if (Array.isArray(value)) {
+    return `[${value.map(stableStringify).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .sort()
+      .map(key => `${JSON.stringify(key)}:${stableStringify(value[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}

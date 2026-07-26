@@ -8,6 +8,13 @@ import {
   createCharacterCombatOutputRecords,
   createCharacterCombatPipelineArtifacts,
 } from './character-combat/character-combat-profile-pipeline.mjs';
+import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
+import {
+  createCharacterCombatPublicationPlan,
+  detectCharacterCombatPublicationDrift,
+  selectCharacterCombatPublicationRecords,
+  writeCharacterCombatOutputsAtomically,
+} from './character-combat/character-combat-publication.mjs';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
@@ -35,6 +42,27 @@ const recipes =
 if (options.ownerId != null && recipes.length !== 1) {
   throw new Error(`character combat recipe missing: ${options.ownerId}`);
 }
+const compiledOwnerContracts = recipes.map(recipe =>
+  readJson(
+    path.join(
+      GENERATED_ROOT,
+      'character-combat-owner-contracts',
+      `${Number(recipe.ownerId)}.json`
+    )
+  )
+);
+const goldenRuntimeByOwner = new Map(
+  await Promise.all(
+    recipes.map(async recipe => [
+      Number(recipe.ownerId),
+      await createCharacterCombatGoldenRuntime({
+        repositoryRoot: REPO_ROOT,
+        mechanicsPackage,
+        recipe,
+      }),
+    ])
+  )
+);
 
 const reportsByOwner = new Map();
 for (const recipe of recipes) {
@@ -54,13 +82,29 @@ const artifacts = createCharacterCombatPipelineArtifacts({
   characterCatalog,
   skills: workbenchSeed.gameData?.skills ?? [],
   recipes,
+  compiledOwnerContracts,
+  goldenRuntimeByOwner,
   reportsByOwner,
 });
-const outputs = createOutputs(artifacts);
-const drift = outputs.filter(
-  ([filePath, content]) =>
-    !fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf8') !== content
-);
+const publicationRecords = selectCharacterCombatPublicationRecords({
+  records: createCharacterCombatOutputRecords(artifacts),
+  ownerId: options.ownerId,
+});
+const outputRoot =
+  options.outputRoot ??
+  (options.ownerId == null || options.assertClean
+    ? REPO_ROOT
+    : path.join(
+        REPO_ROOT,
+        'work',
+        'character-combat-staging',
+        String(options.ownerId)
+      ));
+const outputs = createCharacterCombatPublicationPlan({
+  records: publicationRecords,
+  outputRoot,
+});
+const drift = detectCharacterCombatPublicationDrift(outputs);
 
 if (options.assertClean && drift.length > 0) {
   console.error(
@@ -70,10 +114,7 @@ if (options.assertClean && drift.length > 0) {
   );
   process.exitCode = 1;
 } else if (options.write) {
-  for (const [filePath, content] of outputs) {
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    fs.writeFileSync(filePath, content, 'utf8');
-  }
+  writeCharacterCombatOutputsAtomically(outputs);
 }
 
 console.log(
@@ -93,13 +134,6 @@ console.log(
   )
 );
 
-function createOutputs(result) {
-  return createCharacterCombatOutputRecords(result).map(record => [
-    path.resolve(REPO_ROOT, record.relativePath),
-    record.content,
-  ]);
-}
-
 function readOptionalArtifact(relativePath) {
   if (!relativePath) return null;
   const filePath = path.resolve(REPO_ROOT, relativePath);
@@ -116,6 +150,7 @@ function parseArgs(argv) {
     ownerId: null,
     write: false,
     assertClean: false,
+    outputRoot: null,
   };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -132,6 +167,9 @@ function parseArgs(argv) {
       parsed.write = true;
     } else if (arg === '--assert-clean') {
       parsed.assertClean = true;
+    } else if (arg === '--output-root') {
+      parsed.outputRoot = path.resolve(argv[index + 1]);
+      index += 1;
     } else {
       throw new Error(`unknown argument: ${arg}`);
     }

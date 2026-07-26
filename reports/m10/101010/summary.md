@@ -2,15 +2,17 @@
 
 - Owner: `101010`
 - Profile: `actor:101010:character-combat-profile:v1`
-- Hash: `a0a39adbf43fdfc6726cb2ecc3fb9a7c1b2b30c0c649fc6ed83f2d487ec6b6e6`
-- 阶段：ui-verified
+- Hash: `eda3e0ffcc2673f2e4670da8ca1a10eabcdda1a7bcad5055d5ab125c778bc22e`
+- 流水线成熟度：runtime-applied
+- 战斗覆盖：partial
+- 角色完成：no
 - 公开动作：10
 - 执行形态：21
 - 可达 control：20
 - 窗口：86
 - Hit：108
-- 来源 identity：908
-- 战斗图：193 nodes / 227 edges
+- 来源 identity：945
+- 战斗图：193 nodes / 222 edges
 - 描述覆盖：28
 - Runtime ready 动作：7/10
 - Runtime capture：4
@@ -31,9 +33,9 @@
 | cooldowns | applied | 20 |
 | personalResources | static-evidence-gap | 32 |
 | teamResourcesAndMarks | applied | 1 |
-| buffsAndDebuffs | applied | 1 |
+| buffsAndDebuffs | static-evidence-gap | 118 |
 | passives | applied | 1 |
-| dynamicProperties | applied | 2 |
+| dynamicProperties | static-evidence-gap | 7 |
 | healingAndShields | not-applicable | 0 |
 | stateMachines | applied | 1 |
 | switchAndStarCarry | applied | 1 |
@@ -43,6 +45,6 @@
 ## 未闭环
 
 - runtime-evidence-required: 4
-- static-evidence-gap: 370
+- static-evidence-gap: 185
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。
