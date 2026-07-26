@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   resolveVerifiedAttackInputChainEntry,
+  resolveVerifiedContextInputScheduling,
   resolveVerifiedContextActionStartMs,
 } from '../../domain/verifiedActionContextScheduling';
 import { frameToMs } from '../../domain/timebase';
@@ -206,6 +207,7 @@ describe('verified action context scheduling', () => {
             actionId: normalA5.id,
             controlSkillId: 10101005,
             selectedSubSkillIndex: 0,
+            actualDurationFrames: 80,
           },
         ],
         graph,
@@ -217,7 +219,7 @@ describe('verified action context scheduling', () => {
       })
     ).toMatchObject({
       actionId: normalA5.id,
-      startMs: 2000 + frameToMs(37),
+      startMs: 2000 + frameToMs(80),
       endMs: 2000 + frameToMs(102),
     });
 
@@ -233,6 +235,7 @@ describe('verified action context scheduling', () => {
           actionId: burstA5.id,
           controlSkillId: 10101005,
           selectedSubSkillIndex: 1,
+          actualDurationFrames: 72,
         },
       ],
       graph,
@@ -249,11 +252,9 @@ describe('verified action context scheduling', () => {
       ],
       timelineDurationMs: 30_000,
     });
-    expect(burstContext).toMatchObject({
-      actionId: burstA5.id,
-      startMs: 5000,
-    });
-    expect(burstContext.endMs).toBeCloseTo(5000 + frameToMs(20), 5);
+    expect(burstContext).toMatchObject({ actionId: burstA5.id });
+    expect(burstContext.startMs).toBeCloseTo(5000 + frameToMs(71), 5);
+    expect(burstContext.endMs).toBeCloseTo(5000 + frameToMs(72), 5);
 
     const ordinaryCharged = {
       id: 'jade-ordinary-charged',
@@ -268,6 +269,7 @@ describe('verified action context scheduling', () => {
             actionId: ordinaryCharged.id,
             controlSkillId: 10101010,
             selectedSubSkillIndex: 0,
+            actualDurationFrames: 75,
           },
         ],
         graph,
@@ -295,6 +297,7 @@ describe('verified action context scheduling', () => {
       controlSkillId: 10101012,
       startFrame: 86,
       endFrame: 120,
+      expectedPlacementFrame: 119,
       executionSubSkillIndex: 0,
     },
     {
@@ -302,6 +305,7 @@ describe('verified action context scheduling', () => {
       controlSkillId: 10101013,
       startFrame: 295,
       endFrame: 329,
+      expectedPlacementFrame: 328,
       executionSubSkillIndex: 1,
     },
     {
@@ -309,6 +313,7 @@ describe('verified action context scheduling', () => {
       controlSkillId: 10101025,
       startFrame: 60,
       endFrame: 96,
+      expectedPlacementFrame: 60,
       executionSubSkillIndex: 0,
     },
   ])(
@@ -318,6 +323,7 @@ describe('verified action context scheduling', () => {
       controlSkillId,
       startFrame,
       endFrame,
+      expectedPlacementFrame,
       executionSubSkillIndex,
     }) => {
       const source = {
@@ -350,8 +356,242 @@ describe('verified action context scheduling', () => {
           targetSubSkillIndex: executionSubSkillIndex,
         },
       });
-      expect(result.startMs).toBeCloseTo(3000 + frameToMs(startFrame), 5);
+      expect(result.startMs).toBeCloseTo(
+        3000 + frameToMs(expectedPlacementFrame),
+        5
+      );
       expect(result.endMs).toBeCloseTo(3000 + frameToMs(endFrame), 5);
+    }
+  );
+
+  it('keeps buffered input acceptance separate from successor execution', () => {
+    const edge = {
+      edgeIdentity: 'fixture-buffered-context-edge',
+      applied: true,
+      inputWindow: {
+        startFrame: 86,
+        endFrame: 120,
+        bridgeType: 0,
+        continuousAttackType: 0,
+        sourceIdentity: 'fixture:event-bridge-buffer',
+      },
+      inputScheduling: {
+        status: 'applied',
+        inputSemantics: 'buffered-until-frame',
+        predecessorGenericEndFrame: 120,
+        bufferUntilFrame: 120,
+        edgeIntent: {
+          status: 'applied',
+          predecessorGenericEndFrame: 120,
+          canonicalInputFrame: 119,
+          canonicalExecutionStartFrame: 120,
+          canonicalPredecessorEndFrame: 120,
+        },
+        sourceIdentity: 'fixture:buffered-scheduling',
+      },
+    };
+
+    const result = resolveVerifiedContextInputScheduling({
+      edges: [edge],
+      predecessorStartMs: frameToMs(300),
+      predecessorEffectiveEndFrame: 120,
+      requestedExecutionStartMs: frameToMs(420),
+    });
+
+    expect(result).toMatchObject({
+      resolutionKind: 'edge-intent-contextual-transition',
+      inputSemantics: 'buffered-until-frame',
+      inputFrame: 419,
+      inputOffsetFrame: 119,
+      executionStartFrame: 420,
+      executionStartOffsetFrame: 120,
+      predecessorEffectiveEndFrame: 420,
+      predecessorEffectiveEndOffsetFrame: 120,
+    });
+  });
+
+  it.each([
+    {
+      label: '星鸣技',
+      sourceControlSkillId: 10101012,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 120,
+      requestedFrame: 120,
+      expectedInputFrame: 119,
+      expectedWindow: [86, 120],
+    },
+    {
+      label: '星决技',
+      sourceControlSkillId: 10101013,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 329,
+      requestedFrame: 329,
+      expectedInputFrame: 328,
+      expectedWindow: [295, 329],
+    },
+    {
+      label: '爆发 A3',
+      sourceControlSkillId: 10101005,
+      sourceSubSkillIndex: 1,
+      predecessorEffectiveEndFrame: 72,
+      requestedFrame: 72,
+      expectedInputFrame: 71,
+      expectedWindow: [40, 72],
+    },
+    {
+      label: '极限反击',
+      sourceControlSkillId: 10101025,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 60,
+      requestedFrame: 60,
+      expectedInputFrame: 60,
+      expectedWindow: [60, 96],
+    },
+    {
+      label: '普通 A5',
+      sourceControlSkillId: 10101005,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 80,
+      requestedFrame: 80,
+      expectedInputFrame: 80,
+      expectedWindow: [37, 102],
+    },
+  ])(
+    'maps edge-to-edge $label intent to a verified input and execution frame',
+    ({
+      sourceControlSkillId,
+      sourceSubSkillIndex,
+      predecessorEffectiveEndFrame,
+      requestedFrame,
+      expectedInputFrame,
+      expectedWindow,
+    }) => {
+      const edges =
+        verifiedCombatMechanicsPackage.actionVariantGraph.contextEdges.filter(
+          edge =>
+            Number(edge.sourceControlSkillId) === sourceControlSkillId &&
+            Number(edge.sourceSubSkillIndex) === sourceSubSkillIndex &&
+            Number(edge.targetControlSkillId) === 10101010
+        );
+      const result = resolveVerifiedContextInputScheduling({
+        edges,
+        predecessorStartMs: 0,
+        predecessorEffectiveEndFrame,
+        requestedExecutionStartMs: frameToMs(requestedFrame),
+      });
+
+      expect(result).toMatchObject({
+        resolutionKind:
+          requestedFrame === expectedInputFrame
+            ? 'direct-input-window'
+            : 'edge-intent-contextual-transition',
+        inputOffsetFrame: expectedInputFrame,
+        executionStartFrame: expectedInputFrame,
+        predecessorEffectiveEndFrame: expectedInputFrame,
+        inputWindow: {
+          startFrame: expectedWindow[0],
+          endFrame: expectedWindow[1],
+          interval: '[start,end)',
+        },
+        inputSemantics: 'immediate-interrupt',
+      });
+    }
+  );
+
+  it.each([
+    {
+      label: '星鸣技',
+      sourceControlSkillId: 10101012,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 120,
+      frames: [
+        [85, false, null],
+        [86, true, 86],
+        [119, true, 119],
+        [120, true, 119],
+      ],
+    },
+    {
+      label: '星决技',
+      sourceControlSkillId: 10101013,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 329,
+      frames: [
+        [294, false, null],
+        [295, true, 295],
+        [328, true, 328],
+        [329, true, 328],
+      ],
+    },
+    {
+      label: '爆发 A3',
+      sourceControlSkillId: 10101005,
+      sourceSubSkillIndex: 1,
+      predecessorEffectiveEndFrame: 72,
+      frames: [
+        [0, true, 0],
+        [19, true, 19],
+        [20, false, null],
+        [39, false, null],
+        [40, true, 40],
+        [71, true, 71],
+        [72, true, 71],
+      ],
+    },
+    {
+      label: '极限反击',
+      sourceControlSkillId: 10101025,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 60,
+      frames: [
+        [59, false, null],
+        [60, true, 60],
+        [95, true, 95],
+        [96, false, null],
+      ],
+    },
+    {
+      label: '普通 A5',
+      sourceControlSkillId: 10101005,
+      sourceSubSkillIndex: 0,
+      predecessorEffectiveEndFrame: 80,
+      frames: [
+        [36, false, null],
+        [37, true, 37],
+        [79, true, 79],
+        [80, true, 80],
+        [101, true, 101],
+        [102, false, null],
+      ],
+    },
+  ])(
+    'keeps $label source windows half-open while resolving edge intent',
+    ({
+      sourceControlSkillId,
+      sourceSubSkillIndex,
+      predecessorEffectiveEndFrame,
+      frames,
+    }) => {
+      const edges =
+        verifiedCombatMechanicsPackage.actionVariantGraph.contextEdges.filter(
+          edge =>
+            Number(edge.sourceControlSkillId) === sourceControlSkillId &&
+            Number(edge.sourceSubSkillIndex) === sourceSubSkillIndex &&
+            Number(edge.targetControlSkillId) === 10101010
+        );
+
+      for (const [requestedFrame, expectedSelected, expectedInputFrame] of frames) {
+        const result = resolveVerifiedContextInputScheduling({
+          edges,
+          predecessorStartMs: 0,
+          predecessorEffectiveEndFrame,
+          requestedExecutionStartMs: frameToMs(requestedFrame),
+        });
+        expect(Boolean(result), `${requestedFrame}F`).toBe(expectedSelected);
+        expect(result?.inputOffsetFrame ?? null, `${requestedFrame}F`).toBe(
+          expectedInputFrame
+        );
+      }
     }
   );
 });
@@ -438,7 +678,13 @@ function createVariantGraph() {
         targetControlSkillId: 10101010,
         executionControlSkillId: 10101042,
         targetSubSkillIndex: 0,
-        inputWindow: { startFrame: 37, endFrame: 102, frameRate: 60 },
+        inputWindow: {
+          startFrame: 37,
+          endFrame: 102,
+          frameRate: 60,
+          bridgeType: 3,
+          interruptBehavior: 1,
+        },
         condition: {
           kind: 'resource-state-inactive',
           stateElementId,
@@ -453,7 +699,34 @@ function createVariantGraph() {
         targetControlSkillId: 10101010,
         executionControlSkillId: 10101042,
         targetSubSkillIndex: 1,
-        inputWindow: { startFrame: 0, endFrame: 20, frameRate: 60 },
+        inputWindow: {
+          startFrame: 0,
+          endFrame: 20,
+          frameRate: 60,
+          bridgeType: 3,
+          interruptBehavior: 0,
+        },
+        condition: {
+          kind: 'resource-state-active',
+          stateElementId,
+        },
+        applied: true,
+      },
+      {
+        edgeIdentity: 'jade-burst-a5-heavy-late',
+        ownerId: 101010,
+        sourceControlSkillId: 10101005,
+        sourceSubSkillIndex: 1,
+        targetControlSkillId: 10101010,
+        executionControlSkillId: 10101042,
+        targetSubSkillIndex: 1,
+        inputWindow: {
+          startFrame: 40,
+          endFrame: 72,
+          frameRate: 60,
+          bridgeType: 3,
+          interruptBehavior: 1,
+        },
         condition: {
           kind: 'resource-state-active',
           stateElementId,
@@ -469,7 +742,13 @@ function createVariantGraph() {
         executionControlSkillId: 10101010,
         targetSubSkillIndex: 1,
         semanticName: '连续重击',
-        inputWindow: { startFrame: 75, endFrame: 105, frameRate: 60 },
+        inputWindow: {
+          startFrame: 75,
+          endFrame: 105,
+          frameRate: 60,
+          bridgeType: 3,
+          interruptBehavior: 1,
+        },
         condition: { kind: 'always' },
         applied: true,
       },

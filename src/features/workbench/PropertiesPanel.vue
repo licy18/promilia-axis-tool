@@ -100,6 +100,49 @@
       </small>
     </section>
 
+    <section
+      v-if="contextInputScheduling"
+      class="logic-source context-input-scheduling"
+      :data-resolution-kind="contextInputScheduling.resolutionKind"
+      :data-input-frame="contextInputScheduling.inputFrame"
+      :data-execution-start-frame="contextInputScheduling.executionStartFrame"
+      :data-predecessor-end-frame="
+        contextInputScheduling.predecessorEffectiveEndFrame
+      "
+      data-testid="workbench-context-input-scheduling"
+    >
+      <div class="logic-source-title">
+        <span>接续时序</span>
+        <strong>{{ formatContextInputSemantics(contextInputScheduling) }}</strong>
+      </div>
+      <div class="logic-source-grid">
+        <div class="logic-source-item">
+          <span>输入窗口</span>
+          <strong>{{
+            formatContextInputWindow(contextInputScheduling)
+          }}</strong>
+          <small>原始半开区间</small>
+        </div>
+        <div class="logic-source-item">
+          <span>按键输入</span>
+          <strong>{{ contextInputScheduling.inputFrame }}F</strong>
+          <small>动作内 {{ contextInputScheduling.inputOffsetFrame }}F</small>
+        </div>
+        <div class="logic-source-item">
+          <span>实际起始</span>
+          <strong>{{ contextInputScheduling.executionStartFrame }}F</strong>
+          <small>{{ formatContextResolutionKind(contextInputScheduling) }}</small>
+        </div>
+        <div class="logic-source-item">
+          <span>前动作结束</span>
+          <strong
+            >{{ contextInputScheduling.predecessorEffectiveEndFrame }}F</strong
+          >
+          <small>关系性有效结束</small>
+        </div>
+      </div>
+    </section>
+
     <ActionHitOverrideList
       v-if="
         verifiedMechanicsTrace?.hitBindings?.length && !isReadOnlyDerivedAction
@@ -1072,6 +1115,9 @@ const verifiedMechanicsTrace = computed(() =>
 const variantControlModel = computed(
   () => verifiedMechanicsTrace.value?.variantSelection ?? null
 );
+const contextInputScheduling = computed(
+  () => variantControlModel.value?.contextualInputScheduling ?? null
+);
 const editableVariantInput = computed(() => {
   if (isReadOnlyDerivedAction.value) return null;
   const input = verifiedMechanicsTrace.value?.variantInput;
@@ -1175,6 +1221,25 @@ function formatAttackInputWindow(attackInput) {
         ? '等待衔接'
         : '输入衔接';
   return `${window.startFrame}-${window.endFrame}F · ${mode}`;
+}
+
+function formatContextInputSemantics(scheduling) {
+  if (scheduling?.inputSemantics === 'immediate-interrupt') return '立即中断';
+  if (scheduling?.inputSemantics === 'buffered-until-frame') return '缓冲输入';
+  if (scheduling?.inputSemantics === 'immediate-continuous') return '立即接续';
+  return '接续语义待确认';
+}
+
+function formatContextInputWindow(scheduling) {
+  const window = scheduling?.inputWindow;
+  if (window?.startFrame == null || window?.endFrame == null) return '待确认';
+  return `[${window.startFrame}, ${window.endFrame})F`;
+}
+
+function formatContextResolutionKind(scheduling) {
+  return scheduling?.resolutionKind === 'edge-intent-contextual-transition'
+    ? '贴边意图映射'
+    : '窗口内直接输入';
 }
 
 function updateHitWillHit(hitIdentity, willHit) {

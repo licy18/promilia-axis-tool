@@ -27,6 +27,7 @@
       :data-mode="marker.mode"
       :data-start-ms="marker.startMs"
       :data-end-ms="marker.endMs ?? ''"
+      :data-execution-start-ms="marker.executionStartMs ?? marker.startMs"
       :data-interval-width-px="marker.intervalWidthPx"
       :data-row-index="marker.rowIndex"
       :data-source-status="marker.status"
@@ -151,7 +152,12 @@ function markerTitle(marker) {
     marker.mode === 'hold' && marker.endMs != null
       ? ` - ${formatMilliseconds(marker.endMs)} ms`
       : '';
-  return `${marker.actionName}｜${marker.keyLabel}｜${modeLabel}｜${timeLabel}${rangeLabel}`;
+  const executionLabel =
+    marker.executionStartMs != null &&
+    Math.abs(Number(marker.executionStartMs) - Number(marker.startMs)) > 0.001
+      ? `｜执行 ${formatMilliseconds(marker.executionStartMs)} ms`
+      : '';
+  return `${marker.actionName}｜${marker.keyLabel}｜${modeLabel}｜${timeLabel}${rangeLabel}${executionLabel}`;
 }
 
 function selectMarker(marker) {

@@ -1104,7 +1104,10 @@ function isBlockingActorAction(action) {
 
 function createActionRange(action) {
   const startMs = Math.max(0, Number(action.startMs) || 0);
-  const durationMs = Math.max(1, Number(action.durationMs) || 1);
+  const durationMs =
+    action.contextualEffectiveEndMs == null
+      ? Math.max(1, Number(action.durationMs) || 1)
+      : Math.max(0, Number(action.durationMs) || 0);
   return {
     actionId: action.id,
     actionName: action.name ?? action.id,

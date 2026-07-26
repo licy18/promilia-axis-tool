@@ -8,9 +8,10 @@ import {
   normalizeActionVariantInputSelection,
   resolveActionVariantInputOption,
 } from '../../domain/actionVariantInputSelection';
+import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 import {
-  isFrameWithinVerifiedInputWindow,
   projectVerifiedAttackInputChainSegment,
+  resolveVerifiedContextInputScheduling,
 } from '../../domain/verifiedActionContextScheduling';
 import {
   ACTION_TYPES,
@@ -696,6 +697,10 @@ export function createVerifiedActionVariantRuntime({
             semanticIdentity:
               contextSelection.binding.semanticIdentity ?? null,
             semanticName: contextSelection.binding.semanticName ?? null,
+            contextualInputScheduling:
+              action.contextualInputScheduling ??
+              contextSelection.inputScheduling ??
+              null,
           }
         : attackChainSelection.segment
           ? {
@@ -833,6 +838,15 @@ export function createVerifiedActionVariantRuntime({
     }
 
     for (const operation of selectedOperations) {
+      if (
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          operation.triggerFrame,
+          operation.frameRate ?? FRAME_RATE
+        )
+      ) {
+        continue;
+      }
       pendingEvents.push({
         kind: 'resource-operation',
         timeMs:
@@ -851,6 +865,15 @@ export function createVerifiedActionVariantRuntime({
       ) {
         continue;
       }
+      if (
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          binding.activationFrame,
+          FRAME_RATE
+        )
+      ) {
+        continue;
+      }
       pendingEvents.push({
         kind: 'switch-window',
         timeMs: actionTimeMs + framesToMs(binding.activationFrame, FRAME_RATE),
@@ -865,6 +888,15 @@ export function createVerifiedActionVariantRuntime({
         if (
           Number(trigger.controlSkillId) !== executionControlSkillId ||
           Number(trigger.subSkillIndex) !== selectedSubSkillIndex
+        ) {
+          continue;
+        }
+        if (
+          !isActionFrameWithinContextualOccupancy(
+            action,
+            trigger.triggerFrame,
+            trigger.frameRate ?? FRAME_RATE
+          )
         ) {
           continue;
         }
@@ -899,6 +931,11 @@ export function createVerifiedActionVariantRuntime({
       controlSkillId: executionControlSkillId,
       selectedSubSkillIndex,
       startMs: actionTimeMs,
+      effectiveDurationFrames:
+        resolution.actionBinding?.effectiveOccupancyFrames ??
+        resolution.actionBinding?.actualDurationFrames ??
+        resolution.actionBinding?.actionTiming?.occupancy?.durationFrames ??
+        null,
       sourceIdentity:
         resolution.actionBinding?.bindingSourceIdentity ??
         resolution.actionBinding?.sourceIdentity ??
@@ -1099,22 +1136,22 @@ function resolveContextVariantSelection({
     ) {
       return false;
     }
-    const frameRate = Number(binding.inputWindow?.frameRate) || FRAME_RATE;
-    const relativeFrame = Math.round(
-      ((Number(timeMs) - Number(previous.startMs)) * frameRate) / 1000
-    );
-    return isFrameWithinVerifiedInputWindow(
-      relativeFrame,
-      binding.inputWindow
-    );
+    return true;
   });
-  if (candidates.length !== 1) {
+  const inputScheduling = resolveVerifiedContextInputScheduling({
+    edges: candidates,
+    predecessorStartMs: previous.startMs,
+    predecessorEffectiveEndFrame: previous.effectiveDurationFrames,
+    requestedExecutionStartMs: timeMs,
+  });
+  if (!inputScheduling) {
     return { status: 'none', binding: null, previous };
   }
   return {
     status: 'selected',
-    binding: candidates[0],
+    binding: inputScheduling.edge,
     previous,
+    inputScheduling,
   };
 }
 
@@ -1376,6 +1413,22 @@ function createVariantSelectionRecord({
     selectionReason:
       selectionSource?.sourceKind ?? inputSelection?.reason ?? null,
     contextActionId: selectionSource?.contextActionId ?? null,
+    contextualInputScheduling:
+      selectionSource?.contextualInputScheduling ?? null,
+    inputFrame:
+      selectionSource?.contextualInputScheduling?.inputFrame ?? null,
+    inputTimeMs:
+      selectionSource?.contextualInputScheduling?.inputTimeMs ?? null,
+    executionStartFrame:
+      selectionSource?.contextualInputScheduling?.executionStartFrame ?? null,
+    executionStartMs:
+      selectionSource?.contextualInputScheduling?.executionStartMs ?? null,
+    predecessorEffectiveEndFrame:
+      selectionSource?.contextualInputScheduling
+        ?.predecessorEffectiveEndFrame ?? null,
+    predecessorEffectiveEndMs:
+      selectionSource?.contextualInputScheduling?.predecessorEffectiveEndMs ??
+      null,
     attackInputChainIdentity: selectionSource?.chainIdentity ?? null,
     sourceKind: selectionSource?.sourceKind ?? 'action-mapping-selection',
     sourceIdentity:

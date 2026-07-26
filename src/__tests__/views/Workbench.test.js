@@ -8361,7 +8361,7 @@ describe('Workbench view', () => {
     expect(
       normalDrafts.every(action => action.timingStatus === 'applied')
     ).toBe(true);
-    expect(msToFrame(chargedDraft.startMs - normalDrafts[4].startMs)).toBe(37);
+    expect(msToFrame(chargedDraft.startMs - normalDrafts[4].startMs)).toBe(80);
     expect(chargedDraft).toMatchObject({
       durationFrames: 75,
       timingStatus: 'applied',
@@ -8542,7 +8542,7 @@ describe('Workbench view', () => {
         kind: 'star-skill',
         sourceSkillId: 10101012,
         sourceControlSkillId: 10101012,
-        windowStartFrame: 86,
+        expectedStartFrame: 119,
         semanticName: '特殊重击',
         executionSubSkillIndex: 0,
         occupancyFrames: 90,
@@ -8551,7 +8551,7 @@ describe('Workbench view', () => {
         kind: 'ultimate',
         sourceSkillId: 10101013,
         sourceControlSkillId: 10101013,
-        windowStartFrame: 295,
+        expectedStartFrame: 328,
         semanticName: '强化特殊重击',
         executionSubSkillIndex: 1,
         occupancyFrames: 60,
@@ -8560,7 +8560,7 @@ describe('Workbench view', () => {
         kind: 'limit-counter',
         sourceSkillId: 10101021,
         sourceControlSkillId: 10101025,
-        windowStartFrame: 60,
+        expectedStartFrame: 60,
         semanticName: '特殊重击',
         executionSubSkillIndex: 0,
         occupancyFrames: 90,
@@ -8613,7 +8613,7 @@ describe('Workbench view', () => {
       expect(
         msToFrame(chargedAction.startMs - sourceAction.startMs),
         testCase.kind
-      ).toBe(testCase.windowStartFrame);
+      ).toBe(testCase.expectedStartFrame);
       const chargedBlock = wrapper.get(
         `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
       );
@@ -8632,6 +8632,161 @@ describe('Workbench view', () => {
       await settleWorkbenchAsyncPanels();
     }
   }, 60000);
+
+  it('projects a free-mode edge-to-edge Jade star-skill input without persisting overlap', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    workbenchMechanicsProfileMockState.durationMs = 20_000;
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await findActionLibraryActorButton(wrapper, 101010).trigger('click');
+    await settleWorkbenchAsyncPanels();
+
+    await findActionLibraryEntry(wrapper, 'star-skill').trigger('click');
+    await settleWorkbenchAsyncPanels();
+    const sourceBeforeCharged = (
+      wrapper.vm.$.setupState.actionDrafts?.value ??
+      wrapper.vm.$.setupState.actionDrafts
+    ).find(
+      action =>
+        Number(action.actorCharacterId) === 101010 &&
+        Number(action.skillId) === 10101012
+    );
+    const simulationBeforeCharged =
+      wrapper.vm.$.setupState.simulationResult?.value ??
+      wrapper.vm.$.setupState.simulationResult;
+    const effectiveSourceBeforeCharged =
+      simulationBeforeCharged.effectiveActionTimeline.scenario.actions.find(
+        action => action.id === sourceBeforeCharged.id
+      );
+    expect(
+      msToFrame(effectiveSourceBeforeCharged.durationMs),
+      JSON.stringify(
+        simulationBeforeCharged.verifiedActionVariantRuntime.selectionByActionId.get(
+          sourceBeforeCharged.id
+        )
+      )
+    ).toBe(120);
+    const chargedEntry = getSkillActionCatalog(
+      workbenchSeed.gameData.skills.filter(
+        skill => Number(skill.characterId) === 101010
+      ),
+      1
+    ).find(entry => entry.kind === 'charged-attack');
+    const jadeActionLane = wrapper
+      .findAll(
+        '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"]'
+      )
+      .find(lane => lane.text().includes('涂山小玉'));
+    expect(chargedEntry).toBeTruthy();
+    expect(jadeActionLane).toBeTruthy();
+    wrapper
+      .findComponent(TimelineGridPreview)
+      .vm.$emit('insert-timeline-entry', {
+        entry: { ...chargedEntry, type: 'skill' },
+        laneId: jadeActionLane.attributes('data-lane-id'),
+        startMs: sourceBeforeCharged.startMs + frameToMs(120),
+      });
+    await settleWorkbenchAsyncPanels();
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    const sourceAction = savedDraft.actionDrafts.find(
+      action =>
+        Number(action.actorCharacterId) === 101010 &&
+        Number(action.skillId) === 10101012
+    );
+    const chargedAction = savedDraft.actionDrafts.find(
+      action =>
+        Number(action.actorCharacterId) === 101010 &&
+        Number(action.actionVariantIndex) === 2
+    );
+    expect(sourceAction).toBeTruthy();
+    expect(chargedAction).toBeTruthy();
+    expect(
+      msToFrame(chargedAction.startMs - sourceAction.startMs)
+    ).toBe(120);
+
+    const setupState = wrapper.vm.$.setupState;
+    const readSetupValue = value => value?.value ?? value;
+    const simulation = readSetupValue(setupState.simulationResult);
+    const effectiveById = new Map(
+      simulation.effectiveActionTimeline.scenario.actions.map(action => [
+        action.id,
+        action,
+      ])
+    );
+    const chargedSelection =
+      simulation.verifiedActionVariantRuntime.selectionByActionId.get(
+        chargedAction.id
+      );
+    expect(chargedSelection).toMatchObject({
+      semanticName: '特殊重击',
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 0,
+      contextualInputScheduling: {
+        resolutionKind: 'edge-intent-contextual-transition',
+        inputOffsetFrame: 119,
+        executionStartOffsetFrame: 119,
+        predecessorEffectiveEndOffsetFrame: 119,
+        inputWindow: {
+          startFrame: 86,
+          endFrame: 120,
+          interval: '[start,end)',
+        },
+      },
+    });
+    expect(msToFrame(effectiveById.get(sourceAction.id).durationMs)).toBe(119);
+    expect(
+      msToFrame(
+        effectiveById.get(chargedAction.id).startMs - sourceAction.startMs
+      )
+    ).toBe(119);
+    expect(
+      simulation.actionRuleDiagnostics.diagnostics.filter(
+        diagnostic =>
+          diagnostic.code === 'action-lane-overlap' &&
+          diagnostic.actionIds?.includes(chargedAction.id)
+      )
+    ).toEqual([]);
+
+    const operationMarker = wrapper.get(
+      `[data-testid="workbench-timeline-operation-marker"][data-action-id="${chargedAction.id}"]`
+    );
+    expect(
+      msToFrame(Number(operationMarker.attributes('data-start-ms')))
+    ).toBe(msToFrame(sourceAction.startMs) + 119);
+    expect(
+      msToFrame(Number(operationMarker.attributes('data-execution-start-ms')))
+    ).toBe(msToFrame(sourceAction.startMs) + 119);
+
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    await settleWorkbenchAsyncPanels();
+    expect(
+      wrapper.find(
+        `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
+      ).exists()
+    ).toBe(false);
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    await settleWorkbenchAsyncPanels();
+    expect(
+      wrapper
+        .get(
+          `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
+        )
+        .text()
+    ).toContain('特殊重击');
+  }, 30000);
 
   it('rebuilds a stale normal-chain drag preview after assisted placement crosses the Jade burst frame', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);

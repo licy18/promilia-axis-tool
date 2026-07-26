@@ -152,7 +152,14 @@ function createActionMarker({
     mode === 'hold' && finiteNumber(inputTrigger?.holdTriggerTimeMs) > 0
       ? finiteNumber(inputTrigger.holdTriggerTimeMs)
       : null;
-  const startMs = clamp(finiteNumber(action.startMs), 0, durationMs);
+  const contextualInputScheduling = action.contextualInputScheduling ?? null;
+  const startMs = clamp(
+    finiteNumber(
+      contextualInputScheduling?.inputTimeMs ?? action.startMs
+    ),
+    0,
+    durationMs
+  );
   const endMs =
     holdDurationMs == null
       ? null
@@ -179,6 +186,12 @@ function createActionMarker({
       ? `${action.name} + ${jointAttackPair.kiboAction.name}`
       : String(action.name ?? action.actionKind ?? binding.command),
     actionKind: action.actionKind ?? action.type,
+    executionStartMs: finiteNumber(
+      contextualInputScheduling?.executionStartMs ?? action.startMs
+    ),
+    predecessorEffectiveEndMs:
+      contextualInputScheduling?.predecessorEffectiveEndMs ?? null,
+    contextualInputScheduling,
     attackSequenceIndex: positiveIntegerOrNull(action.attackSequenceIndex),
     sourceKind: binding.sourceKind,
     sourceIdentity: binding.sourceIdentity,

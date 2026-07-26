@@ -8,6 +8,7 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_TUNING_MARK_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedTuningMarkGeneration';
@@ -81,6 +82,15 @@ export function createVerifiedTuningMarkGeneration({
       resolution.effects ?? []
     )) {
       if (effect.classification !== 'applied') continue;
+      if (
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          effect.trigger?.startFrame,
+          resolution.controlBinding?.frameRate ?? FRAME_RATE
+        )
+      ) {
+        continue;
+      }
       const timeMs = resolveEffectTimeMs(action, effect, resolution);
       if (timeMs == null) continue;
       if (effect.tuningMark?.applied) {
@@ -109,6 +119,15 @@ export function createVerifiedTuningMarkGeneration({
         resolution.controlBinding?.frameRate,
         FRAME_RATE
       );
+      if (
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          hit.trigger?.startFrame,
+          frameRate
+        )
+      ) {
+        continue;
+      }
       enqueue({
         kind: 'hit',
         timeMs: roundValue(
@@ -994,6 +1013,11 @@ function resolveEffectTimeMs(action, effect, resolution) {
   const startFrame = Number(effect.trigger?.startFrame);
   const frameRate = Number(resolution.controlBinding?.frameRate ?? FRAME_RATE);
   if (!Number.isInteger(startFrame) || !(frameRate > 0)) return null;
+  if (
+    !isActionFrameWithinContextualOccupancy(action, startFrame, frameRate)
+  ) {
+    return null;
+  }
   return roundValue(Number(action.startMs) + (startFrame * 1000) / frameRate);
 }
 

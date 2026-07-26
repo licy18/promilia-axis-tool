@@ -5,6 +5,7 @@ import actionTimingCoverage from '../../../reports/verified-combat-action-timing
 import effectCoverage from '../../../reports/verified-combat-effect-coverage.json';
 import xiaoyuActionOccupancyAudit from '../../../reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json';
 import xiaoyuHiddenInputAudit from '../../../reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json';
+import contextualInputSchedulingAudit from '../../../reports/m9-r3-r2-r3-contextual-input-scheduling-audit.json';
 import variantResourceCoverage from '../../../reports/verified-action-variant-resource-coverage.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import spUnitContract from '../../data/generated/verified-sp-unit-contract.json';
@@ -722,6 +723,114 @@ describe('verified combat mechanics package', () => {
         semanticName: '连续重击',
       },
     ]);
+    expect(
+      mechanicsPackage.actionVariantGraph.contextEdges.map(edge => ({
+        source: `${edge.sourceControlSkillId}/sub${edge.sourceSubSkillIndex}`,
+        window: [
+          edge.inputWindow.startFrame,
+          edge.inputWindow.endFrame,
+        ],
+        semantics: edge.inputScheduling.inputSemantics,
+        genericEnd:
+          edge.inputScheduling.edgeIntent.predecessorGenericEndFrame,
+        canonicalInput:
+          edge.inputScheduling.edgeIntent.canonicalInputFrame,
+        executionStart:
+          edge.inputScheduling.edgeIntent.canonicalExecutionStartFrame,
+        predecessorEnd:
+          edge.inputScheduling.edgeIntent.canonicalPredecessorEndFrame,
+      }))
+    ).toEqual([
+      {
+        source: '10101005/sub0',
+        window: [37, 102],
+        semantics: 'immediate-interrupt',
+        genericEnd: 80,
+        canonicalInput: 80,
+        executionStart: 80,
+        predecessorEnd: 80,
+      },
+      {
+        source: '10101005/sub1',
+        window: [0, 20],
+        semantics: 'immediate-interrupt',
+        genericEnd: 72,
+        canonicalInput: null,
+        executionStart: null,
+        predecessorEnd: null,
+      },
+      {
+        source: '10101005/sub1',
+        window: [40, 72],
+        semantics: 'immediate-interrupt',
+        genericEnd: 72,
+        canonicalInput: 71,
+        executionStart: 71,
+        predecessorEnd: 71,
+      },
+      {
+        source: '10101012/sub0',
+        window: [86, 120],
+        semantics: 'immediate-interrupt',
+        genericEnd: 120,
+        canonicalInput: 119,
+        executionStart: 119,
+        predecessorEnd: 119,
+      },
+      {
+        source: '10101013/sub0',
+        window: [295, 329],
+        semantics: 'immediate-interrupt',
+        genericEnd: 329,
+        canonicalInput: 328,
+        executionStart: 328,
+        predecessorEnd: 328,
+      },
+      {
+        source: '10101025/sub0',
+        window: [60, 96],
+        semantics: 'immediate-interrupt',
+        genericEnd: 60,
+        canonicalInput: 60,
+        executionStart: 60,
+        predecessorEnd: 60,
+      },
+      {
+        source: '10101010/sub0',
+        window: [75, 100],
+        semantics: 'immediate-interrupt',
+        genericEnd: 75,
+        canonicalInput: 75,
+        executionStart: 75,
+        predecessorEnd: 75,
+      },
+    ]);
+    expect(contextualInputSchedulingAudit).toMatchObject({
+      kind: 'verified-contextual-input-scheduling-audit',
+      frameRate: 60,
+      policy: {
+        sourceWindowInterval: '[start,end)',
+      },
+      summary: {
+        publicTimingSourceCount: 1154,
+        verifiedWindowCount: 1342,
+        resolvedInputSemanticsCount: 1305,
+        unresolvedInputSemanticsCount: 37,
+        xiaoyuPublicExecutionFormCount: 21,
+        xiaoyuWindowAuditRowCount: 86,
+        xiaoyuAppliedContextEdgeCount: 7,
+      },
+      xiaoyu: {
+        publicExecutionFormCount: 21,
+        rowCount: 86,
+        expectedRowCount: 86,
+      },
+    });
+    expect(
+      contextualInputSchedulingAudit.xiaoyu.rows.filter(
+        row => row.contextEdgeIdentity != null
+      )
+    ).toHaveLength(7);
     expect(
       mechanicsPackage.actionVariantGraph.hiddenInputDerivationCatalog
     ).toMatchObject({

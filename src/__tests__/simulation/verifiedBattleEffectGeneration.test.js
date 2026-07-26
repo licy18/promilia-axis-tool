@@ -13,6 +13,7 @@ import {
   createWorkbenchProject,
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
+import { frameToMs } from '../../domain/timebase';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
@@ -183,6 +184,55 @@ describe('verified Battle effect generation', () => {
     expect(generation.effectCommands).toEqual([]);
     expect(generation.directSpEvents).toEqual([]);
     expect(generation.actionResolutionById.size).toBe(0);
+  });
+
+  it('drops applied and unresolved effect rows at an immediate interrupt boundary', () => {
+    const action = {
+      id: 'contextually-interrupted-effect-source',
+      type: 'skill',
+      startMs: 0,
+      durationMs: frameToMs(120),
+      contextualEffectiveEndMs: frameToMs(119),
+    };
+    const generation = createVerifiedBattleEffectGeneration({
+      scenario: {
+        actions: [action],
+        combatScenario: {},
+      },
+      actionResolutionById: new Map([
+        [
+          action.id,
+          {
+            ready: true,
+            controlBinding: { frameRate: 60 },
+            semanticEffects: [
+              {
+                effectIdentity: 'effect-before-interrupt',
+                role: 'gameplay-effect',
+                classification: 'unresolved',
+                trigger: { startFrame: 118 },
+              },
+              {
+                effectIdentity: 'effect-at-interrupt',
+                role: 'gameplay-effect',
+                classification: 'unresolved',
+                trigger: { startFrame: 119 },
+              },
+              {
+                effectIdentity: 'effect-after-interrupt',
+                role: 'gameplay-effect',
+                classification: 'unresolved',
+                trigger: { startFrame: 120 },
+              },
+            ],
+          },
+        ],
+      ]),
+    });
+
+    expect(
+      generation.unresolved.map(effect => effect.effectIdentity)
+    ).toEqual(['effect-before-interrupt']);
   });
 });
 

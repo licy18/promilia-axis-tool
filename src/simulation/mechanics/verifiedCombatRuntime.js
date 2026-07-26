@@ -22,6 +22,7 @@ import {
   qToNumber,
   tuningMarkBaseRaw,
 } from './verifiedCombatFormulaRuntime';
+import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_COMBAT_MECHANICS_PROFILE_ID =
   'azpr-three-value-verified-tc-20260718';
@@ -115,6 +116,15 @@ export function createVerifiedCombatRuntime({
         resolution.controlBinding.frameRate,
         FRAME_RATE
       );
+      if (
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          hit.trigger.startFrame,
+          frameRate
+        )
+      ) {
+        continue;
+      }
       descriptors.push({
         kind: 'hit',
         timeMs:

@@ -851,10 +851,14 @@ describe('verified action variant and special resource runtime', () => {
     { relativeFrame: 20, expectedControlSkillId: 10101010 },
     { relativeFrame: 40, expectedControlSkillId: 10101042 },
     { relativeFrame: 71, expectedControlSkillId: 10101042 },
-    { relativeFrame: 72, expectedControlSkillId: 10101010 },
+    {
+      relativeFrame: 72,
+      expectedControlSkillId: 10101042,
+      expectedInputFrame: 71,
+    },
   ])(
-    'treats the burst A3 EventBridge windows as half-open at frame $relativeFrame',
-    ({ relativeFrame, expectedControlSkillId }) => {
+    'keeps burst A3 windows half-open and resolves edge intent at frame $relativeFrame',
+    ({ relativeFrame, expectedControlSkillId, expectedInputFrame = null }) => {
       const burstA3 = createActorAction({
         id: `jade-burst-a3-boundary-${relativeFrame}`,
         characterId: JADE_ID,
@@ -895,6 +899,17 @@ describe('verified action variant and special resource runtime', () => {
               semanticName: '强化重击',
             }
       );
+      if (expectedInputFrame != null) {
+        expect(
+          runtime.selectionByActionId.get(charged.id)
+            ?.contextualInputScheduling
+        ).toMatchObject({
+          resolutionKind: 'edge-intent-contextual-transition',
+          inputOffsetFrame: expectedInputFrame,
+          executionStartFrame: expectedInputFrame,
+          predecessorEffectiveEndFrame: expectedInputFrame,
+        });
+      }
     }
   );
 
@@ -907,7 +922,7 @@ describe('verified action variant and special resource runtime', () => {
         [85, false],
         [86, true],
         [119, true],
-        [120, false],
+        [120, true, 119],
       ],
       expectedInsideSubSkillIndex: 0,
       expectedInsideSemanticName: '特殊重击',
@@ -920,7 +935,7 @@ describe('verified action variant and special resource runtime', () => {
         [294, false],
         [295, true],
         [328, true],
-        [329, false],
+        [329, true, 328],
       ],
       expectedInsideSubSkillIndex: 1,
       expectedInsideSemanticName: '强化特殊重击',
@@ -951,7 +966,11 @@ describe('verified action variant and special resource runtime', () => {
       entersBurstBeforeWindow = false,
     }) => {
       for (const burstActive of [false, true]) {
-        for (const [relativeFrame, inside] of boundaries) {
+        for (const [
+          relativeFrame,
+          inside,
+          expectedInputFrame = null,
+        ] of boundaries) {
           const source = createActorAction({
             id: `jade-${label}-source-${burstActive}-${relativeFrame}`,
             characterId: JADE_ID,
@@ -998,6 +1017,17 @@ describe('verified action variant and special resource runtime', () => {
                       : '普通重击',
                 }
           );
+          if (expectedInputFrame != null) {
+            expect(
+              selection.contextualInputScheduling,
+              `${label} ${relativeFrame}F edge intent`
+            ).toMatchObject({
+              resolutionKind: 'edge-intent-contextual-transition',
+              inputOffsetFrame: expectedInputFrame,
+              executionStartFrame: expectedInputFrame,
+              predecessorEffectiveEndFrame: expectedInputFrame,
+            });
+          }
         }
       }
     }
@@ -1544,6 +1574,105 @@ describe('verified action variant and special resource runtime', () => {
       after: 1,
     });
     expect(consumeEvents[0].timeMs).toBeCloseTo(frameTime(90), 5);
+  });
+
+  it('executes an edge-to-edge star-skill derivation on one contextual timeline', () => {
+    const teamSlots = [
+      { slotId: 'team-slot-1', position: 0, characterId: JADE_ID },
+      { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
+    ];
+    const selection = {
+      ...DEFAULT_WORKBENCH_SELECTION,
+      characterId: JADE_ID,
+      secondaryCharacterId: 101007,
+    };
+    const actorConfigs = normalizeWorkbenchActorConfigs(
+      [],
+      selection,
+      teamSlots
+    );
+    const starSkill = createWorkbenchActionDraft({
+      id: 'compiled-jade-star-skill-edge',
+      type: 'skill',
+      actorCharacterId: JADE_ID,
+      skillId: 10101012,
+      actionVariantIndex: 0,
+      startMs: 0,
+      durationMs: frameTime(260),
+    });
+    const charged = createWorkbenchActionDraft({
+      id: 'compiled-jade-special-charged-edge',
+      type: 'skill',
+      actorCharacterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(120),
+      durationMs: frameTime(310),
+    });
+    const project = createWorkbenchProject(selection, {
+      durationMs: 8000,
+      teamSlots,
+      actorConfigs,
+      actions: [starSkill, charged],
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+    });
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+    const effectiveById = new Map(
+      result.effectiveActionTimeline.scenario.actions.map(action => [
+        action.id,
+        action,
+      ])
+    );
+    const runtimeSelection =
+      result.verifiedCombatRuntime.specialResourceRuntime.selectionByActionId.get(
+        charged.id
+      );
+
+    expect(runtimeSelection).toMatchObject({
+      contextActionId: starSkill.id,
+      executionControlSkillId: 10101042,
+      selectedSubSkillIndex: 0,
+      semanticName: '特殊重击',
+      contextualInputScheduling: {
+        resolutionKind: 'edge-intent-contextual-transition',
+        inputOffsetFrame: 119,
+        inputFrame: 119,
+        executionStartFrame: 119,
+        predecessorEffectiveEndFrame: 119,
+      },
+    });
+    expect(effectiveById.get(starSkill.id)).toMatchObject({ startMs: 0 });
+    expect(effectiveById.get(starSkill.id).durationMs).toBeCloseTo(
+      frameTime(119),
+      5
+    );
+    expect(
+      effectiveById.get(starSkill.id).contextualEffectiveEndMs
+    ).toBeCloseTo(frameTime(119), 5);
+    expect(effectiveById.get(charged.id)).toMatchObject({
+      requestedStartMs: frameTime(120),
+      name: '特殊重击',
+    });
+    expect(effectiveById.get(charged.id).startMs).toBeCloseTo(
+      frameTime(119),
+      5
+    );
+    expect(
+      result.actionRuleDiagnostics.diagnostics.filter(
+        diagnostic =>
+          diagnostic.code === ACTION_RULE_CODES.LANE_OVERLAP &&
+          diagnostic.actionIds?.includes(charged.id)
+      )
+    ).toEqual([]);
+    expect(
+      result.verifiedCombatRuntime.damageEvents.filter(
+        event => event.actionId === charged.id
+      ).length
+    ).toBeGreaterThan(0);
   });
 });
 

@@ -1,10 +1,45 @@
 import { describe, expect, it } from 'vitest';
+import { frameToMs } from '../../domain/timebase';
 import {
   layoutTimelineOperationMarkers,
   projectTimelineOperationInputs,
 } from '../../simulation/projection/projectTimelineOperationInputs';
 
 describe('projectTimelineOperationInputs', () => {
+  it('projects a contextual input marker independently from action execution', () => {
+    const projection = projectTimelineOperationInputs({
+      actions: [
+        {
+          id: 'buffered-derived-action',
+          type: 'skill',
+          actionKind: 'charged-attack',
+          name: '特殊重击',
+          actorId: 'actor-jade',
+          startMs: frameToMs(120),
+          contextualInputScheduling: {
+            inputTimeMs: frameToMs(86),
+            executionStartMs: frameToMs(120),
+            predecessorEffectiveEndMs: frameToMs(120),
+            applied: true,
+          },
+        },
+      ],
+      actors: [{ id: 'actor-jade', characterId: 101010 }],
+      durationMs: 10_000,
+      resolveActionMapping: () => ({
+        actionKind: 'charged-attack',
+        inputTrigger: { mode: 'press' },
+      }),
+    });
+
+    expect(projection.markers[0]).toMatchObject({
+      actionId: 'buffered-derived-action',
+      startMs: frameToMs(86),
+      executionStartMs: frameToMs(120),
+      predecessorEffectiveEndMs: frameToMs(120),
+    });
+  });
+
   it('projects one press for every independent normal attack input segment', () => {
     const actions = Array.from({ length: 5 }, (_, index) =>
       createAction({

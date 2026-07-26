@@ -92,6 +92,16 @@ const XIAOYU_HIDDEN_INPUT_MARKDOWN_OUTPUT = path.join(
   'reports',
   'm9-r3-r2-r2-xiaoyu-hidden-input-audit.md'
 );
+const CONTEXTUAL_INPUT_SCHEDULING_JSON_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'm9-r3-r2-r3-contextual-input-scheduling-audit.json'
+);
+const CONTEXTUAL_INPUT_SCHEDULING_MARKDOWN_OUTPUT = path.join(
+  REPO_ROOT,
+  'reports',
+  'm9-r3-r2-r3-contextual-input-scheduling-audit.md'
+);
 const ACTION_VARIANT_RESOURCE_JSON_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -519,6 +529,11 @@ async function main() {
     packageValue,
     audit: xiaoyuMechanicsContracts.hiddenInputDerivationAudit,
   });
+  const contextualInputSchedulingAudit =
+    createContextualInputSchedulingAuditReport({
+      packageValue,
+      xiaoyuHiddenInputAudit,
+    });
   const effectCoverage = createEffectCoverageReport(
     packageValue,
     semanticEffectCatalog
@@ -567,6 +582,16 @@ async function main() {
     [
       XIAOYU_HIDDEN_INPUT_MARKDOWN_OUTPUT,
       createXiaoyuHiddenInputMarkdown(xiaoyuHiddenInputAudit),
+    ],
+    [
+      CONTEXTUAL_INPUT_SCHEDULING_JSON_OUTPUT,
+      `${JSON.stringify(contextualInputSchedulingAudit, null, 2)}\n`,
+    ],
+    [
+      CONTEXTUAL_INPUT_SCHEDULING_MARKDOWN_OUTPUT,
+      createContextualInputSchedulingMarkdown(
+        contextualInputSchedulingAudit
+      ),
     ],
     [
       EFFECT_COVERAGE_JSON_OUTPUT,
@@ -1720,6 +1745,7 @@ function createXiaoyuChargedContextEdges({
     }
     return windows.map(window =>
       createXiaoyuChargedContextEdge({
+        sourceControl: definition.sourceControl,
         sourceControlSkillId: definition.sourceControl.controlSkillId,
         sourceSubSkillIndex: definition.sourceSubSkillIndex,
         sourcePublicActionKind: definition.sourcePublicActionKind,
@@ -1751,6 +1777,7 @@ function createXiaoyuChargedContextEdges({
   const edges = [
     ...contextEdges,
     createXiaoyuChargedContextEdge({
+      sourceControl: chargedControl,
       sourceControlSkillId: XIAOYU_MECHANICS.chargedControlSkillId,
       sourceSubSkillIndex: 0,
       sourcePublicActionKind: 'charged-attack',
@@ -1782,6 +1809,7 @@ function createXiaoyuChargedContextEdges({
 }
 
 function createXiaoyuChargedContextEdge({
+  sourceControl,
   sourceControlSkillId,
   sourceSubSkillIndex,
   sourcePublicActionKind,
@@ -1808,11 +1836,21 @@ function createXiaoyuChargedContextEdge({
     subSkillIndex: targetSubSkillIndex,
     actionKind: 'charged-attack',
   });
+  const sourceExecutionTiming = createXiaoyuControlVariantTiming({
+    control: sourceControl,
+    subSkillIndex: sourceSubSkillIndex,
+    actionKind: sourcePublicActionKind,
+  });
+  const inputScheduling = createVerifiedContextInputSchedulingContract({
+    window,
+    sourceExecutionTiming,
+  });
   const applied =
     Number.isInteger(targetSubSkillIndex) &&
     window != null &&
     windowTargetMatches &&
     switchTargetMatches &&
+    inputScheduling.status === 'applied' &&
     resolvedExecutionTiming?.occupancy?.status === 'applied';
   const executionTiming = createRuntimeExecutionTiming(resolvedExecutionTiming);
   return {
@@ -1846,20 +1884,30 @@ function createXiaoyuChargedContextEdge({
     publicActionKind: 'charged-attack',
     publicActionIdentity: `actor:${XIAOYU_MECHANICS.ownerId}:charged-attack`,
     executionTiming,
+    sourceExecutionTiming: createRuntimeExecutionTiming(sourceExecutionTiming),
     decisionFrame: 0,
     inputWindow: window
       ? {
           startFrame: window.startFrame,
           endFrame: window.endFrame,
           frameRate: 60,
+          bridgeType: window.bridgeType,
+          continuousAttackType: window.continuousAttackType,
+          interruptBehavior: window.interruptBehavior,
+          frameIndex: window.frameIndex,
+          baseOnInput: window.baseOnInput,
+          inputToIndex: window.inputToIndex,
+          allowedInputCommands: window.allowedInputCommands ?? [],
           sourceIdentity: window.sourceIdentity,
         }
       : null,
+    inputScheduling,
     condition,
     sourceIdentity: [
       window?.sourceIdentity,
       requiredSwitchAsset?.sourceIdentity,
       condition?.sourceIdentity,
+      inputScheduling.sourceIdentity,
       executionTiming?.sourceIdentity,
     ]
       .filter(Boolean)
@@ -1874,12 +1922,155 @@ function createXiaoyuChargedContextEdge({
         : ['charged-switch-element-missing']),
       ...(windowTargetMatches ? [] : ['charged-window-target-mismatch']),
       ...(switchTargetMatches ? [] : ['charged-switch-target-mismatch']),
+      ...(inputScheduling.status === 'applied'
+        ? []
+        : inputScheduling.reasons),
       ...(executionTiming?.occupancy?.status === 'applied'
         ? []
         : ['charged-execution-occupancy-unresolved']),
     ],
     applied,
   };
+}
+
+function createVerifiedContextInputSchedulingContract({
+  window,
+  sourceExecutionTiming,
+}) {
+  const inputSemantics = classifyVerifiedEventBridgeInputSemantics(window);
+  const predecessorGenericEndFrame = nonNegativeIntegerOrNull(
+    sourceExecutionTiming?.occupancy?.durationFrames
+  );
+  const windowClassification = classifyInputWindowAgainstOccupancy({
+    window,
+    occupancyEndFrame: predecessorGenericEndFrame,
+  });
+  let canonicalInputFrame = null;
+  if (
+    predecessorGenericEndFrame != null &&
+    window &&
+    predecessorGenericEndFrame >= Number(window.startFrame) &&
+    predecessorGenericEndFrame < Number(window.endFrame)
+  ) {
+    canonicalInputFrame = predecessorGenericEndFrame;
+  } else if (
+    predecessorGenericEndFrame != null &&
+    window &&
+    predecessorGenericEndFrame === Number(window.endFrame)
+  ) {
+    canonicalInputFrame = Number(window.endFrame) - 1;
+  }
+  const semanticsApplied = inputSemantics !== 'unresolved';
+  const edgeIntentApplied =
+    semanticsApplied &&
+    canonicalInputFrame != null &&
+    canonicalInputFrame >= Number(window?.startFrame) &&
+    canonicalInputFrame < Number(window?.endFrame);
+  const immediate = [
+    'immediate-interrupt',
+    'immediate-continuous',
+  ].includes(inputSemantics);
+  const canonicalExecutionStartFrame = edgeIntentApplied
+    ? immediate
+      ? canonicalInputFrame
+      : predecessorGenericEndFrame
+    : null;
+  const canonicalPredecessorEndFrame = canonicalExecutionStartFrame;
+  const sourceIdentity = [
+    window?.sourceIdentity,
+    sourceExecutionTiming?.occupancy?.sourceIdentity,
+    'client-runtime:EventBridgeBehavior.Start/OnEvent/Update',
+  ]
+    .filter(Boolean)
+    .join('|');
+  return {
+    schemaVersion: 1,
+    kind: 'verified-context-input-scheduling',
+    status:
+      window && sourceExecutionTiming?.occupancy?.status === 'applied'
+        ? semanticsApplied
+          ? 'applied'
+          : 'unresolved'
+        : 'unresolved',
+    inputSemantics,
+    interval: '[start,end)',
+    predecessorGenericEndFrame,
+    predecessorAnimationDurationFrames:
+      sourceExecutionTiming?.animation?.durationFrames ?? null,
+    predecessorHitEnvelope: sourceExecutionTiming?.hitEnvelope ?? null,
+    windowClassification,
+    bufferUntilFrame:
+      inputSemantics === 'buffered-until-frame'
+        ? nonNegativeIntegerOrNull(window?.frameIndex) ??
+          predecessorGenericEndFrame
+        : null,
+    edgeIntent: {
+      status: edgeIntentApplied ? 'applied' : 'not-applicable',
+      predecessorGenericEndFrame,
+      canonicalInputFrame,
+      canonicalExecutionStartFrame,
+      canonicalPredecessorEndFrame,
+      policy: edgeIntentApplied
+        ? immediate
+          ? 'latest-verified-immediate-input-at-or-before-generic-edge'
+          : 'verified-buffered-input-with-generic-edge-execution'
+        : 'no-verified-edge-intent-mapping',
+    },
+    sourceIdentity,
+    reasons: [
+      ...(window ? [] : ['context-input-window-missing']),
+      ...(sourceExecutionTiming?.occupancy?.status === 'applied'
+        ? []
+        : ['predecessor-effective-occupancy-unresolved']),
+      ...(semanticsApplied
+        ? []
+        : ['event-bridge-input-execution-semantics-unresolved']),
+    ],
+  };
+}
+
+function classifyVerifiedEventBridgeInputSemantics(window) {
+  if (Number(window?.bridgeType) === 3) {
+    return 'immediate-interrupt';
+  }
+  if (
+    Number(window?.bridgeType) === 0 &&
+    Number(window?.continuousAttackType) === 0
+  ) {
+    return 'buffered-until-frame';
+  }
+  if (
+    Number(window?.bridgeType) === 0 &&
+    Number(window?.continuousAttackType) === 1
+  ) {
+    return 'immediate-continuous';
+  }
+  return 'unresolved';
+}
+
+function classifyInputWindowAgainstOccupancy({
+  window,
+  occupancyEndFrame,
+}) {
+  if (!window || occupancyEndFrame == null) return 'unresolved';
+  const startFrame = Number(window.startFrame);
+  const endFrame = Number(window.endFrame);
+  if (startFrame === occupancyEndFrame) {
+    return 'window-start-equals-generic-occupancy';
+  }
+  if (startFrame < occupancyEndFrame && occupancyEndFrame < endFrame) {
+    return 'generic-occupancy-inside-window';
+  }
+  if (endFrame === occupancyEndFrame) {
+    return 'window-end-equals-generic-occupancy';
+  }
+  if (endFrame < occupancyEndFrame) {
+    return 'window-before-generic-occupancy';
+  }
+  if (startFrame > occupancyEndFrame) {
+    return 'window-after-generic-occupancy';
+  }
+  return 'unresolved';
 }
 
 function createXiaoyuChargedPublicActionForms({
@@ -2505,6 +2696,8 @@ function createXiaoyuAuditRow({
     evidence: {
       bridgeType: window?.bridgeType ?? null,
       continuousAttackType: window?.continuousAttackType ?? null,
+      interruptBehavior: window?.interruptBehavior ?? null,
+      frameIndex: window?.frameIndex ?? null,
       allowAttack: window?.allowAttack ?? false,
       baseOnInput: window?.baseOnInput ?? false,
       inputToIndex: window?.inputToIndex ?? false,
@@ -4493,6 +4686,9 @@ function collectSkillPlayerEventBridges(directory, skillControl) {
                   ),
                   bridgeType: integerOrNull(behavior.value.bridge),
                   continuousAttackType: integerOrNull(behavior.value.type),
+                  interruptBehavior: integerOrNull(
+                    behavior.value.interruptBehavior
+                  ),
                   targetSkillId: integerOrNull(behavior.value.skillId),
                   skillIndex: integerOrNull(behavior.value.skillIndex),
                   frameIndex: integerOrNull(behavior.value.frameIndex),
@@ -8850,6 +9046,14 @@ function normalizeActionTimingWindows(bridges = []) {
           continuousAttackType: nonNegativeIntegerOrNull(
             bridge.continuousAttackType
           ),
+          interruptBehavior: nonNegativeIntegerOrNull(
+            bridge.interruptBehavior
+          ),
+          frameIndex: nonNegativeIntegerOrNull(bridge.frameIndex),
+          allowedInputCommands: dedupeBy(
+            bridge.allowedInputCommands ?? [],
+            value => value
+          ),
           sourceIdentity: bridge.sourceIdentity,
         };
       })
@@ -8863,6 +9067,8 @@ function normalizeActionTimingWindows(bridges = []) {
         window.targetSubSkillIndex,
         window.bridgeType,
         window.continuousAttackType,
+        window.interruptBehavior,
+        window.frameIndex,
       ].join('|')
   ).sort(
     (left, right) =>
@@ -10511,6 +10717,418 @@ function createXiaoyuHiddenInputMarkdown(report) {
     '',
   ];
   return lines.join('\n');
+}
+
+function createContextualInputSchedulingAuditReport({
+  packageValue,
+  xiaoyuHiddenInputAudit,
+}) {
+  const timingSources = collectPublicActionTimingSources(packageValue);
+  const globalRows = dedupeBy(
+    timingSources.flatMap(source =>
+      (source.timing?.windows ?? []).map((window, windowIndex) =>
+        createContextualInputSchedulingAuditRow({
+          ...source,
+          window,
+          windowIndex,
+        })
+      )
+    ),
+    row => row.rowIdentity
+  );
+  const successorWindowCounts = countValues(
+    globalRows.map(row =>
+      [
+        row.sourceControlSkillId,
+        row.sourceSubSkillIndex,
+        row.targetControlSkillId ?? 0,
+        row.targetSubSkillIndex ?? 0,
+        row.inputCommand ?? 'none',
+      ].join('|')
+    )
+  );
+  const rows = globalRows.map(row => {
+    const successorKey = [
+      row.sourceControlSkillId,
+      row.sourceSubSkillIndex,
+      row.targetControlSkillId ?? 0,
+      row.targetSubSkillIndex ?? 0,
+      row.inputCommand ?? 'none',
+    ].join('|');
+    return {
+      ...row,
+      hasMultipleWindowsForSuccessor:
+        Number(successorWindowCounts[successorKey] ?? 0) > 1,
+    };
+  });
+  const timingByControlAndSub = new Map(
+    timingSources.map(source => [
+      `${source.sourceControlSkillId}|${source.sourceSubSkillIndex}`,
+      source,
+    ])
+  );
+  const contextEdgeByWindow = new Map(
+    (packageValue.actionVariantGraph?.contextEdges ?? []).map(edge => [
+      [
+        edge.sourceControlSkillId,
+        edge.sourceSubSkillIndex,
+        edge.inputWindow?.startFrame,
+        edge.inputWindow?.endFrame,
+        edge.executionControlSkillId,
+        edge.targetSubSkillIndex,
+      ].join('|'),
+      edge,
+    ])
+  );
+  const xiaoyuRows = (xiaoyuHiddenInputAudit.rows ?? []).map(row => {
+    const timingSource = timingByControlAndSub.get(
+      `${row.sourceControlSkillId}|${row.sourceSubSkillIndex}`
+    );
+    const edge = contextEdgeByWindow.get(
+      [
+        row.sourceControlSkillId,
+        row.sourceSubSkillIndex,
+        row.inputWindow?.startFrame,
+        row.inputWindow?.endFrame,
+        row.targetControlSkillId,
+        row.targetSubSkillIndex,
+      ].join('|')
+    );
+    const timing = timingSource?.timing ?? null;
+    const window = row.inputWindow
+      ? {
+          ...row.inputWindow,
+          ...(row.evidence ?? {}),
+          allowedInputCommands: row.allowedInputCommands ?? [],
+          sourceIdentity: row.evidence?.sourceIdentity ?? row.sourceIdentity,
+        }
+      : null;
+    const scheduling = window
+      ? createContextualInputSchedulingAuditRow({
+          publicActionIdentity: row.publicActionIdentity,
+          actionKind: row.actionKind,
+          semanticName: row.sourceSemanticName,
+          sourceControlSkillId: row.sourceControlSkillId,
+          sourceSubSkillIndex: row.sourceSubSkillIndex,
+          timing,
+          sourceIdentity: row.sourceIdentity,
+          window,
+          windowIndex: 0,
+          contextEdge: edge,
+          inputCommand: row.inputCommand,
+          condition: row.condition,
+        })
+      : null;
+    return {
+      ...row,
+      animationDurationFrames:
+        scheduling?.animationDurationFrames ??
+        timing?.animation?.durationFrames ??
+        null,
+      firstHitFrame:
+        scheduling?.firstHitFrame ?? timing?.hitEnvelope?.firstFrame ?? null,
+      lastHitFrame:
+        scheduling?.lastHitFrame ?? timing?.hitEnvelope?.lastFrame ?? null,
+      genericOccupancyFrames:
+        scheduling?.genericOccupancyFrames ??
+        timing?.occupancy?.durationFrames ??
+        null,
+      inputSemantics:
+        scheduling?.inputSemantics ??
+        classifyVerifiedEventBridgeInputSemantics(window),
+      windowClassification: scheduling?.windowClassification ?? 'unresolved',
+      canonicalInputFrame: scheduling?.canonicalInputFrame ?? null,
+      executionStartFrame: scheduling?.executionStartFrame ?? null,
+      contextualPredecessorEndFrame:
+        scheduling?.contextualPredecessorEndFrame ?? null,
+      edgeToEdgeBefore:
+        scheduling?.edgeToEdgeBefore ?? 'not-applicable',
+      edgeToEdgeAfter: scheduling?.edgeToEdgeAfter ?? 'not-applicable',
+      contextEdgeIdentity: scheduling?.contextEdgeIdentity ?? null,
+      schedulingStatus:
+        scheduling?.status ??
+        (window ? 'unresolved-window-scheduling' : 'no-control-window'),
+      unresolvedReason:
+        scheduling?.unresolvedReason ??
+        row.exclusionReason ??
+        (window ? null : 'no-control-window'),
+      inputSchedulingSourceIdentity:
+        scheduling?.inputSchedulingSourceIdentity ?? row.sourceIdentity,
+    };
+  });
+  const categoryCounts = countValues(
+    rows.map(row => row.windowClassification)
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'verified-contextual-input-scheduling-audit',
+    status: 'verified-contextual-input-scheduling-audit-ready',
+    frameRate: 60,
+    packageId: packageValue.packageId,
+    packageHash: packageValue.packageHash,
+    policy: {
+      sourceWindowInterval: '[start,end)',
+      immediateInterrupt:
+        'inputFrame=executionStartFrame=contextualPredecessorEndFrame',
+      bufferedInput:
+        'inputFrame remains inside the source window; execution uses the verified buffer boundary',
+      edgeIntent:
+        'map only a generic edge with source evidence to a canonical valid input; never make endFrame inclusive',
+    },
+    rows,
+    xiaoyu: {
+      ownerId: XIAOYU_MECHANICS.ownerId,
+      publicExecutionFormCount:
+        xiaoyuHiddenInputAudit.publicExecutionFormCount,
+      rowCount: xiaoyuRows.length,
+      expectedRowCount: 86,
+      rows: xiaoyuRows,
+    },
+    summary: {
+      publicTimingSourceCount: timingSources.length,
+      verifiedWindowCount: rows.length,
+      resolvedInputSemanticsCount: rows.filter(
+        row => row.inputSemantics !== 'unresolved'
+      ).length,
+      unresolvedInputSemanticsCount: rows.filter(
+        row => row.inputSemantics === 'unresolved'
+      ).length,
+      edgeIntentResolvedCount: rows.filter(
+        row => row.edgeToEdgeAfter === 'resolved'
+      ).length,
+      multipleWindowSuccessorCount: rows.filter(
+        row => row.hasMultipleWindowsForSuccessor
+      ).length,
+      categoryCounts,
+      xiaoyuPublicExecutionFormCount:
+        xiaoyuHiddenInputAudit.publicExecutionFormCount,
+      xiaoyuWindowAuditRowCount: xiaoyuRows.length,
+      xiaoyuAppliedContextEdgeCount:
+        xiaoyuHiddenInputAudit.summary.appliedContextEdgeCount,
+    },
+    sourceIdentity: [
+      'Battle/SkillList/skill_control_*.asset#EventBridgeBehavior',
+      'client-runtime:EventBridgeBehavior.Start/OnEvent/Update',
+      ...dedupeBy(
+        rows.map(row => row.inputSchedulingSourceIdentity).filter(Boolean),
+        value => value
+      ),
+    ],
+  };
+}
+
+function collectPublicActionTimingSources(packageValue) {
+  return (packageValue.actionMappings ?? []).flatMap(mapping => {
+    const base = {
+      publicActionIdentity: mapping.identity,
+      actionKind: mapping.actionKind,
+      semanticName: mapping.name ?? mapping.actionName ?? mapping.actionKind,
+      sourceControlSkillId: mapping.controlSkillId,
+      sourceSubSkillIndex: mapping.selectedSubSkillIndex ?? 0,
+      sourceIdentity: mapping.bindingSourceIdentity ?? mapping.sourceIdentity,
+    };
+    const sources = [];
+    for (const timing of mapping.actionTiming?.variantTimings ?? []) {
+      sources.push({
+        ...base,
+        sourceSubSkillIndex: timing.subSkillIndex,
+        timing,
+      });
+    }
+    if (
+      mapping.actionTiming &&
+      !(mapping.actionTiming.variantTimings?.length > 0)
+    ) {
+      sources.push({ ...base, timing: mapping.actionTiming });
+    }
+    for (const segment of mapping.attackInputSegments ?? []) {
+      if (!segment.actionTiming) continue;
+      sources.push({
+        publicActionIdentity: segment.identity,
+        actionKind: 'normal-attack',
+        semanticName: segment.label,
+        sourceControlSkillId: segment.controlSkillId,
+        sourceSubSkillIndex: segment.selectedSubSkillIndex ?? 0,
+        sourceIdentity:
+          segment.durationSourceIdentity ?? segment.sourceIdentity,
+        timing: segment.actionTiming,
+      });
+    }
+    return sources;
+  });
+}
+
+function createContextualInputSchedulingAuditRow({
+  publicActionIdentity,
+  actionKind,
+  semanticName,
+  sourceControlSkillId,
+  sourceSubSkillIndex,
+  timing,
+  sourceIdentity,
+  window,
+  windowIndex,
+  contextEdge = null,
+  inputCommand = null,
+  condition = null,
+}) {
+  const contextScheduling = contextEdge?.inputScheduling ?? null;
+  const genericOccupancyFrames =
+    nonNegativeIntegerOrNull(
+      contextScheduling?.predecessorGenericEndFrame
+    ) ?? nonNegativeIntegerOrNull(timing?.occupancy?.durationFrames);
+  const inputSemantics =
+    contextScheduling?.inputSemantics ??
+    classifyVerifiedEventBridgeInputSemantics(window);
+  const windowClassification =
+    contextScheduling?.windowClassification ??
+    classifyInputWindowAgainstOccupancy({
+      window,
+      occupancyEndFrame: genericOccupancyFrames,
+    });
+  const inside =
+    genericOccupancyFrames != null &&
+    genericOccupancyFrames >= Number(window.startFrame) &&
+    genericOccupancyFrames < Number(window.endFrame);
+  const endAligned =
+    genericOccupancyFrames != null &&
+    genericOccupancyFrames === Number(window.endFrame);
+  const canonicalInputFrame =
+    nonNegativeIntegerOrNull(
+      contextScheduling?.edgeIntent?.canonicalInputFrame
+    ) ??
+    (inside
+      ? genericOccupancyFrames
+      : endAligned
+        ? Number(window.endFrame) - 1
+        : null);
+  const immediate = [
+    'immediate-interrupt',
+    'immediate-continuous',
+  ].includes(inputSemantics);
+  const executionStartFrame =
+    nonNegativeIntegerOrNull(
+      contextScheduling?.edgeIntent?.canonicalExecutionStartFrame
+    ) ??
+    (canonicalInputFrame == null
+      ? null
+      : immediate
+        ? canonicalInputFrame
+        : nonNegativeIntegerOrNull(window.frameIndex) ??
+          genericOccupancyFrames);
+  const contextualPredecessorEndFrame =
+    nonNegativeIntegerOrNull(
+      contextScheduling?.edgeIntent?.canonicalPredecessorEndFrame
+    ) ?? executionStartFrame;
+  const resolvable =
+    canonicalInputFrame != null &&
+    inputSemantics !== 'unresolved' &&
+    executionStartFrame != null;
+  return {
+    rowIdentity: [
+      publicActionIdentity,
+      `control:${sourceControlSkillId}`,
+      `sub:${sourceSubSkillIndex}`,
+      `window:${window.startFrame}-${window.endFrame}:${windowIndex}`,
+      `target:${window.targetControlSkillId ?? 0}`,
+      `sub:${window.targetSubSkillIndex ?? 0}`,
+    ].join('|'),
+    publicActionIdentity,
+    actionKind,
+    semanticName,
+    sourceControlSkillId,
+    sourceSubSkillIndex,
+    inputCommand:
+      inputCommand ??
+      window.allowedInputCommands?.[0] ??
+      (window.allowAttack ? 'normal-attack' : null),
+    inputWindow: {
+      startFrame: window.startFrame,
+      endFrame: window.endFrame,
+      interval: '[start,end)',
+    },
+    condition: condition ?? { kind: 'source-window' },
+    targetControlSkillId: window.targetControlSkillId ?? null,
+    targetSubSkillIndex: window.targetSubSkillIndex ?? null,
+    animationDurationFrames: timing?.animation?.durationFrames ?? null,
+    firstHitFrame: timing?.hitEnvelope?.firstFrame ?? null,
+    lastHitFrame: timing?.hitEnvelope?.lastFrame ?? null,
+    genericOccupancyFrames,
+    inputSemantics,
+    windowClassification,
+    canonicalInputFrame,
+    executionStartFrame,
+    contextualPredecessorEndFrame,
+    edgeToEdgeBefore: endAligned ? 'rejected-by-half-open-window' : inside
+      ? 'already-inside-source-window'
+      : 'not-applicable',
+    edgeToEdgeAfter: resolvable ? 'resolved' : 'not-applicable',
+    contextEdgeIdentity: contextEdge?.edgeIdentity ?? null,
+    status: resolvable
+      ? 'verified-contextual-input-scheduling-ready'
+      : 'contextual-input-scheduling-unresolved',
+    unresolvedReason: resolvable
+      ? null
+      : genericOccupancyFrames == null
+        ? 'predecessor-effective-occupancy-unresolved'
+        : inputSemantics === 'unresolved'
+          ? 'event-bridge-input-execution-semantics-unresolved'
+          : 'generic-edge-has-no-verified-window-mapping',
+    evidence: {
+      bridgeType: window.bridgeType ?? null,
+      continuousAttackType: window.continuousAttackType ?? null,
+      interruptBehavior: window.interruptBehavior ?? null,
+      frameIndex: window.frameIndex ?? null,
+      baseOnInput: window.baseOnInput ?? false,
+      inputToIndex: window.inputToIndex ?? false,
+    },
+    inputSchedulingSourceIdentity: [
+      sourceIdentity,
+      window.sourceIdentity,
+      timing?.occupancy?.sourceIdentity,
+      'client-runtime:EventBridgeBehavior.Start/OnEvent/Update',
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+function createContextualInputSchedulingMarkdown(report) {
+  const xiaoyuApplied = report.xiaoyu.rows.filter(
+    row => row.contextEdgeIdentity != null
+  );
+  return [
+    '# M9-R3-R2-R3 派生输入与动作接续审计',
+    '',
+    `- 小玉公开执行形态：${report.xiaoyu.publicExecutionFormCount}`,
+    `- 小玉窗口审计：${report.xiaoyu.rowCount}/${report.xiaoyu.expectedRowCount}`,
+    `- 全公开动作窗口：${report.summary.verifiedWindowCount}`,
+    `- 已解析输入/执行语义：${report.summary.resolvedInputSemanticsCount}`,
+    `- 可解析贴边接续：${report.summary.edgeIntentResolvedCount}`,
+    `- 同一后继多窗口行：${report.summary.multipleWindowSuccessorCount}`,
+    '',
+    '原始窗口始终保持 `[startFrame, endFrame)`；贴边修复通过分离输入帧、执行起点和前动作关系性结束帧完成。',
+    '',
+    '## 小玉已应用上下文派生',
+    '',
+    '| 来源 | control/sub | 窗口 | 通用占轴 | 语义 | 规范输入 | 执行起点 | 前动作结束 | 贴边结果 |',
+    '| --- | --- | --- | ---: | --- | ---: | ---: | ---: | --- |',
+    ...xiaoyuApplied.map(
+      row =>
+        `| ${row.sourceSemanticName} | ${row.sourceControlSkillId}/sub${row.sourceSubSkillIndex} | [${row.inputWindow.startFrame},${row.inputWindow.endFrame})F | ${formatOptionalFrame(row.genericOccupancyFrames)} | ${row.inputSemantics} | ${formatOptionalFrame(row.canonicalInputFrame)} | ${formatOptionalFrame(row.executionStartFrame)} | ${formatOptionalFrame(row.contextualPredecessorEndFrame)} | ${row.edgeToEdgeAfter} |`
+    ),
+    '',
+    '## 全量分类',
+    '',
+    ...Object.entries(report.summary.categoryCounts)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, value]) => `- ${key}: ${value}`),
+    '',
+  ].join('\n');
+}
+
+function formatOptionalFrame(value) {
+  return value == null ? '-' : `${value}F`;
 }
 
 function createActionTimingCoverageReport(packageValue) {

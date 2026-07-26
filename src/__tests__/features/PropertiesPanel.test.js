@@ -83,6 +83,94 @@ describe('PropertiesPanel', () => {
     ).toContain('90F');
   });
 
+  it('shows contextual input, execution, and predecessor end as separate facts', () => {
+    const action = {
+      id: 'jade-edge-derived',
+      type: 'skill',
+      name: '重击',
+      actorId: 'actor-jade',
+      skillId: 10101001,
+      startMs: 2000,
+      durationMs: 1500,
+      effectCommands: [],
+    };
+    const resolution = {
+      status: 'verified-ready',
+      actionBinding: {
+        identity: 'actor|101010|charged|special',
+        semanticName: '特殊重击',
+        executionControlSkillId: 10101042,
+        selectedSubSkillIndex: 0,
+        actualDurationFrames: 90,
+      },
+      hits: [],
+      effects: [],
+      reasons: [],
+      ready: true,
+      applied: true,
+    };
+    const scheduling = {
+      resolutionKind: 'edge-intent-contextual-transition',
+      inputSemantics: 'immediate-interrupt',
+      inputFrame: 119,
+      inputOffsetFrame: 119,
+      executionStartFrame: 119,
+      predecessorEffectiveEndFrame: 119,
+      inputWindow: { startFrame: 86, endFrame: 120 },
+      applied: true,
+    };
+    const wrapper = mount(PropertiesPanel, {
+      props: {
+        selection: { characterId: 101010, enemyId: 208001 },
+        characters: [{ id: 101010, name: '涂山小玉' }],
+        actors: [{ id: 'actor-jade', characterId: 101010, name: '涂山小玉' }],
+        skills: [{ id: 10101001, name: '重击' }],
+        enemies: [{ id: 208001, name: '训练敌人' }],
+        selectedAction: action,
+        durationMs: 30_000,
+        verifiedCombatRuntime: {
+          enabled: true,
+          actionResolutionById: new Map([[action.id, resolution]]),
+          specialResourceRuntime: {
+            actionResolutionById: new Map([[action.id, resolution]]),
+            selectionByActionId: new Map([
+              [
+                action.id,
+                {
+                  actionId: action.id,
+                  semanticName: '特殊重击',
+                  selectedSubSkillIndex: 0,
+                  controlSource: 'input-context',
+                  contractResolutionStatus: 'applied',
+                  status: 'verified-action-variant-selection-ready',
+                  contextualInputScheduling: scheduling,
+                },
+              ],
+            ]),
+            resourceEvents: [],
+          },
+          damageEvents: [],
+          resourceEvents: [],
+          kiboResourceEvents: [],
+          effectTimeline: { events: [] },
+          tuningMarkRuntime: { events: [], unresolved: [] },
+        },
+      },
+    });
+
+    const panel = wrapper.get(
+      '[data-testid="workbench-context-input-scheduling"]'
+    );
+    expect(panel.attributes('data-resolution-kind')).toBe(
+      'edge-intent-contextual-transition'
+    );
+    expect(panel.attributes('data-input-frame')).toBe('119');
+    expect(panel.attributes('data-execution-start-frame')).toBe('119');
+    expect(panel.attributes('data-predecessor-end-frame')).toBe('119');
+    expect(panel.text()).toContain('[86, 120)F');
+    expect(panel.text()).toContain('贴边意图映射');
+  });
+
   it('shows the verified action trace as one ordered source chain', () => {
     const wrapper = mount(PropertiesPanel, {
       props: {

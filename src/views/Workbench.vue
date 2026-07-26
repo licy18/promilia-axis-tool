@@ -1616,6 +1616,12 @@ const effectiveScenarioActions = computed(
     simulationResult.value.effectiveActionTimeline?.scenario?.actions ??
     scenario.value.actions
 );
+const effectiveScenarioActionById = computed(
+  () =>
+    new Map(
+      effectiveScenarioActions.value.map(action => [String(action.id), action])
+    )
+);
 const currentWorkbenchPresetSummary = computed(() => ({
   actionCount: actionDrafts.value.length,
   actorNames: scenario.value.actors.map(actor => actor.name),
@@ -8535,8 +8541,13 @@ function resolveInsertStartMs(insertIndex) {
   if (!anchor) {
     return 0;
   }
-  const anchorStartMs = Number(anchor.startMs) || 0;
-  const anchorDurationMs = Math.max(0, Number(anchor.durationMs) || 0);
+  const effectiveAnchor =
+    effectiveScenarioActionById.value.get(String(anchor.id)) ?? anchor;
+  const anchorStartMs = Number(effectiveAnchor.startMs) || 0;
+  const anchorDurationMs = Math.max(
+    0,
+    Number(effectiveAnchor.durationMs) || 0
+  );
   return clampNumber(
     anchorStartMs + anchorDurationMs + NEW_ACTION_INSERT_GAP_MS,
     0,
@@ -8552,8 +8563,14 @@ function resolveInsertIndex() {
 }
 
 function createDraftTimelineRange(action, index) {
-  const startMs = Math.max(0, Number(action.startMs) || 0);
-  const durationMs = resolveDraftDurationMs(action);
+  const effectiveAction =
+    effectiveScenarioActionById.value.get(String(action.id)) ?? action;
+  const startMs = Math.max(0, Number(effectiveAction.startMs) || 0);
+  const effectiveDurationMs = Number(effectiveAction.durationMs);
+  const durationMs =
+    Number.isFinite(effectiveDurationMs) && effectiveDurationMs >= 0
+      ? effectiveDurationMs
+      : resolveDraftDurationMs(action);
   return {
     actionId: action.id,
     index,

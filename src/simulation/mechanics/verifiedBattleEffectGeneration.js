@@ -7,6 +7,7 @@ import {
 } from '../../domain/projectSchema';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
+import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
@@ -43,6 +44,16 @@ export function createVerifiedBattleEffectGeneration({
       []) {
       if (effect.role && effect.role !== 'gameplay-effect') continue;
       if (effect.tuningMark || effect.tuningOverlimit) continue;
+      if (
+        Number.isFinite(Number(effect.trigger?.startFrame)) &&
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          effect.trigger.startFrame,
+          resolution.controlBinding?.frameRate ?? 60
+        )
+      ) {
+        continue;
+      }
       if (effect.classification !== 'applied') {
         unresolved.push(createUnresolvedEffect(action, effect));
         continue;
@@ -305,6 +316,11 @@ function resolveEffectTimeMs(action, effect, resolution) {
   const startFrame = Number(effect.trigger?.startFrame);
   const frameRate = Number(resolution.controlBinding?.frameRate ?? 60);
   if (!Number.isInteger(startFrame) || !(frameRate > 0)) return null;
+  if (
+    !isActionFrameWithinContextualOccupancy(action, startFrame, frameRate)
+  ) {
+    return null;
+  }
   return roundValue(Number(action.startMs) + (startFrame * 1000) / frameRate);
 }
 
