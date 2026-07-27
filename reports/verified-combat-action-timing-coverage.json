@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-timing-coverage",
   "status": "verified-combat-action-timing-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "351c9f94e0f99c850e1501aa0a4fc2c8407db1ed6d699b06b8009a338a72dac2",
+  "packageHash": "59e436adac96009c4b148795fb87bf7d069b2820ab8a1228727fd0e570e4fa10",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "publicActionCount": 563,
@@ -12,8 +12,8 @@
     "controlPlayerVariantCount": 1042
   },
   "summary": {
-    "appliedActionCount": 552,
-    "unresolvedActionCount": 11,
+    "appliedActionCount": 553,
+    "unresolvedActionCount": 10,
     "appliedAttackInputSegmentCount": 78,
     "unresolvedAttackInputSegmentCount": 17,
     "appliedPublicVariantCount": 552,
@@ -26,15 +26,16 @@
       "normal-attack-input-segment-duration-unresolved": 8,
       "selected-control-player-variant-duration-unresolved": 16,
       "skill-control-player-variant-missing": 1,
-      "verified-action-effective-occupancy-window-unresolved": 3
+      "verified-action-effective-occupancy-window-unresolved": 2
     },
     "schedulingKindCounts": {
+      "exact-public-action-execution-form-occupancy": 1,
       "exact-selected-variant-occupancy": 630,
       "generic-planning-duration": 1,
-      "source-animation-planning-duration": 27
+      "source-animation-planning-duration": 26
     },
     "exactSelectedVariantOccupancyCount": 630,
-    "sourceAnimationPlanningDurationCount": 27,
+    "sourceAnimationPlanningDurationCount": 26,
     "genericPlanningDurationCount": 1,
     "unresolvedControlIdentityCount": 1,
     "variantModelStatusCounts": {
@@ -119,16 +120,16 @@
     {
       "ownerKind": "actor",
       "actionKind": "perfect-parry",
-      "sourceKind": "skill-control-player-action-range",
+      "sourceKind": "declared-verified-input-reopen-occupancy",
       "status": "applied",
-      "count": 18
+      "count": 1
     },
     {
       "ownerKind": "actor",
       "actionKind": "perfect-parry",
-      "sourceKind": "unresolved-action-occupancy",
-      "status": "unresolved",
-      "count": 1
+      "sourceKind": "skill-control-player-action-range",
+      "status": "applied",
+      "count": 18
     },
     {
       "ownerKind": "actor",
@@ -9732,14 +9733,12 @@
       "sourceSkillName": "一瞬的灼热",
       "controlSkillId": 10300227,
       "variantConditionDiscovery": null,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-      "status": "unresolved",
-      "durationFrames": null,
+      "sourceIdentity": "skill_control_10300249.subskill.bundle#sub1.control-transition[35,80)->10300201/sub1",
+      "status": "applied",
+      "durationFrames": 35,
       "frameRate": 60,
-      "sourceKind": "unresolved-action-occupancy",
-      "reasons": [
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
+      "sourceKind": "declared-verified-input-reopen-occupancy",
+      "reasons": [],
       "input": {
         "mode": "press",
         "pressFrame": 0,
@@ -9750,26 +9749,24 @@
       },
       "occupancy": {
         "startFrame": 0,
-        "endFrame": null,
-        "durationFrames": null,
+        "endFrame": 35,
+        "durationFrames": 35,
         "frameRate": 60,
-        "status": "unresolved",
-        "sourceKind": "unresolved-action-occupancy",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-        "conversion": null,
-        "reasons": [
-          "verified-action-effective-occupancy-window-unresolved"
-        ]
+        "status": "applied",
+        "sourceKind": "declared-verified-input-reopen-occupancy",
+        "sourceIdentity": "skill_control_10300249.subskill.bundle#sub1.control-transition[35,80)->10300201/sub1",
+        "conversion": "35 source frames at 60fps",
+        "reasons": []
       },
       "animation": {
         "startFrame": 0,
-        "endFrame": 175,
-        "durationFrames": 175,
+        "endFrame": 140,
+        "durationFrames": 140,
         "frameRate": 60,
         "status": "applied",
         "sourceKind": "skill-control-player-animation-range",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-        "conversion": "175 source frames at 60fps"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300249.asset/MonoBehaviour/skill_control_10300249__912025094724817730.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+        "conversion": "140 source frames at 60fps"
       },
       "hitEnvelope": {
         "firstFrame": null,
@@ -9785,12 +9782,12 @@
         "status": "applied",
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300227].coolDown|NewTable/skillsub_logic.rows[skillId=10300227].coolDownCount"
       },
-      "schedulingStatus": "planning",
-      "schedulingKind": "source-animation-planning-duration",
-      "planningDurationFrames": 175,
-      "schedulingDurationFrames": null,
-      "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-      "schedulingSourceStatus": "verified-animation-duration",
+      "schedulingStatus": "exact",
+      "schedulingKind": "exact-public-action-execution-form-occupancy",
+      "planningDurationFrames": null,
+      "schedulingDurationFrames": 35,
+      "schedulingSourceIdentity": "skill_control_10300227.asset#listener-wrapper->10300249|skill_control_10300249.asset/MonoBehaviour/MonoBehaviour_-1475876437456334107__-1475876437456334107.json#control-transition[25,166)->10300249/sub1|skill_control_10300227.asset#listener-wrapper->10300249|skill_control_10300249.asset/MonoBehaviour/MonoBehaviour_-1475876437456334107__-1475876437456334107.json#control-transition[25,166)->10300249/sub1|skill_control_10300249.asset/MonoBehaviour/MonoBehaviour_-1475876437456334107__-1475876437456334107.json#counter-input-window-start=25F|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300249.asset/MonoBehaviour/skill_control_10300249__912025094724817730.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|skill_control_10300249.subskill.bundle#sub1.control-transition[35,80)->10300201/sub1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300249.asset/MonoBehaviour/skill_control_10300249__912025094724817730.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|skill_control_10300249.subskill.bundle#sub1.control-transition[35,80)->10300201/sub1",
+      "schedulingSourceStatus": "verified-input-occupancy",
       "variantModelStatus": "resolved"
     },
     {
@@ -106886,11 +106883,9 @@
       "publicVariantLabel": "集中闪避",
       "selected": true,
       "status": "unresolved",
-      "durationFrames": null,
+      "durationFrames": 35,
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300221].level.labels[2]",
-      "reasons": [
-        "verified-action-effective-occupancy-window-unresolved"
-      ]
+      "reasons": []
     },
     {
       "identity": "actor|107001|10700101|0|10700103|public-variant-0",
@@ -249142,78 +249137,6 @@
       "planningDurationFrames": 204,
       "schedulingDurationFrames": null,
       "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-      "schedulingSourceStatus": "verified-animation-duration",
-      "variantModelStatus": "resolved"
-    },
-    {
-      "identity": "actor|103002|10300221|2|10300227",
-      "rowKind": "public-action",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "ownerName": "红宝石",
-      "actionKind": "perfect-parry",
-      "sourceSkillId": 10300221,
-      "sourceSkillName": "一瞬的灼热",
-      "controlSkillId": 10300227,
-      "variantConditionDiscovery": null,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-      "status": "unresolved",
-      "durationFrames": null,
-      "frameRate": 60,
-      "sourceKind": "unresolved-action-occupancy",
-      "reasons": [
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
-      "input": {
-        "mode": "press",
-        "pressFrame": 0,
-        "holdDurationMs": null,
-        "holdFrames": null,
-        "status": "applied",
-        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300227].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10300227].holdTriggerTime"
-      },
-      "occupancy": {
-        "startFrame": 0,
-        "endFrame": null,
-        "durationFrames": null,
-        "frameRate": 60,
-        "status": "unresolved",
-        "sourceKind": "unresolved-action-occupancy",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-        "conversion": null,
-        "reasons": [
-          "verified-action-effective-occupancy-window-unresolved"
-        ]
-      },
-      "animation": {
-        "startFrame": 0,
-        "endFrame": 175,
-        "durationFrames": 175,
-        "frameRate": 60,
-        "status": "applied",
-        "sourceKind": "skill-control-player-animation-range",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-        "conversion": "175 source frames at 60fps"
-      },
-      "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
-      },
-      "hitFrames": [],
-      "windows": [],
-      "cooldown": {
-        "cooldownMs": 7000,
-        "chargeCount": 3,
-        "status": "applied",
-        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300227].coolDown|NewTable/skillsub_logic.rows[skillId=10300227].coolDownCount"
-      },
-      "schedulingStatus": "planning",
-      "schedulingKind": "source-animation-planning-duration",
-      "planningDurationFrames": 175,
-      "schedulingDurationFrames": null,
-      "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
       "schedulingSourceStatus": "verified-animation-duration",
       "variantModelStatus": "resolved"
     },

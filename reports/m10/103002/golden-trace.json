@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
+  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -260,14 +260,14 @@
       "damageEventCount": 221,
       "ownerDamageEventCount": 215,
       "ownerHitEventCount": 96,
-      "totalHpDamage": 163708,
+      "totalHpDamage": 164643,
       "totalToughnessDamage": 2190,
-      "ownerTotalHpDamage": 160675,
+      "ownerTotalHpDamage": 161610,
       "ownerTotalToughnessDamage": 66,
       "enemy": {
         "pointCount": 331,
         "initialHp": 862800,
-        "finalHp": 699092,
+        "finalHp": 698157,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 4477,
@@ -837,7 +837,7 @@
           "eventId": null,
           "actionId": "ruby-ultimate",
           "frame": 2313,
-          "operation": "gain",
+          "operation": "set-to-capacity",
           "resourceIdentity": "actor:103002:element:103002047",
           "stateElementId": null,
           "beforeValue": 12,
@@ -953,248 +953,108 @@
     "effects": {
       "passiveTrace": [
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|3333.333|1",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|3333.333|1",
           "actionId": "ruby-enhanced-shot-1",
           "frame": 200,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
           "expiresAtMs": 18333.333
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|2",
-          "actionId": "ruby-enhanced-shot-1",
-          "frame": 200,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|7166.667|2",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 18333.333
+          "expiresAtMs": 22166.667
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|3",
-          "actionId": "ruby-enhanced-shot-1",
-          "frame": 200,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|11000|3",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": 18333.333
+          "expiresAtMs": 26000
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|4",
-          "actionId": "ruby-enhanced-shot-2",
-          "frame": 430,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|14833.333|4",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": 22166.667
+          "expiresAtMs": 29833.333
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|5",
-          "actionId": "ruby-enhanced-shot-2",
-          "frame": 430,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|18666.667|5",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 5,
-          "expiresAtMs": 22166.667
+          "expiresAtMs": 33666.667
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|6",
-          "actionId": "ruby-enhanced-shot-2",
-          "frame": 430,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|22500|6",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 5,
           "afterStacks": 6,
-          "expiresAtMs": 22166.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|7",
-          "actionId": "ruby-enhanced-shot-3",
-          "frame": 660,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 26000
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|8",
-          "actionId": "ruby-enhanced-shot-3",
-          "frame": 660,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 26000
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|9",
-          "actionId": "ruby-enhanced-shot-3",
-          "frame": 660,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 26000
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|10",
-          "actionId": "ruby-enhanced-shot-4",
-          "frame": 890,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 29833.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|11",
-          "actionId": "ruby-enhanced-shot-4",
-          "frame": 890,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 29833.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|12",
-          "actionId": "ruby-enhanced-shot-4",
-          "frame": 890,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 29833.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|13",
-          "actionId": "ruby-enhanced-shot-5",
-          "frame": 1120,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 33666.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|14",
-          "actionId": "ruby-enhanced-shot-5",
-          "frame": 1120,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 33666.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|15",
-          "actionId": "ruby-enhanced-shot-5",
-          "frame": 1120,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 33666.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|16",
-          "actionId": "ruby-enhanced-shot-6",
-          "frame": 1350,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
           "expiresAtMs": 37500
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|17",
-          "actionId": "ruby-enhanced-shot-6",
-          "frame": 1350,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 37500
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|18",
-          "actionId": "ruby-enhanced-shot-6",
-          "frame": 1350,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 37500
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|37500|18",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|37500|6",
           "actionId": "ruby-enhanced-shot-6",
           "frame": 2250,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "expire",
           "beforeStacks": 6,
           "afterStacks": null,
           "expiresAtMs": null
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|38566.667|1",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|38566.667|1",
           "actionId": "ruby-ultimate",
           "frame": 2314,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": null,
-          "afterStacks": 1,
+          "afterStacks": 6,
           "expiresAtMs": 53566.667
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|2",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|45333.333|2",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 2720,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "apply",
-          "beforeStacks": 1,
-          "afterStacks": 2,
+          "beforeStacks": 6,
+          "afterStacks": 6,
           "expiresAtMs": 60333.333
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|3",
-          "actionId": "ruby-post-ultimate-shot",
-          "frame": 2720,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 2,
-          "afterStacks": 3,
-          "expiresAtMs": 60333.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|4",
-          "actionId": "ruby-post-ultimate-shot",
-          "frame": 2720,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 3,
-          "afterStacks": 4,
-          "expiresAtMs": 60333.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|60333.333|4",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|60333.333|2",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 3620,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "expire",
-          "beforeStacks": 4,
+          "beforeStacks": 6,
           "afterStacks": null,
           "expiresAtMs": null
         }
       ],
       "passiveMaxStacks": 6,
-      "firstPassiveMaxStackFrame": 430,
+      "firstPassiveMaxStackFrame": 1350,
       "burstTrace": [],
       "burstTransitions": []
     },
@@ -1213,9 +1073,18 @@
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 100,
+          "effectIds": [
+            "battle-element:103002275"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 120,
           "effectIds": [
-            "battle-element:4227003560910032429"
+            "battle-element:103002275"
           ]
         },
         {
@@ -1224,7 +1093,16 @@
           "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 20,
           "effectIds": [
-            "battle-element:4227003560910032429"
+            "battle-element:103002275"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 40,
+          "effectIds": [
+            "battle-element:103002275"
           ]
         },
         {
@@ -1233,7 +1111,7 @@
           "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 60,
           "effectIds": [
-            "battle-element:4227003560910032429"
+            "battle-element:103002275"
           ]
         },
         {
@@ -1242,7 +1120,7 @@
           "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 80,
           "effectIds": [
-            "battle-element:4227003560910032429"
+            "battle-element:103002275"
           ]
         }
       ],
@@ -1266,9 +1144,9 @@
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 80,
+          "dynamicExtraRaw": 120,
           "effectIds": [
-            "battle-element:4227003560910032429"
+            "battle-element:103002275"
           ]
         }
       ],
@@ -1277,13 +1155,13 @@
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 80,
+          "dynamicExtraRaw": 120,
           "effectIds": [
-            "battle-element:4227003560910032429"
+            "battle-element:103002275"
           ]
         }
       ],
-      "baselineReplayHash": "a0a35a7d0b93479a7a2e427426b49c48989d0fdec88288fcf2dbeb5ef4def323"
+      "baselineReplayHash": "85f3d6b511affb6b122f42bbfec672bde0ece0e36982d573306c4803e8b29784"
     },
     "trace": {
       "damage": [
@@ -1953,9 +1831,9 @@
           "actionId": "ruby-ultimate",
           "frame": 2317,
           "hitIdentity": null,
-          "rawDamage": 2039,
-          "hpDamage": 2039,
-          "toughnessDamage": 1428,
+          "rawDamage": 2055,
+          "hpDamage": 2055,
+          "toughnessDamage": 1439,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2157,9 +2035,9 @@
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "hitIdentity": null,
-          "rawDamage": 48642,
-          "hpDamage": 48642,
-          "toughnessDamage": 2724,
+          "rawDamage": 49024,
+          "hpDamage": 49024,
+          "toughnessDamage": 2713,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2385,8 +2263,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2544,
           "hitIdentity": null,
-          "rawDamage": 16218,
-          "hpDamage": 16218,
+          "rawDamage": 16346,
+          "hpDamage": 16346,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2517,8 +2395,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2604,
           "hitIdentity": null,
-          "rawDamage": 16218,
-          "hpDamage": 16218,
+          "rawDamage": 16346,
+          "hpDamage": 16346,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2649,8 +2527,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2664,
           "hitIdentity": null,
-          "rawDamage": 16218,
-          "hpDamage": 16218,
+          "rawDamage": 16346,
+          "hpDamage": 16346,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2781,8 +2659,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2724,
           "hitIdentity": null,
-          "rawDamage": 16295,
-          "hpDamage": 16295,
+          "rawDamage": 16346,
+          "hpDamage": 16346,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -3021,8 +2899,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2784,
           "hitIdentity": null,
-          "rawDamage": 16295,
-          "hpDamage": 16295,
+          "rawDamage": 16346,
+          "hpDamage": 16346,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -3153,8 +3031,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2844,
           "hitIdentity": null,
-          "rawDamage": 16295,
-          "hpDamage": 16295,
+          "rawDamage": 16346,
+          "hpDamage": 16346,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4050,7 +3928,7 @@
           "eventId": null,
           "actionId": "ruby-ultimate",
           "frame": 2313,
-          "operation": "gain",
+          "operation": "set-to-capacity",
           "resourceIdentity": "actor:103002:element:103002047",
           "stateElementId": null,
           "beforeValue": 12,
@@ -4161,182 +4039,62 @@
       ],
       "effects": [
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|3333.333|1",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|3333.333|1",
           "actionId": "ruby-enhanced-shot-1",
           "frame": 200,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
           "expiresAtMs": 18333.333
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|2",
-          "actionId": "ruby-enhanced-shot-1",
-          "frame": 200,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|7166.667|2",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 18333.333
+          "expiresAtMs": 22166.667
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|3",
-          "actionId": "ruby-enhanced-shot-1",
-          "frame": 200,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|11000|3",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": 18333.333
+          "expiresAtMs": 26000
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|4",
-          "actionId": "ruby-enhanced-shot-2",
-          "frame": 430,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|14833.333|4",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": 22166.667
+          "expiresAtMs": 29833.333
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|5",
-          "actionId": "ruby-enhanced-shot-2",
-          "frame": 430,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|18666.667|5",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 5,
-          "expiresAtMs": 22166.667
+          "expiresAtMs": 33666.667
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|6",
-          "actionId": "ruby-enhanced-shot-2",
-          "frame": 430,
-          "effectId": "battle-element:4227003560910032429",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|22500|6",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": 5,
-          "afterStacks": 6,
-          "expiresAtMs": 22166.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|7",
-          "actionId": "ruby-enhanced-shot-3",
-          "frame": 660,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 26000
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|8",
-          "actionId": "ruby-enhanced-shot-3",
-          "frame": 660,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 26000
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|9",
-          "actionId": "ruby-enhanced-shot-3",
-          "frame": 660,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 26000
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|10",
-          "actionId": "ruby-enhanced-shot-4",
-          "frame": 890,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 29833.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|11",
-          "actionId": "ruby-enhanced-shot-4",
-          "frame": 890,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 29833.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|12",
-          "actionId": "ruby-enhanced-shot-4",
-          "frame": 890,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 29833.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|13",
-          "actionId": "ruby-enhanced-shot-5",
-          "frame": 1120,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 33666.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|14",
-          "actionId": "ruby-enhanced-shot-5",
-          "frame": 1120,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 33666.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|15",
-          "actionId": "ruby-enhanced-shot-5",
-          "frame": 1120,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 33666.667
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|16",
-          "actionId": "ruby-enhanced-shot-6",
-          "frame": 1350,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 37500
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|17",
-          "actionId": "ruby-enhanced-shot-6",
-          "frame": 1350,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
-          "afterStacks": 6,
-          "expiresAtMs": 37500
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|18",
-          "actionId": "ruby-enhanced-shot-6",
-          "frame": 1350,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 6,
           "afterStacks": 6,
           "expiresAtMs": 37500
         },
@@ -4361,23 +4119,23 @@
           "expiresAtMs": null
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|37500|18",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|37500|6",
           "actionId": "ruby-enhanced-shot-6",
           "frame": 2250,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "expire",
           "beforeStacks": 6,
           "afterStacks": null,
           "expiresAtMs": null
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|38566.667|1",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|38566.667|1",
           "actionId": "ruby-ultimate",
           "frame": 2314,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "apply",
           "beforeStacks": null,
-          "afterStacks": 1,
+          "afterStacks": 6,
           "expiresAtMs": 53566.667
         },
         {
@@ -4401,33 +4159,13 @@
           "expiresAtMs": null
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|2",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|45333.333|2",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 2720,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "apply",
-          "beforeStacks": 1,
-          "afterStacks": 2,
-          "expiresAtMs": 60333.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|3",
-          "actionId": "ruby-post-ultimate-shot",
-          "frame": 2720,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 2,
-          "afterStacks": 3,
-          "expiresAtMs": 60333.333
-        },
-        {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|4",
-          "actionId": "ruby-post-ultimate-shot",
-          "frame": 2720,
-          "effectId": "battle-element:4227003560910032429",
-          "operation": "apply",
-          "beforeStacks": 3,
-          "afterStacks": 4,
+          "beforeStacks": 6,
+          "afterStacks": 6,
           "expiresAtMs": 60333.333
         },
         {
@@ -4451,12 +4189,12 @@
           "expiresAtMs": 71000
         },
         {
-          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|60333.333|4",
+          "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|60333.333|2",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 3620,
-          "effectId": "battle-element:4227003560910032429",
+          "effectId": "battle-element:103002275",
           "operation": "expire",
-          "beforeStacks": 4,
+          "beforeStacks": 6,
           "afterStacks": null,
           "expiresAtMs": null
         },
@@ -4522,7 +4260,7 @@
         }
       ]
     },
-    "summaryHash": "97a31414508b679d363c9d7ae44ba29585df6111abe52a6f1f6682ddb9036b0a"
+    "summaryHash": "d3dd0e2f2ec18b325357c1809606727af02deb22786b89a2acd3eccb2a8c403f"
   },
   "expected": {
     "exact": {
@@ -4570,10 +4308,10 @@
       "combat.damageEventCount": 221,
       "combat.ownerDamageEventCount": 215,
       "combat.ownerHitEventCount": 96,
-      "combat.ownerTotalHpDamage": 160675,
+      "combat.ownerTotalHpDamage": 161610,
       "combat.ownerTotalToughnessDamage": 66,
       "combat.enemy.initialHp": 862800,
-      "combat.enemy.finalHp": 699092,
+      "combat.enemy.finalHp": 698157,
       "resources.specialResourceTrace.0.actionId": "ruby-reload",
       "resources.specialResourceTrace.0.frame": 24,
       "resources.specialResourceTrace.0.beforeValue": 0,
@@ -4625,17 +4363,17 @@
       "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.actionId": "fire-kibo-signature",
       "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.change": -100,
       "effects.passiveMaxStacks": 6,
-      "effects.firstPassiveMaxStackFrame": 430,
+      "effects.firstPassiveMaxStackFrame": 1350,
       "effects.passiveTrace.0.actionId": "ruby-enhanced-shot-1",
       "effects.passiveTrace.0.afterStacks": 1,
       "effects.passiveTrace.5.afterStacks": 6,
-      "effects.passiveTrace.5.expiresAtMs": 22166.667,
-      "effects.passiveTrace.18.operation": "expire",
-      "effects.passiveTrace.18.frame": 2250,
-      "effects.passiveTrace.19.actionId": "ruby-ultimate",
-      "effects.passiveTrace.19.afterStacks": 1,
-      "effects.passiveTrace.23.operation": "expire",
-      "effects.passiveTrace.23.frame": 3620,
+      "effects.passiveTrace.5.expiresAtMs": 37500,
+      "effects.passiveTrace.6.operation": "expire",
+      "effects.passiveTrace.6.frame": 2250,
+      "effects.passiveTrace.7.actionId": "ruby-ultimate",
+      "effects.passiveTrace.7.afterStacks": 6,
+      "effects.passiveTrace.9.operation": "expire",
+      "effects.passiveTrace.9.frame": 3620,
       "dynamicProperties.ownerSources.0.attributeId": 1,
       "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
       "comparison.primaryDamage": 891,
@@ -4937,8 +4675,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 160675,
-        "actual": 160675,
+        "expected": 161610,
+        "actual": 161610,
         "passed": true
       },
       {
@@ -4958,8 +4696,8 @@
       {
         "jsonPath": "combat.enemy.finalHp",
         "operator": "exact",
-        "expected": 699092,
-        "actual": 699092,
+        "expected": 698157,
+        "actual": 698157,
         "passed": true
       },
       {
@@ -5322,8 +5060,8 @@
       {
         "jsonPath": "effects.firstPassiveMaxStackFrame",
         "operator": "exact",
-        "expected": 430,
-        "actual": 430,
+        "expected": 1350,
+        "actual": 1350,
         "passed": true
       },
       {
@@ -5350,47 +5088,47 @@
       {
         "jsonPath": "effects.passiveTrace.5.expiresAtMs",
         "operator": "exact",
-        "expected": 22166.667,
-        "actual": 22166.667,
+        "expected": 37500,
+        "actual": 37500,
         "passed": true
       },
       {
-        "jsonPath": "effects.passiveTrace.18.operation",
+        "jsonPath": "effects.passiveTrace.6.operation",
         "operator": "exact",
         "expected": "expire",
         "actual": "expire",
         "passed": true
       },
       {
-        "jsonPath": "effects.passiveTrace.18.frame",
+        "jsonPath": "effects.passiveTrace.6.frame",
         "operator": "exact",
         "expected": 2250,
         "actual": 2250,
         "passed": true
       },
       {
-        "jsonPath": "effects.passiveTrace.19.actionId",
+        "jsonPath": "effects.passiveTrace.7.actionId",
         "operator": "exact",
         "expected": "ruby-ultimate",
         "actual": "ruby-ultimate",
         "passed": true
       },
       {
-        "jsonPath": "effects.passiveTrace.19.afterStacks",
+        "jsonPath": "effects.passiveTrace.7.afterStacks",
         "operator": "exact",
-        "expected": 1,
-        "actual": 1,
+        "expected": 6,
+        "actual": 6,
         "passed": true
       },
       {
-        "jsonPath": "effects.passiveTrace.23.operation",
+        "jsonPath": "effects.passiveTrace.9.operation",
         "operator": "exact",
         "expected": "expire",
         "actual": "expire",
         "passed": true
       },
       {
-        "jsonPath": "effects.passiveTrace.23.frame",
+        "jsonPath": "effects.passiveTrace.9.frame",
         "operator": "exact",
         "expected": 3620,
         "actual": 3620,
@@ -5435,7 +5173,7 @@
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 160675,
+        "actual": 161610,
         "passed": true
       },
       {
@@ -5468,6 +5206,6 @@
       }
     ]
   },
-  "replayHash": "25ea80a1e1a214ad2a7085a9a240bbc5ab3de5419e6da2e0228f63adab6532cb",
-  "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9"
+  "replayHash": "c8cbeae527d30c3e0754e5519fd78fd4e811fc3e390291a644115a62d4bf00d2",
+  "profileHash": "c7fec8ec9a53bd4d64e29b21fb578ec3e126c5445575ea87ebef1416bc5b6080"
 }

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
+  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -84,7 +84,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "4e355abd9d7518c0284e272ba32d7e126a5ad5b460c4f5f603f69a17f672a7b7"
+      "profileHash": "42b12d0d8feacad77e60d70fe8eaf7e7b66411e194031ce39c6f5a9bfab1ce54"
     },
     {
       "ownerId": 103002,
@@ -97,8 +97,7 @@
         "派生形态",
         "被动监听",
         "切人/星携技",
-        "运行证据",
-        "静态缺口"
+        "运行证据"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "runtime-applied",
@@ -110,15 +109,15 @@
       "indexedControlCount": 12,
       "specialResourceCount": 1,
       "stateMachineCount": 0,
-      "derivedEdgeCount": 291,
+      "derivedEdgeCount": 293,
       "passiveCount": 1,
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "personal-resource",
@@ -127,7 +126,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9"
+      "profileHash": "c7fec8ec9a53bd4d64e29b21fb578ec3e126c5445575ea87ebef1416bc5b6080"
     },
     {
       "ownerId": 101003,
@@ -777,6 +776,6 @@
       "runtime-applied": 2
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 157
+    "totalRuntimeReadyActionCount": 158
   }
 }

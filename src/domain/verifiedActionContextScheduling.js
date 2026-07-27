@@ -12,7 +12,8 @@ export function projectVerifiedAttackInputChainSegment(
   chainSegment,
   sequenceIndex,
   sequenceTotal,
-  attackInputChainIdentity = null
+  attackInputChainIdentity = null,
+  chainSequenceIndex = sequenceIndex
 ) {
   if (!source || !chainSegment) return null;
   const executionTiming = chainSegment.executionTiming ?? {};
@@ -21,6 +22,8 @@ export function projectVerifiedAttackInputChainSegment(
   const linkWindow = occupancy.linkWindow ?? null;
   const resolvedSequenceIndex = Number(sequenceIndex) || 0;
   const resolvedSequenceTotal = Number(sequenceTotal) || 0;
+  const resolvedChainSequenceIndex =
+    Number(chainSequenceIndex) || resolvedSequenceIndex;
   const durationFrames = Number(
     occupancy.durationFrames ?? chainSegment.durationFrames
   );
@@ -36,7 +39,7 @@ export function projectVerifiedAttackInputChainSegment(
     attackInputChainIdentity ??
       source.attackInputChainIdentity ??
       source.identity,
-    `segment:${resolvedSequenceIndex}`,
+    `segment:${resolvedChainSequenceIndex}`,
     `control:${controlSkillId}`,
     `sub:${subSkillIndex}`,
   ]
@@ -48,6 +51,7 @@ export function projectVerifiedAttackInputChainSegment(
     identity: projectedIdentity,
     sequenceIndex: resolvedSequenceIndex,
     sequenceTotal: resolvedSequenceTotal,
+    chainSequenceIndex: resolvedChainSequenceIndex,
     label: chainSegment.label ?? `A${resolvedSequenceIndex}`,
     semanticName: chainSegment.semanticName ?? source.semanticName ?? null,
     selectedSubSkillIndex: subSkillIndex,
@@ -99,10 +103,10 @@ export function resolveVerifiedAttackInputChainEntry({
         excludedActionIds,
       })
   );
-  const derivedChains = eligibleChains.filter(
-    chain =>
-      chain.entryPolicy?.kind === 'derived-or-quick-entry' &&
-      isDerivedAttackChainEntryActive({
+  const derivedEntries = eligibleChains
+    .filter(chain => chain.entryPolicy?.kind === 'derived-or-quick-entry')
+    .map(chain =>
+      resolveDerivedAttackChainEntry({
         chain,
         graph,
         actorId,
@@ -111,7 +115,8 @@ export function resolveVerifiedAttackInputChainEntry({
         actions,
         runtimeSelections,
       })
-  );
+    )
+    .filter(Boolean);
   const conditionSelectedChains = eligibleChains.filter(
     chain =>
       !chain.entryPolicy || chain.entryPolicy.kind === 'condition-selected'
@@ -120,8 +125,8 @@ export function resolveVerifiedAttackInputChainEntry({
     chain => chain.entryPolicy?.kind === 'default'
   );
   const chains =
-    derivedChains.length > 0
-      ? derivedChains
+    derivedEntries.length > 0
+      ? derivedEntries.map(item => item.chain)
       : conditionSelectedChains.length > 0
         ? conditionSelectedChains
         : defaultChains;
@@ -130,6 +135,11 @@ export function resolveVerifiedAttackInputChainEntry({
   }
 
   const chain = chains[0];
+  const derivedEntry =
+    derivedEntries.length === 1 &&
+    derivedEntries[0].chain.chainIdentity === chain.chainIdentity
+      ? derivedEntries[0]
+      : null;
   const resourceValue = resolveRuntimeResourceValue({
     variantRuntime,
     actorId,
@@ -142,7 +152,11 @@ export function resolveVerifiedAttackInputChainEntry({
     resourceValue,
     chain.segments.length
   );
-  const selectedChainSegments = chain.segments.slice(0, segmentLimit);
+  const startSequenceIndex = derivedEntry?.sequenceIndex ?? 1;
+  const selectedChainSegments = chain.segments.slice(
+    startSequenceIndex - 1,
+    startSequenceIndex - 1 + segmentLimit
+  );
   const sourceSegments =
     entry.attackInputSourceSegments ?? entry.attackInputSegments;
   const segments = selectedChainSegments.map((chainSegment, index) => {
@@ -152,13 +166,15 @@ export function resolveVerifiedAttackInputChainEntry({
     );
     if (!source) return null;
     const sequenceIndex = index + 1;
+    const chainSequenceIndex = Number(chainSegment.sequenceIndex);
     const sequenceTotal = selectedChainSegments.length;
     const projected = projectVerifiedAttackInputChainSegment(
       source,
       chainSegment,
       sequenceIndex,
       sequenceTotal,
-      chain.chainIdentity
+      chain.chainIdentity,
+      chainSequenceIndex
     );
     return projected
       ? {
@@ -185,7 +201,7 @@ export function resolveVerifiedAttackInputChainEntry({
   };
 }
 
-function isDerivedAttackChainEntryActive({
+function resolveDerivedAttackChainEntry({
   chain,
   graph,
   actorId,
@@ -194,19 +210,45 @@ function isDerivedAttackChainEntryActive({
   actions,
   runtimeSelections,
 }) {
-  const firstSegment = chain.segments?.[0];
-  if (!firstSegment) return false;
-  const quickEntry = (variantRuntime?.activeSwitchWindows ?? []).some(
-    window =>
+  if (!chain.segments?.length) return null;
+  const quickEntries = (variantRuntime?.activeSwitchWindows ?? [])
+    .filter(
+      window =>
+      (window.compilerBindingIdentity != null ||
+        window.relationType === 'attack-chain-continuity-window') &&
       String(window.actorId) === String(actorId) &&
-      Number(window.targetControlSkillId) ===
-        Number(firstSegment.controlSkillId) &&
-      Number(window.targetSubSkillIndex) ===
-        Number(firstSegment.subSkillIndex) &&
       Number(window.startsAtMs) <= Number(timeMs) &&
       Number(timeMs) < Number(window.endsAtMs)
-  );
-  if (quickEntry) return true;
+    )
+    .map(window => {
+      const segment = chain.segments.find(
+        candidate =>
+          Number(candidate.controlSkillId) ===
+            Number(window.targetControlSkillId) &&
+          Number(candidate.subSkillIndex) ===
+            Number(window.targetSubSkillIndex) &&
+          (window.targetChainIdentity == null ||
+            String(window.targetChainIdentity) === String(chain.chainIdentity))
+      );
+      return segment ? { window, segment } : null;
+    })
+    .filter(Boolean)
+    .sort(
+      (left, right) =>
+        Number(right.window.startsAtMs) - Number(left.window.startsAtMs) ||
+        Number(right.segment.sequenceIndex) -
+          Number(left.segment.sequenceIndex) ||
+        String(left.window.edgeIdentity).localeCompare(
+          String(right.window.edgeIdentity)
+        )
+    );
+  if (quickEntries.length > 0) {
+    return {
+      chain,
+      sequenceIndex: Number(quickEntries[0].segment.sequenceIndex),
+      sourceIdentity: quickEntries[0].window.sourceIdentity,
+    };
+  }
 
   const sourceChains = (graph?.attackInputChains ?? []).filter(
     candidate =>
@@ -220,14 +262,14 @@ function isDerivedAttackChainEntryActive({
       selection,
     ])
   );
-  return sourceChains.some(sourceChain => {
+  for (const sourceChain of sourceChains) {
     const transition = sourceChain.phaseTransition;
     const sourceSegment = sourceChain.segments.find(
       segment =>
         Number(segment.sequenceIndex) === Number(transition.sourceSequenceIndex)
     );
-    if (!sourceSegment) return false;
-    return (actions ?? []).some(action => {
+    if (!sourceSegment) continue;
+    const matched = (actions ?? []).some(action => {
       if (
         (String(action.actorId) !== String(actorId) &&
           Number(action.actorCharacterId) !== Number(chain.ownerId)) ||
@@ -261,7 +303,15 @@ function isDerivedAttackChainEntryActive({
         relativeFrame < Number(transition.inputWindow?.endFrame)
       );
     });
-  });
+    if (matched) {
+      return {
+        chain,
+        sequenceIndex: 1,
+        sourceIdentity: transition.sourceIdentity,
+      };
+    }
+  }
+  return null;
 }
 
 function resolveAttackChainSegmentLimit(segmentLimit, resourceValue, fallback) {

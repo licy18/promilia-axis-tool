@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "351c9f94e0f99c850e1501aa0a4fc2c8407db1ed6d699b06b8009a338a72dac2",
+  "packageHash": "59e436adac96009c4b148795fb87bf7d069b2820ab8a1228727fd0e570e4fa10",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -20,14 +20,14 @@
     "directoryActionCount": 563,
     "classifiedActionCount": 563,
     "linkedActionCount": 563,
-    "runnableActionCount": 457,
-    "sourceAppliedActionCount": 405,
+    "runnableActionCount": 458,
+    "sourceAppliedActionCount": 406,
     "sourceRuntimeDependentActionCount": 52,
-    "sourceStaticEvidenceGapActionCount": 106,
+    "sourceStaticEvidenceGapActionCount": 105,
     "scenarioResolvedActionCount": 62,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 106,
-    "hitNodeCount": 1589,
+    "unresolvedActionCount": 105,
+    "hitNodeCount": 1592,
     "dimensions": {
       "hp": {
         "nonzero": 936,
@@ -51,7 +51,7 @@
       }
     },
     "controlVariantCount": 940,
-    "unresolvedControlVariantCount": 516,
+    "unresolvedControlVariantCount": 515,
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 467,
     "scenarioResolvedNonzeroRecoveryElementCount": 207,
@@ -62,7 +62,7 @@
     "unresolvedProjectileTargetCount": 0,
     "unresolvedReferenceCount": 2533,
     "publicVariantCount": 593,
-    "unresolvedPublicVariantCount": 136,
+    "unresolvedPublicVariantCount": 135,
     "attackInputChainCount": 20,
     "attackInputSegmentCount": 95,
     "appliedAttackInputSegmentCount": 76,
@@ -225,14 +225,14 @@
       "directoryActionCount": 20,
       "classifiedActionCount": 20,
       "linkedActionCount": 20,
-      "runnableActionCount": 0,
-      "sourceAppliedActionCount": 0,
+      "runnableActionCount": 1,
+      "sourceAppliedActionCount": 1,
       "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 20,
+      "sourceStaticEvidenceGapActionCount": 19,
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 20,
-      "hitNodeCount": 0,
+      "unresolvedActionCount": 19,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 0,
@@ -758,14 +758,14 @@
       "directoryActionCount": 10,
       "classifiedActionCount": 10,
       "linkedActionCount": 10,
-      "runnableActionCount": 9,
-      "sourceAppliedActionCount": 8,
+      "runnableActionCount": 10,
+      "sourceAppliedActionCount": 9,
       "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 43,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 46,
       "dimensions": {
         "hp": {
           "nonzero": 15,
@@ -7073,33 +7073,6 @@
       ],
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
-    },
-    {
-      "identity": "actor|103002|10300221|2|10300227",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "ownerName": "红宝石",
-      "actionKind": "perfect-parry",
-      "sourceSkillId": 10300221,
-      "sourceSkillName": "一瞬的灼热",
-      "controlSkillId": 10300227,
-      "publicVariants": [
-        {
-          "index": 2,
-          "label": "集中闪避",
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10300221].level.labels[2]"
-        }
-      ],
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
     },
     {
       "identity": "actor|107001|10700101|0|10700103",
@@ -66124,15 +66097,8 @@
       "publicVariantIndex": 2,
       "publicVariantLabel": "集中闪避",
       "selected": true,
-      "classification": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
+      "classification": "applied",
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300221].level.labels[2]"
     },
     {
@@ -75951,15 +75917,8 @@
       "actionIdentities": [
         "actor|103002|10300221|2|10300227"
       ],
-      "classification": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
+      "classification": "applied",
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {

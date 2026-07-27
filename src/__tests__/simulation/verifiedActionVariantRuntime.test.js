@@ -121,7 +121,7 @@ describe('verified action variant and special resource runtime', () => {
       payload: {
         resourceIdentity: 'actor:103002:element:103002047',
         resourceName: '子弹',
-        operation: 'gain',
+        operation: 'set-to-capacity',
         beforeValue: 0,
         change: 12,
         afterValue: 12,
@@ -431,6 +431,373 @@ describe('verified action variant and special resource runtime', () => {
         event => event.actionId === outside.id
       )
     ).toEqual([]);
+  });
+
+  it('replays a materialized Ruby Star Carry window into public E1 at the block end', () => {
+    const starCarry = createActorAction({
+      id: 'ruby-star-carry-derived',
+      characterId: RUBY_ID,
+      skillId: 10300221,
+      startMs: 0,
+    });
+    const publicAttack = createActorAction({
+      id: 'ruby-public-after-star-carry',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(93),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    const runtime = runVariantRuntime({
+      actors: [starCarry.actor],
+      actions: [starCarry, publicAttack],
+      durationMs: 4000,
+      initialRuntimeState: createRubyAmmoState(starCarry.actorId, 6),
+    });
+
+    expect(runtime.activeSwitchWindows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceActionId: starCarry.id,
+          sourceControlSkillId: 10300221,
+          sourceSubSkillIndex: 0,
+          targetControlSkillId: 10300201,
+          targetSubSkillIndex: 1,
+          inputWindow: {
+            startFrame: 80,
+            endFrame: 112,
+            durationFrames: 32,
+          },
+          startsAtMs: frameTime(80),
+          endsAtMs: frameTime(112),
+        }),
+      ])
+    );
+    expect(runtime.selectionByActionId.get(publicAttack.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      semanticName: '强化普攻 E1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 1,
+    });
+    expect(
+      runtime.resourceEvents.find(event => event.actionId === publicAttack.id)
+    ).toMatchObject({
+      payload: {
+        operation: 'consume',
+        beforeValue: 6,
+        afterValue: 5,
+      },
+    });
+  });
+
+  it.each([
+    {
+      label: 'A3 transition',
+      startFrame: 34,
+      endFrame: 79,
+      initialAmmo: 6,
+      createSource: () =>
+        createActorAction({
+          id: 'ruby-entry-source-a3',
+          characterId: RUBY_ID,
+          skillId: 10300201,
+          startMs: 0,
+          attackInput: RUBY_A3,
+          attackSequenceIndex: 3,
+          attackInputIntent: createPublicNormalAttackIntent(),
+        }),
+    },
+    {
+      label: 'reload',
+      startFrame: 24,
+      endFrame: 264,
+      initialAmmo: 0,
+      createSource: () =>
+        createActorAction({
+          id: 'ruby-entry-source-reload',
+          characterId: RUBY_ID,
+          skillId: 10300201,
+          actionVariantIndex: 1,
+          startMs: 0,
+        }),
+    },
+    {
+      label: 'Star Skill',
+      startFrame: 40,
+      endFrame: 280,
+      initialAmmo: 0,
+      createSource: () =>
+        createActorAction({
+          id: 'ruby-entry-source-star-skill',
+          characterId: RUBY_ID,
+          skillId: 10300212,
+          startMs: 0,
+        }),
+    },
+    {
+      label: 'ultimate end',
+      startFrame: 329,
+      endFrame: 537,
+      initialAmmo: 0,
+      createSource: () =>
+        createActorAction({
+          id: 'ruby-entry-source-ultimate',
+          characterId: RUBY_ID,
+          skillId: 10300213,
+          startMs: 0,
+        }),
+    },
+    {
+      label: 'Star Carry',
+      startFrame: 80,
+      endFrame: 112,
+      initialAmmo: 6,
+      createSource: () =>
+        createActorAction({
+          id: 'ruby-entry-source-star-carry',
+          characterId: RUBY_ID,
+          skillId: 10300221,
+          startMs: 0,
+        }),
+    },
+  ])(
+    'uses the sourced half-open $label quick-entry window',
+    ({ startFrame, endFrame, initialAmmo, createSource }) => {
+      for (const { frame, enhanced } of [
+        { frame: startFrame - 1, enhanced: false },
+        { frame: startFrame, enhanced: true },
+        { frame: endFrame - 1, enhanced: true },
+        { frame: endFrame, enhanced: false },
+      ]) {
+        const source = createSource();
+        const candidate = createActorAction({
+          id: `${source.id}-candidate-${frame}`,
+          characterId: RUBY_ID,
+          skillId: 10300201,
+          startMs: frameTime(frame),
+          attackInput: RUBY_A1,
+          attackSequenceIndex: 1,
+          attackInputIntent: createPublicNormalAttackIntent(),
+        });
+        const runtime = runVariantRuntime({
+          actors: [source.actor],
+          actions: [source, candidate],
+          durationMs: frameTime(endFrame + 120),
+          initialRuntimeState: createRubyAmmoState(
+            source.actorId,
+            initialAmmo
+          ),
+        });
+        expect(runtime.selectionByActionId.get(candidate.id)).toMatchObject(
+          enhanced
+            ? {
+                attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+                attackChainSequenceIndex: 1,
+                semanticName: '强化普攻 E1',
+              }
+            : {
+                attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+                attackChainSequenceIndex: 1,
+                semanticName: '普通攻击 A1',
+              }
+        );
+      }
+    }
+  );
+
+  it('emits one Red Heat stack per enhanced input through the compiled passive runtime', () => {
+    const enhanced = createActorAction({
+      id: 'ruby-one-red-heat-stack',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: 0,
+      attackInput: {
+        ...RUBY_A1,
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        controlSkillId: 10300201,
+        selectedSubSkillIndex: 1,
+        sequenceIndex: 1,
+        sequenceTotal: 12,
+      },
+      attackSequenceIndex: 1,
+    });
+    enhanced.attackInputChainIdentity = 'ruby-enhanced-twelve-inputs';
+    const runtime = runVariantRuntime({
+      actors: [enhanced.actor],
+      actions: [enhanced],
+      durationMs: 1000,
+      initialRuntimeState: createRubyAmmoState(enhanced.actorId, 12),
+    });
+
+    expect(runtime.effectCommands).toHaveLength(1);
+    expect(runtime.effectCommands[0]).toMatchObject({
+      sourceActionId: enhanced.id,
+      timeMs: 0,
+      stackDelta: 1,
+      maxStacks: 6,
+    });
+  });
+
+  it.each([
+    { previousSequence: 1, expectedSequence: 2 },
+    { previousSequence: 3, expectedSequence: 4 },
+    { previousSequence: 11, expectedSequence: 12 },
+  ])(
+    'preserves Ruby enhanced sequence E$previousSequence through a sourced dodge continuity window',
+    ({ previousSequence, expectedSequence }) => {
+      const chain = mechanicsPackage.actionVariantGraph.attackInputChains.find(
+        item => item.chainIdentity === 'ruby-enhanced-twelve-inputs'
+      );
+      const actorId = `actor-${RUBY_ID}`;
+      let cursorFrame = 0;
+      const enhancedActions = chain.segments
+        .slice(0, previousSequence)
+        .map((segment, index) => {
+          const source = RUBY_NORMAL_MAPPING.attackInputSourceSegments.find(
+            item => Number(item.controlSkillId) === Number(segment.controlSkillId)
+          );
+          const attackInput = projectVerifiedAttackInputChainSegment(
+            source,
+            segment,
+            index + 1,
+            previousSequence,
+            chain.chainIdentity
+          );
+          const action = createActorAction({
+            id: `ruby-continuity-e${index + 1}`,
+            characterId: RUBY_ID,
+            skillId: 10300201,
+            startMs: frameTime(cursorFrame),
+            attackInput,
+            attackSequenceIndex: index + 1,
+          });
+          action.attackInputChainIdentity = chain.chainIdentity;
+          action.attackGroupId = 'ruby-continuity-source-group';
+          action.attackSequenceTotal = previousSequence;
+          cursorFrame += Number(segment.durationFrames);
+          return action;
+        });
+      const dodge = createActorAction({
+        id: `ruby-continuity-dodge-after-e${previousSequence}`,
+        characterId: RUBY_ID,
+        skillId: 10300201,
+        actionVariantIndex: 2,
+        startMs: frameTime(cursorFrame),
+      });
+      const resumed = createActorAction({
+        id: `ruby-continuity-resume-e${expectedSequence}`,
+        characterId: RUBY_ID,
+        skillId: 10300201,
+        startMs: frameTime(cursorFrame + 30),
+        attackInput: RUBY_A1,
+        attackSequenceIndex: 1,
+        attackInputIntent: createPublicNormalAttackIntent(),
+      });
+      const runtime = runVariantRuntime({
+        actors: [enhancedActions[0].actor],
+        actions: [...enhancedActions, dodge, resumed],
+        durationMs: 10_000,
+        initialRuntimeState: createRubyAmmoState(actorId, 12),
+      });
+
+      expect(runtime.selectionByActionId.get(resumed.id)).toMatchObject({
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        attackChainSequenceIndex: expectedSequence,
+        semanticName: `强化普攻 E${expectedSequence}`,
+      });
+      expect(
+        runtime.resourceEvents.find(event => event.actionId === resumed.id)
+      ).toMatchObject({
+        payload: {
+          operation: 'consume',
+          beforeValue: 12 - previousSequence,
+          afterValue: 11 - previousSequence,
+        },
+      });
+    }
+  );
+
+  it('resets Ruby enhanced continuity after the sourced dodge window or a switch-out', () => {
+    const chain = mechanicsPackage.actionVariantGraph.attackInputChains.find(
+      item => item.chainIdentity === 'ruby-enhanced-twelve-inputs'
+    );
+    const segment = chain.segments[2];
+    const source = RUBY_NORMAL_MAPPING.attackInputSourceSegments.find(
+      item => Number(item.controlSkillId) === Number(segment.controlSkillId)
+    );
+    const e3 = createActorAction({
+      id: 'ruby-reset-e3',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: 0,
+      attackInput: projectVerifiedAttackInputChainSegment(
+        source,
+        segment,
+        3,
+        3,
+        chain.chainIdentity
+      ),
+      attackSequenceIndex: 3,
+    });
+    e3.attackInputChainIdentity = chain.chainIdentity;
+    const dodge = createActorAction({
+      id: 'ruby-reset-dodge',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      actionVariantIndex: 2,
+      startMs: frameTime(segment.durationFrames),
+    });
+    const outside = createActorAction({
+      id: 'ruby-reset-outside',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(segment.durationFrames + 246),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    const switched = {
+      id: 'ruby-reset-switch',
+      type: 'switch',
+      actorId: e3.actorId,
+      targetActorId: 'actor-other',
+      targetCharacterId: 101003,
+      startMs: frameTime(segment.durationFrames + 10),
+      durationMs: 0,
+    };
+    const insideAfterSwitch = {
+      ...outside,
+      id: 'ruby-reset-after-switch',
+      startMs: frameTime(segment.durationFrames + 30),
+    };
+
+    const outsideRuntime = runVariantRuntime({
+      actors: [e3.actor],
+      actions: [e3, dodge, outside],
+      durationMs: 10_000,
+      initialRuntimeState: createRubyAmmoState(e3.actorId, 12),
+    });
+    expect(outsideRuntime.selectionByActionId.get(outside.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      semanticName: '普通攻击 A1',
+    });
+
+    const switchedRuntime = runVariantRuntime({
+      actors: [
+        e3.actor,
+        { id: 'actor-other', characterId: 101003, name: '寒悠悠' },
+      ],
+      actions: [e3, dodge, switched, insideAfterSwitch],
+      durationMs: 10_000,
+      initialRuntimeState: createRubyAmmoState(e3.actorId, 12),
+    });
+    expect(
+      switchedRuntime.selectionByActionId.get(insideAfterSwitch.id)
+    ).toMatchObject({
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      semanticName: '普通攻击 A1',
+    });
   });
 
   it('projects Jade gains, transformation, and the selected charged variant at exact frames', () => {

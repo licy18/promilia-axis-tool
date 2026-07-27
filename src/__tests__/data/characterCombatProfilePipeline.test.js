@@ -367,6 +367,424 @@ describe('M10 character combat profile pipeline', () => {
     ]);
   });
 
+  it('compiles a sourced control-transition input window without an element wrapper', () => {
+    const ownerId = 424244;
+    const sourceControlSkillId = 42424421;
+    const targetControlSkillId = 42424401;
+    const sourceIdentity =
+      'fixture:skill_control_42424421#control-transition[80,112)->42424401/sub1';
+    const controls = [
+      {
+        controlSkillId: sourceControlSkillId,
+        variants: [{ subSkillIndex: 0 }],
+      },
+      {
+        controlSkillId: targetControlSkillId,
+        variants: [{ subSkillIndex: 1 }],
+      },
+    ];
+    const compilation = compileCharacterCombatRecipeContracts({
+      recipe: {
+        schemaVersion: 1,
+        ownerId,
+        compiler: {
+          timingPolicy: 'verified-input-reopen',
+          reachableControlSkillIds: controls.map(item => item.controlSkillId),
+          contextInputEdges: [],
+          publicActionForms: [],
+          attackInputChains: [],
+          variantWindowBindings: [
+            {
+              bindingIdentity: 'synthetic-direct-enhanced-entry',
+              evidenceKind: 'control-transition-window',
+              sourceControlSkillId,
+              sourceSubSkillIndex: 0,
+              targetControlSkillId,
+              targetSubSkillIndex: 1,
+              inputWindow: { startFrame: 80, endFrame: 112 },
+              inputCommand: 'normal-attack',
+              condition: { kind: 'always' },
+              sourceIdentity,
+            },
+          ],
+          thresholdTransitions: [],
+          passiveEffects: [],
+        },
+      },
+      character: {
+        id: ownerId,
+        name: 'Synthetic Transition Owner',
+        sourceIdentity: `fixture:character:${ownerId}`,
+      },
+      evidence: {
+        controls,
+        skills: [],
+        specialResourceProfiles: [],
+        specialResourceOperations: [],
+      },
+      operators: {
+        ...createNoopCompilerOperators(),
+        normalizeControlWindows: (control, subSkillIndex) =>
+          Number(control.controlSkillId) === sourceControlSkillId &&
+          Number(subSkillIndex) === 0
+            ? [
+                {
+                  kind: 'control-transition-window',
+                  startFrame: 80,
+                  endFrame: 112,
+                  targetControlSkillId,
+                  targetSubSkillIndex: 1,
+                  sourceIdentity,
+                },
+              ]
+            : [],
+      },
+    });
+
+    expect(compilation.contracts.variantWindowBindings).toEqual([
+      expect.objectContaining({
+        bindingIdentity: 'synthetic-direct-enhanced-entry',
+        evidenceKind: 'control-transition-window',
+        ownerId,
+        sourceControlSkillId,
+        sourceSubSkillIndex: 0,
+        targetControlSkillId,
+        targetSubSkillIndex: 1,
+        activationFrame: 80,
+        inputWindow: {
+          startFrame: 80,
+          endFrame: 112,
+          durationFrames: 32,
+        },
+        relationType: 'input-derived',
+        inputCommand: 'normal-attack',
+        sourceIdentity: expect.stringContaining(sourceIdentity),
+        status: 'applied',
+        applied: true,
+      }),
+    ]);
+  });
+
+  it('compiles reusable declared execution, hit, effect, and resource contracts', () => {
+    const ownerId = 424246;
+    const executionControlSkillId = 42424649;
+    const resourceElementId = 424246047;
+    const hitElementId = 424246147;
+    const effectElementId = 424246276;
+    const compilation = compileCharacterCombatRecipeContracts({
+      recipe: {
+        schemaVersion: 1,
+        ownerId,
+        compiler: {
+          timingPolicy: 'verified-input-reopen',
+          reachableControlSkillIds: [executionControlSkillId],
+          contextInputEdges: [],
+          publicActionForms: [
+            {
+              publicActionKind: 'perfect-parry',
+              publicControlSkillId: 42424627,
+              semanticIdentity: 'synthetic-focus-counter',
+              semanticName: 'Synthetic Focus Counter',
+              executionControlSkillId,
+              executionSubSkillIndex: 1,
+              selectionKind: 'wrapper-derived-execution',
+              condition: { kind: 'always' },
+              executionOccupancy: {
+                durationFrames: 35,
+                frameRate: 60,
+                sourceIdentity: 'fixture:focus-counter-occupancy',
+              },
+            },
+          ],
+          attackInputChains: [],
+          variantWindowBindings: [],
+          actionHitBindings: [
+            {
+              bindingIdentity: 'synthetic-focus-counter-hits',
+              controlSkillId: executionControlSkillId,
+              subSkillIndex: 1,
+              elementId: hitElementId,
+              triggerFrames: [15, 20, 25],
+              frameCount: 1,
+              targetKind: 'enemy',
+              sourceIdentity: 'fixture:focus-counter-hit-frames',
+            },
+          ],
+          actionEffectBindings: [
+            {
+              bindingIdentity: 'synthetic-six-stack-effect',
+              controlSkillId: executionControlSkillId,
+              subSkillIndex: 1,
+              mapIndex: 1,
+              elementId: effectElementId,
+              triggerFrame: 10,
+              lifecycleStackDelta: 6,
+              lifecycleMaxStacks: 6,
+              sourceIdentity: 'fixture:six-stack-effect',
+            },
+          ],
+          specialResources: [
+            {
+              resourceElementId,
+              expectedCapacity: 12,
+              operationDeclarations: [
+                {
+                  operationIdentity: 'synthetic-focus-counter-gain',
+                  controlSkillId: executionControlSkillId,
+                  subSkillIndex: 1,
+                  operation: 'gain',
+                  triggerFrame: 15,
+                  frameRate: 60,
+                  amount: 1,
+                  sourceIdentity: 'fixture:focus-counter-resource-gain',
+                },
+              ],
+              expectedOperationCounts: {
+                total: 1,
+                applied: 1,
+                notApplicable: 0,
+                unresolved: 0,
+              },
+            },
+          ],
+          thresholdTransitions: [],
+          passiveEffects: [],
+        },
+      },
+      character: {
+        id: ownerId,
+        name: 'Synthetic Declared Contract Owner',
+        sourceIdentity: `fixture:character:${ownerId}`,
+      },
+      evidence: {
+        controls: [
+          {
+            controlSkillId: executionControlSkillId,
+            frameRate: 60,
+            variants: [
+              {
+                subSkillIndex: 1,
+                sourceIdentity: 'fixture:focus-counter-variant',
+              },
+            ],
+            elements: [
+              {
+                mapIndex: 1,
+                elementId: hitElementId,
+                pathId: 'fixture-focus-hit',
+                sourceIdentity: 'fixture:focus-hit-element',
+                dimensions: {
+                  damage: { status: 'applied' },
+                },
+              },
+            ],
+          },
+        ],
+        skills: [],
+        tuningMarkProfiles: [],
+        specialResourceProfiles: [
+          {
+            ownerId,
+            elementId: resourceElementId,
+            resourceIdentity: `actor:${ownerId}:element:${resourceElementId}`,
+            capacity: 12,
+            sourceIdentity: 'fixture:focus-ammo-profile',
+          },
+        ],
+        specialResourceOperations: [],
+      },
+      operators: {
+        ...createNoopCompilerOperators(),
+        resolveControlVariantTiming: () => ({
+          frameRate: 60,
+          animation: {
+            durationFrames: 140,
+            status: 'applied',
+            sourceIdentity: 'fixture:focus-animation',
+          },
+          occupancy: {
+            durationFrames: 140,
+            status: 'applied',
+            sourceIdentity: 'fixture:focus-animation',
+          },
+          sourceIdentity: 'fixture:focus-animation',
+        }),
+        readElementAsset: elementId =>
+          Number(elementId) === effectElementId
+            ? {
+                pathId: 'fixture-focus-effect',
+                sourceIdentity: 'fixture:focus-effect-element',
+              }
+            : null,
+      },
+    });
+
+    expect(compilation.contracts.publicActionForms).toEqual([
+      expect.objectContaining({
+        selectionKind: 'wrapper-derived-execution',
+        executionControlSkillId,
+        executionSubSkillIndex: 1,
+        executionTiming: expect.objectContaining({
+          occupancy: expect.objectContaining({ durationFrames: 35 }),
+          animation: expect.objectContaining({ durationFrames: 140 }),
+        }),
+        applied: true,
+      }),
+    ]);
+    expect(compilation.contracts.actionHitBindings).toEqual([
+      expect.objectContaining({
+        bindingIdentity: 'synthetic-focus-counter-hits',
+        triggerFrames: [15, 20, 25],
+        applied: true,
+      }),
+    ]);
+    expect(compilation.contracts.actionEffectBindings).toEqual([
+      expect.objectContaining({
+        bindingKind: 'lifecycle-override',
+        lifecycleStackDelta: 6,
+        lifecycleMaxStacks: 6,
+        applied: true,
+      }),
+    ]);
+    expect(compilation.contracts.resourceTransactions).toEqual([
+      expect.objectContaining({
+        operationIdentity: 'synthetic-focus-counter-gain',
+        operation: 'gain',
+        triggerFrame: 15,
+        amountByLevel: { 1: 1 },
+        applied: true,
+      }),
+    ]);
+  });
+
+  it('compiles a reusable attack-chain continuity rule from sourced control windows', () => {
+    const ownerId = 424245;
+    const sourceSkillId = 42424501;
+    const enhancedControlSkillId = 42424502;
+    const intermediaryControlSkillId = 42424515;
+    const activeWindowTargetControlSkillId = 42424514;
+    const sourceIdentity =
+      'fixture:skill_control_42424515#attack-reopen[30,246)';
+    const controls = [
+      {
+        controlSkillId: enhancedControlSkillId,
+        variants: [{ subSkillIndex: 1 }],
+      },
+      {
+        controlSkillId: intermediaryControlSkillId,
+        variants: [{ subSkillIndex: 0 }],
+      },
+      {
+        controlSkillId: activeWindowTargetControlSkillId,
+        variants: [{ subSkillIndex: 1 }],
+      },
+    ];
+    const compilation = compileCharacterCombatRecipeContracts({
+      recipe: {
+        schemaVersion: 1,
+        ownerId,
+        compiler: {
+          timingPolicy: 'verified-input-reopen',
+          reachableControlSkillIds: controls.map(item => item.controlSkillId),
+          contextInputEdges: [],
+          publicActionForms: [],
+          attackInputChains: [
+            {
+              chainIdentity: 'synthetic-enhanced-chain',
+              sourceSkillId,
+              entryPolicy: { kind: 'derived-or-quick-entry' },
+              condition: { kind: 'always' },
+              continuityRules: [
+                {
+                  ruleIdentity: 'synthetic-dodge-chain-continuity',
+                  intermediaryControlSkillId,
+                  intermediarySubSkillIndex: 0,
+                  requiredActiveTargetControlSkillId:
+                    activeWindowTargetControlSkillId,
+                  requiredActiveTargetSubSkillIndex: 1,
+                  inputCommand: 'normal-attack',
+                  inputWindow: { startFrame: 30, endFrame: 246 },
+                  resumePolicy: 'next-segment',
+                  condition: { kind: 'always' },
+                  sourceIdentity,
+                },
+              ],
+              segments: [
+                {
+                  controlSkillId: enhancedControlSkillId,
+                  subSkillIndex: 1,
+                  nextControlSkillId: enhancedControlSkillId,
+                },
+              ],
+            },
+          ],
+          thresholdTransitions: [],
+          passiveEffects: [],
+        },
+      },
+      character: {
+        id: ownerId,
+        name: 'Synthetic Continuity Owner',
+        sourceIdentity: `fixture:character:${ownerId}`,
+      },
+      evidence: {
+        controls,
+        skills: [],
+        specialResourceProfiles: [],
+        specialResourceOperations: [],
+      },
+      operators: {
+        ...createNoopCompilerOperators(),
+        resolveNormalAttackTiming: () => ({
+          occupancy: {
+            status: 'applied',
+            durationFrames: 24,
+            sourceIdentity: 'fixture:enhanced-segment-timing',
+          },
+        }),
+        normalizeControlWindows: (control, subSkillIndex) =>
+          Number(control.controlSkillId) === intermediaryControlSkillId &&
+          Number(subSkillIndex) === 0
+            ? [
+                {
+                  kind: 'attack-reopen-window',
+                  startFrame: 30,
+                  endFrame: 246,
+                  allowAttack: true,
+                  allowedInputCommands: ['normal-attack'],
+                  sourceIdentity,
+                },
+              ]
+            : [],
+      },
+    });
+
+    expect(compilation.contracts.attackInputChains).toEqual([
+      expect.objectContaining({
+        chainIdentity: 'synthetic-enhanced-chain',
+        continuityRules: [
+          expect.objectContaining({
+            ruleIdentity: 'synthetic-dodge-chain-continuity',
+            intermediaryControlSkillId,
+            intermediarySubSkillIndex: 0,
+            requiredActiveTargetControlSkillId:
+              activeWindowTargetControlSkillId,
+            requiredActiveTargetSubSkillIndex: 1,
+            inputWindow: {
+              startFrame: 30,
+              endFrame: 246,
+              durationFrames: 216,
+            },
+            resumePolicy: 'next-segment',
+            status: 'applied',
+            applied: true,
+            sourceIdentity: expect.stringContaining(sourceIdentity),
+          }),
+        ],
+      }),
+    ]);
+  });
+
   it('publishes explicit form status and a deduplicated unresolved ledger', () => {
     expect(profile.denominator).toMatchObject({
       publicActionCount: 10,
@@ -502,7 +920,7 @@ describe('M10 character combat profile pipeline', () => {
         ownerHitEventCount: 111,
         ownerTotalHpDamage: 131213,
         ownerTotalToughnessDamage: 3704,
-        enemy: { initialHp: 862800, finalHp: 547396 },
+        enemy: { initialHp: 862800, finalHp: 546061 },
       },
       resources: {
         thresholdClearCount: 1,

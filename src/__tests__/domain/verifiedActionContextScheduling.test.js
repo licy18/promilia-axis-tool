@@ -242,6 +242,8 @@ describe('verified action context scheduling', () => {
           {
             actorId: 'actor-ruby',
             ownerId: 103002,
+            compilerBindingIdentity:
+              'ruby-star-skill-quick-enhanced-entry',
             sourceActionId: 'ruby-star-skill',
             targetControlSkillId: 10300201,
             targetSubSkillIndex: 1,

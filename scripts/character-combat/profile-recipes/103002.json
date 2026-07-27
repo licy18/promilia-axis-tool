@@ -70,8 +70,64 @@
         "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
       }
     ],
-    "contextInputEdges": [],
-    "publicActionForms": [],
+    "contextInputEdges": [
+      {
+        "sourceControlSkillId": 10300249,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "perfect-parry",
+        "sourceSemanticName": "集中闪避",
+        "publicActionKind": "perfect-parry",
+        "publicControlSkillId": 10300227,
+        "executionControlSkillId": 10300249,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "ruby-focus-dodge-counter",
+        "semanticName": "集中闪避反击",
+        "inputCommand": "normal-attack",
+        "condition": {
+          "kind": "always"
+        },
+        "inputWindow": {
+          "startFrame": 25,
+          "endFrame": 166,
+          "bridgeType": 0,
+          "continuousAttackType": 0
+        },
+        "sourceOccupancy": {
+          "durationFrames": 25,
+          "frameRate": 60,
+          "sourceKind": "declared-wrapper-input-occupancy",
+          "sourceIdentity": "skill_control_10300249.asset/MonoBehaviour/MonoBehaviour_-1475876437456334107__-1475876437456334107.json#counter-input-window-start=25F"
+        },
+        "executionOccupancy": {
+          "durationFrames": 35,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "skill_control_10300249.subskill.bundle#sub1.control-transition[35,80)->10300201/sub1"
+        },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_10300227.asset#listener-wrapper->10300249|skill_control_10300249.asset/MonoBehaviour/MonoBehaviour_-1475876437456334107__-1475876437456334107.json#control-transition[25,166)->10300249/sub1"
+      }
+    ],
+    "publicActionForms": [
+      {
+        "publicActionKind": "perfect-parry",
+        "publicControlSkillId": 10300227,
+        "executionControlSkillId": 10300249,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "ruby-focus-dodge-counter",
+        "semanticName": "集中闪避反击",
+        "selectionKind": "wrapper-derived-execution",
+        "executionOccupancy": {
+          "durationFrames": 35,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "skill_control_10300249.subskill.bundle#sub1.control-transition[35,80)->10300201/sub1"
+        },
+        "condition": {
+          "kind": "always"
+        }
+      }
+    ],
     "attackInputChains": [
       {
         "chainIdentity": "ruby-normal-default-three-inputs",
@@ -135,6 +191,30 @@
           "maximum": 12,
           "sourceIdentity": "Battle/Element/ast_103002049.asset#remove-one-ammo-layer"
         },
+        "continuityRules": [
+          {
+            "ruleIdentity": "ruby-enhanced-dodge-chain-continuity",
+            "intermediaryControlSkillId": 10300215,
+            "intermediarySubSkillIndex": 0,
+            "requiredActiveTargetControlSkillId": 10300214,
+            "requiredActiveTargetSubSkillIndex": 1,
+            "inputCommand": "normal-attack",
+            "inputWindow": {
+              "startFrame": 30,
+              "endFrame": 246
+            },
+            "resumePolicy": "next-segment",
+            "condition": {
+              "kind": "resource-at-least",
+              "resourceElementId": 103002047,
+              "value": 1
+            },
+            "exitRules": {
+              "kind": "resource-empty-timeout-switch-interruption-or-chain-complete"
+            },
+            "sourceIdentity": "Battle/Element/ast_103002243.asset#强化普攻闪避保持|skill_control_10300215.asset#attack-reopen-window[30,246)"
+          }
+        ],
         "segments": [
           {
             "controlSkillId": 10300201,
@@ -201,7 +281,31 @@
     ],
     "variantWindowBindings": [
       {
+        "bindingIdentity": "ruby-reload-quick-enhanced-entry",
+        "evidenceKind": "element-state-window",
+        "sourceControlSkillId": 10300210,
+        "sourceSubSkillIndex": 0,
+        "sourceElementId": 103002246,
+        "targetControlSkillId": 10300201,
+        "targetSubSkillIndex": 1,
+        "activationFrame": 24,
+        "decisionFrame": 24,
+        "durationMs": 4000,
+        "inputWindow": {
+          "startFrame": 24,
+          "endFrame": 264
+        },
+        "inputCommand": "normal-attack",
+        "condition": {
+          "kind": "resource-at-least",
+          "resourceElementId": 103002047,
+          "value": 1
+        },
+        "sourceIdentity": "skill_control_10300210.asset#skillResourceMaps[0].elements[elementConfigId=103002246]@24F|Battle/Element/ast_103002246.asset#duration=4000ms|skill_control_10300210.asset#control-transition[52,93)->10300201/sub1"
+      },
+      {
         "bindingIdentity": "ruby-star-skill-quick-enhanced-entry",
+        "evidenceKind": "element-state-window",
         "sourceControlSkillId": 10300212,
         "sourceSubSkillIndex": 0,
         "sourceElementId": 103002246,
@@ -210,13 +314,65 @@
         "activationFrame": 40,
         "decisionFrame": 40,
         "durationMs": 4000,
+        "inputWindow": {
+          "startFrame": 40,
+          "endFrame": 280
+        },
         "inputCommand": "normal-attack",
         "condition": {
           "kind": "resource-at-least",
           "resourceElementId": 103002047,
           "value": 1
         },
+        "verification": {
+          "e2e": "m10-b1-r1-ruby-star-skill"
+        },
         "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002246]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+      },
+      {
+        "bindingIdentity": "ruby-ultimate-end-quick-enhanced-entry",
+        "evidenceKind": "element-state-window",
+        "sourceControlSkillId": 10300213,
+        "sourceSubSkillIndex": 0,
+        "sourceElementId": 103002246,
+        "targetControlSkillId": 10300201,
+        "targetSubSkillIndex": 1,
+        "activationFrame": 297,
+        "decisionFrame": 329,
+        "durationMs": 4000,
+        "inputWindow": {
+          "startFrame": 329,
+          "endFrame": 537
+        },
+        "inputCommand": "normal-attack",
+        "condition": {
+          "kind": "resource-at-least",
+          "resourceElementId": 103002047,
+          "value": 1
+        },
+        "sourceIdentity": "skill_control_10300213.asset#skillResourceMaps[0].elements[elementConfigId=103002246]@297F|Battle/Element/ast_103002246.asset#duration=4000ms|skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-2200491169492840738__-2200491169492840738.json#control-transition[329,503)->10300201/sub1"
+      },
+      {
+        "bindingIdentity": "ruby-star-carry-direct-enhanced-entry",
+        "evidenceKind": "control-transition-window",
+        "sourceControlSkillId": 10300221,
+        "sourceSubSkillIndex": 0,
+        "targetControlSkillId": 10300201,
+        "targetSubSkillIndex": 1,
+        "inputWindow": {
+          "startFrame": 80,
+          "endFrame": 112
+        },
+        "inputCommand": "normal-attack",
+        "condition": {
+          "kind": "resource-at-least",
+          "resourceElementId": 103002047,
+          "value": 1
+        },
+        "verification": {
+          "e2e": "m10-b1-r3-ruby-star-carry-entry"
+        },
+        "sourceIdentity": "skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_2082990300363720803__2082990300363720803.json#control-transition[80,112)->10300201/sub1"
       }
     ],
     "actionEffectBindings": [
@@ -231,6 +387,47 @@
         "tuningMarkProfileKey": "fire",
         "stackDelta": 1,
         "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=150]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+      },
+      {
+        "bindingIdentity": "ruby-star-carry-thunder-tuning-mark",
+        "controlSkillId": 10300221,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 250,
+        "triggerFrame": 54,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "thunder",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-3809486317990090417__-3809486317990090417.json#elementConfigId=250@54F"
+      },
+      {
+        "bindingIdentity": "ruby-ultimate-red-heat-six-stacks",
+        "controlSkillId": 10300213,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 103002276,
+        "triggerFrame": 114,
+        "frameCount": 1,
+        "lifecycleStackDelta": 6,
+        "lifecycleMaxStacks": 6,
+        "sourceIdentity": "skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#self-property@114F|Battle/Element/ast_103002275.asset#combineNumber=6|NewTable/skill.rows[id=10300213]#gain-six-red-heat"
+      }
+    ],
+    "actionHitBindings": [
+      {
+        "bindingIdentity": "ruby-focus-dodge-counter-three-hits",
+        "controlSkillId": 10300249,
+        "subSkillIndex": 1,
+        "elementId": 103002147,
+        "triggerFrames": [
+          15,
+          20,
+          25
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10300249.subskill.bundle#MonoBehaviour_-3641915522962639021@15F|MonoBehaviour_4086983151447619411@20F|MonoBehaviour_2941305154071279443@25F|Battle/Element/ast_103002147.asset#counter-hit-1-3"
       }
     ],
     "specialResources": [
@@ -257,6 +454,21 @@
           {
             "match": {
               "operation": "gain",
+              "controlSkillId": 10300213,
+              "subSkillIndex": 0,
+              "sourceElementId": 103002048,
+              "triggerFrameStatus": "present"
+            },
+            "status": "applied",
+            "operation": "set-to-capacity",
+            "triggerFrame": 113,
+            "frameRate": 60,
+            "impactClassification": "gameplay-resource-transaction",
+            "sourceIdentity": "skill_control_10300213.asset#skillResourceMaps[0].elements[elementConfigId=103002048]@113F|Battle/Element/ast_103002048.asset#inject-ammo-capacity-12"
+          },
+          {
+            "match": {
+              "operation": "gain",
               "sourceElementId": 103002047,
               "triggerFrameStatus": "missing"
             },
@@ -266,9 +478,24 @@
             "sourceIdentity": "Battle/Element/ast_103002047.asset#root-resource-reference"
           }
         ],
+        "operationDeclarations": [
+          {
+            "operationIdentity": "actor:103002:element:103002047|10300249|1|focus-dodge-counter-gain|15",
+            "controlSkillId": 10300249,
+            "subSkillIndex": 1,
+            "operation": "gain",
+            "amount": 1,
+            "triggerFrame": 15,
+            "frameRate": 60,
+            "sourceElementId": 103002047,
+            "sourcePathId": "9043190771620165459",
+            "behaviorPathId": "9043190771620165459",
+            "sourceIdentity": "skill_control_10300249.subskill.bundle/MonoBehaviour_9043190771620165459__9043190771620165459.json#resourceElementId=103002047@15F|NewTable/skill.rows[id=10300227]#counter-ammo-plus-one"
+          }
+        ],
         "expectedOperationCounts": {
-          "total": 41,
-          "applied": 21,
+          "total": 42,
+          "applied": 22,
           "notApplicable": 20,
           "unresolved": 0
         }
@@ -284,7 +511,19 @@
         "expectedDurationMs": 15000,
         "expectedMaxStacks": 6,
         "expectedModifierCount": 1,
-        "runtimeGenerationMode": "semantic-effect-catalog"
+        "runtimeGenerationMode": "action-variant-runtime",
+        "triggerOverrides": [
+          {
+            "triggerIdentity": "10300261|10300213|0|114|ultimate-red-heat-six",
+            "controlSkillId": 10300213,
+            "subSkillIndex": 0,
+            "triggerFrame": 114,
+            "frameRate": 60,
+            "stackDelta": 6,
+            "sourceElementId": 103002275,
+            "sourceIdentity": "skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-5345265671158772002__-5345265671158772002.json#inject-wrapper@114F|Battle/Element/ast_103002275.asset#stack-buff"
+          }
+        ]
       }
     ]
   },
@@ -509,7 +748,7 @@
     },
     "traceSelectors": {
       "passiveEffectIds": [
-        "battle-element:4227003560910032429"
+        "battle-element:103002275"
       ],
       "stateEffectIds": [],
       "dynamicPropertyActionKeys": [
@@ -569,10 +808,10 @@
         "combat.damageEventCount": 221,
         "combat.ownerDamageEventCount": 215,
         "combat.ownerHitEventCount": 96,
-        "combat.ownerTotalHpDamage": 160675,
+        "combat.ownerTotalHpDamage": 161610,
         "combat.ownerTotalToughnessDamage": 66,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 699092,
+        "combat.enemy.finalHp": 698157,
         "resources.specialResourceTrace.0.actionId": "ruby-reload",
         "resources.specialResourceTrace.0.frame": 24,
         "resources.specialResourceTrace.0.beforeValue": 0,
@@ -624,17 +863,17 @@
         "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.actionId": "fire-kibo-signature",
         "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.change": -100,
         "effects.passiveMaxStacks": 6,
-        "effects.firstPassiveMaxStackFrame": 430,
+        "effects.firstPassiveMaxStackFrame": 1350,
         "effects.passiveTrace.0.actionId": "ruby-enhanced-shot-1",
         "effects.passiveTrace.0.afterStacks": 1,
         "effects.passiveTrace.5.afterStacks": 6,
-        "effects.passiveTrace.5.expiresAtMs": 22166.667,
-        "effects.passiveTrace.18.operation": "expire",
-        "effects.passiveTrace.18.frame": 2250,
-        "effects.passiveTrace.19.actionId": "ruby-ultimate",
-        "effects.passiveTrace.19.afterStacks": 1,
-        "effects.passiveTrace.23.operation": "expire",
-        "effects.passiveTrace.23.frame": 3620,
+        "effects.passiveTrace.5.expiresAtMs": 37500,
+        "effects.passiveTrace.6.operation": "expire",
+        "effects.passiveTrace.6.frame": 2250,
+        "effects.passiveTrace.7.actionId": "ruby-ultimate",
+        "effects.passiveTrace.7.afterStacks": 6,
+        "effects.passiveTrace.9.operation": "expire",
+        "effects.passiveTrace.9.frame": 3620,
         "dynamicProperties.ownerSources.0.attributeId": 1,
         "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
         "comparison.primaryDamage": 891,

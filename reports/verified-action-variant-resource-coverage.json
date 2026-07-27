@@ -3,12 +3,12 @@
   "kind": "azpr-verified-action-variant-resource-coverage",
   "status": "verified-action-variant-resource-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "351c9f94e0f99c850e1501aa0a4fc2c8407db1ed6d699b06b8009a338a72dac2",
+  "packageHash": "59e436adac96009c4b148795fb87bf7d069b2820ab8a1228727fd0e570e4fa10",
   "summary": {
     "profileCount": 2,
     "appliedProfileCount": 2,
-    "operationCount": 71,
-    "appliedOperationCount": 44,
+    "operationCount": 72,
+    "appliedOperationCount": 45,
     "unresolvedOperationCount": 7,
     "unresolvedOwnerCount": 1,
     "notApplicableOperationCount": 20,
@@ -18,7 +18,7 @@
     "ownerCount": 142,
     "nodeCount": 673,
     "edgeCount": 337,
-    "appliedEdgeCount": 94,
+    "appliedEdgeCount": 95,
     "unresolvedEdgeCount": 244,
     "resourceConditionEdgeCount": 259,
     "modeledOwnerCount": 4,
@@ -44,11 +44,11 @@
       "partially-resolved": 98,
       "static-evidence-gap": 3
     },
-    "contextEdgeCount": 7,
-    "appliedContextEdgeCount": 7,
-    "publicActionFormCount": 5,
+    "contextEdgeCount": 8,
+    "appliedContextEdgeCount": 8,
+    "publicActionFormCount": 6,
     "attackInputChainCount": 4,
-    "compiledVariantWindowBindingCount": 1,
+    "compiledVariantWindowBindingCount": 4,
     "hiddenInputAuditRowCount": 86,
     "hiddenInputPublicExecutionFormCount": 21
   },
@@ -1007,14 +1007,14 @@
       "operationSummary": {
         "consume": 15,
         "gain": 5,
-        "set-to-capacity": 1,
+        "set-to-capacity": 2,
         "unresolved:gain": 20
       },
       "actionVariantSummary": {
-        "total": 291,
-        "applied": 80,
+        "total": 292,
+        "applied": 81,
         "unresolved": 211,
-        "resourceConditioned": 253
+        "resourceConditioned": 254
       },
       "unresolvedOperations": [
         {
@@ -7114,44 +7114,6 @@
           "applied": false
         },
         {
-          "edgeIdentity": "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:1->-315085305908719333->0",
-          "ownerId": 103002,
-          "from": "actor:103002|control:10300213|sub:0",
-          "to": "actor:103002|control:10300201|sub:1",
-          "parentIdentity": "10300213|0|elements|0|-8639165093164721059",
-          "sourceRelationPath": [
-            {
-              "relation": "elementDataList",
-              "from": "element:-8639165093164721059",
-              "to": "element:-315085305908719333"
-            }
-          ],
-          "relationType": "input-derived",
-          "inputCommand": "normal-attack",
-          "sourceControlSkillId": 10300213,
-          "sourceSubSkillIndex": 0,
-          "targetControlSkillId": 10300201,
-          "targetSubSkillIndex": 1,
-          "skillSlot": 204,
-          "sourceElementId": 103002246,
-          "sourcePathId": "-315085305908719333",
-          "activationFrame": 0,
-          "decisionFrame": 0,
-          "durationMs": 4000,
-          "condition": {
-            "kind": "resource-at-least",
-            "resourceIdentity": "actor:103002:element:103002047",
-            "value": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
-          },
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-1706060855520538914__-1706060855520538914.json#startFrame|directInjectTargetType",
-          "status": "unresolved-action-variant-edge",
-          "reasons": [
-            "switch-wrapper-relation-unresolved"
-          ],
-          "applied": false
-        },
-        {
           "edgeIdentity": "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->0",
           "ownerId": 103002,
           "from": "actor:103002|control:10300213|sub:0",
@@ -8024,6 +7986,41 @@
             "switch-wrapper-relation-unresolved"
           ],
           "applied": false
+        },
+        {
+          "edgeIdentity": "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:1->-315085305908719333->297",
+          "ownerId": 103002,
+          "from": "actor:103002|control:10300213|sub:0",
+          "to": "actor:103002|control:10300201|sub:1",
+          "parentIdentity": "10300213|0|elements|2|-315085305908719333",
+          "sourceRelationPath": [],
+          "relationType": "input-derived",
+          "inputCommand": "normal-attack",
+          "sourceControlSkillId": 10300213,
+          "sourceSubSkillIndex": 0,
+          "targetControlSkillId": 10300201,
+          "targetSubSkillIndex": 1,
+          "skillSlot": 204,
+          "sourceElementId": 103002246,
+          "sourcePathId": "-315085305908719333",
+          "activationFrame": 297,
+          "decisionFrame": 0,
+          "durationMs": 4000,
+          "condition": {
+            "kind": "resource-at-least",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "value": 1,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+          },
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-7685886842033615138__-7685886842033615138.json#startFrame|directInjectTargetType",
+          "status": "verified-action-variant-edge-superseded",
+          "reasons": [
+            "duplicate-variant-window-normalized:ruby-ultimate-end-quick-enhanced-entry"
+          ],
+          "applied": false,
+          "rawStatus": "verified-action-variant-edge-ready",
+          "rawReasons": [],
+          "compilerBindingIdentity": "ruby-ultimate-end-quick-enhanced-entry"
         },
         {
           "edgeIdentity": "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:2->-2917409335481151685->missing",

@@ -2,19 +2,19 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-profile-catalog",
   "status": "character-combat-profile-catalog-ready",
-  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
+  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
   "profileSchema": "azpr://schemas/character-combat-profile/v1",
   "profiles": [
     {
       "ownerId": 101010,
       "ownerName": "涂山小玉",
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "4e355abd9d7518c0284e272ba32d7e126a5ad5b460c4f5f603f69a17f672a7b7",
+      "profileHash": "42b12d0d8feacad77e60d70fe8eaf7e7b66411e194031ce39c6f5a9bfab1ce54",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "bdacca0ef08888f8d3f48b81f59617bf3599fb93f1660125d3f694a1ae622356",
+      "runtimeContractHash": "215578292bf582e9e8a8b6d97f39d6b9d7bf6e15af9d1170d9834249767a654d",
       "sourcePath": "src/data/generated/character-combat-profiles/101010.json",
       "status": "character-combat-profile-valid"
     },
@@ -22,17 +22,17 @@
       "ownerId": 103002,
       "ownerName": "红宝石",
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9",
+      "profileHash": "c7fec8ec9a53bd4d64e29b21fb578ec3e126c5445575ea87ebef1416bc5b6080",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "9980f42f36f667e11085b36158857c79a0a8da589230584715529418dfe4c4ad",
+      "runtimeContractHash": "185fc1c47ca48cf41a6df9f020151d5d1979f8ec197bfcf394d38ce3838ef8f3",
       "sourcePath": "src/data/generated/character-combat-profiles/103002.json",
       "status": "character-combat-profile-valid"
     }
   ],
-  "coverageManifestHash": "e9386755b43e302e9cf3813fb71669f9e70f91088ce969f2d8b4de0bfd04f90e",
+  "coverageManifestHash": "3c706ff12e3c66a43f5c0f20e84e4f1d668cc5914119df1e5f9ea004845e888c",
   "summary": {
     "publicCharacterCount": 20,
     "compiledProfileCount": 2,

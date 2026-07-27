@@ -241,6 +241,14 @@ export function createCharacterCombatOutputRecords(artifacts) {
         artifact.actionPhaseMarkdown
       ),
       createJsonOutput(
+        `${reportRoot}/action-transition-coverage.json`,
+        artifact.actionTransitionCoverage
+      ),
+      createTextOutput(
+        `${reportRoot}/action-transition-coverage.md`,
+        artifact.actionTransitionMarkdown
+      ),
+      createJsonOutput(
         `${reportRoot}/unresolved-ledger.json`,
         artifact.unresolvedLedger
       ),
@@ -389,6 +397,9 @@ export function createCharacterCombatOwnerArtifacts({
   const attackInputChains = sortByIdentity(
     compiledContracts.attackInputChains ?? []
   );
+  const controlTransitionWindows = sortByIdentity(
+    compiledContracts.controlTransitionWindows ?? []
+  );
   const variantWindowBindings = sortByIdentity(
     compiledContracts.variantWindowBindings ?? []
   );
@@ -477,6 +488,7 @@ export function createCharacterCombatOwnerArtifacts({
       ownerContextEdges,
       ownerVariantEdges,
       attackInputChains,
+      controlTransitionWindows,
       variantWindowBindings,
       actionEffectBindings,
       specialResourceProfiles,
@@ -545,6 +557,17 @@ export function createCharacterCombatOwnerArtifacts({
     resourceTransactions,
     actionEffectBindings,
   });
+  const actionTransitionCoverage = createActionTransitionCoverage({
+    ownerId,
+    publicActions,
+    attackInputChains,
+    controlTransitionWindows,
+    variantEdges: ownerVariantEdges,
+    variantWindowBindings,
+    resourceTransactions,
+    actionEffectBindings,
+    rawEffects,
+  });
   const capturePlan = createRuntimeCapturePlan(unresolvedRecords, ownerId);
   const goldenFixture = createGoldenFixture({
     ownerId,
@@ -572,6 +595,7 @@ export function createCharacterCombatOwnerArtifacts({
     timingInputEdges: ownerContextEdges,
     variantEdges: ownerVariantEdges,
     attackInputChains,
+    controlTransitionWindows,
     variantWindowBindings,
     actionEffectBindings,
     hits,
@@ -690,6 +714,14 @@ export function createCharacterCombatOwnerArtifacts({
     },
     actionPhaseMarkdown: createActionPhaseCoverageMarkdown({
       ...actionPhaseCoverage,
+      profileHash: profile.profileHash,
+    }),
+    actionTransitionCoverage: {
+      ...actionTransitionCoverage,
+      profileHash: profile.profileHash,
+    },
+    actionTransitionMarkdown: createActionTransitionCoverageMarkdown({
+      ...actionTransitionCoverage,
       profileHash: profile.profileHash,
     }),
     unresolvedLedger: {
@@ -2362,6 +2394,630 @@ export function createActionPhaseCoverage({
     actionEffects: actionEffectRows,
     publicActionReview,
   };
+}
+
+export function createActionTransitionCoverage({
+  ownerId,
+  publicActions = [],
+  attackInputChains = [],
+  controlTransitionWindows = [],
+  variantEdges = [],
+  variantWindowBindings = [],
+  resourceTransactions = [],
+  actionEffectBindings = [],
+  rawEffects = [],
+}) {
+  const publicActionByControl = new Map();
+  for (const action of publicActions) {
+    const key = `${numberOrNull(action.controlSkillId)}|${numberOrNull(
+      action.selectedSubSkillIndex
+    )}`;
+    if (!publicActionByControl.has(key)) publicActionByControl.set(key, action);
+  }
+  const chainSegmentByExecution = new Map();
+  const chainByIdentity = new Map(
+    attackInputChains.map(chain => [chain.chainIdentity, chain])
+  );
+  for (const chain of attackInputChains) {
+    for (const segment of chain.segments ?? []) {
+      chainSegmentByExecution.set(
+        `${Number(segment.controlSkillId)}|${Number(segment.subSkillIndex)}`,
+        { chain, segment }
+      );
+    }
+  }
+  const transitions = [];
+  for (const chain of attackInputChains) {
+    for (let index = 0; index < (chain.segments ?? []).length - 1; index += 1) {
+      const sourceSegment = chain.segments[index];
+      const targetSegment = chain.segments[index + 1];
+      const inputWindow =
+        sourceSegment.executionTiming?.occupancy?.linkWindow ?? null;
+      transitions.push(
+        createTransitionCoverageRow({
+          ownerId,
+          identity: `${chain.chainIdentity}:segment:${sourceSegment.sequenceIndex}->${targetSegment.sequenceIndex}`,
+          sourceControlSkillId: sourceSegment.controlSkillId,
+          sourceSubSkillIndex: sourceSegment.subSkillIndex,
+          sourcePublicAction: publicActionByControl.get(
+            `${Number(sourceSegment.controlSkillId)}|${Number(
+              sourceSegment.subSkillIndex
+            )}`
+          ),
+          triggerPhase: 'input-window',
+          inputCommand: 'normal-attack',
+          inputWindow,
+          targetChain: chain,
+          targetSegment,
+          transitionSemantics: 'continue-chain',
+          exitRules: {
+            kind: 'chain-interrupted-or-complete',
+            maximumInputCount: chain.segments.length,
+          },
+          condition: chain.stateCondition,
+          evidenceKind: 'compiled-attack-chain-link',
+          sourceIdentity: uniqueStrings([
+            sourceSegment.sourceIdentity,
+            inputWindow?.sourceIdentity,
+            targetSegment.sourceIdentity,
+          ]).join('|'),
+          status: inputWindow ? 'applied' : 'static-evidence-gap',
+          applied: Boolean(inputWindow),
+          resourceTransactions,
+          actionEffectBindings,
+          rawEffects,
+        })
+      );
+    }
+    const phaseTransition = chain.phaseTransition;
+    if (phaseTransition?.targetChainIdentity) {
+      const sourceSegment = (chain.segments ?? []).find(
+        segment =>
+          Number(segment.sequenceIndex) ===
+          Number(phaseTransition.sourceSequenceIndex)
+      );
+      const targetChain = chainByIdentity.get(
+        phaseTransition.targetChainIdentity
+      );
+      const targetSegment = targetChain?.segments?.[0] ?? null;
+      transitions.push(
+        createTransitionCoverageRow({
+          ownerId,
+          identity: `${chain.chainIdentity}:phase-transition:${phaseTransition.targetChainIdentity}`,
+          sourceControlSkillId: sourceSegment?.controlSkillId,
+          sourceSubSkillIndex: sourceSegment?.subSkillIndex,
+          sourcePublicAction: publicActionByControl.get(
+            `${Number(sourceSegment?.controlSkillId)}|${Number(
+              sourceSegment?.subSkillIndex
+            )}`
+          ),
+          triggerPhase: 'input-window',
+          inputCommand: phaseTransition.inputCommand,
+          inputWindow: phaseTransition.inputWindow,
+          targetChain,
+          targetSegment,
+          transitionSemantics: 'replace-action-phase',
+          exitRules: targetChain?.segmentLimit
+            ? {
+                kind: 'resource-exhausted-or-input-limit-reached',
+                segmentLimit: targetChain.segmentLimit,
+              }
+            : { kind: 'chain-complete' },
+          condition: phaseTransition.condition,
+          evidenceKind: 'compiled-attack-phase-transition',
+          sourceIdentity: phaseTransition.sourceIdentity,
+          status: phaseTransition.applied ? 'applied' : 'static-evidence-gap',
+          applied: phaseTransition.applied === true,
+          resourceTransactions,
+          actionEffectBindings,
+          rawEffects,
+        })
+      );
+    }
+    for (const continuityRule of chain.continuityRules ?? []) {
+      transitions.push(
+        createTransitionCoverageRow({
+          ownerId,
+          identity: continuityRule.ruleIdentity,
+          sourceControlSkillId:
+            continuityRule.intermediaryControlSkillId,
+          sourceSubSkillIndex:
+            continuityRule.intermediarySubSkillIndex,
+          sourcePublicAction: publicActionByControl.get(
+            `${Number(continuityRule.intermediaryControlSkillId)}|${Number(
+              continuityRule.intermediarySubSkillIndex
+            )}`
+          ),
+          triggerPhase: 'input-window',
+          inputCommand: continuityRule.inputCommand,
+          inputWindow: continuityRule.inputWindow,
+          targetChain: chain,
+          targetSegment: null,
+          targetSequenceIndex: 'next',
+          transitionSemantics: 'resume-next-chain-segment',
+          exitRules: continuityRule.exitRules,
+          condition: continuityRule.condition,
+          evidenceKind: 'compiled-attack-chain-continuity',
+          sourceIdentity: continuityRule.sourceIdentity,
+          status: continuityRule.status,
+          applied: continuityRule.applied === true,
+          resourceTransactions,
+          actionEffectBindings,
+          rawEffects,
+        })
+      );
+    }
+  }
+
+  for (const binding of variantWindowBindings) {
+    const target = chainSegmentByExecution.get(
+      `${Number(binding.targetControlSkillId)}|${Number(
+        binding.targetSubSkillIndex
+      )}`
+    );
+    transitions.push(
+      createTransitionCoverageRow({
+        ownerId,
+        identity: binding.bindingIdentity,
+        sourceControlSkillId: binding.sourceControlSkillId,
+        sourceSubSkillIndex: binding.sourceSubSkillIndex,
+        sourcePublicAction: publicActionByControl.get(
+          `${Number(binding.sourceControlSkillId)}|${Number(
+            binding.sourceSubSkillIndex
+          )}`
+        ),
+        triggerPhase:
+          binding.triggerPhase ??
+          (binding.evidenceKind === 'control-transition-window'
+            ? 'input-window'
+            : 'state-activation'),
+        inputCommand: binding.inputCommand,
+        inputWindow: binding.inputWindow,
+        targetChain: target?.chain,
+        targetSegment: target?.segment,
+        transitionSemantics:
+          binding.transitionSemantics ??
+          (Number(target?.segment?.sequenceIndex) === 1
+            ? 'direct-entry'
+            : 'continue-chain'),
+        exitRules: binding.exitRules ?? null,
+        condition: binding.condition,
+        evidenceKind: binding.evidenceKind,
+        sourceIdentity: binding.sourceIdentity,
+        status: binding.status,
+        applied: binding.applied === true,
+        verification: binding.verification,
+        resourceTransactions,
+        actionEffectBindings,
+        rawEffects,
+      })
+    );
+  }
+
+  const coveredTransitionKeys = new Set(
+    transitions.map(createTransitionSemanticKey)
+  );
+  for (const edge of variantEdges) {
+    if (edge.applied !== true || edge.inputCommand !== 'normal-attack') {
+      continue;
+    }
+    const target = chainSegmentByExecution.get(
+      `${Number(edge.targetControlSkillId)}|${Number(
+        edge.targetSubSkillIndex
+      )}`
+    );
+    if (!target) continue;
+    const row = createTransitionCoverageRow({
+      ownerId,
+      identity:
+        edge.compilerBindingIdentity ??
+        edge.edgeIdentity ??
+        edge.sourceIdentity,
+      sourceControlSkillId: edge.sourceControlSkillId,
+      sourceSubSkillIndex: edge.sourceSubSkillIndex,
+      sourcePublicAction: publicActionByControl.get(
+        `${Number(edge.sourceControlSkillId)}|${Number(
+          edge.sourceSubSkillIndex
+        )}`
+      ),
+      triggerPhase: 'state-activation',
+      inputCommand: edge.inputCommand,
+      inputWindow:
+        edge.inputWindow ??
+        createFrameWindowFromDuration(
+          edge.activationFrame,
+          edge.durationMs
+        ),
+      targetChain: target.chain,
+      targetSegment: target.segment,
+      transitionSemantics:
+        Number(target.segment.sequenceIndex) === 1
+          ? 'direct-entry'
+          : 'continue-chain',
+      exitRules: null,
+      condition: edge.condition,
+      evidenceKind: 'battle-effect-variant-window',
+      sourceIdentity: edge.sourceIdentity,
+      status: edge.status,
+      applied: true,
+      resourceTransactions,
+      actionEffectBindings,
+      rawEffects,
+    });
+    const key = createTransitionSemanticKey(row);
+    if (coveredTransitionKeys.has(key)) continue;
+    coveredTransitionKeys.add(key);
+    transitions.push(row);
+  }
+
+  const rawWindows = controlTransitionWindows.map(window => {
+    const sourcePublicAction = publicActionByControl.get(
+      `${Number(window.sourceControlSkillId)}|${Number(
+        window.sourceSubSkillIndex
+      )}`
+    );
+    const target = chainSegmentByExecution.get(
+      `${Number(window.targetControlSkillId)}|${Number(
+        window.targetSubSkillIndex
+      )}`
+    );
+    const semanticKey = createTransitionSemanticKey({
+      sourceControlSkillId: window.sourceControlSkillId,
+      sourceSubSkillIndex: window.sourceSubSkillIndex,
+      targetControlSkillId: window.targetControlSkillId,
+      targetSubSkillIndex: window.targetSubSkillIndex,
+      inputWindow: {
+        startFrame: window.startFrame,
+        endFrame: window.endFrame,
+      },
+    });
+    const appliedTransition = transitions.find(
+      transition => createTransitionSemanticKey(transition) === semanticKey
+    );
+    return {
+      ...window,
+      sourcePublicActionIdentity:
+        sourcePublicAction?.mappingIdentity ?? sourcePublicAction?.id ?? null,
+      sourceActionKind: sourcePublicAction?.actionKind ?? 'hidden-control',
+      targetChainIdentity: target?.chain?.chainIdentity ?? null,
+      targetSequenceIndex: numberOrNull(target?.segment?.sequenceIndex),
+      targetSemanticName:
+        target?.segment?.semanticName ?? target?.segment?.label ?? null,
+      runtimeBindingIdentity:
+        appliedTransition?.transitionIdentity ?? null,
+      runtimeStatus: appliedTransition
+        ? 'applied'
+        : target
+          ? 'static-evidence-indexed'
+          : 'not-runtime-transition',
+      applied: Boolean(appliedTransition),
+    };
+  });
+
+  const sortedTransitions = dedupeBy(
+    transitions,
+    createTransitionSemanticKey
+  ).sort(compareTransitionCoverageRows);
+  const publicActionCoverage = publicActions.map(action => {
+    const actionTransitions = sortedTransitions.filter(
+      transition =>
+        Number(transition.sourceControlSkillId) ===
+          Number(action.controlSkillId) &&
+        Number(transition.sourceSubSkillIndex) ===
+          Number(action.selectedSubSkillIndex)
+    );
+    const resourceCount = resourceTransactions.filter(
+      transaction =>
+        transaction.applied === true &&
+        Number(transaction.controlSkillId) === Number(action.controlSkillId) &&
+        Number(transaction.subSkillIndex) ===
+          Number(action.selectedSubSkillIndex)
+    ).length;
+    const tuningEffectCount = rawEffects.filter(
+      effect =>
+        Number(effect.controlSkillId) === Number(action.controlSkillId) &&
+        Number(effect.mapIndex) === Number(action.selectedSubSkillIndex) &&
+        (effect.tuningMark?.applied === true ||
+          effect.tuningOverlimit?.applied === true)
+    ).length;
+    const directWindowCount = rawWindows.filter(
+      window =>
+        Number(window.sourceControlSkillId) ===
+          Number(action.controlSkillId) &&
+        Number(window.sourceSubSkillIndex) ===
+          Number(action.selectedSubSkillIndex)
+    ).length;
+    const gameplayGap =
+      action.runtimeReady !== true &&
+      (action.reasons ?? []).some(reason =>
+        /window|pack|state|resource|effect/.test(String(reason))
+      );
+    return {
+      publicActionIdentity:
+        action.identity ?? action.mappingIdentity ?? action.id ?? null,
+      actionKind: action.actionKind ?? null,
+      sourceSkillId: numberOrNull(action.sourceSkillId),
+      controlSkillId: numberOrNull(action.controlSkillId),
+      subSkillIndex: numberOrNull(action.selectedSubSkillIndex),
+      transitionCount: actionTransitions.length,
+      appliedTransitionCount: actionTransitions.filter(item => item.applied)
+        .length,
+      directWindowCount,
+      appliedResourceTransactionCount: resourceCount,
+      appliedTuningEffectCount: tuningEffectCount,
+      status: gameplayGap
+        ? 'static-evidence-gap'
+        : actionTransitions.length || resourceCount || tuningEffectCount
+          ? 'applied'
+          : 'not-applicable',
+      reasons: gameplayGap ? uniqueStrings(action.reasons ?? []) : [],
+      sourceIdentity:
+        action.bindingSourceIdentity ?? action.sourceIdentity ?? null,
+    };
+  });
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-character-combat-action-transition-coverage',
+    status: 'character-combat-action-transition-coverage-ready',
+    ownerId: Number(ownerId),
+    summary: {
+      publicActionCount: publicActionCoverage.length,
+      rawWindowCount: rawWindows.length,
+      semanticTransitionCount: sortedTransitions.length,
+      appliedTransitionCount: sortedTransitions.filter(row => row.applied)
+        .length,
+      staticEvidenceOnlyWindowCount: rawWindows.filter(
+        row => row.runtimeStatus === 'static-evidence-indexed'
+      ).length,
+      gameplayGapCount: publicActionCoverage.filter(
+        row => row.status === 'static-evidence-gap'
+      ).length,
+      notApplicableActionCount: publicActionCoverage.filter(
+        row => row.status === 'not-applicable'
+      ).length,
+    },
+    transitions: sortedTransitions,
+    publicActionCoverage,
+    rawWindows,
+  };
+}
+
+function createTransitionCoverageRow({
+  ownerId,
+  identity,
+  sourceControlSkillId,
+  sourceSubSkillIndex,
+  sourcePublicAction,
+  triggerPhase,
+  inputCommand,
+  inputWindow,
+  targetChain,
+  targetSegment,
+  targetSequenceIndex = null,
+  transitionSemantics,
+  exitRules,
+  condition,
+  evidenceKind,
+  sourceIdentity,
+  status,
+  applied,
+  verification = null,
+  resourceTransactions,
+  actionEffectBindings,
+  rawEffects,
+}) {
+  const normalizedInputWindow = inputWindow
+    ? {
+        startFrame: numberOrNull(inputWindow.startFrame),
+        endFrame: numberOrNull(inputWindow.endFrame),
+        durationFrames:
+          numberOrNull(inputWindow.durationFrames) ??
+          (Number(inputWindow.endFrame) - Number(inputWindow.startFrame)),
+      }
+    : null;
+  const sourceTransactions = resourceTransactions
+    .filter(
+      transaction =>
+        transaction.applied === true &&
+        Number(transaction.controlSkillId) === Number(sourceControlSkillId) &&
+        Number(transaction.subSkillIndex) === Number(sourceSubSkillIndex)
+    )
+    .map(transaction => ({
+      operation: transaction.operation ?? null,
+      triggerFrame: numberOrNull(transaction.triggerFrame),
+      value: numberOrNull(
+        transaction.amount ?? transaction.amountByLevel?.['1']
+      ),
+      resourceIdentity: transaction.resourceIdentity ?? null,
+      sourceIdentity: transaction.sourceIdentity ?? null,
+    }));
+  const boundEffects = [
+    ...actionEffectBindings
+      .filter(
+        binding =>
+          binding.applied === true &&
+          Number(binding.controlSkillId) === Number(sourceControlSkillId) &&
+          Number(binding.subSkillIndex) === Number(sourceSubSkillIndex)
+      )
+      .map(binding => ({
+        kind: binding.tuningMark ? 'tuning-mark' : 'action-effect',
+        triggerFrame: numberOrNull(binding.triggerFrame),
+        profileKey: binding.tuningMark?.profileKey ?? null,
+        stackDelta: numberOrNull(binding.tuningMark?.stackDelta),
+        sourceIdentity: binding.sourceIdentity ?? null,
+      })),
+    ...rawEffects
+      .filter(
+        effect =>
+          effect.applied === true &&
+          Number(effect.controlSkillId) === Number(sourceControlSkillId) &&
+          Number(effect.mapIndex) === Number(sourceSubSkillIndex) &&
+          (effect.tuningMark?.applied === true ||
+            effect.tuningOverlimit?.applied === true)
+      )
+      .map(effect => ({
+        kind: effect.tuningMark ? 'tuning-mark' : 'tuning-overlimit',
+        triggerFrame: numberOrNull(effect.trigger?.startFrame),
+        profileKey:
+          effect.tuningMark?.profileKey ??
+          effect.tuningOverlimit?.profileKey ??
+          null,
+        stackDelta:
+          numberOrNull(effect.tuningMark?.stackDelta) ??
+          numberOrNull(effect.tuningOverlimit?.stackDelta),
+        sourceIdentity: effect.sourceIdentity ?? null,
+      })),
+  ];
+  return {
+    transitionIdentity:
+      identity ??
+      [
+        ownerId,
+        sourceControlSkillId,
+        sourceSubSkillIndex,
+        targetSegment?.controlSkillId,
+        targetSegment?.subSkillIndex,
+        normalizedInputWindow?.startFrame,
+        normalizedInputWindow?.endFrame,
+      ].join('|'),
+    ownerId: Number(ownerId),
+    sourcePublicActionIdentity:
+      sourcePublicAction?.identity ??
+      sourcePublicAction?.mappingIdentity ??
+      sourcePublicAction?.id ??
+      null,
+    sourceActionKind: sourcePublicAction?.actionKind ?? 'hidden-control',
+    sourceControlSkillId: numberOrNull(sourceControlSkillId),
+    sourceSubSkillIndex: numberOrNull(sourceSubSkillIndex),
+    triggerPhase: triggerPhase ?? null,
+    resourceTransactions: dedupeBy(
+      sourceTransactions,
+      transaction =>
+        `${transaction.operation}|${transaction.triggerFrame}|${transaction.resourceIdentity}`
+    ),
+    actionEffects: dedupeBy(
+      boundEffects,
+      effect =>
+        `${effect.kind}|${effect.triggerFrame}|${effect.profileKey}|${effect.stackDelta}`
+    ),
+    inputCommand: inputCommand ?? null,
+    inputWindow: normalizedInputWindow,
+    condition: condition ?? null,
+    targetChainIdentity: targetChain?.chainIdentity ?? null,
+    targetSequenceIndex:
+      targetSequenceIndex === 'next'
+        ? 'next'
+        : numberOrNull(
+            targetSequenceIndex ?? targetSegment?.sequenceIndex
+          ),
+    targetControlSkillId: numberOrNull(targetSegment?.controlSkillId),
+    targetSubSkillIndex: numberOrNull(targetSegment?.subSkillIndex),
+    targetSemanticName:
+      targetSegment?.semanticName ?? targetSegment?.label ?? null,
+    transitionSemantics: transitionSemantics ?? null,
+    exitRules: exitRules ?? null,
+    evidenceKind: evidenceKind ?? null,
+    sourceIdentity: sourceIdentity ?? null,
+    runtimeCoverage: applied ? 'applied' : 'not-applied',
+    workbenchCoverage: applied
+      ? 'generic-runtime-projection'
+      : 'not-covered',
+    e2eCoverage: verification?.e2e ?? 'not-covered',
+    status: status ?? (applied ? 'applied' : 'static-evidence-gap'),
+    applied: applied === true,
+  };
+}
+
+function createTransitionSemanticKey(transition) {
+  return [
+    Number(transition.sourceControlSkillId),
+    Number(transition.sourceSubSkillIndex),
+    Number(transition.targetControlSkillId),
+    Number(transition.targetSubSkillIndex),
+    Number(transition.inputWindow?.startFrame),
+    Number(transition.inputWindow?.endFrame),
+  ].join('|');
+}
+
+function createFrameWindowFromDuration(startFrame, durationMs) {
+  const normalizedStart = numberOrNull(startFrame);
+  const normalizedDuration = Number(durationMs);
+  if (normalizedStart == null || !(normalizedDuration > 0)) return null;
+  const durationFrames = Math.round((normalizedDuration * 60) / 1000);
+  return {
+    startFrame: normalizedStart,
+    endFrame: normalizedStart + durationFrames,
+    durationFrames,
+  };
+}
+
+function compareTransitionCoverageRows(left, right) {
+  return (
+    Number(left.sourceControlSkillId) -
+      Number(right.sourceControlSkillId) ||
+    Number(left.sourceSubSkillIndex) - Number(right.sourceSubSkillIndex) ||
+    Number(left.inputWindow?.startFrame ?? -1) -
+      Number(right.inputWindow?.startFrame ?? -1) ||
+    String(left.transitionIdentity).localeCompare(
+      String(right.transitionIdentity)
+    )
+  );
+}
+
+function createActionTransitionCoverageMarkdown(report) {
+  const lines = [
+    `# ${report.ownerId} 动作衔接与派生闭包`,
+    '',
+    `- 公开动作：${report.summary.publicActionCount}`,
+    `- 原始控制窗口：${report.summary.rawWindowCount}`,
+    `- 语义转移：${report.summary.appliedTransitionCount}/${report.summary.semanticTransitionCount}`,
+    `- 仅索引未接入窗口：${report.summary.staticEvidenceOnlyWindowCount}`,
+    `- 玩法影响缺口：${report.summary.gameplayGapCount}`,
+    '',
+    '## 已归一转移',
+    '',
+    '| 来源 | 触发 | 输入窗 | 资源/印记 | 目标 | 语义 | 状态 |',
+    '| --- | --- | --- | --- | --- | --- | --- |',
+    ...report.transitions.map(transition => {
+      const source = `${transition.sourceActionKind} ${transition.sourceControlSkillId}/sub${transition.sourceSubSkillIndex}`;
+      const window = transition.inputWindow
+        ? `[${transition.inputWindow.startFrame},${transition.inputWindow.endFrame})`
+        : '-';
+      const transactions = [
+        ...transition.resourceTransactions.map(
+          item => `${item.operation}@${item.triggerFrame}F`
+        ),
+        ...transition.actionEffects.map(
+          item => `${item.kind}:${item.profileKey ?? '-'}@${item.triggerFrame}F`
+        ),
+      ].join('；');
+      const target = transition.targetChainIdentity
+        ? `${transition.targetChainIdentity} / ${transition.targetSemanticName}`
+        : `${transition.targetControlSkillId}/sub${transition.targetSubSkillIndex}`;
+      return `| ${markdownCell(source)} | ${markdownCell(
+        transition.triggerPhase
+      )} | ${markdownCell(window)} | ${markdownCell(
+        transactions || '-'
+      )} | ${markdownCell(target)} | ${markdownCell(
+        transition.transitionSemantics
+      )} | ${transition.status} |`;
+    }),
+    '',
+    '## 公开动作覆盖',
+    '',
+    '| 动作 | control/sub | 转移 | 资源事务 | 调谐效果 | 状态 |',
+    '| --- | --- | ---: | ---: | ---: | --- |',
+    ...report.publicActionCoverage.map(
+      action =>
+        `| ${markdownCell(action.actionKind)} | ${action.controlSkillId}/sub${
+          action.subSkillIndex
+        } | ${action.appliedTransitionCount}/${action.transitionCount} | ${
+          action.appliedResourceTransactionCount
+        } | ${action.appliedTuningEffectCount} | ${action.status} |`
+    ),
+    '',
+  ];
+  return `${lines.join('\n')}\n`;
 }
 
 function createActionPhaseCoverageMarkdown(report) {

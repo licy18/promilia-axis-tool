@@ -1,14 +1,14 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：563（来源占轴已确认 552，尚未确认 11；公开动作均按独立 schedulable 合同判断）
+- 公开动作：563（来源占轴已确认 553，尚未确认 10；公开动作均按独立 schedulable 合同判断）
 - 公开变体：593（来源占轴已确认 552，尚未确认 41）
 - 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
 - SkillControl/player 变体：1042
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
 - 精确选中变体占轴：630
-- 来源动画规划长度：27
+- 来源动画规划长度：26
 - 通用规划长度：1
 - control 身份未解析：1
 - 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 143
@@ -26,8 +26,8 @@
 | actor | limit-counter | verified-unconditional-attack-reopen-window | applied | 2 |
 | actor | normal-attack | normal-attack-input-segment-chain | applied | 12 |
 | actor | normal-attack | normal-attack-input-segment-chain | unresolved | 8 |
+| actor | perfect-parry | declared-verified-input-reopen-occupancy | applied | 1 |
 | actor | perfect-parry | skill-control-player-action-range | applied | 18 |
-| actor | perfect-parry | unresolved-action-occupancy | unresolved | 1 |
 | actor | perfect-parry | verified-unconditional-attack-reopen-window | applied | 1 |
 | actor | plunging-attack | skill-control-player-action-range | applied | 18 |
 | actor | plunging-attack | verified-unconditional-attack-reopen-window | applied | 2 |
@@ -81,7 +81,6 @@
 - `actor|103002|10300201|0|10300203`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|2|10300215`：verified-action-effective-occupancy-window-unresolved
 - `actor|103002|10300212|0|10300212`：verified-action-effective-occupancy-window-unresolved
-- `actor|103002|10300221|2|10300227`：verified-action-effective-occupancy-window-unresolved
 - `actor|107001|10700101|0|10700103`：normal-attack-input-segment-duration-unresolved
 - `actor|107002|10700201|0|10700203`：normal-attack-input-segment-duration-unresolved
 - `actor|107003|10700301|0|10700303`：normal-attack-input-segment-duration-unresolved

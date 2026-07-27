@@ -67,6 +67,7 @@ export function normalizeAttackInputActionFields(source = {}) {
       `attack-group-${normalizeText(source.id) ?? 'unresolved'}`,
     attackSequenceIndex: segment.sequenceIndex,
     attackSequenceTotal: segment.sequenceTotal,
+    attackChainSequenceIndex: segment.chainSequenceIndex,
     attackInputChainIdentity: segment.attackInputChainIdentity,
     ...(attackInputIntent ? { attackInputIntent } : {}),
     ...(attackInputChainSelectionSource
@@ -163,6 +164,7 @@ export function createWorkbenchAttackInputChainDrafts({
       attackGroupId: groupId,
       attackSequenceIndex: segment.sequenceIndex,
       attackSequenceTotal: segment.sequenceTotal,
+      attackChainSequenceIndex: segment.chainSequenceIndex,
       attackInputChainIdentity: segment.attackInputChainIdentity,
       attackInputIntent,
       attackInputChainSelectionSource,
@@ -428,6 +430,8 @@ function normalizeAttackInputSegment(segment) {
     identity,
     sequenceIndex,
     sequenceTotal,
+    chainSequenceIndex:
+      positiveIntegerOrNull(segment.chainSequenceIndex) ?? sequenceIndex,
     label: normalizeText(segment.label) ?? `A${sequenceIndex}`,
     semanticName: normalizeText(segment.semanticName),
     attackInputChainIdentity: normalizeText(segment.attackInputChainIdentity),

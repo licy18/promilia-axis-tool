@@ -3,8 +3,8 @@
 - 阶段：2（已应用 2）
 - 输入段：15
 - 阶段切换：1
-- 快速入口：12/12
-- 公开动作就绪：9/10
+- 快速入口：13/13
+- 公开动作就绪：10/10
 
 ## 动作阶段
 
@@ -18,8 +18,10 @@
 | 来源 | 触发帧/窗口 | 目标 | 条件 | 状态 |
 | --- | --- | --- | --- | --- |
 | ruby-normal-default-three-inputs#3 | [34,79) | ruby-enhanced-twelve-inputs | resource-at-least | applied |
+| 10300210/sub0 | 24F + 4000ms | 10300201/sub1 | resource-at-least | applied |
 | 10300212/sub0 | 40F + 4000ms | 10300201/sub1 | resource-at-least | applied |
-| 10300210/sub0 | 24F + 4000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
+| 10300213/sub0 | 297F + 4000ms | 10300201/sub1 | resource-at-least | applied |
+| 10300221/sub0 | 80F + 533.3333333333334ms | 10300201/sub1 | resource-at-least | applied |
 | 10300210/sub0 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub0 | 33F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub1 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
@@ -27,7 +29,6 @@
 | 10300210/sub2 | 24F + 4000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub2 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub2 | 33F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
-| 10300213/sub0 | 297F + 4000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300213/sub0 | 297F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300226/sub0 | 35F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 
@@ -44,6 +45,6 @@
 | ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges；judgment-condition-runtime-unimplemented；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；pack-lifecycle-runtime-unimplemented |
 | star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved |
 | limit-counter | 是 | applied-with-residual-gaps | effect-target-unresolved；inject-wrapper-classified-through-child-edges |
-| perfect-parry | 否 | static-evidence-gap | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；pack-lifecycle-runtime-unimplemented；verified-action-effective-occupancy-window-unresolved |
+| perfect-parry | 是 | applied |  |
 
 > 本报告由 owner contract 生成；描述只用于发现与命名，运行状态以 control、资源事务、派生窗口和效果绑定为准。

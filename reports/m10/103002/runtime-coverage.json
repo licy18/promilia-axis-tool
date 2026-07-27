@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 103002,
-  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
+  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
   "actionRows": [
     {
       "actionIdentity": "actor|103002|10300201|0|10300203",
@@ -332,9 +332,9 @@
         10300227
       ],
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "runtimeReady": false,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
       "hitCount": 0,
       "dimensionSummary": {
         "hp": {
@@ -350,34 +350,27 @@
           "unresolved": 4
         }
       },
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "verified-action-effective-occupancy-window-unresolved"
-      ]
+      "reasons": []
     }
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 9,
+    "runtimeReadyActionCount": 10,
     "executionFormCount": 24,
     "controlCount": 28,
-    "hitCount": 212,
+    "hitCount": 215,
     "rawEffectCount": 378,
     "semanticEffectCount": 73,
     "resourceProfileCount": 1,
-    "resourceTransactionCount": 41,
+    "resourceTransactionCount": 42,
     "thresholdTransitionCount": 0,
     "passiveCount": 1,
     "switchTriggerCount": 1,
     "coverageStatusCounts": {
-      "applied": 7,
-      "not-applicable": 3,
-      "static-evidence-gap": 10
+      "applied": 11,
+      "not-applicable": 2,
+      "static-evidence-gap": 7
     }
   },
-  "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9"
+  "profileHash": "c7fec8ec9a53bd4d64e29b21fb578ec3e126c5445575ea87ebef1416bc5b6080"
 }

@@ -3,6 +3,7 @@ import path from 'node:path';
 import {
   applyCharacterCombatAttackInputPhaseMappings,
   applyCharacterCombatActionEffectBindings,
+  applyCharacterCombatActionHitBindings,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
   mergeCharacterCombatOwnerCompilations,
@@ -233,6 +234,26 @@ export async function createCharacterCombatProductionBuild({
   mergeCharacterCombatOwnerCompilations({
     actionVariantGraph,
     specialResourceCatalog,
+    compilations: ownerCompilations,
+  });
+  const unresolvedContextEdges = (
+    actionVariantGraph.contextEdges ?? []
+  ).filter(edge => edge.applied !== true);
+  if (unresolvedContextEdges.length > 0) {
+    throw new Error(
+      `character combat context edge compilation incomplete: ${unresolvedContextEdges
+        .map(
+          edge =>
+            `${
+              edge.edgeIdentity ??
+              `${edge.ownerId}/${edge.sourceControlSkillId}/${edge.sourceSubSkillIndex}->${edge.executionControlSkillId}/${edge.executionSubSkillIndex}`
+            } [${(edge.reasons ?? []).join('|')}]`
+        )
+        .join(', ')}`
+    );
+  }
+  applyCharacterCombatActionHitBindings({
+    controls: compilerEvidence?.controls ?? [],
     compilations: ownerCompilations,
   });
   applyCharacterCombatActionEffectBindings({

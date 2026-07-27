@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
+  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -435,14 +435,14 @@
       "damageEventCount": 403,
       "ownerDamageEventCount": 227,
       "ownerHitEventCount": 111,
-      "totalHpDamage": 315404,
+      "totalHpDamage": 316739,
       "totalToughnessDamage": 0,
       "ownerTotalHpDamage": 131213,
       "ownerTotalToughnessDamage": 3704,
       "enemy": {
         "pointCount": 582,
         "initialHp": 862800,
-        "finalHp": 547396,
+        "finalHp": 546061,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 6667,
@@ -2479,7 +2479,7 @@
           "eventId": null,
           "actionId": "ruby-ultimate",
           "frame": 1713,
-          "operation": "gain",
+          "operation": "set-to-capacity",
           "resourceIdentity": "actor:103002:element:103002047",
           "stateElementId": null,
           "beforeValue": 0,
@@ -2982,7 +2982,7 @@
           ]
         }
       ],
-      "baselineReplayHash": "a22feb40963270dbad7d1589c3cca6ada7442d848c5f7cab37ec99a1e0fc46b4"
+      "baselineReplayHash": "90de6612112440b88f8f467615ca622b7bfaf18bd73f9f5c553ec35ec250e59a"
     },
     "trace": {
       "damage": [
@@ -4264,8 +4264,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1717,
           "hitIdentity": null,
-          "rawDamage": 2604,
-          "hpDamage": 2604,
+          "rawDamage": 2625,
+          "hpDamage": 2625,
           "toughnessDamage": 1645,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4276,8 +4276,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1717,
           "hitIdentity": null,
-          "rawDamage": 1736,
-          "hpDamage": 1736,
+          "rawDamage": 1750,
+          "hpDamage": 1750,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4816,8 +4816,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "hitIdentity": null,
-          "rawDamage": 41415,
-          "hpDamage": 41415,
+          "rawDamage": 41741,
+          "hpDamage": 41741,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4900,8 +4900,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1900,
           "hitIdentity": null,
-          "rawDamage": 41415,
-          "hpDamage": 41415,
+          "rawDamage": 41741,
+          "hpDamage": 41741,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5056,8 +5056,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1944,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5092,8 +5092,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1960,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5200,8 +5200,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2004,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5236,8 +5236,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2020,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5344,8 +5344,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2064,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5380,8 +5380,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2080,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5488,8 +5488,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2124,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5572,8 +5572,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2140,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5680,8 +5680,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2184,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5716,8 +5716,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2200,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5824,8 +5824,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2244,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5860,8 +5860,8 @@
           "actionId": "ruby-ultimate",
           "frame": 2260,
           "hitIdentity": null,
-          "rawDamage": 6863,
-          "hpDamage": 6863,
+          "rawDamage": 6917,
+          "hpDamage": 6917,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -7946,7 +7946,7 @@
           "eventId": null,
           "actionId": "ruby-ultimate",
           "frame": 1713,
-          "operation": "gain",
+          "operation": "set-to-capacity",
           "resourceIdentity": "actor:103002:element:103002047",
           "stateElementId": null,
           "beforeValue": 0,
@@ -8548,7 +8548,7 @@
         }
       ]
     },
-    "summaryHash": "3d1d8103480d5589f64108e49c9527ffa76801821b5d9558f00acb2f87a0e242"
+    "summaryHash": "25aeed7932ef833f953025f95d739789bf2bc543784b3ca2eea4528dabdbc8d6"
   },
   "expected": {
     "exact": {
@@ -8585,7 +8585,7 @@
       "combat.ownerTotalHpDamage": 131213,
       "combat.ownerTotalToughnessDamage": 3704,
       "combat.enemy.initialHp": 862800,
-      "combat.enemy.finalHp": 547396,
+      "combat.enemy.finalHp": 546061,
       "resources.thresholdClearCount": 1,
       "resources.transformCount": 1,
       "resources.refreshCount": 1,
@@ -8865,8 +8865,8 @@
       {
         "jsonPath": "combat.enemy.finalHp",
         "operator": "exact",
-        "expected": 547396,
-        "actual": 547396,
+        "expected": 546061,
+        "actual": 546061,
         "passed": true
       },
       {
@@ -9116,6 +9116,6 @@
       }
     ]
   },
-  "replayHash": "9649fbff3aba3033a8a402adf6215ccc85cc8a3e1fbaea7c35192f1030d7e0ed",
-  "profileHash": "4e355abd9d7518c0284e272ba32d7e126a5ad5b460c4f5f603f69a17f672a7b7"
+  "replayHash": "0f93bac495e9f53115cabf66128d29ff274a5f5e4aad55636fcea71e86672874",
+  "profileHash": "42b12d0d8feacad77e60d70fe8eaf7e7b66411e194031ce39c6f5a9bfab1ce54"
 }

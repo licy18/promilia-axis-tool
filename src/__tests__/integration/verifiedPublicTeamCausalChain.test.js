@@ -68,13 +68,18 @@ describe('M9 public team causal chain', () => {
       withBuff.verifiedCombatRuntime.specialResourceRuntime;
     expect(
       specialResourceRuntime.resourceEvents.find(
-        event =>
-          event.actionId === 'ruby-ultimate' &&
-          event.payload.resourceIdentity === 'actor:103002:element:103002047' &&
-          event.payload.operation === 'gain'
-      )
-    ).toMatchObject({
-      payload: { beforeValue: 0, change: 12, afterValue: 12 },
+          event =>
+            event.actionId === 'ruby-ultimate' &&
+            event.payload.resourceIdentity === 'actor:103002:element:103002047' &&
+            event.payload.operation === 'set-to-capacity'
+        )
+      ).toMatchObject({
+      payload: {
+        operation: 'set-to-capacity',
+        beforeValue: 0,
+        change: 12,
+        afterValue: 12,
+      },
     });
     expect(
       specialResourceRuntime.resourceEvents.filter(

@@ -32,16 +32,16 @@ describe('M9 public runtime coverage', () => {
 
   it('keeps every unresolved public action explicit and source-scoped', () => {
     expect(coverage.summary).toMatchObject({
-      runnableActionCount: 457,
-      sourceAppliedActionCount: 405,
+      runnableActionCount: 458,
+      sourceAppliedActionCount: 406,
       sourceRuntimeDependentActionCount: 52,
       scenarioResolvedActionCount: 62,
       verifiedZeroActionCount: 0,
-      unresolvedActionCount: 106,
+      unresolvedActionCount: 105,
       unclassifiedUnresolvedActionCount: 0,
       unresolvedStatusCounts: {
         'runtime-and-evidence-gap': 72,
-        'static-evidence-gap': 34,
+        'static-evidence-gap': 33,
       },
     });
     expect(
@@ -65,6 +65,25 @@ describe('M9 public runtime coverage', () => {
         'nested-damage-trigger-lifecycle-not-expanded',
       ])
     );
+
+    expect(
+      coverage.actions.find(
+        action =>
+          action.identity === 'actor|103002|10300221|2|10300227'
+      )
+    ).toMatchObject({
+      ownerId: 103002,
+      actionKind: 'perfect-parry',
+      controlSkillId: 10300227,
+      runtimeStatus: 'runnable',
+      sourceEvidenceStatus: 'applied',
+      timing: {
+        status: 'applied',
+        durationFrames: 35,
+        schedulingKind: 'exact-public-action-execution-form-occupancy',
+      },
+      reasons: [],
+    });
   });
 
   it('separates current public recovery gaps from variants and catalog-external elements', () => {

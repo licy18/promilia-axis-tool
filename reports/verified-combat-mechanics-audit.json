@@ -3,13 +3,13 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "351c9f94e0f99c850e1501aa0a4fc2c8407db1ed6d699b06b8009a338a72dac2",
+  "packageHash": "59e436adac96009c4b148795fb87bf7d069b2820ab8a1228727fd0e570e4fa10",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
     "failed": 0,
     "status": "verified",
-    "outputHash": "a3dbea0bb416a72e299e212445b4f8364c0fd83f2b3148484066820da77b6797"
+    "outputHash": "df8a79bbbea1ee28320412cc7e3cc2243f17c8ff3294d5b9b88433b2ddfe6147"
   },
   "mechanismEvidence": {
     "schemaVersion": 1,
@@ -1278,10 +1278,10 @@
     "appliedHitBindingCount": 1830,
     "uniqueControlBindingCount": 501,
     "uniqueControlHitBindingCount": 3669,
-    "appliedEffectBindingCount": 132,
+    "appliedEffectBindingCount": 133,
     "verifiedZeroEffectBindingCount": 2,
-    "unresolvedEffectBindingCount": 3726,
-    "unresolvedActionBindingCount": 106,
+    "unresolvedEffectBindingCount": 3725,
+    "unresolvedActionBindingCount": 105,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
@@ -1425,24 +1425,6 @@
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|103002|10300221|2|10300227",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "sourceSkillId": 10300221,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10300227,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "verified-action-effective-occupancy-window-unresolved"
       ],
       "applied": false
     },

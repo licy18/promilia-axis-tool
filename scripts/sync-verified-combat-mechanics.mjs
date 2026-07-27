@@ -621,7 +621,8 @@ export async function createVerifiedCombatMechanicsBuild({
         battleTargetTypeContract,
       });
       packageValue.semanticEffectCatalog = createSemanticEffectRuntimeCatalog(
-        semanticEffectCatalog
+        semanticEffectCatalog,
+        packageValue.specialResourceCatalog?.passiveEffects ?? []
       );
       packageValue.packageHash = sha256(
         JSON.stringify({
@@ -7471,13 +7472,34 @@ function createSemanticEffectCatalog({
   };
 }
 
-function createSemanticEffectRuntimeCatalog(catalog) {
+function createSemanticEffectRuntimeCatalog(catalog, passiveProfiles = []) {
+  const compiledPassiveProfiles = passiveProfiles.filter(
+    profile =>
+      profile.applied === true &&
+      profile.runtimeGenerationMode === 'action-variant-runtime'
+  );
+  const isCompiledPassiveEffect = effect =>
+    compiledPassiveProfiles.some(
+      profile =>
+        [profile.effectElementId, profile.propertyElementId].some(
+          elementId => Number(elementId) === Number(effect.elementId)
+        ) &&
+        (profile.triggerBindings ?? []).some(
+          trigger =>
+            Number(trigger.controlSkillId) ===
+              Number(effect.controlSkillId) &&
+            Number(trigger.subSkillIndex) === Number(effect.mapIndex) &&
+            Number(trigger.triggerFrame) ===
+              Number(effect.trigger?.startFrame)
+        )
+    );
   const semanticEffects = catalog.semanticEffects.filter(
     effect =>
       effect.classification === 'applied' &&
       effect.role === 'gameplay-effect' &&
       !effect.tuningMark &&
       !effect.tuningOverlimit &&
+      !isCompiledPassiveEffect(effect) &&
       Boolean(
         effect.propertyChange || effect.directSp || effect.heal || effect.shield
       )
@@ -7497,6 +7519,9 @@ function createSemanticEffectRuntimeCatalog(catalog) {
     summary: {
       fullSemanticEffectCount: catalog.semanticEffects.length,
       runtimeEffectCount: semanticEffects.length,
+      compiledPassiveEffectCount: catalog.semanticEffects.filter(
+        isCompiledPassiveEffect
+      ).length,
       runtimeFormulaCount: formulaIdentities.size,
       sourceKind: catalog.kind,
     },
@@ -7649,6 +7674,13 @@ function createSemanticEffectCandidate({
     placementResolution: resolution,
   });
   const stack = resolveEffectStackContract(node.lifecycle);
+  const boundLifecycle = rawEffects.find(
+    effect =>
+      effect.status ===
+        'verified-action-effect-lifecycle-binding-applied' &&
+      Number(effect.elementId) === Number(node.elementId) &&
+      effect.lifecycle
+  )?.lifecycle;
   return {
     semanticKey,
     semanticIdentity: `semantic-effect:${semanticKey}`,
@@ -7683,8 +7715,8 @@ function createSemanticEffectCandidate({
       combineType: node.lifecycle.combineType,
       maxCount: node.lifecycle.maxCount,
       stackMode: stack.mode,
-      stackDelta: 1,
-      maxStacks: stack.maxStacks,
+      stackDelta: boundLifecycle?.stackDelta ?? 1,
+      maxStacks: boundLifecycle?.maxStacks ?? stack.maxStacks,
       instanceScope: stack.instanceScope,
     },
     mechanic: node.mechanic,

@@ -67,6 +67,8 @@ describe('workbench normal attack input chain', () => {
           {
             actorId: 'actor-ruby',
             ownerId: 103002,
+            compilerBindingIdentity:
+              'ruby-star-skill-quick-enhanced-entry',
             targetControlSkillId: 10300201,
             targetSubSkillIndex: 1,
             startsAtMs: frameToMs(40),
@@ -134,6 +136,85 @@ describe('workbench normal attack input chain', () => {
         label: 'E1',
         semanticName: '强化普攻 E1',
         selectedSubSkillIndex: 1,
+      },
+    });
+  });
+
+  it('projects a sourced Ruby dodge continuation as the remaining E4-E12 inputs', () => {
+    const mapping = findNormalAttack(103002);
+    const resolved = resolveVerifiedAttackInputChainEntry({
+      entry: {
+        ...mapping,
+        skillId: mapping.sourceSkillId,
+      },
+      graph: mechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(100),
+      variantRuntime: {
+        initialState: [
+          {
+            actorId: 'actor-ruby',
+            characterId: 103002,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 9,
+            maxValue: 12,
+          },
+        ],
+        resourceEvents: [],
+        activeSwitchWindows: [
+          {
+            edgeIdentity:
+              'attack-chain-continuity:ruby-dodge:ruby-enhanced-dodge-chain-continuity:4',
+            relationType: 'attack-chain-continuity-window',
+            actorId: 'actor-ruby',
+            ownerId: 103002,
+            targetControlSkillId: 10300202,
+            targetSubSkillIndex: 1,
+            targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+            targetSequenceIndex: 4,
+            startsAtMs: frameToMs(90),
+            endsAtMs: frameToMs(306),
+          },
+        ],
+      },
+    });
+
+    expect(resolved.status).toBe('selected');
+    expect(
+      resolved.entry.attackInputSegments.map(segment => [
+        segment.sequenceIndex,
+        segment.chainSequenceIndex,
+        segment.semanticName,
+      ])
+    ).toEqual(
+      Array.from({ length: 9 }, (_, index) => [
+        index + 1,
+        index + 4,
+        `强化普攻 E${index + 4}`,
+      ])
+    );
+
+    const drafts = createChain(resolved.entry, 103002);
+    expect(drafts).toHaveLength(9);
+    expect(drafts[0]).toMatchObject({
+      attackSequenceIndex: 1,
+      attackChainSequenceIndex: 4,
+      attackInput: {
+        chainSequenceIndex: 4,
+        semanticName: '强化普攻 E4',
+        controlSkillId: 10300202,
+        selectedSubSkillIndex: 1,
+      },
+    });
+    expect(drafts.at(-1)).toMatchObject({
+      attackSequenceIndex: 9,
+      attackChainSequenceIndex: 12,
+      attackInput: {
+        chainSequenceIndex: 12,
+        semanticName: '强化普攻 E12',
+        controlSkillId: 10300204,
+        selectedSubSkillIndex: 2,
       },
     });
   });
