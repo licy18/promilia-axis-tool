@@ -486,7 +486,10 @@ function createAttackInputDraft({
       action.attackGroupId ?? `golden-${action.attackInputChainIdentity}`,
     attackSequenceIndex: sequenceIndex,
     attackSequenceTotal: Number(chain.segments.length),
-    attackInput,
+    attackInput: {
+      ...attackInput,
+      attackInputChainIdentity: action.attackInputChainIdentity,
+    },
   });
 }
 
@@ -565,6 +568,27 @@ function createGoldenActualProjection({
       change: numberOrNull(event.payload?.change),
       afterValue: numberOrNull(event.payload?.afterValue),
       durationMs: numberOrNull(event.payload?.stateDurationMs),
+    }))
+    .sort(compareFrameThenIdentity);
+  const tuningMarkTrace = (
+    result.verifiedTuningMarkGeneration?.events ??
+    result.verifiedCombatRuntime?.tuningMarkRuntime?.events ??
+    []
+  )
+    .map(event => ({
+      eventIdentity: event.eventIdentity ?? event.id ?? null,
+      actionId: event.actionId ?? null,
+      frame: numberOrNull(
+        event.frameIndex ??
+          msToFrame(event.timeMs, scenarioRecipe.frameRate)
+      ),
+      kind: event.kind ?? null,
+      profileKey: event.profileKey ?? null,
+      markId: numberOrNull(event.markId),
+      before: numberOrNull(event.before),
+      delta: numberOrNull(event.delta),
+      after: numberOrNull(event.after),
+      maximum: numberOrNull(event.maximum),
     }))
     .sort(compareFrameThenIdentity);
   const selectedEffectIds = new Set([
@@ -705,6 +729,7 @@ function createGoldenActualProjection({
         kiboSp.map(row => [row.slotId, row])
       ),
       specialResourceTrace,
+      tuningMarkTrace,
       thresholdClearCount: specialResourceTrace.filter(
         event =>
           event.stream === 'resource' &&
@@ -751,6 +776,7 @@ function createGoldenActualProjection({
     trace: {
       damage: damageTrace,
       specialResources: specialResourceTrace,
+      tuningMarks: tuningMarkTrace,
       effects: effectTrace,
     },
   };

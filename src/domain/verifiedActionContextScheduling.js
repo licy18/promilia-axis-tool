@@ -11,7 +11,8 @@ export function projectVerifiedAttackInputChainSegment(
   source,
   chainSegment,
   sequenceIndex,
-  sequenceTotal
+  sequenceTotal,
+  attackInputChainIdentity = null
 ) {
   if (!source || !chainSegment) return null;
   const executionTiming = chainSegment.executionTiming ?? {};
@@ -24,16 +25,29 @@ export function projectVerifiedAttackInputChainSegment(
     occupancy.durationFrames ?? chainSegment.durationFrames
   );
   const subSkillIndex = Number(chainSegment.subSkillIndex);
+  const controlSkillId = Number(
+    chainSegment.controlSkillId ?? source.controlSkillId
+  );
   const durationSourceIdentity =
     occupancy.sourceIdentity ?? chainSegment.sourceIdentity;
   const linkTimingApplied =
     resolvedSequenceIndex >= resolvedSequenceTotal || linkWindow != null;
+  const projectedIdentity = [
+    attackInputChainIdentity ?? source.attackInputChainIdentity ?? source.identity,
+    `segment:${resolvedSequenceIndex}`,
+    `control:${controlSkillId}`,
+    `sub:${subSkillIndex}`,
+  ]
+    .filter(Boolean)
+    .join('|');
 
   return {
     ...source,
+    identity: projectedIdentity,
     sequenceIndex: resolvedSequenceIndex,
     sequenceTotal: resolvedSequenceTotal,
-    label: `A${resolvedSequenceIndex}`,
+    label: chainSegment.label ?? `A${resolvedSequenceIndex}`,
+    semanticName: chainSegment.semanticName ?? source.semanticName ?? null,
     selectedSubSkillIndex: subSkillIndex,
     effectiveDurationFrames: durationFrames,
     durationFrames,
@@ -63,11 +77,14 @@ export function resolveVerifiedAttackInputChainEntry({
   actorId = null,
   timeMs = 0,
   effectIntervals = [],
+  variantRuntime = null,
+  actions = [],
+  runtimeSelections = [],
 } = {}) {
   if (!entry?.attackInputSegments?.length || !graph?.attackInputChains) {
     return { status: 'not-required', entry, chain: null };
   }
-  const chains = graph.attackInputChains.filter(
+  const eligibleChains = graph.attackInputChains.filter(
     chain =>
       chain.applied === true &&
       Number(chain.ownerId) === Number(ownerId) &&
@@ -77,27 +94,76 @@ export function resolveVerifiedAttackInputChainEntry({
         actorId,
         timeMs,
         effectIntervals,
+        variantRuntime,
       })
   );
+  const derivedChains = eligibleChains.filter(
+    chain =>
+      chain.entryPolicy?.kind === 'derived-or-quick-entry' &&
+      isDerivedAttackChainEntryActive({
+        chain,
+        graph,
+        actorId,
+        timeMs,
+        variantRuntime,
+        actions,
+        runtimeSelections,
+      })
+  );
+  const conditionSelectedChains = eligibleChains.filter(
+    chain =>
+      !chain.entryPolicy ||
+      chain.entryPolicy.kind === 'condition-selected'
+  );
+  const defaultChains = eligibleChains.filter(
+    chain => chain.entryPolicy?.kind === 'default'
+  );
+  const chains =
+    derivedChains.length > 0
+      ? derivedChains
+      : conditionSelectedChains.length > 0
+        ? conditionSelectedChains
+        : defaultChains;
   if (chains.length !== 1) {
     return { status: 'not-selected', entry, chain: null };
   }
 
   const chain = chains[0];
-  const segments = chain.segments.map((chainSegment, index) => {
-    const source = entry.attackInputSegments.find(
+  const resourceValue = resolveRuntimeResourceValue({
+    variantRuntime,
+    actorId,
+    resourceIdentity: chain.segmentLimit?.resourceIdentity,
+    timeMs,
+  });
+  const segmentLimit = resolveAttackChainSegmentLimit(
+    chain.segmentLimit,
+    resourceValue,
+    chain.segments.length
+  );
+  const selectedChainSegments = chain.segments.slice(0, segmentLimit);
+  const sourceSegments =
+    entry.attackInputSourceSegments ?? entry.attackInputSegments;
+  const segments = selectedChainSegments.map((chainSegment, index) => {
+    const source = sourceSegments.find(
       segment =>
         Number(segment.controlSkillId) === Number(chainSegment.controlSkillId)
     );
     if (!source) return null;
     const sequenceIndex = index + 1;
-    const sequenceTotal = chain.segments.length;
-    return projectVerifiedAttackInputChainSegment(
+    const sequenceTotal = selectedChainSegments.length;
+    const projected = projectVerifiedAttackInputChainSegment(
       source,
       chainSegment,
       sequenceIndex,
-      sequenceTotal
+      sequenceTotal,
+      chain.chainIdentity
     );
+    return projected
+      ? {
+          ...projected,
+          attackInputChainIdentity: chain.chainIdentity,
+        }
+      : null;
   });
   if (segments.some(segment => !segment)) {
     return {
@@ -115,6 +181,133 @@ export function resolveVerifiedAttackInputChainEntry({
       attackInputChainIdentity: chain.chainIdentity,
     },
   };
+}
+
+function isDerivedAttackChainEntryActive({
+  chain,
+  graph,
+  actorId,
+  timeMs,
+  variantRuntime,
+  actions,
+  runtimeSelections,
+}) {
+  const firstSegment = chain.segments?.[0];
+  if (!firstSegment) return false;
+  const quickEntry = (variantRuntime?.activeSwitchWindows ?? []).some(
+    window =>
+      String(window.actorId) === String(actorId) &&
+      Number(window.targetControlSkillId) ===
+        Number(firstSegment.controlSkillId) &&
+      Number(window.targetSubSkillIndex) ===
+        Number(firstSegment.subSkillIndex) &&
+      Number(window.startsAtMs) <= Number(timeMs) &&
+      Number(timeMs) < Number(window.endsAtMs)
+  );
+  if (quickEntry) return true;
+
+  const sourceChains = (graph?.attackInputChains ?? []).filter(
+    candidate =>
+      candidate.applied === true &&
+      candidate.phaseTransition?.applied === true &&
+      candidate.phaseTransition.targetChainIdentity === chain.chainIdentity
+  );
+  const selectionByActionId = new Map(
+    (runtimeSelections ?? []).map(selection => [
+      String(selection.actionId),
+      selection,
+    ])
+  );
+  return sourceChains.some(sourceChain => {
+    const transition = sourceChain.phaseTransition;
+    const sourceSegment = sourceChain.segments.find(
+      segment =>
+        Number(segment.sequenceIndex) ===
+        Number(transition.sourceSequenceIndex)
+    );
+    if (!sourceSegment) return false;
+    return (actions ?? []).some(action => {
+      if (
+        String(action.actorId) !== String(actorId) ||
+        Number(action.startMs) > Number(timeMs)
+      ) {
+        return false;
+      }
+      const selection = selectionByActionId.get(String(action.id));
+      const controlSkillId = Number(
+        selection?.executionControlSkillId ??
+          selection?.controlSkillId ??
+          action.attackInput?.controlSkillId
+      );
+      const subSkillIndex = Number(
+        selection?.selectedSubSkillIndex ??
+          action.controlSubSkillIndex ??
+          action.attackInput?.selectedSubSkillIndex
+      );
+      if (
+        controlSkillId !== Number(sourceSegment.controlSkillId) ||
+        subSkillIndex !== Number(sourceSegment.subSkillIndex)
+      ) {
+        return false;
+      }
+      const relativeFrame = msToFrame(
+        Number(timeMs) - Number(action.startMs),
+        transition.inputWindow?.frameRate ?? 60
+      );
+      return (
+        relativeFrame >= Number(transition.inputWindow?.startFrame) &&
+        relativeFrame < Number(transition.inputWindow?.endFrame)
+      );
+    });
+  });
+}
+
+function resolveAttackChainSegmentLimit(segmentLimit, resourceValue, fallback) {
+  if (!segmentLimit) return fallback;
+  if (segmentLimit.kind !== 'resource-current-value') return fallback;
+  const costPerSegment = Number(segmentLimit.costPerSegment);
+  const maximum = Math.min(
+    Number(segmentLimit.maximum) || fallback,
+    fallback
+  );
+  if (!(costPerSegment > 0) || !Number.isFinite(resourceValue)) return 0;
+  return Math.max(
+    0,
+    Math.min(maximum, Math.floor(Number(resourceValue) / costPerSegment))
+  );
+}
+
+function resolveRuntimeResourceValue({
+  variantRuntime,
+  actorId,
+  resourceIdentity,
+  timeMs,
+}) {
+  if (!resourceIdentity) return null;
+  const initial = (variantRuntime?.initialState ?? []).find(
+    entry =>
+      String(entry.actorId) === String(actorId) &&
+      entry.resourceIdentity === resourceIdentity
+  );
+  let value = Number(initial?.currentValue);
+  if (!Number.isFinite(value)) return null;
+  const events = (variantRuntime?.resourceEvents ?? [])
+    .filter(
+      event =>
+        String(event.actorId) === String(actorId) &&
+        event.payload?.resourceIdentity === resourceIdentity &&
+        Number(event.timeMs) <= Number(timeMs)
+    )
+    .sort(
+      (left, right) =>
+        Number(left.timeMs) - Number(right.timeMs) ||
+        Number(left.runtimeSequenceIndex) - Number(right.runtimeSequenceIndex)
+    );
+  for (const event of events) {
+    const afterValue = Number(event.payload?.afterValue);
+    if (Number.isFinite(afterValue)) value = afterValue;
+  }
+  return value;
 }
 
 export function resolveVerifiedContextActionStartMs({
@@ -424,8 +617,24 @@ function isRuntimeConditionSatisfied({
   actorId,
   timeMs,
   effectIntervals,
+  variantRuntime,
 }) {
   if (!condition || condition.kind === 'always') return true;
+  if (
+    condition.kind === 'resource-at-least' ||
+    condition.kind === 'resource-below'
+  ) {
+    const currentValue = resolveRuntimeResourceValue({
+      variantRuntime,
+      actorId,
+      resourceIdentity: condition.resourceIdentity,
+      timeMs,
+    });
+    if (!Number.isFinite(currentValue)) return false;
+    return condition.kind === 'resource-at-least'
+      ? currentValue >= Number(condition.value)
+      : currentValue < Number(condition.value);
+  }
   const stateActive = (effectIntervals ?? []).some(
     interval =>
       String(interval.effectId) ===

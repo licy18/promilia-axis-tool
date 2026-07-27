@@ -48,6 +48,7 @@ export function normalizeAttackInputActionFields(source = {}) {
       `attack-group-${normalizeText(source.id) ?? 'unresolved'}`,
     attackSequenceIndex: segment.sequenceIndex,
     attackSequenceTotal: segment.sequenceTotal,
+    attackInputChainIdentity: segment.attackInputChainIdentity,
     attackInput: segment,
     ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
   };
@@ -112,8 +113,8 @@ export function createWorkbenchAttackInputChainDrafts({
       sourceEvidenceStatus: segment.sourceEvidenceStatus,
       scenarioRuntimeStatus: segment.scenarioRuntimeStatus,
       note: timingReady
-        ? `普通攻击 ${segment.label} · control ${segment.controlSkillId} · ${segment.hitCount} 个命中绑定`
-        : `普通攻击 ${segment.label} · control ${segment.controlSkillId} · ${formatPlanningDuration(scheduling)}；来源证据与场景结算分开追踪`,
+        ? `${segment.semanticName ?? `普通攻击 ${segment.label}`} · control ${segment.controlSkillId} · ${segment.hitCount} 个命中绑定`
+        : `${segment.semanticName ?? `普通攻击 ${segment.label}`} · control ${segment.controlSkillId} · ${formatPlanningDuration(scheduling)}；来源证据与场景结算分开追踪`,
       generationBatch: {
         batchId: groupId,
         source: ATTACK_INPUT_CHAIN_SOURCE,
@@ -237,6 +238,10 @@ function normalizeAttackInputSegment(segment) {
     sequenceIndex,
     sequenceTotal,
     label: normalizeText(segment.label) ?? `A${sequenceIndex}`,
+    semanticName: normalizeText(segment.semanticName),
+    attackInputChainIdentity: normalizeText(
+      segment.attackInputChainIdentity
+    ),
     controlSkillId,
     selectedSubSkillIndex: nonNegativeIntegerOrNull(
       segment.selectedSubSkillIndex
@@ -332,6 +337,21 @@ function refreshAttackInputActionDrafts(actions, resolveMapping) {
     if (!action?.attackInput || action.attackInputLegacyStatus) continue;
     const mapping = resolveMapping(action);
     if (mapping?.actionKind !== 'normal-attack') continue;
+    const actionChainIdentity = normalizeText(
+      action.attackInputChainIdentity ??
+        action.attackInput?.attackInputChainIdentity
+    );
+    const mappingChainIdentity = normalizeText(
+      mapping.attackInputChainIdentity ??
+        mapping.attackInputSegments?.[0]?.attackInputChainIdentity
+    );
+    if (
+      actionChainIdentity &&
+      mappingChainIdentity &&
+      actionChainIdentity !== mappingChainIdentity
+    ) {
+      continue;
+    }
     const segments = normalizeAttackInputSegments(mapping.attackInputSegments);
     const segment = segments.find(
       item =>

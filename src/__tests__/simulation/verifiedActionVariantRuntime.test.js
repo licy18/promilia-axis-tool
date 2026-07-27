@@ -99,7 +99,7 @@ describe('verified action variant and special resource runtime', () => {
     });
   });
 
-  it('uses Ruby source frames and selects the ammo-aware attack chain', () => {
+  it('uses Ruby source frames and preserves the explicit attack phase', () => {
     const ultimate = createActorAction({
       id: 'ruby-ultimate',
       characterId: RUBY_ID,
@@ -174,14 +174,51 @@ describe('verified action variant and special resource runtime', () => {
     });
     expect(allowed.executionBlocks).toEqual([]);
     expect(allowed.selectionByActionId.get(attack.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      semanticName: '普通攻击 A1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 0,
+    });
+
+    const enhanced = createActorAction({
+      id: 'ruby-enhanced-a1',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: 0,
+      attackInput: {
+        ...RUBY_A1,
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        controlSkillId: 10300201,
+        selectedSubSkillIndex: 1,
+        sequenceIndex: 1,
+        sequenceTotal: 1,
+      },
+      attackSequenceIndex: 1,
+    });
+    enhanced.attackInputChainIdentity = 'ruby-enhanced-twelve-inputs';
+    const enhancedRuntime = runVariantRuntime({
+      actors: [enhanced.actor],
+      actions: [enhanced],
+      durationMs: 1000,
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: enhanced.actorId,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 1,
+          },
+        ],
+      },
+    });
+    expect(enhancedRuntime.selectionByActionId.get(enhanced.id)).toMatchObject({
       attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
-      semanticName: '强化普攻 A1',
+      semanticName: '强化普攻 E1',
       executionControlSkillId: 10300201,
       selectedSubSkillIndex: 1,
     });
-    expect(allowed.resourceEvents[0]).toMatchObject({
+    expect(enhancedRuntime.resourceEvents[0]).toMatchObject({
       timeMs: 0,
-      actionId: 'ruby-a1',
+      actionId: 'ruby-enhanced-a1',
       payload: {
         operation: 'consume',
         beforeValue: 1,
@@ -189,6 +226,151 @@ describe('verified action variant and special resource runtime', () => {
         afterValue: 0,
       },
     });
+
+    const exhaustedRuntime = runVariantRuntime({
+      actors: [enhanced.actor],
+      actions: [enhanced],
+      durationMs: 1000,
+    });
+    expect(exhaustedRuntime.resourceEvents).toEqual([]);
+    expect(exhaustedRuntime.executionBlocks).toEqual([
+      expect.objectContaining({
+        actionId: enhanced.id,
+        reason: 'verified-attack-input-chain-complete',
+        currentValue: 0,
+        maxValue: 12,
+      }),
+    ]);
+  });
+
+  it('refills Ruby ammunition to capacity and opens enhanced entry at the Star Skill release frame', () => {
+    const starSkill = createActorAction({
+      id: 'ruby-star-skill',
+      characterId: RUBY_ID,
+      skillId: 10300212,
+      startMs: 0,
+    });
+    const runtime = runVariantRuntime({
+      actors: [starSkill.actor],
+      actions: [starSkill],
+      durationMs: 5000,
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: starSkill.actorId,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 5,
+          },
+        ],
+      },
+    });
+
+    expect(runtime.resourceEvents).toEqual([
+      expect.objectContaining({
+        timeMs: frameTime(40),
+        actionId: 'ruby-star-skill',
+        payload: expect.objectContaining({
+          operation: 'set-to-capacity',
+          beforeValue: 5,
+          change: 7,
+          afterValue: 12,
+          maxValue: 12,
+        }),
+      }),
+    ]);
+    expect(runtime.activeSwitchWindows).toEqual([
+      expect.objectContaining({
+        actorId: starSkill.actorId,
+        sourceActionId: 'ruby-star-skill',
+        targetControlSkillId: 10300201,
+        targetSubSkillIndex: 1,
+        startsAtMs: frameTime(40),
+        endsAtMs: frameTime(40) + 4000,
+      }),
+    ]);
+
+    const cappedRuntime = runVariantRuntime({
+      actors: [starSkill.actor],
+      actions: [starSkill],
+      durationMs: 5000,
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: starSkill.actorId,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 12,
+          },
+        ],
+      },
+    });
+    expect(cappedRuntime.resourceEvents[0]).toMatchObject({
+      timeMs: frameTime(40),
+      payload: {
+        operation: 'set-to-capacity',
+        beforeValue: 12,
+        change: 0,
+        afterValue: 12,
+        maxValue: 12,
+      },
+    });
+
+    const enhancedAfterStar = createActorAction({
+      id: 'ruby-star-quick-entry-e1',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(204),
+      attackInput: {
+        ...RUBY_A1,
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        controlSkillId: 10300201,
+        selectedSubSkillIndex: 1,
+        sequenceIndex: 1,
+        sequenceTotal: 12,
+      },
+      attackSequenceIndex: 1,
+    });
+    enhancedAfterStar.attackInputChainIdentity =
+      'ruby-enhanced-twelve-inputs';
+    const quickEntryRuntime = runVariantRuntime({
+      actors: [starSkill.actor],
+      actions: [starSkill, enhancedAfterStar],
+      durationMs: 5000,
+      initialRuntimeState: {
+        specialResourcesByActor: [
+          {
+            actorId: starSkill.actorId,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 5,
+          },
+        ],
+      },
+    });
+    expect(
+      quickEntryRuntime.selectionByActionId.get(enhancedAfterStar.id)
+    ).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      semanticName: '强化普攻 E1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 1,
+    });
+    expect(quickEntryRuntime.resourceEvents).toEqual([
+      expect.objectContaining({
+        actionId: 'ruby-star-skill',
+        payload: expect.objectContaining({
+          operation: 'set-to-capacity',
+          beforeValue: 5,
+          afterValue: 12,
+        }),
+      }),
+      expect.objectContaining({
+        actionId: 'ruby-star-quick-entry-e1',
+        payload: expect.objectContaining({
+          operation: 'consume',
+          beforeValue: 12,
+          afterValue: 11,
+        }),
+      }),
+    ]);
   });
 
   it('projects Jade gains, transformation, and the selected charged variant at exact frames', () => {

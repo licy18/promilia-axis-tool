@@ -192,6 +192,118 @@ describe('verified action context scheduling', () => {
     ).toEqual(['ready', 'ready', 'ready']);
   });
 
+  it('keeps Ruby normal attack at three inputs until a verified enhanced entry is active', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 103002 &&
+        Number(item.sourceSkillId) === 10300201 &&
+        Number(item.actionVariantIndex) === 0
+    );
+    const entry = { ...mapping, skillId: mapping.sourceSkillId };
+    const baseRuntime = {
+      initialState: [
+        {
+          actorId: 'actor-ruby',
+          characterId: 103002,
+          resourceIdentity: 'actor:103002:element:103002047',
+          currentValue: 6,
+          maxValue: 12,
+        },
+      ],
+      resourceEvents: [],
+      activeSwitchWindows: [],
+    };
+
+    const defaultSelection = resolveVerifiedAttackInputChainEntry({
+      entry,
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: 1000,
+      effectIntervals: [],
+      variantRuntime: baseRuntime,
+    });
+    expect(defaultSelection.status).toBe('selected');
+    expect(defaultSelection.chain.chainIdentity).toBe(
+      'ruby-normal-default-three-inputs'
+    );
+    expect(defaultSelection.entry.attackInputSegments).toHaveLength(3);
+
+    const quickEntry = resolveVerifiedAttackInputChainEntry({
+      entry,
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: 1000,
+      effectIntervals: [],
+      variantRuntime: {
+        ...baseRuntime,
+        activeSwitchWindows: [
+          {
+            actorId: 'actor-ruby',
+            ownerId: 103002,
+            sourceActionId: 'ruby-star-skill',
+            targetControlSkillId: 10300201,
+            targetSubSkillIndex: 1,
+            startsAtMs: frameToMs(40),
+            endsAtMs: frameToMs(40) + 4000,
+          },
+        ],
+      },
+    });
+    expect(quickEntry.status).toBe('selected');
+    expect(quickEntry.chain.chainIdentity).toBe(
+      'ruby-enhanced-twelve-inputs'
+    );
+    expect(quickEntry.entry.attackInputSegments).toHaveLength(6);
+    expect(
+      quickEntry.entry.attackInputSegments.map(segment => [
+        segment.controlSkillId,
+        segment.selectedSubSkillIndex,
+      ])
+    ).toEqual([
+      [10300201, 1],
+      [10300201, 2],
+      [10300201, 3],
+      [10300202, 1],
+      [10300202, 2],
+      [10300202, 3],
+    ]);
+
+    const phaseEntry = resolveVerifiedAttackInputChainEntry({
+      entry,
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(34),
+      effectIntervals: [],
+      variantRuntime: baseRuntime,
+      actions: [
+        {
+          id: 'ruby-normal-a3',
+          actorId: 'actor-ruby',
+          startMs: 0,
+          attackInput: {
+            controlSkillId: 10300203,
+            selectedSubSkillIndex: 0,
+          },
+        },
+      ],
+      runtimeSelections: [
+        {
+          actionId: 'ruby-normal-a3',
+          executionControlSkillId: 10300203,
+          selectedSubSkillIndex: 0,
+        },
+      ],
+    });
+    expect(phaseEntry.status).toBe('selected');
+    expect(phaseEntry.chain.chainIdentity).toBe(
+      'ruby-enhanced-twelve-inputs'
+    );
+    expect(phaseEntry.entry.attackInputSegments).toHaveLength(6);
+  });
+
   it('snaps a derived heavy input to the sourced A5 context window', () => {
     const graph = createVariantGraph();
     const normalA5 = {

@@ -68,13 +68,13 @@
       "nodeKind": "public-action",
       "actionKind": "star-skill",
       "sourceSkillId": 10300212,
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
       "nodeIdentity": "actor|103002|10300212|0|10300212:default",
       "nodeKind": "action-form",
       "semanticName": "星鸣技",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
       "nodeIdentity": "actor|103002|10300212|1|10300226",
@@ -387,7 +387,7 @@
       "nodeKind": "control",
       "controlSkillId": 10300212,
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json",
-      "status": "static-evidence-gap"
+      "status": "applied"
     },
     {
       "nodeIdentity": "control:10300212:sub:0",
@@ -3659,10 +3659,10 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill103002._burstElementId|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002047.asset/MonoBehaviour/ast_103002047__3663436943335475859.json#elementConfigId=103002047"
       },
-      "status": "static-evidence-gap",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]"
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002246.asset/MonoBehaviour/ast_103002246__-315085305908719333.json#elementConfigId=103002246|skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002246]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
     },
     {
       "edgeIdentity": "actor:103002|control:10300212|sub:0->input-derived->actor:103002|control:10300201|sub:2",
@@ -5674,6 +5674,15 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[26]|battle-element-assets.jsonl#path_id=3663436943335475859|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[26]"
     },
     {
+      "edgeIdentity": "control:10300212:sub:0->resource-set-to-capacity->actor:103002:element:103002047",
+      "from": "control:10300212:sub:0",
+      "to": "actor:103002:element:103002047",
+      "relation": "resource-set-to-capacity",
+      "triggerFrame": 40,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=8812566341439638057|IL2CPP:-7197581663443823049|injectElementDataList|formulaParams.formulaParamValues[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[25]|skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002048]|Battle/Element/ast_103002048.asset#inject-ammo-capacity-12|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+    },
+    {
       "edgeIdentity": "control:10300213->has-subskill->control:10300213:sub:0",
       "from": "control:10300213",
       "to": "control:10300213:sub:0",
@@ -6426,7 +6435,7 @@
   ],
   "summary": {
     "nodeCount": 328,
-    "edgeCount": 486,
+    "edgeCount": 487,
     "controlCount": 28,
     "exclusionCount": 6,
     "nodeKindCounts": {
@@ -6447,9 +6456,10 @@
       "has-subskill": 51,
       "input-derived": 291,
       "resource-consume": 15,
-      "resource-gain": 26,
+      "resource-gain": 25,
+      "resource-set-to-capacity": 1,
       "triggers-passive": 14
     }
   },
-  "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
+  "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9"
 }

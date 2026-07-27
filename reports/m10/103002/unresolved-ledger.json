@@ -2,26 +2,26 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 103002,
-  "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228",
+  "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9",
   "summary": {
-    "semanticRecordCount": 438,
-    "rawRecordCount": 609,
+    "semanticRecordCount": 434,
+    "rawRecordCount": 605,
     "semanticStatusCounts": {
       "not-applicable": 20,
       "runtime-evidence-required": 5,
-      "static-evidence-gap": 413
+      "static-evidence-gap": 409
     },
     "rawStatusCounts": {
       "not-applicable": 20,
       "runtime-evidence-required": 5,
-      "static-evidence-gap": 584
+      "static-evidence-gap": 580
     },
     "impactClassificationCounts": {
-      "gameplay-impacting": 271,
+      "gameplay-impacting": 267,
       "not-applicable": 20,
       "wrapper-or-duplicate": 147
     },
-    "gameplayImpactingCount": 271,
+    "gameplayImpactingCount": 267,
     "wrapperOrDuplicateCount": 147,
     "unreachableOrNotApplicableCount": 20
   },
@@ -1001,24 +1001,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:1f7522f4efb42815a308",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-trigger-frame-missing"
-      ],
-      "sourceIdentity": "battle-effect:10300212:0:-1498771669867596146:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:-1498771669867596146:unresolved:unresolved"
-      ],
-      "rawRecordIdentities": [
-        "effect:10300212|0|elements|28|-1498771669867596146|element:-1498771669867596146|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:1fe95de261fdf0559570",
       "ownerId": 103002,
       "sourceKind": "effect",
@@ -1840,24 +1822,6 @@
       ],
       "rawRecordIdentities": [
         "actor:103002|control:10300202|sub:2->actor:103002|control:10300202|sub:2->-3687969335963551299->0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:3909bcc5c3281d06d673",
-      "ownerId": 103002,
-      "sourceKind": "special-resource-transaction",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "star-skill-full-reload-trigger-frame-static-evidence-gap"
-      ],
-      "sourceIdentity": "skill_control_10300212.asset|Battle/Element/ast_103002048.asset",
-      "sourceIdentities": [
-        "skill_control_10300212.asset|Battle/Element/ast_103002048.asset"
-      ],
-      "rawRecordIdentities": [
-        "actor:103002:action:star-skill:resource-refill"
       ],
       "rawRecordCount": 1
     },
@@ -3543,26 +3507,6 @@
       "rawRecordCount": 4
     },
     {
-      "recordIdentity": "semantic-gap:7124dea706473bc409f0",
-      "ownerId": 103002,
-      "sourceKind": "variant-edge",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-static-evidence-gap",
-        "effect-trigger-frame-static-evidence-gap",
-        "switch-wrapper-relation-unresolved"
-      ],
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]"
-      ],
-      "rawRecordIdentities": [
-        "actor:103002|control:10300212|sub:0->actor:103002|control:10300201|sub:1->-315085305908719333->missing"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:726537da554a0d5377b9",
       "ownerId": 103002,
       "sourceKind": "effect",
@@ -5085,29 +5029,6 @@
       ],
       "rawRecordIdentities": [
         "actor:103002:element:103002047|10300243|0|3663436943335475859|gain||missing"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:9cbb5be083140ec73264",
-      "ownerId": 103002,
-      "sourceKind": "public-action",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "trigger-frame-missing",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
-      "sourceIdentity": null,
-      "sourceIdentities": [],
-      "rawRecordIdentities": [
-        "actor|103002|10300212|0|10300212"
       ],
       "rawRecordCount": 1
     },
@@ -8686,16 +8607,6 @@
   ],
   "rawRecords": [
     {
-      "recordIdentity": "actor:103002:action:star-skill:resource-refill",
-      "ownerId": 103002,
-      "sourceKind": "special-resource-transaction",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "star-skill-full-reload-trigger-frame-static-evidence-gap"
-      ],
-      "sourceIdentity": "skill_control_10300212.asset|Battle/Element/ast_103002048.asset"
-    },
-    {
       "recordIdentity": "actor:103002:element:103002047|10300201|1|3663436943335475859|gain||missing",
       "ownerId": 103002,
       "sourceKind": "special-resource-transaction",
@@ -10253,18 +10164,6 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[2].elements[11]|battle-element-assets.jsonl#path_id=7659847041177413638|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[2].elements[11]"
     },
     {
-      "recordIdentity": "actor:103002|control:10300212|sub:0->actor:103002|control:10300201|sub:1->-315085305908719333->missing",
-      "ownerId": 103002,
-      "sourceKind": "variant-edge",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "effect-target-static-evidence-gap",
-        "effect-trigger-frame-static-evidence-gap",
-        "switch-wrapper-relation-unresolved"
-      ],
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]"
-    },
-    {
       "recordIdentity": "actor:103002|control:10300212|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->missing",
       "ownerId": 103002,
       "sourceKind": "variant-edge",
@@ -11183,23 +11082,6 @@
         "effect-trigger-frame-static-evidence-gap"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300244.asset/MonoBehaviour/skill_control_10300244__4782979813095677305.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=7659847041177413638|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300244.asset/MonoBehaviour/skill_control_10300244__4782979813095677305.json#skillResourceMaps[1].elements[1]"
-    },
-    {
-      "recordIdentity": "actor|103002|10300212|0|10300212",
-      "ownerId": 103002,
-      "sourceKind": "public-action",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "trigger-frame-missing",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
-      "sourceIdentity": null
     },
     {
       "recordIdentity": "actor|103002|10300221|2|10300227",
@@ -14467,16 +14349,6 @@
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "battle-effect:10300212:0:6226025878936021619:unresolved:unresolved"
-    },
-    {
-      "recordIdentity": "effect:10300212|0|elements|28|-1498771669867596146|element:-1498771669867596146|unresolved-frame|0",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "effect-trigger-frame-missing"
-      ],
-      "sourceIdentity": "battle-effect:10300212:0:-1498771669867596146:unresolved:unresolved"
     },
     {
       "recordIdentity": "effect:10300212|0|elements|28|-1498771669867596146|element:3879285143630828198|unresolved-frame|0",

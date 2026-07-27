@@ -73,6 +73,9 @@ export function createWorkbenchTimelineEntry(source = {}) {
     attackInputSegments: normalizeAttackInputSegments(
       source.attackInputSegments
     ),
+    attackInputSourceSegments: normalizeAttackInputSegments(
+      source.attackInputSourceSegments ?? source.attackInputSegments
+    ),
   };
 }
 

@@ -217,11 +217,7 @@
     >
       <div class="logic-source-title">
         <span>普攻输入段</span>
-        <strong
-          >A{{ selectedAction.attackSequenceIndex }} / A{{
-            selectedAction.attackSequenceTotal
-          }}</strong
-        >
+        <strong>{{ formatAttackInputSequence(selectedAction) }}</strong>
       </div>
       <div class="logic-source-grid">
         <div class="logic-source-item">
@@ -1221,6 +1217,14 @@ function formatAttackInputWindow(attackInput) {
         ? '等待衔接'
         : '输入衔接';
   return `${window.startFrame}-${window.endFrame}F · ${mode}`;
+}
+
+function formatAttackInputSequence(action) {
+  const sequenceIndex = Number(action?.attackSequenceIndex) || 0;
+  const sequenceTotal = Number(action?.attackSequenceTotal) || 0;
+  const label = action?.attackInput?.label ?? `A${sequenceIndex}`;
+  const prefix = label.match(/^([^0-9]+)/)?.[1] ?? 'A';
+  return `${label} / ${prefix}${sequenceTotal}`;
 }
 
 function formatContextInputSemantics(scheduling) {

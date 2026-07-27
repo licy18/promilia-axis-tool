@@ -10,9 +10,99 @@ import {
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
 } from '../../domain/workbenchAttackInputChain';
+import { resolveVerifiedAttackInputChainEntry } from '../../domain/verifiedActionContextScheduling';
 import { frameToMs, msToFrame } from '../../domain/timebase';
 
 describe('workbench normal attack input chain', () => {
+  it('publishes Ruby normal attack as three default inputs instead of leaking candidate A4/A5', () => {
+    const mapping = findNormalAttack(103002);
+    const drafts = createChain(mapping, 103002);
+
+    expect(mapping.attackInputChainIdentity).toBe(
+      'ruby-normal-default-three-inputs'
+    );
+    expect(mapping.attackInputSourceSegments).toHaveLength(5);
+    expect(drafts).toHaveLength(3);
+    expect(drafts.map(draft => draft.attackInput.semanticName)).toEqual([
+      '普通攻击 A1',
+      '普通攻击 A2',
+      '普通攻击 A3',
+    ]);
+    expect(
+      drafts.map(draft => [
+        draft.attackInput.controlSkillId,
+        draft.attackInput.selectedSubSkillIndex,
+      ])
+    ).toEqual([
+      [10300201, 0],
+      [10300202, 0],
+      [10300203, 0],
+    ]);
+  });
+
+  it('projects all twelve Ruby enhanced inputs as unique action drafts after quick entry', () => {
+    const mapping = findNormalAttack(103002);
+    const resolved = resolveVerifiedAttackInputChainEntry({
+      entry: {
+        ...mapping,
+        skillId: mapping.sourceSkillId,
+      },
+      graph: mechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(120),
+      variantRuntime: {
+        initialState: [
+          {
+            actorId: 'actor-ruby',
+            characterId: 103002,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 12,
+            maxValue: 12,
+          },
+        ],
+        resourceEvents: [],
+        activeSwitchWindows: [
+          {
+            actorId: 'actor-ruby',
+            ownerId: 103002,
+            targetControlSkillId: 10300201,
+            targetSubSkillIndex: 1,
+            startsAtMs: frameToMs(40),
+            endsAtMs: frameToMs(280),
+          },
+        ],
+      },
+    });
+
+    expect(resolved.status).toBe('selected');
+    expect(resolved.entry.attackInputSegments).toHaveLength(12);
+    expect(
+      new Set(
+        resolved.entry.attackInputSegments.map(segment => segment.identity)
+      ).size
+    ).toBe(12);
+
+    const drafts = createChain(resolved.entry, 103002);
+    expect(drafts).toHaveLength(12);
+    expect(drafts.map(draft => draft.attackInput.semanticName)).toEqual(
+      Array.from({ length: 12 }, (_, index) => `强化普攻 E${index + 1}`)
+    );
+
+    const refreshed = migrateLegacyAttackInputActionDrafts(drafts, {
+      resolveMapping: () => mapping,
+    });
+    expect(refreshed.actions).toHaveLength(12);
+    expect(refreshed.actions[0]).toMatchObject({
+      attackInput: {
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        label: 'E1',
+        semanticName: '强化普攻 E1',
+        selectedSubSkillIndex: 1,
+      },
+    });
+  });
+
   it('creates one independent action per real input and keeps multi-hit inside its owner segment', () => {
     const mapping = findNormalAttack(102001);
     const drafts = createChain(mapping, 102001);

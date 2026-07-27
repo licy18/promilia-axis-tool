@@ -7580,44 +7580,107 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   await expect(ammoLaneLabel).toContainText('子弹');
   await expect(ammoLaneLabel).toContainText('0 / 12');
 
-  const reloadEntry = page.locator(
-    '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"][data-skill-id="10300201"]'
-  );
-  await expect(reloadEntry).toContainText('重击');
-  await reloadEntry.click();
-
-  const reloadAction = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
-  );
-  await expect(reloadAction).toContainText('control 10300210/sub0');
   const ammoNodes = ammoLane.getByTestId('workbench-timeline-state-curve-node');
-  await expect(ammoNodes).toHaveCount(1);
-  await expect(ammoNodes).toHaveAttribute(
-    'title',
-    '24F · 子弹 获取 · 0 -> 6'
+  const normalAttackEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"][data-skill-id="10300201"]'
   );
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-103002"]'
+  );
+  await dragLocatorTo(page, normalAttackEntry, actorLane, {
+    targetPosition: { x: 120, y: 72 },
+  });
+  const normalBlocks = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10300201"]'
+  );
+  await expect(normalBlocks).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="1"]'
+    )
+  ).toContainText(/A1.*普通攻击/);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="3"]'
+    )
+  ).toContainText(/A3.*普通攻击/);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="4"]'
+    )
+  ).toHaveCount(0);
+  await expect(ammoNodes).toHaveCount(0);
 
   await page.getByTestId('workbench-undo-edit').click();
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
-  await expect(ammoNodes).toHaveCount(0);
-  await page.getByTestId('workbench-redo-edit').click();
-  await expect(reloadAction).toBeVisible();
-  await expect(ammoNodes).toHaveCount(1);
 
-  const normalAttackEntry = page.locator(
-    '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"][data-skill-id="10300201"]'
+  const starSkillEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="star-skill"][data-skill-id="10300212"]'
   );
-  await normalAttackEntry.click();
-  await expect
-    .poll(() => timeline.getByTestId('workbench-timeline-action').count())
-    .toBeGreaterThan(1);
-  const actionCount = await timeline
-    .getByTestId('workbench-timeline-action')
-    .count();
-  const ammoNodeCount = await ammoNodes.count();
-  expect(ammoNodeCount).toBeGreaterThan(1);
+  await dragLocatorTo(page, starSkillEntry, actorLane, {
+    targetPosition: { x: 180, y: 72 },
+  });
+  const starSkillAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10300212"]'
+  );
+  await expect(starSkillAction).toHaveCount(1);
+  const starSkillActionId = await starSkillAction.getAttribute(
+    'data-action-id'
+  );
+  expect(starSkillActionId).toBeTruthy();
+  const starAmmoNode = ammoLane.locator(
+    `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${starSkillActionId}"]`
+  );
+  await expect(starAmmoNode).toHaveCount(1);
+  await expect(starAmmoNode).toHaveAttribute(
+    'title',
+    /子弹 补满 · 0 -> 12/
+  );
+  const fireLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"]'
+  );
+  const fireMarkNode = fireLane.locator(
+    `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${starSkillActionId}"][data-event-kinds*="acquire"]`
+  );
+  await expect(fireMarkNode).toHaveCount(1);
+  await expect(fireMarkNode).toHaveAttribute(
+    'title',
+    /火印记 获取 · 0 -> 1/
+  );
+
+  const starBox = await starSkillAction.boundingBox();
+  const actorLaneBox = await actorLane.boundingBox();
+  if (!starBox || !actorLaneBox) {
+    throw new Error('Ruby Star Skill placement geometry is unavailable');
+  }
+  await dragLocatorTo(page, normalAttackEntry, actorLane, {
+    targetPosition: {
+      x: starBox.x + starBox.width - actorLaneBox.x,
+      y: 72,
+    },
+  });
+  await expect(normalBlocks).toHaveCount(12);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="1"]'
+    )
+  ).toContainText(/E1.*强化普攻/);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="12"]'
+    )
+  ).toContainText(/E12.*强化普攻/);
+  await expect(ammoNodes).toHaveCount(13);
+  const finalConsume = ammoLane
+    .locator(
+      '[data-testid="workbench-timeline-state-curve-node"][data-event-kinds*="consume"]'
+    )
+    .last();
+  await expect(finalConsume).toHaveAttribute('title', /1 -> 0/);
+  const actionCount = 13;
+  const ammoNodeCount = 13;
 
   await page.getByTestId('workbench-undo-edit').click();
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
@@ -7645,14 +7708,19 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   );
   await expect(ammoNodes).toHaveCount(ammoNodeCount);
 
-  await reloadAction.click();
+  await starSkillAction.click();
   await expect(page.getByTestId('workbench-side-inspector')).toContainText(
     '子弹'
   );
   await expect(page.getByTestId('workbench-side-inspector')).toContainText(
-    '+6 · 1 个事件'
+    '+12 · 1 个事件'
   );
-  await page.screenshot({ path: 'reports/m10-b1-ruby-desktop.png' });
+  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
+    '火'
+  );
+  await page.screenshot({
+    path: 'reports/m10-b1-r1-ruby-star-skill-desktop.png',
+  });
 
   await page.setViewportSize({ width: 390, height: 900 });
   await closeInspectorIfVisible(page);
@@ -7662,7 +7730,9 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
     actionCount
   );
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: 'reports/m10-b1-ruby-narrow.png' });
+  await page.screenshot({
+    path: 'reports/m10-b1-r1-ruby-star-skill-narrow.png',
+  });
 });
 
 function formatRuntimeFrameLabel(frameIndex) {

@@ -63,6 +63,21 @@ export function compileCharacterCombatRecipeContracts({
     resourceProfiles,
     operators: normalizedOperators,
   });
+  const variantWindowBindings = compileVariantWindowBindings({
+    ownerId,
+    definitions: compilerRecipe.variantWindowBindings ?? [],
+    controlBySkillId,
+    resourceProfiles,
+    operators: normalizedOperators,
+  });
+  const actionEffectBindings = compileActionEffectBindings({
+    ownerId,
+    definitions: compilerRecipe.actionEffectBindings ?? [],
+    controlBySkillId,
+    resourceProfiles,
+    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+    operators: normalizedOperators,
+  });
   const thresholdTransitions = compileThresholdTransitions({
     ownerId,
     definitions: compilerRecipe.thresholdTransitions ?? [],
@@ -82,6 +97,8 @@ export function compileCharacterCombatRecipeContracts({
     contextEdges,
     publicActionForms,
     attackInputChains,
+    variantWindowBindings,
+    actionEffectBindings,
     resourceProfiles: specialResourceContracts.profiles,
     resourceTransactions: specialResourceContracts.operations,
     thresholdTransitions,
@@ -125,6 +142,8 @@ export function compileCharacterCombatRecipeContracts({
       contextEdgeCount: contracts.contextEdges.length,
       publicActionFormCount: contracts.publicActionForms.length,
       attackInputChainCount: contracts.attackInputChains.length,
+      variantWindowBindingCount: contracts.variantWindowBindings.length,
+      actionEffectBindingCount: contracts.actionEffectBindings.length,
       resourceProfileCount: contracts.resourceProfiles.length,
       resourceTransactionCount: contracts.resourceTransactions.length,
       appliedResourceTransactionCount: contracts.resourceTransactions.filter(
@@ -163,6 +182,12 @@ export function mergeCharacterCombatOwnerCompilations({
     actionVariantGraph.attackInputChains,
     compilations.flatMap(item => item.contracts.attackInputChains)
   );
+  const variantWindowBindings = compilations.flatMap(
+    item => item.contracts.variantWindowBindings
+  );
+  const actionEffectBindings = compilations.flatMap(
+    item => item.contracts.actionEffectBindings
+  );
   const thresholdTransitions = replaceOwnerRecords(
     specialResourceCatalog.thresholdTransitions,
     compilations.flatMap(item => item.contracts.thresholdTransitions)
@@ -198,12 +223,19 @@ export function mergeCharacterCombatOwnerCompilations({
   actionVariantGraph.contextEdges = contextEdges;
   actionVariantGraph.publicActionForms = publicActionForms;
   actionVariantGraph.attackInputChains = attackInputChains;
+  actionVariantGraph.edges = applyVariantWindowBindings({
+    edges: actionVariantGraph.edges ?? [],
+    bindings: variantWindowBindings,
+  });
   actionVariantGraph.summary = {
     ...(actionVariantGraph.summary ?? {}),
     contextEdgeCount: contextEdges.length,
     appliedContextEdgeCount: contextEdges.filter(edge => edge.applied).length,
     publicActionFormCount: publicActionForms.length,
     attackInputChainCount: attackInputChains.length,
+    appliedEdgeCount: actionVariantGraph.edges.filter(edge => edge.applied)
+      .length,
+    compiledVariantWindowBindingCount: variantWindowBindings.length,
   };
   specialResourceCatalog.thresholdTransitions = thresholdTransitions;
   specialResourceCatalog.passiveEffects = passiveEffects;
@@ -232,6 +264,214 @@ export function mergeCharacterCombatOwnerCompilations({
     actionVariantGraph,
     specialResourceCatalog,
     compilations,
+    actionEffectBindings,
+  };
+}
+
+export function applyCharacterCombatActionEffectBindings({
+  controls,
+  compilations,
+}) {
+  const bindings = (compilations ?? []).flatMap(
+    compilation => compilation.contracts.actionEffectBindings ?? []
+  );
+  for (const binding of bindings) {
+    const control = (controls ?? []).find(
+      item => Number(item.controlSkillId) === Number(binding.controlSkillId)
+    );
+    if (!control) {
+      throw new Error(
+        `character combat action effect control missing: ${binding.ownerId}/${binding.controlSkillId}`
+      );
+    }
+    const matches = (control.effects ?? []).filter(
+      effect =>
+        Number(effect.mapIndex) === Number(binding.mapIndex) &&
+        Number(effect.elementId) === Number(binding.elementId)
+    );
+    if (matches.length !== 1) {
+      throw new Error(
+        `character combat action effect match mismatch: ${binding.ownerId}/${binding.controlSkillId}/${binding.mapIndex}/${binding.elementId} received ${matches.length}`
+      );
+    }
+    control.effects = control.effects.map(effect =>
+      matches.includes(effect)
+        ? applyActionEffectBinding(effect, binding)
+        : effect
+    );
+  }
+  return controls;
+}
+
+export function applyCharacterCombatAttackInputPhaseMappings({
+  mechanicsPackage,
+  compilations,
+}) {
+  const mappings = mechanicsPackage?.actionMappings ?? [];
+  for (const compilation of compilations ?? []) {
+    const defaultChains = (
+      compilation.contracts.attackInputChains ?? []
+    ).filter(chain => chain.entryPolicy?.kind === 'default');
+    for (const chain of defaultChains) {
+      const matches = mappings.filter(
+        mapping =>
+          Number(mapping.ownerId) === Number(compilation.ownerId) &&
+          Number(mapping.sourceSkillId) === Number(chain.sourceSkillId) &&
+          mapping.actionKind === (chain.actionKind ?? 'normal-attack')
+      );
+      if (matches.length !== 1) {
+        throw new Error(
+          `character combat default attack phase mapping mismatch: ${compilation.ownerId}/${chain.chainIdentity} received ${matches.length}`
+        );
+      }
+      const mapping = matches[0];
+      const sourceSegments = [
+        ...(mapping.attackInputSourceSegments ??
+          mapping.attackInputSegments ??
+          []),
+      ];
+      const projectedSegments = (chain.segments ?? []).map(
+        (segment, index) => {
+          const source = sourceSegments.find(candidate => {
+            if (
+              Number(candidate.controlSkillId) !==
+              Number(segment.controlSkillId)
+            ) {
+              return false;
+            }
+            const candidateSubSkillIndex = Number(
+              candidate.selectedSubSkillIndex ??
+                candidate.subSkillIndex ??
+                0
+            );
+            return (
+              candidateSubSkillIndex === Number(segment.subSkillIndex) ||
+              candidateSubSkillIndex === 0
+            );
+          });
+          if (!source) {
+            throw new Error(
+              `character combat default attack phase source segment missing: ${compilation.ownerId}/${chain.chainIdentity}/${segment.controlSkillId}/sub${segment.subSkillIndex}`
+            );
+          }
+          const sequenceIndex = index + 1;
+          return {
+            ...source,
+            sequenceIndex,
+            sequenceTotal: chain.segments.length,
+            label: segment.label ?? `A${sequenceIndex}`,
+            semanticName:
+              segment.semanticName ??
+              source.semanticName ??
+              `普通攻击 A${sequenceIndex}`,
+            selectedSubSkillIndex: Number(segment.subSkillIndex),
+            effectiveDurationFrames: Number(segment.durationFrames),
+            durationFrames: Number(segment.durationFrames),
+            durationStatus:
+              segment.applied === false ? 'unresolved' : 'applied',
+            durationBasis: 'character-combat-default-attack-phase',
+            durationSourceIdentity: segment.sourceIdentity,
+            attackInputChainIdentity: chain.chainIdentity,
+          };
+        }
+      );
+      mapping.attackInputSourceSegments = sourceSegments;
+      mapping.attackInputSegments = projectedSegments;
+      mapping.attackInputChainIdentity = chain.chainIdentity;
+      mapping.attackInputPhaseStatus =
+        'character-combat-default-attack-phase-applied';
+      mapping.attackInputPhaseSourceIdentity = chain.sourceIdentity;
+    }
+  }
+  return mechanicsPackage;
+}
+
+function applyVariantWindowBindings({ edges, bindings }) {
+  if (!(bindings ?? []).length) return edges;
+  const output = [...edges];
+  for (const binding of bindings) {
+    const indexes = output
+      .map((edge, index) => ({ edge, index }))
+      .filter(({ edge }) =>
+        matchesVariantWindowBinding(edge, binding)
+      )
+      .map(item => item.index);
+    if (indexes.length !== 1) {
+      throw new Error(
+        `character combat variant window match mismatch: ${binding.ownerId}/${binding.bindingIdentity} received ${indexes.length}`
+      );
+    }
+    const index = indexes[0];
+    const edge = output[index];
+    output[index] = {
+      ...edge,
+      rawStatus: edge.status,
+      rawReasons: [...(edge.reasons ?? [])],
+      activationFrame: binding.activationFrame,
+      decisionFrame: binding.decisionFrame,
+      durationMs: binding.durationMs,
+      relationType: binding.relationType,
+      inputCommand: binding.inputCommand,
+      condition: binding.condition,
+      sourceIdentity: [edge.sourceIdentity, binding.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
+      compilerBindingIdentity: binding.bindingIdentity,
+      status: 'verified-action-variant-edge-ready',
+      reasons: [],
+      applied: true,
+    };
+  }
+  return output;
+}
+
+function matchesVariantWindowBinding(edge, binding) {
+  for (const key of [
+    'ownerId',
+    'sourceControlSkillId',
+    'sourceSubSkillIndex',
+    'sourceElementId',
+    'targetControlSkillId',
+    'targetSubSkillIndex',
+  ]) {
+    if (Number(edge[key]) !== Number(binding[key])) return false;
+  }
+  return true;
+}
+
+function applyActionEffectBinding(effect, binding) {
+  const trigger = {
+    behaviorPathId: `character-combat:${binding.bindingIdentity}`,
+    startFrame: binding.triggerFrame,
+    frameCount: binding.frameCount,
+    behaviorIndex: null,
+    timelineGroupIndex: 0,
+    targetCode: effect.trigger?.targetCode ?? 0,
+    targetKind: effect.target?.kind ?? effect.trigger?.targetKind ?? 'unresolved',
+    targetSourceField:
+      effect.trigger?.targetSourceField ?? 'character-combat-verified-binding',
+    sourceIdentity: binding.sourceIdentity,
+  };
+  return {
+    ...effect,
+    effectIdentity: `${effect.graphIdentity}|${binding.triggerFrame}|${effect.depth ?? 0}`,
+    trigger,
+    tuningMark: binding.tuningMark,
+    sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
+      .filter(Boolean)
+      .join('|'),
+    dimensions: {
+      ...(effect.dimensions ?? {}),
+      mark: {
+        status: 'applied',
+        sourceField: 'elementConfigId|layerInfoList|additionalHitRefreshTime',
+      },
+    },
+    classification: 'applied',
+    reasons: [],
+    status: 'verified-action-effect-binding-applied',
+    confidence: 'high',
+    applied: true,
   };
 }
 
@@ -304,6 +544,40 @@ function classifyResourceOperation(operation, rules) {
     matchesResourceOperationRule(operation, candidate.match ?? {})
   );
   if (!rule) return operation;
+  if (rule.status === 'applied') {
+    const triggerFrame = Number(rule.triggerFrame);
+    const frameRate = Number(rule.frameRate) || Number(operation.frameRate) || 60;
+    if (
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      !['gain', 'consume', 'clear', 'transform', 'set-to-capacity'].includes(
+        rule.operation ?? operation.operation
+      )
+    ) {
+      throw new Error(
+        `invalid applied character combat resource operation rule: ${operation.operationIdentity}`
+      );
+    }
+    return {
+      ...operation,
+      rawOperation: operation.operation,
+      rawStatus: operation.status,
+      rawReasons: [...(operation.reasons ?? [])],
+      operation: rule.operation ?? operation.operation,
+      triggerFrame,
+      frameRate,
+      sourceIdentity: [operation.sourceIdentity, rule.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-special-resource-operation-ready',
+      reasons: [],
+      impactClassification:
+        rule.impactClassification ?? 'gameplay-resource-transaction',
+      classificationSourceIdentity:
+        rule.sourceIdentity ?? operation.sourceIdentity ?? null,
+      applied: true,
+    };
+  }
   if (rule.status !== 'not-applicable') {
     throw new Error(
       `unsupported character combat resource operation rule status: ${rule.status}`
@@ -381,6 +655,8 @@ export function createCharacterCombatOwnerRuntimeContracts({
     timingInputEdges: compilation.contracts.contextEdges,
     variantEdges: sortByIdentity(variantEdges ?? []),
     attackInputChains: compilation.contracts.attackInputChains,
+    variantWindowBindings: compilation.contracts.variantWindowBindings,
+    actionEffectBindings: compilation.contracts.actionEffectBindings,
     hits: sortByIdentity(hits ?? []),
     resourceProfiles: sortByIdentity(resourceProfiles ?? []),
     resourceTransactions: sortByIdentity(resourceTransactions ?? []),
@@ -785,7 +1061,7 @@ function compileAttackInputChains({
   resourceProfiles,
   operators,
 }) {
-  return definitions.map(definition => {
+  const chains = definitions.map(definition => {
     const condition = compileCondition(
       definition.condition,
       ownerId,
@@ -812,6 +1088,10 @@ function compileAttackInputChains({
       return {
         sequenceIndex: index + 1,
         sequenceTotal: definition.segments.length,
+        label: `${definition.segmentLabelPrefix ?? 'A'}${index + 1}`,
+        semanticName: definition.semanticNamePrefix
+          ? `${definition.semanticNamePrefix} ${definition.segmentLabelPrefix ?? 'A'}${index + 1}`
+          : null,
         controlSkillId: segment.controlSkillId,
         subSkillIndex: segment.subSkillIndex,
         nextControlSkillId: segment.nextControlSkillId,
@@ -827,11 +1107,239 @@ function compileAttackInputChains({
       ownerId,
       sourceSkillId: definition.sourceSkillId,
       semanticNamePrefix: definition.semanticNamePrefix ?? null,
+      segmentLabelPrefix: definition.segmentLabelPrefix ?? 'A',
       decisionFrame: Number(definition.decisionFrame) || 0,
       stateCondition: condition,
+      entryPolicy: {
+        kind: definition.entryPolicy?.kind ?? 'condition-selected',
+        sourceIdentity:
+          definition.entryPolicy?.sourceIdentity ??
+          definition.sourceIdentity ??
+          null,
+      },
+      segmentLimit: compileAttackInputSegmentLimit({
+        definition: definition.segmentLimit,
+        ownerId,
+        resourceProfiles,
+      }),
       segments,
       sourceIdentity: segments.map(item => item.sourceIdentity).join('|'),
       status: 'verified-attack-input-chain-ready',
+      applied: true,
+    };
+  });
+  const chainByIdentity = new Map(
+    chains.map(chain => [chain.chainIdentity, chain])
+  );
+  return chains.map((chain, index) => {
+    const definition = definitions[index];
+    if (!definition.phaseTransition) return chain;
+    const sourceSegment = chain.segments.find(
+      segment =>
+        Number(segment.sequenceIndex) ===
+        Number(definition.phaseTransition.sourceSequenceIndex)
+    );
+    const targetChain = chainByIdentity.get(
+      definition.phaseTransition.targetChainIdentity
+    );
+    const targetSegment = targetChain?.segments?.[0] ?? null;
+    const inputWindow = sourceSegment?.executionTiming?.occupancy?.linkWindow;
+    const targetMatches =
+      inputWindow &&
+      targetSegment &&
+      Number(inputWindow.targetControlSkillId) ===
+        Number(targetSegment.controlSkillId) &&
+      Number(inputWindow.targetSubSkillIndex) ===
+        Number(targetSegment.subSkillIndex);
+    if (!targetMatches) {
+      throw new Error(
+        `character combat attack phase transition evidence mismatch: ${ownerId}/${chain.chainIdentity}/${definition.phaseTransition.targetChainIdentity}`
+      );
+    }
+    return {
+      ...chain,
+      phaseTransition: {
+        targetChainIdentity: targetChain.chainIdentity,
+        inputCommand:
+          definition.phaseTransition.inputCommand ?? 'normal-attack',
+        sourceSequenceIndex: sourceSegment.sequenceIndex,
+        condition: compileCondition(
+          definition.phaseTransition.condition,
+          ownerId,
+          resourceProfiles,
+          operators
+        ),
+        inputWindow: {
+          startFrame: Number(inputWindow.startFrame),
+          endFrame: Number(inputWindow.endFrame),
+          frameRate: Number(inputWindow.frameRate) || 60,
+          targetControlSkillId: Number(inputWindow.targetControlSkillId),
+          targetSubSkillIndex: Number(inputWindow.targetSubSkillIndex),
+          sourceIdentity: inputWindow.sourceIdentity,
+        },
+        sourceIdentity: [
+          sourceSegment.sourceIdentity,
+          inputWindow.sourceIdentity,
+          definition.phaseTransition.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        status: 'applied',
+        applied: true,
+      },
+    };
+  });
+}
+
+function compileAttackInputSegmentLimit({
+  definition,
+  ownerId,
+  resourceProfiles,
+}) {
+  if (!definition) return null;
+  if (definition.kind !== 'resource-current-value') {
+    throw new Error(
+      `unsupported attack input segment limit: ${ownerId}/${definition.kind}`
+    );
+  }
+  const profile = resourceProfiles.find(
+    item => Number(item.elementId) === Number(definition.resourceElementId)
+  );
+  const costPerSegment = Number(definition.costPerSegment);
+  const maximum = Number(definition.maximum);
+  if (
+    !profile ||
+    !(costPerSegment > 0) ||
+    !Number.isInteger(maximum) ||
+    maximum <= 0
+  ) {
+    throw new Error(
+      `character combat attack input segment limit evidence missing: ${ownerId}/${definition.resourceElementId}`
+    );
+  }
+  return {
+    kind: definition.kind,
+    resourceIdentity: profile.resourceIdentity,
+    costPerSegment,
+    maximum: Math.min(maximum, Number(profile.capacity)),
+    sourceIdentity: [
+      profile.sourceIdentity,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+function compileVariantWindowBindings({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  resourceProfiles,
+  operators,
+}) {
+  return definitions.map(definition => {
+    requireControl(
+      controlBySkillId,
+      definition.sourceControlSkillId,
+      'variant window binding'
+    );
+    const sourceElement = operators.readElementAsset(
+      definition.sourceElementId
+    );
+    const activationFrame = Number(definition.activationFrame);
+    const durationMs = Number(definition.durationMs);
+    if (
+      !sourceElement ||
+      !Number.isInteger(activationFrame) ||
+      activationFrame < 0 ||
+      !(durationMs > 0)
+    ) {
+      throw new Error(
+        `character combat variant window evidence missing: ${ownerId}/${definition.bindingIdentity}`
+      );
+    }
+    return {
+      bindingIdentity: definition.bindingIdentity,
+      ownerId,
+      sourceControlSkillId: Number(definition.sourceControlSkillId),
+      sourceSubSkillIndex: Number(definition.sourceSubSkillIndex),
+      sourceElementId: Number(definition.sourceElementId),
+      targetControlSkillId: Number(definition.targetControlSkillId),
+      targetSubSkillIndex: Number(definition.targetSubSkillIndex),
+      activationFrame,
+      decisionFrame: Number(definition.decisionFrame) || activationFrame,
+      durationMs,
+      relationType: definition.relationType ?? 'input-derived',
+      inputCommand: definition.inputCommand ?? 'normal-attack',
+      condition: compileCondition(
+        definition.condition,
+        ownerId,
+        resourceProfiles,
+        operators
+      ),
+      sourceIdentity: [
+        sourceElement.sourceIdentity,
+        definition.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'applied',
+      applied: true,
+    };
+  });
+}
+
+function compileActionEffectBindings({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  resourceProfiles,
+  tuningMarkProfiles,
+  operators,
+}) {
+  return definitions.map(definition => {
+    requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'action effect binding'
+    );
+    const element = operators.readElementAsset(definition.elementId);
+    const triggerFrame = Number(definition.triggerFrame);
+    const tuningProfile = (tuningMarkProfiles ?? []).find(
+      profile =>
+        (profile.profileKey ?? profile.key) ===
+        definition.tuningMarkProfileKey
+    );
+    if (
+      !element ||
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      !tuningProfile?.applied
+    ) {
+      throw new Error(
+        `character combat action effect evidence missing: ${ownerId}/${definition.bindingIdentity}`
+      );
+    }
+    return {
+      bindingIdentity: definition.bindingIdentity,
+      ownerId,
+      controlSkillId: Number(definition.controlSkillId),
+      subSkillIndex: Number(definition.subSkillIndex),
+      mapIndex: Number(definition.mapIndex),
+      elementId: Number(definition.elementId),
+      triggerFrame,
+      frameCount: Math.max(1, Number(definition.frameCount) || 1),
+      sourceIdentity: [element.sourceIdentity, definition.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
+      tuningMark: {
+        ...tuningProfile,
+        profileKey: tuningProfile.profileKey ?? tuningProfile.key,
+        stackDelta: Number(definition.stackDelta) || 1,
+        applied: true,
+      },
+      status: 'applied',
       applied: true,
     };
   });

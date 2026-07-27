@@ -1068,7 +1068,18 @@ function resolveActionBinding(actionMapping, action) {
       reason: 'verified-normal-attack-legacy-aggregate-unresolved',
     };
   }
-  const candidates = (actionMapping.attackInputSegments ?? []).filter(
+  const requestedChainIdentity =
+    action.attackInputChainIdentity ??
+    action.attackInput?.attackInputChainIdentity ??
+    null;
+  const segmentPool =
+    requestedChainIdentity &&
+    requestedChainIdentity !== actionMapping.attackInputChainIdentity
+      ? (actionMapping.attackInputSourceSegments ??
+        actionMapping.attackInputSegments ??
+        [])
+      : (actionMapping.attackInputSegments ?? []);
+  const candidates = segmentPool.filter(
     segment =>
       (segmentIdentity &&
         (segment.identity === segmentIdentity ||

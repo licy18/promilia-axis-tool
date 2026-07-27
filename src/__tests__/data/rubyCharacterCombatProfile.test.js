@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import goldenTrace from '../../../reports/m10/103002/golden-trace.json';
+import actionPhaseCoverage from '../../../reports/m10/103002/action-phase-coverage.json';
 import reachableGraph from '../../../reports/m10/103002/reachable-graph.json';
 import runtimeCapturePlan from '../../../reports/m10/103002/runtime-capture-plan.json';
 import runtimeCoverage from '../../../reports/m10/103002/runtime-coverage.json';
@@ -30,7 +31,7 @@ describe('M10-B1 Ruby character combat profile', () => {
         reachableControlCount: 28,
         executionFormCount: 24,
         hitCount: 212,
-        semanticEffectCount: 67,
+        semanticEffectCount: 73,
         excludedControlCount: 6,
       },
       validation: {
@@ -54,26 +55,26 @@ describe('M10-B1 Ruby character combat profile', () => {
     expect(ownerContract.contracts.publicActions).toHaveLength(10);
     expect(
       ownerContract.contracts.publicActions.filter(action => action.runtimeReady)
-    ).toHaveLength(8);
+    ).toHaveLength(9);
     expect(
       ownerContract.contracts.publicActions
         .filter(action => !action.runtimeReady)
         .map(action => action.actionKind)
         .sort()
-    ).toEqual(['perfect-parry', 'star-skill']);
+    ).toEqual(['perfect-parry']);
     expect(ownerContract.contracts.actionForms).toHaveLength(24);
     expect(
       ownerContract.contracts.actionForms.filter(form => form.applied)
-    ).toHaveLength(22);
+    ).toHaveLength(23);
     expect(
       ownerContract.contracts.actionForms
         .filter(form => !form.applied)
         .map(form => form.publicActionKind)
         .sort()
-    ).toEqual(['perfect-parry', 'star-skill']);
+    ).toEqual(['perfect-parry']);
     expect(runtimeCoverage.summary).toMatchObject({
       actionCount: 10,
-      runtimeReadyActionCount: 8,
+      runtimeReadyActionCount: 9,
       executionFormCount: 24,
       controlCount: 28,
       hitCount: 212,
@@ -98,7 +99,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     });
   });
 
-  it('compiles the 12-shot resource and both automatic attack chains', () => {
+  it('compiles the normal phase, gated enhanced phase, and Star Skill resource transaction', () => {
     expect(ownerContract.contracts.resourceProfiles).toEqual([
       expect.objectContaining({
         ownerId: RUBY_ID,
@@ -120,9 +121,8 @@ describe('M10-B1 Ruby character combat profile', () => {
             : 'unresolved'
       )
     ).toEqual({
-      applied: 20,
+      applied: 21,
       'not-applicable': 20,
-      unresolved: 1,
     });
 
     const empty = ownerContract.contracts.attackInputChains.find(
@@ -132,10 +132,26 @@ describe('M10-B1 Ruby character combat profile', () => {
       chain => chain.chainIdentity === 'ruby-enhanced-twelve-inputs'
     );
     expect(empty).toMatchObject({
-      stateCondition: {
-        kind: 'resource-below',
-        resourceIdentity: RUBY_RESOURCE_IDENTITY,
-        value: 1,
+      stateCondition: { kind: 'always' },
+      entryPolicy: {
+        kind: 'default',
+      },
+      phaseTransition: {
+        targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+        inputCommand: 'normal-attack',
+        sourceSequenceIndex: 3,
+        condition: {
+          kind: 'resource-at-least',
+          resourceIdentity: RUBY_RESOURCE_IDENTITY,
+          value: 1,
+        },
+        inputWindow: {
+          startFrame: 34,
+          endFrame: 79,
+          targetControlSkillId: 10300201,
+          targetSubSkillIndex: 1,
+        },
+        status: 'applied',
       },
     });
     expect(
@@ -154,6 +170,15 @@ describe('M10-B1 Ruby character combat profile', () => {
         kind: 'resource-at-least',
         resourceIdentity: RUBY_RESOURCE_IDENTITY,
         value: 1,
+      },
+      entryPolicy: {
+        kind: 'derived-or-quick-entry',
+      },
+      segmentLimit: {
+        kind: 'resource-current-value',
+        resourceIdentity: RUBY_RESOURCE_IDENTITY,
+        costPerSegment: 1,
+        maximum: 12,
       },
     });
     expect(
@@ -204,16 +229,106 @@ describe('M10-B1 Ruby character combat profile', () => {
       ownerContract.contracts.resourceTransactions.find(
         transaction =>
           transaction.controlSkillId === 10300212 &&
-          transaction.operation === 'gain' &&
-          transaction.status === 'unresolved-special-resource-operation'
+          transaction.operation === 'set-to-capacity' &&
+          transaction.applied
       )
     ).toMatchObject({
-      status: 'unresolved-special-resource-operation',
-      applied: false,
-      reasons: expect.arrayContaining([
-        'effect-trigger-frame-static-evidence-gap',
-      ]),
+      triggerFrame: 40,
+      operation: 'set-to-capacity',
+      applied: true,
+      status: 'verified-special-resource-operation-ready',
+      reasons: [],
     });
+    expect(
+      ownerContract.contracts.variantWindowBindings.find(
+        binding =>
+          binding.sourceControlSkillId === 10300212 &&
+          binding.targetControlSkillId === 10300201 &&
+          binding.targetSubSkillIndex === 1
+      )
+    ).toMatchObject({
+      activationFrame: 40,
+      durationMs: 4000,
+      status: 'applied',
+      applied: true,
+    });
+    expect(
+      ownerContract.contracts.actionEffectBindings.find(
+        binding =>
+          binding.controlSkillId === 10300212 &&
+          binding.elementId === 150
+      )
+    ).toMatchObject({
+      triggerFrame: 40,
+      status: 'applied',
+      applied: true,
+      tuningMark: {
+        profileKey: 'fire',
+        markId: 150,
+        stackDelta: 1,
+        applied: true,
+      },
+    });
+    expect(actionPhaseCoverage).toMatchObject({
+      ownerId: RUBY_ID,
+      status: 'character-combat-action-phase-coverage-ready',
+      summary: {
+        phaseCount: 2,
+        appliedPhaseCount: 2,
+        inputSegmentCount: 15,
+        phaseTransitionCount: 1,
+        publicActionCount: 10,
+        runtimeReadyActionCount: 9,
+        appliedResourceTransactionCount: 21,
+        appliedActionEffectCount: 1,
+      },
+    });
+    expect(
+      actionPhaseCoverage.phases.find(
+        phase => phase.phaseIdentity === 'ruby-normal-default-three-inputs'
+      )
+    ).toMatchObject({
+      inputCount: 3,
+      exitCondition: {
+        kind: 'chain-complete',
+        maximumInputCount: 3,
+      },
+      phaseTransition: {
+        targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+        inputWindow: {
+          startFrame: 34,
+          endFrame: 79,
+        },
+        status: 'applied',
+      },
+    });
+    expect(
+      actionPhaseCoverage.phases.find(
+        phase => phase.phaseIdentity === 'ruby-enhanced-twelve-inputs'
+      )
+    ).toMatchObject({
+      inputCount: 12,
+      exitCondition: {
+        kind: 'resource-exhausted-or-input-limit-reached',
+        resourceIdentity: RUBY_RESOURCE_IDENTITY,
+        costPerInput: 1,
+        maximumInputCount: 12,
+      },
+    });
+    expect(
+      actionPhaseCoverage.quickEntries.map(entry => [
+        entry.sourceControlSkillId,
+        entry.activationFrame,
+        entry.targetControlSkillId,
+        entry.targetSubSkillIndex,
+      ])
+    ).toEqual(
+      expect.arrayContaining([
+        [10300210, 24, 10300201, 1],
+        [10300212, 40, 10300201, 1],
+        [10300213, 297, 10300201, 1],
+      ])
+    );
   });
 
   it('applies the verified passive branch and keeps the remaining gaps explicit', () => {
@@ -255,15 +370,15 @@ describe('M10-B1 Ruby character combat profile', () => {
       )
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 438,
-      rawRecordCount: 609,
+      semanticRecordCount: 434,
+      rawRecordCount: 605,
       semanticStatusCounts: {
         'not-applicable': 20,
         'runtime-evidence-required': 5,
-        'static-evidence-gap': 413,
+        'static-evidence-gap': 409,
       },
       impactClassificationCounts: {
-        'gameplay-impacting': 271,
+        'gameplay-impacting': 267,
         'not-applicable': 20,
         'wrapper-or-duplicate': 147,
       },
@@ -286,7 +401,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
-        assertionCount: 102,
+        assertionCount: 114,
         failedCount: 0,
       },
     });
@@ -300,13 +415,13 @@ describe('M10-B1 Ruby character combat profile', () => {
         blockedActionIds: ['ruby-insufficient-shot'],
       },
       combat: {
-        ownerDamageEventCount: 96,
+        ownerDamageEventCount: 215,
         ownerHitEventCount: 96,
-        ownerTotalHpDamage: 8156,
-        ownerTotalToughnessDamage: 5582,
+        ownerTotalHpDamage: 160675,
+        ownerTotalToughnessDamage: 66,
         enemy: {
           initialHp: 862800,
-          finalHp: 851035,
+          finalHp: 699092,
         },
       },
       effects: {
@@ -314,9 +429,9 @@ describe('M10-B1 Ruby character combat profile', () => {
         firstPassiveMaxStackFrame: 430,
       },
       comparison: {
-        primaryDamage: 441,
-        baselineDamage: 189,
-        damageDelta: 252,
+        primaryDamage: 891,
+        baselineDamage: 378,
+        damageDelta: 513,
       },
     });
     expect(
@@ -332,11 +447,23 @@ describe('M10-B1 Ruby character combat profile', () => {
         ['ruby-reload', 24, 0, 6, 6],
         ['ruby-enhanced-shot-1', 200, 6, -1, 5],
         ['ruby-enhanced-shot-6', 1350, 1, -1, 0],
-        ['ruby-ultimate', 2313, 0, 12, 12],
+        ['ruby-star-skill', 1890, 0, 12, 12],
+        ['ruby-ultimate', 2313, 12, 0, 12],
         ['ruby-post-ultimate-shot', 2720, 12, -1, 11],
         ['ruby-limit-counter', 3015, 11, 1, 12],
       ])
     );
+    expect(goldenTrace.actual.resources.tuningMarkTrace[0]).toMatchObject({
+      actionId: 'ruby-star-skill',
+      frame: 1890,
+      kind: 'acquire',
+      profileKey: 'fire',
+      markId: 150,
+      before: 0,
+      delta: 1,
+      after: 1,
+      maximum: 5,
+    });
     expect(
       goldenTrace.actual.resources.actorSpByActorId['actor-103002']
     ).toMatchObject({
@@ -360,10 +487,19 @@ describe('M10-B1 Ruby character combat profile', () => {
       initialValue: 100,
       currentValue: 13.559189,
     });
-    expect(goldenTrace.actual.dynamicProperties.ownerSources[0]).toMatchObject({
-      attributeId: 229,
-      dynamicExtraRaw: 120,
-    });
+    expect(goldenTrace.actual.dynamicProperties.ownerSources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attributeId: 1,
+          dynamicPercentRaw: 60,
+          effectIds: ['tuning-mark:150:persistent'],
+        }),
+        expect.objectContaining({
+          attributeId: 229,
+          dynamicExtraRaw: 120,
+        }),
+      ])
+    );
     expect(goldenTrace.replayHash).toMatch(/^[a-f0-9]{64}$/);
 
     const expected = structuredClone(goldenTrace.expected);

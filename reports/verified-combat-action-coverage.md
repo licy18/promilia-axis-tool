@@ -3,15 +3,15 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：456
-- 来源静态可应用：404
+- 场景可运行：457
+- 来源静态可应用：405
 - 来源运行时依赖：52
 - 零距离场景补全：62
-- 来源静态证据缺口：107
+- 来源静态证据缺口：106
 - 明确零：0
-- 未解析：107
+- 未解析：106
 - 真实命中节点：1589
-- 公开动作变体：593（未解析 137）
+- 公开动作变体：593（未解析 136）
 - 非零回能元素：667（未关联 467）
 - 零距离投射物命中：825（仍缺发射帧 305、仍缺公式 172、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 76，未解析 19）
@@ -54,7 +54,7 @@
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
 | actor | star-carry | 17 | 17 | 12 | 0 | 5 | 72 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
-| actor | star-skill | 20 | 20 | 17 | 0 | 3 | 132 |
+| actor | star-skill | 20 | 20 | 18 | 0 | 2 | 132 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 131 |
 | kibo | active | 122 | 122 | 66 | 0 | 56 | 457 |
 | kibo | break | 122 | 122 | 112 | 0 | 10 | 112 |
@@ -72,7 +72,6 @@
 - `actor|101010|10101021|2|10101027` 涂山小玉 / perfect-parry / 驭仙风: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|102001|10200122|2|10200127` 莉莉 / perfect-parry / 骑士加护: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|103002|10300201|0|10300203` 红宝石 / normal-attack / 灵感的火花: trigger-frame-missing, projectile-impact-frame-runtime-dependent, normal-attack-input-segment-duration-unresolved
-- `actor|103002|10300212|0|10300212` 红宝石 / star-skill / 艺术的舞曲: trigger-frame-missing, inject-wrapper-classified-through-child-edges, effect-trigger-frame-missing, effect-target-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, property-formula-not-literal-function-5, verified-action-effective-occupancy-window-unresolved
 - `actor|103002|10300221|2|10300227` 红宝石 / perfect-parry / 一瞬的灼热: pack-lifecycle-runtime-unimplemented, effect-trigger-frame-missing, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, verified-action-effective-occupancy-window-unresolved
 - `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, sp-formula-not-literal-function-5, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|4|10700110` 西芙莉雅 / charged-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "a4fdcee2276ebc960d0d4a28887bf1cc8f048546f7d29a431dc4a29e277a7c44",
+  "packageHash": "351c9f94e0f99c850e1501aa0a4fc2c8407db1ed6d699b06b8009a338a72dac2",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -27,20 +27,20 @@
     "publicActionCount": 563,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "runnableActionCount": 456,
-    "sourceAppliedActionCount": 404,
+    "runnableActionCount": 457,
+    "sourceAppliedActionCount": 405,
     "sourceRuntimeDependentActionCount": 52,
-    "sourceStaticEvidenceGapActionCount": 107,
+    "sourceStaticEvidenceGapActionCount": 106,
     "scenarioResolvedActionCount": 62,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 107,
+    "unresolvedActionCount": 106,
     "unresolvedStatusCounts": {
       "runtime-and-evidence-gap": 72,
-      "static-evidence-gap": 35
+      "static-evidence-gap": 34
     },
     "unclassifiedUnresolvedActionCount": 0,
     "actorCoreActionCount": 60,
-    "actorCoreRunnableCount": 55,
+    "actorCoreRunnableCount": 56,
     "kiboCoreActionCount": 366,
     "kiboCoreRunnableCount": 300,
     "nonzeroRecoveryElementCount": 667,
@@ -74,41 +74,41 @@
     },
     "effectDimensions": {
       "damage": {
-        "unresolved": 497,
-        "verified-zero": 3354
+        "unresolved": 498,
+        "verified-zero": 3362
       },
       "toughness": {
-        "verified-zero": 3851
+        "verified-zero": 3860
       },
       "sp": {
         "unresolved": 104,
-        "verified-zero": 3747
+        "verified-zero": 3756
       },
       "hp": {
         "unresolved": 62,
-        "verified-zero": 3789
+        "verified-zero": 3798
       },
       "shield": {
         "unresolved": 10,
-        "verified-zero": 3841
+        "verified-zero": 3850
       },
       "dynamicProperty": {
         "applied": 50,
-        "unresolved": 1071,
-        "verified-zero": 2730
+        "unresolved": 1073,
+        "verified-zero": 2737
       },
       "mark": {
-        "applied": 137,
+        "applied": 138,
         "unresolved": 425,
-        "verified-zero": 3289
+        "verified-zero": 3297
       }
     },
     "semanticEffects": {
-      "total": 3575,
-      "gameplay": 1816,
+      "total": 3581,
+      "gameplay": 1819,
       "applied": 397,
       "verifiedZero": 2,
-      "unresolved": 1417
+      "unresolved": 1420
     },
     "timing": {
       "appliedActionCount": 552,
@@ -155,8 +155,8 @@
       "profileCount": 2,
       "appliedProfileCount": 2,
       "operationCount": 71,
-      "appliedOperationCount": 43,
-      "unresolvedOperationCount": 8,
+      "appliedOperationCount": 44,
+      "unresolvedOperationCount": 7,
       "unresolvedOwnerCount": 1,
       "notApplicableOperationCount": 20,
       "thresholdTransitionCount": 1,
@@ -165,7 +165,7 @@
       "ownerCount": 142,
       "nodeCount": 673,
       "edgeCount": 337,
-      "appliedEdgeCount": 93,
+      "appliedEdgeCount": 94,
       "unresolvedEdgeCount": 244,
       "resourceConditionEdgeCount": 259,
       "modeledOwnerCount": 4,
@@ -195,6 +195,7 @@
       "appliedContextEdgeCount": 7,
       "publicActionFormCount": 5,
       "attackInputChainCount": 4,
+      "compiledVariantWindowBindingCount": 1,
       "hiddenInputAuditRowCount": 86,
       "hiddenInputPublicExecutionFormCount": 21
     }
@@ -303,9 +304,9 @@
       "actionKind": "star-skill",
       "actionCount": 20,
       "runtimeStatusCounts": {
-        "runnable": 17,
+        "runnable": 18,
         "runtime-and-evidence-gap": 1,
-        "static-evidence-gap": 2
+        "static-evidence-gap": 1
       },
       "timingStatusCounts": {
         "applied": 19,
@@ -1382,12 +1383,12 @@
       "sourceSkillName": "艺术的舞曲",
       "controlSkillId": 10300212,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "unresolved",
         "durationFrames": null,
@@ -1397,10 +1398,10 @@
         "variantModelStatus": "resolved"
       },
       "variants": {
-        "status": "static-evidence-gap",
+        "status": "partially-applied",
         "total": 24,
-        "applied": 0,
-        "unresolved": 24
+        "applied": 1,
+        "unresolved": 23
       },
       "specialResource": {
         "status": "applied",
@@ -1424,16 +1425,26 @@
           "applied": 2,
           "unresolved": 33
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 9
+        },
+        "shield": {
+          "verified-zero": 9
+        },
+        "dynamicProperty": {
+          "unresolved": 2,
+          "verified-zero": 7
+        },
+        "tuningMark": {
+          "applied": 1,
+          "verified-zero": 8
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 3,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 3
       },
       "reasons": [
         "trigger-frame-missing",
@@ -32599,12 +32610,12 @@
       "sourceSkillName": "艺术的舞曲",
       "controlSkillId": 10300212,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "unresolved",
         "durationFrames": null,
@@ -32614,10 +32625,10 @@
         "variantModelStatus": "resolved"
       },
       "variants": {
-        "status": "static-evidence-gap",
+        "status": "partially-applied",
         "total": 24,
-        "applied": 0,
-        "unresolved": 24
+        "applied": 1,
+        "unresolved": 23
       },
       "specialResource": {
         "status": "applied",
@@ -32641,16 +32652,26 @@
           "applied": 2,
           "unresolved": 33
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 9
+        },
+        "shield": {
+          "verified-zero": 9
+        },
+        "dynamicProperty": {
+          "unresolved": 2,
+          "verified-zero": 7
+        },
+        "tuningMark": {
+          "applied": 1,
+          "verified-zero": 8
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 3,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 3
       },
       "reasons": [
         "trigger-frame-missing",
@@ -68349,81 +68370,6 @@
         "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=209]"
-    },
-    {
-      "identity": "actor|103002|10300212|0|10300212",
-      "ownerKind": "actor",
-      "ownerId": 103002,
-      "ownerName": "红宝石",
-      "actionKind": "star-skill",
-      "sourceSkillId": 10300212,
-      "sourceSkillName": "艺术的舞曲",
-      "controlSkillId": 10300212,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "unresolved",
-        "durationFrames": null,
-        "sourceKind": "unresolved-action-occupancy",
-        "schedulingKind": "source-animation-planning-duration",
-        "planningDurationFrames": 204,
-        "variantModelStatus": "resolved"
-      },
-      "variants": {
-        "status": "static-evidence-gap",
-        "total": 24,
-        "applied": 0,
-        "unresolved": 24
-      },
-      "specialResource": {
-        "status": "applied",
-        "resourceIdentity": "actor:103002:element:103002047",
-        "capacity": 12
-      },
-      "dimensions": {
-        "enemyHp": {
-          "applied": 2,
-          "unresolved": 33
-        },
-        "enemyToughness": {
-          "applied": 2,
-          "unresolved": 33
-        },
-        "actorSp": {
-          "applied": 2,
-          "unresolved": 33
-        },
-        "kiboSp": {
-          "applied": 2,
-          "unresolved": 33
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "reasons": [
-        "trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
-      "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
     {
       "identity": "actor|103002|10300221|2|10300227",

@@ -346,7 +346,9 @@ export function createSkillAction({
       inferCatalogActionKind(selectedActionVariant, skill),
     name:
       normalizedAttackInputFields.attackSequenceIndex != null
-        ? `A${normalizedAttackInputFields.attackSequenceIndex}`
+        ? (normalizedAttackInputFields.attackInput?.semanticName ??
+          normalizedAttackInputFields.attackInput?.label ??
+          `A${normalizedAttackInputFields.attackSequenceIndex}`)
         : (verifiedCatalogDeclaration?.label ??
           selectedActionVariant?.displayLabel ??
           selectedActionVariant?.label ??

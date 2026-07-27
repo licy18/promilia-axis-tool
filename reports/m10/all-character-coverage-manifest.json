@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
+  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -84,7 +84,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "79a92f970d66921f3a24ec79248b79c14f1cc3bb822d5169190dd4df5fe78dc4"
+      "profileHash": "4e355abd9d7518c0284e272ba32d7e126a5ad5b460c4f5f603f69a17f672a7b7"
     },
     {
       "ownerId": 103002,
@@ -106,8 +106,8 @@
       "combatCoverageState": "partial",
       "characterComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 56,
-      "indexedControlCount": 14,
+      "reachableFormCount": 54,
+      "indexedControlCount": 12,
       "specialResourceCount": 1,
       "stateMachineCount": 0,
       "derivedEdgeCount": 291,
@@ -116,9 +116,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8,
-      "staticEvidenceGapCount": 2,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
       "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "personal-resource",
@@ -127,7 +127,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
+      "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9"
     },
     {
       "ownerId": 101003,
@@ -777,6 +777,6 @@
       "runtime-applied": 2
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 156
+    "totalRuntimeReadyActionCount": 157
   }
 }

@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
+  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -2486,6 +2486,236 @@
           "change": 12,
           "afterValue": 12,
           "durationMs": null
+        }
+      ],
+      "tuningMarkTrace": [
+        {
+          "eventIdentity": "tuning-mark|150|acquire|20216.666667|95",
+          "actionId": "han-star-skill",
+          "frame": 1213,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|20300|10100312|0|elements|0|8697618991190280668|68|2",
+          "actionId": "han-star-skill",
+          "frame": 1218,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|20333.333334|94",
+          "actionId": "han-star-skill",
+          "frame": 1220,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 1,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|acquire|23400|103",
+          "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 1404,
+          "kind": "acquire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|23450|10100322|0|elements|1|8048974219024052735|57|5",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 1407,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|23450|109",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 1407,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 2,
+          "delta": 1,
+          "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|28616.666667|10300213|0|elements|31|-595230887097621602|117|1",
+          "actionId": "ruby-ultimate",
+          "frame": 1717,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 3,
+          "delta": 0,
+          "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|28616.666667|10300213|0|elements|31|-595230887097621602|117|1",
+          "actionId": "ruby-ultimate",
+          "frame": 1717,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|consume|31400|116",
+          "actionId": "ruby-ultimate",
+          "frame": 1884,
+          "kind": "consume",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 3,
+          "delta": -1,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|consume|31666.666667|115",
+          "actionId": "ruby-ultimate",
+          "frame": 1900,
+          "kind": "consume",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 2,
+          "delta": -1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|35500|50003901|0|elements|0|-8661068056925142015|60|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 2130,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|35500|50003901|0|elements|0|-8661068056925142015|60|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 2130,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|41050|10101005|0|elements|0|8067044185683392805|31|1",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|41050|10101005|0|elements|0|8067044185683392805|31|1",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|750|41050|10101005|0|elements|0|8067044185683392805|31|1",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "held-trigger",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|750|acquire|41050|149",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "acquire",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|750|consume|42750|158",
+          "actionId": "normal-special-charged",
+          "frame": 2565,
+          "kind": "consume",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|expire|43400|175",
+          "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 2604,
+          "kind": "expire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|expire|43450|176",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 2607,
+          "kind": "expire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
         }
       ],
       "thresholdClearCount": 1,
@@ -7725,6 +7955,236 @@
           "durationMs": null
         }
       ],
+      "tuningMarks": [
+        {
+          "eventIdentity": "tuning-mark|150|acquire|20216.666667|95",
+          "actionId": "han-star-skill",
+          "frame": 1213,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|20300|10100312|0|elements|0|8697618991190280668|68|2",
+          "actionId": "han-star-skill",
+          "frame": 1218,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|20333.333334|94",
+          "actionId": "han-star-skill",
+          "frame": 1220,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 1,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|acquire|23400|103",
+          "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 1404,
+          "kind": "acquire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|23450|10100322|0|elements|1|8048974219024052735|57|5",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 1407,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|23450|109",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 1407,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 2,
+          "delta": 1,
+          "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|28616.666667|10300213|0|elements|31|-595230887097621602|117|1",
+          "actionId": "ruby-ultimate",
+          "frame": 1717,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 3,
+          "delta": 0,
+          "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|28616.666667|10300213|0|elements|31|-595230887097621602|117|1",
+          "actionId": "ruby-ultimate",
+          "frame": 1717,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|consume|31400|116",
+          "actionId": "ruby-ultimate",
+          "frame": 1884,
+          "kind": "consume",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 3,
+          "delta": -1,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|consume|31666.666667|115",
+          "actionId": "ruby-ultimate",
+          "frame": 1900,
+          "kind": "consume",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 2,
+          "delta": -1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|35500|50003901|0|elements|0|-8661068056925142015|60|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 2130,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|35500|50003901|0|elements|0|-8661068056925142015|60|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 2130,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|41050|10101005|0|elements|0|8067044185683392805|31|1",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|41050|10101005|0|elements|0|8067044185683392805|31|1",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|750|41050|10101005|0|elements|0|8067044185683392805|31|1",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "held-trigger",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|750|acquire|41050|149",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "acquire",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|750|consume|42750|158",
+          "actionId": "normal-special-charged",
+          "frame": 2565,
+          "kind": "consume",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|expire|43400|175",
+          "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 2604,
+          "kind": "expire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|expire|43450|176",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 2607,
+          "kind": "expire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        }
+      ],
       "effects": [
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_APPLIED|16.667|1",
@@ -8088,7 +8548,7 @@
         }
       ]
     },
-    "summaryHash": "9498507aa08f23dea8cbadcf1d9189f0f4ab8a95939e618a2f693117abb1f9c6"
+    "summaryHash": "3d1d8103480d5589f64108e49c9527ffa76801821b5d9558f00acb2f87a0e242"
   },
   "expected": {
     "exact": {
@@ -8656,6 +9116,6 @@
       }
     ]
   },
-  "replayHash": "ae8ff11ac9f774a93a898fc478c04019166a0a4d1c4f97b0d0f9aadd6ef5e69a",
-  "profileHash": "79a92f970d66921f3a24ec79248b79c14f1cc3bb822d5169190dd4df5fe78dc4"
+  "replayHash": "9649fbff3aba3033a8a402adf6215ccc85cc8a3e1fbaea7c35192f1030d7e0ed",
+  "profileHash": "4e355abd9d7518c0284e272ba32d7e126a5ad5b460c4f5f603f69a17f672a7b7"
 }

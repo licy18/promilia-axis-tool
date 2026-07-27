@@ -77,10 +77,24 @@
         "chainIdentity": "ruby-normal-default-three-inputs",
         "sourceSkillId": 10300201,
         "semanticNamePrefix": "普通攻击",
+        "segmentLabelPrefix": "A",
+        "entryPolicy": {
+          "kind": "default",
+          "sourceIdentity": "NewTable/skill.rows[id=10300201]#普通普攻至多三段"
+        },
         "condition": {
-          "kind": "resource-below",
-          "resourceElementId": 103002047,
-          "value": 1
+          "kind": "always"
+        },
+        "phaseTransition": {
+          "targetChainIdentity": "ruby-enhanced-twelve-inputs",
+          "sourceSequenceIndex": 3,
+          "inputCommand": "normal-attack",
+          "condition": {
+            "kind": "resource-at-least",
+            "resourceElementId": 103002047,
+            "value": 1
+          },
+          "sourceIdentity": "skill_control_10300203.asset#sub0.control-transition[34,79)->10300201/sub1"
         },
         "segments": [
           {
@@ -104,10 +118,22 @@
         "chainIdentity": "ruby-enhanced-twelve-inputs",
         "sourceSkillId": 10300201,
         "semanticNamePrefix": "强化普攻",
+        "segmentLabelPrefix": "E",
+        "entryPolicy": {
+          "kind": "derived-or-quick-entry",
+          "sourceIdentity": "NewTable/skill.rows[id=10300201]#强化普攻最多12次输入"
+        },
         "condition": {
           "kind": "resource-at-least",
           "resourceElementId": 103002047,
           "value": 1
+        },
+        "segmentLimit": {
+          "kind": "resource-current-value",
+          "resourceElementId": 103002047,
+          "costPerSegment": 1,
+          "maximum": 12,
+          "sourceIdentity": "Battle/Element/ast_103002049.asset#remove-one-ammo-layer"
         },
         "segments": [
           {
@@ -173,12 +199,61 @@
         ]
       }
     ],
+    "variantWindowBindings": [
+      {
+        "bindingIdentity": "ruby-star-skill-quick-enhanced-entry",
+        "sourceControlSkillId": 10300212,
+        "sourceSubSkillIndex": 0,
+        "sourceElementId": 103002246,
+        "targetControlSkillId": 10300201,
+        "targetSubSkillIndex": 1,
+        "activationFrame": 40,
+        "decisionFrame": 40,
+        "durationMs": 4000,
+        "inputCommand": "normal-attack",
+        "condition": {
+          "kind": "resource-at-least",
+          "resourceElementId": 103002047,
+          "value": 1
+        },
+        "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002246]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+      }
+    ],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "ruby-star-skill-fire-tuning-mark",
+        "controlSkillId": 10300212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 40,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=150]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+      }
+    ],
     "specialResources": [
       {
         "resourceElementId": 103002047,
         "expectedCapacity": 12,
         "sourceIdentity": "character-combat-recipe:103002#compiler.specialResources[elementId=103002047]",
         "operationRules": [
+          {
+            "match": {
+              "operation": "gain",
+              "controlSkillId": 10300212,
+              "subSkillIndex": 0,
+              "sourceElementId": 103002048,
+              "triggerFrameStatus": "missing"
+            },
+            "status": "applied",
+            "operation": "set-to-capacity",
+            "triggerFrame": 40,
+            "frameRate": 60,
+            "impactClassification": "gameplay-resource-transaction",
+            "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002048]|Battle/Element/ast_103002048.asset#inject-ammo-capacity-12|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+          },
           {
             "match": {
               "operation": "gain",
@@ -193,9 +268,9 @@
         ],
         "expectedOperationCounts": {
           "total": 41,
-          "applied": 20,
+          "applied": 21,
           "notApplicable": 20,
-          "unresolved": 1
+          "unresolved": 0
         }
       }
     ],
@@ -222,15 +297,6 @@
         "initial-ammo-runtime-evidence-required"
       ],
       "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill103002._burstElementId"
-    },
-    {
-      "identity": "actor:103002:action:star-skill:resource-refill",
-      "sourceKind": "special-resource-transaction",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "star-skill-full-reload-trigger-frame-static-evidence-gap"
-      ],
-      "sourceIdentity": "skill_control_10300212.asset|Battle/Element/ast_103002048.asset"
     },
     {
       "identity": "actor:103002:passive:10300261:attack-percent-branch",
@@ -473,24 +539,24 @@
         "actions.selectionByActionId.ruby-reload.controlSkillId": 10300210,
         "actions.selectionByActionId.ruby-reload.subSkillIndex": 0,
         "actions.selectionByActionId.ruby-reload.actualDurationFrames": 38,
-        "actions.selectionByActionId.ruby-enhanced-shot-1.semanticName": "强化普攻 A1",
+        "actions.selectionByActionId.ruby-enhanced-shot-1.semanticName": "强化普攻 E1",
         "actions.selectionByActionId.ruby-enhanced-shot-1.controlSkillId": 10300201,
         "actions.selectionByActionId.ruby-enhanced-shot-1.subSkillIndex": 1,
         "actions.selectionByActionId.ruby-enhanced-shot-1.actualDurationFrames": 24,
-        "actions.selectionByActionId.ruby-enhanced-shot-2.semanticName": "强化普攻 A2",
+        "actions.selectionByActionId.ruby-enhanced-shot-2.semanticName": "强化普攻 E2",
         "actions.selectionByActionId.ruby-enhanced-shot-2.subSkillIndex": 2,
-        "actions.selectionByActionId.ruby-enhanced-shot-3.semanticName": "强化普攻 A3",
+        "actions.selectionByActionId.ruby-enhanced-shot-3.semanticName": "强化普攻 E3",
         "actions.selectionByActionId.ruby-enhanced-shot-3.subSkillIndex": 3,
         "actions.selectionByActionId.ruby-enhanced-shot-3.actualDurationFrames": 32,
-        "actions.selectionByActionId.ruby-enhanced-shot-4.semanticName": "强化普攻 A4",
+        "actions.selectionByActionId.ruby-enhanced-shot-4.semanticName": "强化普攻 E4",
         "actions.selectionByActionId.ruby-enhanced-shot-4.controlSkillId": 10300202,
         "actions.selectionByActionId.ruby-enhanced-shot-4.subSkillIndex": 1,
-        "actions.selectionByActionId.ruby-enhanced-shot-5.semanticName": "强化普攻 A5",
+        "actions.selectionByActionId.ruby-enhanced-shot-5.semanticName": "强化普攻 E5",
         "actions.selectionByActionId.ruby-enhanced-shot-5.subSkillIndex": 2,
-        "actions.selectionByActionId.ruby-enhanced-shot-6.semanticName": "强化普攻 A6",
+        "actions.selectionByActionId.ruby-enhanced-shot-6.semanticName": "强化普攻 E6",
         "actions.selectionByActionId.ruby-enhanced-shot-6.subSkillIndex": 3,
         "actions.selectionByActionId.ruby-enhanced-shot-6.actualDurationFrames": 32,
-        "actions.selectionByActionId.ruby-post-ultimate-shot.semanticName": "强化普攻 A1",
+        "actions.selectionByActionId.ruby-post-ultimate-shot.semanticName": "强化普攻 E1",
         "actions.selectionByActionId.ruby-post-ultimate-shot.subSkillIndex": 1,
         "actions.selectionByActionId.ruby-star-skill.controlSkillId": 10300212,
         "actions.selectionByActionId.ruby-star-skill.actualDurationFrames": 204,
@@ -500,13 +566,13 @@
         "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
-        "combat.damageEventCount": 214,
-        "combat.ownerDamageEventCount": 96,
+        "combat.damageEventCount": 221,
+        "combat.ownerDamageEventCount": 215,
         "combat.ownerHitEventCount": 96,
-        "combat.ownerTotalHpDamage": 8156,
-        "combat.ownerTotalToughnessDamage": 5582,
+        "combat.ownerTotalHpDamage": 160675,
+        "combat.ownerTotalToughnessDamage": 66,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 851035,
+        "combat.enemy.finalHp": 699092,
         "resources.specialResourceTrace.0.actionId": "ruby-reload",
         "resources.specialResourceTrace.0.frame": 24,
         "resources.specialResourceTrace.0.beforeValue": 0,
@@ -519,17 +585,29 @@
         "resources.specialResourceTrace.6.beforeValue": 1,
         "resources.specialResourceTrace.6.change": -1,
         "resources.specialResourceTrace.6.afterValue": 0,
-        "resources.specialResourceTrace.7.actionId": "ruby-ultimate",
-        "resources.specialResourceTrace.7.frame": 2313,
+        "resources.specialResourceTrace.7.actionId": "ruby-star-skill",
+        "resources.specialResourceTrace.7.frame": 1890,
         "resources.specialResourceTrace.7.change": 12,
         "resources.specialResourceTrace.7.afterValue": 12,
-        "resources.specialResourceTrace.8.actionId": "ruby-post-ultimate-shot",
-        "resources.specialResourceTrace.8.beforeValue": 12,
-        "resources.specialResourceTrace.8.afterValue": 11,
-        "resources.specialResourceTrace.9.actionId": "ruby-limit-counter",
-        "resources.specialResourceTrace.9.frame": 3015,
-        "resources.specialResourceTrace.9.change": 1,
-        "resources.specialResourceTrace.9.afterValue": 12,
+        "resources.specialResourceTrace.8.actionId": "ruby-ultimate",
+        "resources.specialResourceTrace.8.afterValue": 12,
+        "resources.specialResourceTrace.9.actionId": "ruby-post-ultimate-shot",
+        "resources.specialResourceTrace.9.frame": 2720,
+        "resources.specialResourceTrace.9.change": -1,
+        "resources.specialResourceTrace.9.afterValue": 11,
+        "resources.specialResourceTrace.10.actionId": "ruby-limit-counter",
+        "resources.specialResourceTrace.10.frame": 3015,
+        "resources.specialResourceTrace.10.change": 1,
+        "resources.specialResourceTrace.10.afterValue": 12,
+        "resources.tuningMarkTrace.0.actionId": "ruby-star-skill",
+        "resources.tuningMarkTrace.0.frame": 1890,
+        "resources.tuningMarkTrace.0.kind": "acquire",
+        "resources.tuningMarkTrace.0.profileKey": "fire",
+        "resources.tuningMarkTrace.0.markId": 150,
+        "resources.tuningMarkTrace.0.before": 0,
+        "resources.tuningMarkTrace.0.delta": 1,
+        "resources.tuningMarkTrace.0.after": 1,
+        "resources.tuningMarkTrace.0.maximum": 5,
         "resources.actorSpByActorId.actor-103002.initialValue": 100,
         "resources.actorSpByActorId.actor-103002.currentValue": 17.469559,
         "resources.actorSpByActorId.actor-103002.autoRecovery.0.reason": "verified-auto-sp-background",
@@ -557,11 +635,11 @@
         "effects.passiveTrace.19.afterStacks": 1,
         "effects.passiveTrace.23.operation": "expire",
         "effects.passiveTrace.23.frame": 3620,
-        "dynamicProperties.ownerSources.0.attributeId": 229,
-        "dynamicProperties.ownerSources.0.dynamicExtraRaw": 120,
-        "comparison.primaryDamage": 441,
-        "comparison.baselineDamage": 189,
-        "comparison.damageDelta": 252
+        "dynamicProperties.ownerSources.0.attributeId": 1,
+        "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
+        "comparison.primaryDamage": 891,
+        "comparison.baselineDamage": 378,
+        "comparison.damageDelta": 513
       },
       "greaterThan": {
         "combat.ownerTotalHpDamage": 0,

@@ -205,6 +205,44 @@ describe('ActionLibraryPanel', () => {
     });
   });
 
+  it('keeps Ruby default inputs separate from the enhanced source pool during drag', async () => {
+    const props = createActionLibraryProps();
+    props.actor = {
+      ...props.actor,
+      id: 'actor-103002',
+      characterId: 103002,
+      name: '红宝石',
+      loadout: { kiboId: null },
+    };
+    props.actors = [props.actor];
+    props.activeActorCharacterId = 103002;
+    props.skills = getSkillsForCharacter(103002);
+    props.kibos = [];
+    const wrapper = mount(ActionLibraryPanel, { props });
+    const normal = wrapper.get(
+      '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"]'
+    );
+
+    expect(normal.attributes('data-attack-input-count')).toBe('3');
+    await dispatchPointerDown(wrapper, normal, {
+      button: 0,
+      pointerId: 32,
+      clientX: 12,
+      clientY: 24,
+    });
+    const entry =
+      wrapper.emitted('begin-timeline-entry-drag')?.at(-1)?.[0]?.entry;
+    expect(entry.attackInputSegments).toHaveLength(3);
+    expect(entry.attackInputSourceSegments).toHaveLength(5);
+    expect(
+      new Set(
+        entry.attackInputSourceSegments.map(segment => segment.controlSkillId)
+      )
+    ).toEqual(
+      new Set([10300201, 10300202, 10300203, 10300204, 10300205])
+    );
+  });
+
   it('saves and reuses compatible fragments through the compact library view', async () => {
     const props = createActionLibraryProps();
     props.selectedActionIds = ['action-0001', 'action-0002'];

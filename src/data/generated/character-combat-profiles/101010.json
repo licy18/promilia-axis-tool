@@ -23,7 +23,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
+    "packageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -63634,6 +63634,7 @@
         "ownerId": 101010,
         "sourceSkillId": 10101001,
         "semanticNamePrefix": null,
+        "segmentLabelPrefix": "A",
         "decisionFrame": 0,
         "stateCondition": {
           "kind": "resource-state-inactive",
@@ -63642,10 +63643,17 @@
           "stateName": "爆发状态buff",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129"
         },
+        "entryPolicy": {
+          "kind": "condition-selected",
+          "sourceIdentity": null
+        },
+        "segmentLimit": null,
         "segments": [
           {
             "sequenceIndex": 1,
             "sequenceTotal": 5,
+            "label": "A1",
+            "semanticName": null,
             "controlSkillId": 10101001,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101002,
@@ -63805,6 +63813,8 @@
           {
             "sequenceIndex": 2,
             "sequenceTotal": 5,
+            "label": "A2",
+            "semanticName": null,
             "controlSkillId": 10101002,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101003,
@@ -63988,6 +63998,8 @@
           {
             "sequenceIndex": 3,
             "sequenceTotal": 5,
+            "label": "A3",
+            "semanticName": null,
             "controlSkillId": 10101003,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101004,
@@ -64137,6 +64149,8 @@
           {
             "sequenceIndex": 4,
             "sequenceTotal": 5,
+            "label": "A4",
+            "semanticName": null,
             "controlSkillId": 10101004,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101005,
@@ -64286,6 +64300,8 @@
           {
             "sequenceIndex": 5,
             "sequenceTotal": 5,
+            "label": "A5",
+            "semanticName": null,
             "controlSkillId": 10101005,
             "subSkillIndex": 0,
             "nextControlSkillId": null,
@@ -64573,6 +64589,7 @@
         "ownerId": 101010,
         "sourceSkillId": 10101001,
         "semanticNamePrefix": null,
+        "segmentLabelPrefix": "A",
         "decisionFrame": 0,
         "stateCondition": {
           "kind": "resource-state-active",
@@ -64581,10 +64598,17 @@
           "stateName": "爆发状态buff",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129"
         },
+        "entryPolicy": {
+          "kind": "condition-selected",
+          "sourceIdentity": null
+        },
+        "segmentLimit": null,
         "segments": [
           {
             "sequenceIndex": 1,
             "sequenceTotal": 3,
+            "label": "A1",
+            "semanticName": null,
             "controlSkillId": 10101001,
             "subSkillIndex": 1,
             "nextControlSkillId": 10101004,
@@ -64808,6 +64832,8 @@
           {
             "sequenceIndex": 2,
             "sequenceTotal": 3,
+            "label": "A2",
+            "semanticName": null,
             "controlSkillId": 10101004,
             "subSkillIndex": 1,
             "nextControlSkillId": 10101005,
@@ -65055,6 +65081,8 @@
           {
             "sequenceIndex": 3,
             "sequenceTotal": 3,
+            "label": "A3",
+            "semanticName": null,
             "controlSkillId": 10101005,
             "subSkillIndex": 1,
             "nextControlSkillId": null,
@@ -65273,6 +65301,8 @@
         "applied": true
       }
     ],
+    "variantWindowBindings": [],
+    "actionEffectBindings": [],
     "hits": [
       {
         "elementId": 101010000,
@@ -127475,8 +127505,8 @@
       "recipeIdentity": "actor:101010:character-combat-recipe:v1",
       "recipeHash": "568e85f19c300db47f3bf1ba360565eb2c7198b569e37bd71a4db89c24439347",
       "compilerInputHash": "0774879824fe74df9d650314598be90e69de485b2977024c444248e6a8411046",
-      "recipeContractHash": "2fac9b08cb4a7c5fdadb296b9a9302049bc0bfaa0dfd3c6a5ddc7cd48f1d37d0",
-      "ownerContractHash": "5a17d30513932a7e8a29859a82d7a42107682b29a436772dacc8c7496b9334a7"
+      "recipeContractHash": "5ae1d2cb1ea6ed0aa4daabb24e4fa0b1011ddd25adb7b8d80f33026799ea89f6",
+      "ownerContractHash": "e2c9300ab7bcdc0100e4436fd1259e475bc65e77e0bed05626745e50b7f34df5"
     },
     "operators": [
       "public-action-binding",
@@ -127521,7 +127551,7 @@
         "packagePath": "actionVariantGraph.attackInputChains",
         "operator": "attack-input-chain",
         "recordCount": 2,
-        "recordsHash": "bf610c76f0f7d5176d3cf48991df495c3257b4fd7663bce18595c80a474f4ef4"
+        "recordsHash": "475fc3cb34b57cf0d82f23a42ec6459c02f82ef0cc4351296446b5730007fa6e"
       },
       {
         "packagePath": "controlBindings.hits",
@@ -127566,7 +127596,7 @@
         "recordsHash": "247fe211202e81629f4274a05189b80340c601f399b4c03f00cca50164a69c52"
       }
     ],
-    "contractHash": "871aad088823e5499d61e5b9f3dccf3dd9a10f2174c013e85bfc1af4f00b4dfb"
+    "contractHash": "bdacca0ef08888f8d3f48b81f59617bf3599fb93f1660125d3f694a1ae622356"
   },
   "coverage": [
     {
@@ -132742,7 +132772,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "7efb56f4cefc48274e6e859dda86b46828bd327d0400ee3b80163683e2ee7895"
+    "deterministicInputHash": "4c962d4a85bf390c11a375e6e1c374a775257430ddd2f1814322a6ecdca3bfd3"
   },
-  "profileHash": "79a92f970d66921f3a24ec79248b79c14f1cc3bb822d5169190dd4df5fe78dc4"
+  "profileHash": "4e355abd9d7518c0284e272ba32d7e126a5ad5b460c4f5f603f69a17f672a7b7"
 }

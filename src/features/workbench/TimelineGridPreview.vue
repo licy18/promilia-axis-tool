@@ -2999,7 +2999,7 @@ function actionIconComponent(action) {
 
 function actionLabel(action) {
   if (action.attackSequenceIndex != null) {
-    return `A${action.attackSequenceIndex}`;
+    return action.attackInput?.label ?? `A${action.attackSequenceIndex}`;
   }
   if (action.type === 'switch') {
     return `${action.name} -> ${action.targetActor?.name ?? '目标'}`;
@@ -3022,7 +3022,7 @@ function actionDetail(action) {
       : null;
     return [
       triggerLabel,
-      identity.typeLabel,
+      action.attackInput?.semanticName ?? identity.typeLabel,
       `${durationFrames}F`,
       executionLabel,
     ]
@@ -3076,7 +3076,11 @@ function resolveTimelineActionRuntimeIdentity(action) {
   const controlSkillId =
     binding?.executionControlSkillId ?? binding?.controlSkillId;
   return {
-    name: action.runtimeSemanticName ?? binding?.semanticName ?? action.name,
+    name:
+      action.runtimeSemanticName ??
+      action.attackInput?.semanticName ??
+      binding?.semanticName ??
+      action.name,
     executionLabel:
       controlSkillId == null
         ? null
@@ -3171,6 +3175,7 @@ function formatTimelineCurveNodeTitle(lane, point) {
     const operationLabels = {
       gain: '获取',
       consume: '消耗',
+      'set-to-capacity': '补满',
       clear: '清空',
       transform: '转化',
       'transform-remove': '退出形态',

@@ -233,6 +233,14 @@ export function createCharacterCombatOutputRecords(artifacts) {
         artifact.runtimeCoverage
       ),
       createJsonOutput(
+        `${reportRoot}/action-phase-coverage.json`,
+        artifact.actionPhaseCoverage
+      ),
+      createTextOutput(
+        `${reportRoot}/action-phase-coverage.md`,
+        artifact.actionPhaseMarkdown
+      ),
+      createJsonOutput(
         `${reportRoot}/unresolved-ledger.json`,
         artifact.unresolvedLedger
       ),
@@ -381,6 +389,12 @@ export function createCharacterCombatOwnerArtifacts({
   const attackInputChains = sortByIdentity(
     compiledContracts.attackInputChains ?? []
   );
+  const variantWindowBindings = sortByIdentity(
+    compiledContracts.variantWindowBindings ?? []
+  );
+  const actionEffectBindings = sortByIdentity(
+    compiledContracts.actionEffectBindings ?? []
+  );
   const actionForms = sortByIdentity(compiledContracts.actionForms ?? []);
   const specialResourceProfiles = sortByIdentity(
     compiledContracts.resourceProfiles ?? []
@@ -462,6 +476,9 @@ export function createCharacterCombatOwnerArtifacts({
       controls,
       ownerContextEdges,
       ownerVariantEdges,
+      attackInputChains,
+      variantWindowBindings,
+      actionEffectBindings,
       specialResourceProfiles,
       resourceTransactions,
       thresholdTransitions,
@@ -519,6 +536,15 @@ export function createCharacterCombatOwnerArtifacts({
     switchTriggers,
     coverage,
   });
+  const actionPhaseCoverage = createActionPhaseCoverage({
+    ownerId,
+    publicActions,
+    attackInputChains,
+    variantEdges: ownerVariantEdges,
+    variantWindowBindings,
+    resourceTransactions,
+    actionEffectBindings,
+  });
   const capturePlan = createRuntimeCapturePlan(unresolvedRecords, ownerId);
   const goldenFixture = createGoldenFixture({
     ownerId,
@@ -546,6 +572,8 @@ export function createCharacterCombatOwnerArtifacts({
     timingInputEdges: ownerContextEdges,
     variantEdges: ownerVariantEdges,
     attackInputChains,
+    variantWindowBindings,
+    actionEffectBindings,
     hits,
     resourceProfiles: specialResourceProfiles,
     resourceTransactions,
@@ -656,6 +684,14 @@ export function createCharacterCombatOwnerArtifacts({
       ...runtimeCoverage,
       profileHash: profile.profileHash,
     },
+    actionPhaseCoverage: {
+      ...actionPhaseCoverage,
+      profileHash: profile.profileHash,
+    },
+    actionPhaseMarkdown: createActionPhaseCoverageMarkdown({
+      ...actionPhaseCoverage,
+      profileHash: profile.profileHash,
+    }),
     unresolvedLedger: {
       schemaVersion: 1,
       kind: 'azpr-character-combat-unresolved-ledger',
@@ -2151,6 +2187,265 @@ function createRuntimeCapturePlan(records, ownerId) {
   };
 }
 
+export function createActionPhaseCoverage({
+  ownerId,
+  publicActions = [],
+  attackInputChains = [],
+  variantEdges = [],
+  variantWindowBindings = [],
+  resourceTransactions = [],
+  actionEffectBindings = [],
+}) {
+  const phases = attackInputChains.map(chain => {
+    const segmentLimit = chain.segmentLimit ?? null;
+    const phaseTransition = chain.phaseTransition ?? null;
+    const segments = (chain.segments ?? []).map(segment => ({
+      sequenceIndex: Number(segment.sequenceIndex),
+      sequenceTotal: Number(segment.sequenceTotal),
+      semanticName: segment.semanticName ?? segment.label ?? null,
+      controlSkillId: numberOrNull(segment.controlSkillId),
+      subSkillIndex: numberOrNull(segment.subSkillIndex),
+      durationFrames: numberOrNull(segment.durationFrames),
+      status: segment.status ?? null,
+      applied: segment.applied === true,
+      sourceIdentity: segment.sourceIdentity ?? null,
+    }));
+    return {
+      phaseIdentity: chain.chainIdentity,
+      publicActionIdentity: chain.sourceMappingIdentity ?? null,
+      actionKind: chain.actionKind ?? 'normal-attack',
+      entryPolicy: chain.entryPolicy ?? null,
+      prerequisite: chain.stateCondition ?? null,
+      inputCount: segments.length,
+      selectedExecutionSegments: segments,
+      segmentLimit,
+      phaseTransition,
+      exitCondition:
+        segmentLimit?.kind === 'resource-current-value'
+          ? {
+              kind: 'resource-exhausted-or-input-limit-reached',
+              resourceIdentity: segmentLimit.resourceIdentity ?? null,
+              costPerInput: numberOrNull(segmentLimit.costPerSegment),
+              maximumInputCount: numberOrNull(segmentLimit.maximum),
+            }
+          : {
+              kind: 'chain-complete',
+              maximumInputCount: segments.length,
+            },
+      sourceIdentities: uniqueStrings([
+        chain.sourceIdentity,
+        chain.entryPolicy?.sourceIdentity,
+        chain.stateCondition?.sourceIdentity,
+        chain.segmentLimit?.sourceIdentity,
+        chain.phaseTransition?.sourceIdentity,
+        ...segments.map(segment => segment.sourceIdentity),
+      ]),
+      status:
+        segments.length > 0 && segments.every(segment => segment.applied)
+          ? 'applied'
+          : 'static-evidence-gap',
+    };
+  });
+  const derivedTargets = new Set(
+    attackInputChains
+      .filter(chain => chain.entryPolicy?.kind === 'derived-or-quick-entry')
+      .map(chain => chain.segments?.[0])
+      .filter(Boolean)
+      .map(
+        segment =>
+          `${Number(segment.controlSkillId)}|${Number(segment.subSkillIndex)}`
+      )
+  );
+  const quickEntryBindings = dedupeBy(
+    [
+      ...variantWindowBindings,
+      ...variantEdges.filter(
+        edge =>
+          edge.applied === true &&
+          derivedTargets.has(
+            `${Number(edge.targetControlSkillId)}|${Number(
+              edge.targetSubSkillIndex
+            )}`
+          )
+      ),
+    ],
+    binding =>
+      [
+        Number(binding.sourceControlSkillId),
+        Number(binding.sourceSubSkillIndex),
+        Number(binding.targetControlSkillId),
+        Number(binding.targetSubSkillIndex),
+        Number(binding.activationFrame ?? binding.triggerFrame),
+        Number(binding.durationMs),
+        Number(binding.sourceElementId),
+      ].join('|')
+  );
+  const quickEntries = quickEntryBindings.map(binding => ({
+    bindingIdentity: binding.bindingIdentity ?? null,
+    sourceControlSkillId: numberOrNull(binding.sourceControlSkillId),
+    sourceSubSkillIndex: numberOrNull(binding.sourceSubSkillIndex),
+    sourceElementId: numberOrNull(binding.sourceElementId),
+    inputCommand: binding.inputCommand ?? null,
+    activationFrame: numberOrNull(
+      binding.activationFrame ?? binding.triggerFrame
+    ),
+    durationMs: numberOrNull(binding.durationMs),
+    targetControlSkillId: numberOrNull(binding.targetControlSkillId),
+    targetSubSkillIndex: numberOrNull(binding.targetSubSkillIndex),
+    condition: binding.condition ?? null,
+    status: binding.status ?? null,
+    applied: binding.applied === true,
+    sourceIdentity: binding.sourceIdentity ?? null,
+  }));
+  const publicActionReview = publicActions.map(action => ({
+    publicActionIdentity: action.mappingIdentity ?? action.id ?? null,
+    actionKind: action.actionKind ?? null,
+    sourceSkillId: numberOrNull(action.sourceSkillId),
+    runtimeReady: action.runtimeReady === true,
+    classification: action.mechanicsClassification ?? null,
+    residualReasons: uniqueStrings(action.reasons ?? []),
+    status: action.runtimeReady
+      ? action.reasons?.length
+        ? 'applied-with-residual-gaps'
+        : 'applied'
+      : 'static-evidence-gap',
+  }));
+  const resourceActionRows = resourceTransactions
+    .filter(transaction => transaction.applied === true)
+    .map(transaction => ({
+      controlSkillId: numberOrNull(transaction.controlSkillId),
+      subSkillIndex: numberOrNull(transaction.subSkillIndex),
+      operation: transaction.operation ?? null,
+      triggerFrame: numberOrNull(transaction.triggerFrame),
+      resourceIdentity: transaction.resourceIdentity ?? null,
+      sourceIdentity: transaction.sourceIdentity ?? null,
+    }));
+  const actionEffectRows = actionEffectBindings.map(binding => ({
+    controlSkillId: numberOrNull(binding.controlSkillId),
+    subSkillIndex: numberOrNull(binding.subSkillIndex),
+    elementId: numberOrNull(binding.elementId),
+    triggerFrame: numberOrNull(binding.triggerFrame),
+    effectKind: binding.tuningMark ? 'tuning-mark' : 'action-effect',
+    profileKey: binding.tuningMark?.profileKey ?? null,
+    stackDelta: numberOrNull(binding.tuningMark?.stackDelta),
+    status: binding.status ?? null,
+    applied: binding.applied === true,
+    sourceIdentity: binding.sourceIdentity ?? null,
+  }));
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-character-combat-action-phase-coverage',
+    status: 'character-combat-action-phase-coverage-ready',
+    ownerId: Number(ownerId),
+    summary: {
+      phaseCount: phases.length,
+      appliedPhaseCount: phases.filter(phase => phase.status === 'applied')
+        .length,
+      inputSegmentCount: phases.reduce(
+        (sum, phase) => sum + phase.inputCount,
+        0
+      ),
+      phaseTransitionCount: phases.filter(phase => phase.phaseTransition).length,
+      quickEntryCount: quickEntries.length,
+      appliedQuickEntryCount: quickEntries.filter(entry => entry.applied).length,
+      publicActionCount: publicActionReview.length,
+      runtimeReadyActionCount: publicActionReview.filter(
+        action => action.runtimeReady
+      ).length,
+      appliedResourceTransactionCount: resourceActionRows.length,
+      appliedActionEffectCount: actionEffectRows.filter(effect => effect.applied)
+        .length,
+    },
+    phases,
+    quickEntries,
+    resourceTransactions: resourceActionRows,
+    actionEffects: actionEffectRows,
+    publicActionReview,
+  };
+}
+
+function createActionPhaseCoverageMarkdown(report) {
+  const lines = [
+    `# ${report.ownerId} 动作阶段与派生入口审计`,
+    '',
+    `- 阶段：${report.summary.phaseCount}（已应用 ${report.summary.appliedPhaseCount}）`,
+    `- 输入段：${report.summary.inputSegmentCount}`,
+    `- 阶段切换：${report.summary.phaseTransitionCount}`,
+    `- 快速入口：${report.summary.appliedQuickEntryCount}/${report.summary.quickEntryCount}`,
+    `- 公开动作就绪：${report.summary.runtimeReadyActionCount}/${report.summary.publicActionCount}`,
+    '',
+    '## 动作阶段',
+    '',
+    '| 阶段 | 入口 | 前置 | 输入段 | 执行 control/sub | 退出条件 | 状态 |',
+    '| --- | --- | --- | ---: | --- | --- | --- |',
+    ...report.phases.map(phase => {
+      const controls = phase.selectedExecutionSegments
+        .map(
+          segment =>
+            `${segment.semanticName ?? `#${segment.sequenceIndex}`}=${segment.controlSkillId}/sub${segment.subSkillIndex}`
+        )
+        .join('；');
+      return `| ${markdownCell(phase.phaseIdentity)} | ${markdownCell(
+        phase.entryPolicy?.kind
+      )} | ${markdownCell(phase.prerequisite?.kind)} | ${
+        phase.inputCount
+      } | ${markdownCell(controls)} | ${markdownCell(
+        phase.exitCondition?.kind
+      )} | ${phase.status} |`;
+    }),
+    '',
+    '## 阶段切换与快速入口',
+    '',
+    '| 来源 | 触发帧/窗口 | 目标 | 条件 | 状态 |',
+    '| --- | --- | --- | --- | --- |',
+    ...report.phases
+      .filter(phase => phase.phaseTransition)
+      .map(phase => {
+        const transition = phase.phaseTransition;
+        return `| ${markdownCell(
+          `${phase.phaseIdentity}#${transition.sourceSequenceIndex}`
+        )} | ${markdownCell(
+          transition.inputWindow
+            ? `[${transition.inputWindow.startFrame},${transition.inputWindow.endFrame})`
+            : null
+        )} | ${markdownCell(transition.targetChainIdentity)} | ${markdownCell(
+          transition.condition?.kind
+        )} | ${transition.status ?? 'unresolved'} |`;
+      }),
+    ...report.quickEntries.map(entry => {
+      return `| ${markdownCell(
+        `${entry.sourceControlSkillId}/sub${entry.sourceSubSkillIndex}`
+      )} | ${markdownCell(
+        `${entry.activationFrame}F + ${entry.durationMs}ms`
+      )} | ${markdownCell(
+        `${entry.targetControlSkillId}/sub${entry.targetSubSkillIndex}`
+      )} | ${markdownCell(entry.condition?.kind)} | ${entry.status} |`;
+    }),
+    '',
+    '## 公开动作复核',
+    '',
+    '| 动作 | 就绪 | 状态 | 剩余缺口 |',
+    '| --- | --- | --- | --- |',
+    ...report.publicActionReview.map(action => {
+      return `| ${markdownCell(action.actionKind)} | ${
+        action.runtimeReady ? '是' : '否'
+      } | ${action.status} | ${markdownCell(
+        action.residualReasons.join('；')
+      )} |`;
+    }),
+    '',
+    '> 本报告由 owner contract 生成；描述只用于发现与命名，运行状态以 control、资源事务、派生窗口和效果绑定为准。',
+    '',
+  ];
+  return `${lines.join('\n')}\n`;
+}
+
+function markdownCell(value) {
+  return String(value ?? '-')
+    .replaceAll('|', '\\|')
+    .replaceAll('\n', ' ');
+}
+
 function createGoldenFixture({ ownerId, goldenRuntime, sourcePackageHash }) {
   if (
     !goldenRuntime ||
@@ -2736,6 +3031,22 @@ function countBy(values, keyOf) {
   return Object.fromEntries(
     Object.entries(counts).sort(([left], [right]) => left.localeCompare(right))
   );
+}
+
+function uniqueStrings(values) {
+  return [
+    ...new Set(
+      (values ?? [])
+        .flat()
+        .filter(value => value != null && String(value).length > 0)
+        .map(String)
+    ),
+  ].sort();
+}
+
+function numberOrNull(value) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
 }
 
 function sha256(value) {

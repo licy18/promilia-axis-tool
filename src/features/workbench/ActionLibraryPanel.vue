@@ -1127,6 +1127,8 @@ function annotateMechanicsCoverage(entry, type) {
     scenarioRuntimeStatus:
       mapping?.scenarioRuntimeStatus ?? mapping?.classification ?? 'unresolved',
     attackInputSegments: mapping?.attackInputSegments ?? [],
+    attackInputSourceSegments:
+      mapping?.attackInputSourceSegments ?? mapping?.attackInputSegments ?? [],
     mechanicsClassification,
     mechanicsTooltip: coverageMessages.join('；') || null,
   };

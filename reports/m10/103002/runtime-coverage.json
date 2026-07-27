@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 103002,
-  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
+  "sourcePackageHash": "58a314ab29b081629341dcb56ec66d742bb668d2c4fa6e08d8dc0614e34868bf",
   "actionRows": [
     {
       "actionIdentity": "actor|103002|10300201|0|10300203",
@@ -11,15 +11,13 @@
       "controlSkillIds": [
         10300201,
         10300202,
-        10300203,
-        10300204,
-        10300205
+        10300203
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "runtimeReady": true,
-      "hitCount": 146,
+      "hitCount": 94,
       "dimensionSummary": {
         "hp": {
           "applied": 2
@@ -149,9 +147,9 @@
         10300212
       ],
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "runtimeReady": false,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
       "hitCount": 0,
       "dimensionSummary": {
         "hp": {
@@ -364,22 +362,22 @@
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 8,
+    "runtimeReadyActionCount": 9,
     "executionFormCount": 24,
     "controlCount": 28,
     "hitCount": 212,
     "rawEffectCount": 378,
-    "semanticEffectCount": 67,
+    "semanticEffectCount": 73,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 41,
     "thresholdTransitionCount": 0,
     "passiveCount": 1,
     "switchTriggerCount": 1,
     "coverageStatusCounts": {
-      "applied": 6,
+      "applied": 7,
       "not-applicable": 3,
-      "static-evidence-gap": 11
+      "static-evidence-gap": 10
     }
   },
-  "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
+  "profileHash": "82189a51d4e58f95bb683af08e8af3160a5a3ff0d924707d01e5406a59e222c9"
 }

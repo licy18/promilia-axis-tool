@@ -151,6 +151,7 @@ export function createVerifiedActionVariantRuntime({
   const actionResolutionById = new Map();
   const selectionByActionId = new Map();
   const activeSwitchWindows = [];
+  const switchWindowHistory = [];
   const pendingEvents = [];
   const resourceEvents = [];
   const stateEvents = [];
@@ -204,7 +205,7 @@ export function createVerifiedActionVariantRuntime({
         ) {
           continue;
         }
-        activeSwitchWindows.push({
+        const window = {
           ...binding,
           actorId,
           sourceActionId: activeState.sourceActionId,
@@ -214,7 +215,9 @@ export function createVerifiedActionVariantRuntime({
             (Number.isFinite(Number(scenario?.time?.durationMs))
               ? Number(scenario.time.durationMs)
               : Number.POSITIVE_INFINITY),
-        });
+        };
+        activeSwitchWindows.push(window);
+        switchWindowHistory.push(window);
       }
     }
   }
@@ -317,13 +320,15 @@ export function createVerifiedActionVariantRuntime({
       ) {
         continue;
       }
-      activeSwitchWindows.push({
+      const window = {
         ...binding,
         actorId: action?.actorId ?? actorState.actor.id,
         sourceActionId: action?.id ?? previous?.sourceActionId ?? null,
         startsAtMs: timeMs,
         endsAtMs: expiresAtMs ?? Number.POSITIVE_INFINITY,
-      });
+      };
+      activeSwitchWindows.push(window);
+      switchWindowHistory.push(window);
     }
     if (expiresAtMs != null) {
       pendingEvents.push({
@@ -400,6 +405,8 @@ export function createVerifiedActionVariantRuntime({
       );
     } else if (operation.operation === 'clear') {
       afterValue = 0;
+    } else if (operation.operation === 'set-to-capacity') {
+      afterValue = state.profile.capacity;
     } else if (operation.operation === 'transform') {
       enterOrRefreshState({
         actorState: state,
@@ -479,13 +486,15 @@ export function createVerifiedActionVariantRuntime({
       return;
     }
     const durationMs = Number(descriptor.binding.durationMs);
-    activeSwitchWindows.push({
+    const window = {
       ...descriptor.binding,
       actorId: descriptor.action.actorId,
       sourceActionId: descriptor.action.id,
       startsAtMs: descriptor.timeMs,
       endsAtMs: descriptor.timeMs + durationMs,
-    });
+    };
+    activeSwitchWindows.push(window);
+    switchWindowHistory.push(window);
   };
 
   const applyStateExpiration = descriptor => {
@@ -716,8 +725,10 @@ export function createVerifiedActionVariantRuntime({
               decisionFrame: attackChainSelection.chain.decisionFrame,
               chainIdentity: attackChainSelection.chain.chainIdentity,
               semanticIdentity: `${attackChainSelection.chain.chainIdentity}:segment:${attackChainSelection.segment.sequenceIndex}`,
-              semanticName: attackChainSelection.chain.semanticNamePrefix
-                ? `${attackChainSelection.chain.semanticNamePrefix} A${attackChainSelection.segment.sequenceIndex}`
+              semanticName: attackChainSelection.segment.semanticName
+                ? attackChainSelection.segment.semanticName
+                : attackChainSelection.chain.semanticNamePrefix
+                  ? `${attackChainSelection.chain.semanticNamePrefix} ${attackChainSelection.segment.label ?? `A${attackChainSelection.segment.sequenceIndex}`}`
                 : action.name ?? `A${attackChainSelection.segment.sequenceIndex}`,
             }
           : activeSelection.binding
@@ -976,6 +987,7 @@ export function createVerifiedActionVariantRuntime({
     stateEvents,
     variantEvents,
     effectCommands,
+    activeSwitchWindows: switchWindowHistory,
     eventLog: [...resourceEvents, ...variantEvents].sort(compareRuntimeEvents),
     executionBlocks,
     curves,
@@ -1025,17 +1037,45 @@ function resolveAttackInputChainAction({
   ) {
     return { status: 'not-required', action, chain: null, segment: null };
   }
-  const matchingChains = (attackInputChains ?? []).filter(
+  const ownerChains = (attackInputChains ?? []).filter(
     chain =>
       chain.applied === true &&
       Number(chain.ownerId) === Number(actorState.profile.ownerId) &&
-      Number(chain.sourceSkillId) === Number(mapping.sourceSkillId) &&
-      isRuntimeConditionSatisfied(chain.stateCondition, actorState)
+      Number(chain.sourceSkillId) === Number(mapping.sourceSkillId)
   );
-  if (matchingChains.length !== 1) {
+  const explicitChainIdentity =
+    action.attackInputChainIdentity ??
+    action.attackInput?.attackInputChainIdentity ??
+    null;
+  let chain = null;
+  if (explicitChainIdentity) {
+    chain =
+      ownerChains.find(
+        candidate => candidate.chainIdentity === explicitChainIdentity
+      ) ?? null;
+    if (
+      chain &&
+      !isRuntimeConditionSatisfied(chain.stateCondition, actorState)
+    ) {
+      return { status: 'blocked', action, chain, segment: null };
+    }
+  } else {
+    const matchingChains = ownerChains.filter(chain =>
+      isRuntimeConditionSatisfied(chain.stateCondition, actorState)
+    );
+    const defaults = matchingChains.filter(
+      candidate => candidate.entryPolicy?.kind === 'default'
+    );
+    chain =
+      defaults.length === 1
+        ? defaults[0]
+        : matchingChains.length === 1
+          ? matchingChains[0]
+          : null;
+  }
+  if (!chain) {
     return { status: 'not-required', action, chain: null, segment: null };
   }
-  const chain = matchingChains[0];
   const sequenceIndex = Number(action.attackSequenceIndex);
   const segment = chain.segments.find(
     item => Number(item.sequenceIndex) === sequenceIndex
@@ -1043,7 +1083,11 @@ function resolveAttackInputChainAction({
   if (!segment) {
     return { status: 'blocked', action, chain, segment: null };
   }
-  const sourceSegment = mapping.attackInputSegments?.find(
+  const sourceSegment = (
+    mapping.attackInputSourceSegments ??
+    mapping.attackInputSegments ??
+    []
+  ).find(
     item => Number(item.controlSkillId) === Number(segment.controlSkillId)
   );
   if (!sourceSegment) {

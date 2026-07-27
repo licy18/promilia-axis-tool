@@ -63617,6 +63617,7 @@
         "ownerId": 101010,
         "sourceSkillId": 10101001,
         "semanticNamePrefix": null,
+        "segmentLabelPrefix": "A",
         "decisionFrame": 0,
         "stateCondition": {
           "kind": "resource-state-inactive",
@@ -63625,10 +63626,17 @@
           "stateName": "爆发状态buff",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129"
         },
+        "entryPolicy": {
+          "kind": "condition-selected",
+          "sourceIdentity": null
+        },
+        "segmentLimit": null,
         "segments": [
           {
             "sequenceIndex": 1,
             "sequenceTotal": 5,
+            "label": "A1",
+            "semanticName": null,
             "controlSkillId": 10101001,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101002,
@@ -63788,6 +63796,8 @@
           {
             "sequenceIndex": 2,
             "sequenceTotal": 5,
+            "label": "A2",
+            "semanticName": null,
             "controlSkillId": 10101002,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101003,
@@ -63971,6 +63981,8 @@
           {
             "sequenceIndex": 3,
             "sequenceTotal": 5,
+            "label": "A3",
+            "semanticName": null,
             "controlSkillId": 10101003,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101004,
@@ -64120,6 +64132,8 @@
           {
             "sequenceIndex": 4,
             "sequenceTotal": 5,
+            "label": "A4",
+            "semanticName": null,
             "controlSkillId": 10101004,
             "subSkillIndex": 0,
             "nextControlSkillId": 10101005,
@@ -64269,6 +64283,8 @@
           {
             "sequenceIndex": 5,
             "sequenceTotal": 5,
+            "label": "A5",
+            "semanticName": null,
             "controlSkillId": 10101005,
             "subSkillIndex": 0,
             "nextControlSkillId": null,
@@ -64556,6 +64572,7 @@
         "ownerId": 101010,
         "sourceSkillId": 10101001,
         "semanticNamePrefix": null,
+        "segmentLabelPrefix": "A",
         "decisionFrame": 0,
         "stateCondition": {
           "kind": "resource-state-active",
@@ -64564,10 +64581,17 @@
           "stateName": "爆发状态buff",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129"
         },
+        "entryPolicy": {
+          "kind": "condition-selected",
+          "sourceIdentity": null
+        },
+        "segmentLimit": null,
         "segments": [
           {
             "sequenceIndex": 1,
             "sequenceTotal": 3,
+            "label": "A1",
+            "semanticName": null,
             "controlSkillId": 10101001,
             "subSkillIndex": 1,
             "nextControlSkillId": 10101004,
@@ -64791,6 +64815,8 @@
           {
             "sequenceIndex": 2,
             "sequenceTotal": 3,
+            "label": "A2",
+            "semanticName": null,
             "controlSkillId": 10101004,
             "subSkillIndex": 1,
             "nextControlSkillId": 10101005,
@@ -65038,6 +65064,8 @@
           {
             "sequenceIndex": 3,
             "sequenceTotal": 3,
+            "label": "A3",
+            "semanticName": null,
             "controlSkillId": 10101005,
             "subSkillIndex": 1,
             "nextControlSkillId": null,
@@ -65256,6 +65284,8 @@
         "applied": true
       }
     ],
+    "variantWindowBindings": [],
+    "actionEffectBindings": [],
     "hits": [
       {
         "elementId": 101010000,
@@ -127446,12 +127476,14 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=-4529113272733101309"
     }
   },
-  "contractHash": "5a17d30513932a7e8a29859a82d7a42107682b29a436772dacc8c7496b9334a7",
+  "contractHash": "e2c9300ab7bcdc0100e4436fd1259e475bc65e77e0bed05626745e50b7f34df5",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,
     "publicActionFormCount": 5,
     "attackInputChainCount": 2,
+    "variantWindowBindingCount": 0,
+    "actionEffectBindingCount": 0,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
     "appliedResourceTransactionCount": 0,
@@ -127459,5 +127491,5 @@
     "thresholdTransitionCount": 1,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "2fac9b08cb4a7c5fdadb296b9a9302049bc0bfaa0dfd3c6a5ddc7cd48f1d37d0"
+  "recipeContractHash": "5ae1d2cb1ea6ed0aa4daabb24e4fa0b1011ddd25adb7b8d80f33026799ea89f6"
 }

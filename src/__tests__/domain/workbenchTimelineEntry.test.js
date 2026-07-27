@@ -82,6 +82,67 @@ describe('workbench timeline entry contract', () => {
     });
   });
 
+  it('preserves alternate attack input source segments without changing the default chain', () => {
+    const entry = createWorkbenchTimelineEntry({
+      type: ACTION_TYPES.SKILL,
+      skillId: 10300201,
+      attackInputSegments: [
+        {
+          identity: 'ruby-default-a1',
+          sequenceIndex: 1,
+          sequenceTotal: 3,
+          controlSkillId: 10300201,
+        },
+        {
+          identity: 'ruby-default-a2',
+          sequenceIndex: 2,
+          sequenceTotal: 3,
+          controlSkillId: 10300202,
+        },
+        {
+          identity: 'ruby-default-a3',
+          sequenceIndex: 3,
+          sequenceTotal: 3,
+          controlSkillId: 10300203,
+        },
+      ],
+      attackInputSourceSegments: [
+        {
+          identity: 'ruby-source-a1',
+          sequenceIndex: 1,
+          sequenceTotal: 4,
+          controlSkillId: 10300201,
+        },
+        {
+          identity: 'ruby-source-a2',
+          sequenceIndex: 2,
+          sequenceTotal: 4,
+          controlSkillId: 10300202,
+        },
+        {
+          identity: 'ruby-source-a3',
+          sequenceIndex: 3,
+          sequenceTotal: 4,
+          controlSkillId: 10300203,
+        },
+        {
+          identity: 'ruby-source-e1',
+          sequenceIndex: 4,
+          sequenceTotal: 4,
+          controlSkillId: 10300201,
+          selectedSubSkillIndex: 1,
+        },
+      ],
+    });
+
+    expect(entry.attackInputSegments).toHaveLength(3);
+    expect(entry.attackInputSourceSegments).toHaveLength(4);
+    expect(entry.attackInputSourceSegments[3]).toMatchObject({
+      controlSkillId: 10300201,
+      selectedSubSkillIndex: 1,
+    });
+  });
+
   it('plans one actor ownership move for a mixed action and kibo selection', () => {
     const plan = createWorkbenchTimelineBatchLaneMovePlan({
       actions: [

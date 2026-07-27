@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
+  applyCharacterCombatAttackInputPhaseMappings,
+  applyCharacterCombatActionEffectBindings,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
   mergeCharacterCombatOwnerCompilations,
@@ -233,6 +235,10 @@ export async function createCharacterCombatProductionBuild({
     specialResourceCatalog,
     compilations: ownerCompilations,
   });
+  applyCharacterCombatActionEffectBindings({
+    controls: compilerEvidence?.controls ?? [],
+    compilations: ownerCompilations,
+  });
   if (typeof prepareCompiledOwners === 'function') {
     await prepareCompiledOwners({
       recipes: normalizedRecipes,
@@ -256,6 +262,10 @@ export async function createCharacterCombatProductionBuild({
   if (!mechanicsPackage) {
     throw new Error('character combat mechanics package builder returned null');
   }
+  applyCharacterCombatAttackInputPhaseMappings({
+    mechanicsPackage,
+    compilations: ownerCompilations,
+  });
   mechanicsPackage.actionVariantGraph = actionVariantGraph;
   mechanicsPackage.specialResourceCatalog = specialResourceCatalog;
 

@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import characterCatalog from '../../data/generated/characters.json';
+import { applyCharacterCombatAttackInputPhaseMappings } from '../../../scripts/character-combat/character-combat-contract-compiler.mjs';
 import {
   createCharacterCombatProductionBuild,
   discoverCharacterCombatRecipes,
@@ -17,6 +18,92 @@ afterEach(() => {
 });
 
 describe('character combat production orchestration', () => {
+  it('publishes a declarative default attack phase without owner-specific compiler branches', () => {
+    const mechanicsPackage = {
+      actionMappings: [
+        {
+          ownerId: 990001,
+          sourceSkillId: 99000101,
+          actionKind: 'normal-attack',
+          attackInputSegments: [
+            {
+              controlSkillId: 99000101,
+              selectedSubSkillIndex: 0,
+              durationFrames: 20,
+            },
+            {
+              controlSkillId: 99000102,
+              selectedSubSkillIndex: 0,
+              durationFrames: 30,
+            },
+            {
+              controlSkillId: 99000103,
+              selectedSubSkillIndex: 0,
+              durationFrames: 40,
+            },
+          ],
+        },
+      ],
+    };
+    applyCharacterCombatAttackInputPhaseMappings({
+      mechanicsPackage,
+      compilations: [
+        {
+          ownerId: 990001,
+          contracts: {
+            attackInputChains: [
+              {
+                chainIdentity: 'fixture-default-two-inputs',
+                sourceSkillId: 99000101,
+                entryPolicy: { kind: 'default' },
+                sourceIdentity: 'fixture:default-phase',
+                segments: [
+                  {
+                    sequenceIndex: 1,
+                    controlSkillId: 99000101,
+                    subSkillIndex: 0,
+                    durationFrames: 20,
+                    semanticName: 'Fixture A1',
+                    sourceIdentity: 'fixture:a1',
+                    status: 'applied',
+                  },
+                  {
+                    sequenceIndex: 2,
+                    controlSkillId: 99000102,
+                    subSkillIndex: 0,
+                    durationFrames: 30,
+                    semanticName: 'Fixture A2',
+                    sourceIdentity: 'fixture:a2',
+                    status: 'applied',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(mechanicsPackage.actionMappings[0]).toMatchObject({
+      attackInputChainIdentity: 'fixture-default-two-inputs',
+      attackInputPhaseStatus:
+        'character-combat-default-attack-phase-applied',
+    });
+    expect(
+      mechanicsPackage.actionMappings[0].attackInputSegments.map(segment => [
+        segment.semanticName,
+        segment.controlSkillId,
+        segment.durationFrames,
+      ])
+    ).toEqual([
+      ['Fixture A1', 99000101, 20],
+      ['Fixture A2', 99000102, 30],
+    ]);
+    expect(
+      mechanicsPackage.actionMappings[0].attackInputSourceSegments
+    ).toHaveLength(3);
+  });
+
   it('discovers and compiles two non-empty recipes through package, runtime, profile, and catalog', async () => {
     const recipeRoot = createTemporaryRoot();
     const ownerA = 101010;

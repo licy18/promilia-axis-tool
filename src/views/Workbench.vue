@@ -3586,6 +3586,8 @@ function resolveVerifiedStateSelectedActionEntry({
 } = {}) {
   const graph = getVerifiedActionVariantGraph();
   const actorId = resolveScenarioActorId(actorCharacterId);
+  const variantRuntime =
+    simulationResult.value.verifiedActionVariantRuntime ?? null;
   return resolveVerifiedAttackInputChainEntry({
     entry,
     graph,
@@ -3593,6 +3595,9 @@ function resolveVerifiedStateSelectedActionEntry({
     actorId,
     timeMs,
     effectIntervals: effectIntervalProjection.value.intervals,
+    variantRuntime,
+    actions: actionDrafts.value,
+    runtimeSelections: variantRuntime?.selections ?? [],
   }).entry;
 }
 
@@ -8935,6 +8940,8 @@ function applyVerifiedActionTiming(entry, mapping) {
       ...entry,
       needsTimingData: false,
       attackInputSegments: entry.attackInputSegments ?? [],
+      attackInputSourceSegments:
+        entry.attackInputSourceSegments ?? entry.attackInputSegments ?? [],
       mechanicsClassification: entry.mechanicsClassification ?? 'unresolved',
     };
   }
@@ -8972,6 +8979,8 @@ function applyVerifiedActionTiming(entry, mapping) {
     scenarioRuntimeStatus:
       mapping?.scenarioRuntimeStatus ?? mapping?.classification ?? 'unresolved',
     attackInputSegments: mapping?.attackInputSegments ?? [],
+    attackInputSourceSegments:
+      mapping?.attackInputSourceSegments ?? mapping?.attackInputSegments ?? [],
     mechanicsClassification: mapping?.classification ?? 'unresolved',
   };
 }

@@ -554,6 +554,7 @@ export async function createVerifiedCombatMechanicsBuild({
       controls: controlBindings,
       specialResourceProfiles: specialResourceCatalog.profiles,
       specialResourceOperations: specialResourceCatalog.operationBindings,
+      tuningMarkProfiles: tuningMechanicsCatalog.profiles,
       skills: seed.gameData?.skills ?? [],
     },
     compilerOperators: characterCombatCompilerOperators,
@@ -6927,7 +6928,7 @@ function createPackage({
       .map(mapping => mapping.controlSkillId)
   );
   for (const mapping of actionMappings) {
-    for (const segment of mapping.attackInputSegments ?? []) {
+    for (const segment of getAuditAttackInputSegments(mapping)) {
       if (Number.isInteger(segment.controlSkillId)) {
         publishedControlSkillIds.add(segment.controlSkillId);
       }
@@ -7387,7 +7388,7 @@ function createSemanticEffectCatalog({
   for (const mapping of packageValue.actionMappings) {
     const selectedEffectIdentities = new Set([
       ...(mapping.selectedEffectIdentities ?? []),
-      ...(mapping.attackInputSegments ?? []).flatMap(
+      ...getAuditAttackInputSegments(mapping).flatMap(
         segment => segment.selectedEffectIdentities ?? []
       ),
     ]);
@@ -10178,7 +10179,7 @@ function collectPublicActionTimingSources(packageValue) {
     ) {
       sources.push({ ...base, timing: mapping.actionTiming });
     }
-    for (const segment of mapping.attackInputSegments ?? []) {
+    for (const segment of getAuditAttackInputSegments(mapping)) {
       if (!segment.actionTiming) continue;
       sources.push({
         publicActionIdentity: segment.identity,
@@ -10388,7 +10389,7 @@ function createActionTimingCoverageReport(packageValue) {
     })
   );
   const attackInputSegments = packageValue.actionMappings.flatMap(mapping =>
-    (mapping.attackInputSegments ?? []).map(segment =>
+    getAuditAttackInputSegments(mapping).map(segment =>
       createActionTimingCoverageRow({
         identity: segment.identity,
         rowKind: 'normal-attack-input-segment',
@@ -10916,16 +10917,23 @@ function createActionCoverageReport({
     );
   const attackInputChains = packageValue.actionMappings
     .filter(mapping => mapping.actionKind === 'normal-attack')
-    .map(mapping => ({
-      actionIdentity: mapping.identity,
-      ownerId: mapping.ownerId,
-      ownerName: mapping.ownerName,
-      sourceSkillId: mapping.sourceSkillId,
-      sequenceTotal: mapping.attackInputSegments?.length ?? 0,
-      appliedSegmentCount: mapping.attackInputAppliedSegmentCount ?? 0,
-      unresolvedSegmentCount: mapping.attackInputUnresolvedSegmentCount ?? 0,
-      segments: mapping.attackInputSegments ?? [],
-    }));
+    .map(mapping => {
+      const segments = getAuditAttackInputSegments(mapping);
+      return {
+        actionIdentity: mapping.identity,
+        ownerId: mapping.ownerId,
+        ownerName: mapping.ownerName,
+        sourceSkillId: mapping.sourceSkillId,
+        sequenceTotal: segments.length,
+        appliedSegmentCount: segments.filter(
+          segment => segment.classification === 'applied'
+        ).length,
+        unresolvedSegmentCount: segments.filter(
+          segment => segment.classification === 'unresolved'
+        ).length,
+        segments,
+      };
+    });
   const summary = createCoverageSummary({
     mappings: packageValue.actionMappings,
   });
@@ -11493,7 +11501,7 @@ function createEffectCoverageReport(packageValue, semanticEffectCatalog) {
   const actions = packageValue.actionMappings.map(mapping => {
     const selectedIdentities = new Set([
       ...(mapping.selectedEffectIdentities ?? []),
-      ...(mapping.attackInputSegments ?? []).flatMap(
+      ...getAuditAttackInputSegments(mapping).flatMap(
         segment => segment.selectedEffectIdentities ?? []
       ),
     ]);
@@ -12141,6 +12149,14 @@ function findRequiredBinding(bindings, controlBySkillId, predicate) {
     controlSkillId: binding?.controlSkillId ?? null,
     elementIds,
   };
+}
+
+function getAuditAttackInputSegments(mapping) {
+  return (
+    mapping?.attackInputSourceSegments ??
+    mapping?.attackInputSegments ??
+    []
+  );
 }
 
 function countValues(values) {
