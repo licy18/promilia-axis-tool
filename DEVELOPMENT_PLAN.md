@@ -374,7 +374,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M10-A-R1 / 单角色战斗运行逻辑解析与接入流水线整改实现完成，等待产品复验**。Profile 现由声明式 recipe 和通用角色编译器单向生成 owner contracts，再合并 verified package 并供 runtime/UI 消费；成熟度、战斗覆盖、golden 回放和 owner 发布隔离均由守门验证。小玉当前诚实停在 `runtime-applied / partial`，M10-B 在产品复验通过前不得启动。
+当前里程碑：**M10-A / 单角色战斗运行逻辑解析与接入流水线已通过产品验收，停在阶段边界**。Profile 由声明式 recipe 和通用角色编译器单向生成 owner contracts，再合并 verified package 并供 runtime/UI 消费；成熟度、战斗覆盖、golden 回放和 owner 发布隔离均由守门验证。小玉当前诚实停在 `runtime-applied / partial`；M10-B 只在产品明确下达启动指令后进入。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -725,7 +725,7 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 
 统一流水线按 Discovery -> Normalize -> Compile -> Validate -> Runtime capture -> Apply 执行。角色差异只进入版本化 profile 和声明式 recipe；运行时继续复用 verified package 的通用算子，禁止在生成层之外新增散落的角色 ID/技能 ID 分支。单角色命令必须幂等，失败不得覆盖上一份有效全量包；UI、动作库、状态轴、曲线和 trace 只消费同一编译结果，不维护第二份角色规则。
 
-#### M10-A：流水线与涂山小玉金标准（M10-A-R2 实现完成，等待产品复验）
+#### M10-A：流水线与涂山小玉金标准（已通过产品验收）
 
 - 生产同步现自动发现全部 `profile-recipes/*.json`，统一汇总证据与 control policy，经 `raw evidence + declarative recipe -> generic character compiler -> owner contracts -> merged verified package -> runtime/UI` 单向链编译所有 owner；profile、golden、运行时合同和全局目录来自同一轮中间结果。第二个非空 synthetic owner 可在不修改 compiler/sync 源码的情况下进入完整生产编排。
 - `pipelineMaturity`、`combatCoverageState` 与 `characterComplete` 由守门计算。小玉当前为 `runtime-applied / partial`、`characterComplete=false`，不会计入 `uiVerifiedProfileCount`；410 条 raw 记录归一为 225 条语义记录，其中 99 条仍可能影响玩法结果，包装重复、不可达与不适用项单独分账。
@@ -733,7 +733,7 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 - `sync-character-combat-profile --owner <id>` 会从原始证据和 recipe 重新编译，不读取既有 owner contract；默认只写 owner staging，失败零写入，`--all` 才原子发布全局 package/catalog。双 owner 发现、编译、合并、owner A -> owner B -> all、删除/篡改合同自愈和重复零漂移均有整链测试守门；小玉运行策略已进入声明式 recipe，生产 runtime、Workbench 与 UI 没有新增角色 ID 分支。
 - 135 个测试文件、781 条单元/组件测试及 57/57 production preview 全部通过，41/41 必需能力为 `trial-ready`；character/verified 漂移、applied-source、生产引用、Workbench 数据和动作状态审计通过。小玉 117 条语义效果、7 条动态属性依赖与 69 条 golden 数值断言均保持不变。总 JS gzip `746,804B`，仍超发布硬门槛 `6,804B`；依本轮边界只记录既有发布风险，不做包体优化。
 
-#### M10-B：全角色逐个解析与验收（待 M10-A 产品验收后启动）
+#### M10-B：全角色逐个解析与验收（待产品明确启动）
 
 - 角色状态严格按 `not-started -> evidence-indexed -> profile-compiled -> runtime-applied -> UI-verified` 推进；每个角色独立生成、提交和验收，不批量自动标绿。
 - 推荐先红宝石（弹药/特殊资源），再寒悠悠（队伍印记/支援链），随后按 `reports/m10/all-character-coverage-manifest.json` 中的机制类型和证据缺口逐个推进其余角色。
@@ -825,7 +825,7 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 46. 实现已完成，等待产品复验：M9-R3-R2-R2 已审计小玉 21/21 个公开形态并接入 7 条有直接证据的隐藏输入派生；星携技入场链未发现特殊重击派生，未生成传闻边。总 JS gzip 超发布硬门槛 `445B`，当前不压包、不扩其他角色或后续里程碑。
 47. 实现已完成，等待产品复验：M9-R3-R3 已将完整模拟结果的曲线、日志、来源与检查面改为稀疏投影、窗口化和按需挂载，并隔离拖拽预览与 authoritative simulation；复杂 fixture 的 DOM 与交互指标通过专用性能守门。总 JS gzip 超发布硬门槛 `4,280B`，当前按范围不压包、不扩机制或进入下一里程碑。
 48. 实现已完成，等待产品复验：M9-R3-R2-R3 已拆分派生输入帧、后续执行起点和前动作关系结束帧，保持原始半开窗口并让真实贴边拖拽稳定选择对应形态；全角色窗口审计、完整单测、聚焦 production preview 和性能回归通过。总 JS gzip 超发布硬门槛 `6,434B`，当前按范围不压包、不扩机制或进入下一里程碑。
-49. 实现已完成，等待产品复验：M10-A-R2 已将自动 recipe 发现、多 owner 通用编译、单轮 package 合并、runtime/profile/golden 生成与 owner 自愈发布贯通为生产主链；135 文件/781 测试、57/57 production preview、41/41 必需能力及两条漂移审计通过。小玉仍诚实标为 `runtime-applied / partial`，69 条 golden 结果不变；总 JS gzip 超硬门槛 `6,804B` 仅记录风险，M10-B/红宝石未启动。
+49. 已完成并通过产品验收：M10-A-R2 已将自动 recipe 发现、多 owner 通用编译、单轮 package 合并、runtime/profile/golden 生成与 owner 自愈发布贯通为生产主链；独立复验确认 135 文件/781 测试、57/57 production preview、41/41 必需能力及两条漂移审计通过。小玉仍诚实标为 `runtime-applied / partial`，69 条 golden、117 条语义效果和 7 条动态属性依赖保持一致；总 JS gzip 超硬门槛仅记录为既有发布风险。当前停在阶段边界，M10-B/红宝石未启动。
 
 ## 8. 风险和取舍
 

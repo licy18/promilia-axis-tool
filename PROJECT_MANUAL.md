@@ -1716,9 +1716,9 @@ Workbench 在保留完整模拟数据与小玉机制结果的前提下，将曲�
 
 角色流水线现按“声明式 recipe -> 通用编译器 -> owner contracts -> verified package -> runtime/UI”单向生成，并由守门派生成熟度和战斗覆盖；小玉当前诚实停在 `runtime-applied / partial`，410 条 raw 缺口归一为 225 条语义记录，其中 99 条仍可能影响玩法结果，不计为 `ui-verified` 或角色完成。120 秒三人队 golden 已改为真实 project compile + simulation，69 条数值断言覆盖三值/SP、缘结与爆发、被动、动态属性和装配传播；owner-scoped 原子发布、双 recipe 保留、失败零写入与重复零漂移均通过。完整 134 文件/779 测试、57/57 production preview 和 41/41 必需能力通过；总 JS gzip `746,821B` 较整改基线净增 `133B`，仍超硬门槛 `6,821B`，按本轮边界仅记录既有发布风险。M10-B 未启动，当前停在产品复验点。
 
-### M10-A-R2 生产多 owner 编排与 owner 自愈已完成，等待产品复验（2026-07-26）
+### M10-A-R2 生产多 owner 编排与 owner 自愈已通过产品验收（2026-07-27）
 
-生产同步现自动发现全部角色 recipe，以同一通用编译中间结果合并 owner contracts、verified package、runtime、golden 与 profile/catalog；小玉即时投射物策略已改为声明式 control policy，共享生产生成不再以角色或技能 ID 决定合同。owner 命令会从原始证据重新编译并只写隔离 staging，删除或篡改旧合同仍可重建同 hash，只有 `--all` 发布全局产物。双 owner 生产编排测试、135 文件/781 测试、57/57 production preview、41/41 必需能力及 character/verified 漂移审计通过；小玉保持 `runtime-applied / partial`，117 条语义效果、7 条动态属性依赖和 69 条 golden 结果未变。总 JS gzip `746,804B`，超硬门槛 `6,804B` 的既有风险仅记录；M10-B/红宝石未启动。
+生产同步现自动发现全部角色 recipe，以同一通用编译中间结果合并 owner contracts、verified package、runtime、golden 与 profile/catalog；小玉即时投射物策略已改为声明式 control policy，共享生产生成不再以角色或技能 ID 决定合同。owner 命令会从原始证据重新编译并只写隔离 staging，删除或篡改旧合同仍可重建同 hash，只有 `--all` 发布全局产物。独立复验确认双 owner 生产编排、135 文件/781 测试、57/57 production preview、41/41 必需能力及 character/verified、build、production imports、Workbench data、action status、applied-source 守门全部通过；小玉保持 `runtime-applied / partial`，117 条语义效果、7 条动态属性依赖和 69 条 golden 结果未变。总 JS gzip 超既定硬门槛的状态继续作为已知发布风险保留；M10-A 正式关闭，当前停在阶段边界，M10-B/红宝石未启动。
 
 ## 10. 文档维护规则
 
