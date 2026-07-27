@@ -68,8 +68,8 @@ describe('M10 character combat profile pipeline', () => {
       status: 'character-combat-profile-catalog-ready',
       summary: {
         publicCharacterCount: 20,
-        compiledProfileCount: 1,
-        runtimeAppliedProfileCount: 1,
+        compiledProfileCount: 2,
+        runtimeAppliedProfileCount: 2,
         uiVerifiedProfileCount: 0,
         characterCompleteCount: 0,
       },
@@ -181,6 +181,190 @@ describe('M10 character combat profile pipeline', () => {
     ]);
     expect(compilation.contractHash).toMatch(/^[a-f0-9]{64}$/);
     expect(runtimeContract.contractHash).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('compiles reusable resource conditions and transaction classifications', () => {
+    const ownerId = 424243;
+    const resourceIdentity = `actor:${ownerId}:element:424243047`;
+    const controls = [
+      { controlSkillId: 42424301 },
+      { controlSkillId: 42424302 },
+    ];
+    const compilation = compileCharacterCombatRecipeContracts({
+      recipe: {
+        schemaVersion: 1,
+        ownerId,
+        compiler: {
+          timingPolicy: 'verified-input-reopen',
+          reachableControlSkillIds: controls.map(item => item.controlSkillId),
+          contextInputEdges: [],
+          publicActionForms: [],
+          attackInputChains: [
+            {
+              chainIdentity: 'synthetic-empty-chain',
+              sourceSkillId: 42424301,
+              condition: {
+                kind: 'resource-below',
+                resourceElementId: 424243047,
+                value: 1,
+              },
+              segments: [
+                {
+                  controlSkillId: 42424301,
+                  subSkillIndex: 0,
+                  nextControlSkillId: null,
+                },
+              ],
+            },
+            {
+              chainIdentity: 'synthetic-loaded-chain',
+              sourceSkillId: 42424301,
+              condition: {
+                kind: 'resource-at-least',
+                resourceElementId: 424243047,
+                value: 1,
+              },
+              segments: [
+                {
+                  controlSkillId: 42424302,
+                  subSkillIndex: 1,
+                  nextControlSkillId: null,
+                },
+              ],
+            },
+          ],
+          specialResources: [
+            {
+              resourceElementId: 424243047,
+              expectedCapacity: 3,
+              operationRules: [
+                {
+                  match: {
+                    operation: 'gain',
+                    sourceElementId: 424243047,
+                    triggerFrameStatus: 'missing',
+                  },
+                  status: 'not-applicable',
+                  reason: 'synthetic-root-wrapper',
+                },
+              ],
+              expectedOperationCounts: {
+                total: 2,
+                applied: 1,
+                notApplicable: 1,
+                unresolved: 0,
+              },
+            },
+          ],
+          thresholdTransitions: [],
+          passiveEffects: [],
+        },
+      },
+      character: {
+        id: ownerId,
+        name: 'Synthetic Resource Owner',
+        sourceIdentity: `fixture:character:${ownerId}`,
+      },
+      evidence: {
+        controls,
+        skills: [],
+        specialResourceProfiles: [
+          {
+            ownerId,
+            elementId: 424243047,
+            resourceIdentity,
+            capacity: 3,
+            sourceIdentity: 'fixture:resource-profile',
+            status: 'verified-special-resource-profile-ready',
+            applied: true,
+          },
+        ],
+        specialResourceOperations: [
+          {
+            operationIdentity: 'synthetic-consume',
+            ownerId,
+            resourceIdentity,
+            operation: 'consume',
+            controlSkillId: 42424302,
+            subSkillIndex: 1,
+            sourceElementId: 424243049,
+            triggerFrame: 0,
+            sourceIdentity: 'fixture:consume',
+            status: 'verified-special-resource-operation-ready',
+            applied: true,
+          },
+          {
+            operationIdentity: 'synthetic-wrapper',
+            ownerId,
+            resourceIdentity,
+            operation: 'gain',
+            controlSkillId: 42424301,
+            subSkillIndex: 0,
+            sourceElementId: 424243047,
+            triggerFrame: null,
+            sourceIdentity: 'fixture:wrapper',
+            status: 'unresolved-special-resource-operation',
+            reasons: ['effect-trigger-frame-static-evidence-gap'],
+            applied: false,
+          },
+        ],
+      },
+      operators: {
+        ...createNoopCompilerOperators(),
+        resolveNormalAttackTiming: ({ subSkillIndex }) => ({
+          occupancy: {
+            status: 'applied',
+            durationFrames: subSkillIndex === 0 ? 20 : 30,
+            sourceIdentity: `fixture:timing:${subSkillIndex}`,
+          },
+        }),
+      },
+    });
+
+    expect(compilation.contracts.attackInputChains).toEqual([
+      expect.objectContaining({
+        chainIdentity: 'synthetic-empty-chain',
+        stateCondition: expect.objectContaining({
+          kind: 'resource-below',
+          resourceIdentity,
+          value: 1,
+        }),
+        segments: [
+          expect.objectContaining({
+            controlSkillId: 42424301,
+            subSkillIndex: 0,
+            durationFrames: 20,
+          }),
+        ],
+      }),
+      expect.objectContaining({
+        chainIdentity: 'synthetic-loaded-chain',
+        stateCondition: expect.objectContaining({
+          kind: 'resource-at-least',
+          resourceIdentity,
+          value: 1,
+        }),
+        segments: [
+          expect.objectContaining({
+            controlSkillId: 42424302,
+            subSkillIndex: 1,
+            durationFrames: 30,
+          }),
+        ],
+      }),
+    ]);
+    expect(compilation.contracts.resourceTransactions).toEqual([
+      expect.objectContaining({
+        operationIdentity: 'synthetic-consume',
+        applied: true,
+      }),
+      expect.objectContaining({
+        operationIdentity: 'synthetic-wrapper',
+        status: 'not-applicable',
+        impactClassification: 'wrapper-or-duplicate',
+        reasons: ['synthetic-root-wrapper'],
+      }),
+    ]);
   });
 
   it('publishes explicit form status and a deduplicated unresolved ledger', () => {

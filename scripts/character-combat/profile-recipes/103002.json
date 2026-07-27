@@ -1,0 +1,575 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 103002,
+  "targetPipelineMaturity": "ui-verified",
+  "goldStandard": false,
+  "mechanicsDiscovery": {
+    "ownerId": 103002,
+    "normalAttackSkillId": 10300201,
+    "reloadControlSkillId": 10300210,
+    "starSkillControlSkillId": 10300212,
+    "ultimateControlSkillId": 10300213,
+    "starCarryControlSkillId": 10300221,
+    "limitCounterControlSkillId": 10300225,
+    "perfectParryControlSkillId": 10300227,
+    "passiveSkillIds": [
+      10300261,
+      10300262
+    ],
+    "resourceElementId": 103002047,
+    "resourceConsumeElementId": 103002049,
+    "reloadElementId": 103002244,
+    "fullReloadElementId": 103002048,
+    "passiveMarkerElementId": 103002256,
+    "passiveWrapperElementId": 103002275,
+    "passivePropertyElementId": 103002276
+  },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      10300201,
+      10300202,
+      10300203,
+      10300204,
+      10300205,
+      10300210,
+      10300211,
+      10300212,
+      10300213,
+      10300214,
+      10300215,
+      10300216,
+      10300217,
+      10300221,
+      10300224,
+      10300225,
+      10300226,
+      10300227,
+      10300241,
+      10300242,
+      10300243,
+      10300244,
+      10300245,
+      10300246,
+      10300247,
+      10300248,
+      10300249,
+      10300261,
+      10300262
+    ],
+    "publicActionDeclarations": [
+      {
+        "sourceSkillId": 10300201,
+        "actionVariantIndex": 1,
+        "actionKind": "charged-attack",
+        "controlSkillId": 10300210,
+        "catalogLabel": "重击",
+        "actionVariantLabel": "换弹",
+        "sourceStatus": "verified-static-evidence",
+        "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
+      }
+    ],
+    "contextInputEdges": [],
+    "publicActionForms": [],
+    "attackInputChains": [
+      {
+        "chainIdentity": "ruby-normal-default-three-inputs",
+        "sourceSkillId": 10300201,
+        "semanticNamePrefix": "普通攻击",
+        "condition": {
+          "kind": "resource-below",
+          "resourceElementId": 103002047,
+          "value": 1
+        },
+        "segments": [
+          {
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10300202
+          },
+          {
+            "controlSkillId": 10300202,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10300203
+          },
+          {
+            "controlSkillId": 10300203,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10300201
+          }
+        ]
+      },
+      {
+        "chainIdentity": "ruby-enhanced-twelve-inputs",
+        "sourceSkillId": 10300201,
+        "semanticNamePrefix": "强化普攻",
+        "condition": {
+          "kind": "resource-at-least",
+          "resourceElementId": 103002047,
+          "value": 1
+        },
+        "segments": [
+          {
+            "controlSkillId": 10300201,
+            "subSkillIndex": 1,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300201,
+            "subSkillIndex": 2,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300201,
+            "subSkillIndex": 3,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300202,
+            "subSkillIndex": 1,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300202,
+            "subSkillIndex": 2,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300202,
+            "subSkillIndex": 3,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300203,
+            "subSkillIndex": 1,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300203,
+            "subSkillIndex": 2,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300203,
+            "subSkillIndex": 3,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300204,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300204,
+            "subSkillIndex": 1,
+            "nextControlSkillId": 10300201
+          },
+          {
+            "controlSkillId": 10300204,
+            "subSkillIndex": 2,
+            "nextControlSkillId": null
+          }
+        ]
+      }
+    ],
+    "specialResources": [
+      {
+        "resourceElementId": 103002047,
+        "expectedCapacity": 12,
+        "sourceIdentity": "character-combat-recipe:103002#compiler.specialResources[elementId=103002047]",
+        "operationRules": [
+          {
+            "match": {
+              "operation": "gain",
+              "sourceElementId": 103002047,
+              "triggerFrameStatus": "missing"
+            },
+            "status": "not-applicable",
+            "reason": "resource-root-wrapper-reference-not-a-runtime-transaction",
+            "impactClassification": "wrapper-or-duplicate",
+            "sourceIdentity": "Battle/Element/ast_103002047.asset#root-resource-reference"
+          }
+        ],
+        "expectedOperationCounts": {
+          "total": 41,
+          "applied": 20,
+          "notApplicable": 20,
+          "unresolved": 1
+        }
+      }
+    ],
+    "thresholdTransitions": [],
+    "passiveEffects": [
+      {
+        "skillId": 10300261,
+        "markerElementId": 103002256,
+        "wrapperElementId": 103002275,
+        "propertyElementId": 103002276,
+        "expectedDurationMs": 15000,
+        "expectedMaxStacks": 6,
+        "expectedModifierCount": 1,
+        "runtimeGenerationMode": "semantic-effect-catalog"
+      }
+    ]
+  },
+  "unresolvedRecords": [
+    {
+      "identity": "actor:103002:resource:initial-ammo",
+      "sourceKind": "special-resource-initial-state",
+      "status": "runtime-evidence-required",
+      "reasons": [
+        "initial-ammo-runtime-evidence-required"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill103002._burstElementId"
+    },
+    {
+      "identity": "actor:103002:action:star-skill:resource-refill",
+      "sourceKind": "special-resource-transaction",
+      "status": "static-evidence-gap",
+      "reasons": [
+        "star-skill-full-reload-trigger-frame-static-evidence-gap"
+      ],
+      "sourceIdentity": "skill_control_10300212.asset|Battle/Element/ast_103002048.asset"
+    },
+    {
+      "identity": "actor:103002:passive:10300261:attack-percent-branch",
+      "sourceKind": "passive-trigger",
+      "status": "static-evidence-gap",
+      "reasons": [
+        "passive-attack-percent-trigger-binding-static-evidence-gap"
+      ],
+      "sourceIdentity": "Battle/Element/ast_103002252.asset|Battle/Element/ast_103002253.asset"
+    },
+    {
+      "identity": "actor:103002:passive:10300262",
+      "sourceKind": "passive-trigger",
+      "status": "static-evidence-gap",
+      "reasons": [
+        "passive-listener-closure-static-evidence-gap"
+      ],
+      "sourceIdentity": "NewTable/skill.rows[id=10300262]|skill_control_10300262.asset"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [
+      103002,
+      101010,
+      101003
+    ],
+    "initialControlledCharacterId": 103002,
+    "initialActorSp": {
+      "103002": 100,
+      "101010": 0,
+      "101003": 0
+    },
+    "kiboByCharacterId": {
+      "103002": 500039,
+      "101010": 500003,
+      "101003": 500469
+    },
+    "initialKiboSp": {
+      "103002": 100,
+      "101010": 100,
+      "101003": 100
+    },
+    "loadoutByCharacterId": {
+      "103002": {
+        "soulessenceId": 10001,
+        "soulessenceLevel": 80,
+        "soulessenceRank": 1
+      }
+    },
+    "initialSpecialResources": [
+      {
+        "characterId": 103002,
+        "resourceIdentity": "actor:103002:element:103002047",
+        "currentValue": 0
+      }
+    ],
+    "actions": [
+      {
+        "actionKey": "ruby-reload",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 0,
+        "startFrame": 0
+      },
+      {
+        "actionKey": "ruby-enhanced-shot-1",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 1,
+        "startFrame": 200
+      },
+      {
+        "actionKey": "ruby-enhanced-shot-2",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 2,
+        "startFrame": 430
+      },
+      {
+        "actionKey": "ruby-enhanced-shot-3",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 3,
+        "startFrame": 660
+      },
+      {
+        "actionKey": "ruby-enhanced-shot-4",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 4,
+        "startFrame": 890
+      },
+      {
+        "actionKey": "ruby-enhanced-shot-5",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 5,
+        "startFrame": 1120
+      },
+      {
+        "actionKey": "ruby-enhanced-shot-6",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 6,
+        "startFrame": 1350
+      },
+      {
+        "actionKey": "ruby-insufficient-shot",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-reload",
+        "attackSequenceIndex": 7,
+        "startFrame": 1580
+      },
+      {
+        "actionKey": "ruby-star-skill",
+        "actorCharacterId": 103002,
+        "skillId": 10300212,
+        "actionKind": "star-skill",
+        "startFrame": 1850
+      },
+      {
+        "actionKey": "ruby-ultimate",
+        "actorCharacterId": 103002,
+        "skillId": 10300213,
+        "actionKind": "ultimate",
+        "startFrame": 2200
+      },
+      {
+        "actionKey": "ruby-post-ultimate-shot",
+        "actorCharacterId": 103002,
+        "skillId": 10300201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
+        "attackGroupId": "golden-ruby-enhanced-after-ultimate",
+        "attackSequenceIndex": 1,
+        "startFrame": 2720
+      },
+      {
+        "actionKey": "ruby-limit-counter",
+        "actorCharacterId": 103002,
+        "skillId": 10300221,
+        "actionKind": "limit-counter",
+        "actionVariantIndex": 1,
+        "startFrame": 3000
+      },
+      {
+        "actionKey": "fire-kibo-signature",
+        "type": "kiboEvent",
+        "actorCharacterId": 103002,
+        "kiboId": 500039,
+        "skillId": 50003901,
+        "actionKind": "signature",
+        "startFrame": 3300
+      }
+    ],
+    "switchEvents": [
+      {
+        "eventKey": "switch-to-xiaoyu",
+        "startFrame": 3600,
+        "sourceCharacterId": 103002,
+        "targetCharacterId": 101010
+      },
+      {
+        "eventKey": "switch-back-to-ruby",
+        "startFrame": 3900,
+        "sourceCharacterId": 101010,
+        "targetCharacterId": 103002
+      }
+    ],
+    "comparison": {
+      "comparisonIdentity": "m10-b1:103002:soulessence-stat-propagation",
+      "clearLoadoutCharacterIds": [
+        103002
+      ],
+      "compareActionKey": "ruby-post-ultimate-shot"
+    },
+    "traceSelectors": {
+      "passiveEffectIds": [
+        "battle-element:4227003560910032429"
+      ],
+      "stateEffectIds": [],
+      "dynamicPropertyActionKeys": [
+        "ruby-enhanced-shot-1",
+        "ruby-enhanced-shot-2",
+        "ruby-enhanced-shot-3",
+        "ruby-enhanced-shot-4",
+        "ruby-enhanced-shot-5",
+        "ruby-enhanced-shot-6",
+        "ruby-ultimate",
+        "ruby-post-ultimate-shot"
+      ]
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000,
+        "project.actionCount": 15,
+        "project.teamCharacterIds": [
+          103002,
+          101010,
+          101003
+        ],
+        "actions.blockedActionIds": [
+          "ruby-insufficient-shot"
+        ],
+        "actions.selectionByActionId.ruby-reload.semanticName": "重击",
+        "actions.selectionByActionId.ruby-reload.controlSkillId": 10300210,
+        "actions.selectionByActionId.ruby-reload.subSkillIndex": 0,
+        "actions.selectionByActionId.ruby-reload.actualDurationFrames": 38,
+        "actions.selectionByActionId.ruby-enhanced-shot-1.semanticName": "强化普攻 A1",
+        "actions.selectionByActionId.ruby-enhanced-shot-1.controlSkillId": 10300201,
+        "actions.selectionByActionId.ruby-enhanced-shot-1.subSkillIndex": 1,
+        "actions.selectionByActionId.ruby-enhanced-shot-1.actualDurationFrames": 24,
+        "actions.selectionByActionId.ruby-enhanced-shot-2.semanticName": "强化普攻 A2",
+        "actions.selectionByActionId.ruby-enhanced-shot-2.subSkillIndex": 2,
+        "actions.selectionByActionId.ruby-enhanced-shot-3.semanticName": "强化普攻 A3",
+        "actions.selectionByActionId.ruby-enhanced-shot-3.subSkillIndex": 3,
+        "actions.selectionByActionId.ruby-enhanced-shot-3.actualDurationFrames": 32,
+        "actions.selectionByActionId.ruby-enhanced-shot-4.semanticName": "强化普攻 A4",
+        "actions.selectionByActionId.ruby-enhanced-shot-4.controlSkillId": 10300202,
+        "actions.selectionByActionId.ruby-enhanced-shot-4.subSkillIndex": 1,
+        "actions.selectionByActionId.ruby-enhanced-shot-5.semanticName": "强化普攻 A5",
+        "actions.selectionByActionId.ruby-enhanced-shot-5.subSkillIndex": 2,
+        "actions.selectionByActionId.ruby-enhanced-shot-6.semanticName": "强化普攻 A6",
+        "actions.selectionByActionId.ruby-enhanced-shot-6.subSkillIndex": 3,
+        "actions.selectionByActionId.ruby-enhanced-shot-6.actualDurationFrames": 32,
+        "actions.selectionByActionId.ruby-post-ultimate-shot.semanticName": "强化普攻 A1",
+        "actions.selectionByActionId.ruby-post-ultimate-shot.subSkillIndex": 1,
+        "actions.selectionByActionId.ruby-star-skill.controlSkillId": 10300212,
+        "actions.selectionByActionId.ruby-star-skill.actualDurationFrames": 204,
+        "actions.selectionByActionId.ruby-ultimate.controlSkillId": 10300213,
+        "actions.selectionByActionId.ruby-ultimate.actualDurationFrames": 329,
+        "actions.selectionByActionId.ruby-limit-counter.controlSkillId": 10300225,
+        "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
+        "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
+        "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
+        "combat.damageEventCount": 214,
+        "combat.ownerDamageEventCount": 96,
+        "combat.ownerHitEventCount": 96,
+        "combat.ownerTotalHpDamage": 8156,
+        "combat.ownerTotalToughnessDamage": 5582,
+        "combat.enemy.initialHp": 862800,
+        "combat.enemy.finalHp": 851035,
+        "resources.specialResourceTrace.0.actionId": "ruby-reload",
+        "resources.specialResourceTrace.0.frame": 24,
+        "resources.specialResourceTrace.0.beforeValue": 0,
+        "resources.specialResourceTrace.0.change": 6,
+        "resources.specialResourceTrace.0.afterValue": 6,
+        "resources.specialResourceTrace.1.actionId": "ruby-enhanced-shot-1",
+        "resources.specialResourceTrace.1.beforeValue": 6,
+        "resources.specialResourceTrace.1.afterValue": 5,
+        "resources.specialResourceTrace.6.actionId": "ruby-enhanced-shot-6",
+        "resources.specialResourceTrace.6.beforeValue": 1,
+        "resources.specialResourceTrace.6.change": -1,
+        "resources.specialResourceTrace.6.afterValue": 0,
+        "resources.specialResourceTrace.7.actionId": "ruby-ultimate",
+        "resources.specialResourceTrace.7.frame": 2313,
+        "resources.specialResourceTrace.7.change": 12,
+        "resources.specialResourceTrace.7.afterValue": 12,
+        "resources.specialResourceTrace.8.actionId": "ruby-post-ultimate-shot",
+        "resources.specialResourceTrace.8.beforeValue": 12,
+        "resources.specialResourceTrace.8.afterValue": 11,
+        "resources.specialResourceTrace.9.actionId": "ruby-limit-counter",
+        "resources.specialResourceTrace.9.frame": 3015,
+        "resources.specialResourceTrace.9.change": 1,
+        "resources.specialResourceTrace.9.afterValue": 12,
+        "resources.actorSpByActorId.actor-103002.initialValue": 100,
+        "resources.actorSpByActorId.actor-103002.currentValue": 17.469559,
+        "resources.actorSpByActorId.actor-103002.autoRecovery.0.reason": "verified-auto-sp-background",
+        "resources.actorSpByActorId.actor-103002.autoRecovery.0.totalChange": 0.5203,
+        "resources.actorSpByActorId.actor-103002.autoRecovery.1.reason": "verified-auto-sp-foreground",
+        "resources.actorSpByActorId.actor-103002.autoRecovery.1.totalChange": 16.329152,
+        "resources.actorSpByActorId.actor-103002.actionTransactions.0.actionId": "ruby-ultimate",
+        "resources.actorSpByActorId.actor-103002.actionTransactions.0.change": -100,
+        "resources.actorSpByActorId.actor-101010.currentValue": 13.548798,
+        "resources.actorSpByActorId.actor-101003.currentValue": 13.02771,
+        "resources.kiboSpBySlotId.team-slot-1.kiboId": 500039,
+        "resources.kiboSpBySlotId.team-slot-1.initialValue": 100,
+        "resources.kiboSpBySlotId.team-slot-1.currentValue": 13.559189,
+        "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.actionId": "fire-kibo-signature",
+        "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.change": -100,
+        "effects.passiveMaxStacks": 6,
+        "effects.firstPassiveMaxStackFrame": 430,
+        "effects.passiveTrace.0.actionId": "ruby-enhanced-shot-1",
+        "effects.passiveTrace.0.afterStacks": 1,
+        "effects.passiveTrace.5.afterStacks": 6,
+        "effects.passiveTrace.5.expiresAtMs": 22166.667,
+        "effects.passiveTrace.18.operation": "expire",
+        "effects.passiveTrace.18.frame": 2250,
+        "effects.passiveTrace.19.actionId": "ruby-ultimate",
+        "effects.passiveTrace.19.afterStacks": 1,
+        "effects.passiveTrace.23.operation": "expire",
+        "effects.passiveTrace.23.frame": 3620,
+        "dynamicProperties.ownerSources.0.attributeId": 229,
+        "dynamicProperties.ownerSources.0.dynamicExtraRaw": 120,
+        "comparison.primaryDamage": 441,
+        "comparison.baselineDamage": 189,
+        "comparison.damageDelta": 252
+      },
+      "greaterThan": {
+        "combat.ownerTotalHpDamage": 0,
+        "combat.ownerTotalToughnessDamage": 0,
+        "resources.actorSpByActorId.actor-103002.currentValue": 0,
+        "resources.kiboSpBySlotId.team-slot-1.currentValue": 0,
+        "comparison.damageDelta": 0
+      }
+    }
+  }
+}

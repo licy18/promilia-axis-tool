@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-runtime-capture-plan",
+  "ownerId": 103002,
+  "status": "runtime-evidence-required",
+  "entries": [
+    {
+      "captureIdentity": "capture:semantic-gap:2260fb26f435a99a2527",
+      "ownerId": 103002,
+      "sourceRecordIdentity": "semantic-gap:2260fb26f435a99a2527",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002000"
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:6f55f116c8bac16f207c",
+      "ownerId": 103002,
+      "sourceRecordIdentity": "semantic-gap:6f55f116c8bac16f207c",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002002"
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:e934d89188ff64bb45ad",
+      "ownerId": 103002,
+      "sourceRecordIdentity": "semantic-gap:e934d89188ff64bb45ad",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002001"
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:ec06cbbdad7fcc69803e",
+      "ownerId": 103002,
+      "sourceRecordIdentity": "semantic-gap:ec06cbbdad7fcc69803e",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill103002._burstElementId"
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:f210e6bcc7e28e24ee71",
+      "ownerId": 103002,
+      "sourceRecordIdentity": "semantic-gap:f210e6bcc7e28e24ee71",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002002"
+    }
+  ],
+  "summary": {
+    "captureCount": 5
+  },
+  "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
+}

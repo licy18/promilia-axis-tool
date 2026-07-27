@@ -4,7 +4,7 @@
 - Resource profiles: 2/2
 - Resource operations: 43/71
 - Variant edges: 93/337
-- Variant nodes: 671
+- Variant nodes: 673
 
 | Owner | Resource | Capacity | Operations | Variant edges |
 | --- | --- | ---: | --- | ---: |
@@ -14,8 +14,9 @@
 ## Unresolved summary
 
 - charging-module-has-no-static-element-identity: 1
-- effect-target-static-evidence-gap: 136
-- effect-trigger-frame-static-evidence-gap: 136
+- effect-target-static-evidence-gap: 116
+- effect-trigger-frame-static-evidence-gap: 116
+- resource-root-wrapper-reference-not-a-runtime-transaction: 20
 - runtime-target-from-projectile-collision: 2
 - runtime-trigger-projectile-collision-frame: 2
 - switch-duration-unresolved: 21

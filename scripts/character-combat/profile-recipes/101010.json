@@ -383,6 +383,13 @@
     }
   ],
   "goldenScenario": {
+    "traceSelectors": {
+      "dynamicPropertyActionKeys": [
+        "jade-limit-counter",
+        "jade-star-skill",
+        "jade-star-derived-charged"
+      ]
+    },
     "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
     "durationFrames": 7200,
     "frameRate": 60,

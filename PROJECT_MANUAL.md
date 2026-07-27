@@ -1720,6 +1720,10 @@ Workbench 在保留完整模拟数据与小玉机制结果的前提下，将曲�
 
 生产同步现自动发现全部角色 recipe，以同一通用编译中间结果合并 owner contracts、verified package、runtime、golden 与 profile/catalog；小玉即时投射物策略已改为声明式 control policy，共享生产生成不再以角色或技能 ID 决定合同。owner 命令会从原始证据重新编译并只写隔离 staging，删除或篡改旧合同仍可重建同 hash，只有 `--all` 发布全局产物。独立复验确认双 owner 生产编排、135 文件/781 测试、57/57 production preview、41/41 必需能力及 character/verified、build、production imports、Workbench data、action status、applied-source 守门全部通过；小玉保持 `runtime-applied / partial`，117 条语义效果、7 条动态属性依赖和 69 条 golden 结果未变。总 JS gzip 超既定硬门槛的状态继续作为已知发布风险保留；M10-A 正式关闭，当前停在阶段边界，M10-B/红宝石未启动。
 
+### M10-B1 红宝石单角色完整战斗解析与接入已实现，等待产品复验（2026-07-27）
+
+红宝石现由声明式 recipe 经通用 compiler 生成 10 个公开动作、24 个执行形态、12 发子弹资源、被动 10300261、运行时三值/SP 和 102 条 authoritative golden；换弹、逐发消耗、空弹阻塞、星决技/极限反击补弹、动态属性及装配传播均进入同一资源轴与 trace。角色状态诚实保持 `runtime-applied / partial`：星鸣技、完美招架、被动 10300262 等 5 项运行证据需求继续保留。136 文件/788 测试、58/58 production preview、41/41 必需能力及 owner 自愈/漂移/生产守门通过，桌面与 390px 已验证动作库、子弹阶梯、撤销/重做和保存回载；总 JS gzip `747,082B` 超硬门槛 `7,082B` 仅记录为发布风险。当前停止等待红宝石产品验收，不启动寒悠悠。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

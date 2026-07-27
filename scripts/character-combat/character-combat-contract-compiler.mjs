@@ -32,6 +32,15 @@ export function compileCharacterCombatRecipeContracts({
   const resourceOperations = (
     evidence?.specialResourceOperations ?? []
   ).filter(operation => Number(operation.ownerId) === ownerId);
+  const managesResourceContracts = Array.isArray(
+    compilerRecipe.specialResources
+  );
+  const specialResourceContracts = compileSpecialResourceContracts({
+    ownerId,
+    definitions: compilerRecipe.specialResources ?? [],
+    resourceProfiles,
+    resourceOperations,
+  });
   const contextEdges = compileContextInputEdges({
     ownerId,
     definitions: compilerRecipe.contextInputEdges ?? [],
@@ -73,6 +82,8 @@ export function compileCharacterCombatRecipeContracts({
     contextEdges,
     publicActionForms,
     attackInputChains,
+    resourceProfiles: specialResourceContracts.profiles,
+    resourceTransactions: specialResourceContracts.operations,
     thresholdTransitions,
     passiveEffects,
   };
@@ -99,6 +110,7 @@ export function compileCharacterCombatRecipeContracts({
     recipeHash: sha256Json(recipe),
     compilerInputHash: sha256Json(compilerInput),
     timingPolicy: compilerRecipe.timingPolicy ?? 'standalone-animation',
+    managesResourceContracts,
     reachableControlSkillIds: [
       ...new Set(
         (compilerRecipe.reachableControlSkillIds ?? [])
@@ -113,6 +125,15 @@ export function compileCharacterCombatRecipeContracts({
       contextEdgeCount: contracts.contextEdges.length,
       publicActionFormCount: contracts.publicActionForms.length,
       attackInputChainCount: contracts.attackInputChains.length,
+      resourceProfileCount: contracts.resourceProfiles.length,
+      resourceTransactionCount: contracts.resourceTransactions.length,
+      appliedResourceTransactionCount: contracts.resourceTransactions.filter(
+        item => item.applied
+      ).length,
+      notApplicableResourceTransactionCount:
+        contracts.resourceTransactions.filter(
+          item => item.status === 'not-applicable'
+        ).length,
       thresholdTransitionCount: contracts.thresholdTransitions.length,
       passiveEffectCount: contracts.passiveEffects.length,
     },
@@ -150,6 +171,29 @@ export function mergeCharacterCombatOwnerCompilations({
     specialResourceCatalog.passiveEffects,
     compilations.flatMap(item => item.contracts.passiveEffects)
   );
+  const resourceOwnerIds = new Set(
+    compilations
+      .filter(item => item.managesResourceContracts)
+      .map(item => Number(item.ownerId))
+  );
+  const replaceResourceOwnerRecords = (records, additions) => [
+    ...(records ?? []).filter(
+      record => !resourceOwnerIds.has(Number(record.ownerId))
+    ),
+    ...additions,
+  ];
+  const resourceProfiles = replaceResourceOwnerRecords(
+    specialResourceCatalog.profiles,
+    compilations
+      .filter(item => item.managesResourceContracts)
+      .flatMap(item => item.contracts.resourceProfiles)
+  );
+  const resourceTransactions = replaceResourceOwnerRecords(
+    specialResourceCatalog.operationBindings,
+    compilations
+      .filter(item => item.managesResourceContracts)
+      .flatMap(item => item.contracts.resourceTransactions)
+  );
 
   actionVariantGraph.contextEdges = contextEdges;
   actionVariantGraph.publicActionForms = publicActionForms;
@@ -163,8 +207,21 @@ export function mergeCharacterCombatOwnerCompilations({
   };
   specialResourceCatalog.thresholdTransitions = thresholdTransitions;
   specialResourceCatalog.passiveEffects = passiveEffects;
+  specialResourceCatalog.profiles = resourceProfiles;
+  specialResourceCatalog.operationBindings = resourceTransactions;
   specialResourceCatalog.summary = {
     ...(specialResourceCatalog.summary ?? {}),
+    profileCount: resourceProfiles.length,
+    appliedProfileCount: resourceProfiles.filter(item => item.applied).length,
+    operationCount: resourceTransactions.length,
+    appliedOperationCount: resourceTransactions.filter(item => item.applied)
+      .length,
+    notApplicableOperationCount: resourceTransactions.filter(
+      item => item.status === 'not-applicable'
+    ).length,
+    unresolvedOperationCount: resourceTransactions.filter(
+      item => !item.applied && item.status !== 'not-applicable'
+    ).length,
     thresholdTransitionCount: thresholdTransitions.length,
     passiveEffectCount: passiveEffects.length,
     appliedPassiveEffectCount: passiveEffects.filter(item => item.applied)
@@ -176,6 +233,126 @@ export function mergeCharacterCombatOwnerCompilations({
     specialResourceCatalog,
     compilations,
   };
+}
+
+function compileSpecialResourceContracts({
+  ownerId,
+  definitions,
+  resourceProfiles,
+  resourceOperations,
+}) {
+  const profiles = [];
+  const operations = [];
+  for (const definition of definitions) {
+    const elementId = Number(definition.resourceElementId);
+    const profile = resourceProfiles.find(
+      item => Number(item.elementId) === elementId
+    );
+    if (!profile) {
+      throw new Error(
+        `character combat resource profile missing: ${ownerId}/${elementId}`
+      );
+    }
+    if (
+      definition.expectedCapacity != null &&
+      Number(profile.capacity) !== Number(definition.expectedCapacity)
+    ) {
+      throw new Error(
+        `character combat resource capacity mismatch: ${ownerId}/${elementId} expected ${definition.expectedCapacity}, received ${profile.capacity}`
+      );
+    }
+    profiles.push({
+      ...profile,
+      contractSourceIdentity:
+        definition.sourceIdentity ??
+        `character-combat-recipe:${ownerId}#compiler.specialResources[elementId=${elementId}]`,
+    });
+    const sourceOperations = resourceOperations.filter(
+      operation => operation.resourceIdentity === profile.resourceIdentity
+    );
+    const normalized = sourceOperations.map(operation =>
+      classifyResourceOperation(operation, definition.operationRules ?? [])
+    );
+    const appliedCount = normalized.filter(item => item.applied).length;
+    const notApplicableCount = normalized.filter(
+      item => item.status === 'not-applicable'
+    ).length;
+    const unresolvedCount = normalized.length - appliedCount - notApplicableCount;
+    const expected = definition.expectedOperationCounts ?? {};
+    for (const [key, actual] of Object.entries({
+      total: normalized.length,
+      applied: appliedCount,
+      notApplicable: notApplicableCount,
+      unresolved: unresolvedCount,
+    })) {
+      if (expected[key] != null && Number(expected[key]) !== actual) {
+        throw new Error(
+          `character combat resource operation count mismatch: ${ownerId}/${elementId}/${key} expected ${expected[key]}, received ${actual}`
+        );
+      }
+    }
+    operations.push(...normalized);
+  }
+  return {
+    profiles: sortByIdentity(profiles),
+    operations: sortByIdentity(operations),
+  };
+}
+
+function classifyResourceOperation(operation, rules) {
+  const rule = rules.find(candidate =>
+    matchesResourceOperationRule(operation, candidate.match ?? {})
+  );
+  if (!rule) return operation;
+  if (rule.status !== 'not-applicable') {
+    throw new Error(
+      `unsupported character combat resource operation rule status: ${rule.status}`
+    );
+  }
+  return {
+    ...operation,
+    rawStatus: operation.status,
+    rawReasons: [...(operation.reasons ?? [])],
+    status: 'not-applicable',
+    reasons: [rule.reason ?? 'structural-resource-reference'],
+    impactClassification:
+      rule.impactClassification ?? 'wrapper-or-duplicate',
+    classificationSourceIdentity:
+      rule.sourceIdentity ?? operation.sourceIdentity ?? null,
+    applied: false,
+  };
+}
+
+function matchesResourceOperationRule(operation, match) {
+  if (
+    match.operation != null &&
+    operation.operation !== String(match.operation)
+  ) {
+    return false;
+  }
+  for (const key of [
+    'controlSkillId',
+    'subSkillIndex',
+    'sourceElementId',
+    'sourcePathId',
+  ]) {
+    if (match[key] != null && Number(operation[key]) !== Number(match[key])) {
+      return false;
+    }
+  }
+  if (
+    match.triggerFrameStatus === 'missing' &&
+    operation.triggerFrame != null
+  ) {
+    return false;
+  }
+  if (
+    match.triggerFrameStatus === 'present' &&
+    operation.triggerFrame == null
+  ) {
+    return false;
+  }
+  return true;
 }
 
 export function createCharacterCombatOwnerRuntimeContracts({
@@ -314,9 +491,7 @@ export function createCompiledActionForms({
       sequenceIndex: segment.sequenceIndex,
       sequenceTotal: segment.sequenceTotal,
       semanticName:
-        chain.stateCondition?.kind === 'resource-state-active'
-          ? `爆发普攻 A${segment.sequenceIndex}`
-          : `普通攻击 A${segment.sequenceIndex}`,
+        `${chain.semanticNamePrefix ?? '普通攻击'} A${segment.sequenceIndex}`,
       executionTiming: segment.executionTiming,
       sourceIdentity: segment.sourceIdentity,
       status: segment.applied ? 'applied' : 'static-evidence-gap',
@@ -651,6 +826,7 @@ function compileAttackInputChains({
       chainIdentity: definition.chainIdentity,
       ownerId,
       sourceSkillId: definition.sourceSkillId,
+      semanticNamePrefix: definition.semanticNamePrefix ?? null,
       decisionFrame: Number(definition.decisionFrame) || 0,
       stateCondition: condition,
       segments,
@@ -739,6 +915,16 @@ function compilePassiveEffects({
   operators,
 }) {
   return definitions.map(definition => {
+    if (definition.runtimeGenerationMode === 'semantic-effect-catalog') {
+      return compileSemanticCatalogPassiveEffect({
+        ownerId,
+        definition,
+        controls,
+        controlBySkillId,
+        skills,
+        operators,
+      });
+    }
     const passiveControl = controlBySkillId.get(Number(definition.skillId));
     const marker = operators.readElementAsset(definition.markerElementId);
     const wrapper = operators.readElementAsset(definition.wrapperElementId);
@@ -953,6 +1139,148 @@ function compilePassiveEffects({
   });
 }
 
+function compileSemanticCatalogPassiveEffect({
+  ownerId,
+  definition,
+  controls,
+  controlBySkillId,
+  skills,
+  operators,
+}) {
+  const passiveControl = controlBySkillId.get(Number(definition.skillId));
+  const marker = operators.readElementAsset(definition.markerElementId);
+  const wrapper = operators.readElementAsset(definition.wrapperElementId);
+  const property = operators.readElementAsset(definition.propertyElementId);
+  const matchingEffects = controls.flatMap(control =>
+    (control.effects ?? [])
+      .filter(
+        effect =>
+          Number(effect.elementId) === Number(definition.propertyElementId) &&
+          Number(effect.rootElementId) === Number(definition.wrapperElementId) &&
+          Number.isInteger(Number(effect.trigger?.startFrame))
+      )
+      .map(effect => ({ control, effect }))
+  );
+  const triggerBindings = dedupeBy(
+    matchingEffects.map(({ control, effect }) => ({
+      triggerIdentity: [
+        definition.skillId,
+        control.controlSkillId,
+        effect.mapIndex,
+        effect.trigger.startFrame,
+        effect.rootPathId,
+      ].join('|'),
+      controlSkillId: Number(control.controlSkillId),
+      subSkillIndex: Number(effect.mapIndex),
+      triggerFrame: Number(effect.trigger.startFrame),
+      frameRate: Number(control.frameRate) || 60,
+      sourceElementId: Number(effect.rootElementId),
+      sourcePathId: String(effect.rootPathId),
+      semanticEffectElementId: Number(effect.elementId),
+      sourceIdentity: [
+        effect.sourceIdentity,
+        effect.trigger?.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-semantic-passive-trigger-binding-ready',
+      applied: true,
+    })),
+    item => item.triggerIdentity
+  ).sort(
+    (left, right) =>
+      left.controlSkillId - right.controlSkillId ||
+      left.subSkillIndex - right.subSkillIndex ||
+      left.triggerFrame - right.triggerFrame
+  );
+  const modifierCandidates = matchingEffects
+    .map(({ effect }) => effect.propertyChange)
+    .filter(Boolean)
+    .map(change => ({
+      attributeId: Number(change.attributeId),
+      bucket: change.bucket ?? null,
+      valueRaw: Number(change.valueByLevel?.['1']),
+      calculateType: Number(change.calculateType),
+      functionId: Number(change.functionId ?? 5),
+      propertyTags: change.defaultPropertyTags ?? [],
+      sourceIdentity: matchingEffects.find(
+        ({ effect }) => effect.propertyChange === change
+      )?.effect?.sourceIdentity,
+    }));
+  const modifiers = dedupeBy(
+    modifierCandidates,
+    modifier =>
+      [
+        modifier.attributeId,
+        modifier.bucket,
+        modifier.valueRaw,
+        modifier.calculateType,
+        modifier.functionId,
+      ].join('|')
+  );
+  const applied =
+    passiveControl != null &&
+    marker != null &&
+    wrapper != null &&
+    property != null &&
+    Number(wrapper.tree?.time) === Number(definition.expectedDurationMs) &&
+    Number(wrapper.tree?.combineNumber) ===
+      Number(definition.expectedMaxStacks) &&
+    triggerBindings.length > 0 &&
+    modifiers.length === Number(definition.expectedModifierCount) &&
+    modifiers.every(
+      modifier =>
+        Number.isInteger(modifier.attributeId) &&
+        modifier.bucket != null &&
+        Number.isFinite(modifier.valueRaw)
+    );
+  return {
+    passiveIdentity: `actor:${ownerId}:passive:${definition.skillId}`,
+    ownerId,
+    skillId: Number(definition.skillId),
+    name:
+      skills.find(skill => Number(skill.id) === Number(definition.skillId))
+        ?.name ?? `被动 ${definition.skillId}`,
+    effectId: `battle-element:${definition.wrapperElementId}`,
+    effectElementId: Number(definition.wrapperElementId),
+    markerElementId: Number(definition.markerElementId),
+    propertyElementId: Number(definition.propertyElementId),
+    durationMs: Number(wrapper?.tree?.time) || null,
+    stackMode: 'stack',
+    maxStacks: Number(wrapper?.tree?.combineNumber) || null,
+    stackDelta: 1,
+    runtimeGenerationMode: 'semantic-effect-catalog',
+    triggerBindings,
+    unresolvedTriggerBindings: [],
+    modifiers,
+    sourceIdentity: [
+      passiveControl?.sourcePath,
+      marker?.sourceIdentity,
+      wrapper?.sourceIdentity,
+      property?.sourceIdentity,
+      ...triggerBindings.map(item => item.sourceIdentity),
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: applied
+      ? 'verified-semantic-passive-effect-profile-ready'
+      : 'unresolved-semantic-passive-effect-profile',
+    reasons: [
+      ...(passiveControl ? [] : ['passive-skill-control-missing']),
+      ...(marker ? [] : ['passive-marker-element-missing']),
+      ...(wrapper ? [] : ['passive-wrapper-element-missing']),
+      ...(property ? [] : ['passive-property-element-missing']),
+      ...(triggerBindings.length > 0
+        ? []
+        : ['passive-semantic-trigger-bindings-missing']),
+      ...(modifiers.length === Number(definition.expectedModifierCount)
+        ? []
+        : ['passive-property-change-count-mismatch']),
+    ],
+    applied,
+  };
+}
+
 function compileCondition(definition, ownerId, resourceProfiles, operators) {
   if (!definition || definition.kind === 'always') {
     return { kind: 'always' };
@@ -960,6 +1288,22 @@ function compileCondition(definition, ownerId, resourceProfiles, operators) {
   const profile = resourceProfiles.find(
     item => Number(item.elementId) === Number(definition.resourceElementId)
   );
+  if (
+    ['resource-at-least', 'resource-below'].includes(definition.kind)
+  ) {
+    const value = Number(definition.value);
+    if (!profile || !Number.isFinite(value)) {
+      throw new Error(
+        `character combat numeric resource condition evidence missing: ${ownerId}/${definition.resourceElementId}/${definition.value}`
+      );
+    }
+    return {
+      kind: definition.kind,
+      resourceIdentity: profile.resourceIdentity,
+      value,
+      sourceIdentity: profile.sourceIdentity,
+    };
+  }
   const state = profile?.stateElements?.find(
     item => Number(item.elementId) === Number(definition.stateElementId)
   );

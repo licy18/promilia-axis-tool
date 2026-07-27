@@ -1,12 +1,44 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import { loadWorkbenchKiboActionCatalog } from '../../data/workbenchKiboActionCatalog';
 import { getSkillActionCatalog } from '../../domain/skillActionCatalog';
 
 describe('workbench action assets', () => {
+  beforeEach(() => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  });
+
+  afterEach(() => {
+    clearInstalledVerifiedCombatMechanicsPackage();
+  });
+
+  it('exposes the verified Ruby reload as the charged-attack catalog entry', () => {
+    const actions = getSkillActionCatalog(
+      workbenchSeed.gameData.skills.filter(
+        skill => Number(skill.characterId) === 103002
+      )
+    );
+
+    expect(actions.find(action => action.kind === 'charged-attack')).toMatchObject({
+      id: '10300201:1',
+      label: '重击',
+      skillId: 10300201,
+      actionVariantIndex: 1,
+      sourceLabel: '强化普攻',
+    });
+    expect(
+      actions.filter(action => action.kind === 'charged-attack')
+    ).toHaveLength(1);
+  });
+
   it('publishes every icon used by a schedulable role or kibo action', () => {
     const roleActions = workbenchSeed.gameData.characters.flatMap(character =>
       getSkillActionCatalog(

@@ -2,28 +2,41 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-profile-catalog",
   "status": "character-combat-profile-catalog-ready",
-  "sourcePackageHash": "d59db0483bc855241625ced4518b09049caf8e4b6cd7b808b9cdccf72ecd4021",
+  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
   "profileSchema": "azpr://schemas/character-combat-profile/v1",
   "profiles": [
     {
       "ownerId": 101010,
       "ownerName": "涂山小玉",
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "17f022747b596fe553f3f881ad03affe463fd193c0eba34a4f9326528a133e63",
+      "profileHash": "79a92f970d66921f3a24ec79248b79c14f1cc3bb822d5169190dd4df5fe78dc4",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "2eea6b22eb6917a7745c16d4fa1e48b0801127a1fbbc8f47b5531750030fe9e6",
+      "runtimeContractHash": "871aad088823e5499d61e5b9f3dccf3dd9a10f2174c013e85bfc1af4f00b4dfb",
       "sourcePath": "src/data/generated/character-combat-profiles/101010.json",
+      "status": "character-combat-profile-valid"
+    },
+    {
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "profileIdentity": "actor:103002:character-combat-profile:v1",
+      "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228",
+      "pipelineMaturity": "runtime-applied",
+      "combatCoverageState": "partial",
+      "characterComplete": false,
+      "completionState": "runtime-applied",
+      "runtimeContractHash": "d60e8a46c415311bd9013de387bafe52f4d960b0ba3e1f00800c38c32bd83f87",
+      "sourcePath": "src/data/generated/character-combat-profiles/103002.json",
       "status": "character-combat-profile-valid"
     }
   ],
-  "coverageManifestHash": "92dade66907d1ba8ff4bbf4eacd3696432d95fe211cb7b94deebc303447429dc",
+  "coverageManifestHash": "d859454908c90baafeefafef6e9177e500b221af4b14dd45ca0280b0c6ab10f0",
   "summary": {
     "publicCharacterCount": 20,
-    "compiledProfileCount": 1,
-    "runtimeAppliedProfileCount": 1,
+    "compiledProfileCount": 2,
+    "runtimeAppliedProfileCount": 2,
     "uiVerifiedProfileCount": 0,
     "characterCompleteCount": 0
   }

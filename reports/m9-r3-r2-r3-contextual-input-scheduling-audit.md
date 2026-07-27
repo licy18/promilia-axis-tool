@@ -2,9 +2,9 @@
 
 - 小玉公开执行形态：21
 - 小玉窗口审计：86/86
-- 全公开动作窗口：1342
-- 已解析输入/执行语义：1305
-- 可解析贴边接续：953
+- 全公开动作窗口：1351
+- 已解析输入/执行语义：1314
+- 可解析贴边接续：969
 - 同一后继多窗口行：525
 
 原始窗口始终保持 `[startFrame, endFrame)`；贴边修复通过分离输入帧、执行起点和前动作关系性结束帧完成。
@@ -23,8 +23,9 @@
 
 ## 全量分类
 
-- generic-occupancy-inside-window: 804
-- window-after-generic-occupancy: 73
-- window-before-generic-occupancy: 314
+- generic-occupancy-inside-window: 809
+- unresolved: 3
+- window-after-generic-occupancy: 77
+- window-before-generic-occupancy: 300
 - window-end-equals-generic-occupancy: 55
-- window-start-equals-generic-occupancy: 96
+- window-start-equals-generic-occupancy: 107

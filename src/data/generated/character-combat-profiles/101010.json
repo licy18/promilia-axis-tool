@@ -23,7 +23,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "d59db0483bc855241625ced4518b09049caf8e4b6cd7b808b9cdccf72ecd4021",
+    "packageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -90,6 +90,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -105,6 +106,8 @@
         "runtimeReady": false,
         "runtimeHitCount": 0,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 5,
         "selectedHitIdentities": [],
         "selectedEffectIdentities": [],
@@ -6239,6 +6242,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "partially-resolved",
         "variantConditionDiscovery": {
           "identity": "actor:101010|control:10101010|variant-condition-discovery",
@@ -6696,6 +6700,14 @@
         "runtimeReady": true,
         "runtimeHitCount": 10,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 5,
+        "selectedResourceTransactionIdentities": [
+          "actor:101010:element:101010115|10101010|0|-2415393471651248925|gain||43",
+          "actor:101010:element:101010115|10101010|0|-2415393471651248925|gain||48",
+          "actor:101010:element:101010115|10101010|0|-2415393471651248925|gain||53",
+          "actor:101010:element:101010115|10101010|0|-2415393471651248925|gain||58",
+          "actor:101010:element:101010115|10101010|0|-2415393471651248925|gain||63"
+        ],
         "selectedElementCount": 14,
         "selectedHitIdentities": [
           "10101010|0|elements|0|-8304317819766733523|43|1",
@@ -7717,6 +7729,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -7732,6 +7745,8 @@
         "runtimeReady": true,
         "runtimeHitCount": 3,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 1,
         "selectedHitIdentities": [
           "10101015|0|elements|0|-7461455105045004652|9|1",
@@ -8202,6 +8217,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -8217,6 +8233,8 @@
         "runtimeReady": true,
         "runtimeHitCount": 1,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 3,
         "selectedHitIdentities": [
           "10101011|0|elements|0|-9038391806014875439|36|1"
@@ -8652,6 +8670,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -8667,6 +8686,8 @@
         "runtimeReady": true,
         "runtimeHitCount": 8,
         "runtimeEffectCount": 1,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 9,
         "selectedHitIdentities": [
           "10101012|0|elements|0|-5870764486374818424|15|1",
@@ -9272,6 +9293,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -9287,6 +9309,8 @@
         "runtimeReady": true,
         "runtimeHitCount": 1,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 2,
         "selectedHitIdentities": [
           "10101026|0|elements|0|6429354647570570854|40|1"
@@ -9609,6 +9633,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -9624,6 +9649,12 @@
         "runtimeReady": true,
         "runtimeHitCount": 12,
         "runtimeEffectCount": 6,
+        "runtimeResourceTransactionCount": 3,
+        "selectedResourceTransactionIdentities": [
+          "actor:101010:element:101010115|10101013|0|-4364670297239232442|clear||264",
+          "actor:101010:element:101010115|10101013|0|-4364670297239232442|transform-remove|101010129|264",
+          "actor:101010:element:101010115|10101013|0|-1458914462506140012|transform|101010129|272"
+        ],
         "selectedElementCount": 30,
         "selectedHitIdentities": [
           "10101013|0|elements|2|-6429706496330270988|136|1",
@@ -10314,6 +10345,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -10329,6 +10361,8 @@
         "runtimeReady": false,
         "runtimeHitCount": 0,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 18,
         "selectedHitIdentities": [],
         "selectedEffectIdentities": [
@@ -10783,6 +10817,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -10798,6 +10833,17 @@
         "runtimeReady": true,
         "runtimeHitCount": 8,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 8,
+        "selectedResourceTransactionIdentities": [
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||15",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||21",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||27",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||33",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||39",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||45",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||51",
+          "actor:101010:element:101010115|10101025|0|8047766170799718774|gain||57"
+        ],
         "selectedElementCount": 5,
         "selectedHitIdentities": [
           "10101025|0|elements|0|-5394695384185407020|15|1",
@@ -11405,6 +11451,7 @@
           "applied": true
         },
         "schedulable": true,
+        "catalogDeclaration": null,
         "variantModelStatus": "resolved",
         "variantConditionDiscovery": null,
         "selectedSubSkillIndex": 0,
@@ -11420,6 +11467,8 @@
         "runtimeReady": false,
         "runtimeHitCount": 0,
         "runtimeEffectCount": 0,
+        "runtimeResourceTransactionCount": 0,
+        "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 4,
         "selectedHitIdentities": [],
         "selectedEffectIdentities": [
@@ -12330,7 +12379,7 @@
         "executionSubSkillIndex": 1,
         "sequenceIndex": 1,
         "sequenceTotal": 3,
-        "semanticName": "爆发普攻 A1",
+        "semanticName": "普通攻击 A1",
         "executionTiming": {
           "schemaVersion": 1,
           "subSkillIndex": 1,
@@ -12561,7 +12610,7 @@
         "executionSubSkillIndex": 1,
         "sequenceIndex": 2,
         "sequenceTotal": 3,
-        "semanticName": "爆发普攻 A2",
+        "semanticName": "普通攻击 A2",
         "executionTiming": {
           "schemaVersion": 1,
           "subSkillIndex": 1,
@@ -12816,7 +12865,7 @@
         "executionSubSkillIndex": 1,
         "sequenceIndex": 3,
         "sequenceTotal": 3,
-        "semanticName": "爆发普攻 A3",
+        "semanticName": "普通攻击 A3",
         "executionTiming": {
           "schemaVersion": 1,
           "subSkillIndex": 1,
@@ -63584,6 +63633,7 @@
         "chainIdentity": "xiaoyu-normal-default-five-inputs",
         "ownerId": 101010,
         "sourceSkillId": 10101001,
+        "semanticNamePrefix": null,
         "decisionFrame": 0,
         "stateCondition": {
           "kind": "resource-state-inactive",
@@ -64522,6 +64572,7 @@
         "chainIdentity": "xiaoyu-burst-three-inputs",
         "ownerId": 101010,
         "sourceSkillId": 10101001,
+        "semanticNamePrefix": null,
         "decisionFrame": 0,
         "stateCondition": {
           "kind": "resource-state-active",
@@ -127422,10 +127473,10 @@
     "sourceCompilation": {
       "compilerVersion": 1,
       "recipeIdentity": "actor:101010:character-combat-recipe:v1",
-      "recipeHash": "958d586201db0dd64a5f3168ec11b70fc352e00928eaf6a0eced6e7f4a193d08",
-      "compilerInputHash": "a5a8c5565790258cdcf9990fbed3dc3b86003603b51b503b68058eca5414f783",
-      "recipeContractHash": "44ba0041eea01c245f5f42d017cc5d29bda97c07c92cb87a53ec411c8b31d955",
-      "ownerContractHash": "423f667e34aafe0327cbe649f92b2035f6d1faf91bb787b529b6c266eb766a55"
+      "recipeHash": "568e85f19c300db47f3bf1ba360565eb2c7198b569e37bd71a4db89c24439347",
+      "compilerInputHash": "0774879824fe74df9d650314598be90e69de485b2977024c444248e6a8411046",
+      "recipeContractHash": "2fac9b08cb4a7c5fdadb296b9a9302049bc0bfaa0dfd3c6a5ddc7cd48f1d37d0",
+      "ownerContractHash": "5a17d30513932a7e8a29859a82d7a42107682b29a436772dacc8c7496b9334a7"
     },
     "operators": [
       "public-action-binding",
@@ -127446,13 +127497,13 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "6a115d0433fbe186282ffd0b61782a6d7cf1bbb730fdd6e82f7cc69542121a5c"
+        "recordsHash": "edfc7e20af0ba27055c770dee7bcaf9256f969f31cbeba6ea51ac9d9b59da43f"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
         "operator": "action-form-resolution",
         "recordCount": 21,
-        "recordsHash": "3af15cea5a7eb5adb4495006c471bf0fe0b3f76c828d33df9ec4644b8f13b618"
+        "recordsHash": "d3018664d9f322313c8520014cbeccb37b7d8e61456c53f073a73261f12ef517"
       },
       {
         "packagePath": "actionVariantGraph.contextEdges",
@@ -127470,7 +127521,7 @@
         "packagePath": "actionVariantGraph.attackInputChains",
         "operator": "attack-input-chain",
         "recordCount": 2,
-        "recordsHash": "ad7d9bc17f6375ae973ffb15855ce9b6ae07094c8b4eb6352f5b7ecfa9105d89"
+        "recordsHash": "bf610c76f0f7d5176d3cf48991df495c3257b4fd7663bce18595c80a474f4ef4"
       },
       {
         "packagePath": "controlBindings.hits",
@@ -127515,7 +127566,7 @@
         "recordsHash": "247fe211202e81629f4274a05189b80340c601f399b4c03f00cca50164a69c52"
       }
     ],
-    "contractHash": "2eea6b22eb6917a7745c16d4fa1e48b0801127a1fbbc8f47b5531750030fe9e6"
+    "contractHash": "871aad088823e5499d61e5b9f3dccf3dd9a10f2174c013e85bfc1af4f00b4dfb"
   },
   "coverage": [
     {
@@ -132691,7 +132742,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "2796ee076fcdce59df1c5a9055731bf689a2cead59a48b323acd22d86b707075"
+    "deterministicInputHash": "7efb56f4cefc48274e6e859dda86b46828bd327d0400ee3b80163683e2ee7895"
   },
-  "profileHash": "17f022747b596fe553f3f881ad03affe463fd193c0eba34a4f9326528a133e63"
+  "profileHash": "79a92f970d66921f3a24ec79248b79c14f1cc3bb822d5169190dd4df5fe78dc4"
 }

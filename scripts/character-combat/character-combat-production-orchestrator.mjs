@@ -86,6 +86,114 @@ export function createCharacterCombatControlPolicyIndex(recipes) {
   return policies;
 }
 
+export function augmentCharacterCombatActionCandidates({
+  candidates,
+  recipes,
+  characterCatalog,
+  skills,
+}) {
+  const output = [...(candidates ?? [])];
+  const characters = Array.isArray(characterCatalog)
+    ? characterCatalog
+    : (characterCatalog?.items ?? []);
+  const characterByOwnerId = new Map(
+    characters.map(character => [Number(character.id), character])
+  );
+  const skillById = new Map(
+    (skills ?? []).map(skill => [Number(skill.id), skill])
+  );
+  const identityOf = candidate =>
+    [
+      candidate.ownerKind,
+      Number(candidate.ownerId),
+      Number(candidate.sourceSkillId),
+      Number(candidate.actionVariantIndex),
+      Number(candidate.controlSkillId),
+    ].join('|');
+  const seen = new Set(output.map(identityOf));
+
+  for (const recipe of recipes ?? []) {
+    const ownerId = Number(recipe.ownerId);
+    const character = characterByOwnerId.get(ownerId);
+    if (!character) {
+      throw new Error(
+        `character combat public action owner missing: ${ownerId}`
+      );
+    }
+    for (const declaration of recipe.compiler?.publicActionDeclarations ?? []) {
+      const sourceSkillId = Number(declaration.sourceSkillId);
+      const actionVariantIndex = Number(declaration.actionVariantIndex);
+      const controlSkillId = Number(declaration.controlSkillId);
+      const skill = skillById.get(sourceSkillId);
+      if (
+        !skill ||
+        Number(skill.characterId) !== ownerId ||
+        !Number.isInteger(actionVariantIndex) ||
+        actionVariantIndex < 0 ||
+        !Number.isInteger(controlSkillId) ||
+        !declaration.actionKind
+      ) {
+        throw new Error(
+          `character combat public action declaration invalid: ${ownerId}/${sourceSkillId}/${declaration.actionKind}`
+        );
+      }
+      const sourceVariant = skill.level?.labels?.[actionVariantIndex] ?? null;
+      const candidate = {
+        ownerKind: 'actor',
+        ownerId,
+        ownerName: character.name ?? skill.characterName ?? null,
+        sourceSkillId,
+        sourceSkillName: skill.name ?? skill.displayName ?? null,
+        actionVariantIndex,
+        actionVariantLabel:
+          declaration.actionVariantLabel ??
+          declaration.catalogLabel ??
+          sourceVariant ??
+          declaration.actionKind,
+        actionKind: declaration.actionKind,
+        publicVariants: [
+          {
+            index: actionVariantIndex,
+            label:
+              declaration.catalogLabel ??
+              declaration.actionVariantLabel ??
+              sourceVariant ??
+              declaration.actionKind,
+            sourceIdentity:
+              declaration.sourceIdentity ??
+              `character-combat-recipe:${ownerId}#compiler.publicActionDeclarations`,
+          },
+        ],
+        controlSkillId,
+        bindingKind: 'character-combat-recipe-public-action-control',
+        bindingSourceIdentity:
+          declaration.sourceIdentity ??
+          `character-combat-recipe:${ownerId}#compiler.publicActionDeclarations[controlSkillId=${controlSkillId}]`,
+        bindingEligible: true,
+        catalogDeclaration: {
+          label:
+            declaration.catalogLabel ??
+            declaration.actionVariantLabel ??
+            declaration.actionKind,
+          sourceStatus: declaration.sourceStatus ?? 'verified-static-evidence',
+          sourceIdentity:
+            declaration.sourceIdentity ??
+            `character-combat-recipe:${ownerId}#compiler.publicActionDeclarations[controlSkillId=${controlSkillId}]`,
+        },
+      };
+      const identity = identityOf(candidate);
+      if (seen.has(identity)) {
+        throw new Error(
+          `character combat public action declaration duplicates candidate: ${identity}`
+        );
+      }
+      seen.add(identity);
+      output.push(candidate);
+    }
+  }
+  return output;
+}
+
 export async function createCharacterCombatProductionBuild({
   recipes,
   characterCatalog,
@@ -327,7 +435,8 @@ function collectOwnerSemanticEffects({
   ).filter(effect =>
     (effect.owners ?? []).some(
       owner =>
-        owner.ownerKind === 'actor' && Number(owner.ownerId) === Number(ownerId)
+        owner.ownerKind === 'actor' &&
+        Number(owner.ownerId) === Number(ownerId)
     )
   );
 }

@@ -19,6 +19,7 @@ import {
 } from './character-combat/character-combat-contract-compiler.mjs';
 import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
 import {
+  augmentCharacterCombatActionCandidates,
   collectCharacterCombatRequiredControlSkillIds,
   createCharacterCombatControlPolicyIndex,
   createCharacterCombatProductionBuild,
@@ -275,7 +276,7 @@ const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
   'perfect-parry': ['ground', 209],
 });
 const M9_PRODUCT_DENOMINATOR = Object.freeze({
-  publicActionCount: 562,
+  publicActionCount: 563,
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
@@ -340,12 +341,17 @@ export async function createVerifiedCombatMechanicsBuild({
   const skillLogicById = new Map(
     skillLogicRows.map(row => [Number(row.skillId), row])
   );
-  const candidates = createActionCandidates({
-    seed,
-    kiboCatalog,
+  const candidates = augmentCharacterCombatActionCandidates({
+    candidates: createActionCandidates({
+      seed,
+      kiboCatalog,
+      characterCatalog,
+      petRows: readJson(PET_PATH).rows,
+      skillLogicById,
+    }),
+    recipes,
     characterCatalog,
-    petRows: readJson(PET_PATH).rows,
-    skillLogicById,
+    skills: seed.gameData?.skills ?? [],
   });
   const publicControlIds = new Set([
     ...candidates.map(candidate => candidate.controlSkillId),
@@ -6794,6 +6800,7 @@ function createPackage({
     );
     const mechanicsMapping = createActionMapping(candidate, control, {
       defaultSelection,
+      resourceTransactions: specialResourceCatalog.operationBindings,
       variantModelStatus: classifyActionVariantModelStatus({
         graph: actionVariantGraph,
         ownerId: candidate.ownerId,
@@ -6823,7 +6830,8 @@ function createPackage({
     const attackInputSegments = createAttackInputSegments(
       candidate,
       preparedControlBySkillId,
-      actionVariantGraph
+      actionVariantGraph,
+      specialResourceCatalog.operationBindings
     );
     const actionTiming =
       createAttackInputChainTimingContract(attackInputSegments);
@@ -8665,7 +8673,8 @@ function createAttackInputChainSchedulingContract(segments) {
 function createAttackInputSegments(
   candidate,
   controlBySkillId,
-  actionVariantGraph
+  actionVariantGraph,
+  resourceTransactions = []
 ) {
   const inputs = candidate.attackInputControls ?? [];
   const segments = inputs.map((input, segmentIndex) => {
@@ -8686,6 +8695,7 @@ function createAttackInputSegments(
       control,
       {
         defaultSelection,
+        resourceTransactions,
         variantModelStatus: classifyActionVariantModelStatus({
           graph: actionVariantGraph,
           ownerId: candidate.ownerId,
@@ -8987,6 +8997,7 @@ function createActionMapping(
   control,
   {
     defaultSelection = null,
+    resourceTransactions = [],
     variantModelStatus = 'resolved',
     variantConditionDiscovery = null,
   } = {}
@@ -9012,6 +9023,7 @@ function createActionMapping(
     controlFrameRate: control?.frameRate ?? 60,
     inputTrigger: createControlInputTrigger(control?.logic),
     schedulable: Boolean(candidate.bindingEligible && control),
+    catalogDeclaration: candidate.catalogDeclaration ?? null,
     variantModelStatus,
     variantConditionDiscovery,
   };
@@ -9072,8 +9084,16 @@ function createActionMapping(
   const appliedEffects = runtimeEffects.filter(
     effect => effect.classification === 'applied'
   );
+  const appliedResourceTransactions = resourceTransactions.filter(
+    transaction =>
+      transaction.applied === true &&
+      Number(transaction.ownerId) === Number(candidate.ownerId) &&
+      Number(transaction.controlSkillId) === Number(candidate.controlSkillId) &&
+      Number(transaction.subSkillIndex) === Number(selectedSubSkillIndex)
+  );
   const spCost = finiteNumberOrNull(control.logic?.spCost);
   const hasAppliedCost = spCost != null && spCost > 0;
+  const hasAppliedResourceTransaction = appliedResourceTransactions.length > 0;
   const relevantElements = selectedElements.filter(
     element => element.threeValueRelevant
   );
@@ -9086,13 +9106,19 @@ function createActionMapping(
       element => element.classification === 'verified-zero'
     );
   const classification =
-    runtimeHits.length > 0 || hasAppliedCost || appliedEffects.length > 0
+    runtimeHits.length > 0 ||
+    hasAppliedCost ||
+    hasAppliedResourceTransaction ||
+    appliedEffects.length > 0
       ? 'applied'
       : allRelevantZero && spCost === 0
         ? 'verified-zero'
         : 'unresolved';
   const sourceClassification =
-    sourceRuntimeHits.length > 0 || hasAppliedCost || appliedEffects.length > 0
+    sourceRuntimeHits.length > 0 ||
+    hasAppliedCost ||
+    hasAppliedResourceTransaction ||
+    appliedEffects.length > 0
       ? 'applied'
       : allRelevantZero && spCost === 0
         ? 'verified-zero'
@@ -9121,6 +9147,10 @@ function createActionMapping(
     runtimeReady: classification === 'applied',
     runtimeHitCount: runtimeHits.length,
     runtimeEffectCount: appliedEffects.length,
+    runtimeResourceTransactionCount: appliedResourceTransactions.length,
+    selectedResourceTransactionIdentities: appliedResourceTransactions.map(
+      transaction => transaction.operationIdentity
+    ),
     selectedElementCount: selectedElements.length,
     selectedHitIdentities: runtimeHits.map(hit => hit.hitIdentity),
     selectedEffectIdentities: runtimeEffects.map(

@@ -1,9 +1,9 @@
 # M9-R2 全角色派生控制覆盖
 
 - 包：`azpr-tc-2026-07-18`
-- 固定分母：20 名角色 / 154 个公开动作引用 / 136 个派生 control / 256 个 player/resourceMap 变体
-- 控制源：combined=11，input-controlled=107，not-yet-modeled=17，state-controlled=1
-- 解析状态：applied=5，not-yet-modeled=31，partially-resolved=97，static-evidence-gap=3
+- 固定分母：20 名角色 / 155 个公开动作引用 / 137 个派生 control / 259 个 player/resourceMap 变体
+- 控制源：combined=11，input-controlled=108，not-yet-modeled=17，state-controlled=1
+- 解析状态：applied=5，not-yet-modeled=31，partially-resolved=98，static-evidence-gap=3
 - 输入选择器：5/22 已建立明确 public variant → subskill 关系
 - 静默遗漏：0
 
@@ -26,6 +26,7 @@
 | 102001 | normal-attack | 4 | input-controlled=4 | partially-resolved=4 |
 | 102001 | perfect-parry | 1 | input-controlled=1 | partially-resolved=1 |
 | 102001 | star-skill | 1 | not-yet-modeled=1 | not-yet-modeled=1 |
+| 103002 | charged-attack | 1 | input-controlled=1 | partially-resolved=1 |
 | 103002 | limit-counter | 1 | combined=1 | partially-resolved=1 |
 | 103002 | normal-attack | 5 | combined=4<br>input-controlled=1 | partially-resolved=5 |
 | 103002 | star-carry | 1 | input-controlled=1 | partially-resolved=1 |
@@ -124,6 +125,7 @@
 - `actor:103002|control:10300203|derived-control` normal-attack：partially-resolved；switch-wrapper-relation-unresolved, effect-trigger-frame-static-evidence-gap, effect-target-static-evidence-gap, event-bridge-input-semantics-partially-modeled
 - `actor:103002|control:10300204|derived-control` normal-attack：partially-resolved；switch-wrapper-relation-unresolved, effect-trigger-frame-static-evidence-gap, effect-target-static-evidence-gap, event-bridge-input-semantics-partially-modeled
 - `actor:103002|control:10300205|derived-control` normal-attack：partially-resolved；variant-condition-source-families-audited-not-yet-modeled, event-bridge-input-semantics-partially-modeled
+- `actor:103002|control:10300210|derived-control` charged-attack：partially-resolved；variant-condition-source-families-audited-not-yet-modeled, event-bridge-input-semantics-partially-modeled
 - `actor:103002|control:10300212|derived-control` star-skill：not-yet-modeled；derived-control-source-not-yet-modeled
 - `actor:103002|control:10300213|derived-control` ultimate：partially-resolved；event-bridge-input-semantics-partially-modeled
 - `actor:103002|control:10300221|derived-control` star-carry：partially-resolved；event-bridge-input-semantics-partially-modeled

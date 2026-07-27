@@ -1,0 +1,5069 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-authoritative-golden-runtime",
+  "status": "authoritative-golden-runtime-verified",
+  "ownerId": 103002,
+  "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+  "durationMs": 120000,
+  "frameRate": 60,
+  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
+  "compilerPath": "src/simulation/compiler/compileProject.js",
+  "simulatorPath": "src/simulation/engine/simulateScenario.js",
+  "actual": {
+    "project": {
+      "durationMs": 120000,
+      "actionCount": 15,
+      "teamCharacterIds": [
+        103002,
+        101010,
+        101003
+      ]
+    },
+    "actions": {
+      "executedActionIds": [
+        "fire-kibo-signature",
+        "ruby-enhanced-shot-1",
+        "ruby-enhanced-shot-2",
+        "ruby-enhanced-shot-3",
+        "ruby-enhanced-shot-4",
+        "ruby-enhanced-shot-5",
+        "ruby-enhanced-shot-6",
+        "ruby-limit-counter",
+        "ruby-post-ultimate-shot",
+        "ruby-reload",
+        "ruby-star-skill",
+        "ruby-ultimate",
+        "switch-back-to-ruby",
+        "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+        "switch-to-xiaoyu",
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry"
+      ],
+      "blockedActionIds": [
+        "ruby-insufficient-shot"
+      ],
+      "selections": [
+        {
+          "actionId": "fire-kibo-signature",
+          "semanticName": "炎灼角羊事件",
+          "controlSkillId": 50003901,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 114,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "ruby-enhanced-shot-1",
+          "semanticName": "强化普攻 A1",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 1,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-enhanced-shot-2",
+          "semanticName": "强化普攻 A2",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 2,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-enhanced-shot-3",
+          "semanticName": "强化普攻 A3",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 3,
+          "actualDurationFrames": 32,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-enhanced-shot-4",
+          "semanticName": "强化普攻 A4",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 1,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-enhanced-shot-5",
+          "semanticName": "强化普攻 A5",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 2,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-enhanced-shot-6",
+          "semanticName": "强化普攻 A6",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 3,
+          "actualDurationFrames": 32,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-limit-counter",
+          "semanticName": "极限反击",
+          "controlSkillId": 10300225,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 35,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "ruby-post-ultimate-shot",
+          "semanticName": "强化普攻 A1",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 1,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "ruby-reload",
+          "semanticName": "重击",
+          "controlSkillId": 10300210,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 38,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "ruby-star-skill",
+          "semanticName": "星鸣技",
+          "controlSkillId": 10300212,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 204,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "ruby-ultimate",
+          "semanticName": "星决技",
+          "controlSkillId": 10300213,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 329,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "semanticName": "一瞬的灼热",
+          "controlSkillId": 10300221,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 93,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "semanticName": "驭仙风",
+          "controlSkillId": 10101021,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 295,
+          "sourceKind": "workbench-explicit-input-variant"
+        }
+      ],
+      "selectionByActionId": {
+        "fire-kibo-signature": {
+          "semanticName": "炎灼角羊事件",
+          "controlSkillId": 50003901,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 114,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "ruby-enhanced-shot-1": {
+          "semanticName": "强化普攻 A1",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 1,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-enhanced-shot-2": {
+          "semanticName": "强化普攻 A2",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 2,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-enhanced-shot-3": {
+          "semanticName": "强化普攻 A3",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 3,
+          "actualDurationFrames": 32,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-enhanced-shot-4": {
+          "semanticName": "强化普攻 A4",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 1,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-enhanced-shot-5": {
+          "semanticName": "强化普攻 A5",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 2,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-enhanced-shot-6": {
+          "semanticName": "强化普攻 A6",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 3,
+          "actualDurationFrames": 32,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-limit-counter": {
+          "semanticName": "极限反击",
+          "controlSkillId": 10300225,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 35,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "ruby-post-ultimate-shot": {
+          "semanticName": "强化普攻 A1",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 1,
+          "actualDurationFrames": 24,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "ruby-reload": {
+          "semanticName": "重击",
+          "controlSkillId": 10300210,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 38,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "ruby-star-skill": {
+          "semanticName": "星鸣技",
+          "controlSkillId": 10300212,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 204,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "ruby-ultimate": {
+          "semanticName": "星决技",
+          "controlSkillId": 10300213,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 329,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "switch-back-to-ruby--on-enter--actor-103002--star-carry": {
+          "semanticName": "一瞬的灼热",
+          "controlSkillId": 10300221,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 93,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
+          "semanticName": "驭仙风",
+          "controlSkillId": 10101021,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 295,
+          "sourceKind": "workbench-explicit-input-variant"
+        }
+      }
+    },
+    "combat": {
+      "damageEventCount": 214,
+      "ownerDamageEventCount": 96,
+      "ownerHitEventCount": 96,
+      "totalHpDamage": 11765,
+      "totalToughnessDamage": 0,
+      "ownerTotalHpDamage": 8156,
+      "ownerTotalToughnessDamage": 5582,
+      "enemy": {
+        "pointCount": 316,
+        "initialHp": 862800,
+        "finalHp": 851035,
+        "maxHp": 862800,
+        "initialToughness": 6667,
+        "finalToughness": 6667,
+        "maxToughness": 6667
+      }
+    },
+    "resources": {
+      "actorSp": [
+        {
+          "kind": "actor",
+          "actorId": "actor-101003",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.02771,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1200,
+              "totalChange": 12.4872,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 3616.666666,
+              "actionId": "ruby-enhanced-shot-1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.374634,
+              "change": 0.11499,
+              "afterValue": 0.489624
+            },
+            {
+              "timeMs": 15116.666666,
+              "actionId": "ruby-enhanced-shot-4",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.686371,
+              "change": 0.11499,
+              "afterValue": 1.801361
+            },
+            {
+              "timeMs": 45616.666666,
+              "actionId": "ruby-post-ultimate-shot",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.975342,
+              "change": 0.11499,
+              "afterValue": 5.090332
+            },
+            {
+              "timeMs": 50300,
+              "actionId": "ruby-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.569031,
+              "change": 0.194946,
+              "afterValue": 5.763977
+            }
+          ]
+        },
+        {
+          "kind": "actor",
+          "actorId": "actor-101010",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.548798,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1150,
+              "totalChange": 11.9669,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 50,
+              "totalChange": 1.0414,
+              "firstTimeMs": 60000,
+              "lastTimeMs": 64900
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 3616.666666,
+              "actionId": "ruby-enhanced-shot-1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.374634,
+              "change": 0.11499,
+              "afterValue": 0.489624
+            },
+            {
+              "timeMs": 15116.666666,
+              "actionId": "ruby-enhanced-shot-4",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.686371,
+              "change": 0.11499,
+              "afterValue": 1.801361
+            },
+            {
+              "timeMs": 45616.666666,
+              "actionId": "ruby-post-ultimate-shot",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.975342,
+              "change": 0.11499,
+              "afterValue": 5.090332
+            },
+            {
+              "timeMs": 50300,
+              "actionId": "ruby-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.569031,
+              "change": 0.194946,
+              "afterValue": 5.763977
+            }
+          ]
+        },
+        {
+          "kind": "actor",
+          "actorId": "actor-103002",
+          "kiboId": null,
+          "initialValue": 100,
+          "currentValue": 17.469559,
+          "maxValue": 100,
+          "eventCount": 837,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 50,
+              "totalChange": 0.5203,
+              "firstTimeMs": 60000,
+              "lastTimeMs": 64900
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 784,
+              "totalChange": 16.329152,
+              "firstTimeMs": 36700,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 36666.666667,
+              "actionId": "ruby-ultimate",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            },
+            {
+              "timeMs": 45616.666666,
+              "actionId": "ruby-post-ultimate-shot",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.874542,
+              "change": 0.229996,
+              "afterValue": 2.104538
+            },
+            {
+              "timeMs": 50300,
+              "actionId": "ruby-limit-counter",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 3.062637,
+              "change": 0.389893,
+              "afterValue": 3.45253
+            }
+          ]
+        }
+      ],
+      "kiboSp": [
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-1",
+          "actorId": "actor-103002",
+          "kiboId": 500039,
+          "initialValue": 100,
+          "currentValue": 13.559189,
+          "maxValue": 100,
+          "eventCount": 652,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 50,
+              "totalChange": 1.0414,
+              "firstTimeMs": 60000,
+              "lastTimeMs": 64900
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 601,
+              "totalChange": 12.517628,
+              "firstTimeMs": 55000,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 55000,
+              "actionId": "fire-kibo-signature",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            }
+          ]
+        },
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-2",
+          "actorId": "actor-101010",
+          "kiboId": 500003,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-3",
+          "actorId": "actor-101003",
+          "kiboId": 500469,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      ],
+      "actorSpByActorId": {
+        "actor-101003": {
+          "kind": "actor",
+          "actorId": "actor-101003",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.02771,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1200,
+              "totalChange": 12.4872,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 3616.666666,
+              "actionId": "ruby-enhanced-shot-1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.374634,
+              "change": 0.11499,
+              "afterValue": 0.489624
+            },
+            {
+              "timeMs": 15116.666666,
+              "actionId": "ruby-enhanced-shot-4",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.686371,
+              "change": 0.11499,
+              "afterValue": 1.801361
+            },
+            {
+              "timeMs": 45616.666666,
+              "actionId": "ruby-post-ultimate-shot",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.975342,
+              "change": 0.11499,
+              "afterValue": 5.090332
+            },
+            {
+              "timeMs": 50300,
+              "actionId": "ruby-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.569031,
+              "change": 0.194946,
+              "afterValue": 5.763977
+            }
+          ]
+        },
+        "actor-101010": {
+          "kind": "actor",
+          "actorId": "actor-101010",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.548798,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1150,
+              "totalChange": 11.9669,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 50,
+              "totalChange": 1.0414,
+              "firstTimeMs": 60000,
+              "lastTimeMs": 64900
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 3616.666666,
+              "actionId": "ruby-enhanced-shot-1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.374634,
+              "change": 0.11499,
+              "afterValue": 0.489624
+            },
+            {
+              "timeMs": 15116.666666,
+              "actionId": "ruby-enhanced-shot-4",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.686371,
+              "change": 0.11499,
+              "afterValue": 1.801361
+            },
+            {
+              "timeMs": 45616.666666,
+              "actionId": "ruby-post-ultimate-shot",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.975342,
+              "change": 0.11499,
+              "afterValue": 5.090332
+            },
+            {
+              "timeMs": 50300,
+              "actionId": "ruby-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.569031,
+              "change": 0.194946,
+              "afterValue": 5.763977
+            }
+          ]
+        },
+        "actor-103002": {
+          "kind": "actor",
+          "actorId": "actor-103002",
+          "kiboId": null,
+          "initialValue": 100,
+          "currentValue": 17.469559,
+          "maxValue": 100,
+          "eventCount": 837,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 50,
+              "totalChange": 0.5203,
+              "firstTimeMs": 60000,
+              "lastTimeMs": 64900
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 784,
+              "totalChange": 16.329152,
+              "firstTimeMs": 36700,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 36666.666667,
+              "actionId": "ruby-ultimate",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            },
+            {
+              "timeMs": 45616.666666,
+              "actionId": "ruby-post-ultimate-shot",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.874542,
+              "change": 0.229996,
+              "afterValue": 2.104538
+            },
+            {
+              "timeMs": 50300,
+              "actionId": "ruby-limit-counter",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 3.062637,
+              "change": 0.389893,
+              "afterValue": 3.45253
+            }
+          ]
+        }
+      },
+      "kiboSpBySlotId": {
+        "team-slot-1": {
+          "kind": "kibo",
+          "slotId": "team-slot-1",
+          "actorId": "actor-103002",
+          "kiboId": 500039,
+          "initialValue": 100,
+          "currentValue": 13.559189,
+          "maxValue": 100,
+          "eventCount": 652,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 50,
+              "totalChange": 1.0414,
+              "firstTimeMs": 60000,
+              "lastTimeMs": 64900
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 601,
+              "totalChange": 12.517628,
+              "firstTimeMs": 55000,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 55000,
+              "actionId": "fire-kibo-signature",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            }
+          ]
+        },
+        "team-slot-2": {
+          "kind": "kibo",
+          "slotId": "team-slot-2",
+          "actorId": "actor-101010",
+          "kiboId": 500003,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        "team-slot-3": {
+          "kind": "kibo",
+          "slotId": "team-slot-3",
+          "actorId": "actor-101003",
+          "kiboId": 500469,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      },
+      "specialResourceTrace": [
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-reload",
+          "frame": 24,
+          "operation": "gain",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 0,
+          "change": 6,
+          "afterValue": 6,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 6,
+          "change": -1,
+          "afterValue": 5,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 5,
+          "change": -1,
+          "afterValue": 4,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 4,
+          "change": -1,
+          "afterValue": 3,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 3,
+          "change": -1,
+          "afterValue": 2,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 2,
+          "change": -1,
+          "afterValue": 1,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 1,
+          "change": -1,
+          "afterValue": 0,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-ultimate",
+          "frame": 2313,
+          "operation": "gain",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 0,
+          "change": 12,
+          "afterValue": 12,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 12,
+          "change": -1,
+          "afterValue": 11,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-limit-counter",
+          "frame": 3015,
+          "operation": "gain",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 11,
+          "change": 1,
+          "afterValue": 12,
+          "durationMs": null
+        }
+      ],
+      "thresholdClearCount": 0,
+      "transformCount": 0,
+      "refreshCount": 0
+    },
+    "effects": {
+      "passiveTrace": [
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|3333.333|1",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": 18333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|2",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "expiresAtMs": 18333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|3",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "expiresAtMs": 18333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|4",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "expiresAtMs": 22166.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|5",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 4,
+          "afterStacks": 5,
+          "expiresAtMs": 22166.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|6",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 5,
+          "afterStacks": 6,
+          "expiresAtMs": 22166.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|7",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 26000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|8",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 26000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|9",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 26000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|10",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 29833.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|11",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 29833.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|12",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 29833.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|13",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 33666.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|14",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 33666.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|15",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 33666.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|16",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 37500
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|17",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 37500
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|18",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 37500
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|37500|18",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 2250,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "expire",
+          "beforeStacks": 6,
+          "afterStacks": null,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|38566.667|1",
+          "actionId": "ruby-ultimate",
+          "frame": 2314,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": 53566.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|2",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "expiresAtMs": 60333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|3",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "expiresAtMs": 60333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|4",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "expiresAtMs": 60333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|60333.333|4",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 3620,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "expire",
+          "beforeStacks": 4,
+          "afterStacks": null,
+          "expiresAtMs": null
+        }
+      ],
+      "passiveMaxStacks": 6,
+      "firstPassiveMaxStackFrame": 430,
+      "burstTrace": [],
+      "burstTransitions": []
+    },
+    "dynamicProperties": {
+      "ownerSources": [
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 120,
+          "effectIds": [
+            "battle-element:4227003560910032429"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 20,
+          "effectIds": [
+            "battle-element:4227003560910032429"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 60,
+          "effectIds": [
+            "battle-element:4227003560910032429"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 80,
+          "effectIds": [
+            "battle-element:4227003560910032429"
+          ]
+        }
+      ],
+      "maxPercentRawByAttributeId": {
+        "229": 0
+      }
+    },
+    "comparison": {
+      "comparisonIdentity": "m10-b1:103002:soulessence-stat-propagation",
+      "compareActionKey": "ruby-post-ultimate-shot",
+      "omittedActionKeys": [],
+      "clearLoadoutCharacterIds": [
+        103002
+      ],
+      "primaryDamage": 441,
+      "baselineDamage": 189,
+      "damageDelta": 252,
+      "primaryDynamicPropertySources": [
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 80,
+          "effectIds": [
+            "battle-element:4227003560910032429"
+          ]
+        }
+      ],
+      "baselineDynamicPropertySources": [
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 80,
+          "effectIds": [
+            "battle-element:4227003560910032429"
+          ]
+        }
+      ],
+      "baselineReplayHash": "24306cc26494e6e1d2148c74d3a6c80f499f1845a5b77eff9c80225eea0581ba"
+    },
+    "trace": {
+      "damage": [
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 217,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 219,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 221,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 224,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 226,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 226,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 229,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 231,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 236,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 447,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 449,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 451,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 454,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 456,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 456,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 459,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 461,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 466,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 677,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 679,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 681,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 684,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 686,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 686,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 689,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 691,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 696,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 907,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 909,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 911,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 914,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 916,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 916,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 919,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 921,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 926,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1137,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1139,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1141,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1144,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1146,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1146,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1149,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1151,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1156,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1367,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1369,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1371,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1374,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1376,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1376,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1379,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1381,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1386,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2317,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2325,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2333,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2341,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2349,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2357,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2365,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2373,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2381,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2389,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2397,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2405,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2413,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2421,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2429,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2437,
+          "hitIdentity": null,
+          "rawDamage": 12,
+          "hpDamage": 12,
+          "toughnessDamage": 8,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2461,
+          "hitIdentity": null,
+          "rawDamage": 706,
+          "hpDamage": 706,
+          "toughnessDamage": 494,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2484,
+          "hitIdentity": null,
+          "rawDamage": 212,
+          "hpDamage": 212,
+          "toughnessDamage": 148,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2488,
+          "hitIdentity": null,
+          "rawDamage": 212,
+          "hpDamage": 212,
+          "toughnessDamage": 148,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2492,
+          "hitIdentity": null,
+          "rawDamage": 212,
+          "hpDamage": 212,
+          "toughnessDamage": 148,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2500,
+          "hitIdentity": null,
+          "rawDamage": 1647,
+          "hpDamage": 1647,
+          "toughnessDamage": 1153,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2507,
+          "hitIdentity": null,
+          "rawDamage": 266,
+          "hpDamage": 266,
+          "toughnessDamage": 186,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2513,
+          "hitIdentity": null,
+          "rawDamage": 266,
+          "hpDamage": 266,
+          "toughnessDamage": 186,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2519,
+          "hitIdentity": null,
+          "rawDamage": 266,
+          "hpDamage": 266,
+          "toughnessDamage": 186,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 2525,
+          "hitIdentity": null,
+          "rawDamage": 266,
+          "hpDamage": 266,
+          "toughnessDamage": 186,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2737,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2739,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2741,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2744,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2746,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2746,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2749,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2751,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2756,
+          "hitIdentity": null,
+          "rawDamage": 49,
+          "hpDamage": 49,
+          "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-limit-counter",
+          "frame": 3018,
+          "hitIdentity": null,
+          "rawDamage": 82,
+          "hpDamage": 82,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-limit-counter",
+          "frame": 3018,
+          "hitIdentity": null,
+          "rawDamage": 82,
+          "hpDamage": 82,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-limit-counter",
+          "frame": 3023,
+          "hitIdentity": null,
+          "rawDamage": 82,
+          "hpDamage": 82,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-limit-counter",
+          "frame": 3023,
+          "hitIdentity": null,
+          "rawDamage": 82,
+          "hpDamage": 82,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-limit-counter",
+          "frame": 3028,
+          "hitIdentity": null,
+          "rawDamage": 82,
+          "hpDamage": 82,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-limit-counter",
+          "frame": 3028,
+          "hitIdentity": null,
+          "rawDamage": 82,
+          "hpDamage": 82,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "fire-kibo-signature",
+          "frame": 3360,
+          "hitIdentity": null,
+          "rawDamage": 166,
+          "hpDamage": 166,
+          "toughnessDamage": 33,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "fire-kibo-signature",
+          "frame": 3365,
+          "hitIdentity": null,
+          "rawDamage": 166,
+          "hpDamage": 166,
+          "toughnessDamage": 33,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3958,
+          "hitIdentity": null,
+          "rawDamage": 433,
+          "hpDamage": 433,
+          "toughnessDamage": 303,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3958,
+          "hitIdentity": null,
+          "rawDamage": 2024,
+          "hpDamage": 2024,
+          "toughnessDamage": 782,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3960,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -20.142609,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3964,
+          "hitIdentity": null,
+          "rawDamage": 288,
+          "hpDamage": 288,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3966,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3970,
+          "hitIdentity": null,
+          "rawDamage": 288,
+          "hpDamage": 288,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3972,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3976,
+          "hitIdentity": null,
+          "rawDamage": 288,
+          "hpDamage": 288,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3978,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3982,
+          "hitIdentity": null,
+          "rawDamage": 288,
+          "hpDamage": 288,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3984,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3990,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3996,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4002,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4008,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4014,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4020,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4026,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4032,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4038,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4044,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4050,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4056,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4062,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4068,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4074,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4080,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4086,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4092,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4098,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4104,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4110,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4116,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4122,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4128,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4134,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4140,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4146,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4152,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4158,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4164,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4170,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4176,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4182,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4188,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4194,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4200,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4206,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4212,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4218,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4224,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4230,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4236,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4242,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4248,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4254,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4260,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4266,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4272,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4278,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4284,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4290,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4296,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4302,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4308,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4314,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4320,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4326,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4332,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4338,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4344,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4350,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4356,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4362,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4368,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4374,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4380,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4386,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4392,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4398,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4404,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4410,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4416,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4422,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4428,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4434,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4440,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4446,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4452,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4458,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4464,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4470,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4476,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4482,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4488,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4494,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4500,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4506,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4512,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4518,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4524,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4530,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4536,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4542,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4548,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4554,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4560,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4566,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4572,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4578,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4584,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4590,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4596,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4602,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4608,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4614,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4620,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -40.488678,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 4680,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        }
+      ],
+      "specialResources": [
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-reload",
+          "frame": 24,
+          "operation": "gain",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 0,
+          "change": 6,
+          "afterValue": 6,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 6,
+          "change": -1,
+          "afterValue": 5,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 5,
+          "change": -1,
+          "afterValue": 4,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 4,
+          "change": -1,
+          "afterValue": 3,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 3,
+          "change": -1,
+          "afterValue": 2,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 2,
+          "change": -1,
+          "afterValue": 1,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 1,
+          "change": -1,
+          "afterValue": 0,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-ultimate",
+          "frame": 2313,
+          "operation": "gain",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 0,
+          "change": 12,
+          "afterValue": 12,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "operation": "consume",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 12,
+          "change": -1,
+          "afterValue": 11,
+          "durationMs": null
+        },
+        {
+          "stream": "resource",
+          "eventId": null,
+          "actionId": "ruby-limit-counter",
+          "frame": 3015,
+          "operation": "gain",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "stateElementId": null,
+          "beforeValue": 11,
+          "change": 1,
+          "afterValue": 12,
+          "durationMs": null
+        }
+      ],
+      "effects": [
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|3333.333|1",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": 18333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|2",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "expiresAtMs": 18333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|3333.333|3",
+          "actionId": "ruby-enhanced-shot-1",
+          "frame": 200,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "expiresAtMs": 18333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|4",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "expiresAtMs": 22166.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|5",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 4,
+          "afterStacks": 5,
+          "expiresAtMs": 22166.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|7166.667|6",
+          "actionId": "ruby-enhanced-shot-2",
+          "frame": 430,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 5,
+          "afterStacks": 6,
+          "expiresAtMs": 22166.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|7",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 26000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|8",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 26000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|11000|9",
+          "actionId": "ruby-enhanced-shot-3",
+          "frame": 660,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 26000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|10",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 29833.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|11",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 29833.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|14833.333|12",
+          "actionId": "ruby-enhanced-shot-4",
+          "frame": 890,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 29833.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|13",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 33666.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|14",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 33666.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|18666.667|15",
+          "actionId": "ruby-enhanced-shot-5",
+          "frame": 1120,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 33666.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|16",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 37500
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|17",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 37500
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|22500|18",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 1350,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 6,
+          "afterStacks": 6,
+          "expiresAtMs": 37500
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|37500|18",
+          "actionId": "ruby-enhanced-shot-6",
+          "frame": 2250,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "expire",
+          "beforeStacks": 6,
+          "afterStacks": null,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_APPLIED|38566.667|1",
+          "actionId": "ruby-ultimate",
+          "frame": 2314,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": 53566.667
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|2",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "expiresAtMs": 60333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|3",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "expiresAtMs": 60333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_REFRESHED|45333.333|4",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 2720,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "apply",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "expiresAtMs": 60333.333
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_APPLIED|55000|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 3300,
+          "effectId": "battle-element:5945053457653544063",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": 71000
+        },
+        {
+          "eventId": "kibo/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_APPLIED|55000|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 3300,
+          "effectId": "battle-element:5945053457653544063",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": 71000
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:4227003560910032429/verified-calculator|EFFECT_EXPIRED|60333.333|4",
+          "actionId": "ruby-post-ultimate-shot",
+          "frame": 3620,
+          "effectId": "battle-element:4227003560910032429",
+          "operation": "expire",
+          "beforeStacks": 4,
+          "afterStacks": null,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "actor/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|65900|1",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3954,
+          "effectId": "tuning-mark:250:persistent",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "kibo/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|65900|1",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 3954,
+          "effectId": "tuning-mark:250:persistent",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_EXPIRED|71000|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 4260,
+          "effectId": "battle-element:5945053457653544063",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "kibo/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_EXPIRED|71000|1",
+          "actionId": "fire-kibo-signature",
+          "frame": 4260,
+          "effectId": "battle-element:5945053457653544063",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "actor/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|85900|1",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 5154,
+          "effectId": "tuning-mark:250:persistent",
+          "operation": "remove",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "expiresAtMs": null
+        },
+        {
+          "eventId": "kibo/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|85900|1",
+          "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "frame": 5154,
+          "effectId": "tuning-mark:250:persistent",
+          "operation": "remove",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "expiresAtMs": null
+        }
+      ]
+    },
+    "summaryHash": "d0b3a7e403c69478936b9219488fcd872ea1b9edcc63ae8aa56172ea286f819f"
+  },
+  "expected": {
+    "exact": {
+      "project.durationMs": 120000,
+      "project.actionCount": 15,
+      "project.teamCharacterIds": [
+        103002,
+        101010,
+        101003
+      ],
+      "actions.blockedActionIds": [
+        "ruby-insufficient-shot"
+      ],
+      "actions.selectionByActionId.ruby-reload.semanticName": "重击",
+      "actions.selectionByActionId.ruby-reload.controlSkillId": 10300210,
+      "actions.selectionByActionId.ruby-reload.subSkillIndex": 0,
+      "actions.selectionByActionId.ruby-reload.actualDurationFrames": 38,
+      "actions.selectionByActionId.ruby-enhanced-shot-1.semanticName": "强化普攻 A1",
+      "actions.selectionByActionId.ruby-enhanced-shot-1.controlSkillId": 10300201,
+      "actions.selectionByActionId.ruby-enhanced-shot-1.subSkillIndex": 1,
+      "actions.selectionByActionId.ruby-enhanced-shot-1.actualDurationFrames": 24,
+      "actions.selectionByActionId.ruby-enhanced-shot-2.semanticName": "强化普攻 A2",
+      "actions.selectionByActionId.ruby-enhanced-shot-2.subSkillIndex": 2,
+      "actions.selectionByActionId.ruby-enhanced-shot-3.semanticName": "强化普攻 A3",
+      "actions.selectionByActionId.ruby-enhanced-shot-3.subSkillIndex": 3,
+      "actions.selectionByActionId.ruby-enhanced-shot-3.actualDurationFrames": 32,
+      "actions.selectionByActionId.ruby-enhanced-shot-4.semanticName": "强化普攻 A4",
+      "actions.selectionByActionId.ruby-enhanced-shot-4.controlSkillId": 10300202,
+      "actions.selectionByActionId.ruby-enhanced-shot-4.subSkillIndex": 1,
+      "actions.selectionByActionId.ruby-enhanced-shot-5.semanticName": "强化普攻 A5",
+      "actions.selectionByActionId.ruby-enhanced-shot-5.subSkillIndex": 2,
+      "actions.selectionByActionId.ruby-enhanced-shot-6.semanticName": "强化普攻 A6",
+      "actions.selectionByActionId.ruby-enhanced-shot-6.subSkillIndex": 3,
+      "actions.selectionByActionId.ruby-enhanced-shot-6.actualDurationFrames": 32,
+      "actions.selectionByActionId.ruby-post-ultimate-shot.semanticName": "强化普攻 A1",
+      "actions.selectionByActionId.ruby-post-ultimate-shot.subSkillIndex": 1,
+      "actions.selectionByActionId.ruby-star-skill.controlSkillId": 10300212,
+      "actions.selectionByActionId.ruby-star-skill.actualDurationFrames": 204,
+      "actions.selectionByActionId.ruby-ultimate.controlSkillId": 10300213,
+      "actions.selectionByActionId.ruby-ultimate.actualDurationFrames": 329,
+      "actions.selectionByActionId.ruby-limit-counter.controlSkillId": 10300225,
+      "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
+      "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
+      "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
+      "combat.damageEventCount": 214,
+      "combat.ownerDamageEventCount": 96,
+      "combat.ownerHitEventCount": 96,
+      "combat.ownerTotalHpDamage": 8156,
+      "combat.ownerTotalToughnessDamage": 5582,
+      "combat.enemy.initialHp": 862800,
+      "combat.enemy.finalHp": 851035,
+      "resources.specialResourceTrace.0.actionId": "ruby-reload",
+      "resources.specialResourceTrace.0.frame": 24,
+      "resources.specialResourceTrace.0.beforeValue": 0,
+      "resources.specialResourceTrace.0.change": 6,
+      "resources.specialResourceTrace.0.afterValue": 6,
+      "resources.specialResourceTrace.1.actionId": "ruby-enhanced-shot-1",
+      "resources.specialResourceTrace.1.beforeValue": 6,
+      "resources.specialResourceTrace.1.afterValue": 5,
+      "resources.specialResourceTrace.6.actionId": "ruby-enhanced-shot-6",
+      "resources.specialResourceTrace.6.beforeValue": 1,
+      "resources.specialResourceTrace.6.change": -1,
+      "resources.specialResourceTrace.6.afterValue": 0,
+      "resources.specialResourceTrace.7.actionId": "ruby-ultimate",
+      "resources.specialResourceTrace.7.frame": 2313,
+      "resources.specialResourceTrace.7.change": 12,
+      "resources.specialResourceTrace.7.afterValue": 12,
+      "resources.specialResourceTrace.8.actionId": "ruby-post-ultimate-shot",
+      "resources.specialResourceTrace.8.beforeValue": 12,
+      "resources.specialResourceTrace.8.afterValue": 11,
+      "resources.specialResourceTrace.9.actionId": "ruby-limit-counter",
+      "resources.specialResourceTrace.9.frame": 3015,
+      "resources.specialResourceTrace.9.change": 1,
+      "resources.specialResourceTrace.9.afterValue": 12,
+      "resources.actorSpByActorId.actor-103002.initialValue": 100,
+      "resources.actorSpByActorId.actor-103002.currentValue": 17.469559,
+      "resources.actorSpByActorId.actor-103002.autoRecovery.0.reason": "verified-auto-sp-background",
+      "resources.actorSpByActorId.actor-103002.autoRecovery.0.totalChange": 0.5203,
+      "resources.actorSpByActorId.actor-103002.autoRecovery.1.reason": "verified-auto-sp-foreground",
+      "resources.actorSpByActorId.actor-103002.autoRecovery.1.totalChange": 16.329152,
+      "resources.actorSpByActorId.actor-103002.actionTransactions.0.actionId": "ruby-ultimate",
+      "resources.actorSpByActorId.actor-103002.actionTransactions.0.change": -100,
+      "resources.actorSpByActorId.actor-101010.currentValue": 13.548798,
+      "resources.actorSpByActorId.actor-101003.currentValue": 13.02771,
+      "resources.kiboSpBySlotId.team-slot-1.kiboId": 500039,
+      "resources.kiboSpBySlotId.team-slot-1.initialValue": 100,
+      "resources.kiboSpBySlotId.team-slot-1.currentValue": 13.559189,
+      "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.actionId": "fire-kibo-signature",
+      "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.change": -100,
+      "effects.passiveMaxStacks": 6,
+      "effects.firstPassiveMaxStackFrame": 430,
+      "effects.passiveTrace.0.actionId": "ruby-enhanced-shot-1",
+      "effects.passiveTrace.0.afterStacks": 1,
+      "effects.passiveTrace.5.afterStacks": 6,
+      "effects.passiveTrace.5.expiresAtMs": 22166.667,
+      "effects.passiveTrace.18.operation": "expire",
+      "effects.passiveTrace.18.frame": 2250,
+      "effects.passiveTrace.19.actionId": "ruby-ultimate",
+      "effects.passiveTrace.19.afterStacks": 1,
+      "effects.passiveTrace.23.operation": "expire",
+      "effects.passiveTrace.23.frame": 3620,
+      "dynamicProperties.ownerSources.0.attributeId": 229,
+      "dynamicProperties.ownerSources.0.dynamicExtraRaw": 120,
+      "comparison.primaryDamage": 441,
+      "comparison.baselineDamage": 189,
+      "comparison.damageDelta": 252
+    },
+    "greaterThan": {
+      "combat.ownerTotalHpDamage": 0,
+      "combat.ownerTotalToughnessDamage": 0,
+      "resources.actorSpByActorId.actor-103002.currentValue": 0,
+      "resources.kiboSpBySlotId.team-slot-1.currentValue": 0,
+      "comparison.damageDelta": 0
+    }
+  },
+  "validation": {
+    "status": "authoritative-golden-runtime-expectation-passed",
+    "passed": true,
+    "assertionCount": 102,
+    "failedCount": 0,
+    "assertions": [
+      {
+        "jsonPath": "project.durationMs",
+        "operator": "exact",
+        "expected": 120000,
+        "actual": 120000,
+        "passed": true
+      },
+      {
+        "jsonPath": "project.actionCount",
+        "operator": "exact",
+        "expected": 15,
+        "actual": 15,
+        "passed": true
+      },
+      {
+        "jsonPath": "project.teamCharacterIds",
+        "operator": "exact",
+        "expected": [
+          103002,
+          101010,
+          101003
+        ],
+        "actual": [
+          103002,
+          101010,
+          101003
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.blockedActionIds",
+        "operator": "exact",
+        "expected": [
+          "ruby-insufficient-shot"
+        ],
+        "actual": [
+          "ruby-insufficient-shot"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-reload.semanticName",
+        "operator": "exact",
+        "expected": "重击",
+        "actual": "重击",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-reload.controlSkillId",
+        "operator": "exact",
+        "expected": 10300210,
+        "actual": 10300210,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-reload.subSkillIndex",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-reload.actualDurationFrames",
+        "operator": "exact",
+        "expected": 38,
+        "actual": 38,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-1.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A1",
+        "actual": "强化普攻 A1",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-1.controlSkillId",
+        "operator": "exact",
+        "expected": 10300201,
+        "actual": 10300201,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-1.subSkillIndex",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-1.actualDurationFrames",
+        "operator": "exact",
+        "expected": 24,
+        "actual": 24,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-2.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A2",
+        "actual": "强化普攻 A2",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-2.subSkillIndex",
+        "operator": "exact",
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-3.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A3",
+        "actual": "强化普攻 A3",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-3.subSkillIndex",
+        "operator": "exact",
+        "expected": 3,
+        "actual": 3,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-3.actualDurationFrames",
+        "operator": "exact",
+        "expected": 32,
+        "actual": 32,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-4.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A4",
+        "actual": "强化普攻 A4",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-4.controlSkillId",
+        "operator": "exact",
+        "expected": 10300202,
+        "actual": 10300202,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-4.subSkillIndex",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-5.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A5",
+        "actual": "强化普攻 A5",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-5.subSkillIndex",
+        "operator": "exact",
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-6.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A6",
+        "actual": "强化普攻 A6",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-6.subSkillIndex",
+        "operator": "exact",
+        "expected": 3,
+        "actual": 3,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-enhanced-shot-6.actualDurationFrames",
+        "operator": "exact",
+        "expected": 32,
+        "actual": 32,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-post-ultimate-shot.semanticName",
+        "operator": "exact",
+        "expected": "强化普攻 A1",
+        "actual": "强化普攻 A1",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-post-ultimate-shot.subSkillIndex",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-star-skill.controlSkillId",
+        "operator": "exact",
+        "expected": 10300212,
+        "actual": 10300212,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-star-skill.actualDurationFrames",
+        "operator": "exact",
+        "expected": 204,
+        "actual": 204,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-ultimate.controlSkillId",
+        "operator": "exact",
+        "expected": 10300213,
+        "actual": 10300213,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-ultimate.actualDurationFrames",
+        "operator": "exact",
+        "expected": 329,
+        "actual": 329,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-limit-counter.controlSkillId",
+        "operator": "exact",
+        "expected": 10300225,
+        "actual": 10300225,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames",
+        "operator": "exact",
+        "expected": 35,
+        "actual": 35,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId",
+        "operator": "exact",
+        "expected": 10300221,
+        "actual": 10300221,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames",
+        "operator": "exact",
+        "expected": 93,
+        "actual": 93,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.damageEventCount",
+        "operator": "exact",
+        "expected": 214,
+        "actual": 214,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerDamageEventCount",
+        "operator": "exact",
+        "expected": 96,
+        "actual": 96,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitEventCount",
+        "operator": "exact",
+        "expected": 96,
+        "actual": 96,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerTotalHpDamage",
+        "operator": "exact",
+        "expected": 8156,
+        "actual": 8156,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerTotalToughnessDamage",
+        "operator": "exact",
+        "expected": 5582,
+        "actual": 5582,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.enemy.initialHp",
+        "operator": "exact",
+        "expected": 862800,
+        "actual": 862800,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.enemy.finalHp",
+        "operator": "exact",
+        "expected": 851035,
+        "actual": 851035,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.0.actionId",
+        "operator": "exact",
+        "expected": "ruby-reload",
+        "actual": "ruby-reload",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.0.frame",
+        "operator": "exact",
+        "expected": 24,
+        "actual": 24,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.0.beforeValue",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.0.change",
+        "operator": "exact",
+        "expected": 6,
+        "actual": 6,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.0.afterValue",
+        "operator": "exact",
+        "expected": 6,
+        "actual": 6,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.1.actionId",
+        "operator": "exact",
+        "expected": "ruby-enhanced-shot-1",
+        "actual": "ruby-enhanced-shot-1",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.1.beforeValue",
+        "operator": "exact",
+        "expected": 6,
+        "actual": 6,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.1.afterValue",
+        "operator": "exact",
+        "expected": 5,
+        "actual": 5,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.6.actionId",
+        "operator": "exact",
+        "expected": "ruby-enhanced-shot-6",
+        "actual": "ruby-enhanced-shot-6",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.6.beforeValue",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.6.change",
+        "operator": "exact",
+        "expected": -1,
+        "actual": -1,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.6.afterValue",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.7.actionId",
+        "operator": "exact",
+        "expected": "ruby-ultimate",
+        "actual": "ruby-ultimate",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.7.frame",
+        "operator": "exact",
+        "expected": 2313,
+        "actual": 2313,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.7.change",
+        "operator": "exact",
+        "expected": 12,
+        "actual": 12,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.7.afterValue",
+        "operator": "exact",
+        "expected": 12,
+        "actual": 12,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.8.actionId",
+        "operator": "exact",
+        "expected": "ruby-post-ultimate-shot",
+        "actual": "ruby-post-ultimate-shot",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.8.beforeValue",
+        "operator": "exact",
+        "expected": 12,
+        "actual": 12,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.8.afterValue",
+        "operator": "exact",
+        "expected": 11,
+        "actual": 11,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.9.actionId",
+        "operator": "exact",
+        "expected": "ruby-limit-counter",
+        "actual": "ruby-limit-counter",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.9.frame",
+        "operator": "exact",
+        "expected": 3015,
+        "actual": 3015,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.9.change",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.specialResourceTrace.9.afterValue",
+        "operator": "exact",
+        "expected": 12,
+        "actual": 12,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.initialValue",
+        "operator": "exact",
+        "expected": 100,
+        "actual": 100,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.currentValue",
+        "operator": "exact",
+        "expected": 17.469559,
+        "actual": 17.469559,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.autoRecovery.0.reason",
+        "operator": "exact",
+        "expected": "verified-auto-sp-background",
+        "actual": "verified-auto-sp-background",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.autoRecovery.0.totalChange",
+        "operator": "exact",
+        "expected": 0.5203,
+        "actual": 0.5203,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.autoRecovery.1.reason",
+        "operator": "exact",
+        "expected": "verified-auto-sp-foreground",
+        "actual": "verified-auto-sp-foreground",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.autoRecovery.1.totalChange",
+        "operator": "exact",
+        "expected": 16.329152,
+        "actual": 16.329152,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.actionTransactions.0.actionId",
+        "operator": "exact",
+        "expected": "ruby-ultimate",
+        "actual": "ruby-ultimate",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.actionTransactions.0.change",
+        "operator": "exact",
+        "expected": -100,
+        "actual": -100,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-101010.currentValue",
+        "operator": "exact",
+        "expected": 13.548798,
+        "actual": 13.548798,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-101003.currentValue",
+        "operator": "exact",
+        "expected": 13.02771,
+        "actual": 13.02771,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.kiboSpBySlotId.team-slot-1.kiboId",
+        "operator": "exact",
+        "expected": 500039,
+        "actual": 500039,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.kiboSpBySlotId.team-slot-1.initialValue",
+        "operator": "exact",
+        "expected": 100,
+        "actual": 100,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.kiboSpBySlotId.team-slot-1.currentValue",
+        "operator": "exact",
+        "expected": 13.559189,
+        "actual": 13.559189,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.actionId",
+        "operator": "exact",
+        "expected": "fire-kibo-signature",
+        "actual": "fire-kibo-signature",
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.kiboSpBySlotId.team-slot-1.actionTransactions.0.change",
+        "operator": "exact",
+        "expected": -100,
+        "actual": -100,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveMaxStacks",
+        "operator": "exact",
+        "expected": 6,
+        "actual": 6,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.firstPassiveMaxStackFrame",
+        "operator": "exact",
+        "expected": 430,
+        "actual": 430,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.0.actionId",
+        "operator": "exact",
+        "expected": "ruby-enhanced-shot-1",
+        "actual": "ruby-enhanced-shot-1",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.0.afterStacks",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.5.afterStacks",
+        "operator": "exact",
+        "expected": 6,
+        "actual": 6,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.5.expiresAtMs",
+        "operator": "exact",
+        "expected": 22166.667,
+        "actual": 22166.667,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.18.operation",
+        "operator": "exact",
+        "expected": "expire",
+        "actual": "expire",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.18.frame",
+        "operator": "exact",
+        "expected": 2250,
+        "actual": 2250,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.19.actionId",
+        "operator": "exact",
+        "expected": "ruby-ultimate",
+        "actual": "ruby-ultimate",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.19.afterStacks",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.23.operation",
+        "operator": "exact",
+        "expected": "expire",
+        "actual": "expire",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.23.frame",
+        "operator": "exact",
+        "expected": 3620,
+        "actual": 3620,
+        "passed": true
+      },
+      {
+        "jsonPath": "dynamicProperties.ownerSources.0.attributeId",
+        "operator": "exact",
+        "expected": 229,
+        "actual": 229,
+        "passed": true
+      },
+      {
+        "jsonPath": "dynamicProperties.ownerSources.0.dynamicExtraRaw",
+        "operator": "exact",
+        "expected": 120,
+        "actual": 120,
+        "passed": true
+      },
+      {
+        "jsonPath": "comparison.primaryDamage",
+        "operator": "exact",
+        "expected": 441,
+        "actual": 441,
+        "passed": true
+      },
+      {
+        "jsonPath": "comparison.baselineDamage",
+        "operator": "exact",
+        "expected": 189,
+        "actual": 189,
+        "passed": true
+      },
+      {
+        "jsonPath": "comparison.damageDelta",
+        "operator": "exact",
+        "expected": 252,
+        "actual": 252,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerTotalHpDamage",
+        "operator": "greater-than",
+        "expected": 0,
+        "actual": 8156,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerTotalToughnessDamage",
+        "operator": "greater-than",
+        "expected": 0,
+        "actual": 5582,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.actorSpByActorId.actor-103002.currentValue",
+        "operator": "greater-than",
+        "expected": 0,
+        "actual": 17.469559,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.kiboSpBySlotId.team-slot-1.currentValue",
+        "operator": "greater-than",
+        "expected": 0,
+        "actual": 13.559189,
+        "passed": true
+      },
+      {
+        "jsonPath": "comparison.damageDelta",
+        "operator": "greater-than",
+        "expected": 0,
+        "actual": 252,
+        "passed": true
+      }
+    ]
+  },
+  "replayHash": "f9c56c0806607f36c69552a2d2a11a1a4388cd63ebf26a79e3e2621f67cef785",
+  "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
+}

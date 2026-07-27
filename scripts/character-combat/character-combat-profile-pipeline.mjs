@@ -423,6 +423,7 @@ export function createCharacterCombatOwnerArtifacts({
     ownerId,
     publicActions,
     controls,
+    resourceTransactions,
     ownerContextEdges,
     ownerVariantEdges,
     passives,
@@ -1013,7 +1014,7 @@ function createCoverage(input) {
         ...input.resourceTransactions,
         ...input.thresholdTransitions,
       ],
-      item => item.applied === true,
+      item => item.applied === true || item.status === 'not-applicable',
       item => item.reasons
     ),
     teamResourcesAndMarks: input.mechanicsPackage.tuningMechanicsCatalog
@@ -1837,6 +1838,7 @@ function createUnresolvedLedger({
   ownerId,
   publicActions,
   controls,
+  resourceTransactions,
   ownerContextEdges,
   ownerVariantEdges,
   passives,
@@ -1901,6 +1903,23 @@ function createUnresolvedLedger({
         sourceIdentity: effect.sourceIdentity,
       });
     }
+  }
+  for (const transaction of resourceTransactions ?? []) {
+    if (transaction.applied) continue;
+    if (transaction.status === 'not-applicable') {
+      append({
+        identity: transaction.operationIdentity,
+        sourceKind: 'special-resource-transaction',
+        reasons: transaction.reasons,
+        sourceIdentity:
+          transaction.classificationSourceIdentity ??
+          transaction.sourceIdentity,
+        forcedStatus: 'not-applicable',
+      });
+      continue;
+    }
+    // Unresolved operations originate from the same raw effect already recorded
+    // above. Recipe-level records carry any resource-specific product gap once.
   }
   for (const edge of [...ownerContextEdges, ...ownerVariantEdges]) {
     if (edge.applied) continue;
@@ -1979,6 +1998,15 @@ function createUnresolvedLedger({
       reasons: [item.reason],
       sourceIdentity: item.sourceIdentity,
       forcedStatus: 'not-applicable',
+    });
+  }
+  for (const item of recipe.unresolvedRecords ?? []) {
+    append({
+      identity: item.identity,
+      sourceKind: item.sourceKind,
+      reasons: item.reasons,
+      sourceIdentity: item.sourceIdentity,
+      forcedStatus: item.status,
     });
   }
   const rawRecords = dedupeBy(
@@ -2139,7 +2167,11 @@ function createGoldenFixture({ ownerId, goldenRuntime, sourcePackageHash }) {
     throw new Error(
       `authoritative golden runtime failed for ${ownerId}: ${
         goldenRuntime.validation?.failedCount ?? 'unknown'
-      }`
+      } ${JSON.stringify(
+        goldenRuntime.validation?.assertions
+          ?.filter?.(assertion => !assertion.passed)
+          .slice(0, 5) ?? []
+      )}`
     );
   }
   return {

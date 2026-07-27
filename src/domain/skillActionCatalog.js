@@ -3,6 +3,7 @@ import {
   createSkillLogicModel,
   resolveSkillCooldownSource,
 } from './skillLogicModel';
+import { getVerifiedCombatActionMapping } from '../data/verifiedCombatMechanicsPackage';
 
 export const AZPR_ACTION_KIND_ORDER = Object.freeze([
   'normal-attack',
@@ -74,6 +75,10 @@ export function getSkillActionCatalog(skills = [], level = 1) {
 }
 
 export function inferCatalogActionKind(variant, skill = {}) {
+  const declaration = resolveVerifiedCatalogActionDeclaration(variant, skill);
+  if (declaration?.actionKind) {
+    return declaration.actionKind;
+  }
   const label = normalizeLabel(variant?.label);
   const displayLabel = normalizeLabel(variant?.displayLabel);
   const displayName = normalizeLabel(skill?.displayName);
@@ -113,6 +118,35 @@ export function inferCatalogActionKind(variant, skill = {}) {
   }
 
   return null;
+}
+
+export function resolveVerifiedCatalogActionDeclaration(variant, skill = {}) {
+  const characterId = Number(skill.characterId);
+  const skillId = Number(skill.id);
+  const actionVariantIndex = Number(variant?.index);
+  if (
+    !Number.isInteger(characterId) ||
+    !Number.isInteger(skillId) ||
+    !Number.isInteger(actionVariantIndex)
+  ) {
+    return null;
+  }
+  const mapping = getVerifiedCombatActionMapping({
+    actorCharacterId: characterId,
+    skillId,
+    actionVariantIndex,
+  });
+  if (!mapping?.catalogDeclaration) return null;
+  return {
+    actionKind: mapping.actionKind,
+    label:
+      mapping.catalogDeclaration.catalogLabel ??
+      AZPR_ACTION_KIND_LABELS[mapping.actionKind] ??
+      null,
+    sourceIdentity: mapping.catalogDeclaration.sourceIdentity ?? null,
+    sourceStatus: mapping.catalogDeclaration.sourceStatus ?? null,
+    mappingIdentity: mapping.identity,
+  };
 }
 
 function dedupeActionEntries(entries) {

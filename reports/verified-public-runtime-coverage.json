@@ -3,9 +3,9 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "3f244b28957782d8cdafe04be6ecbd5fb7ccf937a31ed825caf5f1c88bfaf4aa",
+  "packageHash": "a4fdcee2276ebc960d0d4a28887bf1cc8f048546f7d29a431dc4a29e277a7c44",
   "fixedProductDenominator": {
-    "publicActionCount": 562,
+    "publicActionCount": 563,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122
   },
@@ -24,11 +24,11 @@
     }
   },
   "summary": {
-    "publicActionCount": 562,
+    "publicActionCount": 563,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "runnableActionCount": 455,
-    "sourceAppliedActionCount": 403,
+    "runnableActionCount": 456,
+    "sourceAppliedActionCount": 404,
     "sourceRuntimeDependentActionCount": 52,
     "sourceStaticEvidenceGapActionCount": 107,
     "scenarioResolvedActionCount": 62,
@@ -54,69 +54,69 @@
       "hp": {
         "nonzero": 936,
         "verified-zero": 0,
-        "unresolved": 2099
+        "unresolved": 2118
       },
       "toughness": {
         "nonzero": 936,
         "verified-zero": 0,
-        "unresolved": 2099
+        "unresolved": 2118
       },
       "actorSp": {
         "nonzero": 266,
         "verified-zero": 712,
-        "unresolved": 2057
+        "unresolved": 2076
       },
       "kiboSp": {
         "nonzero": 266,
         "verified-zero": 712,
-        "unresolved": 2057
+        "unresolved": 2076
       }
     },
     "effectDimensions": {
       "damage": {
         "unresolved": 497,
-        "verified-zero": 3338
+        "verified-zero": 3354
       },
       "toughness": {
-        "verified-zero": 3835
+        "verified-zero": 3851
       },
       "sp": {
         "unresolved": 104,
-        "verified-zero": 3731
+        "verified-zero": 3747
       },
       "hp": {
         "unresolved": 62,
-        "verified-zero": 3773
+        "verified-zero": 3789
       },
       "shield": {
         "unresolved": 10,
-        "verified-zero": 3825
+        "verified-zero": 3841
       },
       "dynamicProperty": {
         "applied": 50,
         "unresolved": 1071,
-        "verified-zero": 2714
+        "verified-zero": 2730
       },
       "mark": {
         "applied": 137,
         "unresolved": 425,
-        "verified-zero": 3273
+        "verified-zero": 3289
       }
     },
     "semanticEffects": {
-      "total": 3559,
+      "total": 3575,
       "gameplay": 1816,
       "applied": 397,
       "verifiedZero": 2,
       "unresolved": 1417
     },
     "timing": {
-      "appliedActionCount": 554,
-      "unresolvedActionCount": 8,
+      "appliedActionCount": 552,
+      "unresolvedActionCount": 11,
       "appliedAttackInputSegmentCount": 78,
       "unresolvedAttackInputSegmentCount": 17,
-      "appliedPublicVariantCount": 554,
-      "unresolvedPublicVariantCount": 38,
+      "appliedPublicVariantCount": 552,
+      "unresolvedPublicVariantCount": 41,
       "oneFrameCount": 0,
       "abnormalLongCount": 5,
       "unresolvedReasonCounts": {
@@ -124,15 +124,16 @@
         "next-control-event-bridge-window-unavailable": 13,
         "normal-attack-input-segment-duration-unresolved": 8,
         "selected-control-player-variant-duration-unresolved": 16,
-        "skill-control-player-variant-missing": 1
+        "skill-control-player-variant-missing": 1,
+        "verified-action-effective-occupancy-window-unresolved": 3
       },
       "schedulingKindCounts": {
-        "exact-selected-variant-occupancy": 632,
+        "exact-selected-variant-occupancy": 630,
         "generic-planning-duration": 1,
-        "source-animation-planning-duration": 24
+        "source-animation-planning-duration": 27
       },
-      "exactSelectedVariantOccupancyCount": 632,
-      "sourceAnimationPlanningDurationCount": 24,
+      "exactSelectedVariantOccupancyCount": 630,
+      "sourceAnimationPlanningDurationCount": 27,
       "genericPlanningDurationCount": 1,
       "unresolvedControlIdentityCount": 1,
       "variantModelStatusCounts": {
@@ -140,59 +141,60 @@
         "resolved": 491,
         "static-evidence-gap": 4,
         "unresolved-control-identity": 1,
-        "variant-condition-not-yet-modeled": 153
+        "variant-condition-not-yet-modeled": 154
       },
       "variantConditionDiscoveryStatusCounts": {
         "partially-resolved": 6,
         "resolved": 2,
         "static-evidence-gap": 4,
-        "variant-condition-not-yet-modeled": 142
+        "variant-condition-not-yet-modeled": 143
       },
-      "variantConditionFocusCount": 22
+      "variantConditionFocusCount": 23
     },
     "actionVariantsAndResources": {
       "profileCount": 2,
       "appliedProfileCount": 2,
       "operationCount": 71,
       "appliedOperationCount": 43,
-      "unresolvedOperationCount": 28,
+      "unresolvedOperationCount": 8,
       "unresolvedOwnerCount": 1,
+      "notApplicableOperationCount": 20,
       "thresholdTransitionCount": 1,
-      "passiveEffectCount": 1,
-      "appliedPassiveEffectCount": 1,
+      "passiveEffectCount": 2,
+      "appliedPassiveEffectCount": 2,
       "ownerCount": 142,
-      "nodeCount": 671,
+      "nodeCount": 673,
       "edgeCount": 337,
       "appliedEdgeCount": 93,
       "unresolvedEdgeCount": 244,
       "resourceConditionEdgeCount": 259,
       "modeledOwnerCount": 4,
       "automaticEdgeCount": 0,
-      "conditionDiscoveryCount": 154,
+      "conditionDiscoveryCount": 155,
       "conditionDiscoveryStatusCounts": {
         "partially-resolved": 6,
         "resolved": 2,
         "static-evidence-gap": 4,
-        "variant-condition-not-yet-modeled": 142
+        "variant-condition-not-yet-modeled": 143
       },
-      "derivedControlContractCount": 136,
+      "derivedControlContractCount": 137,
       "derivedControlOwnerCount": 20,
       "derivedControlSourceCounts": {
         "combined": 11,
-        "input-controlled": 107,
+        "input-controlled": 108,
         "not-yet-modeled": 17,
         "state-controlled": 1
       },
       "derivedControlResolutionStatusCounts": {
         "applied": 5,
         "not-yet-modeled": 31,
-        "partially-resolved": 97,
+        "partially-resolved": 98,
         "static-evidence-gap": 3
       },
       "contextEdgeCount": 7,
       "appliedContextEdgeCount": 7,
       "publicActionFormCount": 5,
-      "attackInputChainCount": 2,
+      "attackInputChainCount": 4,
       "hiddenInputAuditRowCount": 86,
       "hiddenInputPublicExecutionFormCount": 21
     }
@@ -201,14 +203,14 @@
     {
       "ownerKind": "actor",
       "actionKind": "charged-attack",
-      "actionCount": 19,
+      "actionCount": 20,
       "runtimeStatusCounts": {
-        "runnable": 13,
+        "runnable": 14,
         "runtime-and-evidence-gap": 2,
         "static-evidence-gap": 4
       },
       "timingStatusCounts": {
-        "applied": 19
+        "applied": 20
       }
     },
     {
@@ -220,7 +222,8 @@
         "runtime-and-evidence-gap": 4
       },
       "timingStatusCounts": {
-        "applied": 20
+        "applied": 19,
+        "unresolved": 1
       }
     },
     {
@@ -256,7 +259,8 @@
         "static-evidence-gap": 20
       },
       "timingStatusCounts": {
-        "applied": 20
+        "applied": 19,
+        "unresolved": 1
       }
     },
     {
@@ -304,7 +308,8 @@
         "static-evidence-gap": 2
       },
       "timingStatusCounts": {
-        "applied": 20
+        "applied": 19,
+        "unresolved": 1
       }
     },
     {
@@ -1384,11 +1389,11 @@
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "mechanicsClassification": "unresolved",
       "timing": {
-        "status": "applied",
-        "durationFrames": 204,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
+        "status": "unresolved",
+        "durationFrames": null,
+        "sourceKind": "unresolved-action-occupancy",
+        "schedulingKind": "source-animation-planning-duration",
+        "planningDurationFrames": 204,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -1437,7 +1442,8 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
@@ -1459,8 +1465,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 484,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 329,
+        "sourceKind": "verified-specific-input-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -32459,11 +32465,11 @@
       "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
-        "status": "applied",
-        "durationFrames": 241,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
+        "status": "unresolved",
+        "durationFrames": null,
+        "sourceKind": "unresolved-action-occupancy",
+        "schedulingKind": "source-animation-planning-duration",
+        "planningDurationFrames": 241,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -32503,7 +32509,9 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "reasons": [],
+      "reasons": [
+        "verified-action-effective-occupancy-window-unresolved"
+      ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=204]"
     },
     {
@@ -32524,8 +32532,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 140,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 55,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -32598,11 +32606,11 @@
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "mechanicsClassification": "unresolved",
       "timing": {
-        "status": "applied",
-        "durationFrames": 204,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
+        "status": "unresolved",
+        "durationFrames": null,
+        "sourceKind": "unresolved-action-occupancy",
+        "schedulingKind": "source-animation-planning-duration",
+        "planningDurationFrames": 204,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -32651,7 +32659,8 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
@@ -32673,8 +32682,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 278,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 57,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -32739,8 +32748,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 484,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 329,
+        "sourceKind": "verified-specific-input-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -32824,8 +32833,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 225,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 93,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
@@ -32903,8 +32912,8 @@
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 141,
-        "sourceKind": "skill-control-player-action-range",
+        "durationFrames": 35,
+        "sourceKind": "verified-unconditional-attack-reopen-window",
         "schedulingKind": "exact-selected-variant-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "static-evidence-gap"
@@ -32977,11 +32986,11 @@
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "mechanicsClassification": "unresolved",
       "timing": {
-        "status": "applied",
-        "durationFrames": 175,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
+        "status": "unresolved",
+        "durationFrames": null,
+        "sourceKind": "unresolved-action-occupancy",
+        "schedulingKind": "source-animation-planning-duration",
+        "planningDurationFrames": 175,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -33022,7 +33031,8 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap"
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=209]"
     },
@@ -67845,6 +67855,80 @@
       },
       "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500470].actions[skillId=50047007].skillId"
+    },
+    {
+      "identity": "actor|103002|10300201|1|10300210",
+      "ownerKind": "actor",
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "actionKind": "charged-attack",
+      "sourceSkillId": 10300201,
+      "sourceSkillName": "灵感的火花",
+      "controlSkillId": 10300210,
+      "selectedSubSkillIndex": 0,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
+      "timing": {
+        "status": "applied",
+        "durationFrames": 38,
+        "sourceKind": "verified-specific-input-window",
+        "schedulingKind": "exact-selected-variant-occupancy",
+        "planningDurationFrames": null,
+        "variantModelStatus": "variant-condition-not-yet-modeled"
+      },
+      "variants": {
+        "status": "partially-applied",
+        "total": 52,
+        "applied": 8,
+        "unresolved": 44
+      },
+      "specialResource": {
+        "status": "applied",
+        "resourceIdentity": "actor:103002:element:103002047",
+        "capacity": 12
+      },
+      "dimensions": {
+        "enemyHp": {
+          "unresolved": 19
+        },
+        "enemyToughness": {
+          "unresolved": 19
+        },
+        "actorSp": {
+          "unresolved": 19
+        },
+        "kiboSp": {
+          "unresolved": 19
+        },
+        "healing": {
+          "verified-zero": 8
+        },
+        "shield": {
+          "verified-zero": 8
+        },
+        "dynamicProperty": {
+          "verified-zero": 8
+        },
+        "tuningMark": {
+          "verified-zero": 8
+        }
+      },
+      "semanticEffects": {
+        "total": 0,
+        "applied": 0,
+        "verifiedZero": 0,
+        "unresolved": 0
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing"
+      ],
+      "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
     }
   ],
   "unresolvedActions": [
@@ -68283,11 +68367,11 @@
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "mechanicsClassification": "unresolved",
       "timing": {
-        "status": "applied",
-        "durationFrames": 204,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
+        "status": "unresolved",
+        "durationFrames": null,
+        "sourceKind": "unresolved-action-occupancy",
+        "schedulingKind": "source-animation-planning-duration",
+        "planningDurationFrames": 204,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -68336,7 +68420,8 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
@@ -68357,11 +68442,11 @@
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "mechanicsClassification": "unresolved",
       "timing": {
-        "status": "applied",
-        "durationFrames": 175,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
+        "status": "unresolved",
+        "durationFrames": null,
+        "sourceKind": "unresolved-action-occupancy",
+        "schedulingKind": "source-animation-planning-duration",
+        "planningDurationFrames": 175,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -68402,7 +68487,8 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap"
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=209]"
     },

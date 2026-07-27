@@ -4,7 +4,7 @@ import coverage from '../../../reports/verified-public-runtime-coverage.json';
 describe('M9 public runtime coverage', () => {
   it('guards the fixed public action, actor, and kibo denominator', () => {
     expect(coverage.fixedProductDenominator).toEqual({
-      publicActionCount: 562,
+      publicActionCount: 563,
       actorOwnerCount: 20,
       kiboOwnerCount: 122,
     });
@@ -22,9 +22,9 @@ describe('M9 public runtime coverage', () => {
         everyNonzeroRecoveryElementScoped: true,
       }),
     });
-    expect(coverage.actions).toHaveLength(562);
+    expect(coverage.actions).toHaveLength(563);
     expect(new Set(coverage.actions.map(action => action.identity)).size).toBe(
-      562
+      563
     );
     expect(coverage.actorCoreActions).toHaveLength(60);
     expect(coverage.kiboCoreActions).toHaveLength(366);
@@ -32,8 +32,8 @@ describe('M9 public runtime coverage', () => {
 
   it('keeps every unresolved public action explicit and source-scoped', () => {
     expect(coverage.summary).toMatchObject({
-      runnableActionCount: 455,
-      sourceAppliedActionCount: 403,
+      runnableActionCount: 456,
+      sourceAppliedActionCount: 404,
       sourceRuntimeDependentActionCount: 52,
       scenarioResolvedActionCount: 62,
       verifiedZeroActionCount: 0,

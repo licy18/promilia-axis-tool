@@ -1,41 +1,45 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：562（来源占轴已确认 554，尚未确认 8；公开动作均按独立 schedulable 合同判断）
-- 公开变体：592（来源占轴已确认 554，尚未确认 38）
+- 公开动作：563（来源占轴已确认 552，尚未确认 11；公开动作均按独立 schedulable 合同判断）
+- 公开变体：593（来源占轴已确认 552，尚未确认 41）
 - 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
-- SkillControl/player 变体：1039
+- SkillControl/player 变体：1042
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：632
-- 来源动画规划长度：24
+- 精确选中变体占轴：630
+- 来源动画规划长度：27
 - 通用规划长度：1
 - control 身份未解析：1
-- 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 142
+- 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 143
 
 ## Owner / 动作类型 / 来源状态
 
 | Owner | 动作类型 | 占轴来源 | 状态 | 数量 |
 | --- | --- | --- | --- | ---: |
 | actor | charged-attack | skill-control-player-action-range | applied | 18 |
-| actor | charged-attack | verified-specific-input-window | applied | 1 |
-| actor | dodge-attack | skill-control-player-action-range | applied | 19 |
+| actor | charged-attack | verified-specific-input-window | applied | 2 |
+| actor | dodge-attack | skill-control-player-action-range | applied | 18 |
+| actor | dodge-attack | unresolved-action-occupancy | unresolved | 1 |
 | actor | dodge-attack | verified-specific-input-window | applied | 1 |
-| actor | limit-counter | skill-control-player-action-range | applied | 19 |
-| actor | limit-counter | verified-unconditional-attack-reopen-window | applied | 1 |
+| actor | limit-counter | skill-control-player-action-range | applied | 18 |
+| actor | limit-counter | verified-unconditional-attack-reopen-window | applied | 2 |
 | actor | normal-attack | normal-attack-input-segment-chain | applied | 12 |
 | actor | normal-attack | normal-attack-input-segment-chain | unresolved | 8 |
-| actor | perfect-parry | skill-control-player-action-range | applied | 19 |
+| actor | perfect-parry | skill-control-player-action-range | applied | 18 |
+| actor | perfect-parry | unresolved-action-occupancy | unresolved | 1 |
 | actor | perfect-parry | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | plunging-attack | skill-control-player-action-range | applied | 19 |
-| actor | plunging-attack | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | star-carry | skill-control-player-action-range | applied | 16 |
-| actor | star-carry | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | star-combo | skill-control-player-action-range | applied | 19 |
-| actor | star-combo | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | star-skill | skill-control-player-action-range | applied | 19 |
+| actor | plunging-attack | skill-control-player-action-range | applied | 18 |
+| actor | plunging-attack | verified-unconditional-attack-reopen-window | applied | 2 |
+| actor | star-carry | skill-control-player-action-range | applied | 15 |
+| actor | star-carry | verified-unconditional-attack-reopen-window | applied | 2 |
+| actor | star-combo | skill-control-player-action-range | applied | 18 |
+| actor | star-combo | verified-unconditional-attack-reopen-window | applied | 2 |
+| actor | star-skill | skill-control-player-action-range | applied | 18 |
+| actor | star-skill | unresolved-action-occupancy | unresolved | 1 |
 | actor | star-skill | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | ultimate | skill-control-player-action-range | applied | 19 |
+| actor | ultimate | skill-control-player-action-range | applied | 18 |
+| actor | ultimate | verified-specific-input-window | applied | 1 |
 | actor | ultimate | verified-unconditional-attack-reopen-window | applied | 1 |
 | kibo | active | skill-control-player-action-range | applied | 122 |
 | kibo | break | skill-control-player-action-range | applied | 122 |
@@ -48,6 +52,7 @@
 | 涂山小玉 | charged-attack | 10101010 | partially-resolved | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
 | 莉莉 | charged-attack | 10200110 | variant-condition-not-yet-modeled | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
 | 莉莉 | perfect-parry | 10200127 | variant-condition-not-yet-modeled | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
+| 红宝石 | charged-attack | 10300210 | variant-condition-not-yet-modeled | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
 | 米砂 | star-skill | 10700212 | variant-condition-not-yet-modeled | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
 | 米砂 | dodge-attack | 10700215 | variant-condition-not-yet-modeled | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
 | 米砂 | limit-counter | 10700225 | variant-condition-not-yet-modeled | skillsub-logic / public-skill-slots-and-labels / battle-switch-relations / resource-state-judgment / input-hold-chain |
@@ -74,6 +79,9 @@
 
 - `actor|101007|10100701|0|10100703`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|0|10300203`：normal-attack-input-segment-duration-unresolved
+- `actor|103002|10300201|2|10300215`：verified-action-effective-occupancy-window-unresolved
+- `actor|103002|10300212|0|10300212`：verified-action-effective-occupancy-window-unresolved
+- `actor|103002|10300221|2|10300227`：verified-action-effective-occupancy-window-unresolved
 - `actor|107001|10700101|0|10700103`：normal-attack-input-segment-duration-unresolved
 - `actor|107002|10700201|0|10700203`：normal-attack-input-segment-duration-unresolved
 - `actor|107003|10700301|0|10700303`：normal-attack-input-segment-duration-unresolved

@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-runtime-coverage",
+  "ownerId": 103002,
+  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
+  "actionRows": [
+    {
+      "actionIdentity": "actor|103002|10300201|0|10300203",
+      "actionKind": "normal-attack",
+      "sourceSkillId": 10300201,
+      "controlSkillIds": [
+        10300201,
+        10300202,
+        10300203,
+        10300204,
+        10300205
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "runtimeReady": true,
+      "hitCount": 146,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 2
+        },
+        "toughness": {
+          "applied": 2
+        },
+        "actorSp": {
+          "applied": 2
+        },
+        "kiboSp": {
+          "applied": 2
+        }
+      },
+      "reasons": [
+        "trigger-frame-missing",
+        "projectile-impact-frame-runtime-dependent",
+        "normal-attack-input-segment-duration-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300201|1|10300210",
+      "actionKind": "charged-attack",
+      "sourceSkillId": 10300201,
+      "controlSkillIds": [
+        10300210
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 0,
+      "dimensionSummary": {
+        "hp": {
+          "unresolved": 19
+        },
+        "toughness": {
+          "unresolved": 19
+        },
+        "actorSp": {
+          "unresolved": 19
+        },
+        "kiboSp": {
+          "unresolved": 19
+        }
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300201|2|10300215",
+      "actionKind": "dodge-attack",
+      "sourceSkillId": 10300201,
+      "controlSkillIds": [
+        10300215
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 3,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 2
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 2
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 2
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 2
+        }
+      },
+      "reasons": [
+        "verified-action-effective-occupancy-window-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300201|3|10300211",
+      "actionKind": "plunging-attack",
+      "sourceSkillId": 10300201,
+      "controlSkillIds": [
+        10300211
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 1,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 3
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 3
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 3
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 3
+        }
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300212|0|10300212",
+      "actionKind": "star-skill",
+      "sourceSkillId": 10300212,
+      "controlSkillIds": [
+        10300212
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "runtimeReady": false,
+      "hitCount": 0,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 2,
+          "unresolved": 33
+        },
+        "toughness": {
+          "applied": 2,
+          "unresolved": 33
+        },
+        "actorSp": {
+          "applied": 2,
+          "unresolved": 33
+        },
+        "kiboSp": {
+          "applied": 2,
+          "unresolved": 33
+        }
+      },
+      "reasons": [
+        "trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "property-formula-not-literal-function-5",
+        "verified-action-effective-occupancy-window-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300212|1|10300226",
+      "actionKind": "star-combo",
+      "sourceSkillId": 10300212,
+      "controlSkillIds": [
+        10300226
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 1,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 3
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 3
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 3
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 3
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|103002|10300213|0|10300213",
+      "actionKind": "ultimate",
+      "sourceSkillId": 10300213,
+      "controlSkillIds": [
+        10300213
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 25,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 5,
+          "unresolved": 39
+        },
+        "toughness": {
+          "applied": 5,
+          "unresolved": 39
+        },
+        "actorSp": {
+          "unresolved": 39,
+          "verified-zero": 5
+        },
+        "kiboSp": {
+          "unresolved": 39,
+          "verified-zero": 5
+        }
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing",
+        "judgment-condition-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "pack-lifecycle-runtime-unimplemented"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300221|0|10300221",
+      "actionKind": "star-carry",
+      "sourceSkillId": 10300221,
+      "controlSkillIds": [
+        10300221
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 5,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 2,
+          "unresolved": 7
+        },
+        "toughness": {
+          "applied": 2,
+          "unresolved": 7
+        },
+        "actorSp": {
+          "unresolved": 7,
+          "verified-zero": 2
+        },
+        "kiboSp": {
+          "unresolved": 7,
+          "verified-zero": 2
+        }
+      },
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "effect-trigger-frame-missing"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300221|1|10300225",
+      "actionKind": "limit-counter",
+      "sourceSkillId": 10300221,
+      "controlSkillIds": [
+        10300225
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 12,
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "unresolved": 5
+        },
+        "toughness": {
+          "applied": 1,
+          "unresolved": 5
+        },
+        "actorSp": {
+          "applied": 1,
+          "unresolved": 5
+        },
+        "kiboSp": {
+          "applied": 1,
+          "unresolved": 5
+        }
+      },
+      "reasons": [
+        "inject-wrapper-classified-through-child-edges",
+        "effect-target-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|103002|10300221|2|10300227",
+      "actionKind": "perfect-parry",
+      "sourceSkillId": 10300221,
+      "controlSkillIds": [
+        10300227
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "runtimeReady": false,
+      "hitCount": 0,
+      "dimensionSummary": {
+        "hp": {
+          "unresolved": 4
+        },
+        "toughness": {
+          "unresolved": 4
+        },
+        "actorSp": {
+          "unresolved": 4
+        },
+        "kiboSp": {
+          "unresolved": 4
+        }
+      },
+      "reasons": [
+        "pack-lifecycle-runtime-unimplemented",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "verified-action-effective-occupancy-window-unresolved"
+      ]
+    }
+  ],
+  "summary": {
+    "actionCount": 10,
+    "runtimeReadyActionCount": 8,
+    "executionFormCount": 24,
+    "controlCount": 28,
+    "hitCount": 212,
+    "rawEffectCount": 378,
+    "semanticEffectCount": 67,
+    "resourceProfileCount": 1,
+    "resourceTransactionCount": 41,
+    "thresholdTransitionCount": 0,
+    "passiveCount": 1,
+    "switchTriggerCount": 1,
+    "coverageStatusCounts": {
+      "applied": 6,
+      "not-applicable": 3,
+      "static-evidence-gap": 11
+    }
+  },
+  "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
+}

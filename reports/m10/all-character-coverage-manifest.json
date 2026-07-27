@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "d59db0483bc855241625ced4518b09049caf8e4b6cd7b808b9cdccf72ecd4021",
+  "sourcePackageHash": "1b1c472867a3ef9b8fca849b47b7592368f528004b9ca4204de1915cc76405fd",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -84,7 +84,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "17f022747b596fe553f3f881ad03affe463fd193c0eba34a4f9326528a133e63"
+      "profileHash": "79a92f970d66921f3a24ec79248b79c14f1cc3bb822d5169190dd4df5fe78dc4"
     },
     {
       "ownerId": 103002,
@@ -95,37 +95,39 @@
         "弹药",
         "个人资源",
         "派生形态",
+        "被动监听",
         "切人/星携技",
         "运行证据",
         "静态缺口"
       ],
       "estimatedWorkUnits": 1,
-      "progressState": "evidence-indexed",
+      "progressState": "runtime-applied",
       "targetPipelineMaturity": "ui-verified",
-      "combatCoverageState": "evidence-required",
+      "combatCoverageState": "partial",
       "characterComplete": false,
-      "publicActionCount": 9,
-      "reachableFormCount": 54,
-      "indexedControlCount": 13,
+      "publicActionCount": 10,
+      "reachableFormCount": 56,
+      "indexedControlCount": 14,
       "specialResourceCount": 1,
       "stateMachineCount": 0,
       "derivedEdgeCount": 291,
-      "passiveCount": 0,
+      "passiveCount": 1,
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 7,
-      "runtimeReadyRatio": 0.7778,
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
       "staticEvidenceGapCount": 2,
       "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "personal-resource",
         "derived-action",
+        "passive-listener",
         "switch-trigger"
       ],
-      "profileIdentity": null,
-      "profileHash": null
+      "profileIdentity": "actor:103002:character-combat-profile:v1",
+      "profileHash": "30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228"
     },
     {
       "ownerId": 101003,
@@ -771,10 +773,10 @@
   "summary": {
     "characterCount": 20,
     "progressStateCounts": {
-      "evidence-indexed": 19,
-      "runtime-applied": 1
+      "evidence-indexed": 18,
+      "runtime-applied": 2
     },
-    "totalPublicActionCount": 196,
-    "totalRuntimeReadyActionCount": 155
+    "totalPublicActionCount": 197,
+    "totalRuntimeReadyActionCount": 156
   }
 }

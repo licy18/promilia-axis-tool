@@ -7,10 +7,10 @@ describe('verified derived action control contracts', () => {
     expect(coverage.sourceDenominator).toEqual({
       kind: 'current-client-public-actor-derived-control-candidates',
       actorOwnerCount: 20,
-      publicActionCount: 154,
-      controlCount: 136,
-      multiVariantControlCount: 63,
-      controlPlayerVariantCount: 256,
+      publicActionCount: 155,
+      controlCount: 137,
+      multiVariantControlCount: 64,
+      controlPlayerVariantCount: 259,
     });
     expect(coverage.summary.silentOmissionCount).toBe(0);
     expect(coverage.omittedMultiVariantCandidates).toEqual([]);
@@ -22,7 +22,7 @@ describe('verified derived action control contracts', () => {
       mechanicsPackage.actionVariantGraph.conditionDiscoveries.filter(
         discovery => discovery.ownerKind === 'actor'
       );
-    expect(actorDiscoveries).toHaveLength(63);
+    expect(actorDiscoveries).toHaveLength(64);
     for (const discovery of actorDiscoveries) {
       expect(
         identities.has(

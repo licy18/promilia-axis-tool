@@ -68,6 +68,7 @@ export async function createCharacterCombatGoldenRuntime({
     });
     const actual = createGoldenActualProjection({
       ownerId: Number(recipe.ownerId),
+      recipe,
       scenarioRecipe,
       result: primary.result,
       project: primary.project,
@@ -232,10 +233,11 @@ function runGoldenScenario({
     project,
     factory.getWorkbenchGameData()
   );
+  const result = engine.simulateScenario(compiledScenario);
   return {
     project,
     compiledScenario,
-    result: engine.simulateScenario(compiledScenario),
+    result,
   };
 }
 
@@ -342,10 +344,21 @@ function createGoldenActionDraft({
       frameRate,
     });
   }
+  const selectedSubSkillIndex =
+    action.controlSubSkillIndex ?? action.selectedSubSkillIndex ?? null;
   const durationFrames = resolveMappingDurationFrames(
     mapping,
-    action.selectedSubSkillIndex
+    selectedSubSkillIndex,
+    mechanicsPackage,
+    action.attackInputControlSkillId
   );
+  const attackInputFields = createGoldenAttackInputFields({
+    action,
+    actionId,
+    mapping,
+    selectedSubSkillIndex,
+    durationFrames,
+  });
   return factory.createWorkbenchActionDraft({
     id: actionId,
     type: ownerKind === 'kibo' ? 'kiboEvent' : 'skill',
@@ -357,6 +370,7 @@ function createGoldenActionDraft({
       action.actionVariantIndex ?? mapping.actionVariantIndex
     ),
     variantInputSelection: action.variantInputSelection ?? null,
+    controlSubSkillIndex: selectedSubSkillIndex,
     startMs,
     durationMs: frameToMs(durationFrames, frameRate),
     durationFrames,
@@ -365,7 +379,57 @@ function createGoldenActionDraft({
     timingSourceIdentity:
       mapping.actionTiming?.occupancy?.sourceIdentity ?? null,
     needsTimingData: false,
+    ...attackInputFields,
   });
+}
+
+function createGoldenAttackInputFields({
+  action,
+  actionId,
+  mapping,
+  selectedSubSkillIndex,
+  durationFrames,
+}) {
+  if (mapping.actionKind !== 'normal-attack') return {};
+  const segments = mapping.attackInputSegments ?? [];
+  const controlSkillId = Number(
+    action.attackInputControlSkillId ?? mapping.controlSkillId
+  );
+  const segment =
+    segments.find(
+      candidate =>
+        Number(candidate.controlSkillId) === controlSkillId &&
+        Number(candidate.selectedSubSkillIndex ?? selectedSubSkillIndex) ===
+          Number(selectedSubSkillIndex)
+    ) ??
+    segments.find(
+      candidate => Number(candidate.controlSkillId) === controlSkillId
+    );
+  if (!segment) {
+    throw new Error(
+      `golden normal attack input missing: ${actionId}/${controlSkillId}/${selectedSubSkillIndex}`
+    );
+  }
+  const sequenceIndex = Number(
+    action.attackSequenceIndex ?? segment.sequenceIndex ?? 1
+  );
+  const sequenceTotal = Number(
+    action.attackSequenceTotal ?? segment.sequenceTotal ?? segments.length
+  );
+  return {
+    attackGroupId: action.attackGroupId ?? `golden-${actionId}`,
+    attackSequenceIndex: sequenceIndex,
+    attackSequenceTotal: sequenceTotal,
+    attackInput: {
+      ...segment,
+      sequenceIndex,
+      sequenceTotal,
+      selectedSubSkillIndex,
+      effectiveDurationFrames: durationFrames,
+      durationFrames,
+      durationStatus: 'applied',
+    },
+  };
 }
 
 function createAttackInputDraft({
@@ -428,6 +492,7 @@ function createAttackInputDraft({
 
 function createGoldenActualProjection({
   ownerId,
+  recipe,
   scenarioRecipe,
   result,
   project,
@@ -435,16 +500,24 @@ function createGoldenActualProjection({
 }) {
   const specialRuntime = result.verifiedCombatRuntime?.specialResourceRuntime;
   const actionSelections = [...(specialRuntime?.selectionByActionId ?? [])]
-    .map(([actionId, selection]) => ({
-      actionId,
-      semanticName: selection.semanticName ?? null,
-      controlSkillId: numberOrNull(
-        selection.executionControlSkillId ?? selection.controlSkillId
-      ),
-      subSkillIndex: numberOrNull(selection.selectedSubSkillIndex),
-      actualDurationFrames: numberOrNull(selection.actualDurationFrames),
-      sourceKind: selection.sourceKind ?? null,
-    }))
+    .map(([actionId, selection]) => {
+      const isGoldenOwner = Number(selection.ownerId) === ownerId;
+      return {
+        actionId,
+        semanticName: selection.semanticName ?? null,
+        controlSkillId: numberOrNull(
+          selection.executionControlSkillId ?? selection.controlSkillId
+        ),
+        subSkillIndex: numberOrNull(selection.selectedSubSkillIndex),
+        actualDurationFrames: numberOrNull(
+          isGoldenOwner
+            ? selection.actualDurationFrames
+            : (selection.animationDurationFrames ??
+                selection.actualDurationFrames)
+        ),
+        sourceKind: selection.sourceKind ?? null,
+      };
+    })
     .sort(compareIdentity);
   const executedActionIds = (result.actionExecutionPlan?.actions ?? [])
     .filter(action => action.execute)
@@ -494,13 +567,17 @@ function createGoldenActualProjection({
       durationMs: numberOrNull(event.payload?.stateDurationMs),
     }))
     .sort(compareFrameThenIdentity);
+  const selectedEffectIds = new Set([
+    ...(recipe.goldenScenario?.traceSelectors?.passiveEffectIds ?? []),
+    ...(recipe.goldenScenario?.traceSelectors?.stateEffectIds ?? []),
+  ]);
   const effectTrace = (result.effectTimeline?.events ?? [])
     .filter(event => {
       const targetId = String(event.targetId ?? '');
       return (
         Number(event.ownerId) === ownerId ||
         targetId === `actor-${ownerId}` ||
-        String(event.effectId ?? '').includes('101010')
+        selectedEffectIds.has(String(event.effectId ?? ''))
       );
     })
     .map(event => ({
@@ -544,19 +621,40 @@ function createGoldenActualProjection({
       )
       .map(action => action.id)
   );
+  const dynamicPropertyActionKeys =
+    recipe.goldenScenario?.traceSelectors?.dynamicPropertyActionKeys ?? [];
+  const dynamicPropertyActionIds =
+    dynamicPropertyActionKeys.length > 0
+      ? new Set(dynamicPropertyActionKeys)
+      : ownerActionIds;
   const ownerDamageEvents = damageTrace.filter(event =>
     ownerActionIds.has(event.actionId)
   );
-  const passiveTrace = effectTrace.filter(
-    event => event.effectId === 'battle-element:101010206'
+  const passiveEffectIds = new Set(
+    recipe.goldenScenario?.traceSelectors?.passiveEffectIds ?? [
+      'battle-element:101010206',
+    ]
   );
-  const burstTrace = effectTrace.filter(
-    event => event.effectId === 'battle-element:101010129'
+  const stateEffectIds = new Set(
+    recipe.goldenScenario?.traceSelectors?.stateEffectIds ?? [
+      'battle-element:101010129',
+    ]
+  );
+  const passiveTrace = effectTrace.filter(event =>
+    passiveEffectIds.has(String(event.effectId ?? ''))
+  );
+  const passiveMaxStacks = Math.max(
+    0,
+    ...passiveTrace.map(event => Number(event.afterStacks) || 0)
+  );
+  const burstTrace = effectTrace.filter(event =>
+    stateEffectIds.has(String(event.effectId ?? ''))
   );
   const ownerDynamicPropertySources = collectDynamicPropertySources(
     result,
     null,
-    ownerId
+    ownerId,
+    dynamicPropertyActionIds
   );
 
   const actual = {
@@ -621,13 +719,11 @@ function createGoldenActualProjection({
     },
     effects: {
       passiveTrace,
-      passiveMaxStacks: Math.max(
-        0,
-        ...passiveTrace.map(event => Number(event.afterStacks) || 0)
-      ),
+      passiveMaxStacks,
       firstPassiveMaxStackFrame:
-        passiveTrace.find(event => Number(event.afterStacks) === 4)?.frame ??
-        null,
+        passiveTrace.find(
+          event => Number(event.afterStacks) === passiveMaxStacks
+        )?.frame ?? null,
       burstTrace,
       burstTransitions: burstTrace.map(event => ({
         actionId: event.actionId,
@@ -787,13 +883,18 @@ function summarizeEnemyState({ initial = {}, final = {}, pointCount = 0 }) {
   };
 }
 
-function collectDynamicPropertySources(result, actionId = null, ownerId = null) {
+function collectDynamicPropertySources(
+  result,
+  actionId = null,
+  ownerId = null,
+  ownerActionIds = null
+) {
   const sources = (result.verifiedCombatRuntime?.damageEvents ?? [])
     .filter(
       event =>
         (!actionId || event.actionId === actionId) &&
         (!ownerId ||
-          String(event.actionId ?? '').startsWith('jade-') ||
+          ownerActionIds?.has(event.actionId) ||
           Number(event.payload?.ownerId) === ownerId)
     )
     .flatMap(event => event.payload?.dynamicPropertyTrace?.source ?? [])
@@ -903,7 +1004,12 @@ function resolveActionMapping({
   );
 }
 
-function resolveMappingDurationFrames(mapping, selectedSubSkillIndex) {
+function resolveMappingDurationFrames(
+  mapping,
+  selectedSubSkillIndex,
+  mechanicsPackage,
+  explicitControlSkillId = null
+) {
   const timing =
     selectedSubSkillIndex == null
       ? mapping.actionTiming
@@ -911,7 +1017,30 @@ function resolveMappingDurationFrames(mapping, selectedSubSkillIndex) {
           variant =>
             Number(variant.subSkillIndex) === Number(selectedSubSkillIndex)
         );
-  const value = Number(timing?.occupancy?.durationFrames);
+  let value = Number(timing?.occupancy?.durationFrames);
+  if (!Number.isInteger(value) || value <= 0) {
+    const controlSkillId = Number(
+      explicitControlSkillId ?? mapping.controlSkillId
+    );
+    const controlContract =
+      mechanicsPackage.actionVariantGraph?.derivedControlContracts?.find(
+        contract =>
+          contract.ownerKind === mapping.ownerKind &&
+          Number(contract.ownerId) === Number(mapping.ownerId) &&
+          Number(contract.controlSkillId) === controlSkillId
+      );
+    const resolvedSubSkillIndex =
+      selectedSubSkillIndex ??
+      controlContract?.selectedSubSkillIndex ??
+      controlContract?.defaultSelection?.subSkillIndex ??
+      0;
+    value = Number(
+      controlContract?.variants?.find(
+        variant =>
+          Number(variant.subSkillIndex) === Number(resolvedSubSkillIndex)
+      )?.durationFrames
+    );
+  }
   if (!Number.isInteger(value) || value <= 0) {
     throw new Error(
       `golden action duration missing: ${mapping.identity}/${selectedSubSkillIndex}`

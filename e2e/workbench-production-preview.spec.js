@@ -71,7 +71,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m9-r3-r2-r1-xiaoyu-burst-chain]') ||
     testInfo.title.includes('[m9-r3-r2-r2-xiaoyu-hidden-inputs]') ||
     testInfo.title.includes('[m9-r3-r2-r3-contextual-edge]') ||
-    testInfo.title.includes('[m9-r3-r1-timeline-layout]')
+    testInfo.title.includes('[m9-r3-r1-timeline-layout]') ||
+    testInfo.title.includes('[m10-b1-ruby-profile-ui]')
   ) {
     return;
   }
@@ -7535,6 +7536,133 @@ test('[m9-r3-r1-timeline-layout] keeps team marks above actors and reserves a de
   await page.screenshot({
     path: 'reports/m9-r3-r1-timeline-layout-narrow.png',
   });
+});
+
+test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks through the real Workbench', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.getByTestId('workbench-scenario-bar')).toBeVisible();
+  await page.getByTestId('workbench-scenario-add').click();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await expect(timeline).toHaveAttribute('data-duration-ms', '120000');
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    0
+  );
+
+  const slotOne = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-1"]'
+  );
+  await slotOne.getByTestId('workbench-direct-character-picker').click();
+  await page
+    .getByTestId('workbench-loadout-picker')
+    .locator(
+      '[data-testid="workbench-loadout-option"][data-option-id="103002"]'
+    )
+    .click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="103002"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+
+  const ammoLaneLabel = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-special-resource-curve"][data-character-id="103002"]'
+  );
+  const ammoLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="actor-special-resource-curve"]'
+  );
+  await expect(ammoLaneLabel).toContainText('子弹');
+  await expect(ammoLaneLabel).toContainText('0 / 12');
+
+  const reloadEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"][data-skill-id="10300201"]'
+  );
+  await expect(reloadEntry).toContainText('重击');
+  await reloadEntry.click();
+
+  const reloadAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+  );
+  await expect(reloadAction).toContainText('control 10300210/sub0');
+  const ammoNodes = ammoLane.getByTestId('workbench-timeline-state-curve-node');
+  await expect(ammoNodes).toHaveCount(1);
+  await expect(ammoNodes).toHaveAttribute(
+    'title',
+    '24F · 子弹 获取 · 0 -> 6'
+  );
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    0
+  );
+  await expect(ammoNodes).toHaveCount(0);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(reloadAction).toBeVisible();
+  await expect(ammoNodes).toHaveCount(1);
+
+  const normalAttackEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"][data-skill-id="10300201"]'
+  );
+  await normalAttackEntry.click();
+  await expect
+    .poll(() => timeline.getByTestId('workbench-timeline-action').count())
+    .toBeGreaterThan(1);
+  const actionCount = await timeline
+    .getByTestId('workbench-timeline-action')
+    .count();
+  const ammoNodeCount = await ammoNodes.count();
+  expect(ammoNodeCount).toBeGreaterThan(1);
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    1
+  );
+  await expect(ammoNodes).toHaveCount(1);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    actionCount
+  );
+  await expect(ammoNodes).toHaveCount(ammoNodeCount);
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="103002"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    actionCount
+  );
+  await expect(ammoNodes).toHaveCount(ammoNodeCount);
+
+  await reloadAction.click();
+  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
+    '子弹'
+  );
+  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
+    '+6 · 1 个事件'
+  );
+  await page.screenshot({ path: 'reports/m10-b1-ruby-desktop.png' });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expect(ammoLaneLabel).toContainText('子弹');
+  await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
+    actionCount
+  );
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m10-b1-ruby-narrow.png' });
 });
 
 function formatRuntimeFrameLabel(frameIndex) {

@@ -32,8 +32,8 @@ const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
 );
-const RUBY_A5 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
-  segment => segment.sequenceIndex === 5
+const RUBY_A1 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 1
 );
 const JADE_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
@@ -99,7 +99,7 @@ describe('verified action variant and special resource runtime', () => {
     });
   });
 
-  it('uses Ruby source frames for gains and blocks a consuming input before execution', () => {
+  it('uses Ruby source frames and selects the ammo-aware attack chain', () => {
     const ultimate = createActorAction({
       id: 'ruby-ultimate',
       characterId: RUBY_ID,
@@ -137,31 +137,26 @@ describe('verified action variant and special resource runtime', () => {
     });
 
     const attack = createActorAction({
-      id: 'ruby-a5',
+      id: 'ruby-a1',
       characterId: RUBY_ID,
       skillId: 10300201,
       startMs: 0,
-      attackInput: RUBY_A5,
+      attackInput: RUBY_A1,
     });
-    const blocked = runVariantRuntime({
+    const emptyAmmo = runVariantRuntime({
       actors: [attack.actor],
       actions: [attack],
       durationMs: 1000,
     });
 
-    expect(blocked.executionBlocks).toEqual([
-      expect.objectContaining({
-        code: 'VERIFIED_SPECIAL_RESOURCE_INSUFFICIENT',
-        actionId: 'ruby-a5',
-        controlSkillId: 10300205,
-        selectedSubSkillIndex: 0,
-        resourceIdentity: 'actor:103002:element:103002047',
-        requiredValue: 1,
-        currentValue: 0,
-        maxValue: 12,
-      }),
-    ]);
-    expect(blocked.resourceEvents).toEqual([]);
+    expect(emptyAmmo.executionBlocks).toEqual([]);
+    expect(emptyAmmo.resourceEvents).toEqual([]);
+    expect(emptyAmmo.selectionByActionId.get(attack.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      semanticName: '普通攻击 A1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 0,
+    });
 
     const allowed = runVariantRuntime({
       actors: [attack.actor],
@@ -178,9 +173,15 @@ describe('verified action variant and special resource runtime', () => {
       },
     });
     expect(allowed.executionBlocks).toEqual([]);
+    expect(allowed.selectionByActionId.get(attack.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      semanticName: '强化普攻 A1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 1,
+    });
     expect(allowed.resourceEvents[0]).toMatchObject({
       timeMs: 0,
-      actionId: 'ruby-a5',
+      actionId: 'ruby-a1',
       payload: {
         operation: 'consume',
         beforeValue: 1,

@@ -1,0 +1,50 @@
+# 红宝石角色战斗 profile
+
+- Owner: `103002`
+- Profile: `actor:103002:character-combat-profile:v1`
+- Hash: `30913f699b920b994daaf0925b7e56cdaec8d0586451396defe8936ba5081228`
+- 流水线成熟度：runtime-applied
+- 战斗覆盖：partial
+- 角色完成：no
+- 公开动作：10
+- 执行形态：24
+- 可达 control：28
+- 窗口：0
+- Hit：212
+- 来源 identity：1833
+- 战斗图：328 nodes / 486 edges
+- 描述覆盖：18
+- Runtime ready 动作：8/10
+- Runtime capture：5
+
+## 维度状态
+
+| 维度 | 状态 | 数量 |
+| --- | --- | ---: |
+| publicActions | static-evidence-gap | 10 |
+| hiddenAndDerivedForms | static-evidence-gap | 24 |
+| inputAndExecutionTiming | not-applicable | 0 |
+| effectiveOccupancy | static-evidence-gap | 24 |
+| hitsAndProjectiles | static-evidence-gap | 212 |
+| hpDamage | static-evidence-gap | 130 |
+| toughnessDamage | static-evidence-gap | 130 |
+| actorSp | static-evidence-gap | 130 |
+| kiboSp | static-evidence-gap | 130 |
+| cooldowns | applied | 28 |
+| personalResources | static-evidence-gap | 42 |
+| teamResourcesAndMarks | applied | 1 |
+| buffsAndDebuffs | static-evidence-gap | 68 |
+| passives | applied | 1 |
+| dynamicProperties | static-evidence-gap | 12 |
+| healingAndShields | not-applicable | 0 |
+| stateMachines | not-applicable | 0 |
+| switchAndStarCarry | applied | 1 |
+| frontBackDifferences | applied | 1 |
+| loadoutAndTeamStatPropagation | applied | 1 |
+
+## 未闭环
+
+- runtime-evidence-required: 5
+- static-evidence-gap: 413
+
+> JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

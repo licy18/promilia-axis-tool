@@ -293,13 +293,16 @@ export function resolveVerifiedCombatActionMechanics(
     });
   }
   const actionBinding = dynamicBinding.binding;
+  const hasAppliedSpecialResourceOperation =
+    hasVerifiedSpecialResourceOperation(actionBinding);
   if (actionBinding?.classification !== 'applied') {
     const partialControlBinding = controlBindingBySkillId.get(
       actionBinding?.controlSkillId
     );
     if (
       actionBinding?.selectedSubSkillIndex != null &&
-      Number(partialControlBinding?.logic?.spCost) > 0
+      (Number(partialControlBinding?.logic?.spCost) > 0 ||
+        hasAppliedSpecialResourceOperation)
     ) {
       return {
         schemaVersion: 1,
@@ -392,7 +395,10 @@ export function resolveVerifiedCombatActionMechanics(
   );
   if (
     !controlBinding ||
-    (!allHits.length && !hasAppliedCost && !hasAppliedEffect)
+    (!allHits.length &&
+      !hasAppliedCost &&
+      !hasAppliedEffect &&
+      !hasAppliedSpecialResourceOperation)
   ) {
     return createUnresolvedActionMechanics(
       action,
@@ -423,6 +429,20 @@ export function resolveVerifiedCombatActionMechanics(
     applied: true,
     variantSelection: actionBinding.variantSelection ?? null,
   };
+}
+
+function hasVerifiedSpecialResourceOperation(actionBinding) {
+  return (
+    installedPackage?.specialResourceCatalog?.operationBindings?.some(
+      operation =>
+        operation.applied === true &&
+        Number(operation.ownerId) === Number(actionBinding?.ownerId) &&
+        Number(operation.controlSkillId) ===
+          Number(actionBinding?.controlSkillId) &&
+        Number(operation.subSkillIndex) ===
+          Number(actionBinding?.selectedSubSkillIndex)
+    ) ?? false
+  );
 }
 
 function isEffectTriggeredByDisabledHit(effect, disabledHits) {

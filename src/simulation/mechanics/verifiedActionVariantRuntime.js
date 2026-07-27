@@ -109,7 +109,11 @@ export function createVerifiedActionVariantRuntime({
     .sort(compareBindings);
   const passiveEffects = (
     mechanicsPackage.specialResourceCatalog.passiveEffects ?? []
-  ).filter(profile => profile.applied);
+  ).filter(
+    profile =>
+      profile.applied &&
+      profile.runtimeGenerationMode !== 'semantic-effect-catalog'
+  );
   const graph = mechanicsPackage.actionVariantGraph;
   const switchBindings = graph.edges
     .filter(edge => edge.applied)
@@ -711,6 +715,10 @@ export function createVerifiedActionVariantRuntime({
               ].join('|'),
               decisionFrame: attackChainSelection.chain.decisionFrame,
               chainIdentity: attackChainSelection.chain.chainIdentity,
+              semanticIdentity: `${attackChainSelection.chain.chainIdentity}:segment:${attackChainSelection.segment.sequenceIndex}`,
+              semanticName: attackChainSelection.chain.semanticNamePrefix
+                ? `${attackChainSelection.chain.semanticNamePrefix} A${attackChainSelection.segment.sequenceIndex}`
+                : action.name ?? `A${attackChainSelection.segment.sequenceIndex}`,
             }
           : activeSelection.binding
             ? {
@@ -1188,6 +1196,9 @@ function isRuntimeConditionSatisfied(condition, actorState) {
   }
   if (condition.kind === 'resource-at-least') {
     return actorState.current >= Number(condition.value || 0);
+  }
+  if (condition.kind === 'resource-below') {
+    return actorState.current < Number(condition.value || 0);
   }
   return false;
 }

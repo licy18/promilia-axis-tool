@@ -1,7 +1,10 @@
 import { createSkillDamageModel } from './skillDamageSegments';
 import { createSkillLogicModel } from './skillLogicModel';
 import { normalizeInitialRuntimeState } from './initialRuntimeState';
-import { inferCatalogActionKind } from './skillActionCatalog';
+import {
+  inferCatalogActionKind,
+  resolveVerifiedCatalogActionDeclaration,
+} from './skillActionCatalog';
 import {
   createKiboActionStatusGeneration,
   createSkillActionStatusGeneration,
@@ -329,6 +332,8 @@ export function createSkillAction({
     id: actionId,
     ...(attackInputFields ?? {}),
   });
+  const verifiedCatalogDeclaration =
+    resolveVerifiedCatalogActionDeclaration(selectedActionVariant, skill);
 
   return {
     id: actionId,
@@ -336,11 +341,14 @@ export function createSkillAction({
     actorId,
     skillId: skill.id,
     icon: skill.icon ?? null,
-    actionKind: inferCatalogActionKind(selectedActionVariant, skill),
+    actionKind:
+      verifiedCatalogDeclaration?.actionKind ??
+      inferCatalogActionKind(selectedActionVariant, skill),
     name:
       normalizedAttackInputFields.attackSequenceIndex != null
         ? `A${normalizedAttackInputFields.attackSequenceIndex}`
-        : (selectedActionVariant?.displayLabel ??
+        : (verifiedCatalogDeclaration?.label ??
+          selectedActionVariant?.displayLabel ??
           selectedActionVariant?.label ??
           skill.displayName ??
           skill.name ??
