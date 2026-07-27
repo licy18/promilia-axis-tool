@@ -6,7 +6,10 @@ import {
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createSwitchAction } from '../../domain/projectSchema';
-import { createSwitchTriggeredActionGeneration } from '../../simulation/generation/switchTriggeredActionGeneration';
+import {
+  createSwitchTriggeredActionGeneration,
+  resolveSwitchTriggeredCooldownGate,
+} from '../../simulation/generation/switchTriggeredActionGeneration';
 
 const skillsById = new Map(
   seed.gameData.skills.map(skill => [Number(skill.id), skill])
@@ -116,6 +119,78 @@ describe('switch triggered star-carry generation', () => {
     expect(
       moved.actions.every(action => action.id.includes('switch-moved'))
     ).toBe(true);
+  });
+
+  it('suppresses cooldown-active star-carry materialization without creating an occupying action', () => {
+    const actors = [actor(101003), actor(101007)];
+    const result = generate({
+      actors,
+      initialActorId: 'actor-101003',
+      switches: [
+        switchAction('switch-first', 1000, 101003, 101007),
+        switchAction('switch-reset', 2000, 101007, 101003),
+        switchAction('switch-during-cooldown', 3000, 101003, 101007),
+        switchAction('switch-reset-after-cooldown', 4000, 101007, 101003),
+        switchAction('switch-after-cooldown', 26_000, 101003, 101007),
+      ],
+    });
+
+    expect(
+      result.actions.filter(
+        action => action.parentActionId === 'switch-during-cooldown'
+      )
+    ).toEqual([]);
+    expect(result.bindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          switchEventId: 'switch-during-cooldown',
+          starCarryOwnerCharacterId: 101003,
+          resolutionStatus: 'suppressed-cooldown-active',
+          materializationStatus: 'not-materialized',
+          cooldownRemainingMs: 22_000,
+          applied: false,
+        }),
+      ])
+    );
+    expect(
+      result.actions.filter(
+        action => action.parentActionId === 'switch-after-cooldown'
+      )
+    ).toHaveLength(2);
+    expect(result.summary).toMatchObject({
+      derivedActionCount: 4,
+      cooldownSuppressedBindingCount: 2,
+    });
+  });
+
+  it('applies the same cooldown gate to a synthetic owner without generator branches', () => {
+    const first = resolveSwitchTriggeredCooldownGate({
+      ownerId: 'synthetic-owner',
+      actionIdentity: 'synthetic-star-carry',
+      startMs: 1000,
+      cooldownDurationMs: 24_000,
+      cooldownSourceIdentity: 'synthetic-source',
+    });
+    expect(first).toMatchObject({
+      status: 'materialized-with-cooldown',
+      nextReadyAtMs: 25_000,
+    });
+
+    expect(
+      resolveSwitchTriggeredCooldownGate({
+        ownerId: 'synthetic-owner',
+        actionIdentity: 'synthetic-star-carry',
+        startMs: 9000,
+        cooldownDurationMs: 24_000,
+        cooldownSourceIdentity: 'synthetic-source',
+        readyAtMs: first.nextReadyAtMs,
+      })
+    ).toMatchObject({
+      status: 'suppressed-cooldown-active',
+      cooldownReadyAtMs: 25_000,
+      cooldownRemainingMs: 16_000,
+      nextReadyAtMs: 25_000,
+    });
   });
 });
 

@@ -128,7 +128,8 @@ describe('generated action status runtime', () => {
       createStatusReturnAction({ id: 'status-action-return', startMs: 500 }),
       createStatusAction({ id: 'status-action-blocked', startMs: 1000 }),
     ]);
-    const result = runSimulation(project, getWorkbenchGameData());
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = simulateScenario(scenario);
     const firstDerivedActionId = createStatusDerivedActionId('status-action-1');
     const blockedDerivedActionId = createStatusDerivedActionId(
       'status-action-blocked'
@@ -140,12 +141,17 @@ describe('generated action status runtime', () => {
       )
     ).toMatchObject({ execute: true });
     expect(
-      result.actionExecutionPlan.actions.find(
-        action => action.actionId === blockedDerivedActionId
+      scenario.actions.find(action => action.id === blockedDerivedActionId)
+    ).toBeUndefined();
+    expect(
+      scenario.switchTriggerGeneration.bindings.find(
+        binding => binding.switchEventId === 'status-action-blocked'
       )
     ).toMatchObject({
-      execute: false,
-      status: 'skipped-rule-blocked',
+      resolutionStatus: 'suppressed-cooldown-active',
+      materializationStatus: 'not-materialized',
+      starCarryActionIdentity: 'actor|101003|10100322|0|10100322',
+      applied: false,
     });
     expect(result.effectTimeline.input.summary).toMatchObject({
       inputCommandCount: expect.any(Number),
@@ -158,15 +164,14 @@ describe('generated action status runtime', () => {
         event => event.actionId === blockedDerivedActionId
       )
     ).toEqual([]);
-    expect(result.actionEffectRelationGraph.edges).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          commandActionId: blockedDerivedActionId,
-          status: 'blocked',
-          runtimeEventId: null,
-        }),
-      ])
-    );
+    expect(
+      result.actionEffectRelationGraph.edges.filter(
+        edge => edge.commandActionId === blockedDerivedActionId
+      )
+    ).toEqual([]);
+    expect(scenario.switchTriggerGeneration.summary).toMatchObject({
+      cooldownSuppressedBindingCount: 2,
+    });
   });
 
   it('uses the sourced kibo cooldown on the kibo owner lane and blocks reuse', () => {
@@ -683,14 +688,12 @@ function createStatusLifecycleProject(
       actions,
       teamSlots,
       durationMs: 30000,
-      initialRuntimeState:
-        initialRuntimeState ??
-        {
-          controlledActor: {
-            actorId: 'actor-101003',
-            characterId: 101003,
-          },
+      initialRuntimeState: initialRuntimeState ?? {
+        controlledActor: {
+          actorId: 'actor-101003',
+          characterId: 101003,
         },
+      },
     }
   );
 }

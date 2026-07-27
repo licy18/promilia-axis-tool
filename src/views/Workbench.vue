@@ -1151,6 +1151,7 @@ import { ACTION_RELATION_KINDS, ACTION_TYPES } from '../domain/projectSchema';
 import {
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
+  reconcileWorkbenchAttackInputIntentGroups,
 } from '../domain/workbenchAttackInputChain';
 import {
   resolveVerifiedAttackInputChainEntry,
@@ -1408,6 +1409,7 @@ const mechanicsProfileSelection = ref(
 );
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const actionDrafts = ref([...initialDraft.actionDrafts]);
+let reconcilingAttackInputIntentGroups = false;
 const actionRelations = ref([...initialDraft.actionRelations]);
 const timelineDurationMs = ref(
   normalizeWorkbenchTimelineDuration(initialDraft.durationMs)
@@ -2230,6 +2232,46 @@ watch(
     }
   },
   { flush: 'sync' }
+);
+
+watch(
+  () => simulationResult.value.verifiedActionVariantRuntime,
+  variantRuntime => {
+    if (reconcilingAttackInputIntentGroups || !variantRuntime?.ready) return;
+    const actorIdByActionId = new Map(
+      scenario.value.actions.map(action => [String(action.id), action.actorId])
+    );
+    const reconciled = reconcileWorkbenchAttackInputIntentGroups({
+      actions: actionDrafts.value,
+      graph: getVerifiedActionVariantGraph(),
+      variantRuntime,
+      effectIntervals: effectIntervalProjection.value.intervals,
+      resolveMapping: action =>
+        getVerifiedCombatActionMapping({
+          type: ACTION_TYPES.SKILL,
+          skillId: action.attackInputIntent?.sourceSkillId ?? action.skillId,
+          actionVariantIndex:
+            action.attackInputIntent?.actionVariantIndex ??
+            action.actionVariantIndex ??
+            0,
+          actor: { characterId: action.actorCharacterId },
+        }),
+      resolveActorId: action =>
+        actorIdByActionId.get(String(action.id)) ??
+        resolveScenarioActorId(action.actorCharacterId),
+    });
+    if (!reconciled.changed) return;
+    reconcilingAttackInputIntentGroups = true;
+    actionDrafts.value = normalizeWorkbenchActionDrafts(
+      reconciled.actions,
+      selection.value,
+      teamSlots.value
+    );
+    void nextTick().then(() => {
+      reconcilingAttackInputIntentGroups = false;
+    });
+  },
+  { flush: 'post', immediate: true }
 );
 
 function createInitialWorkbenchLayoutState() {
@@ -8549,10 +8591,7 @@ function resolveInsertStartMs(insertIndex) {
   const effectiveAnchor =
     effectiveScenarioActionById.value.get(String(anchor.id)) ?? anchor;
   const anchorStartMs = Number(effectiveAnchor.startMs) || 0;
-  const anchorDurationMs = Math.max(
-    0,
-    Number(effectiveAnchor.durationMs) || 0
-  );
+  const anchorDurationMs = Math.max(0, Number(effectiveAnchor.durationMs) || 0);
   return clampNumber(
     anchorStartMs + anchorDurationMs + NEW_ACTION_INSERT_GAP_MS,
     0,

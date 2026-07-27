@@ -33,6 +33,7 @@ export function createSwitchTriggeredActionGeneration({
   const acceptedSwitchByFrame = new Map();
   const bindings = [];
   const derivedActions = [];
+  const cooldownReadyAtByOwnerAction = new Map();
   let controlledActor = initialActor;
 
   for (const switchAction of switches) {
@@ -88,6 +89,7 @@ export function createSwitchTriggeredActionGeneration({
         phaseOwner,
         skillsById,
         targetId,
+        cooldownReadyAtByOwnerAction,
       });
       if (!result) continue;
       bindings.push(result.binding);
@@ -104,7 +106,12 @@ export function createSwitchTriggeredActionGeneration({
     schemaVersion: 1,
     contractName: SWITCH_TRIGGER_GENERATION_CONTRACT_NAME,
     sourceKind: 'azpr-verified-switch-trigger-action-generation',
-    status: bindings.some(binding => binding.resolutionStatus !== 'applied')
+    status: bindings.some(
+      binding =>
+        !['applied', 'suppressed-cooldown-active'].includes(
+          binding.resolutionStatus
+        )
+    )
       ? 'switch-trigger-generation-ready-with-unresolved-bindings'
       : 'switch-trigger-generation-ready',
     bindings,
@@ -117,7 +124,13 @@ export function createSwitchTriggeredActionGeneration({
         binding => binding.resolutionStatus === 'applied'
       ).length,
       unresolvedBindingCount: bindings.filter(
-        binding => binding.resolutionStatus !== 'applied'
+        binding =>
+          !['applied', 'suppressed-cooldown-active'].includes(
+            binding.resolutionStatus
+          )
+      ).length,
+      cooldownSuppressedBindingCount: bindings.filter(
+        binding => binding.resolutionStatus === 'suppressed-cooldown-active'
       ).length,
       derivedActionCount: derivedActions.length,
       onEnterDerivedActionCount: derivedActions.filter(
@@ -147,6 +160,7 @@ function createPhaseBinding({
   phaseOwner,
   skillsById,
   targetId,
+  cooldownReadyAtByOwnerAction,
 }) {
   const owner = phaseOwner.owner;
   if (!owner) return null;
@@ -211,6 +225,47 @@ function createPhaseBinding({
     0,
     frameIndex + Number(profile.triggerFrameOffset ?? 0)
   );
+  const startMs = frameToMs(startFrame, frameRate);
+  const cooldown = resolveVerifiedMappingCooldown(mapping);
+  const cooldownKey = `${owner.id}|${profile.starCarryActionIdentity}`;
+  const cooldownReadyAtMs = Number(
+    cooldownReadyAtByOwnerAction.get(cooldownKey) ?? 0
+  );
+  const cooldownGate = resolveSwitchTriggeredCooldownGate({
+    ownerId: owner.id,
+    actionIdentity: profile.starCarryActionIdentity,
+    startMs,
+    cooldownDurationMs: cooldown?.durationMs,
+    cooldownSourceIdentity: cooldown?.sourceIdentity,
+    readyAtMs: cooldownReadyAtMs,
+  });
+  if (cooldownGate.status === 'suppressed-cooldown-active') {
+    return {
+      binding: {
+        ...binding,
+        resolutionStatus: 'suppressed-cooldown-active',
+        materializationStatus: 'not-materialized',
+        cooldownDurationMs: cooldownGate.cooldownDurationMs,
+        cooldownReadyAtMs: cooldownGate.cooldownReadyAtMs,
+        cooldownRemainingMs: cooldownGate.cooldownRemainingMs,
+        cooldownSourceIdentity: cooldownGate.cooldownSourceIdentity,
+        reasons: [...reasons, 'verified-star-carry-cooldown-active'],
+        applied: false,
+      },
+      action: null,
+    };
+  }
+  if (cooldownGate.status === 'materialized-with-cooldown') {
+    cooldownReadyAtByOwnerAction.set(cooldownKey, cooldownGate.nextReadyAtMs);
+  }
+  const materializedBinding = {
+    ...binding,
+    materializationStatus: 'materialized',
+    cooldownDurationMs: cooldownGate.cooldownDurationMs,
+    cooldownReadyAtMs: cooldownGate.nextReadyAtMs,
+    cooldownRemainingMs: 0,
+    cooldownSourceIdentity: cooldownGate.cooldownSourceIdentity,
+  };
   const action = createSkillAction({
     id: createDerivedActionId(
       switchAction.id,
@@ -220,7 +275,7 @@ function createPhaseBinding({
     actorId: owner.id,
     skill,
     targetId,
-    startMs: frameToMs(startFrame, frameRate),
+    startMs,
     durationFrames,
     durationMs: frameToMs(durationFrames, frameRate),
     timingSource:
@@ -239,14 +294,14 @@ function createPhaseBinding({
     note: `${phaseOwner.triggerPhase === 'on-enter' ? '入场' : '退场'}切人事件自动触发`,
   });
   return {
-    binding,
+    binding: materializedBinding,
     action: {
       ...action,
       durationFrames,
       name: skill.name ?? action.name,
       actionKind: 'star-carry',
       parentActionId: switchAction.id,
-      switchTriggerBinding: binding,
+      switchTriggerBinding: materializedBinding,
       derivedAction: {
         schemaVersion: 1,
         kind: SWITCH_TRIGGERED_ACTION_KIND,
@@ -299,6 +354,50 @@ function resolveMappingDurationFrames(mapping) {
       mapping.actionTiming?.occupancy?.durationFrames
   );
   return Number.isInteger(duration) && duration > 0 ? duration : null;
+}
+
+function resolveVerifiedMappingCooldown(mapping) {
+  const cooldown = mapping?.actionTiming?.cooldown;
+  const durationMs = Number(cooldown?.cooldownMs);
+  if (cooldown?.status !== 'applied' || !(durationMs > 0)) return null;
+  return {
+    durationMs,
+    sourceIdentity: cooldown.sourceIdentity ?? null,
+  };
+}
+
+export function resolveSwitchTriggeredCooldownGate({
+  ownerId = null,
+  actionIdentity = null,
+  startMs = 0,
+  cooldownDurationMs = null,
+  cooldownSourceIdentity = null,
+  readyAtMs = 0,
+} = {}) {
+  const durationMs = Number(cooldownDurationMs);
+  const normalizedStartMs = Number(startMs) || 0;
+  const normalizedReadyAtMs = Number(readyAtMs) || 0;
+  const base = {
+    ownerId,
+    actionIdentity,
+    cooldownDurationMs: durationMs > 0 ? durationMs : null,
+    cooldownSourceIdentity,
+    cooldownReadyAtMs: durationMs > 0 ? normalizedReadyAtMs : null,
+    cooldownRemainingMs: 0,
+    nextReadyAtMs: durationMs > 0 ? normalizedStartMs + durationMs : null,
+  };
+  if (!(durationMs > 0)) {
+    return { ...base, status: 'materialized-without-verified-cooldown' };
+  }
+  if (normalizedStartMs < normalizedReadyAtMs) {
+    return {
+      ...base,
+      status: 'suppressed-cooldown-active',
+      cooldownRemainingMs: normalizedReadyAtMs - normalizedStartMs,
+      nextReadyAtMs: normalizedReadyAtMs,
+    };
+  }
+  return { ...base, status: 'materialized-with-cooldown' };
 }
 
 function resolveInitialActor({

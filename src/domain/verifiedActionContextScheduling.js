@@ -33,7 +33,9 @@ export function projectVerifiedAttackInputChainSegment(
   const linkTimingApplied =
     resolvedSequenceIndex >= resolvedSequenceTotal || linkWindow != null;
   const projectedIdentity = [
-    attackInputChainIdentity ?? source.attackInputChainIdentity ?? source.identity,
+    attackInputChainIdentity ??
+      source.attackInputChainIdentity ??
+      source.identity,
     `segment:${resolvedSequenceIndex}`,
     `control:${controlSkillId}`,
     `sub:${subSkillIndex}`,
@@ -63,9 +65,7 @@ export function projectVerifiedAttackInputChainSegment(
     linkTimingBasis: occupancy.sourceKind ?? null,
     linkSourceIdentity:
       linkWindow?.sourceIdentity ?? occupancy.sourceIdentity ?? null,
-    selectedHitIdentities: hits
-      .map(hit => hit?.hitIdentity)
-      .filter(Boolean),
+    selectedHitIdentities: hits.map(hit => hit?.hitIdentity).filter(Boolean),
     hitCount: hits.length,
   };
 }
@@ -80,6 +80,7 @@ export function resolveVerifiedAttackInputChainEntry({
   variantRuntime = null,
   actions = [],
   runtimeSelections = [],
+  excludedActionIds = [],
 } = {}) {
   if (!entry?.attackInputSegments?.length || !graph?.attackInputChains) {
     return { status: 'not-required', entry, chain: null };
@@ -95,6 +96,7 @@ export function resolveVerifiedAttackInputChainEntry({
         timeMs,
         effectIntervals,
         variantRuntime,
+        excludedActionIds,
       })
   );
   const derivedChains = eligibleChains.filter(
@@ -112,8 +114,7 @@ export function resolveVerifiedAttackInputChainEntry({
   );
   const conditionSelectedChains = eligibleChains.filter(
     chain =>
-      !chain.entryPolicy ||
-      chain.entryPolicy.kind === 'condition-selected'
+      !chain.entryPolicy || chain.entryPolicy.kind === 'condition-selected'
   );
   const defaultChains = eligibleChains.filter(
     chain => chain.entryPolicy?.kind === 'default'
@@ -134,6 +135,7 @@ export function resolveVerifiedAttackInputChainEntry({
     actorId,
     resourceIdentity: chain.segmentLimit?.resourceIdentity,
     timeMs,
+    excludedActionIds,
   });
   const segmentLimit = resolveAttackChainSegmentLimit(
     chain.segmentLimit,
@@ -222,13 +224,13 @@ function isDerivedAttackChainEntryActive({
     const transition = sourceChain.phaseTransition;
     const sourceSegment = sourceChain.segments.find(
       segment =>
-        Number(segment.sequenceIndex) ===
-        Number(transition.sourceSequenceIndex)
+        Number(segment.sequenceIndex) === Number(transition.sourceSequenceIndex)
     );
     if (!sourceSegment) return false;
     return (actions ?? []).some(action => {
       if (
-        String(action.actorId) !== String(actorId) ||
+        (String(action.actorId) !== String(actorId) &&
+          Number(action.actorCharacterId) !== Number(chain.ownerId)) ||
         Number(action.startMs) > Number(timeMs)
       ) {
         return false;
@@ -266,10 +268,7 @@ function resolveAttackChainSegmentLimit(segmentLimit, resourceValue, fallback) {
   if (!segmentLimit) return fallback;
   if (segmentLimit.kind !== 'resource-current-value') return fallback;
   const costPerSegment = Number(segmentLimit.costPerSegment);
-  const maximum = Math.min(
-    Number(segmentLimit.maximum) || fallback,
-    fallback
-  );
+  const maximum = Math.min(Number(segmentLimit.maximum) || fallback, fallback);
   if (!(costPerSegment > 0) || !Number.isFinite(resourceValue)) return 0;
   return Math.max(
     0,
@@ -282,6 +281,7 @@ function resolveRuntimeResourceValue({
   actorId,
   resourceIdentity,
   timeMs,
+  excludedActionIds = [],
 }) {
   if (!resourceIdentity) return null;
   const initial = (variantRuntime?.initialState ?? []).find(
@@ -291,9 +291,11 @@ function resolveRuntimeResourceValue({
   );
   let value = Number(initial?.currentValue);
   if (!Number.isFinite(value)) return null;
+  const excludedActionIdSet = new Set((excludedActionIds ?? []).map(String));
   const events = (variantRuntime?.resourceEvents ?? [])
     .filter(
       event =>
+        !excludedActionIdSet.has(String(event.actionId)) &&
         String(event.actorId) === String(actorId) &&
         event.payload?.resourceIdentity === resourceIdentity &&
         Number(event.timeMs) <= Number(timeMs)
@@ -361,13 +363,10 @@ export function resolveVerifiedContextActionStartMs({
     if (!matchingEdges.length) continue;
     const predecessorEffectiveEndFrame = Number(
       selection.actualDurationFrames ??
-        matchingEdges.find(
-          edge =>
-            Number.isInteger(
-              Number(
-                edge.inputScheduling?.predecessorGenericEndFrame
-              )
-            )
+        matchingEdges.find(edge =>
+          Number.isInteger(
+            Number(edge.inputScheduling?.predecessorGenericEndFrame)
+          )
         )?.inputScheduling?.predecessorGenericEndFrame ??
         action.attackInput?.effectiveDurationFrames ??
         action.attackInput?.durationFrames ??
@@ -440,10 +439,7 @@ export function resolveVerifiedContextInputScheduling({
   const requestedOffsetFrame =
     requestedExecutionStartFrame - predecessorStartFrame;
   const direct = candidates.filter(edge =>
-    isFrameWithinVerifiedInputWindow(
-      requestedOffsetFrame,
-      edge.inputWindow
-    )
+    isFrameWithinVerifiedInputWindow(requestedOffsetFrame, edge.inputWindow)
   );
   if (direct.length) {
     const edge = selectContextEdge(direct, requestedOffsetFrame);
@@ -472,16 +468,13 @@ export function resolveVerifiedContextInputScheduling({
         resolvedPredecessorEndFrame
       );
     }
-    return (
-      Number(edge.inputWindow?.endFrame) === resolvedPredecessorEndFrame
-    );
+    return Number(edge.inputWindow?.endFrame) === resolvedPredecessorEndFrame;
   });
   if (!edgeIntentCandidates.length) return null;
   const edge = [...edgeIntentCandidates].sort(
     (left, right) =>
       Number(right.inputWindow.startFrame) -
-        Number(left.inputWindow.startFrame) ||
-      compareContextEdges(left, right)
+        Number(left.inputWindow.startFrame) || compareContextEdges(left, right)
   )[0];
   const inputOffsetFrame = Number(
     edge.inputScheduling?.edgeIntent?.canonicalInputFrame ??
@@ -528,8 +521,7 @@ function createContextInputSchedulingResult({
   const generatedPredecessorEndFrame = Number(
     edge.inputScheduling?.edgeIntent?.canonicalPredecessorEndFrame
   );
-  const isEdgeIntent =
-    resolutionKind === 'edge-intent-contextual-transition';
+  const isEdgeIntent = resolutionKind === 'edge-intent-contextual-transition';
   const executionOffsetFrame =
     isEdgeIntent && Number.isInteger(generatedExecutionOffsetFrame)
       ? generatedExecutionOffsetFrame
@@ -545,8 +537,7 @@ function createContextInputSchedulingResult({
     isEdgeIntent && Number.isInteger(generatedPredecessorEndFrame)
       ? generatedPredecessorEndFrame
       : executionOffsetFrame;
-  const executionStartFrame =
-    predecessorStartFrame + executionOffsetFrame;
+  const executionStartFrame = predecessorStartFrame + executionOffsetFrame;
   const contextualPredecessorEndFrame =
     predecessorStartFrame + contextualPredecessorEndOffsetFrame;
   return {
@@ -618,6 +609,7 @@ function isRuntimeConditionSatisfied({
   timeMs,
   effectIntervals,
   variantRuntime,
+  excludedActionIds = [],
 }) {
   if (!condition || condition.kind === 'always') return true;
   if (
@@ -629,6 +621,7 @@ function isRuntimeConditionSatisfied({
       actorId,
       resourceIdentity: condition.resourceIdentity,
       timeMs,
+      excludedActionIds,
     });
     if (!Number.isFinite(currentValue)) return false;
     return condition.kind === 'resource-at-least'

@@ -1,8 +1,15 @@
 import { frameToMs, msToFrame, snapMsToFrame } from './timebase';
+import { resolveVerifiedAttackInputChainEntry } from './verifiedActionContextScheduling';
 import { resolveWorkbenchActionScheduling } from './workbenchActionScheduling';
 
 export const ATTACK_INPUT_CHAIN_SOURCE = 'normal-attack-input-chain';
 export const ATTACK_INPUT_LEGACY_UNRESOLVED = 'legacy-unresolved-duration';
+export const ATTACK_INPUT_INTENT_CONTRACT_NAME =
+  'AzPrWorkbenchAttackInputIntent';
+export const ATTACK_INPUT_CHAIN_SELECTION_SOURCES = Object.freeze({
+  RUNTIME_PROJECTED: 'runtime-projected',
+  USER_EXPLICIT: 'user-explicit',
+});
 
 export function normalizeAttackInputSegments(segments = []) {
   const values = (Array.isArray(segments) ? segments : [])
@@ -32,6 +39,12 @@ export function normalizeAttackInputSegments(segments = []) {
 
 export function normalizeAttackInputActionFields(source = {}) {
   const legacyStatus = normalizeText(source.attackInputLegacyStatus);
+  const attackInputIntent = normalizeAttackInputIntent(
+    source.attackInputIntent ?? source.attackInput?.intent
+  );
+  const attackInputChainSelectionSource = normalizeText(
+    source.attackInputChainSelectionSource
+  );
   const segment = normalizeAttackInputSegment({
     ...(source.attackInput ?? {}),
     sequenceIndex:
@@ -40,7 +53,13 @@ export function normalizeAttackInputActionFields(source = {}) {
       source.attackSequenceTotal ?? source.attackInput?.sequenceTotal,
   });
   if (!segment) {
-    return legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {};
+    return {
+      ...(attackInputIntent ? { attackInputIntent } : {}),
+      ...(attackInputChainSelectionSource
+        ? { attackInputChainSelectionSource }
+        : {}),
+      ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
+    };
   }
   return {
     attackGroupId:
@@ -49,6 +68,10 @@ export function normalizeAttackInputActionFields(source = {}) {
     attackSequenceIndex: segment.sequenceIndex,
     attackSequenceTotal: segment.sequenceTotal,
     attackInputChainIdentity: segment.attackInputChainIdentity,
+    ...(attackInputIntent ? { attackInputIntent } : {}),
+    ...(attackInputChainSelectionSource
+      ? { attackInputChainSelectionSource }
+      : {}),
     attackInput: segment,
     ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
   };
@@ -74,7 +97,13 @@ export function createWorkbenchAttackInputChainDrafts({
   );
   const groupId =
     normalizeText(attackGroupId) ?? `attack-group-${actionIds[0]}`;
-  let cursorMs = Math.max(0, snapMsToFrame(Number(startMs) || 0));
+  const attackInputIntent =
+    normalizeAttackInputIntent(baseDraft?.attackInputIntent) ??
+    createPublicNormalAttackIntent(entry);
+  const attackInputChainSelectionSource =
+    normalizeText(baseDraft?.attackInputChainSelectionSource) ??
+    ATTACK_INPUT_CHAIN_SELECTION_SOURCES.RUNTIME_PROJECTED;
+  let cursorFrame = Math.max(0, msToFrame(Number(startMs) || 0));
   return segments.map((segment, index) => {
     const actionId = actionIds[index];
     const scheduling = resolveWorkbenchActionScheduling({
@@ -84,6 +113,12 @@ export function createWorkbenchAttackInputChainDrafts({
     });
     const durationMs = scheduling.durationMs;
     const linkDelayFrames = segment.defaultLinkDelayFrames;
+    const layoutDurationFrames =
+      positiveIntegerOrNull(segment.effectiveDurationFrames) ??
+      positiveIntegerOrNull(segment.durationFrames) ??
+      positiveIntegerOrNull(scheduling.durationFrames) ??
+      positiveIntegerOrNull(scheduling.planningDurationFrames) ??
+      1;
     const timingReady = scheduling.status === 'verified';
     const timingReasons = normalizeTextArray([
       ...(segment.linkTimingReasons ?? []),
@@ -99,7 +134,7 @@ export function createWorkbenchAttackInputChainDrafts({
       level: Math.max(1, Number(level) || 1),
       actionVariantIndex: Math.max(0, Number(entry?.actionVariantIndex) || 0),
       damageSegmentIndex: Math.max(0, Number(entry?.actionVariantIndex) || 0),
-      startMs: cursorMs,
+      startMs: frameToMs(cursorFrame),
       durationMs,
       durationFrames: scheduling.durationFrames,
       timingSource: timingReady ? segment.durationBasis : scheduling.kind,
@@ -128,13 +163,146 @@ export function createWorkbenchAttackInputChainDrafts({
       attackGroupId: groupId,
       attackSequenceIndex: segment.sequenceIndex,
       attackSequenceTotal: segment.sequenceTotal,
+      attackInputChainIdentity: segment.attackInputChainIdentity,
+      attackInputIntent,
+      attackInputChainSelectionSource,
       attackInput: segment,
     };
-    cursorMs = snapMsToFrame(
-      cursorMs + durationMs + frameToMs(linkDelayFrames ?? 0)
-    );
+    cursorFrame += layoutDurationFrames + (linkDelayFrames ?? 0);
     return action;
   });
+}
+
+export function reconcileWorkbenchAttackInputIntentGroups({
+  actions = [],
+  graph = null,
+  variantRuntime = null,
+  effectIntervals = [],
+  resolveMapping,
+  resolveActorId,
+} = {}) {
+  if (
+    !graph?.attackInputChains ||
+    typeof resolveMapping !== 'function' ||
+    typeof resolveActorId !== 'function'
+  ) {
+    return { actions, changed: false, reconciledGroupIds: [] };
+  }
+  const groups = collectRuntimeAttackInputIntentGroups(actions);
+  if (!groups.length) {
+    return { actions, changed: false, reconciledGroupIds: [] };
+  }
+  const usedActionIds = new Set(actions.map(action => String(action.id)));
+  const replacements = new Map();
+  for (const group of groups) {
+    const first = group[0];
+    const mapping = resolveMapping(first);
+    if (mapping?.actionKind !== 'normal-attack') continue;
+    const actorId = resolveActorId(first);
+    const result = resolveVerifiedAttackInputChainEntry({
+      entry: {
+        ...mapping,
+        skillId:
+          first.attackInputIntent?.sourceSkillId ??
+          mapping.sourceSkillId ??
+          first.skillId,
+      },
+      graph,
+      ownerId: first.actorCharacterId ?? mapping.ownerId,
+      actorId,
+      timeMs: first.startMs,
+      effectIntervals,
+      variantRuntime,
+      actions,
+      runtimeSelections: variantRuntime?.selections ?? [],
+      excludedActionIds: group.map(action => action.id),
+    });
+    if (result.status !== 'selected') continue;
+    const targetSegments = normalizeAttackInputSegments(
+      result.entry.attackInputSegments
+    );
+    if (
+      !targetSegments.length ||
+      isAttackInputGroupResolved(group, targetSegments)
+    ) {
+      continue;
+    }
+    const packed = isAttackInputGroupDefaultPacked(group);
+    const existingBySequenceIndex = new Map(
+      group.map(action => [Number(action.attackSequenceIndex), action])
+    );
+    const generatedDrafts = createWorkbenchAttackInputChainDrafts({
+      entry: result.entry,
+      actorCharacterId: first.actorCharacterId ?? mapping.ownerId,
+      skillId: first.skillId ?? mapping.sourceSkillId,
+      level: first.level,
+      startMs: first.startMs,
+      attackGroupId: first.attackGroupId,
+      baseDraft: {
+        ...first,
+        attackInputIntent: first.attackInputIntent,
+        attackInputChainSelectionSource:
+          ATTACK_INPUT_CHAIN_SELECTION_SOURCES.RUNTIME_PROJECTED,
+      },
+      createActionId: (_, index) => {
+        const existing = existingBySequenceIndex.get(index + 1);
+        if (existing) return existing.id;
+        return createDerivedAttackInputActionId({
+          firstActionId: first.id,
+          sequenceIndex: index + 1,
+          usedActionIds,
+        });
+      },
+      createdAt: first.generationBatch?.createdAt ?? null,
+    });
+    const drafts = [];
+    for (const [index, draft] of generatedDrafts.entries()) {
+      const existing = existingBySequenceIndex.get(index + 1);
+      let next = existing
+        ? {
+            ...existing,
+            ...draft,
+            id: existing.id,
+            startMs: packed ? draft.startMs : existing.startMs,
+          }
+        : draft;
+      if (!packed && !existing && index > 0) {
+        const previous = drafts[index - 1];
+        next = {
+          ...next,
+          startMs: frameToMs(
+            msToFrame(previous.startMs) +
+              resolveAttackInputLayoutDurationFrames(previous)
+          ),
+        };
+      }
+      drafts.push(next);
+    }
+    replacements.set(String(first.attackGroupId), drafts);
+  }
+  if (!replacements.size) {
+    return { actions, changed: false, reconciledGroupIds: [] };
+  }
+
+  const emittedGroups = new Set();
+  const nextActions = [];
+  for (const action of actions) {
+    const groupId = String(action.attackGroupId ?? '');
+    const replacement = replacements.get(groupId);
+    if (!replacement) {
+      nextActions.push(action);
+      continue;
+    }
+    if (!emittedGroups.has(groupId)) {
+      nextActions.push(...replacement);
+      emittedGroups.add(groupId);
+    }
+  }
+  return {
+    actions: nextActions,
+    changed: !sameValue(actions, nextActions),
+    reconciledGroupIds: [...replacements.keys()],
+  };
 }
 
 export function migrateLegacyAttackInputActionDrafts(
@@ -148,12 +316,35 @@ export function migrateLegacyAttackInputActionDrafts(
       unresolvedActionIds: [],
     };
   }
-  const refreshed = refreshAttackInputActionDrafts(actions, resolveMapping);
+  let intentMigrationChanged = false;
+  const intentMigratedActions = actions.map(action => {
+    if (
+      action?.generationBatch?.source !== ATTACK_INPUT_CHAIN_SOURCE ||
+      !action.attackInput ||
+      normalizeAttackInputIntent(action.attackInputIntent)
+    ) {
+      return action;
+    }
+    const mapping = resolveMapping(action);
+    const attackInputIntent = createPublicNormalAttackIntent(mapping);
+    if (!attackInputIntent) return action;
+    intentMigrationChanged = true;
+    return {
+      ...action,
+      attackInputIntent,
+      attackInputChainSelectionSource:
+        ATTACK_INPUT_CHAIN_SELECTION_SOURCES.RUNTIME_PROJECTED,
+    };
+  });
+  const refreshed = refreshAttackInputActionDrafts(
+    intentMigratedActions,
+    resolveMapping
+  );
   const usedIds = new Set(
     refreshed.actions.map(action => String(action.id ?? ''))
   );
   const unresolvedActionIds = [];
-  let changed = refreshed.changed;
+  let changed = intentMigrationChanged || refreshed.changed;
   const result = [];
   for (const action of refreshed.actions) {
     if (
@@ -239,9 +430,7 @@ function normalizeAttackInputSegment(segment) {
     sequenceTotal,
     label: normalizeText(segment.label) ?? `A${sequenceIndex}`,
     semanticName: normalizeText(segment.semanticName),
-    attackInputChainIdentity: normalizeText(
-      segment.attackInputChainIdentity
-    ),
+    attackInputChainIdentity: normalizeText(segment.attackInputChainIdentity),
     controlSkillId,
     selectedSubSkillIndex: nonNegativeIntegerOrNull(
       segment.selectedSubSkillIndex
@@ -275,6 +464,44 @@ function normalizeAttackInputSegment(segment) {
     classification: normalizeText(segment.classification) ?? 'unresolved',
     reasons: normalizeTextArray(segment.reasons),
     sourceIdentity: normalizeText(segment.sourceIdentity),
+  };
+}
+
+function createPublicNormalAttackIntent(entry) {
+  const sourceSkillId = positiveIntegerOrNull(
+    entry?.skillId ?? entry?.sourceSkillId
+  );
+  if (!sourceSkillId) return null;
+  return {
+    schemaVersion: 1,
+    contractName: ATTACK_INPUT_INTENT_CONTRACT_NAME,
+    kind: 'public-normal-attack',
+    selectionMode: 'runtime-context',
+    sourceSkillId,
+    actionVariantIndex:
+      nonNegativeIntegerOrNull(entry?.actionVariantIndex) ?? 0,
+    sourceIdentity:
+      normalizeText(entry?.bindingSourceIdentity ?? entry?.sourceIdentity) ??
+      `workbench-public-normal-attack-input:${sourceSkillId}`,
+  };
+}
+
+function normalizeAttackInputIntent(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const kind = normalizeText(value.kind);
+  const selectionMode = normalizeText(value.selectionMode);
+  const sourceSkillId = positiveIntegerOrNull(value.sourceSkillId);
+  if (!kind || !selectionMode || !sourceSkillId) return null;
+  return {
+    schemaVersion: 1,
+    contractName: ATTACK_INPUT_INTENT_CONTRACT_NAME,
+    kind,
+    selectionMode,
+    sourceSkillId,
+    actionVariantIndex: nonNegativeIntegerOrNull(value.actionVariantIndex) ?? 0,
+    sourceIdentity:
+      normalizeText(value.sourceIdentity) ??
+      `workbench-public-normal-attack-input:${sourceSkillId}`,
   };
 }
 
@@ -329,6 +556,87 @@ function normalizeLinkWindow(value) {
         bridgeType: nonNegativeIntegerOrNull(value.bridgeType),
         sourceIdentity: normalizeText(value.sourceIdentity),
       };
+}
+
+function collectRuntimeAttackInputIntentGroups(actions) {
+  const groups = new Map();
+  for (const action of actions ?? []) {
+    if (
+      action?.attackInputIntent?.kind !== 'public-normal-attack' ||
+      action.attackInputIntent.selectionMode !== 'runtime-context' ||
+      action.attackInputChainSelectionSource ===
+        ATTACK_INPUT_CHAIN_SELECTION_SOURCES.USER_EXPLICIT ||
+      !action.attackGroupId
+    ) {
+      continue;
+    }
+    const groupId = String(action.attackGroupId);
+    if (!groups.has(groupId)) groups.set(groupId, []);
+    groups.get(groupId).push(action);
+  }
+  return [...groups.values()]
+    .map(group =>
+      [...group].sort(
+        (left, right) =>
+          Number(left.attackSequenceIndex) - Number(right.attackSequenceIndex)
+      )
+    )
+    .filter(group => group.length > 0);
+}
+
+function isAttackInputGroupResolved(group, targetSegments) {
+  if (group.length !== targetSegments.length) return false;
+  return group.every((action, index) => {
+    const target = targetSegments[index];
+    return (
+      Number(action.attackSequenceIndex) === target.sequenceIndex &&
+      Number(action.attackSequenceTotal) === target.sequenceTotal &&
+      String(
+        action.attackInputChainIdentity ??
+          action.attackInput?.attackInputChainIdentity
+      ) === String(target.attackInputChainIdentity) &&
+      Number(action.attackInput?.controlSkillId) === target.controlSkillId &&
+      Number(action.attackInput?.selectedSubSkillIndex) ===
+        target.selectedSubSkillIndex
+    );
+  });
+}
+
+function isAttackInputGroupDefaultPacked(group) {
+  return group.every((action, index) => {
+    if (index === 0) return true;
+    const previous = group[index - 1];
+    const expectedStartFrame =
+      msToFrame(previous.startMs) +
+      resolveAttackInputLayoutDurationFrames(previous) +
+      (previous.attackInput?.defaultLinkDelayFrames ?? 0);
+    return msToFrame(action.startMs) === expectedStartFrame;
+  });
+}
+
+function resolveAttackInputLayoutDurationFrames(action) {
+  return (
+    positiveIntegerOrNull(action.attackInput?.effectiveDurationFrames) ??
+    positiveIntegerOrNull(action.attackInput?.durationFrames) ??
+    positiveIntegerOrNull(action.durationFrames) ??
+    Math.max(1, msToFrame(action.durationMs))
+  );
+}
+
+function createDerivedAttackInputActionId({
+  firstActionId,
+  sequenceIndex,
+  usedActionIds,
+}) {
+  const base = `${firstActionId}-a${String(sequenceIndex).padStart(2, '0')}`;
+  let candidate = base;
+  let suffix = 2;
+  while (usedActionIds.has(String(candidate))) {
+    candidate = `${base}-${suffix}`;
+    suffix += 1;
+  }
+  usedActionIds.add(String(candidate));
+  return candidate;
 }
 
 function refreshAttackInputActionDrafts(actions, resolveMapping) {
@@ -422,6 +730,17 @@ function refreshAttackInputActionDrafts(actions, resolveMapping) {
         : {}),
       attackSequenceIndex: refresh.segment.sequenceIndex,
       attackSequenceTotal: refresh.segment.sequenceTotal,
+      attackInputChainIdentity: refresh.segment.attackInputChainIdentity,
+      ...(action.generationBatch?.source === ATTACK_INPUT_CHAIN_SOURCE
+        ? {
+            attackInputIntent:
+              normalizeAttackInputIntent(action.attackInputIntent) ??
+              createPublicNormalAttackIntent(mapping),
+            attackInputChainSelectionSource:
+              normalizeText(action.attackInputChainSelectionSource) ??
+              ATTACK_INPUT_CHAIN_SELECTION_SOURCES.RUNTIME_PROJECTED,
+          }
+        : {}),
       attackInput: refresh.segment,
     };
     if (!sameValue(action, next)) changed = true;

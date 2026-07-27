@@ -252,9 +252,7 @@ describe('verified action context scheduling', () => {
       },
     });
     expect(quickEntry.status).toBe('selected');
-    expect(quickEntry.chain.chainIdentity).toBe(
-      'ruby-enhanced-twelve-inputs'
-    );
+    expect(quickEntry.chain.chainIdentity).toBe('ruby-enhanced-twelve-inputs');
     expect(quickEntry.entry.attackInputSegments).toHaveLength(6);
     expect(
       quickEntry.entry.attackInputSegments.map(segment => [
@@ -281,7 +279,7 @@ describe('verified action context scheduling', () => {
       actions: [
         {
           id: 'ruby-normal-a3',
-          actorId: 'actor-ruby',
+          actorCharacterId: 103002,
           startMs: 0,
           attackInput: {
             controlSkillId: 10300203,
@@ -298,9 +296,7 @@ describe('verified action context scheduling', () => {
       ],
     });
     expect(phaseEntry.status).toBe('selected');
-    expect(phaseEntry.chain.chainIdentity).toBe(
-      'ruby-enhanced-twelve-inputs'
-    );
+    expect(phaseEntry.chain.chainIdentity).toBe('ruby-enhanced-twelve-inputs');
     expect(phaseEntry.entry.attackInputSegments).toHaveLength(6);
   });
 
@@ -692,7 +688,11 @@ describe('verified action context scheduling', () => {
             Number(edge.targetControlSkillId) === 10101010
         );
 
-      for (const [requestedFrame, expectedSelected, expectedInputFrame] of frames) {
+      for (const [
+        requestedFrame,
+        expectedSelected,
+        expectedInputFrame,
+      ] of frames) {
         const result = resolveVerifiedContextInputScheduling({
           edges,
           predecessorStartMs: 0,

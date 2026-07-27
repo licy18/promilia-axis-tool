@@ -553,6 +553,9 @@ export function createVerifiedActionVariantRuntime({
       mapping,
       actorState,
       attackInputChains,
+      activeSwitchWindows,
+      previous: lastResolvedActionByActorId.get(action.actorId),
+      timeMs: actionTimeMs,
     });
     if (attackChainSelection.status === 'blocked') {
       const block = createAttackChainExecutionBlock({
@@ -707,8 +710,7 @@ export function createVerifiedActionVariantRuntime({
             decisionFrame: contextSelection.binding.decisionFrame,
             contextActionId: contextSelection.previous?.actionId ?? null,
             executionTiming: contextSelection.binding.executionTiming ?? null,
-            semanticIdentity:
-              contextSelection.binding.semanticIdentity ?? null,
+            semanticIdentity: contextSelection.binding.semanticIdentity ?? null,
             semanticName: contextSelection.binding.semanticName ?? null,
             contextualInputScheduling:
               action.contextualInputScheduling ??
@@ -729,7 +731,8 @@ export function createVerifiedActionVariantRuntime({
                 ? attackChainSelection.segment.semanticName
                 : attackChainSelection.chain.semanticNamePrefix
                   ? `${attackChainSelection.chain.semanticNamePrefix} ${attackChainSelection.segment.label ?? `A${attackChainSelection.segment.sequenceIndex}`}`
-                : action.name ?? `A${attackChainSelection.segment.sequenceIndex}`,
+                  : (action.name ??
+                    `A${attackChainSelection.segment.sequenceIndex}`),
             }
           : activeSelection.binding
             ? {
@@ -959,6 +962,10 @@ export function createVerifiedActionVariantRuntime({
         resolution.actionBinding?.bindingSourceIdentity ??
         resolution.actionBinding?.sourceIdentity ??
         null,
+      attackGroupId: action.attackGroupId ?? null,
+      attackInputChainIdentity:
+        attackChainSelection.chain?.chainIdentity ?? null,
+      attackSequenceIndex: Number(action.attackSequenceIndex) || null,
       ready: true,
     });
   }
@@ -1029,6 +1036,9 @@ function resolveAttackInputChainAction({
   mapping,
   actorState,
   attackInputChains,
+  activeSwitchWindows = [],
+  previous = null,
+  timeMs = 0,
 }) {
   if (
     mapping?.actionKind !== 'normal-attack' ||
@@ -1047,8 +1057,12 @@ function resolveAttackInputChainAction({
     action.attackInputChainIdentity ??
     action.attackInput?.attackInputChainIdentity ??
     null;
+  const runtimeContextIntent =
+    action.attackInputIntent?.kind === 'public-normal-attack' &&
+    action.attackInputIntent?.selectionMode === 'runtime-context' &&
+    action.attackInputChainSelectionSource !== 'user-explicit';
   let chain = null;
-  if (explicitChainIdentity) {
+  if (explicitChainIdentity && !runtimeContextIntent) {
     chain =
       ownerChains.find(
         candidate => candidate.chainIdentity === explicitChainIdentity
@@ -1063,15 +1077,47 @@ function resolveAttackInputChainAction({
     const matchingChains = ownerChains.filter(chain =>
       isRuntimeConditionSatisfied(chain.stateCondition, actorState)
     );
+    const continuedChain =
+      Number(action.attackSequenceIndex) > 1 &&
+      previous?.ready &&
+      previous.attackGroupId != null &&
+      String(previous.attackGroupId) === String(action.attackGroupId)
+        ? matchingChains.find(
+            candidate =>
+              candidate.chainIdentity === previous.attackInputChainIdentity
+          )
+        : null;
+    const derivedChains = matchingChains.filter(
+      candidate =>
+        candidate.entryPolicy?.kind === 'derived-or-quick-entry' &&
+        isRuntimeDerivedAttackChainEntryActive({
+          chain: candidate,
+          ownerChains,
+          actorState,
+          activeSwitchWindows,
+          previous,
+          timeMs,
+        })
+    );
+    const conditionSelected = matchingChains.filter(
+      candidate =>
+        !candidate.entryPolicy ||
+        candidate.entryPolicy.kind === 'condition-selected'
+    );
     const defaults = matchingChains.filter(
       candidate => candidate.entryPolicy?.kind === 'default'
     );
     chain =
-      defaults.length === 1
-        ? defaults[0]
-        : matchingChains.length === 1
-          ? matchingChains[0]
-          : null;
+      continuedChain ??
+      (derivedChains.length === 1
+        ? derivedChains[0]
+        : conditionSelected.length === 1
+          ? conditionSelected[0]
+          : defaults.length === 1
+            ? defaults[0]
+            : matchingChains.length === 1
+              ? matchingChains[0]
+              : null);
   }
   if (!chain) {
     return { status: 'not-required', action, chain: null, segment: null };
@@ -1112,6 +1158,71 @@ function resolveAttackInputChainAction({
       attackInput: projectedSegment,
     },
   };
+}
+
+function isRuntimeDerivedAttackChainEntryActive({
+  chain,
+  ownerChains,
+  actorState,
+  activeSwitchWindows,
+  previous,
+  timeMs,
+}) {
+  const firstSegment = chain.segments?.[0];
+  if (!firstSegment || !hasAttackChainEntryResource(chain, actorState)) {
+    return false;
+  }
+  const quickEntry = (activeSwitchWindows ?? []).some(
+    window =>
+      String(window.actorId) === String(actorState.actor.id) &&
+      Number(window.targetControlSkillId) ===
+        Number(firstSegment.controlSkillId) &&
+      Number(window.targetSubSkillIndex) ===
+        Number(firstSegment.subSkillIndex) &&
+      Number(window.startsAtMs) <= Number(timeMs) &&
+      Number(timeMs) < Number(window.endsAtMs)
+  );
+  if (quickEntry) return true;
+  if (!previous?.ready) return false;
+
+  return (ownerChains ?? []).some(sourceChain => {
+    const transition = sourceChain.phaseTransition;
+    if (
+      transition?.applied !== true ||
+      transition.targetChainIdentity !== chain.chainIdentity
+    ) {
+      return false;
+    }
+    const sourceSegment = sourceChain.segments?.find(
+      segment =>
+        Number(segment.sequenceIndex) === Number(transition.sourceSequenceIndex)
+    );
+    if (
+      !sourceSegment ||
+      Number(previous.controlSkillId) !==
+        Number(sourceSegment.controlSkillId) ||
+      Number(previous.selectedSubSkillIndex) !==
+        Number(sourceSegment.subSkillIndex)
+    ) {
+      return false;
+    }
+    const relativeFrame = Math.round(
+      ((Number(timeMs) - Number(previous.startMs)) * FRAME_RATE) / 1000
+    );
+    return (
+      relativeFrame >= Number(transition.inputWindow?.startFrame) &&
+      relativeFrame < Number(transition.inputWindow?.endFrame)
+    );
+  });
+}
+
+function hasAttackChainEntryResource(chain, actorState) {
+  const segmentLimit = chain.segmentLimit;
+  if (!segmentLimit || segmentLimit.kind !== 'resource-current-value') {
+    return true;
+  }
+  const costPerSegment = Number(segmentLimit.costPerSegment);
+  return costPerSegment > 0 && Number(actorState.current) >= costPerSegment;
 }
 
 function applyAttackInputChainTimingResolution({
@@ -1222,8 +1333,7 @@ function resolvePublicActionForm({
         Number(form.publicControlSkillId) === Number(publicControlSkillId) &&
         Number(form.executionControlSkillId) ===
           Number(executionControlSkillId) &&
-        Number(form.executionSubSkillIndex) ===
-          Number(selectedSubSkillIndex) &&
+        Number(form.executionSubSkillIndex) === Number(selectedSubSkillIndex) &&
         isRuntimeConditionSatisfied(form.condition, actorState)
     ) ?? null
   );
@@ -1470,8 +1580,7 @@ function createVariantSelectionRecord({
     contextActionId: selectionSource?.contextActionId ?? null,
     contextualInputScheduling:
       selectionSource?.contextualInputScheduling ?? null,
-    inputFrame:
-      selectionSource?.contextualInputScheduling?.inputFrame ?? null,
+    inputFrame: selectionSource?.contextualInputScheduling?.inputFrame ?? null,
     inputTimeMs:
       selectionSource?.contextualInputScheduling?.inputTimeMs ?? null,
     executionStartFrame:

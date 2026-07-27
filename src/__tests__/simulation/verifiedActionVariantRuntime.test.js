@@ -35,6 +35,9 @@ const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
 const RUBY_A1 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
   segment => segment.sequenceIndex === 1
 );
+const RUBY_A3 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 3
+);
 const JADE_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === JADE_ID && mapping.actionKind === 'normal-attack'
@@ -319,18 +322,10 @@ describe('verified action variant and special resource runtime', () => {
       characterId: RUBY_ID,
       skillId: 10300201,
       startMs: frameTime(204),
-      attackInput: {
-        ...RUBY_A1,
-        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
-        controlSkillId: 10300201,
-        selectedSubSkillIndex: 1,
-        sequenceIndex: 1,
-        sequenceTotal: 12,
-      },
+      attackInput: RUBY_A1,
       attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
     });
-    enhancedAfterStar.attackInputChainIdentity =
-      'ruby-enhanced-twelve-inputs';
     const quickEntryRuntime = runVariantRuntime({
       actors: [starSkill.actor],
       actions: [starSkill, enhancedAfterStar],
@@ -371,6 +366,71 @@ describe('verified action variant and special resource runtime', () => {
         }),
       }),
     ]);
+  });
+
+  it('replays public normal-attack intent into Ruby E1 only inside the sourced A3 transition window', () => {
+    const a3 = createActorAction({
+      id: 'ruby-public-a3',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: 0,
+      attackInput: RUBY_A3,
+      attackSequenceIndex: 3,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    const inside = createActorAction({
+      id: 'ruby-public-after-a3-inside',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(34),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    const insideRuntime = runVariantRuntime({
+      actors: [a3.actor],
+      actions: [a3, inside],
+      durationMs: 3000,
+      initialRuntimeState: createRubyAmmoState(a3.actorId, 6),
+    });
+    expect(insideRuntime.selectionByActionId.get(inside.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      semanticName: '强化普攻 E1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 1,
+    });
+    expect(
+      insideRuntime.resourceEvents.find(event => event.actionId === inside.id)
+    ).toMatchObject({
+      payload: {
+        operation: 'consume',
+        beforeValue: 6,
+        afterValue: 5,
+      },
+    });
+
+    const outside = {
+      ...inside,
+      id: 'ruby-public-after-a3-outside',
+      startMs: frameTime(79),
+    };
+    const outsideRuntime = runVariantRuntime({
+      actors: [a3.actor],
+      actions: [a3, outside],
+      durationMs: 3000,
+      initialRuntimeState: createRubyAmmoState(a3.actorId, 6),
+    });
+    expect(outsideRuntime.selectionByActionId.get(outside.id)).toMatchObject({
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      semanticName: '普通攻击 A1',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 0,
+    });
+    expect(
+      outsideRuntime.resourceEvents.filter(
+        event => event.actionId === outside.id
+      )
+    ).toEqual([]);
   });
 
   it('projects Jade gains, transformation, and the selected charged variant at exact frames', () => {
@@ -1084,8 +1144,7 @@ describe('verified action variant and special resource runtime', () => {
       );
       if (expectedInputFrame != null) {
         expect(
-          runtime.selectionByActionId.get(charged.id)
-            ?.contextualInputScheduling
+          runtime.selectionByActionId.get(charged.id)?.contextualInputScheduling
         ).toMatchObject({
           resolutionKind: 'edge-intent-contextual-transition',
           inputOffsetFrame: expectedInputFrame,
@@ -1867,6 +1926,7 @@ function createActorAction({
   startMs = 0,
   attackInput = null,
   attackSequenceIndex = null,
+  attackInputIntent = null,
   variantInputSelection = null,
 }) {
   const actor = {
@@ -1885,6 +1945,7 @@ function createActorAction({
     actionVariantIndex,
     startMs,
     durationMs: 1000,
+    attackInputIntent,
     variantInputSelection,
     ...(attackInput
       ? {
@@ -1894,6 +1955,29 @@ function createActorAction({
           attackInput,
         }
       : {}),
+  };
+}
+
+function createPublicNormalAttackIntent() {
+  return {
+    schemaVersion: 1,
+    contractName: 'AzPrWorkbenchAttackInputIntent',
+    kind: 'public-normal-attack',
+    selectionMode: 'runtime-context',
+    sourceSkillId: 10300201,
+    sourceIdentity: 'workbench-public-normal-attack-input',
+  };
+}
+
+function createRubyAmmoState(actorId, currentValue) {
+  return {
+    specialResourcesByActor: [
+      {
+        actorId,
+        resourceIdentity: 'actor:103002:element:103002047',
+        currentValue,
+      },
+    ],
   };
 }
 

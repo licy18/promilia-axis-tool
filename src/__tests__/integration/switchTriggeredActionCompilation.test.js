@@ -94,6 +94,40 @@ describe('switch triggered action compilation', () => {
       )?.code
     ).toBe('star-carry-switch-trigger-required');
   });
+
+  it('keeps a manual action executable after a cooldown-suppressed switch trigger', () => {
+    const project = createCooldownSwitchProject();
+    const scenario = compileProject(project, getWorkbenchGameData());
+    expect(
+      scenario.actions.filter(
+        action => action.parentActionId === 'switch-during-cooldown'
+      )
+    ).toEqual([]);
+    expect(
+      scenario.actions.find(action => action.id === 'switch-during-cooldown')
+        ?.switchTriggerBindings
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          resolutionStatus: 'suppressed-cooldown-active',
+          materializationStatus: 'not-materialized',
+          applied: false,
+        }),
+      ])
+    );
+
+    const result = simulateScenario(scenario);
+    expect(result.actionExecutionPlan.executedActionIds).toContain(
+      'manual-after-suppressed-trigger'
+    );
+    expect(
+      result.actionRuleDiagnostics.diagnostics.filter(
+        diagnostic =>
+          diagnostic.actionIds?.includes('manual-after-suppressed-trigger') &&
+          diagnostic.code === 'lane-overlap'
+      )
+    ).toEqual([]);
+  });
 });
 
 function createSwitchProject({ startMs = 1000, includeSwitch = true } = {}) {
@@ -123,6 +157,66 @@ function createSwitchProject({ startMs = 1000, includeSwitch = true } = {}) {
             },
           ]
         : [],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-101003',
+          characterId: 101003,
+        },
+      },
+    }
+  );
+}
+
+function createCooldownSwitchProject() {
+  const teamSlots = [
+    { slotId: 'team-slot-1', position: 0, characterId: 101003 },
+    { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+    { slotId: 'team-slot-3', position: 2, characterId: 103002 },
+  ];
+  return createWorkbenchProject(
+    {
+      characterId: 101003,
+      secondaryCharacterId: 101007,
+      tertiaryCharacterId: 103002,
+    },
+    {
+      teamSlots,
+      actions: [
+        {
+          id: 'switch-first',
+          type: 'switch',
+          actorCharacterId: 101003,
+          targetCharacterId: 101007,
+          startMs: 1000,
+          durationMs: 0,
+        },
+        {
+          id: 'switch-reset',
+          type: 'switch',
+          actorCharacterId: 101007,
+          targetCharacterId: 101003,
+          startMs: 8000,
+          durationMs: 0,
+        },
+        {
+          id: 'switch-during-cooldown',
+          type: 'switch',
+          actorCharacterId: 101003,
+          targetCharacterId: 101007,
+          startMs: 9000,
+          durationMs: 0,
+        },
+        {
+          id: 'manual-after-suppressed-trigger',
+          type: 'skill',
+          actorCharacterId: 101007,
+          skillId: 10100701,
+          startMs: 9100,
+          durationMs: 1000,
+          level: 1,
+          actionVariantIndex: 0,
+        },
+      ],
       initialRuntimeState: {
         controlledActor: {
           actorId: 'actor-101003',

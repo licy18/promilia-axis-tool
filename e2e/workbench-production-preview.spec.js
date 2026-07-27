@@ -72,7 +72,9 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m9-r3-r2-r2-xiaoyu-hidden-inputs]') ||
     testInfo.title.includes('[m9-r3-r2-r3-contextual-edge]') ||
     testInfo.title.includes('[m9-r3-r1-timeline-layout]') ||
-    testInfo.title.includes('[m10-b1-ruby-profile-ui]')
+    testInfo.title.includes('[m10-b1-ruby-profile-ui]') ||
+    testInfo.title.includes('[m10-b1-r2-ruby-replay]') ||
+    testInfo.title.includes('[m10-b1-r2-switch-cooldown]')
   ) {
     return;
   }
@@ -6811,10 +6813,7 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] [m9-r3-r2-r1-xiaoyu-burst-chain] resolve
   const enhancedSpecialStartMs = Number(
     await enhancedSpecialCharged.getAttribute('data-start-ms')
   );
-  expect(enhancedSpecialStartMs - burstA3StartMs).toBeCloseTo(
-    frameToMs(71),
-    3
-  );
+  expect(enhancedSpecialStartMs - burstA3StartMs).toBeCloseTo(frameToMs(71), 3);
   await expectChargedForm(enhancedSpecialCharged, {
     name: '强化特殊重击',
     controlSkillId: 10101042,
@@ -7626,18 +7625,14 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
     '[data-testid="workbench-timeline-action"][data-skill-id="10300212"]'
   );
   await expect(starSkillAction).toHaveCount(1);
-  const starSkillActionId = await starSkillAction.getAttribute(
-    'data-action-id'
-  );
+  const starSkillActionId =
+    await starSkillAction.getAttribute('data-action-id');
   expect(starSkillActionId).toBeTruthy();
   const starAmmoNode = ammoLane.locator(
     `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${starSkillActionId}"]`
   );
   await expect(starAmmoNode).toHaveCount(1);
-  await expect(starAmmoNode).toHaveAttribute(
-    'title',
-    /子弹 补满 · 0 -> 12/
-  );
+  await expect(starAmmoNode).toHaveAttribute('title', /子弹 补满 · 0 -> 12/);
   const fireLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="tuning-mark-150"]'
   );
@@ -7645,10 +7640,7 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
     `[data-testid="workbench-timeline-state-curve-node"][data-action-id="${starSkillActionId}"][data-event-kinds*="acquire"]`
   );
   await expect(fireMarkNode).toHaveCount(1);
-  await expect(fireMarkNode).toHaveAttribute(
-    'title',
-    /火印记 获取 · 0 -> 1/
-  );
+  await expect(fireMarkNode).toHaveAttribute('title', /火印记 获取 · 0 -> 1/);
 
   const starBox = await starSkillAction.boundingBox();
   const actorLaneBox = await actorLane.boundingBox();
@@ -7672,6 +7664,35 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
       '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="12"]'
     )
   ).toContainText(/E12.*强化普攻/);
+  const enhancedGeometry = await normalBlocks.evaluateAll(actions =>
+    actions
+      .map(action => {
+        const rect = action.getBoundingClientRect();
+        return {
+          sequenceIndex: Number(
+            action.getAttribute('data-attack-sequence-index')
+          ),
+          startFrame: Math.round(
+            (Number(action.getAttribute('data-start-ms')) * 60) / 1000
+          ),
+          durationFrames: Math.round(
+            (Number(action.getAttribute('data-duration-ms')) * 60) / 1000
+          ),
+          left: rect.left,
+          right: rect.right,
+        };
+      })
+      .sort((left, right) => left.sequenceIndex - right.sequenceIndex)
+  );
+  expect(enhancedGeometry).toHaveLength(12);
+  for (let index = 1; index < enhancedGeometry.length; index += 1) {
+    const previous = enhancedGeometry[index - 1];
+    const current = enhancedGeometry[index];
+    expect(current.startFrame).toBe(
+      previous.startFrame + previous.durationFrames
+    );
+    expect(Math.abs(current.left - previous.right)).toBeLessThanOrEqual(1.25);
+  }
   await expect(ammoNodes).toHaveCount(13);
   const finalConsume = ammoLane
     .locator(
@@ -7732,6 +7753,308 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: 'reports/m10-b1-r1-ruby-star-skill-narrow.png',
+  });
+});
+
+test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replayed Ruby state', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.getByTestId('workbench-scenario-bar')).toBeVisible();
+  await page.getByTestId('workbench-scenario-add').click();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const slotOne = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-1"]'
+  );
+  await slotOne.getByTestId('workbench-direct-character-picker').click();
+  await page
+    .getByTestId('workbench-loadout-picker')
+    .locator(
+      '[data-testid="workbench-loadout-option"][data-option-id="103002"]'
+    )
+    .click();
+  await page.getByTestId('workbench-save-draft').click();
+  await page.evaluate(storageKey => {
+    const draft = JSON.parse(window.localStorage.getItem(storageKey));
+    const applyRubyInitialAmmo = value => {
+      if (!value || typeof value !== 'object') return;
+      if (
+        Array.isArray(value.actorConfigs) &&
+        Array.isArray(value.actionDrafts) &&
+        value.actorConfigs.some(actor => Number(actor.characterId) === 103002)
+      ) {
+        const initialRuntimeState = value.initialRuntimeState ?? {};
+        value.initialRuntimeState = {
+          ...initialRuntimeState,
+          controlledActor: {
+            actorId: 'actor-103002',
+            characterId: 103002,
+          },
+          specialResourcesByActor: [
+            ...(initialRuntimeState.specialResourcesByActor ?? []).filter(
+              row => row.resourceIdentity !== 'actor:103002:element:103002047'
+            ),
+            {
+              actorId: 'actor-103002',
+              characterId: 103002,
+              actorName: '红宝石',
+              resourceIdentity: 'actor:103002:element:103002047',
+              resourceName: '子弹',
+              currentValue: 6,
+              maxValue: 12,
+            },
+          ],
+        };
+      }
+      Object.values(value).forEach(applyRubyInitialAmmo);
+    };
+    applyRubyInitialAmmo(draft);
+    window.localStorage.setItem(storageKey, JSON.stringify(draft));
+  }, BASIC_WORKBENCH_DRAFT_STORAGE_KEY);
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-103002"]'
+  );
+  const ammoLaneLabel = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-special-resource-curve"][data-character-id="103002"]'
+  );
+  await expect(ammoLaneLabel).toContainText('6 / 12');
+  const normalAttackEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"][data-skill-id="10300201"]'
+  );
+  await dragLocatorTo(page, normalAttackEntry, actorLane, {
+    targetPosition: { x: 120, y: 72 },
+  });
+  const normalBlocks = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10300201"]'
+  );
+  await expect(normalBlocks).toHaveCount(3);
+  const firstGroupId = await normalBlocks
+    .filter({ hasText: /A1.*普通攻击/ })
+    .getAttribute('data-attack-group-id');
+  expect(firstGroupId).toBeTruthy();
+  const firstA3 = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-attack-group-id="${firstGroupId}"][data-attack-sequence-index="3"]`
+  );
+  const firstA3StartMs = Number(await firstA3.getAttribute('data-start-ms'));
+  const durationMs = Number(await timeline.getAttribute('data-duration-ms'));
+  const actorLaneBox = await actorLane.boundingBox();
+  if (!actorLaneBox || !durationMs) {
+    throw new Error('Ruby A3 transition geometry is unavailable');
+  }
+  const transitionStartMs = firstA3StartMs + frameToMs(34);
+  await dragLocatorTo(page, normalAttackEntry, actorLane, {
+    targetPosition: {
+      x: (transitionStartMs / durationMs) * actorLaneBox.width,
+      y: 72,
+    },
+  });
+  await expect(normalBlocks).toHaveCount(9);
+  const groupIds = await normalBlocks.evaluateAll(actions => [
+    ...new Set(
+      actions
+        .map(action => action.getAttribute('data-attack-group-id'))
+        .filter(Boolean)
+    ),
+  ]);
+  const enhancedGroupId = groupIds.find(groupId => groupId !== firstGroupId);
+  expect(enhancedGroupId).toBeTruthy();
+  const projectedGroup = () =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-attack-group-id="${enhancedGroupId}"]`
+    );
+  await expect(projectedGroup()).toHaveCount(6);
+  const projectedFirst = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-attack-group-id="${enhancedGroupId}"][data-attack-sequence-index="1"]`
+  );
+  await expect(projectedFirst).toContainText(/E1.*强化普攻/);
+  const projectedFirstId = await projectedFirst.getAttribute('data-action-id');
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-kind="actor-special-resource-curve"] [data-testid="workbench-timeline-state-curve-node"][data-action-id="${projectedFirstId}"]`
+    )
+  ).toHaveAttribute('title', /6 -> 5/);
+
+  await dragTimelineActionByFrames(page, projectedFirst, 50);
+  await expect(projectedGroup()).toHaveCount(3);
+  await expect(projectedFirst).toContainText(/A1.*普通攻击/);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(projectedGroup()).toHaveCount(6);
+  await expect(projectedFirst).toContainText(/E1.*强化普攻/);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(projectedGroup()).toHaveCount(3);
+  await expect(projectedFirst).toContainText(/A1.*普通攻击/);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(projectedGroup()).toHaveCount(6);
+  await expect(projectedFirst).toContainText(/E1.*强化普攻/);
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(projectedGroup()).toHaveCount(6);
+  await expect(projectedFirst).toContainText(/E1.*强化普攻/);
+  await page.screenshot({
+    path: 'reports/m10-b1-r2-ruby-replay-desktop.png',
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expect(projectedGroup()).toHaveCount(6);
+  await page.screenshot({
+    path: 'reports/m10-b1-r2-ruby-replay-narrow.png',
+  });
+});
+
+test('[m10-b1-r2-switch-cooldown] suppresses cooldown-active switch children before timeline materialization', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  const draft = createM10B1R2SwitchCooldownDraft();
+  await page.addInitScript(
+    ({ storageKey, draftState }) => {
+      const markerKey = 'promilia-axis-tool:e2e-m10-b1-r2-switch-seeded';
+      if (window.sessionStorage.getItem(markerKey) === '1') return;
+      window.localStorage.setItem(storageKey, JSON.stringify(draftState));
+      window.sessionStorage.setItem(markerKey, '1');
+    },
+    {
+      storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+      draftState: draft,
+    }
+  );
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await expect(timeline).toHaveAttribute('data-duration-ms', '120000');
+
+  const firstSwitchId = 'm10-b1-r2-switch-first';
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-parent-action-id="${firstSwitchId}"][data-derived-action-kind="switch-triggered-star-carry"]`
+    )
+  ).toHaveCount(2);
+  await expect(
+    timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-parent-action-id="${firstSwitchId}"][data-derived-action-kind="switch-triggered-star-carry"][data-skill-id="10100322"]`
+    )
+  ).toHaveCount(1);
+
+  const cooldownSwitchId = 'm10-b1-r2-switch-during-cooldown';
+  let cooldownSwitch = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-action-id="${cooldownSwitchId}"]`
+  );
+  const suppressedRubyChild = () =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-parent-action-id="${cooldownSwitchId}"][data-derived-action-kind="switch-triggered-star-carry"][data-skill-id="10100322"]`
+    );
+  await expect(suppressedRubyChild()).toHaveCount(0);
+
+  await page
+    .locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="109001"]'
+    )
+    .click();
+  const manualEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="star-skill"][data-skill-id="10900112"]'
+  );
+  const manualLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]'
+  );
+  const timelineDurationMs = Number(
+    await timeline.getAttribute('data-duration-ms')
+  );
+  const manualLaneBox = await manualLane.boundingBox();
+  if (!manualLaneBox || !timelineDurationMs) {
+    throw new Error('Switch cooldown manual-action geometry is unavailable');
+  }
+  const previousManualIds = new Set(
+    await timeline
+      .locator(
+        '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
+      )
+      .evaluateAll(actions =>
+        actions.map(action => action.getAttribute('data-action-id'))
+      )
+  );
+  await dragLocatorTo(page, manualEntry, manualLane, {
+    targetPosition: {
+      x: (frameToMs(1120) / timelineDurationMs) * manualLaneBox.width,
+      y: 72,
+    },
+  });
+  const newManualIds = await timeline
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'
+    )
+    .evaluateAll(
+      (actions, previousIds) =>
+        actions
+          .map(action => action.getAttribute('data-action-id'))
+          .filter(actionId => !previousIds.includes(actionId)),
+      [...previousManualIds]
+    );
+  expect(newManualIds.length).toBeGreaterThan(0);
+  for (const actionId of newManualIds) {
+    const action = timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+    );
+    await expect(action).not.toHaveClass(/overlap/);
+    await expect(action).not.toHaveAttribute(
+      'data-readiness-status',
+      'blocked'
+    );
+  }
+
+  await cooldownSwitch.click();
+  const frameInput = page.getByTestId('workbench-start-frame-input');
+  await frameInput.fill('2100');
+  await frameInput.press('Enter');
+  await expect(suppressedRubyChild()).toHaveCount(1);
+  await page.getByTestId('workbench-undo-edit').click();
+  cooldownSwitch = timeline.locator(
+    `[data-testid="workbench-timeline-action"][data-action-id="${cooldownSwitchId}"]`
+  );
+  await expect(suppressedRubyChild()).toHaveCount(0);
+  for (const actionId of newManualIds) {
+    await expect(
+      timeline.locator(
+        `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+      )
+    ).not.toHaveClass(/overlap/);
+  }
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(suppressedRubyChild()).toHaveCount(1);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(suppressedRubyChild()).toHaveCount(0);
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(suppressedRubyChild()).toHaveCount(0);
+  await page.screenshot({
+    path: 'reports/m10-b1-r2-switch-cooldown-desktop.png',
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expect(suppressedRubyChild()).toHaveCount(0);
+  await page.screenshot({
+    path: 'reports/m10-b1-r2-switch-cooldown-narrow.png',
   });
 });
 
@@ -8000,9 +8323,9 @@ async function setEnemyLevel(page, value) {
 
 async function expectEnemyLevel(page, value) {
   const inspector = await openEnemyInspector(page);
-  await expect(inspector.getByTestId('workbench-enemy-level-input')).toHaveValue(
-    String(value)
-  );
+  await expect(
+    inspector.getByTestId('workbench-enemy-level-input')
+  ).toHaveValue(String(value));
 }
 
 async function readVerifiedPanelValue(panel, label) {
@@ -8366,6 +8689,58 @@ async function setWorkbenchTimelineDuration(page, durationMs) {
     'data-duration-ms',
     String(durationMs)
   );
+}
+
+function createM10B1R2SwitchCooldownDraft() {
+  const draft = createBasicWorkbenchDraftFixture();
+  const actionDrafts = [
+    {
+      id: 'm10-b1-r2-switch-first',
+      type: 'switch',
+      actorCharacterId: 101003,
+      targetCharacterId: 109001,
+      startMs: frameToMs(600),
+      durationMs: 0,
+      note: '首次退场触发星携技',
+    },
+    {
+      id: 'm10-b1-r2-switch-reset',
+      type: 'switch',
+      actorCharacterId: 109001,
+      targetCharacterId: 101003,
+      startMs: frameToMs(1080),
+      durationMs: 0,
+      note: '切回寒悠悠',
+    },
+    {
+      id: 'm10-b1-r2-switch-during-cooldown',
+      type: 'switch',
+      actorCharacterId: 101003,
+      targetCharacterId: 109001,
+      startMs: frameToMs(1100),
+      durationMs: 0,
+      note: 'CD 内再次退场',
+    },
+  ];
+  const initialRuntimeState = {
+    controlledActor: {
+      actorId: 'actor-101003',
+      characterId: 101003,
+    },
+  };
+  const applyFixture = value => {
+    value.durationMs = 120_000;
+    value.actionDrafts = actionDrafts.map(action => ({ ...action }));
+    value.actionRelations = [];
+    value.cycleBoundaries = [];
+    value.initialRuntimeState = structuredClone(initialRuntimeState);
+    value.selectedActionId = 'm10-b1-r2-switch-during-cooldown';
+  };
+  applyFixture(draft);
+  for (const scenario of draft.scenarioWorkspace.scenarios) {
+    applyFixture(scenario.draft);
+  }
+  return draft;
 }
 
 function createM9R2R1WorkbenchDraft() {

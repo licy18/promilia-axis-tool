@@ -9,6 +9,7 @@ import {
   ATTACK_INPUT_LEGACY_UNRESOLVED,
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
+  reconcileWorkbenchAttackInputIntentGroups,
 } from '../../domain/workbenchAttackInputChain';
 import { resolveVerifiedAttackInputChainEntry } from '../../domain/verifiedActionContextScheduling';
 import { frameToMs, msToFrame } from '../../domain/timebase';
@@ -85,15 +86,49 @@ describe('workbench normal attack input chain', () => {
 
     const drafts = createChain(resolved.entry, 103002);
     expect(drafts).toHaveLength(12);
+    expect(drafts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attackInputIntent: expect.objectContaining({
+            kind: 'public-normal-attack',
+            selectionMode: 'runtime-context',
+            sourceSkillId: 10300201,
+          }),
+          attackInputChainSelectionSource: 'runtime-projected',
+        }),
+      ])
+    );
     expect(drafts.map(draft => draft.attackInput.semanticName)).toEqual(
       Array.from({ length: 12 }, (_, index) => `强化普攻 E${index + 1}`)
     );
+    for (let index = 1; index < drafts.length; index += 1) {
+      expect(msToFrame(drafts[index].startMs)).toBe(
+        msToFrame(drafts[index - 1].startMs) +
+          drafts[index - 1].attackInput.effectiveDurationFrames
+      );
+    }
+    expect(drafts.slice(6, 9).map(draft => msToFrame(draft.startMs))).toEqual([
+      220, 238, 256,
+    ]);
 
-    const refreshed = migrateLegacyAttackInputActionDrafts(drafts, {
+    const legacyDrafts = drafts.map(
+      ({
+        attackInputIntent: _attackInputIntent,
+        attackInputChainSelectionSource: _selectionSource,
+        ...draft
+      }) => draft
+    );
+    const refreshed = migrateLegacyAttackInputActionDrafts(legacyDrafts, {
       resolveMapping: () => mapping,
     });
+    expect(refreshed.changed).toBe(true);
     expect(refreshed.actions).toHaveLength(12);
     expect(refreshed.actions[0]).toMatchObject({
+      attackInputIntent: {
+        kind: 'public-normal-attack',
+        selectionMode: 'runtime-context',
+      },
+      attackInputChainSelectionSource: 'runtime-projected',
       attackInput: {
         attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
         label: 'E1',
@@ -138,6 +173,84 @@ describe('workbench normal attack input chain', () => {
     });
     expect(drafts[2].attackInput.selectedHitIdentities).toHaveLength(6);
     expect(new Set(drafts.map(draft => draft.attackGroupId)).size).toBe(1);
+  });
+
+  it('re-materializes a public Ruby input group from replay state instead of persisting the computed phase', () => {
+    const mapping = findNormalAttack(103002);
+    const normalDrafts = createChain(mapping, 103002, frameToMs(34));
+    const sourceA3 = {
+      id: 'ruby-source-a3',
+      type: 'skill',
+      skillId: 10300201,
+      actorCharacterId: 103002,
+      startMs: 0,
+      durationMs: frameToMs(79),
+      attackInput: {
+        controlSkillId: 10300203,
+        selectedSubSkillIndex: 0,
+      },
+    };
+    const variantRuntime = {
+      ready: true,
+      initialState: [
+        {
+          actorId: 'actor-ruby',
+          characterId: 103002,
+          resourceIdentity: 'actor:103002:element:103002047',
+          currentValue: 6,
+          maxValue: 12,
+        },
+      ],
+      resourceEvents: [],
+      activeSwitchWindows: [],
+      selections: [
+        {
+          actionId: sourceA3.id,
+          executionControlSkillId: 10300203,
+          selectedSubSkillIndex: 0,
+        },
+      ],
+    };
+    const enhanced = reconcileWorkbenchAttackInputIntentGroups({
+      actions: [sourceA3, ...normalDrafts],
+      graph: mechanicsPackage.actionVariantGraph,
+      variantRuntime,
+      resolveMapping: () => mapping,
+      resolveActorId: () => 'actor-ruby',
+    });
+
+    expect(enhanced.changed).toBe(true);
+    expect(enhanced.actions.slice(1)).toHaveLength(6);
+    expect(enhanced.actions[1]).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      attackInputChainSelectionSource: 'runtime-projected',
+      attackInput: {
+        semanticName: '强化普攻 E1',
+        selectedSubSkillIndex: 1,
+      },
+    });
+
+    const shifted = enhanced.actions.map(action =>
+      action.attackGroupId
+        ? {
+            ...action,
+            startMs: frameToMs(msToFrame(action.startMs) + 45),
+          }
+        : action
+    );
+    const normal = reconcileWorkbenchAttackInputIntentGroups({
+      actions: shifted,
+      graph: mechanicsPackage.actionVariantGraph,
+      variantRuntime,
+      resolveMapping: () => mapping,
+      resolveActorId: () => 'actor-ruby',
+    });
+    expect(normal.changed).toBe(true);
+    expect(normal.actions.slice(1)).toHaveLength(3);
+    expect(normal.actions[1]).toMatchObject({
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      attackInput: { semanticName: '普通攻击 A1' },
+    });
   });
 
   it('keeps ambiguous input chains schedulable without promoting unknown timing', () => {
@@ -411,14 +524,14 @@ function findNormalAttack(ownerId) {
   );
 }
 
-function createChain(mapping, actorCharacterId) {
+function createChain(mapping, actorCharacterId, startMs = 1000) {
   let index = 0;
   return createWorkbenchAttackInputChainDrafts({
     entry: mapping,
     actorCharacterId,
     skillId: mapping.sourceSkillId,
     level: 1,
-    startMs: 1000,
+    startMs,
     createActionId: () => `action-${++index}`,
   });
 }
