@@ -357,8 +357,7 @@ export function createCharacterCombatPipelineArtifacts({
       characterComplete: profile.characterComplete,
       zeroDistanceSimulationComplete:
         profile.zeroDistanceSimulationComplete === true,
-      realClientEvidenceComplete:
-        profile.realClientEvidenceComplete === true,
+      realClientEvidenceComplete: profile.realClientEvidenceComplete === true,
       completionState: profile.completionState,
       runtimeContractHash: profile.runtimeCompilation.contractHash,
       sourcePath: `src/data/generated/character-combat-profiles/${profile.owner.ownerId}.json`,
@@ -630,6 +629,7 @@ export function createCharacterCombatOwnerArtifacts({
     passives,
     switchTriggers,
     coverage,
+    descriptionCoverage,
   });
   const actionPhaseCoverage = createActionPhaseCoverage({
     ownerId,
@@ -699,6 +699,7 @@ export function createCharacterCombatOwnerArtifacts({
     actionForms,
     unresolvedRecords,
     runtimeCompilation,
+    runtimeCoverage,
     uiVerification: recipe.uiVerification,
   });
   const simulationScopes = deriveCharacterCombatSimulationScopes({
@@ -712,6 +713,7 @@ export function createCharacterCombatOwnerArtifacts({
     capturePlan,
     goldenFixture,
     unresolvedRecords,
+    runtimeCoverage,
   });
   const profileBase = {
     schemaVersion: CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION,
@@ -1686,25 +1688,33 @@ function createDescriptionCoverage({
     clauses.forEach(({ text, paragraphIndex, clauseIndex }) => {
       const references = [];
       const mechanicKinds = [];
-      const actions = publicActions.filter(
+      const skillActions = publicActions.filter(
         action => Number(action.sourceSkillId) === Number(skill.id)
       );
       const actionKinds = resolveDescriptionActionKinds(text);
-      if (/伤害|攻击|反击|打断/.test(text)) {
+      const actions =
+        actionKinds.length > 0
+          ? skillActions.filter(action =>
+              actionKinds.includes(action.actionKind)
+            )
+          : skillActions;
+      let publicFormSettlements = [];
+      if (/伤害/.test(text)) {
         mechanicKinds.push('action-settlement');
         references.push(...actions.map(action => action.identity));
-        const actionControlIds = new Set(
-          actions.flatMap(action => [
-            Number(action.controlSkillId),
-            ...(action.attackInputSegments ?? []).map(segment =>
-              Number(segment.controlSkillId)
-            ),
-          ])
+        publicFormSettlements = actions.flatMap(action =>
+          createPublicFormSettlementRows({
+            action,
+            actionForms,
+            hits,
+            recipe,
+          })
         );
         references.push(
-          ...hits
-            .filter(hit => actionControlIds.has(Number(hit.controlSkillId)))
-            .map(hit => `hit:${hit.hitIdentity}`)
+          ...publicFormSettlements.flatMap(row => [
+            row.publicFormId,
+            ...row.settlementEvidence,
+          ])
         );
       }
       if (actionKinds.length > 0) {
@@ -1749,18 +1759,36 @@ function createDescriptionCoverage({
       references.push(
         ...semanticEffects
           .filter(effect =>
-            (effect.publicActions ?? []).some(
-              action => Number(action.sourceSkillId) === Number(skill.id)
+            (effect.publicActions ?? []).some(effectAction =>
+              actions.some(
+                action =>
+                  effectAction.actionIdentity === action.identity ||
+                  (Number(effectAction.sourceSkillId) ===
+                    Number(action.sourceSkillId) &&
+                    effectAction.actionKind === action.actionKind)
+              )
             )
           )
           .map(effect => effect.semanticIdentity)
       );
       const uniqueReferences = [...new Set(references.filter(Boolean))].sort();
+      const settlementStatuses = publicFormSettlements.map(row => row.status);
+      const settlementStatus =
+        mechanicKinds.includes('action-settlement') &&
+        publicFormSettlements.length > 0
+          ? settlementStatuses.every(status => status === 'applied')
+            ? 'applied'
+            : settlementStatuses.includes('runtime-evidence-required')
+              ? 'runtime-evidence-required'
+              : 'static-evidence-gap'
+          : null;
       const status = notApplicable
         ? 'not-applicable'
-        : uniqueReferences.length > 0
-          ? 'applied'
-          : 'static-evidence-gap';
+        : (settlementStatus ??
+          (uniqueReferences.length > 0 ? 'applied' : 'static-evidence-gap'));
+      const settlementReasons = publicFormSettlements.flatMap(
+        row => row.reasons ?? []
+      );
       entries.push({
         coverageIdentity: `actor:${ownerId}:skill:${skill.id}:description:${paragraphIndex}:${clauseIndex}`,
         skillId: Number(skill.id),
@@ -1771,11 +1799,20 @@ function createDescriptionCoverage({
         mechanicKinds: [...new Set(mechanicKinds)].sort(),
         status,
         coverageReferences: uniqueReferences,
+        publicFormSettlements,
         reasons: notApplicable
           ? [notApplicable.reason]
           : status === 'applied'
             ? []
-            : ['description-executable-effect-not-linked-to-static-profile'],
+            : [
+                ...new Set(
+                  settlementReasons.length > 0
+                    ? settlementReasons
+                    : [
+                        'description-executable-effect-not-linked-to-static-profile',
+                      ]
+                ),
+              ].sort(),
         sourceIdentity:
           notApplicable?.sourceIdentity ??
           skill.source?.heroModule ??
@@ -1797,6 +1834,140 @@ function createDescriptionCoverage({
       statusCounts: countBy(entries, entry => entry.status),
     },
   };
+}
+
+function createPublicFormSettlementRows({ action, actionForms, hits, recipe }) {
+  const forms = actionForms.filter(
+    form =>
+      String(form.formIdentity ?? '').startsWith(`${action.identity}:`) ||
+      (form.publicActionKind === action.actionKind &&
+        Number(form.ownerId) === Number(action.ownerId) &&
+        Number(form.publicControlSkillId ?? action.controlSkillId) ===
+          Number(action.controlSkillId))
+  );
+  const normalizedForms =
+    forms.length > 0
+      ? forms
+      : [
+          {
+            formIdentity: `${action.identity}:default`,
+            executionControlSkillId: action.controlSkillId,
+            executionSubSkillIndex: null,
+            syntheticFallback: true,
+          },
+        ];
+
+  return normalizedForms.map(form => {
+    const controlSelectors =
+      form.syntheticFallback === true &&
+      action.actionKind === 'normal-attack' &&
+      (action.attackInputSegments ?? []).length > 0
+        ? action.attackInputSegments.map(segment => ({
+            controlSkillId: Number(segment.controlSkillId),
+            subSkillIndex: normalizeOptionalInteger(
+              segment.selectedSubSkillIndex ?? segment.subSkillIndex
+            ),
+          }))
+        : [
+            {
+              controlSkillId: Number(
+                form.executionControlSkillId ?? action.controlSkillId
+              ),
+              subSkillIndex: normalizeOptionalInteger(
+                form.executionSubSkillIndex ?? form.subSkillIndex
+              ),
+            },
+          ];
+    const formHits = dedupeBy(
+      hits.filter(hit =>
+        controlSelectors.some(
+          selector =>
+            Number(hit.controlSkillId) === selector.controlSkillId &&
+            (selector.subSkillIndex == null ||
+              Number(hit.subSkillIndex ?? hit.mapIndex) ===
+                selector.subSkillIndex)
+        )
+      ),
+      hit => hit.hitIdentity
+    );
+    const gap = (recipe.unresolvedRecords ?? []).find(
+      item =>
+        item.sourceKind === 'public-form-settlement' &&
+        (item.publicFormId === form.formIdentity ||
+          item.publicActionIdentity === action.identity ||
+          (Number(item.sourceSkillId) === Number(action.sourceSkillId) &&
+            item.actionKind === action.actionKind &&
+            (item.subSkillIndex == null ||
+              Number(item.subSkillIndex) ===
+                Number(form.executionSubSkillIndex))))
+    );
+    const status =
+      formHits.length > 0 ? 'applied' : (gap?.status ?? 'static-evidence-gap');
+    const dimensionSummary = createPublicFormHitDimensionSummary(formHits);
+    return {
+      actionIdentity: action.identity,
+      publicFormId: form.formIdentity,
+      actionKind: action.actionKind,
+      sourceSkillId: Number(action.sourceSkillId),
+      executionControlSkillId: Number(
+        form.executionControlSkillId ?? action.controlSkillId
+      ),
+      executionSubSkillIndex: normalizeOptionalInteger(
+        form.executionSubSkillIndex ?? form.subSkillIndex
+      ),
+      hitCount: formHits.length,
+      settlementEvidence: formHits.map(hit => `hit:${hit.hitIdentity}`).sort(),
+      dimensionSummary,
+      status,
+      reasons:
+        status === 'applied'
+          ? []
+          : [
+              ...new Set([
+                'public-action-damage-settlement-evidence-missing',
+                ...(gap?.reasons ?? []),
+              ]),
+            ].sort(),
+      sourceIdentity:
+        gap?.sourceIdentity ??
+        form.sourceIdentity ??
+        action.sourceIdentity ??
+        null,
+    };
+  });
+}
+
+function createPublicFormHitDimensionSummary(hits) {
+  if (hits.length === 0) {
+    return Object.fromEntries(
+      ['hp', 'toughness', 'actorSp', 'kiboSp'].map(dimension => [
+        dimension,
+        { unresolved: 1 },
+      ])
+    );
+  }
+  const statusForValue = value =>
+    value == null
+      ? 'unresolved'
+      : Number(value) === 0
+        ? 'verified-zero'
+        : 'applied';
+  return {
+    hp: countBy(hits, hit =>
+      hit.formula && hit.damage ? 'applied' : 'unresolved'
+    ),
+    toughness: countBy(hits, hit =>
+      statusForValue(hit.damage?.weakBreakDamageRateBasisPoints)
+    ),
+    actorSp: countBy(hits, hit => statusForValue(hit.energy?.recoverSp)),
+    kiboSp: countBy(hits, hit => statusForValue(hit.energy?.petRecoverSp)),
+  };
+}
+
+function normalizeOptionalInteger(value) {
+  if (value == null) return null;
+  const number = Number(value);
+  return Number.isInteger(number) ? number : null;
 }
 
 function splitDescriptionClauses(value) {
@@ -1874,6 +2045,7 @@ function createRuntimeCoverage({
   passives,
   switchTriggers,
   coverage,
+  descriptionCoverage,
 }) {
   const actionRows = publicActions.map(action => {
     const actionControlIds = new Set([
@@ -1885,6 +2057,34 @@ function createRuntimeCoverage({
     const actionHits = hits.filter(hit =>
       actionControlIds.has(Number(hit.controlSkillId))
     );
+    const settlementClauses = (descriptionCoverage?.entries ?? []).filter(
+      entry =>
+        entry.mechanicKinds?.includes('action-settlement') &&
+        (entry.publicFormSettlements ?? []).some(
+          row => row.actionIdentity === action.identity
+        )
+    );
+    const publicFormSettlements = dedupeBy(
+      settlementClauses.flatMap(entry =>
+        (entry.publicFormSettlements ?? []).filter(
+          row => row.actionIdentity === action.identity
+        )
+      ),
+      row => row.publicFormId
+    );
+    const requiresDamageSettlement = settlementClauses.length > 0;
+    const settlementStatus = requiresDamageSettlement
+      ? publicFormSettlements.every(row => row.status === 'applied')
+        ? 'applied'
+        : publicFormSettlements.some(
+              row => row.status === 'runtime-evidence-required'
+            )
+          ? 'runtime-evidence-required'
+          : 'static-evidence-gap'
+      : 'not-required';
+    const runtimeReady =
+      action.runtimeReady === true &&
+      (!requiresDamageSettlement || settlementStatus === 'applied');
     return {
       actionIdentity: action.identity,
       actionKind: action.actionKind,
@@ -1893,13 +2093,30 @@ function createRuntimeCoverage({
       schedulable: action.schedulable !== false,
       sourceEvidenceStatus:
         action.sourceEvidenceStatus ?? mapClassification(action.classification),
-      scenarioRuntimeStatus:
-        action.scenarioRuntimeStatus ??
-        (action.runtimeReady ? 'applied' : 'static-evidence-gap'),
-      runtimeReady: action.runtimeReady === true,
-      hitCount: actionHits.length,
+      scenarioRuntimeStatus: runtimeReady
+        ? (action.scenarioRuntimeStatus ?? 'applied')
+        : settlementStatus,
+      rawRuntimeReady: action.runtimeReady === true,
+      runtimeReady,
+      hitCount:
+        publicFormSettlements.length > 0
+          ? publicFormSettlements.reduce(
+              (sum, row) => sum + Number(row.hitCount ?? 0),
+              0
+            )
+          : actionHits.length,
+      requiresDamageSettlement,
+      settlementStatus,
+      publicFormSettlements,
       dimensionSummary: action.dimensionSummary ?? null,
-      reasons: action.reasons ?? [],
+      reasons: [
+        ...new Set([
+          ...(action.reasons ?? []),
+          ...(!runtimeReady && requiresDamageSettlement
+            ? ['public-action-damage-settlement-evidence-missing']
+            : []),
+        ]),
+      ].sort(),
     };
   });
   return {
@@ -1910,9 +2127,8 @@ function createRuntimeCoverage({
     actionRows,
     summary: {
       actionCount: publicActions.length,
-      runtimeReadyActionCount: publicActions.filter(
-        action => action.runtimeReady
-      ).length,
+      runtimeReadyActionCount: actionRows.filter(action => action.runtimeReady)
+        .length,
       executionFormCount: actionForms.length,
       controlCount: controls.length,
       hitCount: hits.length,
@@ -1938,12 +2154,15 @@ function deriveCharacterCombatLifecycle({
   actionForms,
   unresolvedRecords,
   runtimeCompilation,
+  runtimeCoverage,
   uiVerification,
 }) {
   const requiredCoverageComplete = coverage.every(item =>
     ['applied', 'not-applicable'].includes(item.status)
   );
-  const publicActionsComplete = publicActions.every(
+  const publicActionsComplete = (
+    runtimeCoverage?.actionRows ?? publicActions
+  ).every(
     action =>
       action.runtimeReady === true ||
       action.classification === 'verified-zero' ||
@@ -2006,8 +2225,10 @@ function deriveCharacterCombatSimulationScopes({
   capturePlan,
   goldenFixture,
   unresolvedRecords,
+  runtimeCoverage,
 }) {
-  const requirements = recipe?.simulationScopeRequirements?.zeroDistance ?? null;
+  const requirements =
+    recipe?.simulationScopeRequirements?.zeroDistance ?? null;
   const declared = requirements != null;
   const requiredResourceIdentities = [
     ...new Set(requirements?.requiredResourceIdentities ?? []),
@@ -2070,9 +2291,10 @@ function deriveCharacterCombatSimulationScopes({
   const gates = {
     declared,
     scenarioPolicyIsZeroDistance:
-      requirements?.projectileImpactPolicy ===
-      'scenario-assumed-zero-distance',
-    publicActionsRuntimeReady: publicActions.every(
+      requirements?.projectileImpactPolicy === 'scenario-assumed-zero-distance',
+    publicActionsRuntimeReady: (
+      runtimeCoverage?.actionRows ?? publicActions
+    ).every(
       action =>
         action.runtimeReady === true ||
         action.classification === 'verified-zero' ||
@@ -2085,15 +2307,13 @@ function deriveCharacterCombatSimulationScopes({
     requiredResourcesApplied,
     requiredActionEffectsApplied,
     requiredPassivesApplied,
-    zeroDistanceRuntimeCapturesResolved:
-      zeroDistanceBlockingCaptureCount === 0,
+    zeroDistanceRuntimeCapturesResolved: zeroDistanceBlockingCaptureCount === 0,
     authoritativeGoldenPassed:
       goldenFixture?.validation?.passed === true &&
       goldenFixture?.validation?.status ===
         'authoritative-golden-runtime-expectation-passed',
   };
-  const zeroDistanceComplete =
-    declared && Object.values(gates).every(Boolean);
+  const zeroDistanceComplete = declared && Object.values(gates).every(Boolean);
   const realClientEvidenceGates = {
     zeroDistanceSimulationComplete: zeroDistanceComplete,
     runtimeCapturePlanEmpty:
@@ -2112,8 +2332,7 @@ function deriveCharacterCombatSimulationScopes({
         targetDistance: 0,
         defaultWillHit: true,
         projectileTravelFrames: 0,
-        projectileImpactPolicy:
-          requirements?.projectileImpactPolicy ?? null,
+        projectileImpactPolicy: requirements?.projectileImpactPolicy ?? null,
       },
       requiredResourceIdentities,
       requiredActionEffectBindingIdentities,
@@ -2271,6 +2490,7 @@ function createUnresolvedLedger({
     referenceKind,
     sourceEvidenceStatus,
     scenarioRuntimeStatus,
+    metadata,
   }) => {
     const normalizedReasons = [
       ...new Set((reasons ?? []).filter(Boolean).map(String)),
@@ -2288,6 +2508,7 @@ function createUnresolvedLedger({
       referenceKind: referenceKind ?? null,
       sourceEvidenceStatus: sourceEvidenceStatus ?? null,
       scenarioRuntimeStatus: scenarioRuntimeStatus ?? null,
+      metadata: metadata ?? null,
     });
   };
   for (const action of publicActions) {
@@ -2430,6 +2651,7 @@ function createUnresolvedLedger({
       reasons: item.reasons,
       sourceIdentity: item.sourceIdentity,
       forcedStatus: item.status,
+      metadata: item.metadata,
     });
   }
   const rawRecords = dedupeBy(records, record => record.recordIdentity).sort(
@@ -2481,6 +2703,7 @@ function createUnresolvedLedger({
       scenarioRuntimeStatuses: record.scenarioRuntimeStatus
         ? [record.scenarioRuntimeStatus]
         : [],
+      metadata: record.metadata ?? null,
       rawRecordIdentities: [record.recordIdentity],
     });
   }
@@ -2629,6 +2852,7 @@ function createRuntimeCapturePlan(records, ownerId) {
         sourceIdentity:
           record.sourceIdentity ??
           `character-combat-record:${record.recordIdentity}`,
+        sourceMetadata: record.metadata ?? null,
       };
     });
   return {
@@ -3641,8 +3865,7 @@ function createAllCharacterCoverageManifest({
       characterComplete: profile?.characterComplete === true,
       zeroDistanceSimulationComplete:
         profile?.zeroDistanceSimulationComplete === true,
-      realClientEvidenceComplete:
-        profile?.realClientEvidenceComplete === true,
+      realClientEvidenceComplete: profile?.realClientEvidenceComplete === true,
       publicActionCount: actions.length,
       reachableFormCount:
         variantNodes.length +

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "ae3b5de3a0760a17be19005d71bc246d1b067c8d7bc9e600b6797a27f9e90d67",
+  "sourcePackageHash": "a0d145536afb1288bf0392d7c94c046e62901aa73adc3408b3ef404cf0449d1e",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024"
+      "profileHash": "8010949bc5f1cc917c6228d6b3c6ce6b2b259317dfaed90ecb8168af791d586e"
     },
     {
       "ownerId": 103002,
@@ -112,7 +112,7 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "partial",
       "characterComplete": false,
-      "zeroDistanceSimulationComplete": true,
+      "zeroDistanceSimulationComplete": false,
       "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 53,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "ae4f67fdf833805773c6fab09c460b24f9c271c167a9a54c1b579aa87c756102"
+      "profileHash": "ab17a010bf4ae7fe85f39178a933f317d6b1b9a4d659615037351d7673fc2dbe"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "7e287cd144af8d91e85a95b656d90157577db9395a17dcaeeffca4825fc1b82d"
+      "profileHash": "5c96aba0a759dd36372c48c6da01ed0721bb4bfe8e1f5c904e640d2ccd879973"
     },
     {
       "ownerId": 101007,
@@ -922,7 +922,7 @@
     "totalPublicActionCount": 197,
     "totalRuntimeReadyActionCount": 162,
     "unnamedSecondaryPassiveCount": 20,
-    "zeroDistanceSimulationCompleteCount": 1,
+    "zeroDistanceSimulationCompleteCount": 0,
     "realClientEvidenceCompleteCount": 0
   }
 }

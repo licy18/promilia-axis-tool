@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101010,
-  "sourcePackageHash": "ae3b5de3a0760a17be19005d71bc246d1b067c8d7bc9e600b6797a27f9e90d67",
+  "sourcePackageHash": "a0d145536afb1288bf0392d7c94c046e62901aa73adc3408b3ef404cf0449d1e",
   "actionRows": [
     {
       "actionIdentity": "actor|101010|10101001|0|10101003",
@@ -18,8 +18,281 @@
       "schedulable": true,
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 51,
+      "hitCount": 44,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-burst-three-inputs:segment:1",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101001,
+          "executionSubSkillIndex": 1,
+          "hitCount": 9,
+          "settlementEvidence": [
+            "hit:10101001|1|elements|1|7245988392201001564|13|1",
+            "hit:10101001|1|elements|1|7245988392201001564|18|2",
+            "hit:10101001|1|elements|1|7245988392201001564|23|3",
+            "hit:10101001|1|elements|1|7245988392201001564|28|4",
+            "hit:10101001|1|elements|1|7245988392201001564|33|5",
+            "hit:10101001|1|elements|1|7245988392201001564|38|6",
+            "hit:10101001|1|elements|2|-393717411505334080|55|7",
+            "hit:10101001|1|elements|2|-393717411505334080|60|8",
+            "hit:10101001|1|elements|2|-393717411505334080|65|9"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 9
+            },
+            "toughness": {
+              "applied": 9
+            },
+            "actorSp": {
+              "applied": 9
+            },
+            "kiboSp": {
+              "applied": 9
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-burst-three-inputs:segment:2",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101004,
+          "executionSubSkillIndex": 1,
+          "hitCount": 12,
+          "settlementEvidence": [
+            "hit:10101004|1|elements|0|-7672362046032568081|13|2",
+            "hit:10101004|1|elements|0|-7672362046032568081|8|1",
+            "hit:10101004|1|elements|1|-3490069646761131835|27|3",
+            "hit:10101004|1|elements|1|-3490069646761131835|32|4",
+            "hit:10101004|1|elements|3|-1862339442599942768|57|5",
+            "hit:10101004|1|elements|3|-1862339442599942768|63|6",
+            "hit:10101004|1|elements|3|-1862339442599942768|69|7",
+            "hit:10101004|1|elements|3|-1862339442599942768|75|8",
+            "hit:10101004|1|elements|3|-1862339442599942768|81|9",
+            "hit:10101004|1|elements|3|-1862339442599942768|87|10",
+            "hit:10101004|1|elements|3|-1862339442599942768|93|11",
+            "hit:10101004|1|elements|3|-1862339442599942768|99|12"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 12
+            },
+            "toughness": {
+              "applied": 12
+            },
+            "actorSp": {
+              "applied": 12
+            },
+            "kiboSp": {
+              "applied": 12
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-burst-three-inputs:segment:3",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101005,
+          "executionSubSkillIndex": 1,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:10101005|1|elements|2|4000396690601339399|32|1",
+            "hit:10101005|1|elements|2|4000396690601339399|38|2",
+            "hit:10101005|1|elements|2|4000396690601339399|44|3",
+            "hit:10101005|1|elements|2|4000396690601339399|50|4",
+            "hit:10101005|1|elements|2|4000396690601339399|56|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-normal-default-five-inputs:segment:1",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101001,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10101001|0|elements|0|-2245783402811878012|12|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_165341662459234635__165341662459234635.json#behaviorlineControl[0].behaviorList[pathId=2660188517265606987]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_2660188517265606987__2660188517265606987.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-normal-default-five-inputs:segment:2",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101002,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:10101002|0|elements|0|829541202970059325|12|1",
+            "hit:10101002|0|elements|3|-1097882139883196114|23|2",
+            "hit:10101002|0|elements|3|-1097882139883196114|28|3",
+            "hit:10101002|0|elements|3|-1097882139883196114|33|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_7212743067276039530__7212743067276039530.json#behaviorlineControl[0].behaviorList[pathId=3067658033679914346]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_3067658033679914346__3067658033679914346.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-normal-default-five-inputs:segment:3",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101003,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10101003|0|projectile|101010091|101010003|0|0|control:10101003|sub:0|behavior:-424796195718940256|config:0|bullet:101010003:0:0|execution:bullet:101010003|logic:0|action:0|element:0|element:101010091:0"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_6626720207028828576__6626720207028828576.json#behaviorlineControl[0].behaviorList[pathId=3622866919876671904]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_3622866919876671904__3622866919876671904.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-normal-default-five-inputs:segment:4",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101004,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:-3875140846970907040|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0",
+            "hit:10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:-4003851066891217312|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0",
+            "hit:10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:-6677266917412350368|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0",
+            "hit:10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:2649223868158596704|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-7015361169988888992__-7015361169988888992.json#behaviorlineControl[0].behaviorList[pathId=3144736292614526560]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_3144736292614526560__3144736292614526560.json"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|0|10101003",
+          "publicFormId": "xiaoyu-normal-default-five-inputs:segment:5",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101005,
+          "executionSubSkillIndex": 0,
+          "hitCount": 8,
+          "settlementEvidence": [
+            "hit:10101005|0|elements|0|8067044185683392805|31|1",
+            "hit:10101005|0|elements|0|8067044185683392805|37|2",
+            "hit:10101005|0|elements|0|8067044185683392805|43|3",
+            "hit:10101005|0|elements|0|8067044185683392805|49|4",
+            "hit:10101005|0|elements|0|8067044185683392805|55|5",
+            "hit:10101005|0|elements|0|8067044185683392805|61|6",
+            "hit:10101005|0|elements|0|8067044185683392805|67|7",
+            "hit:10101005|0|elements|0|8067044185683392805|73|8"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 8
+            },
+            "toughness": {
+              "applied": 8
+            },
+            "actorSp": {
+              "applied": 8
+            },
+            "kiboSp": {
+              "applied": 8
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-315692776239424798__-315692776239424798.json#behaviorlineControl[0].behaviorList[pathId=1142011828510366434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1142011828510366434__1142011828510366434.json"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 2,
@@ -39,8 +312,8 @@
         }
       },
       "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "trigger-frame-missing"
       ]
     },
     {
@@ -53,8 +326,182 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 25,
+      "hitCount": 29,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101001|2|10101010",
+          "publicFormId": "actor:101010:charged-attack:xiaoyu-continuous-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101010,
+          "executionSubSkillIndex": 1,
+          "hitCount": 10,
+          "settlementEvidence": [
+            "hit:10101010|1|elements|0|-8304317819766733523|43|1",
+            "hit:10101010|1|elements|0|-8304317819766733523|43|2",
+            "hit:10101010|1|elements|0|-8304317819766733523|48|3",
+            "hit:10101010|1|elements|0|-8304317819766733523|48|4",
+            "hit:10101010|1|elements|0|-8304317819766733523|53|5",
+            "hit:10101010|1|elements|0|-8304317819766733523|53|6",
+            "hit:10101010|1|elements|0|-8304317819766733523|58|7",
+            "hit:10101010|1|elements|0|-8304317819766733523|58|8",
+            "hit:10101010|1|elements|0|-8304317819766733523|63|10",
+            "hit:10101010|1|elements|0|-8304317819766733523|63|9"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 10
+            },
+            "toughness": {
+              "applied": 10
+            },
+            "actorSp": {
+              "applied": 10
+            },
+            "kiboSp": {
+              "applied": 10
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010113.asset/MonoBehaviour/ast_101010113__-2323960829737228709.json#elementConfigId=101010113|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010113.asset/MonoBehaviour/ast_101010113__-2323960829737228709.json#elementConfigId=101010113|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_3312707760408068435__3312707760408068435.json#behaviorlineControl[0].behaviorList[pathId=1982871732206469459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/MonoBehaviour_1982871732206469459__1982871732206469459.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|2|10101010",
+          "publicFormId": "actor:101010:charged-attack:xiaoyu-enhanced-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101010,
+          "executionSubSkillIndex": 2,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:10101010|2|elements|0|8018483949148366892|20|1",
+            "hit:10101010|2|elements|2|-3391706297265688636|31|2",
+            "hit:10101010|2|elements|2|-3391706297265688636|36|3",
+            "hit:10101010|2|elements|2|-3391706297265688636|41|4",
+            "hit:10101010|2|elements|2|-3391706297265688636|46|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010116.asset/MonoBehaviour/ast_101010116__-3332207699858072492.json#elementConfigId=101010116|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|2|10101010",
+          "publicFormId": "actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101042,
+          "executionSubSkillIndex": 1,
+          "hitCount": 2,
+          "settlementEvidence": [
+            "hit:10101042|1|projectile|101010155|101010016|0|0|control:10101042|sub:1|behavior:-1521643003225462709|config:0|bullet:101010016:0:0|element:101010155:0",
+            "hit:10101042|1|projectile|101010156|101010018|0|0|control:10101042|sub:1|behavior:-1521643003225462709|config:0|bullet:101010016:0:0|nested-bullet:101010018|element:101010156:2"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 2
+            },
+            "toughness": {
+              "applied": 2
+            },
+            "actorSp": {
+              "applied": 2
+            },
+            "kiboSp": {
+              "applied": 2
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010154.asset/MonoBehaviour/ast_101010154__-731372582710671704.json#elementConfigId=101010154|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8167490790856463001__-8167490790856463001.json#behaviorlineControl[0].behaviorList[pathId=4699512701125586279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_4699512701125586279__4699512701125586279.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8167490790856463001__-8167490790856463001.json#behaviorlineControl[0].behaviorList[pathId=4699512701125586279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_4699512701125586279__4699512701125586279.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8167490790856463001__-8167490790856463001.json#behaviorlineControl[1].behaviorList[pathId=-22667623548588697]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-22667623548588697__-22667623548588697.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8167490790856463001__-8167490790856463001.json#behaviorlineControl[1].behaviorList[pathId=-22667623548588697]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-22667623548588697__-22667623548588697.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1761581173042178218__-1761581173042178218.json#behaviorlineControl[0].behaviorList[pathId=1119335550432450390]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_1119335550432450390__1119335550432450390.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1761581173042178218__-1761581173042178218.json#behaviorlineControl[0].behaviorList[pathId=1119335550432450390]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_1119335550432450390__1119335550432450390.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_7452075638113834838__7452075638113834838.json#behaviorlineControl[0].behaviorList[pathId=-8728835051228293290]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-8728835051228293290__-8728835051228293290.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|2|10101010",
+          "publicFormId": "actor:101010:charged-attack:xiaoyu-ordinary-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101010,
+          "executionSubSkillIndex": 0,
+          "hitCount": 10,
+          "settlementEvidence": [
+            "hit:10101010|0|elements|0|-8304317819766733523|43|1",
+            "hit:10101010|0|elements|0|-8304317819766733523|43|2",
+            "hit:10101010|0|elements|0|-8304317819766733523|48|3",
+            "hit:10101010|0|elements|0|-8304317819766733523|48|4",
+            "hit:10101010|0|elements|0|-8304317819766733523|53|5",
+            "hit:10101010|0|elements|0|-8304317819766733523|53|6",
+            "hit:10101010|0|elements|0|-8304317819766733523|58|7",
+            "hit:10101010|0|elements|0|-8304317819766733523|58|8",
+            "hit:10101010|0|elements|0|-8304317819766733523|63|10",
+            "hit:10101010|0|elements|0|-8304317819766733523|63|9"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 10
+            },
+            "toughness": {
+              "applied": 10
+            },
+            "actorSp": {
+              "applied": 10
+            },
+            "kiboSp": {
+              "applied": 10
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+        },
+        {
+          "actionIdentity": "actor|101010|10101001|2|10101010",
+          "publicFormId": "actor:101010:charged-attack:xiaoyu-special-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101042,
+          "executionSubSkillIndex": 0,
+          "hitCount": 2,
+          "settlementEvidence": [
+            "hit:10101042|0|projectile|101010130|101010015|0|0|control:10101042|sub:0|behavior:1082770784268020564|config:0|bullet:101010015:0:0|element:101010130:0",
+            "hit:10101042|0|projectile|101010157|101010017|0|0|control:10101042|sub:0|behavior:1082770784268020564|config:0|bullet:101010015:0:0|nested-bullet:101010017|element:101010157:2"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 2
+            },
+            "toughness": {
+              "applied": 2
+            },
+            "actorSp": {
+              "applied": 2
+            },
+            "kiboSp": {
+              "applied": 2
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1980203543736195810__1980203543736195810.json#behaviorlineControl[0].behaviorList[pathId=-8554738025901679902]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8554738025901679902__-8554738025901679902.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010129.asset/MonoBehaviour/ast_101010129__-1458914462506140012.json#elementConfigId=101010129|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1980203543736195810__1980203543736195810.json#behaviorlineControl[0].behaviorList[pathId=-8554738025901679902]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-8554738025901679902__-8554738025901679902.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-315692776239424798__-315692776239424798.json#behaviorlineControl[0].behaviorList[pathId=1142011828510366434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1142011828510366434__1142011828510366434.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_947864315419749411__947864315419749411.json#behaviorlineControl[0].behaviorList[pathId=-80817963508110301]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-80817963508110301__-80817963508110301.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_947864315419749411__947864315419749411.json#behaviorlineControl[0].behaviorList[pathId=-80817963508110301]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-80817963508110301__-80817963508110301.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_6409247919513070627__6409247919513070627.json#behaviorlineControl[0].behaviorList[pathId=-3927276856072410077]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_-3927276856072410077__-3927276856072410077.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-5145301466758555634__-5145301466758555634.json#behaviorlineControl[0].behaviorList[pathId=-6857785426171701234]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6857785426171701234__-6857785426171701234.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-5145301466758555634__-5145301466758555634.json#behaviorlineControl[0].behaviorList[pathId=-6857785426171701234]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6857785426171701234__-6857785426171701234.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6799115387162765298__-6799115387162765298.json#behaviorlineControl[0].behaviorList[pathId=-7360650682097903602]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-7360650682097903602__-7360650682097903602.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 3,
@@ -74,14 +521,14 @@
         }
       },
       "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "effect-trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges",
         "pack-lifecycle-runtime-unimplemented",
+        "projectile-impact-frame-runtime-dependent",
+        "property-conditions-not-expanded",
         "property-formula-not-literal-function-5",
-        "property-conditions-not-expanded"
+        "trigger-frame-missing"
       ]
     },
     {
@@ -94,8 +541,44 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 3,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101001|6|10101015",
+          "publicFormId": "actor|101010|10101001|6|10101015:default",
+          "actionKind": "dodge-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101015,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:10101015|0|elements|0|-7461455105045004652|14|2",
+            "hit:10101015|0|elements|0|-7461455105045004652|19|3",
+            "hit:10101015|0|elements|0|-7461455105045004652|9|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=204]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 1
@@ -122,8 +605,42 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 1,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101001|7|10101011",
+          "publicFormId": "actor|101010|10101001|7|10101011:default",
+          "actionKind": "plunging-attack",
+          "sourceSkillId": 10101001,
+          "executionControlSkillId": 10101011,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10101011|0|elements|0|-9038391806014875439|36|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=aerial,slot=301]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 1,
@@ -143,8 +660,8 @@
         }
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "effect-target-unresolved",
+        "inject-wrapper-classified-through-child-edges"
       ]
     },
     {
@@ -157,8 +674,49 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 8,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101012|0|10101012",
+          "publicFormId": "actor|101010|10101012|0|10101012:default",
+          "actionKind": "star-skill",
+          "sourceSkillId": 10101012,
+          "executionControlSkillId": 10101012,
+          "executionSubSkillIndex": 0,
+          "hitCount": 8,
+          "settlementEvidence": [
+            "hit:10101012|0|elements|0|-5870764486374818424|15|1",
+            "hit:10101012|0|elements|0|-5870764486374818424|21|2",
+            "hit:10101012|0|elements|0|-5870764486374818424|27|3",
+            "hit:10101012|0|elements|2|2002395146413747344|50|4",
+            "hit:10101012|0|elements|2|2002395146413747344|55|5",
+            "hit:10101012|0|elements|2|2002395146413747344|60|6",
+            "hit:10101012|0|elements|2|2002395146413747344|65|7",
+            "hit:10101012|0|elements|2|2002395146413747344|70|8"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 8
+            },
+            "toughness": {
+              "applied": 8
+            },
+            "actorSp": {
+              "applied": 8
+            },
+            "kiboSp": {
+              "applied": 8
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=3]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 2,
@@ -181,17 +739,17 @@
       },
       "reasons": [
         "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
         "effect-target-unresolved",
+        "effect-trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "trigger-frame-missing",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved",
-        "effect-trigger-frame-missing"
+        "tuning-consume-success-branch-unresolved"
       ]
     },
     {
@@ -204,8 +762,42 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 1,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101012|1|10101026",
+          "publicFormId": "actor|101010|10101012|1|10101026:default",
+          "actionKind": "star-combo",
+          "sourceSkillId": 10101012,
+          "executionControlSkillId": 10101026,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10101026|0|elements|0|6429354647570570854|40|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=208]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 1,
@@ -236,8 +828,53 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 12,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101013|0|10101013",
+          "publicFormId": "actor|101010|10101013|0|10101013:default",
+          "actionKind": "ultimate",
+          "sourceSkillId": 10101013,
+          "executionControlSkillId": 10101013,
+          "executionSubSkillIndex": 0,
+          "hitCount": 12,
+          "settlementEvidence": [
+            "hit:10101013|0|elements|16|59197623417195618|272|10",
+            "hit:10101013|0|elements|16|59197623417195618|278|11",
+            "hit:10101013|0|elements|16|59197623417195618|284|12",
+            "hit:10101013|0|elements|2|-6429706496330270988|136|1",
+            "hit:10101013|0|elements|2|-6429706496330270988|145|2",
+            "hit:10101013|0|elements|2|-6429706496330270988|151|3",
+            "hit:10101013|0|elements|2|-6429706496330270988|157|4",
+            "hit:10101013|0|elements|2|-6429706496330270988|163|5",
+            "hit:10101013|0|elements|4|8275426223765851682|219|6",
+            "hit:10101013|0|elements|4|8275426223765851682|225|7",
+            "hit:10101013|0|elements|4|8275426223765851682|231|8",
+            "hit:10101013|0|elements|4|8275426223765851682|237|9"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 12
+            },
+            "toughness": {
+              "applied": 12
+            },
+            "actorSp": {
+              "verified-zero": 12
+            },
+            "kiboSp": {
+              "verified-zero": 12
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=4]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 3,
@@ -258,25 +895,25 @@
       },
       "reasons": [
         "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
+        "effect-combine-semantics-unresolved",
         "effect-target-unresolved",
+        "effect-trigger-frame-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "inject-wrapper-classified-through-child-edges",
+        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "property-conditions-not-expanded",
+        "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5",
+        "toughness:pre-shield-damage-inputs-incomplete",
+        "trigger-frame-missing",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
-        "tuning-mark-relation-notDelElementDataList-unresolved",
-        "property-formula-not-literal-function-5",
-        "property-conditions-not-expanded"
+        "tuning-mark-relation-notDelElementDataList-unresolved"
       ]
     },
     {
@@ -289,8 +926,43 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 2,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101021|0|10101021",
+          "publicFormId": "actor:101010:star-carry:xiaoyu-star-carry",
+          "actionKind": "star-carry",
+          "sourceSkillId": 10101021,
+          "executionControlSkillId": 10101021,
+          "executionSubSkillIndex": 0,
+          "hitCount": 2,
+          "settlementEvidence": [
+            "hit:10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
+            "hit:10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 2
+            },
+            "toughness": {
+              "applied": 2
+            },
+            "actorSp": {
+              "verified-zero": 2
+            },
+            "kiboSp": {
+              "verified-zero": 2
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 4,
@@ -321,8 +993,49 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 8,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101021|1|10101025",
+          "publicFormId": "actor|101010|10101021|1|10101025:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10101021,
+          "executionControlSkillId": 10101025,
+          "executionSubSkillIndex": 0,
+          "hitCount": 8,
+          "settlementEvidence": [
+            "hit:10101025|0|elements|0|-5394695384185407020|15|1",
+            "hit:10101025|0|elements|0|-5394695384185407020|21|2",
+            "hit:10101025|0|elements|0|-5394695384185407020|27|3",
+            "hit:10101025|0|elements|0|-5394695384185407020|33|4",
+            "hit:10101025|0|elements|0|-5394695384185407020|39|5",
+            "hit:10101025|0|elements|0|-5394695384185407020|45|6",
+            "hit:10101025|0|elements|0|-5394695384185407020|51|7",
+            "hit:10101025|0|elements|0|-5394695384185407020|57|8"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 8
+            },
+            "toughness": {
+              "applied": 8
+            },
+            "actorSp": {
+              "applied": 8
+            },
+            "kiboSp": {
+              "applied": 8
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=207]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "applied": 1,
@@ -342,9 +1055,9 @@
         }
       },
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "inject-wrapper-classified-through-child-edges"
       ]
     },
     {
@@ -357,8 +1070,43 @@
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
+      "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 0,
+      "hitCount": 2,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|101010|10101021|2|10101027",
+          "publicFormId": "actor:101010:perfect-parry:xiaoyu-perfect-parry-counter",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 10101021,
+          "executionControlSkillId": 10101049,
+          "executionSubSkillIndex": 1,
+          "hitCount": 2,
+          "settlementEvidence": [
+            "hit:10101049|1|projectile|101010175|101010272|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|nested-bullet:101010272|execution:bullet:101010272|logic:1|action:0|element:0|element:101010175:2",
+            "hit:10101049|1|projectile|101010176|101010271|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|execution:bullet:101010271|logic:1|action:0|element:0|element:101010176:0"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 2
+            },
+            "toughness": {
+              "applied": 2
+            },
+            "actorSp": {
+              "applied": 2
+            },
+            "kiboSp": {
+              "applied": 2
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]"
+        }
+      ],
       "dimensionSummary": {
         "hp": {
           "unresolved": 4
@@ -399,5 +1147,5 @@
       "static-evidence-gap": 8
     }
   },
-  "profileHash": "de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024"
+  "profileHash": "8010949bc5f1cc917c6228d6b3c6ce6b2b259317dfaed90ecb8168af791d586e"
 }

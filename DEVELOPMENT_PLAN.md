@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M10-A / 涂山小玉闭环缺口修复已完成实施，等待产品复验**。普通 A3/A4、入场星携技延迟命中、完美招架反击、缘结阈值风印记和玉未央触发边界已进入同一生成与运行时合同；小玉仍诚实保持 `runtime-applied / partial`，M11 与下一角色继续暂停。
+当前里程碑：**M10-B1 / 红宝石星鸣技结算证据修复已收口，等待上游重提取与产品复验**。星鸣技资源、印记和强化入口保持可用，但当前导出的 51 条外部 gameplay track 均为 `stubOnly`，终端伤害链不得伪造；公开形态覆盖门禁现将该动作诚实标为 `runtime-evidence-required`。M11、下一角色与包体优化继续暂停。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -740,14 +740,14 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 - `sync-character-combat-profile --owner <id>` 会从原始证据和 recipe 重新编译，不读取既有 owner contract；默认只写 owner staging，失败零写入，`--all` 才原子发布全局 package/catalog。双 owner 发现、编译、合并、owner A -> owner B -> all、删除/篡改合同自愈和重复零漂移均有整链测试守门；小玉运行策略已进入声明式 recipe，生产 runtime、Workbench 与 UI 没有新增角色 ID 分支。
 - 135 个测试文件、781 条单元/组件测试及 57/57 production preview 全部通过，41/41 必需能力为 `trial-ready`；character/verified 漂移、applied-source、生产引用、Workbench 数据和动作状态审计通过。小玉 117 条语义效果、7 条动态属性依赖与 69 条 golden 数值断言均保持不变。总 JS gzip `746,804B`，仍超发布硬门槛 `6,804B`；依本轮边界只记录既有发布风险，不做包体优化。
 
-#### M10-A 小玉闭环缺口修复轮（实施完成，等待产品复验）
+#### M10-A 小玉闭环缺口修复轮（已通过独立机制验收）
 
 - 普通 A3 已接入 `101010091@18F`；普通 A4 已接入四个独立的 `101010107@10/14/18/22F`，命中开关分别控制伤害、削韧和角色/奇波回能，且不与爆发 A2 的 12 hit 合并。
 - 入场星携技保持 `95F` 有效占轴，`55F/109F` 两次命中可越过动作块尾端结算；派生只读动作的 hit 编辑写回父切人事件并随草稿、JSON、分享与 PNG 重放。完美招架反击由公开 `10101027` 映射到 `10101049/sub1`，只有同帧 `successful-parry` 场景事件存在时才执行两次命中。
 - 缘结值到 100 的阈值事务现原子完成 `100 -> 0`、进入爆发和风印记 `+2`；星决技刷新是否再次授予风印记继续标为 `runtime-evidence-needed`。玉未央只消费真实 direct trigger，极限反击本体 `10101025` 的 apply count 固定为 0，实际派生重击、完美招架反击、星携技和星决技分别有正向守门。
 - 生成审计现覆盖小玉 23 个带有效占轴的公开/运行形态与 89 条可达窗口。完整单测 `141/141` 文件、`867/867` 用例，production preview `62/62`，character/verified 漂移、production imports、Workbench data、action status、applied-source 和 production build 均通过。Workbench gzip `370,692B`、总 JS gzip `761,260B` 仍超过既定门槛，本轮仅记录风险，不做包体优化。
 
-#### M10-B：全角色逐个解析与验收（暂停扩角色，当前执行 M10-B2-R1）
+#### M10-B：全角色逐个解析与验收（暂停扩角色，当前执行 M10-B1 修复轮）
 
 - 角色状态严格按 `not-started -> evidence-indexed -> profile-compiled -> runtime-applied -> UI-verified` 推进；每个角色独立生成、提交和验收，不批量自动标绿。
 - 推荐先红宝石（弹药/特殊资源），再寒悠悠（队伍印记/支援链），随后按 `reports/m10/all-character-coverage-manifest.json` 中的机制类型和证据缺口逐个推进其余角色。
@@ -755,11 +755,11 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 
 ##### M10-B1：红宝石（103002）单角色完整战斗解析与接入（R3 衔接/派生闭包已通过产品验收；角色总 Profile 仍为 partial）
 
-- Discovery 与阶段审计得到 10 个公开动作、28 个 control、24 个执行形态、212 个命中，以及普通 A1-A3 和强化 E1-E12 两个 applied 输入阶段；9/10 个公开动作达到 runtime-ready，剩余完美招架及共享效果语义缺口继续准确保留。
+- Discovery 与阶段审计当前得到 10 个公开动作、27 个 control、24 个执行形态、215 个命中，以及普通 A1-A3 和强化 E1-E12 两个 applied 输入阶段；公开形态门禁下 9/10 个动作达到 runtime-ready，唯一动作级阻断为星鸣技终端伤害来源缺失。
 - 子弹资源 `actor:103002:element:103002047` 以容量 12 进入通用资源算子。41 条交易现分为 21 条 applied 与 20 条 wrapper/not-applicable；普通 A3 仅在有弹时进入强化阶段，E1-E12 每次独立消耗 1 发并在空弹时停止。
 - 星鸣技 `10300212/sub0` 在来源动作第 40F 同帧把弹药补至 12、向唯一队伍资源池增加 1 枚火属性调谐印记，并开启 4 秒快速强化入口；资源轴、印记轴、事件日志、动作形态与项目回放消费同一合同。
 - 被动 10300261 只保留可达 `103002275/276` 支持的 15 秒、最多 6 层、属性 229 每层 `+20` 合同。无名第二被动 10300262 按当前客户端统一产品边界归为 `not-applicable`；零引用 `103002252/253` 归为 `legacy-or-unreachable-current-client`，二者均不再计入玩法缺口或运行时。
-- 120 秒 authoritative golden 由真实 project compiler 与 simulation 生成，114 条断言覆盖普通/强化阶段、逐发耗弹、空弹阻塞、星鸣技补弹/火印记/快速入口，以及原有命中、HP/韧性、前后台角色 SP、奇波 SP、被动和装配传播；replay hash 为 `25ea80a1e1a214ad2a7085a9a240bbc5ab3de5419e6da2e0228f63adab6532cb`。
+- 120 秒 authoritative golden 由真实 project compiler 与 simulation 生成，当前 118 条断言覆盖普通/强化阶段、逐发耗弹、空弹阻塞、星鸣技补弹/火印记/快速入口，以及原有命中、HP/韧性、前后台角色 SP、奇波 SP、被动和装配传播；replay hash 为 `c429af6d6a2a57d04ca0027f96611e4782043c1e942fca78c804d6ec0ac5f9ca`。
 - owner 空 staging 自愈、双 owner `--all` 幂等、136 个测试文件/795 条单元与组件测试、58/58 production preview、41/41 必需能力及 character/verified、production imports、Workbench data、action status、applied-source 守门均通过。Workbench gzip `361,976B` 低于主块门槛；总 JS gzip `748,362B` 超发布硬门槛 `8,362B`，按阶段边界只记录风险。
 - 真实 Workbench 流程已证明普通拖入只生成 A1-A3；星鸣技后再次拖入普攻生成 E1-E12，12 次交易从 `12 -> 0`，并覆盖整批撤销/重做、保存回载和 390px。角色状态保持 `runtime-applied / partial`、`characterComplete=false`；当前停止等待产品复验，不启动寒悠悠。
 - R2 将公开“普攻”保存为输入意图，由当前时间轴重放状态统一解析普通或强化链；A3 转段窗、实际弹药与快速入口会在移动、删除、撤销/重做和重载后重新决定 E1/A1，不再把拖入时的计算结果持久化成用户选择。E1-E12 的默认排布按每段 authoritative occupancy 逐帧紧贴，用户手动制造的间隔继续保留。
@@ -767,6 +767,7 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 - R3 以 10 个公开动作、146 条原始窗口为固定分母，归一得到 53 条语义转移且全部进入统一运行时；18 条仅具静态窗口证据的记录独立保留，玩法相关转移缺口为 0。A3、换弹、星鸣技、星决技结束和入场星携技五种入口均按来源窗口动态选择 E1；强化闪击保持 E 序号，空弹、E12、超时、切出和明确中断按同一状态机退出。
 - 入场星携技 `10300221` 在实际子动作第 54F增加 1 枚雷属性调谐印记，并以自身 `[80,112)` 窗口开放强化普攻；CD 门禁抑制子动作时，命中、印记和窗口均不生成。E1-E12 每击只产生一次红温交易，E3/E6/E9/E12 的火印记消费与超限事件按序结算。独立复验确认 114 条 authoritative golden、136 个测试文件/818 条测试、61/61 production preview、真实切人/拖拽流程及全部来源与生产数据门禁通过，M10-B1-R3 衔接/派生闭包正式通过产品验收。该结论不代表红宝石全量战斗机制完成：角色仍为 `runtime-applied / partial`、`characterComplete=false`，保留 5 个 runtime capture 需求和数值/效果静态缺口。Workbench gzip `364,491B`，总 JS gzip `752,607B` 超硬门槛 `12,607B`，风险继续单独保留；当前停在阶段边界，不启动下一角色。
 - 阶段收口将所有带容量的角色个人资源接入通用初值控件；红宝石弹药以 `initialRuntimeState.specialResourcesByActor` 为唯一真值，支持 `0..12` 整数初值、历史事务与五载体重放，并从 0 帧重新决定 A/E 链。红宝石现为 `zero-distance-simulation-complete=true`、`real-client-evidence-complete=false`：初始弹药不再要求实机采样，剩余 4 项 capture 仅保留真实投射物时序证据。清理 211 条已由 53/53 语义转移覆盖的候选及三个假缺口后，semantic/raw/gameplay-impacting 分母为 `431/602/51`；118 条 golden 断言通过，角色总 Profile 仍诚实保持 `runtime-applied / partial`。
+- 当前修复轮确认 `10300212/sub0` 的 51 条外部 gameplay track 在现有提取物中全部为 `stubOnly`，无法从静态证据恢复终端弹体、命中帧、DamageElement、削韧或 SP 链。覆盖现按 `public action form + subskill + description clause` 独立结算，星携合击 `10300226` 不再代偿星鸣技伤害；红宝石当前为 `9/10 runtime-ready`、`zero-distance-simulation-complete=false`，新增 1 项阻断 capture。golden 辅助器同时修正来源普攻段、nullable subskill 与完美招架 `sub1` 选择，三角色实际 golden trace/replay hash 均无行为漂移。上游需按已记录的 51 个 PathID 重提取完整 Typetree 后再接入真实命中。当前 Workbench gzip `370,687B`、总 JS gzip `761,244B` 的既有发布风险仅记录，不在本轮优化。
 
 ##### M10-B2：寒悠悠（101003）单角色战斗解析与接入（首轮实现完成，R1 已完成实施并等待产品复验）
 
@@ -952,6 +953,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 55. 实施完成，等待产品复验：M10-B2-R1 已用公共入口和强正负例锁定寒悠悠七段焰火 `7 -> 1`、4+5 次命中、引爆 Buff/SP、主控 Buff 切人继承、星决技 24 秒全队双层与 15 秒主控比例 Buff；无名第二被动统一 N/A，红宝石初始弹药改为通用场景输入。141 文件/859 测试、62/62 production preview 与全部漂移/来源守门通过；当前不启动 M11 或下一角色。
 56. 路线已重整：M10-B2-R1 收口后进入 M11 无头核心、机器排轴合同、可视化验收台和角色验收协议，再进入 M12 批量评估、搜索器与末音试点。UI 美化、非必要响应式、包体压缩和全角色盲目扩张暂缓。
 57. 实施完成，等待产品复验：M10-A 小玉闭环缺口修复已接通普通 A3/A4、95F 星携技块后的 109F 延迟结算、带成功招架前置的 `10101049/sub1`、缘结阈值风印记 `+2` 和玉未央真实触发边界；141 文件/867 测试、62/62 production preview、两道漂移审计、生产数据守门与构建通过。M11、下一角色和包体优化继续暂停。
+58. 实施完成，等待上游重提取与产品复验：M10-B1 红宝石星鸣技覆盖门禁已改为按公开形态/描述条款独立结算；当前 51 条外部 gameplay track 均为 `stubOnly`，因此不伪造 280% 命中，动作诚实停在 `runtime-evidence-required`。E1-E12、资源/印记/快速入口、切人 CD 门禁与三角色 golden 行为保持不变；M11 和下一角色继续暂停。
 
 ## 8. 风险和取舍
 

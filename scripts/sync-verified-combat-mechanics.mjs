@@ -330,15 +330,18 @@ export async function createVerifiedCombatMechanicsBuild({
     characterCatalog,
     skills: seed.gameData?.skills ?? [],
   });
-  if (productBoundaryReport.status !== 'unnamed-secondary-passive-boundary-ready') {
+  if (
+    productBoundaryReport.status !== 'unnamed-secondary-passive-boundary-ready'
+  ) {
     throw new Error(
       `character combat product boundary incomplete: ${JSON.stringify(
         productBoundaryReport.unresolved
       )}`
     );
   }
-  const productBoundaryMarkdown =
-    createCharacterCombatProductBoundaryMarkdown(productBoundaryReport);
+  const productBoundaryMarkdown = createCharacterCombatProductBoundaryMarkdown(
+    productBoundaryReport
+  );
   const recipes = applyCharacterCombatProductBoundaries({
     recipes: discoveredRecipes,
     boundaryReport: productBoundaryReport,
@@ -834,6 +837,7 @@ export async function createVerifiedCombatMechanicsBuild({
     timingCoverage,
     effectCoverage,
     actionVariantResourceCoverage,
+    characterCombatArtifacts,
   });
 
   const outputs = [
@@ -3714,11 +3718,9 @@ function collectBulletLaunchContracts(
               if (!bulletId) continue;
               const injection = readBulletInjectionContract(bulletId);
               const injectedElements =
-                runtimePolicy?.bulletInjectionMode ===
-                'recursive-static-timed'
+                runtimePolicy?.bulletInjectionMode === 'recursive-static-timed'
                   ? collectStaticTimedBulletInjectionElements(bulletId)
-                  : runtimePolicy?.bulletInjectionMode ===
-                      'recursive-immediate'
+                  : runtimePolicy?.bulletInjectionMode === 'recursive-immediate'
                     ? collectImmediateBulletInjectionElements(bulletId)
                     : (injection.elements ?? []);
               for (
@@ -3731,8 +3733,7 @@ function collectBulletLaunchContracts(
                   element,
                 ] of injectedElements.entries()) {
                   const totalDelayMs =
-                    delayMs +
-                    (nonNegativeNumberOrNull(element.delayMs) ?? 0);
+                    delayMs + (nonNegativeNumberOrNull(element.delayMs) ?? 0);
                   const delayFrames = Math.round(
                     (totalDelayMs / 1000) * frameRate
                   );
@@ -3782,8 +3783,8 @@ function collectBulletLaunchContracts(
                     status:
                       (element.targetType ?? injection.targetType) === 1
                         ? 'verified-projectile-launch-ready'
-                        : element.executionStatus ??
-                          'runtime-projectile-target-dependent',
+                        : (element.executionStatus ??
+                          'runtime-projectile-target-dependent'),
                   });
                 }
               }
@@ -3877,10 +3878,9 @@ function readBulletInjectionContract(bulletId) {
                   `element:${index}`,
                 ].join('|'),
                 executionStatus: timing.status,
-                sourceIdentity: [
-                  timing.sourceIdentity,
-                  sourceIdentity,
-                ].join('|'),
+                sourceIdentity: [timing.sourceIdentity, sourceIdentity].join(
+                  '|'
+                ),
               });
             }
           }
@@ -3917,10 +3917,9 @@ function readBulletInjectionContract(bulletId) {
                   `nested:${nestedBulletId}:${configIndex}:${nestedIndex}`,
                 ].join('|'),
                 executionStatus: timing.status,
-                sourceIdentity: [
-                  timing.sourceIdentity,
-                  sourceIdentity,
-                ].join('|'),
+                sourceIdentity: [timing.sourceIdentity, sourceIdentity].join(
+                  '|'
+                ),
               });
             }
           }
@@ -4044,8 +4043,7 @@ function collectStaticTimedBulletInjectionElements(
       ...(contract.staticTimedElements ?? []).map(element => ({
         ...element,
         delayMs:
-          accumulatedDelayMs +
-          (nonNegativeNumberOrNull(element.delayMs) ?? 0),
+          accumulatedDelayMs + (nonNegativeNumberOrNull(element.delayMs) ?? 0),
         sourceIdentity: [...parentSources, element.sourceIdentity]
           .filter(Boolean)
           .join('|'),
@@ -4054,8 +4052,7 @@ function collectStaticTimedBulletInjectionElements(
         collectStaticTimedBulletInjectionElements(
           nested.bulletId,
           nextVisited,
-          accumulatedDelayMs +
-            (nonNegativeNumberOrNull(nested.delayMs) ?? 0),
+          accumulatedDelayMs + (nonNegativeNumberOrNull(nested.delayMs) ?? 0),
           [...parentSources, nested.sourceIdentity]
         )
       ),
@@ -4149,8 +4146,7 @@ function createRuntimeControlElementRefs(control) {
   for (const launch of control.bulletLaunches ?? []) {
     const key = `${launch.subSkillIndex}|${launch.elementId}`;
     if (seenElementIds.has(key)) continue;
-    const elementIndex =
-      nextElementIndexByMap.get(launch.subSkillIndex) ?? 0;
+    const elementIndex = nextElementIndexByMap.get(launch.subSkillIndex) ?? 0;
     refs.push({
       mapIndex: launch.subSkillIndex,
       referenceKind: 'bulletElements',
@@ -4778,8 +4774,8 @@ function createElementInheritanceFieldAudit({
     )
   );
   const nonMigratingRegressionElementIds = [101010206, 103002275];
-  const nonMigratingRegressionEvidence =
-    nonMigratingRegressionElementIds.map(elementId => {
+  const nonMigratingRegressionEvidence = nonMigratingRegressionElementIds.map(
+    elementId => {
       const entry = (allIndexedElementsById.get(elementId) ?? [])[0];
       return {
         elementId,
@@ -4793,7 +4789,8 @@ function createElementInheritanceFieldAudit({
           ? `battle-element-assets.jsonl#path_id=${entry.pathId}`
           : null,
       };
-    });
+    }
+  );
   const legacyUnreachableElementIds = [
     101010030, 101010039, 101010081, 103002040, 103002079, 103002157,
   ];
@@ -4841,8 +4838,7 @@ function createElementInheritanceFieldAudit({
       nonzeroInheritTypeRecordCount: dedupedRecords.length,
       matrix,
       reachableRecordCount: dedupedRecords.filter(
-        record =>
-          record.reachabilityStatus === 'reachable-battle-effect-graph'
+        record => record.reachabilityStatus === 'reachable-battle-effect-graph'
       ).length,
       legacyUnreachableRecordCount: dedupedRecords.filter(
         record => record.reachabilityStatus === 'legacy-unreachable-evidence'
@@ -12336,6 +12332,7 @@ function createPublicRuntimeCoverageReport({
   timingCoverage,
   effectCoverage,
   actionVariantResourceCoverage,
+  characterCombatArtifacts,
 }) {
   const timingByAction = new Map(
     timingCoverage.actions.map(action => [action.identity, action])
@@ -12353,6 +12350,14 @@ function createPublicRuntimeCoverageReport({
       profile,
     ])
   );
+  const characterRuntimeCoverageByAction = new Map(
+    (characterCombatArtifacts?.ownerArtifacts ?? []).flatMap(artifact =>
+      (artifact.runtimeCoverage?.actionRows ?? []).map(row => [
+        row.actionIdentity,
+        row,
+      ])
+    )
+  );
   const actions = packageValue.actionMappings.map(mapping => {
     const timing = timingByAction.get(mapping.identity) ?? null;
     const effect = effectByAction.get(mapping.identity) ?? null;
@@ -12360,17 +12365,36 @@ function createPublicRuntimeCoverageReport({
       variantEdgesByOwnerControl.get(
         `${mapping.ownerId}|${mapping.controlSkillId}`
       ) ?? [];
+    const characterRuntimeCoverage = characterRuntimeCoverageByAction.get(
+      mapping.identity
+    );
     const normalizedReasons = dedupeBy(
-      (mapping.reasons ?? []).map(normalizeProductGapReason),
+      [
+        ...(mapping.reasons ?? []),
+        ...(characterRuntimeCoverage?.reasons ?? []),
+      ].map(normalizeProductGapReason),
       value => value
     );
     const gapResolution = classifyProductActionGap(normalizedReasons);
-    const runtimeStatus = mapping.runtimeReady
+    const runtimeReady =
+      characterRuntimeCoverage?.runtimeReady ?? mapping.runtimeReady;
+    const runtimeStatus = runtimeReady
       ? 'runnable'
       : mapping.classification === 'verified-zero'
         ? 'verified-zero'
-        : gapResolution.status;
+        : characterRuntimeCoverage?.settlementStatus ===
+            'runtime-evidence-required'
+          ? 'runtime-evidence-required'
+          : characterRuntimeCoverage?.settlementStatus === 'static-evidence-gap'
+            ? 'static-evidence-gap'
+            : gapResolution.status;
     const resourceProfile = resourceProfileByOwner.get(Number(mapping.ownerId));
+    const settlementDimensions =
+      characterRuntimeCoverage?.requiresDamageSettlement === true
+        ? mergePublicFormSettlementDimensions(
+            characterRuntimeCoverage.publicFormSettlements
+          )
+        : null;
     return {
       identity: mapping.identity,
       ownerKind: mapping.ownerKind,
@@ -12382,12 +12406,17 @@ function createPublicRuntimeCoverageReport({
       controlSkillId: mapping.controlSkillId,
       selectedSubSkillIndex: mapping.selectedSubSkillIndex,
       runtimeStatus,
-      runnable: Boolean(mapping.runtimeReady),
+      runnable: Boolean(runtimeReady),
+      rawRuntimeReady:
+        characterRuntimeCoverage?.rawRuntimeReady ??
+        Boolean(mapping.runtimeReady),
       schedulable: mapping.schedulable !== false,
       sourceEvidenceStatus:
         mapping.sourceEvidenceStatus ?? 'static-evidence-gap',
       scenarioRuntimeStatus:
-        mapping.scenarioRuntimeStatus ?? 'scenario-runtime-unresolved',
+        characterRuntimeCoverage?.scenarioRuntimeStatus ??
+        mapping.scenarioRuntimeStatus ??
+        'scenario-runtime-unresolved',
       mechanicsClassification: mapping.mechanicsClassification,
       timing: {
         status: timing?.status ?? mapping.timingStatus ?? 'unresolved',
@@ -12409,10 +12438,19 @@ function createPublicRuntimeCoverageReport({
           }
         : { status: 'not-applicable' },
       dimensions: {
-        enemyHp: mapping.dimensionSummary?.hp ?? {},
-        enemyToughness: mapping.dimensionSummary?.toughness ?? {},
-        actorSp: mapping.dimensionSummary?.actorSp ?? {},
-        kiboSp: mapping.dimensionSummary?.kiboSp ?? {},
+        enemyHp: settlementDimensions?.hp ?? mapping.dimensionSummary?.hp ?? {},
+        enemyToughness:
+          settlementDimensions?.toughness ??
+          mapping.dimensionSummary?.toughness ??
+          {},
+        actorSp:
+          settlementDimensions?.actorSp ??
+          mapping.dimensionSummary?.actorSp ??
+          {},
+        kiboSp:
+          settlementDimensions?.kiboSp ??
+          mapping.dimensionSummary?.kiboSp ??
+          {},
         healing: effect?.dimensions?.hp ?? {},
         shield: effect?.dimensions?.shield ?? {},
         dynamicProperty: effect?.dimensions?.dynamicProperty ?? {},
@@ -12424,6 +12462,15 @@ function createPublicRuntimeCoverageReport({
         verifiedZero: effect?.semanticVerifiedZeroEffectCount ?? 0,
         unresolved: effect?.semanticUnresolvedEffectCount ?? 0,
       },
+      settlement: characterRuntimeCoverage
+        ? {
+            required:
+              characterRuntimeCoverage.requiresDamageSettlement === true,
+            status: characterRuntimeCoverage.settlementStatus ?? 'not-required',
+            hitCount: Number(characterRuntimeCoverage.hitCount ?? 0),
+            publicForms: characterRuntimeCoverage.publicFormSettlements ?? [],
+          }
+        : null,
       reasons: normalizedReasons,
       sourceIdentity: mapping.bindingSourceIdentity ?? null,
     };
@@ -12608,6 +12655,22 @@ function createPublicRuntimeCoverageReport({
     unresolvedActions,
     recoveryCoverage,
   };
+}
+
+function mergePublicFormSettlementDimensions(publicFormSettlements = []) {
+  const dimensions = {};
+  for (const dimension of ['hp', 'toughness', 'actorSp', 'kiboSp']) {
+    dimensions[dimension] = {};
+    for (const row of publicFormSettlements) {
+      for (const [status, count] of Object.entries(
+        row.dimensionSummary?.[dimension] ?? {}
+      )) {
+        dimensions[dimension][status] =
+          Number(dimensions[dimension][status] ?? 0) + Number(count ?? 0);
+      }
+    }
+  }
+  return dimensions;
 }
 
 function summarizeProductVariantEdges(edges) {
@@ -12887,7 +12950,17 @@ function relativePath(filePath) {
 }
 
 function relativeExternalPath(filePath) {
-  return filePath.replaceAll('\\', '/');
+  const absolutePath = path.resolve(filePath);
+  const repositoryRelativePath = path.relative(REPO_ROOT, absolutePath);
+  if (
+    repositoryRelativePath &&
+    !repositoryRelativePath.startsWith(`..${path.sep}`) &&
+    repositoryRelativePath !== '..' &&
+    !path.isAbsolute(repositoryRelativePath)
+  ) {
+    return repositoryRelativePath.replaceAll('\\', '/');
+  }
+  return absolutePath.replaceAll('\\', '/');
 }
 
 function finiteNumberOrNull(value) {

@@ -2,6 +2,10 @@ import crypto from 'node:crypto';
 import path from 'node:path';
 import { createServer } from 'vite';
 import { validateCharacterCombatGoldenRuntime } from './character-combat-golden-validation.mjs';
+import {
+  resolveGoldenAttackInputSourceSegment,
+  resolveGoldenSelectedSubSkillIndex,
+} from './character-combat-golden-selection.mjs';
 
 const DEFAULT_FRAME_RATE = 60;
 
@@ -361,8 +365,11 @@ function createGoldenActionDraft({
       frameRate,
     });
   }
-  const selectedSubSkillIndex =
-    action.controlSubSkillIndex ?? action.selectedSubSkillIndex ?? null;
+  const selectedSubSkillIndex = resolveGoldenSelectedSubSkillIndex({
+    action,
+    mapping,
+    mechanicsPackage,
+  });
   const durationFrames = resolveMappingDurationFrames(
     mapping,
     selectedSubSkillIndex,
@@ -469,9 +476,9 @@ function createAttackInputDraft({
   const chainSegment = chain?.segments?.find(
     segment => Number(segment.sequenceIndex) === sequenceIndex
   );
-  const sourceSegment = mapping.attackInputSegments?.find(
-    segment =>
-      Number(segment.controlSkillId) === Number(chainSegment?.controlSkillId)
+  const sourceSegment = resolveGoldenAttackInputSourceSegment(
+    mapping,
+    chainSegment
   );
   const attackInput = contextScheduling.projectVerifiedAttackInputChainSegment(
     sourceSegment,
@@ -695,8 +702,7 @@ function createGoldenActualProjection({
         previousTargetId:
           event.previousTargetId ?? event.before?.targetId ?? null,
         nextTargetId: event.nextTargetId ?? event.after?.targetId ?? null,
-        controlledActorTransitionId:
-          event.controlledActorTransitionId ?? null,
+        controlledActorTransitionId: event.controlledActorTransitionId ?? null,
         inheritType:
           event.after?.inheritType ?? event.before?.inheritType ?? null,
         formulaSourceActorId:
@@ -746,20 +752,18 @@ function createGoldenActualProjection({
     final: combatRuntime.finalState?.enemy,
     pointCount: result.runtimeOutputs?.stateCurves?.enemy?.pointCount ?? 0,
   });
-  const ownerActionIds = new Set(
-    [
-      ...(project.actions ?? [])
-        .filter(
-          action =>
-            String(action.actorId ?? '') === `actor-${ownerId}` ||
-            Number(action.actor?.characterId) === ownerId
-        )
-        .map(action => action.id),
-      ...actionSelections
-        .filter(selection => Number(selection.ownerId) === ownerId)
-        .map(selection => selection.actionId),
-    ]
-  );
+  const ownerActionIds = new Set([
+    ...(project.actions ?? [])
+      .filter(
+        action =>
+          String(action.actorId ?? '') === `actor-${ownerId}` ||
+          Number(action.actor?.characterId) === ownerId
+      )
+      .map(action => action.id),
+    ...actionSelections
+      .filter(selection => Number(selection.ownerId) === ownerId)
+      .map(selection => selection.actionId),
+  ]);
   const dynamicPropertyActionKeys =
     recipe.goldenScenario?.traceSelectors?.dynamicPropertyActionKeys ?? [];
   const dynamicPropertyActionIds =
@@ -807,11 +811,10 @@ function createGoldenActualProjection({
       ownerActorSp?.actionTransactions,
       scenarioRecipe.frameRate
     );
-  const ownerKiboSpTransactionsByActionId =
-    summarizeEnergyTransactionsByAction(
-      ownerKiboSp?.actionTransactions,
-      scenarioRecipe.frameRate
-    );
+  const ownerKiboSpTransactionsByActionId = summarizeEnergyTransactionsByAction(
+    ownerKiboSp?.actionTransactions,
+    scenarioRecipe.frameRate
+  );
   const energyActionKeys =
     recipe.goldenScenario?.traceSelectors?.energyActionKeys ?? [];
   for (const actionId of energyActionKeys) {
@@ -881,10 +884,7 @@ function createGoldenActualProjection({
         roundNumber(
           damageTrace
             .filter(event => event.actionId === actionId)
-            .reduce(
-              (total, event) => total + (Number(event.hpDamage) || 0),
-              0
-            )
+            .reduce((total, event) => total + (Number(event.hpDamage) || 0), 0)
         ),
       ])
   );
@@ -1256,9 +1256,7 @@ function summarizeEnergyTransactionsByAction(
 ) {
   const actionIds = [
     ...new Set(
-      transactions
-        .map(transaction => transaction.actionId)
-        .filter(Boolean)
+      transactions.map(transaction => transaction.actionId).filter(Boolean)
     ),
   ].sort();
   return Object.fromEntries(
@@ -1278,8 +1276,7 @@ function summarizeEnergyTransactionsByAction(
           ),
           totalChange: roundNumber(
             rows.reduce(
-              (sum, transaction) =>
-                sum + (Number(transaction.change) || 0),
+              (sum, transaction) => sum + (Number(transaction.change) || 0),
               0
             )
           ),

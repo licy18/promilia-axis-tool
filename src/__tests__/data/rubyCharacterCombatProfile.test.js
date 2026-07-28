@@ -2,11 +2,17 @@ import { describe, expect, it } from 'vitest';
 import goldenTrace from '../../../reports/m10/103002/golden-trace.json';
 import actionPhaseCoverage from '../../../reports/m10/103002/action-phase-coverage.json';
 import actionTransitionCoverage from '../../../reports/m10/103002/action-transition-coverage.json';
+import descriptionCoverage from '../../../reports/m10/103002/description-coverage.json';
 import reachableGraph from '../../../reports/m10/103002/reachable-graph.json';
 import runtimeCapturePlan from '../../../reports/m10/103002/runtime-capture-plan.json';
 import runtimeCoverage from '../../../reports/m10/103002/runtime-coverage.json';
 import sourceManifest from '../../../reports/m10/103002/source-manifest.json';
 import unresolvedLedger from '../../../reports/m10/103002/unresolved-ledger.json';
+import publicRuntimeCoverage from '../../../reports/verified-public-runtime-coverage.json';
+import {
+  resolveGoldenAttackInputSourceSegment,
+  resolveGoldenSelectedSubSkillIndex,
+} from '../../../scripts/character-combat/character-combat-golden-selection.mjs';
 import { validateCharacterCombatGoldenRuntime } from '../../../scripts/character-combat/character-combat-golden-validation.mjs';
 import catalog from '../../data/generated/character-combat-profile-catalog.json';
 import ownerContract from '../../data/generated/character-combat-owner-contracts/103002.json';
@@ -26,7 +32,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
-      zeroDistanceSimulationComplete: true,
+      zeroDistanceSimulationComplete: false,
       realClientEvidenceComplete: false,
       completionState: 'runtime-applied',
       denominator: {
@@ -51,7 +57,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
-      zeroDistanceSimulationComplete: true,
+      zeroDistanceSimulationComplete: false,
       realClientEvidenceComplete: false,
     });
     expect(profile.runtimeCompilation.sourceCompilation.ownerContractHash).toBe(
@@ -59,7 +65,9 @@ describe('M10-B1 Ruby character combat profile', () => {
     );
     expect(ownerContract.contracts.publicActions).toHaveLength(10);
     expect(
-      ownerContract.contracts.publicActions.filter(action => action.runtimeReady)
+      ownerContract.contracts.publicActions.filter(
+        action => action.runtimeReady
+      )
     ).toHaveLength(10);
     expect(
       ownerContract.contracts.publicActions
@@ -79,7 +87,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     ).toEqual([]);
     expect(runtimeCoverage.summary).toMatchObject({
       actionCount: 10,
-      runtimeReadyActionCount: 10,
+      runtimeReadyActionCount: 9,
       executionFormCount: 24,
       controlCount: 27,
       hitCount: 215,
@@ -102,6 +110,217 @@ describe('M10-B1 Ruby character combat profile', () => {
         'switch-trigger': 1,
       },
     });
+  });
+
+  it('does not let Star Combo settlement make the Star Skill damage clause ready', () => {
+    const starSkillActionIdentity = 'actor|103002|10300212|0|10300212';
+    const starComboActionIdentity = 'actor|103002|10300212|1|10300226';
+    const starSkillRow = runtimeCoverage.actionRows.find(
+      row => row.actionIdentity === starSkillActionIdentity
+    );
+    const starComboRow = runtimeCoverage.actionRows.find(
+      row => row.actionIdentity === starComboActionIdentity
+    );
+
+    expect(starSkillRow).toMatchObject({
+      actionKind: 'star-skill',
+      sourceSkillId: 10300212,
+      rawRuntimeReady: true,
+      runtimeReady: false,
+      hitCount: 0,
+      requiresDamageSettlement: true,
+      settlementStatus: 'runtime-evidence-required',
+      publicFormSettlements: [
+        expect.objectContaining({
+          publicFormId: `${starSkillActionIdentity}:default`,
+          executionControlSkillId: 10300212,
+          executionSubSkillIndex: 0,
+          hitCount: 0,
+          settlementEvidence: [],
+          status: 'runtime-evidence-required',
+        }),
+      ],
+    });
+    expect(starComboRow).toMatchObject({
+      actionKind: 'star-combo',
+      sourceSkillId: 10300212,
+      runtimeReady: true,
+      hitCount: 1,
+      requiresDamageSettlement: true,
+      settlementStatus: 'applied',
+      publicFormSettlements: [
+        expect.objectContaining({
+          publicFormId: `${starComboActionIdentity}:default`,
+          executionControlSkillId: 10300226,
+          executionSubSkillIndex: 0,
+          hitCount: 1,
+          status: 'applied',
+        }),
+      ],
+    });
+
+    const starSkillDamageClause = descriptionCoverage.entries.find(
+      entry =>
+        entry.skillId === 10300212 &&
+        entry.text.startsWith('【星鸣技】') &&
+        entry.mechanicKinds.includes('action-settlement')
+    );
+    const starComboDamageClause = descriptionCoverage.entries.find(
+      entry =>
+        entry.skillId === 10300212 &&
+        entry.text.startsWith('【星结合击】') &&
+        entry.mechanicKinds.includes('action-settlement')
+    );
+    expect(starSkillDamageClause).toMatchObject({
+      status: 'runtime-evidence-required',
+      coverageReferences: expect.arrayContaining([
+        starSkillActionIdentity,
+        `${starSkillActionIdentity}:default`,
+      ]),
+      publicFormSettlements: [
+        expect.objectContaining({
+          publicFormId: `${starSkillActionIdentity}:default`,
+          executionSubSkillIndex: 0,
+          hitCount: 0,
+          settlementEvidence: [],
+          status: 'runtime-evidence-required',
+        }),
+      ],
+      reasons: expect.arrayContaining([
+        'public-action-damage-settlement-evidence-missing',
+        'upstream-gameplay-track-stub-only',
+      ]),
+    });
+    expect(starSkillDamageClause.coverageReferences).not.toContain(
+      starComboActionIdentity
+    );
+    expect(starSkillDamageClause.coverageReferences).not.toContain(
+      'hit:10300226|0|elements|2|7932730177002622605|40|1'
+    );
+    expect(starComboDamageClause).toMatchObject({
+      status: 'applied',
+      coverageReferences: expect.arrayContaining([
+        starComboActionIdentity,
+        `${starComboActionIdentity}:default`,
+        'hit:10300226|0|elements|2|7932730177002622605|40|1',
+      ]),
+      publicFormSettlements: [
+        expect.objectContaining({
+          publicFormId: `${starComboActionIdentity}:default`,
+          executionSubSkillIndex: 0,
+          hitCount: 1,
+          status: 'applied',
+        }),
+      ],
+    });
+
+    const globalStarSkill = publicRuntimeCoverage.actions.find(
+      row => row.identity === starSkillActionIdentity
+    );
+    const globalStarCombo = publicRuntimeCoverage.actions.find(
+      row => row.identity === starComboActionIdentity
+    );
+    expect(globalStarSkill).toMatchObject({
+      runtimeStatus: 'runtime-evidence-required',
+      rawRuntimeReady: true,
+      runnable: false,
+      dimensions: {
+        enemyHp: { unresolved: 1 },
+        enemyToughness: { unresolved: 1 },
+        actorSp: { unresolved: 1 },
+        kiboSp: { unresolved: 1 },
+      },
+      settlement: {
+        required: true,
+        status: 'runtime-evidence-required',
+        hitCount: 0,
+        publicForms: [
+          expect.objectContaining({
+            publicFormId: `${starSkillActionIdentity}:default`,
+            hitCount: 0,
+            status: 'runtime-evidence-required',
+          }),
+        ],
+      },
+    });
+    expect(globalStarCombo).toMatchObject({
+      runtimeStatus: 'runnable',
+      runnable: true,
+      dimensions: {
+        enemyHp: { applied: 1 },
+        enemyToughness: { applied: 1 },
+        actorSp: { applied: 1 },
+        kiboSp: { applied: 1 },
+      },
+      settlement: {
+        required: true,
+        status: 'applied',
+        hitCount: 1,
+      },
+    });
+
+    const upstreamGap = unresolvedLedger.records.find(record =>
+      record.rawRecordIdentities?.includes(
+        'actor:103002:public-form:10300212:0:star-skill:damage-settlement'
+      )
+    );
+    expect(upstreamGap).toMatchObject({
+      status: 'runtime-evidence-required',
+      impactClassification: 'gameplay-impacting',
+      metadata: {
+        externalFileId: 3,
+        externalReferenceCount: 51,
+        missingAssetType: 'MonoBehaviour gameplay track',
+        stubOnlyCount: 51,
+        missingPathIds: expect.arrayContaining([
+          '5957483931528029221',
+          '5112223355471684645',
+        ]),
+      },
+    });
+  });
+
+  it('resolves golden source segments without collapsing nullable subskills', () => {
+    const normalMapping = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerKind === 'actor' &&
+        Number(mapping.ownerId) === RUBY_ID &&
+        mapping.actionKind === 'normal-attack'
+    );
+    const enhancedChain =
+      mechanicsPackage.actionVariantGraph.attackInputChains.find(
+        chain => chain.chainIdentity === 'ruby-enhanced-twelve-inputs'
+      );
+    const e10 = enhancedChain.segments.find(
+      segment => Number(segment.sequenceIndex) === 10
+    );
+    expect(
+      resolveGoldenAttackInputSourceSegment(normalMapping, e10)
+    ).toMatchObject({
+      controlSkillId: 10300204,
+      selectedSubSkillIndex: 0,
+    });
+
+    const perfectParryMapping = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerKind === 'actor' &&
+        Number(mapping.ownerId) === RUBY_ID &&
+        mapping.actionKind === 'perfect-parry'
+    );
+    expect(
+      resolveGoldenSelectedSubSkillIndex({
+        action: {},
+        mapping: perfectParryMapping,
+        mechanicsPackage,
+      })
+    ).toBe(1);
+    expect(
+      resolveGoldenSelectedSubSkillIndex({
+        action: { selectedSubSkillIndex: null },
+        mapping: perfectParryMapping,
+        mechanicsPackage,
+      })
+    ).toBeNull();
   });
 
   it('compiles the normal phase, gated enhanced phase, and Star Skill resource transaction', () => {
@@ -132,7 +351,7 @@ describe('M10-B1 Ruby character combat profile', () => {
             : 'unresolved'
       )
     ).toEqual({
-        applied: 22,
+      applied: 22,
       'not-applicable': 20,
     });
 
@@ -266,8 +485,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     expect(
       ownerContract.contracts.actionEffectBindings.find(
         binding =>
-          binding.controlSkillId === 10300212 &&
-          binding.elementId === 150
+          binding.controlSkillId === 10300212 && binding.elementId === 150
       )
     ).toMatchObject({
       triggerFrame: 40,
@@ -282,8 +500,8 @@ describe('M10-B1 Ruby character combat profile', () => {
     });
     expect(
       ownerContract.contracts.variantWindowBindings.find(
-        binding => binding.bindingIdentity ===
-          'ruby-star-carry-direct-enhanced-entry'
+        binding =>
+          binding.bindingIdentity === 'ruby-star-carry-direct-enhanced-entry'
       )
     ).toMatchObject({
       sourceControlSkillId: 10300221,
@@ -300,8 +518,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     expect(
       ownerContract.contracts.actionEffectBindings.find(
         binding =>
-          binding.bindingIdentity ===
-          'ruby-star-carry-thunder-tuning-mark'
+          binding.bindingIdentity === 'ruby-star-carry-thunder-tuning-mark'
       )
     ).toMatchObject({
       controlSkillId: 10300221,
@@ -504,7 +721,9 @@ describe('M10-B1 Ruby character combat profile', () => {
         ],
       }),
     ]);
-    expect(ownerContract.contracts.passives[0].triggerBindings).toHaveLength(15);
+    expect(ownerContract.contracts.passives[0].triggerBindings).toHaveLength(
+      15
+    );
     expect(
       ownerContract.contracts.passives[0].triggerBindings.find(
         trigger => trigger.controlSkillId === 10300213
@@ -517,9 +736,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     });
     expect(
       unresolvedLedger.records.some(record =>
-        record.reasons.includes(
-          'passive-listener-closure-static-evidence-gap'
-        )
+        record.reasons.includes('passive-listener-closure-static-evidence-gap')
       )
     ).toBe(false);
     expect(
@@ -542,15 +759,15 @@ describe('M10-B1 Ruby character combat profile', () => {
       rawRecordIdentities: ['actor:103002:skill:10300262'],
     });
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 431,
-      rawRecordCount: 602,
+      semanticRecordCount: 432,
+      rawRecordCount: 603,
       semanticStatusCounts: {
         'not-applicable': 22,
-        'runtime-evidence-required': 4,
+        'runtime-evidence-required': 5,
         'static-evidence-gap': 405,
       },
       impactClassificationCounts: {
-        'gameplay-impacting': 51,
+        'gameplay-impacting': 52,
         'not-applicable': 22,
         'superseded-by-semantic-transition-closure': 211,
         'wrapper-or-duplicate': 147,
@@ -581,36 +798,50 @@ describe('M10-B1 Ruby character combat profile', () => {
         applied: true,
       }),
     ]);
-    expect(
-      JSON.stringify(ownerContract.contracts)
-    ).not.toContain('103002252');
-    expect(
-      JSON.stringify(ownerContract.contracts)
-    ).not.toContain('103002253');
+    expect(JSON.stringify(ownerContract.contracts)).not.toContain('103002252');
+    expect(JSON.stringify(ownerContract.contracts)).not.toContain('103002253');
     expect(runtimeCapturePlan).toMatchObject({
       ownerId: RUBY_ID,
       status: 'runtime-evidence-required',
       summary: {
-        captureCount: 4,
-        zeroDistanceBlockingCaptureCount: 0,
+        captureCount: 5,
+        zeroDistanceBlockingCaptureCount: 1,
         realClientEvidenceCaptureCount: 4,
       },
     });
-    expect(runtimeCapturePlan.entries).toHaveLength(4);
+    expect(runtimeCapturePlan.entries).toHaveLength(5);
     expect(
-      runtimeCapturePlan.entries.every(
-        entry =>
-          entry.evidenceScope === 'real-client-projectile-impact' &&
-          entry.blocksZeroDistanceSimulation === false &&
-          entry.scenarioRuntimeStatus ===
-            'scenario-assumed-zero-distance' &&
-          entry.referenceKinds.includes('bulletElements')
-      )
+      runtimeCapturePlan.entries
+        .filter(
+          entry =>
+            entry.sourceRecordIdentity !== 'semantic-gap:ad30748479d70e27668e'
+        )
+        .every(
+          entry =>
+            entry.evidenceScope === 'real-client-projectile-impact' &&
+            entry.blocksZeroDistanceSimulation === false &&
+            entry.scenarioRuntimeStatus === 'scenario-assumed-zero-distance' &&
+            entry.referenceKinds.includes('bulletElements')
+        )
     ).toBe(true);
+    expect(
+      runtimeCapturePlan.entries.find(
+        entry =>
+          entry.sourceMetadata?.externalContainerPath ===
+          'Assets/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset'
+      )
+    ).toMatchObject({
+      evidenceScope: 'runtime-mechanism',
+      blocksZeroDistanceSimulation: true,
+      sourceMetadata: {
+        externalReferenceCount: 51,
+        stubOnlyCount: 51,
+      },
+    });
     expect(profile.simulationScopes).toMatchObject({
       zeroDistance: {
-        status: 'complete',
-        complete: true,
+        status: 'incomplete',
+        complete: false,
         scenarioContract: {
           targetDistance: 0,
           defaultWillHit: true,
@@ -619,23 +850,23 @@ describe('M10-B1 Ruby character combat profile', () => {
         },
         gates: {
           declared: true,
-          publicActionsRuntimeReady: true,
+          publicActionsRuntimeReady: false,
           actionFormsApplied: true,
           semanticTransitionClosureComplete: true,
           requiredResourcesApplied: true,
           requiredActionEffectsApplied: true,
           requiredPassivesApplied: true,
-          zeroDistanceRuntimeCapturesResolved: true,
+          zeroDistanceRuntimeCapturesResolved: false,
           authoritativeGoldenPassed: true,
         },
-        sourceEvidenceGapCount: 51,
+        sourceEvidenceGapCount: 52,
         sourceEvidenceGapsRemainAuditable: true,
         realClientEvidenceCaptureCount: 4,
       },
       realClientEvidence: {
         status: 'incomplete',
         complete: false,
-        runtimeCaptureCount: 4,
+        runtimeCaptureCount: 5,
         staticEvidenceGapCount: 47,
       },
     });
@@ -786,19 +1017,20 @@ describe('M10-B1 Ruby character combat profile', () => {
       passed: false,
       failedCount: 1,
     });
-    expect(validation.assertions.find(assertion => !assertion.passed)).toMatchObject(
-      {
-        jsonPath: 'resources.specialResourceTrace.0.afterValue',
-        expected: 7,
-        actual: 6,
-      }
-    );
+    expect(
+      validation.assertions.find(assertion => !assertion.passed)
+    ).toMatchObject({
+      jsonPath: 'resources.specialResourceTrace.0.afterValue',
+      expected: 7,
+      actual: 6,
+    });
   });
 
   it('publishes the same owner contract through the verified mechanics package', () => {
-    const metadata = mechanicsPackage.characterCombatProfileCatalog.profiles.find(
-      item => Number(item.ownerId) === RUBY_ID
-    );
+    const metadata =
+      mechanicsPackage.characterCombatProfileCatalog.profiles.find(
+        item => Number(item.ownerId) === RUBY_ID
+      );
     expect(metadata).toMatchObject({
       profileIdentity: profile.profileIdentity,
       profileHash: profile.profileHash,
@@ -806,7 +1038,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
-      zeroDistanceSimulationComplete: true,
+      zeroDistanceSimulationComplete: false,
       realClientEvidenceComplete: false,
     });
     expect(
