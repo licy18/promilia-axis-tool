@@ -20,6 +20,7 @@ export function createVerifiedTuningMarkGeneration({
   scenario = {},
   actionExecutionPlan = null,
   effectGeneration = null,
+  actionVariantRuntime = null,
 } = {}) {
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
   const catalog = mechanicsPackage?.tuningMechanicsCatalog;
@@ -68,6 +69,41 @@ export function createVerifiedTuningMarkGeneration({
     effectCommands,
     mechanicsPackage,
   });
+
+  for (const transaction of
+    actionVariantRuntime?.tuningMarkTransactions ?? []) {
+    if (
+      transaction.applied !== true ||
+      transaction.kind !== 'threshold-grant'
+    ) {
+      continue;
+    }
+    const profile = profileByMarkId.get(Number(transaction.markId));
+    const action =
+      transaction.action ??
+      (scenario.actions ?? []).find(
+        candidate => candidate.id === transaction.actionId
+      ) ??
+      null;
+    if (!profile || !action) continue;
+    enqueue({
+      kind: 'acquire',
+      timeMs: Number(transaction.timeMs),
+      action,
+      resolution: null,
+      effect: {
+        effectIdentity: transaction.transactionIdentity,
+        sourceIdentity: transaction.sourceIdentity,
+        tuningMark: {
+          applied: true,
+          markId: Number(transaction.markId),
+          profileKey: transaction.profileKey,
+          stackDelta: Number(transaction.stackDelta),
+        },
+      },
+      profile,
+    });
+  }
 
   for (const action of scenario.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -329,19 +365,28 @@ function applyLayerAcquisition({
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
   if (!state) return;
   const before = state.layers.length;
-  let layer = null;
-  if (before < state.profile.maxStacks) {
-    layer = {
-      id: `${descriptor.effect.effectIdentity}|layer|${descriptor.queueSequence}`,
+  const requestedLayerCount = positiveInteger(
+    descriptor.effect?.tuningMark?.stackDelta,
+    1
+  );
+  const acquiredLayerCount = Math.min(
+    requestedLayerCount,
+    Math.max(0, state.profile.maxStacks - before)
+  );
+  const layers = [];
+  for (let index = 0; index < acquiredLayerCount; index += 1) {
+    const layer = {
+      id: `${descriptor.effect.effectIdentity}|layer|${descriptor.queueSequence}|${index}`,
       acquiredAtMs: descriptor.timeMs,
-      acquisitionSequence: descriptor.queueSequence,
+      acquisitionSequence: descriptor.queueSequence + index / 1000,
       sourceActionId: descriptor.action.id,
       sourceActorId: descriptor.action.actorId,
       sourceIdentity: descriptor.effect.sourceIdentity,
     };
+    layers.push(layer);
     state.layers.push(layer);
-    sortLayers(state.layers);
   }
+  sortLayers(state.layers);
   scheduleSharedDecay(
     state,
     descriptor.timeMs + state.profile.layerDurationMs,
@@ -360,7 +405,7 @@ function applyLayerAcquisition({
       before,
       after,
       delta: after - before,
-      layerIds: layer ? [layer.id] : [],
+      layerIds: layers.map(layer => layer.id),
     })
   );
   if (after !== before) {

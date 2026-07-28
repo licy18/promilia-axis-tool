@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
+  "sourcePackageHash": "ae3b5de3a0760a17be19005d71bc246d1b067c8d7bc9e600b6797a27f9e90d67",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -55,7 +55,7 @@
         "派生形态",
         "被动监听",
         "切人/星携技",
-        "静态缺口"
+        "运行证据"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "runtime-applied",
@@ -80,10 +80,10 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 7,
-      "runtimeReadyRatio": 0.7,
-      "staticEvidenceGapCount": 3,
-      "runtimeEvidenceRequiredCount": 0,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
+      "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "personal-resource",
         "state-machine",
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6"
+      "profileHash": "de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
+      "profileHash": "ae4f67fdf833805773c6fab09c460b24f9c271c167a9a54c1b579aa87c756102"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "2cf3e38ec4d2febe6e6f8b975d3750bd1c4748e292e054111378f2032a0e54a5"
+      "profileHash": "7e287cd144af8d91e85a95b656d90157577db9395a17dcaeeffca4825fc1b82d"
     },
     {
       "ownerId": 101007,
@@ -920,7 +920,7 @@
       "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 159,
+    "totalRuntimeReadyActionCount": 162,
     "unnamedSecondaryPassiveCount": 20,
     "zeroDistanceSimulationCompleteCount": 1,
     "realClientEvidenceCompleteCount": 0

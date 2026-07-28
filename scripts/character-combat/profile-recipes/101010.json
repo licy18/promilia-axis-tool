@@ -36,11 +36,39 @@
   "runtimePolicies": {
     "controlPolicies": [
       {
+        "controlSkillId": 10101003,
+        "bulletInjectionMode": "recursive-static-timed",
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101003]"
+      },
+      {
+        "controlSkillId": 10101004,
+        "bulletInjectionMode": "recursive-static-timed",
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101004]"
+      },
+      {
+        "controlSkillId": 10101021,
+        "bulletInjectionMode": "recursive-static-timed",
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101021]"
+      },
+      {
         "controlSkillId": 10101042,
         "bulletInjectionMode": "recursive-immediate",
         "allowRuntimeTargetZeroDistance": true,
         "runtimeEffectsUseScenarioTriggers": true,
         "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101042]"
+      },
+      {
+        "controlSkillId": 10101049,
+        "bulletInjectionMode": "recursive-static-timed",
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.controlPolicies[controlSkillId=10101049]"
       }
     ]
   },
@@ -172,6 +200,48 @@
           "kind": "resource-state-inactive",
           "resourceElementId": 101010115,
           "stateElementId": 101010129
+        }
+      },
+      {
+        "publicActionKind": "star-carry",
+        "publicControlSkillId": 10101021,
+        "executionControlSkillId": 10101021,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "xiaoyu-star-carry",
+        "semanticName": "星携技",
+        "selectionKind": "direct-execution",
+        "executionOccupancy": {
+          "durationFrames": 95,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]"
+        },
+        "condition": {
+          "kind": "always"
+        }
+      },
+      {
+        "publicActionKind": "perfect-parry",
+        "publicControlSkillId": 10101027,
+        "executionControlSkillId": 10101049,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "xiaoyu-perfect-parry-counter",
+        "semanticName": "完美招架反击",
+        "selectionKind": "wrapper-derived-execution",
+        "executionOccupancy": {
+          "durationFrames": 36,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]"
+        },
+        "condition": {
+          "kind": "always"
+        },
+        "executionPrerequisite": {
+          "kind": "scenario-event-at-action-frame",
+          "eventType": "successful-parry",
+          "toleranceFrames": 0,
+          "sourceIdentity": "project-scenario-contract#enemy-event:successful-parry@action-frame"
         }
       },
       {
@@ -314,7 +384,15 @@
             "operations": ["transform-remove"]
           }
         ],
-        "runtimeSourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill101010._accElementId|_burstElementId"
+        "runtimeSourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill101010._accElementId|_burstElementId",
+        "tuningMarkGrants": [
+          {
+            "profileKey": "wind",
+            "sourceField": "notDelElementDataList",
+            "expectedMultiplicity": 2,
+            "sourceIdentity": "skill_control_101010129.asset#notDelElementDataList[m_PathID=1474042154774785480]x2"
+          }
+        ]
       }
     ],
     "passiveEffects": [
@@ -325,29 +403,14 @@
         "propertyElementId": 101010207,
         "expectedDurationMs": 8000,
         "expectedMaxStacks": 4,
-        "expectedModifierCount": 2,
-        "publicTriggerAliases": [
-          {
-            "publicControlSkillId": 10101025,
-            "publicSubSkillIndex": 0,
-            "runtimeControlSkillId": 10101042,
-            "runtimeSubSkillIndex": 0
-          }
-        ],
-        "unresolvedTriggerAliases": [
-          {
-            "publicControlSkillId": 10101027,
-            "runtimeControlSkillId": 10101049,
-            "reason": "perfect-parry-public-to-runtime-control-transition-static-evidence-gap"
-          }
-        ]
+        "expectedModifierCount": 2
       }
     ]
   },
   "expected": {
     "publicActionCount": 10,
     "publicExecutionFormCount": 21,
-    "verifiedWindowCount": 86,
+    "verifiedWindowCount": 89,
     "contextEdgeCount": 7,
     "attackInputChainCount": 2,
     "specialResourceProfileCount": 1,
@@ -361,8 +424,24 @@
   "goldenScenario": {
     "traceSelectors": {
       "passiveEffectIds": ["battle-element:101010206"],
-      "dynamicPropertyActionKeys": [
+      "passiveActionKeys": [
+        "threshold-charged",
+        "threshold-enhanced-special-charged",
+        "ultimate-refresh",
         "jade-limit-counter",
+        "switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
+        "normal-special-charged",
+        "jade-star-derived-charged",
+        "jade-perfect-parry"
+      ],
+      "energyActionKeys": [
+        "normal-a3",
+        "normal-a4",
+        "switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
+        "jade-perfect-parry"
+      ],
+      "dynamicPropertyActionKeys": [
+        "threshold-charged",
         "jade-star-skill",
         "jade-star-derived-charged"
       ]
@@ -383,7 +462,7 @@
       "103002": 500039
     },
     "initialKiboSp": {
-      "101010": 100,
+      "101010": 0,
       "101003": 100,
       "103002": 100
     },
@@ -585,6 +664,21 @@
         "actionKind": "charged-attack",
         "actionVariantIndex": 2,
         "startFrame": 2820
+      },
+      {
+        "actionKey": "jade-perfect-parry-event",
+        "type": "enemyEvent",
+        "actorCharacterId": 101010,
+        "eventType": "successful-parry",
+        "startFrame": 3000
+      },
+      {
+        "actionKey": "jade-perfect-parry",
+        "actorCharacterId": 101010,
+        "skillId": 10101021,
+        "actionKind": "perfect-parry",
+        "actionVariantIndex": 2,
+        "startFrame": 3000
       }
     ],
     "switchEvents": [
@@ -632,12 +726,12 @@
     "comparison": {
       "comparisonIdentity": "m10-a:101010:soulessence-stat-propagation",
       "clearLoadoutCharacterIds": [101010],
-      "compareActionKey": "jade-star-derived-charged"
+      "compareActionKey": "threshold-charged"
     },
     "expectedRuntime": {
       "exact": {
         "project.durationMs": 120000,
-        "project.actionCount": 25,
+        "project.actionCount": 27,
         "actions.blockedActionIds": [],
         "actions.selectionByActionId.threshold-charged.controlSkillId": 10101010,
         "actions.selectionByActionId.threshold-charged.subSkillIndex": 0,
@@ -663,18 +757,42 @@
         "actions.selectionByActionId.jade-star-derived-charged.semanticName": "特殊重击",
         "actions.selectionByActionId.jade-star-derived-charged.controlSkillId": 10101042,
         "actions.selectionByActionId.jade-star-derived-charged.subSkillIndex": 0,
-        "combat.damageEventCount": 403,
-        "combat.ownerDamageEventCount": 227,
-        "combat.ownerHitEventCount": 111,
-        "combat.ownerTotalHpDamage": 131213,
-        "combat.ownerTotalToughnessDamage": 3704,
+        "actions.selectionByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.semanticName": "星携技",
+        "actions.selectionByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.controlSkillId": 10101021,
+        "actions.selectionByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.subSkillIndex": 0,
+        "actions.selectionByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.actualDurationFrames": 95,
+        "actions.selectionByActionId.jade-perfect-parry.semanticName": "完美招架反击",
+        "actions.selectionByActionId.jade-perfect-parry.controlSkillId": 10101049,
+        "actions.selectionByActionId.jade-perfect-parry.subSkillIndex": 1,
+        "actions.selectionByActionId.jade-perfect-parry.actualDurationFrames": 36,
+        "combat.damageEventCount": 427,
+        "combat.ownerDamageEventCount": 252,
+        "combat.ownerHitEventCount": 120,
+        "combat.ownerHitTotalHpDamage": 9942,
+        "combat.ownerHitTotalToughnessDamage": 1961,
+        "combat.ownerTotalHpDamage": 699322,
+        "combat.ownerTotalToughnessDamage": 0,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 545947,
+        "combat.enemy.finalHp": 0,
+        "combat.ownerHitSummaryByActionId.normal-a3.hitCount": 1,
+        "combat.ownerHitSummaryByActionId.normal-a3.frames": [2373],
+        "combat.ownerHitSummaryByActionId.normal-a3.totalHpDamage": 40,
+        "combat.ownerHitSummaryByActionId.normal-a4.hitCount": 4,
+        "combat.ownerHitSummaryByActionId.normal-a4.frames": [2412, 2416, 2420, 2424],
+        "combat.ownerHitSummaryByActionId.normal-a4.totalHpDamage": 280,
+        "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.hitCount": 2,
+        "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.frames": [2255, 2309],
+        "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.totalHpDamage": 448,
+        "combat.ownerHitSummaryByActionId.jade-perfect-parry.hitCount": 2,
+        "combat.ownerHitSummaryByActionId.jade-perfect-parry.frames": [3031, 3096],
+        "combat.ownerHitSummaryByActionId.jade-perfect-parry.totalToughnessDamage": 102,
         "resources.thresholdClearCount": 1,
         "resources.transformCount": 1,
         "resources.refreshCount": 1,
+        "resources.tuningMarkAcquireByActionId.threshold-charged.eventCount": 1,
+        "resources.tuningMarkAcquireByActionId.threshold-charged.totalDelta": 2,
         "resources.actorSpByActorId.actor-101010.initialValue": 100,
-        "resources.actorSpByActorId.actor-101010.currentValue": 31.856216,
+        "resources.actorSpByActorId.actor-101010.currentValue": 35.35611,
         "resources.actorSpByActorId.actor-101010.autoRecovery.0.reason": "verified-auto-sp-background",
         "resources.actorSpByActorId.actor-101010.autoRecovery.0.totalChange": 1.904298,
         "resources.actorSpByActorId.actor-101010.autoRecovery.1.reason": "verified-auto-sp-foreground",
@@ -684,19 +802,37 @@
         "resources.actorSpByActorId.actor-101010.actionTransactions.0.beforeValue": 100,
         "resources.actorSpByActorId.actor-101010.actionTransactions.0.change": -100,
         "resources.actorSpByActorId.actor-101010.actionTransactions.0.afterValue": 0,
-        "resources.kiboSpBySlotId.team-slot-3.kiboId": 500039,
-        "resources.kiboSpBySlotId.team-slot-3.initialValue": 100,
-        "resources.kiboSpBySlotId.team-slot-3.currentValue": 31.908417,
-        "resources.kiboSpBySlotId.team-slot-3.actionTransactions.0.actionId": "fire-kibo-signature",
-        "resources.kiboSpBySlotId.team-slot-3.actionTransactions.0.change": -100,
+        "resources.ownerActorSpTransactionsByActionId.normal-a3.eventCount": 1,
+        "resources.ownerActorSpTransactionsByActionId.normal-a3.frames": [2373],
+        "resources.ownerActorSpTransactionsByActionId.normal-a3.totalChange": 0.159897,
+        "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount": 4,
+        "resources.ownerActorSpTransactionsByActionId.normal-a4.frames": [2412, 2416, 2420, 2424],
+        "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange": 1,
+        "resources.ownerActorSpTransactionsByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.eventCount": 0,
+        "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.eventCount": 2,
+        "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.frames": [3031, 3096],
+        "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.totalChange": 0.339996,
+        "resources.kiboSpBySlotId.team-slot-1.kiboId": 500003,
+        "resources.kiboSpBySlotId.team-slot-1.initialValue": 0,
+        "resources.kiboSpBySlotId.team-slot-1.currentValue": 79.271744,
+        "resources.ownerKiboSpTransactionsByActionId.normal-a3.eventCount": 1,
+        "resources.ownerKiboSpTransactionsByActionId.normal-a3.frames": [2373],
+        "resources.ownerKiboSpTransactionsByActionId.normal-a3.totalChange": 0.609985,
+        "resources.ownerKiboSpTransactionsByActionId.normal-a4.eventCount": 4,
+        "resources.ownerKiboSpTransactionsByActionId.normal-a4.frames": [2412, 2416, 2420, 2424],
+        "resources.ownerKiboSpTransactionsByActionId.normal-a4.totalChange": 3.919984,
+        "resources.ownerKiboSpTransactionsByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.eventCount": 0,
+        "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.eventCount": 2,
+        "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.frames": [3031, 3096],
+        "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.totalChange": 1.299774,
+        "effects.passiveApplyCountByActionId.jade-limit-counter": 0,
+        "effects.passiveApplyCountByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry": 1,
+        "effects.passiveApplyCountByActionId.jade-perfect-parry": 1,
+        "effects.passiveApplyCountByActionId.ultimate-refresh": 1,
+        "effects.passiveApplyCountByActionId.jade-star-derived-charged": 1,
         "effects.passiveMaxStacks": 4,
-        "effects.firstPassiveMaxStackFrame": 761,
+        "effects.firstPassiveMaxStackFrame": 3001,
         "effects.inheritanceTransferCountByEffectId.battle-element:101010206": 0,
-        "effects.passiveTrace.4.frame": 979,
-        "effects.passiveTrace.4.targetId": "actor-101010",
-        "effects.passiveTrace.5.operation": "expire",
-        "effects.passiveTrace.5.frame": 1459,
-        "effects.passiveTrace.5.targetId": "actor-101010",
         "effects.burstTransitions.0.frame": 43,
         "effects.burstTransitions.0.operation": "apply",
         "effects.burstTransitions.1.frame": 632,
@@ -705,13 +841,13 @@
         "effects.burstTransitions.2.operation": "expire",
         "dynamicProperties.maxPercentRawByAttributeId.1": 1500,
         "dynamicProperties.maxPercentRawByAttributeId.229": 9600,
-        "comparison.primaryDamage": 248,
-        "comparison.baselineDamage": 52,
-        "comparison.damageDelta": 196
+        "comparison.primaryDamage": 5813,
+        "comparison.baselineDamage": 2451,
+        "comparison.damageDelta": 3362
       },
       "greaterThan": {
         "combat.ownerTotalHpDamage": 0,
-        "combat.ownerTotalToughnessDamage": 0,
+        "combat.ownerHitTotalToughnessDamage": 0,
         "comparison.damageDelta": 0
       }
     }

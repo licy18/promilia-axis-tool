@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
   "durationMs": 30000,
   "frameRate": 60,
-  "sourcePackageHash": "669875c11a27064e1983c13095730f2069d5bbdcf4400f2c13c65e57c79d326c",
+  "sourcePackageHash": "2e256de49232f43be6889e0e2dda8cee34fee26d1ad9921a2006182abd6b04a1",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -32,6 +32,7 @@
       "selections": [
         {
           "actionId": "han-ultimate",
+          "ownerId": 101003,
           "semanticName": "星决技",
           "controlSkillId": 10100313,
           "subSkillIndex": 0,
@@ -40,14 +41,16 @@
         },
         {
           "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
-          "semanticName": "驭仙风",
+          "ownerId": 101010,
+          "semanticName": "星携技",
           "controlSkillId": 10101021,
           "subSkillIndex": 0,
           "actualDurationFrames": 295,
-          "sourceKind": "workbench-explicit-input-variant"
+          "sourceKind": "verified-public-action-form-direct-execution"
         },
         {
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "ownerId": 101003,
           "semanticName": "缚风烟",
           "controlSkillId": 10100322,
           "subSkillIndex": 0,
@@ -56,6 +59,7 @@
         },
         {
           "actionId": "xiaoyu-hit-after-expiry",
+          "ownerId": 101010,
           "semanticName": "A1",
           "controlSkillId": 10101001,
           "subSkillIndex": 0,
@@ -64,6 +68,7 @@
         },
         {
           "actionId": "xiaoyu-hit-during-buff",
+          "ownerId": 101010,
           "semanticName": "A1",
           "controlSkillId": 10101001,
           "subSkillIndex": 0,
@@ -73,6 +78,7 @@
       ],
       "selectionByActionId": {
         "han-ultimate": {
+          "ownerId": 101003,
           "semanticName": "星决技",
           "controlSkillId": 10100313,
           "subSkillIndex": 0,
@@ -80,13 +86,15 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
-          "semanticName": "驭仙风",
+          "ownerId": 101010,
+          "semanticName": "星携技",
           "controlSkillId": 10101021,
           "subSkillIndex": 0,
           "actualDurationFrames": 295,
-          "sourceKind": "workbench-explicit-input-variant"
+          "sourceKind": "verified-public-action-form-direct-execution"
         },
         "switch-to-xiaoyu--on-exit--actor-101003--star-carry": {
+          "ownerId": 101003,
           "semanticName": "缚风烟",
           "controlSkillId": 10100322,
           "subSkillIndex": 0,
@@ -94,6 +102,7 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "xiaoyu-hit-after-expiry": {
+          "ownerId": 101010,
           "semanticName": "A1",
           "controlSkillId": 10101001,
           "subSkillIndex": 0,
@@ -101,6 +110,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "xiaoyu-hit-during-buff": {
+          "ownerId": 101010,
           "semanticName": "A1",
           "controlSkillId": 10101001,
           "subSkillIndex": 0,
@@ -110,25 +120,56 @@
       }
     },
     "combat": {
-      "damageEventCount": 115,
-      "ownerDamageEventCount": 8,
-      "ownerHitEventCount": 7,
+      "damageEventCount": 117,
+      "ownerDamageEventCount": 13,
+      "ownerHitEventCount": 12,
       "ownerHitCountByActionId": {
-        "han-ultimate": 7
+        "han-ultimate": 7,
+        "switch-to-xiaoyu--on-exit--actor-101003--star-carry": 5
       },
+      "ownerHitSummaryByActionId": {
+        "han-ultimate": {
+          "hitCount": 7,
+          "frames": [
+            236,
+            244,
+            253,
+            261,
+            267,
+            273,
+            283
+          ],
+          "totalHpDamage": 1349,
+          "totalToughnessDamage": 944
+        },
+        "switch-to-xiaoyu--on-exit--actor-101003--star-carry": {
+          "hitCount": 5,
+          "frames": [
+            429,
+            433,
+            437,
+            441,
+            457
+          ],
+          "totalHpDamage": 196,
+          "totalToughnessDamage": 139
+        }
+      },
+      "ownerHitTotalHpDamage": 1545,
+      "ownerHitTotalToughnessDamage": 1083,
       "selectedHpDamageByActionId": {
         "han-ultimate": 2722,
         "xiaoyu-hit-after-expiry": 3428,
-        "xiaoyu-hit-during-buff": 3718
+        "xiaoyu-hit-during-buff": 5009
       },
-      "totalHpDamage": 10064,
+      "totalHpDamage": 11455,
       "totalToughnessDamage": 727.371979,
-      "ownerTotalHpDamage": 2722,
-      "ownerTotalToughnessDamage": 1905,
+      "ownerTotalHpDamage": 2918,
+      "ownerTotalToughnessDamage": 2044,
       "enemy": {
-        "pointCount": 132,
+        "pointCount": 136,
         "initialHp": 862800,
-        "finalHp": 852736,
+        "finalHp": 851345,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 5939.628021,
@@ -428,6 +469,35 @@
           "actionTransactions": []
         }
       },
+      "ownerActorSpTransactionsByActionId": {
+        "han-ultimate": {
+          "eventCount": 1,
+          "frames": [
+            60
+          ],
+          "changes": [
+            -100
+          ],
+          "totalChange": -100,
+          "reasons": [
+            "verified-skill-cost"
+          ]
+        },
+        "xiaoyu-hit-during-buff": {
+          "eventCount": 1,
+          "frames": [
+            762
+          ],
+          "changes": [
+            0.334991
+          ],
+          "totalChange": 0.334991,
+          "reasons": [
+            "verified-hit-sp-shared-recovery"
+          ]
+        }
+      },
+      "ownerKiboSpTransactionsByActionId": {},
       "specialResourceTrace": [],
       "tuningMarkTrace": [
         {
@@ -479,7 +549,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|7616.666667|10",
+          "eventIdentity": "tuning-mark|150|acquire|7616.666667|13",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 457,
           "kind": "acquire",
@@ -515,7 +585,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|27616.666667|21",
+          "eventIdentity": "tuning-mark|150|expire|27616.666667|24",
           "actionId": "han-ultimate",
           "frame": 1657,
           "kind": "expire",
@@ -557,6 +627,7 @@
     },
     "effects": {
       "passiveTrace": [],
+      "passiveApplyCountByActionId": {},
       "passiveMaxStacks": 0,
       "firstPassiveMaxStackFrame": null,
       "burstTrace": [
@@ -1024,6 +1095,16 @@
           ]
         },
         {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 740,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "battle-element:101010206",
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
@@ -1040,6 +1121,17 @@
           "dynamicExtraRaw": 36,
           "effectIds": [
             "battle-element:-5652413049857383353"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 3200,
+          "dynamicExtraRaw": 1078.0045928955078,
+          "effectIds": [
+            "battle-element:-4841411980842434486",
+            "battle-element:-5652413049857383353",
+            "battle-element:101010206"
           ]
         }
       ],
@@ -1098,20 +1190,22 @@
           {
             "attributeId": 1,
             "dynamicBaseRaw": 0,
-            "dynamicPercentRaw": 240,
+            "dynamicPercentRaw": 740,
             "dynamicExtraRaw": 0,
             "effectIds": [
+              "battle-element:101010206",
               "tuning-mark:150:persistent"
             ]
           },
           {
             "attributeId": 229,
             "dynamicBaseRaw": 0,
-            "dynamicPercentRaw": 0,
+            "dynamicPercentRaw": 3200,
             "dynamicExtraRaw": 1078.0045928955078,
             "effectIds": [
               "battle-element:-4841411980842434486",
-              "battle-element:-5652413049857383353"
+              "battle-element:-5652413049857383353",
+              "battle-element:101010206"
             ]
           }
         ]
@@ -1129,12 +1223,13 @@
         "xiaoyu-hit-during-buff": [
           "battle-element:-4841411980842434486",
           "battle-element:-5652413049857383353",
+          "battle-element:101010206",
           "tuning-mark:150:persistent"
         ]
       },
       "maxPercentRawByAttributeId": {
-        "1": 240,
-        "229": 0
+        "1": 740,
+        "229": 3200
       },
       "maxExtraRawByAttributeId": {
         "1": 0,
@@ -1227,7 +1322,7 @@
           1019.9066162109375
         ]
       },
-      "baselineReplayHash": "d4ee0c8ffbccc5b7bdb5c5a281f73321f78711025354e37da0709744e6d6c8e5"
+      "baselineReplayHash": "80561928a9f4c80deefc2d8f86be73f2de719c13d8958924df827a80a858a10a"
     },
     "trace": {
       "damage": [
@@ -1378,6 +1473,18 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "frame": 455,
+          "hitIdentity": null,
+          "rawDamage": 48,
+          "hpDamage": 48,
+          "toughnessDamage": 33,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 457,
           "hitIdentity": null,
@@ -1390,12 +1497,24 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "frame": 509,
+          "hitIdentity": null,
+          "rawDamage": 52,
+          "hpDamage": 52,
+          "toughnessDamage": 36,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "xiaoyu-hit-during-buff",
           "frame": 762,
           "hitIdentity": null,
-          "rawDamage": 31,
-          "hpDamage": 31,
-          "toughnessDamage": 22,
+          "rawDamage": 32,
+          "hpDamage": 32,
+          "toughnessDamage": 23,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -1405,9 +1524,9 @@
           "actionId": "xiaoyu-hit-during-buff",
           "frame": 762,
           "hitIdentity": null,
-          "rawDamage": 3687,
-          "hpDamage": 3687,
-          "toughnessDamage": 2581,
+          "rawDamage": 4977,
+          "hpDamage": 4977,
+          "toughnessDamage": 3484,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -1431,7 +1550,7 @@
           "hitIdentity": null,
           "rawDamage": 3400,
           "hpDamage": 3400,
-          "toughnessDamage": 2000,
+          "toughnessDamage": 1027,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2663,7 +2782,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|7616.666667|10",
+          "eventIdentity": "tuning-mark|150|acquire|7616.666667|13",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 457,
           "kind": "acquire",
@@ -2699,7 +2818,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|27616.666667|21",
+          "eventIdentity": "tuning-mark|150|expire|27616.666667|24",
           "actionId": "han-ultimate",
           "frame": 1657,
           "kind": "expire",
@@ -3343,7 +3462,7 @@
         }
       ]
     },
-    "summaryHash": "ecdcafd2b6c1d64d28f25264851ba5c294eb96940a2c875092c63911bc5f61ad"
+    "summaryHash": "4ffdfc6ed2f971060b420a77369b3550ac65070071b08169a6fdb9eb3a4b670e"
   },
   "expected": {
     "exact": {
@@ -3353,11 +3472,12 @@
       "actions.selectionByActionId.han-ultimate.subSkillIndex": 0,
       "actions.selectionByActionId.xiaoyu-hit-during-buff.controlSkillId": 10101001,
       "actions.selectionByActionId.xiaoyu-hit-after-expiry.controlSkillId": 10101001,
-      "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 3718,
+      "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 5009,
       "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry": 3428,
       "dynamicProperties.effectIdsByActionId.xiaoyu-hit-during-buff": [
         "battle-element:-4841411980842434486",
         "battle-element:-5652413049857383353",
+        "battle-element:101010206",
         "tuning-mark:150:persistent"
       ],
       "dynamicProperties.effectIdsByActionId.xiaoyu-hit-after-expiry": [
@@ -3456,8 +3576,8 @@
       {
         "jsonPath": "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff",
         "operator": "exact",
-        "expected": 3718,
-        "actual": 3718,
+        "expected": 5009,
+        "actual": 5009,
         "passed": true
       },
       {
@@ -3473,11 +3593,13 @@
         "expected": [
           "battle-element:-4841411980842434486",
           "battle-element:-5652413049857383353",
+          "battle-element:101010206",
           "tuning-mark:150:persistent"
         ],
         "actual": [
           "battle-element:-4841411980842434486",
           "battle-element:-5652413049857383353",
+          "battle-element:101010206",
           "tuning-mark:150:persistent"
         ],
         "passed": true
@@ -3695,5 +3817,5 @@
       }
     ]
   },
-  "replayHash": "3def45170d73717d7e544b209219a5fc40aa4b5fdd98fe98ee0a343742316b1e"
+  "replayHash": "53a7d025597e6d6762e3c1530a8df5813255b738a89942fc092f7e29c9777232"
 }

@@ -411,7 +411,10 @@ export async function createVerifiedCombatMechanicsBuild({
   );
   const wantedElementIds = new Set(
     controls
-      .flatMap(control => control.elementRefs.map(ref => ref.elementIdHint))
+      .flatMap(control => [
+        ...control.elementRefs.map(ref => ref.elementIdHint),
+        ...(control.bulletLaunches ?? []).map(launch => launch.elementId),
+      ])
       .filter(Number.isInteger)
   );
   const {
@@ -1278,7 +1281,7 @@ function readBattleElementAsset(elementId) {
     .filter(fileName => fileName.endsWith('.json'))
     .map(fileName => {
       const filePath = path.join(directory, fileName);
-      return { filePath, tree: readJson(filePath) };
+      return { filePath, tree: readUnityJson(filePath) };
     })
     .filter(candidate => Number(candidate.tree.elementConfigId) === elementId);
   if (candidates.length !== 1) return null;
@@ -1883,7 +1886,13 @@ function createXiaoyuHiddenInputDerivationAudit({
           (node.actionKinds ?? [])
             .filter(
               actionKind =>
-                !['normal-attack', 'charged-attack'].includes(actionKind)
+                !['normal-attack', 'charged-attack'].includes(actionKind) &&
+                !publicActionForms.some(
+                  form =>
+                    form.publicActionKind === actionKind &&
+                    Number(form.publicControlSkillId) ===
+                      Number(node.controlSkillId)
+                )
             )
             .map(actionKind => {
               const publicAction = (node.publicActions ?? []).find(
@@ -3705,9 +3714,13 @@ function collectBulletLaunchContracts(
               if (!bulletId) continue;
               const injection = readBulletInjectionContract(bulletId);
               const injectedElements =
-                runtimePolicy?.bulletInjectionMode === 'recursive-immediate'
-                  ? collectImmediateBulletInjectionElements(bulletId)
-                  : (injection.elements ?? []);
+                runtimePolicy?.bulletInjectionMode ===
+                'recursive-static-timed'
+                  ? collectStaticTimedBulletInjectionElements(bulletId)
+                  : runtimePolicy?.bulletInjectionMode ===
+                      'recursive-immediate'
+                    ? collectImmediateBulletInjectionElements(bulletId)
+                    : (injection.elements ?? []);
               for (
                 let repeatIndex = 0;
                 repeatIndex < repeatCount;
@@ -3717,7 +3730,12 @@ function collectBulletLaunchContracts(
                   elementIndex,
                   element,
                 ] of injectedElements.entries()) {
-                  const delayFrames = Math.round((delayMs / 1000) * frameRate);
+                  const totalDelayMs =
+                    delayMs +
+                    (nonNegativeNumberOrNull(element.delayMs) ?? 0);
+                  const delayFrames = Math.round(
+                    (totalDelayMs / 1000) * frameRate
+                  );
                   const launchFrame = startFrame + delayFrames;
                   launches.push({
                     subSkillIndex,
@@ -3732,12 +3750,12 @@ function collectBulletLaunchContracts(
                     rootBulletId: bulletId,
                     elementId: element.elementId,
                     startFrame,
-                    delayMs,
+                    delayMs: totalDelayMs,
                     delayFrames,
                     launchFrame,
-                    targetType: injection.targetType,
+                    targetType: element.targetType ?? injection.targetType,
                     targetKind:
-                      injection.targetType === 1
+                      (element.targetType ?? injection.targetType) === 1
                         ? 'skill-target'
                         : 'runtime-target',
                     launchIdentity: [
@@ -3749,6 +3767,9 @@ function collectBulletLaunchContracts(
                       ...(element.bulletId && element.bulletId !== bulletId
                         ? [`nested-bullet:${element.bulletId}`]
                         : []),
+                      ...(element.executionIdentity
+                        ? [`execution:${element.executionIdentity}`]
+                        : []),
                       `element:${element.elementId}:${elementIndex}`,
                     ].join('|'),
                     sourceIdentity: [
@@ -3759,9 +3780,10 @@ function collectBulletLaunchContracts(
                       .filter(Boolean)
                       .join('|'),
                     status:
-                      injection.targetType === 1
+                      (element.targetType ?? injection.targetType) === 1
                         ? 'verified-projectile-launch-ready'
-                        : 'runtime-projectile-target-dependent',
+                        : element.executionStatus ??
+                          'runtime-projectile-target-dependent',
                   });
                 }
               }
@@ -3813,47 +3835,98 @@ function readBulletInjectionContract(bulletId) {
   }
   const elements = [];
   const immediateNestedBullets = [];
+  const staticTimedElements = [];
+  const staticTimedNestedBullets = [];
   if (selected) {
-    walkUnityObject(selected.value, (value, objectPath) => {
-      if (
-        Number(value?.actionType) === 0 &&
-        Array.isArray(value?.actionElementParameter?.elementInfos)
-      ) {
-        for (const [
-          index,
-          info,
-        ] of value.actionElementParameter.elementInfos.entries()) {
-          const elementId = positiveIntegerOrNull(info?.elementId);
-          if (!elementId) continue;
-          elements.push({
-            bulletId,
-            elementId,
-            sourceIdentity: `${relativeExternalPath(selected.filePath)}#${objectPath}.actionElementParameter.elementInfos[${index}].elementId`,
-          });
+    for (const [logicIndex, logic] of (
+      selected.value.bulletLogicObjects ?? []
+    ).entries()) {
+      const timing = resolveStaticBulletLogicTiming(logic);
+      for (const [actionIndex, action] of (
+        logic?.actionObjects ?? []
+      ).entries()) {
+        const objectPath = `bulletLogicObjects[${logicIndex}].actionObjects[${actionIndex}]`;
+        const actionDelayMs =
+          nonNegativeNumberOrNull(action?.doDelayActionTime) ?? 0;
+        if (
+          Number(action?.actionType) === 0 &&
+          Array.isArray(action?.actionElementParameter?.elementInfos)
+        ) {
+          for (const [
+            index,
+            info,
+          ] of action.actionElementParameter.elementInfos.entries()) {
+            const elementId = positiveIntegerOrNull(info?.elementId);
+            if (!elementId) continue;
+            const sourceIdentity = `${relativeExternalPath(selected.filePath)}#${objectPath}.actionElementParameter.elementInfos[${index}].elementId`;
+            elements.push({
+              bulletId,
+              elementId,
+              sourceIdentity,
+            });
+            if (timing.applied) {
+              staticTimedElements.push({
+                bulletId,
+                elementId,
+                targetType: integerOrNull(selected.value.bulletTargetType),
+                delayMs: timing.delayMs + actionDelayMs,
+                executionIdentity: [
+                  `bullet:${bulletId}`,
+                  `logic:${logicIndex}`,
+                  `action:${actionIndex}`,
+                  `element:${index}`,
+                ].join('|'),
+                executionStatus: timing.status,
+                sourceIdentity: [
+                  timing.sourceIdentity,
+                  sourceIdentity,
+                ].join('|'),
+              });
+            }
+          }
         }
-      }
 
-      if (
-        Number(value?.actionType) === 3 &&
-        Number(value?.doDelayActionTime ?? 0) === 0
-      ) {
+        if (Number(action?.actionType) !== 3) continue;
         for (const [configIndex, config] of (
-          value?.actionSummonBulletParameter?.bulletShootDataConfigs ?? []
+          action?.actionSummonBulletParameter?.bulletShootDataConfigs ?? []
         ).entries()) {
-          for (const [nestedIndex, bullet] of (
+          for (const [nestedIndex, nestedBullet] of (
             config?.bullets ?? []
           ).entries()) {
-            const nestedBulletId = positiveIntegerOrNull(bullet?.bulletId);
-            const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
-            if (!nestedBulletId || delayMs !== 0) continue;
-            immediateNestedBullets.push({
-              bulletId: nestedBulletId,
-              sourceIdentity: `${relativeExternalPath(selected.filePath)}#${objectPath}.actionSummonBulletParameter.bulletShootDataConfigs[${configIndex}].bullets[${nestedIndex}]`,
-            });
+            const nestedBulletId = positiveIntegerOrNull(
+              nestedBullet?.bulletId
+            );
+            const nestedDelayMs =
+              nonNegativeNumberOrNull(nestedBullet?.delayTime) ?? 0;
+            if (!nestedBulletId) continue;
+            const sourceIdentity = `${relativeExternalPath(selected.filePath)}#${objectPath}.actionSummonBulletParameter.bulletShootDataConfigs[${configIndex}].bullets[${nestedIndex}]`;
+            if (actionDelayMs === 0 && nestedDelayMs === 0) {
+              immediateNestedBullets.push({
+                bulletId: nestedBulletId,
+                sourceIdentity,
+              });
+            }
+            if (timing.applied) {
+              staticTimedNestedBullets.push({
+                bulletId: nestedBulletId,
+                delayMs: timing.delayMs + actionDelayMs + nestedDelayMs,
+                executionIdentity: [
+                  `bullet:${bulletId}`,
+                  `logic:${logicIndex}`,
+                  `action:${actionIndex}`,
+                  `nested:${nestedBulletId}:${configIndex}:${nestedIndex}`,
+                ].join('|'),
+                executionStatus: timing.status,
+                sourceIdentity: [
+                  timing.sourceIdentity,
+                  sourceIdentity,
+                ].join('|'),
+              });
+            }
           }
         }
       }
-    });
+    }
   }
   const contract = {
     bulletId,
@@ -3862,6 +3935,16 @@ function readBulletInjectionContract(bulletId) {
     immediateNestedBullets: dedupeBy(
       immediateNestedBullets,
       nested => `${nested.bulletId}|${nested.sourceIdentity}`
+    ),
+    staticTimedElements: dedupeBy(
+      staticTimedElements,
+      element =>
+        `${element.elementId}|${element.executionIdentity}|${element.delayMs}`
+    ),
+    staticTimedNestedBullets: dedupeBy(
+      staticTimedNestedBullets,
+      nested =>
+        `${nested.bulletId}|${nested.executionIdentity}|${nested.delayMs}`
     ),
     sourceIdentity: selected
       ? `${relativeExternalPath(selected.filePath)}#bulletTargetType|bulletLogicObjects`
@@ -3873,6 +3956,49 @@ function readBulletInjectionContract(bulletId) {
   };
   bulletInjectionContractCache.set(bulletId, contract);
   return contract;
+}
+
+function resolveStaticBulletLogicTiming(logic) {
+  const conditions = logic?.conditionObjects ?? [];
+  if (Number(logic?.operatorType ?? 0) !== 0 || conditions.length !== 1) {
+    return {
+      delayMs: 0,
+      status: 'bullet-logic-condition-static-evidence-gap',
+      sourceIdentity: null,
+      applied: false,
+    };
+  }
+  const condition = conditions[0];
+  const conditionType = integerOrNull(condition?.conditionType);
+  if (conditionType === 0) {
+    return {
+      delayMs: 0,
+      status: 'scenario-assumed-zero-distance',
+      sourceIdentity: 'conditionType=0(collision)|targetDistance=0',
+      applied: true,
+    };
+  }
+  if (conditionType === 3) {
+    const lifeTime = nonNegativeNumberOrNull(condition?.lifeTime);
+    return {
+      delayMs: lifeTime ?? 0,
+      status:
+        lifeTime == null
+          ? 'bullet-timer-duration-static-evidence-gap'
+          : 'verified-bullet-timer-ready',
+      sourceIdentity:
+        lifeTime == null
+          ? 'conditionType=3(timer)|lifeTime=unresolved'
+          : `conditionType=3(timer)|lifeTime=${lifeTime}`,
+      applied: lifeTime != null,
+    };
+  }
+  return {
+    delayMs: 0,
+    status: `bullet-condition-${conditionType ?? 'unknown'}-runtime-dependent`,
+    sourceIdentity: `conditionType=${conditionType ?? 'unknown'}`,
+    applied: false,
+  };
 }
 
 function collectImmediateBulletInjectionElements(
@@ -3900,6 +4026,48 @@ function collectImmediateBulletInjectionElements(
     ],
     element =>
       `${element.bulletId}|${element.elementId}|${element.sourceIdentity}`
+  );
+}
+
+function collectStaticTimedBulletInjectionElements(
+  bulletId,
+  visited = new Set(),
+  accumulatedDelayMs = 0,
+  parentSources = []
+) {
+  if (visited.has(bulletId)) return [];
+  const nextVisited = new Set(visited);
+  nextVisited.add(bulletId);
+  const contract = readBulletInjectionContract(bulletId);
+  return dedupeBy(
+    [
+      ...(contract.staticTimedElements ?? []).map(element => ({
+        ...element,
+        delayMs:
+          accumulatedDelayMs +
+          (nonNegativeNumberOrNull(element.delayMs) ?? 0),
+        sourceIdentity: [...parentSources, element.sourceIdentity]
+          .filter(Boolean)
+          .join('|'),
+      })),
+      ...(contract.staticTimedNestedBullets ?? []).flatMap(nested =>
+        collectStaticTimedBulletInjectionElements(
+          nested.bulletId,
+          nextVisited,
+          accumulatedDelayMs +
+            (nonNegativeNumberOrNull(nested.delayMs) ?? 0),
+          [...parentSources, nested.sourceIdentity]
+        )
+      ),
+    ],
+    element =>
+      [
+        element.bulletId,
+        element.elementId,
+        element.delayMs,
+        element.executionIdentity,
+        element.sourceIdentity,
+      ].join('|')
   );
 }
 
@@ -3954,6 +4122,46 @@ function collectElementRefs(skillControl) {
         }
       }
     }
+  }
+  return refs;
+}
+
+function createRuntimeControlElementRefs(control) {
+  const refs = [...(control.elementRefs ?? [])];
+  if (!control.runtimePolicy?.bulletInjectionMode) {
+    return refs;
+  }
+  const seenElementIds = new Set(
+    refs
+      .filter(ref => Number.isInteger(ref.elementIdHint))
+      .map(ref => `${ref.mapIndex}|${ref.elementIdHint}`)
+  );
+  const nextElementIndexByMap = new Map();
+  for (const ref of refs) {
+    nextElementIndexByMap.set(
+      ref.mapIndex,
+      Math.max(
+        nextElementIndexByMap.get(ref.mapIndex) ?? 0,
+        Number(ref.elementIndex) + 1
+      )
+    );
+  }
+  for (const launch of control.bulletLaunches ?? []) {
+    const key = `${launch.subSkillIndex}|${launch.elementId}`;
+    if (seenElementIds.has(key)) continue;
+    const elementIndex =
+      nextElementIndexByMap.get(launch.subSkillIndex) ?? 0;
+    refs.push({
+      mapIndex: launch.subSkillIndex,
+      referenceKind: 'bulletElements',
+      elementIndex,
+      fileId: 0,
+      pathId: null,
+      elementIdHint: launch.elementId,
+      sourceIdentity: `generatedProjectileElements[subSkillIndex=${launch.subSkillIndex},elementId=${launch.elementId}]|${launch.sourceIdentity}`,
+    });
+    nextElementIndexByMap.set(launch.subSkillIndex, elementIndex + 1);
+    seenElementIds.add(key);
   }
   return refs;
 }
@@ -4717,7 +4925,8 @@ function createControlBinding({
   skillLogicById,
   tuningMechanicsCatalog,
 }) {
-  const elements = control.elementRefs.map(ref => {
+  const runtimeElementRefs = createRuntimeControlElementRefs(control);
+  const elements = runtimeElementRefs.map(ref => {
     const indexed = ref.pathId
       ? (indexedElements.get(ref.pathId) ?? [])
       : (indexedElementsById.get(ref.elementIdHint) ?? []);
@@ -4913,7 +5122,10 @@ function createControlBinding({
   const players = control.value.skillControlData?.skillPlayers ?? [];
   const resourceMaps = control.value.skillResourceMaps ?? [];
   const effectGraph = createControlEffectGraph({
-    control,
+    control: {
+      ...control,
+      elementRefs: runtimeElementRefs,
+    },
     allIndexedElements,
     allIndexedElementsById,
     formulas,
@@ -10506,7 +10718,7 @@ function createContextualInputSchedulingAuditReport({
       ownerId: XIAOYU_MECHANICS.ownerId,
       publicExecutionFormCount: xiaoyuHiddenInputAudit.publicExecutionFormCount,
       rowCount: xiaoyuRows.length,
-      expectedRowCount: 86,
+      expectedRowCount: 89,
       rows: xiaoyuRows,
     },
     summary: {

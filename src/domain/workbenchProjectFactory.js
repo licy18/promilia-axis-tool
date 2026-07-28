@@ -1012,6 +1012,7 @@ function createProjectActionFromDraft(
       targetActorId: targetActor.id,
       targetCharacterId: targetActor.characterId,
       startMs: draft.startMs,
+      hitOverrides: draft.hitOverrides,
       note: draft.note || `切换至 ${targetActor.name}`,
       insertion: draft.insertion,
     });

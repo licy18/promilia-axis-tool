@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
+  "sourcePackageHash": "ae3b5de3a0760a17be19005d71bc246d1b067c8d7bc9e600b6797a27f9e90d67",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -44,6 +44,7 @@
       "selections": [
         {
           "actionId": "fire-kibo-signature",
+          "ownerId": 103002,
           "semanticName": "炎灼角羊事件",
           "controlSkillId": 50003901,
           "subSkillIndex": 0,
@@ -52,6 +53,7 @@
         },
         {
           "actionId": "ruby-enhanced-shot-1",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E1",
           "controlSkillId": 10300201,
           "subSkillIndex": 1,
@@ -60,6 +62,7 @@
         },
         {
           "actionId": "ruby-enhanced-shot-2",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E2",
           "controlSkillId": 10300201,
           "subSkillIndex": 2,
@@ -68,6 +71,7 @@
         },
         {
           "actionId": "ruby-enhanced-shot-3",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E3",
           "controlSkillId": 10300201,
           "subSkillIndex": 3,
@@ -76,6 +80,7 @@
         },
         {
           "actionId": "ruby-enhanced-shot-4",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E4",
           "controlSkillId": 10300202,
           "subSkillIndex": 1,
@@ -84,6 +89,7 @@
         },
         {
           "actionId": "ruby-enhanced-shot-5",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E5",
           "controlSkillId": 10300202,
           "subSkillIndex": 2,
@@ -92,6 +98,7 @@
         },
         {
           "actionId": "ruby-enhanced-shot-6",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E6",
           "controlSkillId": 10300202,
           "subSkillIndex": 3,
@@ -100,6 +107,7 @@
         },
         {
           "actionId": "ruby-limit-counter",
+          "ownerId": 103002,
           "semanticName": "极限反击",
           "controlSkillId": 10300225,
           "subSkillIndex": 0,
@@ -108,6 +116,7 @@
         },
         {
           "actionId": "ruby-post-ultimate-shot",
+          "ownerId": 103002,
           "semanticName": "强化普攻 E1",
           "controlSkillId": 10300201,
           "subSkillIndex": 1,
@@ -116,6 +125,7 @@
         },
         {
           "actionId": "ruby-reload",
+          "ownerId": 103002,
           "semanticName": "重击",
           "controlSkillId": 10300210,
           "subSkillIndex": 0,
@@ -124,6 +134,7 @@
         },
         {
           "actionId": "ruby-star-skill",
+          "ownerId": 103002,
           "semanticName": "星鸣技",
           "controlSkillId": 10300212,
           "subSkillIndex": 0,
@@ -132,6 +143,7 @@
         },
         {
           "actionId": "ruby-ultimate",
+          "ownerId": 103002,
           "semanticName": "星决技",
           "controlSkillId": 10300213,
           "subSkillIndex": 0,
@@ -140,6 +152,7 @@
         },
         {
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "ownerId": 103002,
           "semanticName": "一瞬的灼热",
           "controlSkillId": 10300221,
           "subSkillIndex": 0,
@@ -148,15 +161,17 @@
         },
         {
           "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
-          "semanticName": "驭仙风",
+          "ownerId": 101010,
+          "semanticName": "星携技",
           "controlSkillId": 10101021,
           "subSkillIndex": 0,
           "actualDurationFrames": 295,
-          "sourceKind": "workbench-explicit-input-variant"
+          "sourceKind": "verified-public-action-form-direct-execution"
         }
       ],
       "selectionByActionId": {
         "fire-kibo-signature": {
+          "ownerId": 103002,
           "semanticName": "炎灼角羊事件",
           "controlSkillId": 50003901,
           "subSkillIndex": 0,
@@ -164,6 +179,7 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "ruby-enhanced-shot-1": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E1",
           "controlSkillId": 10300201,
           "subSkillIndex": 1,
@@ -171,6 +187,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-enhanced-shot-2": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E2",
           "controlSkillId": 10300201,
           "subSkillIndex": 2,
@@ -178,6 +195,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-enhanced-shot-3": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E3",
           "controlSkillId": 10300201,
           "subSkillIndex": 3,
@@ -185,6 +203,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-enhanced-shot-4": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E4",
           "controlSkillId": 10300202,
           "subSkillIndex": 1,
@@ -192,6 +211,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-enhanced-shot-5": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E5",
           "controlSkillId": 10300202,
           "subSkillIndex": 2,
@@ -199,6 +219,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-enhanced-shot-6": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E6",
           "controlSkillId": 10300202,
           "subSkillIndex": 3,
@@ -206,6 +227,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-limit-counter": {
+          "ownerId": 103002,
           "semanticName": "极限反击",
           "controlSkillId": 10300225,
           "subSkillIndex": 0,
@@ -213,6 +235,7 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "ruby-post-ultimate-shot": {
+          "ownerId": 103002,
           "semanticName": "强化普攻 E1",
           "controlSkillId": 10300201,
           "subSkillIndex": 1,
@@ -220,6 +243,7 @@
           "sourceKind": "verified-active-attack-input-chain"
         },
         "ruby-reload": {
+          "ownerId": 103002,
           "semanticName": "重击",
           "controlSkillId": 10300210,
           "subSkillIndex": 0,
@@ -227,6 +251,7 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "ruby-star-skill": {
+          "ownerId": 103002,
           "semanticName": "星鸣技",
           "controlSkillId": 10300212,
           "subSkillIndex": 0,
@@ -234,6 +259,7 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "ruby-ultimate": {
+          "ownerId": 103002,
           "semanticName": "星决技",
           "controlSkillId": 10300213,
           "subSkillIndex": 0,
@@ -241,6 +267,7 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "switch-back-to-ruby--on-enter--actor-103002--star-carry": {
+          "ownerId": 103002,
           "semanticName": "一瞬的灼热",
           "controlSkillId": 10300221,
           "subSkillIndex": 0,
@@ -248,18 +275,19 @@
           "sourceKind": "workbench-explicit-input-variant"
         },
         "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
-          "semanticName": "驭仙风",
+          "ownerId": 101010,
+          "semanticName": "星携技",
           "controlSkillId": 10101021,
           "subSkillIndex": 0,
           "actualDurationFrames": 295,
-          "sourceKind": "workbench-explicit-input-variant"
+          "sourceKind": "verified-public-action-form-direct-execution"
         }
       }
     },
     "combat": {
-      "damageEventCount": 221,
-      "ownerDamageEventCount": 215,
-      "ownerHitEventCount": 96,
+      "damageEventCount": 223,
+      "ownerDamageEventCount": 221,
+      "ownerHitEventCount": 101,
       "ownerHitCountByActionId": {
         "fire-kibo-signature": 2,
         "ruby-enhanced-shot-1": 9,
@@ -270,8 +298,191 @@
         "ruby-enhanced-shot-6": 9,
         "ruby-limit-counter": 6,
         "ruby-post-ultimate-shot": 9,
-        "ruby-ultimate": 25
+        "ruby-ultimate": 25,
+        "switch-back-to-ruby--on-enter--actor-103002--star-carry": 5
       },
+      "ownerHitSummaryByActionId": {
+        "fire-kibo-signature": {
+          "hitCount": 2,
+          "frames": [
+            3360,
+            3365
+          ],
+          "totalHpDamage": 332,
+          "totalToughnessDamage": 66
+        },
+        "ruby-enhanced-shot-1": {
+          "hitCount": 9,
+          "frames": [
+            217,
+            219,
+            221,
+            224,
+            226,
+            226,
+            229,
+            231,
+            236
+          ],
+          "totalHpDamage": 441,
+          "totalToughnessDamage": 315
+        },
+        "ruby-enhanced-shot-2": {
+          "hitCount": 9,
+          "frames": [
+            447,
+            449,
+            451,
+            454,
+            456,
+            456,
+            459,
+            461,
+            466
+          ],
+          "totalHpDamage": 441,
+          "totalToughnessDamage": 315
+        },
+        "ruby-enhanced-shot-3": {
+          "hitCount": 9,
+          "frames": [
+            677,
+            679,
+            681,
+            684,
+            686,
+            686,
+            689,
+            691,
+            696
+          ],
+          "totalHpDamage": 441,
+          "totalToughnessDamage": 315
+        },
+        "ruby-enhanced-shot-4": {
+          "hitCount": 9,
+          "frames": [
+            907,
+            909,
+            911,
+            914,
+            916,
+            916,
+            919,
+            921,
+            926
+          ],
+          "totalHpDamage": 441,
+          "totalToughnessDamage": 315
+        },
+        "ruby-enhanced-shot-5": {
+          "hitCount": 9,
+          "frames": [
+            1137,
+            1139,
+            1141,
+            1144,
+            1146,
+            1146,
+            1149,
+            1151,
+            1156
+          ],
+          "totalHpDamage": 441,
+          "totalToughnessDamage": 315
+        },
+        "ruby-enhanced-shot-6": {
+          "hitCount": 9,
+          "frames": [
+            1367,
+            1369,
+            1371,
+            1374,
+            1376,
+            1376,
+            1379,
+            1381,
+            1386
+          ],
+          "totalHpDamage": 441,
+          "totalToughnessDamage": 315
+        },
+        "ruby-limit-counter": {
+          "hitCount": 6,
+          "frames": [
+            3018,
+            3018,
+            3023,
+            3023,
+            3028,
+            3028
+          ],
+          "totalHpDamage": 990,
+          "totalToughnessDamage": 0
+        },
+        "ruby-post-ultimate-shot": {
+          "hitCount": 9,
+          "frames": [
+            2737,
+            2739,
+            2741,
+            2744,
+            2746,
+            2746,
+            2749,
+            2751,
+            2756
+          ],
+          "totalHpDamage": 891,
+          "totalToughnessDamage": 0
+        },
+        "ruby-ultimate": {
+          "hitCount": 25,
+          "frames": [
+            2317,
+            2325,
+            2333,
+            2341,
+            2349,
+            2357,
+            2365,
+            2373,
+            2381,
+            2389,
+            2397,
+            2405,
+            2413,
+            2421,
+            2429,
+            2437,
+            2461,
+            2484,
+            2488,
+            2492,
+            2500,
+            2507,
+            2513,
+            2519,
+            2525
+          ],
+          "totalHpDamage": 7596,
+          "totalToughnessDamage": 625
+        },
+        "switch-back-to-ruby--on-enter--actor-103002--star-carry": {
+          "hitCount": 5,
+          "frames": [
+            3958,
+            3964,
+            3970,
+            3976,
+            3982
+          ],
+          "totalHpDamage": 1009,
+          "totalToughnessDamage": 707
+        }
+      },
+      "ownerHitTotalHpDamage": 13464,
+      "ownerHitTotalToughnessDamage": 3288,
       "selectedHpDamageByActionId": {
         "ruby-enhanced-shot-1": 441,
         "ruby-enhanced-shot-2": 441,
@@ -282,17 +493,17 @@
         "ruby-post-ultimate-shot": 891,
         "ruby-ultimate": 156751
       },
-      "totalHpDamage": 164643,
-      "totalToughnessDamage": 2190,
-      "ownerTotalHpDamage": 161610,
-      "ownerTotalToughnessDamage": 66,
+      "totalHpDamage": 164737,
+      "totalToughnessDamage": 2256,
+      "ownerTotalHpDamage": 164643,
+      "ownerTotalToughnessDamage": 2190,
       "enemy": {
-        "pointCount": 331,
+        "pointCount": 335,
         "initialHp": 862800,
-        "finalHp": 698157,
+        "finalHp": 698063,
         "maxHp": 862800,
         "initialToughness": 6667,
-        "finalToughness": 4477,
+        "finalToughness": 4411,
         "maxToughness": 6667
       }
     },
@@ -749,6 +960,62 @@
           "actionTransactions": []
         }
       },
+      "ownerActorSpTransactionsByActionId": {
+        "ruby-limit-counter": {
+          "eventCount": 1,
+          "frames": [
+            3018
+          ],
+          "changes": [
+            0.389893
+          ],
+          "totalChange": 0.389893,
+          "reasons": [
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "ruby-post-ultimate-shot": {
+          "eventCount": 1,
+          "frames": [
+            2737
+          ],
+          "changes": [
+            0.229996
+          ],
+          "totalChange": 0.229996,
+          "reasons": [
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "ruby-ultimate": {
+          "eventCount": 1,
+          "frames": [
+            2200
+          ],
+          "changes": [
+            -100
+          ],
+          "totalChange": -100,
+          "reasons": [
+            "verified-skill-cost"
+          ]
+        }
+      },
+      "ownerKiboSpTransactionsByActionId": {
+        "fire-kibo-signature": {
+          "eventCount": 1,
+          "frames": [
+            3300
+          ],
+          "changes": [
+            -100
+          ],
+          "totalChange": -100,
+          "reasons": [
+            "verified-skill-cost"
+          ]
+        }
+      },
       "specialResourceTrace": [
         {
           "stream": "resource",
@@ -932,7 +1199,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|65900|101",
+          "eventIdentity": "tuning-mark|250|acquire|65900|104",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "kind": "acquire",
@@ -956,7 +1223,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|85900|114",
+          "eventIdentity": "tuning-mark|250|expire|85900|117",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "kind": "expire",
@@ -1329,6 +1596,16 @@
           ]
         }
       ],
+      "passiveApplyCountByActionId": {
+        "ruby-enhanced-shot-1": 1,
+        "ruby-enhanced-shot-2": 1,
+        "ruby-enhanced-shot-3": 1,
+        "ruby-enhanced-shot-4": 1,
+        "ruby-enhanced-shot-5": 1,
+        "ruby-enhanced-shot-6": 1,
+        "ruby-post-ultimate-shot": 1,
+        "ruby-ultimate": 1
+      },
       "passiveMaxStacks": 6,
       "firstPassiveMaxStackFrame": 1350,
       "burstTrace": [],
@@ -1603,7 +1880,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "85f3d6b511affb6b122f42bbfec672bde0ece0e36982d573306c4803e8b29784"
+      "baselineReplayHash": "54aa78b527749ddd7d523cd3ba45365e2014ab04bcb3548108ba31aa4d236aee"
     },
     "trace": {
       "damage": [
@@ -4190,6 +4467,30 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "frame": 3655,
+          "hitIdentity": null,
+          "rawDamage": 47,
+          "hpDamage": 47,
+          "toughnessDamage": 33,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "frame": 3709,
+          "hitIdentity": null,
+          "rawDamage": 47,
+          "hpDamage": 47,
+          "toughnessDamage": 33,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3958,
           "hitIdentity": null,
@@ -4443,7 +4744,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|65900|101",
+          "eventIdentity": "tuning-mark|250|acquire|65900|104",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "kind": "acquire",
@@ -4467,7 +4768,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|85900|114",
+          "eventIdentity": "tuning-mark|250|expire|85900|117",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "kind": "expire",
@@ -5242,7 +5543,7 @@
         }
       ]
     },
-    "summaryHash": "dd72e21b949f816410ba1d709e00bd47d9742ccf10aac03d5bf92dfbbd0c0d37"
+    "summaryHash": "26b51f3b13216430c7e0b7f6d16af707e6d34dd9ffcfa86367bdcb8a683a81bf"
   },
   "expected": {
     "exact": {
@@ -5287,13 +5588,13 @@
       "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
       "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
       "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
-      "combat.damageEventCount": 221,
-      "combat.ownerDamageEventCount": 215,
-      "combat.ownerHitEventCount": 96,
-      "combat.ownerTotalHpDamage": 161610,
-      "combat.ownerTotalToughnessDamage": 66,
+      "combat.damageEventCount": 223,
+      "combat.ownerDamageEventCount": 221,
+      "combat.ownerHitEventCount": 101,
+      "combat.ownerTotalHpDamage": 164643,
+      "combat.ownerTotalToughnessDamage": 2190,
       "combat.enemy.initialHp": 862800,
-      "combat.enemy.finalHp": 698157,
+      "combat.enemy.finalHp": 698063,
       "resources.specialResourceTrace.0.actionId": "ruby-reload",
       "resources.specialResourceTrace.0.frame": 24,
       "resources.specialResourceTrace.0.beforeValue": 0,
@@ -5640,36 +5941,36 @@
       {
         "jsonPath": "combat.damageEventCount",
         "operator": "exact",
-        "expected": 221,
-        "actual": 221,
+        "expected": 223,
+        "actual": 223,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerDamageEventCount",
         "operator": "exact",
-        "expected": 215,
-        "actual": 215,
+        "expected": 221,
+        "actual": 221,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitEventCount",
         "operator": "exact",
-        "expected": 96,
-        "actual": 96,
+        "expected": 101,
+        "actual": 101,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 161610,
-        "actual": 161610,
+        "expected": 164643,
+        "actual": 164643,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalToughnessDamage",
         "operator": "exact",
-        "expected": 66,
-        "actual": 66,
+        "expected": 2190,
+        "actual": 2190,
         "passed": true
       },
       {
@@ -5682,8 +5983,8 @@
       {
         "jsonPath": "combat.enemy.finalHp",
         "operator": "exact",
-        "expected": 698157,
-        "actual": 698157,
+        "expected": 698063,
+        "actual": 698063,
         "passed": true
       },
       {
@@ -6187,14 +6488,14 @@
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 161610,
+        "actual": 164643,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalToughnessDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 66,
+        "actual": 2190,
         "passed": true
       },
       {
@@ -6220,6 +6521,6 @@
       }
     ]
   },
-  "replayHash": "f04ac97b729d5bd2caa355cd12b0035186aaa3b7b02f106efe6c6e5476e1515e",
-  "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
+  "replayHash": "c429af6d6a2a57d04ca0027f96611e4782043c1e942fca78c804d6ec0ac5f9ca",
+  "profileHash": "ae4f67fdf833805773c6fab09c460b24f9c271c167a9a54c1b579aa87c756102"
 }

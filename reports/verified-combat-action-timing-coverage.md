@@ -7,7 +7,7 @@
 - SkillControl/player 变体：1042
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：627
+- 精确选中变体占轴：625
 - 来源动画规划长度：27
 - 通用规划长度：1
 - control 身份未解析：1
@@ -28,14 +28,14 @@
 | actor | limit-counter | verified-unconditional-attack-reopen-window | applied | 3 |
 | actor | normal-attack | normal-attack-input-segment-chain | applied | 12 |
 | actor | normal-attack | normal-attack-input-segment-chain | unresolved | 8 |
-| actor | perfect-parry | declared-verified-input-reopen-occupancy | applied | 2 |
+| actor | perfect-parry | declared-verified-input-reopen-occupancy | applied | 3 |
 | actor | perfect-parry | skill-control-player-action-range | applied | 17 |
-| actor | perfect-parry | verified-unconditional-attack-reopen-window | applied | 1 |
 | actor | plunging-attack | skill-control-player-action-range | applied | 17 |
 | actor | plunging-attack | verified-unconditional-attack-reopen-window | applied | 3 |
+| actor | star-carry | declared-verified-input-reopen-occupancy | applied | 1 |
 | actor | star-carry | skill-control-player-action-range | applied | 14 |
 | actor | star-carry | unresolved-action-occupancy | unresolved | 1 |
-| actor | star-carry | verified-unconditional-attack-reopen-window | applied | 2 |
+| actor | star-carry | verified-unconditional-attack-reopen-window | applied | 1 |
 | actor | star-combo | skill-control-player-action-range | applied | 17 |
 | actor | star-combo | verified-unconditional-attack-reopen-window | applied | 3 |
 | actor | star-skill | declared-verified-input-reopen-occupancy | applied | 1 |

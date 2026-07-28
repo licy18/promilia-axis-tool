@@ -772,8 +772,8 @@
       "controlSkillId": 10101003,
       "subSkillIndex": 0,
       "animationDurationFrames": 305,
-      "firstHitFrame": null,
-      "lastHitFrame": null,
+      "firstHitFrame": 18,
+      "lastHitFrame": 18,
       "effectiveOccupancyFrames": 47,
       "occupancyStatus": "applied",
       "occupancySourceKind": "next-control-input-window",
@@ -865,8 +865,8 @@
       "controlSkillId": 10101004,
       "subSkillIndex": 0,
       "animationDurationFrames": 225,
-      "firstHitFrame": null,
-      "lastHitFrame": null,
+      "firstHitFrame": 10,
+      "lastHitFrame": 22,
       "effectiveOccupancyFrames": 30,
       "occupancyStatus": "applied",
       "occupancySourceKind": "next-control-input-window",
@@ -1404,6 +1404,27 @@
       "reasons": []
     },
     {
+      "identity": "actor:101010:perfect-parry:xiaoyu-perfect-parry-counter",
+      "actionKind": "perfect-parry",
+      "semanticName": "完美招架反击",
+      "context": "wrapper-derived-execution",
+      "controlSkillId": 10101049,
+      "subSkillIndex": 1,
+      "animationDurationFrames": 300,
+      "firstHitFrame": null,
+      "lastHitFrame": null,
+      "effectiveOccupancyFrames": 36,
+      "occupancyStatus": "applied",
+      "occupancySourceKind": "declared-verified-input-reopen-occupancy",
+      "reopenWindow": null,
+      "selectedWindowRole": null,
+      "windowKindCounts": {},
+      "windows": [],
+      "animationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+      "occupancySourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]",
+      "reasons": []
+    },
+    {
       "identity": "actor|101010|10101001|7|10101011|sub:0",
       "publicActionIdentity": "actor|101010|10101001|7|10101011",
       "actionKind": "plunging-attack",
@@ -1526,6 +1547,27 @@
       "reasons": []
     },
     {
+      "identity": "actor:101010:star-carry:xiaoyu-star-carry",
+      "actionKind": "star-carry",
+      "semanticName": "星携技",
+      "context": "direct-execution",
+      "controlSkillId": 10101021,
+      "subSkillIndex": 0,
+      "animationDurationFrames": 295,
+      "firstHitFrame": null,
+      "lastHitFrame": null,
+      "effectiveOccupancyFrames": 95,
+      "occupancyStatus": "applied",
+      "occupancySourceKind": "declared-verified-input-reopen-occupancy",
+      "reopenWindow": null,
+      "selectedWindowRole": null,
+      "windowKindCounts": {},
+      "windows": [],
+      "animationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+      "occupancySourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]",
+      "reasons": []
+    },
+    {
       "identity": "actor|101010|10101021|0|10101021|sub:0",
       "publicActionIdentity": "actor|101010|10101021|0|10101021",
       "actionKind": "star-carry",
@@ -1534,15 +1576,15 @@
       "controlSkillId": 10101021,
       "subSkillIndex": 0,
       "animationDurationFrames": 295,
-      "firstHitFrame": null,
-      "lastHitFrame": null,
-      "effectiveOccupancyFrames": 95,
+      "firstHitFrame": 55,
+      "lastHitFrame": 109,
+      "effectiveOccupancyFrames": 130,
       "occupancyStatus": "applied",
       "occupancySourceKind": "verified-unconditional-attack-reopen-window",
       "reopenWindow": {
         "kind": "attack-reopen-window",
-        "startFrame": 95,
-        "endFrame": 299,
+        "startFrame": 130,
+        "endFrame": 334,
         "durationFrames": 204,
         "targetControlSkillId": null,
         "targetSubSkillIndex": 0,
@@ -1562,7 +1604,7 @@
           "jump",
           "perfect-parry"
         ],
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-1650247899203806543__-1650247899203806543.json#behaviorlineControl[0].behaviorList[pathId=-7948287450012755279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7948287450012755279__-7948287450012755279.json"
       },
       "selectedWindowRole": "unconditional-attack-reopen",
       "windowKindCounts": {
@@ -1641,7 +1683,7 @@
         }
       ],
       "animationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-      "occupancySourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json",
+      "occupancySourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-1650247899203806543__-1650247899203806543.json#behaviorlineControl[0].behaviorList[pathId=-7948287450012755279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7948287450012755279__-7948287450012755279.json",
       "reasons": []
     },
     {
@@ -1976,11 +2018,11 @@
     }
   ],
   "summary": {
-    "rowCount": 21,
-    "exactOccupancyCount": 21,
+    "rowCount": 23,
+    "exactOccupancyCount": 23,
     "planningOccupancyCount": 0,
     "unresolvedOccupancyCount": 0,
-    "animationTailRemovedCount": 21,
+    "animationTailRemovedCount": 23,
     "publicActionKindCount": 10
   },
   "sourceIdentity": [
@@ -1988,5 +2030,5 @@
     "skillControlData.skillPlayers|skillResourceMaps",
     "EventBridge behaviorlineControl"
   ],
-  "packageHash": "669875c11a27064e1983c13095730f2069d5bbdcf4400f2c13c65e57c79d326c"
+  "packageHash": "2e256de49232f43be6889e0e2dda8cee34fee26d1ad9921a2006182abd6b04a1"
 }

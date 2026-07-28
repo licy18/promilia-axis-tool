@@ -186,6 +186,7 @@ export function createVerifiedActionVariantRuntime({
   const stateEvents = [];
   const variantEvents = [];
   const effectCommands = [];
+  const tuningMarkTransactions = [];
   const executionBlocks = [];
   const lastResolvedActionByActorId = new Map();
   let runtimeSequenceIndex = 0;
@@ -506,6 +507,33 @@ export function createVerifiedActionVariantRuntime({
         sourceIdentity: transition.sourceIdentity,
         transition,
       });
+      for (const grant of transition.tuningMarkGrants ?? []) {
+        if (grant.applied !== true || !(Number(grant.stackDelta) > 0)) {
+          continue;
+        }
+        tuningMarkTransactions.push({
+          transactionIdentity: [
+            transition.transitionIdentity,
+            grant.markId,
+            descriptor.action?.id ?? 'unknown-action',
+            descriptor.timeMs,
+          ].join('|'),
+          kind: 'threshold-grant',
+          timeMs: descriptor.timeMs,
+          action: descriptor.action,
+          actionId: descriptor.action?.id ?? null,
+          actorId: descriptor.action?.actorId ?? state.actor.id,
+          ownerId: Number(state.profile.ownerId),
+          resourceIdentity: state.profile.resourceIdentity,
+          stateElementId: Number(transition.stateElementId),
+          profileKey: grant.profileKey,
+          markId: Number(grant.markId),
+          stackDelta: Number(grant.stackDelta),
+          sourceIdentity: grant.sourceIdentity,
+          status: 'verified-threshold-tuning-mark-grant-ready',
+          applied: true,
+        });
+      }
     }
   };
 
@@ -645,6 +673,47 @@ export function createVerifiedActionVariantRuntime({
       publicControlSkillId,
       actorState,
     });
+    const executionPrerequisite = resolveExecutionPrerequisite({
+      prerequisite: directExecutionForm?.executionPrerequisite,
+      scenario,
+      action: runtimeAction,
+    });
+    if (executionPrerequisite.status === 'blocked') {
+      const block = createExecutionPrerequisiteBlock({
+        action,
+        actorState,
+        publicControlSkillId,
+        directExecutionForm,
+        executionPrerequisite,
+      });
+      executionBlocks.push(block);
+      actionResolutionById.set(action.id, {
+        ...resolveVerifiedCombatActionMechanics(runtimeAction, {
+          combatScenario: scenario.combatScenario,
+        }),
+        ready: false,
+        applied: false,
+        status: block.reason,
+        reasons: block.reasons,
+      });
+      selectionByActionId.set(action.id, {
+        actionId: action.id,
+        actorId: action.actorId,
+        ownerId: characterId || null,
+        controlSkillId: publicControlSkillId,
+        executionControlSkillId:
+          directExecutionForm?.executionControlSkillId ?? null,
+        selectedSubSkillIndex:
+          directExecutionForm?.executionSubSkillIndex ?? null,
+        selectionReason: block.reason,
+        sourceKind: 'verified-scenario-execution-prerequisite',
+        sourceIdentity:
+          directExecutionForm?.executionPrerequisite?.sourceIdentity ?? null,
+        status: block.reason,
+      });
+      lastResolvedActionByActorId.delete(action.actorId);
+      continue;
+    }
     const derivedControlContract = getVerifiedDerivedControlContract({
       ownerKind: mapping?.ownerKind ?? 'actor',
       ownerId: characterId,
@@ -760,17 +829,17 @@ export function createVerifiedActionVariantRuntime({
         contextSelection.binding?.targetSubSkillIndex ??
         attackChainSelection.segment?.subSkillIndex ??
         activeSelection.binding?.targetSubSkillIndex ??
+        directExecutionForm?.executionSubSkillIndex ??
         inputSelection.option?.subSkillIndex ??
         explicitSubSkillIndex ??
-        directExecutionForm?.executionSubSkillIndex ??
         (derivedControlContract?.inputSelector?.resolutionStatus === 'applied'
           ? null
           : defaultSelection?.subSkillIndex) ??
         selectedSubSkillIndex;
       executionControlSkillId =
         contextSelection.binding?.executionControlSkillId ??
-        inputSelection.option?.executionControlSkillId ??
         directExecutionForm?.executionControlSkillId ??
+        inputSelection.option?.executionControlSkillId ??
         publicControlSkillId;
       selectionSource = contextSelection.binding
         ? {
@@ -810,29 +879,29 @@ export function createVerifiedActionVariantRuntime({
                 sourceIdentity: activeSelection.binding.sourceIdentity,
                 decisionFrame: activeSelection.binding.decisionFrame,
               }
-            : inputSelection.option
+            : directExecutionForm
               ? {
-                  sourceKind: inputSelection.sourceKind,
-                  sourceIdentity: inputSelection.option.sourceIdentity,
-                  decisionFrame: derivedControlContract?.decisionFrame ?? 0,
-                  executionTiming: inputSelection.option.executionTiming,
-                  semanticIdentity: inputSelection.option.selectorIdentity,
-                  semanticName: inputSelection.option.label,
+                  sourceKind: `verified-public-action-form-${directExecutionForm.selectionKind}`,
+                  sourceIdentity: directExecutionForm.sourceIdentity,
+                  decisionFrame: directExecutionForm.decisionFrame ?? 0,
+                  executionTiming: directExecutionForm.executionTiming,
+                  semanticIdentity: directExecutionForm.semanticIdentity,
+                  semanticName: directExecutionForm.semanticName,
                 }
-              : explicitSubSkillIndex != null
+              : inputSelection.option
                 ? {
-                    sourceKind: 'workbench-explicit-input-variant',
-                    sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
-                    decisionFrame: 0,
+                    sourceKind: inputSelection.sourceKind,
+                    sourceIdentity: inputSelection.option.sourceIdentity,
+                    decisionFrame: derivedControlContract?.decisionFrame ?? 0,
+                    executionTiming: inputSelection.option.executionTiming,
+                    semanticIdentity: inputSelection.option.selectorIdentity,
+                    semanticName: inputSelection.option.label,
                   }
-                : directExecutionForm
+                : explicitSubSkillIndex != null
                   ? {
-                      sourceKind: `verified-public-action-form-${directExecutionForm.selectionKind}`,
-                      sourceIdentity: directExecutionForm.sourceIdentity,
-                      decisionFrame: directExecutionForm.decisionFrame ?? 0,
-                      executionTiming: directExecutionForm.executionTiming,
-                      semanticIdentity: directExecutionForm.semanticIdentity,
-                      semanticName: directExecutionForm.semanticName,
+                      sourceKind: 'workbench-explicit-input-variant',
+                      sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
+                      decisionFrame: 0,
                     }
                 : defaultSelection
                   ? {
@@ -1099,6 +1168,7 @@ export function createVerifiedActionVariantRuntime({
     stateEvents,
     variantEvents,
     effectCommands,
+    tuningMarkTransactions,
     directSpEvents: targetStateRuntime.directSpEvents,
     targetStateRuntime,
     activeSwitchWindows: switchWindowHistory,
@@ -1135,6 +1205,7 @@ export function createVerifiedActionVariantRuntime({
       resourceEventCount: resourceEvents.length,
       stateEventCount: stateEvents.length,
       effectCommandCount: effectCommands.length,
+      tuningMarkTransactionCount: tuningMarkTransactions.length,
       targetStateEventCount: targetStateRuntime.events.length,
       conditionalHitGroupCount: targetStateRuntime.groupResults.length,
       directSpEventCount: targetStateRuntime.directSpEvents.length,
@@ -1609,6 +1680,51 @@ function resolveDirectPublicActionExecutionForm({
         isRuntimeConditionSatisfied(form.condition, actorState)
     ) ?? null
   );
+}
+
+function resolveExecutionPrerequisite({ prerequisite, scenario, action }) {
+  if (!prerequisite) return { status: 'not-required' };
+  if (
+    prerequisite.applied !== true ||
+    prerequisite.kind !== 'scenario-event-at-action-frame'
+  ) {
+    return {
+      status: 'blocked',
+      reason: 'verified-action-execution-prerequisite-unresolved',
+    };
+  }
+  const frameRate = Number(scenario?.time?.fps) || FRAME_RATE;
+  const actionFrame = Math.round(
+    ((Number(action?.startMs) || 0) * frameRate) / 1000
+  );
+  const toleranceFrames = Math.max(
+    0,
+    Number(prerequisite.toleranceFrames) || 0
+  );
+  const matchingEvent =
+    (scenario?.actions ?? []).find(candidate => {
+      if (
+        candidate.type !== ACTION_TYPES.ENEMY_EVENT ||
+        candidate.eventType !== prerequisite.eventType
+      ) {
+        return false;
+      }
+      const eventFrame = Math.round(
+        ((Number(candidate.startMs) || 0) * frameRate) / 1000
+      );
+      return Math.abs(eventFrame - actionFrame) <= toleranceFrames;
+    }) ?? null;
+  return matchingEvent
+    ? {
+        status: 'satisfied',
+        eventActionId: matchingEvent.id,
+        eventFrame: actionFrame,
+      }
+    : {
+        status: 'blocked',
+        reason: 'verified-action-execution-prerequisite-missing',
+        eventFrame: actionFrame,
+      };
 }
 
 function isRuntimeConditionSatisfied(condition, actorState) {
@@ -2113,6 +2229,42 @@ function createInputVariantExecutionBlock({
   };
 }
 
+function createExecutionPrerequisiteBlock({
+  action,
+  actorState,
+  publicControlSkillId,
+  directExecutionForm,
+  executionPrerequisite,
+}) {
+  const prerequisite = directExecutionForm?.executionPrerequisite;
+  return {
+    code: 'VERIFIED_ACTION_EXECUTION_PREREQUISITE_MISSING',
+    status: 'blocked',
+    reason:
+      executionPrerequisite.reason ??
+      'verified-action-execution-prerequisite-missing',
+    reasons: [
+      `scenario-event-required:${prerequisite?.eventType ?? 'unknown'}`,
+    ],
+    message: `${action.name ?? '动作'}需要同帧场景事件“${prerequisite?.eventType ?? '未知事件'}”`,
+    sourceKind: 'azpr-verified-action-variant-runtime',
+    sourceIdentity: prerequisite?.sourceIdentity ?? null,
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    controlSkillId: publicControlSkillId,
+    executionControlSkillId:
+      directExecutionForm?.executionControlSkillId ?? null,
+    selectedSubSkillIndex:
+      directExecutionForm?.executionSubSkillIndex ?? null,
+    resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
+    resourceName: actorState?.profile?.name ?? null,
+    requiredEventType: prerequisite?.eventType ?? null,
+    requiredEventFrame: executionPrerequisite.eventFrame ?? null,
+  };
+}
+
 function createAttackChainExecutionBlock({ action, actorState, chain }) {
   return {
     code: 'VERIFIED_ATTACK_INPUT_CHAIN_COMPLETE',
@@ -2219,6 +2371,7 @@ function createUnavailableRuntime(reason) {
     stateEvents: [],
     variantEvents: [],
     effectCommands: [],
+    tuningMarkTransactions: [],
     directSpEvents: [],
     targetStateRuntime: null,
     eventLog: [],
@@ -2231,6 +2384,7 @@ function createUnavailableRuntime(reason) {
       resourceEventCount: 0,
       stateEventCount: 0,
       effectCommandCount: 0,
+      tuningMarkTransactionCount: 0,
       targetStateEventCount: 0,
       conditionalHitGroupCount: 0,
       directSpEventCount: 0,

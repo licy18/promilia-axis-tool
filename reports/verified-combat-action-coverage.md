@@ -3,18 +3,18 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：459
-- 来源静态可应用：408
-- 来源运行时依赖：51
-- 零距离场景补全：62
-- 来源静态证据缺口：104
+- 场景可运行：462
+- 来源静态可应用：410
+- 来源运行时依赖：52
+- 零距离场景补全：63
+- 来源静态证据缺口：101
 - 明确零：0
-- 未解析：104
-- 真实命中节点：1605
-- 公开动作变体：593（未解析 134）
+- 未解析：101
+- 真实命中节点：1610
+- 公开动作变体：593（未解析 131）
 - 非零回能元素：667（未关联 466）
-- 零距离投射物命中：825（仍缺发射帧 305、仍缺公式 172、仍缺目标 0）
-- 普攻输入链：20 条 / 95 个输入段（可运行 78，未解析 17）
+- 零距离投射物命中：832（仍缺发射帧 302、仍缺公式 172、仍缺目标 0）
+- 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
 ## 普攻输入链
@@ -23,7 +23,7 @@
 | --- | ---: | ---: | ---: | --- |
 | 寒悠悠 | 5 | 5 | 0 | 10100301 / 10100302 / 10100303 / 10100304 / 10100305 |
 | 芃芃 | 4 | 4 | 0 | 10100701 / 10100702 / 10100703 / 10100704 |
-| 涂山小玉 | 5 | 3 | 2 | 10101001 / 10101002 / 10101003 / 10101004 / 10101005 |
+| 涂山小玉 | 5 | 5 | 0 | 10101001 / 10101002 / 10101003 / 10101004 / 10101005 |
 | 莉莉 | 5 | 5 | 0 | 10200101 / 10200102 / 10200103 / 10200104 / 10200105 |
 | 红宝石 | 5 | 5 | 0 | 10300201 / 10300202 / 10300203 / 10300204 / 10300205 |
 | 西芙莉雅 | 5 | 3 | 2 | 10700101 / 10700102 / 10700103 / 10700104 / 10700105 |
@@ -49,10 +49,10 @@
 | actor | charged-attack | 20 | 20 | 14 | 0 | 6 | 80 |
 | actor | dodge-attack | 20 | 20 | 16 | 0 | 4 | 50 |
 | actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 84 |
-| actor | normal-attack | 20 | 20 | 18 | 0 | 2 | 92 |
-| actor | perfect-parry | 20 | 20 | 2 | 0 | 18 | 8 |
+| actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
+| actor | perfect-parry | 20 | 20 | 3 | 0 | 17 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
-| actor | star-carry | 17 | 17 | 12 | 0 | 5 | 72 |
+| actor | star-carry | 17 | 17 | 13 | 0 | 4 | 74 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 18 | 0 | 2 | 132 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 131 |
@@ -66,8 +66,6 @@
 - `actor|101003|10100322|1|10100325` 寒悠悠 / limit-counter / 缚风烟: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|101007|10100721|2|10100727` 芃芃 / perfect-parry / 来打我啊！: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|101010|10101001|0|10101003` 涂山小玉 / normal-attack / 画扇春: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|101010|10101021|0|10101021` 涂山小玉 / star-carry / 驭仙风: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-target-unresolved, property-formula-not-literal-function-5, property-conditions-not-expanded, effect-trigger-frame-missing, judgment-condition-runtime-unimplemented, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, pack-lifecycle-runtime-unimplemented, sp-formula-not-literal-function-5, tuning-consume-judgment-missing, tuning-consume-mark-identity-ambiguous, tuning-consume-success-branch-unresolved
-- `actor|101010|10101021|2|10101027` 涂山小玉 / perfect-parry / 驭仙风: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|102001|10200122|2|10200127` 莉莉 / perfect-parry / 骑士加护: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|103002|10300201|0|10300203` 红宝石 / normal-attack / 灵感的火花: trigger-frame-missing, projectile-impact-frame-runtime-dependent, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, sp-formula-not-literal-function-5, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved

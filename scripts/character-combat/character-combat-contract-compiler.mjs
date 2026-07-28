@@ -132,6 +132,7 @@ export function compileCharacterCombatRecipeContracts({
     definitions: compilerRecipe.thresholdTransitions ?? [],
     resourceProfiles,
     resourceOperations,
+    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
     operators: normalizedOperators,
   });
   const passiveEffects = compilePassiveEffects({
@@ -1651,6 +1652,11 @@ function compilePublicActionForms({
       resourceProfiles,
       operators
     );
+    const executionPrerequisite = compileExecutionPrerequisite(
+      definition.executionPrerequisite,
+      ownerId,
+      definition.semanticIdentity
+    );
     const switchAsset = definition.switchElementId
       ? operators.readElementAsset(definition.switchElementId)
       : null;
@@ -1679,6 +1685,7 @@ function compilePublicActionForms({
       executionSubSkillIndex: definition.executionSubSkillIndex,
       selectionKind: definition.selectionKind,
       condition,
+      executionPrerequisite,
       executionTiming: toRuntimeExecutionTiming(timing),
       sourceIdentity: [
         ...definitionSources,
@@ -3277,6 +3284,7 @@ function compileThresholdTransitions({
   definitions,
   resourceProfiles,
   resourceOperations,
+  tuningMarkProfiles,
   operators,
 }) {
   return definitions.map(definition => {
@@ -3308,6 +3316,54 @@ function compileThresholdTransitions({
       )
       .map(operation => operation.operationIdentity)
       .sort();
+    const tuningMarkGrants = (
+      definition.tuningMarkGrants ?? []
+    ).map(grant => {
+      const profile = tuningMarkProfiles.find(
+        item => item.key === grant.profileKey
+      );
+      const markAsset = profile
+        ? operators.readElementAsset(profile.markId)
+        : null;
+      const sourceEntries = stateAsset.tree?.[grant.sourceField];
+      if (!profile || !markAsset || !Array.isArray(sourceEntries)) {
+        throw new Error(
+          `character combat threshold tuning mark evidence missing: ${ownerId}/${definition.stateElementId}/${grant.profileKey}`
+        );
+      }
+      const markPathId = String(markAsset.pathId);
+      const sourcePathIds = sourceEntries
+        .map(entry => String(entry?.m_PathID ?? ''))
+        .filter(value => /^-?\d+$/.test(value));
+      const stackDelta = sourcePathIds.filter(
+        pathId => pathId === markPathId
+      ).length;
+      if (
+        stackDelta <= 0 ||
+        (Number.isInteger(Number(grant.expectedMultiplicity)) &&
+          stackDelta !== Number(grant.expectedMultiplicity))
+      ) {
+        throw new Error(
+          `character combat threshold tuning mark multiplicity mismatch: ${ownerId}/${definition.stateElementId}/${grant.profileKey}/${stackDelta}`
+        );
+      }
+      return {
+        profileKey: profile.key,
+        markId: profile.markId,
+        stackDelta,
+        sourceField: grant.sourceField,
+        markPathId,
+        sourceIdentity: [
+          `${stateAsset.sourceIdentity}#${grant.sourceField}[m_PathID=${markPathId}]x${stackDelta}`,
+          markAsset.sourceIdentity,
+          grant.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        status: 'verified-threshold-tuning-mark-grant-ready',
+        applied: true,
+      };
+    });
     return {
       transitionIdentity: [
         profile.resourceIdentity,
@@ -3326,12 +3382,14 @@ function compileThresholdTransitions({
       stateElementId: definition.stateElementId,
       stateName: state.name,
       stateDurationMs: state.durationMs,
+      tuningMarkGrants,
       sourceIdentity: [
         resourceAsset.sourceIdentity,
         `${resourceAsset.sourceIdentity}#combineType=${resourceAsset.tree?.combineType};combineNumber=${resourceAsset.tree?.combineNumber}`,
         stateAsset.sourceIdentity,
         `${stateAsset.sourceIdentity}#time=${stateAsset.tree?.time}`,
         definition.runtimeSourceIdentity,
+        ...tuningMarkGrants.map(grant => grant.sourceIdentity),
       ]
         .filter(Boolean)
         .join('|'),
@@ -3427,54 +3485,13 @@ function compilePassiveEffects({
         }
       }
     }
-    const aliasTriggers = (definition.publicTriggerAliases ?? []).flatMap(
-      alias => {
-        const sourceControl = controlBySkillId.get(
-          Number(alias.publicControlSkillId)
-        );
-        const runtimeTrigger = directTriggers.find(
-          trigger =>
-            Number(trigger.controlSkillId) ===
-              Number(alias.runtimeControlSkillId) &&
-            Number(trigger.subSkillIndex) ===
-              Number(alias.runtimeSubSkillIndex)
-        );
-        const bridge = operators
-          .normalizeControlWindows(sourceControl, alias.publicSubSkillIndex)
-          .find(
-            window =>
-              Number(window.targetControlSkillId) ===
-                Number(alias.runtimeControlSkillId) &&
-              Number(window.targetSubSkillIndex) ===
-                Number(alias.runtimeSubSkillIndex)
-          );
-        if (!runtimeTrigger || !bridge) return [];
-        return [
-          {
-            ...runtimeTrigger,
-            triggerIdentity: [
-              definition.skillId,
-              alias.publicControlSkillId,
-              alias.publicSubSkillIndex,
-              bridge.startFrame + runtimeTrigger.triggerFrame,
-              'runtime-control',
-              alias.runtimeControlSkillId,
-            ].join('|'),
-            controlSkillId: alias.publicControlSkillId,
-            subSkillIndex: alias.publicSubSkillIndex,
-            triggerFrame: bridge.startFrame + runtimeTrigger.triggerFrame,
-            sourceIdentity: [
-              bridge.sourceIdentity,
-              runtimeTrigger.sourceIdentity,
-            ].join('|'),
-            status: 'verified-passive-public-trigger-binding-ready',
-            applied: true,
-          },
-        ];
-      }
-    );
+    if ((definition.publicTriggerAliases ?? []).length > 0) {
+      throw new Error(
+        `character combat passive public trigger aliases cannot infer derived execution: ${ownerId}/${definition.skillId}`
+      );
+    }
     const triggerBindings = dedupeBy(
-      [...directTriggers, ...aliasTriggers],
+      directTriggers,
       item => item.triggerIdentity
     ).sort(
       (left, right) =>
@@ -3992,6 +4009,35 @@ function compileCondition(definition, ownerId, resourceProfiles, operators) {
     stateElementId: state.elementId,
     stateName: state.name,
     sourceIdentity: state.sourceIdentity ?? stateAsset?.sourceIdentity ?? null,
+  };
+}
+
+function compileExecutionPrerequisite(definition, ownerId, identity) {
+  if (!definition) return null;
+  if (definition.kind !== 'scenario-event-at-action-frame') {
+    throw new Error(
+      `character combat execution prerequisite kind unsupported: ${ownerId}/${identity}/${definition.kind}`
+    );
+  }
+  const eventType = String(definition.eventType ?? '').trim();
+  const toleranceFrames = Number(definition.toleranceFrames ?? 0);
+  if (
+    !eventType ||
+    !Number.isInteger(toleranceFrames) ||
+    toleranceFrames < 0 ||
+    !definition.sourceIdentity
+  ) {
+    throw new Error(
+      `character combat execution prerequisite invalid: ${ownerId}/${identity}`
+    );
+  }
+  return {
+    kind: definition.kind,
+    eventType,
+    toleranceFrames,
+    sourceIdentity: definition.sourceIdentity,
+    status: 'verified-scenario-execution-prerequisite-ready',
+    applied: true,
   };
 }
 

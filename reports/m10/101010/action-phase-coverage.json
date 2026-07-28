@@ -11,7 +11,7 @@
     "quickEntryCount": 0,
     "appliedQuickEntryCount": 0,
     "publicActionCount": 10,
-    "runtimeReadyActionCount": 7,
+    "runtimeReadyActionCount": 10,
     "appliedResourceTransactionCount": 23,
     "appliedActionEffectCount": 0
   },
@@ -366,13 +366,13 @@
       "publicActionIdentity": null,
       "actionKind": "normal-attack",
       "sourceSkillId": 10101001,
-      "runtimeReady": false,
-      "classification": "unresolved",
+      "runtimeReady": true,
+      "classification": "applied",
       "residualReasons": [
         "projectile-impact-frame-runtime-dependent",
         "trigger-frame-missing"
       ],
-      "status": "static-evidence-gap"
+      "status": "applied-with-residual-gaps"
     },
     {
       "publicActionIdentity": null,
@@ -478,29 +478,10 @@
       "publicActionIdentity": null,
       "actionKind": "star-carry",
       "sourceSkillId": 10101021,
-      "runtimeReady": false,
-      "classification": "unresolved",
-      "residualReasons": [
-        "base-function-unverified",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "inject-wrapper-classified-through-child-edges",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
-        "projectile-impact-frame-runtime-dependent",
-        "property-conditions-not-expanded",
-        "property-formula-not-literal-function-5",
-        "sp-formula-not-literal-function-5",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "trigger-frame-missing",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
-      ],
-      "status": "static-evidence-gap"
+      "runtimeReady": true,
+      "classification": "applied",
+      "residualReasons": [],
+      "status": "applied"
     },
     {
       "publicActionIdentity": null,
@@ -519,17 +500,11 @@
       "publicActionIdentity": null,
       "actionKind": "perfect-parry",
       "sourceSkillId": 10101021,
-      "runtimeReady": false,
+      "runtimeReady": true,
       "classification": "unresolved",
-      "residualReasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "status": "static-evidence-gap"
+      "residualReasons": [],
+      "status": "applied"
     }
   ],
-  "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6"
+  "profileHash": "de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024"
 }

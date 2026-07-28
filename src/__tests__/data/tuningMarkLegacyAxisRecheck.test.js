@@ -4,9 +4,12 @@ import xiaoyuGoldenTrace from '../../../reports/m10/101010/golden-trace.json';
 import rubyGoldenTrace from '../../../reports/m10/103002/golden-trace.json';
 
 describe('legacy golden axes under shared tuning-mark decay', () => {
-  it('keeps Xiaoyu observable results because the two early Fire consumes leave the latest shared deadline', () => {
+  it('keeps Xiaoyu threshold Wind transactions and the later shared mark deadlines observable', () => {
     expect(xiaoyuGoldenTrace.validation.passed).toBe(true);
     expect(projectActiveTuningEvents(xiaoyuGoldenTrace)).toEqual([
+      ['wind', 'acquire', 43, 0, 2, 'threshold-charged'],
+      ['wind', 'consume', 324, 2, 1, 'threshold-enhanced-special-charged'],
+      ['wind', 'consume', 579, 1, 0, 'ultimate-refresh'],
       ['fire', 'acquire', 1213, 0, 1, 'han-star-skill'],
       ['fire', 'acquire', 1220, 1, 2, 'han-star-skill'],
       [
@@ -47,8 +50,8 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(xiaoyuGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 131213,
-      ownerTotalToughnessDamage: 3704,
+      ownerTotalHpDamage: 699322,
+      ownerTotalToughnessDamage: 0,
     });
     expect(
       xiaoyuGoldenTrace.actual.dynamicProperties.maxPercentRawByAttributeId
@@ -78,8 +81,8 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(rubyGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 161610,
-      ownerTotalToughnessDamage: 66,
+      ownerTotalHpDamage: 164643,
+      ownerTotalToughnessDamage: 2190,
     });
     expect(
       rubyGoldenTrace.actual.dynamicProperties.maxPercentRawByAttributeId

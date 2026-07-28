@@ -321,6 +321,16 @@ function createGoldenActionDraft({
       durationMs: 0,
     });
   }
+  if (action.type === 'enemyEvent') {
+    return factory.createWorkbenchActionDraft({
+      id: actionId,
+      type: 'enemyEvent',
+      actorCharacterId,
+      eventType: String(action.eventType),
+      startMs,
+      durationMs: frameToMs(1, frameRate),
+    });
+  }
 
   const actionKind = String(action.actionKind);
   const ownerKind = action.type === 'kiboEvent' ? 'kibo' : 'actor';
@@ -513,6 +523,7 @@ function createGoldenActualProjection({
       const isGoldenOwner = Number(selection.ownerId) === ownerId;
       return {
         actionId,
+        ownerId: numberOrNull(selection.ownerId),
         semanticName: selection.semanticName ?? null,
         controlSkillId: numberOrNull(
           selection.executionControlSkillId ?? selection.controlSkillId
@@ -736,13 +747,18 @@ function createGoldenActualProjection({
     pointCount: result.runtimeOutputs?.stateCurves?.enemy?.pointCount ?? 0,
   });
   const ownerActionIds = new Set(
-    (project.actions ?? [])
-      .filter(
-        action =>
-          String(action.actorId ?? '') === `actor-${ownerId}` ||
-          Number(action.actor?.characterId) === ownerId
-      )
-      .map(action => action.id)
+    [
+      ...(project.actions ?? [])
+        .filter(
+          action =>
+            String(action.actorId ?? '') === `actor-${ownerId}` ||
+            Number(action.actor?.characterId) === ownerId
+        )
+        .map(action => action.id),
+      ...actionSelections
+        .filter(selection => Number(selection.ownerId) === ownerId)
+        .map(selection => selection.actionId),
+    ]
   );
   const dynamicPropertyActionKeys =
     recipe.goldenScenario?.traceSelectors?.dynamicPropertyActionKeys ?? [];
@@ -764,7 +780,44 @@ function createGoldenActualProjection({
         ownerHitEvents.filter(event => event.actionId === actionId).length,
       ])
   );
+  const ownerHitSummaryByActionId = Object.fromEntries(
+    [...new Set(ownerHitEvents.map(event => event.actionId))]
+      .sort()
+      .map(actionId => {
+        const rows = ownerHitEvents.filter(
+          event => event.actionId === actionId
+        );
+        return [
+          actionId,
+          {
+            hitCount: rows.length,
+            frames: rows.map(event => event.frame),
+            totalHpDamage: roundNumber(sumNumbers(rows, 'hpDamage')),
+            totalToughnessDamage: roundNumber(
+              sumNumbers(rows, 'toughnessDamage')
+            ),
+          },
+        ];
+      })
+  );
   const ownerActorSp = actorSp.find(row => row.actorId === `actor-${ownerId}`);
+  const ownerKiboSp = kiboSp.find(row => row.actorId === `actor-${ownerId}`);
+  const ownerActorSpTransactionsByActionId =
+    summarizeEnergyTransactionsByAction(
+      ownerActorSp?.actionTransactions,
+      scenarioRecipe.frameRate
+    );
+  const ownerKiboSpTransactionsByActionId =
+    summarizeEnergyTransactionsByAction(
+      ownerKiboSp?.actionTransactions,
+      scenarioRecipe.frameRate
+    );
+  const energyActionKeys =
+    recipe.goldenScenario?.traceSelectors?.energyActionKeys ?? [];
+  for (const actionId of energyActionKeys) {
+    ownerActorSpTransactionsByActionId[actionId] ??= createEmptyActionSummary();
+    ownerKiboSpTransactionsByActionId[actionId] ??= createEmptyActionSummary();
+  }
   const ownerDirectSpTransactions = (
     ownerActorSp?.actionTransactions ?? []
   ).filter(transaction => transaction.reason === 'verified-direct-sp');
@@ -780,6 +833,22 @@ function createGoldenActualProjection({
   );
   const passiveTrace = effectTrace.filter(event =>
     passiveEffectIds.has(String(event.effectId ?? ''))
+  );
+  const passiveActionKeys = [
+    ...new Set([
+      ...(recipe.goldenScenario?.traceSelectors?.passiveActionKeys ?? []),
+      ...passiveTrace
+        .filter(event => event.operation === 'apply' && event.actionId)
+        .map(event => event.actionId),
+    ]),
+  ].sort();
+  const passiveApplyCountByActionId = Object.fromEntries(
+    passiveActionKeys.map(actionId => [
+      actionId,
+      passiveTrace.filter(
+        event => event.actionId === actionId && event.operation === 'apply'
+      ).length,
+    ])
   );
   const passiveMaxStacks = Math.max(
     0,
@@ -834,6 +903,7 @@ function createGoldenActualProjection({
         actionSelections.map(selection => [
           selection.actionId,
           {
+            ownerId: selection.ownerId,
             semanticName: selection.semanticName,
             controlSkillId: selection.controlSkillId,
             subSkillIndex: selection.subSkillIndex,
@@ -848,6 +918,12 @@ function createGoldenActualProjection({
       ownerDamageEventCount: ownerDamageEvents.length,
       ownerHitEventCount: ownerHitEvents.length,
       ownerHitCountByActionId,
+      ownerHitSummaryByActionId,
+      ownerHitTotalHpDamage: sumNumbers(ownerHitEvents, 'hpDamage'),
+      ownerHitTotalToughnessDamage: sumNumbers(
+        ownerHitEvents,
+        'toughnessDamage'
+      ),
       selectedHpDamageByActionId,
       totalHpDamage: sumNumbers(damageTrace, 'hpDamage'),
       totalToughnessDamage: sumNumbers(damageTrace, 'toughnessDamage'),
@@ -865,6 +941,8 @@ function createGoldenActualProjection({
         actorSp.map(row => [row.actorId, row])
       ),
       kiboSpBySlotId: Object.fromEntries(kiboSp.map(row => [row.slotId, row])),
+      ownerActorSpTransactionsByActionId,
+      ownerKiboSpTransactionsByActionId,
       specialResourceTrace,
       tuningMarkTrace,
       tuningMarkAcquireByActionId,
@@ -893,6 +971,7 @@ function createGoldenActualProjection({
     },
     effects: {
       passiveTrace,
+      passiveApplyCountByActionId,
       passiveMaxStacks,
       firstPassiveMaxStackFrame:
         passiveTrace.find(
@@ -1130,6 +1209,16 @@ function summarizeVerifiedEnergyRuntime({
     );
 }
 
+function createEmptyActionSummary() {
+  return {
+    eventCount: 0,
+    frames: [],
+    changes: [],
+    totalChange: 0,
+    reasons: [],
+  };
+}
+
 function aggregateEnergyEvents(events) {
   const byReason = new Map();
   for (const event of events) {
@@ -1159,6 +1248,48 @@ function aggregateEnergyEvents(events) {
       totalChange: roundNumber(row.totalChange),
     }))
     .sort((left, right) => left.reason.localeCompare(right.reason));
+}
+
+function summarizeEnergyTransactionsByAction(
+  transactions = [],
+  frameRate = DEFAULT_FRAME_RATE
+) {
+  const actionIds = [
+    ...new Set(
+      transactions
+        .map(transaction => transaction.actionId)
+        .filter(Boolean)
+    ),
+  ].sort();
+  return Object.fromEntries(
+    actionIds.map(actionId => {
+      const rows = transactions.filter(
+        transaction => transaction.actionId === actionId
+      );
+      return [
+        actionId,
+        {
+          eventCount: rows.length,
+          frames: rows.map(transaction =>
+            msToFrame(transaction.timeMs, frameRate)
+          ),
+          changes: rows.map(transaction =>
+            roundNumber(Number(transaction.change) || 0)
+          ),
+          totalChange: roundNumber(
+            rows.reduce(
+              (sum, transaction) =>
+                sum + (Number(transaction.change) || 0),
+              0
+            )
+          ),
+          reasons: [...new Set(rows.map(transaction => transaction.reason))]
+            .filter(Boolean)
+            .sort(),
+        },
+      ];
+    })
+  );
 }
 
 function summarizeEnemyState({ initial = {}, final = {}, pointCount = 0 }) {

@@ -9,8 +9,8 @@
     "semanticTransitionCount": 8,
     "appliedTransitionCount": 8,
     "staticEvidenceOnlyWindowCount": 6,
-    "gameplayGapCount": 2,
-    "notApplicableActionCount": 4
+    "gameplayGapCount": 0,
+    "notApplicableActionCount": 6
   },
   "transitions": [
     {
@@ -490,27 +490,8 @@
       "directWindowCount": 3,
       "appliedResourceTransactionCount": 0,
       "appliedTuningEffectCount": 0,
-      "status": "static-evidence-gap",
-      "reasons": [
-        "base-function-unverified",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "inject-wrapper-classified-through-child-edges",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
-        "projectile-impact-frame-runtime-dependent",
-        "property-conditions-not-expanded",
-        "property-formula-not-literal-function-5",
-        "sp-formula-not-literal-function-5",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "trigger-frame-missing",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
-      ],
+      "status": "not-applicable",
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101010].skillSlots[skillId=10101021]"
     },
     {
@@ -539,14 +520,8 @@
       "directWindowCount": 2,
       "appliedResourceTransactionCount": 0,
       "appliedTuningEffectCount": 0,
-      "status": "static-evidence-gap",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "status": "not-applicable",
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=209]"
     }
   ],
@@ -4024,5 +3999,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6"
+  "profileHash": "de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024"
 }

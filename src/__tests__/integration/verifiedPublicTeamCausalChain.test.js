@@ -158,9 +158,9 @@ describe('M9 public team causal chain', () => {
     expect(
       jadePassiveEvents.map(event => [event.actionId, event.after.stacks])
     ).toEqual([
-      ['jade-limit-counter', 1],
-      ['jade-ultimate', 2],
-      ['jade-charged-variant', 3],
+      ['switch-to-jade--on-enter--actor-101010--star-carry', 1],
+      ['jade-ultimate', 1],
+      ['jade-charged-variant', 2],
     ]);
     const jadeBurstInterval = projectEffectRuntimeIntervals({
       effectTimeline: withBuff.effectTimeline,
@@ -188,12 +188,12 @@ describe('M9 public team causal chain', () => {
       expect.arrayContaining([
         expect.objectContaining({
           attributeId: 1,
-          dynamicPercentRaw: 1500,
+          dynamicPercentRaw: 1000,
           effects: expect.arrayContaining([
             expect.objectContaining({
               effectId: 'battle-element:101010206',
-              stacks: 3,
-              valueRaw: 1500,
+              stacks: 2,
+              valueRaw: 1000,
             }),
           ]),
         }),

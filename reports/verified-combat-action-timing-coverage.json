@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-timing-coverage",
   "status": "verified-combat-action-timing-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "669875c11a27064e1983c13095730f2069d5bbdcf4400f2c13c65e57c79d326c",
+  "packageHash": "2e256de49232f43be6889e0e2dda8cee34fee26d1ad9921a2006182abd6b04a1",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "publicActionCount": 563,
@@ -29,12 +29,12 @@
       "verified-action-effective-occupancy-window-unresolved": 3
     },
     "schedulingKindCounts": {
-      "exact-public-action-execution-form-occupancy": 3,
-      "exact-selected-variant-occupancy": 627,
+      "exact-public-action-execution-form-occupancy": 5,
+      "exact-selected-variant-occupancy": 625,
       "generic-planning-duration": 1,
       "source-animation-planning-duration": 27
     },
-    "exactSelectedVariantOccupancyCount": 627,
+    "exactSelectedVariantOccupancyCount": 625,
     "sourceAnimationPlanningDurationCount": 27,
     "genericPlanningDurationCount": 1,
     "unresolvedControlIdentityCount": 1,
@@ -136,7 +136,7 @@
       "actionKind": "perfect-parry",
       "sourceKind": "declared-verified-input-reopen-occupancy",
       "status": "applied",
-      "count": 2
+      "count": 3
     },
     {
       "ownerKind": "actor",
@@ -144,13 +144,6 @@
       "sourceKind": "skill-control-player-action-range",
       "status": "applied",
       "count": 17
-    },
-    {
-      "ownerKind": "actor",
-      "actionKind": "perfect-parry",
-      "sourceKind": "verified-unconditional-attack-reopen-window",
-      "status": "applied",
-      "count": 1
     },
     {
       "ownerKind": "actor",
@@ -165,6 +158,13 @@
       "sourceKind": "verified-unconditional-attack-reopen-window",
       "status": "applied",
       "count": 3
+    },
+    {
+      "ownerKind": "actor",
+      "actionKind": "star-carry",
+      "sourceKind": "declared-verified-input-reopen-occupancy",
+      "status": "applied",
+      "count": 1
     },
     {
       "ownerKind": "actor",
@@ -185,7 +185,7 @@
       "actionKind": "star-carry",
       "sourceKind": "verified-unconditional-attack-reopen-window",
       "status": "applied",
-      "count": 2
+      "count": 1
     },
     {
       "ownerKind": "actor",
@@ -5042,11 +5042,11 @@
       "sourceSkillName": "驭仙风",
       "controlSkillId": 10101021,
       "variantConditionDiscovery": null,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]",
       "status": "applied",
       "durationFrames": 95,
       "frameRate": 60,
-      "sourceKind": "verified-unconditional-attack-reopen-window",
+      "sourceKind": "declared-verified-input-reopen-occupancy",
       "reasons": [],
       "input": {
         "mode": "press",
@@ -5062,37 +5062,9 @@
         "durationFrames": 95,
         "frameRate": 60,
         "status": "applied",
-        "sourceKind": "verified-unconditional-attack-reopen-window",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json",
+        "sourceKind": "declared-verified-input-reopen-occupancy",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]",
         "conversion": "95 source frames at 60fps",
-        "animationDurationFrames": 295,
-        "lastHitFrame": null,
-        "reopenWindow": {
-          "kind": "attack-reopen-window",
-          "startFrame": 95,
-          "endFrame": 299,
-          "durationFrames": 204,
-          "targetControlSkillId": null,
-          "targetSubSkillIndex": 0,
-          "allowAttack": true,
-          "baseOnInput": false,
-          "inputToIndex": false,
-          "bridgeType": 3,
-          "continuousAttackType": 0,
-          "interruptBehavior": 0,
-          "frameIndex": 0,
-          "allowedInputCommands": [
-            "normal-attack",
-            "charged-attack",
-            "star-skill",
-            "ultimate",
-            "dodge",
-            "jump",
-            "perfect-parry"
-          ],
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json"
-        },
-        "windowRole": "unconditional-attack-reopen",
         "reasons": []
       },
       "animation": {
@@ -5106,12 +5078,18 @@
         "conversion": "295 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 55,
+        "lastFrame": 109,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7178919562725074255__-7178919562725074255.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7178919562725074255__-7178919562725074255.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletTargetType|bulletLogicObjects|conditionType=3(timer)|lifeTime=900|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010212.asset/MonoBehaviour/ast_bullet_101010212__8010027229995626354.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        55,
+        109
+      ],
       "windows": [
         {
           "kind": "cancel-or-derived-window",
@@ -5190,10 +5168,10 @@
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10101021].coolDown|NewTable/skillsub_logic.rows[skillId=10101021].coolDownCount"
       },
       "schedulingStatus": "exact",
-      "schedulingKind": "exact-selected-variant-occupancy",
+      "schedulingKind": "exact-public-action-execution-form-occupancy",
       "planningDurationFrames": null,
       "schedulingDurationFrames": 95,
-      "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json",
+      "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]",
       "schedulingSourceStatus": "verified-input-occupancy",
       "variantModelStatus": "resolved"
     },
@@ -5413,11 +5391,11 @@
       "sourceSkillName": "驭仙风",
       "controlSkillId": 10101027,
       "variantConditionDiscovery": null,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]",
       "status": "applied",
       "durationFrames": 36,
       "frameRate": 60,
-      "sourceKind": "verified-unconditional-attack-reopen-window",
+      "sourceKind": "declared-verified-input-reopen-occupancy",
       "reasons": [],
       "input": {
         "mode": "press",
@@ -5433,48 +5411,20 @@
         "durationFrames": 36,
         "frameRate": 60,
         "status": "applied",
-        "sourceKind": "verified-unconditional-attack-reopen-window",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json",
+        "sourceKind": "declared-verified-input-reopen-occupancy",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]",
         "conversion": "36 source frames at 60fps",
-        "animationDurationFrames": 190,
-        "lastHitFrame": null,
-        "reopenWindow": {
-          "kind": "attack-reopen-window",
-          "startFrame": 36,
-          "endFrame": 228,
-          "durationFrames": 192,
-          "targetControlSkillId": null,
-          "targetSubSkillIndex": 0,
-          "allowAttack": true,
-          "baseOnInput": false,
-          "inputToIndex": false,
-          "bridgeType": 3,
-          "continuousAttackType": 0,
-          "interruptBehavior": 0,
-          "frameIndex": 0,
-          "allowedInputCommands": [
-            "normal-attack",
-            "charged-attack",
-            "star-skill",
-            "ultimate",
-            "dodge",
-            "jump",
-            "perfect-parry"
-          ],
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json"
-        },
-        "windowRole": "unconditional-attack-reopen",
         "reasons": []
       },
       "animation": {
         "startFrame": 0,
-        "endFrame": 190,
-        "durationFrames": 190,
+        "endFrame": 300,
+        "durationFrames": 300,
         "frameRate": 60,
         "status": "applied",
         "sourceKind": "skill-control-player-animation-range",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-        "conversion": "190 source frames at 60fps"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+        "conversion": "300 source frames at 60fps"
       },
       "hitEnvelope": {
         "firstFrame": null,
@@ -5539,10 +5489,10 @@
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10101027].coolDown|NewTable/skillsub_logic.rows[skillId=10101027].coolDownCount"
       },
       "schedulingStatus": "exact",
-      "schedulingKind": "exact-selected-variant-occupancy",
+      "schedulingKind": "exact-public-action-execution-form-occupancy",
       "planningDurationFrames": null,
       "schedulingDurationFrames": 36,
-      "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json",
+      "schedulingSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]",
       "schedulingSourceStatus": "verified-input-occupancy",
       "variantModelStatus": "resolved"
     },
@@ -85219,12 +85169,16 @@
         "conversion": "305 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 18,
+        "lastFrame": 18,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_-424796195718940256__-424796195718940256.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010003.asset/MonoBehaviour/ast_bullet_101010003__-4345714021377217395.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010003.asset/MonoBehaviour/ast_bullet_101010003__-4345714021377217395.json#bulletLogicObjects[0].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        18
+      ],
       "windows": [
         {
           "kind": "control-transition-window",
@@ -85543,12 +85497,22 @@
         "conversion": "225 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 10,
+        "lastFrame": 22,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3875140846970907040__-3875140846970907040.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletLogicObjects[1].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010002.asset/MonoBehaviour/ast_bullet_101010002__-8250309892187831010.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-6677266917412350368__-6677266917412350368.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletLogicObjects[1].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010002.asset/MonoBehaviour/ast_bullet_101010002__-8250309892187831010.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-4003851066891217312__-4003851066891217312.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletLogicObjects[1].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010002.asset/MonoBehaviour/ast_bullet_101010002__-8250309892187831010.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_2649223868158596704__2649223868158596704.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010001.asset/MonoBehaviour/ast_bullet_101010001__-5266350416779066509.json#bulletLogicObjects[1].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010002.asset/MonoBehaviour/ast_bullet_101010002__-8250309892187831010.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        10,
+        14,
+        18,
+        22
+      ],
       "windows": [
         {
           "kind": "control-transition-window",
@@ -119987,9 +119951,9 @@
       "subSkillIndex": 0,
       "playerSkillId": 0,
       "status": "applied",
-      "durationFrames": 95,
+      "durationFrames": 130,
       "sourceKind": "verified-unconditional-attack-reopen-window",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-1650247899203806543__-1650247899203806543.json#behaviorlineControl[0].behaviorList[pathId=-7948287450012755279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7948287450012755279__-7948287450012755279.json",
       "reasons": [],
       "input": {
         "mode": "press",
@@ -120001,19 +119965,19 @@
       },
       "occupancy": {
         "startFrame": 0,
-        "endFrame": 95,
-        "durationFrames": 95,
+        "endFrame": 130,
+        "durationFrames": 130,
         "frameRate": 60,
         "status": "applied",
         "sourceKind": "verified-unconditional-attack-reopen-window",
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json",
-        "conversion": "95 source frames at 60fps",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-1650247899203806543__-1650247899203806543.json#behaviorlineControl[0].behaviorList[pathId=-7948287450012755279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7948287450012755279__-7948287450012755279.json",
+        "conversion": "130 source frames at 60fps",
         "animationDurationFrames": 295,
-        "lastHitFrame": null,
+        "lastHitFrame": 109,
         "reopenWindow": {
           "kind": "attack-reopen-window",
-          "startFrame": 95,
-          "endFrame": 299,
+          "startFrame": 130,
+          "endFrame": 334,
           "durationFrames": 204,
           "targetControlSkillId": null,
           "targetSubSkillIndex": 0,
@@ -120033,7 +119997,7 @@
             "jump",
             "perfect-parry"
           ],
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_3623448825743563441__3623448825743563441.json#behaviorlineControl[0].behaviorList[pathId=-5476606051291866447]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-5476606051291866447__-5476606051291866447.json"
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-1650247899203806543__-1650247899203806543.json#behaviorlineControl[0].behaviorList[pathId=-7948287450012755279]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7948287450012755279__-7948287450012755279.json"
         },
         "windowRole": "unconditional-attack-reopen",
         "reasons": []
@@ -120049,10 +120013,13 @@
         "conversion": "295 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 55,
+        "lastFrame": 109,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7178919562725074255__-7178919562725074255.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletTargetType|bulletLogicObjects|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7178919562725074255__-7178919562725074255.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletTargetType|bulletLogicObjects|conditionType=3(timer)|lifeTime=900|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010212.asset/MonoBehaviour/ast_bullet_101010212__8010027229995626354.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
+        ]
       },
       "windows": [
         {

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "669875c11a27064e1983c13095730f2069d5bbdcf4400f2c13c65e57c79d326c",
+  "packageHash": "2e256de49232f43be6889e0e2dda8cee34fee26d1ad9921a2006182abd6b04a1",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -27,20 +27,20 @@
     "publicActionCount": 563,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "runnableActionCount": 459,
-    "sourceAppliedActionCount": 408,
-    "sourceRuntimeDependentActionCount": 51,
-    "sourceStaticEvidenceGapActionCount": 104,
-    "scenarioResolvedActionCount": 62,
+    "runnableActionCount": 462,
+    "sourceAppliedActionCount": 410,
+    "sourceRuntimeDependentActionCount": 52,
+    "sourceStaticEvidenceGapActionCount": 101,
+    "scenarioResolvedActionCount": 63,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 104,
+    "unresolvedActionCount": 101,
     "unresolvedStatusCounts": {
-      "runtime-and-evidence-gap": 72,
-      "static-evidence-gap": 32
+      "runtime-and-evidence-gap": 70,
+      "static-evidence-gap": 31
     },
     "unclassifiedUnresolvedActionCount": 0,
     "actorCoreActionCount": 60,
-    "actorCoreRunnableCount": 56,
+    "actorCoreRunnableCount": 57,
     "kiboCoreActionCount": 366,
     "kiboCoreRunnableCount": 300,
     "nonzeroRecoveryElementCount": 667,
@@ -74,41 +74,41 @@
     },
     "effectDimensions": {
       "damage": {
-        "unresolved": 498,
-        "verified-zero": 3361
+        "unresolved": 502,
+        "verified-zero": 3384
       },
       "toughness": {
-        "verified-zero": 3859
+        "verified-zero": 3886
       },
       "sp": {
-        "unresolved": 104,
-        "verified-zero": 3755
+        "unresolved": 112,
+        "verified-zero": 3774
       },
       "hp": {
         "unresolved": 62,
-        "verified-zero": 3797
+        "verified-zero": 3824
       },
       "shield": {
         "unresolved": 10,
-        "verified-zero": 3849
+        "verified-zero": 3876
       },
       "dynamicProperty": {
         "applied": 54,
-        "unresolved": 1068,
-        "verified-zero": 2737
+        "unresolved": 1070,
+        "verified-zero": 2762
       },
       "mark": {
-        "applied": 138,
-        "unresolved": 425,
-        "verified-zero": 3296
+        "applied": 141,
+        "unresolved": 434,
+        "verified-zero": 3311
       }
     },
     "semanticEffects": {
-      "total": 3581,
-      "gameplay": 1819,
+      "total": 3601,
+      "gameplay": 1832,
       "applied": 400,
       "verifiedZero": 2,
-      "unresolved": 1417
+      "unresolved": 1430
     },
     "timing": {
       "appliedActionCount": 552,
@@ -128,12 +128,12 @@
         "verified-action-effective-occupancy-window-unresolved": 3
       },
       "schedulingKindCounts": {
-        "exact-public-action-execution-form-occupancy": 3,
-        "exact-selected-variant-occupancy": 627,
+        "exact-public-action-execution-form-occupancy": 5,
+        "exact-selected-variant-occupancy": 625,
         "generic-planning-duration": 1,
         "source-animation-planning-duration": 27
       },
-      "exactSelectedVariantOccupancyCount": 627,
+      "exactSelectedVariantOccupancyCount": 625,
       "sourceAnimationPlanningDurationCount": 27,
       "genericPlanningDurationCount": 1,
       "unresolvedControlIdentityCount": 1,
@@ -194,7 +194,7 @@
       },
       "contextEdgeCount": 9,
       "appliedContextEdgeCount": 9,
-      "publicActionFormCount": 8,
+      "publicActionFormCount": 10,
       "attackInputChainCount": 5,
       "compiledInputVariantSelectorCount": 1,
       "compiledVariantWindowBindingCount": 4,
@@ -202,7 +202,7 @@
       "targetStateTransactionCount": 7,
       "conditionalHitGroupCount": 2,
       "runtimeEffectBindingCount": 6,
-      "hiddenInputAuditRowCount": 86,
+      "hiddenInputAuditRowCount": 89,
       "hiddenInputPublicExecutionFormCount": 21
     }
   },
@@ -250,8 +250,8 @@
       "actionKind": "normal-attack",
       "actionCount": 20,
       "runtimeStatusCounts": {
-        "runnable": 18,
-        "runtime-and-evidence-gap": 2
+        "runnable": 19,
+        "runtime-and-evidence-gap": 1
       },
       "timingStatusCounts": {
         "applied": 12,
@@ -263,8 +263,8 @@
       "actionKind": "perfect-parry",
       "actionCount": 20,
       "runtimeStatusCounts": {
-        "runnable": 2,
-        "static-evidence-gap": 18
+        "runnable": 3,
+        "static-evidence-gap": 17
       },
       "timingStatusCounts": {
         "applied": 20
@@ -286,8 +286,8 @@
       "actionKind": "star-carry",
       "actionCount": 17,
       "runtimeStatusCounts": {
-        "runnable": 12,
-        "runtime-and-evidence-gap": 2,
+        "runnable": 13,
+        "runtime-and-evidence-gap": 1,
         "static-evidence-gap": 3
       },
       "timingStatusCounts": {
@@ -812,12 +812,12 @@
       "sourceSkillName": "画扇春",
       "controlSkillId": 10101003,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 212,
@@ -30997,12 +30997,12 @@
       "sourceSkillName": "画扇春",
       "controlSkillId": 10101003,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 212,
@@ -31545,17 +31545,17 @@
       "sourceSkillName": "驭仙风",
       "controlSkillId": 10101021,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 95,
-        "sourceKind": "verified-unconditional-attack-reopen-window",
-        "schedulingKind": "exact-selected-variant-occupancy",
+        "sourceKind": "declared-verified-input-reopen-occupancy",
+        "schedulingKind": "exact-public-action-execution-form-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
       },
@@ -31585,37 +31585,29 @@
           "unresolved": 12,
           "verified-zero": 6
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 27
+        },
+        "shield": {
+          "verified-zero": 27
+        },
+        "dynamicProperty": {
+          "unresolved": 2,
+          "verified-zero": 25
+        },
+        "tuningMark": {
+          "applied": 3,
+          "unresolved": 9,
+          "verified-zero": 15
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 13,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 13
       },
-      "reasons": [
-        "trigger-frame-missing",
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5",
-        "property-conditions-not-expanded",
-        "effect-trigger-frame-missing",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-semantics-evidence-gap",
-        "sp-formula-not-literal-function-5",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101010].skillSlots[skillId=10101021]"
     },
     {
@@ -31704,17 +31696,17 @@
       "sourceSkillName": "驭仙风",
       "controlSkillId": 10101027,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
         "durationFrames": 36,
-        "sourceKind": "verified-unconditional-attack-reopen-window",
-        "schedulingKind": "exact-selected-variant-occupancy",
+        "sourceKind": "declared-verified-input-reopen-occupancy",
+        "schedulingKind": "exact-public-action-execution-form-occupancy",
         "planningDurationFrames": null,
         "variantModelStatus": "resolved"
       },
@@ -31751,13 +31743,7 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "reasons": [
-        "pack-lifecycle-semantics-evidence-gap",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "effect-trigger-frame-missing"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=209]"
     },
     {
@@ -68008,232 +67994,6 @@
       "sourceIdentity": "characters.items[id=101007].skillSlots[group=ground,slot=209]"
     },
     {
-      "identity": "actor|101010|10101001|0|10101003",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "ownerName": "涂山小玉",
-      "actionKind": "normal-attack",
-      "sourceSkillId": 10101001,
-      "sourceSkillName": "画扇春",
-      "controlSkillId": 10101003,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 212,
-        "sourceKind": "normal-attack-input-segment-chain",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "partially-resolved"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "applied",
-        "resourceIdentity": "actor:101010:element:101010115",
-        "capacity": 100
-      },
-      "dimensions": {
-        "enemyHp": {
-          "applied": 2,
-          "unresolved": 3
-        },
-        "enemyToughness": {
-          "applied": 2,
-          "unresolved": 3
-        },
-        "actorSp": {
-          "applied": 2,
-          "unresolved": 3
-        },
-        "kiboSp": {
-          "applied": 2,
-          "unresolved": 3
-        },
-        "healing": {
-          "verified-zero": 6
-        },
-        "shield": {
-          "verified-zero": 6
-        },
-        "dynamicProperty": {
-          "unresolved": 2,
-          "verified-zero": 4
-        },
-        "tuningMark": {
-          "applied": 1,
-          "verified-zero": 5
-        }
-      },
-      "semanticEffects": {
-        "total": 6,
-        "applied": 1,
-        "verifiedZero": 0,
-        "unresolved": 5
-      },
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101003]"
-    },
-    {
-      "identity": "actor|101010|10101021|0|10101021",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "ownerName": "涂山小玉",
-      "actionKind": "star-carry",
-      "sourceSkillId": 10101021,
-      "sourceSkillName": "驭仙风",
-      "controlSkillId": 10101021,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 95,
-        "sourceKind": "verified-unconditional-attack-reopen-window",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "resolved"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "applied",
-        "resourceIdentity": "actor:101010:element:101010115",
-        "capacity": 100
-      },
-      "dimensions": {
-        "enemyHp": {
-          "applied": 4,
-          "unresolved": 14
-        },
-        "enemyToughness": {
-          "applied": 4,
-          "unresolved": 14
-        },
-        "actorSp": {
-          "unresolved": 12,
-          "verified-zero": 6
-        },
-        "kiboSp": {
-          "unresolved": 12,
-          "verified-zero": 6
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "reasons": [
-        "trigger-frame-missing",
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5",
-        "property-conditions-not-expanded",
-        "effect-trigger-frame-missing",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-semantics-evidence-gap",
-        "sp-formula-not-literal-function-5",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
-      ],
-      "sourceIdentity": "characters.items[id=101010].skillSlots[skillId=10101021]"
-    },
-    {
-      "identity": "actor|101010|10101021|2|10101027",
-      "ownerKind": "actor",
-      "ownerId": 101010,
-      "ownerName": "涂山小玉",
-      "actionKind": "perfect-parry",
-      "sourceSkillId": 10101021,
-      "sourceSkillName": "驭仙风",
-      "controlSkillId": 10101027,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 36,
-        "sourceKind": "verified-unconditional-attack-reopen-window",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "resolved"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "applied",
-        "resourceIdentity": "actor:101010:element:101010115",
-        "capacity": 100
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 4
-        },
-        "enemyToughness": {
-          "unresolved": 4
-        },
-        "actorSp": {
-          "unresolved": 4
-        },
-        "kiboSp": {
-          "unresolved": 4
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "reasons": [
-        "pack-lifecycle-semantics-evidence-gap",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "effect-trigger-frame-missing"
-      ],
-      "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=209]"
-    },
-    {
       "identity": "actor|102001|10200122|2|10200127",
       "ownerKind": "actor",
       "ownerId": 102001,
@@ -76255,7 +76015,7 @@
         {
           "actionIdentity": "actor|101010|10101001|0|10101003",
           "classification": "unresolved",
-          "scenarioClassification": "unresolved",
+          "scenarioClassification": "applied",
           "controlSkillId": 10101003,
           "subSkillIndex": 0,
           "selected": true

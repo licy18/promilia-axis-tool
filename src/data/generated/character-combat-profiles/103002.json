@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
+    "packageHash": "ae3b5de3a0760a17be19005d71bc246d1b067c8d7bc9e600b6797a27f9e90d67",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -31102,6 +31102,7 @@
             "condition": {
               "kind": "always"
             },
+            "executionPrerequisite": null,
             "executionTiming": {
               "subSkillIndex": 1,
               "frameRate": 60,
@@ -31159,6 +31160,7 @@
         "condition": {
           "kind": "always"
         },
+        "executionPrerequisite": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -187103,10 +187105,10 @@
     "sourceCompilation": {
       "compilerVersion": 3,
       "recipeIdentity": "actor:103002:character-combat-recipe:v1",
-      "recipeHash": "f7932a11485c7db64625f1d3f52ca6b9cc4e746742a86c8f5c51f9664053ff4c",
-      "compilerInputHash": "d1abb210e3a6817ae736c0f52996857dbdbfe65a74a1e7fb7725b2936ed0b266",
-      "recipeContractHash": "dc6eecd391f404e2ed6bb3680fa0811cf46c36fa08f47c7fdd8377907732324c",
-      "ownerContractHash": "8d742b8c2afcdae5d9a4fcaa05a38979548b4a6b26251856c4b3b61f3e4d3f41"
+      "recipeHash": "f00d6485cebfd93b7861124a7322c28b73b198663167f10b4f12908ee5be46db",
+      "compilerInputHash": "e8b07a8ad003b24865ad2bd82de7daea0aa64dadeeb6fb1ad023069769f72d03",
+      "recipeContractHash": "9c92cd1a42d70ae8eb73b95013170ed6c49bfd455f8543450684cc2097f7c167",
+      "ownerContractHash": "656cc4439511eb61260c6319c5a5b10d37ac3a0c9c58d5d3647239bad38e9339"
     },
     "operators": [
       "public-action-binding",
@@ -187127,13 +187129,13 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "578bfe627af95e1184e828168b40e2d986943f40ed4be5532bc1a869845f64c4"
+        "recordsHash": "7cf7c2c949d2ef31033070ebbc6072990a10d44a6815e343332657a7cab6ee6e"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
         "operator": "action-form-resolution",
         "recordCount": 24,
-        "recordsHash": "be3e18b39e38d781da5825d0ece93a83820a4e1ffb1486586e41698e70615864"
+        "recordsHash": "12cfd672587f123aa29dd9594b7bb8146d7db986c347f3a6194dab697ae58675"
       },
       {
         "packagePath": "actionVariantGraph.contextEdges",
@@ -187196,7 +187198,7 @@
         "recordsHash": "410762642676dc8e4ea424108008d0861080ab8f7c6d6da2625b43d3ae4cde68"
       }
     ],
-    "contractHash": "f009a8ef3d47557b791b4af03be7449bcd31476291e8011af83925183c338c10"
+    "contractHash": "a51288d09c401f7c352714f82e8da12900ad9b7b29a0ebc568d4badb75b7cf6f"
   },
   "coverage": [
     {
@@ -197863,7 +197865,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "1fe70c96e7cded739b595ab7cc95ee1540ca0d048dfccca4dd087a82b9219856"
+    "deterministicInputHash": "638ce90377a776b0612a29d430c707d1590c1ec5523539bad1e6959695c54b96"
   },
-  "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
+  "profileHash": "ae4f67fdf833805773c6fab09c460b24f9c271c167a9a54c1b579aa87c756102"
 }

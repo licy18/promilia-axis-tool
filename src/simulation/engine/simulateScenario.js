@@ -287,6 +287,7 @@ function createVerifiedRuntimeBundle({
         scenario,
         actionExecutionPlan,
         effectGeneration,
+        actionVariantRuntime,
       })
     : null;
   const effectTimeline = createEffectRuntimeTimeline({

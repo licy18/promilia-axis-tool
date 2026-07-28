@@ -40,12 +40,12 @@ describe('verified combat mechanics package', () => {
       summary: {
         candidateActionCount: 563,
         classifiedActionCount: 563,
-        appliedActionBindingCount: 517,
-        appliedHitBindingCount: 1846,
-        appliedEffectBindingCount: 137,
+        appliedActionBindingCount: 520,
+        appliedHitBindingCount: 1853,
+        appliedEffectBindingCount: 138,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 3721,
-        actionVariantSupportControlBindingCount: 83,
+        unresolvedEffectBindingCount: 3747,
+        actionVariantSupportControlBindingCount: 82,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 45,
         actionVariantNodeCount: 689,
@@ -54,7 +54,7 @@ describe('verified combat mechanics package', () => {
         appliedSwitchTriggerProfileCount: 17,
         unresolvedSwitchTriggerProfileCount: 3,
         battleEffectNodeCount: 3693,
-        unresolvedActionCount: 106,
+        unresolvedActionCount: 104,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
@@ -65,12 +65,12 @@ describe('verified combat mechanics package', () => {
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
-        appliedAttackInputSegmentCount: 78,
-        unresolvedAttackInputSegmentCount: 17,
+        appliedAttackInputSegmentCount: 80,
+        unresolvedAttackInputSegmentCount: 15,
         appliedAttackInputTimingCount: 78,
         unresolvedAttackInputTimingCount: 17,
-        semanticEffectCount: 3581,
-        semanticGameplayEffectCount: 1819,
+        semanticEffectCount: 3601,
+        semanticGameplayEffectCount: 1832,
         semanticAppliedEffectCount: 400,
         characterCombatProfileCount: 3,
         characterCombatUiVerifiedProfileCount: 0,
@@ -182,29 +182,29 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      semanticEffectCount: 3581,
-      semanticGameplayEffectCount: 1819,
-      semanticStructuralCount: 1762,
+      semanticEffectCount: 3601,
+      semanticGameplayEffectCount: 1832,
+      semanticStructuralCount: 1769,
       semanticAppliedCount: 400,
       semanticVerifiedZeroCount: 2,
-      semanticUnresolvedCount: 1417,
+      semanticUnresolvedCount: 1430,
       semanticPlacementCounts: {
-        'runtime-dependent': 107,
-        'static-evidence-gap': 506,
-        'static-resolved': 1206,
+        'runtime-dependent': 115,
+        'static-evidence-gap': 510,
+        'static-resolved': 1207,
       },
-      effectBindingCount: 3859,
-      appliedEffectBindingCount: 136,
+      effectBindingCount: 3886,
+      appliedEffectBindingCount: 137,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 3721,
+      unresolvedEffectBindingCount: 3747,
       bindingKindCounts: {
-        damage: 560,
-        inject: 1559,
-        judgment: 112,
-        pack: 222,
-        'property-change': 1124,
+        damage: 564,
+        inject: 1564,
+        judgment: 114,
+        pack: 228,
+        'property-change': 1126,
         shield: 10,
-        sp: 104,
+        sp: 112,
         stack: 168,
       },
       dimensions: expect.objectContaining({
@@ -293,7 +293,7 @@ describe('verified combat mechanics package', () => {
         unresolvedEdgeCount: 244,
       },
     });
-    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1618);
+    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1635);
     expect(variantResourceCoverage.summary).toMatchObject({
       profileCount: 2,
       appliedProfileCount: 2,
@@ -525,7 +525,7 @@ describe('verified combat mechanics package', () => {
         unresolvedActionCount: 11,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
-        exactSelectedVariantOccupancyCount: 627,
+        exactSelectedVariantOccupancyCount: 625,
         sourceAnimationPlanningDurationCount: 27,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
@@ -865,13 +865,13 @@ describe('verified combat mechanics package', () => {
         resolvedInputSemanticsCount: 1314,
         unresolvedInputSemanticsCount: 37,
         xiaoyuPublicExecutionFormCount: 21,
-        xiaoyuWindowAuditRowCount: 86,
+        xiaoyuWindowAuditRowCount: 89,
         xiaoyuAppliedContextEdgeCount: 7,
       },
       xiaoyu: {
         publicExecutionFormCount: 21,
-        rowCount: 86,
-        expectedRowCount: 86,
+        rowCount: 89,
+        expectedRowCount: 89,
       },
     });
     expect(
@@ -898,7 +898,11 @@ describe('verified combat mechanics package', () => {
     });
     expect(
       mechanicsPackage.actionVariantGraph.publicActionForms
-        .filter(form => form.ownerId === 101010)
+        .filter(
+          form =>
+            form.ownerId === 101010 &&
+            form.publicActionKind === 'charged-attack'
+        )
         .map(form => ({
           semanticName: form.semanticName,
           executionControlSkillId: form.executionControlSkillId,
@@ -943,6 +947,39 @@ describe('verified combat mechanics package', () => {
         occupancyFrames: 75,
       },
     ]);
+    expect(
+      mechanicsPackage.actionVariantGraph.publicActionForms.filter(
+        form =>
+          form.ownerId === 101010 &&
+          ['star-carry', 'perfect-parry'].includes(form.publicActionKind)
+      )
+    ).toEqual([
+      expect.objectContaining({
+        publicActionKind: 'star-carry',
+        semanticName: '星携技',
+        executionControlSkillId: 10101021,
+        executionSubSkillIndex: 0,
+        executionTiming: expect.objectContaining({
+          animation: expect.objectContaining({ durationFrames: 295 }),
+          occupancy: expect.objectContaining({ durationFrames: 95 }),
+        }),
+      }),
+      expect.objectContaining({
+        publicActionKind: 'perfect-parry',
+        semanticName: '完美招架反击',
+        executionControlSkillId: 10101049,
+        executionSubSkillIndex: 1,
+        executionPrerequisite: expect.objectContaining({
+          kind: 'scenario-event-at-action-frame',
+          eventType: 'successful-parry',
+          applied: true,
+        }),
+        executionTiming: expect.objectContaining({
+          animation: expect.objectContaining({ durationFrames: 300 }),
+          occupancy: expect.objectContaining({ durationFrames: 36 }),
+        }),
+      }),
+    ]);
     const xiaoyuDerivedControl =
       mechanicsPackage.actionVariantControlBindings.find(
         control => control.controlSkillId === 10101042
@@ -985,11 +1022,11 @@ describe('verified combat mechanics package', () => {
       },
     ]);
     expect(xiaoyuActionOccupancyAudit.summary).toEqual({
-      rowCount: 21,
-      exactOccupancyCount: 21,
+      rowCount: 23,
+      exactOccupancyCount: 23,
       planningOccupancyCount: 0,
       unresolvedOccupancyCount: 0,
-      animationTailRemovedCount: 21,
+      animationTailRemovedCount: 23,
       publicActionKindCount: 10,
     });
     expect(
@@ -1116,11 +1153,11 @@ describe('verified combat mechanics package', () => {
       stateDurationMs: 10000,
       applied: true,
     });
-    expect(
+    const xiaoyuPassive =
       mechanicsPackage.specialResourceCatalog.passiveEffects.find(
         passive => passive.ownerId === 101010
-      )
-    ).toMatchObject({
+      );
+    expect(xiaoyuPassive).toMatchObject({
       skillId: 10101061,
       name: '玉未央',
       durationMs: 8000,
@@ -1129,7 +1166,17 @@ describe('verified combat mechanics package', () => {
       triggerBindings: expect.arrayContaining([
         expect.objectContaining({
           controlSkillId: 10101010,
+          subSkillIndex: 0,
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101010,
           subSkillIndex: 1,
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101010,
+          subSkillIndex: 2,
           triggerFrame: 1,
         }),
         expect.objectContaining({
@@ -1138,23 +1185,27 @@ describe('verified combat mechanics package', () => {
           triggerFrame: 1,
         }),
         expect.objectContaining({
-          controlSkillId: 10101025,
+          controlSkillId: 10101021,
           subSkillIndex: 0,
-          triggerFrame: 61,
-          status: 'verified-passive-public-trigger-binding-ready',
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101042,
+          subSkillIndex: 0,
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101042,
+          subSkillIndex: 1,
+          triggerFrame: 1,
+        }),
+        expect.objectContaining({
+          controlSkillId: 10101049,
+          subSkillIndex: 1,
+          triggerFrame: 1,
         }),
       ]),
-      unresolvedTriggerBindings: [
-        expect.objectContaining({
-          controlSkillId: 10101027,
-          runtimeControlSkillId: 10101049,
-          status: 'static-evidence-gap',
-          reasons: [
-            'perfect-parry-public-to-runtime-control-transition-static-evidence-gap',
-          ],
-          applied: false,
-        }),
-      ],
+      unresolvedTriggerBindings: [],
       modifiers: expect.arrayContaining([
         expect.objectContaining({
           attributeId: 1,
@@ -1169,6 +1220,12 @@ describe('verified combat mechanics package', () => {
       ]),
       applied: true,
     });
+    expect(xiaoyuPassive.triggerBindings).toHaveLength(8);
+    expect(
+      xiaoyuPassive.triggerBindings.some(
+        binding => binding.controlSkillId === 10101025
+      )
+    ).toBe(false);
     expect(
       mechanicsPackage.specialResourceCatalog.passiveEffects.some(
         passive => passive.skillId === 10101062
@@ -1485,7 +1542,7 @@ describe('verified combat mechanics package', () => {
     });
 
     expect(mechanicsPackage.semanticEffectCatalog.summary).toMatchObject({
-      fullSemanticEffectCount: 3581,
+      fullSemanticEffectCount: 3601,
       runtimeEffectCount: 275,
       compiledPassiveEffectCount: 101,
       runtimeFormulaCount: 52,

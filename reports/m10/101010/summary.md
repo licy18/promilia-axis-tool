@@ -2,34 +2,34 @@
 
 - Owner: `101010`
 - Profile: `actor:101010:character-combat-profile:v1`
-- Hash: `4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6`
+- Hash: `de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
 - 公开动作：10
 - 执行形态：21
 - 可达 control：20
-- 窗口：86
-- Hit：108
-- 来源 identity：974
-- 战斗图：193 nodes / 222 edges
+- 窗口：89
+- Hit：117
+- 来源 identity：1012
+- 战斗图：202 nodes / 228 edges
 - 描述覆盖：28
-- Runtime ready 动作：7/10
-- Runtime capture：4
+- Runtime ready 动作：10/10
+- Runtime capture：13
 - 零距离模拟完整：no
 - 实机证据完整：no
 - 零距离阻断 capture：0
-- 实机证据 capture：4
+- 实机证据 capture：13
 
 ## 维度状态
 
 | 维度 | 状态 | 已应用 | 未解析 | 总数 |
 | --- | --- | ---: | ---: | ---: |
-| publicActions | static-evidence-gap | 7 | 3 | 10 |
-| hiddenAndDerivedForms | static-evidence-gap | 19 | 2 | 21 |
+| publicActions | applied | 10 | 0 | 10 |
+| hiddenAndDerivedForms | applied | 21 | 0 | 21 |
 | inputAndExecutionTiming | applied | 7 | 0 | 7 |
-| effectiveOccupancy | applied | 21 | 0 | 21 |
-| hitsAndProjectiles | static-evidence-gap | 104 | 4 | 108 |
+| effectiveOccupancy | applied | 23 | 0 | 23 |
+| hitsAndProjectiles | static-evidence-gap | 104 | 13 | 117 |
 | hpDamage | static-evidence-gap | 18 | 73 | 91 |
 | toughnessDamage | static-evidence-gap | 18 | 73 | 91 |
 | actorSp | static-evidence-gap | 11 | 66 | 91 |
@@ -37,7 +37,7 @@
 | cooldowns | applied | 20 | 0 | 20 |
 | personalResources | static-evidence-gap | 25 | 7 | 32 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | static-evidence-gap | 9 | 109 | 118 |
+| buffsAndDebuffs | static-evidence-gap | 9 | 129 | 138 |
 | passives | applied | 1 | 0 | 1 |
 | dynamicProperties | static-evidence-gap | 2 | 5 | 7 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
@@ -48,7 +48,7 @@
 
 ## 未闭环
 
-- runtime-evidence-required: 4
-- static-evidence-gap: 185
+- runtime-evidence-required: 13
+- static-evidence-gap: 189
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

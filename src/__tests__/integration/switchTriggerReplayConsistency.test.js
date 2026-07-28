@@ -71,6 +71,19 @@ describe('switch-triggered star-carry replay consistency', () => {
 
     expect(signatures[0]).toMatchObject({
       persistedActions: [['switch-replay', 'switch', 1500, 0]],
+      persistedHitOverrides: {
+        'switch-replay': {
+          'derived-star-carry-hit': { willHit: false },
+        },
+      },
+      childHitOverrides: [
+        {
+          'derived-star-carry-hit': { willHit: false },
+        },
+        {
+          'derived-star-carry-hit': { willHit: false },
+        },
+      ],
       generationSummary: {
         switchEventCount: 1,
         appliedBindingCount: 2,
@@ -147,6 +160,9 @@ function createSwitchReplayDraft() {
           targetCharacterId: 101007,
           startMs: 1500,
           durationMs: 0,
+          hitOverrides: {
+            'derived-star-carry-hit': { willHit: false },
+          },
           note: '切换至苃苃',
         }),
       ],
@@ -202,7 +218,11 @@ function createSwitchReplaySignature(draft) {
       action.startMs,
       action.durationMs,
     ]),
+    persistedHitOverrides: Object.fromEntries(
+      draft.actionDrafts.map(action => [action.id, action.hitOverrides])
+    ),
     generationSummary: scenario.switchTriggerGeneration.summary,
+    childHitOverrides: children.map(action => action.hitOverrides),
     children: children.map(action => [
       action.id,
       action.parentActionId,

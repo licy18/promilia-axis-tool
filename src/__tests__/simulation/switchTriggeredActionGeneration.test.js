@@ -121,6 +121,35 @@ describe('switch triggered star-carry generation', () => {
     ).toBe(true);
   });
 
+  it('projects persisted parent hit overrides onto the read-only child action', () => {
+    const hitOverrides = {
+      'verified-child-hit': { willHit: false },
+    };
+    const result = generate({
+      actors: [actor(103002), actor(101010)],
+      initialActorId: 'actor-103002',
+      switches: [
+        switchAction('switch-with-hit-mask', 1000, 103002, 101010, {
+          hitOverrides,
+        }),
+      ],
+    });
+    const child = result.actions.find(
+      action =>
+        action.parentActionId === 'switch-with-hit-mask' &&
+        action.actorId === 'actor-101010'
+    );
+
+    expect(child).toMatchObject({
+      skillId: 10101021,
+      hitOverrides,
+      derivedAction: {
+        parentActionId: 'switch-with-hit-mask',
+        readOnly: true,
+      },
+    });
+  });
+
   it('suppresses cooldown-active star-carry materialization without creating an occupying action', () => {
     const actors = [actor(101003), actor(101007)];
     const result = generate({
@@ -225,12 +254,19 @@ function actor(characterId) {
   };
 }
 
-function switchAction(id, startMs, sourceCharacterId, targetCharacterId) {
+function switchAction(
+  id,
+  startMs,
+  sourceCharacterId,
+  targetCharacterId,
+  { hitOverrides = null } = {}
+) {
   return createSwitchAction({
     id,
     actorId: `actor-${sourceCharacterId}`,
     targetActorId: `actor-${targetCharacterId}`,
     targetCharacterId,
     startMs,
+    hitOverrides,
   });
 }

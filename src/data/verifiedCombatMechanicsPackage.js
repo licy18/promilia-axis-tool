@@ -446,6 +446,18 @@ function hasVerifiedSpecialResourceOperation(actionBinding) {
 }
 
 function isEffectTriggeredByDisabledHit(effect, disabledHits) {
+  const launchIdentity = String(effect?.trigger?.launchIdentity ?? '');
+  const launchEventIdentity = createLaunchEventIdentity(launchIdentity);
+  if (
+    launchEventIdentity &&
+    disabledHits.some(
+      hit =>
+        createLaunchEventIdentity(hit?.trigger?.launchIdentity) ===
+        launchEventIdentity
+    )
+  ) {
+    return true;
+  }
   const effectPathId = String(effect?.pathId ?? '');
   const effectFrame = frameOrNull(effect?.trigger?.startFrame);
   if (!effectPathId || effectFrame == null) return false;
@@ -455,6 +467,12 @@ function isEffectTriggeredByDisabledHit(effect, disabledHits) {
       frameOrNull(hit?.trigger?.impactFrame ?? hit?.trigger?.startFrame) ===
         effectFrame
   );
+}
+
+function createLaunchEventIdentity(value) {
+  const identity = String(value ?? '');
+  const actionIndex = identity.indexOf('|action:');
+  return actionIndex >= 0 ? identity.slice(0, actionIndex) : identity;
 }
 
 function frameOrNull(value) {

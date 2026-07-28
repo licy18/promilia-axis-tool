@@ -666,13 +666,13 @@ describe('M10-B1 Ruby character combat profile', () => {
         blockedActionIds: ['ruby-insufficient-shot'],
       },
       combat: {
-        ownerDamageEventCount: 215,
-        ownerHitEventCount: 96,
-        ownerTotalHpDamage: 161610,
-        ownerTotalToughnessDamage: 66,
+        ownerDamageEventCount: 221,
+        ownerHitEventCount: 101,
+        ownerTotalHpDamage: 164643,
+        ownerTotalToughnessDamage: 2190,
         enemy: {
           initialHp: 862800,
-          finalHp: 698157,
+          finalHp: 698063,
         },
       },
       effects: {

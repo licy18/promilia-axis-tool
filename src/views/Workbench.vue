@@ -3055,7 +3055,20 @@ function remapInitialControlledActor(characterRemap) {
 }
 
 function updateAction(patch) {
-  const actionId = selectedActionId.value;
+  const selectedActionValue = effectiveScenarioActionById.value.get(
+    String(selectedActionId.value)
+  );
+  const derivedParentActionId =
+    selectedActionValue?.derivedAction?.readOnly === true
+      ? selectedActionValue.parentActionId
+      : null;
+  if (
+    derivedParentActionId &&
+    Object.keys(patch).some(key => key !== 'hitOverrides')
+  ) {
+    return false;
+  }
+  const actionId = derivedParentActionId ?? selectedActionId.value;
   if (
     Object.prototype.hasOwnProperty.call(patch, 'startMs') &&
     Object.keys(patch).length === 1 &&

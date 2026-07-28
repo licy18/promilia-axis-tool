@@ -49,6 +49,32 @@ const HAN_YOUYOU_PROJECTILE_INPUT =
   HAN_YOUYOU_NORMAL_MAPPING.attackInputSegments.find(
     segment => segment.controlSkillId === 10100303
   );
+const XIAOYU_CHARACTER_ID = 101010;
+const XIAOYU_NORMAL_SKILL_ID = 10101001;
+const XIAOYU_TRIGGER_SKILL_ID = 10101021;
+const XIAOYU_KIBO_ID = 500003;
+const XIAOYU_NORMAL_MAPPING =
+  verifiedCombatMechanicsPackage.actionMappings.find(
+    mapping =>
+      mapping.ownerId === XIAOYU_CHARACTER_ID &&
+      mapping.actionKind === 'normal-attack'
+  );
+const XIAOYU_A3_INPUT = XIAOYU_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 3
+);
+const XIAOYU_A4_INPUT = XIAOYU_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 4
+);
+const XIAOYU_WIND_MARK =
+  verifiedCombatMechanicsPackage.tuningMechanicsCatalog.profiles.find(
+    profile => profile.key === 'wind'
+  );
+const XIAOYU_CONTROL_BINDING_BY_ID = new Map(
+  verifiedCombatMechanicsPackage.controlBindings.map(binding => [
+    Number(binding.controlSkillId),
+    binding,
+  ])
+);
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -374,6 +400,265 @@ describe('verified combat mechanics runtime', () => {
         runtime.actionResolutionById.get('verified-han-projectile-a3')
           .disabledHitIdentities
       ).toEqual([hit.hitIdentity]);
+    }
+  });
+
+  it('settles Xiaoyu normal A3 and A4 from their own projectile chains', () => {
+    expect(
+      XIAOYU_CONTROL_BINDING_BY_ID.get(10101003).hits.map(hit => ({
+        elementId: hit.elementId,
+        frame: hit.trigger.impactFrame,
+        weakBreak: hit.damage.weakBreakDamageRateBasisPoints,
+        recoverSp: hit.energy.recoverSp,
+        petRecoverSp: hit.energy.petRecoverSp,
+      }))
+    ).toEqual([
+      {
+        elementId: 101010091,
+        frame: 18,
+        weakBreak: 7000,
+        recoverSp: 1599,
+        petRecoverSp: 6100,
+      },
+    ]);
+    expect(
+      XIAOYU_CONTROL_BINDING_BY_ID.get(10101004)
+        .hits.filter(hit => hit.mapIndex === 0)
+        .map(hit => ({
+          elementId: hit.elementId,
+          frame: hit.trigger.impactFrame,
+          weakBreak: hit.damage.weakBreakDamageRateBasisPoints,
+          recoverSp: hit.energy.recoverSp,
+          petRecoverSp: hit.energy.petRecoverSp,
+        }))
+    ).toEqual(
+      [10, 14, 18, 22].map(frame => ({
+        elementId: 101010107,
+        frame,
+        weakBreak: 7000,
+        recoverSp: 2500,
+        petRecoverSp: 9800,
+      }))
+    );
+    expect(
+      XIAOYU_CONTROL_BINDING_BY_ID.get(10101004).hits.filter(
+        hit => hit.mapIndex === 1
+      )
+    ).toHaveLength(12);
+
+    const baseline = simulateXiaoyuRepairScenario({
+      actions: [
+        createXiaoyuAttackInputAction('xiaoyu-normal-a3', XIAOYU_A3_INPUT, 0),
+        createXiaoyuAttackInputAction(
+          'xiaoyu-normal-a4',
+          XIAOYU_A4_INPUT,
+          frameTimeMs(60)
+        ),
+      ],
+    });
+    expectXiaoyuHitSettlement(baseline, 'xiaoyu-normal-a3', {
+      frames: [18],
+      actorRecovery: [0.159897],
+      kiboRecovery: [0.609985],
+    });
+    expectXiaoyuHitSettlement(baseline, 'xiaoyu-normal-a4', {
+      frames: [70, 74, 78, 82],
+      actorRecovery: [0.25, 0.25, 0.25, 0.25],
+      kiboRecovery: [0.979996, 0.979996, 0.979996, 0.979996],
+    });
+
+    const disabledIdentity =
+      XIAOYU_CONTROL_BINDING_BY_ID.get(10101004).hits.find(
+        hit => hit.mapIndex === 0 && hit.trigger.impactFrame === 18
+      ).hitIdentity;
+    const disabled = simulateXiaoyuRepairScenario({
+      actions: [
+        createXiaoyuAttackInputAction(
+          'xiaoyu-normal-a4-disabled',
+          XIAOYU_A4_INPUT,
+          0,
+          { [disabledIdentity]: { willHit: false } }
+        ),
+      ],
+    });
+    expectXiaoyuHitSettlement(disabled, 'xiaoyu-normal-a4-disabled', {
+      frames: [10, 14, 22],
+      actorRecovery: [0.25, 0.25, 0.25],
+      kiboRecovery: [0.979996, 0.979996, 0.979996],
+    });
+  });
+
+  it('keeps Xiaoyu star-carry occupancy at 95F while its terminal hit settles at 109F', () => {
+    const baseline = simulateXiaoyuStarCarry();
+    const actionId = xiaoyuStarCarryActionId('switch-to-xiaoyu');
+    const derivedAction =
+      baseline.effectiveActionTimeline.scenario.actions.find(
+        action => action.id === actionId
+      );
+    expect(derivedAction).toMatchObject({
+      durationFrames: 95,
+      parentActionId: 'switch-to-xiaoyu',
+      readOnly: true,
+    });
+    expectXiaoyuHitSettlement(baseline, actionId, {
+      frames: [115, 169],
+      actorRecovery: [],
+      kiboRecovery: [],
+    });
+    expect(
+      baseline.actionExecutionPlan.actions.find(
+        item => item.actionId === 'xiaoyu-after-star-carry'
+      )?.execute
+    ).toBe(true);
+    expect(
+      baseline.verifiedTuningMarkGeneration.events.filter(
+        event => event.actionId === actionId && event.kind === 'consume'
+      )
+    ).toHaveLength(1);
+    expect(
+      baseline.effectTimeline.events.filter(
+        event =>
+          event.actionId === actionId &&
+          event.effectId === 'battle-element:101010206' &&
+          event.after
+      )
+    ).toHaveLength(1);
+
+    const [firstHit, terminalHit] =
+      XIAOYU_CONTROL_BINDING_BY_ID.get(10101021).hits;
+    const withoutTerminal = simulateXiaoyuStarCarry({
+      [terminalHit.hitIdentity]: { willHit: false },
+    });
+    expectXiaoyuHitSettlement(withoutTerminal, actionId, {
+      frames: [115],
+      actorRecovery: [],
+      kiboRecovery: [],
+    });
+    expect(
+      withoutTerminal.verifiedTuningMarkGeneration.events.filter(
+        event => event.actionId === actionId && event.kind === 'consume'
+      )
+    ).toEqual([]);
+
+    const withoutFirst = simulateXiaoyuStarCarry({
+      [firstHit.hitIdentity]: { willHit: false },
+    });
+    expectXiaoyuHitSettlement(withoutFirst, actionId, {
+      frames: [169],
+      actorRecovery: [],
+      kiboRecovery: [],
+    });
+    expect(
+      withoutFirst.verifiedTuningMarkGeneration.events.filter(
+        event => event.actionId === actionId && event.kind === 'consume'
+      )
+    ).toHaveLength(1);
+  });
+
+  it('requires a successful-parry event before Xiaoyu perfect-parry can settle', () => {
+    const accepted = simulateXiaoyuPerfectParry({ includePrerequisite: true });
+    expectXiaoyuHitSettlement(accepted, 'xiaoyu-perfect-parry', {
+      frames: [91, 156],
+      actorRecovery: [0.169998, 0.169998],
+      kiboRecovery: [0.649887, 0.649887],
+    });
+    expect(
+      accepted.verifiedTuningMarkGeneration.events.filter(
+        event =>
+          event.actionId === 'xiaoyu-perfect-parry' &&
+          event.kind === 'consume'
+      )
+    ).toHaveLength(1);
+    expect(
+      accepted.effectTimeline.events.filter(
+        event =>
+          event.actionId === 'xiaoyu-perfect-parry' &&
+          event.effectId === 'battle-element:101010206' &&
+          event.after
+      )
+    ).toHaveLength(1);
+
+    const rejected = simulateXiaoyuPerfectParry({
+      includePrerequisite: false,
+    });
+    expect(
+      rejected.verifiedCombatRuntime.damageEvents.filter(
+        event => event.actionId === 'xiaoyu-perfect-parry'
+      )
+    ).toEqual([]);
+    expect(
+      rejected.actionExecutionPlan.actions.find(
+        item => item.actionId === 'xiaoyu-perfect-parry'
+      )
+    ).toEqual(
+      expect.objectContaining({
+        execute: false,
+      })
+    );
+    expect(rejected.verifiedCombatRuntime.executionBlocks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'xiaoyu-perfect-parry',
+          reason: 'verified-action-execution-prerequisite-missing',
+        }),
+      ])
+    );
+  });
+
+  it('grants exactly two wind marks in the same 95 to 100 threshold transaction after replay', () => {
+    const action = createWorkbenchActionDraft({
+      id: 'xiaoyu-threshold-charged',
+      type: 'skill',
+      actorCharacterId: XIAOYU_CHARACTER_ID,
+      skillId: XIAOYU_NORMAL_SKILL_ID,
+      actionVariantIndex: 2,
+      startMs: 0,
+      durationMs: frameTimeMs(75),
+      durationFrames: 75,
+    });
+    const project = createXiaoyuRepairProject({
+      actions: [action],
+      specialResourceValue: 95,
+    });
+    const simulations = [
+      simulateScenario(compileProject(project, getWorkbenchGameData())),
+      simulateScenario(
+        compileProject(
+          JSON.parse(JSON.stringify(project)),
+          getWorkbenchGameData()
+        )
+      ),
+    ];
+
+    for (const result of simulations) {
+      const thresholdFrameMs = frameTimeMs(43);
+      expect(
+        result.verifiedActionVariantRuntime.resourceEvents
+          .filter(event => Math.round(event.timeMs * 60 * 0.001) === 43)
+          .map(event => [
+            event.payload.operation,
+            event.payload.beforeValue,
+            event.payload.afterValue,
+          ])
+      ).toEqual([
+        ['gain', 95, 100],
+        ['threshold-clear', 100, 0],
+        ['transform', 0, 0],
+      ]);
+      const windAcquire =
+        result.verifiedTuningMarkGeneration.events.filter(
+          event =>
+            event.actionId === action.id &&
+            event.kind === 'acquire' &&
+            event.profileKey === 'wind'
+        );
+      expect(windAcquire).toHaveLength(1);
+      expect(windAcquire[0]).toMatchObject({
+        before: 0,
+        delta: 2,
+        after: 2,
+      });
+      expect(windAcquire[0].timeMs).toBeCloseTo(thresholdFrameMs, 5);
     }
   });
 
@@ -1091,6 +1376,248 @@ describe('verified combat mechanics runtime', () => {
     );
   });
 });
+
+function frameTimeMs(frame) {
+  return frame * (1000 / 60);
+}
+
+function createXiaoyuAttackInputAction(
+  id,
+  segment,
+  startMs,
+  hitOverrides = null
+) {
+  return createWorkbenchActionDraft({
+    id,
+    type: 'skill',
+    actorCharacterId: XIAOYU_CHARACTER_ID,
+    skillId: XIAOYU_NORMAL_SKILL_ID,
+    actionVariantIndex: 0,
+    startMs,
+    durationMs: frameTimeMs(segment.durationFrames),
+    durationFrames: segment.durationFrames,
+    attackGroupId: `${id}-chain`,
+    attackSequenceIndex: segment.sequenceIndex,
+    attackSequenceTotal: segment.sequenceTotal,
+    attackInput: segment,
+    actionScheduling: segment.actionScheduling,
+    hitOverrides,
+  });
+}
+
+function simulateXiaoyuRepairScenario({
+  actions,
+  initialControlledCharacterId = XIAOYU_CHARACTER_ID,
+  tuningMarkLayers = 0,
+  specialResourceValue = null,
+} = {}) {
+  return simulateScenario(
+    compileProject(
+      createXiaoyuRepairProject({
+        actions,
+        initialControlledCharacterId,
+        tuningMarkLayers,
+        specialResourceValue,
+      }),
+      getWorkbenchGameData()
+    )
+  );
+}
+
+function createXiaoyuRepairProject({
+  actions,
+  initialControlledCharacterId = XIAOYU_CHARACTER_ID,
+  tuningMarkLayers = 0,
+  specialResourceValue = null,
+} = {}) {
+  const selection = {
+    ...DEFAULT_WORKBENCH_SELECTION,
+    characterId: XIAOYU_CHARACTER_ID,
+    secondaryCharacterId: 103002,
+    skillId: XIAOYU_NORMAL_SKILL_ID,
+  };
+  const teamSlots = createDefaultWorkbenchTeamSlots(selection);
+  const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+    config => ({
+      ...config,
+      initialSp: 0,
+      loadout: {
+        ...config.loadout,
+        ...(Number(config.characterId) === XIAOYU_CHARACTER_ID
+          ? { kiboId: XIAOYU_KIBO_ID }
+          : {}),
+      },
+    })
+  );
+  const controlledActor = teamSlots.find(
+    slot =>
+      Number(slot.characterId) === Number(initialControlledCharacterId)
+  );
+  const initialRuntimeState = {
+    controlledActor: {
+      actorId: `actor-${controlledActor.characterId}`,
+      characterId: controlledActor.characterId,
+    },
+    kiboEnergyBySlot: [
+      {
+        slotId: 'team-slot-1',
+        actorId: `actor-${XIAOYU_CHARACTER_ID}`,
+        characterId: XIAOYU_CHARACTER_ID,
+        kiboId: XIAOYU_KIBO_ID,
+        currentValue: 0,
+        maxValue: 100,
+      },
+    ],
+    tuningMarks:
+      tuningMarkLayers > 0
+        ? [
+            {
+              markId: XIAOYU_WIND_MARK.markId,
+              profileKey: XIAOYU_WIND_MARK.key,
+              elementName: XIAOYU_WIND_MARK.element,
+              decayRemainingMs: 20_000,
+              heldReadyRemainingMs: 0,
+              layers: Array.from(
+                { length: tuningMarkLayers },
+                (_, index) => ({
+                  remainingDurationMs: 20_000,
+                  sourceActionId: `initial-wind-${index + 1}`,
+                  sourceActorId: `actor-${XIAOYU_CHARACTER_ID}`,
+                  sourceIdentity: {
+                    profile: XIAOYU_WIND_MARK.sourceIdentity,
+                    layer: index + 1,
+                  },
+                })
+              ),
+            },
+          ]
+        : [],
+    specialResourcesByActor:
+      specialResourceValue == null
+        ? []
+        : [
+            {
+              actorId: `actor-${XIAOYU_CHARACTER_ID}`,
+              characterId: XIAOYU_CHARACTER_ID,
+              resourceIdentity: 'actor:101010:element:101010115',
+              currentValue: specialResourceValue,
+              maxValue: 100,
+            },
+          ],
+  };
+  return createWorkbenchProject(selection, {
+    durationMs: 10_000,
+    teamSlots,
+    actorConfigs,
+    actions,
+    initialRuntimeState,
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+}
+
+function simulateXiaoyuStarCarry(hitOverrides = null) {
+  const switchFrame = 60;
+  const starCarryEndFrame = switchFrame + 95;
+  return simulateXiaoyuRepairScenario({
+    initialControlledCharacterId: 103002,
+    tuningMarkLayers: 1,
+    actions: [
+      createWorkbenchActionDraft({
+        id: 'switch-to-xiaoyu',
+        type: 'switch',
+        actorCharacterId: 103002,
+        targetCharacterId: XIAOYU_CHARACTER_ID,
+        startMs: frameTimeMs(switchFrame),
+        durationMs: 0,
+        hitOverrides,
+      }),
+      createXiaoyuAttackInputAction(
+        'xiaoyu-after-star-carry',
+        XIAOYU_NORMAL_MAPPING.attackInputSegments[0],
+        frameTimeMs(starCarryEndFrame)
+      ),
+    ],
+  });
+}
+
+function xiaoyuStarCarryActionId(parentActionId) {
+  return `${parentActionId}--on-enter--actor-${XIAOYU_CHARACTER_ID}--star-carry`;
+}
+
+function simulateXiaoyuPerfectParry({ includePrerequisite }) {
+  const startFrame = 60;
+  return simulateXiaoyuRepairScenario({
+    tuningMarkLayers: 1,
+    actions: [
+      ...(includePrerequisite
+        ? [
+            createWorkbenchActionDraft({
+              id: 'xiaoyu-perfect-parry-event',
+              type: 'enemyEvent',
+              actorCharacterId: XIAOYU_CHARACTER_ID,
+              skillId: XIAOYU_NORMAL_SKILL_ID,
+              eventType: 'successful-parry',
+              startMs: frameTimeMs(startFrame),
+              durationMs: frameTimeMs(1),
+            }),
+          ]
+        : []),
+      createWorkbenchActionDraft({
+        id: 'xiaoyu-perfect-parry',
+        type: 'skill',
+        actorCharacterId: XIAOYU_CHARACTER_ID,
+        skillId: XIAOYU_TRIGGER_SKILL_ID,
+        actionVariantIndex: 2,
+        startMs: frameTimeMs(startFrame),
+        durationMs: frameTimeMs(36),
+        durationFrames: 36,
+      }),
+    ],
+  });
+}
+
+function expectXiaoyuHitSettlement(
+  result,
+  actionId,
+  { frames, actorRecovery, kiboRecovery }
+) {
+  const hits = result.verifiedCombatRuntime.damageEvents.filter(
+    event =>
+      event.actionId === actionId && event.type === 'VERIFIED_COMBAT_HIT'
+  );
+  expect(hits.map(event => Math.round(event.timeMs * 60 * 0.001))).toEqual(
+    frames
+  );
+  expect(
+    hits.every(
+      event =>
+        Number(event.payload.rawDamage) > 0 &&
+        Number(event.payload.toughnessDamage) > 0
+    )
+  ).toBe(true);
+  expect(
+    result.verifiedCombatRuntime.resourceEvents
+      .filter(
+        event =>
+          event.actionId === actionId &&
+          event.actorId === `actor-${XIAOYU_CHARACTER_ID}` &&
+          event.payload.reason === 'verified-hit-sp-recovery'
+      )
+      .map(event => event.payload.change)
+  ).toEqual(actorRecovery);
+  expect(
+    result.verifiedCombatRuntime.kiboResourceEvents
+      .filter(
+        event =>
+          event.actionId === actionId &&
+          event.payload.slotId === 'team-slot-1' &&
+          event.payload.kiboId === XIAOYU_KIBO_ID &&
+          event.payload.reason === 'verified-hit-pet-sp-shared-recovery'
+      )
+      .map(event => event.payload.change)
+  ).toEqual(kiboRecovery);
+}
 
 function createPangpangAttackInputFields(attackGroupId) {
   return {

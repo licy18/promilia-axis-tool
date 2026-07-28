@@ -9,7 +9,7 @@
 | --- | --- | ---: | ---: | --- | --- |
 | 寒悠悠 (101003) | 退场 | 201 | 10100322 | applied | applied |
 | 芃芃 (101007) | 入场 | 203 | 10100721 | applied | applied |
-| 涂山小玉 (101010) | 入场 | 203 | 10101021 | applied | unresolved |
+| 涂山小玉 (101010) | 入场 | 203 | 10101021 | applied | applied |
 | 莉莉 (102001) | 退场 | 201 | 10200122 | static-evidence-gap | unresolved |
 | 红宝石 (103002) | 入场 | 203 | 10300221 | applied | applied |
 | 西芙莉雅 (107001) | 入场 | 203 | 10700121 | applied | unresolved |

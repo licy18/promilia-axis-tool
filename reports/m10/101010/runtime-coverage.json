@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101010,
-  "sourcePackageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
+  "sourcePackageHash": "ae3b5de3a0760a17be19005d71bc246d1b067c8d7bc9e600b6797a27f9e90d67",
   "actionRows": [
     {
       "actionIdentity": "actor|101010|10101001|0|10101003",
@@ -16,10 +16,10 @@
         10101005
       ],
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "runtimeReady": false,
-      "hitCount": 46,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "runtimeReady": true,
+      "hitCount": 51,
       "dimensionSummary": {
         "hp": {
           "applied": 2,
@@ -287,10 +287,10 @@
         10101021
       ],
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "runtimeReady": false,
-      "hitCount": 0,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
+      "hitCount": 2,
       "dimensionSummary": {
         "hp": {
           "applied": 4,
@@ -309,26 +309,7 @@
           "verified-zero": 6
         }
       },
-      "reasons": [
-        "trigger-frame-missing",
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5",
-        "property-conditions-not-expanded",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
-        "sp-formula-not-literal-function-5",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
-      ]
+      "reasons": []
     },
     {
       "actionIdentity": "actor|101010|10101021|1|10101025",
@@ -374,9 +355,9 @@
         10101027
       ],
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "runtimeReady": false,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "runtimeReady": true,
       "hitCount": 0,
       "dimensionSummary": {
         "hp": {
@@ -392,23 +373,17 @@
           "unresolved": 4
         }
       },
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing"
-      ]
+      "reasons": []
     }
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 7,
+    "runtimeReadyActionCount": 10,
     "executionFormCount": 21,
     "controlCount": 20,
-    "hitCount": 108,
+    "hitCount": 117,
     "rawEffectCount": 333,
-    "semanticEffectCount": 117,
+    "semanticEffectCount": 137,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 30,
     "thresholdTransitionCount": 1,
@@ -419,10 +394,10 @@
     "passiveCount": 1,
     "switchTriggerCount": 1,
     "coverageStatusCounts": {
-      "applied": 9,
+      "applied": 11,
       "not-applicable": 1,
-      "static-evidence-gap": 10
+      "static-evidence-gap": 8
     }
   },
-  "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6"
+  "profileHash": "de758570bb54f3cd7bc3c4a293a1fa94390e72d92f24066dc6ead45b61d80024"
 }

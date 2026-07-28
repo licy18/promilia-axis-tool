@@ -1644,7 +1644,7 @@ describe('verified action variant and special resource runtime', () => {
 
   it('resolves all 21 audited Xiaoyu public execution forms with their authoritative occupancy', () => {
     expect(xiaoyuHiddenInputAudit.publicExecutionForms).toHaveLength(21);
-    expect(xiaoyuActionOccupancyAudit.rows).toHaveLength(21);
+    expect(xiaoyuActionOccupancyAudit.rows).toHaveLength(23);
 
     for (const form of xiaoyuHiddenInputAudit.publicExecutionForms) {
       const setup = createXiaoyuPublicExecutionFormCase(form);
@@ -1745,6 +1745,16 @@ describe('verified action variant and special resource runtime', () => {
       durationMs: 10_000,
       sourceStatus: 'verified-action-state-generated',
     });
+    expect(threshold.tuningMarkTransactions).toEqual([
+      expect.objectContaining({
+        actionId: charged.id,
+        timeMs: thresholdFrameMs,
+        profileKey: 'wind',
+        stackDelta: 2,
+        status: 'verified-threshold-tuning-mark-grant-ready',
+        applied: true,
+      }),
+    ]);
     const clampedThreshold = runVariantRuntime({
       actors: [charged.actor],
       actions: [charged],
@@ -1802,6 +1812,7 @@ describe('verified action variant and special resource runtime', () => {
         stateDurationMs: 10_000,
       },
     });
+    expect(enteredByUltimate.tuningMarkTransactions).toEqual([]);
     const refreshed = runVariantRuntime({
       actors: [ultimate.actor],
       actions: [ultimate],
@@ -1909,6 +1920,79 @@ describe('verified action variant and special resource runtime', () => {
           event.type === 'EFFECT_EXPIRED'
       )?.timeMs
     ).toBeCloseTo(4000 + frameTime(1) + 8000, 2);
+  });
+
+  it('requires the verified parry event and never treats a limit-counter input window as a passive trigger', () => {
+    const perfectParry = createActorAction({
+      id: 'jade-perfect-parry',
+      characterId: JADE_ID,
+      skillId: 10101021,
+      actionVariantIndex: 2,
+      startMs: frameTime(60),
+    });
+    const parryEvent = {
+      id: 'jade-perfect-parry-event',
+      type: 'enemyEvent',
+      eventType: 'successful-parry',
+      startMs: frameTime(60),
+      durationMs: 0,
+    };
+    const accepted = runVariantRuntime({
+      actors: [perfectParry.actor],
+      actions: [parryEvent, perfectParry],
+      durationMs: 4000,
+    });
+    expect(accepted.selectionByActionId.get(perfectParry.id)).toMatchObject({
+      semanticName: '完美招架反击',
+      executionControlSkillId: 10101049,
+      selectedSubSkillIndex: 1,
+      actualDurationFrames: 36,
+    });
+    expect(accepted.executionBlocks).toEqual([]);
+    expect(
+      accepted.effectCommands.filter(
+        command =>
+          command.sourceActionId === perfectParry.id &&
+          command.effectId === 'battle-element:101010206'
+      )
+    ).toHaveLength(1);
+
+    const rejected = runVariantRuntime({
+      actors: [perfectParry.actor],
+      actions: [perfectParry],
+      durationMs: 4000,
+    });
+    expect(rejected.executionBlocks).toEqual([
+      expect.objectContaining({
+        actionId: perfectParry.id,
+        reason: 'verified-action-execution-prerequisite-missing',
+      }),
+    ]);
+    expect(
+      rejected.effectCommands.some(
+        command => command.sourceActionId === perfectParry.id
+      )
+    ).toBe(false);
+
+    const limitCounter = createActorAction({
+      id: 'jade-limit-counter-only',
+      characterId: JADE_ID,
+      skillId: 10101021,
+      actionVariantIndex: 1,
+      startMs: 0,
+    });
+    const limitRuntime = runVariantRuntime({
+      actors: [limitCounter.actor],
+      actions: [limitCounter],
+      durationMs: 4000,
+    });
+    expect(
+      limitRuntime.effectCommands.some(
+        command =>
+          command.sourceActionId === limitCounter.id &&
+          command.effectId === 'battle-element:101010206'
+      )
+    ).toBe(false);
   });
 
   it('rebuilds inherited state windows and expires them without adding empty generic lanes', () => {
@@ -2538,11 +2622,22 @@ function createXiaoyuPublicExecutionFormCase(form) {
     return { focus, actions: [source, focus], initialRuntimeState: null };
   }
 
+  const publicForm =
+    mechanicsPackage.actionVariantGraph.publicActionForms.find(
+      item =>
+        item.publicActionIdentity === form.publicActionIdentity ||
+        (Number(item.executionControlSkillId) ===
+          Number(form.sourceControlSkillId) &&
+          Number(item.executionSubSkillIndex) ===
+            Number(form.sourceSubSkillIndex) &&
+          String(item.publicActionKind) === String(form.actionKind))
+    );
   const mapping = mechanicsPackage.actionMappings.find(
     item =>
       Number(item.ownerId) === JADE_ID &&
       String(item.actionKind) === String(form.actionKind) &&
-      Number(item.controlSkillId) === Number(form.sourceControlSkillId)
+      Number(item.controlSkillId) ===
+        Number(publicForm?.publicControlSkillId ?? form.sourceControlSkillId)
   );
   if (!mapping) {
     throw new Error(`Missing Xiaoyu public mapping for ${form.semanticName}`);
@@ -2553,7 +2648,22 @@ function createXiaoyuPublicExecutionFormCase(form) {
     skillId: mapping.sourceSkillId,
     actionVariantIndex: mapping.actionVariantIndex,
   });
-  return { focus, actions: [focus], initialRuntimeState: null };
+  const prerequisite =
+    publicForm?.executionPrerequisite?.kind ===
+    'scenario-event-at-action-frame'
+      ? {
+          id: `audited-${form.actionKind}-event`,
+          type: 'enemyEvent',
+          eventType: publicForm.executionPrerequisite.eventType,
+          startMs: focus.startMs,
+          durationMs: 0,
+        }
+      : null;
+  return {
+    focus,
+    actions: prerequisite ? [prerequisite, focus] : [focus],
+    initialRuntimeState: null,
+  };
 }
 
 function frameTime(frame) {

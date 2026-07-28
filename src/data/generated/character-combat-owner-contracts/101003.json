@@ -5,8 +5,8 @@
   "ownerId": 101003,
   "ownerName": "寒悠悠",
   "recipeIdentity": "actor:101003:character-combat-recipe:v1",
-  "recipeHash": "5dbc0821e23a6d6998c3478790b343952e1354778eaa4b3ba8e716f0f0d5767f",
-  "compilerInputHash": "1bb283f57729e4370cfebe1bb60e2cf0e4148610da6fe663d3fe1171b5a7eb3b",
+  "recipeHash": "fef1cc599fe89d423d060a9c6403129383e695146aafdfcce0320735c7a56c59",
+  "compilerInputHash": "681846aaa14d4b9942d29aacc4dca08ee1306733897562e419d77ece00f71c7b",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -8856,6 +8856,7 @@
             "condition": {
               "kind": "always"
             },
+            "executionPrerequisite": null,
             "executionTiming": {
               "subSkillIndex": 0,
               "frameRate": 60,
@@ -10989,6 +10990,7 @@
             "condition": {
               "kind": "always"
             },
+            "executionPrerequisite": null,
             "executionTiming": {
               "subSkillIndex": 1,
               "frameRate": 60,
@@ -11046,6 +11048,7 @@
         "condition": {
           "kind": "always"
         },
+        "executionPrerequisite": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -11098,6 +11101,7 @@
         "condition": {
           "kind": "always"
         },
+        "executionPrerequisite": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -48933,7 +48937,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5652413049857383353"
     }
   },
-  "contractHash": "07a74044ab1bc4a63eeae862d62d1b2639862c691c85fa89982ba5d5fa180c7d",
+  "contractHash": "e5186e1b0cdc4998b6cc66171c6e57987e559848c84dd85c12f45755b49bd9e1",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -48955,5 +48959,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "b6c2f3abedad561a4aad1b00a73d99ce679cbfb7a1b6a822f47dc990c3d56686"
+  "recipeContractHash": "0a5ce149a61276c9ffcb1ff99524d25abb6eaa5e745f069eccd4cabdce198f15"
 }

@@ -26,7 +26,9 @@ import {
 import {
   createWorkbenchActionDraft,
   getSkillActionCatalog,
+  normalizeWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
+import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
 import { WORKBENCH_LAYOUT_STORAGE_KEY } from '../../domain/workbenchLayout';
 import { frameToMs, msToFrame } from '../../domain/timebase';
 import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
@@ -8282,6 +8284,107 @@ describe('Workbench view', () => {
       wrapper.find('.action-item[data-action-id="action-0003"]').text()
     ).toContain('4s0f');
   });
+
+  it('persists a generated star-carry hit edit on its parent switch action', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    workbenchMechanicsProfileMockState.durationMs = 10_000;
+    const selection = {
+      characterId: 103002,
+      secondaryCharacterId: 101010,
+      tertiaryCharacterId: 101003,
+      skillId: 10300201,
+      enemyId: workbenchSeed.defaults.enemyId,
+    };
+    const teamSlots = [
+      { slotId: 'team-slot-1', position: 0, characterId: 103002 },
+      { slotId: 'team-slot-2', position: 1, characterId: 101010 },
+      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
+    ];
+    const draft = createWorkbenchDraftSnapshot(
+      {
+        selection,
+        teamSlots,
+        actorConfigs: normalizeWorkbenchActorConfigs(
+          [],
+          selection,
+          teamSlots
+        ),
+        mechanicsProfileSelection:
+          createVerifiedWorkbenchMechanicsProfileSelection(),
+        actionDrafts: [
+          createWorkbenchActionDraft({
+            id: 'switch-to-xiaoyu-hit-edit',
+            type: 'switch',
+            actorCharacterId: 103002,
+            targetCharacterId: 101010,
+            startMs: 1000,
+            durationMs: 0,
+          }),
+        ],
+        initialRuntimeState: {
+          controlledActor: {
+            actorId: 'actor-103002',
+            characterId: 103002,
+          },
+        },
+        selectedActionId: 'switch-to-xiaoyu-hit-edit',
+      },
+      '2026-07-28T00:00:00.000Z'
+    );
+    window.localStorage.setItem(
+      WORKBENCH_DRAFT_STORAGE_KEY,
+      JSON.stringify(draft)
+    );
+
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    const childId =
+      'switch-to-xiaoyu-hit-edit--on-enter--actor-101010--star-carry';
+    await wrapper
+      .get(`.action-block[data-action-id="${childId}"]`)
+      .trigger('click');
+    await settleWorkbenchAsyncPanels();
+    if (
+      wrapper.find(
+        '[data-testid="workbench-side-inspector-tab"][data-inspector-panel="properties"]'
+      ).exists()
+    ) {
+      await selectSideInspectorPanel(wrapper, 'properties');
+    }
+    const hitRows = wrapper.findAll(
+      '[data-testid="workbench-hit-override-row"]'
+    );
+    expect(hitRows).toHaveLength(2);
+    await hitRows[1].get('input').setValue(false);
+    await settleWorkbenchAsyncPanels();
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    const savedSwitch = savedDraft.actionDrafts.find(
+      action => action.id === 'switch-to-xiaoyu-hit-edit'
+    );
+    const terminalHitIdentity =
+      verifiedCombatMechanicsPackage.controlBindings
+        .find(binding => Number(binding.controlSkillId) === 10101021)
+        .hits.find(hit => Number(hit.elementId) === 101010177).hitIdentity;
+    expect(savedSwitch.hitOverrides).toEqual({
+      [terminalHitIdentity]: { willHit: false },
+    });
+    expect(
+      savedDraft.actionDrafts.some(action => action.id === childId)
+    ).toBe(false);
+  }, 30000);
 
   it('keeps the Jade charged intent while projecting the A5-derived special form and occupancy', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);

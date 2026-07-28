@@ -1,7 +1,7 @@
 # M9-R3-R2-R3 派生输入与动作接续审计
 
 - 小玉公开执行形态：21
-- 小玉窗口审计：86/86
+- 小玉窗口审计：89/89
 - 全公开动作窗口：1351
 - 已解析输入/执行语义：1314
 - 可解析贴边接续：979
@@ -25,7 +25,7 @@
 
 - generic-occupancy-inside-window: 817
 - unresolved: 6
-- window-after-generic-occupancy: 76
-- window-before-generic-occupancy: 288
+- window-after-generic-occupancy: 75
+- window-before-generic-occupancy: 289
 - window-end-equals-generic-occupancy: 51
 - window-start-equals-generic-occupancy: 113

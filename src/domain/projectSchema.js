@@ -407,6 +407,7 @@ export function createSwitchAction({
   targetActorId,
   targetCharacterId = null,
   startMs = 0,
+  hitOverrides = null,
   note = '',
   insertion = null,
 } = {}) {
@@ -424,6 +425,7 @@ export function createSwitchAction({
     endFrame: eventFrame,
     durationMs: 0,
     durationFrames: 0,
+    hitOverrides: normalizeActionHitOverrides(hitOverrides),
     note,
     insertion,
     ...createActionEffectCommandsField([]),

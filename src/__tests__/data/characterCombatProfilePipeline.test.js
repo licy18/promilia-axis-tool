@@ -1260,35 +1260,35 @@ describe('M10 character combat profile pipeline', () => {
       publicActionCount: 10,
       executionFormCount: 21,
       reachableControlCount: 20,
-      verifiedWindowCount: 86,
-      hitCount: 108,
+      verifiedWindowCount: 89,
+      hitCount: 117,
     });
     expect(profile.contracts.actionForms).toHaveLength(21);
     expect(
       profile.contracts.actionForms.filter(item => item.status === 'applied')
-    ).toHaveLength(19);
+    ).toHaveLength(21);
     expect(
       profile.contracts.actionForms.filter(
         item => item.status === 'static-evidence-gap'
       )
-    ).toHaveLength(2);
+    ).toHaveLength(0);
     expect(
       profile.contracts.actionForms.every(
         item => PROFILE_STATUSES.has(item.status) && item.applied === (item.status === 'applied')
       )
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 225,
-      rawRecordCount: 410,
+      semanticRecordCount: 239,
+      rawRecordCount: 414,
       impactClassificationCounts: {
-        'gameplay-impacting': 99,
-        'not-applicable': 36,
+        'gameplay-impacting': 106,
+        'not-applicable': 37,
         unreachable: 22,
-        'wrapper-or-duplicate': 68,
+        'wrapper-or-duplicate': 74,
       },
     });
-    expect(unresolvedLedger.records).toHaveLength(225);
-    expect(unresolvedLedger.rawRecords).toHaveLength(410);
+    expect(unresolvedLedger.records).toHaveLength(239);
+    expect(unresolvedLedger.rawRecords).toHaveLength(414);
     expect(
       unresolvedLedger.records.every(
         record =>
@@ -1340,7 +1340,7 @@ describe('M10 character combat profile pipeline', () => {
         item => Number(item.ownerId) === 101010
       )
     ).toEqual(ownerContract.contracts.passives);
-    expect(ownerContract.contracts.effects.semantic).toHaveLength(117);
+    expect(ownerContract.contracts.effects.semantic).toHaveLength(137);
     expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(7);
 
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
@@ -1377,43 +1377,45 @@ describe('M10 character combat profile pipeline', () => {
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
-        assertionCount: 75,
+        assertionCount: 117,
         failedCount: 0,
       },
     });
     expect(goldenTrace.actual).toMatchObject({
-      project: { durationMs: 120000, actionCount: 25 },
+      project: { durationMs: 120000, actionCount: 27 },
       actions: { blockedActionIds: [] },
       combat: {
-        damageEventCount: 403,
-        ownerDamageEventCount: 227,
-        ownerHitEventCount: 111,
-        ownerTotalHpDamage: 131213,
-        ownerTotalToughnessDamage: 3704,
-        enemy: { initialHp: 862800, finalHp: 545947 },
+        damageEventCount: 427,
+        ownerDamageEventCount: 252,
+        ownerHitEventCount: 120,
+        ownerHitTotalHpDamage: 9942,
+        ownerHitTotalToughnessDamage: 1961,
+        ownerTotalHpDamage: 699322,
+        ownerTotalToughnessDamage: 0,
+        enemy: { initialHp: 862800, finalHp: 0 },
       },
       resources: {
         thresholdClearCount: 1,
         transformCount: 1,
         refreshCount: 1,
+        tuningMarkAcquireByActionId: {
+          'threshold-charged': {
+            eventCount: 1,
+            totalDelta: 2,
+          },
+        },
       },
       effects: {
         passiveMaxStacks: 4,
-        firstPassiveMaxStackFrame: 761,
+        firstPassiveMaxStackFrame: 3001,
+        passiveApplyCountByActionId: expect.objectContaining({
+          'jade-limit-counter': 0,
+          'switch-back-to-xiaoyu--on-enter--actor-101010--star-carry': 1,
+          'jade-perfect-parry': 1,
+        }),
         inheritanceTransferCountByEffectId: {
           'battle-element:101010206': 0,
         },
-        passiveTrace: expect.arrayContaining([
-          expect.objectContaining({
-            frame: 979,
-            targetId: 'actor-101010',
-          }),
-          expect.objectContaining({
-            frame: 1459,
-            operation: 'expire',
-            targetId: 'actor-101010',
-          }),
-        ]),
       },
       dynamicProperties: {
         maxPercentRawByAttributeId: {
@@ -1422,16 +1424,16 @@ describe('M10 character combat profile pipeline', () => {
         },
       },
       comparison: {
-        primaryDamage: 248,
-        baselineDamage: 52,
-        damageDelta: 196,
+        primaryDamage: 5813,
+        baselineDamage: 2451,
+        damageDelta: 3362,
       },
     });
     expect(
       goldenTrace.actual.resources.actorSpByActorId['actor-101010']
     ).toMatchObject({
       initialValue: 100,
-      currentValue: 31.856216,
+      currentValue: 35.35611,
       autoRecovery: [
         {
           reason: 'verified-auto-sp-background',
@@ -1444,11 +1446,11 @@ describe('M10 character combat profile pipeline', () => {
       ],
     });
     expect(
-      goldenTrace.actual.resources.kiboSpBySlotId['team-slot-3']
+      goldenTrace.actual.resources.kiboSpBySlotId['team-slot-1']
     ).toMatchObject({
-      kiboId: 500039,
-      initialValue: 100,
-      currentValue: 31.908417,
+      kiboId: 500003,
+      initialValue: 0,
+      currentValue: 79.271744,
     });
     expect(goldenTrace.replayHash).toMatch(/^[a-f0-9]{64}$/);
 
@@ -1465,8 +1467,8 @@ describe('M10 character combat profile pipeline', () => {
     expect(tamperedValidation.assertions.find(item => !item.passed)).toMatchObject(
       {
         jsonPath: 'combat.ownerTotalHpDamage',
-        expected: 131214,
-        actual: 131213,
+        expected: 699323,
+        actual: 699322,
       }
     );
   });
@@ -1546,10 +1548,10 @@ describe('M10 character combat profile pipeline', () => {
     });
     expect(runtimeCoverage.summary).toMatchObject({
       actionCount: 10,
-      runtimeReadyActionCount: 7,
+      runtimeReadyActionCount: 10,
       executionFormCount: 21,
       controlCount: 20,
-      hitCount: 108,
+      hitCount: 117,
       resourceProfileCount: 1,
       thresholdTransitionCount: 1,
       passiveCount: 1,
@@ -1563,6 +1565,88 @@ describe('M10 character combat profile pipeline', () => {
         'unnamed-secondary-passive-not-implemented-current-client',
       ],
     });
+  });
+
+  it('compiles the missing Xiaoyu projectile hits and keeps passive triggers materialization-aware', () => {
+    const controls = [
+      ...(mechanicsPackage.controlBindings ?? []),
+      ...(mechanicsPackage.actionVariantControlBindings ?? []),
+    ];
+    const hitRows = (controlSkillId, subSkillIndex) =>
+      controls
+        .find(control => Number(control.controlSkillId) === controlSkillId)
+        ?.hits.filter(hit => Number(hit.mapIndex) === subSkillIndex)
+        .map(hit => [
+          Number(hit.elementId),
+          Number(hit.trigger?.startFrame),
+          Number(hit.damage?.weakBreakDamageRateBasisPoints),
+          Number(hit.energy?.recoverSp),
+          Number(hit.energy?.petRecoverSp),
+        ]) ?? [];
+
+    expect(hitRows(10101003, 0)).toEqual([
+      [101010091, 18, 7000, 1599, 6100],
+    ]);
+    expect(hitRows(10101004, 0)).toEqual([
+      [101010107, 10, 7000, 2500, 9800],
+      [101010107, 14, 7000, 2500, 9800],
+      [101010107, 18, 7000, 2500, 9800],
+      [101010107, 22, 7000, 2500, 9800],
+    ]);
+    expect(hitRows(10101004, 1)).toHaveLength(12);
+    expect(hitRows(10101021, 0).map(row => row.slice(0, 2))).toEqual([
+      [101010178, 55],
+      [101010177, 109],
+    ]);
+    expect(hitRows(10101049, 1).map(row => row.slice(0, 2))).toEqual([
+      [101010176, 31],
+      [101010175, 96],
+    ]);
+
+    const perfectParry = mechanicsPackage.actionVariantGraph.publicActionForms.find(
+      form =>
+        Number(form.ownerId) === 101010 &&
+        form.publicActionKind === 'perfect-parry'
+    );
+    expect(perfectParry).toMatchObject({
+      publicControlSkillId: 10101027,
+      executionControlSkillId: 10101049,
+      executionSubSkillIndex: 1,
+      selectionKind: 'wrapper-derived-execution',
+      executionPrerequisite: {
+        kind: 'scenario-event-at-action-frame',
+        eventType: 'successful-parry',
+      },
+      applied: true,
+    });
+
+    const threshold =
+      mechanicsPackage.specialResourceCatalog.thresholdTransitions.find(
+        transition => Number(transition.ownerId) === 101010
+      );
+    expect(threshold?.tuningMarkGrants).toEqual([
+      expect.objectContaining({
+        profileKey: 'wind',
+        markId: 750,
+        stackDelta: 2,
+        sourceField: 'notDelElementDataList',
+        status: 'verified-threshold-tuning-mark-grant-ready',
+        applied: true,
+      }),
+    ]);
+
+    const passive =
+      mechanicsPackage.specialResourceCatalog.passiveEffects.find(
+        effect => Number(effect.ownerId) === 101010
+      );
+    expect(
+      passive.triggerBindings.filter(
+        trigger => Number(trigger.controlSkillId) === 10101025
+      )
+    ).toEqual([]);
+    expect(
+      passive.triggerBindings.map(trigger => Number(trigger.controlSkillId))
+    ).toEqual(expect.arrayContaining([10101021, 10101049]));
   });
 
   it('keeps Xiaoyu policy declarative and removes the old contract generator', () => {

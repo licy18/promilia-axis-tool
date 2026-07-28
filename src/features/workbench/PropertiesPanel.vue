@@ -144,9 +144,7 @@
     </section>
 
     <ActionHitOverrideList
-      v-if="
-        verifiedMechanicsTrace?.hitBindings?.length && !isReadOnlyDerivedAction
-      "
+      v-if="verifiedMechanicsTrace?.hitBindings?.length"
       :hit-bindings="verifiedMechanicsTrace.hitBindings"
       :disabled-count="verifiedMechanicsTrace.disabledHitCount"
       @change="updateHitWillHit"

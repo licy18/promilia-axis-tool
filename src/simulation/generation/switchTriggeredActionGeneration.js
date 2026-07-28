@@ -301,6 +301,7 @@ function createPhaseBinding({
       name: skill.name ?? action.name,
       actionKind: 'star-carry',
       parentActionId: switchAction.id,
+      hitOverrides: switchAction.hitOverrides ?? null,
       switchTriggerBinding: materializedBinding,
       derivedAction: {
         schemaVersion: 1,
