@@ -23,6 +23,33 @@ describe('verified Battle effect formula registry', () => {
     });
   });
 
+  it('evaluates verified percent and source-tuning property families', () => {
+    expect(
+      evaluateVerifiedBattleEffectFormula({
+        effect: createEffect({ a: 1000, baseFunctionId: 3 }),
+      })
+    ).toMatchObject({
+      family: 'basis-point-property-a-with-common-ratio',
+      value: 1000,
+      reason: null,
+    });
+    expect(
+      evaluateVerifiedBattleEffectFormula({
+        effect: createEffect({ a: 1800, baseFunctionId: 2008 }),
+        sourceActor: {
+          stats: {
+            tuningStrength: 100,
+          },
+        },
+      })
+    ).toMatchObject({
+      family: 'source-tuning-ratio-with-common-ratio',
+      value: 17.999267578125,
+      raw: '1179600',
+      reason: null,
+    });
+  });
+
   it('delegates verified tuning families and rejects unverified formulas', () => {
     expect(
       classifyVerifiedBattleEffectFormula(
@@ -35,7 +62,7 @@ describe('verified Battle effect formula registry', () => {
     });
     expect(
       evaluateVerifiedBattleEffectFormula({
-        effect: createEffect({ baseFunctionId: 3 }),
+        effect: createEffect({ baseFunctionId: 4 }),
       })
     ).toMatchObject({
       status: 'unresolved',

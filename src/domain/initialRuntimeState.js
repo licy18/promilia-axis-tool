@@ -1,4 +1,4 @@
-export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 5;
+export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 6;
 export const INITIAL_RUNTIME_STATE_CONTRACT_NAME = 'AzPrInitialRuntimeState';
 
 export function normalizeInitialRuntimeState(value, defaults = {}) {
@@ -355,30 +355,58 @@ function normalizeInitialTuningMarks(values) {
   return (Array.isArray(values) ? values : []).flatMap(value => {
     const markId = positiveIntegerOrNull(value?.markId);
     if (!markId || usedMarkIds.has(markId)) return [];
-    const layers = (Array.isArray(value?.layers) ? value.layers : []).flatMap(
-      layer => {
-        const remainingDurationMs = nonNegativeNumberOrNull(
-          layer?.remainingDurationMs
+    const explicitDecayRemainingMs = nonNegativeNumberOrNull(
+      value?.decayRemainingMs
+    );
+    const normalizedLayers = (Array.isArray(value?.layers) ? value.layers : [])
+      .flatMap(layer => {
+        if (!layer || typeof layer !== 'object') return [];
+        const legacyRemainingDurationMs = nonNegativeNumberOrNull(
+          layer.remainingDurationMs
         );
-        if (remainingDurationMs == null || remainingDurationMs <= 0) return [];
+        if (
+          explicitDecayRemainingMs == null &&
+          (legacyRemainingDurationMs == null || legacyRemainingDurationMs <= 0)
+        ) {
+          return [];
+        }
         return [
           {
-            remainingDurationMs,
-            sourceActionId: optionalText(layer?.sourceActionId),
-            sourceActorId: optionalText(layer?.sourceActorId),
-            sourceIdentity: cloneObject(layer?.sourceIdentity),
+            legacyRemainingDurationMs,
+            sourceActionId: optionalText(layer.sourceActionId),
+            sourceActorId: optionalText(layer.sourceActorId),
+            sourceIdentity: cloneObject(layer.sourceIdentity),
           },
         ];
-      }
-    );
-    if (layers.length === 0) return [];
+      })
+      .slice(0, 5);
+    const legacyDecayCandidates = normalizedLayers
+      .map(layer => layer.legacyRemainingDurationMs)
+      .filter(remainingMs => remainingMs != null && remainingMs > 0);
+    const decayRemainingMs =
+      explicitDecayRemainingMs ??
+      (legacyDecayCandidates.length > 0
+        ? Math.max(...legacyDecayCandidates)
+        : null);
+    if (
+      normalizedLayers.length === 0 ||
+      decayRemainingMs == null ||
+      decayRemainingMs <= 0
+    ) {
+      return [];
+    }
     usedMarkIds.add(markId);
     return [
       {
         markId,
         profileKey: optionalText(value?.profileKey),
         elementName: optionalText(value?.elementName),
-        layers: layers.slice(0, 5),
+        decayRemainingMs,
+        layers: normalizedLayers.map(layer => ({
+          sourceActionId: layer.sourceActionId,
+          sourceActorId: layer.sourceActorId,
+          sourceIdentity: layer.sourceIdentity,
+        })),
         heldReadyRemainingMs:
           nonNegativeNumberOrNull(value?.heldReadyRemainingMs) ?? 0,
         valueUnit: 'mark-stacks',

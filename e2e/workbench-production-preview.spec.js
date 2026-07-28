@@ -75,7 +75,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m10-b1-ruby-profile-ui]') ||
     testInfo.title.includes('[m10-b1-r2-ruby-replay]') ||
     testInfo.title.includes('[m10-b1-r2-switch-cooldown]') ||
-    testInfo.title.includes('[m10-b1-r3-ruby-star-carry-entry]')
+    testInfo.title.includes('[m10-b1-r3-ruby-star-carry-entry]') ||
+    testInfo.title.includes('[m10-b2-han-firework-runtime]')
   ) {
     return;
   }
@@ -7754,6 +7755,159 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: 'reports/m10-b1-r1-ruby-star-skill-narrow.png',
+  });
+});
+
+test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, and three-value changes through the real Workbench', async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.getByTestId('workbench-scenario-bar')).toBeVisible();
+  await page.getByTestId('workbench-scenario-add').click();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const slotOne = timeline.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-team-slot-id="team-slot-1"]'
+  );
+  await slotOne.getByTestId('workbench-direct-character-picker').click();
+  await page
+    .getByTestId('workbench-loadout-picker')
+    .locator(
+      '[data-testid="workbench-loadout-option"][data-option-id="101003"]'
+    )
+    .click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+
+  const actorLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+  );
+  const starSkillEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="star-skill"][data-skill-id="10100312"]'
+  );
+  const chargedEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="charged-attack"][data-skill-id="10100301"]'
+  );
+  await dragLocatorTo(page, starSkillEntry, actorLane, {
+    targetPosition: { x: 120, y: 72 },
+  });
+  const starSkillAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
+  );
+  await expect(starSkillAction).toHaveCount(1);
+
+  await dragLocatorTo(page, chargedEntry, actorLane, {
+    targetPosition: { x: 260, y: 72 },
+  });
+  const chargedActions = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100301"]'
+  );
+  await expect(chargedActions).toHaveCount(1);
+  const stageOneAction = chargedActions.first();
+  await expect(stageOneAction).toContainText('重击1段');
+  await expect(stageOneAction).toContainText('control 10100310/sub0');
+
+  await dragLocatorTo(page, chargedEntry, actorLane, {
+    targetPosition: { x: 400, y: 72 },
+  });
+  await expect(chargedActions).toHaveCount(2);
+  const stageTwoAction = chargedActions.last();
+  await stageTwoAction.click();
+  const stageTwoOption = page
+    .getByTestId('workbench-action-variant-option')
+    .filter({ hasText: '重击2段' });
+  await expect(stageTwoOption).toBeVisible();
+  await stageTwoOption.click();
+  await expect(stageTwoAction).toContainText('重击2段');
+  await expect(stageTwoAction).toContainText('control 10100341/sub0');
+
+  const starSkillActionId =
+    await starSkillAction.getAttribute('data-action-id');
+  const stageOneActionId =
+    await stageOneAction.getAttribute('data-action-id');
+  const stageTwoActionId =
+    await stageTwoAction.getAttribute('data-action-id');
+  expect(starSkillActionId).toBeTruthy();
+  expect(stageOneActionId).toBeTruthy();
+  expect(stageTwoActionId).toBeTruthy();
+
+  const fireworkIntervals = timeline.locator(
+    '[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101003079"][data-target-kind="enemy"]'
+  );
+  await expect
+    .poll(async () => fireworkIntervals.count())
+    .toBeGreaterThan(0);
+  await expect(fireworkIntervals.first()).toContainText('焰火');
+
+  const stateNodesFor = (laneId, actionId) =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve-node"][data-action-id="${actionId}"]`
+    );
+  await expect
+    .poll(async () =>
+      stateNodesFor('energy-actor-101003', stageOneActionId).count()
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(async () =>
+      stateNodesFor('energy-actor-101003', stageTwoActionId).count()
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(async () =>
+      stateNodesFor('enemy-hp-curve', stageOneActionId).count()
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(async () =>
+      stateNodesFor('enemy-toughness-curve', stageTwoActionId).count()
+    )
+    .toBeGreaterThan(0);
+  const fireMarkNodes = stateNodesFor(
+    'tuning-mark-150',
+    stageTwoActionId
+  );
+  await expect.poll(async () => fireMarkNodes.count()).toBeGreaterThan(0);
+  await expect(fireMarkNodes.first()).toHaveAttribute(
+    'data-event-kinds',
+    /acquire/
+  );
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(starSkillAction).toHaveCount(1);
+  await expect(chargedActions).toHaveCount(2);
+  await expect(stageTwoAction).toContainText('重击2段');
+  await expect(fireworkIntervals.first()).toContainText('焰火');
+
+  await stageTwoAction.click();
+  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
+    '重击2段'
+  );
+  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
+    'control 10100341/sub0'
+  );
+  await page.screenshot({
+    path: 'reports/m10-b2-han-firework-desktop.png',
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await closeInspectorIfVisible(page);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expect(fireworkIntervals.first()).toContainText('焰火');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m10-b2-han-firework-narrow.png',
   });
 });
 

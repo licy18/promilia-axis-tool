@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
+  "sourcePackageHash": "56e344b403b69743befdd3b29d781f6c96e3d44907c703635b57833199aa229b",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -260,6 +260,18 @@
       "damageEventCount": 221,
       "ownerDamageEventCount": 215,
       "ownerHitEventCount": 96,
+      "ownerHitCountByActionId": {
+        "fire-kibo-signature": 2,
+        "ruby-enhanced-shot-1": 9,
+        "ruby-enhanced-shot-2": 9,
+        "ruby-enhanced-shot-3": 9,
+        "ruby-enhanced-shot-4": 9,
+        "ruby-enhanced-shot-5": 9,
+        "ruby-enhanced-shot-6": 9,
+        "ruby-limit-counter": 6,
+        "ruby-post-ultimate-shot": 9,
+        "ruby-ultimate": 25
+      },
       "totalHpDamage": 164643,
       "totalToughnessDamage": 2190,
       "ownerTotalHpDamage": 161610,
@@ -946,6 +958,30 @@
           "maximum": 5
         }
       ],
+      "tuningMarkAcquireByActionId": {
+        "ruby-star-skill": {
+          "eventCount": 1,
+          "totalDelta": 1
+        },
+        "switch-back-to-ruby--on-enter--actor-103002--star-carry": {
+          "eventCount": 1,
+          "totalDelta": 1
+        }
+      },
+      "targetStateTrace": [],
+      "conditionalHitGroups": [],
+      "targetStateSummary": {
+        "profileCount": 1,
+        "eventCount": 0,
+        "appliedGroupCount": 0,
+        "skippedGroupCount": 0,
+        "effectCommandCount": 0,
+        "directSpEventCount": 0
+      },
+      "ownerDirectSp": {
+        "eventCount": 0,
+        "totalChange": 0
+      },
       "thresholdClearCount": 0,
       "transformCount": 0,
       "refreshCount": 0
@@ -1127,6 +1163,10 @@
       "maxPercentRawByAttributeId": {
         "1": 60,
         "229": 0
+      },
+      "maxExtraRawByAttributeId": {
+        "1": 0,
+        "229": 120
       }
     },
     "comparison": {
@@ -4037,6 +4077,8 @@
           "maximum": 5
         }
       ],
+      "targetStates": [],
+      "conditionalHitGroups": [],
       "effects": [
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|3333.333|1",
@@ -4260,7 +4302,7 @@
         }
       ]
     },
-    "summaryHash": "d3dd0e2f2ec18b325357c1809606727af02deb22786b89a2acd3eccb2a8c403f"
+    "summaryHash": "7b19a48fde51b5f581a7b44f903bbefcec1bb98a4ef1c92a8e9de245cc81ad07"
   },
   "expected": {
     "exact": {
@@ -5206,6 +5248,6 @@
       }
     ]
   },
-  "replayHash": "c8cbeae527d30c3e0754e5519fd78fd4e811fc3e390291a644115a62d4bf00d2",
-  "profileHash": "c7fec8ec9a53bd4d64e29b21fb578ec3e126c5445575ea87ebef1416bc5b6080"
+  "replayHash": "1c92cd1e1b62fde31ef7e8cc505524651d4374ece0b238fe6e7d8d090dc0e5d5",
+  "profileHash": "8f7d5e3285301761a490ab03a95d2c794b07e9d15678b93fd11114d559a1b0b1"
 }

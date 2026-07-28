@@ -1,14 +1,14 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：563（来源占轴已确认 553，尚未确认 10；公开动作均按独立 schedulable 合同判断）
-- 公开变体：593（来源占轴已确认 552，尚未确认 41）
+- 公开动作：563（来源占轴已确认 552，尚未确认 11；公开动作均按独立 schedulable 合同判断）
+- 公开变体：593（来源占轴已确认 550，尚未确认 43）
 - 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
 - SkillControl/player 变体：1042
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：630
-- 来源动画规划长度：26
+- 精确选中变体占轴：627
+- 来源动画规划长度：27
 - 通用规划长度：1
 - control 身份未解析：1
 - 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 143
@@ -17,30 +17,34 @@
 
 | Owner | 动作类型 | 占轴来源 | 状态 | 数量 |
 | --- | --- | --- | --- | ---: |
-| actor | charged-attack | skill-control-player-action-range | applied | 18 |
+| actor | charged-attack | skill-control-player-action-range | applied | 17 |
 | actor | charged-attack | verified-specific-input-window | applied | 2 |
-| actor | dodge-attack | skill-control-player-action-range | applied | 18 |
+| actor | charged-attack | verified-unconditional-attack-reopen-window | applied | 1 |
+| actor | dodge-attack | skill-control-player-action-range | applied | 17 |
 | actor | dodge-attack | unresolved-action-occupancy | unresolved | 1 |
 | actor | dodge-attack | verified-specific-input-window | applied | 1 |
-| actor | limit-counter | skill-control-player-action-range | applied | 18 |
-| actor | limit-counter | verified-unconditional-attack-reopen-window | applied | 2 |
+| actor | dodge-attack | verified-unconditional-attack-reopen-window | applied | 1 |
+| actor | limit-counter | skill-control-player-action-range | applied | 17 |
+| actor | limit-counter | verified-unconditional-attack-reopen-window | applied | 3 |
 | actor | normal-attack | normal-attack-input-segment-chain | applied | 12 |
 | actor | normal-attack | normal-attack-input-segment-chain | unresolved | 8 |
-| actor | perfect-parry | declared-verified-input-reopen-occupancy | applied | 1 |
-| actor | perfect-parry | skill-control-player-action-range | applied | 18 |
+| actor | perfect-parry | declared-verified-input-reopen-occupancy | applied | 2 |
+| actor | perfect-parry | skill-control-player-action-range | applied | 17 |
 | actor | perfect-parry | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | plunging-attack | skill-control-player-action-range | applied | 18 |
-| actor | plunging-attack | verified-unconditional-attack-reopen-window | applied | 2 |
-| actor | star-carry | skill-control-player-action-range | applied | 15 |
+| actor | plunging-attack | skill-control-player-action-range | applied | 17 |
+| actor | plunging-attack | verified-unconditional-attack-reopen-window | applied | 3 |
+| actor | star-carry | skill-control-player-action-range | applied | 14 |
+| actor | star-carry | unresolved-action-occupancy | unresolved | 1 |
 | actor | star-carry | verified-unconditional-attack-reopen-window | applied | 2 |
-| actor | star-combo | skill-control-player-action-range | applied | 18 |
-| actor | star-combo | verified-unconditional-attack-reopen-window | applied | 2 |
-| actor | star-skill | skill-control-player-action-range | applied | 18 |
+| actor | star-combo | skill-control-player-action-range | applied | 17 |
+| actor | star-combo | verified-unconditional-attack-reopen-window | applied | 3 |
+| actor | star-skill | declared-verified-input-reopen-occupancy | applied | 1 |
+| actor | star-skill | skill-control-player-action-range | applied | 17 |
 | actor | star-skill | unresolved-action-occupancy | unresolved | 1 |
 | actor | star-skill | verified-unconditional-attack-reopen-window | applied | 1 |
-| actor | ultimate | skill-control-player-action-range | applied | 18 |
+| actor | ultimate | skill-control-player-action-range | applied | 17 |
 | actor | ultimate | verified-specific-input-window | applied | 1 |
-| actor | ultimate | verified-unconditional-attack-reopen-window | applied | 1 |
+| actor | ultimate | verified-unconditional-attack-reopen-window | applied | 2 |
 | kibo | active | skill-control-player-action-range | applied | 122 |
 | kibo | break | skill-control-player-action-range | applied | 122 |
 | kibo | signature | skill-control-player-action-range | applied | 122 |
@@ -77,6 +81,7 @@
 
 ## 尚未确认的输入占轴
 
+- `actor|101003|10100322|0|10100322`：verified-action-effective-occupancy-window-unresolved
 - `actor|101007|10100701|0|10100703`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|0|10300203`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|2|10300215`：verified-action-effective-occupancy-window-unresolved

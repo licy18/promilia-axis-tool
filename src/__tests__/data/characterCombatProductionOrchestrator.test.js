@@ -104,6 +104,85 @@ describe('character combat production orchestration', () => {
     ).toHaveLength(3);
   });
 
+  it('publishes verified occupancy for a declarative single-control action form', () => {
+    const mechanicsPackage = {
+      actionMappings: [
+        {
+          ownerId: 990001,
+          controlSkillId: 99000112,
+          actionKind: 'star-skill',
+          runtimeReady: false,
+        },
+      ],
+      controlBindings: [
+        {
+          controlSkillId: 99000112,
+          hits: [
+            {
+              hitIdentity: 'fixture:star-skill:hit:1',
+              mapIndex: 0,
+            },
+          ],
+          effects: [],
+        },
+      ],
+      actionVariantControlBindings: [],
+    };
+
+    applyCharacterCombatAttackInputPhaseMappings({
+      mechanicsPackage,
+      compilations: [
+        {
+          ownerId: 990001,
+          contracts: {
+            attackInputChains: [],
+            publicActionForms: [
+              {
+                formIdentity: 'fixture-single-control-star-skill',
+                publicControlSkillId: 99000112,
+                publicActionKind: 'star-skill',
+                executionControlSkillId: 99000112,
+                executionSubSkillIndex: 0,
+                selectionKind: 'single-control-verified-occupancy',
+                executionTiming: {
+                  occupancy: {
+                    durationFrames: 47,
+                    status: 'applied',
+                  },
+                  animation: {
+                    durationFrames: 90,
+                    status: 'applied',
+                  },
+                },
+                sourceIdentity: 'fixture:single-control:occupancy',
+                applied: true,
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(mechanicsPackage.actionMappings[0]).toMatchObject({
+      runtimeReady: true,
+      classification: 'applied',
+      publicActionExecutionStatus:
+        'verified-public-action-execution-form-ready',
+      actionTiming: {
+        status: 'applied',
+        sourceKind: 'single-control-verified-occupancy',
+        occupancy: {
+          durationFrames: 47,
+        },
+      },
+      actionScheduling: {
+        status: 'exact',
+        durationFrames: 47,
+        selectedSubSkillIndex: 0,
+      },
+    });
+  });
+
   it('discovers and compiles two non-empty recipes through package, runtime, profile, and catalog', async () => {
     const recipeRoot = createTemporaryRoot();
     const ownerA = 101010;

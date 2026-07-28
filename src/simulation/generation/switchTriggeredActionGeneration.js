@@ -351,6 +351,7 @@ function createRejectedSwitchBinding({
 function resolveMappingDurationFrames(mapping) {
   const duration = Number(
     mapping.actionScheduling?.durationFrames ??
+      mapping.actionScheduling?.planningDurationFrames ??
       mapping.actionTiming?.occupancy?.durationFrames
   );
   return Number.isInteger(duration) && duration > 0 ? duration : null;

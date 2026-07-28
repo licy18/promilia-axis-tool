@@ -7277,6 +7277,14 @@ function createControlRuntimeHits(control) {
         trigger: element.trigger,
         sourceEvidenceStatus: element.sourceEvidenceStatus,
         scenarioRuntimeStatus: element.scenarioRuntimeStatus,
+        conditionalGroupIdentity:
+          element.trigger?.conditionalGroupIdentity ??
+          element.conditionalGroupIdentity ??
+          null,
+        runtimeCondition:
+          element.trigger?.runtimeCondition ??
+          element.runtimeCondition ??
+          null,
         hitIndex,
         hitIdentity,
       };

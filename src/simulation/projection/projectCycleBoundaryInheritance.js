@@ -272,23 +272,39 @@ function createInheritedTuningMarksAtBoundary({
   boundaryTimeMs,
 }) {
   const initialByMarkId = new Map(
-    (tuningMarkRuntime?.initialState ?? []).map(state => [
-      Number(state.markId),
-      {
-        ...cloneValue(state),
-        layers: (state.layers ?? []).map((layer, index) => ({
-          id: `initial|${state.markId}|${index}`,
-          expiresAtMs: nonNegativeNumber(layer.remainingDurationMs),
-          sourceActionId: layer.sourceActionId ?? null,
-          sourceActorId: layer.sourceActorId ?? null,
-          sourceIdentity: cloneValue(layer.sourceIdentity),
-        })),
-        heldReadyAtMs: nonNegativeNumber(state.heldReadyRemainingMs),
-      },
-    ])
+    (tuningMarkRuntime?.initialState ?? []).map(state => {
+      const decayRemainingMs = resolveTuningDecayRemainingMs(state);
+      return [
+        Number(state.markId),
+        {
+          ...cloneValue(state),
+          layers: resolveTuningLayerSources(state).map((layer, index) => ({
+            id: `initial|${state.markId}|${index}`,
+            sourceActionId: layer.sourceActionId ?? null,
+            sourceActorId: layer.sourceActorId ?? null,
+            sourceIdentity: cloneValue(layer.sourceIdentity),
+          })),
+          decayDueAtMs: decayRemainingMs,
+          heldReadyAtMs: nonNegativeNumber(state.heldReadyRemainingMs),
+        },
+      ];
+    })
   );
-  for (const event of tuningMarkRuntime?.events ?? []) {
-    if (!isBeforeBoundary(event.timeMs, boundaryTimeMs)) continue;
+  const sortedEvents = [...(tuningMarkRuntime?.events ?? [])].sort(
+    (left, right) =>
+      nonNegativeNumber(left.timeMs) - nonNegativeNumber(right.timeMs) ||
+      nonNegativeNumber(left.runtimeSequenceIndex) -
+        nonNegativeNumber(right.runtimeSequenceIndex)
+  );
+  for (const event of sortedEvents) {
+    const timeMs = nonNegativeNumber(event.timeMs);
+    const boundaryDecay = timeMs === boundaryTimeMs && event.kind === 'expire';
+    if (
+      timeMs > boundaryTimeMs ||
+      (timeMs === boundaryTimeMs && !boundaryDecay)
+    ) {
+      continue;
+    }
     const state = initialByMarkId.get(Number(event.markId));
     if (!state) continue;
     if (event.kind === 'held-trigger') {
@@ -297,41 +313,41 @@ function createInheritedTuningMarksAtBoundary({
       for (const [index, layerId] of (event.layerIds ?? []).entries()) {
         state.layers.push({
           id: layerId,
-          expiresAtMs: Number(event.timeMs) + 20_000,
           sourceActionId: event.actionId ?? null,
           sourceActorId: event.actorId ?? null,
           sourceIdentity: cloneValue(event.sourceIdentity),
           order: index,
         });
       }
-    } else {
+      state.decayDueAtMs =
+        finiteNumberOrNull(event.decayDueAtMs) ?? timeMs + 20_000;
+    } else if (event.kind === 'consume' || event.kind === 'expire') {
       const removedIds = new Set(event.layerIds ?? []);
       state.layers = state.layers.filter(layer => !removedIds.has(layer.id));
+      state.decayDueAtMs =
+        state.layers.length === 0
+          ? null
+          : (finiteNumberOrNull(event.decayDueAtMs) ??
+            (event.kind === 'expire' ? timeMs + 20_000 : state.decayDueAtMs));
     }
   }
   return [...initialByMarkId.values()].flatMap(state => {
-    const layers = state.layers.flatMap(layer => {
-      const remainingDurationMs = roundValue(
-        Number(layer.expiresAtMs) - boundaryTimeMs
-      );
-      return remainingDurationMs > 0
-        ? [
-            {
-              remainingDurationMs,
-              sourceActionId: layer.sourceActionId,
-              sourceActorId: layer.sourceActorId,
-              sourceIdentity: layer.sourceIdentity,
-            },
-          ]
-        : [];
-    });
-    if (layers.length === 0) return [];
+    if (state.layers.length === 0 || state.decayDueAtMs == null) return [];
+    const decayRemainingMs = roundValue(
+      Number(state.decayDueAtMs) - boundaryTimeMs
+    );
+    if (decayRemainingMs <= 0) return [];
     return [
       {
         markId: state.markId,
         profileKey: state.profileKey,
         elementName: state.elementName,
-        layers,
+        decayRemainingMs,
+        layers: state.layers.map(layer => ({
+          sourceActionId: layer.sourceActionId,
+          sourceActorId: layer.sourceActorId,
+          sourceIdentity: layer.sourceIdentity,
+        })),
         heldReadyRemainingMs: Math.max(
           0,
           Number(state.heldReadyAtMs) - boundaryTimeMs
@@ -339,6 +355,30 @@ function createInheritedTuningMarksAtBoundary({
       },
     ];
   });
+}
+
+function resolveTuningDecayRemainingMs(state) {
+  const explicitRemainingMs = finiteNumberOrNull(state?.decayRemainingMs);
+  if (explicitRemainingMs != null) {
+    return explicitRemainingMs > 0 ? explicitRemainingMs : null;
+  }
+  const legacyRemainingValues = (state?.layers ?? [])
+    .map(layer => finiteNumberOrNull(layer?.remainingDurationMs))
+    .filter(value => value != null && value > 0);
+  return legacyRemainingValues.length > 0
+    ? Math.max(...legacyRemainingValues)
+    : null;
+}
+
+function resolveTuningLayerSources(state) {
+  const layers = Array.isArray(state?.layers) ? state.layers : [];
+  const hasSharedDecay = finiteNumberOrNull(state?.decayRemainingMs) > 0;
+  return layers.filter(
+    layer =>
+      layer &&
+      typeof layer === 'object' &&
+      (hasSharedDecay || nonNegativeNumber(layer.remainingDurationMs) > 0)
+  );
 }
 
 function createVerifiedEnemyStateAtBoundary({

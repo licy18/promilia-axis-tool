@@ -1,16 +1,17 @@
 # M9-R2 全角色派生控制覆盖
 
 - 包：`azpr-tc-2026-07-18`
-- 固定分母：20 名角色 / 155 个公开动作引用 / 137 个派生 control / 259 个 player/resourceMap 变体
-- 控制源：combined=11，input-controlled=108，not-yet-modeled=17，state-controlled=1
-- 解析状态：applied=5，not-yet-modeled=31，partially-resolved=98，static-evidence-gap=3
-- 输入选择器：5/22 已建立明确 public variant → subskill 关系
+- 固定分母：20 名角色 / 155 个公开动作引用 / 138 个派生 control / 261 个 player/resourceMap 变体
+- 控制源：combined=11，input-controlled=109，not-yet-modeled=17，state-controlled=1
+- 解析状态：applied=6，not-yet-modeled=31，partially-resolved=98，static-evidence-gap=3
+- 输入选择器：6/23 已建立明确 public variant → subskill 关系
 - 静默遗漏：0
 
 ## Owner / 动作类型
 
 | Owner | 动作类型 | control | 控制源 | 解析状态 |
 | ---: | --- | ---: | --- | --- |
+| 101003 | charged-attack | 1 | input-controlled=1 | applied=1 |
 | 101003 | normal-attack | 4 | input-controlled=4 | partially-resolved=4 |
 | 101007 | charged-attack | 1 | input-controlled=1 | applied=1 |
 | 101007 | dodge-attack | 1 | input-controlled=1 | partially-resolved=1 |

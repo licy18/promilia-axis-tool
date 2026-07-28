@@ -3073,12 +3073,22 @@ function resolveTimelineActionRuntimeIdentity(action) {
     props.verifiedCombatRuntime,
     action.id
   )?.actionBinding;
+  const selection =
+    props.verifiedCombatRuntime?.specialResourceRuntime?.selectionByActionId?.get?.(
+      action.id
+    ) ?? null;
+  const selectedInputOption = selection?.inputSelector?.options?.find(
+    option =>
+      option.selectorIdentity === selection?.selectedInputIdentity
+  );
   const controlSkillId =
     binding?.executionControlSkillId ?? binding?.controlSkillId;
   return {
     name:
       action.runtimeSemanticName ??
       action.attackInput?.semanticName ??
+      selectedInputOption?.label ??
+      selection?.semanticName ??
       binding?.semanticName ??
       action.name,
     executionLabel:

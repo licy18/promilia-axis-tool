@@ -591,6 +591,64 @@ function createGoldenActualProjection({
       maximum: numberOrNull(event.maximum),
     }))
     .sort(compareFrameThenIdentity);
+  const tuningMarkAcquireByActionId = Object.fromEntries(
+    [
+      ...new Set(
+        tuningMarkTrace
+          .filter(event => event.kind === 'acquire' && event.actionId)
+          .map(event => event.actionId)
+      ),
+    ]
+      .sort()
+      .map(actionId => {
+        const events = tuningMarkTrace.filter(
+          event =>
+            event.kind === 'acquire' && event.actionId === actionId
+        );
+        return [
+          actionId,
+          {
+            eventCount: events.length,
+            totalDelta: roundNumber(
+              events.reduce(
+                (sum, event) => sum + (Number(event.delta) || 0),
+                0
+              )
+            ),
+          },
+        ];
+      })
+  );
+  const targetStateRuntime = specialRuntime?.targetStateRuntime;
+  const targetStateTrace = (targetStateRuntime?.events ?? [])
+    .map(event => ({
+      eventId: event.id ?? event.eventId ?? null,
+      actionId: event.actionId ?? null,
+      frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+      stateIdentity: event.payload?.stateIdentity ?? null,
+      stateName: event.payload?.stateName ?? null,
+      operation: event.payload?.operation ?? null,
+      beforeValue: numberOrNull(event.payload?.beforeValue),
+      change: numberOrNull(event.payload?.change),
+      afterValue: numberOrNull(event.payload?.afterValue),
+      maxValue: numberOrNull(event.payload?.maxValue),
+    }))
+    .sort(compareFrameThenIdentity);
+  const conditionalHitGroups = (
+    targetStateRuntime?.groupResults ?? []
+  )
+    .map(result => ({
+      actionId: result.actionId ?? null,
+      groupIdentity: result.groupIdentity ?? null,
+      frame: msToFrame(result.timeMs, scenarioRecipe.frameRate),
+      stateIdentity: result.stateIdentity ?? null,
+      beforeStacks: numberOrNull(result.beforeStacks),
+      consumedStacks: numberOrNull(result.consumedStacks),
+      afterStacks: numberOrNull(result.afterStacks),
+      status: result.status ?? null,
+      applied: result.applied === true,
+    }))
+    .sort(compareFrameThenIdentity);
   const selectedEffectIds = new Set([
     ...(recipe.goldenScenario?.traceSelectors?.passiveEffectIds ?? []),
     ...(recipe.goldenScenario?.traceSelectors?.stateEffectIds ?? []),
@@ -654,6 +712,23 @@ function createGoldenActualProjection({
   const ownerDamageEvents = damageTrace.filter(event =>
     ownerActionIds.has(event.actionId)
   );
+  const ownerHitEvents = ownerDamageEvents.filter(
+    event => event.eventType === 'VERIFIED_COMBAT_HIT'
+  );
+  const ownerHitCountByActionId = Object.fromEntries(
+    [...new Set(ownerHitEvents.map(event => event.actionId))]
+      .sort()
+      .map(actionId => [
+        actionId,
+        ownerHitEvents.filter(event => event.actionId === actionId).length,
+      ])
+  );
+  const ownerActorSp = actorSp.find(
+    row => row.actorId === `actor-${ownerId}`
+  );
+  const ownerDirectSpTransactions = (
+    ownerActorSp?.actionTransactions ?? []
+  ).filter(transaction => transaction.reason === 'verified-direct-sp');
   const passiveEffectIds = new Set(
     recipe.goldenScenario?.traceSelectors?.passiveEffectIds ?? [
       'battle-element:101010206',
@@ -707,9 +782,8 @@ function createGoldenActualProjection({
     combat: {
       damageEventCount: damageTrace.length,
       ownerDamageEventCount: ownerDamageEvents.length,
-      ownerHitEventCount: ownerDamageEvents.filter(
-        event => event.eventType === 'VERIFIED_COMBAT_HIT'
-      ).length,
+      ownerHitEventCount: ownerHitEvents.length,
+      ownerHitCountByActionId,
       totalHpDamage: sumNumbers(damageTrace, 'hpDamage'),
       totalToughnessDamage: sumNumbers(damageTrace, 'toughnessDamage'),
       ownerTotalHpDamage: sumNumbers(ownerDamageEvents, 'hpDamage'),
@@ -730,6 +804,20 @@ function createGoldenActualProjection({
       ),
       specialResourceTrace,
       tuningMarkTrace,
+      tuningMarkAcquireByActionId,
+      targetStateTrace,
+      conditionalHitGroups,
+      targetStateSummary: targetStateRuntime?.summary ?? null,
+      ownerDirectSp: {
+        eventCount: ownerDirectSpTransactions.length,
+        totalChange: roundNumber(
+          ownerDirectSpTransactions.reduce(
+            (sum, transaction) =>
+              sum + (Number(transaction.change) || 0),
+            0
+          )
+        ),
+      },
       thresholdClearCount: specialResourceTrace.filter(
         event =>
           event.stream === 'resource' &&
@@ -771,12 +859,26 @@ function createGoldenActualProjection({
             ),
           ])
       ),
+      maxExtraRawByAttributeId: Object.fromEntries(
+        [...new Set(ownerDynamicPropertySources.map(row => row.attributeId))]
+          .filter(Number.isFinite)
+          .map(attributeId => [
+            attributeId,
+            Math.max(
+              ...ownerDynamicPropertySources
+                .filter(row => row.attributeId === attributeId)
+                .map(row => Number(row.dynamicExtraRaw) || 0)
+            ),
+          ])
+      ),
     },
     comparison,
     trace: {
       damage: damageTrace,
       specialResources: specialResourceTrace,
       tuningMarks: tuningMarkTrace,
+      targetStates: targetStateTrace,
+      conditionalHitGroups,
       effects: effectTrace,
     },
   };
@@ -1065,6 +1167,23 @@ function resolveMappingDurationFrames(
         variant =>
           Number(variant.subSkillIndex) === Number(resolvedSubSkillIndex)
       )?.durationFrames
+    );
+  }
+  if (!Number.isInteger(value) || value <= 0) {
+    const actionForm =
+      mechanicsPackage.actionVariantGraph?.publicActionForms?.find(
+        form =>
+          Number(form.ownerId) === Number(mapping.ownerId) &&
+          form.publicActionKind === mapping.actionKind &&
+          Number(form.publicControlSkillId) ===
+            Number(mapping.controlSkillId) &&
+          (selectedSubSkillIndex == null ||
+            Number(form.executionSubSkillIndex) ===
+              Number(selectedSubSkillIndex)) &&
+          form.applied === true
+      );
+    value = Number(
+      actionForm?.executionTiming?.occupancy?.durationFrames
     );
   }
   if (!Number.isInteger(value) || value <= 0) {

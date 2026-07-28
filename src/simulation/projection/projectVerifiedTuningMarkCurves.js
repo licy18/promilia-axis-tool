@@ -67,9 +67,10 @@ export function projectVerifiedTuningMarkCurves({
 
 function createTuningMarkTrack({ state, events, durationMs, order }) {
   const trackKey = `tuningMark:${state.markId}`;
-  const valueEvents = events.filter(isValueChangingEvent);
+  const timelineEvents = events.filter(isTimelineMarkEvent);
+  const valueEvents = timelineEvents.filter(isValueChangingEvent);
   const eventByIdentity = new Map(
-    valueEvents.map(event => [event.eventIdentity, event])
+    timelineEvents.map(event => [event.eventIdentity, event])
   );
   const initialValue = nonNegativeNumber(state.currentValue);
   const maxValue = positiveNumber(state.maxValue, 5);
@@ -79,7 +80,7 @@ function createTuningMarkTrack({ state, events, durationMs, order }) {
     maxValue,
     durationMs,
     semanticClusterMs: 0,
-    points: valueEvents.map((event, eventIndex) => ({
+    points: timelineEvents.map((event, eventIndex) => ({
       trackKey,
       sourceDeltaId: event.eventIdentity,
       runtimeSequenceIndex: eventIndex,
@@ -88,6 +89,7 @@ function createTuningMarkTrack({ state, events, durationMs, order }) {
       frameIndex: event.frameIndex,
       delta: Number(event.after) - Number(event.before),
       afterValue: event.after,
+      semantic: Number(event.before) === Number(event.after),
     })),
   });
   const semanticNodes = displaySeries.semanticNodes.map(node => {
@@ -125,8 +127,11 @@ function createTuningMarkTrack({ state, events, durationMs, order }) {
     initialValue,
     currentValue: displaySeries.currentValue,
     maxValue,
-    involved: initialValue > 0 || valueEvents.length > 0,
+    involved: initialValue > 0 || timelineEvents.length > 0,
     valueEventCount: valueEvents.length,
+    refreshEventCount: timelineEvents.filter(
+      event => event.kind === 'acquire' && event.before === event.after
+    ).length,
     simulationPointCount: displaySeries.simulationPointCount,
     displayPointCount: displaySeries.displayPointCount,
     semanticNodeCount: semanticNodes.length,
@@ -163,6 +168,20 @@ function isValueChangingEvent(event) {
     Number.isFinite(Number(event?.before)) &&
     Number.isFinite(Number(event?.after)) &&
     Number(event.before) !== Number(event.after)
+  );
+}
+
+function isTimelineMarkEvent(event) {
+  if (
+    !['acquire', 'consume', 'expire'].includes(event?.kind) ||
+    !Number.isFinite(Number(event?.before)) ||
+    !Number.isFinite(Number(event?.after))
+  ) {
+    return false;
+  }
+  return (
+    Number(event.before) !== Number(event.after) ||
+    (event.kind === 'acquire' && event.decayDueAtMs != null)
   );
 }
 

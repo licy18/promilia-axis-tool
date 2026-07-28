@@ -42,6 +42,8 @@ export function createVerifiedTuningMarkGeneration({
       {
         profile,
         layers: [],
+        decayDueAtMs: null,
+        decayRevision: 0,
         heldReadyAtMs: 0,
         periodicDueAtMs: null,
       },
@@ -78,9 +80,7 @@ export function createVerifiedTuningMarkGeneration({
         combatScenario: scenario.combatScenario,
       });
     if (!resolution?.ready) continue;
-    for (const effect of dedupeTuningRuntimeEffects(
-      resolution.effects ?? []
-    )) {
+    for (const effect of dedupeTuningRuntimeEffects(resolution.effects ?? [])) {
       if (effect.classification !== 'applied') continue;
       if (
         !isActionFrameWithinContextualOccupancy(
@@ -152,6 +152,7 @@ export function createVerifiedTuningMarkGeneration({
         effectCommands,
         mechanicsPackage,
         scenario,
+        enqueue,
       });
     } else if (descriptor.kind === 'acquire') {
       applyLayerAcquisition({
@@ -198,11 +199,14 @@ export function createVerifiedTuningMarkGeneration({
     }
   }
 
+  for (const [runtimeSequenceIndex, event] of events.entries()) {
+    event.runtimeSequenceIndex = runtimeSequenceIndex;
+  }
   events.sort(compareGeneratedEvents);
   combatEvents.sort(compareGeneratedEvents);
   effectCommands.sort(compareGeneratedEvents);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     contractName: VERIFIED_TUNING_MARK_GENERATION_CONTRACT_NAME,
     sourceKind: 'azpr-verified-tuning-mark-generation',
     status: 'verified-tuning-mark-generation-ready',
@@ -219,6 +223,9 @@ export function createVerifiedTuningMarkGeneration({
       markEventCount: events.length,
       acquireEventCount: events.filter(event => event.kind === 'acquire')
         .length,
+      refreshAtMaximumEventCount: events.filter(
+        event => event.kind === 'acquire' && event.delta === 0
+      ).length,
       consumeEventCount: events.filter(event => event.kind === 'consume')
         .length,
       expireEventCount: events.filter(event => event.kind === 'expire').length,
@@ -267,31 +274,25 @@ function installInheritedState({
   for (const inherited of scenario?.initialRuntimeState?.tuningMarks ?? []) {
     const state = stateByMarkId.get(Number(inherited.markId));
     if (!state) continue;
+    const decayRemainingMs = resolveInheritedDecayRemainingMs(inherited);
+    if (decayRemainingMs == null) continue;
     state.heldReadyAtMs = nonNegativeNumber(inherited.heldReadyRemainingMs);
-    for (const [index, source] of (inherited.layers ?? []).entries()) {
+    for (const [index, source] of resolveInheritedLayerSources(
+      inherited
+    ).entries()) {
       if (state.layers.length >= state.profile.maxStacks) break;
-      const remainingDurationMs = positiveNumberOrNull(
-        source.remainingDurationMs
-      );
-      if (remainingDurationMs == null) continue;
       const layer = {
         id: `inherited|${state.profile.markId}|${index}`,
         acquiredAtMs: 0,
-        expiresAtMs: remainingDurationMs,
+        acquisitionSequence: index,
         sourceActionId: source.sourceActionId ?? null,
         sourceActorId: source.sourceActorId ?? null,
         sourceIdentity: source.sourceIdentity ?? state.profile.sourceIdentity,
       };
       state.layers.push(layer);
-      enqueue({
-        kind: 'expire',
-        timeMs: layer.expiresAtMs,
-        profile: state.profile,
-        layerId: layer.id,
-        layer,
-      });
     }
     if (state.layers.length > 0) {
+      scheduleSharedDecay(state, decayRemainingMs, enqueue);
       effectCommands.push(
         ...createPersistentModifierCommands({
           profile: state.profile,
@@ -326,28 +327,30 @@ function applyLayerAcquisition({
   enqueue,
 }) {
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
-  if (!state || state.layers.length >= state.profile.maxStacks) return;
+  if (!state) return;
   const before = state.layers.length;
-  const layer = {
-    id: `${descriptor.effect.effectIdentity}|layer`,
-    acquiredAtMs: descriptor.timeMs,
-    expiresAtMs: roundValue(descriptor.timeMs + state.profile.layerDurationMs),
-    sourceActionId: descriptor.action.id,
-    sourceActorId: descriptor.action.actorId,
-    sourceIdentity: descriptor.effect.sourceIdentity,
-  };
-  state.layers.push(layer);
-  sortLayers(state.layers);
-  enqueue({
-    kind: 'expire',
-    timeMs: layer.expiresAtMs,
-    profile: state.profile,
-    layerId: layer.id,
-    layer,
-  });
+  let layer = null;
+  if (before < state.profile.maxStacks) {
+    layer = {
+      id: `${descriptor.effect.effectIdentity}|layer|${descriptor.queueSequence}`,
+      acquiredAtMs: descriptor.timeMs,
+      acquisitionSequence: descriptor.queueSequence,
+      sourceActionId: descriptor.action.id,
+      sourceActorId: descriptor.action.actorId,
+      sourceIdentity: descriptor.effect.sourceIdentity,
+    };
+    state.layers.push(layer);
+    sortLayers(state.layers);
+  }
+  scheduleSharedDecay(
+    state,
+    descriptor.timeMs + state.profile.layerDurationMs,
+    enqueue
+  );
   if (state.profile.key === 'wood' && before === 0) {
     schedulePeriodic(state, descriptor.timeMs + 5_000, enqueue);
   }
+  const after = state.layers.length;
   const source = createDescriptorSource(descriptor);
   events.push(
     createMarkEvent({
@@ -355,21 +358,23 @@ function applyLayerAcquisition({
       descriptor,
       state,
       before,
-      after: state.layers.length,
-      delta: 1,
-      layerIds: [layer.id],
+      after,
+      delta: after - before,
+      layerIds: layer ? [layer.id] : [],
     })
   );
-  effectCommands.push(
-    ...createPersistentModifierCommands({
-      profile: state.profile,
-      layerCount: state.layers.length,
-      timeMs: descriptor.timeMs,
-      scenario,
-      mechanicsPackage,
-      source,
-    })
-  );
+  if (after !== before) {
+    effectCommands.push(
+      ...createPersistentModifierCommands({
+        profile: state.profile,
+        layerCount: after,
+        timeMs: descriptor.timeMs,
+        scenario,
+        mechanicsPackage,
+        source,
+      })
+    );
+  }
 }
 
 function applyLayerExpiry({
@@ -379,19 +384,33 @@ function applyLayerExpiry({
   effectCommands,
   mechanicsPackage,
   scenario,
+  enqueue,
 }) {
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
-  if (!state) return;
-  const index = state.layers.findIndex(
-    layer => layer.id === descriptor.layerId
-  );
-  if (index < 0) return;
+  if (
+    !state ||
+    state.layers.length === 0 ||
+    descriptor.decayRevision !== state.decayRevision ||
+    descriptor.timeMs !== state.decayDueAtMs
+  ) {
+    return;
+  }
   const before = state.layers.length;
-  const [expired] = state.layers.splice(index, 1);
+  sortLayers(state.layers);
+  const [expired] = state.layers.splice(0, 1);
+  if (state.layers.length > 0) {
+    scheduleSharedDecay(
+      state,
+      descriptor.timeMs + state.profile.layerDurationMs,
+      enqueue
+    );
+  } else {
+    clearSharedDecay(state);
+  }
   events.push(
     createMarkEvent({
       kind: 'expire',
-      descriptor,
+      descriptor: { ...descriptor, layer: expired },
       state,
       before,
       after: state.layers.length,
@@ -455,6 +474,9 @@ function applyMarkConsumption({
   const before = state.layers.length;
   sortLayers(state.layers);
   const consumedLayers = state.layers.splice(0, consumedCount);
+  if (state.layers.length === 0) {
+    clearSharedDecay(state);
+  }
   const source = createDescriptorSource(descriptor);
   events.push(
     createMarkEvent({
@@ -582,6 +604,7 @@ function applyHeldMarkTriggers({
       maximum: state.profile.maxStacks,
       layerIds: [],
       heldReadyAtMs: state.heldReadyAtMs,
+      decayDueAtMs: state.decayDueAtMs,
       sourceIdentity: state.profile.sourceIdentity,
       appliedToCalculators: true,
       applied: true,
@@ -974,6 +997,11 @@ function createMarkEvent({
     maximum: state.profile.maxStacks,
     layerIds,
     heldReadyAtMs: state.heldReadyAtMs,
+    decayDueAtMs: state.decayDueAtMs,
+    decayRemainingMs:
+      state.decayDueAtMs == null
+        ? 0
+        : Math.max(0, state.decayDueAtMs - descriptor.timeMs),
     sourceIdentity:
       descriptor.effect?.sourceIdentity ??
       descriptor.layer?.sourceIdentity ??
@@ -1009,13 +1037,27 @@ function schedulePeriodic(state, timeMs, enqueue) {
   });
 }
 
+function scheduleSharedDecay(state, timeMs, enqueue) {
+  state.decayRevision += 1;
+  state.decayDueAtMs = roundValue(timeMs);
+  enqueue({
+    kind: 'expire',
+    timeMs: state.decayDueAtMs,
+    profile: state.profile,
+    decayRevision: state.decayRevision,
+  });
+}
+
+function clearSharedDecay(state) {
+  state.decayRevision += 1;
+  state.decayDueAtMs = null;
+}
+
 function resolveEffectTimeMs(action, effect, resolution) {
   const startFrame = Number(effect.trigger?.startFrame);
   const frameRate = Number(resolution.controlBinding?.frameRate ?? FRAME_RATE);
   if (!Number.isInteger(startFrame) || !(frameRate > 0)) return null;
-  if (
-    !isActionFrameWithinContextualOccupancy(action, startFrame, frameRate)
-  ) {
+  if (!isActionFrameWithinContextualOccupancy(action, startFrame, frameRate)) {
     return null;
   }
   return roundValue(Number(action.startMs) + (startFrame * 1000) / frameRate);
@@ -1030,41 +1072,60 @@ function createInitialTuningState(scenario, catalog) {
   );
   return catalog.profiles.map(profile => {
     const inherited = inheritedByMarkId.get(Number(profile.markId));
+    const layers = resolveInheritedLayerSources(inherited)
+      .slice(0, profile.maxStacks)
+      .map(layer => ({
+        sourceActionId: layer.sourceActionId ?? null,
+        sourceActorId: layer.sourceActorId ?? null,
+        sourceIdentity: layer.sourceIdentity ?? profile.sourceIdentity,
+      }));
     return {
       markId: profile.markId,
       profileKey: profile.key,
       elementName: profile.element,
-      currentValue: (inherited?.layers ?? []).length,
+      currentValue: layers.length,
       maxValue: profile.maxStacks,
+      decayRemainingMs:
+        layers.length > 0
+          ? (resolveInheritedDecayRemainingMs(inherited) ?? 0)
+          : 0,
       heldReadyRemainingMs: nonNegativeNumber(inherited?.heldReadyRemainingMs),
-      layers: (inherited?.layers ?? []).map(layer => ({ ...layer })),
+      layers,
       valueUnit: 'mark-stacks',
     };
   });
 }
 
 function createPublishedTuningState(stateByMarkId, timeMs) {
-  return [...stateByMarkId.values()].map(state => ({
-    markId: state.profile.markId,
-    profileKey: state.profile.key,
-    elementName: state.profile.element,
-    currentValue: state.layers.length,
-    maxValue: state.profile.maxStacks,
-    heldReadyRemainingMs: Math.max(0, state.heldReadyAtMs - timeMs),
-    layers: state.layers.map(layer => ({
-      remainingDurationMs: Math.max(0, layer.expiresAtMs - timeMs),
-      sourceActionId: layer.sourceActionId,
-      sourceActorId: layer.sourceActorId,
-      sourceIdentity: layer.sourceIdentity,
-    })),
-    valueUnit: 'mark-stacks',
-  }));
+  return [...stateByMarkId.values()].map(state => {
+    const decayRemainingMs =
+      state.layers.length > 0 && state.decayDueAtMs != null
+        ? Math.max(0, state.decayDueAtMs - timeMs)
+        : 0;
+    return {
+      markId: state.profile.markId,
+      profileKey: state.profile.key,
+      elementName: state.profile.element,
+      currentValue: state.layers.length,
+      maxValue: state.profile.maxStacks,
+      decayRemainingMs,
+      heldReadyRemainingMs: Math.max(0, state.heldReadyAtMs - timeMs),
+      layers: state.layers.map(layer => ({
+        sourceActionId: layer.sourceActionId,
+        sourceActorId: layer.sourceActorId,
+        sourceIdentity: layer.sourceIdentity,
+      })),
+      valueUnit: 'mark-stacks',
+    };
+  });
 }
 
 function sortLayers(layers) {
   layers.sort(
     (left, right) =>
-      left.expiresAtMs - right.expiresAtMs || left.id.localeCompare(right.id)
+      left.acquiredAtMs - right.acquiredAtMs ||
+      left.acquisitionSequence - right.acquisitionSequence ||
+      left.id.localeCompare(right.id)
   );
 }
 
@@ -1095,7 +1156,7 @@ function compareGeneratedEvents(left, right) {
 
 function createUnavailableGeneration(reason) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     contractName: VERIFIED_TUNING_MARK_GENERATION_CONTRACT_NAME,
     sourceKind: 'azpr-verified-tuning-mark-generation',
     status: reason,
@@ -1129,6 +1190,30 @@ function positiveNumber(value, fallback) {
 function positiveNumberOrNull(value) {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+function resolveInheritedDecayRemainingMs(inherited) {
+  const sharedRemainingMs = positiveNumberOrNull(inherited?.decayRemainingMs);
+  if (sharedRemainingMs != null) return sharedRemainingMs;
+  const legacyLayerDurations = (inherited?.layers ?? [])
+    .map(layer => positiveNumberOrNull(layer?.remainingDurationMs))
+    .filter(value => value != null);
+  return legacyLayerDurations.length > 0
+    ? Math.max(...legacyLayerDurations)
+    : null;
+}
+
+function resolveInheritedLayerSources(inherited) {
+  const layers = Array.isArray(inherited?.layers) ? inherited.layers : [];
+  const hasSharedDecay =
+    positiveNumberOrNull(inherited?.decayRemainingMs) != null;
+  return layers.filter(
+    layer =>
+      layer &&
+      typeof layer === 'object' &&
+      (hasSharedDecay ||
+        positiveNumberOrNull(layer.remainingDurationMs) != null)
+  );
 }
 
 function positiveInteger(value, fallback) {

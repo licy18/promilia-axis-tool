@@ -13,8 +13,10 @@ import runtimeCoverage from '../../../reports/m10/101010/runtime-coverage.json';
 import sourceManifest from '../../../reports/m10/101010/source-manifest.json';
 import unresolvedLedger from '../../../reports/m10/101010/unresolved-ledger.json';
 import {
+  applyCharacterCombatActionHitBindings,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
+  mergeCharacterCombatOwnerCompilations,
 } from '../../../scripts/character-combat/character-combat-contract-compiler.mjs';
 import { validateCharacterCombatGoldenRuntime } from '../../../scripts/character-combat/character-combat-golden-validation.mjs';
 import catalog from '../../data/generated/character-combat-profile-catalog.json';
@@ -68,8 +70,8 @@ describe('M10 character combat profile pipeline', () => {
       status: 'character-combat-profile-catalog-ready',
       summary: {
         publicCharacterCount: 20,
-        compiledProfileCount: 2,
-        runtimeAppliedProfileCount: 2,
+        compiledProfileCount: 3,
+        runtimeAppliedProfileCount: 3,
         uiVerifiedProfileCount: 0,
         characterCompleteCount: 0,
       },
@@ -181,6 +183,191 @@ describe('M10 character combat profile pipeline', () => {
     ]);
     expect(compilation.contractHash).toMatch(/^[a-f0-9]{64}$/);
     expect(runtimeContract.contractHash).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('compiles target-state transactions and conditional runtime effects for a synthetic owner', () => {
+    const ownerId = 424244;
+    const controlSkillId = 42424401;
+    const elementAssets = new Map([
+      [
+        9001,
+        {
+          elementId: 9001,
+          sourceIdentity: 'fixture:element:9001',
+          tree: { time: 10000 },
+        },
+      ],
+      [
+        9002,
+        {
+          elementId: 9002,
+          sourceIdentity: 'fixture:element:9002',
+          tree: { combineNumber: 3 },
+        },
+      ],
+      [
+        9003,
+        {
+          elementId: 9003,
+          sourceIdentity: 'fixture:element:9003',
+          tree: {},
+        },
+      ],
+      [
+        9004,
+        {
+          elementId: 9004,
+          sourceIdentity: 'fixture:element:9004',
+          tree: { functionParams: [20000] },
+        },
+      ],
+    ]);
+    const compilation = compileCharacterCombatRecipeContracts({
+      recipe: {
+        schemaVersion: 1,
+        ownerId,
+        compiler: {
+          timingPolicy: 'standalone-animation',
+          reachableControlSkillIds: [controlSkillId],
+          contextInputEdges: [],
+          publicActionForms: [],
+          attackInputChains: [],
+          thresholdTransitions: [],
+          passiveEffects: [],
+          targetStateProfiles: [
+            {
+              stateIdentity: 'enemy:synthetic-firework',
+              name: 'Synthetic Firework',
+              targetKind: 'enemy',
+              elementId: 9001,
+              capacityElementId: 9002,
+              expectedDurationMs: 10000,
+              expectedMaxStacks: 3,
+              sourceIdentity: 'fixture:target-state-profile',
+            },
+          ],
+          targetStateTransactions: [
+            {
+              transactionIdentity: 'synthetic-firework-gain',
+              stateIdentity: 'enemy:synthetic-firework',
+              controlSkillId,
+              subSkillIndex: 0,
+              triggerFrame: 5,
+              amount: 1,
+              requiresHitElementId: 9001,
+              sourceIdentity: 'fixture:target-state-transaction',
+            },
+          ],
+          conditionalHitGroups: [
+            {
+              groupIdentity: 'synthetic-firework-burst',
+              controlSkillId,
+              subSkillIndex: 0,
+              sourceControlSkillId: controlSkillId,
+              sourceSubSkillIndex: 0,
+              elementId: 9001,
+              triggerFrames: [5],
+              decisionFrame: 5,
+              stateIdentity: 'enemy:synthetic-firework',
+              minimumStacks: 1,
+              consumeBands: [
+                {
+                  minimumStacks: 1,
+                  amount: 1,
+                  sourceElementId: 9003,
+                  sourceIdentity: 'fixture:target-state-consume',
+                },
+              ],
+              sourceIdentity: 'fixture:conditional-hit-group',
+            },
+          ],
+          runtimeEffectBindings: [
+            {
+              bindingIdentity: 'synthetic-firework-sp',
+              triggerKind: 'conditional-hit-group-applied',
+              conditionalGroupIdentity: 'synthetic-firework-burst',
+              triggerFrame: 5,
+              targetKind: 'source-actor',
+              directSpElementId: 9004,
+              expectedDirectSpValue: 2,
+              sourceIdentity: 'fixture:runtime-direct-sp',
+            },
+          ],
+        },
+      },
+      character: {
+        id: ownerId,
+        name: 'Synthetic Target State Owner',
+        sourceIdentity: `fixture:character:${ownerId}`,
+      },
+      evidence: {
+        controls: [
+          {
+            controlSkillId,
+            frameRate: 60,
+            elements: [
+              {
+                mapIndex: 0,
+                elementId: 9001,
+                pathId: 'fixture-path-9001',
+                triggers: [{ startFrame: 5 }],
+                dimensions: {
+                  hp: { status: 'applied' },
+                },
+                formula: {
+                  commonFunctionId: 1,
+                },
+                damage: {
+                  damageType: 1,
+                },
+                sourceIdentity: 'fixture:control-element:9001',
+              },
+            ],
+          },
+        ],
+        skills: [],
+        specialResourceProfiles: [],
+        specialResourceOperations: [],
+      },
+      operators: {
+        ...createNoopCompilerOperators(),
+        readElementAsset: elementId => elementAssets.get(Number(elementId)),
+      },
+    });
+
+    expect(compilation.summary).toMatchObject({
+      targetStateProfileCount: 1,
+      targetStateTransactionCount: 1,
+      conditionalHitGroupCount: 1,
+      runtimeEffectBindingCount: 1,
+      actionHitBindingCount: 1,
+    });
+    expect(compilation.contracts.targetStateProfiles[0]).toMatchObject({
+      ownerId,
+      stateIdentity: 'enemy:synthetic-firework',
+      durationMs: 10000,
+      maxStacks: 3,
+      applied: true,
+    });
+    expect(compilation.contracts.actionHitBindings[0]).toMatchObject({
+      ownerId,
+      controlSkillId,
+      conditionalGroupIdentity: 'synthetic-firework-burst',
+      runtimeCondition: {
+        kind: 'target-state-at-least',
+        stateIdentity: 'enemy:synthetic-firework',
+        minimumStacks: 1,
+      },
+    });
+    expect(compilation.contracts.runtimeEffectBindings[0]).toMatchObject({
+      ownerId,
+      conditionalGroupIdentity: 'synthetic-firework-burst',
+      directSp: {
+        elementId: 9004,
+        value: 2,
+      },
+      applied: true,
+    });
   });
 
   it('compiles reusable resource conditions and transaction classifications', () => {
@@ -653,6 +840,223 @@ describe('M10 character combat profile pipeline', () => {
         triggerFrame: 15,
         amountByLevel: { 1: 1 },
         applied: true,
+      }),
+    ]);
+  });
+
+  it('compiles cross-control input variants and projects child-control hits onto the public action', () => {
+    const ownerId = 424247;
+    const publicControlSkillId = 42424710;
+    const secondStageControlSkillId = 42424741;
+    const childControlSkillId = 48042401;
+    const childElementId = 424247147;
+    const controls = [
+      {
+        controlSkillId: publicControlSkillId,
+        frameRate: 60,
+        variants: [
+          {
+            subSkillIndex: 0,
+            sourceIdentity: 'fixture:first-stage-variant',
+          },
+        ],
+        elements: [],
+      },
+      {
+        controlSkillId: secondStageControlSkillId,
+        frameRate: 60,
+        variants: [
+          {
+            subSkillIndex: 0,
+            sourceIdentity: 'fixture:second-stage-variant',
+          },
+        ],
+        elements: [],
+      },
+      {
+        controlSkillId: childControlSkillId,
+        frameRate: 60,
+        variants: [
+          {
+            subSkillIndex: 0,
+            sourceIdentity: 'fixture:child-hit-variant',
+          },
+        ],
+        elements: [
+          {
+            mapIndex: 0,
+            elementId: childElementId,
+            pathId: 'fixture-child-hit',
+            sourceIdentity: 'fixture:child-hit-element',
+            triggers: [],
+            dimensions: {
+              damage: { status: 'applied' },
+            },
+          },
+        ],
+      },
+    ];
+    const compilation = compileCharacterCombatRecipeContracts({
+      recipe: {
+        schemaVersion: 1,
+        ownerId,
+        compiler: {
+          timingPolicy: 'verified-input-reopen',
+          reachableControlSkillIds: controls.map(item => item.controlSkillId),
+          contextInputEdges: [],
+          publicActionForms: [],
+          attackInputChains: [],
+          inputVariantSelectors: [
+            {
+              selectorIdentity: 'synthetic-two-stage-charge',
+              publicControlSkillId,
+              actionKinds: ['charged-attack'],
+              kind: 'charge-tier',
+              mode: 'hold',
+              options: [
+                {
+                  selectorIdentity: 'synthetic-charge-stage-1',
+                  label: 'Stage 1',
+                  publicVariantIndex: 1,
+                  executionControlSkillId: publicControlSkillId,
+                  executionSubSkillIndex: 0,
+                  chargeTier: 1,
+                },
+                {
+                  selectorIdentity: 'synthetic-charge-stage-2',
+                  label: 'Stage 2',
+                  publicVariantIndex: 2,
+                  executionControlSkillId: secondStageControlSkillId,
+                  executionSubSkillIndex: 0,
+                  chargeTier: 2,
+                },
+              ],
+              sourceIdentity: 'fixture:two-stage-charge-selector',
+            },
+          ],
+          variantWindowBindings: [],
+          actionHitBindings: [
+            {
+              bindingIdentity: 'synthetic-child-control-hit',
+              controlSkillId: publicControlSkillId,
+              subSkillIndex: 0,
+              sourceControlSkillId: childControlSkillId,
+              sourceSubSkillIndex: 0,
+              elementId: childElementId,
+              triggerFrames: [38, 59],
+              frameCount: 1,
+              targetKind: 'enemy',
+              sourceIdentity: 'fixture:child-control-launch-offset',
+            },
+          ],
+          actionEffectBindings: [],
+          thresholdTransitions: [],
+          passiveEffects: [],
+        },
+      },
+      character: {
+        id: ownerId,
+        name: 'Synthetic Cross Control Owner',
+        sourceIdentity: `fixture:character:${ownerId}`,
+      },
+      evidence: {
+        controls,
+        skills: [],
+        tuningMarkProfiles: [],
+        specialResourceProfiles: [],
+        specialResourceOperations: [],
+      },
+      operators: {
+        ...createNoopCompilerOperators(),
+        resolveControlVariantTiming: ({ control }) => ({
+          frameRate: 60,
+          animation: {
+            durationFrames:
+              control.controlSkillId === secondStageControlSkillId ? 211 : 248,
+            status: 'applied',
+            sourceIdentity: `fixture:${control.controlSkillId}:animation`,
+          },
+          occupancy: {
+            durationFrames:
+              control.controlSkillId === secondStageControlSkillId ? 71 : 61,
+            status: 'applied',
+            sourceIdentity: `fixture:${control.controlSkillId}:occupancy`,
+          },
+          sourceIdentity: `fixture:${control.controlSkillId}:timing`,
+        }),
+      },
+    });
+
+    expect(compilation.contracts.inputVariantSelectors).toEqual([
+      expect.objectContaining({
+        selectorIdentity: 'synthetic-two-stage-charge',
+        publicControlSkillId,
+        resolutionStatus: 'applied',
+        options: [
+          expect.objectContaining({
+            executionControlSkillId: publicControlSkillId,
+            executionSubSkillIndex: 0,
+            durationFrames: 61,
+          }),
+          expect.objectContaining({
+            executionControlSkillId: secondStageControlSkillId,
+            executionSubSkillIndex: 0,
+            durationFrames: 71,
+          }),
+        ],
+      }),
+    ]);
+    expect(compilation.contracts.actionHitBindings).toEqual([
+      expect.objectContaining({
+        controlSkillId: publicControlSkillId,
+        sourceControlSkillId: childControlSkillId,
+        sourceSubSkillIndex: 0,
+        triggerFrames: [38, 59],
+      }),
+    ]);
+
+    const actionVariantGraph = {
+      contextEdges: [],
+      publicActionForms: [],
+      attackInputChains: [],
+      derivedControlContracts: [],
+      edges: [],
+      summary: {},
+    };
+    mergeCharacterCombatOwnerCompilations({
+      actionVariantGraph,
+      specialResourceCatalog: {
+        profiles: [],
+        operationBindings: [],
+        thresholdTransitions: [],
+        passiveEffects: [],
+        summary: {},
+      },
+      compilations: [compilation],
+    });
+    expect(actionVariantGraph.derivedControlContracts).toEqual([
+      expect.objectContaining({
+        ownerId,
+        controlSkillId: publicControlSkillId,
+        inputSelector: expect.objectContaining({
+          selectorIdentity: 'synthetic-two-stage-charge',
+        }),
+      }),
+    ]);
+
+    applyCharacterCombatActionHitBindings({
+      controls,
+      compilations: [compilation],
+    });
+    expect(controls[0].elements).toEqual([
+      expect.objectContaining({
+        elementId: childElementId,
+        mapIndex: 0,
+        projectedFromControlSkillId: childControlSkillId,
+        triggers: [
+          expect.objectContaining({ startFrame: 38 }),
+          expect.objectContaining({ startFrame: 59 }),
+        ],
       }),
     ]);
   });
@@ -1133,7 +1537,9 @@ describe('M10 character combat profile pipeline', () => {
           filePath => !filePath.includes(`${path.sep}__tests__${path.sep}`)
         )
         .filter(filePath =>
-          /101010|xiaoyu|涂山小玉/i.test(fs.readFileSync(filePath, 'utf8'))
+          /101010|xiaoyu|涂山小玉|101003|han[ -]?youyou|寒悠悠/i.test(
+            fs.readFileSync(filePath, 'utf8')
+          )
         )
         .map(filePath => path.relative(REPO_ROOT, filePath))
     );

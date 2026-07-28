@@ -21,6 +21,22 @@ export function classifyVerifiedBattleEffectFormula(effect = {}) {
       applied: true,
     };
   }
+  if (commonFunctionId === 1 && baseFunctionId === 3) {
+    return {
+      family: 'basis-point-property-a-with-common-ratio',
+      status: 'applied',
+      evaluator: 'q16.16-basis-point-a-times-g',
+      applied: true,
+    };
+  }
+  if (commonFunctionId === 1 && baseFunctionId === 2008) {
+    return {
+      family: 'source-tuning-ratio-with-common-ratio',
+      status: 'applied',
+      evaluator: 'q16.16-source-tuning-times-a-times-g',
+      applied: true,
+    };
+  }
   if (VERIFIED_TUNING_FUNCTION_IDS.has(baseFunctionId)) {
     return {
       family: 'verified-tuning-state-formula',
@@ -40,6 +56,7 @@ export function classifyVerifiedBattleEffectFormula(effect = {}) {
 export function evaluateVerifiedBattleEffectFormula({
   effect = {},
   level = 1,
+  sourceActor = null,
 } = {}) {
   const contract = classifyVerifiedBattleEffectFormula(effect);
   if (!contract.applied) {
@@ -68,6 +85,52 @@ export function evaluateVerifiedBattleEffectFormula({
       reason: 'formula-parameters-a-or-g-missing',
     };
   }
+  if (contract.family === 'source-tuning-ratio-with-common-ratio') {
+    const sourceTuning = finiteNumberOrNull(
+      sourceActor?.stats?.tuningStrength
+    );
+    if (sourceTuning == null) {
+      return {
+        ...contract,
+        status: 'unresolved',
+        applied: false,
+        value: null,
+        raw: null,
+        trace: [],
+        reason: 'source-actor-tuning-strength-missing',
+      };
+    }
+    const sourceRaw = qFromFloat(sourceTuning);
+    const ratioRaw = qFromBasisPoints(a);
+    const commonRaw = qFromBasisPoints(g);
+    const resultRaw = qMul(qMul(sourceRaw, ratioRaw), commonRaw);
+    return {
+      ...contract,
+      value: qToNumber(resultRaw),
+      raw: resultRaw.toString(),
+      trace: [
+        {
+          step: 'source-actor-tuning-strength',
+          input: sourceTuning,
+          raw: sourceRaw.toString(),
+        },
+        {
+          step: 'base-function-2008-a-per-10000',
+          input: a,
+          raw: ratioRaw.toString(),
+        },
+        {
+          step: 'common-function-1-g-per-10000',
+          input: g,
+          raw: commonRaw.toString(),
+        },
+        { step: 'q16.16-multiply', raw: resultRaw.toString() },
+      ],
+      sourceIdentity:
+        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      reason: null,
+    };
+  }
   const baseRaw = qFromFloat(a);
   const commonRaw = qFromBasisPoints(g);
   const resultRaw = qMul(baseRaw, commonRaw);
@@ -76,7 +139,15 @@ export function evaluateVerifiedBattleEffectFormula({
     value: qToNumber(resultRaw),
     raw: resultRaw.toString(),
     trace: [
-      { step: 'base-function-5-a', input: a, raw: baseRaw.toString() },
+      {
+        step:
+          contract.family ===
+          'basis-point-property-a-with-common-ratio'
+            ? 'base-function-3-basis-point-property-a'
+            : 'base-function-5-a',
+        input: a,
+        raw: baseRaw.toString(),
+      },
       {
         step: 'common-function-1-g-per-10000',
         input: g,

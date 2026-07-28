@@ -82,11 +82,9 @@ describe('cycle boundary inheritance projection', () => {
         {
           markId: 150,
           profileKey: 'fire',
+          decayRemainingMs: 19500,
           heldReadyRemainingMs: 4700,
-          layers: [
-            { remainingDurationMs: 19000 },
-            { remainingDurationMs: 19500 },
-          ],
+          layers: [{}, {}],
         },
       ],
       specialResourcesByActor: [
@@ -123,6 +121,46 @@ describe('cycle boundary inheritance projection', () => {
     expect(state.kiboEnergyBySlot[0].currentValue).toBe(0.5);
     expect(state.activeEffects.map(effect => effect.effectId)).toEqual([
       'focus',
+    ]);
+  });
+
+  it('applies one shared-timer decay on the boundary and carries the next interval', () => {
+    const runtimeOutputs = createRuntimeOutputs();
+    runtimeOutputs.verifiedCombatRuntime.tuningMarkRuntime = {
+      initialState: [
+        {
+          markId: 150,
+          profileKey: 'fire',
+          elementName: '火',
+          decayRemainingMs: 1_000,
+          heldReadyRemainingMs: 0,
+          layers: [{ sourceActionId: 'fire-1' }, { sourceActionId: 'fire-2' }],
+        },
+      ],
+      events: [
+        {
+          kind: 'expire',
+          timeMs: 1_000,
+          runtimeSequenceIndex: 0,
+          markId: 150,
+          layerIds: ['initial|150|0'],
+          decayDueAtMs: 21_000,
+        },
+      ],
+    };
+
+    const state = createInitialRuntimeStateAtBoundary({
+      scenario: createScenario(),
+      runtimeOutputs,
+      boundary: { id: 'boundary-1', timeMs: 1_000 },
+    });
+
+    expect(state.tuningMarks).toEqual([
+      expect.objectContaining({
+        markId: 150,
+        decayRemainingMs: 20_000,
+        layers: [expect.objectContaining({ sourceActionId: 'fire-2' })],
+      }),
     ]);
   });
 
@@ -413,10 +451,10 @@ function createRuntimeOutputs() {
             markId: 150,
             profileKey: 'fire',
             elementName: '火',
+            decayRemainingMs: 20000,
             heldReadyRemainingMs: 0,
             layers: [
               {
-                remainingDurationMs: 20000,
                 sourceActionId: 'initial-fire',
                 sourceActorId: 'actor-1',
                 sourceIdentity: { source: 'initial-fire' },
@@ -432,6 +470,7 @@ function createRuntimeOutputs() {
             actionId: 'action-before',
             actorId: 'actor-1',
             layerIds: ['fire-layer-2'],
+            decayDueAtMs: 20500,
             sourceIdentity: { source: 'action-before' },
           },
           {

@@ -90,7 +90,7 @@ describe('initial runtime state', () => {
     });
 
     expect(state).toMatchObject({
-      schemaVersion: 5,
+      schemaVersion: 6,
       contractName: 'AzPrInitialRuntimeState',
       status: 'initial-runtime-state-inherited',
       source: {
@@ -174,7 +174,7 @@ describe('initial runtime state', () => {
         },
       })
     ).toMatchObject({
-      schemaVersion: 5,
+      schemaVersion: 6,
       status: 'initial-runtime-state-ready',
       controlledActor: {
         actorId: 'actor-2',
@@ -204,5 +204,57 @@ describe('initial runtime state', () => {
         ],
       })
     ).toBeNull();
+  });
+
+  it('normalizes one shared tuning decay timer and migrates legacy layer timers', () => {
+    const shared = normalizeInitialRuntimeState({
+      tuningMarks: [
+        {
+          markId: 150,
+          profileKey: 'fire',
+          decayRemainingMs: 12_345,
+          heldReadyRemainingMs: 500,
+          layers: [{ sourceActionId: 'fire-1' }, { sourceActionId: 'fire-2' }],
+        },
+      ],
+    });
+    const legacy = normalizeInitialRuntimeState({
+      tuningMarks: [
+        {
+          markId: 750,
+          profileKey: 'wind',
+          layers: [
+            { remainingDurationMs: 1_000, sourceActionId: 'wind-1' },
+            { remainingDurationMs: 1_500, sourceActionId: 'wind-2' },
+            { remainingDurationMs: 0, sourceActionId: 'expired' },
+          ],
+        },
+      ],
+    });
+
+    expect(shared.tuningMarks).toEqual([
+      expect.objectContaining({
+        markId: 150,
+        decayRemainingMs: 12_345,
+        heldReadyRemainingMs: 500,
+        layers: [
+          expect.objectContaining({ sourceActionId: 'fire-1' }),
+          expect.objectContaining({ sourceActionId: 'fire-2' }),
+        ],
+      }),
+    ]);
+    expect(shared.tuningMarks[0].layers[0]).not.toHaveProperty(
+      'remainingDurationMs'
+    );
+    expect(legacy.tuningMarks).toEqual([
+      expect.objectContaining({
+        markId: 750,
+        decayRemainingMs: 1_500,
+        layers: [
+          expect.objectContaining({ sourceActionId: 'wind-1' }),
+          expect.objectContaining({ sourceActionId: 'wind-2' }),
+        ],
+      }),
+    ]);
   });
 });

@@ -3,41 +3,54 @@
   "kind": "azpr-verified-derived-control-coverage",
   "status": "verified-derived-control-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "59e436adac96009c4b148795fb87bf7d069b2820ab8a1228727fd0e570e4fa10",
+  "packageHash": "fd49b65a7a8db64bf81059a44bbb09e7ff0ca902ccb88b33a988925023219795",
   "sourceDenominator": {
     "kind": "current-client-public-actor-derived-control-candidates",
     "actorOwnerCount": 20,
     "publicActionCount": 155,
-    "controlCount": 137,
+    "controlCount": 138,
     "multiVariantControlCount": 64,
-    "controlPlayerVariantCount": 259
+    "controlPlayerVariantCount": 261
   },
   "summary": {
     "controlSourceCounts": {
       "combined": 11,
-      "input-controlled": 108,
+      "input-controlled": 109,
       "not-yet-modeled": 17,
       "state-controlled": 1
     },
     "candidateControlSourceCounts": {
-      "input-controlled": 119,
+      "input-controlled": 120,
       "resource-controlled": 4,
       "state-controlled": 8
     },
     "resolutionStatusCounts": {
-      "applied": 5,
+      "applied": 6,
       "not-yet-modeled": 31,
       "partially-resolved": 98,
       "static-evidence-gap": 3
     },
-    "inputSelectorCount": 22,
-    "appliedInputSelectorCount": 5,
+    "inputSelectorCount": 23,
+    "appliedInputSelectorCount": 6,
     "resourceControlledCount": 4,
     "stateControlledCount": 8,
     "automaticFollowUpCount": 0,
     "silentOmissionCount": 0
   },
   "byOwnerActionKind": [
+    {
+      "ownerId": 101003,
+      "actionKinds": [
+        "charged-attack"
+      ],
+      "controlCount": 1,
+      "controlSourceCounts": {
+        "input-controlled": 1
+      },
+      "resolutionStatusCounts": {
+        "applied": 1
+      }
+    },
     {
       "ownerId": 101003,
       "actionKinds": [
@@ -1409,6 +1422,260 @@
       "reasons": [
         "event-bridge-input-semantics-partially-modeled"
       ]
+    },
+    {
+      "contractIdentity": "actor:101003|control:10100310|derived-control",
+      "ownerKind": "actor",
+      "ownerId": 101003,
+      "controlSkillId": 10100310,
+      "actionKinds": [
+        "charged-attack"
+      ],
+      "publicActions": [],
+      "controlSource": "input-controlled",
+      "candidateControlSources": [
+        "input-controlled"
+      ],
+      "decisionFrame": 0,
+      "inputSelector": {
+        "selectorIdentity": "han-charged-stage-selector",
+        "kind": "charge-tier",
+        "mode": "hold",
+        "holdRange": {
+          "minimumFrames": 28,
+          "maximumFrames": 61,
+          "frameRate": 60,
+          "sourceIdentity": "skill_control_10100310.asset#projectile@28F|control-transition[61,188)->10100341/sub0"
+        },
+        "options": [
+          {
+            "selectorIdentity": "han-charged-stage-one",
+            "label": "重击1段",
+            "publicVariantIndex": 1,
+            "executionControlSkillId": 10100310,
+            "executionSubSkillIndex": 0,
+            "subSkillIndex": 0,
+            "playerSkillId": 10100310,
+            "durationFrames": 65,
+            "chargeTier": 1,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "hold",
+                "pressFrame": 0,
+                "holdDurationMs": 250,
+                "holdFrames": 15,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 65,
+                "durationFrames": 65,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "declared-verified-input-reopen-occupancy",
+                "sourceIdentity": "skill_control_10100310.asset#attack-reopen-window-start=65F",
+                "conversion": "65 source frames at 60fps",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 248,
+                "durationFrames": 248,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "248 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F"
+            },
+            "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击1段|skill_control_10100310.asset#sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F",
+            "resolutionStatus": "applied"
+          },
+          {
+            "selectorIdentity": "han-charged-stage-two",
+            "label": "重击2段",
+            "publicVariantIndex": 3,
+            "executionControlSkillId": 10100341,
+            "executionSubSkillIndex": 0,
+            "subSkillIndex": 0,
+            "playerSkillId": 10100347,
+            "durationFrames": 71,
+            "chargeTier": 2,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "press",
+                "pressFrame": 0,
+                "holdDurationMs": null,
+                "holdFrames": null,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100341].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 71,
+                "durationFrames": 71,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "declared-verified-input-reopen-occupancy",
+                "sourceIdentity": "skill_control_10100341.asset#attack-reopen-window-start=71F",
+                "conversion": "71 source frames at 60fps",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 211,
+                "durationFrames": 211,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "211 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F"
+            },
+            "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击2段|skill_control_10100310.asset#control-transition[61,188)->10100341/sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F",
+            "resolutionStatus": "applied"
+          }
+        ],
+        "sourceIdentity": "skill_control_10100310.asset#two-stage-charge-transition|skill_control_10100341.asset#stage-two-execution|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json|NewTable/skill.rows[id=10100301]#重击1段|skill_control_10100310.asset#sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F|NewTable/skill.rows[id=10100301]#重击2段|skill_control_10100310.asset#control-transition[61,188)->10100341/sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F",
+        "resolutionStatus": "applied"
+      },
+      "inputRelations": [],
+      "holdRange": {
+        "minimumFrames": 28,
+        "maximumFrames": 61,
+        "frameRate": 60,
+        "sourceIdentity": "skill_control_10100310.asset#projectile@28F|control-transition[61,188)->10100341/sub0"
+      },
+      "chargeTier": [
+        {
+          "selectorIdentity": "han-charged-stage-one",
+          "label": "重击1段",
+          "publicVariantIndex": 1,
+          "executionControlSkillId": 10100310,
+          "executionSubSkillIndex": 0,
+          "subSkillIndex": 0,
+          "playerSkillId": 10100310,
+          "durationFrames": 65,
+          "chargeTier": 1,
+          "executionTiming": {
+            "subSkillIndex": 0,
+            "frameRate": 60,
+            "input": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "holdDurationMs": 250,
+              "holdFrames": 15,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 65,
+              "durationFrames": 65,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "declared-verified-input-reopen-occupancy",
+              "sourceIdentity": "skill_control_10100310.asset#attack-reopen-window-start=65F",
+              "conversion": "65 source frames at 60fps",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 248,
+              "durationFrames": 248,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+              "conversion": "248 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F"
+          },
+          "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击1段|skill_control_10100310.asset#sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F",
+          "resolutionStatus": "applied"
+        },
+        {
+          "selectorIdentity": "han-charged-stage-two",
+          "label": "重击2段",
+          "publicVariantIndex": 3,
+          "executionControlSkillId": 10100341,
+          "executionSubSkillIndex": 0,
+          "subSkillIndex": 0,
+          "playerSkillId": 10100347,
+          "durationFrames": 71,
+          "chargeTier": 2,
+          "executionTiming": {
+            "subSkillIndex": 0,
+            "frameRate": 60,
+            "input": {
+              "mode": "press",
+              "pressFrame": 0,
+              "holdDurationMs": null,
+              "holdFrames": null,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100341].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 71,
+              "durationFrames": 71,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "declared-verified-input-reopen-occupancy",
+              "sourceIdentity": "skill_control_10100341.asset#attack-reopen-window-start=71F",
+              "conversion": "71 source frames at 60fps",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 211,
+              "durationFrames": 211,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+              "conversion": "211 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F"
+          },
+          "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击2段|skill_control_10100310.asset#control-transition[61,188)->10100341/sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F",
+          "resolutionStatus": "applied"
+        }
+      ],
+      "resourceCondition": [],
+      "resourceCost": [],
+      "stateCondition": [],
+      "automaticFollowUps": [],
+      "selectedSubSkillIndex": null,
+      "defaultSelection": null,
+      "variants": [
+        {
+          "executionControlSkillId": 10100310,
+          "subSkillIndex": 0,
+          "playerSkillId": 10100310,
+          "durationFrames": 65,
+          "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击1段|skill_control_10100310.asset#sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F"
+        },
+        {
+          "executionControlSkillId": 10100341,
+          "subSkillIndex": 0,
+          "playerSkillId": 10100347,
+          "durationFrames": 71,
+          "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击2段|skill_control_10100310.asset#control-transition[61,188)->10100341/sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F"
+        }
+      ],
+      "sourceIdentity": [
+        "skill_control_10100310.asset#two-stage-charge-transition|skill_control_10100341.asset#stage-two-execution|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json|NewTable/skill.rows[id=10100301]#重击1段|skill_control_10100310.asset#sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/skill_control_10100310__1303462730970577885.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100310.asset#attack-reopen-window-start=65F|NewTable/skill.rows[id=10100301]#重击2段|skill_control_10100310.asset#control-transition[61,188)->10100341/sub0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100341.asset#attack-reopen-window-start=71F"
+      ],
+      "resolutionStatus": "applied",
+      "reasons": []
     },
     {
       "contractIdentity": "actor:101007|control:10100701|derived-control",

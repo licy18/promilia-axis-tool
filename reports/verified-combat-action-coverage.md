@@ -3,25 +3,25 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：458
-- 来源静态可应用：406
-- 来源运行时依赖：52
+- 场景可运行：459
+- 来源静态可应用：408
+- 来源运行时依赖：51
 - 零距离场景补全：62
-- 来源静态证据缺口：105
+- 来源静态证据缺口：104
 - 明确零：0
-- 未解析：105
-- 真实命中节点：1592
-- 公开动作变体：593（未解析 135）
-- 非零回能元素：667（未关联 467）
+- 未解析：104
+- 真实命中节点：1605
+- 公开动作变体：593（未解析 134）
+- 非零回能元素：667（未关联 466）
 - 零距离投射物命中：825（仍缺发射帧 305、仍缺公式 172、仍缺目标 0）
-- 普攻输入链：20 条 / 95 个输入段（可运行 76，未解析 19）
+- 普攻输入链：20 条 / 95 个输入段（可运行 78，未解析 17）
 - 普攻输入时序：已确认 78，未确认 17
 
 ## 普攻输入链
 
 | 角色 | 输入段 | 可运行 | 未解析 | control |
 | --- | ---: | ---: | ---: | --- |
-| 寒悠悠 | 5 | 3 | 2 | 10100301 / 10100302 / 10100303 / 10100304 / 10100305 |
+| 寒悠悠 | 5 | 5 | 0 | 10100301 / 10100302 / 10100303 / 10100304 / 10100305 |
 | 芃芃 | 4 | 4 | 0 | 10100701 / 10100702 / 10100703 / 10100704 |
 | 涂山小玉 | 5 | 3 | 2 | 10101001 / 10101002 / 10101003 / 10101004 / 10101005 |
 | 莉莉 | 5 | 5 | 0 | 10200101 / 10200102 / 10200103 / 10200104 / 10200105 |
@@ -46,11 +46,11 @@
 
 | Owner | 动作类型 | 目录 | 关联 | 可运行 | 明确零 | 未解析 | 命中 |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| actor | charged-attack | 20 | 20 | 14 | 0 | 6 | 72 |
+| actor | charged-attack | 20 | 20 | 14 | 0 | 6 | 80 |
 | actor | dodge-attack | 20 | 20 | 16 | 0 | 4 | 50 |
 | actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 84 |
 | actor | normal-attack | 20 | 20 | 18 | 0 | 2 | 92 |
-| actor | perfect-parry | 20 | 20 | 1 | 0 | 19 | 3 |
+| actor | perfect-parry | 20 | 20 | 2 | 0 | 18 | 8 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
 | actor | star-carry | 17 | 17 | 12 | 0 | 5 | 72 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
@@ -63,9 +63,7 @@
 ## 未解析动作
 
 - `actor|101003|10100301|0|10100303` 寒悠悠 / normal-attack / 鸢回影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|101003|10100301|1|10100310` 寒悠悠 / charged-attack / 鸢回影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|101003|10100322|1|10100325` 寒悠悠 / limit-counter / 缚风烟: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|101003|10100322|2|10100327` 寒悠悠 / perfect-parry / 缚风烟: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|101007|10100721|2|10100727` 芃芃 / perfect-parry / 来打我啊！: pack-lifecycle-runtime-unimplemented, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing
 - `actor|101010|10101001|0|10101003` 涂山小玉 / normal-attack / 画扇春: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|101010|10101021|0|10101021` 涂山小玉 / star-carry / 驭仙风: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, inject-wrapper-classified-through-child-edges, effect-target-unresolved, property-formula-not-literal-function-5, property-conditions-not-expanded, effect-trigger-frame-missing, judgment-condition-runtime-unimplemented, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, pack-lifecycle-runtime-unimplemented, sp-formula-not-literal-function-5, tuning-consume-judgment-missing, tuning-consume-mark-identity-ambiguous, tuning-consume-success-branch-unresolved
@@ -223,7 +221,7 @@
 ## 未关联非零回能元素
 
 - linked-only-to-unresolved-public-action: 37
-- not-referenced-by-public-action-control: 400
+- not-referenced-by-public-action-control: 399
 - referenced-only-by-unselected-control-variant: 30
 
 逐项 source identity 与字段值见 `verified-combat-action-coverage.json#nonzeroRecoveryCoverage`。

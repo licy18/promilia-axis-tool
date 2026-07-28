@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
+  "sourcePackageHash": "56e344b403b69743befdd3b29d781f6c96e3d44907c703635b57833199aa229b",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -84,7 +84,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "42b12d0d8feacad77e60d70fe8eaf7e7b66411e194031ce39c6f5a9bfab1ce54"
+      "profileHash": "07fdd4c1d6619d23b87798bc6969b64bbef593e27df837798227a058f4446d90"
     },
     {
       "ownerId": 103002,
@@ -126,7 +126,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "c7fec8ec9a53bd4d64e29b21fb578ec3e126c5445575ea87ebef1416bc5b6080"
+      "profileHash": "8f7d5e3285301761a490ab03a95d2c794b07e9d15678b93fd11114d559a1b0b1"
     },
     {
       "ownerId": 101003,
@@ -135,35 +135,38 @@
       "reviewBatch": "M10-B2",
       "mechanicFocus": [
         "队伍印记/支援链",
+        "派生形态",
+        "被动监听",
         "切人/星携技",
-        "运行证据",
-        "静态缺口"
+        "运行证据"
       ],
       "estimatedWorkUnits": 1,
-      "progressState": "evidence-indexed",
-      "targetPipelineMaturity": "ui-verified",
-      "combatCoverageState": "evidence-required",
+      "progressState": "runtime-applied",
+      "targetPipelineMaturity": "runtime-applied",
+      "combatCoverageState": "partial",
       "characterComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 19,
+      "reachableFormCount": 37,
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
-      "derivedEdgeCount": 0,
-      "passiveCount": 0,
+      "derivedEdgeCount": 1,
+      "passiveCount": 2,
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
-      "runtimeEvidenceRequiredCount": 3,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
+      "runtimeEvidenceRequiredCount": 2,
       "mechanismTypes": [
+        "derived-action",
+        "passive-listener",
         "switch-trigger"
       ],
-      "profileIdentity": null,
-      "profileHash": null
+      "profileIdentity": "actor:101003:character-combat-profile:v1",
+      "profileHash": "a6af55d6d7582e3574b2823cced25208a4006c4ee641ed7cde581cb938382381"
     },
     {
       "ownerId": 101007,
@@ -772,10 +775,10 @@
   "summary": {
     "characterCount": 20,
     "progressStateCounts": {
-      "evidence-indexed": 18,
-      "runtime-applied": 2
+      "evidence-indexed": 17,
+      "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 158
+    "totalRuntimeReadyActionCount": 159
   }
 }

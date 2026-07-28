@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 
-export const CHARACTER_COMBAT_COMPILER_VERSION = 1;
+export const CHARACTER_COMBAT_COMPILER_VERSION = 3;
+const TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 101100;
 
 export function compileCharacterCombatRecipeContracts({
   recipe,
@@ -63,6 +64,12 @@ export function compileCharacterCombatRecipeContracts({
     resourceProfiles,
     operators: normalizedOperators,
   });
+  const inputVariantSelectors = compileInputVariantSelectors({
+    ownerId,
+    definitions: compilerRecipe.inputVariantSelectors ?? [],
+    controlBySkillId,
+    operators: normalizedOperators,
+  });
   const controlTransitionWindows = compileControlTransitionWindows({
     ownerId,
     reachableControlSkillIds: compilerRecipe.reachableControlSkillIds ?? [],
@@ -84,10 +91,41 @@ export function compileCharacterCombatRecipeContracts({
     tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
     operators: normalizedOperators,
   });
+  const targetStateProfiles = compileTargetStateProfiles({
+    ownerId,
+    definitions: compilerRecipe.targetStateProfiles ?? [],
+    operators: normalizedOperators,
+  });
+  const targetStateTransactions = compileTargetStateTransactions({
+    ownerId,
+    definitions: compilerRecipe.targetStateTransactions ?? [],
+    controlBySkillId,
+    targetStateProfiles,
+    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+    operators: normalizedOperators,
+  });
+  const conditionalHitGroups = compileConditionalHitGroups({
+    ownerId,
+    definitions: compilerRecipe.conditionalHitGroups ?? [],
+    controlBySkillId,
+    targetStateProfiles,
+    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+    operators: normalizedOperators,
+  });
   const actionHitBindings = compileActionHitBindings({
     ownerId,
-    definitions: compilerRecipe.actionHitBindings ?? [],
+    definitions: [
+      ...(compilerRecipe.actionHitBindings ?? []),
+      ...conditionalHitGroups.map(createConditionalGroupHitBinding),
+    ],
     controlBySkillId,
+  });
+  const runtimeEffectBindings = compileRuntimeEffectBindings({
+    ownerId,
+    definitions: compilerRecipe.runtimeEffectBindings ?? [],
+    controlBySkillId,
+    conditionalHitGroups,
+    operators: normalizedOperators,
   });
   const thresholdTransitions = compileThresholdTransitions({
     ownerId,
@@ -102,16 +140,23 @@ export function compileCharacterCombatRecipeContracts({
     controls,
     controlBySkillId,
     skills: evidence?.skills ?? [],
+    targetStateTransactions,
+    runtimeEffectBindings,
     operators: normalizedOperators,
   });
   const contracts = {
     contextEdges,
     publicActionForms,
     attackInputChains,
+    inputVariantSelectors,
     controlTransitionWindows,
     variantWindowBindings,
     actionEffectBindings,
     actionHitBindings,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
     resourceProfiles: specialResourceContracts.profiles,
     resourceTransactions: specialResourceContracts.operations,
     thresholdTransitions,
@@ -155,11 +200,16 @@ export function compileCharacterCombatRecipeContracts({
       contextEdgeCount: contracts.contextEdges.length,
       publicActionFormCount: contracts.publicActionForms.length,
       attackInputChainCount: contracts.attackInputChains.length,
+      inputVariantSelectorCount: contracts.inputVariantSelectors.length,
       controlTransitionWindowCount:
         contracts.controlTransitionWindows.length,
       variantWindowBindingCount: contracts.variantWindowBindings.length,
       actionEffectBindingCount: contracts.actionEffectBindings.length,
       actionHitBindingCount: contracts.actionHitBindings.length,
+      targetStateProfileCount: contracts.targetStateProfiles.length,
+      targetStateTransactionCount: contracts.targetStateTransactions.length,
+      conditionalHitGroupCount: contracts.conditionalHitGroups.length,
+      runtimeEffectBindingCount: contracts.runtimeEffectBindings.length,
       resourceProfileCount: contracts.resourceProfiles.length,
       resourceTransactionCount: contracts.resourceTransactions.length,
       appliedResourceTransactionCount: contracts.resourceTransactions.filter(
@@ -198,6 +248,9 @@ export function mergeCharacterCombatOwnerCompilations({
     actionVariantGraph.attackInputChains,
     compilations.flatMap(item => item.contracts.attackInputChains)
   );
+  const inputVariantSelectors = compilations.flatMap(
+    item => item.contracts.inputVariantSelectors ?? []
+  );
   const variantWindowBindings = compilations.flatMap(
     item => item.contracts.variantWindowBindings
   );
@@ -206,6 +259,24 @@ export function mergeCharacterCombatOwnerCompilations({
   );
   const actionHitBindings = compilations.flatMap(
     item => item.contracts.actionHitBindings ?? []
+  );
+  const targetStateProfiles = replaceOwnerRecords(
+    actionVariantGraph.targetStateProfiles,
+    compilations.flatMap(item => item.contracts.targetStateProfiles ?? [])
+  );
+  const targetStateTransactions = replaceOwnerRecords(
+    actionVariantGraph.targetStateTransactions,
+    compilations.flatMap(
+      item => item.contracts.targetStateTransactions ?? []
+    )
+  );
+  const conditionalHitGroups = replaceOwnerRecords(
+    actionVariantGraph.conditionalHitGroups,
+    compilations.flatMap(item => item.contracts.conditionalHitGroups ?? [])
+  );
+  const runtimeEffectBindings = replaceOwnerRecords(
+    actionVariantGraph.runtimeEffectBindings,
+    compilations.flatMap(item => item.contracts.runtimeEffectBindings ?? [])
   );
   const thresholdTransitions = replaceOwnerRecords(
     specialResourceCatalog.thresholdTransitions,
@@ -242,6 +313,15 @@ export function mergeCharacterCombatOwnerCompilations({
   actionVariantGraph.contextEdges = contextEdges;
   actionVariantGraph.publicActionForms = publicActionForms;
   actionVariantGraph.attackInputChains = attackInputChains;
+  actionVariantGraph.targetStateProfiles = targetStateProfiles;
+  actionVariantGraph.targetStateTransactions = targetStateTransactions;
+  actionVariantGraph.conditionalHitGroups = conditionalHitGroups;
+  actionVariantGraph.runtimeEffectBindings = runtimeEffectBindings;
+  actionVariantGraph.derivedControlContracts =
+    applyCompiledInputVariantSelectors({
+      contracts: actionVariantGraph.derivedControlContracts ?? [],
+      bindings: inputVariantSelectors,
+    });
   actionVariantGraph.edges = applyVariantWindowBindings({
     edges: actionVariantGraph.edges ?? [],
     bindings: variantWindowBindings,
@@ -252,9 +332,14 @@ export function mergeCharacterCombatOwnerCompilations({
     appliedContextEdgeCount: contextEdges.filter(edge => edge.applied).length,
     publicActionFormCount: publicActionForms.length,
     attackInputChainCount: attackInputChains.length,
+    compiledInputVariantSelectorCount: inputVariantSelectors.length,
     appliedEdgeCount: actionVariantGraph.edges.filter(edge => edge.applied)
       .length,
     compiledVariantWindowBindingCount: variantWindowBindings.length,
+    targetStateProfileCount: targetStateProfiles.length,
+    targetStateTransactionCount: targetStateTransactions.length,
+    conditionalHitGroupCount: conditionalHitGroups.length,
+    runtimeEffectBindingCount: runtimeEffectBindings.length,
   };
   specialResourceCatalog.thresholdTransitions = thresholdTransitions;
   specialResourceCatalog.passiveEffects = passiveEffects;
@@ -285,6 +370,10 @@ export function mergeCharacterCombatOwnerCompilations({
     compilations,
     actionEffectBindings,
     actionHitBindings,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
   };
 }
 
@@ -304,21 +393,67 @@ export function applyCharacterCombatActionHitBindings({
         `character combat action hit control missing: ${binding.ownerId}/${binding.controlSkillId}`
       );
     }
-    const indexes = (control.elements ?? [])
+    const sourceControl = (controls ?? []).find(
+      item =>
+        Number(item.controlSkillId) ===
+        Number(binding.sourceControlSkillId ?? binding.controlSkillId)
+    );
+    if (!sourceControl) {
+      throw new Error(
+        `character combat action hit source control missing: ${binding.ownerId}/${binding.sourceControlSkillId}`
+      );
+    }
+    const sourceIndexes = (sourceControl.elements ?? [])
+      .map((element, index) => ({ element, index }))
+      .filter(
+        ({ element }) =>
+          Number(element.mapIndex) ===
+            Number(binding.sourceSubSkillIndex ?? binding.subSkillIndex) &&
+          Number(element.elementId) === Number(binding.elementId) &&
+          (!binding.sourceReferenceKind ||
+            element.referenceKind === binding.sourceReferenceKind)
+      );
+    if (sourceIndexes.length !== 1) {
+      throw new Error(
+        `character combat action hit source match mismatch: ${binding.ownerId}/${binding.sourceControlSkillId}/${binding.sourceSubSkillIndex}/${binding.elementId} received ${sourceIndexes.length}`
+      );
+    }
+    const sourceElement = sourceIndexes[0].element;
+    const targetIndexes = (control.elements ?? [])
       .map((element, index) => ({ element, index }))
       .filter(
         ({ element }) =>
           Number(element.mapIndex) === Number(binding.subSkillIndex) &&
-          Number(element.elementId) === Number(binding.elementId)
+          Number(element.elementId) === Number(binding.elementId) &&
+          (!binding.targetReferenceKind ||
+            element.referenceKind === binding.targetReferenceKind)
       );
-    if (indexes.length !== 1) {
+    if (targetIndexes.length > 1) {
       throw new Error(
-        `character combat action hit match mismatch: ${binding.ownerId}/${binding.controlSkillId}/${binding.subSkillIndex}/${binding.elementId} received ${indexes.length}`
+        `character combat action hit target match mismatch: ${binding.ownerId}/${binding.controlSkillId}/${binding.subSkillIndex}/${binding.elementId} received ${targetIndexes.length}`
       );
     }
-    const index = indexes[0].index;
+    const index =
+      targetIndexes[0]?.index ??
+      (control.elements ?? (control.elements = [])).push({
+        ...sourceElement,
+        mapIndex: Number(binding.subSkillIndex),
+        triggers: [],
+        projectedFromControlSkillId: Number(
+          binding.sourceControlSkillId ?? binding.controlSkillId
+        ),
+        projectedFromSubSkillIndex: Number(
+          binding.sourceSubSkillIndex ?? binding.subSkillIndex
+        ),
+      }) - 1;
     const element = control.elements[index];
-    const existingTriggers = element.triggers ?? [];
+    const normalizedElement = binding.formulaNormalization?.applied
+      ? normalizeConditionalHitElement({
+          element,
+          formulaNormalization: binding.formulaNormalization,
+        })
+      : element;
+    const existingTriggers = normalizedElement.triggers ?? [];
     const boundTriggers = binding.triggerFrames.map((startFrame, hitIndex) => ({
       behaviorPathId: `character-combat:${binding.bindingIdentity}:${hitIndex + 1}`,
       startFrame,
@@ -329,9 +464,12 @@ export function applyCharacterCombatActionHitBindings({
       targetKind: binding.targetKind,
       targetSourceField: 'character-combat-verified-hit-binding',
       sourceIdentity: binding.sourceIdentity,
+      conditionalGroupIdentity:
+        binding.conditionalGroupIdentity ?? null,
+      runtimeCondition: binding.runtimeCondition ?? null,
     }));
     control.elements[index] = {
-      ...element,
+      ...normalizedElement,
       triggers: dedupeBy(
         [...existingTriggers, ...boundTriggers],
         trigger => `${trigger.behaviorPathId}|${trigger.startFrame}`
@@ -346,16 +484,73 @@ export function applyCharacterCombatActionHitBindings({
       scenarioClassification: 'applied',
       status: 'verified-action-hit-binding-applied',
       confidence: 'high',
-      issues: (element.issues ?? []).filter(
-        reason => reason !== 'trigger-frame-missing'
+      issues: (normalizedElement.issues ?? []).filter(
+        reason =>
+          reason !== 'trigger-frame-missing' &&
+          reason !== 'common-function-unverified'
       ),
       applied: true,
+      projectedFromControlSkillId: Number(
+        binding.sourceControlSkillId ?? binding.controlSkillId
+      ),
+      projectedFromSubSkillIndex: Number(
+        binding.sourceSubSkillIndex ?? binding.subSkillIndex
+      ),
       sourceIdentity: [element.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
+      conditionalGroupIdentity:
+        binding.conditionalGroupIdentity ?? null,
+      runtimeCondition: binding.runtimeCondition ?? null,
     };
   }
   return controls;
+}
+
+function normalizeConditionalHitElement({
+  element,
+  formulaNormalization,
+}) {
+  const damageType = Number(element.damage?.damageType);
+  const weakBreakDamageRate = Number(
+    element.damage?.weakBreakDamageRateBasisPoints
+  );
+  return {
+    ...element,
+    formula: {
+      ...element.formula,
+      commonFunctionId: formulaNormalization.normalizedCommonFunctionId,
+      commonExpression: '1',
+      conditionalNormalization: formulaNormalization,
+    },
+    dimensions: {
+      ...element.dimensions,
+      hp:
+        damageType === 8
+          ? {
+              status: 'verified-zero',
+              reasons: ['pure-weakness-damage-type'],
+              sourceField: 'damageType',
+            }
+          : {
+              status: 'applied',
+              reasons: [],
+              sourceField: 'formulaParams',
+            },
+      toughness:
+        weakBreakDamageRate === 0
+          ? {
+              status: 'verified-zero',
+              reasons: ['weak-break-damage-rate-explicit-zero'],
+              sourceField: 'weakBreakDamageRate',
+            }
+          : {
+              status: 'applied',
+              reasons: [],
+              sourceField: 'weakBreakDamageRate',
+            },
+    },
+  };
 }
 
 export function applyCharacterCombatActionEffectBindings({
@@ -374,14 +569,21 @@ export function applyCharacterCombatActionEffectBindings({
         `character combat action effect control missing: ${binding.ownerId}/${binding.controlSkillId}`
       );
     }
-    const matches = (control.effects ?? []).filter(
+    const elementMatches = (control.effects ?? []).filter(
       effect =>
         Number(effect.mapIndex) === Number(binding.mapIndex) &&
-        Number(effect.elementId) === Number(binding.elementId) &&
-        (binding.bindingKind !== 'lifecycle-override' ||
-          Number(effect.trigger?.startFrame) ===
-            Number(binding.triggerFrame))
+        Number(effect.elementId) === Number(binding.elementId)
     );
+    const triggerMatches = elementMatches.filter(
+      effect =>
+        Number(effect.trigger?.startFrame) === Number(binding.triggerFrame)
+    );
+    const matches =
+      triggerMatches.length === 1
+        ? triggerMatches
+        : elementMatches.length === 1
+          ? elementMatches
+          : triggerMatches;
     if (matches.length !== 1) {
       throw new Error(
         `character combat action effect match mismatch: ${binding.ownerId}/${binding.controlSkillId}/${binding.mapIndex}/${binding.elementId} received ${matches.length}`
@@ -475,16 +677,18 @@ export function applyCharacterCombatAttackInputPhaseMappings({
         'character-combat-default-attack-phase-applied';
       mapping.attackInputPhaseSourceIdentity = chain.sourceIdentity;
     }
-    const directExecutionForms = (
+    const appliedExecutionForms = (
       compilation.contracts.publicActionForms ?? []
     ).filter(
       form =>
         form.applied === true &&
-        ['direct-execution', 'wrapper-derived-execution'].includes(
-          form.selectionKind
-        )
+        [
+          'direct-execution',
+          'single-control-verified-occupancy',
+          'wrapper-derived-execution',
+        ].includes(form.selectionKind)
     );
-    for (const form of directExecutionForms) {
+    for (const form of appliedExecutionForms) {
       const matches = mappings.filter(
         mapping =>
           Number(mapping.ownerId) === Number(compilation.ownerId) &&
@@ -651,6 +855,11 @@ function matchesVariantWindowBinding(edge, binding) {
 }
 
 function applyActionEffectBinding(effect, binding) {
+  const targetKind =
+    binding.targetKindOverride ??
+    effect.target?.kind ??
+    effect.trigger?.targetKind ??
+    'unresolved';
   const trigger = {
     behaviorPathId: `character-combat:${binding.bindingIdentity}`,
     startFrame: binding.triggerFrame,
@@ -658,7 +867,7 @@ function applyActionEffectBinding(effect, binding) {
     behaviorIndex: null,
     timelineGroupIndex: 0,
     targetCode: effect.trigger?.targetCode ?? 0,
-    targetKind: effect.target?.kind ?? effect.trigger?.targetKind ?? 'unresolved',
+    targetKind,
     targetSourceField:
       effect.trigger?.targetSourceField ?? 'character-combat-verified-binding',
     sourceIdentity: binding.sourceIdentity,
@@ -670,6 +879,10 @@ function applyActionEffectBinding(effect, binding) {
       trigger,
       lifecycle: {
         ...(effect.lifecycle ?? {}),
+        durationMs:
+          binding.durationMsOverride ??
+          effect.lifecycle?.durationMs ??
+          null,
         stackDelta: binding.lifecycleStackDelta,
         maxStacks:
           binding.lifecycleMaxStacks ??
@@ -679,6 +892,11 @@ function applyActionEffectBinding(effect, binding) {
       sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
+      target: {
+        ...(effect.target ?? {}),
+        kind: targetKind,
+        sourceIdentity: binding.sourceIdentity,
+      },
       dimensions: {
         ...(effect.dimensions ?? {}),
         dynamicProperty: {
@@ -697,6 +915,11 @@ function applyActionEffectBinding(effect, binding) {
     ...effect,
     effectIdentity: `${effect.graphIdentity}|${binding.triggerFrame}|${effect.depth ?? 0}`,
     trigger,
+    target: {
+      ...(effect.target ?? {}),
+      kind: targetKind,
+      sourceIdentity: binding.sourceIdentity,
+    },
     tuningMark: binding.tuningMark,
     sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
       .filter(Boolean)
@@ -971,6 +1194,10 @@ export function createCharacterCombatOwnerRuntimeContracts({
     variantWindowBindings: compilation.contracts.variantWindowBindings,
     actionEffectBindings: compilation.contracts.actionEffectBindings,
     actionHitBindings: compilation.contracts.actionHitBindings,
+    targetStateProfiles: compilation.contracts.targetStateProfiles,
+    targetStateTransactions: compilation.contracts.targetStateTransactions,
+    conditionalHitGroups: compilation.contracts.conditionalHitGroups,
+    runtimeEffectBindings: compilation.contracts.runtimeEffectBindings,
     hits: sortByIdentity(hits ?? []),
     resourceProfiles: sortByIdentity(resourceProfiles ?? []),
     resourceTransactions: sortByIdentity(resourceTransactions ?? []),
@@ -1460,6 +1687,196 @@ function applyDeclaredExecutionOccupancy({
         reason !== 'verified-action-effective-occupancy-window-unresolved'
     ),
   };
+}
+
+function compileInputVariantSelectors({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  operators,
+}) {
+  return definitions.map(definition => {
+    const publicControl = requireControl(
+      controlBySkillId,
+      definition.publicControlSkillId,
+      'input variant public control'
+    );
+    const actionKinds = [
+      ...new Set((definition.actionKinds ?? []).map(String).filter(Boolean)),
+    ];
+    const options = (definition.options ?? []).map((option, index) => {
+      const executionControl = requireControl(
+        controlBySkillId,
+        option.executionControlSkillId,
+        'input variant execution control'
+      );
+      const executionTiming = applyDeclaredExecutionOccupancy({
+        timing: operators.resolveControlVariantTiming({
+          control: executionControl,
+          subSkillIndex: option.executionSubSkillIndex,
+          actionKind: actionKinds[0] ?? null,
+        }),
+        declaration: option.executionOccupancy,
+        ownerId,
+        identity: option.selectorIdentity,
+      });
+      const publicVariantIndex = Number(option.publicVariantIndex);
+      const executionSubSkillIndex = Number(
+        option.executionSubSkillIndex
+      );
+      if (
+        !option.selectorIdentity ||
+        !Number.isInteger(publicVariantIndex) ||
+        publicVariantIndex < 0 ||
+        !Number.isInteger(executionSubSkillIndex) ||
+        executionSubSkillIndex < 0 ||
+        executionTiming?.occupancy?.status !== 'applied'
+      ) {
+        throw new Error(
+          `character combat input variant evidence missing: ${ownerId}/${definition.selectorIdentity}/${index}`
+        );
+      }
+      return {
+        selectorIdentity: option.selectorIdentity,
+        label: option.label ?? `Variant ${index + 1}`,
+        publicVariantIndex,
+        executionControlSkillId: Number(option.executionControlSkillId),
+        executionSubSkillIndex,
+        subSkillIndex: executionSubSkillIndex,
+        playerSkillId:
+          executionControl.variants?.find(
+            variant =>
+              Number(variant.subSkillIndex) === executionSubSkillIndex
+          )?.playerSkillId ?? null,
+        durationFrames: executionTiming.occupancy.durationFrames,
+        chargeTier:
+          option.chargeTier == null ? null : Number(option.chargeTier),
+        executionTiming: toRuntimeExecutionTiming(executionTiming),
+        sourceIdentity: [
+          option.sourceIdentity,
+          executionTiming.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        resolutionStatus: 'applied',
+      };
+    });
+    if (
+      !definition.selectorIdentity ||
+      actionKinds.length === 0 ||
+      options.length < 2 ||
+      new Set(options.map(option => option.selectorIdentity)).size !==
+        options.length ||
+      new Set(options.map(option => option.publicVariantIndex)).size !==
+        options.length
+    ) {
+      throw new Error(
+        `character combat input variant selector invalid: ${ownerId}/${definition.selectorIdentity}`
+      );
+    }
+    const inputSelector = {
+      selectorIdentity: definition.selectorIdentity,
+      kind: definition.kind ?? 'input-variant',
+      mode: definition.mode ?? 'press',
+      holdRange:
+        definition.holdRange && typeof definition.holdRange === 'object'
+          ? { ...definition.holdRange }
+          : null,
+      options,
+      sourceIdentity: [
+        definition.sourceIdentity,
+        publicControl.sourcePath,
+        ...options.map(option => option.sourceIdentity),
+      ]
+        .filter(Boolean)
+        .join('|'),
+      resolutionStatus: 'applied',
+    };
+    return {
+      selectorIdentity: definition.selectorIdentity,
+      ownerId,
+      publicControlSkillId: Number(definition.publicControlSkillId),
+      actionKinds,
+      decisionFrame: Number(definition.decisionFrame) || 0,
+      options,
+      inputSelector,
+      sourceIdentity: inputSelector.sourceIdentity,
+      resolutionStatus: 'applied',
+      applied: true,
+    };
+  });
+}
+
+function applyCompiledInputVariantSelectors({ contracts, bindings }) {
+  const nextContracts = [...contracts];
+  for (const binding of bindings) {
+    const index = nextContracts.findIndex(
+      contract =>
+        Number(contract.ownerId) === Number(binding.ownerId) &&
+        Number(contract.controlSkillId) ===
+          Number(binding.publicControlSkillId)
+    );
+    const current = index >= 0 ? nextContracts[index] : null;
+    const next = {
+      ...(current ?? {}),
+      contractIdentity:
+        current?.contractIdentity ??
+        `actor:${binding.ownerId}|control:${binding.publicControlSkillId}|derived-control`,
+      ownerKind: 'actor',
+      ownerId: Number(binding.ownerId),
+      controlSkillId: Number(binding.publicControlSkillId),
+      actionKinds: [
+        ...new Set([
+          ...(current?.actionKinds ?? []),
+          ...(binding.actionKinds ?? []),
+        ]),
+      ],
+      publicActions: current?.publicActions ?? [],
+      controlSource: 'input-controlled',
+      candidateControlSources: [
+        ...new Set([
+          ...(current?.candidateControlSources ?? []),
+          'input-controlled',
+        ]),
+      ],
+      decisionFrame: binding.decisionFrame,
+      inputSelector: binding.inputSelector,
+      inputRelations: current?.inputRelations ?? [],
+      holdRange: binding.inputSelector.holdRange,
+      chargeTier: binding.options,
+      resourceCondition: current?.resourceCondition ?? [],
+      resourceCost: current?.resourceCost ?? [],
+      stateCondition: current?.stateCondition ?? [],
+      automaticFollowUps: current?.automaticFollowUps ?? [],
+      selectedSubSkillIndex: null,
+      defaultSelection: current?.defaultSelection ?? null,
+      variants: binding.options.map(option => ({
+        executionControlSkillId: option.executionControlSkillId,
+        subSkillIndex: option.executionSubSkillIndex,
+        playerSkillId: option.playerSkillId,
+        durationFrames: option.durationFrames,
+        sourceIdentity: option.sourceIdentity,
+      })),
+      sourceIdentity: [
+        ...(Array.isArray(current?.sourceIdentity)
+          ? current.sourceIdentity
+          : [current?.sourceIdentity].filter(Boolean)),
+        binding.sourceIdentity,
+      ],
+      resolutionStatus: 'applied',
+      reasons: [],
+    };
+    if (index >= 0) nextContracts[index] = next;
+    else nextContracts.push(next);
+  }
+  return nextContracts.sort(
+    (left, right) =>
+      Number(left.ownerId) - Number(right.ownerId) ||
+      Number(left.controlSkillId) - Number(right.controlSkillId) ||
+      String(left.contractIdentity).localeCompare(
+        String(right.contractIdentity)
+      )
+  );
 }
 
 function compileAttackInputChains({
@@ -2067,10 +2484,578 @@ function compileActionEffectBindings({
         definition.lifecycleMaxStacks == null
           ? null
           : Number(definition.lifecycleMaxStacks),
+      durationMsOverride:
+        definition.durationMsOverride == null
+          ? null
+          : Number(definition.durationMsOverride),
+      targetKindOverride: definition.targetKindOverride ?? null,
       status: 'applied',
       applied: true,
     };
   });
+}
+
+function compileTargetStateProfiles({ ownerId, definitions, operators }) {
+  return definitions.map(definition => {
+    const stateAsset = operators.readElementAsset(definition.elementId);
+    const capacityAsset = operators.readElementAsset(
+      definition.capacityElementId ?? definition.elementId
+    );
+    const durationMs = Number(stateAsset?.tree?.time);
+    const maxStacks = Number(capacityAsset?.tree?.combineNumber);
+    if (
+      !stateAsset ||
+      !capacityAsset ||
+      !(durationMs > 0) ||
+      !(maxStacks > 0) ||
+      (definition.expectedDurationMs != null &&
+        durationMs !== Number(definition.expectedDurationMs)) ||
+      (definition.expectedMaxStacks != null &&
+        maxStacks !== Number(definition.expectedMaxStacks))
+    ) {
+      throw new Error(
+        `character combat target state evidence missing: ${ownerId}/${definition.stateIdentity}`
+      );
+    }
+    return {
+      stateIdentity: String(definition.stateIdentity),
+      ownerId,
+      name:
+        definition.name ??
+        stateAsset.tree?.elementName ??
+        `状态 ${definition.elementId}`,
+      targetKind: definition.targetKind ?? 'enemy',
+      elementId: Number(definition.elementId),
+      capacityElementId: Number(
+        definition.capacityElementId ?? definition.elementId
+      ),
+      durationMs,
+      maxStacks,
+      expiryMode: definition.expiryMode ?? 'independent-layer',
+      sourceIdentity: [
+        stateAsset.sourceIdentity,
+        `${stateAsset.sourceIdentity}#time=${durationMs}`,
+        capacityAsset.sourceIdentity,
+        `${capacityAsset.sourceIdentity}#combineNumber=${maxStacks}`,
+        definition.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-target-state-profile-ready',
+      applied: true,
+    };
+  });
+}
+
+function compileTargetStateTransactions({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  targetStateProfiles,
+  operators,
+}) {
+  const profileByIdentity = new Map(
+    targetStateProfiles.map(profile => [profile.stateIdentity, profile])
+  );
+  return definitions.map(definition => {
+    const control = requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'target state transaction'
+    );
+    const profile = profileByIdentity.get(String(definition.stateIdentity));
+    const transactionAsset = operators.readElementAsset(
+      definition.transactionElementId ?? profile?.elementId
+    );
+    const triggerFrame = Number(definition.triggerFrame);
+    const amount = Number(definition.amount);
+    const hitElementId =
+      definition.requiresHitElementId == null
+        ? null
+        : Number(definition.requiresHitElementId);
+    const hitEvidence =
+      hitElementId == null
+        ? null
+        : (control.elements ?? []).find(
+            element =>
+              Number(element.mapIndex) ===
+                Number(definition.subSkillIndex) &&
+              Number(element.elementId) === hitElementId &&
+              (element.triggers ?? []).some(
+                trigger => Number(trigger.startFrame) === triggerFrame
+              )
+          );
+    if (
+      !profile ||
+      !transactionAsset ||
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      !Number.isInteger(amount) ||
+      amount <= 0 ||
+      (hitElementId != null && !hitEvidence)
+    ) {
+      throw new Error(
+        `character combat target state transaction evidence missing: ${ownerId}/${definition.transactionIdentity}`
+      );
+    }
+    return {
+      transactionIdentity: String(definition.transactionIdentity),
+      ownerId,
+      stateIdentity: profile.stateIdentity,
+      controlSkillId: Number(definition.controlSkillId),
+      subSkillIndex: Number(definition.subSkillIndex),
+      triggerFrame,
+      frameRate: Number(control.frameRate) || 60,
+      operation: definition.operation ?? 'gain',
+      amount,
+      durationMs:
+        definition.durationMs == null
+          ? profile.durationMs
+          : Number(definition.durationMs),
+      requiresHitElementId: hitElementId,
+      passiveSkillId:
+        definition.passiveSkillId == null
+          ? null
+          : Number(definition.passiveSkillId),
+      priority: Number(definition.priority) || 0,
+      sourceIdentity: [
+        transactionAsset.sourceIdentity,
+        hitEvidence?.sourceIdentity,
+        definition.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-target-state-transaction-ready',
+      applied: true,
+    };
+  });
+}
+
+function compileConditionalHitGroups({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  targetStateProfiles,
+  tuningMarkProfiles,
+  operators,
+}) {
+  const profileByIdentity = new Map(
+    targetStateProfiles.map(profile => [profile.stateIdentity, profile])
+  );
+  return definitions.map(definition => {
+    const targetControl = requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'conditional hit target'
+    );
+    const sourceControl = requireControl(
+      controlBySkillId,
+      definition.sourceControlSkillId,
+      'conditional hit source'
+    );
+    const profile = profileByIdentity.get(String(definition.stateIdentity));
+    const sourceElement = (sourceControl.elements ?? []).find(
+      element =>
+        Number(element.mapIndex) ===
+          Number(definition.sourceSubSkillIndex) &&
+        Number(element.elementId) === Number(definition.elementId)
+    );
+    const formulaNormalization =
+      resolveTargetStateConditionalFormulaNormalization({
+        sourceElement,
+        profile,
+        minimumStacks: Math.max(
+          1,
+          Number(definition.minimumStacks) || 1
+        ),
+        operators,
+      });
+    const decisionFrame = Number(definition.decisionFrame);
+    const triggerFrames = [...new Set(definition.triggerFrames.map(Number))];
+    const consumeBands = (definition.consumeBands ?? []).map(band => {
+      const asset = operators.readElementAsset(band.sourceElementId);
+      const amount = Number(band.amount);
+      const minimumStacks = Number(band.minimumStacks ?? 1);
+      if (
+        !asset ||
+        !Number.isInteger(amount) ||
+        amount <= 0 ||
+        !Number.isInteger(minimumStacks) ||
+        minimumStacks <= 0
+      ) {
+        throw new Error(
+          `character combat conditional consume evidence missing: ${ownerId}/${definition.groupIdentity}/${band.sourceElementId}`
+        );
+      }
+      return {
+        minimumStacks,
+        amount,
+        sourceElementId: Number(band.sourceElementId),
+        sourceIdentity: [
+          asset.sourceIdentity,
+          band.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        status: 'verified-target-state-consume-band-ready',
+        applied: true,
+      };
+    });
+    const tuningMark = definition.tuningMarkProfileKey
+      ? (tuningMarkProfiles ?? []).find(
+          profile =>
+            (profile.profileKey ?? profile.key) ===
+            definition.tuningMarkProfileKey
+        )
+      : null;
+    if (
+      !targetControl ||
+      !sourceElement ||
+      !profile ||
+      !Number.isInteger(decisionFrame) ||
+      decisionFrame < 0 ||
+      triggerFrames.length === 0 ||
+      triggerFrames.some(
+        frame => !Number.isInteger(frame) || frame < decisionFrame
+      ) ||
+      (definition.tuningMarkProfileKey && !tuningMark?.applied) ||
+      (!Object.values(sourceElement.dimensions ?? {}).some(
+        dimension => dimension.status === 'applied'
+      ) &&
+        !formulaNormalization?.applied)
+    ) {
+      throw new Error(
+        `character combat conditional hit evidence missing: ${ownerId}/${definition.groupIdentity} ${JSON.stringify(
+          {
+            targetControl: Boolean(targetControl),
+            sourceElement: Boolean(sourceElement),
+            targetStateProfile: Boolean(profile),
+            decisionFrame,
+            triggerFrames,
+            tuningMarkApplied: definition.tuningMarkProfileKey
+              ? Boolean(tuningMark?.applied)
+              : null,
+            appliedDimensionCount: Object.values(
+              sourceElement?.dimensions ?? {}
+            ).filter(dimension => dimension.status === 'applied').length,
+            conditionalFormulaNormalized:
+              formulaNormalization?.applied === true,
+          }
+        )}`
+      );
+    }
+    return {
+      groupIdentity: String(definition.groupIdentity),
+      ownerId,
+      controlSkillId: Number(definition.controlSkillId),
+      subSkillIndex: Number(definition.subSkillIndex),
+      sourceControlSkillId: Number(definition.sourceControlSkillId),
+      sourceSubSkillIndex: Number(definition.sourceSubSkillIndex),
+      elementId: Number(definition.elementId),
+      triggerFrames: triggerFrames.sort((left, right) => left - right),
+      decisionFrame,
+      frameRate: Number(targetControl.frameRate) || 60,
+      stateIdentity: profile.stateIdentity,
+      minimumStacks: Math.max(
+        1,
+        Number(definition.minimumStacks) || 1
+      ),
+      consumePolicy: definition.consumePolicy ?? 'consume-band-or-all',
+      consumeBands: consumeBands.sort(
+        (left, right) => right.minimumStacks - left.minimumStacks
+      ),
+      fallbackConsumeAll: definition.fallbackConsumeAll !== false,
+      formulaNormalization,
+      tuningMark: tuningMark?.applied
+        ? {
+            ...tuningMark,
+            profileKey: tuningMark.profileKey ?? tuningMark.key,
+            stackDelta: Math.max(
+              1,
+              Number(definition.tuningMarkStackDelta) || 1
+            ),
+            triggerFrame: Number(
+              definition.tuningMarkTriggerFrame ?? decisionFrame
+            ),
+            applied: true,
+          }
+        : null,
+      semanticName:
+        definition.semanticName ??
+        sourceElement.name ??
+        `条件命中 ${definition.elementId}`,
+      sourceIdentity: [
+        sourceElement.sourceIdentity,
+        definition.sourceIdentity,
+        ...consumeBands.map(band => band.sourceIdentity),
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-conditional-hit-group-ready',
+      applied: true,
+    };
+  });
+}
+
+function resolveTargetStateConditionalFormulaNormalization({
+  sourceElement,
+  profile,
+  minimumStacks,
+  operators,
+}) {
+  if (
+    !sourceElement ||
+    Number(sourceElement.formula?.commonFunctionId) !==
+      TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID
+  ) {
+    return null;
+  }
+  const asset = operators.readElementAsset(sourceElement.elementId);
+  const tree = asset?.tree;
+  const parameters =
+    tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
+  const stateElementId = Number(parameters[12]);
+  const threshold = Number(parameters[8]);
+  const trueValue = Number(parameters[19]);
+  const falseValue = Number(parameters[5]);
+  const expectedMinimumStacks = threshold + 1;
+  const ratioAtLevelOne = Number(
+    sourceElement.formula?.ratiosByLevel?.[1]
+  );
+  if (
+    Number(tree?.formulaParams?.function_1) !==
+      TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID ||
+    stateElementId !== Number(profile?.elementId) ||
+    expectedMinimumStacks !== Number(minimumStacks) ||
+    trueValue !== 1 ||
+    falseValue !== 0 ||
+    !Number.isFinite(ratioAtLevelOne) ||
+    !Number.isFinite(Number(sourceElement.damage?.damageType))
+  ) {
+    return null;
+  }
+  return {
+    kind: 'target-state-condition-to-unity-common-factor',
+    originalCommonFunctionId:
+      TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID,
+    normalizedCommonFunctionId: 1,
+    stateIdentity: profile.stateIdentity,
+    stateElementId,
+    comparison: 'greater-than',
+    threshold,
+    minimumStacks: expectedMinimumStacks,
+    trueValue,
+    falseValue,
+    sourceIdentity: [
+      asset.sourceIdentity,
+      `element_formula[${TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID}]#IF(target.ELEMENT_LAYERS[M]>I,T,F)`,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-target-state-conditional-formula-normalized',
+    applied: true,
+  };
+}
+
+function createConditionalGroupHitBinding(group) {
+  return {
+    bindingIdentity: `conditional-hit-group:${group.groupIdentity}`,
+    controlSkillId: group.controlSkillId,
+    subSkillIndex: group.subSkillIndex,
+    sourceControlSkillId: group.sourceControlSkillId,
+    sourceSubSkillIndex: group.sourceSubSkillIndex,
+    elementId: group.elementId,
+    triggerFrames: group.triggerFrames,
+    frameCount: 1,
+    targetCode: 0,
+    targetKind: 'enemy',
+    conditionalGroupIdentity: group.groupIdentity,
+    runtimeCondition: {
+      kind: 'target-state-at-least',
+      stateIdentity: group.stateIdentity,
+      minimumStacks: group.minimumStacks,
+      decisionFrame: group.decisionFrame,
+    },
+    formulaNormalization: group.formulaNormalization ?? null,
+    sourceIdentity: group.sourceIdentity,
+  };
+}
+
+function compileRuntimeEffectBindings({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  conditionalHitGroups,
+  operators,
+}) {
+  const groupByIdentity = new Map(
+    conditionalHitGroups.map(group => [group.groupIdentity, group])
+  );
+  return definitions.map(definition => {
+    const triggerKind = definition.triggerKind;
+    const group =
+      triggerKind === 'conditional-hit-group-applied'
+        ? groupByIdentity.get(String(definition.conditionalGroupIdentity))
+        : null;
+    const control =
+      triggerKind === 'action-frame'
+        ? requireControl(
+            controlBySkillId,
+            definition.controlSkillId,
+            'runtime effect binding'
+          )
+        : null;
+    const triggerFrame = Number(
+      definition.triggerFrame ?? group?.decisionFrame
+    );
+    const propertyAsset =
+      definition.propertyElementId == null
+        ? null
+        : operators.readElementAsset(definition.propertyElementId);
+    const directSpAsset =
+      definition.directSpElementId == null
+        ? null
+        : operators.readElementAsset(definition.directSpElementId);
+    const durationAsset =
+      definition.durationElementId == null
+        ? propertyAsset
+        : operators.readElementAsset(definition.durationElementId);
+    const modifier = propertyAsset
+      ? compileRuntimePropertyModifier({
+          asset: propertyAsset,
+          expectedAttributeId: definition.expectedAttributeId,
+          expectedBucket: definition.expectedBucket,
+          expectedValueRaw: definition.expectedValueRaw,
+        })
+      : null;
+    const directSp = directSpAsset
+      ? compileRuntimeDirectSp({
+          asset: directSpAsset,
+          expectedValue: definition.expectedDirectSpValue,
+        })
+      : null;
+    const durationMs = Number(
+      definition.durationMs ?? durationAsset?.tree?.time
+    );
+    if (
+      !['conditional-hit-group-applied', 'action-frame'].includes(
+        triggerKind
+      ) ||
+      (triggerKind === 'conditional-hit-group-applied' && !group) ||
+      (triggerKind === 'action-frame' && !control) ||
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      (!modifier && !directSp) ||
+      (modifier && !(durationMs > 0))
+    ) {
+      throw new Error(
+        `character combat runtime effect evidence missing: ${ownerId}/${definition.bindingIdentity}`
+      );
+    }
+    return {
+      bindingIdentity: String(definition.bindingIdentity),
+      ownerId,
+      triggerKind,
+      conditionalGroupIdentity: group?.groupIdentity ?? null,
+      controlSkillId:
+        triggerKind === 'action-frame'
+          ? Number(definition.controlSkillId)
+          : group.controlSkillId,
+      subSkillIndex:
+        triggerKind === 'action-frame'
+          ? Number(definition.subSkillIndex)
+          : group.subSkillIndex,
+      triggerFrame,
+      frameRate: Number(control?.frameRate ?? group?.frameRate) || 60,
+      targetKind: definition.targetKind,
+      effectId:
+        definition.effectId ??
+        `battle-element:${
+          propertyAsset?.elementId ?? directSpAsset?.elementId
+        }`,
+      effectName:
+        definition.effectName ??
+        propertyAsset?.tree?.elementName ??
+        directSpAsset?.tree?.elementName ??
+        definition.bindingIdentity,
+      durationMs: modifier ? durationMs : null,
+      stackMode: definition.stackMode ?? 'refresh',
+      stackDelta: Math.max(1, Number(definition.stackDelta) || 1),
+      maxStacks: Math.max(1, Number(definition.maxStacks) || 1),
+      modifiers: modifier ? [modifier] : [],
+      directSp,
+      sourceIdentity: [
+        propertyAsset?.sourceIdentity,
+        directSpAsset?.sourceIdentity,
+        durationAsset?.sourceIdentity,
+        definition.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-runtime-effect-binding-ready',
+      applied: true,
+    };
+  });
+}
+
+function compileRuntimePropertyModifier({
+  asset,
+  expectedAttributeId,
+  expectedBucket,
+  expectedValueRaw,
+}) {
+  const tree = asset.tree ?? {};
+  const attributeId = Number(tree.attributeID);
+  const baseFunctionId = Number(tree.formulaParams?.function_2);
+  const bucket =
+    baseFunctionId === 3
+      ? 'dynamicPercent'
+      : baseFunctionId === 5
+        ? 'dynamicExtra'
+        : null;
+  const valueRaw = Number(tree.functionParams?.[0]);
+  if (
+    !Number.isInteger(attributeId) ||
+    !bucket ||
+    !Number.isFinite(valueRaw) ||
+    (expectedAttributeId != null &&
+      attributeId !== Number(expectedAttributeId)) ||
+    (expectedBucket != null && bucket !== expectedBucket) ||
+    (expectedValueRaw != null &&
+      valueRaw !== Number(expectedValueRaw))
+  ) {
+    throw new Error(
+      `character combat runtime property evidence mismatch: ${asset.elementId}`
+    );
+  }
+  return {
+    kind: 'battle-property',
+    attributeId,
+    bucket,
+    valueRaw,
+    propertyTags: [],
+    sourceIdentity: `${asset.sourceIdentity}#attributeID=${attributeId};function=${baseFunctionId};A=${valueRaw}`,
+  };
+}
+
+function compileRuntimeDirectSp({ asset, expectedValue }) {
+  const rawValue = Number(asset.tree?.functionParams?.[0]);
+  const value = rawValue / 10_000;
+  if (
+    !Number.isFinite(value) ||
+    (expectedValue != null && value !== Number(expectedValue))
+  ) {
+    throw new Error(
+      `character combat runtime direct SP evidence mismatch: ${asset.elementId}`
+    );
+  }
+  return {
+    elementId: Number(asset.elementId),
+    value,
+    enhanceable: false,
+    shareType: 0,
+    sourceIdentity: `${asset.sourceIdentity}#A=${rawValue}/10000`,
+  };
 }
 
 function compileActionHitBindings({
@@ -2079,15 +3064,28 @@ function compileActionHitBindings({
   controlBySkillId,
 }) {
   return definitions.map(definition => {
-    const control = requireControl(
+    requireControl(
       controlBySkillId,
       definition.controlSkillId,
-      'action hit binding'
+      'action hit target binding'
     );
-    const matches = (control.elements ?? []).filter(
+    const sourceControlSkillId = Number(
+      definition.sourceControlSkillId ?? definition.controlSkillId
+    );
+    const sourceSubSkillIndex = Number(
+      definition.sourceSubSkillIndex ?? definition.subSkillIndex
+    );
+    const sourceControl = requireControl(
+      controlBySkillId,
+      sourceControlSkillId,
+      'action hit source binding'
+    );
+    const matches = (sourceControl.elements ?? []).filter(
       element =>
-        Number(element.mapIndex) === Number(definition.subSkillIndex) &&
-        Number(element.elementId) === Number(definition.elementId)
+        Number(element.mapIndex) === sourceSubSkillIndex &&
+        Number(element.elementId) === Number(definition.elementId) &&
+        (!definition.sourceReferenceKind ||
+          element.referenceKind === definition.sourceReferenceKind)
     );
     const triggerFrames = [
       ...new Set((definition.triggerFrames ?? []).map(Number)),
@@ -2099,12 +3097,32 @@ function compileActionHitBindings({
       triggerFrames.some(
         frame => !Number.isInteger(frame) || frame < 0
       ) ||
-      !Object.values(sourceElement?.dimensions ?? {}).some(
+      (!Object.values(sourceElement?.dimensions ?? {}).some(
         dimension => dimension.status === 'applied'
-      )
+      ) &&
+        !definition.formulaNormalization?.applied)
     ) {
       throw new Error(
-        `character combat action hit evidence missing: ${ownerId}/${definition.bindingIdentity}`
+        `character combat action hit evidence missing: ${ownerId}/${definition.bindingIdentity} ${JSON.stringify(
+          {
+            matchCount: matches.length,
+            matches: matches.map(match => ({
+              referenceKind: match.referenceKind,
+              pathId: match.pathId,
+              scenarioTriggerCount: match.scenarioTriggers?.length ?? 0,
+              triggerCount: match.triggers?.length ?? 0,
+            })),
+            sourceControlSkillId,
+            sourceSubSkillIndex,
+            elementId: Number(definition.elementId),
+            triggerFrames,
+            appliedDimensionCount: Object.values(
+              sourceElement?.dimensions ?? {}
+            ).filter(dimension => dimension.status === 'applied').length,
+            formulaNormalizationApplied:
+              definition.formulaNormalization?.applied === true,
+          }
+        )}`
       );
     }
     return {
@@ -2112,12 +3130,23 @@ function compileActionHitBindings({
       ownerId,
       controlSkillId: Number(definition.controlSkillId),
       subSkillIndex: Number(definition.subSkillIndex),
+      sourceControlSkillId,
+      sourceSubSkillIndex,
+      sourceReferenceKind: definition.sourceReferenceKind ?? null,
+      targetReferenceKind:
+        definition.targetReferenceKind ??
+        definition.sourceReferenceKind ??
+        null,
       elementId: Number(definition.elementId),
       elementPathId: sourceElement.pathId ?? null,
       triggerFrames,
       frameCount: Math.max(1, Number(definition.frameCount) || 1),
       targetCode: Number(definition.targetCode) || 0,
       targetKind: definition.targetKind ?? 'enemy',
+      conditionalGroupIdentity:
+        definition.conditionalGroupIdentity ?? null,
+      runtimeCondition: definition.runtimeCondition ?? null,
+      formulaNormalization: definition.formulaNormalization ?? null,
       sourceIdentity: [
         sourceElement.sourceIdentity,
         definition.sourceIdentity,
@@ -2205,9 +3234,22 @@ function compilePassiveEffects({
   controls,
   controlBySkillId,
   skills,
+  targetStateTransactions,
+  runtimeEffectBindings,
   operators,
 }) {
   return definitions.map(definition => {
+    if (definition.runtimeGenerationMode === 'target-state-runtime') {
+      return compileTargetStateRuntimePassiveEffect({
+        ownerId,
+        definition,
+        controlBySkillId,
+        skills,
+        targetStateTransactions,
+        runtimeEffectBindings,
+        operators,
+      });
+    }
     if (
       [
         'semantic-effect-catalog',
@@ -2435,6 +3477,169 @@ function compilePassiveEffects({
       applied,
     };
   });
+}
+
+function compileTargetStateRuntimePassiveEffect({
+  ownerId,
+  definition,
+  controlBySkillId,
+  skills,
+  targetStateTransactions,
+  runtimeEffectBindings,
+  operators,
+}) {
+  const passiveControl = controlBySkillId.get(Number(definition.skillId));
+  const sourceAssets = (definition.sourceElementIds ?? []).map(elementId =>
+    operators.readElementAsset(Number(elementId))
+  );
+  const selectedRuntimeBindings = (
+    definition.runtimeBindingIdentities ?? []
+  ).map(identity =>
+    runtimeEffectBindings.find(
+      binding => binding.bindingIdentity === identity
+    )
+  );
+  const selectedTransactions = (
+    definition.targetStateTransactionIdentities ?? []
+  ).map(identity =>
+    targetStateTransactions.find(
+      transaction => transaction.transactionIdentity === identity
+    )
+  );
+  const triggerBindings = [
+    ...selectedRuntimeBindings.filter(Boolean).map(binding => ({
+      triggerIdentity: `runtime-effect:${binding.bindingIdentity}`,
+      controlSkillId: binding.controlSkillId,
+      subSkillIndex: binding.subSkillIndex,
+      triggerFrame: binding.triggerFrame,
+      frameRate: binding.frameRate,
+      conditionalGroupIdentity: binding.conditionalGroupIdentity,
+      sourceIdentity: binding.sourceIdentity,
+      status: 'verified-target-state-passive-runtime-trigger-ready',
+      applied: true,
+    })),
+    ...selectedTransactions.filter(Boolean).map(transaction => ({
+      triggerIdentity: `target-state:${transaction.transactionIdentity}`,
+      controlSkillId: transaction.controlSkillId,
+      subSkillIndex: transaction.subSkillIndex,
+      triggerFrame: transaction.triggerFrame,
+      frameRate: transaction.frameRate,
+      requiresHitElementId: transaction.requiresHitElementId,
+      sourceIdentity: transaction.sourceIdentity,
+      status: 'verified-target-state-passive-transaction-trigger-ready',
+      applied: true,
+    })),
+  ];
+  const modifiers = dedupeBy(
+    [
+      ...selectedRuntimeBindings
+        .filter(Boolean)
+        .flatMap(binding => binding.modifiers ?? []),
+      ...selectedTransactions.filter(Boolean).map(transaction => ({
+        kind: 'target-state',
+        stateIdentity: transaction.stateIdentity,
+        operation: transaction.operation,
+        amount: transaction.amount,
+        durationMs: transaction.durationMs,
+        sourceIdentity: transaction.sourceIdentity,
+      })),
+    ],
+    modifier =>
+      [
+        modifier.kind,
+        modifier.attributeId ?? '',
+        modifier.bucket ?? '',
+        modifier.valueRaw ?? '',
+        modifier.stateIdentity ?? '',
+        modifier.operation ?? '',
+        modifier.amount ?? '',
+      ].join('|')
+  );
+  const expectedRuntimeBindingCount = (
+    definition.runtimeBindingIdentities ?? []
+  ).length;
+  const expectedTransactionCount = (
+    definition.targetStateTransactionIdentities ?? []
+  ).length;
+  const applied =
+    passiveControl != null &&
+    sourceAssets.length > 0 &&
+    sourceAssets.every(Boolean) &&
+    selectedRuntimeBindings.filter(Boolean).length ===
+      expectedRuntimeBindingCount &&
+    selectedTransactions.filter(Boolean).length ===
+      expectedTransactionCount &&
+    triggerBindings.length > 0 &&
+    modifiers.length > 0;
+  return {
+    passiveIdentity: `actor:${ownerId}:passive:${definition.skillId}`,
+    ownerId,
+    skillId: Number(definition.skillId),
+    name:
+      skills.find(skill => Number(skill.id) === Number(definition.skillId))
+        ?.name ?? `被动 ${definition.skillId}`,
+    effectId:
+      definition.effectId ??
+      `battle-element:${Number(definition.sourceElementIds?.[0])}`,
+    effectElementId:
+      Number(definition.effectElementId) ||
+      Number(definition.sourceElementIds?.[0]),
+    markerElementId:
+      Number(definition.markerElementId) ||
+      Number(definition.sourceElementIds?.[0]),
+    propertyElementId:
+      Number(definition.propertyElementId) ||
+      Number(definition.sourceElementIds?.at(-1)),
+    durationMs:
+      Number(definition.durationMs) ||
+      Math.max(
+        0,
+        ...selectedRuntimeBindings
+          .filter(Boolean)
+          .map(binding => Number(binding.durationMs) || 0),
+        ...selectedTransactions
+          .filter(Boolean)
+          .map(transaction => Number(transaction.durationMs) || 0)
+      ) ||
+      null,
+    stackMode: definition.stackMode ?? 'refresh',
+    maxStacks: Math.max(1, Number(definition.maxStacks) || 1),
+    stackDelta: Math.max(1, Number(definition.stackDelta) || 1),
+    runtimeGenerationMode: 'target-state-runtime',
+    triggerBindings,
+    unresolvedTriggerBindings: [],
+    modifiers,
+    sourceIdentity: [
+      passiveControl?.sourcePath,
+      ...sourceAssets.filter(Boolean).map(asset => asset.sourceIdentity),
+      ...triggerBindings.map(trigger => trigger.sourceIdentity),
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: applied
+      ? 'verified-target-state-runtime-passive-profile-ready'
+      : 'unresolved-target-state-runtime-passive-profile',
+    reasons: [
+      ...(passiveControl ? [] : ['passive-skill-control-missing']),
+      ...(sourceAssets.length > 0 && sourceAssets.every(Boolean)
+        ? []
+        : ['passive-source-element-missing']),
+      ...(selectedRuntimeBindings.filter(Boolean).length ===
+      expectedRuntimeBindingCount
+        ? []
+        : ['passive-runtime-binding-missing']),
+      ...(selectedTransactions.filter(Boolean).length ===
+      expectedTransactionCount
+        ? []
+        : ['passive-target-state-transaction-missing']),
+      ...(triggerBindings.length > 0
+        ? []
+        : ['passive-runtime-trigger-missing']),
+      ...(modifiers.length > 0 ? [] : ['passive-runtime-output-missing']),
+    ],
+    applied,
+  };
 }
 
 function compileSemanticCatalogPassiveEffect({

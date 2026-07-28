@@ -40,15 +40,15 @@ describe('verified combat mechanics package', () => {
       summary: {
         candidateActionCount: 563,
         classifiedActionCount: 563,
-        appliedActionBindingCount: 515,
-        appliedHitBindingCount: 1830,
-        appliedEffectBindingCount: 133,
+        appliedActionBindingCount: 517,
+        appliedHitBindingCount: 1846,
+        appliedEffectBindingCount: 137,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 3725,
-        actionVariantSupportControlBindingCount: 69,
+        unresolvedEffectBindingCount: 3721,
+        actionVariantSupportControlBindingCount: 85,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 45,
-        actionVariantNodeCount: 673,
+        actionVariantNodeCount: 691,
         actionVariantEdgeCount: 95,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
@@ -65,14 +65,14 @@ describe('verified combat mechanics package', () => {
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
-        appliedAttackInputSegmentCount: 76,
-        unresolvedAttackInputSegmentCount: 19,
+        appliedAttackInputSegmentCount: 78,
+        unresolvedAttackInputSegmentCount: 17,
         appliedAttackInputTimingCount: 78,
         unresolvedAttackInputTimingCount: 17,
         semanticEffectCount: 3581,
         semanticGameplayEffectCount: 1819,
         semanticAppliedEffectCount: 397,
-        characterCombatProfileCount: 2,
+        characterCombatProfileCount: 3,
         characterCombatUiVerifiedProfileCount: 0,
       },
       mechanismEvidence: {
@@ -149,7 +149,7 @@ describe('verified combat mechanics package', () => {
         profileSchema: 'azpr://schemas/character-combat-profile/v1',
         summary: {
           publicCharacterCount: 20,
-          compiledProfileCount: 2,
+          compiledProfileCount: 3,
           uiVerifiedProfileCount: 0,
         },
       },
@@ -193,16 +193,16 @@ describe('verified combat mechanics package', () => {
         'static-evidence-gap': 430,
         'static-resolved': 1282,
       },
-      effectBindingCount: 3860,
-      appliedEffectBindingCount: 133,
+      effectBindingCount: 3859,
+      appliedEffectBindingCount: 136,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 3725,
+      unresolvedEffectBindingCount: 3721,
       bindingKindCounts: {
         damage: 560,
         inject: 1559,
         judgment: 112,
         pack: 222,
-        'property-change': 1125,
+        'property-change': 1124,
         shield: 10,
         sp: 104,
         stack: 168,
@@ -213,7 +213,7 @@ describe('verified combat mechanics package', () => {
         sp: expect.any(Object),
         hp: expect.any(Object),
         shield: expect.any(Object),
-        dynamicProperty: expect.objectContaining({ applied: 51 }),
+        dynamicProperty: expect.objectContaining({ applied: 54 }),
         mark: expect.any(Object),
       }),
     });
@@ -287,7 +287,7 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 673,
+        nodeCount: 691,
         edgeCount: 337,
         appliedEdgeCount: 95,
         unresolvedEdgeCount: 244,
@@ -521,12 +521,12 @@ describe('verified combat mechanics package', () => {
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 553,
-        unresolvedActionCount: 10,
+        appliedActionCount: 552,
+        unresolvedActionCount: 11,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
-        exactSelectedVariantOccupancyCount: 630,
-        sourceAnimationPlanningDurationCount: 26,
+        exactSelectedVariantOccupancyCount: 627,
+        sourceAnimationPlanningDurationCount: 27,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
         oneFrameCount: 0,
@@ -654,7 +654,7 @@ describe('verified combat mechanics package', () => {
     ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 673,
+      nodeCount: 691,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 155,
       conditionDiscoveryStatusCounts: {
@@ -771,6 +771,15 @@ describe('verified combat mechanics package', () => {
           edge.inputScheduling.edgeIntent.canonicalPredecessorEndFrame,
       }))
     ).toEqual([
+      {
+        source: '10100349/sub0',
+        window: [19, 160],
+        semantics: 'buffered-until-frame',
+        genericEnd: 19,
+        canonicalInput: 19,
+        executionStart: 19,
+        predecessorEnd: 19,
+      },
       {
         source: '10101005/sub0',
         window: [37, 102],
@@ -1257,7 +1266,8 @@ describe('verified combat mechanics package', () => {
       action => action.identity === 'actor|101003|10100312|0|10100312'
     );
     expect(starSkill.actionTiming).toMatchObject({
-      occupancy: { durationFrames: 180 },
+      occupancy: { durationFrames: 93 },
+      animation: { durationFrames: 180 },
       hitEnvelope: { lastFrame: 109 },
       cooldown: { cooldownMs: 24000 },
     });

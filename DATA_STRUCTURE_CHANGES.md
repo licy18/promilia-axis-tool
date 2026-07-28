@@ -27682,3 +27682,69 @@ Workbench 切人记录统一为精确帧事件：`type/kind = switch`、`startFr
 新增非持久化切人子动作生成：项目仍只保存零时长父切人事件；compiler 根据切人前后的受控角色，在同一帧生成退场角色的 `on-exit` 与入场角色的 `on-enter` 子动作。子动作使用稳定的父事件/阶段/owner identity，保留自身真实偏移、占轴、命中、CD、状态与三值来源，并标记为只读；移动、复制或删除父事件后统一重建，不会在五载体中重复持久化或产生孤儿。初始前台不生成入场子动作，同帧冲突沿父切人事件的稳定顺序拒绝。
 
 动作 readiness 的冷却状态键改为优先使用来源 control/subskill identity。公开技能根包含星携技、极限反击或完美招架等多个动作时，各变体读取自身 verified cooldown；明确为 0 的变体不再误继承根技能或星携技 CD。该调整不新增项目字段，也不改变未安装 verified package 时的原有状态生成回退。
+
+## 453. Tuning mark shared decay runtime v2 / InitialRuntimeState v6
+
+`AzPrVerifiedTuningMarkGeneration` 从 v1 升级为 v2。每个属性印记运行时由逐层 `layers[].expiresAtMs` 改为容器级共享衰减状态：
+
+```text
+runtime mark state
+  layers[]
+    id / acquiredAtMs / acquisitionSequence
+    sourceActionId / sourceActorId / sourceIdentity
+  decayDueAtMs
+  decayRevision
+  heldReadyAtMs
+
+mark event
+  before / delta / after / layerIds[]
+  decayDueAtMs / decayRemainingMs
+  runtimeSequenceIndex
+```
+
+同属性获得事件始终刷新 `decayDueAtMs`，即使 5 层封顶且 `delta = 0`；每个排队的自然衰减任务携带 revision，只有当前 revision 可减少一层。自然衰减后若仍有层数，以该时刻加 `layerDurationMs` 安排下一次衰减；部分主动消费保留当前截止时刻，全部消费清空截止时刻并递增 revision。层对象只承担来源和确定性 FIFO 审计，不再声称拥有独立寿命。
+
+`AzPrInitialRuntimeState` 从 v5 升级为 v6，`tuningMarks[]` 规范化为：
+
+```text
+tuningMarks[]
+  markId / profileKey / elementName
+  decayRemainingMs
+  heldReadyRemainingMs
+  layers[]
+    sourceActionId / sourceActorId / sourceIdentity
+```
+
+旧项目若仍保存 `layers[].remainingDurationMs`，统一解析器保留正剩余时间的层，并取其中最大值作为 `decayRemainingMs`；该值对应旧记录中最近一次获得所形成的共享截止时刻。新写入不再输出逐层剩余时间。`AzPrCycleBoundaryInheritanceProjection` 按 `runtimeSequenceIndex` 重放事件后的 `decayDueAtMs`；恰好发生在边界的被动 `expire` 会先减少一层并继承下一段计时，而边界上的动作获得/消费仍留给新方案。
+
+WorkbenchProjectFile 继续使用现有项目版本；本地草稿、JSON、分享链接、PNG 和预设中的嵌套初始状态经统一 normalizer 升级为 v6，无需复制运行时绝对截止时间。印记曲线把满层重施保留为零数值变化语义节点，但阶梯值不产生假变化。
+
+## 454. Character combat compiler v3 / Target state runtime
+
+角色声明式编译器升级为 v3，并在 owner contract 与 verified package 的 `actionVariantGraph` 中增加四组通用记录：
+
+```text
+targetStateProfiles[]
+  stateIdentity / ownerId / targetKind
+  elementId / durationMs / maxStacks / expiryMode
+
+targetStateTransactions[]
+  transactionIdentity / stateIdentity
+  controlSkillId / subSkillIndex / triggerFrame
+  operation / amount / durationMs / requiresHitElementId
+
+conditionalHitGroups[]
+  groupIdentity / sourceControlSkillId / sourceSubSkillIndex
+  controlSkillId / subSkillIndex / triggerFrames / decisionFrame
+  stateIdentity / minimumStacks / consumeBands / fallbackConsumeAll
+  formulaNormalization / tuningMark
+
+runtimeEffectBindings[]
+  bindingIdentity / triggerKind / conditionalGroupIdentity
+  controlSkillId / subSkillIndex / triggerFrame / targetKind
+  modifiers[] / directSp / durationMs / stackMode / maxStacks
+```
+
+`AzPrVerifiedTargetStateRuntime` 在模拟过程中按稳定 state/transaction/group identity 维护目标状态层、独立到期任务、条件命中组与消费结果；命中未发生时不生成依赖交易或后续效果。条件组应用后再由现有动态属性、调谐印记和 SP 运行时消费 `runtimeEffectBindings`，不建立角色专用旁路。`actionMappings` 另可从声明式 `inputVariantSelectors` 和 `single-control-verified-occupancy` 生成选定 control/subskill 与权威占轴；完整动画、命中包络和规划时长仍分离保存。
+
+这些记录均由 recipe 和原始 Battle 证据重新生成，不持久化到用户项目；本地草稿、JSON、分享链接、PNG 和循环回放只保存动作意图，刷新后从同一 verified package 确定性重建目标状态与效果结果。

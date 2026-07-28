@@ -8,9 +8,9 @@ describe('verified derived action control contracts', () => {
       kind: 'current-client-public-actor-derived-control-candidates',
       actorOwnerCount: 20,
       publicActionCount: 155,
-      controlCount: 137,
+      controlCount: 138,
       multiVariantControlCount: 64,
-      controlPlayerVariantCount: 259,
+      controlPlayerVariantCount: 261,
     });
     expect(coverage.summary.silentOmissionCount).toBe(0);
     expect(coverage.omittedMultiVariantCandidates).toEqual([]);

@@ -19,6 +19,7 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { applyVerifiedTargetStateRuntime } from './verifiedTargetStateRuntime';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -28,6 +29,7 @@ const FRAME_RATE = 60;
 export function createVerifiedActionVariantRuntime({
   scenario = null,
   actionExecutionPlan = null,
+  controlledActorTimeline = null,
 } = {}) {
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
   if (!mechanicsPackage?.specialResourceCatalog?.profiles) {
@@ -85,6 +87,28 @@ export function createVerifiedActionVariantRuntime({
       ),
     });
   }
+  const variantActorStateById = new Map(
+    (scenario?.actors ?? []).map(actor => {
+      const resourceState = actorStateById.get(actor.id);
+      return [
+        actor.id,
+        resourceState ?? {
+          actor,
+          profile: {
+            ownerId: Number(actor.characterId),
+            resourceIdentity: null,
+            name: actor.name ?? null,
+            capacity: 0,
+            initialValue: 0,
+            applied: false,
+          },
+          initialValue: 0,
+          current: 0,
+          activeStates: new Map(),
+        },
+      ];
+    })
+  );
 
   const thresholdTransitions = (
     mechanicsPackage.specialResourceCatalog.thresholdTransitions ?? []
@@ -112,7 +136,8 @@ export function createVerifiedActionVariantRuntime({
   ).filter(
     profile =>
       profile.applied &&
-      profile.runtimeGenerationMode !== 'semantic-effect-catalog'
+      (profile.runtimeGenerationMode == null ||
+        profile.runtimeGenerationMode === 'action-variant-runtime')
   );
   const graph = mechanicsPackage.actionVariantGraph;
   const switchBindings = graph.edges
@@ -563,7 +588,7 @@ export function createVerifiedActionVariantRuntime({
         action.actorId
       );
     }
-    const actorState = actorStateById.get(action.actorId);
+    const actorState = variantActorStateById.get(action.actorId);
     const scenarioActor = actorById.get(String(action.actorId));
     const characterId = Number(
       action.actor?.characterId ??
@@ -744,6 +769,7 @@ export function createVerifiedActionVariantRuntime({
         selectedSubSkillIndex;
       executionControlSkillId =
         contextSelection.binding?.executionControlSkillId ??
+        inputSelection.option?.executionControlSkillId ??
         directExecutionForm?.executionControlSkillId ??
         publicControlSkillId;
       selectionSource = contextSelection.binding
@@ -789,6 +815,9 @@ export function createVerifiedActionVariantRuntime({
                   sourceKind: inputSelection.sourceKind,
                   sourceIdentity: inputSelection.option.sourceIdentity,
                   decisionFrame: derivedControlContract?.decisionFrame ?? 0,
+                  executionTiming: inputSelection.option.executionTiming,
+                  semanticIdentity: inputSelection.option.selectorIdentity,
+                  semanticName: inputSelection.option.label,
                 }
               : explicitSubSkillIndex != null
                 ? {
@@ -1040,6 +1069,13 @@ export function createVerifiedActionVariantRuntime({
   }
 
   flushPending(Number(scenario?.time?.durationMs) || 0);
+  const targetStateRuntime = applyVerifiedTargetStateRuntime({
+    scenario,
+    actionResolutionById,
+    mechanicsPackage,
+    controlledActorTimeline,
+  });
+  effectCommands.push(...targetStateRuntime.effectCommands);
   resourceEvents.sort(compareRuntimeEvents);
   stateEvents.sort(compareRuntimeEvents);
   variantEvents.sort(compareRuntimeEvents);
@@ -1063,8 +1099,14 @@ export function createVerifiedActionVariantRuntime({
     stateEvents,
     variantEvents,
     effectCommands,
+    directSpEvents: targetStateRuntime.directSpEvents,
+    targetStateRuntime,
     activeSwitchWindows: switchWindowHistory,
-    eventLog: [...resourceEvents, ...variantEvents].sort(compareRuntimeEvents),
+    eventLog: [
+      ...resourceEvents,
+      ...variantEvents,
+      ...targetStateRuntime.events,
+    ].sort(compareRuntimeEvents),
     executionBlocks,
     curves,
     initialState: curves.map(curve => ({
@@ -1093,6 +1135,9 @@ export function createVerifiedActionVariantRuntime({
       resourceEventCount: resourceEvents.length,
       stateEventCount: stateEvents.length,
       effectCommandCount: effectCommands.length,
+      targetStateEventCount: targetStateRuntime.events.length,
+      conditionalHitGroupCount: targetStateRuntime.groupResults.length,
+      directSpEventCount: targetStateRuntime.directSpEvents.length,
       executionBlockCount: executionBlocks.length,
     },
     ready: true,
@@ -1789,6 +1834,8 @@ function createVariantSelectionRecord({
               selectorIdentity: option.selectorIdentity,
               label: option.label,
               publicVariantIndex: option.publicVariantIndex,
+              executionControlSkillId: option.executionControlSkillId,
+              executionSubSkillIndex: option.executionSubSkillIndex,
               subSkillIndex: option.subSkillIndex,
               playerSkillId: option.playerSkillId,
               durationFrames: option.durationFrames,
@@ -2170,6 +2217,8 @@ function createUnavailableRuntime(reason) {
     stateEvents: [],
     variantEvents: [],
     effectCommands: [],
+    directSpEvents: [],
+    targetStateRuntime: null,
     eventLog: [],
     executionBlocks: [],
     curves: [],
@@ -2180,6 +2229,9 @@ function createUnavailableRuntime(reason) {
       resourceEventCount: 0,
       stateEventCount: 0,
       effectCommandCount: 0,
+      targetStateEventCount: 0,
+      conditionalHitGroupCount: 0,
+      directSpEventCount: 0,
       executionBlockCount: 0,
     },
     ready: false,

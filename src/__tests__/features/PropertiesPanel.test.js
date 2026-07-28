@@ -511,12 +511,12 @@ describe('PropertiesPanel', () => {
         mode: 'hold',
       },
       controlSubSkillIndex: 2,
-      actionVariantIndex: 3,
-      damageSegmentIndex: 3,
       durationFrames: 416,
       timingStatus: 'applied',
       needsTimingData: false,
     });
+    expect(patch).not.toHaveProperty('actionVariantIndex');
+    expect(patch).not.toHaveProperty('damageSegmentIndex');
     expect(patch.durationMs).toBeCloseTo((416 * 1000) / 60, 5);
   });
 

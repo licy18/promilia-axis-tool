@@ -1,0 +1,1083 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 101003,
+  "targetPipelineMaturity": "runtime-applied",
+  "goldStandard": false,
+  "mechanicsDiscovery": {
+    "ownerId": 101003,
+    "normalAttackSkillId": 10100301,
+    "chargedControlSkillIds": [
+      10100310,
+      10100341
+    ],
+    "starSkillControlSkillId": 10100312,
+    "ultimateControlSkillId": 10100313,
+    "starCarryControlSkillId": 10100322,
+    "limitCounterControlSkillId": 10100325,
+    "perfectParryControlSkillId": 10100327,
+    "perfectParryExecutionControlSkillId": 10100349,
+    "passiveSkillIds": [
+      10100361,
+      10100362
+    ],
+    "fireworkMarkerElementIds": [
+      101003079,
+      101003171
+    ],
+    "teamTuningElementId": 101003205
+  },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      10100301,
+      10100302,
+      10100303,
+      10100304,
+      10100305,
+      10100310,
+      10100311,
+      10100312,
+      10100313,
+      10100314,
+      10100315,
+      10100316,
+      10100322,
+      10100324,
+      10100325,
+      10100326,
+      10100327,
+      10100331,
+      10100341,
+      10100342,
+      10100343,
+      10100344,
+      10100345,
+      10100346,
+      10100347,
+      10100348,
+      10100349,
+      10100360,
+      10100361,
+      10100362,
+      48005901,
+      48006001,
+      48012401,
+      48012501,
+      48012601,
+      48013201,
+      48013301
+    ],
+    "publicActionDeclarations": [],
+    "contextInputEdges": [
+      {
+        "sourceControlSkillId": 10100349,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "perfect-parry",
+        "sourceSemanticName": "集中闪避",
+        "publicActionKind": "perfect-parry",
+        "publicControlSkillId": 10100327,
+        "executionControlSkillId": 10100349,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "han-focus-dodge-counter",
+        "semanticName": "集中闪避反击",
+        "inputCommand": "normal-attack",
+        "condition": {
+          "kind": "always"
+        },
+        "inputWindow": {
+          "startFrame": 19,
+          "endFrame": 160,
+          "bridgeType": 0,
+          "continuousAttackType": 0
+        },
+        "sourceOccupancy": {
+          "durationFrames": 19,
+          "frameRate": 60,
+          "sourceKind": "declared-wrapper-input-occupancy",
+          "sourceIdentity": "skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_7123295481686101325__7123295481686101325.json#control-transition[19,160)->10100349/sub1"
+        },
+        "executionOccupancy": {
+          "durationFrames": 60,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_4229464481616893525__4229464481616893525.json#attack-reopen-window[60,200)"
+        },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_10100327.asset#listener-wrapper->10100349|skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_7123295481686101325__7123295481686101325.json#control-transition[19,160)->10100349/sub1"
+      }
+    ],
+    "publicActionForms": [
+      {
+        "publicActionKind": "star-skill",
+        "publicControlSkillId": 10100312,
+        "executionControlSkillId": 10100312,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "han-star-skill-main",
+        "semanticName": "星鸣技",
+        "selectionKind": "single-control-verified-occupancy",
+        "executionOccupancy": {
+          "durationFrames": 93,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#attack-reopen-window-start=93F"
+        },
+        "condition": {
+          "kind": "always"
+        }
+      },
+      {
+        "publicActionKind": "perfect-parry",
+        "publicControlSkillId": 10100327,
+        "executionControlSkillId": 10100349,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "han-focus-dodge-counter",
+        "semanticName": "集中闪避反击",
+        "selectionKind": "wrapper-derived-execution",
+        "executionOccupancy": {
+          "durationFrames": 60,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-input-reopen-occupancy",
+          "sourceIdentity": "skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_4229464481616893525__4229464481616893525.json#attack-reopen-window[60,200)"
+        },
+        "condition": {
+          "kind": "always"
+        }
+      }
+    ],
+    "attackInputChains": [
+      {
+        "chainIdentity": "han-normal-five-inputs",
+        "sourceSkillId": 10100301,
+        "semanticNamePrefix": "普通攻击",
+        "segmentLabelPrefix": "A",
+        "entryPolicy": {
+          "kind": "default",
+          "sourceIdentity": "NewTable/skill.rows[id=10100301]#普通攻击五次输入"
+        },
+        "condition": {
+          "kind": "always"
+        },
+        "segments": [
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10100302
+          },
+          {
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10100303
+          },
+          {
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10100304
+          },
+          {
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10100305
+          },
+          {
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0
+          }
+        ]
+      }
+    ],
+    "inputVariantSelectors": [
+      {
+        "selectorIdentity": "han-charged-stage-selector",
+        "publicControlSkillId": 10100310,
+        "actionKinds": [
+          "charged-attack"
+        ],
+        "kind": "charge-tier",
+        "mode": "hold",
+        "decisionFrame": 0,
+        "holdRange": {
+          "minimumFrames": 28,
+          "maximumFrames": 61,
+          "frameRate": 60,
+          "sourceIdentity": "skill_control_10100310.asset#projectile@28F|control-transition[61,188)->10100341/sub0"
+        },
+        "options": [
+          {
+            "selectorIdentity": "han-charged-stage-one",
+            "label": "重击1段",
+            "publicVariantIndex": 1,
+            "executionControlSkillId": 10100310,
+            "executionSubSkillIndex": 0,
+            "chargeTier": 1,
+            "executionOccupancy": {
+              "durationFrames": 65,
+              "frameRate": 60,
+              "sourceKind": "declared-verified-input-reopen-occupancy",
+              "sourceIdentity": "skill_control_10100310.asset#attack-reopen-window-start=65F"
+            },
+            "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击1段|skill_control_10100310.asset#sub0"
+          },
+          {
+            "selectorIdentity": "han-charged-stage-two",
+            "label": "重击2段",
+            "publicVariantIndex": 3,
+            "executionControlSkillId": 10100341,
+            "executionSubSkillIndex": 0,
+            "chargeTier": 2,
+            "executionOccupancy": {
+              "durationFrames": 71,
+              "frameRate": 60,
+              "sourceKind": "declared-verified-input-reopen-occupancy",
+              "sourceIdentity": "skill_control_10100341.asset#attack-reopen-window-start=71F"
+            },
+            "sourceIdentity": "NewTable/skill.rows[id=10100301]#重击2段|skill_control_10100310.asset#control-transition[61,188)->10100341/sub0"
+          }
+        ],
+        "sourceIdentity": "skill_control_10100310.asset#two-stage-charge-transition|skill_control_10100341.asset#stage-two-execution"
+      }
+    ],
+    "variantWindowBindings": [],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "han-star-skill-fire-tuning-mark-1",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 63,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10100312.asset#elementConfigId=150@63F"
+      },
+      {
+        "bindingIdentity": "han-star-skill-fire-tuning-mark-2",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 70,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10100312.asset#elementConfigId=150@70F"
+      },
+      {
+        "bindingIdentity": "han-ultimate-fire-tuning-mark-1",
+        "controlSkillId": 10100313,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 193,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10100313.asset#elementConfigId=150@193F"
+      },
+      {
+        "bindingIdentity": "han-ultimate-fire-tuning-mark-2",
+        "controlSkillId": 10100313,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 207,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10100313.asset#elementConfigId=150@207F"
+      },
+      {
+        "bindingIdentity": "han-ultimate-fire-tuning-mark-3",
+        "controlSkillId": 10100313,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 223,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10100313.asset#elementConfigId=150@223F"
+      },
+      {
+        "bindingIdentity": "han-star-carry-fire-tuning-mark",
+        "controlSkillId": 10100322,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 150,
+        "triggerFrame": 57,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "fire",
+        "stackDelta": 1,
+        "sourceIdentity": "skill_control_10100322.asset#elementConfigId=150@57F"
+      },
+      {
+        "bindingIdentity": "han-ultimate-team-tuning-two-stacks",
+        "controlSkillId": 10100313,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 101003205,
+        "triggerFrame": 148,
+        "frameCount": 1,
+        "lifecycleStackDelta": 2,
+        "lifecycleMaxStacks": 2,
+        "durationMsOverride": 24000,
+        "targetKindOverride": "team-actors",
+        "sourceIdentity": "skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
+      },
+      {
+        "bindingIdentity": "han-ultimate-controlled-tuning-ratio",
+        "controlSkillId": 10100313,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 101003207,
+        "triggerFrame": 148,
+        "frameCount": 1,
+        "lifecycleStackDelta": 1,
+        "lifecycleMaxStacks": 1,
+        "durationMsOverride": 15000,
+        "targetKindOverride": "controlling-actor",
+        "sourceIdentity": "skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
+      },
+      {
+        "bindingIdentity": "han-perfect-dodge-team-tuning",
+        "controlSkillId": 10100349,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 101003205,
+        "triggerFrame": 17,
+        "frameCount": 1,
+        "lifecycleStackDelta": 1,
+        "lifecycleMaxStacks": 2,
+        "durationMsOverride": 24000,
+        "targetKindOverride": "team-actors",
+        "sourceIdentity": "skill_control_10100349.asset#element101003205@17F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
+      },
+      {
+        "bindingIdentity": "han-star-carry-physical-defense-down",
+        "controlSkillId": 10100322,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 101003145,
+        "triggerFrame": 57,
+        "frameCount": 2,
+        "lifecycleStackDelta": 1,
+        "lifecycleMaxStacks": 1,
+        "durationMsOverride": 8000,
+        "targetKindOverride": "enemy",
+        "sourceIdentity": "skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
+      },
+      {
+        "bindingIdentity": "han-star-carry-magical-defense-down",
+        "controlSkillId": 10100322,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 101003142,
+        "triggerFrame": 57,
+        "frameCount": 2,
+        "lifecycleStackDelta": 1,
+        "lifecycleMaxStacks": 1,
+        "durationMsOverride": 8000,
+        "targetKindOverride": "enemy",
+        "sourceIdentity": "skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
+      }
+    ],
+    "actionHitBindings": [
+      {
+        "bindingIdentity": "han-normal-a4-child-opening-hit",
+        "controlSkillId": 10100304,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48005901,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003156,
+        "triggerFrames": [
+          38
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100304.asset#child-control-48005901@34F|skill_control_48005901.asset#element101003156@4F"
+      },
+      {
+        "bindingIdentity": "han-normal-a4-child-follow-up-hits",
+        "controlSkillId": 10100304,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48005901,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003182,
+        "triggerFrames": [
+          59,
+          68,
+          77
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100304.asset#child-control-48005901@34F|skill_control_48005901.asset#element101003182@[25,34,43]F"
+      },
+      {
+        "bindingIdentity": "han-normal-a5-child-opening-hit",
+        "controlSkillId": 10100305,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48006001,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003157,
+        "triggerFrames": [
+          50
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100305.asset#child-control-48006001@45F|skill_control_48006001.asset#element101003157@5F"
+      },
+      {
+        "bindingIdentity": "han-normal-a5-child-follow-up-hits",
+        "controlSkillId": 10100305,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48006001,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003179,
+        "triggerFrames": [
+          65,
+          74,
+          83
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100305.asset#child-control-48006001@45F|skill_control_48006001.asset#element101003179@[20,29,38]F"
+      },
+      {
+        "bindingIdentity": "han-charged-stage-one-item-hits",
+        "controlSkillId": 10100310,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48012401,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003104,
+        "triggerFrames": [
+          30,
+          40,
+          51
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100310.asset#bullet101003101@28F->item480124|skill_control_48012401.asset#element101003104@[2,12,23]F"
+      },
+      {
+        "bindingIdentity": "han-charged-stage-two-projectile-hit",
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10100341,
+        "sourceSubSkillIndex": 0,
+        "sourceReferenceKind": "bulletElements",
+        "targetReferenceKind": "bulletElements",
+        "elementId": 101003094,
+        "triggerFrames": [
+          24
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100341.asset#bullet101300105@24F|combatScenario.projectile.targetDistance=0"
+      },
+      {
+        "bindingIdentity": "han-charged-stage-two-item-hits",
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48012501,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003105,
+        "triggerFrames": [
+          27,
+          35,
+          43,
+          53,
+          66
+        ],
+        "frameCount": 1,
+        "targetCode": 0,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10100341.asset#bullet101300105@24F->item480125|skill_control_48012501.asset#element101003105@[3,11,19,29,42]F"
+      }
+    ],
+    "targetStateProfiles": [
+      {
+        "stateIdentity": "enemy:firework",
+        "name": "焰火",
+        "targetKind": "enemy",
+        "elementId": 101003079,
+        "capacityElementId": 101003171,
+        "expectedDurationMs": 10000,
+        "expectedMaxStacks": 15,
+        "expiryMode": "independent-layer",
+        "sourceIdentity": "Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15"
+      }
+    ],
+    "targetStateTransactions": [
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-1",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 61,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003033,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003033+101003079@61F"
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-2",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 68,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003033,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003033+101003079@68F"
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-3",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 73,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003033,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003033+101003079@73F"
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-4",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 94,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003108+101003079@94F"
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-5",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 99,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003108+101003079@99F"
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-6",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 104,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003108+101003079@104F"
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-7",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 109,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "transactionElementId": 101003079,
+        "sourceIdentity": "skill_control_10100312.asset#element101003108+101003079@109F"
+      },
+      {
+        "transactionIdentity": "han-passive-10100362-final-hit-extra-firework",
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 109,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 15000,
+        "requiresHitElementId": 101003108,
+        "transactionElementId": 101003152,
+        "passiveSkillId": 10100362,
+        "priority": 1,
+        "sourceIdentity": "NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079"
+      }
+    ],
+    "conditionalHitGroups": [
+      {
+        "groupIdentity": "han-charged-stage-one-firework-explosion",
+        "semanticName": "重击1段·焰火爆炸",
+        "controlSkillId": 10100310,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48012601,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003110,
+        "triggerFrames": [
+          31,
+          55,
+          58,
+          62,
+          65
+        ],
+        "decisionFrame": 28,
+        "stateIdentity": "enemy:firework",
+        "minimumStacks": 1,
+        "consumePolicy": "consume-band-or-all",
+        "consumeBands": [
+          {
+            "minimumStacks": 6,
+            "amount": 6,
+            "sourceElementId": 101003136,
+            "sourceIdentity": "Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)"
+          }
+        ],
+        "fallbackConsumeAll": true,
+        "sourceIdentity": "skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F"
+      },
+      {
+        "groupIdentity": "han-charged-stage-two-firework-explosion",
+        "semanticName": "重击2段·焰火爆炸",
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48013201,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003111,
+        "triggerFrames": [
+          27,
+          51,
+          54,
+          58,
+          61
+        ],
+        "decisionFrame": 24,
+        "stateIdentity": "enemy:firework",
+        "minimumStacks": 1,
+        "consumePolicy": "consume-band-or-all",
+        "consumeBands": [
+          {
+            "minimumStacks": 10,
+            "amount": 10,
+            "sourceElementId": 101003170,
+            "sourceIdentity": "Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)"
+          },
+          {
+            "minimumStacks": 8,
+            "amount": 8,
+            "sourceElementId": 101003137,
+            "sourceIdentity": "Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)"
+          }
+        ],
+        "fallbackConsumeAll": true,
+        "tuningMarkProfileKey": "fire",
+        "tuningMarkStackDelta": 1,
+        "tuningMarkTriggerFrame": 25,
+        "sourceIdentity": "skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F"
+      }
+    ],
+    "runtimeEffectBindings": [
+      {
+        "bindingIdentity": "han-firework-explosion-controlled-attack-passive",
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
+        "triggerFrame": 29,
+        "targetKind": "controlled-actor",
+        "propertyElementId": 480126003,
+        "durationElementId": 480124006,
+        "expectedAttributeId": 1,
+        "expectedBucket": "dynamicPercent",
+        "expectedValueRaw": 1000,
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "effectId": "battle-element:480124006",
+        "effectName": "焰火爆炸·主控攻击力提升",
+        "sourceIdentity": "NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset"
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-team-tuning-stage-one",
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
+        "triggerFrame": 29,
+        "targetKind": "team-actors",
+        "propertyElementId": 101003205,
+        "expectedAttributeId": 229,
+        "expectedBucket": "dynamicExtra",
+        "expectedValueRaw": 18,
+        "durationMs": 24000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 2,
+        "effectId": "battle-element:101003205",
+        "effectName": "焰火爆炸·全队调谐提升",
+        "sourceIdentity": "Battle/Element/ast_480126002.asset->ast_101003205.asset"
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-sp-stage-one",
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
+        "triggerFrame": 29,
+        "targetKind": "source-actor",
+        "directSpElementId": 101003125,
+        "expectedDirectSpValue": 2,
+        "sourceIdentity": "Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186"
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-controlled-attack-passive-stage-two",
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
+        "triggerFrame": 25,
+        "targetKind": "controlled-actor",
+        "propertyElementId": 480126003,
+        "durationElementId": 480126002,
+        "expectedAttributeId": 1,
+        "expectedBucket": "dynamicPercent",
+        "expectedValueRaw": 1000,
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "effectId": "battle-element:480124006",
+        "effectName": "焰火爆炸·主控攻击力提升",
+        "sourceIdentity": "NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset"
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-team-tuning-stage-two",
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
+        "triggerFrame": 25,
+        "targetKind": "team-actors",
+        "propertyElementId": 101003205,
+        "expectedAttributeId": 229,
+        "expectedBucket": "dynamicExtra",
+        "expectedValueRaw": 18,
+        "durationMs": 24000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 2,
+        "effectId": "battle-element:101003205",
+        "effectName": "焰火爆炸·全队调谐提升",
+        "sourceIdentity": "Battle/Element/ast_480126002.asset->ast_101003205.asset"
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-sp-stage-two",
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
+        "triggerFrame": 25,
+        "targetKind": "source-actor",
+        "directSpElementId": 101003125,
+        "expectedDirectSpValue": 2,
+        "sourceIdentity": "Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186"
+      }
+    ],
+    "specialResources": [],
+    "thresholdTransitions": [],
+    "passiveEffects": [
+      {
+        "skillId": 10100361,
+        "runtimeGenerationMode": "target-state-runtime",
+        "sourceElementIds": [
+          101003186,
+          480124006,
+          480126003
+        ],
+        "runtimeBindingIdentities": [
+          "han-firework-explosion-controlled-attack-passive",
+          "han-firework-explosion-controlled-attack-passive-stage-two"
+        ],
+        "effectId": "battle-element:480124006",
+        "effectElementId": 480124006,
+        "markerElementId": 101003186,
+        "propertyElementId": 480126003,
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "maxStacks": 1,
+        "sourceIdentity": "NewTable/skill.rows[id=10100361]|Battle/Element/ast_101003186.asset|Battle/Element/ast_480124006.asset|Battle/Element/ast_480126003.asset"
+      },
+      {
+        "skillId": 10100362,
+        "runtimeGenerationMode": "target-state-runtime",
+        "sourceElementIds": [
+          101003151,
+          101003152
+        ],
+        "targetStateTransactionIdentities": [
+          "han-passive-10100362-final-hit-extra-firework"
+        ],
+        "effectId": "battle-element:101003152",
+        "effectElementId": 101003152,
+        "markerElementId": 101003151,
+        "propertyElementId": 101003152,
+        "durationMs": 15000,
+        "stackMode": "stack",
+        "maxStacks": 15,
+        "sourceIdentity": "NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset"
+      }
+    ]
+  },
+  "unresolvedRecords": [
+    {
+      "identity": "actor:101003:ultimate:hidden-firework-explosion",
+      "sourceKind": "runtime-trigger",
+      "status": "runtime-evidence-required",
+      "reasons": [
+        "ultimate-hidden-firework-explosion-trigger-reachability-runtime-evidence-required"
+      ],
+      "sourceIdentity": "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [
+      101003,
+      101010,
+      103002
+    ],
+    "initialControlledCharacterId": 101003,
+    "initialActorSp": {
+      "101003": 100,
+      "101010": 0,
+      "103002": 0
+    },
+    "kiboByCharacterId": {
+      "101003": 500469,
+      "101010": 500003,
+      "103002": 500039
+    },
+    "initialKiboSp": {
+      "101003": 100,
+      "101010": 100,
+      "103002": 100
+    },
+    "loadoutByCharacterId": {
+      "101003": {
+        "soulessenceId": 10001,
+        "soulessenceLevel": 80,
+        "soulessenceRank": 1
+      }
+    },
+    "initialSpecialResources": [],
+    "actions": [
+      {
+        "actionKey": "han-normal-a1",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "han-normal-five-inputs",
+        "attackGroupId": "golden-han-normal",
+        "attackSequenceIndex": 1,
+        "startFrame": 500
+      },
+      {
+        "actionKey": "han-normal-a2",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "han-normal-five-inputs",
+        "attackGroupId": "golden-han-normal",
+        "attackSequenceIndex": 2,
+        "startFrame": 518
+      },
+      {
+        "actionKey": "han-normal-a3",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "han-normal-five-inputs",
+        "attackGroupId": "golden-han-normal",
+        "attackSequenceIndex": 3,
+        "startFrame": 556
+      },
+      {
+        "actionKey": "han-normal-a4",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "han-normal-five-inputs",
+        "attackGroupId": "golden-han-normal",
+        "attackSequenceIndex": 4,
+        "startFrame": 588
+      },
+      {
+        "actionKey": "han-normal-a5",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "han-normal-five-inputs",
+        "attackGroupId": "golden-han-normal",
+        "attackSequenceIndex": 5,
+        "startFrame": 639
+      },
+      {
+        "actionKey": "han-charged-stage-one",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "startFrame": 2000
+      },
+      {
+        "actionKey": "han-charged-stage-two",
+        "actorCharacterId": 101003,
+        "skillId": 10100301,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "variantInputSelection": {
+          "schemaVersion": 1,
+          "selectorIdentity": "han-charged-stage-two",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 3,
+          "chargeTier": 2,
+          "mode": "hold"
+        },
+        "startFrame": 2150
+      },
+      {
+        "actionKey": "han-star-skill",
+        "actorCharacterId": 101003,
+        "skillId": 10100312,
+        "actionKind": "star-skill",
+        "startFrame": 1800
+      },
+      {
+        "actionKey": "han-ultimate",
+        "actorCharacterId": 101003,
+        "skillId": 10100313,
+        "actionKind": "ultimate",
+        "startFrame": 60
+      },
+      {
+        "actionKey": "han-perfect-parry",
+        "actorCharacterId": 101003,
+        "skillId": 10100322,
+        "actionKind": "perfect-parry",
+        "actionVariantIndex": 2,
+        "startFrame": 2350
+      },
+      {
+        "actionKey": "han-limit-counter",
+        "actorCharacterId": 101003,
+        "skillId": 10100322,
+        "actionKind": "limit-counter",
+        "actionVariantIndex": 1,
+        "startFrame": 2600
+      },
+      {
+        "actionKey": "han-kibo-signature",
+        "type": "kiboEvent",
+        "actorCharacterId": 101003,
+        "kiboId": 500469,
+        "skillId": 50046903,
+        "actionKind": "signature",
+        "startFrame": 3300
+      }
+    ],
+    "switchEvents": [
+      {
+        "eventKey": "switch-away-from-han",
+        "startFrame": 2900,
+        "sourceCharacterId": 101003,
+        "targetCharacterId": 101010
+      }
+    ],
+    "comparison": {
+      "comparisonIdentity": "m10-b2:101003:soulessence-stat-propagation",
+      "clearLoadoutCharacterIds": [
+        101003
+      ],
+      "compareActionKey": "han-ultimate"
+    },
+    "traceSelectors": {
+      "passiveEffectIds": [
+        "battle-element:480124006"
+      ],
+      "stateEffectIds": [
+        "battle-element:101003079",
+        "battle-element:101003205",
+        "battle-element:101003207",
+        "battle-element:101003145",
+        "battle-element:101003142"
+      ],
+      "dynamicPropertyActionKeys": [
+        "han-charged-stage-one",
+        "han-charged-stage-two",
+        "han-star-skill",
+        "han-ultimate"
+      ]
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000,
+        "project.actionCount": 13,
+        "project.teamCharacterIds": [
+          101003,
+          101010,
+          103002
+        ],
+        "actions.selectionByActionId.han-normal-a1.semanticName": "普通攻击 A1",
+        "actions.selectionByActionId.han-normal-a5.semanticName": "普通攻击 A5",
+        "actions.selectionByActionId.han-charged-stage-one.controlSkillId": 10100310,
+        "actions.selectionByActionId.han-charged-stage-one.subSkillIndex": 0,
+        "actions.selectionByActionId.han-charged-stage-one.actualDurationFrames": 65,
+        "actions.selectionByActionId.han-charged-stage-two.controlSkillId": 10100341,
+        "actions.selectionByActionId.han-charged-stage-two.subSkillIndex": 0,
+        "actions.selectionByActionId.han-charged-stage-two.actualDurationFrames": 71,
+        "combat.ownerHitCountByActionId.han-charged-stage-one": 9,
+        "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
+        "combat.ownerHitCountByActionId.han-star-skill": 7,
+        "combat.ownerHitCountByActionId.han-ultimate": 7,
+        "combat.ownerTotalHpDamage": 68765,
+        "combat.ownerTotalToughnessDamage": 6069,
+        "resources.targetStateSummary.profileCount": 1,
+        "resources.targetStateSummary.eventCount": 10,
+        "resources.targetStateSummary.appliedGroupCount": 2,
+        "resources.targetStateSummary.skippedGroupCount": 0,
+        "resources.targetStateSummary.directSpEventCount": 2,
+        "resources.conditionalHitGroups.0.groupIdentity": "han-charged-stage-one-firework-explosion",
+        "resources.conditionalHitGroups.0.beforeStacks": 8,
+        "resources.conditionalHitGroups.0.consumedStacks": 6,
+        "resources.conditionalHitGroups.0.afterStacks": 2,
+        "resources.conditionalHitGroups.1.groupIdentity": "han-charged-stage-two-firework-explosion",
+        "resources.conditionalHitGroups.1.beforeStacks": 2,
+        "resources.conditionalHitGroups.1.consumedStacks": 2,
+        "resources.conditionalHitGroups.1.afterStacks": 0,
+        "resources.ownerDirectSp.eventCount": 2,
+        "resources.ownerDirectSp.totalChange": 4,
+        "resources.tuningMarkAcquireByActionId.han-star-skill.totalDelta": 2,
+        "resources.tuningMarkAcquireByActionId.han-charged-stage-two.totalDelta": 1,
+        "resources.tuningMarkAcquireByActionId.han-ultimate.totalDelta": 3,
+        "effects.passiveMaxStacks": 1,
+        "effects.firstPassiveMaxStackFrame": 2029,
+        "dynamicProperties.maxPercentRawByAttributeId.1": 1300,
+        "dynamicProperties.maxExtraRawByAttributeId.229": 36,
+        "comparison.damageDelta": 1960
+      },
+      "greaterThan": {
+        "resources.actorSpByActorId.actor-101003.currentValue": 0,
+        "resources.kiboSpBySlotId.team-slot-1.currentValue": 0,
+        "comparison.primaryDamage": 0
+      }
+    }
+  }
+}

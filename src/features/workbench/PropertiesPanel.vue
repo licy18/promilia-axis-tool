@@ -1271,8 +1271,6 @@ function selectVariantInputOption(option) {
       option,
     }),
     controlSubSkillIndex: option.subSkillIndex,
-    actionVariantIndex: option.publicVariantIndex,
-    damageSegmentIndex: option.publicVariantIndex,
     durationFrames: option.durationFrames,
     durationMs: frameToMs(option.durationFrames),
     timingSource: 'verified-control-player-variant',

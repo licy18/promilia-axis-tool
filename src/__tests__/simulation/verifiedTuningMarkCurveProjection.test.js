@@ -110,6 +110,46 @@ describe('verified tuning mark curve projection', () => {
       projection.tracks.every(track => track.linePoints.length === 2)
     ).toBe(true);
   });
+
+  it('keeps a full-stack timer refresh visible without adding a false value step', () => {
+    const projection = projectVerifiedTuningMarkCurves({
+      durationMs: 30_000,
+      tuningMarkRuntime: {
+        initialState: createInitialStates({ fire: 5 }),
+        events: [
+          createEvent({
+            identity: 'fire-refresh-at-cap',
+            kind: 'acquire',
+            markId: 150,
+            actionId: 'fire-refresh-action',
+            timeMs: 1_000,
+            frameIndex: 60,
+            before: 5,
+            after: 5,
+            decayDueAtMs: 21_000,
+          }),
+        ],
+      },
+    });
+    const fire = projection.tracks.find(track => track.profileKey === 'fire');
+
+    expect(fire).toMatchObject({
+      involved: true,
+      valueEventCount: 0,
+      refreshEventCount: 1,
+      semanticNodeCount: 1,
+      currentValue: 5,
+    });
+    expect(fire.semanticNodes[0]).toMatchObject({
+      timeMs: 1_000,
+      beforeValue: 5,
+      afterValue: 5,
+      eventKinds: ['acquire'],
+      eventIdentities: ['fire-refresh-at-cap'],
+    });
+    expect(fire.valueAtTime(999)).toBe(5);
+    expect(fire.valueAtTime(1_000)).toBe(5);
+  });
 });
 
 function createInitialStates(initialValues = {}) {
@@ -142,6 +182,7 @@ function createEvent({
   frameIndex,
   before,
   after,
+  decayDueAtMs,
 }) {
   return {
     eventIdentity: identity,
@@ -153,6 +194,7 @@ function createEvent({
     before,
     delta: after - before,
     after,
+    decayDueAtMs,
     sourceIdentity: { path: `Battle/${String(identity).split('-')[0]}` },
   };
 }

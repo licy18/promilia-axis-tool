@@ -266,13 +266,20 @@ function createVerifiedRuntimeBundle({
   controlledActorTimeline,
 }) {
   const actionVariantRuntime = isVerifiedCombatMechanicsScenario(scenario)
-    ? createVerifiedActionVariantRuntime({ scenario, actionExecutionPlan })
+    ? createVerifiedActionVariantRuntime({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+      })
     : null;
   const effectGeneration = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedBattleEffectGeneration({
         scenario,
         actionExecutionPlan,
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        controlledActorTimeline,
+        generatedDirectSpEvents:
+          actionVariantRuntime?.directSpEvents ?? [],
       })
     : null;
   const tuningGeneration = isVerifiedCombatMechanicsScenario(scenario)

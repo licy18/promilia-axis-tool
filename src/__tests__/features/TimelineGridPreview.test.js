@@ -81,6 +81,62 @@ describe('TimelineGridPreview', () => {
     );
   });
 
+  it('uses the replayed input selection name when the resolution only carries execution timing', () => {
+    const action = createAction({
+      id: 'charged-stage-two',
+      name: '重击',
+      actorId: 'actor-a',
+      startMs: 0,
+    });
+    const actionResolution = {
+      actionBinding: {
+        executionControlSkillId: 424242,
+        selectedSubSkillIndex: 0,
+        actualDurationFrames: 71,
+        actualDurationMs: (71 * 1000) / 60,
+      },
+    };
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actions: [action],
+        durationMs: 10_000,
+        verifiedCombatRuntime: {
+          specialResourceRuntime: {
+            actionResolutionById: new Map([[action.id, actionResolution]]),
+            selectionByActionId: new Map([
+              [
+                action.id,
+                {
+                  semanticName: '重击',
+                  selectedInputIdentity: 'charged-stage-two',
+                  inputSelector: {
+                    options: [
+                      {
+                        selectorIdentity: 'charged-stage-one',
+                        label: '重击1段',
+                      },
+                      {
+                        selectorIdentity: 'charged-stage-two',
+                        label: '重击2段',
+                      },
+                    ],
+                  },
+                },
+              ],
+            ]),
+          },
+        },
+      }),
+    });
+
+    const block = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-action-id="charged-stage-two"]'
+    );
+    expect(block.text()).toContain('重击2段');
+    expect(block.text()).toContain('71F');
+    expect(block.text()).toContain('control 424242/sub0');
+  });
+
   it('exposes free and constraint-assisted placement as an explicit mode choice', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

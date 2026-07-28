@@ -15,6 +15,7 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createVerifiedTuningMarkGeneration } from '../../simulation/mechanics/verifiedTuningMarkGeneration';
 
 const PANGPANG_ID = 101007;
 const PANGPANG_NORMAL_SKILL_ID = 10100701;
@@ -67,9 +68,9 @@ describe('verified tuning mark runtime', () => {
     );
   });
 
-  it('acquires real fire marks at authoritative frames and expires each layer after 20 seconds', () => {
+  it('refreshes one shared timer on real acquisitions and then decays one layer every 20 seconds', () => {
     const result = simulateVerifiedProject({
-      durationMs: 22_000,
+      durationMs: 42_000,
       actions: [
         createWorkbenchActionDraft({
           id: 'han-star-skill',
@@ -99,14 +100,27 @@ describe('verified tuning mark runtime', () => {
         before: 1,
         after: 2,
       },
-      { kind: 'expire', timeMs: 21050, before: 2, after: 1 },
       {
         kind: 'expire',
         timeMs: 21166.666667,
+        before: 2,
+        after: 1,
+      },
+      {
+        kind: 'expire',
+        timeMs: 41166.666667,
         before: 1,
         after: 0,
       },
     ]);
+    expect(
+      result.verifiedTuningMarkGeneration.events.find(
+        event =>
+          event.profileKey === 'fire' &&
+          event.kind === 'acquire' &&
+          event.timeMs === 1166.666667
+      ).decayDueAtMs
+    ).toBe(21166.666667);
     expect(
       result.effectTimeline.events.some(
         event =>
@@ -161,6 +175,194 @@ describe('verified tuning mark runtime', () => {
           .payload.formulaBreakdown.weaknessResult.deducted
       )
     ).toBeGreaterThan(0);
+  });
+
+  it('refreshes the shared timer at five layers and ignores stale same-time expiry tasks', () => {
+    const fire = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'fire'
+    );
+    const initialMark = {
+      ...createInheritedMark(fire, 1_000),
+      layers: Array.from({ length: 5 }, (_, index) => ({
+        sourceActionId: `inherited-fire-${index + 1}`,
+        sourceActorId: 'actor-direct',
+        sourceIdentity: { layer: index + 1 },
+      })),
+    };
+    const result = createDirectTuningGeneration({
+      durationMs: 21_000,
+      initialMark,
+      effects: [
+        createDirectAcquireEffect('refresh-full-1', fire.markId, 30, 0),
+        createDirectAcquireEffect('refresh-full-2', fire.markId, 30, 1),
+      ],
+    });
+    const fireEvents = result.events.filter(
+      event => event.profileKey === 'fire'
+    );
+
+    expect(
+      fireEvents
+        .filter(event => event.kind === 'acquire')
+        .map(event => ({
+          timeMs: event.timeMs,
+          before: event.before,
+          delta: event.delta,
+          after: event.after,
+          decayDueAtMs: event.decayDueAtMs,
+        }))
+    ).toEqual([
+      {
+        timeMs: 500,
+        before: 5,
+        delta: 0,
+        after: 5,
+        decayDueAtMs: 20_500,
+      },
+      {
+        timeMs: 500,
+        before: 5,
+        delta: 0,
+        after: 5,
+        decayDueAtMs: 20_500,
+      },
+    ]);
+    expect(
+      fireEvents
+        .filter(event => event.kind === 'expire')
+        .map(event => ({
+          timeMs: event.timeMs,
+          before: event.before,
+          after: event.after,
+        }))
+    ).toEqual([{ timeMs: 20_500, before: 5, after: 4 }]);
+    expect(result.summary.refreshAtMaximumEventCount).toBe(2);
+    expect(
+      result.finalState.find(state => state.profileKey === 'fire')
+    ).toMatchObject({
+      currentValue: 4,
+      decayRemainingMs: 19_500,
+    });
+  });
+
+  it('keeps the shared deadline on partial consumption and invalidates it on full consumption', () => {
+    const wind = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'wind'
+    );
+    const consumeEffect = createDirectConsumeEffect(
+      'consume-one-wind',
+      wind.markId,
+      30,
+      1
+    );
+    const partial = createDirectTuningGeneration({
+      durationMs: 1_500,
+      initialMark: {
+        ...createInheritedMark(wind, 1_000),
+        layers: [{ sourceActionId: 'wind-1' }, { sourceActionId: 'wind-2' }],
+      },
+      effects: [consumeEffect],
+    });
+    const full = createDirectTuningGeneration({
+      durationMs: 1_500,
+      initialMark: createInheritedMark(wind, 1_000),
+      effects: [consumeEffect],
+    });
+
+    expect(
+      partial.events
+        .filter(event => event.profileKey === 'wind')
+        .map(event => ({
+          kind: event.kind,
+          timeMs: event.timeMs,
+          before: event.before,
+          after: event.after,
+          decayDueAtMs: event.decayDueAtMs,
+        }))
+    ).toEqual([
+      {
+        kind: 'consume',
+        timeMs: 500,
+        before: 2,
+        after: 1,
+        decayDueAtMs: 1_000,
+      },
+      {
+        kind: 'expire',
+        timeMs: 1_000,
+        before: 1,
+        after: 0,
+        decayDueAtMs: null,
+      },
+    ]);
+    expect(
+      full.events
+        .filter(event => event.profileKey === 'wind')
+        .map(event => ({
+          kind: event.kind,
+          timeMs: event.timeMs,
+          before: event.before,
+          after: event.after,
+          decayDueAtMs: event.decayDueAtMs,
+        }))
+    ).toEqual([
+      {
+        kind: 'consume',
+        timeMs: 500,
+        before: 1,
+        after: 0,
+        decayDueAtMs: null,
+      },
+    ]);
+  });
+
+  it('applies expiry before a same-time acquisition and starts a fresh shared interval', () => {
+    const fire = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'fire'
+    );
+    const result = createDirectTuningGeneration({
+      durationMs: 1_500,
+      initialMark: createInheritedMark(fire, 1_000),
+      effects: [
+        createDirectAcquireEffect(
+          'same-time-expiry-and-acquire',
+          fire.markId,
+          60,
+          0
+        ),
+      ],
+    });
+
+    expect(
+      result.events
+        .filter(event => event.profileKey === 'fire')
+        .sort(
+          (left, right) =>
+            left.runtimeSequenceIndex - right.runtimeSequenceIndex
+        )
+        .map(event => ({
+          kind: event.kind,
+          timeMs: event.timeMs,
+          before: event.before,
+          after: event.after,
+          decayDueAtMs: event.decayDueAtMs,
+        }))
+    ).toEqual([
+      {
+        kind: 'expire',
+        timeMs: 1_000,
+        before: 1,
+        after: 0,
+        decayDueAtMs: null,
+      },
+      {
+        kind: 'acquire',
+        timeMs: 1_000,
+        before: 0,
+        after: 1,
+        decayDueAtMs: 21_000,
+      },
+    ]);
   });
 
   it('respects the five-second held trigger gate across independent hits', () => {
@@ -304,16 +506,84 @@ function createInheritedMark(profile, remainingDurationMs) {
     markId: profile.markId,
     profileKey: profile.key,
     elementName: profile.element,
+    decayRemainingMs: remainingDurationMs,
     heldReadyRemainingMs: 0,
     layers: [
       {
-        remainingDurationMs,
         sourceActionId: `inherited-${profile.key}`,
         sourceActorId: 'actor-3',
         sourceIdentity: { profile: profile.sourceIdentity },
       },
     ],
   };
+}
+
+function createDirectAcquireEffect(
+  effectIdentity,
+  markId,
+  startFrame,
+  mapIndex
+) {
+  return {
+    effectIdentity,
+    classification: 'applied',
+    mapIndex,
+    trigger: { startFrame },
+    sourceIdentity: `test-source:${effectIdentity}`,
+    tuningMark: { applied: true, markId },
+  };
+}
+
+function createDirectConsumeEffect(
+  effectIdentity,
+  markId,
+  startFrame,
+  maximumStacks
+) {
+  return {
+    effectIdentity,
+    classification: 'applied',
+    mapIndex: 0,
+    trigger: { startFrame },
+    sourceIdentity: `test-source:${effectIdentity}`,
+    tuningOverlimit: {
+      markId,
+      minimumStacks: 1,
+      maximumStacks,
+    },
+  };
+}
+
+function createDirectTuningGeneration({ durationMs, initialMark, effects }) {
+  const action = {
+    id: 'direct-tuning-action',
+    type: 'skill',
+    actorId: 'actor-direct',
+    startMs: 0,
+    durationMs: 2_000,
+  };
+  return createVerifiedTuningMarkGeneration({
+    scenario: {
+      time: { durationMs },
+      actors: [],
+      enemy: { id: 'enemy-direct' },
+      initialRuntimeState: { tuningMarks: [initialMark] },
+      actions: [action],
+    },
+    effectGeneration: {
+      actionResolutionById: new Map([
+        [
+          action.id,
+          {
+            ready: true,
+            controlBinding: { frameRate: 60 },
+            effects,
+            hits: [],
+          },
+        ],
+      ]),
+    },
+  });
 }
 
 function simulateVerifiedProject({

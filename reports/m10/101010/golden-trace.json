@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "626bfcd5f79799fc507750fdba5b290b839a12fabe33c8e2a6253677647574dd",
+  "sourcePackageHash": "56e344b403b69743befdd3b29d781f6c96e3d44907c703635b57833199aa229b",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -435,6 +435,25 @@
       "damageEventCount": 403,
       "ownerDamageEventCount": 227,
       "ownerHitEventCount": 111,
+      "ownerHitCountByActionId": {
+        "jade-limit-counter": 8,
+        "jade-star-derived-charged": 2,
+        "jade-star-skill": 8,
+        "normal-a1": 1,
+        "normal-a2": 4,
+        "normal-a5": 8,
+        "normal-special-charged": 2,
+        "threshold-burst-a1": 9,
+        "threshold-burst-a2": 12,
+        "threshold-burst-a3": 5,
+        "threshold-charged": 10,
+        "threshold-enhanced-special-charged": 2,
+        "ultimate-burst-a1": 9,
+        "ultimate-burst-a2": 12,
+        "ultimate-burst-a3": 5,
+        "ultimate-enhanced-special-charged": 2,
+        "ultimate-refresh": 12
+      },
       "totalHpDamage": 316739,
       "totalToughnessDamage": 0,
       "ownerTotalHpDamage": 131213,
@@ -2718,6 +2737,231 @@
           "maximum": 5
         }
       ],
+      "tuningMarkAcquireByActionId": {
+        "han-star-skill": {
+          "eventCount": 2,
+          "totalDelta": 2
+        },
+        "normal-a5": {
+          "eventCount": 1,
+          "totalDelta": 1
+        },
+        "switch-to-ruby--on-enter--actor-103002--star-carry": {
+          "eventCount": 1,
+          "totalDelta": 1
+        },
+        "switch-to-ruby--on-exit--actor-101003--star-carry": {
+          "eventCount": 1,
+          "totalDelta": 1
+        }
+      },
+      "targetStateTrace": [
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1211,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 0,
+          "change": 1,
+          "afterValue": 1,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1218,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 1,
+          "change": 1,
+          "afterValue": 2,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1223,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 2,
+          "change": 1,
+          "afterValue": 3,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1244,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 3,
+          "change": 1,
+          "afterValue": 4,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1249,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 4,
+          "change": 1,
+          "afterValue": 5,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1254,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 5,
+          "change": 1,
+          "afterValue": 6,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1259,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 6,
+          "change": 1,
+          "afterValue": 7,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1259,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 7,
+          "change": 1,
+          "afterValue": 8,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1811,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 8,
+          "change": -1,
+          "afterValue": 7,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1818,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 7,
+          "change": -1,
+          "afterValue": 6,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1823,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 6,
+          "change": -1,
+          "afterValue": 5,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1844,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 5,
+          "change": -1,
+          "afterValue": 4,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1849,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 4,
+          "change": -1,
+          "afterValue": 3,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1854,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 3,
+          "change": -1,
+          "afterValue": 2,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1859,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 2,
+          "change": -1,
+          "afterValue": 1,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 2159,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 1,
+          "change": -1,
+          "afterValue": 0,
+          "maxValue": 15
+        }
+      ],
+      "conditionalHitGroups": [],
+      "targetStateSummary": {
+        "profileCount": 1,
+        "eventCount": 16,
+        "appliedGroupCount": 0,
+        "skippedGroupCount": 0,
+        "effectCommandCount": 16,
+        "directSpEventCount": 0
+      },
+      "ownerDirectSp": {
+        "eventCount": 0,
+        "totalChange": 0
+      },
       "thresholdClearCount": 1,
       "transformCount": 1,
       "refreshCount": 1
@@ -2930,6 +3174,10 @@
       "maxPercentRawByAttributeId": {
         "1": 1500,
         "229": 9600
+      },
+      "maxExtraRawByAttributeId": {
+        "1": 0,
+        "229": 0
       }
     },
     "comparison": {
@@ -8185,6 +8433,201 @@
           "maximum": 5
         }
       ],
+      "targetStates": [
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1211,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 0,
+          "change": 1,
+          "afterValue": 1,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1218,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 1,
+          "change": 1,
+          "afterValue": 2,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1223,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 2,
+          "change": 1,
+          "afterValue": 3,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1244,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 3,
+          "change": 1,
+          "afterValue": 4,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1249,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 4,
+          "change": 1,
+          "afterValue": 5,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1254,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 5,
+          "change": 1,
+          "afterValue": 6,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1259,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 6,
+          "change": 1,
+          "afterValue": 7,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": "han-star-skill",
+          "frame": 1259,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "gain",
+          "beforeValue": 7,
+          "change": 1,
+          "afterValue": 8,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1811,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 8,
+          "change": -1,
+          "afterValue": 7,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1818,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 7,
+          "change": -1,
+          "afterValue": 6,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1823,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 6,
+          "change": -1,
+          "afterValue": 5,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1844,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 5,
+          "change": -1,
+          "afterValue": 4,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1849,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 4,
+          "change": -1,
+          "afterValue": 3,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1854,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 3,
+          "change": -1,
+          "afterValue": 2,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1859,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 2,
+          "change": -1,
+          "afterValue": 1,
+          "maxValue": 15
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 2159,
+          "stateIdentity": "enemy:firework",
+          "stateName": "焰火",
+          "operation": "expire",
+          "beforeValue": 1,
+          "change": -1,
+          "afterValue": 0,
+          "maxValue": 15
+        }
+      ],
+      "conditionalHitGroups": [],
       "effects": [
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_APPLIED|16.667|1",
@@ -8548,7 +8991,7 @@
         }
       ]
     },
-    "summaryHash": "25aeed7932ef833f953025f95d739789bf2bc543784b3ca2eea4528dabdbc8d6"
+    "summaryHash": "001254dbe511aecf981bf2eb0548db5580e7c03a69e45b97afc75a05fa52ce95"
   },
   "expected": {
     "exact": {
@@ -9116,6 +9559,6 @@
       }
     ]
   },
-  "replayHash": "0f93bac495e9f53115cabf66128d29ff274a5f5e4aad55636fcea71e86672874",
-  "profileHash": "42b12d0d8feacad77e60d70fe8eaf7e7b66411e194031ce39c6f5a9bfab1ce54"
+  "replayHash": "ee13eb665e43c0a1e7e2db7eb2324903a8bda1a2b6dfec3fe311b2d0b242c6b3",
+  "profileHash": "07fdd4c1d6619d23b87798bc6969b64bbef593e27df837798227a058f4446d90"
 }

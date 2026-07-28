@@ -8,6 +8,7 @@ import {
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
+import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
@@ -16,13 +17,15 @@ export function createVerifiedBattleEffectGeneration({
   scenario = {},
   actionExecutionPlan = null,
   actionResolutionById: suppliedActionResolutionById = null,
+  controlledActorTimeline = null,
+  generatedDirectSpEvents = [],
 } = {}) {
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
   );
   const actionResolutionById = new Map();
   const effectCommands = [];
-  const directSpEvents = [];
+  const directSpEvents = [...generatedDirectSpEvents];
   const directHpEvents = [];
   const shieldEvents = [];
   const unresolved = [];
@@ -58,9 +61,19 @@ export function createVerifiedBattleEffectGeneration({
         unresolved.push(createUnresolvedEffect(action, effect));
         continue;
       }
-      const targets = resolveEffectTargets({ action, effect, scenario });
+      const targets = resolveEffectTargets({
+        action,
+        effect,
+        scenario,
+        timeMs: resolveEffectTimeMs(action, effect, resolution),
+        controlledActorTimeline,
+      });
       const timeMs = resolveEffectTimeMs(action, effect, resolution);
-      const formulaResult = resolveEffectValue(action, effect, resolution);
+      const formulaResult = resolveEffectValue(
+        action,
+        effect,
+        resolution
+      );
       const value = formulaResult.value;
       if (targets.length === 0 || timeMs == null || value == null) {
         unresolved.push(
@@ -277,16 +290,29 @@ function createDirectEvent({
   };
 }
 
-function resolveEffectTargets({ action, effect, scenario }) {
+function resolveEffectTargets({
+  action,
+  effect,
+  scenario,
+  timeMs,
+  controlledActorTimeline,
+}) {
   if (effect.target?.kind === 'enemy') {
     return scenario.enemy?.id
       ? [{ kind: EFFECT_TARGET_KINDS.ENEMY, id: scenario.enemy.id }]
       : [];
   }
+  if (effect.target?.kind === 'controlling-actor') {
+    const controlled = resolveControlledActorAt(
+      controlledActorTimeline,
+      timeMs
+    );
+    return controlled
+      ? [{ kind: EFFECT_TARGET_KINDS.ACTOR, id: controlled.actorId }]
+      : [];
+  }
   if (
-    ['source-owner', 'owner-actor', 'controlling-actor', 'player'].includes(
-      effect.target?.kind
-    )
+    ['source-owner', 'owner-actor', 'player'].includes(effect.target?.kind)
   ) {
     return [
       action.type === ACTION_TYPES.KIBO_EVENT &&
@@ -331,7 +357,11 @@ function resolveEffectValue(action, effect, resolution) {
     12,
     1
   );
-  return evaluateVerifiedBattleEffectFormula({ effect, level });
+  return evaluateVerifiedBattleEffectFormula({
+    effect,
+    level,
+    sourceActor: action.actor,
+  });
 }
 
 function normalizeDuration(value) {
