@@ -11,13 +11,6 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100361.asset/MonoBehaviour/skill_control_10100361__-4454120741835547178.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003186.asset/MonoBehaviour/ast_101003186__865127997397410363.json#elementConfigId=101003186|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset|NewTable/skill.rows[id=10100361]|Battle/Element/ast_101003186.asset|Battle/Element/ast_480124006.asset|Battle/Element/ast_480126003.asset"
     },
     {
-      "nodeIdentity": "actor:101003:passive:10100362",
-      "nodeKind": "passive-listener",
-      "skillId": 10100362,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100362.asset/MonoBehaviour/skill_control_10100362__-8535174754551404571.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003151.asset/MonoBehaviour/ast_101003151__-4894023131109751821.json#elementConfigId=101003151|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset"
-    },
-    {
       "nodeIdentity": "actor:101003:perfect-parry:han-focus-dodge-counter",
       "nodeKind": "action-form",
       "semanticName": "集中闪避反击",
@@ -606,21 +599,6 @@
       "controlSkillId": 10100361,
       "subSkillIndex": 0,
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100361.asset/MonoBehaviour/skill_control_10100361__-4454120741835547178.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
-      "status": "applied"
-    },
-    {
-      "nodeIdentity": "control:10100362",
-      "nodeKind": "control",
-      "controlSkillId": 10100362,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100362.asset/MonoBehaviour/skill_control_10100362__-8535174754551404571.json",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "control:10100362:sub:0",
-      "nodeKind": "control-variant",
-      "controlSkillId": 10100362,
-      "subSkillIndex": 0,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100362.asset/MonoBehaviour/skill_control_10100362__-8535174754551404571.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
       "status": "applied"
     },
     {
@@ -1826,15 +1804,6 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F"
     },
     {
-      "edgeIdentity": "control:10100312:sub:0->triggers-passive->actor:101003:passive:10100362",
-      "from": "control:10100312:sub:0",
-      "to": "actor:101003:passive:10100362",
-      "relation": "triggers-passive",
-      "triggerFrame": 109,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079",
-      "status": "applied"
-    },
-    {
       "edgeIdentity": "control:10100313->has-subskill->control:10100313:sub:0",
       "from": "control:10100313",
       "to": "control:10100313:sub:0",
@@ -2271,12 +2240,6 @@
       "relation": "has-subskill"
     },
     {
-      "edgeIdentity": "control:10100362->has-subskill->control:10100362:sub:0",
-      "from": "control:10100362",
-      "to": "control:10100362:sub:0",
-      "relation": "has-subskill"
-    },
-    {
       "edgeIdentity": "han-normal-five-inputs:segment:1->executes-control->control:10100301",
       "from": "han-normal-five-inputs:segment:1",
       "to": "control:10100301",
@@ -2382,17 +2345,17 @@
     }
   ],
   "summary": {
-    "nodeCount": 171,
-    "edgeCount": 157,
-    "controlCount": 30,
+    "nodeCount": 168,
+    "edgeCount": 155,
+    "controlCount": 29,
     "exclusionCount": 7,
     "nodeKindCounts": {
       "action-form": 14,
       "conditional-hit-group": 2,
-      "control": 30,
-      "control-variant": 32,
+      "control": 29,
+      "control-variant": 31,
       "hit": 73,
-      "passive-listener": 2,
+      "passive-listener": 1,
       "public-action": 10,
       "runtime-effect": 6,
       "switch-trigger": 1,
@@ -2405,12 +2368,12 @@
       "emits-hit": 73,
       "executes-control": 24,
       "has-form": 12,
-      "has-subskill": 32,
+      "has-subskill": 31,
       "materializes-conditional-hits": 2,
-      "target-state-gain": 8,
-      "triggers-passive": 3,
+      "target-state-gain": 7,
+      "triggers-passive": 2,
       "triggers-runtime-effect": 6
     }
   },
-  "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7"
+  "profileHash": "2cf3e38ec4d2febe6e6f8b975d3750bd1c4748e292e054111378f2032a0e54a5"
 }

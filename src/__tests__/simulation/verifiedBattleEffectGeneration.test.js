@@ -252,6 +252,14 @@ describe('verified Battle effect generation', () => {
                 durationMs: 15000,
                 a: 1000,
                 baseFunctionId: 2008,
+                inheritance: {
+                  inheritOnControlledActorSwitch: true,
+                  inheritType: 'source',
+                  isTeamElement: true,
+                  containerElementId: 101003206,
+                  containerPathId: '-87352517346442030',
+                  sourceIdentity: 'fixture:container:101003206',
+                },
               }),
             ],
           },
@@ -276,6 +284,19 @@ describe('verified Battle effect generation', () => {
         command => command.targetId === 'actor-101007'
       )
     ).toHaveLength(2);
+    expect(
+      generation.effectCommands.find(
+        command => command.sourceIdentity.elementId === 101003207
+      )
+    ).toMatchObject({
+      semanticTargetKind: 'controlling-actor',
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'source',
+      inheritanceContainerElementId: 101003206,
+      inheritanceContainerPathId: '-87352517346442030',
+      inheritanceSourceIdentity: 'fixture:container:101003206',
+      formulaSourceActorId: 'actor-101003',
+    });
   });
 
   it('drops applied and unresolved effect rows at an immediate interrupt boundary', () => {
@@ -386,6 +407,7 @@ function createPropertyEffect({
   maxStacks = 1,
   a,
   baseFunctionId = 5,
+  inheritance = null,
 }) {
   return {
     semanticIdentity,
@@ -408,6 +430,7 @@ function createPropertyEffect({
       stackMode: 'stack',
       stackDelta,
       maxStacks,
+      inheritance,
     },
     formula: {
       commonFunctionId: 1,

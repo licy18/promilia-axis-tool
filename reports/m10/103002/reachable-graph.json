@@ -731,21 +731,6 @@
       "status": "applied"
     },
     {
-      "nodeIdentity": "control:10300262",
-      "nodeKind": "control",
-      "controlSkillId": 10300262,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300262.asset/MonoBehaviour/skill_control_10300262__-2321862503808261239.json",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "control:10300262:sub:0",
-      "nodeKind": "control-variant",
-      "controlSkillId": 10300262,
-      "subSkillIndex": 0,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300262.asset/MonoBehaviour/skill_control_10300262__-2321862503808261239.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
-      "status": "applied"
-    },
-    {
       "nodeIdentity": "hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
       "nodeKind": "hit",
       "controlSkillId": 10300201,
@@ -6398,12 +6383,6 @@
       "relation": "has-subskill"
     },
     {
-      "edgeIdentity": "control:10300262->has-subskill->control:10300262:sub:0",
-      "from": "control:10300262",
-      "to": "control:10300262:sub:0",
-      "relation": "has-subskill"
-    },
-    {
       "edgeIdentity": "ruby-enhanced-twelve-inputs:segment:1->executes-control->control:10300201",
       "from": "ruby-enhanced-twelve-inputs:segment:1",
       "to": "control:10300201",
@@ -6546,14 +6525,14 @@
     }
   ],
   "summary": {
-    "nodeCount": 331,
-    "edgeCount": 493,
-    "controlCount": 28,
+    "nodeCount": 329,
+    "edgeCount": 492,
+    "controlCount": 27,
     "exclusionCount": 6,
     "nodeKindCounts": {
       "action-form": 24,
-      "control": 28,
-      "control-variant": 51,
+      "control": 27,
+      "control-variant": 50,
       "hit": 215,
       "passive-listener": 1,
       "personal-resource": 1,
@@ -6566,7 +6545,7 @@
       "emits-hit": 215,
       "executes-control": 34,
       "has-form": 23,
-      "has-subskill": 51,
+      "has-subskill": 50,
       "input-derived": 291,
       "resource-consume": 15,
       "resource-gain": 25,
@@ -6574,5 +6553,5 @@
       "triggers-passive": 15
     }
   },
-  "profileHash": "5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b"
+  "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
 }

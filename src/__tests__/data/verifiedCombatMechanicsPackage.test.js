@@ -45,10 +45,10 @@ describe('verified combat mechanics package', () => {
         appliedEffectBindingCount: 137,
         verifiedZeroEffectBindingCount: 2,
         unresolvedEffectBindingCount: 3721,
-        actionVariantSupportControlBindingCount: 85,
+        actionVariantSupportControlBindingCount: 83,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 45,
-        actionVariantNodeCount: 691,
+        actionVariantNodeCount: 689,
         actionVariantEdgeCount: 95,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
@@ -287,7 +287,7 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 691,
+        nodeCount: 689,
         edgeCount: 337,
         appliedEdgeCount: 95,
         unresolvedEdgeCount: 244,
@@ -654,7 +654,7 @@ describe('verified combat mechanics package', () => {
     ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 691,
+      nodeCount: 689,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 155,
       conditionDiscoveryStatusCounts: {

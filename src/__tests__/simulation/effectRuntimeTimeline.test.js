@@ -17,6 +17,204 @@ import {
 import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 describe('effect runtime timeline', () => {
+  it('transfers inheritable controlled-actor effects without refreshing their lifetime', () => {
+    const scenario = {
+      time: { durationMs: 1200, fps: 60 },
+      actors: [
+        { id: 'actor-source', name: '来源角色' },
+        { id: 'actor-next', name: '下一角色' },
+        { id: 'actor-third', name: '第三角色' },
+      ],
+      actions: [],
+      initialRuntimeState: { activeEffects: [] },
+    };
+    const controlledActorTimeline = {
+      initialActor: {
+        actorId: 'actor-source',
+        actorName: '来源角色',
+      },
+      transitions: [
+        createControlledActorTransition({
+          id: 'switch-next',
+          timeMs: 200,
+          beforeActorId: 'actor-source',
+          afterActorId: 'actor-next',
+        }),
+        createControlledActorTransition({
+          id: 'switch-third',
+          timeMs: 300,
+          beforeActorId: 'actor-next',
+          afterActorId: 'actor-third',
+        }),
+        createControlledActorTransition({
+          id: 'switch-after-expiry',
+          timeMs: 700,
+          beforeActorId: 'actor-third',
+          afterActorId: 'actor-source',
+        }),
+      ],
+    };
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      controlledActorTimeline,
+      generatedCommands: [
+        createVerifiedGeneratedEffectCommand({
+          id: 'source-inherited-buff',
+          effectId: 'effect-source-inherited',
+          semanticTargetKind: 'controlled-actor',
+          targetId: 'actor-source',
+          timeMs: 100,
+          durationMs: 500,
+          inheritType: 'source',
+        }),
+        createVerifiedGeneratedEffectCommand({
+          id: 'self-inherited-buff',
+          effectId: 'effect-self-inherited',
+          semanticTargetKind: 'controlled-actor',
+          targetId: 'actor-source',
+          timeMs: 100,
+          durationMs: 500,
+          inheritType: 'self',
+        }),
+        createVerifiedGeneratedEffectCommand({
+          id: 'team-buff-copy',
+          effectId: 'effect-team',
+          semanticTargetKind: 'team-actors',
+          targetId: 'actor-source',
+          timeMs: 100,
+          durationMs: 500,
+          inheritType: null,
+          inheritOnControlledActorSwitch: false,
+        }),
+      ],
+    });
+
+    expect(timeline.summary).toMatchObject({
+      transferredEventCount: 4,
+      expiredEventCount: 3,
+    });
+    expect(
+      timeline.events
+        .filter(event => event.type === 'EFFECT_TRANSFERRED')
+        .map(event => [
+          event.effectId,
+          event.frameIndex,
+          event.before.targetId,
+          event.after.targetId,
+          event.after.appliedAtMs,
+          event.after.expiresAtMs,
+          event.after.formulaSourceActorId,
+          event.after.effectAdderActorId,
+        ])
+    ).toEqual([
+      [
+        'effect-self-inherited',
+        12,
+        'actor-source',
+        'actor-next',
+        100,
+        600,
+        'actor-source',
+        'actor-next',
+      ],
+      [
+        'effect-source-inherited',
+        12,
+        'actor-source',
+        'actor-next',
+        100,
+        600,
+        'actor-source',
+        'actor-source',
+      ],
+      [
+        'effect-self-inherited',
+        18,
+        'actor-next',
+        'actor-third',
+        100,
+        600,
+        'actor-source',
+        'actor-third',
+      ],
+      [
+        'effect-source-inherited',
+        18,
+        'actor-next',
+        'actor-third',
+        100,
+        600,
+        'actor-source',
+        'actor-source',
+      ],
+    ]);
+    expect(
+      timeline.events.filter(
+        event =>
+          event.type === 'EFFECT_TRANSFERRED' &&
+          event.effectId === 'effect-team'
+      )
+    ).toEqual([]);
+    expect(
+      resolveActiveEffectsAt(timeline, 250).map(effect => [
+        effect.effectId,
+        effect.targetId,
+      ])
+    ).toEqual([
+      ['effect-self-inherited', 'actor-next'],
+      ['effect-source-inherited', 'actor-next'],
+      ['effect-team', 'actor-source'],
+    ]);
+    expect(resolveActiveEffectsAt(timeline, 700)).toEqual([]);
+  });
+
+  it('applies same-frame commands before the exact switch transfer', () => {
+    const scenario = {
+      time: { durationMs: 1000, fps: 60 },
+      actors: [{ id: 'actor-source' }, { id: 'actor-next' }],
+      actions: [],
+      initialRuntimeState: { activeEffects: [] },
+    };
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      controlledActorTimeline: {
+        initialActor: { actorId: 'actor-source' },
+        transitions: [
+          createControlledActorTransition({
+            id: 'same-frame-switch',
+            timeMs: 200,
+            beforeActorId: 'actor-source',
+            afterActorId: 'actor-next',
+          }),
+        ],
+      },
+      generatedCommands: [
+        createVerifiedGeneratedEffectCommand({
+          id: 'same-frame-source-buff',
+          effectId: 'same-frame-source-buff',
+          semanticTargetKind: 'controlled-actor',
+          targetId: 'actor-source',
+          timeMs: 200,
+          durationMs: 500,
+          inheritType: 'source',
+        }),
+      ],
+    });
+
+    expect(
+      timeline.events.map(event => [
+        event.type,
+        event.timeMs,
+        event.before?.targetId ?? null,
+        event.after?.targetId ?? null,
+      ])
+    ).toEqual([
+      ['EFFECT_APPLIED', 200, null, 'actor-source'],
+      ['EFFECT_TRANSFERRED', 200, 'actor-source', 'actor-next'],
+      ['EFFECT_EXPIRED', 700, 'actor-next', null],
+    ]);
+  });
+
   it('keeps corrupt source names auditable without publishing them as effect labels', () => {
     const timeline = createEffectRuntimeTimeline({
       scenario: {
@@ -651,5 +849,74 @@ function createEmptyGameData() {
     skills: [],
     enemies: [],
     elements: [],
+  };
+}
+
+function createVerifiedGeneratedEffectCommand({
+  id,
+  effectId,
+  semanticTargetKind,
+  targetId,
+  timeMs,
+  durationMs,
+  inheritType,
+  inheritOnControlledActorSwitch = true,
+}) {
+  return {
+    id,
+    sourceActionId: 'source-action',
+    sourceActionName: '来源动作',
+    sourceActorId: 'actor-source',
+    sourceActorName: '来源角色',
+    effectId,
+    effectName: effectId,
+    operation: EFFECT_OPERATIONS.APPLY,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId,
+    timeMs,
+    durationMs,
+    stackMode: EFFECT_STACK_MODES.REFRESH,
+    stackDelta: 1,
+    maxStacks: 1,
+    semanticTargetKind,
+    inheritOnControlledActorSwitch,
+    inheritType,
+    inheritanceSourceIdentity: 'fixture:element-container',
+    sourceStatus: 'verified-battle-effect-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    sourceIdentity: {
+      packageId: 'fixture-package',
+      packageHash: 'fixture-hash',
+      actionBindingIdentity: 'fixture-action-binding',
+      effectIdentity: id,
+    },
+    modifiers: [],
+    appliedToCalculators: true,
+    generatedVerified: true,
+  };
+}
+
+function createControlledActorTransition({
+  id,
+  timeMs,
+  beforeActorId,
+  afterActorId,
+}) {
+  return {
+    transitionId: id,
+    actionId: id,
+    timeMs,
+    frameIndex: Math.round((timeMs * 60) / 1000),
+    beforeActor: {
+      actorId: beforeActorId,
+      actorName: beforeActorId,
+    },
+    afterActor: {
+      actorId: afterActorId,
+      actorName: afterActorId,
+    },
+    status: 'controlled-actor-switch-applied',
+    applied: true,
   };
 }

@@ -14,6 +14,7 @@ import sourceManifest from '../../../reports/m10/101010/source-manifest.json';
 import unresolvedLedger from '../../../reports/m10/101010/unresolved-ledger.json';
 import {
   applyCharacterCombatActionHitBindings,
+  compileElementInheritance,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
   mergeCharacterCombatOwnerCompilations,
@@ -61,6 +62,71 @@ afterEach(() => {
 });
 
 describe('M10 character combat profile pipeline', () => {
+  it('uses inheritType rather than the team-element flag for controlled-actor transfer', () => {
+    const createAsset = ({ teamElement, inheritType }) => ({
+      elementId: 424200 + inheritType + (teamElement ? 10 : 0),
+      pathId: `fixture-${teamElement}-${inheritType}`,
+      sourceIdentity: `fixture:element:${teamElement}:${inheritType}`,
+      tree: {
+        inherit: teamElement ? 1 : 0,
+        inheritType,
+      },
+    });
+
+    expect(
+      compileElementInheritance(
+        createAsset({ teamElement: true, inheritType: 0 })
+      )
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: false,
+      inheritType: null,
+      isTeamElement: true,
+      status: 'verified-element-no-controlled-actor-inheritance',
+    });
+    expect(
+      compileElementInheritance(
+        createAsset({ teamElement: false, inheritType: 1 })
+      )
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'self',
+      isTeamElement: false,
+      status: 'verified-element-inheritance-ready',
+    });
+    expect(
+      compileElementInheritance(
+        createAsset({ teamElement: true, inheritType: 1 })
+      )
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'self',
+      isTeamElement: true,
+    });
+    expect(
+      compileElementInheritance(
+        createAsset({ teamElement: false, inheritType: 2 })
+      )
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'source',
+      isTeamElement: false,
+    });
+    expect(
+      compileElementInheritance(
+        createAsset({ teamElement: true, inheritType: 2 })
+      )
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'source',
+      isTeamElement: true,
+    });
+    expect(() =>
+      compileElementInheritance(
+        createAsset({ teamElement: true, inheritType: 3 })
+      )
+    ).toThrow(/inheritance type unsupported/);
+  });
+
   it('derives honest maturity and coverage against the fixed 20-character denominator', () => {
     expect(schema).toMatchObject({
       $id: 'azpr://schemas/character-combat-profile/v1',
@@ -1311,7 +1377,7 @@ describe('M10 character combat profile pipeline', () => {
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
-        assertionCount: 69,
+        assertionCount: 75,
         failedCount: 0,
       },
     });
@@ -1334,6 +1400,20 @@ describe('M10 character combat profile pipeline', () => {
       effects: {
         passiveMaxStacks: 4,
         firstPassiveMaxStackFrame: 761,
+        inheritanceTransferCountByEffectId: {
+          'battle-element:101010206': 0,
+        },
+        passiveTrace: expect.arrayContaining([
+          expect.objectContaining({
+            frame: 979,
+            targetId: 'actor-101010',
+          }),
+          expect.objectContaining({
+            frame: 1459,
+            operation: 'expire',
+            targetId: 'actor-101010',
+          }),
+        ]),
       },
       dynamicProperties: {
         maxPercentRawByAttributeId: {
@@ -1479,7 +1559,9 @@ describe('M10 character combat profile pipeline', () => {
       descriptionCoverage.entries.find(entry => entry.skillId === 10101062)
     ).toMatchObject({
       status: 'not-applicable',
-      reasons: ['client-passive-not-implemented'],
+      reasons: [
+        'unnamed-secondary-passive-not-implemented-current-client',
+      ],
     });
   });
 

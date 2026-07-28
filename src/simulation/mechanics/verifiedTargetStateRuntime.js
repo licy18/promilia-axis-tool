@@ -636,6 +636,7 @@ function emitRuntimeBinding({
       targetKind: target.kind,
       targetId: String(target.id),
       targetName: target.name ?? null,
+      semanticTargetKind: binding.targetKind,
       timeMs,
       durationMs: binding.durationMs,
       stackMode:
@@ -657,6 +658,20 @@ function emitRuntimeBinding({
         effectIdentity: binding.bindingIdentity,
         sourceIdentity: binding.sourceIdentity,
       },
+      inheritOnControlledActorSwitch:
+        binding.inheritance?.inheritOnControlledActorSwitch === true,
+      inheritType: binding.inheritance?.inheritType ?? null,
+      inheritanceContainerElementId:
+        binding.inheritance?.containerElementId ?? null,
+      inheritanceContainerPathId:
+        binding.inheritance?.containerPathId ?? null,
+      inheritanceSourceIdentity:
+        binding.inheritance?.sourceIdentity ?? null,
+      formulaSourceActorId: action.actorId,
+      effectAdderActorId:
+        binding.inheritance?.inheritType === 'self'
+          ? String(target.id)
+          : action.actorId,
       modifiers: binding.modifiers.map(modifier => ({ ...modifier })),
       appliedToCalculators: true,
       generatedVerified: true,

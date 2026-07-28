@@ -1,0 +1,1068 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-element-inheritance-field-audit",
+  "status": "verified-element-inheritance-field-audit-ready",
+  "policy": {
+    "controlledActorTransferGate": "inheritType",
+    "teamElementField": "inherit",
+    "teamElementAffectsTransfer": false,
+    "supportedInheritTypes": {
+      "0": "none",
+      "1": "self",
+      "2": "source"
+    }
+  },
+  "summary": {
+    "nonzeroInheritTypeRecordCount": 82,
+    "matrix": {
+      "self|team-element-false": 2,
+      "self|team-element-true": 70,
+      "source|team-element-false": 6,
+      "source|team-element-true": 4
+    },
+    "reachableRecordCount": 16,
+    "legacyUnreachableRecordCount": 66
+  },
+  "nonMigratingRegressionEvidence": [
+    {
+      "elementId": 101010206,
+      "name": "有被动1时，加攻",
+      "inheritType": "none",
+      "inheritTypeRaw": 0,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "expectedRuntimeStatus": "fixed-owner-no-controlled-actor-transfer",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=601520908186242978"
+    },
+    {
+      "elementId": 103002275,
+      "name": "红宝石 强化普攻 获得调谐强度",
+      "inheritType": "none",
+      "inheritTypeRaw": 0,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "expectedRuntimeStatus": "fixed-owner-no-controlled-actor-transfer",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-5857702920164552208"
+    }
+  ],
+  "legacyUnreachableEvidence": [
+    {
+      "elementId": 101010030,
+      "records": [
+        {
+          "elementId": 101010030,
+          "pathId": "-6094526570337244446",
+          "name": "被动1 防御增加",
+          "inheritType": "self",
+          "inheritTypeRaw": 1,
+          "isTeamElement": true,
+          "teamElementRaw": 1,
+          "reachabilityStatus": "legacy-unreachable-evidence",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6094526570337244446"
+        }
+      ],
+      "status": "legacy-unreachable-evidence",
+      "applied": false,
+      "exclusionReason": "no-current-skill-list-or-reachable-character-combat-contract-reference"
+    },
+    {
+      "elementId": 101010039,
+      "records": [
+        {
+          "elementId": 101010039,
+          "pathId": "-3266533892416498639",
+          "name": "被动1 防御增加",
+          "inheritType": "self",
+          "inheritTypeRaw": 1,
+          "isTeamElement": true,
+          "teamElementRaw": 1,
+          "reachabilityStatus": "legacy-unreachable-evidence",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3266533892416498639"
+        }
+      ],
+      "status": "legacy-unreachable-evidence",
+      "applied": false,
+      "exclusionReason": "no-current-skill-list-or-reachable-character-combat-contract-reference"
+    },
+    {
+      "elementId": 101010081,
+      "records": [
+        {
+          "elementId": 101010081,
+          "pathId": "2648741378693061773",
+          "name": "被动1 防御增加",
+          "inheritType": "self",
+          "inheritTypeRaw": 1,
+          "isTeamElement": true,
+          "teamElementRaw": 1,
+          "reachabilityStatus": "legacy-unreachable-evidence",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=2648741378693061773"
+        }
+      ],
+      "status": "legacy-unreachable-evidence",
+      "applied": false,
+      "exclusionReason": "no-current-skill-list-or-reachable-character-combat-contract-reference"
+    },
+    {
+      "elementId": 103002040,
+      "records": [
+        {
+          "elementId": 103002040,
+          "pathId": "1237001200203783513",
+          "name": "被动1 团队加攻buff包",
+          "inheritType": "self",
+          "inheritTypeRaw": 1,
+          "isTeamElement": true,
+          "teamElementRaw": 1,
+          "reachabilityStatus": "legacy-unreachable-evidence",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1237001200203783513"
+        }
+      ],
+      "status": "legacy-unreachable-evidence",
+      "applied": false,
+      "exclusionReason": "no-current-skill-list-or-reachable-character-combat-contract-reference"
+    },
+    {
+      "elementId": 103002079,
+      "records": [
+        {
+          "elementId": 103002079,
+          "pathId": "-8320024027328267597",
+          "name": "被动1 团队加攻buff包",
+          "inheritType": "self",
+          "inheritTypeRaw": 1,
+          "isTeamElement": true,
+          "teamElementRaw": 1,
+          "reachabilityStatus": "legacy-unreachable-evidence",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8320024027328267597"
+        }
+      ],
+      "status": "legacy-unreachable-evidence",
+      "applied": false,
+      "exclusionReason": "no-current-skill-list-or-reachable-character-combat-contract-reference"
+    },
+    {
+      "elementId": 103002157,
+      "records": [
+        {
+          "elementId": 103002157,
+          "pathId": "2315650703988471791",
+          "name": "被动1 团队加攻buff包",
+          "inheritType": "self",
+          "inheritTypeRaw": 1,
+          "isTeamElement": true,
+          "teamElementRaw": 1,
+          "reachabilityStatus": "legacy-unreachable-evidence",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=2315650703988471791"
+        }
+      ],
+      "status": "legacy-unreachable-evidence",
+      "applied": false,
+      "exclusionReason": "no-current-skill-list-or-reachable-character-combat-contract-reference"
+    }
+  ],
+  "records": [
+    {
+      "elementId": 49,
+      "pathId": "-3576699088596625062",
+      "name": "减低防御debuff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3576699088596625062"
+    },
+    {
+      "elementId": 112,
+      "pathId": "7534969273818127422",
+      "name": "火属性残响",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7534969273818127422"
+    },
+    {
+      "elementId": 312,
+      "pathId": "2675848591735782647",
+      "name": "冰属性残响",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2675848591735782647"
+    },
+    {
+      "elementId": 809,
+      "pathId": "7668311999287911535",
+      "name": "水属性残响",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7668311999287911535"
+    },
+    {
+      "elementId": 915,
+      "pathId": "-6351865656861630231",
+      "name": "光属性残响",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-6351865656861630231"
+    },
+    {
+      "elementId": 18003024,
+      "pathId": "3759876868949480074",
+      "name": "极限反击效果计数",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=3759876868949480074"
+    },
+    {
+      "elementId": 18003027,
+      "pathId": "441595377661384424",
+      "name": "主要BUFF",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=441595377661384424"
+    },
+    {
+      "elementId": 18003028,
+      "pathId": "537332264414056229",
+      "name": "主要BUFF",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=537332264414056229"
+    },
+    {
+      "elementId": 19001001,
+      "pathId": "2200502015063214997",
+      "name": "灵子Buff 阿比 充能时间",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2200502015063214997"
+    },
+    {
+      "elementId": 19001004,
+      "pathId": "5291844972043524897",
+      "name": "增加buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5291844972043524897"
+    },
+    {
+      "elementId": 101003079,
+      "pathId": "-3716196104709416648",
+      "name": "烟花debuff （标记）",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3716196104709416648"
+    },
+    {
+      "elementId": 101003140,
+      "pathId": "7641570276680779531",
+      "name": "Buff 全队暴击率提升 寒悠悠暴击率10%",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7641570276680779531"
+    },
+    {
+      "elementId": 101003141,
+      "pathId": "4373635720509741260",
+      "name": "Debuff 降低敌人防御 8%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4373635720509741260"
+    },
+    {
+      "elementId": 101003147,
+      "pathId": "2236543684200653031",
+      "name": " buff判断 重击1 烟花伤害",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2236543684200653031"
+    },
+    {
+      "elementId": 101003148,
+      "pathId": "-3647437052628454171",
+      "name": " buff判断 重击2烟花伤害",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3647437052628454171"
+    },
+    {
+      "elementId": 101003149,
+      "pathId": "2436320881335789684",
+      "name": " buff判断 大招 烟花伤害",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2436320881335789684"
+    },
+    {
+      "elementId": 101003150,
+      "pathId": "-3788959656081139627",
+      "name": "减低防御debuff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3788959656081139627"
+    },
+    {
+      "elementId": 101003151,
+      "pathId": "-4894023131109751821",
+      "name": "被动技能2 爆竹debuff 2层",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-4894023131109751821"
+    },
+    {
+      "elementId": 101003155,
+      "pathId": "-7047277564832680844",
+      "name": "寒悠悠 重击释放标记",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-7047277564832680844"
+    },
+    {
+      "elementId": 101003171,
+      "pathId": "1689173673222703886",
+      "name": "烟花debuff （标记）",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=1689173673222703886"
+    },
+    {
+      "elementId": 101003186,
+      "pathId": "865127997397410363",
+      "name": "寒悠悠 被动标记",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=865127997397410363"
+    },
+    {
+      "elementId": 101003197,
+      "pathId": "2321758234169978652",
+      "name": "全队buff 暴击伤害加成  每层0.25%，最多14层",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2321758234169978652"
+    },
+    {
+      "elementId": 101003206,
+      "pathId": "-87352517346442030",
+      "name": "Buff 全队精通提升为寒悠悠精通10%",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-87352517346442030"
+    },
+    {
+      "elementId": 101006233,
+      "pathId": "5749210311729939929",
+      "name": "被动BUFF2",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5749210311729939929"
+    },
+    {
+      "elementId": 101007177,
+      "pathId": "-5619220543347332461",
+      "name": "珐兰塔 buff1",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-5619220543347332461"
+    },
+    {
+      "elementId": 101010030,
+      "pathId": "-6094526570337244446",
+      "name": "被动1 防御增加",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-6094526570337244446"
+    },
+    {
+      "elementId": 101010039,
+      "pathId": "-3266533892416498639",
+      "name": "被动1 防御增加",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3266533892416498639"
+    },
+    {
+      "elementId": 101010081,
+      "pathId": "2648741378693061773",
+      "name": "被动1 防御增加",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2648741378693061773"
+    },
+    {
+      "elementId": 103002040,
+      "pathId": "1237001200203783513",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=1237001200203783513"
+    },
+    {
+      "elementId": 103002079,
+      "pathId": "-8320024027328267597",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-8320024027328267597"
+    },
+    {
+      "elementId": 103002157,
+      "pathId": "2315650703988471791",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2315650703988471791"
+    },
+    {
+      "elementId": 107001163,
+      "pathId": "-6243484313724920556",
+      "name": "被动1 小精灵存在加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-6243484313724920556"
+    },
+    {
+      "elementId": 107001216,
+      "pathId": "-3667273184382830806",
+      "name": "小精灵存在加爆伤包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3667273184382830806"
+    },
+    {
+      "elementId": 107002060,
+      "pathId": "5742352837010914791",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5742352837010914791"
+    },
+    {
+      "elementId": 107002067,
+      "pathId": "-1260775484859693841",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-1260775484859693841"
+    },
+    {
+      "elementId": 107002076,
+      "pathId": "-1876865589297863895",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-1876865589297863895"
+    },
+    {
+      "elementId": 107002085,
+      "pathId": "3703931093634969457",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=3703931093634969457"
+    },
+    {
+      "elementId": 107002094,
+      "pathId": "-471623451055326945",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-471623451055326945"
+    },
+    {
+      "elementId": 107002103,
+      "pathId": "-9082352452314199681",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-9082352452314199681"
+    },
+    {
+      "elementId": 107002110,
+      "pathId": "8491234207894571137",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=8491234207894571137"
+    },
+    {
+      "elementId": 107002118,
+      "pathId": "4399028636885243084",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4399028636885243084"
+    },
+    {
+      "elementId": 107002142,
+      "pathId": "7924685491885984059",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7924685491885984059"
+    },
+    {
+      "elementId": 107002149,
+      "pathId": "-3867367161087811311",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3867367161087811311"
+    },
+    {
+      "elementId": 107002196,
+      "pathId": "3396922520367715013",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=3396922520367715013"
+    },
+    {
+      "elementId": 107002204,
+      "pathId": "-1583137655800039100",
+      "name": "被动1 团队加攻buff包",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-1583137655800039100"
+    },
+    {
+      "elementId": 107002265,
+      "pathId": "3375530858005333853",
+      "name": "加伤害",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=3375530858005333853"
+    },
+    {
+      "elementId": 107002271,
+      "pathId": "7643301625766811642",
+      "name": "残留物加攻击",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7643301625766811642"
+    },
+    {
+      "elementId": 107003185,
+      "pathId": "-4192482977125646961",
+      "name": "阿比减防",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-4192482977125646961"
+    },
+    {
+      "elementId": 108001211,
+      "pathId": "2036662801972601594",
+      "name": "被动技能1标记buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2036662801972601594"
+    },
+    {
+      "elementId": 108001245,
+      "pathId": "-7910310549716015568",
+      "name": "大招分轨BUFF",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-7910310549716015568"
+    },
+    {
+      "elementId": 108001269,
+      "pathId": "-5082871333998346750",
+      "name": "大招 调谐强度增加",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-5082871333998346750"
+    },
+    {
+      "elementId": 108002108,
+      "pathId": "-1742663304043374763",
+      "name": "被动技能1 buff标记",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-1742663304043374763"
+    },
+    {
+      "elementId": 108002119,
+      "pathId": "2676692086494325580",
+      "name": "buff 全队防御力提升5%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2676692086494325580"
+    },
+    {
+      "elementId": 108002157,
+      "pathId": "4268107100726438830",
+      "name": "小技能范围 加暴击率",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4268107100726438830"
+    },
+    {
+      "elementId": 108002234,
+      "pathId": "3445000593387450097",
+      "name": "debuff 防御力降低15%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=3445000593387450097"
+    },
+    {
+      "elementId": 108002239,
+      "pathId": "855747262397610002",
+      "name": "减低防御debuff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=855747262397610002"
+    },
+    {
+      "elementId": 108002266,
+      "pathId": "-8700178344277036915",
+      "name": "战斗引导，快速重击buff判定",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-8700178344277036915"
+    },
+    {
+      "elementId": 108002269,
+      "pathId": "7104986872845676034",
+      "name": "战斗引导，快速重击小技能跳转buff判定",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7104986872845676034"
+    },
+    {
+      "elementId": 108002271,
+      "pathId": "-1171027441901542652",
+      "name": "重击蓄力buff，1段能打出终结的子弹",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-1171027441901542652"
+    },
+    {
+      "elementId": 108003141,
+      "pathId": "2840154760276311923",
+      "name": "被动技能1标记buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2840154760276311923"
+    },
+    {
+      "elementId": 108005031,
+      "pathId": "-9209941641650037431",
+      "name": "被动1 防御增加",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-9209941641650037431"
+    },
+    {
+      "elementId": 108005056,
+      "pathId": "1910842878230454517",
+      "name": "被动1 防御增加",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=1910842878230454517"
+    },
+    {
+      "elementId": 108005164,
+      "pathId": "5495598981628150929",
+      "name": "被动Buff外套",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5495598981628150929"
+    },
+    {
+      "elementId": 111001182,
+      "pathId": "-3700774689219833373",
+      "name": "珐兰塔 被动buff1标记",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3700774689219833373"
+    },
+    {
+      "elementId": 111001196,
+      "pathId": "4418441644923563257",
+      "name": "珐兰塔 buff1",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4418441644923563257"
+    },
+    {
+      "elementId": 111001262,
+      "pathId": "8494857273930952169",
+      "name": "被动技能2 减低防御debuff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=8494857273930952169"
+    },
+    {
+      "elementId": 111001266,
+      "pathId": "-8098058418163180377",
+      "name": "珐兰塔 大招风场标记",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-8098058418163180377"
+    },
+    {
+      "elementId": 112002091,
+      "pathId": "5370668497437967807",
+      "name": "Buff-留场技加攻击，24s",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5370668497437967807"
+    },
+    {
+      "elementId": 112002114,
+      "pathId": "-7614187518037682719",
+      "name": "buff - 小技能增加暴击率",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": false,
+      "teamElementRaw": 0,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-7614187518037682719"
+    },
+    {
+      "elementId": 199001048,
+      "pathId": "3859325085704717590",
+      "name": "女主角_留场 攻击buff",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=3859325085704717590"
+    },
+    {
+      "elementId": 199002080,
+      "pathId": "-2711043023008507545",
+      "name": "女主角_留场 攻击buff 5%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-2711043023008507545"
+    },
+    {
+      "elementId": 199002261,
+      "pathId": "-6117208996199980820",
+      "name": "主角_留场 攻击buff",
+      "inheritType": "source",
+      "inheritTypeRaw": 2,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-6117208996199980820"
+    },
+    {
+      "elementId": 199002268,
+      "pathId": "1920509610385167669",
+      "name": "主角_留场 空buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=1920509610385167669"
+    },
+    {
+      "elementId": 199003173,
+      "pathId": "8810001282599459251",
+      "name": "被动 重击2蓄，全队攻击力 20%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=8810001282599459251"
+    },
+    {
+      "elementId": 199003175,
+      "pathId": "8391523250435815748",
+      "name": "被动技能1 提升暴击率5%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=8391523250435815748"
+    },
+    {
+      "elementId": 199999007,
+      "pathId": "2083529805044937524",
+      "name": "增加buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2083529805044937524"
+    },
+    {
+      "elementId": 199999012,
+      "pathId": "4811652086551188676",
+      "name": "上debuff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4811652086551188676"
+    },
+    {
+      "elementId": 310283059,
+      "pathId": "5962246460837388246",
+      "name": "大招狼  全队攻击力提升 12%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5962246460837388246"
+    },
+    {
+      "elementId": 480041001,
+      "pathId": "2597380282862822327",
+      "name": "回sp特效 空buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=2597380282862822327"
+    },
+    {
+      "elementId": 480042001,
+      "pathId": "5147380714789007564",
+      "name": "回hp特效 空buff",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "legacy-unreachable-evidence",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=5147380714789007564"
+    },
+    {
+      "elementId": 480124006,
+      "pathId": "7905960758689617794",
+      "name": "Buff 烟花爆炸 主控攻击力+10%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=7905960758689617794"
+    },
+    {
+      "elementId": 480126002,
+      "pathId": "4072414477131374224",
+      "name": "Buff 烟花爆炸 全队攻击力+10%",
+      "inheritType": "self",
+      "inheritTypeRaw": 1,
+      "isTeamElement": true,
+      "teamElementRaw": 1,
+      "reachabilityStatus": "reachable-battle-effect-graph",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4072414477131374224"
+    }
+  ]
+}

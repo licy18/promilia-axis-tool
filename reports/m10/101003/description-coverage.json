@@ -698,8 +698,7 @@
       ],
       "status": "applied",
       "coverageReferences": [
-        "actor:101003:passive:10100361",
-        "actor:101003:passive:10100362"
+        "actor:101003:passive:10100361"
       ],
       "reasons": [],
       "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/101003.hero-module.local.json"
@@ -714,20 +713,20 @@
       "mechanicKinds": [
         "action-form"
       ],
-      "status": "static-evidence-gap",
+      "status": "not-applicable",
       "coverageReferences": [],
       "reasons": [
-        "description-executable-effect-not-linked-to-static-profile"
+        "unnamed-secondary-passive-not-implemented-current-client"
       ],
-      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/101003.hero-module.local.json"
+      "sourceIdentity": "characters.items[id=101003].skillSlots[group=passive,index=1,skillId=10100362]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/101003.hero-module.local.json"
     }
   ],
   "summary": {
     "entryCount": 19,
     "statusCounts": {
       "applied": 18,
-      "static-evidence-gap": 1
+      "not-applicable": 1
     }
   },
-  "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7"
+  "profileHash": "2cf3e38ec4d2febe6e6f8b975d3750bd1c4748e292e054111378f2032a0e54a5"
 }

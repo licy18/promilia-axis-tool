@@ -2,7 +2,7 @@
 
 - Owner: `101010`
 - Profile: `actor:101010:character-combat-profile:v1`
-- Hash: `bfe00286754b3c24d1f4d5a5ad61756fa0fc47516d39aa1898722f8ce0678288`
+- Hash: `4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -16,6 +16,10 @@
 - 描述覆盖：28
 - Runtime ready 动作：7/10
 - Runtime capture：4
+- 零距离模拟完整：no
+- 实机证据完整：no
+- 零距离阻断 capture：0
+- 实机证据 capture：4
 
 ## 维度状态
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b",
+  "sourcePackageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -39,6 +39,7 @@
     ],
     "oneCharacterPerReviewCommitAfterM10A": true,
     "automaticBulkGreenIsForbidden": true,
+    "unnamedSecondaryPassiveClassification": "not-applicable",
     "recommendedSecondProfileOwnerId": 103002,
     "recommendedThirdProfileOwnerId": 101003
   },
@@ -61,6 +62,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "partial",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 36,
       "indexedControlCount": 14,
@@ -68,6 +71,11 @@
       "stateMachineCount": 1,
       "derivedEdgeCount": 34,
       "passiveCount": 1,
+      "unnamedSecondaryPassive": {
+        "skillId": 10101062,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -84,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "bfe00286754b3c24d1f4d5a5ad61756fa0fc47516d39aa1898722f8ce0678288"
+      "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6"
     },
     {
       "ownerId": 103002,
@@ -104,13 +112,20 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "partial",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": true,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 54,
+      "reachableFormCount": 53,
       "indexedControlCount": 12,
       "specialResourceCount": 1,
       "stateMachineCount": 0,
       "derivedEdgeCount": 293,
       "passiveCount": 1,
+      "unnamedSecondaryPassive": {
+        "skillId": 10300262,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -126,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b"
+      "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
     },
     {
       "ownerId": 101003,
@@ -145,13 +160,20 @@
       "targetPipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 37,
+      "reachableFormCount": 36,
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
       "derivedEdgeCount": 1,
-      "passiveCount": 2,
+      "passiveCount": 1,
+      "unnamedSecondaryPassive": {
+        "skillId": 10100362,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -166,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7"
+      "profileHash": "2cf3e38ec4d2febe6e6f8b975d3750bd1c4748e292e054111378f2032a0e54a5"
     },
     {
       "ownerId": 101007,
@@ -183,6 +205,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 29,
       "indexedControlCount": 13,
@@ -190,6 +214,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 9,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10100762,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -219,6 +248,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 9,
       "reachableFormCount": 25,
       "indexedControlCount": 13,
@@ -226,6 +257,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10200162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -256,6 +292,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 34,
       "indexedControlCount": 14,
@@ -263,6 +301,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 4,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10700162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -292,6 +335,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 22,
       "indexedControlCount": 14,
@@ -299,6 +344,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10700262,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -327,6 +377,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 27,
       "indexedControlCount": 14,
@@ -334,6 +386,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10700362,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -362,6 +419,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 25,
       "indexedControlCount": 14,
@@ -369,6 +428,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10800162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -398,6 +462,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 23,
       "indexedControlCount": 14,
@@ -405,6 +471,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10800262,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -433,6 +504,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 16,
       "indexedControlCount": 12,
@@ -440,6 +513,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10800362,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -468,6 +546,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 17,
       "indexedControlCount": 12,
@@ -475,6 +555,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10800562,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -503,6 +588,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 20,
       "indexedControlCount": 14,
@@ -510,6 +597,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10900162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -538,6 +630,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 23,
       "indexedControlCount": 14,
@@ -545,6 +639,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 10900262,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -574,6 +673,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 34,
       "indexedControlCount": 14,
@@ -581,6 +682,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 6,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 11100162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -610,6 +716,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 27,
       "indexedControlCount": 14,
@@ -617,6 +725,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 11200162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -645,6 +758,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 21,
       "indexedControlCount": 14,
@@ -652,6 +767,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 11200262,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -680,6 +800,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 9,
       "reachableFormCount": 20,
       "indexedControlCount": 13,
@@ -687,6 +809,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 19900162,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -715,6 +842,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 9,
       "reachableFormCount": 20,
       "indexedControlCount": 13,
@@ -722,6 +851,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 19900262,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-exit"
@@ -750,6 +884,8 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "evidence-required",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 23,
       "indexedControlCount": 14,
@@ -757,6 +893,11 @@
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
       "passiveCount": 0,
+      "unnamedSecondaryPassive": {
+        "skillId": 19900362,
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+      },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
         "on-enter"
@@ -779,6 +920,9 @@
       "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 159
+    "totalRuntimeReadyActionCount": 159,
+    "unnamedSecondaryPassiveCount": 20,
+    "zeroDistanceSimulationCompleteCount": 1,
+    "realClientEvidenceCompleteCount": 0
   }
 }

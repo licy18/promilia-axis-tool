@@ -1593,20 +1593,20 @@
       "clauseIndex": 0,
       "text": "红宝石（小红帽）上场时，8s内提升暴击率{0}",
       "mechanicKinds": [],
-      "status": "static-evidence-gap",
+      "status": "not-applicable",
       "coverageReferences": [],
       "reasons": [
-        "description-executable-effect-not-linked-to-static-profile"
+        "unnamed-secondary-passive-not-implemented-current-client"
       ],
-      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/103002.hero-module.local.json"
+      "sourceIdentity": "characters.items[id=103002].skillSlots[group=passive,index=1,skillId=10300262]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/103002.hero-module.local.json"
     }
   ],
   "summary": {
     "entryCount": 18,
     "statusCounts": {
       "applied": 17,
-      "static-evidence-gap": 1
+      "not-applicable": 1
     }
   },
-  "profileHash": "5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b"
+  "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
 }

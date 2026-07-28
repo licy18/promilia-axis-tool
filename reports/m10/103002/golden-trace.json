@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b",
+  "sourcePackageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -271,6 +271,16 @@
         "ruby-limit-counter": 6,
         "ruby-post-ultimate-shot": 9,
         "ruby-ultimate": 25
+      },
+      "selectedHpDamageByActionId": {
+        "ruby-enhanced-shot-1": 441,
+        "ruby-enhanced-shot-2": 441,
+        "ruby-enhanced-shot-3": 441,
+        "ruby-enhanced-shot-4": 441,
+        "ruby-enhanced-shot-5": 441,
+        "ruby-enhanced-shot-6": 441,
+        "ruby-post-ultimate-shot": 891,
+        "ruby-ultimate": 156751
       },
       "totalHpDamage": 164643,
       "totalToughnessDamage": 2190,
@@ -999,6 +1009,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -1025,6 +1042,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 1,
           "afterStacks": 2,
           "stackChange": 1,
@@ -1051,6 +1075,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 2,
           "afterStacks": 3,
           "stackChange": 1,
@@ -1077,6 +1108,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 3,
           "afterStacks": 4,
           "stackChange": 1,
@@ -1103,6 +1141,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 4,
           "afterStacks": 5,
           "stackChange": 1,
@@ -1129,6 +1174,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 5,
           "afterStacks": 6,
           "stackChange": 1,
@@ -1155,6 +1207,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 6,
           "afterStacks": null,
           "stackChange": -6,
@@ -1181,6 +1240,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-ultimate|38566.667",
           "beforeStacks": null,
           "afterStacks": 6,
           "stackChange": 6,
@@ -1207,6 +1273,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-ultimate|38566.667",
           "beforeStacks": 6,
           "afterStacks": 6,
           "stackChange": 0,
@@ -1233,6 +1306,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-ultimate|38566.667",
           "beforeStacks": 6,
           "afterStacks": null,
           "stackChange": -6,
@@ -1266,6 +1346,7 @@
             "actor-103002"
           ],
           "appliedEventCount": 2,
+          "transferredEventCount": 0,
           "expiredEventCount": 2,
           "firstAppliedFrame": 3300,
           "firstExpiredFrame": 4260,
@@ -1281,6 +1362,10 @@
           ]
         }
       },
+      "inheritanceTransferCountByEffectId": {
+        "battle-element:103002275": 0
+      },
+      "inheritanceTransfers": [],
       "burstTransitions": []
     },
     "dynamicProperties": {
@@ -1349,6 +1434,132 @@
           ]
         }
       ],
+      "byActionId": {
+        "ruby-enhanced-shot-1": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 20,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-enhanced-shot-2": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 40,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-enhanced-shot-3": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 60,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-enhanced-shot-4": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 80,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-enhanced-shot-5": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 100,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-enhanced-shot-6": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 120,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-post-ultimate-shot": [
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 120,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ],
+        "ruby-ultimate": [
+          {
+            "attributeId": 1,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 60,
+            "dynamicExtraRaw": 0,
+            "effectIds": [
+              "tuning-mark:150:persistent"
+            ]
+          },
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 120,
+            "effectIds": [
+              "battle-element:103002275"
+            ]
+          }
+        ]
+      },
+      "effectIdsByActionId": {
+        "ruby-enhanced-shot-1": [
+          "battle-element:103002275"
+        ],
+        "ruby-enhanced-shot-2": [
+          "battle-element:103002275"
+        ],
+        "ruby-enhanced-shot-3": [
+          "battle-element:103002275"
+        ],
+        "ruby-enhanced-shot-4": [
+          "battle-element:103002275"
+        ],
+        "ruby-enhanced-shot-5": [
+          "battle-element:103002275"
+        ],
+        "ruby-enhanced-shot-6": [
+          "battle-element:103002275"
+        ],
+        "ruby-post-ultimate-shot": [
+          "battle-element:103002275"
+        ],
+        "ruby-ultimate": [
+          "battle-element:103002275",
+          "tuning-mark:150:persistent"
+        ]
+      },
       "maxPercentRawByAttributeId": {
         "1": 60,
         "229": 0
@@ -1390,6 +1601,8 @@
           ]
         }
       ],
+      "primaryEffectFormulaValuesById": {},
+      "baselineEffectFormulaValuesById": {},
       "baselineReplayHash": "85f3d6b511affb6b122f42bbfec672bde0ece0e36982d573306c4803e8b29784"
     },
     "trace": {
@@ -4280,6 +4493,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4306,6 +4526,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 1,
           "afterStacks": 2,
           "stackChange": 1,
@@ -4332,6 +4559,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 2,
           "afterStacks": 3,
           "stackChange": 1,
@@ -4358,6 +4592,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 3,
           "afterStacks": 4,
           "stackChange": 1,
@@ -4384,6 +4625,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 4,
           "afterStacks": 5,
           "stackChange": 1,
@@ -4410,6 +4658,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 5,
           "afterStacks": 6,
           "stackChange": 1,
@@ -4436,6 +4691,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4462,6 +4724,13 @@
           "targetKind": "kibo",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4488,6 +4757,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-enhanced-shot-1|3333.333",
           "beforeStacks": 6,
           "afterStacks": null,
           "stackChange": -6,
@@ -4514,6 +4790,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-ultimate|38566.667",
           "beforeStacks": null,
           "afterStacks": 6,
           "stackChange": 6,
@@ -4540,6 +4823,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "remove",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -4566,6 +4856,13 @@
           "targetKind": "kibo",
           "targetId": "actor-103002",
           "operation": "remove",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -4592,6 +4889,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-ultimate|38566.667",
           "beforeStacks": 6,
           "afterStacks": 6,
           "stackChange": 0,
@@ -4618,6 +4922,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:5945053457653544063|fire-kibo-signature|55000",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4644,6 +4955,13 @@
           "targetKind": "kibo",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:5945053457653544063|fire-kibo-signature|55000",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4670,6 +4988,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:103002275|ruby-ultimate|38566.667",
           "beforeStacks": 6,
           "afterStacks": null,
           "stackChange": -6,
@@ -4696,6 +5021,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:250:persistent|switch-back-to-ruby--on-enter--actor-103002--star-carry|65900",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4730,6 +5062,13 @@
           "targetKind": "kibo",
           "targetId": "actor-103002",
           "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:250:persistent|switch-back-to-ruby--on-enter--actor-103002--star-carry|65900",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -4764,6 +5103,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:5945053457653544063|fire-kibo-signature|55000",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -4790,6 +5136,13 @@
           "targetKind": "kibo",
           "targetId": "actor-103002",
           "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "battle-element:5945053457653544063|fire-kibo-signature|55000",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -4816,6 +5169,13 @@
           "targetKind": "actor",
           "targetId": "actor-103002",
           "operation": "remove",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:250:persistent|switch-back-to-ruby--on-enter--actor-103002--star-carry|65900",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -4850,6 +5210,13 @@
           "targetKind": "kibo",
           "targetId": "actor-103002",
           "operation": "remove",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-103002",
+          "effectAdderActorId": "actor-103002",
+          "effectInstanceId": "tuning-mark:250:persistent|switch-back-to-ruby--on-enter--actor-103002--star-carry|65900",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -4875,7 +5242,7 @@
         }
       ]
     },
-    "summaryHash": "ab8a56c491f7bc9a9c419afce933bebcd1519f0a26f55c7d484265cf32b425de"
+    "summaryHash": "dd72e21b949f816410ba1d709e00bd47d9742ccf10aac03d5bf92dfbbd0c0d37"
   },
   "expected": {
     "exact": {
@@ -4987,8 +5354,12 @@
       "effects.passiveTrace.6.frame": 2250,
       "effects.passiveTrace.7.actionId": "ruby-ultimate",
       "effects.passiveTrace.7.afterStacks": 6,
+      "effects.inheritanceTransferCountByEffectId.battle-element:103002275": 0,
+      "effects.passiveTrace.8.frame": 2720,
+      "effects.passiveTrace.8.targetId": "actor-103002",
       "effects.passiveTrace.9.operation": "expire",
       "effects.passiveTrace.9.frame": 3620,
+      "effects.passiveTrace.9.targetId": "actor-103002",
       "dynamicProperties.ownerSources.0.attributeId": 1,
       "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
       "comparison.primaryDamage": 891,
@@ -5006,7 +5377,7 @@
   "validation": {
     "status": "authoritative-golden-runtime-expectation-passed",
     "passed": true,
-    "assertionCount": 114,
+    "assertionCount": 118,
     "failedCount": 0,
     "assertions": [
       {
@@ -5736,6 +6107,27 @@
         "passed": true
       },
       {
+        "jsonPath": "effects.inheritanceTransferCountByEffectId.battle-element:103002275",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.8.frame",
+        "operator": "exact",
+        "expected": 2720,
+        "actual": 2720,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.8.targetId",
+        "operator": "exact",
+        "expected": "actor-103002",
+        "actual": "actor-103002",
+        "passed": true
+      },
+      {
         "jsonPath": "effects.passiveTrace.9.operation",
         "operator": "exact",
         "expected": "expire",
@@ -5747,6 +6139,13 @@
         "operator": "exact",
         "expected": 3620,
         "actual": 3620,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.passiveTrace.9.targetId",
+        "operator": "exact",
+        "expected": "actor-103002",
+        "actual": "actor-103002",
         "passed": true
       },
       {
@@ -5821,6 +6220,6 @@
       }
     ]
   },
-  "replayHash": "ab3411f3dc84ec6cccd9fff6d14fe6b7b10f017d44147a0ad99bbbad9a84db52",
-  "profileHash": "5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b"
+  "replayHash": "f04ac97b729d5bd2caa355cd12b0035186aaa3b7b02f106efe6c6e5476e1515e",
+  "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
 }

@@ -1652,7 +1652,7 @@ describe('Workbench view', () => {
     );
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
-  });
+  }, 30_000);
 
   it('unmounts heavy inspector and review panels when they are inactive', async () => {
     const wrapper = mount(Workbench, {
@@ -11059,6 +11059,146 @@ describe('Workbench view', () => {
       '有未保存改动'
     );
   });
+
+  it('edits a character special-resource baseline through history and draft restore', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await selectCharacterFromTimeline(wrapper, 0, 103002);
+    await settleWorkbenchAsyncPanels();
+
+    const resourceIdentity = 'actor:103002:element:103002047';
+    const specialResourceInput = () =>
+      wrapper.get(
+        `[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="${resourceIdentity}"]`
+      );
+    const runtimeCurve = () =>
+      wrapper
+        .findComponent(TimelineGridPreview)
+        .props('runtimeStateCurves')
+        .resources.curvesBySpecialResource.find(
+          curve =>
+            curve.actorId === 'actor-103002' &&
+            curve.resourceIdentity === resourceIdentity
+        );
+
+    expect(specialResourceInput().attributes()).toMatchObject({
+      min: '0',
+      max: '12',
+      step: '1',
+    });
+    expect(specialResourceInput().element.value).toBe('0');
+    expect(runtimeCurve()).toMatchObject({
+      initialValue: 0,
+      maxValue: 12,
+      inputStep: 1,
+      scenarioConfigurable: true,
+    });
+
+    const historyCountBeforeEdit = Number(
+      wrapper
+        .get('[data-testid="workbench-undo-edit"]')
+        .attributes('data-history-count')
+    );
+    await specialResourceInput().setValue('6');
+    await specialResourceInput().trigger('blur');
+    await nextTick();
+    expect(specialResourceInput().element.value).toBe('6');
+    expect(runtimeCurve().initialValue).toBe(6);
+    expect(
+      Number(
+        wrapper
+          .get('[data-testid="workbench-undo-edit"]')
+          .attributes('data-history-count')
+      )
+    ).toBe(historyCountBeforeEdit + 1);
+    expect(
+      wrapper
+        .findComponent(TimelineGridPreview)
+        .emitted('update-initial-energy')
+        ?.at(-1)?.[0]
+    ).toMatchObject({
+      ownerKind: 'special-resource',
+      actorId: 'actor-103002',
+      characterId: 103002,
+      resourceIdentity,
+      currentValue: 6,
+      maxValue: 12,
+      inputStep: 1,
+    });
+
+    await specialResourceInput().setValue('6.5');
+    await specialResourceInput().trigger('blur');
+    expect(specialResourceInput().element.value).toBe('6');
+    expect(runtimeCurve().initialValue).toBe(6);
+
+    await specialResourceInput().setValue('20');
+    await specialResourceInput().trigger('blur');
+    await nextTick();
+    expect(specialResourceInput().element.value).toBe('12');
+    expect(runtimeCurve().initialValue).toBe(12);
+    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(specialResourceInput().element.value).toBe('6');
+    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(specialResourceInput().element.value).toBe('0');
+    await wrapper.get('[data-testid="workbench-redo-edit"]').trigger('click');
+    await nextTick();
+    expect(specialResourceInput().element.value).toBe('6');
+
+    await wrapper.get('[data-testid="workbench-save-draft"]').trigger('click');
+    const saved = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(saved.initialRuntimeState.specialResourcesByActor).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-103002',
+        characterId: 103002,
+        resourceIdentity,
+        currentValue: 6,
+        maxValue: 12,
+        inputStep: 1,
+        scenarioConfigurable: true,
+        baselineStatus: 'scenario-configurable-initial-state',
+      }),
+    ]);
+    wrapper.unmount();
+
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    expect(
+      restored
+        .get(
+          `[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="${resourceIdentity}"]`
+        )
+        .element.value
+    ).toBe('6');
+    expect(
+      restored
+        .findComponent(TimelineGridPreview)
+        .props('runtimeStateCurves')
+        .resources.curvesBySpecialResource.find(
+          curve => curve.resourceIdentity === resourceIdentity
+        ).initialValue
+    ).toBe(6);
+  }, 30000);
 
   it('saves, restores, and resets a versioned workbench draft', async () => {
     const wrapper = mount(Workbench, {

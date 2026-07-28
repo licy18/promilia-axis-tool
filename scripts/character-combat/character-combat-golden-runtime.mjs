@@ -286,6 +286,14 @@ function runGoldenComparison({
       baseline.result,
       actionKey
     ),
+    primaryEffectFormulaValuesById: collectEffectFormulaValuesById(
+      primary.result,
+      scenarioRecipe.traceSelectors?.stateEffectIds
+    ),
+    baselineEffectFormulaValuesById: collectEffectFormulaValuesById(
+      baseline.result,
+      scenarioRecipe.traceSelectors?.stateEffectIds
+    ),
     baselineReplayHash: sha256Json(
       createCompactReplaySignature(baseline.result)
     ),
@@ -673,6 +681,25 @@ function createGoldenActualProjection({
         targetKind: event.targetKind ?? null,
         targetId: event.targetId ?? null,
         operation: event.operation ?? event.kind ?? null,
+        previousTargetId:
+          event.previousTargetId ?? event.before?.targetId ?? null,
+        nextTargetId: event.nextTargetId ?? event.after?.targetId ?? null,
+        controlledActorTransitionId:
+          event.controlledActorTransitionId ?? null,
+        inheritType:
+          event.after?.inheritType ?? event.before?.inheritType ?? null,
+        formulaSourceActorId:
+          event.after?.formulaSourceActorId ??
+          event.before?.formulaSourceActorId ??
+          null,
+        effectAdderActorId:
+          event.after?.effectAdderActorId ??
+          event.before?.effectAdderActorId ??
+          null,
+        effectInstanceId:
+          event.after?.effectInstanceId ??
+          event.before?.effectInstanceId ??
+          null,
         beforeStacks: numberOrNull(event.before?.stacks),
         afterStacks: numberOrNull(event.after?.stacks),
         stackChange: numberOrNull(event.stackChange),
@@ -769,6 +796,29 @@ function createGoldenActualProjection({
     ownerId,
     dynamicPropertyActionIds
   );
+  const selectedDynamicPropertySourcesByActionId = Object.fromEntries(
+    [...dynamicPropertyActionIds]
+      .sort()
+      .map(actionId => [
+        actionId,
+        collectDynamicPropertySources(result, actionId),
+      ])
+  );
+  const selectedHpDamageByActionId = Object.fromEntries(
+    [...dynamicPropertyActionIds]
+      .sort()
+      .map(actionId => [
+        actionId,
+        roundNumber(
+          damageTrace
+            .filter(event => event.actionId === actionId)
+            .reduce(
+              (total, event) => total + (Number(event.hpDamage) || 0),
+              0
+            )
+        ),
+      ])
+  );
 
   const actual = {
     project: {
@@ -798,6 +848,7 @@ function createGoldenActualProjection({
       ownerDamageEventCount: ownerDamageEvents.length,
       ownerHitEventCount: ownerHitEvents.length,
       ownerHitCountByActionId,
+      selectedHpDamageByActionId,
       totalHpDamage: sumNumbers(damageTrace, 'hpDamage'),
       totalToughnessDamage: sumNumbers(damageTrace, 'toughnessDamage'),
       ownerTotalHpDamage: sumNumbers(ownerDamageEvents, 'hpDamage'),
@@ -849,6 +900,33 @@ function createGoldenActualProjection({
         )?.frame ?? null,
       burstTrace,
       selectedEffectSummaryByElementId,
+      inheritanceTransferCountByEffectId: Object.fromEntries(
+        [...selectedEffectIds]
+          .sort()
+          .map(effectId => [
+            effectId,
+            effectTrace.filter(
+              event =>
+                event.effectId === effectId && event.operation === 'transfer'
+            ).length,
+          ])
+      ),
+      inheritanceTransfers: effectTrace
+        .filter(event => event.operation === 'transfer')
+        .map(event => ({
+          effectId: event.effectId,
+          frame: event.frame,
+          previousTargetId: event.previousTargetId,
+          nextTargetId: event.nextTargetId,
+          inheritType: event.inheritType,
+          formulaSourceActorId: event.formulaSourceActorId,
+          effectAdderActorId: event.effectAdderActorId,
+          effectInstanceId: event.effectInstanceId,
+          expiresAtMs: event.expiresAtMs,
+          formulaValues: (event.modifiers ?? [])
+            .map(modifier => numberOrNull(modifier.formulaValue))
+            .filter(value => value != null),
+        })),
       burstTransitions: burstTrace.map(event => ({
         actionId: event.actionId,
         frame: event.frame,
@@ -858,6 +936,15 @@ function createGoldenActualProjection({
     },
     dynamicProperties: {
       ownerSources: ownerDynamicPropertySources,
+      byActionId: selectedDynamicPropertySourcesByActionId,
+      effectIdsByActionId: Object.fromEntries(
+        Object.entries(selectedDynamicPropertySourcesByActionId).map(
+          ([actionId, rows]) => [
+            actionId,
+            [...new Set(rows.flatMap(row => row.effectIds ?? []))].sort(),
+          ]
+        )
+      ),
       maxPercentRawByAttributeId: Object.fromEntries(
         [...new Set(ownerDynamicPropertySources.map(row => row.attributeId))]
           .filter(Number.isFinite)
@@ -918,7 +1005,12 @@ function summarizeSelectedEffectsByElementId(effectTrace) {
     [...byElementId.entries()]
       .sort(([left], [right]) => left - right)
       .map(([elementId, rows]) => {
-        const appliedRows = rows.filter(row => row.operation !== 'expire');
+        const appliedRows = rows.filter(row =>
+          ['apply', 'refresh'].includes(row.operation)
+        );
+        const transferredRows = rows.filter(
+          row => row.operation === 'transfer'
+        );
         const expiredRows = rows.filter(row => row.operation === 'expire');
         const modifierRows = appliedRows.flatMap(row => row.modifiers ?? []);
         return [
@@ -935,6 +1027,7 @@ function summarizeSelectedEffectsByElementId(effectTrace) {
               .filter(Boolean)
               .sort(),
             appliedEventCount: appliedRows.length,
+            transferredEventCount: transferredRows.length,
             expiredEventCount: expiredRows.length,
             firstAppliedFrame: appliedRows[0]?.frame ?? null,
             firstExpiredFrame: expiredRows[0]?.frame ?? null,
@@ -1113,6 +1206,36 @@ function collectDynamicPropertySources(
     (left, right) =>
       Number(left.attributeId) - Number(right.attributeId) ||
       JSON.stringify(left).localeCompare(JSON.stringify(right))
+  );
+}
+
+function collectEffectFormulaValuesById(result, effectIds = []) {
+  const selectedIds = new Set(effectIds.map(String));
+  const valuesById = new Map();
+  for (const event of result.effectTimeline?.events ?? []) {
+    if (!['apply', 'refresh'].includes(event.operation)) continue;
+    const sourceElementId = numberOrNull(event.sourceIdentity?.elementId);
+    const effectId =
+      sourceElementId == null
+        ? String(event.effectId ?? '')
+        : `battle-element:${sourceElementId}`;
+    if (!selectedIds.has(effectId)) continue;
+    const values = valuesById.get(effectId) ?? new Set();
+    for (const modifier of event.modifiers ?? event.after?.modifiers ?? []) {
+      const value = numberOrNull(
+        modifier.formulaResult?.value ?? modifier.formulaValue
+      );
+      if (value != null) values.add(value);
+    }
+    valuesById.set(effectId, values);
+  }
+  return Object.fromEntries(
+    [...valuesById.entries()]
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([effectId, values]) => [
+        effectId,
+        [...values].sort((left, right) => left - right),
+      ])
   );
 }
 

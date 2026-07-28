@@ -60,6 +60,33 @@ export function projectEffectRuntimeIntervals({
       continue;
     }
 
+    if (event.type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED) {
+      const previousInstanceKey =
+        event.previousInstanceKey ?? event.before?.instanceKey ?? instanceKey;
+      const previousInterval = activeIntervals.get(previousInstanceKey);
+      if (previousInterval) {
+        appendEffectIntervalEvent(previousInterval, event);
+        activeIntervals.delete(previousInstanceKey);
+        intervals.push(
+          finalizeEffectInterval(previousInterval, event.timeMs, {
+            frameRate,
+            scenarioEndMs,
+            terminationType: EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED,
+            activeAtScenarioEnd: false,
+          })
+        );
+      }
+      activeIntervals.set(
+        instanceKey,
+        createOpenEffectInterval(
+          event,
+          nextIntervalIndex(intervalCountByInstanceKey, instanceKey),
+          event.timeMs
+        )
+      );
+      continue;
+    }
+
     if (
       event.type === EFFECT_RUNTIME_EVENT_TYPES.REMOVED ||
       event.type === EFFECT_RUNTIME_EVENT_TYPES.EXPIRED
@@ -306,7 +333,8 @@ function finalizeEffectInterval(
     selectionEventId: lastEvent?.eventId ?? '',
     terminationEventId:
       terminationType === EFFECT_RUNTIME_EVENT_TYPES.REMOVED ||
-      terminationType === EFFECT_RUNTIME_EVENT_TYPES.EXPIRED
+      terminationType === EFFECT_RUNTIME_EVENT_TYPES.EXPIRED ||
+      terminationType === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED
         ? (lastEvent?.eventId ?? '')
         : '',
     terminationType,

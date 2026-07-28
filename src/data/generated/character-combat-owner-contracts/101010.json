@@ -5,8 +5,8 @@
   "ownerId": 101010,
   "ownerName": "涂山小玉",
   "recipeIdentity": "actor:101010:character-combat-recipe:v1",
-  "recipeHash": "b6a138de755dfba9d41c29ba325c1c0cb3b6cd92551bf526034570d55c9f5cc5",
-  "compilerInputHash": "3527fde1e265b926f403e32c40f8f3b15ee188a91803841e597f1ca1eef33363",
+  "recipeHash": "50b4007f5707e16e7d5456ebcfaf0a4b70881389ac6d5545e7cdffa6cbabee44",
+  "compilerInputHash": "01e1207571a270f258e74aaa40eecfdd2627bdb229a574a6ba519b60c77c3b24",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": false,
   "reachableControlSkillIds": [
@@ -75486,8 +75486,10 @@
         "sourceName": "爆发状态叠层",
         "capacity": 100,
         "initialValue": 0,
-        "initialValueStatus": "verified-scenario-initial-element-layer-zero",
-        "initialValueSourceIdentity": "AzPrVerifiedSpecialResourceRuntime#empty-runtime-element-state",
+        "inputStep": 1,
+        "scenarioConfigurable": true,
+        "initialValueStatus": "scenario-configurable-initial-state",
+        "initialValueSourceIdentity": "AzPrCombatScenario#initialRuntimeState.specialResourcesByActor",
         "combineType": 4,
         "stateElements": [
           {
@@ -110851,7 +110853,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111014,7 +111017,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111181,7 +111185,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111343,7 +111348,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111511,7 +111517,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111669,7 +111676,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111838,7 +111846,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -111996,7 +112005,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -112154,7 +112164,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -112312,7 +112323,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -112466,7 +112478,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -112634,7 +112647,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -112802,7 +112816,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -112970,7 +112985,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -113138,7 +113154,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -113306,7 +113323,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -113474,7 +113492,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -113642,7 +113661,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -113810,7 +113830,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -113978,7 +113999,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -114149,7 +114171,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -114327,7 +114350,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -114496,7 +114520,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -114665,7 +114690,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -114828,7 +114854,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -114991,7 +115018,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -115147,7 +115175,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -115303,7 +115332,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -115464,7 +115494,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -115632,7 +115663,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -115800,7 +115832,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -115968,7 +116001,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -116136,7 +116170,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -116304,7 +116339,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -116472,7 +116508,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -116640,7 +116677,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -116808,7 +116846,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -116976,7 +117015,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -117147,7 +117187,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -117312,7 +117353,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -117468,7 +117510,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -117623,7 +117666,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -117793,7 +117837,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -117962,7 +118007,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -118118,7 +118164,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -118294,7 +118341,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -118450,7 +118498,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -118629,7 +118678,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -118798,7 +118848,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -118967,7 +119018,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -119136,7 +119188,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -119305,7 +119358,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -119469,7 +119523,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -119627,7 +119682,8 @@
             "stackMode": "refresh",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -119787,7 +119843,8 @@
             "stackMode": "refresh",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -119959,7 +120016,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -120139,7 +120197,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -120319,7 +120378,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -120495,7 +120555,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -120682,7 +120743,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -120858,7 +120920,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -121034,7 +121097,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -121205,7 +121269,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -121368,7 +121433,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -121529,7 +121595,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -121705,7 +121772,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -121885,7 +121953,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -122054,7 +122123,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -122220,7 +122290,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -122394,7 +122465,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -122568,7 +122640,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -122758,7 +122831,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -122934,7 +123008,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -123110,7 +123185,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -123281,7 +123357,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -123454,7 +123531,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -123633,7 +123711,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -123801,7 +123880,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -123958,7 +124038,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -124130,7 +124211,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -124302,7 +124384,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -124476,7 +124559,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 4,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -124637,7 +124721,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -124822,7 +124907,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -124997,7 +125083,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -125172,7 +125259,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -125336,7 +125424,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -125500,7 +125589,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -125658,7 +125748,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -125834,7 +125925,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126008,7 +126100,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126164,7 +126257,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126328,7 +126422,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126492,7 +126587,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126656,7 +126752,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126814,7 +126911,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -126993,7 +127091,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -127169,7 +127268,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -127345,7 +127445,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -127516,7 +127617,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -127679,7 +127781,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -127845,7 +127948,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -128011,7 +128115,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -128177,7 +128282,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -128343,7 +128449,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -128509,7 +128616,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -128675,7 +128783,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -128841,7 +128950,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -129003,7 +129113,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 100,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -129154,7 +129265,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -129320,7 +129432,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -129486,7 +129599,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -129652,7 +129766,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -129818,7 +129933,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -129984,7 +130100,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -130150,7 +130267,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -130316,7 +130434,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -130720,7 +130839,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=-4529113272733101309"
     }
   },
-  "contractHash": "d9cbd563612647ef4abd21cd6d8868b30a89248cd1827ff2cd5954118006e1da",
+  "contractHash": "f5b0079a573a74c42f95fcab237f3a89593a7e1cdd10c94420c9d52bb918bc80",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,

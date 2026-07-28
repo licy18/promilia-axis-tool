@@ -8,6 +8,7 @@ import {
   resolveActionEffectRelationKind,
 } from './actionEffectRelationGraph';
 import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
+import { isControlledActorEffectTargetKind } from '../../domain/effectTargetSemantics';
 
 export const ACTION_EFFECT_COMMAND_CONTRACT_NAME = 'AzPrActionEffectCommand';
 export const EFFECT_RUNTIME_TIMELINE_CONTRACT_NAME =
@@ -15,6 +16,7 @@ export const EFFECT_RUNTIME_TIMELINE_CONTRACT_NAME =
 
 export const EFFECT_RUNTIME_EVENT_TYPES = Object.freeze({
   INHERITED: 'EFFECT_INHERITED',
+  TRANSFERRED: 'EFFECT_TRANSFERRED',
   APPLIED: 'EFFECT_APPLIED',
   REFRESHED: 'EFFECT_REFRESHED',
   REMOVED: 'EFFECT_REMOVED',
@@ -130,6 +132,7 @@ export function createEffectRuntimeTimeline({
   effectInput = null,
   actionExecutionPlan = null,
   generatedCommands = [],
+  controlledActorTimeline = null,
 } = {}) {
   const input =
     effectInput ??
@@ -176,15 +179,28 @@ export function createEffectRuntimeTimeline({
     );
   }
 
-  for (const command of input.commands) {
+  const runtimeDescriptors = createEffectRuntimeDescriptors({
+    commands: input.commands,
+    controlledActorTimeline,
+  });
+  for (const descriptor of runtimeDescriptors) {
     expireRuntimeEffects({
       activeByInstanceKey,
-      timeMs: command.timeMs,
+      timeMs: descriptor.timeMs,
       scenario,
       emitEvent,
     });
+    if (descriptor.kind === 'controlled-actor-transition') {
+      transferControlledActorEffects({
+        transition: descriptor.transition,
+        activeByInstanceKey,
+        scenario,
+        emitEvent,
+      });
+      continue;
+    }
     applyRuntimeEffectCommand({
-      command,
+      command: descriptor.command,
       activeByInstanceKey,
       scenario,
       emitEvent,
@@ -220,6 +236,8 @@ export function createEffectRuntimeTimeline({
       eventCount: events.length,
       inheritedEventCount:
         eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.INHERITED) ?? 0,
+      transferredEventCount:
+        eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED) ?? 0,
       appliedEventCount:
         eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.APPLIED) ?? 0,
       refreshedEventCount:
@@ -266,6 +284,11 @@ export function resolveActiveEffectsAt(
   const activeByInstanceKey = new Map();
   for (const event of timeline?.events ?? []) {
     if (Number(event.timeMs) > Number(timeMs)) break;
+    if (event.type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED) {
+      activeByInstanceKey.delete(
+        event.previousInstanceKey ?? event.before?.instanceKey
+      );
+    }
     if (event.after?.active) {
       activeByInstanceKey.set(event.instanceKey, event.after);
     } else {
@@ -338,6 +361,28 @@ function createInheritedRuntimeEffectState(effect) {
     confidence: effect.confidence ?? null,
     trackingStatus: effect.trackingStatus ?? null,
     sourceIdentity: cloneSourceIdentity(effect.sourceIdentity),
+    semanticTargetKind: effect.semanticTargetKind ?? null,
+    inheritOnControlledActorSwitch:
+      effect.inheritOnControlledActorSwitch === true,
+    inheritType: normalizeEffectInheritType(effect.inheritType),
+    inheritanceContainerElementId:
+      strictNumberOrNull(effect.inheritanceContainerElementId) ?? null,
+    inheritanceContainerPathId:
+      effect.inheritanceContainerPathId ?? null,
+    inheritanceSourceIdentity:
+      effect.inheritanceSourceIdentity ?? null,
+    formulaSourceActorId:
+      effect.formulaSourceActorId ?? effect.sourceActorId ?? null,
+    effectAdderActorId:
+      effect.effectAdderActorId ?? effect.sourceActorId ?? null,
+    effectInstanceId:
+      effect.effectInstanceId ??
+      createEffectInstanceId({
+        effectId: effect.effectId,
+        sourceActionId: effect.sourceActionId,
+        appliedAtMs: 0,
+      }),
+    transferCount: Math.max(0, Number(effect.transferCount) || 0),
     modifiers: Array.isArray(effect.modifiers)
       ? effect.modifiers.map(modifier => ({ ...modifier }))
       : [],
@@ -485,6 +530,33 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     confidence: command.confidence ?? null,
     trackingStatus: command.trackingStatus ?? null,
     sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
+    semanticTargetKind:
+      command.semanticTargetKind ??
+      command.targetSemantics?.kind ??
+      command.targetKind ??
+      null,
+    inheritOnControlledActorSwitch:
+      command.inheritOnControlledActorSwitch === true,
+    inheritType: normalizeEffectInheritType(command.inheritType),
+    inheritanceContainerElementId:
+      strictNumberOrNull(command.inheritanceContainerElementId) ?? null,
+    inheritanceContainerPathId:
+      command.inheritanceContainerPathId ?? null,
+    inheritanceSourceIdentity:
+      command.inheritanceSourceIdentity ?? null,
+    formulaSourceActorId:
+      command.formulaSourceActorId ?? command.sourceActorId ?? action?.actorId ?? null,
+    effectAdderActorId:
+      command.effectAdderActorId ??
+      resolveInitialEffectAdderActorId({
+        inheritType: command.inheritType,
+        sourceActorId:
+          command.formulaSourceActorId ??
+          command.sourceActorId ??
+          action?.actorId ??
+          null,
+        targetId,
+      }),
     modifiers: Array.isArray(command.modifiers)
       ? command.modifiers.map(modifier => ({ ...modifier }))
       : [],
@@ -556,6 +628,101 @@ function applyRuntimeEffectCommand({
   );
 }
 
+function createEffectRuntimeDescriptors({ commands, controlledActorTimeline }) {
+  return [
+    ...(commands ?? []).map(command => ({
+      kind: 'effect-command',
+      timeMs: command.timeMs,
+      priority: 0,
+      identity: command.commandId,
+      command,
+      transition: null,
+    })),
+    ...(controlledActorTimeline?.transitions ?? [])
+      .filter(transition => transition.applied === true)
+      .map(transition => ({
+        kind: 'controlled-actor-transition',
+        timeMs: roundEffectValue(transition.timeMs),
+        priority: 1,
+        identity:
+          transition.transitionId ?? transition.actionId ?? 'controlled-switch',
+        command: null,
+        transition,
+      })),
+  ].sort(
+    (left, right) =>
+      left.timeMs - right.timeMs ||
+      left.priority - right.priority ||
+      String(left.identity).localeCompare(String(right.identity))
+  );
+}
+
+function transferControlledActorEffects({
+  transition,
+  activeByInstanceKey,
+  scenario,
+  emitEvent,
+}) {
+  const beforeTargetId = String(transition?.beforeActor?.actorId ?? '').trim();
+  const afterTargetId = String(transition?.afterActor?.actorId ?? '').trim();
+  if (!beforeTargetId || !afterTargetId || beforeTargetId === afterTargetId) {
+    return;
+  }
+  const afterTargetName =
+    transition?.afterActor?.actorName ??
+    scenario?.actors?.find(actor => String(actor.id) === afterTargetId)?.name ??
+    null;
+  const transferableEffects = sortEffectStates(
+    [...activeByInstanceKey.values()].filter(
+      effect =>
+        effect.active === true &&
+        effect.inheritOnControlledActorSwitch === true &&
+        isControlledActorEffectTargetKind(effect.semanticTargetKind) &&
+        effect.targetKind === EFFECT_TARGET_KINDS.ACTOR &&
+        String(effect.targetId) === beforeTargetId
+    )
+  );
+  for (const before of transferableEffects) {
+    if (activeByInstanceKey.get(before.instanceKey) !== before) continue;
+    const afterInstanceKey = createEffectInstanceKey({
+      targetKind: EFFECT_TARGET_KINDS.ACTOR,
+      targetId: afterTargetId,
+      effectId: before.effectId,
+      calculatorScope: before.appliedToCalculators === true,
+    });
+    activeByInstanceKey.delete(before.instanceKey);
+    const after = {
+      ...before,
+      instanceKey: afterInstanceKey,
+      targetId: afterTargetId,
+      targetName: afterTargetName,
+      updatedAtMs: roundEffectValue(transition.timeMs),
+      revision: before.revision + 1,
+      transferCount: (Number(before.transferCount) || 0) + 1,
+      effectAdderActorId:
+        normalizeEffectInheritType(before.inheritType) === 'self'
+          ? afterTargetId
+          : before.effectAdderActorId,
+      inheritedFromTargetId: beforeTargetId,
+      inheritedByTransitionId:
+        transition.transitionId ?? transition.actionId ?? null,
+    };
+    activeByInstanceKey.set(afterInstanceKey, after);
+    emitEvent(
+      createEffectRuntimeEvent({
+        type: EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED,
+        command: null,
+        before,
+        after,
+        scenario,
+        timeMs: transition.timeMs,
+        status: 'effect-runtime-controlled-actor-transferred',
+        transition,
+      })
+    );
+  }
+}
+
 function expireRuntimeEffects({
   activeByInstanceKey,
   timeMs,
@@ -618,6 +785,21 @@ function createRuntimeEffectState(command) {
     confidence: command.confidence,
     trackingStatus: command.trackingStatus,
     sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
+    semanticTargetKind: command.semanticTargetKind,
+    inheritOnControlledActorSwitch:
+      command.inheritOnControlledActorSwitch === true,
+    inheritType: command.inheritType,
+    inheritanceContainerElementId: command.inheritanceContainerElementId,
+    inheritanceContainerPathId: command.inheritanceContainerPathId,
+    inheritanceSourceIdentity: command.inheritanceSourceIdentity,
+    formulaSourceActorId: command.formulaSourceActorId,
+    effectAdderActorId: command.effectAdderActorId,
+    effectInstanceId: createEffectInstanceId({
+      effectId: command.effectId,
+      sourceActionId: command.sourceActionId,
+      appliedAtMs: command.timeMs,
+    }),
+    transferCount: 0,
     appliedToCalculators: command.appliedToCalculators === true,
     active: true,
   };
@@ -650,6 +832,35 @@ function refreshRuntimeEffectState(existing, command) {
     sourceIdentity:
       cloneSourceIdentity(command.sourceIdentity) ??
       cloneSourceIdentity(existing.sourceIdentity),
+    semanticTargetKind:
+      command.semanticTargetKind ?? existing.semanticTargetKind ?? null,
+    inheritOnControlledActorSwitch:
+      command.inheritOnControlledActorSwitch === true ||
+      existing.inheritOnControlledActorSwitch === true,
+    inheritType:
+      command.inheritType ?? existing.inheritType ?? null,
+    inheritanceContainerElementId:
+      command.inheritanceContainerElementId ??
+      existing.inheritanceContainerElementId ??
+      null,
+    inheritanceContainerPathId:
+      command.inheritanceContainerPathId ??
+      existing.inheritanceContainerPathId ??
+      null,
+    inheritanceSourceIdentity:
+      command.inheritanceSourceIdentity ??
+      existing.inheritanceSourceIdentity ??
+      null,
+    formulaSourceActorId:
+      command.formulaSourceActorId ??
+      existing.formulaSourceActorId ??
+      existing.sourceActorId ??
+      null,
+    effectAdderActorId:
+      command.effectAdderActorId ??
+      existing.effectAdderActorId ??
+      existing.sourceActorId ??
+      null,
     appliedToCalculators:
       command.appliedToCalculators === true ||
       existing.appliedToCalculators === true,
@@ -681,6 +892,7 @@ function createEffectRuntimeEvent({
   scenario,
   timeMs = command?.timeMs,
   status,
+  transition = null,
 }) {
   const state = after ?? before;
   const normalizedTimeMs = roundEffectValue(timeMs);
@@ -709,6 +921,10 @@ function createEffectRuntimeEvent({
     effectId: state?.effectId ?? command?.effectId ?? null,
     effectName: state?.effectName ?? command?.effectName ?? null,
     instanceKey,
+    previousInstanceKey:
+      type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED
+        ? before?.instanceKey ?? null
+        : null,
     commandId: command?.commandId ?? null,
     relationId: command?.commandId
       ? createActionEffectRelationId(command.commandId)
@@ -718,7 +934,11 @@ function createEffectRuntimeEvent({
       : null,
     operation:
       command?.operation ??
-      (type === EFFECT_RUNTIME_EVENT_TYPES.INHERITED ? 'inherit' : 'expire'),
+      (type === EFFECT_RUNTIME_EVENT_TYPES.INHERITED
+        ? 'inherit'
+        : type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED
+          ? 'transfer'
+          : 'expire'),
     stackMode: command?.stackMode ?? null,
     stackBefore,
     stackAfter,
@@ -730,7 +950,12 @@ function createEffectRuntimeEvent({
       sourceActorId: command?.sourceActorId ?? state?.sourceActorId ?? null,
       targetKind: state?.targetKind ?? command?.targetKind ?? null,
       targetId: state?.targetId ?? command?.targetId ?? null,
+      previousTargetId: before?.targetId ?? null,
+      nextTargetId: after?.targetId ?? null,
     },
+    controlledActorTransitionId:
+      transition?.transitionId ?? transition?.actionId ?? null,
+    controlledActorTransitionActionId: transition?.actionId ?? null,
     sourceStatus: command?.sourceStatus ?? state?.sourceStatus ?? null,
     icon: command?.icon ?? state?.icon ?? null,
     confidence: command?.confidence ?? state?.confidence ?? null,
@@ -753,6 +978,10 @@ function createEffectRuntimeEvent({
       expiresAtMs: after?.expiresAtMs ?? null,
       appliedToCalculators: state?.appliedToCalculators === true,
       trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
+      previousTargetId: before?.targetId ?? null,
+      nextTargetId: after?.targetId ?? null,
+      inheritType: state?.inheritType ?? null,
+      effectInstanceId: state?.effectInstanceId ?? null,
     },
     applied: true,
   };
@@ -793,6 +1022,28 @@ function createEffectInstanceKey({
 
 function createEffectIdPart(value) {
   return String(value ?? 'none').replace(/\|/g, '/');
+}
+
+function createEffectInstanceId({ effectId, sourceActionId, appliedAtMs }) {
+  return [effectId, sourceActionId ?? 'unknown-action', appliedAtMs]
+    .map(createEffectIdPart)
+    .join('|');
+}
+
+function normalizeEffectInheritType(value) {
+  if (value === 1 || value === '1' || value === 'self') return 'self';
+  if (value === 2 || value === '2' || value === 'source') return 'source';
+  return null;
+}
+
+function resolveInitialEffectAdderActorId({
+  inheritType,
+  sourceActorId,
+  targetId,
+}) {
+  return normalizeEffectInheritType(inheritType) === 'self'
+    ? targetId
+    : sourceActorId;
 }
 
 function compareEffectRuntimeCommands(left, right) {

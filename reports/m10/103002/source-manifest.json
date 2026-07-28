@@ -4,10 +4,10 @@
   "ownerId": 103002,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b"
+    "packageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/103002.json",
-  "recipeHash": "5ea373ee1bfdcb9378840938637f56efb14053bbd65c517bef86cc6425485e91",
+  "recipeHash": "c1cf3843e7b2a5302a6d2bd61d624b6c4dfde00555fa15cdd6d3d5f002758596",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -9763,13 +9763,6 @@
       "status": "evidence-indexed"
     },
     {
-      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300262.asset/MonoBehaviour/skill_control_10300262__-2321862503808261239.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300262.asset/MonoBehaviour/skill_control_10300262__-2321862503808261239.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
-      "identityHash": "d4f29346b78b2129dd3e81eed915a3b67261873c8b15ddafe2580aa3a132c110",
-      "sourceKind": "skill-control",
-      "status": "evidence-indexed"
-    },
-    {
       "identity": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=103002].skillList[slot=203]",
       "sourceIdentity": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=103002].skillList[slot=203]",
       "identityHash": "869c539e3ecfaf0c9a5249216c26e40a249a0050edfa98bf69f75573257fd237",
@@ -10228,13 +10221,6 @@
       "identity": "NewTable/skillsub_logic.rows[skillId=10300261]",
       "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300261]",
       "identityHash": "928f92696d80b92b505bd6ed34ebcddc4bbbba846b320b2e011266a47133213f",
-      "sourceKind": "new-table",
-      "status": "evidence-indexed"
-    },
-    {
-      "identity": "NewTable/skillsub_logic.rows[skillId=10300262]",
-      "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300262]",
-      "identityHash": "37d367c0518ad3f44a7be2d7079e3b184656cbe0d92c7b7ff91e9e32a698b2e6",
       "sourceKind": "new-table",
       "status": "evidence-indexed"
     },
@@ -13621,14 +13607,14 @@
     }
   ],
   "summary": {
-    "identityCount": 1900,
+    "identityCount": 1898,
     "sourceKindCounts": {
       "battle-element": 59,
       "client-code": 3,
-      "new-table": 65,
+      "new-table": 64,
       "other": 393,
-      "skill-control": 1380
+      "skill-control": 1379
     }
   },
-  "profileHash": "5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b"
+  "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2"
 }

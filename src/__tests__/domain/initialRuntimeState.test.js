@@ -76,6 +76,9 @@ describe('initial runtime state', () => {
           resourceName: '爆发状态叠层',
           currentValue: 32,
           maxValue: 100,
+          inputStep: 1,
+          scenarioConfigurable: true,
+          baselineStatus: 'scenario-configurable-initial-state',
           activeStates: [
             {
               elementId: 101010129,
@@ -150,6 +153,8 @@ describe('initial runtime state', () => {
           resourceIdentity: 'actor:101010:element:101010115',
           currentValue: 32,
           maxValue: 100,
+          inputStep: 1,
+          scenarioConfigurable: true,
           activeStates: [
             {
               elementId: 101010129,
@@ -157,7 +162,7 @@ describe('initial runtime state', () => {
               sourceActionId: 'jade-ultimate',
             },
           ],
-          baselineStatus: 'baseline-inherited-from-cycle-boundary',
+          baselineStatus: 'scenario-configurable-initial-state',
         },
       ],
       applied: true,

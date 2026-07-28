@@ -4,6 +4,25 @@
   "ownerId": 103002,
   "targetPipelineMaturity": "ui-verified",
   "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": [
+        "actor:103002:element:103002047"
+      ],
+      "requiredActionEffectBindingIdentities": [
+        "ruby-star-skill-fire-tuning-mark",
+        "ruby-star-carry-thunder-tuning-mark",
+        "ruby-ultimate-red-heat-six-stacks"
+      ],
+      "requiredPassiveIdentities": [
+        "actor:103002:passive:10300261"
+      ]
+    }
+  },
   "mechanicsDiscovery": {
     "ownerId": 103002,
     "normalAttackSkillId": 10300201,
@@ -14,8 +33,7 @@
     "limitCounterControlSkillId": 10300225,
     "perfectParryControlSkillId": 10300227,
     "passiveSkillIds": [
-      10300261,
-      10300262
+      10300261
     ],
     "resourceElementId": 103002047,
     "resourceConsumeElementId": 103002049,
@@ -55,8 +73,7 @@
       10300247,
       10300248,
       10300249,
-      10300261,
-      10300262
+      10300261
     ],
     "publicActionDeclarations": [
       {
@@ -434,6 +451,12 @@
       {
         "resourceElementId": 103002047,
         "expectedCapacity": 12,
+        "initialStatePolicy": {
+          "kind": "scenario-configurable-initial-state",
+          "defaultValue": 0,
+          "inputStep": 1,
+          "sourceIdentity": "AzPrCombatScenario#initialRuntimeState.specialResourcesByActor[resourceIdentity=actor:103002:element:103002047]"
+        },
         "sourceIdentity": "character-combat-recipe:103002#compiler.specialResources[elementId=103002047]",
         "operationRules": [
           {
@@ -529,31 +552,13 @@
   },
   "unresolvedRecords": [
     {
-      "identity": "actor:103002:resource:initial-ammo",
-      "sourceKind": "special-resource-initial-state",
-      "status": "runtime-evidence-required",
+      "identity": "actor:103002:legacy-elements:103002252-103002253",
+      "sourceKind": "legacy-unreachable-element",
+      "status": "not-applicable",
       "reasons": [
-        "initial-ammo-runtime-evidence-required"
+        "legacy-or-unreachable-current-client"
       ],
-      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill103002._burstElementId"
-    },
-    {
-      "identity": "actor:103002:passive:10300261:attack-percent-branch",
-      "sourceKind": "passive-trigger",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "passive-attack-percent-trigger-binding-static-evidence-gap"
-      ],
-      "sourceIdentity": "Battle/Element/ast_103002252.asset|Battle/Element/ast_103002253.asset"
-    },
-    {
-      "identity": "actor:103002:passive:10300262",
-      "sourceKind": "passive-trigger",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "passive-listener-closure-static-evidence-gap"
-      ],
-      "sourceIdentity": "NewTable/skill.rows[id=10300262]|skill_control_10300262.asset"
+      "sourceIdentity": "Battle/Element/ast_103002252.asset#pathId=5283540782453142555|Battle/Element/ast_103002253.asset#pathId=-5597493967702633568|current-skill-control-103002-closure#referenceCount=0"
     }
   ],
   "goldenScenario": {
@@ -872,8 +877,12 @@
         "effects.passiveTrace.6.frame": 2250,
         "effects.passiveTrace.7.actionId": "ruby-ultimate",
         "effects.passiveTrace.7.afterStacks": 6,
+        "effects.inheritanceTransferCountByEffectId.battle-element:103002275": 0,
+        "effects.passiveTrace.8.frame": 2720,
+        "effects.passiveTrace.8.targetId": "actor-103002",
         "effects.passiveTrace.9.operation": "expire",
         "effects.passiveTrace.9.frame": 3620,
+        "effects.passiveTrace.9.targetId": "actor-103002",
         "dynamicProperties.ownerSources.0.attributeId": 1,
         "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
         "comparison.primaryDamage": 891,

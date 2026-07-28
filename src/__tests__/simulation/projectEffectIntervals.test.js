@@ -2,6 +2,91 @@ import { describe, expect, it } from 'vitest';
 import { projectEffectRuntimeIntervals } from '../../simulation/projection/projectEffectIntervals';
 
 describe('effect interval projection', () => {
+  it('splits one inherited effect instance into target intervals at the exact switch frame', () => {
+    const oldState = createState({
+      stacks: 1,
+      expiresAtMs: 600,
+      instanceKey: 'actor|actor-old|source-buff',
+      targetKind: 'actor',
+      targetId: 'actor-old',
+      effectInstanceId: 'source-buff|action|100',
+      inheritType: 'source',
+      formulaSourceActorId: 'actor-source',
+    });
+    const newState = {
+      ...oldState,
+      instanceKey: 'actor|actor-new|source-buff',
+      targetId: 'actor-new',
+    };
+    const projection = projectEffectRuntimeIntervals({
+      effectTimeline: {
+        events: [
+          createEvent({
+            eventId: 'source-buff-applied',
+            type: 'EFFECT_APPLIED',
+            timeMs: 100,
+            instanceKey: oldState.instanceKey,
+            effectId: 'source-buff',
+            targetKind: 'actor',
+            targetId: 'actor-old',
+            after: oldState,
+          }),
+          createEvent({
+            eventId: 'source-buff-transferred',
+            type: 'EFFECT_TRANSFERRED',
+            timeMs: 200,
+            previousInstanceKey: oldState.instanceKey,
+            instanceKey: newState.instanceKey,
+            effectId: 'source-buff',
+            targetKind: 'actor',
+            targetId: 'actor-new',
+            previousTargetId: 'actor-old',
+            nextTargetId: 'actor-new',
+            before: oldState,
+            after: newState,
+          }),
+          createEvent({
+            eventId: 'source-buff-expired',
+            type: 'EFFECT_EXPIRED',
+            timeMs: 600,
+            instanceKey: newState.instanceKey,
+            effectId: 'source-buff',
+            targetKind: 'actor',
+            targetId: 'actor-new',
+            before: newState,
+          }),
+        ],
+      },
+      durationMs: 1000,
+      frameRate: 60,
+    });
+
+    expect(projection.intervals).toEqual([
+      expect.objectContaining({
+        instanceKey: oldState.instanceKey,
+        targetId: 'actor-old',
+        startMs: 100,
+        endMs: 200,
+        terminationType: 'EFFECT_TRANSFERRED',
+        lifecycleEventIds: [
+          'source-buff-applied',
+          'source-buff-transferred',
+        ],
+      }),
+      expect.objectContaining({
+        instanceKey: newState.instanceKey,
+        targetId: 'actor-new',
+        startMs: 200,
+        endMs: 600,
+        terminationType: 'EFFECT_EXPIRED',
+        lifecycleEventIds: [
+          'source-buff-transferred',
+          'source-buff-expired',
+        ],
+      }),
+    ]);
+  });
+
   it('projects inherited effects from the new scenario origin', () => {
     const projection = projectEffectRuntimeIntervals({
       effectTimeline: {
@@ -352,8 +437,10 @@ function createState({
   maxStacks = 1,
   expiresAtMs,
   appliedToCalculators = false,
+  ...rest
 }) {
   return {
+    ...rest,
     active: true,
     stacks,
     maxStacks,

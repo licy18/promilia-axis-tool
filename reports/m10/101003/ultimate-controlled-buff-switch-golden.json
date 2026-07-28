@@ -1,0 +1,3699 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-authoritative-golden-runtime",
+  "status": "authoritative-golden-runtime-verified",
+  "ownerId": 101003,
+  "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+  "durationMs": 30000,
+  "frameRate": 60,
+  "sourcePackageHash": "669875c11a27064e1983c13095730f2069d5bbdcf4400f2c13c65e57c79d326c",
+  "compilerPath": "src/simulation/compiler/compileProject.js",
+  "simulatorPath": "src/simulation/engine/simulateScenario.js",
+  "actual": {
+    "project": {
+      "durationMs": 30000,
+      "actionCount": 4,
+      "teamCharacterIds": [
+        101003,
+        101010,
+        103002
+      ]
+    },
+    "actions": {
+      "executedActionIds": [
+        "han-ultimate",
+        "switch-to-xiaoyu",
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+        "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+        "xiaoyu-hit-after-expiry",
+        "xiaoyu-hit-during-buff"
+      ],
+      "blockedActionIds": [],
+      "selections": [
+        {
+          "actionId": "han-ultimate",
+          "semanticName": "星决技",
+          "controlSkillId": 10100313,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 241,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "semanticName": "驭仙风",
+          "controlSkillId": 10101021,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 295,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "semanticName": "缚风烟",
+          "controlSkillId": 10100322,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 140,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "xiaoyu-hit-after-expiry",
+          "semanticName": "A1",
+          "controlSkillId": 10101001,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 215,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        {
+          "actionId": "xiaoyu-hit-during-buff",
+          "semanticName": "A1",
+          "controlSkillId": 10101001,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 215,
+          "sourceKind": "verified-active-attack-input-chain"
+        }
+      ],
+      "selectionByActionId": {
+        "han-ultimate": {
+          "semanticName": "星决技",
+          "controlSkillId": 10100313,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 241,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
+          "semanticName": "驭仙风",
+          "controlSkillId": 10101021,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 295,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "switch-to-xiaoyu--on-exit--actor-101003--star-carry": {
+          "semanticName": "缚风烟",
+          "controlSkillId": 10100322,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 140,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "xiaoyu-hit-after-expiry": {
+          "semanticName": "A1",
+          "controlSkillId": 10101001,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 215,
+          "sourceKind": "verified-active-attack-input-chain"
+        },
+        "xiaoyu-hit-during-buff": {
+          "semanticName": "A1",
+          "controlSkillId": 10101001,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 215,
+          "sourceKind": "verified-active-attack-input-chain"
+        }
+      }
+    },
+    "combat": {
+      "damageEventCount": 115,
+      "ownerDamageEventCount": 8,
+      "ownerHitEventCount": 7,
+      "ownerHitCountByActionId": {
+        "han-ultimate": 7
+      },
+      "selectedHpDamageByActionId": {
+        "han-ultimate": 2722,
+        "xiaoyu-hit-after-expiry": 3428,
+        "xiaoyu-hit-during-buff": 3718
+      },
+      "totalHpDamage": 10064,
+      "totalToughnessDamage": 727.371979,
+      "ownerTotalHpDamage": 2722,
+      "ownerTotalToughnessDamage": 1905,
+      "enemy": {
+        "pointCount": 132,
+        "initialHp": 862800,
+        "finalHp": 852736,
+        "maxHp": 862800,
+        "initialToughness": 6667,
+        "finalToughness": 5939.628021,
+        "maxToughness": 6667
+      }
+    },
+    "resources": {
+      "actorSp": [
+        {
+          "kind": "actor",
+          "actorId": "actor-101003",
+          "kiboId": null,
+          "initialValue": 100,
+          "currentValue": 3.957321,
+          "maxValue": 100,
+          "eventCount": 293,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 234,
+              "totalChange": 2.435004,
+              "firstTimeMs": 6700,
+              "lastTimeMs": 30000
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 57,
+              "totalChange": 1.187196,
+              "firstTimeMs": 1000,
+              "lastTimeMs": 6600
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 1000,
+              "actionId": "han-ultimate",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            },
+            {
+              "timeMs": 12700,
+              "actionId": "xiaoyu-hit-during-buff",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.8116,
+              "change": 0.334991,
+              "afterValue": 2.146591
+            }
+          ]
+        },
+        {
+          "kind": "actor",
+          "actorId": "actor-101010",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 6.230637,
+          "maxValue": 100,
+          "eventCount": 301,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 66,
+              "totalChange": 0.686796,
+              "firstTimeMs": 100,
+              "lastTimeMs": 6600
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 234,
+              "totalChange": 4.873752,
+              "firstTimeMs": 6700,
+              "lastTimeMs": 30000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 12700,
+              "actionId": "xiaoyu-hit-during-buff",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.936524,
+              "change": 0.669998,
+              "afterValue": 2.606522
+            }
+          ]
+        },
+        {
+          "kind": "actor",
+          "actorId": "actor-103002",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 3.45694,
+          "maxValue": 100,
+          "eventCount": 301,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 300,
+              "totalChange": 3.1218,
+              "firstTimeMs": 100,
+              "lastTimeMs": 30000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 12700,
+              "actionId": "xiaoyu-hit-during-buff",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.311219,
+              "change": 0.334991,
+              "afterValue": 1.64621
+            }
+          ]
+        }
+      ],
+      "kiboSp": [
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-1",
+          "actorId": "actor-101003",
+          "kiboId": 500469,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-2",
+          "actorId": "actor-101010",
+          "kiboId": 500003,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-3",
+          "actorId": "actor-103002",
+          "kiboId": 500039,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      ],
+      "actorSpByActorId": {
+        "actor-101003": {
+          "kind": "actor",
+          "actorId": "actor-101003",
+          "kiboId": null,
+          "initialValue": 100,
+          "currentValue": 3.957321,
+          "maxValue": 100,
+          "eventCount": 293,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 234,
+              "totalChange": 2.435004,
+              "firstTimeMs": 6700,
+              "lastTimeMs": 30000
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 57,
+              "totalChange": 1.187196,
+              "firstTimeMs": 1000,
+              "lastTimeMs": 6600
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 1000,
+              "actionId": "han-ultimate",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            },
+            {
+              "timeMs": 12700,
+              "actionId": "xiaoyu-hit-during-buff",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.8116,
+              "change": 0.334991,
+              "afterValue": 2.146591
+            }
+          ]
+        },
+        "actor-101010": {
+          "kind": "actor",
+          "actorId": "actor-101010",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 6.230637,
+          "maxValue": 100,
+          "eventCount": 301,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 66,
+              "totalChange": 0.686796,
+              "firstTimeMs": 100,
+              "lastTimeMs": 6600
+            },
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 234,
+              "totalChange": 4.873752,
+              "firstTimeMs": 6700,
+              "lastTimeMs": 30000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 12700,
+              "actionId": "xiaoyu-hit-during-buff",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.936524,
+              "change": 0.669998,
+              "afterValue": 2.606522
+            }
+          ]
+        },
+        "actor-103002": {
+          "kind": "actor",
+          "actorId": "actor-103002",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 3.45694,
+          "maxValue": 100,
+          "eventCount": 301,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 300,
+              "totalChange": 3.1218,
+              "firstTimeMs": 100,
+              "lastTimeMs": 30000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 12700,
+              "actionId": "xiaoyu-hit-during-buff",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.311219,
+              "change": 0.334991,
+              "afterValue": 1.64621
+            }
+          ]
+        }
+      },
+      "kiboSpBySlotId": {
+        "team-slot-1": {
+          "kind": "kibo",
+          "slotId": "team-slot-1",
+          "actorId": "actor-101003",
+          "kiboId": 500469,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        "team-slot-2": {
+          "kind": "kibo",
+          "slotId": "team-slot-2",
+          "actorId": "actor-101010",
+          "kiboId": 500003,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        "team-slot-3": {
+          "kind": "kibo",
+          "slotId": "team-slot-3",
+          "actorId": "actor-103002",
+          "kiboId": 500039,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      },
+      "specialResourceTrace": [],
+      "tuningMarkTrace": [
+        {
+          "eventIdentity": "tuning-held|150|4216.666667|10100313|0|elements|0|2114308111398669772|193|3",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|4216.666667|2",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|4450|0",
+          "actionId": "han-ultimate",
+          "frame": 267,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 1,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|4716.666667|1",
+          "actionId": "han-ultimate",
+          "frame": 283,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 2,
+          "delta": 1,
+          "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|7616.666667|10",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 457,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 3,
+          "delta": 1,
+          "after": 4,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|12700|10101001|0|elements|0|-2245783402811878012|12|1",
+          "actionId": "xiaoyu-hit-during-buff",
+          "frame": 762,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 4,
+          "delta": 0,
+          "after": 4,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|20200|10101001|0|elements|0|-2245783402811878012|12|1",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1212,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 4,
+          "delta": 0,
+          "after": 4,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|expire|27616.666667|21",
+          "actionId": "han-ultimate",
+          "frame": 1657,
+          "kind": "expire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 4,
+          "delta": -1,
+          "after": 3,
+          "maximum": 5
+        }
+      ],
+      "tuningMarkAcquireByActionId": {
+        "han-ultimate": {
+          "eventCount": 3,
+          "totalDelta": 3
+        },
+        "switch-to-xiaoyu--on-exit--actor-101003--star-carry": {
+          "eventCount": 1,
+          "totalDelta": 1
+        }
+      },
+      "targetStateTrace": [],
+      "conditionalHitGroups": [],
+      "targetStateSummary": {
+        "profileCount": 1,
+        "eventCount": 0,
+        "appliedGroupCount": 0,
+        "skippedGroupCount": 0,
+        "effectCommandCount": 0,
+        "directSpEventCount": 0
+      },
+      "ownerDirectSp": {
+        "eventCount": 0,
+        "totalChange": 0
+      },
+      "thresholdClearCount": 0,
+      "transformCount": 0,
+      "refreshCount": 0
+    },
+    "effects": {
+      "passiveTrace": [],
+      "passiveMaxStacks": 0,
+      "firstPassiveMaxStackFrame": null,
+      "burstTrace": [
+        {
+          "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 18466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1042.0045928955078,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1042.0045928955078
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101010",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_TRANSFERRED|6666.667|2",
+          "actionId": "han-ultimate",
+          "frame": 400,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "transfer",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101010",
+          "controlledActorTransitionId": "controlled-actor-transition-switch-to-xiaoyu",
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "beforeStacks": 1,
+          "afterStacks": 1,
+          "stackChange": 0,
+          "expiresAtMs": 18466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1042.0045928955078,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1042.0045928955078
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_EXPIRED|18466.667|2",
+          "actionId": "han-ultimate",
+          "frame": 1108,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "expire",
+          "previousTargetId": "actor-101010",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1042.0045928955078,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1042.0045928955078
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "expire",
+          "previousTargetId": "actor-101010",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        }
+      ],
+      "selectedEffectSummaryByElementId": {
+        "101003205": {
+          "effectId": "battle-element:101003205",
+          "effectNames": [
+            "全队调谐强度提升"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-101003",
+            "actor-101010",
+            "actor-103002"
+          ],
+          "appliedEventCount": 3,
+          "transferredEventCount": 0,
+          "expiredEventCount": 3,
+          "firstAppliedFrame": 208,
+          "firstExpiredFrame": 1648,
+          "maxStacks": 2,
+          "attributeIds": [
+            229
+          ],
+          "formulaFamilies": [
+            "literal-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            18
+          ]
+        },
+        "101003207": {
+          "effectId": "battle-element:101003207",
+          "effectNames": [
+            "主控角色调谐强度提升"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-101003",
+            "actor-101010"
+          ],
+          "appliedEventCount": 1,
+          "transferredEventCount": 1,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 208,
+          "firstExpiredFrame": 1108,
+          "maxStacks": 1,
+          "attributeIds": [
+            229
+          ],
+          "formulaFamilies": [
+            "source-tuning-ratio-with-common-ratio"
+          ],
+          "formulaValues": [
+            1042.0045928955078
+          ]
+        }
+      },
+      "inheritanceTransferCountByEffectId": {
+        "battle-element:101003205": 0,
+        "battle-element:101003207": 1
+      },
+      "inheritanceTransfers": [
+        {
+          "effectId": "battle-element:101003207",
+          "frame": 400,
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101010",
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "expiresAtMs": 18466.667,
+          "formulaValues": [
+            1042.0045928955078
+          ]
+        }
+      ],
+      "burstTransitions": [
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 18466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 27466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 27466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 27466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 400,
+          "operation": "transfer",
+          "expiresAtMs": 18466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1108,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "operation": "expire",
+          "expiresAtMs": null
+        }
+      ]
+    },
+    "dynamicProperties": {
+      "ownerSources": [
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 120,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 240,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 60,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 1078.0045928955078,
+          "effectIds": [
+            "battle-element:-4841411980842434486",
+            "battle-element:-5652413049857383353"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 36,
+          "effectIds": [
+            "battle-element:-5652413049857383353"
+          ]
+        }
+      ],
+      "byActionId": {
+        "han-ultimate": [
+          {
+            "attributeId": 1,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 120,
+            "dynamicExtraRaw": 0,
+            "effectIds": [
+              "tuning-mark:150:persistent"
+            ]
+          },
+          {
+            "attributeId": 1,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 60,
+            "dynamicExtraRaw": 0,
+            "effectIds": [
+              "tuning-mark:150:persistent"
+            ]
+          },
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 1078.0045928955078,
+            "effectIds": [
+              "battle-element:-4841411980842434486",
+              "battle-element:-5652413049857383353"
+            ]
+          }
+        ],
+        "xiaoyu-hit-after-expiry": [
+          {
+            "attributeId": 1,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 240,
+            "dynamicExtraRaw": 0,
+            "effectIds": [
+              "tuning-mark:150:persistent"
+            ]
+          },
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 36,
+            "effectIds": [
+              "battle-element:-5652413049857383353"
+            ]
+          }
+        ],
+        "xiaoyu-hit-during-buff": [
+          {
+            "attributeId": 1,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 240,
+            "dynamicExtraRaw": 0,
+            "effectIds": [
+              "tuning-mark:150:persistent"
+            ]
+          },
+          {
+            "attributeId": 229,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 1078.0045928955078,
+            "effectIds": [
+              "battle-element:-4841411980842434486",
+              "battle-element:-5652413049857383353"
+            ]
+          }
+        ]
+      },
+      "effectIdsByActionId": {
+        "han-ultimate": [
+          "battle-element:-4841411980842434486",
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ],
+        "xiaoyu-hit-after-expiry": [
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ],
+        "xiaoyu-hit-during-buff": [
+          "battle-element:-4841411980842434486",
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ]
+      },
+      "maxPercentRawByAttributeId": {
+        "1": 240,
+        "229": 0
+      },
+      "maxExtraRawByAttributeId": {
+        "1": 0,
+        "229": 1078.0045928955078
+      }
+    },
+    "comparison": {
+      "comparisonIdentity": "m10-b2-r1:ultimate-source-loadout",
+      "compareActionKey": "han-ultimate",
+      "omittedActionKeys": [],
+      "clearLoadoutCharacterIds": [
+        101003
+      ],
+      "primaryDamage": 2722,
+      "baselineDamage": 1242,
+      "damageDelta": 1480,
+      "primaryDynamicPropertySources": [
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 120,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 60,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 1078.0045928955078,
+          "effectIds": [
+            "battle-element:-4841411980842434486",
+            "battle-element:-5652413049857383353"
+          ]
+        }
+      ],
+      "baselineDynamicPropertySources": [
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 120,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 1,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 60,
+          "dynamicExtraRaw": 0,
+          "effectIds": [
+            "tuning-mark:150:persistent"
+          ]
+        },
+        {
+          "attributeId": 229,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 1055.9066162109375,
+          "effectIds": [
+            "battle-element:-4841411980842434486",
+            "battle-element:-5652413049857383353"
+          ]
+        }
+      ],
+      "primaryEffectFormulaValuesById": {
+        "battle-element:101003205": [
+          18
+        ],
+        "battle-element:101003207": [
+          1042.0045928955078
+        ]
+      },
+      "baselineEffectFormulaValuesById": {
+        "battle-element:101003205": [
+          18
+        ],
+        "battle-element:101003207": [
+          1019.9066162109375
+        ]
+      },
+      "baselineReplayHash": "d4ee0c8ffbccc5b7bdb5c5a281f73321f78711025354e37da0709744e6d6c8e5"
+    },
+    "trace": {
+      "damage": [
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 236,
+          "hitIdentity": null,
+          "rawDamage": 137,
+          "hpDamage": 137,
+          "toughnessDamage": 96,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 244,
+          "hitIdentity": null,
+          "rawDamage": 137,
+          "hpDamage": 137,
+          "toughnessDamage": 96,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "hitIdentity": null,
+          "rawDamage": 137,
+          "hpDamage": 137,
+          "toughnessDamage": 96,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "hitIdentity": null,
+          "rawDamage": 1373,
+          "hpDamage": 1373,
+          "toughnessDamage": 961,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 261,
+          "hitIdentity": null,
+          "rawDamage": 138,
+          "hpDamage": 138,
+          "toughnessDamage": 97,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 267,
+          "hitIdentity": null,
+          "rawDamage": 139,
+          "hpDamage": 139,
+          "toughnessDamage": 97,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 273,
+          "hitIdentity": null,
+          "rawDamage": 139,
+          "hpDamage": 139,
+          "toughnessDamage": 97,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-ultimate",
+          "frame": 283,
+          "hitIdentity": null,
+          "rawDamage": 522,
+          "hpDamage": 522,
+          "toughnessDamage": 365,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 429,
+          "hitIdentity": null,
+          "rawDamage": 28,
+          "hpDamage": 28,
+          "toughnessDamage": 20,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 433,
+          "hitIdentity": null,
+          "rawDamage": 28,
+          "hpDamage": 28,
+          "toughnessDamage": 20,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 437,
+          "hitIdentity": null,
+          "rawDamage": 28,
+          "hpDamage": 28,
+          "toughnessDamage": 20,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 441,
+          "hitIdentity": null,
+          "rawDamage": 28,
+          "hpDamage": 28,
+          "toughnessDamage": 20,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 457,
+          "hitIdentity": null,
+          "rawDamage": 84,
+          "hpDamage": 84,
+          "toughnessDamage": 59,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "xiaoyu-hit-during-buff",
+          "frame": 762,
+          "hitIdentity": null,
+          "rawDamage": 31,
+          "hpDamage": 31,
+          "toughnessDamage": 22,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "xiaoyu-hit-during-buff",
+          "frame": 762,
+          "hitIdentity": null,
+          "rawDamage": 3687,
+          "hpDamage": 3687,
+          "toughnessDamage": 2581,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1212,
+          "hitIdentity": null,
+          "rawDamage": 28,
+          "hpDamage": 28,
+          "toughnessDamage": 20,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1212,
+          "hitIdentity": null,
+          "rawDamage": 3400,
+          "hpDamage": 3400,
+          "toughnessDamage": 2000,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1218,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1224,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1230,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1236,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1242,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1248,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1254,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1260,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1266,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1272,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1278,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1284,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1290,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1296,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1302,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1308,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1314,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1320,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1326,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1332,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1338,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1344,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1350,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1356,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1362,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1368,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1374,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1380,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1386,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1392,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1398,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1404,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1410,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1416,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1422,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1428,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1434,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1440,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1446,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1452,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1458,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1464,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1470,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1476,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1482,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1488,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1494,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1500,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1506,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1512,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1518,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1524,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1530,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1536,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1542,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1548,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1554,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1560,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1566,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1572,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1578,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1584,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1590,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1596,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1602,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1608,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1614,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1620,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1626,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1632,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1638,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1644,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1650,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1656,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1662,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1668,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1674,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1680,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1686,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1692,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1698,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1704,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1710,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1716,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1722,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1728,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1734,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1740,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1746,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1752,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1758,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1764,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1770,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1776,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1782,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1788,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1794,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1800,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        }
+      ],
+      "specialResources": [],
+      "tuningMarks": [
+        {
+          "eventIdentity": "tuning-held|150|4216.666667|10100313|0|elements|0|2114308111398669772|193|3",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|4216.666667|2",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|4450|0",
+          "actionId": "han-ultimate",
+          "frame": 267,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 1,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|4716.666667|1",
+          "actionId": "han-ultimate",
+          "frame": 283,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 2,
+          "delta": 1,
+          "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|acquire|7616.666667|10",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 457,
+          "kind": "acquire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 3,
+          "delta": 1,
+          "after": 4,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|12700|10101001|0|elements|0|-2245783402811878012|12|1",
+          "actionId": "xiaoyu-hit-during-buff",
+          "frame": 762,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 4,
+          "delta": 0,
+          "after": 4,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|20200|10101001|0|elements|0|-2245783402811878012|12|1",
+          "actionId": "xiaoyu-hit-after-expiry",
+          "frame": 1212,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 4,
+          "delta": 0,
+          "after": 4,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|150|expire|27616.666667|21",
+          "actionId": "han-ultimate",
+          "frame": 1657,
+          "kind": "expire",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 4,
+          "delta": -1,
+          "after": 3,
+          "maximum": 5
+        }
+      ],
+      "targetStates": [],
+      "conditionalHitGroups": [],
+      "effects": [
+        {
+          "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 18466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1042.0045928955078,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1042.0045928955078
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101010",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-103002",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|4216.667|1",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|4216.667|1",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4450|2",
+          "actionId": "han-ultimate",
+          "frame": 267,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4450|2",
+          "actionId": "han-ultimate",
+          "frame": 267,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4716.667|3",
+          "actionId": "han-ultimate",
+          "frame": 283,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4716.667|3",
+          "actionId": "han-ultimate",
+          "frame": 283,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_TRANSFERRED|6666.667|2",
+          "actionId": "han-ultimate",
+          "frame": 400,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "transfer",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101010",
+          "controlledActorTransitionId": "controlled-actor-transition-switch-to-xiaoyu",
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "beforeStacks": 1,
+          "afterStacks": 1,
+          "stackChange": 0,
+          "expiresAtMs": 18466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1042.0045928955078,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1042.0045928955078
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|7616.667|4",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 457,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|7616.667|4",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 457,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_EXPIRED|18466.667|2",
+          "actionId": "han-ultimate",
+          "frame": 1108,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "expire",
+          "previousTargetId": "actor-101010",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": "source",
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-4841411980842434486|han-ultimate|3466.667",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1042.0045928955078,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1042.0045928955078
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "expire",
+          "previousTargetId": "actor-101010",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "expire",
+          "previousTargetId": "actor-103002",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:-5652413049857383353|han-ultimate|3466.667",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|27616.667|5",
+          "actionId": "han-ultimate",
+          "frame": 1657,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 4,
+          "afterStacks": 3,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|27616.667|5",
+          "actionId": "han-ultimate",
+          "frame": 1657,
+          "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "tuning-mark:150:persistent|han-ultimate|4216.667",
+          "beforeStacks": 4,
+          "afterStacks": 3,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        }
+      ]
+    },
+    "summaryHash": "ecdcafd2b6c1d64d28f25264851ba5c294eb96940a2c875092c63911bc5f61ad"
+  },
+  "expected": {
+    "exact": {
+      "project.durationMs": 30000,
+      "project.actionCount": 4,
+      "actions.selectionByActionId.han-ultimate.controlSkillId": 10100313,
+      "actions.selectionByActionId.han-ultimate.subSkillIndex": 0,
+      "actions.selectionByActionId.xiaoyu-hit-during-buff.controlSkillId": 10101001,
+      "actions.selectionByActionId.xiaoyu-hit-after-expiry.controlSkillId": 10101001,
+      "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 3718,
+      "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry": 3428,
+      "dynamicProperties.effectIdsByActionId.xiaoyu-hit-during-buff": [
+        "battle-element:-4841411980842434486",
+        "battle-element:-5652413049857383353",
+        "tuning-mark:150:persistent"
+      ],
+      "dynamicProperties.effectIdsByActionId.xiaoyu-hit-after-expiry": [
+        "battle-element:-5652413049857383353",
+        "tuning-mark:150:persistent"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003205.targetIds": [
+        "actor-101003",
+        "actor-101010",
+        "actor-103002"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount": 3,
+      "effects.selectedEffectSummaryByElementId.101003205.transferredEventCount": 0,
+      "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount": 3,
+      "effects.selectedEffectSummaryByElementId.101003207.targetIds": [
+        "actor-101003",
+        "actor-101010"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount": 1,
+      "effects.selectedEffectSummaryByElementId.101003207.transferredEventCount": 1,
+      "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount": 1,
+      "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame": 208,
+      "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame": 1108,
+      "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [
+        1042.0045928955078
+      ],
+      "effects.inheritanceTransferCountByEffectId.battle-element:101003205": 0,
+      "effects.inheritanceTransferCountByEffectId.battle-element:101003207": 1,
+      "effects.inheritanceTransfers.0.effectId": "battle-element:101003207",
+      "effects.inheritanceTransfers.0.frame": 400,
+      "effects.inheritanceTransfers.0.previousTargetId": "actor-101003",
+      "effects.inheritanceTransfers.0.nextTargetId": "actor-101010",
+      "effects.inheritanceTransfers.0.inheritType": "source",
+      "effects.inheritanceTransfers.0.formulaSourceActorId": "actor-101003",
+      "effects.inheritanceTransfers.0.effectAdderActorId": "actor-101003",
+      "effects.inheritanceTransfers.0.expiresAtMs": 18466.667,
+      "effects.inheritanceTransfers.0.formulaValues": [
+        1042.0045928955078
+      ],
+      "comparison.primaryEffectFormulaValuesById.battle-element:101003207": [
+        1042.0045928955078
+      ],
+      "comparison.baselineEffectFormulaValuesById.battle-element:101003207": [
+        1019.9066162109375
+      ]
+    }
+  },
+  "validation": {
+    "status": "authoritative-golden-runtime-expectation-passed",
+    "passed": true,
+    "assertionCount": 34,
+    "failedCount": 0,
+    "assertions": [
+      {
+        "jsonPath": "project.durationMs",
+        "operator": "exact",
+        "expected": 30000,
+        "actual": 30000,
+        "passed": true
+      },
+      {
+        "jsonPath": "project.actionCount",
+        "operator": "exact",
+        "expected": 4,
+        "actual": 4,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.han-ultimate.controlSkillId",
+        "operator": "exact",
+        "expected": 10100313,
+        "actual": 10100313,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.han-ultimate.subSkillIndex",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.xiaoyu-hit-during-buff.controlSkillId",
+        "operator": "exact",
+        "expected": 10101001,
+        "actual": 10101001,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.selectionByActionId.xiaoyu-hit-after-expiry.controlSkillId",
+        "operator": "exact",
+        "expected": 10101001,
+        "actual": 10101001,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff",
+        "operator": "exact",
+        "expected": 3718,
+        "actual": 3718,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry",
+        "operator": "exact",
+        "expected": 3428,
+        "actual": 3428,
+        "passed": true
+      },
+      {
+        "jsonPath": "dynamicProperties.effectIdsByActionId.xiaoyu-hit-during-buff",
+        "operator": "exact",
+        "expected": [
+          "battle-element:-4841411980842434486",
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ],
+        "actual": [
+          "battle-element:-4841411980842434486",
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "dynamicProperties.effectIdsByActionId.xiaoyu-hit-after-expiry",
+        "operator": "exact",
+        "expected": [
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ],
+        "actual": [
+          "battle-element:-5652413049857383353",
+          "tuning-mark:150:persistent"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.targetIds",
+        "operator": "exact",
+        "expected": [
+          "actor-101003",
+          "actor-101010",
+          "actor-103002"
+        ],
+        "actual": [
+          "actor-101003",
+          "actor-101010",
+          "actor-103002"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount",
+        "operator": "exact",
+        "expected": 3,
+        "actual": 3,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.transferredEventCount",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount",
+        "operator": "exact",
+        "expected": 3,
+        "actual": 3,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.targetIds",
+        "operator": "exact",
+        "expected": [
+          "actor-101003",
+          "actor-101010"
+        ],
+        "actual": [
+          "actor-101003",
+          "actor-101010"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.transferredEventCount",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame",
+        "operator": "exact",
+        "expected": 208,
+        "actual": 208,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame",
+        "operator": "exact",
+        "expected": 1108,
+        "actual": 1108,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.formulaValues",
+        "operator": "exact",
+        "expected": [
+          1042.0045928955078
+        ],
+        "actual": [
+          1042.0045928955078
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransferCountByEffectId.battle-element:101003205",
+        "operator": "exact",
+        "expected": 0,
+        "actual": 0,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransferCountByEffectId.battle-element:101003207",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.effectId",
+        "operator": "exact",
+        "expected": "battle-element:101003207",
+        "actual": "battle-element:101003207",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.frame",
+        "operator": "exact",
+        "expected": 400,
+        "actual": 400,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.previousTargetId",
+        "operator": "exact",
+        "expected": "actor-101003",
+        "actual": "actor-101003",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.nextTargetId",
+        "operator": "exact",
+        "expected": "actor-101010",
+        "actual": "actor-101010",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.inheritType",
+        "operator": "exact",
+        "expected": "source",
+        "actual": "source",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.formulaSourceActorId",
+        "operator": "exact",
+        "expected": "actor-101003",
+        "actual": "actor-101003",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.effectAdderActorId",
+        "operator": "exact",
+        "expected": "actor-101003",
+        "actual": "actor-101003",
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.expiresAtMs",
+        "operator": "exact",
+        "expected": 18466.667,
+        "actual": 18466.667,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.inheritanceTransfers.0.formulaValues",
+        "operator": "exact",
+        "expected": [
+          1042.0045928955078
+        ],
+        "actual": [
+          1042.0045928955078
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "comparison.primaryEffectFormulaValuesById.battle-element:101003207",
+        "operator": "exact",
+        "expected": [
+          1042.0045928955078
+        ],
+        "actual": [
+          1042.0045928955078
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "comparison.baselineEffectFormulaValuesById.battle-element:101003207",
+        "operator": "exact",
+        "expected": [
+          1019.9066162109375
+        ],
+        "actual": [
+          1019.9066162109375
+        ],
+        "passed": true
+      }
+    ]
+  },
+  "replayHash": "3def45170d73717d7e544b209219a5fc40aa4b5fdd98fe98ee0a343742316b1e"
+}

@@ -219,6 +219,8 @@ function normalizeInitialSpecialResourceStates(values) {
         resourceName: optionalText(value?.resourceName),
         currentValue,
         maxValue: nonNegativeNumberOrNull(value?.maxValue),
+        inputStep: positiveNumberOrNull(value?.inputStep),
+        scenarioConfigurable: value?.scenarioConfigurable === true,
         activeStates: (Array.isArray(value?.activeStates)
           ? value.activeStates
           : []
@@ -238,7 +240,9 @@ function normalizeInitialSpecialResourceStates(values) {
             },
           ];
         }),
-        baselineStatus: 'baseline-inherited-from-cycle-boundary',
+        baselineStatus:
+          optionalText(value?.baselineStatus) ??
+          'baseline-inherited-from-cycle-boundary',
       },
     ];
   });
@@ -332,6 +336,23 @@ function normalizeInitialActiveEffects(values) {
         confidence: optionalText(value?.confidence),
         trackingStatus: optionalText(value?.trackingStatus),
         sourceIdentity: cloneObject(value?.sourceIdentity),
+        semanticTargetKind: optionalText(value?.semanticTargetKind),
+        inheritOnControlledActorSwitch:
+          value?.inheritOnControlledActorSwitch === true,
+        inheritType: normalizeEffectInheritType(value?.inheritType),
+        inheritanceContainerElementId: numberOrNull(
+          value?.inheritanceContainerElementId
+        ),
+        inheritanceContainerPathId: optionalText(
+          value?.inheritanceContainerPathId
+        ),
+        inheritanceSourceIdentity: optionalText(
+          value?.inheritanceSourceIdentity
+        ),
+        formulaSourceActorId: optionalText(value?.formulaSourceActorId),
+        effectAdderActorId: optionalText(value?.effectAdderActorId),
+        effectInstanceId: optionalText(value?.effectInstanceId),
+        transferCount: nonNegativeInteger(value?.transferCount),
         originSourceStatus: optionalText(
           value?.originSourceStatus ?? value?.sourceStatus
         ),
@@ -343,11 +364,17 @@ function normalizeInitialActiveEffects(values) {
         tags: uniqueTextValues(value?.tags),
         modifiers: cloneObjectRows(value?.modifiers),
         sourceStatus: 'effect-inherited-from-cycle-boundary',
-        appliedToCalculators: false,
+        appliedToCalculators: value?.appliedToCalculators === true,
         active: true,
       },
     ];
   });
+}
+
+function normalizeEffectInheritType(value) {
+  if (value === 1 || value === '1' || value === 'self') return 'self';
+  if (value === 2 || value === '2' || value === 'source') return 'source';
+  return null;
 }
 
 function normalizeInitialTuningMarks(values) {
@@ -452,6 +479,11 @@ function numberOrNull(value) {
 function nonNegativeNumberOrNull(value) {
   const number = numberOrNull(value);
   return number == null ? null : roundValue(Math.max(0, number));
+}
+
+function positiveNumberOrNull(value) {
+  const number = numberOrNull(value);
+  return number != null && number > 0 ? roundValue(number) : null;
 }
 
 function positiveInteger(value, fallback) {

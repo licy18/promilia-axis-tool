@@ -5,8 +5,8 @@
   "ownerId": 103002,
   "ownerName": "红宝石",
   "recipeIdentity": "actor:103002:character-combat-recipe:v1",
-  "recipeHash": "8b548cb5dc923611710cf4f170bb7acbc52b42c1a53feccda3a60b749dffc3da",
-  "compilerInputHash": "c86c1fc0cd47732f75a71a019cbac3c32d76d564655f7d16f15250557ea18873",
+  "recipeHash": "f7932a11485c7db64625f1d3f52ca6b9cc4e746742a86c8f5c51f9664053ff4c",
+  "compilerInputHash": "d1abb210e3a6817ae736c0f52996857dbdbfe65a74a1e7fb7725b2936ed0b266",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -37,8 +37,7 @@
     10300247,
     10300248,
     10300249,
-    10300261,
-    10300262
+    10300261
   ],
   "contracts": {
     "publicActions": [
@@ -49589,7 +49588,8 @@
               "instanceScope": "target-effect",
               "combineType": 4,
               "mutuallyExclusiveId": 0,
-              "tags": []
+              "tags": [],
+              "inheritance": null
             },
             "propertyChange": {
               "changeType": 0,
@@ -49659,7 +49659,8 @@
             "reasons": [],
             "status": "verified-action-effect-lifecycle-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "inheritance": null
           },
           {
             "effectIdentity": "10300213|0|elements|26|-5857702920164552208|element:-5857702920164552208|unresolved-frame|0",
@@ -101576,55 +101577,6 @@
         "status": "verified-skill-control-mechanics-binding-unresolved",
         "confidence": "unresolved",
         "applied": false
-      },
-      {
-        "controlSkillId": 10300262,
-        "runtimePolicy": null,
-        "frameRate": 60,
-        "frameCounts": [
-          {
-            "key": 0,
-            "frameCount": 100
-          }
-        ],
-        "sourcePath": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300262.asset/MonoBehaviour/skill_control_10300262__-2321862503808261239.json",
-        "logic": {
-          "spCost": 0,
-          "cooldownMs": 0,
-          "cooldownCount": 0,
-          "skillTag": "0",
-          "petSkillLogicTag": "-1",
-          "inputTriggerType": 0,
-          "holdTriggerTimeMs": 0,
-          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300262]",
-          "status": "verified-skill-logic-ready",
-          "applied": true
-        },
-        "variants": [
-          {
-            "subSkillIndex": 0,
-            "playerSkillId": 1,
-            "frameCounts": [
-              {
-                "key": 0,
-                "frameCount": 100
-              }
-            ],
-            "directElementReferenceCount": 0,
-            "bulletElementReferenceCount": 0,
-            "elementCount": 0,
-            "runnableElementCount": 0,
-            "effectNodeCount": 0,
-            "runnableEffectCount": 0,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300262.asset/MonoBehaviour/skill_control_10300262__-2321862503808261239.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
-          }
-        ],
-        "hits": [],
-        "effects": [],
-        "effectGraph": [],
-        "status": "verified-skill-control-mechanics-binding-unresolved",
-        "confidence": "unresolved",
-        "applied": false
       }
     ],
     "timingInputEdges": [
@@ -120062,6 +120014,7 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "inheritance": null,
         "status": "applied",
         "applied": true
       },
@@ -120193,6 +120146,7 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "inheritance": null,
         "status": "applied",
         "applied": true
       },
@@ -120212,6 +120166,7 @@
         "lifecycleMaxStacks": 6,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "inheritance": null,
         "status": "applied",
         "applied": true
       }
@@ -134484,8 +134439,10 @@
         "sourceName": "buff资源 换弹 pre_peipei_skill2_buff_sle",
         "capacity": 12,
         "initialValue": 0,
-        "initialValueStatus": "verified-scenario-initial-element-layer-zero",
-        "initialValueSourceIdentity": "AzPrVerifiedSpecialResourceRuntime#empty-runtime-element-state",
+        "inputStep": 1,
+        "scenarioConfigurable": true,
+        "initialValueStatus": "scenario-configurable-initial-state",
+        "initialValueSourceIdentity": "AzPrCombatScenario#initialRuntimeState.specialResourcesByActor[resourceIdentity=actor:103002:element:103002047]",
         "combineType": 4,
         "stateElements": [],
         "moduleClass": "ModuleChargingSkill103002",
@@ -167474,7 +167431,8 @@
             "instanceScope": "target-effect",
             "combineType": 4,
             "mutuallyExclusiveId": 0,
-            "tags": []
+            "tags": [],
+            "inheritance": null
           },
           "propertyChange": {
             "changeType": 0,
@@ -167544,7 +167502,8 @@
           "reasons": [],
           "status": "verified-action-effect-lifecycle-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "inheritance": null
         },
         {
           "effectIdentity": "10300213|0|elements|26|-5857702920164552208|element:4227003560910032429|unresolved-frame|0",
@@ -174731,7 +174690,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -174888,7 +174848,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -175045,7 +175006,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -175202,7 +175164,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -175357,7 +175320,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -175510,7 +175474,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -175672,7 +175637,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -175837,7 +175803,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176002,7 +175969,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176167,7 +176135,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176326,7 +176295,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176486,7 +176456,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176653,7 +176624,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176820,7 +176792,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -176987,7 +176960,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -177148,7 +177122,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -177316,7 +177291,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -177481,7 +177457,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -177646,7 +177623,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -177811,7 +177789,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -177970,7 +177949,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -178132,7 +178112,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -178288,7 +178269,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -178450,7 +178432,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -178606,7 +178589,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -178761,7 +178745,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -178926,7 +178911,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -179098,7 +179084,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -179260,7 +179247,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -179416,7 +179404,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -179578,7 +179567,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -179740,7 +179730,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -179896,7 +179887,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -180051,7 +180043,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -180208,7 +180201,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -180385,7 +180379,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -180560,7 +180555,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -180729,7 +180725,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -180896,7 +180893,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -181056,7 +181054,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -181237,7 +181236,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -181412,7 +181412,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -181581,7 +181582,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -181750,7 +181752,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -181916,7 +181919,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -182071,7 +182075,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -182226,7 +182231,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -182399,7 +182405,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -182572,7 +182579,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -182745,7 +182753,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -182922,7 +182931,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -183085,7 +183095,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -183251,7 +183262,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -183406,7 +183418,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -183572,7 +183585,8 @@
             "stackMode": "stack",
             "stackDelta": 6,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -183737,7 +183751,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 6,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -183902,7 +183917,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -184072,7 +184088,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -184227,7 +184244,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -184402,7 +184420,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -184581,7 +184600,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -184740,7 +184760,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": {
             "kind": "layer-control",
@@ -184917,7 +184938,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -185087,7 +185109,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -185252,7 +185275,8 @@
             "stackMode": "replace",
             "stackDelta": 1,
             "maxStacks": 1,
-            "instanceScope": "source-action"
+            "instanceScope": "source-action",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -185417,7 +185441,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -185579,7 +185604,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -185741,7 +185767,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -185918,7 +185945,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -186080,7 +186108,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 5,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -186241,7 +186270,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -186396,7 +186426,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -186551,7 +186582,8 @@
             "stackMode": "stack",
             "stackDelta": 1,
             "maxStacks": 12,
-            "instanceScope": "target-effect"
+            "instanceScope": "target-effect",
+            "inheritance": null
           },
           "mechanic": null,
           "formulaRuntime": {
@@ -187029,7 +187061,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-3436032383153191763__-3436032383153191763.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-5353622254098868888__-5353622254098868888.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_1529913207984149574__1529913207984149574.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[20]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-7783775984244194322"
     }
   },
-  "contractHash": "378ab6223bccb6dfcf8f70df0680cbffd531f07481d135df2e88bb02675ea0fb",
+  "contractHash": "8d742b8c2afcdae5d9a4fcaa05a38979548b4a6b26251856c4b3b61f3e4d3f41",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -187051,5 +187083,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "9c5dd70f775db10f8e284eeb17d46c4d80b10dbaa4bea530ee89b78c282f5466"
+  "recipeContractHash": "dc6eecd391f404e2ed6bb3680fa0811cf46c36fa08f47c7fdd8377907732324c"
 }

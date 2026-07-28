@@ -217,6 +217,7 @@ function createPropertyEffectCommand({
     operation: EFFECT_OPERATIONS.APPLY,
     targetKind: target.kind,
     targetId: String(target.id),
+    semanticTargetKind: effect.target?.kind ?? null,
     timeMs,
     durationMs: normalizeDuration(effect.lifecycle?.durationMs),
     stackMode: normalizeStackMode(effect.lifecycle?.stackMode),
@@ -237,6 +238,20 @@ function createPropertyEffectCommand({
       pathId: effect.pathId ?? null,
       sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
     },
+    inheritOnControlledActorSwitch:
+      effect.lifecycle?.inheritance?.inheritOnControlledActorSwitch === true,
+    inheritType: effect.lifecycle?.inheritance?.inheritType ?? null,
+    inheritanceContainerElementId:
+      effect.lifecycle?.inheritance?.containerElementId ?? null,
+    inheritanceContainerPathId:
+      effect.lifecycle?.inheritance?.containerPathId ?? null,
+    inheritanceSourceIdentity:
+      effect.lifecycle?.inheritance?.sourceIdentity ?? null,
+    formulaSourceActorId: action.actorId,
+    effectAdderActorId:
+      effect.lifecycle?.inheritance?.inheritType === 'self'
+        ? String(target.id)
+        : action.actorId,
     modifiers: [
       {
         kind: 'battle-property',

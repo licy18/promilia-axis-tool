@@ -1642,7 +1642,7 @@ describe('TimelineGridPreview', () => {
     ).toBe(false);
   });
 
-  it('renders a special resource lane only for the owning actor and locates its source action', async () => {
+  it('edits a scenario-configurable special resource without selecting or scrubbing the lane', async () => {
     const runtimeStateCurves = createRuntimeTimelineStateCurves();
     runtimeStateCurves.resources.curvesBySpecialResource = [
       {
@@ -1655,6 +1655,8 @@ describe('TimelineGridPreview', () => {
         initialValue: 0,
         currentValue: 6,
         maxValue: 12,
+        inputStep: 1,
+        scenarioConfigurable: true,
         stateMetric: { initialValue: 0, currentValue: 6, maxValue: 12 },
         points: [
           {
@@ -1674,7 +1676,10 @@ describe('TimelineGridPreview', () => {
       },
     ];
     const wrapper = mount(TimelineGridPreview, {
-      props: createTimelineProps({ runtimeStateCurves }),
+      props: createTimelineProps({
+        runtimeStateCurves,
+        initialEnergyEditing: true,
+      }),
     });
 
     const labels = wrapper.findAll(
@@ -1683,6 +1688,18 @@ describe('TimelineGridPreview', () => {
     expect(labels).toHaveLength(1);
     expect(labels[0].attributes('data-actor-id')).toBe('actor-a');
     expect(labels[0].text()).toContain('子弹');
+    const input = labels[0].get(
+      '[data-testid="workbench-timeline-initial-special-resource-input"]'
+    );
+    expect(input.attributes()).toMatchObject({
+      type: 'number',
+      min: '0',
+      max: '12',
+      step: '1',
+      'data-owner-kind': 'special-resource',
+      'data-resource-identity': 'actor:103002:element:103002047',
+    });
+    expect(input.element.value).toBe('0');
     expect(
       wrapper
         .find(
@@ -1711,6 +1728,87 @@ describe('TimelineGridPreview', () => {
         source: 'timeline-special-resource-curve',
       }
     );
+
+    const emittedBeforeEdit =
+      wrapper.emitted('update-initial-energy')?.length ?? 0;
+    await input.trigger('click');
+    await input.setValue('6');
+    await input.trigger('keydown', { key: 'Enter' });
+    expect(wrapper.emitted('select-identity')).toBeUndefined();
+    expect(wrapper.emitted('select-timeline-frame')).toHaveLength(1);
+    expect(wrapper.emitted('update-initial-energy')?.at(-1)?.[0]).toMatchObject(
+      {
+        ownerKind: 'special-resource',
+        actorId: 'actor-a',
+        characterId: 103002,
+        resourceIdentity: 'actor:103002:element:103002047',
+        resourceName: '子弹',
+        currentValue: 6,
+        maxValue: 12,
+        inputStep: 1,
+      }
+    );
+    expect(wrapper.emitted('update-initial-energy')).toHaveLength(
+      emittedBeforeEdit + 1
+    );
+
+    await input.setValue('6.5');
+    await input.trigger('blur');
+    expect(wrapper.emitted('update-initial-energy')).toHaveLength(
+      emittedBeforeEdit + 1
+    );
+    expect(input.element.value).toBe('0');
+
+    await input.setValue('20');
+    await input.trigger('blur');
+    expect(wrapper.emitted('update-initial-energy')?.at(-1)?.[0]).toMatchObject(
+      {
+        ownerKind: 'special-resource',
+        currentValue: 12,
+      }
+    );
+  });
+
+  it('keeps non-configurable special resource lanes read-only', () => {
+    const runtimeStateCurves = createRuntimeTimelineStateCurves();
+    runtimeStateCurves.resources.curvesBySpecialResource = [
+      {
+        trackKey: 'specialResource:actor-a:101010115',
+        actorId: 'actor-a',
+        characterId: 101010,
+        resourceIdentity: 'actor:101010:element:101010115',
+        resourceName: '缘结值',
+        elementId: 101010115,
+        initialValue: 24,
+        currentValue: 24,
+        maxValue: 100,
+        inputStep: 1,
+        scenarioConfigurable: false,
+        stateMetric: { initialValue: 24, currentValue: 24, maxValue: 100 },
+        points: [],
+      },
+    ];
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        runtimeStateCurves,
+        initialEnergyEditing: true,
+      }),
+    });
+
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-special-resource-curve"]'
+        )
+        .text()
+    ).toContain('24 / 100');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-initial-special-resource-input"]'
+        )
+        .exists()
+    ).toBe(false);
   });
 
   it('renders controlled actor intervals and follows the exact-frame cursor state', async () => {

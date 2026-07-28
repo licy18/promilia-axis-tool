@@ -2,19 +2,21 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-profile-catalog",
   "status": "character-combat-profile-catalog-ready",
-  "sourcePackageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b",
+  "sourcePackageHash": "92554d0635b84c486f70d10f79cd0db7ade053b5d013aea22d61512eb40ea85a",
   "profileSchema": "azpr://schemas/character-combat-profile/v1",
   "profiles": [
     {
       "ownerId": 101003,
       "ownerName": "寒悠悠",
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7",
+      "profileHash": "2cf3e38ec4d2febe6e6f8b975d3750bd1c4748e292e054111378f2032a0e54a5",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "fd4f47a9ea92f063441b491cbd1ffe4182724ac141a054982f203322de21466d",
+      "runtimeContractHash": "fa4db35837dc0c22c5bbc4193417e255880f51a8a142ce6c955898ca76708ffc",
       "sourcePath": "src/data/generated/character-combat-profiles/101003.json",
       "status": "character-combat-profile-valid"
     },
@@ -22,12 +24,14 @@
       "ownerId": 101010,
       "ownerName": "涂山小玉",
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "bfe00286754b3c24d1f4d5a5ad61756fa0fc47516d39aa1898722f8ce0678288",
+      "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": false,
+      "realClientEvidenceComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "91fcbe281b0ae781eeb2bef67cdbafdf27f40f2f9cf69fd01d288553ca65dd27",
+      "runtimeContractHash": "a0519c3f29d70eeeafeb75d5b1cac72e1a15d6b4c73f88df1e39ac5509239061",
       "sourcePath": "src/data/generated/character-combat-profiles/101010.json",
       "status": "character-combat-profile-valid"
     },
@@ -35,22 +39,26 @@
       "ownerId": 103002,
       "ownerName": "红宝石",
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b",
+      "profileHash": "1a9de14a913160520107ed47437af67b3824a2b183bbede81a1e9151c709afb2",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
+      "zeroDistanceSimulationComplete": true,
+      "realClientEvidenceComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "224950e3238d5495affd562c7d5d97aebe122a570a8872603bcee78da3bef647",
+      "runtimeContractHash": "f009a8ef3d47557b791b4af03be7449bcd31476291e8011af83925183c338c10",
       "sourcePath": "src/data/generated/character-combat-profiles/103002.json",
       "status": "character-combat-profile-valid"
     }
   ],
-  "coverageManifestHash": "6fda0fcfaa22ff0b34b294bd6ed4661b8c64c4b4db473fe8915e968be7f27219",
+  "coverageManifestHash": "62461d6e15a1110a3f835998d0476fbb098ec2a1bd52441cb6c1601356ca913a",
   "summary": {
     "publicCharacterCount": 20,
     "compiledProfileCount": 3,
     "runtimeAppliedProfileCount": 3,
     "uiVerifiedProfileCount": 0,
-    "characterCompleteCount": 0
+    "characterCompleteCount": 0,
+    "zeroDistanceSimulationCompleteCount": 1,
+    "realClientEvidenceCompleteCount": 0
   }
 }

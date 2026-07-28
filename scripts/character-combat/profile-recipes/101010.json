@@ -358,15 +358,9 @@
     "occupancyAudit": "reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json",
     "hiddenInputAudit": "reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json"
   },
-  "notApplicableSkills": [
-    {
-      "skillId": 10101062,
-      "reason": "client-passive-not-implemented",
-      "sourceIdentity": "product-mechanic-boundary:2026-07-23:10101062"
-    }
-  ],
   "goldenScenario": {
     "traceSelectors": {
+      "passiveEffectIds": ["battle-element:101010206"],
       "dynamicPropertyActionKeys": [
         "jade-limit-counter",
         "jade-star-skill",
@@ -697,6 +691,12 @@
         "resources.kiboSpBySlotId.team-slot-3.actionTransactions.0.change": -100,
         "effects.passiveMaxStacks": 4,
         "effects.firstPassiveMaxStackFrame": 761,
+        "effects.inheritanceTransferCountByEffectId.battle-element:101010206": 0,
+        "effects.passiveTrace.4.frame": 979,
+        "effects.passiveTrace.4.targetId": "actor-101010",
+        "effects.passiveTrace.5.operation": "expire",
+        "effects.passiveTrace.5.frame": 1459,
+        "effects.passiveTrace.5.targetId": "actor-101010",
         "effects.burstTransitions.0.frame": 43,
         "effects.burstTransitions.0.operation": "apply",
         "effects.burstTransitions.1.frame": 632,

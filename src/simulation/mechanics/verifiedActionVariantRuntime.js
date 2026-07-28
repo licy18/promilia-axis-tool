@@ -1929,6 +1929,8 @@ function createSpecialResourceCurves({
       initialValue,
       currentValue: points.at(-1)?.afterValue ?? initialValue,
       maxValue: state.profile.capacity,
+      inputStep: state.profile.inputStep,
+      scenarioConfigurable: state.profile.scenarioConfigurable === true,
       durationMs,
       stateMetric: {
         initialValue,

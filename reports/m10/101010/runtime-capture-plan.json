@@ -17,6 +17,13 @@
         "sourceIdentity"
       ],
       "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[1].bulletElements[2]|battle-element-assets.jsonl#elementConfigId=101010156"
     },
     {
@@ -32,6 +39,13 @@
         "sourceIdentity"
       ],
       "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=101010130"
     },
     {
@@ -47,6 +61,13 @@
         "sourceIdentity"
       ],
       "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=101010155"
     },
     {
@@ -62,11 +83,20 @@
         "sourceIdentity"
       ],
       "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[0].bulletElements[2]|battle-element-assets.jsonl#elementConfigId=101010157"
     }
   ],
   "summary": {
-    "captureCount": 4
+    "captureCount": 4,
+    "zeroDistanceBlockingCaptureCount": 0,
+    "realClientEvidenceCaptureCount": 4
   },
-  "profileHash": "bfe00286754b3c24d1f4d5a5ad61756fa0fc47516d39aa1898722f8ce0678288"
+  "profileHash": "4005cddc8860c15914834291ef447e9c00e8c64e979f9587a68f62dc09c503f6"
 }

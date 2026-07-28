@@ -507,6 +507,11 @@ function createInheritedActiveEffectsAtBoundary(events, boundaryTimeMs) {
       continue;
     }
     if (event.after?.active) {
+      if (event.type === 'EFFECT_TRANSFERRED') {
+        activeByInstanceKey.delete(
+          event.previousInstanceKey ?? event.before?.instanceKey
+        );
+      }
       activeByInstanceKey.set(event.instanceKey, cloneValue(event.after));
     } else {
       activeByInstanceKey.delete(event.instanceKey);

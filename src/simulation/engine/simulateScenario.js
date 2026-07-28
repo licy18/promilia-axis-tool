@@ -292,6 +292,7 @@ function createVerifiedRuntimeBundle({
   const effectTimeline = createEffectRuntimeTimeline({
     scenario,
     actionExecutionPlan,
+    controlledActorTimeline,
     generatedCommands: [
       ...(actionVariantRuntime?.effectCommands ?? []),
       ...(effectGeneration?.effectCommands ?? []),

@@ -426,16 +426,26 @@
               <strong>{{ lane.name }}</strong>
               <TimelineInitialEnergyInput
                 v-if="isTimelineInitialEnergyEditable(lane)"
-                :label="lane.detail"
+                :label="
+                  lane.kind === 'actor-special-resource-curve'
+                    ? '初始值'
+                    : lane.detail
+                "
                 :value="lane.curve.initialValue"
                 :max-value="lane.curve.maxValue"
+                :step-value="lane.curve.inputStep"
                 :owner-kind="
-                  lane.kind === 'kibo-energy-curve' ? 'kibo' : 'actor'
+                  lane.kind === 'kibo-energy-curve'
+                    ? 'kibo'
+                    : lane.kind === 'actor-special-resource-curve'
+                      ? 'special-resource'
+                      : 'actor'
                 "
                 :actor-id="lane.actorId"
                 :character-id="lane.identity?.characterId"
                 :slot-id="lane.identity?.slotId"
                 :kibo-id="lane.identity?.kiboId"
+                :resource-identity="lane.identity?.resourceIdentity"
                 @commit="commitTimelineInitialEnergy(lane, $event)"
               />
               <small v-else>
@@ -1927,6 +1937,7 @@ function createTimelineActorGroups() {
           identity: {
             ...identity,
             kind: 'special-resource',
+            characterId: curve.characterId ?? identity.characterId,
             resourceIdentity: curve.resourceIdentity,
             accentColor: identity.accentColor,
           },
@@ -2362,7 +2373,11 @@ function formatTopologyCurveLaneValue(lane) {
 }
 
 function isTimelineInitialEnergyLane(lane) {
-  return ['actor-energy-curve', 'kibo-energy-curve'].includes(lane?.kind);
+  return [
+    'actor-energy-curve',
+    'kibo-energy-curve',
+    'actor-special-resource-curve',
+  ].includes(lane?.kind);
 }
 
 function isTimelineInitialEnergyEditable(lane) {
@@ -2372,20 +2387,35 @@ function isTimelineInitialEnergyEditable(lane) {
   if (lane.kind === 'kibo-energy-curve' && !Number(lane.identity?.kiboId)) {
     return false;
   }
+  if (
+    lane.kind === 'actor-special-resource-curve' &&
+    lane.curve?.scenarioConfigurable !== true
+  ) {
+    return false;
+  }
   return Number(lane.curve?.maxValue) > 0;
 }
 
 function commitTimelineInitialEnergy(lane, currentValue) {
   if (!isTimelineInitialEnergyEditable(lane)) return;
+  const ownerKind =
+    lane.kind === 'kibo-energy-curve'
+      ? 'kibo'
+      : lane.kind === 'actor-special-resource-curve'
+        ? 'special-resource'
+        : 'actor';
   emit('update-initial-energy', {
-    ownerKind: lane.kind === 'kibo-energy-curve' ? 'kibo' : 'actor',
+    ownerKind,
     actorId: lane.actorId,
     characterId: lane.identity?.characterId ?? null,
     slotId: lane.identity?.slotId ?? '',
     kiboId: lane.identity?.kiboId ?? null,
     kiboName: lane.identity?.kiboName ?? null,
+    resourceIdentity: lane.identity?.resourceIdentity ?? null,
+    resourceName: lane.curve.resourceName ?? lane.name ?? null,
     currentValue,
     maxValue: lane.curve.maxValue,
+    inputStep: lane.curve.inputStep,
   });
 }
 
@@ -2446,6 +2476,8 @@ function createTimelineStateCurve({
     cursorValue,
     cursorYPercent: 100 - (cursorValue / displaySeries.maxValue) * 100,
     maxValue: displaySeries.maxValue,
+    inputStep: strictPositiveNumberOrNull(runtimeCurve?.inputStep) ?? 0.01,
+    scenarioConfigurable: runtimeCurve?.scenarioConfigurable === true,
     pointCount: displaySeries.semanticNodeCount,
     displayPointCount: displaySeries.displayPointCount,
     simulationPointCount: displaySeries.simulationPointCount,
@@ -2499,6 +2531,11 @@ function strictNumberOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function strictPositiveNumberOrNull(value) {
+  const number = strictNumberOrNull(value);
+  return number != null && number > 0 ? number : null;
 }
 function isActionInSelectedBatch(action) {
   return Boolean(

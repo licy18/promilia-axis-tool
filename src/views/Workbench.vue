@@ -3272,8 +3272,83 @@ function updateTimelineInitialEnergy(request = {}) {
     });
     return true;
   }
+  if (request.ownerKind === 'special-resource') {
+    return updateInitialSpecialResource(request);
+  }
   if (request.ownerKind !== 'kibo') return false;
   return updateInitialKiboEnergy(request);
+}
+
+function updateInitialSpecialResource(request = {}) {
+  const actorId = String(request.actorId ?? '').trim();
+  const resourceIdentity = String(request.resourceIdentity ?? '').trim();
+  if (!actorId || !resourceIdentity) return false;
+  const runtimeCurve =
+    simulationResult.value.runtimeOutputs.stateCurves.resources.curvesBySpecialResource?.find(
+      curve =>
+        curve.actorId === actorId &&
+        curve.resourceIdentity === resourceIdentity
+    );
+  if (
+    !runtimeCurve ||
+    runtimeCurve.scenarioConfigurable !== true ||
+    !Number.isFinite(Number(runtimeCurve.maxValue))
+  ) {
+    return false;
+  }
+  const maxValue = Number(runtimeCurve.maxValue);
+  const inputStep = normalizeInitialResourceStep(
+    runtimeCurve.inputStep ?? request.inputStep
+  );
+  const currentValue = normalizeInitialSpecialResourceInput(
+    request.currentValue,
+    maxValue,
+    inputStep
+  );
+  if (currentValue == null) return false;
+  const currentRows =
+    initialRuntimeState.value?.specialResourcesByActor ?? [];
+  const currentRow = currentRows.find(
+    row =>
+      row.actorId === actorId &&
+      row.resourceIdentity === resourceIdentity
+  );
+  if (
+    Number(currentRow?.currentValue ?? runtimeCurve.initialValue ?? 0) ===
+      currentValue &&
+    Number(currentRow?.maxValue ?? maxValue) === maxValue
+  ) {
+    return false;
+  }
+  const actor = scenario.value.actors.find(item => item.id === actorId);
+  recordWorkbenchHistorySnapshot();
+  initialRuntimeState.value = normalizeInitialRuntimeState({
+    ...(initialRuntimeState.value ?? {}),
+    specialResourcesByActor: [
+      ...currentRows.filter(
+        row =>
+          row.actorId !== actorId ||
+          row.resourceIdentity !== resourceIdentity
+      ),
+      {
+        ...(currentRow ?? {}),
+        actorId,
+        characterId:
+          actor?.characterId ?? runtimeCurve.characterId ?? request.characterId,
+        actorName: actor?.name ?? runtimeCurve.actorName ?? null,
+        resourceIdentity,
+        resourceName:
+          runtimeCurve.resourceName ?? request.resourceName ?? null,
+        currentValue,
+        maxValue,
+        inputStep,
+        scenarioConfigurable: true,
+        baselineStatus: 'scenario-configurable-initial-state',
+      },
+    ],
+  });
+  markDraftDirty();
+  return true;
 }
 
 function updateInitialKiboEnergy(request = {}) {
@@ -3352,6 +3427,26 @@ function normalizeInitialEnergyInput(value, maxValue) {
   return (
     Math.round((clampNumber(number, 0, maxValue) + Number.EPSILON) * 100) / 100
   );
+}
+
+function normalizeInitialResourceStep(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : 1;
+}
+
+function normalizeInitialSpecialResourceInput(value, maxValue, inputStep) {
+  const number = Number(value);
+  if (
+    !Number.isFinite(number) ||
+    !Number.isFinite(maxValue) ||
+    maxValue <= 0
+  ) {
+    return null;
+  }
+  const clampedValue = clampNumber(number, 0, maxValue);
+  const ratio = clampedValue / inputStep;
+  if (Math.abs(ratio - Math.round(ratio)) >= 1e-8) return null;
+  return Math.round(ratio) * inputStep;
 }
 
 function applyWorkbenchConfigurationCommand(command = {}) {

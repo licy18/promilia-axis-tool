@@ -26,10 +26,12 @@ describe('M10-B1 Ruby character combat profile', () => {
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
+      zeroDistanceSimulationComplete: true,
+      realClientEvidenceComplete: false,
       completionState: 'runtime-applied',
       denominator: {
         publicActionCount: 10,
-        reachableControlCount: 28,
+        reachableControlCount: 27,
         executionFormCount: 24,
         hitCount: 215,
         semanticEffectCount: 73,
@@ -49,6 +51,8 @@ describe('M10-B1 Ruby character combat profile', () => {
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
+      zeroDistanceSimulationComplete: true,
+      realClientEvidenceComplete: false,
     });
     expect(profile.runtimeCompilation.sourceCompilation.ownerContractHash).toBe(
       ownerContract.contractHash
@@ -77,7 +81,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       actionCount: 10,
       runtimeReadyActionCount: 10,
       executionFormCount: 24,
-      controlCount: 28,
+      controlCount: 27,
       hitCount: 215,
       resourceProfileCount: 1,
       resourceTransactionCount: 42,
@@ -87,7 +91,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     expect(sourceManifest.ownerId).toBe(RUBY_ID);
     expect(sourceManifest.summary.identityCount).toBeGreaterThan(1000);
     expect(reachableGraph.summary).toMatchObject({
-      controlCount: 28,
+      controlCount: 27,
       exclusionCount: 6,
       nodeKindCounts: {
         'public-action': 10,
@@ -109,6 +113,12 @@ describe('M10-B1 Ruby character combat profile', () => {
         name: '子弹',
         capacity: 12,
         initialValue: 0,
+        inputStep: 1,
+        scenarioConfigurable: true,
+        initialValueStatus: 'scenario-configurable-initial-state',
+        initialValueSourceIdentity: expect.stringContaining(
+          'initialRuntimeState.specialResourcesByActor'
+        ),
         status: 'verified-special-resource-profile-ready',
         applied: true,
       }),
@@ -506,32 +516,128 @@ describe('M10-B1 Ruby character combat profile', () => {
       applied: true,
     });
     expect(
-      unresolvedLedger.records.some(
-        record =>
-          record.sourceKind === 'passive-trigger' &&
-          record.reasons.includes(
-            'passive-listener-closure-static-evidence-gap'
-          )
+      unresolvedLedger.records.some(record =>
+        record.reasons.includes(
+          'passive-listener-closure-static-evidence-gap'
+        )
       )
-    ).toBe(true);
+    ).toBe(false);
+    expect(
+      unresolvedLedger.records.some(record =>
+        record.reasons.includes(
+          'passive-attack-percent-trigger-binding-static-evidence-gap'
+        )
+      )
+    ).toBe(false);
+    expect(
+      unresolvedLedger.records.find(record =>
+        record.reasons.includes(
+          'unnamed-secondary-passive-not-implemented-current-client'
+        )
+      )
+    ).toMatchObject({
+      sourceKind: 'passive-or-skill',
+      status: 'not-applicable',
+      impactClassification: 'not-applicable',
+      rawRecordIdentities: ['actor:103002:skill:10300262'],
+    });
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 432,
-      rawRecordCount: 603,
+      semanticRecordCount: 431,
+      rawRecordCount: 602,
       semanticStatusCounts: {
-        'not-applicable': 20,
-        'runtime-evidence-required': 5,
-        'static-evidence-gap': 407,
+        'not-applicable': 22,
+        'runtime-evidence-required': 4,
+        'static-evidence-gap': 405,
       },
       impactClassificationCounts: {
-        'gameplay-impacting': 265,
-        'not-applicable': 20,
+        'gameplay-impacting': 51,
+        'not-applicable': 22,
+        'superseded-by-semantic-transition-closure': 211,
         'wrapper-or-duplicate': 147,
       },
+      transitionCandidateSupersededCount: 211,
     });
+    expect(
+      unresolvedLedger.records.some(record =>
+        record.reasons.includes('initial-ammo-runtime-evidence-required')
+      )
+    ).toBe(false);
+    expect(
+      unresolvedLedger.records.find(
+        record =>
+          record.sourceKind === 'legacy-unreachable-element' &&
+          record.reasons.includes('legacy-or-unreachable-current-client')
+      )
+    ).toMatchObject({
+      status: 'not-applicable',
+      impactClassification: 'not-applicable',
+      sourceIdentity: expect.stringContaining('referenceCount=0'),
+    });
+    expect(ownerContract.contracts.passives).toEqual([
+      expect.objectContaining({
+        skillId: 10300261,
+        effectElementId: 103002275,
+        propertyElementId: 103002276,
+        applied: true,
+      }),
+    ]);
+    expect(
+      JSON.stringify(ownerContract.contracts)
+    ).not.toContain('103002252');
+    expect(
+      JSON.stringify(ownerContract.contracts)
+    ).not.toContain('103002253');
     expect(runtimeCapturePlan).toMatchObject({
       ownerId: RUBY_ID,
       status: 'runtime-evidence-required',
-      summary: { captureCount: 5 },
+      summary: {
+        captureCount: 4,
+        zeroDistanceBlockingCaptureCount: 0,
+        realClientEvidenceCaptureCount: 4,
+      },
+    });
+    expect(runtimeCapturePlan.entries).toHaveLength(4);
+    expect(
+      runtimeCapturePlan.entries.every(
+        entry =>
+          entry.evidenceScope === 'real-client-projectile-impact' &&
+          entry.blocksZeroDistanceSimulation === false &&
+          entry.scenarioRuntimeStatus ===
+            'scenario-assumed-zero-distance' &&
+          entry.referenceKinds.includes('bulletElements')
+      )
+    ).toBe(true);
+    expect(profile.simulationScopes).toMatchObject({
+      zeroDistance: {
+        status: 'complete',
+        complete: true,
+        scenarioContract: {
+          targetDistance: 0,
+          defaultWillHit: true,
+          projectileTravelFrames: 0,
+          projectileImpactPolicy: 'scenario-assumed-zero-distance',
+        },
+        gates: {
+          declared: true,
+          publicActionsRuntimeReady: true,
+          actionFormsApplied: true,
+          semanticTransitionClosureComplete: true,
+          requiredResourcesApplied: true,
+          requiredActionEffectsApplied: true,
+          requiredPassivesApplied: true,
+          zeroDistanceRuntimeCapturesResolved: true,
+          authoritativeGoldenPassed: true,
+        },
+        sourceEvidenceGapCount: 51,
+        sourceEvidenceGapsRemainAuditable: true,
+        realClientEvidenceCaptureCount: 4,
+      },
+      realClientEvidence: {
+        status: 'incomplete',
+        complete: false,
+        runtimeCaptureCount: 4,
+        staticEvidenceGapCount: 47,
+      },
     });
   });
 
@@ -546,7 +652,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
-        assertionCount: 114,
+        assertionCount: 118,
         failedCount: 0,
       },
     });
@@ -572,6 +678,20 @@ describe('M10-B1 Ruby character combat profile', () => {
       effects: {
         passiveMaxStacks: 6,
         firstPassiveMaxStackFrame: 1350,
+        inheritanceTransferCountByEffectId: {
+          'battle-element:103002275': 0,
+        },
+        passiveTrace: expect.arrayContaining([
+          expect.objectContaining({
+            frame: 2720,
+            targetId: 'actor-103002',
+          }),
+          expect.objectContaining({
+            frame: 3620,
+            operation: 'expire',
+            targetId: 'actor-103002',
+          }),
+        ]),
       },
       comparison: {
         primaryDamage: 891,
@@ -686,6 +806,8 @@ describe('M10-B1 Ruby character combat profile', () => {
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
+      zeroDistanceSimulationComplete: true,
+      realClientEvidenceComplete: false,
     });
     expect(
       mechanicsPackage.actionMappings.filter(
@@ -699,6 +821,9 @@ describe('M10-B1 Ruby character combat profile', () => {
       )
     ).toMatchObject({
       capacity: 12,
+      inputStep: 1,
+      scenarioConfigurable: true,
+      initialValue: 0,
       applied: true,
     });
   });

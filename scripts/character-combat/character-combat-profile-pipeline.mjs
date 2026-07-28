@@ -85,6 +85,9 @@ export function createCharacterCombatProfileSchema() {
       'profileHash',
       'pipelineMaturity',
       'combatCoverageState',
+      'zeroDistanceSimulationComplete',
+      'realClientEvidenceComplete',
+      'simulationScopes',
       'owner',
       'sourcePackage',
       'denominator',
@@ -117,6 +120,16 @@ export function createCharacterCombatProfileSchema() {
       },
       combatCoverageState: {
         enum: [...CHARACTER_COMBAT_COVERAGE_STATES],
+      },
+      zeroDistanceSimulationComplete: {
+        type: 'boolean',
+      },
+      realClientEvidenceComplete: {
+        type: 'boolean',
+      },
+      simulationScopes: {
+        type: 'object',
+        required: ['zeroDistance', 'realClientEvidence'],
       },
       owner: {
         type: 'object',
@@ -204,6 +217,18 @@ export function createCharacterCombatOutputRecords(artifacts) {
       artifacts.coverageMarkdown
     ),
   ];
+  if (artifacts.productBoundaryReport) {
+    records.push(
+      createJsonOutput(
+        'reports/m10/character-product-boundaries.json',
+        artifacts.productBoundaryReport
+      ),
+      createTextOutput(
+        'reports/m10/character-product-boundaries.md',
+        artifacts.productBoundaryMarkdown
+      )
+    );
+  }
   for (const artifact of artifacts.ownerArtifacts) {
     const ownerId = artifact.profile.owner.ownerId;
     const reportRoot = `reports/m10/${ownerId}`;
@@ -271,6 +296,8 @@ export function createCharacterCombatPipelineArtifacts({
   characterCatalog,
   skills,
   recipes = [],
+  productBoundaryReport = null,
+  productBoundaryMarkdown = null,
   compiledOwnerContracts = [],
   goldenRuntimeByOwner = new Map(),
   reportsByOwner = new Map(),
@@ -309,6 +336,7 @@ export function createCharacterCombatPipelineArtifacts({
     characters,
     recipeByOwnerId,
     compiledProfiles,
+    productBoundaryReport,
   });
   const sourcePackageHash =
     mechanicsPackage.characterCombatProfileCatalog?.sourcePackageHash ??
@@ -327,6 +355,10 @@ export function createCharacterCombatPipelineArtifacts({
       pipelineMaturity: profile.pipelineMaturity,
       combatCoverageState: profile.combatCoverageState,
       characterComplete: profile.characterComplete,
+      zeroDistanceSimulationComplete:
+        profile.zeroDistanceSimulationComplete === true,
+      realClientEvidenceComplete:
+        profile.realClientEvidenceComplete === true,
       completionState: profile.completionState,
       runtimeContractHash: profile.runtimeCompilation.contractHash,
       sourcePath: `src/data/generated/character-combat-profiles/${profile.owner.ownerId}.json`,
@@ -345,6 +377,12 @@ export function createCharacterCombatPipelineArtifacts({
       characterCompleteCount: compiledProfiles.filter(
         profile => profile.characterComplete === true
       ).length,
+      zeroDistanceSimulationCompleteCount: compiledProfiles.filter(
+        profile => profile.zeroDistanceSimulationComplete === true
+      ).length,
+      realClientEvidenceCompleteCount: compiledProfiles.filter(
+        profile => profile.realClientEvidenceComplete === true
+      ).length,
     },
   };
   return {
@@ -352,6 +390,8 @@ export function createCharacterCombatPipelineArtifacts({
     catalog,
     profiles: compiledProfiles,
     ownerArtifacts,
+    productBoundaryReport,
+    productBoundaryMarkdown,
     coverageManifest,
     coverageMarkdown: createAllCharacterCoverageMarkdown(coverageManifest),
   };
@@ -455,6 +495,17 @@ export function createCharacterCombatOwnerArtifacts({
     switchTriggers,
     hiddenAudit,
   });
+  const actionTransitionCoverage = createActionTransitionCoverage({
+    ownerId,
+    publicActions,
+    attackInputChains,
+    controlTransitionWindows,
+    variantEdges: ownerVariantEdges,
+    variantWindowBindings,
+    resourceTransactions,
+    actionEffectBindings,
+    rawEffects,
+  });
   const unresolvedLedger = createUnresolvedLedger({
     ownerId,
     publicActions,
@@ -467,6 +518,7 @@ export function createCharacterCombatOwnerArtifacts({
     hiddenAudit,
     occupancyAudit,
     recipe,
+    actionTransitionCoverage,
   });
   const unresolvedRecords = unresolvedLedger.records;
   const coverage = createCoverage({
@@ -588,17 +640,6 @@ export function createCharacterCombatOwnerArtifacts({
     resourceTransactions,
     actionEffectBindings,
   });
-  const actionTransitionCoverage = createActionTransitionCoverage({
-    ownerId,
-    publicActions,
-    attackInputChains,
-    controlTransitionWindows,
-    variantEdges: ownerVariantEdges,
-    variantWindowBindings,
-    resourceTransactions,
-    actionEffectBindings,
-    rawEffects,
-  });
   const capturePlan = createRuntimeCapturePlan(unresolvedRecords, ownerId);
   const goldenFixture = createGoldenFixture({
     ownerId,
@@ -660,6 +701,18 @@ export function createCharacterCombatOwnerArtifacts({
     runtimeCompilation,
     uiVerification: recipe.uiVerification,
   });
+  const simulationScopes = deriveCharacterCombatSimulationScopes({
+    recipe,
+    publicActions,
+    actionForms,
+    specialResourceProfiles,
+    actionEffectBindings,
+    passives,
+    actionTransitionCoverage,
+    capturePlan,
+    goldenFixture,
+    unresolvedRecords,
+  });
   const profileBase = {
     schemaVersion: CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION,
     kind: 'azpr-character-combat-profile',
@@ -667,6 +720,11 @@ export function createCharacterCombatOwnerArtifacts({
     pipelineMaturity: lifecycle.pipelineMaturity,
     combatCoverageState: lifecycle.combatCoverageState,
     characterComplete: lifecycle.characterComplete,
+    zeroDistanceSimulationComplete:
+      simulationScopes.zeroDistance.complete === true,
+    realClientEvidenceComplete:
+      simulationScopes.realClientEvidence.complete === true,
+    simulationScopes,
     maturityGates: lifecycle.gates,
     completionState: lifecycle.pipelineMaturity,
     targetPipelineMaturity: recipe.targetPipelineMaturity ?? 'profile-compiled',
@@ -815,6 +873,14 @@ export function validateCharacterCombatProfile({
         profile.pipelineMaturity === 'ui-verified')
   ) {
     issues.push('combat-coverage-state-invalid');
+  }
+  if (
+    profile.zeroDistanceSimulationComplete !==
+      (profile.simulationScopes?.zeroDistance?.complete === true) ||
+    profile.realClientEvidenceComplete !==
+      (profile.simulationScopes?.realClientEvidence?.complete === true)
+  ) {
+    issues.push('simulation-scope-state-invalid');
   }
   if (
     profile.coverage.length !== COVERAGE_DIMENSIONS.length ||
@@ -1929,6 +1995,148 @@ function deriveCharacterCombatLifecycle({
   };
 }
 
+function deriveCharacterCombatSimulationScopes({
+  recipe,
+  publicActions,
+  actionForms,
+  specialResourceProfiles,
+  actionEffectBindings,
+  passives,
+  actionTransitionCoverage,
+  capturePlan,
+  goldenFixture,
+  unresolvedRecords,
+}) {
+  const requirements = recipe?.simulationScopeRequirements?.zeroDistance ?? null;
+  const declared = requirements != null;
+  const requiredResourceIdentities = [
+    ...new Set(requirements?.requiredResourceIdentities ?? []),
+  ].sort();
+  const requiredActionEffectBindingIdentities = [
+    ...new Set(requirements?.requiredActionEffectBindingIdentities ?? []),
+  ].sort();
+  const requiredPassiveIdentities = [
+    ...new Set(requirements?.requiredPassiveIdentities ?? []),
+  ].sort();
+  const resourceByIdentity = new Map(
+    specialResourceProfiles.map(profile => [profile.resourceIdentity, profile])
+  );
+  const actionEffectByIdentity = new Map(
+    actionEffectBindings.map(binding => [binding.bindingIdentity, binding])
+  );
+  const passiveByIdentity = new Map(
+    passives.map(passive => [passive.passiveIdentity, passive])
+  );
+  const requiredResourcesApplied = requiredResourceIdentities.every(
+    identity => {
+      const profile = resourceByIdentity.get(identity);
+      return (
+        profile?.applied === true &&
+        profile.scenarioConfigurable === true &&
+        Number(profile.capacity) > 0 &&
+        Number(profile.inputStep) > 0
+      );
+    }
+  );
+  const requiredActionEffectsApplied =
+    requiredActionEffectBindingIdentities.every(
+      identity => actionEffectByIdentity.get(identity)?.applied === true
+    );
+  const requiredPassivesApplied = requiredPassiveIdentities.every(
+    identity => passiveByIdentity.get(identity)?.applied === true
+  );
+  const semanticTransitionClosureComplete =
+    Number(actionTransitionCoverage?.summary?.semanticTransitionCount) > 0 &&
+    Number(actionTransitionCoverage?.summary?.appliedTransitionCount) ===
+      Number(actionTransitionCoverage?.summary?.semanticTransitionCount) &&
+    Number(actionTransitionCoverage?.summary?.gameplayGapCount) === 0;
+  const zeroDistanceBlockingCaptureCount = Number(
+    capturePlan?.summary?.zeroDistanceBlockingCaptureCount ??
+      capturePlan?.entries?.filter(
+        entry => entry.blocksZeroDistanceSimulation !== false
+      ).length ??
+      0
+  );
+  const sourceGameplayGapCount = unresolvedRecords.filter(
+    record =>
+      record.impactClassification === 'gameplay-impacting' &&
+      record.status !== 'not-applicable'
+  ).length;
+  const sourceStaticEvidenceGapCount = unresolvedRecords.filter(
+    record =>
+      record.status === 'static-evidence-gap' &&
+      record.impactClassification === 'gameplay-impacting'
+  ).length;
+  const gates = {
+    declared,
+    scenarioPolicyIsZeroDistance:
+      requirements?.projectileImpactPolicy ===
+      'scenario-assumed-zero-distance',
+    publicActionsRuntimeReady: publicActions.every(
+      action =>
+        action.runtimeReady === true ||
+        action.classification === 'verified-zero' ||
+        action.notApplicable === true
+    ),
+    actionFormsApplied: actionForms.every(form =>
+      ['applied', 'not-applicable'].includes(form.status)
+    ),
+    semanticTransitionClosureComplete,
+    requiredResourcesApplied,
+    requiredActionEffectsApplied,
+    requiredPassivesApplied,
+    zeroDistanceRuntimeCapturesResolved:
+      zeroDistanceBlockingCaptureCount === 0,
+    authoritativeGoldenPassed:
+      goldenFixture?.validation?.passed === true &&
+      goldenFixture?.validation?.status ===
+        'authoritative-golden-runtime-expectation-passed',
+  };
+  const zeroDistanceComplete =
+    declared && Object.values(gates).every(Boolean);
+  const realClientEvidenceGates = {
+    zeroDistanceSimulationComplete: zeroDistanceComplete,
+    runtimeCapturePlanEmpty:
+      Number(capturePlan?.summary?.captureCount ?? 0) === 0,
+    sourceGameplayGapCountIsZero: sourceGameplayGapCount === 0,
+  };
+  return {
+    zeroDistance: {
+      status: declared
+        ? zeroDistanceComplete
+          ? 'complete'
+          : 'incomplete'
+        : 'not-declared',
+      complete: zeroDistanceComplete,
+      scenarioContract: {
+        targetDistance: 0,
+        defaultWillHit: true,
+        projectileTravelFrames: 0,
+        projectileImpactPolicy:
+          requirements?.projectileImpactPolicy ?? null,
+      },
+      requiredResourceIdentities,
+      requiredActionEffectBindingIdentities,
+      requiredPassiveIdentities,
+      gates,
+      sourceEvidenceGapCount: sourceGameplayGapCount,
+      sourceEvidenceGapsRemainAuditable: sourceGameplayGapCount > 0,
+      realClientEvidenceCaptureCount: Number(
+        capturePlan?.summary?.realClientEvidenceCaptureCount ?? 0
+      ),
+    },
+    realClientEvidence: {
+      status: Object.values(realClientEvidenceGates).every(Boolean)
+        ? 'complete'
+        : 'incomplete',
+      complete: Object.values(realClientEvidenceGates).every(Boolean),
+      gates: realClientEvidenceGates,
+      runtimeCaptureCount: Number(capturePlan?.summary?.captureCount ?? 0),
+      staticEvidenceGapCount: sourceStaticEvidenceGapCount,
+    },
+  };
+}
+
 function createRuntimeCompilation({
   ownerId,
   profileIdentity,
@@ -2051,6 +2259,7 @@ function createUnresolvedLedger({
   hiddenAudit,
   occupancyAudit,
   recipe,
+  actionTransitionCoverage,
 }) {
   const records = [];
   const append = ({
@@ -2059,6 +2268,9 @@ function createUnresolvedLedger({
     reasons,
     sourceIdentity,
     forcedStatus,
+    referenceKind,
+    sourceEvidenceStatus,
+    scenarioRuntimeStatus,
   }) => {
     const normalizedReasons = [
       ...new Set((reasons ?? []).filter(Boolean).map(String)),
@@ -2073,6 +2285,9 @@ function createUnresolvedLedger({
       status,
       reasons: normalizedReasons,
       sourceIdentity: sourceIdentity ?? null,
+      referenceKind: referenceKind ?? null,
+      sourceEvidenceStatus: sourceEvidenceStatus ?? null,
+      scenarioRuntimeStatus: scenarioRuntimeStatus ?? null,
     });
   };
   for (const action of publicActions) {
@@ -2097,6 +2312,9 @@ function createUnresolvedLedger({
         sourceKind: 'hit',
         reasons: hit.reasons ?? [hit.sourceEvidenceStatus],
         sourceIdentity: hit.sourceIdentity,
+        referenceKind: hit.referenceKind,
+        sourceEvidenceStatus: hit.sourceEvidenceStatus,
+        scenarioRuntimeStatus: hit.scenarioRuntimeStatus,
       });
     }
     for (const effect of control.effects ?? []) {
@@ -2219,7 +2437,13 @@ function createUnresolvedLedger({
   );
   const semanticGroups = new Map();
   for (const record of rawRecords) {
-    const impactClassification = classifyUnresolvedImpactClassification(record);
+    const impactClassification = classifyUnresolvedImpactClassification(
+      record,
+      {
+        recipe,
+        actionTransitionCoverage,
+      }
+    );
     const canonicalKey = createUnresolvedCanonicalKey(
       record,
       impactClassification
@@ -2229,6 +2453,15 @@ function createUnresolvedLedger({
       existing.rawRecordIdentities.push(record.recordIdentity);
       if (record.sourceIdentity) {
         existing.sourceIdentities.push(record.sourceIdentity);
+      }
+      if (record.referenceKind) {
+        existing.referenceKinds.push(record.referenceKind);
+      }
+      if (record.sourceEvidenceStatus) {
+        existing.sourceEvidenceStatuses.push(record.sourceEvidenceStatus);
+      }
+      if (record.scenarioRuntimeStatus) {
+        existing.scenarioRuntimeStatuses.push(record.scenarioRuntimeStatus);
       }
       continue;
     }
@@ -2241,6 +2474,13 @@ function createUnresolvedLedger({
       reasons: record.reasons,
       sourceIdentity: record.sourceIdentity,
       sourceIdentities: record.sourceIdentity ? [record.sourceIdentity] : [],
+      referenceKinds: record.referenceKind ? [record.referenceKind] : [],
+      sourceEvidenceStatuses: record.sourceEvidenceStatus
+        ? [record.sourceEvidenceStatus]
+        : [],
+      scenarioRuntimeStatuses: record.scenarioRuntimeStatus
+        ? [record.scenarioRuntimeStatus]
+        : [],
       rawRecordIdentities: [record.recordIdentity],
     });
   }
@@ -2248,6 +2488,13 @@ function createUnresolvedLedger({
     .map(record => ({
       ...record,
       sourceIdentities: [...new Set(record.sourceIdentities)].sort(),
+      referenceKinds: [...new Set(record.referenceKinds)].sort(),
+      sourceEvidenceStatuses: [
+        ...new Set(record.sourceEvidenceStatuses),
+      ].sort(),
+      scenarioRuntimeStatuses: [
+        ...new Set(record.scenarioRuntimeStatuses),
+      ].sort(),
       rawRecordIdentities: [...new Set(record.rawRecordIdentities)].sort(),
       rawRecordCount: new Set(record.rawRecordIdentities).size,
     }))
@@ -2268,7 +2515,15 @@ function createUnresolvedLedger({
         record => record.impactClassification === 'gameplay-impacting'
       ).length,
       wrapperOrDuplicateCount: semanticRecords.filter(
-        record => record.impactClassification === 'wrapper-or-duplicate'
+        record =>
+          record.impactClassification === 'wrapper-or-duplicate' ||
+          record.impactClassification ===
+            'superseded-by-semantic-transition-closure'
+      ).length,
+      transitionCandidateSupersededCount: semanticRecords.filter(
+        record =>
+          record.impactClassification ===
+          'superseded-by-semantic-transition-closure'
       ).length,
       unreachableOrNotApplicableCount: semanticRecords.filter(record =>
         ['unreachable', 'not-applicable'].includes(record.impactClassification)
@@ -2277,7 +2532,10 @@ function createUnresolvedLedger({
   };
 }
 
-function classifyUnresolvedImpactClassification(record) {
+function classifyUnresolvedImpactClassification(
+  record,
+  { recipe, actionTransitionCoverage } = {}
+) {
   if (record.status === 'not-applicable') return 'not-applicable';
   const reasons = new Set(record.reasons ?? []);
   if (
@@ -2293,6 +2551,21 @@ function classifyUnresolvedImpactClassification(record) {
     )
   ) {
     return 'wrapper-or-duplicate';
+  }
+  const transitionClosurePolicy =
+    recipe?.coveragePolicies
+      ?.semanticTransitionClosureSupersedesRawCandidateGaps === true;
+  const transitionClosureComplete =
+    Number(actionTransitionCoverage?.summary?.semanticTransitionCount) > 0 &&
+    Number(actionTransitionCoverage?.summary?.appliedTransitionCount) ===
+      Number(actionTransitionCoverage?.summary?.semanticTransitionCount) &&
+    Number(actionTransitionCoverage?.summary?.gameplayGapCount) === 0;
+  if (
+    transitionClosurePolicy &&
+    transitionClosureComplete &&
+    record.sourceKind === 'variant-edge'
+  ) {
+    return 'superseded-by-semantic-transition-closure';
   }
   return 'gameplay-impacting';
 }
@@ -2328,18 +2601,36 @@ function createUnresolvedCanonicalKey(record, impactClassification) {
 function createRuntimeCapturePlan(records, ownerId) {
   const entries = records
     .filter(record => record.status === 'runtime-evidence-required')
-    .map(record => ({
-      captureIdentity: `capture:${record.recordIdentity}`,
-      ownerId,
-      sourceRecordIdentity: record.recordIdentity,
-      triggerScenario: inferCaptureScenario(record),
-      observe: inferCaptureFields(record),
-      successCriteria:
-        'captured runtime identity resolves the listed condition without changing static source status',
-      sourceIdentity:
-        record.sourceIdentity ??
-        `character-combat-record:${record.recordIdentity}`,
-    }));
+    .map(record => {
+      const zeroDistanceScenarioResolved =
+        record.sourceKind === 'hit' &&
+        record.referenceKinds?.includes('bulletElements') &&
+        record.scenarioRuntimeStatuses?.includes(
+          'scenario-assumed-zero-distance'
+        );
+      return {
+        captureIdentity: `capture:${record.recordIdentity}`,
+        ownerId,
+        sourceRecordIdentity: record.recordIdentity,
+        triggerScenario: inferCaptureScenario(record),
+        observe: inferCaptureFields(record),
+        successCriteria:
+          'captured runtime identity resolves the listed condition without changing static source status',
+        evidenceScope: zeroDistanceScenarioResolved
+          ? 'real-client-projectile-impact'
+          : 'runtime-mechanism',
+        blocksZeroDistanceSimulation: !zeroDistanceScenarioResolved,
+        scenarioRuntimeStatus: zeroDistanceScenarioResolved
+          ? 'scenario-assumed-zero-distance'
+          : (record.scenarioRuntimeStatuses?.[0] ?? null),
+        sourceEvidenceStatus:
+          record.sourceEvidenceStatuses?.[0] ?? record.status,
+        referenceKinds: record.referenceKinds ?? [],
+        sourceIdentity:
+          record.sourceIdentity ??
+          `character-combat-record:${record.recordIdentity}`,
+      };
+    });
   return {
     schemaVersion: 1,
     kind: 'azpr-character-combat-runtime-capture-plan',
@@ -2348,6 +2639,12 @@ function createRuntimeCapturePlan(records, ownerId) {
     entries,
     summary: {
       captureCount: entries.length,
+      zeroDistanceBlockingCaptureCount: entries.filter(
+        entry => entry.blocksZeroDistanceSimulation
+      ).length,
+      realClientEvidenceCaptureCount: entries.filter(
+        entry => entry.evidenceScope === 'real-client-projectile-impact'
+      ).length,
     },
   };
 }
@@ -3257,9 +3554,16 @@ function createAllCharacterCoverageManifest({
   characters,
   recipeByOwnerId,
   compiledProfiles,
+  productBoundaryReport,
 }) {
   const profileByOwnerId = new Map(
     compiledProfiles.map(profile => [profile.owner.ownerId, profile])
+  );
+  const productBoundariesByOwnerId = new Map(
+    (productBoundaryReport?.entries ?? []).map(entry => [
+      Number(entry.ownerId),
+      entry,
+    ])
   );
   const rows = M10_PUBLIC_CHARACTER_ORDER.map((ownerId, orderIndex) => {
     const character = characters.find(item => Number(item.id) === ownerId);
@@ -3308,6 +3612,7 @@ function createAllCharacterCoverageManifest({
     ).length;
     const profile = profileByOwnerId.get(ownerId);
     const recipe = recipeByOwnerId.get(ownerId);
+    const productBoundary = productBoundariesByOwnerId.get(ownerId) ?? null;
     const route = resolveCharacterCombatRoute({
       ownerId,
       orderIndex,
@@ -3334,6 +3639,10 @@ function createAllCharacterCoverageManifest({
         profile?.combatCoverageState ??
         (actions.length ? 'evidence-required' : 'evidence-required'),
       characterComplete: profile?.characterComplete === true,
+      zeroDistanceSimulationComplete:
+        profile?.zeroDistanceSimulationComplete === true,
+      realClientEvidenceComplete:
+        profile?.realClientEvidenceComplete === true,
       publicActionCount: actions.length,
       reachableFormCount:
         variantNodes.length +
@@ -3346,6 +3655,13 @@ function createAllCharacterCoverageManifest({
       stateMachineCount: states.length,
       derivedEdgeCount: variantEdges.length,
       passiveCount: passives.length,
+      unnamedSecondaryPassive: productBoundary
+        ? {
+            skillId: Number(productBoundary.skillId),
+            status: productBoundary.classification,
+            reason: productBoundary.reason,
+          }
+        : null,
       switchRelationCount: switches.length,
       switchTriggerPhases: [
         ...new Set(switches.map(item => item.triggerPhase).filter(Boolean)),
@@ -3384,6 +3700,7 @@ function createAllCharacterCoverageManifest({
       states: [...CHARACTER_COMBAT_PROGRESS_STATES],
       oneCharacterPerReviewCommitAfterM10A: true,
       automaticBulkGreenIsForbidden: true,
+      unnamedSecondaryPassiveClassification: 'not-applicable',
       recommendedSecondProfileOwnerId: 103002,
       recommendedThirdProfileOwnerId: 101003,
     },
@@ -3399,6 +3716,15 @@ function createAllCharacterCoverageManifest({
         (sum, row) => sum + row.runtimeReadyActionCount,
         0
       ),
+      unnamedSecondaryPassiveCount: rows.filter(
+        row => row.unnamedSecondaryPassive
+      ).length,
+      zeroDistanceSimulationCompleteCount: rows.filter(
+        row => row.zeroDistanceSimulationComplete
+      ).length,
+      realClientEvidenceCompleteCount: rows.filter(
+        row => row.realClientEvidenceComplete
+      ).length,
     },
   };
 }
@@ -3495,6 +3821,10 @@ function createOwnerSummaryMarkdown({
     `- 描述覆盖：${descriptionCoverage.summary.entryCount}`,
     `- Runtime ready 动作：${runtimeCoverage.summary.runtimeReadyActionCount}/${runtimeCoverage.summary.actionCount}`,
     `- Runtime capture：${capturePlan.summary.captureCount}`,
+    `- 零距离模拟完整：${profile.zeroDistanceSimulationComplete ? 'yes' : 'no'}`,
+    `- 实机证据完整：${profile.realClientEvidenceComplete ? 'yes' : 'no'}`,
+    `- 零距离阻断 capture：${profile.simulationScopes.zeroDistance.gates.zeroDistanceRuntimeCapturesResolved ? 0 : capturePlan.summary.zeroDistanceBlockingCaptureCount}`,
+    `- 实机证据 capture：${profile.simulationScopes.realClientEvidence.runtimeCaptureCount}`,
     '',
     '## 维度状态',
     '',

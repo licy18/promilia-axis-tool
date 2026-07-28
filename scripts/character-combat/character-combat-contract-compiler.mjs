@@ -888,7 +888,9 @@ function applyActionEffectBinding(effect, binding) {
           binding.lifecycleMaxStacks ??
           effect.lifecycle?.maxStacks ??
           binding.lifecycleStackDelta,
+        inheritance: binding.inheritance ?? null,
       },
+      inheritance: binding.inheritance ?? null,
       sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
@@ -965,8 +967,16 @@ function compileSpecialResourceContracts({
         `character combat resource capacity mismatch: ${ownerId}/${elementId} expected ${definition.expectedCapacity}, received ${profile.capacity}`
       );
     }
+    const initialStatePolicy = compileSpecialResourceInitialStatePolicy({
+      ownerId,
+      elementId,
+      capacity: profile.capacity,
+      definition: definition.initialStatePolicy,
+      fallbackProfile: profile,
+    });
     profiles.push({
       ...profile,
+      ...initialStatePolicy,
       contractSourceIdentity:
         definition.sourceIdentity ??
         `character-combat-recipe:${ownerId}#compiler.specialResources[elementId=${elementId}]`,
@@ -1007,6 +1017,56 @@ function compileSpecialResourceContracts({
   return {
     profiles: sortByIdentity(profiles),
     operations: sortByIdentity(operations),
+  };
+}
+
+function compileSpecialResourceInitialStatePolicy({
+  ownerId,
+  elementId,
+  capacity,
+  definition,
+  fallbackProfile,
+}) {
+  const source =
+    definition && typeof definition === 'object' ? definition : null;
+  const kind =
+    source?.kind ??
+    fallbackProfile?.initialValueStatus ??
+    'scenario-configurable-initial-state';
+  if (kind !== 'scenario-configurable-initial-state') {
+    throw new Error(
+      `character combat resource initial-state policy unsupported: ${ownerId}/${elementId}/${kind}`
+    );
+  }
+  const maxValue = Number(capacity);
+  const defaultValue = Number(
+    source?.defaultValue ?? fallbackProfile?.initialValue ?? 0
+  );
+  const inputStep = Number(
+    source?.inputStep ?? fallbackProfile?.inputStep ?? 1
+  );
+  if (
+    !Number.isFinite(maxValue) ||
+    maxValue <= 0 ||
+    !Number.isFinite(defaultValue) ||
+    defaultValue < 0 ||
+    defaultValue > maxValue ||
+    !Number.isFinite(inputStep) ||
+    inputStep <= 0
+  ) {
+    throw new Error(
+      `character combat resource initial-state policy invalid: ${ownerId}/${elementId}`
+    );
+  }
+  return {
+    initialValue: defaultValue,
+    inputStep,
+    scenarioConfigurable: true,
+    initialValueStatus: 'scenario-configurable-initial-state',
+    initialValueSourceIdentity:
+      source?.sourceIdentity ??
+      fallbackProfile?.initialValueSourceIdentity ??
+      'AzPrCombatScenario#initialRuntimeState.specialResourcesByActor',
   };
 }
 
@@ -2430,6 +2490,11 @@ function compileActionEffectBindings({
       'action effect binding'
     );
     const element = operators.readElementAsset(definition.elementId);
+    const inheritanceContainer =
+      definition.inheritanceContainerElementId == null
+        ? null
+        : operators.readElementAsset(definition.inheritanceContainerElementId);
+    const inheritance = compileElementInheritance(inheritanceContainer);
     const triggerFrame = Number(definition.triggerFrame);
     const tuningProfile = definition.tuningMarkProfileKey
       ? (tuningMarkProfiles ?? []).find(
@@ -2489,6 +2554,7 @@ function compileActionEffectBindings({
           ? null
           : Number(definition.durationMsOverride),
       targetKindOverride: definition.targetKindOverride ?? null,
+      inheritance,
       status: 'applied',
       applied: true,
     };
@@ -2920,6 +2986,7 @@ function compileRuntimeEffectBindings({
       definition.durationElementId == null
         ? propertyAsset
         : operators.readElementAsset(definition.durationElementId);
+    const inheritance = compileElementInheritance(durationAsset);
     const modifier = propertyAsset
       ? compileRuntimePropertyModifier({
           asset: propertyAsset,
@@ -2984,6 +3051,7 @@ function compileRuntimeEffectBindings({
       maxStacks: Math.max(1, Number(definition.maxStacks) || 1),
       modifiers: modifier ? [modifier] : [],
       directSp,
+      inheritance,
       sourceIdentity: [
         propertyAsset?.sourceIdentity,
         directSpAsset?.sourceIdentity,
@@ -2996,6 +3064,51 @@ function compileRuntimeEffectBindings({
       applied: true,
     };
   });
+}
+
+export function compileElementInheritance(asset) {
+  if (!asset) return null;
+  const teamElementRaw = Number(asset.tree?.inherit);
+  const isTeamElement = teamElementRaw === 1;
+  const inheritTypeRaw = Number(asset.tree?.inheritType);
+  if (!Number.isInteger(inheritTypeRaw) || inheritTypeRaw < 0) {
+    throw new Error(
+      `character combat element inheritance type invalid: ${asset.elementId}/${asset.tree?.inheritType}`
+    );
+  }
+  if (inheritTypeRaw === 0) {
+    return {
+      inheritOnControlledActorSwitch: false,
+      inheritType: null,
+      inheritTypeRaw,
+      isTeamElement,
+      teamElementRaw,
+      containerElementId: Number(asset.elementId),
+      containerPathId: asset.pathId ?? null,
+      sourceIdentity: asset.sourceIdentity,
+      status: 'verified-element-no-controlled-actor-inheritance',
+      applied: true,
+    };
+  }
+  const inheritType =
+    inheritTypeRaw === 1 ? 'self' : inheritTypeRaw === 2 ? 'source' : null;
+  if (!inheritType) {
+    throw new Error(
+      `character combat element inheritance type unsupported: ${asset.elementId}/${inheritTypeRaw}`
+    );
+  }
+  return {
+    inheritOnControlledActorSwitch: true,
+    inheritType,
+    inheritTypeRaw,
+    isTeamElement,
+    teamElementRaw,
+    containerElementId: Number(asset.elementId),
+    containerPathId: asset.pathId ?? null,
+    sourceIdentity: asset.sourceIdentity,
+    status: 'verified-element-inheritance-ready',
+    applied: true,
+  };
 }
 
 function compileRuntimePropertyModifier({

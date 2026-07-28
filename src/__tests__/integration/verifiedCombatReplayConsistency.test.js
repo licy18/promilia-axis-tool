@@ -326,7 +326,15 @@ describe('verified combat project replay consistency', () => {
       ],
     ]);
     expect(signatures[0].specialResourceCurveSignature).toEqual([
-      ['actor-101010', 'actor:101010:element:101010115', 24, 0, 100],
+      [
+        'actor-101010',
+        'actor:101010:element:101010115',
+        24,
+        0,
+        100,
+        1,
+        true,
+      ],
     ]);
     expect(signatures[0].jadeEffectSignature).toEqual(
       expect.arrayContaining([
@@ -359,6 +367,60 @@ describe('verified combat project replay consistency', () => {
       expect(signature).toEqual(signatures[0]);
     }
   });
+
+  it('restores scenario-configured Ruby ammo across all five project carriers', async () => {
+    const source = createRubyInitialAmmoReplayDraft();
+    const duplicated = duplicateWorkbenchScenario(
+      source.scenarioWorkspace,
+      source.scenarioWorkspace.activeScenarioId,
+      source
+    );
+    const storage = createMemoryStorage();
+    saveWorkbenchDraft(storage, source);
+    const local = loadWorkbenchDraft(storage);
+    const json = parseWorkbenchProjectFile(
+      serializeWorkbenchProjectFile(source, EXPORTED_AT)
+    );
+    const share = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(source, EXPORTED_AT)
+    );
+    const png = await embedWorkbenchProjectInPng(
+      new Uint8Array(Buffer.from(ONE_PIXEL_PNG_BASE64, 'base64')),
+      createWorkbenchProjectPngMetadata(source, EXPORTED_AT)
+    );
+    const pngDraft = await parseWorkbenchProjectPng(png);
+    const drafts = [duplicated.scenario.draft, local, json, share, pngDraft];
+
+    for (const draft of drafts) {
+      expect(draft.initialRuntimeState.specialResourcesByActor).toEqual([
+        expect.objectContaining({
+          actorId: 'actor-103002',
+          characterId: 103002,
+          resourceIdentity: 'actor:103002:element:103002047',
+          currentValue: 6,
+          maxValue: 12,
+          inputStep: 1,
+          scenarioConfigurable: true,
+          baselineStatus: 'scenario-configurable-initial-state',
+        }),
+      ]);
+    }
+    const signatures = drafts.map(createVerifiedReplaySignature);
+    expect(signatures[0].specialResourceCurveSignature).toEqual([
+      [
+        'actor-103002',
+        'actor:103002:element:103002047',
+        6,
+        6,
+        12,
+        1,
+        true,
+      ],
+    ]);
+    for (const signature of signatures.slice(1)) {
+      expect(signature).toEqual(signatures[0]);
+    }
+  }, 30_000);
 });
 
 function createAttackInputReplayDraft() {
@@ -636,15 +698,67 @@ function createSpecialResourceReplayDraft() {
             characterId: 101010,
             actorName: '涂山小玉',
             resourceIdentity: 'actor:101010:element:101010115',
-            resourceName: '爆发状态叠层',
-            currentValue: 24,
-            maxValue: 100,
-            activeStates: [],
-          },
+          resourceName: '爆发状态叠层',
+          currentValue: 24,
+          maxValue: 100,
+          inputStep: 1,
+          scenarioConfigurable: true,
+          baselineStatus: 'scenario-configurable-initial-state',
+          activeStates: [],
+        },
         ],
       },
       runtimeSampleCaptures: [],
       selectedActionId: 'verified-replay-jade-charged',
+    },
+    EXPORTED_AT
+  );
+}
+
+function createRubyInitialAmmoReplayDraft() {
+  const base = createDefaultWorkbenchDraftState();
+  const teamSlots = [
+    { slotId: 'team-slot-1', position: 0, characterId: 103002 },
+    { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+    { slotId: 'team-slot-3', position: 2, characterId: 101007 },
+  ];
+  const selection = {
+    ...base.selection,
+    characterId: 103002,
+    secondaryCharacterId: 101003,
+  };
+  return createWorkbenchDraftSnapshot(
+    {
+      ...base,
+      selection,
+      teamSlots,
+      actorConfigs: normalizeWorkbenchActorConfigs([], selection, teamSlots),
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+      actionDrafts: [],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-103002',
+          characterId: 103002,
+          actorName: '红宝石',
+        },
+        specialResourcesByActor: [
+          {
+            actorId: 'actor-103002',
+            characterId: 103002,
+            actorName: '红宝石',
+            resourceIdentity: 'actor:103002:element:103002047',
+            resourceName: '子弹',
+            currentValue: 6,
+            maxValue: 12,
+            inputStep: 1,
+            scenarioConfigurable: true,
+            baselineStatus: 'scenario-configurable-initial-state',
+          },
+        ],
+      },
+      runtimeSampleCaptures: [],
+      selectedActionId: null,
     },
     EXPORTED_AT
   );
@@ -772,6 +886,8 @@ function createVerifiedReplaySignature(draft) {
       curve.initialValue,
       curve.currentValue,
       curve.maxValue,
+      curve.inputStep,
+      curve.scenarioConfigurable,
     ]),
     jadeEffectSignature: (result.effectTimeline?.events ?? [])
       .filter(event =>

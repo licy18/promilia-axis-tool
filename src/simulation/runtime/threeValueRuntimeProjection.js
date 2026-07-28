@@ -62,7 +62,11 @@ export function createThreeValueRuntimeProjection({
     createThreeValueRuntimeHitTransactionByDeltaId(hitTransactions);
   const runtimeEffectTimeline =
     effectTimeline ??
-    createEffectRuntimeTimeline({ scenario, actionExecutionPlan });
+    createEffectRuntimeTimeline({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline: runtimeControlledActorTimeline,
+    });
   const runtimeActionEffectRelationGraph =
     actionEffectRelationGraph ??
     createActionEffectRelationGraph({

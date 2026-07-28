@@ -11,14 +11,19 @@
       type="number"
       min="0"
       :max="normalizedMaxValue"
-      step="0.01"
-      :aria-label="`${label}初始能量`"
+      :step="normalizedStepValue"
+      :aria-label="`${label}${isSpecialResource ? '初始值' : '初始能量'}`"
       :data-owner-kind="ownerKind"
       :data-actor-id="actorId"
       :data-character-id="characterId"
       :data-team-slot-id="slotId"
       :data-kibo-id="kiboId"
-      data-testid="workbench-timeline-initial-energy-input"
+      :data-resource-identity="resourceIdentity"
+      :data-testid="
+        isSpecialResource
+          ? 'workbench-timeline-initial-special-resource-input'
+          : 'workbench-timeline-initial-energy-input'
+      "
       @input="handleInput"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -51,6 +56,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  stepValue: {
+    type: Number,
+    default: 0.01,
+  },
   ownerKind: {
     type: String,
     required: true,
@@ -71,10 +80,16 @@ const props = defineProps({
     type: [Number, String],
     default: '',
   },
+  resourceIdentity: {
+    type: String,
+    default: '',
+  },
 });
 
 const emit = defineEmits(['commit']);
 const normalizedMaxValue = computed(() => normalizeMaxValue(props.maxValue));
+const normalizedStepValue = computed(() => normalizeStepValue(props.stepValue));
+const isSpecialResource = computed(() => props.ownerKind === 'special-resource');
 const draftValue = ref(formatEnergyValue(props.value));
 const dirty = ref(false);
 const displayValue = computed(() =>
@@ -121,12 +136,21 @@ function commitDraft() {
     draftValue.value = formatEnergyValue(props.value);
     return;
   }
-  const nextValue = roundInputValue(
-    Math.min(normalizedMaxValue.value, Math.max(0, parsedValue))
+  const clampedValue = Math.min(
+    normalizedMaxValue.value,
+    Math.max(0, parsedValue)
   );
+  if (!isValueAlignedToStep(clampedValue, normalizedStepValue.value)) {
+    dirty.value = false;
+    draftValue.value = formatEnergyValue(props.value);
+    return;
+  }
+  const nextValue = roundInputValue(clampedValue, normalizedStepValue.value);
   dirty.value = false;
   draftValue.value = formatEnergyValue(nextValue);
-  if (nextValue !== roundInputValue(props.value)) {
+  if (
+    nextValue !== roundInputValue(props.value, normalizedStepValue.value)
+  ) {
     emit('commit', nextValue);
   }
 }
@@ -136,8 +160,23 @@ function normalizeMaxValue(value) {
   return Number.isFinite(number) && number > 0 ? number : 0;
 }
 
-function roundInputValue(value) {
-  return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+function normalizeStepValue(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : 0.01;
+}
+
+function isValueAlignedToStep(value, step) {
+  const ratio = Number(value) / Number(step);
+  return Math.abs(ratio - Math.round(ratio)) < 1e-8;
+}
+
+function roundInputValue(value, step = normalizedStepValue.value) {
+  const precision = Math.min(
+    8,
+    Math.max(0, String(step).split('.')[1]?.length ?? 0)
+  );
+  const factor = 10 ** precision;
+  return Math.round((Number(value) + Number.EPSILON) * factor) / factor;
 }
 
 function formatEnergyValue(value) {

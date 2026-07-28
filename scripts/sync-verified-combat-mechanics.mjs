@@ -21,6 +21,12 @@ import {
   createCharacterCombatProductionBuild,
   discoverCharacterCombatRecipes,
 } from './character-combat/character-combat-production-orchestrator.mjs';
+import {
+  applyCharacterCombatProductBoundaries,
+  assertUnnamedSecondaryPassiveRuntimeIsolation,
+  createCharacterCombatProductBoundaryMarkdown,
+  discoverUnnamedSecondaryPassiveBoundaries,
+} from './character-combat/character-combat-product-boundaries.mjs';
 
 const SCRIPT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
@@ -312,25 +318,42 @@ if (isDirectExecution()) {
 export async function createVerifiedCombatMechanicsBuild({
   recipes: recipeOverrides,
 } = {}) {
-  const recipes =
+  const discoveredRecipes =
     recipeOverrides ??
     discoverCharacterCombatRecipes({
       recipeRoot: CHARACTER_COMBAT_RECIPE_ROOT,
     });
+  assertRequiredInputs();
+  const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
+  const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
+  const productBoundaryReport = discoverUnnamedSecondaryPassiveBoundaries({
+    characterCatalog,
+    skills: seed.gameData?.skills ?? [],
+  });
+  if (productBoundaryReport.status !== 'unnamed-secondary-passive-boundary-ready') {
+    throw new Error(
+      `character combat product boundary incomplete: ${JSON.stringify(
+        productBoundaryReport.unresolved
+      )}`
+    );
+  }
+  const productBoundaryMarkdown =
+    createCharacterCombatProductBoundaryMarkdown(productBoundaryReport);
+  const recipes = applyCharacterCombatProductBoundaries({
+    recipes: discoveredRecipes,
+    boundaryReport: productBoundaryReport,
+  });
   const controlPolicyBySkillId =
     createCharacterCombatControlPolicyIndex(recipes);
-  assertRequiredInputs();
   const validation = runCalculatorValidation();
   const evidence = readJson(EVIDENCE_PATH);
   validateEvidence(evidence, validation);
   const mechanismEvidence = createMechanismEvidenceManifest();
   const battleTargetTypeContract = createBattleTargetTypeContract();
   const overlimitMechanics = readJson(OVERLIMIT_MECHANICS_PATH);
-  const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
   const kiboCatalog = readJson(
     path.join(GENERATED_ROOT, 'workbench-kibo-action-catalog.json')
   );
-  const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
   const specialResourceIdentityDiscovery =
     discoverSpecialResourceIdentityHints(characterCatalog);
   const skillLogicRows = readJson(SKILL_LOGIC_PATH).rows;
@@ -542,6 +565,8 @@ export async function createVerifiedCombatMechanicsBuild({
     recipes,
     characterCatalog,
     skills: seed.gameData?.skills ?? [],
+    productBoundaryReport,
+    productBoundaryMarkdown,
     compilerEvidence: {
       controls: controlBindings,
       specialResourceProfiles: specialResourceCatalog.profiles,
@@ -608,6 +633,38 @@ export async function createVerifiedCombatMechanicsBuild({
         characterCatalog,
         characterCombatOwnerCompilations: ownerCompilations,
       });
+      assertUnnamedSecondaryPassiveRuntimeIsolation({
+        recipes,
+        ownerCompilations,
+        mechanicsPackage: packageValue,
+        boundaryReport: productBoundaryReport,
+      });
+      packageValue.characterCombatProductBoundaries = {
+        schemaVersion: productBoundaryReport.schemaVersion,
+        kind: productBoundaryReport.kind,
+        status: productBoundaryReport.status,
+        policy: productBoundaryReport.policy,
+        entries: productBoundaryReport.entries.map(entry => ({
+          boundaryIdentity: entry.boundaryIdentity,
+          ownerId: entry.ownerId,
+          ownerName: entry.ownerName,
+          skillId: entry.skillId,
+          passiveSlotIndex: entry.passiveSlotIndex,
+          classification: entry.classification,
+          reason: entry.reason,
+          sourceIdentities: entry.sourceIdentities,
+        })),
+        summary: productBoundaryReport.summary,
+      };
+      packageValue.summary.unnamedSecondaryPassiveCount =
+        productBoundaryReport.summary.matchedCharacterCount;
+      packageValue.packageHash = sha256(
+        JSON.stringify({
+          basePackageHash: packageValue.packageHash,
+          characterCombatProductBoundaries:
+            packageValue.characterCombatProductBoundaries,
+        })
+      );
       const semanticEffectCatalog = createSemanticEffectCatalog({
         controlBindings: publicControlBindings,
         packageValue,
@@ -695,6 +752,44 @@ export async function createVerifiedCombatMechanicsBuild({
   const semanticEffectCatalog =
     characterCombatBuild.sharedContext.semanticEffectCatalog;
   const characterCombatArtifacts = characterCombatBuild.pipelineArtifacts;
+  assertUnnamedSecondaryPassiveRuntimeIsolation({
+    recipes,
+    ownerCompilations: characterCombatBuild.ownerCompilations,
+    mechanicsPackage: packageValue,
+    boundaryReport: productBoundaryReport,
+  });
+  const elementInheritanceAudit = createElementInheritanceFieldAudit({
+    allIndexedElementsById,
+    controlBindings,
+  });
+  const characterCombatVerificationGoldens = [];
+  for (const recipe of recipes) {
+    for (const scenarioRecipe of recipe.verificationGoldenScenarios ?? []) {
+      const goldenRuntime = await createCharacterCombatGoldenRuntime({
+        repositoryRoot: REPO_ROOT,
+        mechanicsPackage: packageValue,
+        recipe: {
+          ...recipe,
+          goldenScenario: scenarioRecipe,
+        },
+      });
+      if (goldenRuntime.validation?.passed !== true) {
+        throw new Error(
+          `character combat verification golden failed: ${recipe.ownerId}/${scenarioRecipe.scenarioIdentity}`
+        );
+      }
+      characterCombatVerificationGoldens.push({
+        ownerId: Number(recipe.ownerId),
+        fileName: String(
+          scenarioRecipe.outputFileName ??
+            `${scenarioRecipe.scenarioIdentity}.json`
+        )
+          .replace(/[^a-z0-9._-]+/gi, '-')
+          .replace(/^-+|-+$/g, ''),
+        goldenRuntime,
+      });
+    }
+  }
   if (!xiaoyuActionOccupancyAudit || !xiaoyuHiddenInputAudit) {
     throw new Error('gold standard character combat reports missing');
   }
@@ -823,6 +918,34 @@ export async function createVerifiedCombatMechanicsBuild({
     ...createCharacterCombatOutputRecords(characterCombatArtifacts).map(
       record => [path.resolve(REPO_ROOT, record.relativePath), record.content]
     ),
+    ...characterCombatVerificationGoldens.map(record => [
+      path.resolve(
+        REPO_ROOT,
+        'reports',
+        'm10',
+        String(record.ownerId),
+        record.fileName
+      ),
+      `${JSON.stringify(record.goldenRuntime, null, 2)}\n`,
+    ]),
+    [
+      path.resolve(
+        REPO_ROOT,
+        'reports',
+        'm10',
+        'controlled-actor-inheritance-audit.json'
+      ),
+      `${JSON.stringify(elementInheritanceAudit, null, 2)}\n`,
+    ],
+    [
+      path.resolve(
+        REPO_ROOT,
+        'reports',
+        'm10',
+        'controlled-actor-inheritance-audit.md'
+      ),
+      createElementInheritanceFieldAuditMarkdown(elementInheritanceAudit),
+    ],
   ];
   return {
     ...characterCombatBuild,
@@ -1083,9 +1206,11 @@ function createSpecialResourceCatalog({ discovery, controlBindings }) {
         sourceName: primaryAsset.tree.elementName ?? primaryAsset.tree.m_Name,
         capacity: applied ? capacity : null,
         initialValue: 0,
-        initialValueStatus: 'verified-scenario-initial-element-layer-zero',
+        inputStep: 1,
+        scenarioConfigurable: applied,
+        initialValueStatus: 'scenario-configurable-initial-state',
         initialValueSourceIdentity:
-          'AzPrVerifiedSpecialResourceRuntime#empty-runtime-element-state',
+          'AzPrCombatScenario#initialRuntimeState.specialResourcesByActor',
         combineType: integerOrNull(primaryAsset.tree.combineType),
         stateElements,
         moduleClass: hint.moduleClass,
@@ -4386,6 +4511,175 @@ async function loadElementIndex(wantedPathIds, wantedElementIds) {
       entry => `${entry.pathId}|${entry.elementId}`
     ),
   };
+}
+
+function createElementInheritanceFieldAudit({
+  allIndexedElementsById,
+  controlBindings,
+}) {
+  const reachableElementIds = new Set(
+    (controlBindings ?? []).flatMap(binding =>
+      (binding.effectGraph ?? []).flatMap(root =>
+        (root.nodes ?? [])
+          .map(node => integerOrNull(node.elementId))
+          .filter(Number.isInteger)
+      )
+    )
+  );
+  const records = [];
+  for (const [elementId, entries] of allIndexedElementsById.entries()) {
+    for (const entry of entries ?? []) {
+      const inheritTypeRaw = integerOrNull(entry.typetree?.inheritType);
+      if (![1, 2].includes(inheritTypeRaw)) continue;
+      records.push({
+        elementId: Number(elementId),
+        pathId: entry.pathId,
+        name: entry.typetree?.elementName ?? entry.name ?? null,
+        inheritType: inheritTypeRaw === 1 ? 'self' : 'source',
+        inheritTypeRaw,
+        isTeamElement: Number(entry.typetree?.inherit) === 1,
+        teamElementRaw: integerOrNull(entry.typetree?.inherit),
+        reachabilityStatus: reachableElementIds.has(Number(elementId))
+          ? 'reachable-battle-effect-graph'
+          : 'legacy-unreachable-evidence',
+        sourceIdentity: `battle-element-assets.jsonl#path_id=${entry.pathId}`,
+      });
+    }
+  }
+  const dedupedRecords = dedupeBy(
+    records,
+    record => `${record.elementId}|${record.pathId}`
+  ).sort(
+    (left, right) =>
+      left.elementId - right.elementId ||
+      String(left.pathId).localeCompare(String(right.pathId))
+  );
+  const matrix = Object.fromEntries(
+    ['self', 'source'].flatMap(inheritType =>
+      [false, true].map(isTeamElement => {
+        const key = `${inheritType}|team-element-${isTeamElement ? 'true' : 'false'}`;
+        return [
+          key,
+          dedupedRecords.filter(
+            record =>
+              record.inheritType === inheritType &&
+              record.isTeamElement === isTeamElement
+          ).length,
+        ];
+      })
+    )
+  );
+  const nonMigratingRegressionElementIds = [101010206, 103002275];
+  const nonMigratingRegressionEvidence =
+    nonMigratingRegressionElementIds.map(elementId => {
+      const entry = (allIndexedElementsById.get(elementId) ?? [])[0];
+      return {
+        elementId,
+        name: entry?.typetree?.elementName ?? entry?.name ?? null,
+        inheritType: 'none',
+        inheritTypeRaw: integerOrNull(entry?.typetree?.inheritType),
+        isTeamElement: Number(entry?.typetree?.inherit) === 1,
+        teamElementRaw: integerOrNull(entry?.typetree?.inherit),
+        expectedRuntimeStatus: 'fixed-owner-no-controlled-actor-transfer',
+        sourceIdentity: entry
+          ? `battle-element-assets.jsonl#path_id=${entry.pathId}`
+          : null,
+      };
+    });
+  const legacyUnreachableElementIds = [
+    101010030, 101010039, 101010081, 103002040, 103002079, 103002157,
+  ];
+  const legacyUnreachableEvidence = legacyUnreachableElementIds.map(
+    elementId => {
+      const candidates = dedupedRecords.filter(
+        record => record.elementId === elementId
+      );
+      return {
+        elementId,
+        records: candidates,
+        status:
+          candidates.length > 0 &&
+          candidates.every(
+            record =>
+              record.reachabilityStatus === 'legacy-unreachable-evidence'
+          )
+            ? 'legacy-unreachable-evidence'
+            : 'inheritance-evidence-reachability-drift',
+        applied: false,
+        exclusionReason:
+          'no-current-skill-list-or-reachable-character-combat-contract-reference',
+      };
+    }
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-element-inheritance-field-audit',
+    status: legacyUnreachableEvidence.every(
+      evidence => evidence.status === 'legacy-unreachable-evidence'
+    )
+      ? 'verified-element-inheritance-field-audit-ready'
+      : 'element-inheritance-field-audit-drift',
+    policy: {
+      controlledActorTransferGate: 'inheritType',
+      teamElementField: 'inherit',
+      teamElementAffectsTransfer: false,
+      supportedInheritTypes: {
+        0: 'none',
+        1: 'self',
+        2: 'source',
+      },
+    },
+    summary: {
+      nonzeroInheritTypeRecordCount: dedupedRecords.length,
+      matrix,
+      reachableRecordCount: dedupedRecords.filter(
+        record =>
+          record.reachabilityStatus === 'reachable-battle-effect-graph'
+      ).length,
+      legacyUnreachableRecordCount: dedupedRecords.filter(
+        record => record.reachabilityStatus === 'legacy-unreachable-evidence'
+      ).length,
+    },
+    nonMigratingRegressionEvidence,
+    legacyUnreachableEvidence,
+    records: dedupedRecords,
+  };
+}
+
+function createElementInheritanceFieldAuditMarkdown(audit) {
+  const matrix = audit.summary.matrix;
+  return [
+    '# Controlled-actor inheritance field audit',
+    '',
+    `Status: \`${audit.status}\``,
+    '',
+    '## Field contract',
+    '',
+    '- Controlled-actor transfer is gated only by `inheritType`.',
+    '- `inherit` is retained as `isTeamElement` evidence and does not gate transfer.',
+    '',
+    '## Nonzero inheritType matrix',
+    '',
+    `- Self / team=true: ${matrix['self|team-element-true']}`,
+    `- Self / team=false: ${matrix['self|team-element-false']}`,
+    `- Source / team=true: ${matrix['source|team-element-true']}`,
+    `- Source / team=false: ${matrix['source|team-element-false']}`,
+    '',
+    '## Fixed-owner negative regressions',
+    '',
+    ...audit.nonMigratingRegressionEvidence.map(
+      record =>
+        `- ${record.elementId}: team=${record.isTeamElement}, inheritType=${record.inheritTypeRaw}, expected=${record.expectedRuntimeStatus}`
+    ),
+    '',
+    '## Legacy unreachable evidence',
+    '',
+    ...audit.legacyUnreachableEvidence.map(
+      record =>
+        `- ${record.elementId}: ${record.status}; ${record.exclusionReason}`
+    ),
+    '',
+  ].join('\n');
 }
 
 function appendMapArray(map, key, value) {
@@ -7720,6 +8014,7 @@ function createSemanticEffectCandidate({
       stackDelta: boundLifecycle?.stackDelta ?? 1,
       maxStacks: boundLifecycle?.maxStacks ?? stack.maxStacks,
       instanceScope: stack.instanceScope,
+      inheritance: boundLifecycle?.inheritance ?? null,
     },
     mechanic: node.mechanic,
     formula: node.formula,

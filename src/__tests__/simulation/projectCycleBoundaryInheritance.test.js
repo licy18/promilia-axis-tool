@@ -124,6 +124,60 @@ describe('cycle boundary inheritance projection', () => {
     ]);
   });
 
+  it('carries a transferred effect instance and its formula source across a cycle boundary', () => {
+    const runtimeOutputs = createRuntimeOutputs();
+    const before = runtimeOutputs.effectTimeline.events[0].after;
+    const after = {
+      ...before,
+      instanceKey: 'actor|actor-2|focus',
+      targetId: 'actor-2',
+      semanticTargetKind: 'controlled-actor',
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'source',
+      inheritanceContainerElementId: 101003206,
+      inheritanceSourceIdentity: 'battle-element:101003206',
+      formulaSourceActorId: 'actor-1',
+      effectAdderActorId: 'actor-1',
+      effectInstanceId: 'focus|han-ultimate|100',
+      transferCount: 1,
+      appliedToCalculators: true,
+    };
+    runtimeOutputs.effectTimeline.events.splice(1, 0, {
+      type: 'EFFECT_TRANSFERRED',
+      timeMs: 750,
+      runtimeSequenceIndex: 1,
+      instanceKey: after.instanceKey,
+      previousInstanceKey: before.instanceKey,
+      before,
+      after,
+    });
+
+    const state = createInitialRuntimeStateAtBoundary({
+      scenario: createScenario(),
+      runtimeOutputs,
+      boundary: { id: 'boundary-1', timeMs: 1000 },
+    });
+
+    expect(state.activeEffects).toEqual([
+      expect.objectContaining({
+        instanceKey: 'actor|actor-2|focus',
+        effectId: 'focus',
+        targetId: 'actor-2',
+        remainingDurationMs: 500,
+        semanticTargetKind: 'controlled-actor',
+        inheritOnControlledActorSwitch: true,
+        inheritType: 'source',
+        inheritanceContainerElementId: 101003206,
+        inheritanceSourceIdentity: 'battle-element:101003206',
+        formulaSourceActorId: 'actor-1',
+        effectAdderActorId: 'actor-1',
+        effectInstanceId: 'focus|han-ultimate|100',
+        transferCount: 1,
+        appliedToCalculators: true,
+      }),
+    ]);
+  });
+
   it('applies one shared-timer decay on the boundary and carries the next interval', () => {
     const runtimeOutputs = createRuntimeOutputs();
     runtimeOutputs.verifiedCombatRuntime.tuningMarkRuntime = {

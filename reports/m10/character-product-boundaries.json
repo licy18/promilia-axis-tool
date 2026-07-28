@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-product-boundary-report",
+  "status": "unnamed-secondary-passive-boundary-ready",
+  "policy": {
+    "identification": "second character-owned passive slot with missing localized name",
+    "numericSuffixIsNotEvidence": true,
+    "descriptionRemainsAuditable": true,
+    "classification": "not-applicable",
+    "reason": "unnamed-secondary-passive-not-implemented-current-client"
+  },
+  "entries": [
+    {
+      "boundaryIdentity": "actor:101003:skill:10100362:product-boundary",
+      "ownerId": 101003,
+      "ownerName": "寒悠悠",
+      "passiveSlotIndex": 1,
+      "skillId": 10100362,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "星鸣技最后1击命中敌方时将为其附加{0}层「焰火」状态（持续15秒）",
+        "plain": "星鸣技最后1击命中敌方时将为其附加{0}层「焰火」状态（持续15秒）",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10100361,
+        "name": "来点好玩的！"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=101003].skillSlots[group=passive,index=1,skillId=10100362]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/101003.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:101007:skill:10100762:product-boundary",
+      "ownerId": 101007,
+      "ownerName": "芃芃",
+      "passiveSlotIndex": 1,
+      "skillId": 10100762,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "连续释放普攻中暴击率增加{0}，普攻打断后增益消失。",
+        "plain": "连续释放普攻中暴击率增加{0}，普攻打断后增益消失。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10100761,
+        "name": "连珠拳！"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=101007].skillSlots[group=passive,index=1,skillId=10100762]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/101007.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:101010:skill:10101062:product-boundary",
+      "ownerId": 101010,
+      "ownerName": "涂山小玉",
+      "passiveSlotIndex": 1,
+      "skillId": 10101062,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "连续释放普攻中暴击率增加{0}，普攻打断后增益消失。",
+        "plain": "连续释放普攻中暴击率增加{0}，普攻打断后增益消失。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10101061,
+        "name": "玉未央"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=101010].skillSlots[group=passive,index=1,skillId=10101062]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/101010.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:102001:skill:10200162:product-boundary",
+      "ownerId": 102001,
+      "ownerName": "莉莉",
+      "passiveSlotIndex": 1,
+      "skillId": 10200162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "星鸣技命中目标后，每下伤害再额外增加{0}点星决蓄能。",
+        "plain": "星鸣技命中目标后，每下伤害再额外增加{0}点星决蓄能。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10200161,
+        "name": "精准命中"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=102001].skillSlots[group=passive,index=1,skillId=10200162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:103002:skill:10300262:product-boundary",
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "passiveSlotIndex": 1,
+      "skillId": 10300262,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "红宝石（小红帽）上场时，8s内提升暴击率{0}",
+        "plain": "红宝石（小红帽）上场时，8s内提升暴击率{0}",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10300261,
+        "name": "以心燃焰"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=103002].skillSlots[group=passive,index=1,skillId=10300262]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/103002.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:107001:skill:10700162:product-boundary",
+      "ownerId": 107001,
+      "ownerName": "西芙莉雅",
+      "passiveSlotIndex": 1,
+      "skillId": 10700162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "",
+        "plain": "",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10700161,
+        "name": "交给露米吧"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=107001].skillSlots[group=passive,index=1,skillId=10700162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:107002:skill:10700262:product-boundary",
+      "ownerId": 107002,
+      "ownerName": "米砂",
+      "passiveSlotIndex": 1,
+      "skillId": 10700262,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "被动星鸣技占位，后续会更新星鸣技描述{0}",
+        "plain": "被动星鸣技占位，后续会更新星鸣技描述{0}",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10700261,
+        "name": "育树之风"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=107002].skillSlots[group=passive,index=1,skillId=10700262]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:107003:skill:10700362:product-boundary",
+      "ownerId": 107003,
+      "ownerName": "阿比",
+      "passiveSlotIndex": 1,
+      "skillId": 10700362,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "释放星鸣技也可以获得「龙息」状态，使其魔法攻击力提升{0}（持续6秒），最多叠加3层。",
+        "plain": "释放星鸣技也可以获得「龙息」状态，使其魔法攻击力提升{0}（持续6秒），最多叠加3层。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10700361,
+        "name": "灵龙之息"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=107003].skillSlots[group=passive,index=1,skillId=10700362]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107003.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:108001:skill:10800162:product-boundary",
+      "ownerId": 108001,
+      "ownerName": "忒拉拉",
+      "passiveSlotIndex": 1,
+      "skillId": 10800162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "获得「炽腾」状态时，额外增加{0}点星决蓄能。",
+        "plain": "获得「炽腾」状态时，额外增加{0}点星决蓄能。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10800161,
+        "name": "最强猎人"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=108001].skillSlots[group=passive,index=1,skillId=10800162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/108001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:108002:skill:10800262:product-boundary",
+      "ownerId": 108002,
+      "ownerName": "璐璐卡",
+      "passiveSlotIndex": 1,
+      "skillId": 10800262,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "释放星鸣技，全队防御力提升{0}，持续8s",
+        "plain": "释放星鸣技，全队防御力提升{0}，持续8s",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10800261,
+        "name": "萨满的祈愿"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=108002].skillSlots[group=passive,index=1,skillId=10800262]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/108002.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:108003:skill:10800362:product-boundary",
+      "ownerId": 108003,
+      "ownerName": "米蒂",
+      "passiveSlotIndex": 1,
+      "skillId": 10800362,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "星鸣技最后一击命中敌人后，额外增加{0}点星决蓄能。",
+        "plain": "星鸣技最后一击命中敌人后，额外增加{0}点星决蓄能。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10800361,
+        "name": "破穹之翼"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=108003].skillSlots[group=passive,index=1,skillId=10800362]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/108003.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:108005:skill:10800562:product-boundary",
+      "ownerId": 108005,
+      "ownerName": "卡塔露",
+      "passiveSlotIndex": 1,
+      "skillId": 10800562,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "",
+        "plain": "",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10800561,
+        "name": "立于伙伴之前"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=108005].skillSlots[group=passive,index=1,skillId=10800562]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/108005.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:109001:skill:10900162:product-boundary",
+      "ownerId": 109001,
+      "ownerName": "末音",
+      "passiveSlotIndex": 1,
+      "skillId": 10900162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "「璀璨」状态下，每次释放普攻第三/五段攻击或重击时，额外增加{0}点星决蓄能",
+        "plain": "「璀璨」状态下，每次释放普攻第三/五段攻击或重击时，额外增加{0}点星决蓄能",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10900161,
+        "name": "哈库茵之耀"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:109002:skill:10900262:product-boundary",
+      "ownerId": 109002,
+      "ownerName": "夏儿",
+      "passiveSlotIndex": 1,
+      "skillId": 10900262,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "夏儿上场时，8s内提升暴击率{0}",
+        "plain": "夏儿上场时，8s内提升暴击率{0}",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 10900261,
+        "name": "天马骑士"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=109002].skillSlots[group=passive,index=1,skillId=10900262]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109002.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:111001:skill:11100162:product-boundary",
+      "ownerId": 111001,
+      "ownerName": "法兰塔",
+      "passiveSlotIndex": 1,
+      "skillId": 11100162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "法兰塔造成敌方架势破坏时，敌方防御降低{0}，持续10秒",
+        "plain": "法兰塔造成敌方架势破坏时，敌方防御降低{0}，持续10秒",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 11100161,
+        "name": "扬翼"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=111001].skillSlots[group=passive,index=1,skillId=11100162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/111001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:112001:skill:11200162:product-boundary",
+      "ownerId": 112001,
+      "ownerName": "姬瑟贝露",
+      "passiveSlotIndex": 1,
+      "skillId": 11200162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "星鸣技最后1击命中敌方时将为其附加{0}层「焰火」状态（持续15秒）",
+        "plain": "星鸣技最后1击命中敌方时将为其附加{0}层「焰火」状态（持续15秒）",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 11200161,
+        "name": "女仆的花招"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:112002:skill:11200262:product-boundary",
+      "ownerId": 112002,
+      "ownerName": "艾妮丝",
+      "passiveSlotIndex": 1,
+      "skillId": 11200262,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "",
+        "plain": "",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 11200261,
+        "name": "我不会害怕"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=112002].skillSlots[group=passive,index=1,skillId=11200262]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112002.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:199001:skill:19900162:product-boundary",
+      "ownerId": 199001,
+      "ownerName": "女主角",
+      "passiveSlotIndex": 1,
+      "skillId": 19900162,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "重击派生命中敌人后，提高自身{0}攻击力，持续10秒。",
+        "plain": "重击派生命中敌人后，提高自身{0}攻击力，持续10秒。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 19900161,
+        "name": "星之鸣响"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=199001].skillSlots[group=passive,index=1,skillId=19900162]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:199002:skill:19900262:product-boundary",
+      "ownerId": 199002,
+      "ownerName": "男主角",
+      "passiveSlotIndex": 1,
+      "skillId": 19900262,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "重击派生命中敌人后，提高自身{0}攻击力，持续10秒。",
+        "plain": "重击派生命中敌人后，提高自身{0}攻击力，持续10秒。",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 19900261,
+        "name": "星之鸣响"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=199002].skillSlots[group=passive,index=1,skillId=19900262]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199002.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    },
+    {
+      "boundaryIdentity": "actor:199003:skill:19900362:product-boundary",
+      "ownerId": 199003,
+      "ownerName": "诺诺",
+      "passiveSlotIndex": 1,
+      "skillId": 19900362,
+      "name": null,
+      "displayName": null,
+      "description": {
+        "raw": "重击满蓄力最后1击命中敌人时，自身攻击力提升{0}，持续8s",
+        "plain": "重击满蓄力最后1击命中敌人时，自身攻击力提升{0}，持续8s",
+        "special": ""
+      },
+      "primaryPassive": {
+        "skillId": 19900361,
+        "name": "铛铛铛"
+      },
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceIdentities": [
+        "characters.items[id=199003].skillSlots[group=passive,index=1,skillId=19900362]",
+        "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199003.hero-module.local.json"
+      ],
+      "runtimeContractPolicy": {
+        "passiveProfile": false,
+        "listener": false,
+        "effectBinding": false,
+        "captureRequirement": false,
+        "gameplayImpactingGap": false
+      }
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "publicCharacterCount": 20,
+    "matchedCharacterCount": 20,
+    "unresolvedCharacterCount": 0,
+    "matchedSkillIds": [
+      10100362,
+      10100762,
+      10101062,
+      10200162,
+      10300262,
+      10700162,
+      10700262,
+      10700362,
+      10800162,
+      10800262,
+      10800362,
+      10800562,
+      10900162,
+      10900262,
+      11100162,
+      11200162,
+      11200262,
+      19900162,
+      19900262,
+      19900362
+    ]
+  }
+}

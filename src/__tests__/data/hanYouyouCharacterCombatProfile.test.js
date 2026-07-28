@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import goldenTrace from '../../../reports/m10/101003/golden-trace.json';
+import ultimateSwitchGolden from '../../../reports/m10/101003/ultimate-controlled-buff-switch-golden.json';
+import inheritanceAudit from '../../../reports/m10/controlled-actor-inheritance-audit.json';
 import reachableGraph from '../../../reports/m10/101003/reachable-graph.json';
 import runtimeCapturePlan from '../../../reports/m10/101003/runtime-capture-plan.json';
 import runtimeCoverage from '../../../reports/m10/101003/runtime-coverage.json';
@@ -27,7 +29,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       completionState: 'runtime-applied',
       denominator: {
         publicActionCount: 10,
-        reachableControlCount: 30,
+        reachableControlCount: 29,
         executionFormCount: 14,
         hitCount: 73,
         semanticEffectCount: 40,
@@ -61,18 +63,18 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       actionCount: 10,
       runtimeReadyActionCount: 10,
       executionFormCount: 14,
-      controlCount: 30,
+      controlCount: 29,
       hitCount: 73,
       targetStateProfileCount: 1,
-      targetStateTransactionCount: 8,
+      targetStateTransactionCount: 7,
       conditionalHitGroupCount: 2,
       runtimeEffectBindingCount: 6,
-      passiveCount: 2,
+      passiveCount: 1,
       switchTriggerCount: 1,
     });
-    expect(sourceManifest.summary.identityCount).toBe(490);
+    expect(sourceManifest.summary.identityCount).toBe(487);
     expect(reachableGraph.summary).toMatchObject({
-      controlCount: 30,
+      controlCount: 29,
       exclusionCount: 7,
       nodeKindCounts: {
         'public-action': 10,
@@ -81,7 +83,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
         'target-state': 1,
         'conditional-hit-group': 2,
         'runtime-effect': 6,
-        'passive-listener': 2,
+        'passive-listener': 1,
         'switch-trigger': 1,
       },
     });
@@ -132,7 +134,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
     });
   });
 
-  it('compiles Firework, conditional explosions, tuning, and both passives from one owner contract', () => {
+  it('compiles Firework, conditional explosions, tuning, and the implemented named passive from one owner contract', () => {
     expect(ownerContract.contracts.targetStateProfiles).toEqual([
       expect.objectContaining({
         ownerId: HAN_ID,
@@ -144,12 +146,12 @@ describe('M10-B2 Han Youyou character combat profile', () => {
         applied: true,
       }),
     ]);
-    expect(ownerContract.contracts.targetStateTransactions).toHaveLength(8);
+    expect(ownerContract.contracts.targetStateTransactions).toHaveLength(7);
     expect(
       ownerContract.contracts.targetStateTransactions.map(
         transaction => transaction.triggerFrame
       )
-    ).toEqual([61, 68, 73, 94, 99, 104, 109, 109]);
+    ).toEqual([61, 68, 73, 94, 99, 104, 109]);
     expect(ownerContract.contracts.conditionalHitGroups).toEqual([
       expect.objectContaining({
         groupIdentity: 'han-charged-stage-one-firework-explosion',
@@ -200,21 +202,19 @@ describe('M10-B2 Han Youyou character combat profile', () => {
         ],
         applied: true,
       }),
-      expect.objectContaining({
-        passiveIdentity: 'actor:101003:passive:10100362',
-        runtimeGenerationMode: 'target-state-runtime',
-        durationMs: 15000,
-        maxStacks: 15,
-        modifiers: [
-          expect.objectContaining({
-            kind: 'target-state',
-            stateIdentity: FIREWORK_STATE_IDENTITY,
-            amount: 1,
-          }),
-        ],
-        applied: true,
-      }),
     ]);
+    expect(
+      ownerContract.contracts.targetStateTransactions.some(
+        transaction =>
+          transaction.transactionIdentity ===
+          'han-star-skill-final-hit-extra-firework'
+      )
+    ).toBe(false);
+    expect(
+      mechanicsPackage.specialResourceCatalog.passiveEffects.some(
+        passive => Number(passive.skillId) === 10100362
+      )
+    ).toBe(false);
     expect(
       mechanicsPackage.actionVariantGraph.targetStateProfiles.some(
         state =>
@@ -226,16 +226,16 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       profile.coverage.find(item => item.dimension === 'stateMachines')
     ).toMatchObject({
       status: 'applied',
-      recordCount: 11,
-      appliedCount: 11,
+      recordCount: 10,
+      appliedCount: 10,
       unresolvedCount: 0,
     });
     expect(
       profile.coverage.find(item => item.dimension === 'dynamicProperties')
     ).toMatchObject({
       status: 'static-evidence-gap',
-      recordCount: 8,
-      appliedCount: 7,
+      recordCount: 7,
+      appliedCount: 6,
       unresolvedCount: 1,
     });
   });
@@ -288,6 +288,98 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       commonFunctionId: 1,
       baseFunctionId: 2008,
     });
+    expect(
+      ultimateEffects.find(effect => Number(effect.elementId) === 101003207)
+        ?.lifecycle?.inheritance
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'source',
+      isTeamElement: true,
+      containerElementId: 101003206,
+      status: 'verified-element-inheritance-ready',
+    });
+    expect(
+      ownerContract.contracts.actionEffectBindings.find(
+        binding => Number(binding.elementId) === 101003207
+      )?.inheritance
+    ).toMatchObject({
+      inheritOnControlledActorSwitch: true,
+      inheritType: 'source',
+      isTeamElement: true,
+      containerElementId: 101003206,
+    });
+  });
+
+  it('audits inheritType independently from the team-element flag', () => {
+    expect(inheritanceAudit).toMatchObject({
+      status: 'verified-element-inheritance-field-audit-ready',
+      policy: {
+        controlledActorTransferGate: 'inheritType',
+        teamElementField: 'inherit',
+        teamElementAffectsTransfer: false,
+      },
+      summary: {
+        nonzeroInheritTypeRecordCount: 82,
+        matrix: {
+          'self|team-element-true': 70,
+          'self|team-element-false': 2,
+          'source|team-element-true': 4,
+          'source|team-element-false': 6,
+        },
+      },
+    });
+    expect(
+      inheritanceAudit.legacyUnreachableEvidence.map(record => [
+        record.elementId,
+        record.status,
+      ])
+    ).toEqual([
+      [101010030, 'legacy-unreachable-evidence'],
+      [101010039, 'legacy-unreachable-evidence'],
+      [101010081, 'legacy-unreachable-evidence'],
+      [103002040, 'legacy-unreachable-evidence'],
+      [103002079, 'legacy-unreachable-evidence'],
+      [103002157, 'legacy-unreachable-evidence'],
+    ]);
+  });
+
+  it('replays the Ultimate Source buff through a real switch without refreshing it', () => {
+    expect(ultimateSwitchGolden).toMatchObject({
+      status: 'authoritative-golden-runtime-verified',
+      validation: {
+        passed: true,
+        failedCount: 0,
+      },
+      actual: {
+        effects: {
+          inheritanceTransferCountByEffectId: {
+            'battle-element:101003205': 0,
+            'battle-element:101003207': 1,
+          },
+          inheritanceTransfers: [
+            {
+              effectId: 'battle-element:101003207',
+              frame: 400,
+              previousTargetId: 'actor-101003',
+              nextTargetId: 'actor-101010',
+              inheritType: 'source',
+              formulaSourceActorId: 'actor-101003',
+              effectAdderActorId: 'actor-101003',
+              expiresAtMs: 18466.667,
+              formulaValues: [1042.0045928955078],
+            },
+          ],
+        },
+        comparison: {
+          primaryEffectFormulaValuesById: {
+            'battle-element:101003207': [1042.0045928955078],
+          },
+          baselineEffectFormulaValuesById: {
+            'battle-element:101003207': [1019.9066162109375],
+          },
+        },
+      },
+    });
   });
 
   it('replays an authoritative three-person golden and fails on a tampered Firework settlement', () => {
@@ -298,21 +390,21 @@ describe('M10-B2 Han Youyou character combat profile', () => {
     });
     expect(goldenTrace.actual.resources.targetStateSummary).toMatchObject({
       profileCount: 1,
-      eventCount: 10,
+      eventCount: 9,
       appliedGroupCount: 2,
       skippedGroupCount: 0,
       directSpEventCount: 2,
     });
     expect(goldenTrace.actual.resources.conditionalHitGroups).toEqual([
       expect.objectContaining({
-        beforeStacks: 8,
+        beforeStacks: 7,
         consumedStacks: 6,
-        afterStacks: 2,
+        afterStacks: 1,
         applied: true,
       }),
       expect.objectContaining({
-        beforeStacks: 2,
-        consumedStacks: 2,
+        beforeStacks: 1,
+        consumedStacks: 1,
         afterStacks: 0,
         applied: true,
       }),
@@ -353,6 +445,25 @@ describe('M10-B2 Han Youyou character combat profile', () => {
           formulaValues: [1019.9066162109375],
         },
       },
+      inheritanceTransferCountByEffectId: {
+        'battle-element:480124006': 1,
+      },
+      passiveTrace: expect.arrayContaining([
+        expect.objectContaining({
+          frame: 2900,
+          operation: 'transfer',
+          previousTargetId: 'actor-101003',
+          nextTargetId: 'actor-101010',
+          inheritType: 'self',
+          effectAdderActorId: 'actor-101010',
+          expiresAtMs: 60250,
+        }),
+        expect.objectContaining({
+          frame: 3615,
+          operation: 'expire',
+          targetId: 'actor-101010',
+        }),
+      ]),
     });
     expect(goldenTrace.actual.dynamicProperties).toMatchObject({
       maxPercentRawByAttributeId: { 1: 1300 },

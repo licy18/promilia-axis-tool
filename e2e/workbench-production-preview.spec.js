@@ -7579,7 +7579,9 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
     '[data-testid="workbench-timeline-row"][data-lane-kind="actor-special-resource-curve"]'
   );
   await expect(ammoLaneLabel).toContainText('子弹');
-  await expect(ammoLaneLabel).toContainText('0 / 12');
+  await expect(ammoLaneLabel).toContainText('初始值');
+  await expect(ammoLaneLabel).toContainText('/ 12');
+  await expect(ammoLaneLabel).toHaveAttribute('title', /0 \/ 12/);
 
   const ammoNodes = ammoLane.getByTestId('workbench-timeline-state-curve-node');
   const normalAttackEntry = page.locator(
@@ -7789,6 +7791,78 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="101003"]'
   );
   await expect(actorInitialSp).toHaveValue('0');
+  const addSwitchAtFrame = async ({
+    sourceCharacterId,
+    targetCharacterId,
+    frame,
+  }) => {
+    await closeInspectorIfVisible(page);
+    await page
+      .locator(
+        `[data-testid="workbench-action-library-actor"][data-character-id="${sourceCharacterId}"]`
+      )
+      .click();
+    const switchActions = timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-switch-event="true"]'
+    );
+    const existingSwitchActionIds = new Set(
+      await switchActions.evaluateAll(rows =>
+        rows.map(row => row.dataset.actionId).filter(Boolean)
+      )
+    );
+    await page.getByTestId('workbench-add-switch-action').click();
+    await expect
+      .poll(async () => {
+        const actionIds = await switchActions.evaluateAll(rows =>
+          rows.map(row => row.dataset.actionId).filter(Boolean)
+        );
+        return actionIds.filter(
+          actionId => !existingSwitchActionIds.has(actionId)
+        ).length;
+      })
+      .toBe(1);
+    const newSwitchActionId = (
+      await switchActions.evaluateAll(rows =>
+        rows.map(row => row.dataset.actionId).filter(Boolean)
+      )
+    ).find(actionId => !existingSwitchActionIds.has(actionId));
+    const switchAction = timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-switch-event="true"][data-action-id="${newSwitchActionId}"]`
+    );
+    await expect(switchAction).toHaveCount(1);
+    await switchAction.click();
+    const switchTarget = page.getByTestId('workbench-switch-target-select');
+    const targetOptions = await switchTarget.locator('option').evaluateAll(
+      options => options.map(option => String(option.value)).filter(Boolean)
+    );
+    const resolvedTargetCharacterId = targetOptions.includes(
+      String(targetCharacterId)
+    )
+      ? String(targetCharacterId)
+      : targetOptions.find(
+          option => option !== String(sourceCharacterId)
+        );
+    if (!resolvedTargetCharacterId) {
+      throw new Error(
+        `No switch target is available for ${sourceCharacterId} at frame ${frame}`
+      );
+    }
+    if ((await switchTarget.inputValue()) !== resolvedTargetCharacterId) {
+      await switchTarget.selectOption(resolvedTargetCharacterId);
+    }
+    const frameInput = page.getByTestId('workbench-start-frame-input');
+    await frameInput.fill(String(frame));
+    await frameInput.press('Enter');
+    await expect(switchAction).toHaveAttribute(
+      'data-start-ms',
+      String(frameToMs(frame))
+    );
+    await closeInspectorIfVisible(page);
+    return {
+      switchAction,
+      targetCharacterId: Number(resolvedTargetCharacterId),
+    };
+  };
 
   const actorLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
@@ -7843,7 +7917,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   await expect(fireworkIntervals.first()).toContainText('焰火');
   await expect(fireworkIntervals.first()).toHaveAttribute(
     'data-peak-stacks',
-    '8'
+    '7'
   );
   await expect(fireworkIntervals.first()).toHaveAttribute(
     'data-max-stacks',
@@ -7852,7 +7926,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   const fireworkConsume = fireworkIntervals
     .first()
     .locator(
-      '[data-testid="workbench-effect-lifecycle-marker"][data-before-stacks="8"][data-after-stacks="2"]'
+      '[data-testid="workbench-effect-lifecycle-marker"][data-before-stacks="7"][data-after-stacks="1"]'
     );
   await expect(fireworkConsume).toHaveCount(1);
 
@@ -7904,6 +7978,41 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   );
   await expect(controlledAttackBuff).toHaveCount(1);
   await expect(stageOneTeamTuningBuffs).toHaveCount(3);
+  const attackBuffAbsoluteEndFrame = await controlledAttackBuff.getAttribute(
+    'data-end-frame-index'
+  );
+  expect(Number(attackBuffAbsoluteEndFrame)).toBeGreaterThan(500);
+  const attackBuffSwitch = await addSwitchAtFrame({
+    sourceCharacterId: 101003,
+    targetCharacterId: 109001,
+    frame: 500,
+  });
+  const attackBuffTargetCharacterId = attackBuffSwitch.targetCharacterId;
+  const inheritedAttackBuff = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:480124006"][data-target-id="actor-${attackBuffTargetCharacterId}"][data-source-action-id="${stageOneActionId}"]`
+  );
+  await expect(controlledAttackBuff).toHaveAttribute(
+    'data-end-frame-index',
+    '500'
+  );
+  await expect(inheritedAttackBuff).toHaveCount(1);
+  await expect(inheritedAttackBuff).toHaveAttribute(
+    'data-start-frame-index',
+    '500'
+  );
+  await expect(inheritedAttackBuff).toHaveAttribute(
+    'data-end-frame-index',
+    attackBuffAbsoluteEndFrame
+  );
+  await expect(stageOneTeamTuningBuffs).toHaveCount(3);
+  await addSwitchAtFrame({
+    sourceCharacterId: attackBuffTargetCharacterId,
+    targetCharacterId: 101003,
+    frame: 1700,
+  });
+  await expect(inheritedAttackBuff).toHaveCount(1);
+  await expect(controlledAttackBuff).toHaveCount(1);
+  await expect(stageOneTeamTuningBuffs).toHaveCount(3);
   await controlledAttackBuff.click();
   await openRuntimeReviewTab(page, 'effect');
   await expect(
@@ -7947,19 +8056,19 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   await disabledStarHit.uncheck();
   await expect(fireworkIntervals.first()).toHaveAttribute(
     'data-peak-stacks',
-    '7'
+    '6'
   );
   await expect(
     fireworkIntervals
       .first()
       .locator(
-        '[data-testid="workbench-effect-lifecycle-marker"][data-before-stacks="7"][data-after-stacks="1"]'
+        '[data-testid="workbench-effect-lifecycle-marker"][data-before-stacks="6"][data-after-stacks="0"]'
       )
   ).toHaveCount(1);
   await page.getByTestId('workbench-undo-edit').click();
   await expect(fireworkIntervals.first()).toHaveAttribute(
     'data-peak-stacks',
-    '8'
+    '7'
   );
 
   await setTimelineActionStartFrame(page, starSkillAction, 400);
@@ -7975,6 +8084,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     )
     .toBe(4);
   await expect(controlledAttackBuff).toHaveCount(0);
+  await expect(inheritedAttackBuff).toHaveCount(0);
   await expect(stageOneTeamTuningBuffs).toHaveCount(0);
   await page.getByTestId('workbench-undo-edit').click();
   await expect(starSkillAction).toHaveAttribute(
@@ -7983,7 +8093,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   );
   await expect(fireworkIntervals.first()).toHaveAttribute(
     'data-peak-stacks',
-    '8'
+    '7'
   );
   await expect
     .poll(() =>
@@ -7996,6 +8106,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   await openActionInspectorPanel(page, 'properties', stageOneActionId);
   await expect(stageOneExplosionRows).toHaveCount(5);
   await expect(controlledAttackBuff).toHaveCount(1);
+  await expect(inheritedAttackBuff).toHaveCount(1);
 
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
@@ -8006,6 +8117,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   await expect(chargedActions).toHaveCount(1);
   await expect(stageOneAction).toContainText('重击1段');
   await expect(fireworkIntervals.first()).toContainText('焰火');
+  await expect(inheritedAttackBuff).toHaveCount(1);
 
   await actorInitialSp.fill('100');
   await actorInitialSp.press('Enter');
@@ -8026,28 +8138,36 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     'true'
   );
 
-  const controlledTuningBuff = timeline.locator(
+  const controlledTuningBuffs = timeline.locator(
     '[data-testid="workbench-timeline-effect-interval"][data-source-element-id="101003207"]'
+  );
+  const controlledTuningBuffBeforeSwitch = timeline.locator(
+    '[data-testid="workbench-timeline-effect-interval"][data-source-element-id="101003207"][data-target-id="actor-101003"]'
   );
   const teamTuningBuffs = timeline.locator(
     '[data-testid="workbench-timeline-effect-interval"][data-source-element-id="101003205"]'
   );
-  await expect(controlledTuningBuff).toHaveCount(1);
+  await expect(controlledTuningBuffs).toHaveCount(1);
   await expect(teamTuningBuffs).toHaveCount(3);
-  await expect(controlledTuningBuff).toContainText('主控角色调谐强度提升');
-  await expect(controlledTuningBuff).toHaveAttribute(
+  await expect(controlledTuningBuffBeforeSwitch).toContainText(
+    '主控角色调谐强度提升'
+  );
+  await expect(controlledTuningBuffBeforeSwitch).toHaveAttribute(
     'data-target-id',
     'actor-101003'
   );
-  await expect(controlledTuningBuff).toHaveAttribute(
+  await expect(controlledTuningBuffBeforeSwitch).toHaveAttribute(
     'data-start-frame-index',
     '1948'
   );
-  await expect(controlledTuningBuff).toHaveAttribute(
+  await expect(controlledTuningBuffBeforeSwitch).toHaveAttribute(
     'data-end-frame-index',
     '2848'
   );
-  await expect(controlledTuningBuff).toHaveAttribute('data-peak-stacks', '1');
+  await expect(controlledTuningBuffBeforeSwitch).toHaveAttribute(
+    'data-peak-stacks',
+    '1'
+  );
   await expect(teamTuningBuffs.first()).toContainText('全队调谐强度提升');
   await expect(teamTuningBuffs.first()).toHaveAttribute(
     'data-start-frame-index',
@@ -8062,8 +8182,8 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     '2'
   );
 
-  await controlledTuningBuff.scrollIntoViewIfNeeded();
-  await controlledTuningBuff.click();
+  await controlledTuningBuffBeforeSwitch.scrollIntoViewIfNeeded();
+  await controlledTuningBuffBeforeSwitch.click();
   await openRuntimeReviewTab(page, 'effect');
   await expect(
     page.getByTestId('workbench-effect-selected-interval')
@@ -8080,14 +8200,54 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   ).toHaveText('调谐强度 +18/层');
   await expect(page.locator('body')).not.toContainText('精通加成');
 
+  const tuningBuffSwitch = await addSwitchAtFrame({
+    sourceCharacterId: 101003,
+    targetCharacterId: attackBuffTargetCharacterId,
+    frame: 2100,
+  });
+  const tuningBuffTargetCharacterId = tuningBuffSwitch.targetCharacterId;
+  const controlledTuningBuffNewTarget = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-source-element-id="101003207"][data-target-id="actor-${tuningBuffTargetCharacterId}"]`
+  );
+  await expect(controlledTuningBuffs).toHaveCount(2);
+  await expect(controlledTuningBuffBeforeSwitch).toHaveCount(1);
+  await expect(controlledTuningBuffBeforeSwitch).toHaveAttribute(
+    'data-start-frame-index',
+    '1948'
+  );
+  await expect(controlledTuningBuffBeforeSwitch).toHaveAttribute(
+    'data-end-frame-index',
+    '2100'
+  );
+  await expect(controlledTuningBuffNewTarget).toHaveCount(1);
+  await expect(controlledTuningBuffNewTarget).toHaveAttribute(
+    'data-start-frame-index',
+    '2100'
+  );
+  await expect(controlledTuningBuffNewTarget).toHaveAttribute(
+    'data-end-frame-index',
+    '2848'
+  );
+  await expect(teamTuningBuffs).toHaveCount(3);
+  await controlledTuningBuffNewTarget.click();
+  await openRuntimeReviewTab(page, 'effect');
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('主控角色调谐强度提升');
+  await expect(
+    page.getByTestId('workbench-effect-interval-modifiers')
+  ).toHaveText('调谐强度 +1,019.91');
+
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已恢复草稿'
   );
-  await expect(controlledTuningBuff).toHaveCount(1);
+  await expect(controlledTuningBuffs).toHaveCount(2);
+  await expect(controlledTuningBuffBeforeSwitch).toHaveCount(1);
+  await expect(controlledTuningBuffNewTarget).toHaveCount(1);
   await expect(teamTuningBuffs).toHaveCount(3);
-  await controlledTuningBuff.scrollIntoViewIfNeeded();
+  await controlledTuningBuffNewTarget.scrollIntoViewIfNeeded();
   await page.screenshot({
     path: 'reports/m10-b2-r1-han-causal-chain-desktop.png',
   });
@@ -8095,7 +8255,9 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   await page.setViewportSize({ width: 390, height: 900 });
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
-  await expect(controlledTuningBuff).toContainText('主控角色调谐强度提升');
+  await expect(controlledTuningBuffNewTarget).toContainText(
+    '主控角色调谐强度提升'
+  );
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: 'reports/m10-b2-r1-han-causal-chain-narrow.png',
@@ -8124,48 +8286,13 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
       '[data-testid="workbench-loadout-option"][data-option-id="103002"]'
     )
     .click();
-  await page.getByTestId('workbench-save-draft').click();
-  await page.evaluate(storageKey => {
-    const draft = JSON.parse(window.localStorage.getItem(storageKey));
-    const applyRubyInitialAmmo = value => {
-      if (!value || typeof value !== 'object') return;
-      if (
-        Array.isArray(value.actorConfigs) &&
-        Array.isArray(value.actionDrafts) &&
-        value.actorConfigs.some(actor => Number(actor.characterId) === 103002)
-      ) {
-        const initialRuntimeState = value.initialRuntimeState ?? {};
-        value.initialRuntimeState = {
-          ...initialRuntimeState,
-          controlledActor: {
-            actorId: 'actor-103002',
-            characterId: 103002,
-          },
-          specialResourcesByActor: [
-            ...(initialRuntimeState.specialResourcesByActor ?? []).filter(
-              row => row.resourceIdentity !== 'actor:103002:element:103002047'
-            ),
-            {
-              actorId: 'actor-103002',
-              characterId: 103002,
-              actorName: '红宝石',
-              resourceIdentity: 'actor:103002:element:103002047',
-              resourceName: '子弹',
-              currentValue: 6,
-              maxValue: 12,
-            },
-          ],
-        };
-      }
-      Object.values(value).forEach(applyRubyInitialAmmo);
-    };
-    applyRubyInitialAmmo(draft);
-    window.localStorage.setItem(storageKey, JSON.stringify(draft));
-  }, BASIC_WORKBENCH_DRAFT_STORAGE_KEY);
-  await page.reload();
-  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
-    '已恢复草稿'
+  const rubyInitialAmmo = timeline.locator(
+    '[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="actor:103002:element:103002047"]'
   );
+  await expect(rubyInitialAmmo).toHaveValue('0');
+  await rubyInitialAmmo.fill('6');
+  await rubyInitialAmmo.press('Enter');
+  await expect(rubyInitialAmmo).toHaveValue('6');
 
   const actorLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-103002"]'
@@ -8173,7 +8300,10 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
   const ammoLaneLabel = timeline.locator(
     '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-special-resource-curve"][data-character-id="103002"]'
   );
-  await expect(ammoLaneLabel).toContainText('6 / 12');
+  await expect(ammoLaneLabel).toContainText('子弹');
+  await expect(ammoLaneLabel).toContainText('初始值');
+  await expect(ammoLaneLabel).toContainText('/ 12');
+  await expect(ammoLaneLabel).toHaveAttribute('title', /6 \/ 12/);
   const normalAttackEntry = page.locator(
     '[data-testid="workbench-skill-entry"][data-action-kind="normal-attack"][data-skill-id="10300201"]'
   );
@@ -8253,6 +8383,9 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
   await page.screenshot({
     path: 'reports/m10-b1-r2-ruby-replay-desktop.png',
   });
+  await page.screenshot({
+    path: 'reports/m10-b1-r4-ruby-initial-ammo-desktop.png',
+  });
 
   await page.setViewportSize({ width: 390, height: 900 });
   await closeInspectorIfVisible(page);
@@ -8260,6 +8393,9 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
   await expect(projectedGroup()).toHaveCount(6);
   await page.screenshot({
     path: 'reports/m10-b1-r2-ruby-replay-narrow.png',
+  });
+  await page.screenshot({
+    path: 'reports/m10-b1-r4-ruby-initial-ammo-narrow.png',
   });
 });
 
@@ -8426,48 +8562,13 @@ test('[m10-b1-r3-ruby-star-carry-entry] replays a real switch into Ruby thunder 
       '[data-testid="workbench-loadout-option"][data-option-id="103002"]'
     )
     .click();
-  await page.getByTestId('workbench-save-draft').click();
-  await page.evaluate(storageKey => {
-    const draft = JSON.parse(window.localStorage.getItem(storageKey));
-    const seedRubyAmmo = value => {
-      if (!value || typeof value !== 'object') return;
-      if (
-        Array.isArray(value.actorConfigs) &&
-        Array.isArray(value.actionDrafts) &&
-        value.actorConfigs.some(actor => Number(actor.characterId) === 103002)
-      ) {
-        const initialRuntimeState = value.initialRuntimeState ?? {};
-        value.initialRuntimeState = {
-          ...initialRuntimeState,
-          controlledActor: {
-            actorId: 'actor-109001',
-            characterId: 109001,
-          },
-          specialResourcesByActor: [
-            ...(initialRuntimeState.specialResourcesByActor ?? []).filter(
-              row => row.resourceIdentity !== 'actor:103002:element:103002047'
-            ),
-            {
-              actorId: 'actor-103002',
-              characterId: 103002,
-              actorName: '红宝石',
-              resourceIdentity: 'actor:103002:element:103002047',
-              resourceName: '子弹',
-              currentValue: 12,
-              maxValue: 12,
-            },
-          ],
-        };
-      }
-      Object.values(value).forEach(seedRubyAmmo);
-    };
-    seedRubyAmmo(draft);
-    window.localStorage.setItem(storageKey, JSON.stringify(draft));
-  }, BASIC_WORKBENCH_DRAFT_STORAGE_KEY);
-  await page.reload();
-  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
-    '已恢复草稿'
+  const rubyInitialAmmo = timeline.locator(
+    '[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="actor:103002:element:103002047"]'
   );
+  await expect(rubyInitialAmmo).toHaveValue('0');
+  await rubyInitialAmmo.fill('12');
+  await rubyInitialAmmo.press('Enter');
+  await expect(rubyInitialAmmo).toHaveValue('12');
 
   await page
     .locator(
