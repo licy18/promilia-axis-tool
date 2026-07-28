@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "56e344b403b69743befdd3b29d781f6c96e3d44907c703635b57833199aa229b",
+  "sourcePackageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -270,14 +270,14 @@
         "han-star-skill": 7,
         "han-ultimate": 7
       },
-      "totalHpDamage": 77762,
+      "totalHpDamage": 78387,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 68765,
+      "ownerTotalHpDamage": 69372,
       "ownerTotalToughnessDamage": 6069,
       "enemy": {
         "pointCount": 360,
         "initialHp": 862800,
-        "finalHp": 785038,
+        "finalHp": 784413,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 6667,
@@ -1673,227 +1673,957 @@
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:480124006",
+          "runtimeEffectId": "battle-element:480124006",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·主控攻击力提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 1000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:480124006/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:480124006",
+          "runtimeEffectId": "battle-element:480124006",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·主控攻击力提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 1,
-          "expiresAtMs": 60250
+          "stackChange": 0,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 1000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:480124006/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:480124006",
+          "runtimeEffectId": "battle-element:480124006",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·主控攻击力提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "expire",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 1000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         }
       ],
       "passiveMaxStacks": 1,
       "firstPassiveMaxStackFrame": 2029,
       "burstTrace": [
         {
+          "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 18466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1019.9066162109375,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1019.9066162109375
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_EXPIRED|18466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1108,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1019.9066162109375,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1019.9066162109375
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "expire",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "expire",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_APPLIED|31016.667|1",
           "actionId": "han-star-skill",
           "frame": 1861,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31133.333|2",
           "actionId": "han-star-skill",
           "frame": 1868,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 41016.666
+          "stackChange": 1,
+          "expiresAtMs": 41016.666,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31216.667|3",
           "actionId": "han-star-skill",
           "frame": 1873,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31566.667|4",
           "actionId": "han-star-skill",
           "frame": 1894,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31650|5",
           "actionId": "han-star-skill",
           "frame": 1899,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 5,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31733.333|6",
           "actionId": "han-star-skill",
           "frame": 1904,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 5,
           "afterStacks": 6,
-          "expiresAtMs": 41016.666
+          "stackChange": 1,
+          "expiresAtMs": 41016.666,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31816.667|7",
           "actionId": "han-star-skill",
           "frame": 1909,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 6,
           "afterStacks": 7,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31816.667|8",
           "actionId": "han-star-skill",
           "frame": 1909,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 7,
           "afterStacks": 8,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|33800|9",
           "actionId": "han-charged-stage-one",
           "frame": 2028,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 8,
           "afterStacks": 2,
-          "expiresAtMs": 41816.667
+          "stackChange": -6,
+          "expiresAtMs": 41816.667,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101003/battle-element:101003205/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101003205/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-103002/battle-element:101003205/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REMOVED|36233.333|9",
           "actionId": "han-charged-stage-two",
           "frame": 2174,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "remove",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101003/battle-element:101003205/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 60250
+          "stackChange": 1,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101003205/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 60250
+          "stackChange": 1,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-103002/battle-element:101003205/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 60250
+          "stackChange": 1,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-15343624725538709/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_APPLIED|49283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2957,
+          "effectId": "battle-element:101003142",
+          "runtimeEffectId": "battle-element:-15343624725538709|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003142,
+          "effectName": "降低魔法防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 57283.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 4,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-7141218965533365560/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_APPLIED|49283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2957,
+          "effectId": "battle-element:101003145",
+          "runtimeEffectId": "battle-element:-7141218965533365560|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003145,
+          "effectName": "降低物理防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 57283.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 3,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-15343624725538709/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_EXPIRED|57283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 3437,
+          "effectId": "battle-element:101003142",
+          "runtimeEffectId": "battle-element:-15343624725538709|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003142,
+          "effectName": "降低魔法防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 4,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-7141218965533365560/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_EXPIRED|57283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 3437,
+          "effectId": "battle-element:101003145",
+          "runtimeEffectId": "battle-element:-7141218965533365560|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003145,
+          "effectName": "降低物理防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 3,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:101003205/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101003205/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-103002/battle-element:101003205/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         }
       ],
+      "selectedEffectSummaryByElementId": {
+        "101003142": {
+          "effectId": "battle-element:101003142",
+          "effectNames": [
+            "降低魔法防御8%"
+          ],
+          "targetKinds": [
+            "enemy"
+          ],
+          "targetIds": [
+            "enemy-300032"
+          ],
+          "appliedEventCount": 1,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 2957,
+          "firstExpiredFrame": 3437,
+          "maxStacks": 1,
+          "attributeIds": [
+            4
+          ],
+          "formulaFamilies": [
+            "basis-point-property-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            -800
+          ]
+        },
+        "101003145": {
+          "effectId": "battle-element:101003145",
+          "effectNames": [
+            "降低物理防御8%"
+          ],
+          "targetKinds": [
+            "enemy"
+          ],
+          "targetIds": [
+            "enemy-300032"
+          ],
+          "appliedEventCount": 1,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 2957,
+          "firstExpiredFrame": 3437,
+          "maxStacks": 1,
+          "attributeIds": [
+            3
+          ],
+          "formulaFamilies": [
+            "basis-point-property-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            -800
+          ]
+        },
+        "101003205": {
+          "effectId": "battle-element:101003205",
+          "effectNames": [
+            "全队调谐强度提升"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-101003",
+            "actor-101010",
+            "actor-103002"
+          ],
+          "appliedEventCount": 3,
+          "expiredEventCount": 3,
+          "firstAppliedFrame": 208,
+          "firstExpiredFrame": 1648,
+          "maxStacks": 2,
+          "attributeIds": [
+            229
+          ],
+          "formulaFamilies": [
+            "literal-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            18
+          ]
+        },
+        "101003207": {
+          "effectId": "battle-element:101003207",
+          "effectNames": [
+            "主控角色调谐强度提升"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-101003"
+          ],
+          "appliedEventCount": 1,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 208,
+          "firstExpiredFrame": 1108,
+          "maxStacks": 1,
+          "attributeIds": [
+            229
+          ],
+          "formulaFamilies": [
+            "source-tuning-ratio-with-common-ratio"
+          ],
+          "formulaValues": [
+            1019.9066162109375
+          ]
+        }
+      },
       "burstTransitions": [
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 18466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 27466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 27466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "operation": "apply",
+          "expiresAtMs": 27466.667
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1108,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
         {
           "actionId": "han-star-skill",
           "frame": 1861,
@@ -1989,6 +2719,30 @@
           "frame": 2175,
           "operation": "apply",
           "expiresAtMs": 60250
+        },
+        {
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2957,
+          "operation": "apply",
+          "expiresAtMs": 57283.333
+        },
+        {
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2957,
+          "operation": "apply",
+          "expiresAtMs": 57283.333
+        },
+        {
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 3437,
+          "operation": "expire",
+          "expiresAtMs": null
+        },
+        {
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 3437,
+          "operation": "expire",
+          "expiresAtMs": null
         },
         {
           "actionId": "han-charged-stage-two",
@@ -2072,18 +2826,19 @@
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 18,
+          "dynamicExtraRaw": 1055.9066162109375,
           "effectIds": [
-            "battle-element:101003205"
+            "battle-element:-4841411980842434486",
+            "battle-element:-5652413049857383353"
           ]
         },
         {
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 36,
+          "dynamicExtraRaw": 18,
           "effectIds": [
-            "battle-element:-5652413049857383353"
+            "battle-element:101003205"
           ]
         },
         {
@@ -2102,7 +2857,7 @@
       },
       "maxExtraRawByAttributeId": {
         "1": 0,
-        "229": 36
+        "229": 1055.9066162109375
       }
     },
     "comparison": {
@@ -2112,9 +2867,9 @@
       "clearLoadoutCharacterIds": [
         101003
       ],
-      "primaryDamage": 3148,
-      "baselineDamage": 1188,
-      "damageDelta": 1960,
+      "primaryDamage": 3293,
+      "baselineDamage": 1242,
+      "damageDelta": 2051,
       "primaryDynamicPropertySources": [
         {
           "attributeId": 1,
@@ -2138,8 +2893,9 @@
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 36,
+          "dynamicExtraRaw": 1055.9066162109375,
           "effectIds": [
+            "battle-element:-4841411980842434486",
             "battle-element:-5652413049857383353"
           ]
         }
@@ -2167,13 +2923,14 @@
           "attributeId": 229,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 36,
+          "dynamicExtraRaw": 1055.9066162109375,
           "effectIds": [
+            "battle-element:-4841411980842434486",
             "battle-element:-5652413049857383353"
           ]
         }
       ],
-      "baselineReplayHash": "f6e585465764195493412bfbcac85e18c3475b5a6dd4c7bce91ed05d38ea955b"
+      "baselineReplayHash": "e6f78fa4bffa43412b3d1e39795aad4101b5861af43ae01e9b7bef3ea13b9066"
     },
     "trace": {
       "damage": [
@@ -2219,9 +2976,9 @@
           "actionId": "han-ultimate",
           "frame": 253,
           "hitIdentity": null,
-          "rawDamage": 1498,
-          "hpDamage": 1498,
-          "toughnessDamage": 1049,
+          "rawDamage": 1643,
+          "hpDamage": 1643,
+          "toughnessDamage": 1150,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2327,9 +3084,9 @@
           "actionId": "han-normal-a3",
           "frame": 569,
           "hitIdentity": null,
-          "rawDamage": 4575,
-          "hpDamage": 4575,
-          "toughnessDamage": 3203,
+          "rawDamage": 5018,
+          "hpDamage": 5018,
+          "toughnessDamage": 3513,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2473,7 +3230,7 @@
           "hitIdentity": null,
           "rawDamage": 3022,
           "hpDamage": 3022,
-          "toughnessDamage": 751,
+          "toughnessDamage": 340,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4307,8 +5064,8 @@
           "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
           "frame": 2957,
           "hitIdentity": null,
-          "rawDamage": 228,
-          "hpDamage": 228,
+          "rawDamage": 246,
+          "hpDamage": 246,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5063,8 +5820,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3327,
           "hitIdentity": null,
-          "rawDamage": 110,
-          "hpDamage": 110,
+          "rawDamage": 119,
+          "hpDamage": 119,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5111,8 +5868,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3338,
           "hitIdentity": null,
-          "rawDamage": 63,
-          "hpDamage": 63,
+          "rawDamage": 68,
+          "hpDamage": 68,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5147,8 +5904,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3349,
           "hitIdentity": null,
-          "rawDamage": 63,
-          "hpDamage": 63,
+          "rawDamage": 68,
+          "hpDamage": 68,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -6049,448 +6806,1322 @@
       ],
       "effects": [
         {
+          "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 18466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1019.9066162109375,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1019.9066162109375
+            }
+          ]
+        },
+        {
           "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
           "actionId": "han-ultimate",
           "frame": 208,
-          "effectId": "battle-element:-5652413049857383353",
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 2,
-          "expiresAtMs": 27466.667
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 208,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": 27466.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|4216.667|1",
           "actionId": "han-ultimate",
           "frame": 253,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|4216.667|1",
           "actionId": "han-ultimate",
           "frame": 253,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4450|2",
           "actionId": "han-ultimate",
           "frame": 267,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4450|2",
           "actionId": "han-ultimate",
           "frame": 267,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4716.667|3",
           "actionId": "han-ultimate",
           "frame": 283,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4716.667|3",
           "actionId": "han-ultimate",
           "frame": 283,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_EXPIRED|18466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1108,
+          "effectId": "battle-element:101003207",
+          "runtimeEffectId": "battle-element:-4841411980842434486",
+          "sourceElementId": 101003207,
+          "effectName": "主控角色调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1019.9066162109375,
+              "formulaFamily": "source-tuning-ratio-with-common-ratio",
+              "formulaValue": 1019.9066162109375
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|24716.667|4",
           "actionId": "han-ultimate",
           "frame": 1483,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|24716.667|4",
           "actionId": "han-ultimate",
           "frame": 1483,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
           "actionId": "han-ultimate",
           "frame": 1648,
-          "effectId": "battle-element:-5652413049857383353",
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "operation": "expire",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "actionId": "han-ultimate",
+          "frame": 1648,
+          "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:-5652413049857383353",
+          "sourceElementId": 101003205,
+          "effectName": "全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
+          "operation": "expire",
+          "beforeStacks": 2,
+          "afterStacks": null,
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 18
+            }
+          ]
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_APPLIED|31016.667|1",
           "actionId": "han-star-skill",
           "frame": 1861,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31050|5",
           "actionId": "han-star-skill",
           "frame": 1863,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31050|5",
           "actionId": "han-star-skill",
           "frame": 1863,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31133.333|2",
           "actionId": "han-star-skill",
           "frame": 1868,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 41016.666
+          "stackChange": 1,
+          "expiresAtMs": 41016.666,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31166.667|6",
           "actionId": "han-star-skill",
           "frame": 1870,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31166.667|6",
           "actionId": "han-star-skill",
           "frame": 1870,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31216.667|3",
           "actionId": "han-star-skill",
           "frame": 1873,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31566.667|4",
           "actionId": "han-star-skill",
           "frame": 1894,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31650|5",
           "actionId": "han-star-skill",
           "frame": 1899,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 5,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31733.333|6",
           "actionId": "han-star-skill",
           "frame": 1904,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 5,
           "afterStacks": 6,
-          "expiresAtMs": 41016.666
+          "stackChange": 1,
+          "expiresAtMs": 41016.666,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31816.667|7",
           "actionId": "han-star-skill",
           "frame": 1909,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 6,
           "afterStacks": 7,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|31816.667|8",
           "actionId": "han-star-skill",
           "frame": 1909,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 7,
           "afterStacks": 8,
-          "expiresAtMs": 41016.667
+          "stackChange": 1,
+          "expiresAtMs": 41016.667,
+          "modifiers": []
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REFRESHED|33800|9",
           "actionId": "han-charged-stage-one",
           "frame": 2028,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "apply",
           "beforeStacks": 8,
           "afterStacks": 2,
-          "expiresAtMs": 41816.667
+          "stackChange": -6,
+          "expiresAtMs": 41816.667,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101003/battle-element:101003205/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:480124006/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:480124006",
+          "runtimeEffectId": "battle-element:480124006",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·主控攻击力提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 1000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101003205/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-103002/battle-element:101003205/verified-calculator|EFFECT_APPLIED|33816.667|1",
           "actionId": "han-charged-stage-one",
           "frame": 2029,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 57816.667
+          "stackChange": 1,
+          "expiresAtMs": 57816.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "enemy/enemy-300032/battle-element:101003079|EFFECT_REMOVED|36233.333|9",
           "actionId": "han-charged-stage-two",
           "frame": 2174,
           "effectId": "battle-element:101003079",
+          "runtimeEffectId": "battle-element:101003079",
+          "sourceElementId": null,
+          "effectName": "焰火",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
           "operation": "remove",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101003/battle-element:101003205/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 60250
+          "stackChange": 1,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:480124006/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:480124006",
+          "runtimeEffectId": "battle-element:480124006",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·主控攻击力提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 1,
-          "expiresAtMs": 60250
+          "stackChange": 0,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 1000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|36250|7",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 5,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101003205/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 60250
+          "stackChange": 1,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-103002/battle-element:101003205/verified-calculator|EFFECT_REFRESHED|36250|2",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 60250
+          "stackChange": 1,
+          "expiresAtMs": 60250,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|36250|7",
           "actionId": "han-charged-stage-two",
           "frame": 2175,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 5,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-15343624725538709/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_APPLIED|49283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2957,
+          "effectId": "battle-element:101003142",
+          "runtimeEffectId": "battle-element:-15343624725538709|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003142,
+          "effectName": "降低魔法防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 57283.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 4,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-7141218965533365560/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_APPLIED|49283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2957,
+          "effectId": "battle-element:101003145",
+          "runtimeEffectId": "battle-element:-7141218965533365560|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003145,
+          "effectName": "降低物理防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "apply",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 57283.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 3,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-15343624725538709/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_EXPIRED|57283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 3437,
+          "effectId": "battle-element:101003142",
+          "runtimeEffectId": "battle-element:-15343624725538709|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003142,
+          "effectName": "降低魔法防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 4,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "enemy/enemy-300032/battle-element:-7141218965533365560/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_EXPIRED|57283.333|1",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 3437,
+          "effectId": "battle-element:101003145",
+          "runtimeEffectId": "battle-element:-7141218965533365560|source:switch-away-from-han--on-exit--actor-101003--star-carry",
+          "sourceElementId": 101003145,
+          "effectName": "降低物理防御8%",
+          "targetKind": "enemy",
+          "targetId": "enemy-300032",
+          "operation": "expire",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 3,
+              "bucket": "dynamicPercent",
+              "valueRaw": -800,
+              "formulaFamily": "basis-point-property-a-with-common-ratio",
+              "formulaValue": -800
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:101003205/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/battle-element:480124006/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:480124006",
+          "runtimeEffectId": "battle-element:480124006",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·主控攻击力提升",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "expire",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 1000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101003205/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-103002/battle-element:101003205/verified-calculator|EFFECT_EXPIRED|60250|2",
           "actionId": "han-charged-stage-two",
           "frame": 3615,
           "effectId": "battle-element:101003205",
+          "runtimeEffectId": "battle-element:101003205",
+          "sourceElementId": null,
+          "effectName": "焰火爆炸·全队调谐强度提升",
+          "targetKind": "actor",
+          "targetId": "actor-103002",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicExtra",
+              "valueRaw": 18,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|69283.333|8",
           "actionId": "han-ultimate",
           "frame": 4157,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 5,
           "afterStacks": 4,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|69283.333|8",
           "actionId": "han-ultimate",
           "frame": 4157,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 5,
           "afterStacks": 4,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|89283.333|9",
           "actionId": "han-ultimate",
           "frame": 5357,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|89283.333|9",
           "actionId": "han-ultimate",
           "frame": 5357,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|109283.333|10",
           "actionId": "han-star-skill",
           "frame": 6557,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|109283.333|10",
           "actionId": "han-star-skill",
           "frame": 6557,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         }
       ]
     },
-    "summaryHash": "f6b6373a8d3dfceb5186821f8455d97a011a878e14c04ed0a46ccf2d7403821e"
+    "summaryHash": "f0c6ca6f508e4db962dd8e49d79501fa78579b47034dc576ff3499361fba5d9b"
   },
   "expected": {
     "exact": {
@@ -6513,7 +8144,7 @@
       "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
       "combat.ownerHitCountByActionId.han-star-skill": 7,
       "combat.ownerHitCountByActionId.han-ultimate": 7,
-      "combat.ownerTotalHpDamage": 68765,
+      "combat.ownerTotalHpDamage": 69372,
       "combat.ownerTotalToughnessDamage": 6069,
       "resources.targetStateSummary.profileCount": 1,
       "resources.targetStateSummary.eventCount": 10,
@@ -6535,9 +8166,45 @@
       "resources.tuningMarkAcquireByActionId.han-ultimate.totalDelta": 3,
       "effects.passiveMaxStacks": 1,
       "effects.firstPassiveMaxStackFrame": 2029,
+      "effects.selectedEffectSummaryByElementId.101003205.effectNames": [
+        "全队调谐强度提升"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003205.targetKinds": [
+        "actor"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003205.targetIds": [
+        "actor-101003",
+        "actor-101010",
+        "actor-103002"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount": 3,
+      "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount": 3,
+      "effects.selectedEffectSummaryByElementId.101003205.firstAppliedFrame": 208,
+      "effects.selectedEffectSummaryByElementId.101003205.firstExpiredFrame": 1648,
+      "effects.selectedEffectSummaryByElementId.101003205.maxStacks": 2,
+      "effects.selectedEffectSummaryByElementId.101003205.formulaValues": [
+        18
+      ],
+      "effects.selectedEffectSummaryByElementId.101003207.effectNames": [
+        "主控角色调谐强度提升"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003207.targetKinds": [
+        "actor"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003207.targetIds": [
+        "actor-101003"
+      ],
+      "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount": 1,
+      "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount": 1,
+      "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame": 208,
+      "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame": 1108,
+      "effects.selectedEffectSummaryByElementId.101003207.maxStacks": 1,
+      "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [
+        1019.9066162109375
+      ],
       "dynamicProperties.maxPercentRawByAttributeId.1": 1300,
-      "dynamicProperties.maxExtraRawByAttributeId.229": 36,
-      "comparison.damageDelta": 1960
+      "dynamicProperties.maxExtraRawByAttributeId.229": 1055.9066162109375,
+      "comparison.damageDelta": 2051
     },
     "greaterThan": {
       "resources.actorSpByActorId.actor-101003.currentValue": 0,
@@ -6548,7 +8215,7 @@
   "validation": {
     "status": "authoritative-golden-runtime-expectation-passed",
     "passed": true,
-    "assertionCount": 43,
+    "assertionCount": 61,
     "failedCount": 0,
     "assertions": [
       {
@@ -6667,8 +8334,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 68765,
-        "actual": 68765,
+        "expected": 69372,
+        "actual": 69372,
         "passed": true
       },
       {
@@ -6819,6 +8486,168 @@
         "passed": true
       },
       {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.effectNames",
+        "operator": "exact",
+        "expected": [
+          "全队调谐强度提升"
+        ],
+        "actual": [
+          "全队调谐强度提升"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.targetKinds",
+        "operator": "exact",
+        "expected": [
+          "actor"
+        ],
+        "actual": [
+          "actor"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.targetIds",
+        "operator": "exact",
+        "expected": [
+          "actor-101003",
+          "actor-101010",
+          "actor-103002"
+        ],
+        "actual": [
+          "actor-101003",
+          "actor-101010",
+          "actor-103002"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount",
+        "operator": "exact",
+        "expected": 3,
+        "actual": 3,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount",
+        "operator": "exact",
+        "expected": 3,
+        "actual": 3,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.firstAppliedFrame",
+        "operator": "exact",
+        "expected": 208,
+        "actual": 208,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.firstExpiredFrame",
+        "operator": "exact",
+        "expected": 1648,
+        "actual": 1648,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.maxStacks",
+        "operator": "exact",
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003205.formulaValues",
+        "operator": "exact",
+        "expected": [
+          18
+        ],
+        "actual": [
+          18
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.effectNames",
+        "operator": "exact",
+        "expected": [
+          "主控角色调谐强度提升"
+        ],
+        "actual": [
+          "主控角色调谐强度提升"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.targetKinds",
+        "operator": "exact",
+        "expected": [
+          "actor"
+        ],
+        "actual": [
+          "actor"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.targetIds",
+        "operator": "exact",
+        "expected": [
+          "actor-101003"
+        ],
+        "actual": [
+          "actor-101003"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame",
+        "operator": "exact",
+        "expected": 208,
+        "actual": 208,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame",
+        "operator": "exact",
+        "expected": 1108,
+        "actual": 1108,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.maxStacks",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
+        "passed": true
+      },
+      {
+        "jsonPath": "effects.selectedEffectSummaryByElementId.101003207.formulaValues",
+        "operator": "exact",
+        "expected": [
+          1019.9066162109375
+        ],
+        "actual": [
+          1019.9066162109375
+        ],
+        "passed": true
+      },
+      {
         "jsonPath": "dynamicProperties.maxPercentRawByAttributeId.1",
         "operator": "exact",
         "expected": 1300,
@@ -6828,15 +8657,15 @@
       {
         "jsonPath": "dynamicProperties.maxExtraRawByAttributeId.229",
         "operator": "exact",
-        "expected": 36,
-        "actual": 36,
+        "expected": 1055.9066162109375,
+        "actual": 1055.9066162109375,
         "passed": true
       },
       {
         "jsonPath": "comparison.damageDelta",
         "operator": "exact",
-        "expected": 1960,
-        "actual": 1960,
+        "expected": 2051,
+        "actual": 2051,
         "passed": true
       },
       {
@@ -6857,11 +8686,11 @@
         "jsonPath": "comparison.primaryDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 3148,
+        "actual": 3293,
         "passed": true
       }
     ]
   },
-  "replayHash": "d77c0b1b92c7d24968e6d7b788e58dc769691d76cfa5698de14bc6b74e030267",
-  "profileHash": "a6af55d6d7582e3574b2823cced25208a4006c4ee641ed7cde581cb938382381"
+  "replayHash": "c6e72904bfb5ba21a83568527f203320c1344be4c4fa056cb976573769501650",
+  "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7"
 }

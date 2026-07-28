@@ -2,7 +2,7 @@
 
 - Owner: `101010`
 - Profile: `actor:101010:character-combat-profile:v1`
-- Hash: `07fdd4c1d6619d23b87798bc6969b64bbef593e27df837798227a058f4446d90`
+- Hash: `bfe00286754b3c24d1f4d5a5ad61756fa0fc47516d39aa1898722f8ce0678288`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -19,28 +19,28 @@
 
 ## 维度状态
 
-| 维度 | 状态 | 数量 |
-| --- | --- | ---: |
-| publicActions | static-evidence-gap | 10 |
-| hiddenAndDerivedForms | static-evidence-gap | 21 |
-| inputAndExecutionTiming | applied | 7 |
-| effectiveOccupancy | applied | 21 |
-| hitsAndProjectiles | static-evidence-gap | 108 |
-| hpDamage | static-evidence-gap | 91 |
-| toughnessDamage | static-evidence-gap | 91 |
-| actorSp | static-evidence-gap | 91 |
-| kiboSp | static-evidence-gap | 91 |
-| cooldowns | applied | 20 |
-| personalResources | static-evidence-gap | 32 |
-| teamResourcesAndMarks | applied | 1 |
-| buffsAndDebuffs | static-evidence-gap | 118 |
-| passives | applied | 1 |
-| dynamicProperties | static-evidence-gap | 7 |
-| healingAndShields | not-applicable | 0 |
-| stateMachines | applied | 1 |
-| switchAndStarCarry | applied | 1 |
-| frontBackDifferences | applied | 1 |
-| loadoutAndTeamStatPropagation | applied | 1 |
+| 维度 | 状态 | 已应用 | 未解析 | 总数 |
+| --- | --- | ---: | ---: | ---: |
+| publicActions | static-evidence-gap | 7 | 3 | 10 |
+| hiddenAndDerivedForms | static-evidence-gap | 19 | 2 | 21 |
+| inputAndExecutionTiming | applied | 7 | 0 | 7 |
+| effectiveOccupancy | applied | 21 | 0 | 21 |
+| hitsAndProjectiles | static-evidence-gap | 104 | 4 | 108 |
+| hpDamage | static-evidence-gap | 18 | 73 | 91 |
+| toughnessDamage | static-evidence-gap | 18 | 73 | 91 |
+| actorSp | static-evidence-gap | 11 | 66 | 91 |
+| kiboSp | static-evidence-gap | 11 | 66 | 91 |
+| cooldowns | applied | 20 | 0 | 20 |
+| personalResources | static-evidence-gap | 25 | 7 | 32 |
+| teamResourcesAndMarks | applied | 1 | 0 | 1 |
+| buffsAndDebuffs | static-evidence-gap | 9 | 109 | 118 |
+| passives | applied | 1 | 0 | 1 |
+| dynamicProperties | static-evidence-gap | 2 | 5 | 7 |
+| healingAndShields | not-applicable | 0 | 0 | 0 |
+| stateMachines | applied | 1 | 0 | 1 |
+| switchAndStarCarry | applied | 1 | 0 | 1 |
+| frontBackDifferences | applied | 1 | 0 | 1 |
+| loadoutAndTeamStatPropagation | applied | 1 | 0 | 1 |
 
 ## 未闭环
 

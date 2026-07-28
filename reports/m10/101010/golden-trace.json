@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "56e344b403b69743befdd3b29d781f6c96e3d44907c703635b57833199aa229b",
+  "sourcePackageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -454,14 +454,14 @@
         "ultimate-enhanced-special-charged": 2,
         "ultimate-refresh": 12
       },
-      "totalHpDamage": 316739,
+      "totalHpDamage": 316853,
       "totalToughnessDamage": 0,
       "ownerTotalHpDamage": 131213,
       "ownerTotalToughnessDamage": 3704,
       "enemy": {
         "pointCount": 582,
         "initialHp": 862800,
-        "finalHp": 546061,
+        "finalHp": 545947,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 6667,
@@ -2973,90 +2973,306 @@
           "actionId": "threshold-charged",
           "frame": 1,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 8016.667
+          "stackChange": 1,
+          "expiresAtMs": 8016.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|4900|2",
           "actionId": "threshold-enhanced-special-charged",
           "frame": 294,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 12900
+          "stackChange": 1,
+          "expiresAtMs": 12900,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|6016.667|3",
           "actionId": "ultimate-refresh",
           "frame": 361,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": 14016.667
+          "stackChange": 1,
+          "expiresAtMs": 14016.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|12683.333|4",
           "actionId": "jade-limit-counter",
           "frame": 761,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": 20683.333
+          "stackChange": 1,
+          "expiresAtMs": 20683.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|16316.667|5",
           "actionId": "ultimate-enhanced-special-charged",
           "frame": 979,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 4,
-          "expiresAtMs": 24316.667
+          "stackChange": 0,
+          "expiresAtMs": 24316.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_EXPIRED|24316.667|5",
           "actionId": "ultimate-enhanced-special-charged",
           "frame": 1459,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 4,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -4,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_APPLIED|41883.333|1",
           "actionId": "normal-special-charged",
           "frame": 2513,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 49883.333
+          "stackChange": 1,
+          "expiresAtMs": 49883.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|47000|2",
           "actionId": "jade-star-derived-charged",
           "frame": 2820,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 55000
+          "stackChange": 1,
+          "expiresAtMs": 55000,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_EXPIRED|55000|2",
           "actionId": "jade-star-derived-charged",
           "frame": 3300,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         }
       ],
       "passiveMaxStacks": 4,
@@ -3067,32 +3283,82 @@
           "actionId": "threshold-charged",
           "frame": 43,
           "effectId": "battle-element:101010129",
+          "runtimeEffectId": "battle-element:101010129",
+          "sourceElementId": null,
+          "effectName": "爆发状态buff",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 10716.667
+          "stackChange": 1,
+          "expiresAtMs": 10716.667,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010129|EFFECT_REFRESHED|10533.333|2",
           "actionId": "ultimate-refresh",
           "frame": 632,
           "effectId": "battle-element:101010129",
+          "runtimeEffectId": "battle-element:101010129",
+          "sourceElementId": null,
+          "effectName": "爆发状态buff",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "refresh",
           "beforeStacks": 1,
           "afterStacks": 1,
-          "expiresAtMs": 20533.333
+          "stackChange": 0,
+          "expiresAtMs": 20533.333,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010129|EFFECT_EXPIRED|20533.333|2",
           "actionId": "ultimate-refresh",
           "frame": 1232,
           "effectId": "battle-element:101010129",
+          "runtimeEffectId": "battle-element:101010129",
+          "sourceElementId": null,
+          "effectName": "爆发状态buff",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": []
         }
       ],
+      "selectedEffectSummaryByElementId": {
+        "540016": {
+          "effectId": "battle-element:540016",
+          "effectNames": [
+            "火元素增伤提升1"
+          ],
+          "targetKinds": [
+            "actor",
+            "kibo"
+          ],
+          "targetIds": [
+            "actor-101010"
+          ],
+          "appliedEventCount": 2,
+          "expiredEventCount": 2,
+          "firstAppliedFrame": 2070,
+          "firstExpiredFrame": 3030,
+          "maxStacks": 1,
+          "attributeIds": [
+            52
+          ],
+          "formulaFamilies": [
+            "literal-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            216
+          ]
+        }
+      },
       "burstTransitions": [
         {
           "actionId": "threshold-charged",
@@ -3230,7 +3496,7 @@
           ]
         }
       ],
-      "baselineReplayHash": "90de6612112440b88f8f467615ca622b7bfaf18bd73f9f5c553ec35ec250e59a"
+      "baselineReplayHash": "5293845c73c2be56f841d9250df249ba0f352e62606ec843e8ea7ef6a99663d4"
     },
     "trace": {
       "damage": [
@@ -4416,9 +4682,9 @@
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
           "hitIdentity": null,
-          "rawDamage": 39,
-          "hpDamage": 39,
-          "toughnessDamage": 27,
+          "rawDamage": 42,
+          "hpDamage": 42,
+          "toughnessDamage": 29,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4440,9 +4706,9 @@
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1408,
           "hitIdentity": null,
-          "rawDamage": 181,
-          "hpDamage": 181,
-          "toughnessDamage": 127,
+          "rawDamage": 196,
+          "hpDamage": 196,
+          "toughnessDamage": 137,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4452,9 +4718,9 @@
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1414,
           "hitIdentity": null,
-          "rawDamage": 60,
-          "hpDamage": 60,
-          "toughnessDamage": 42,
+          "rawDamage": 65,
+          "hpDamage": 65,
+          "toughnessDamage": 46,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4464,9 +4730,9 @@
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1420,
           "hitIdentity": null,
-          "rawDamage": 60,
-          "hpDamage": 60,
-          "toughnessDamage": 42,
+          "rawDamage": 65,
+          "hpDamage": 65,
+          "toughnessDamage": 46,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4476,9 +4742,9 @@
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1426,
           "hitIdentity": null,
-          "rawDamage": 60,
-          "hpDamage": 60,
-          "toughnessDamage": 42,
+          "rawDamage": 65,
+          "hpDamage": 65,
+          "toughnessDamage": 46,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4488,9 +4754,9 @@
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1432,
           "hitIdentity": null,
-          "rawDamage": 60,
-          "hpDamage": 60,
-          "toughnessDamage": 42,
+          "rawDamage": 65,
+          "hpDamage": 65,
+          "toughnessDamage": 46,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4514,7 +4780,7 @@
           "hitIdentity": null,
           "rawDamage": 2625,
           "hpDamage": 2625,
-          "toughnessDamage": 1645,
+          "toughnessDamage": 1617,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4548,8 +4814,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1725,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4572,8 +4838,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1733,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4608,8 +4874,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1741,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4632,8 +4898,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1749,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4656,8 +4922,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1757,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4692,8 +4958,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1765,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4716,8 +4982,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1773,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4740,8 +5006,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1781,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4776,8 +5042,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1789,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4800,8 +5066,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1797,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4824,8 +5090,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1805,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4860,8 +5126,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1813,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4884,8 +5150,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1821,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4908,8 +5174,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1829,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4944,8 +5210,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1837,
           "hitIdentity": null,
-          "rawDamage": 10,
-          "hpDamage": 10,
+          "rawDamage": 11,
+          "hpDamage": 11,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5004,8 +5270,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1861,
           "hitIdentity": null,
-          "rawDamage": 605,
-          "hpDamage": 605,
+          "rawDamage": 652,
+          "hpDamage": 652,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -5076,8 +5342,8 @@
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "hitIdentity": null,
-          "rawDamage": 180,
-          "hpDamage": 180,
+          "rawDamage": 194,
+          "hpDamage": 194,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -8634,364 +8900,1017 @@
           "actionId": "threshold-charged",
           "frame": 1,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 8016.667
+          "stackChange": 1,
+          "expiresAtMs": 8016.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010129|EFFECT_APPLIED|716.667|1",
           "actionId": "threshold-charged",
           "frame": 43,
           "effectId": "battle-element:101010129",
+          "runtimeEffectId": "battle-element:101010129",
+          "sourceElementId": null,
+          "effectName": "爆发状态buff",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 10716.667
+          "stackChange": 1,
+          "expiresAtMs": 10716.667,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|4900|2",
           "actionId": "threshold-enhanced-special-charged",
           "frame": 294,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 12900
+          "stackChange": 1,
+          "expiresAtMs": 12900,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|6016.667|3",
           "actionId": "ultimate-refresh",
           "frame": 361,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": 14016.667
+          "stackChange": 1,
+          "expiresAtMs": 14016.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010129|EFFECT_REFRESHED|10533.333|2",
           "actionId": "ultimate-refresh",
           "frame": 632,
           "effectId": "battle-element:101010129",
+          "runtimeEffectId": "battle-element:101010129",
+          "sourceElementId": null,
+          "effectName": "爆发状态buff",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "refresh",
           "beforeStacks": 1,
           "afterStacks": 1,
-          "expiresAtMs": 20533.333
+          "stackChange": 0,
+          "expiresAtMs": 20533.333,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|12683.333|4",
           "actionId": "jade-limit-counter",
           "frame": 761,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 4,
-          "expiresAtMs": 20683.333
+          "stackChange": 1,
+          "expiresAtMs": 20683.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|16316.667|5",
           "actionId": "ultimate-enhanced-special-charged",
           "frame": 979,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 4,
           "afterStacks": 4,
-          "expiresAtMs": 24316.667
+          "stackChange": 0,
+          "expiresAtMs": 24316.667,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|20216.667|1",
           "actionId": "han-star-skill",
           "frame": 1213,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|20216.667|1",
           "actionId": "han-star-skill",
           "frame": 1213,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|20333.333|2",
           "actionId": "han-star-skill",
           "frame": 1220,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|20333.333|2",
           "actionId": "han-star-skill",
           "frame": 1220,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010129|EFFECT_EXPIRED|20533.333|2",
           "actionId": "ultimate-refresh",
           "frame": 1232,
           "effectId": "battle-element:101010129",
+          "runtimeEffectId": "battle-element:101010129",
+          "sourceElementId": null,
+          "effectName": "爆发状态buff",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": []
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|23400|1",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1404,
           "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|23400|1",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1404,
           "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|23450|3",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|23450|3",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 3,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_EXPIRED|24316.667|5",
           "actionId": "ultimate-enhanced-special-charged",
           "frame": 1459,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 4,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -4,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31400|4",
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31400|4",
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 3,
           "afterStacks": 2,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31666.667|5",
           "actionId": "ruby-ultimate",
           "frame": 1900,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|31666.667|5",
           "actionId": "ruby-ultimate",
           "frame": 1900,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 2,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:5945053457653544063/verified-calculator|EFFECT_APPLIED|34500|1",
           "actionId": "fire-kibo-signature",
           "frame": 2070,
-          "effectId": "battle-element:5945053457653544063",
+          "effectId": "battle-element:540016",
+          "runtimeEffectId": "battle-element:5945053457653544063",
+          "sourceElementId": 540016,
+          "effectName": "火元素增伤提升1",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 50500
+          "stackChange": 1,
+          "expiresAtMs": 50500,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 52,
+              "bucket": "dynamicExtra",
+              "valueRaw": 216,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 216
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/battle-element:5945053457653544063/verified-calculator|EFFECT_APPLIED|34500|1",
           "actionId": "fire-kibo-signature",
           "frame": 2070,
-          "effectId": "battle-element:5945053457653544063",
+          "effectId": "battle-element:540016",
+          "runtimeEffectId": "battle-element:5945053457653544063",
+          "sourceElementId": 540016,
+          "effectName": "火元素增伤提升1",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 50500
+          "stackChange": 1,
+          "expiresAtMs": 50500,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 52,
+              "bucket": "dynamicExtra",
+              "valueRaw": 216,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 216
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:750:persistent/verified-calculator|EFFECT_APPLIED|41050|1",
           "actionId": "normal-a5",
           "frame": 2463,
           "effectId": "tuning-mark:750:persistent",
+          "runtimeEffectId": "tuning-mark:750:persistent",
+          "sourceElementId": null,
+          "effectName": "风调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 105,
+              "bucket": "dynamicExtra",
+              "valueRaw": 558,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:750:persistent/verified-calculator|EFFECT_APPLIED|41050|1",
           "actionId": "normal-a5",
           "frame": 2463,
           "effectId": "tuning-mark:750:persistent",
+          "runtimeEffectId": "tuning-mark:750:persistent",
+          "sourceElementId": null,
+          "effectName": "风调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": null
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 105,
+              "bucket": "dynamicExtra",
+              "valueRaw": 558,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_APPLIED|41883.333|1",
           "actionId": "normal-special-charged",
           "frame": 2513,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": null,
           "afterStacks": 1,
-          "expiresAtMs": 49883.333
+          "stackChange": 1,
+          "expiresAtMs": 49883.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:750:persistent/verified-calculator|EFFECT_REMOVED|42750|1",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "effectId": "tuning-mark:750:persistent",
+          "runtimeEffectId": "tuning-mark:750:persistent",
+          "sourceElementId": null,
+          "effectName": "风调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "remove",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 105,
+              "bucket": "dynamicExtra",
+              "valueRaw": 558,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:750:persistent/verified-calculator|EFFECT_REMOVED|42750|1",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "effectId": "tuning-mark:750:persistent",
+          "runtimeEffectId": "tuning-mark:750:persistent",
+          "sourceElementId": null,
+          "effectName": "风调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "remove",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 105,
+              "bucket": "dynamicExtra",
+              "valueRaw": 558,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|43400|1",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 2604,
           "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "remove",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|43400|1",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 2604,
           "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "remove",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REMOVED|43450|5",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 2607,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "remove",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/tuning-mark:150:persistent/verified-calculator|EFFECT_REMOVED|43450|5",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 2607,
           "effectId": "tuning-mark:150:persistent",
+          "runtimeEffectId": "tuning-mark:150:persistent",
+          "sourceElementId": null,
+          "effectName": "火调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "remove",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_REFRESHED|47000|2",
           "actionId": "jade-star-derived-charged",
           "frame": 2820,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "apply",
           "beforeStacks": 1,
           "afterStacks": 2,
-          "expiresAtMs": 55000
+          "stackChange": 1,
+          "expiresAtMs": 55000,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:5945053457653544063/verified-calculator|EFFECT_EXPIRED|50500|1",
           "actionId": "fire-kibo-signature",
           "frame": 3030,
-          "effectId": "battle-element:5945053457653544063",
+          "effectId": "battle-element:540016",
+          "runtimeEffectId": "battle-element:5945053457653544063",
+          "sourceElementId": 540016,
+          "effectName": "火元素增伤提升1",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 52,
+              "bucket": "dynamicExtra",
+              "valueRaw": 216,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 216
+            }
+          ]
         },
         {
           "eventId": "kibo/actor-101010/battle-element:5945053457653544063/verified-calculator|EFFECT_EXPIRED|50500|1",
           "actionId": "fire-kibo-signature",
           "frame": 3030,
-          "effectId": "battle-element:5945053457653544063",
+          "effectId": "battle-element:540016",
+          "runtimeEffectId": "battle-element:5945053457653544063",
+          "sourceElementId": 540016,
+          "effectName": "火元素增伤提升1",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 1,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 52,
+              "bucket": "dynamicExtra",
+              "valueRaw": 216,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 216
+            }
+          ]
         },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_EXPIRED|55000|2",
           "actionId": "jade-star-derived-charged",
           "frame": 3300,
           "effectId": "battle-element:101010206",
+          "runtimeEffectId": "battle-element:101010206",
+          "sourceElementId": null,
+          "effectName": "玉未央",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
           "operation": "expire",
           "beforeStacks": 2,
           "afterStacks": null,
-          "expiresAtMs": null
+          "stackChange": -2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 500,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 229,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3200,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         }
       ]
     },
-    "summaryHash": "001254dbe511aecf981bf2eb0548db5580e7c03a69e45b97afc75a05fa52ce95"
+    "summaryHash": "02aaf00215319f70d2a79b699f3c0adb7c248c9179ce569fe7e7c01825ceaf6f"
   },
   "expected": {
     "exact": {
@@ -9028,7 +9947,7 @@
       "combat.ownerTotalHpDamage": 131213,
       "combat.ownerTotalToughnessDamage": 3704,
       "combat.enemy.initialHp": 862800,
-      "combat.enemy.finalHp": 546061,
+      "combat.enemy.finalHp": 545947,
       "resources.thresholdClearCount": 1,
       "resources.transformCount": 1,
       "resources.refreshCount": 1,
@@ -9308,8 +10227,8 @@
       {
         "jsonPath": "combat.enemy.finalHp",
         "operator": "exact",
-        "expected": 546061,
-        "actual": 546061,
+        "expected": 545947,
+        "actual": 545947,
         "passed": true
       },
       {
@@ -9559,6 +10478,6 @@
       }
     ]
   },
-  "replayHash": "ee13eb665e43c0a1e7e2db7eb2324903a8bda1a2b6dfec3fe311b2d0b242c6b3",
-  "profileHash": "07fdd4c1d6619d23b87798bc6969b64bbef593e27df837798227a058f4446d90"
+  "replayHash": "ee1c327d33f9d3d18c516ec1d59911cfff155e9b0c46b3d99afa77227cc7e116",
+  "profileHash": "bfe00286754b3c24d1f4d5a5ad61756fa0fc47516d39aa1898722f8ce0678288"
 }

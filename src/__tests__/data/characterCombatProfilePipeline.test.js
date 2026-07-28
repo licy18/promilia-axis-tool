@@ -1324,7 +1324,7 @@ describe('M10 character combat profile pipeline', () => {
         ownerHitEventCount: 111,
         ownerTotalHpDamage: 131213,
         ownerTotalToughnessDamage: 3704,
-        enemy: { initialHp: 862800, finalHp: 546061 },
+        enemy: { initialHp: 862800, finalHp: 545947 },
       },
       resources: {
         thresholdClearCount: 1,

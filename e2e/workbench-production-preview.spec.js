@@ -7761,7 +7761,7 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
 test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, and three-value changes through the real Workbench', async ({
   page,
 }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(240_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
   await page.evaluate(() => window.localStorage.clear());
@@ -7785,6 +7785,10 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
       '[data-testid="workbench-action-library-actor"][data-character-id="101003"]'
     )
   ).toHaveAttribute('data-active', 'true');
+  const actorInitialSp = timeline.locator(
+    '[data-testid="workbench-timeline-initial-energy-input"][data-owner-kind="actor"][data-character-id="101003"]'
+  );
+  await expect(actorInitialSp).toHaveValue('0');
 
   const actorLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
@@ -7802,6 +7806,7 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
   );
   await expect(starSkillAction).toHaveCount(1);
+  await setTimelineActionStartFrame(page, starSkillAction, 60);
 
   await dragLocatorTo(page, chargedEntry, actorLane, {
     targetPosition: { x: 260, y: 72 },
@@ -7813,38 +7818,43 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
   const stageOneAction = chargedActions.first();
   await expect(stageOneAction).toContainText('重击1段');
   await expect(stageOneAction).toContainText('control 10100310/sub0');
-
-  await dragLocatorTo(page, chargedEntry, actorLane, {
-    targetPosition: { x: 400, y: 72 },
-  });
-  await expect(chargedActions).toHaveCount(2);
-  const stageTwoAction = chargedActions.last();
-  await stageTwoAction.click();
-  const stageTwoOption = page
-    .getByTestId('workbench-action-variant-option')
-    .filter({ hasText: '重击2段' });
-  await expect(stageTwoOption).toBeVisible();
-  await stageTwoOption.click();
-  await expect(stageTwoAction).toContainText('重击2段');
-  await expect(stageTwoAction).toContainText('control 10100341/sub0');
+  await setTimelineActionStartFrame(page, stageOneAction, 153);
 
   const starSkillActionId =
     await starSkillAction.getAttribute('data-action-id');
-  const stageOneActionId =
-    await stageOneAction.getAttribute('data-action-id');
-  const stageTwoActionId =
-    await stageTwoAction.getAttribute('data-action-id');
+  const stageOneActionId = await stageOneAction.getAttribute('data-action-id');
   expect(starSkillActionId).toBeTruthy();
   expect(stageOneActionId).toBeTruthy();
-  expect(stageTwoActionId).toBeTruthy();
+  await expect
+    .poll(async () =>
+      Number(await starSkillAction.getAttribute('data-start-ms'))
+    )
+    .toBe(frameToMs(60));
+  await expect
+    .poll(async () =>
+      Number(await stageOneAction.getAttribute('data-start-ms'))
+    )
+    .toBe(frameToMs(153));
 
   const fireworkIntervals = timeline.locator(
     '[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101003079"][data-target-kind="enemy"]'
   );
-  await expect
-    .poll(async () => fireworkIntervals.count())
-    .toBeGreaterThan(0);
+  await expect.poll(async () => fireworkIntervals.count()).toBeGreaterThan(0);
   await expect(fireworkIntervals.first()).toContainText('焰火');
+  await expect(fireworkIntervals.first()).toHaveAttribute(
+    'data-peak-stacks',
+    '8'
+  );
+  await expect(fireworkIntervals.first()).toHaveAttribute(
+    'data-max-stacks',
+    '15'
+  );
+  const fireworkConsume = fireworkIntervals
+    .first()
+    .locator(
+      '[data-testid="workbench-effect-lifecycle-marker"][data-before-stacks="8"][data-after-stacks="2"]'
+    );
+  await expect(fireworkConsume).toHaveCount(1);
 
   const stateNodesFor = (laneId, actionId) =>
     timeline.locator(
@@ -7856,29 +7866,136 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     )
     .toBeGreaterThan(0);
   await expect
-    .poll(async () =>
-      stateNodesFor('energy-actor-101003', stageTwoActionId).count()
+    .poll(() =>
+      sumTimelineNodeEventCount(
+        stateNodesFor('enemy-hp-curve', stageOneActionId)
+      )
     )
-    .toBeGreaterThan(0);
+    .toBe(9);
+  await expect
+    .poll(() =>
+      sumTimelineNodeEventCount(
+        stateNodesFor('enemy-toughness-curve', stageOneActionId)
+      )
+    )
+    .toBe(9);
+
+  await stageOneAction.click();
+  await openActionInspectorPanel(page, 'properties', stageOneActionId);
+  const stageOneHitRows = page.getByTestId('workbench-hit-override-row');
+  const stageOneExplosionRows = page.locator(
+    '[data-testid="workbench-hit-override-row"][data-hit-label*="重击1引爆"]'
+  );
+  await expect(stageOneHitRows).toHaveCount(9);
+  await expect(stageOneExplosionRows).toHaveCount(5);
   await expect
     .poll(async () =>
-      stateNodesFor('enemy-hp-curve', stageOneActionId).count()
+      stageOneExplosionRows.evaluateAll(rows =>
+        rows.map(row => Number(row.dataset.hitFrame))
+      )
     )
-    .toBeGreaterThan(0);
+    .toEqual([31, 55, 58, 62, 65]);
+
+  const controlledAttackBuff = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:480124006"][data-target-id="actor-101003"][data-source-action-id="${stageOneActionId}"]`
+  );
+  const stageOneTeamTuningBuffs = timeline.locator(
+    `[data-testid="workbench-timeline-effect-interval"][data-effect-id="battle-element:101003205"][data-source-action-id="${stageOneActionId}"]`
+  );
+  await expect(controlledAttackBuff).toHaveCount(1);
+  await expect(stageOneTeamTuningBuffs).toHaveCount(3);
+  await controlledAttackBuff.click();
+  await openRuntimeReviewTab(page, 'effect');
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('焰火爆炸·主控攻击力提升');
+  await expect(
+    page.getByTestId('workbench-effect-interval-modifiers')
+  ).toHaveText('攻击力 +10%');
+  await stageOneTeamTuningBuffs.first().click();
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('焰火爆炸·全队调谐强度提升');
+  await expect(
+    page.getByTestId('workbench-effect-interval-modifiers')
+  ).toHaveText('调谐强度 +18/层');
+
+  await openRuntimeReviewTab(page, 'event');
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
+    )
+    .click();
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="selfEnergyChange"]'
+    )
+    .click();
+  await page
+    .getByTestId('workbench-runtime-sim-log-action-filter')
+    .selectOption(stageOneActionId);
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-window')
+  ).toContainText('SP +2');
+
+  await starSkillAction.click();
+  await openActionInspectorPanel(page, 'properties', starSkillActionId);
+  const disabledStarHit = page.locator(
+    '[data-testid="workbench-hit-override-row"][data-hit-frame="68"] input[type="checkbox"]'
+  );
+  await expect(disabledStarHit).toBeChecked();
+  await disabledStarHit.uncheck();
+  await expect(fireworkIntervals.first()).toHaveAttribute(
+    'data-peak-stacks',
+    '7'
+  );
+  await expect(
+    fireworkIntervals
+      .first()
+      .locator(
+        '[data-testid="workbench-effect-lifecycle-marker"][data-before-stacks="7"][data-after-stacks="1"]'
+      )
+  ).toHaveCount(1);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(fireworkIntervals.first()).toHaveAttribute(
+    'data-peak-stacks',
+    '8'
+  );
+
+  await setTimelineActionStartFrame(page, starSkillAction, 400);
+  await stageOneAction.click();
+  await openActionInspectorPanel(page, 'properties', stageOneActionId);
+  await expect(stageOneHitRows).toHaveCount(4);
+  await expect(stageOneExplosionRows).toHaveCount(0);
   await expect
-    .poll(async () =>
-      stateNodesFor('enemy-toughness-curve', stageTwoActionId).count()
+    .poll(() =>
+      sumTimelineNodeEventCount(
+        stateNodesFor('enemy-hp-curve', stageOneActionId)
+      )
     )
-    .toBeGreaterThan(0);
-  const fireMarkNodes = stateNodesFor(
-    'tuning-mark-150',
-    stageTwoActionId
+    .toBe(4);
+  await expect(controlledAttackBuff).toHaveCount(0);
+  await expect(stageOneTeamTuningBuffs).toHaveCount(0);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(starSkillAction).toHaveAttribute(
+    'data-start-ms',
+    String(frameToMs(60))
   );
-  await expect.poll(async () => fireMarkNodes.count()).toBeGreaterThan(0);
-  await expect(fireMarkNodes.first()).toHaveAttribute(
-    'data-event-kinds',
-    /acquire/
+  await expect(fireworkIntervals.first()).toHaveAttribute(
+    'data-peak-stacks',
+    '8'
   );
+  await expect
+    .poll(() =>
+      sumTimelineNodeEventCount(
+        stateNodesFor('enemy-hp-curve', stageOneActionId)
+      )
+    )
+    .toBe(9);
+  await stageOneAction.click();
+  await openActionInspectorPanel(page, 'properties', stageOneActionId);
+  await expect(stageOneExplosionRows).toHaveCount(5);
+  await expect(controlledAttackBuff).toHaveCount(1);
 
   await page.getByTestId('workbench-save-draft').click();
   await page.reload();
@@ -7886,28 +8003,102 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     '已恢复草稿'
   );
   await expect(starSkillAction).toHaveCount(1);
-  await expect(chargedActions).toHaveCount(2);
-  await expect(stageTwoAction).toContainText('重击2段');
+  await expect(chargedActions).toHaveCount(1);
+  await expect(stageOneAction).toContainText('重击1段');
   await expect(fireworkIntervals.first()).toContainText('焰火');
 
-  await stageTwoAction.click();
-  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
-    '重击2段'
+  await actorInitialSp.fill('100');
+  await actorInitialSp.press('Enter');
+  await expect(actorInitialSp).toHaveValue('100');
+  const ultimateEntry = page.locator(
+    '[data-testid="workbench-skill-entry"][data-action-kind="ultimate"][data-skill-id="10100313"]'
   );
-  await expect(page.getByTestId('workbench-side-inspector')).toContainText(
-    'control 10100341/sub0'
+  await dragLocatorTo(page, ultimateEntry, actorLane, {
+    targetPosition: { x: 620, y: 72 },
+  });
+  const ultimateAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100313"]'
   );
+  await expect(ultimateAction).toHaveCount(1);
+  await setTimelineActionStartFrame(page, ultimateAction, 1800);
+  await expect(ultimateAction).toHaveAttribute(
+    'data-readiness-executable',
+    'true'
+  );
+
+  const controlledTuningBuff = timeline.locator(
+    '[data-testid="workbench-timeline-effect-interval"][data-source-element-id="101003207"]'
+  );
+  const teamTuningBuffs = timeline.locator(
+    '[data-testid="workbench-timeline-effect-interval"][data-source-element-id="101003205"]'
+  );
+  await expect(controlledTuningBuff).toHaveCount(1);
+  await expect(teamTuningBuffs).toHaveCount(3);
+  await expect(controlledTuningBuff).toContainText('主控角色调谐强度提升');
+  await expect(controlledTuningBuff).toHaveAttribute(
+    'data-target-id',
+    'actor-101003'
+  );
+  await expect(controlledTuningBuff).toHaveAttribute(
+    'data-start-frame-index',
+    '1948'
+  );
+  await expect(controlledTuningBuff).toHaveAttribute(
+    'data-end-frame-index',
+    '2848'
+  );
+  await expect(controlledTuningBuff).toHaveAttribute('data-peak-stacks', '1');
+  await expect(teamTuningBuffs.first()).toContainText('全队调谐强度提升');
+  await expect(teamTuningBuffs.first()).toHaveAttribute(
+    'data-start-frame-index',
+    '1948'
+  );
+  await expect(teamTuningBuffs.first()).toHaveAttribute(
+    'data-end-frame-index',
+    '3388'
+  );
+  await expect(teamTuningBuffs.first()).toHaveAttribute(
+    'data-peak-stacks',
+    '2'
+  );
+
+  await controlledTuningBuff.scrollIntoViewIfNeeded();
+  await controlledTuningBuff.click();
+  await openRuntimeReviewTab(page, 'effect');
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('主控角色调谐强度提升');
+  await expect(
+    page.getByTestId('workbench-effect-interval-modifiers')
+  ).toHaveText('调谐强度 +1,019.91');
+  await teamTuningBuffs.first().click();
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('全队调谐强度提升');
+  await expect(
+    page.getByTestId('workbench-effect-interval-modifiers')
+  ).toHaveText('调谐强度 +18/层');
+  await expect(page.locator('body')).not.toContainText('精通加成');
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(controlledTuningBuff).toHaveCount(1);
+  await expect(teamTuningBuffs).toHaveCount(3);
+  await controlledTuningBuff.scrollIntoViewIfNeeded();
   await page.screenshot({
-    path: 'reports/m10-b2-han-firework-desktop.png',
+    path: 'reports/m10-b2-r1-han-causal-chain-desktop.png',
   });
 
   await page.setViewportSize({ width: 390, height: 900 });
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
-  await expect(fireworkIntervals.first()).toContainText('焰火');
+  await expect(controlledTuningBuff).toContainText('主控角色调谐强度提升');
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
-    path: 'reports/m10-b2-han-firework-narrow.png',
+    path: 'reports/m10-b2-r1-han-causal-chain-narrow.png',
   });
 });
 
@@ -8361,8 +8552,9 @@ test('[m10-b1-r3-ruby-star-carry-entry] replays a real switch into Ruby thunder 
       '[data-testid="workbench-timeline-action"][data-skill-id="10300201"][data-attack-sequence-index="1"]'
     )
     .first();
-  const enhancedGroupId = await enhancedFirstBlock
-    .getAttribute('data-attack-group-id');
+  const enhancedGroupId = await enhancedFirstBlock.getAttribute(
+    'data-attack-group-id'
+  );
   expect(enhancedGroupId).toBeTruthy();
   const projectedGroup = () =>
     timeline.locator(
@@ -8704,6 +8896,27 @@ async function openRuntimeReviewTab(page, tabKey) {
   await expect(tab).toBeVisible();
   await tab.click();
   await expect(tab).toHaveAttribute('aria-selected', 'true');
+}
+
+async function setTimelineActionStartFrame(page, action, frameIndex) {
+  await action.click();
+  const actionId = await action.getAttribute('data-action-id');
+  await openActionInspectorPanel(page, 'properties', actionId);
+  const input = page.getByTestId('workbench-start-frame-input');
+  await input.fill(String(frameIndex));
+  await input.press('Tab');
+  await expect
+    .poll(async () => Number(await action.getAttribute('data-start-ms')))
+    .toBe(frameToMs(frameIndex));
+}
+
+async function sumTimelineNodeEventCount(locator) {
+  return locator.evaluateAll(nodes =>
+    nodes.reduce(
+      (total, node) => total + Number(node.dataset.eventCount || 0),
+      0
+    )
+  );
 }
 
 async function setEnemyLevel(page, value) {

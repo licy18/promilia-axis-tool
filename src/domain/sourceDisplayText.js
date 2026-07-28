@@ -74,9 +74,45 @@ export function createEffectSourceDisplayLabel({
       ? `追加命中 ${normalizedSequence}`
       : `状态效果 ${normalizedSequence}`;
   return {
-    displayLabel: inspection.displayable ? inspection.rawText : fallback,
+    displayLabel: inspection.displayable
+      ? normalizeAzPrEffectTerminology(inspection.rawText)
+      : fallback,
     rawSourceName: inspection.rawText,
     sourceNameStatus: inspection.status,
     ...(sourceIdentity == null ? {} : { sourceIdentity }),
   };
+}
+
+export function createBattlePropertyEffectDisplayLabel({
+  sourceText,
+  sequence = 1,
+  sourceIdentity,
+  effectKind = '',
+  attributeId,
+  targetKind,
+} = {}) {
+  const display = createEffectSourceDisplayLabel({
+    sourceText,
+    sequence,
+    sourceIdentity,
+    effectKind,
+  });
+  if (Number(attributeId) !== 229) return display;
+
+  const targetLabel =
+    targetKind === 'team-actors'
+      ? '全队调谐强度提升'
+      : ['controlled-actor', 'controlling-actor'].includes(targetKind)
+        ? '主控角色调谐强度提升'
+        : '调谐强度提升';
+  return {
+    ...display,
+    displayLabel: targetLabel,
+  };
+}
+
+function normalizeAzPrEffectTerminology(value) {
+  return String(value)
+    .replace(/精通(?:强度)?/gu, '调谐强度')
+    .replace(/调谐提升/gu, '调谐强度提升');
 }

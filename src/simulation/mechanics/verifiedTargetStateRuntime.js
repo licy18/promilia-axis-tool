@@ -3,6 +3,7 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { isControlledActorEffectTargetKind } from '../../domain/effectTargetSemantics';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
 export const VERIFIED_TARGET_STATE_RUNTIME_CONTRACT_NAME =
@@ -27,12 +28,10 @@ export function applyVerifiedTargetStateRuntime({
   );
   const transactions = (graph.targetStateTransactions ?? []).filter(
     transaction =>
-      transaction.applied &&
-      profileByIdentity.has(transaction.stateIdentity)
+      transaction.applied && profileByIdentity.has(transaction.stateIdentity)
   );
   const groups = (graph.conditionalHitGroups ?? []).filter(
-    group =>
-      group.applied && profileByIdentity.has(group.stateIdentity)
+    group => group.applied && profileByIdentity.has(group.stateIdentity)
   );
   const runtimeBindings = (graph.runtimeEffectBindings ?? []).filter(
     binding => binding.applied
@@ -94,11 +93,7 @@ export function applyVerifiedTargetStateRuntime({
       }
       pending.push({
         kind: 'conditional-hit-group',
-        timeMs: actionFrameToMs(
-          action,
-          group.decisionFrame,
-          group.frameRate
-        ),
+        timeMs: actionFrameToMs(action, group.decisionFrame, group.frameRate),
         priority: 100,
         action,
         resolution,
@@ -170,8 +165,7 @@ export function applyVerifiedTargetStateRuntime({
         for (const binding of runtimeBindings) {
           if (
             binding.triggerKind !== 'conditional-hit-group-applied' ||
-            binding.conditionalGroupIdentity !==
-              descriptor.group.groupIdentity
+            binding.conditionalGroupIdentity !== descriptor.group.groupIdentity
           ) {
             continue;
           }
@@ -236,9 +230,7 @@ export function applyVerifiedTargetStateRuntime({
     const hits = (resolution?.hits ?? []).filter(
       hit =>
         !hit.conditionalGroupIdentity ||
-        appliedGroupKeys.has(
-          `${actionId}|${hit.conditionalGroupIdentity}`
-        )
+        appliedGroupKeys.has(`${actionId}|${hit.conditionalGroupIdentity}`)
     );
     actionResolutionById.set(actionId, {
       ...resolution,
@@ -337,9 +329,7 @@ function applyTargetStateTransaction({
   effectCommands,
   nextSequence,
 }) {
-  const state = stateByIdentity.get(
-    descriptor.transaction.stateIdentity
-  );
+  const state = stateByIdentity.get(descriptor.transaction.stateIdentity);
   if (!state || descriptor.transaction.operation !== 'gain') return;
   const before = state.layers.length;
   const available = Math.max(0, state.profile.maxStacks - before);
@@ -348,8 +338,7 @@ function applyTargetStateTransaction({
     state.layers.push({
       layerIdentity: `${descriptor.transaction.transactionIdentity}|${descriptor.action.id}|${descriptor.timeMs}|${index + 1}`,
       appliedAtMs: descriptor.timeMs,
-      expiresAtMs:
-        descriptor.timeMs + descriptor.transaction.durationMs,
+      expiresAtMs: descriptor.timeMs + descriptor.transaction.durationMs,
       sourceActionId: descriptor.action.id,
       sourceIdentity: descriptor.transaction.sourceIdentity,
     });
@@ -401,8 +390,7 @@ function applyConditionalHitGroup({
         operation: 'consume',
         before,
         after: state.layers.length,
-        sourceIdentity:
-          band?.sourceIdentity ?? descriptor.group.sourceIdentity,
+        sourceIdentity: band?.sourceIdentity ?? descriptor.group.sourceIdentity,
         scenario,
         events,
         effectCommands,
@@ -434,9 +422,7 @@ function createConditionalTuningEffect({ result, resolution }) {
     semanticIdentity: `conditional-tuning|${result.groupIdentity}`,
     graphIdentity: `conditional-tuning|${result.groupIdentity}`,
     elementId: Number(mark.markId),
-    mapIndex: Number(
-      resolution.actionBinding?.selectedSubSkillIndex
-    ),
+    mapIndex: Number(resolution.actionBinding?.selectedSubSkillIndex),
     name: mark.name,
     displayLabel: mark.name,
     kind: 'stack',
@@ -552,6 +538,7 @@ function emitStateChange({
       operation,
       after,
       sourceIdentity,
+      sequence,
     })
   );
 }
@@ -564,18 +551,18 @@ function createTargetStateEffectCommand({
   operation,
   after,
   sourceIdentity,
+  sequence,
 }) {
   const nextExpiryMs = state.layers[0]?.expiresAtMs ?? null;
   return {
-    id: `verified-target-state|${state.profile.stateIdentity}|${timeMs}|${operation}`,
+    id: `verified-target-state|${state.profile.stateIdentity}|${timeMs}|${operation}|${sequence}`,
     sourceActionId: action?.id ?? null,
     sourceActionName: action?.name ?? state.profile.name,
     sourceActorId: action?.actorId ?? null,
     sourceActorName: action?.actor?.name ?? null,
     effectId: `battle-element:${state.profile.elementId}`,
     effectName: state.profile.name,
-    operation:
-      after <= 0 ? EFFECT_OPERATIONS.REMOVE : EFFECT_OPERATIONS.APPLY,
+    operation: after <= 0 ? EFFECT_OPERATIONS.REMOVE : EFFECT_OPERATIONS.APPLY,
     targetKind:
       state.profile.targetKind === 'enemy'
         ? EFFECT_TARGET_KINDS.ENEMY
@@ -594,10 +581,7 @@ function createTargetStateEffectCommand({
     sourceIdentity: {
       actionBindingIdentity: state.profile.stateIdentity,
       effectIdentity: state.profile.stateIdentity,
-      sourceIdentity: [
-        state.profile.sourceIdentity,
-        sourceIdentity,
-      ]
+      sourceIdentity: [state.profile.sourceIdentity, sourceIdentity]
         .filter(Boolean)
         .join('|'),
     },
@@ -662,10 +646,7 @@ function emitRuntimeBinding({
             : EFFECT_STACK_MODES.REFRESH,
       stackDelta: binding.stackDelta,
       maxStacks: binding.maxStacks,
-      tags: [
-        'character-combat-runtime-effect',
-        `owner:${binding.ownerId}`,
-      ],
+      tags: ['character-combat-runtime-effect', `owner:${binding.ownerId}`],
       sourceStatus: 'verified-passive-effect-generated',
       confidence: 'high',
       trackingStatus: 'applied',
@@ -699,7 +680,7 @@ function resolveBindingTargets({
       },
     ];
   }
-  if (binding.targetKind === 'controlled-actor') {
+  if (isControlledActorEffectTargetKind(binding.targetKind)) {
     const actor = resolveControlledActorAt(controlledActorTimeline, timeMs);
     return actor
       ? [
@@ -732,13 +713,7 @@ function resolveBindingTargets({
   return [];
 }
 
-function createDirectSpEvent({
-  binding,
-  action,
-  resolution,
-  target,
-  timeMs,
-}) {
+function createDirectSpEvent({ binding, action, resolution, target, timeMs }) {
   const directSp = binding.directSp;
   return {
     schemaVersion: 1,

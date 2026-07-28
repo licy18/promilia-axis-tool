@@ -103,14 +103,10 @@ describe('verified target-state runtime', () => {
       }),
     ]);
     expect(
-      actionResolutionById
-        .get('burst-applied')
-        .hits.map(hit => hit.elementId)
+      actionResolutionById.get('burst-applied').hits.map(hit => hit.elementId)
     ).toEqual([9002, 9003]);
     expect(
-      actionResolutionById
-        .get('burst-skipped')
-        .hits.map(hit => hit.elementId)
+      actionResolutionById.get('burst-skipped').hits.map(hit => hit.elementId)
     ).toEqual([9003]);
     expect(result.directSpEvents).toHaveLength(1);
     expect(result.directSpEvents[0]).toMatchObject({
@@ -129,6 +125,182 @@ describe('verified target-state runtime', () => {
           command.appliedToCalculators
       )
     ).toBe(true);
+  });
+
+  it('keeps same-frame independent layers addressable and accepts both controlled-actor target aliases', () => {
+    const actionResolutionById = new Map([
+      [
+        'gain',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+      [
+        'burst-applied',
+        createResolution({
+          controlSkillId: 424202,
+          hits: [createHit(9002, 1, 'synthetic-firework-burst')],
+        }),
+      ],
+    ]);
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateTransactions.push({
+      ...mechanicsPackage.actionVariantGraph.targetStateTransactions[0],
+      transactionIdentity: 'synthetic-firework-same-frame-passive',
+      durationMs: 15000,
+      sourceIdentity: 'fixture:synthetic-firework-same-frame-passive',
+    });
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings.push(
+      {
+        ...mechanicsPackage.actionVariantGraph.runtimeEffectBindings[0],
+        bindingIdentity: 'synthetic-burst-controlled-alias',
+        targetKind: 'controlling-actor',
+        effectId: 'battle-element:9006',
+        effectName: 'Synthetic Controlled Alias',
+        sourceIdentity: 'fixture:synthetic-burst-controlled-alias',
+      },
+      {
+        ...mechanicsPackage.actionVariantGraph.runtimeEffectBindings[0],
+        bindingIdentity: 'synthetic-burst-controlled-canonical',
+        targetKind: 'controlled-actor',
+        effectId: 'battle-element:9007',
+        effectName: 'Synthetic Controlled Canonical',
+        sourceIdentity: 'fixture:synthetic-burst-controlled-canonical',
+      }
+    );
+    const scenario = {
+      time: { durationMs: 5000 },
+      actors: [
+        {
+          id: 'actor-1',
+          characterId: 424242,
+          name: 'Synthetic Owner',
+        },
+      ],
+      enemy: {
+        id: 'enemy-1',
+        name: 'Synthetic Enemy',
+      },
+      actions: [createAction('gain', 0), createAction('burst-applied', 1000)],
+    };
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario,
+      actionResolutionById,
+      mechanicsPackage,
+      controlledActorTimeline: {
+        initialActor: {
+          actorId: 'actor-1',
+          characterId: 424242,
+          actorName: 'Synthetic Owner',
+        },
+        transitions: [],
+        intervals: [
+          {
+            startMs: 0,
+            endMs: 5000,
+            actorId: 'actor-1',
+            name: 'Synthetic Owner',
+          },
+        ],
+      },
+    });
+
+    const sameFrameCommands = result.effectCommands.filter(
+      command =>
+        command.effectId === 'battle-element:undefined' &&
+        command.timeMs === 83.333333
+    );
+    expect(sameFrameCommands).toHaveLength(2);
+    expect(new Set(sameFrameCommands.map(command => command.id)).size).toBe(2);
+    expect(
+      result.effectCommands
+        .filter(command =>
+          ['battle-element:9006', 'battle-element:9007'].includes(
+            command.effectId
+          )
+        )
+        .map(command => [
+          command.effectId,
+          command.targetKind,
+          command.targetId,
+        ])
+    ).toEqual([
+      ['battle-element:9006', 'actor', 'actor-1'],
+      ['battle-element:9007', 'actor', 'actor-1'],
+    ]);
+  });
+
+  it('expires layers independently and omits a disabled required hit', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    const scenario = {
+      time: { durationMs: 12000 },
+      actors: [
+        {
+          id: 'actor-1',
+          characterId: 424242,
+          name: 'Synthetic Owner',
+        },
+      ],
+      enemy: {
+        id: 'enemy-1',
+        name: 'Synthetic Enemy',
+      },
+      actions: [
+        createAction('gain-first', 0),
+        createAction('gain-second', 1000),
+        createAction('gain-disabled', 2000),
+      ],
+    };
+    const actionResolutionById = new Map([
+      [
+        'gain-first',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+      [
+        'gain-second',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+      [
+        'gain-disabled',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [],
+        }),
+      ],
+    ]);
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario,
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(
+      result.events.map(event => [
+        event.actionId,
+        event.payload.operation,
+        event.payload.beforeValue,
+        event.payload.afterValue,
+        event.timeMs,
+      ])
+    ).toEqual([
+      ['gain-first', 'gain', 0, 1, 83.333333],
+      ['gain-second', 'gain', 1, 2, 1083.333333],
+      [null, 'expire', 2, 1, 10083.333333],
+      [null, 'expire', 1, 0, 11083.333333],
+    ]);
+    expect(
+      result.events.some(event => event.actionId === 'gain-disabled')
+    ).toBe(false);
+    expect(result.finalState[0].currentValue).toBe(0);
   });
 });
 

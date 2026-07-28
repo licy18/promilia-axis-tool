@@ -91,7 +91,23 @@ describe('verified Battle effect formula registry', () => {
         formula: formulaByIdentity.get(sourceEffect.formulaIdentity),
       };
       for (let level = 1; level <= 12; level += 1) {
-        const result = evaluateVerifiedBattleEffectFormula({ effect, level });
+        const contract = classifyVerifiedBattleEffectFormula(effect);
+        const sourceTuning =
+          contract.family === 'source-tuning-ratio-with-common-ratio'
+            ? 100
+            : null;
+        const result = evaluateVerifiedBattleEffectFormula({
+          effect,
+          level,
+          sourceActor:
+            sourceTuning == null
+              ? null
+              : {
+                  stats: {
+                    tuningStrength: sourceTuning,
+                  },
+                },
+        });
         const legacyValues = sourceEffect.rawEffectIdentities
           .map(
             identity =>
@@ -102,7 +118,21 @@ describe('verified Battle effect formula registry', () => {
           .filter(Number.isFinite);
 
         expect(legacyValues.length).toBeGreaterThan(0);
-        expect(new Set(legacyValues)).toEqual(new Set([result.value]));
+        if (contract.family === 'source-tuning-ratio-with-common-ratio') {
+          expect(new Set(legacyValues)).toEqual(
+            new Set([
+              effect.formula.valueByLevel[level] ??
+                effect.formula.valueByLevel[String(level)],
+            ])
+          );
+          expect(result).toMatchObject({
+            status: 'applied',
+            reason: null,
+          });
+          expect(result.value).toBeGreaterThan(0);
+        } else {
+          expect(new Set(legacyValues)).toEqual(new Set([result.value]));
+        }
         comparisonCount += 1;
       }
     }

@@ -195,6 +195,99 @@ describe('verified action mechanics trace', () => {
     expect(trace.hitBindings.map(hit => hit.label).join('')).not.toContain('�');
   });
 
+  it('only exposes materialized conditional hits while preserving disabled source hits', () => {
+    const createTrace = applied =>
+      createVerifiedActionMechanicsTrace({
+        action: {
+          id: 'conditional-hit-action',
+          actorId: 'actor-a',
+          type: 'charged-attack',
+          name: '重击',
+        },
+        verifiedCombatRuntime: {
+          enabled: true,
+          actionResolutionById: new Map([
+            [
+              'conditional-hit-action',
+              {
+                ready: true,
+                complete: true,
+                applied: true,
+                actionBinding: { identity: 'actor|a|charged' },
+                hits: [
+                  {
+                    hitIdentity: 'base-hit',
+                    referenceKind: 'elements',
+                    trigger: { startFrame: 12 },
+                  },
+                  ...(applied
+                    ? [
+                        {
+                          hitIdentity: 'explosion-hit',
+                          conditionalGroupIdentity: 'firework-explosion',
+                          referenceKind: 'elements',
+                          trigger: { startFrame: 31 },
+                        },
+                      ]
+                    : []),
+                ],
+                allHits: [
+                  {
+                    hitIdentity: 'base-hit',
+                    referenceKind: 'elements',
+                    trigger: { startFrame: 12 },
+                  },
+                  {
+                    hitIdentity: 'disabled-base-hit',
+                    referenceKind: 'elements',
+                    trigger: { startFrame: 18 },
+                  },
+                  {
+                    hitIdentity: 'explosion-hit',
+                    conditionalGroupIdentity: 'firework-explosion',
+                    referenceKind: 'elements',
+                    trigger: { startFrame: 31 },
+                  },
+                ],
+                disabledHitIdentities: ['disabled-base-hit'],
+                conditionalHitGroupResults: [
+                  {
+                    groupIdentity: 'firework-explosion',
+                    applied,
+                  },
+                ],
+                effects: [],
+                reasons: [],
+              },
+            ],
+          ]),
+          damageEvents: [],
+          resourceEvents: [],
+          kiboResourceEvents: [],
+          effectTimeline: { events: [] },
+          tuningMarkRuntime: { events: [], unresolved: [] },
+        },
+      });
+
+    const inactiveTrace = createTrace(false);
+    expect(inactiveTrace.hitBindings).toEqual([
+      expect.objectContaining({ identity: 'base-hit', willHit: true }),
+      expect.objectContaining({
+        identity: 'disabled-base-hit',
+        willHit: false,
+      }),
+    ]);
+    expect(inactiveTrace.hitBindingCount).toBe(2);
+
+    const activeTrace = createTrace(true);
+    expect(activeTrace.hitBindings.map(hit => hit.identity)).toEqual([
+      'base-hit',
+      'disabled-base-hit',
+      'explosion-hit',
+    ]);
+    expect(activeTrace.hitBindingCount).toBe(3);
+  });
+
   it('keeps character special resources separate from SP in the trace', () => {
     const trace = createVerifiedActionMechanicsTrace({
       action: {

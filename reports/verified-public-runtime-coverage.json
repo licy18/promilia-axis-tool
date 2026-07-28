@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "fd49b65a7a8db64bf81059a44bbb09e7ff0ca902ccb88b33a988925023219795",
+  "packageHash": "dee5069d7daa562f9748d40d7ad1ccbd4928eaa87ed1be40401b9298fdcc85f8",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -106,9 +106,9 @@
     "semanticEffects": {
       "total": 3581,
       "gameplay": 1819,
-      "applied": 397,
+      "applied": 400,
       "verifiedZero": 2,
-      "unresolved": 1420
+      "unresolved": 1417
     },
     "timing": {
       "appliedActionCount": 552,
@@ -569,9 +569,9 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 9
       },
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
@@ -30075,9 +30075,9 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 9
       },
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
@@ -30156,9 +30156,9 @@
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "reasons": [
         "inject-wrapper-classified-through-child-edges",

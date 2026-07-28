@@ -49,20 +49,19 @@ npm run test:e2e:production-preview
 - 旧 `Home.vue`、`Editor.vue`、`Preset.vue` 页面已经退役并删除，不得重新建立平行主编辑器或假数据首页。
 - 旧 `src/components/editor/`、`src/components/timeline/`、project/history/setting store 和旧计算工具已经按引用审计删除，不得重新引入平行实现。
 - 生产时间轴只使用 `src/features/workbench/TimelineGridPreview.vue`；新增源码后运行 `npm run audit:production-imports:check`，不得留下无引用或未允许的 test-only 模块。
-- 生产构建使用 `npm run audit:bundle:check` 守住首屏、Workbench 和全部 JavaScript gzip 预算；不得通过放宽预算或隐藏 Vite 警告代替实际依赖边界优化。
+- 对外试用和正式发布使用 `npm run audit:bundle:check` 守住首屏、Workbench 和全部 JavaScript gzip 预算；M11/M12 内部里程碑记录超限但不转去压包，不得通过放宽预算或隐藏 Vite 警告伪造发布通过。
 - 发布试用前运行 `npm run test:e2e:production-preview`，必须从真实 `dist` 启动 preview 并生成 `reports/production-preview-acceptance.json`；开发服务器主流程通过不能替代该验收。
 
 ## 当前路线边界
 
-- 蓝色星原仍在测试阶段，数值和平衡可能变动；当前主线不要继续追逐最终公式、最终倍率或每个 runtime 条件。
-- 优先做三层收束：
-  - 生成层：把现有 evidence / candidate / runtime sample 折叠成标准 `Action -> Hit -> ThreeValueDelta` 输入合同。
-  - 运行时层：只消费标准合同，输出 `simLog`、`stateCurves`、资源曲线和统计摘要。
-  - UI 层：优先补 Endaxis 式资源监控、模拟日志、伤害/三值详情弹层、贡献拆分和编辑器体验。
-- Evidence 层保留为来源追溯和诊断信息，不再作为用户主路径，也不阻塞工具体验。
-- `actionResultTimeline[]` 必须持续按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。不要把韧性或充能混进 HP 伤害公式。
-- HP 基线可从 `scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier` 派生；韧性基线和角色初始当前 SP 暂缺真实机制时必须保持待确认状态，不要用 0 或上限值冒充已确认当前值。
-- HP / 韧性 / 自身能量 delta 的产生入口应收束为可替换 calculator contract，当前 evidence/raw/pending 输出必须带 `status`、`sourceIds`、`confidence` 和 `replaceable`，为后续接入真实 AzPr 公式留接口。
+- 当前顺序固定为：收口 `M10-B2-R1`，再实施 M11 无头核心/机器排轴/可视化验收台，之后才进入 M12 批量评估、搜索与末音试点；R1 后不要直接启动下一角色。
+- 生成层、运行时、CLI、优化器和 Workbench 必须消费同一版本化合同并输出同一确定性 trace；禁止维护第二套角色规则、UI 计算或测试专用真相。
+- 无头核心不得依赖 Vue、DOM、像素坐标、拖拽或 `localStorage`。机器轴使用语义动作与变体，不要求调用方理解内部 control/subskill。
+- Workbench 保留为强制机制验收台：动作形态、hit、三值/资源曲线、状态层数、Buff 生命周期和因果来源必须可见。AI 或机器测试不能替代产品可视化验收。
+- 角色成熟度使用 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`；未达到最后一级的角色不得进入正式配队或输出轴搜索，`runtime-evidence-required` 与 `static-evidence-gap` 不得用默认值静默补齐。
+- 蓝色星原仍在测试阶段，平衡数值应保持可替换、带来源和置信度；机制正确性、状态顺序和派生闭包优先于最终倍率考据。
+- `actionResultTimeline[]` 必须按动作分别追踪敌人 HP、敌人韧性和自身能量变化，不得把韧性或充能混进 HP 公式。缺少真实基线时保持待确认，不用 0 或上限冒充。
+- 新的视觉特效、非必要响应式适配、拖拽手感细修、包体压缩和全角色盲目接入暂缓。包体审计继续记录并约束对外发布，但不阻断 M11/M12 内部核心与验收里程碑。
 
 ## Endaxis 参考原则
 

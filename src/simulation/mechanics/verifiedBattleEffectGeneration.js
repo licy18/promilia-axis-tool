@@ -6,7 +6,8 @@ import {
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
-import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
+import { isControlledActorEffectTargetKind } from '../../domain/effectTargetSemantics';
+import { createBattlePropertyEffectDisplayLabel } from '../../domain/sourceDisplayText';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
@@ -69,11 +70,7 @@ export function createVerifiedBattleEffectGeneration({
         controlledActorTimeline,
       });
       const timeMs = resolveEffectTimeMs(action, effect, resolution);
-      const formulaResult = resolveEffectValue(
-        action,
-        effect,
-        resolution
-      );
+      const formulaResult = resolveEffectValue(action, effect, resolution);
       const value = formulaResult.value;
       if (targets.length === 0 || timeMs == null || value == null) {
         unresolved.push(
@@ -197,10 +194,12 @@ function createPropertyEffectCommand({
   resolution,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
-  const effectDisplay = createEffectSourceDisplayLabel({
+  const effectDisplay = createBattlePropertyEffectDisplayLabel({
     sourceText: effect.displayLabel ?? effect.name,
     effectKind: effect.kind,
     sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities,
+    attributeId: effect.propertyChange.attributeId,
+    targetKind: effect.target?.kind,
   });
   return {
     id: `verified-effect|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
@@ -232,6 +231,10 @@ function createPropertyEffectCommand({
       packageHash: resolution.packageHash,
       actionBindingIdentity: resolution.actionBinding.identity,
       effectIdentity,
+      elementId: Number.isFinite(Number(effect.elementId))
+        ? Number(effect.elementId)
+        : null,
+      pathId: effect.pathId ?? null,
       sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
     },
     modifiers: [
@@ -302,7 +305,7 @@ function resolveEffectTargets({
       ? [{ kind: EFFECT_TARGET_KINDS.ENEMY, id: scenario.enemy.id }]
       : [];
   }
-  if (effect.target?.kind === 'controlling-actor') {
+  if (isControlledActorEffectTargetKind(effect.target?.kind)) {
     const controlled = resolveControlledActorAt(
       controlledActorTimeline,
       timeMs
@@ -311,9 +314,7 @@ function resolveEffectTargets({
       ? [{ kind: EFFECT_TARGET_KINDS.ACTOR, id: controlled.actorId }]
       : [];
   }
-  if (
-    ['source-owner', 'owner-actor', 'player'].includes(effect.target?.kind)
-  ) {
+  if (['source-owner', 'owner-actor', 'player'].includes(effect.target?.kind)) {
     return [
       action.type === ACTION_TYPES.KIBO_EVENT &&
       effect.target?.kind === 'source-owner'
@@ -342,9 +343,7 @@ function resolveEffectTimeMs(action, effect, resolution) {
   const startFrame = Number(effect.trigger?.startFrame);
   const frameRate = Number(resolution.controlBinding?.frameRate ?? 60);
   if (!Number.isInteger(startFrame) || !(frameRate > 0)) return null;
-  if (
-    !isActionFrameWithinContextualOccupancy(action, startFrame, frameRate)
-  ) {
+  if (!isActionFrameWithinContextualOccupancy(action, startFrame, frameRate)) {
     return null;
   }
   return roundValue(Number(action.startMs) + (startFrame * 1000) / frameRate);

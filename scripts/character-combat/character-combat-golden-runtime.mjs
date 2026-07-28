@@ -122,7 +122,8 @@ function runGoldenScenario({
       Number(
         scenarioRecipe.teamCharacterIds.find(
           value =>
-            Number(value) !== Number(scenarioRecipe.initialControlledCharacterId)
+            Number(value) !==
+            Number(scenarioRecipe.initialControlledCharacterId)
         )
       ) || Number(scenarioRecipe.teamCharacterIds[1]),
   };
@@ -131,9 +132,7 @@ function runGoldenScenario({
       ([characterId, kiboId]) => [Number(characterId), Number(kiboId)]
     )
   );
-  const clearedLoadoutOwners = new Set(
-    clearLoadoutCharacterIds.map(Number)
-  );
+  const clearedLoadoutOwners = new Set(clearLoadoutCharacterIds.map(Number));
   const actorConfigs = factory
     .normalizeWorkbenchActorConfigs([], selection, teamSlots)
     .map(config => ({
@@ -185,17 +184,17 @@ function runGoldenScenario({
     })
   );
   const initialRuntimeState = {
-    specialResourcesByActor: (
-      scenarioRecipe.initialSpecialResources ?? []
-    ).map(resource => ({
-      ...resource,
-      actorId:
-        resource.actorId ??
-        `actor-${Number(resource.characterId ?? recipe.ownerId)}`,
-    })),
+    specialResourcesByActor: (scenarioRecipe.initialSpecialResources ?? []).map(
+      resource => ({
+        ...resource,
+        actorId:
+          resource.actorId ??
+          `actor-${Number(resource.characterId ?? recipe.ownerId)}`,
+      })
+    ),
     kiboEnergyBySlot: teamSlots
-      .filter(
-        slot => Number.isInteger(kiboByCharacterId[Number(slot.characterId)])
+      .filter(slot =>
+        Number.isInteger(kiboByCharacterId[Number(slot.characterId)])
       )
       .map(slot => ({
         slotId: slot.slotId,
@@ -456,13 +455,12 @@ function createAttackInputDraft({
     segment =>
       Number(segment.controlSkillId) === Number(chainSegment?.controlSkillId)
   );
-  const attackInput =
-    contextScheduling.projectVerifiedAttackInputChainSegment(
-      sourceSegment,
-      chainSegment,
-      sequenceIndex,
-      chain?.segments?.length
-    );
+  const attackInput = contextScheduling.projectVerifiedAttackInputChainSegment(
+    sourceSegment,
+    chainSegment,
+    sequenceIndex,
+    chain?.segments?.length
+  );
   if (!attackInput) {
     throw new Error(
       `golden attack input missing: ${actionId}/${action.attackInputChainIdentity}/A${sequenceIndex}`
@@ -530,22 +528,22 @@ function createGoldenActualProjection({
     .filter(action => !action.execute)
     .map(action => action.actionId)
     .sort();
-  const damageTrace = (
-    result.verifiedCombatRuntime?.damageEvents ?? []
-  ).map(event => ({
-    eventId: event.id ?? event.eventId ?? null,
-    eventType: event.type ?? null,
-    actionId: event.actionId,
-    frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
-    hitIdentity: event.payload?.hitIdentity ?? null,
-    rawDamage: numberOrNull(event.payload?.rawDamage),
-    hpDamage: numberOrNull(
-      event.payload?.hpDamage ?? event.payload?.rawDamage
-    ),
-    toughnessDamage: numberOrNull(event.payload?.toughnessDamage),
-    actorSpRecovery: numberOrNull(event.payload?.actorSpRecovery),
-    kiboSpRecovery: numberOrNull(event.payload?.kiboSpRecovery),
-  }));
+  const damageTrace = (result.verifiedCombatRuntime?.damageEvents ?? []).map(
+    event => ({
+      eventId: event.id ?? event.eventId ?? null,
+      eventType: event.type ?? null,
+      actionId: event.actionId,
+      frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+      hitIdentity: event.payload?.hitIdentity ?? null,
+      rawDamage: numberOrNull(event.payload?.rawDamage),
+      hpDamage: numberOrNull(
+        event.payload?.hpDamage ?? event.payload?.rawDamage
+      ),
+      toughnessDamage: numberOrNull(event.payload?.toughnessDamage),
+      actorSpRecovery: numberOrNull(event.payload?.actorSpRecovery),
+      kiboSpRecovery: numberOrNull(event.payload?.kiboSpRecovery),
+    })
+  );
   const specialResourceTrace = [
     ...(specialRuntime?.resourceEvents ?? []).map(event => ({
       stream: 'resource',
@@ -579,8 +577,7 @@ function createGoldenActualProjection({
       eventIdentity: event.eventIdentity ?? event.id ?? null,
       actionId: event.actionId ?? null,
       frame: numberOrNull(
-        event.frameIndex ??
-          msToFrame(event.timeMs, scenarioRecipe.frameRate)
+        event.frameIndex ?? msToFrame(event.timeMs, scenarioRecipe.frameRate)
       ),
       kind: event.kind ?? null,
       profileKey: event.profileKey ?? null,
@@ -602,18 +599,14 @@ function createGoldenActualProjection({
       .sort()
       .map(actionId => {
         const events = tuningMarkTrace.filter(
-          event =>
-            event.kind === 'acquire' && event.actionId === actionId
+          event => event.kind === 'acquire' && event.actionId === actionId
         );
         return [
           actionId,
           {
             eventCount: events.length,
             totalDelta: roundNumber(
-              events.reduce(
-                (sum, event) => sum + (Number(event.delta) || 0),
-                0
-              )
+              events.reduce((sum, event) => sum + (Number(event.delta) || 0), 0)
             ),
           },
         ];
@@ -634,9 +627,7 @@ function createGoldenActualProjection({
       maxValue: numberOrNull(event.payload?.maxValue),
     }))
     .sort(compareFrameThenIdentity);
-  const conditionalHitGroups = (
-    targetStateRuntime?.groupResults ?? []
-  )
+  const conditionalHitGroups = (targetStateRuntime?.groupResults ?? [])
     .map(result => ({
       actionId: result.actionId ?? null,
       groupIdentity: result.groupIdentity ?? null,
@@ -656,22 +647,46 @@ function createGoldenActualProjection({
   const effectTrace = (result.effectTimeline?.events ?? [])
     .filter(event => {
       const targetId = String(event.targetId ?? '');
+      const sourceElementId = numberOrNull(event.sourceIdentity?.elementId);
+      const sourceElementEffectId =
+        sourceElementId == null ? null : `battle-element:${sourceElementId}`;
       return (
         Number(event.ownerId) === ownerId ||
         targetId === `actor-${ownerId}` ||
-        selectedEffectIds.has(String(event.effectId ?? ''))
+        selectedEffectIds.has(String(event.effectId ?? '')) ||
+        selectedEffectIds.has(sourceElementEffectId)
       );
     })
-    .map(event => ({
-      eventId: event.eventId ?? event.id ?? null,
-      actionId: event.actionId ?? null,
-      frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
-      effectId: event.effectId ?? null,
-      operation: event.operation ?? event.kind ?? null,
-      beforeStacks: numberOrNull(event.before?.stacks),
-      afterStacks: numberOrNull(event.after?.stacks),
-      expiresAtMs: numberOrNull(event.after?.expiresAtMs),
-    }))
+    .map(event => {
+      const sourceElementId = numberOrNull(event.sourceIdentity?.elementId);
+      return {
+        eventId: event.eventId ?? event.id ?? null,
+        actionId: event.actionId ?? null,
+        frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+        effectId:
+          sourceElementId == null
+            ? (event.effectId ?? null)
+            : `battle-element:${sourceElementId}`,
+        runtimeEffectId: event.effectId ?? null,
+        sourceElementId,
+        effectName: event.effectName ?? null,
+        targetKind: event.targetKind ?? null,
+        targetId: event.targetId ?? null,
+        operation: event.operation ?? event.kind ?? null,
+        beforeStacks: numberOrNull(event.before?.stacks),
+        afterStacks: numberOrNull(event.after?.stacks),
+        stackChange: numberOrNull(event.stackChange),
+        expiresAtMs: numberOrNull(event.after?.expiresAtMs),
+        modifiers: (event.modifiers ?? []).map(modifier => ({
+          kind: modifier.kind ?? null,
+          attributeId: numberOrNull(modifier.attributeId),
+          bucket: modifier.bucket ?? null,
+          valueRaw: numberOrNull(modifier.valueRaw),
+          formulaFamily: modifier.formulaResult?.family ?? null,
+          formulaValue: numberOrNull(modifier.formulaResult?.value),
+        })),
+      };
+    })
     .sort(compareFrameThenIdentity);
   const combatRuntime = result.verifiedCombatRuntime ?? {};
   const actorSp = summarizeVerifiedEnergyRuntime({
@@ -691,8 +706,7 @@ function createGoldenActualProjection({
   const enemy = summarizeEnemyState({
     initial: combatRuntime.initialState?.enemy,
     final: combatRuntime.finalState?.enemy,
-    pointCount:
-      result.runtimeOutputs?.stateCurves?.enemy?.pointCount ?? 0,
+    pointCount: result.runtimeOutputs?.stateCurves?.enemy?.pointCount ?? 0,
   });
   const ownerActionIds = new Set(
     (project.actions ?? [])
@@ -723,9 +737,7 @@ function createGoldenActualProjection({
         ownerHitEvents.filter(event => event.actionId === actionId).length,
       ])
   );
-  const ownerActorSp = actorSp.find(
-    row => row.actorId === `actor-${ownerId}`
-  );
+  const ownerActorSp = actorSp.find(row => row.actorId === `actor-${ownerId}`);
   const ownerDirectSpTransactions = (
     ownerActorSp?.actionTransactions ?? []
   ).filter(transaction => transaction.reason === 'verified-direct-sp');
@@ -749,6 +761,8 @@ function createGoldenActualProjection({
   const burstTrace = effectTrace.filter(event =>
     stateEffectIds.has(String(event.effectId ?? ''))
   );
+  const selectedEffectSummaryByElementId =
+    summarizeSelectedEffectsByElementId(effectTrace);
   const ownerDynamicPropertySources = collectDynamicPropertySources(
     result,
     null,
@@ -799,9 +813,7 @@ function createGoldenActualProjection({
       actorSpByActorId: Object.fromEntries(
         actorSp.map(row => [row.actorId, row])
       ),
-      kiboSpBySlotId: Object.fromEntries(
-        kiboSp.map(row => [row.slotId, row])
-      ),
+      kiboSpBySlotId: Object.fromEntries(kiboSp.map(row => [row.slotId, row])),
       specialResourceTrace,
       tuningMarkTrace,
       tuningMarkAcquireByActionId,
@@ -812,16 +824,14 @@ function createGoldenActualProjection({
         eventCount: ownerDirectSpTransactions.length,
         totalChange: roundNumber(
           ownerDirectSpTransactions.reduce(
-            (sum, transaction) =>
-              sum + (Number(transaction.change) || 0),
+            (sum, transaction) => sum + (Number(transaction.change) || 0),
             0
           )
         ),
       },
       thresholdClearCount: specialResourceTrace.filter(
         event =>
-          event.stream === 'resource' &&
-          event.operation === 'threshold-clear'
+          event.stream === 'resource' && event.operation === 'threshold-clear'
       ).length,
       transformCount: specialResourceTrace.filter(
         event => event.stream === 'state' && event.operation === 'transform'
@@ -838,6 +848,7 @@ function createGoldenActualProjection({
           event => Number(event.afterStacks) === passiveMaxStacks
         )?.frame ?? null,
       burstTrace,
+      selectedEffectSummaryByElementId,
       burstTransitions: burstTrace.map(event => ({
         actionId: event.actionId,
         frame: event.frame,
@@ -894,6 +905,68 @@ function createGoldenActualProjection({
   return actual;
 }
 
+function summarizeSelectedEffectsByElementId(effectTrace) {
+  const byElementId = new Map();
+  for (const event of effectTrace) {
+    const elementId = numberOrNull(event.sourceElementId);
+    if (elementId == null) continue;
+    const rows = byElementId.get(elementId) ?? [];
+    rows.push(event);
+    byElementId.set(elementId, rows);
+  }
+  return Object.fromEntries(
+    [...byElementId.entries()]
+      .sort(([left], [right]) => left - right)
+      .map(([elementId, rows]) => {
+        const appliedRows = rows.filter(row => row.operation !== 'expire');
+        const expiredRows = rows.filter(row => row.operation === 'expire');
+        const modifierRows = appliedRows.flatMap(row => row.modifiers ?? []);
+        return [
+          String(elementId),
+          {
+            effectId: `battle-element:${elementId}`,
+            effectNames: [...new Set(rows.map(row => row.effectName))]
+              .filter(Boolean)
+              .sort(),
+            targetKinds: [...new Set(rows.map(row => row.targetKind))]
+              .filter(Boolean)
+              .sort(),
+            targetIds: [...new Set(rows.map(row => row.targetId))]
+              .filter(Boolean)
+              .sort(),
+            appliedEventCount: appliedRows.length,
+            expiredEventCount: expiredRows.length,
+            firstAppliedFrame: appliedRows[0]?.frame ?? null,
+            firstExpiredFrame: expiredRows[0]?.frame ?? null,
+            maxStacks: Math.max(
+              0,
+              ...appliedRows.map(row => Number(row.afterStacks) || 0)
+            ),
+            attributeIds: [
+              ...new Set(
+                modifierRows
+                  .map(row => numberOrNull(row.attributeId))
+                  .filter(Number.isFinite)
+              ),
+            ].sort((left, right) => left - right),
+            formulaFamilies: [
+              ...new Set(
+                modifierRows.map(row => row.formulaFamily).filter(Boolean)
+              ),
+            ].sort(),
+            formulaValues: [
+              ...new Set(
+                modifierRows
+                  .map(row => numberOrNull(row.formulaValue))
+                  .filter(Number.isFinite)
+              ),
+            ].sort((left, right) => left - right),
+          },
+        ];
+      })
+  );
+}
+
 function summarizeVerifiedEnergyRuntime({
   initialRows = [],
   finalRows = [],
@@ -936,9 +1009,7 @@ function summarizeVerifiedEnergyRuntime({
       const actionTransactions = rows
         .filter(
           event =>
-            !String(event.payload?.reason ?? '').startsWith(
-              'verified-auto-sp-'
-            )
+            !String(event.payload?.reason ?? '').startsWith('verified-auto-sp-')
         )
         .map(event => ({
           timeMs: numberOrNull(event.timeMs),
@@ -1005,9 +1076,7 @@ function summarizeEnemyState({ initial = {}, final = {}, pointCount = 0 }) {
     maxHp: numberOrNull(final.maxHp ?? initial.maxHp),
     initialToughness: numberOrNull(initial.toughness),
     finalToughness: numberOrNull(final.toughness),
-    maxToughness: numberOrNull(
-      final.maxToughness ?? initial.maxToughness
-    ),
+    maxToughness: numberOrNull(final.maxToughness ?? initial.maxToughness),
   };
 }
 
@@ -1182,9 +1251,7 @@ function resolveMappingDurationFrames(
               Number(selectedSubSkillIndex)) &&
           form.applied === true
       );
-    value = Number(
-      actionForm?.executionTiming?.occupancy?.durationFrames
-    );
+    value = Number(actionForm?.executionTiming?.occupancy?.durationFrames);
   }
   if (!Number.isInteger(value) || value <= 0) {
     throw new Error(

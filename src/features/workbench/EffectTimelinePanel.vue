@@ -68,6 +68,13 @@
           <small>{{ formatIntervalStacks(selectedEffectInterval) }}</small>
         </span>
       </div>
+      <p
+        v-if="formatIntervalModifiers(selectedEffectInterval)"
+        class="effect-interval-modifiers"
+        data-testid="workbench-effect-interval-modifiers"
+      >
+        {{ formatIntervalModifiers(selectedEffectInterval) }}
+      </p>
       <ol class="effect-interval-lifecycle">
         <li
           v-for="event in selectedEffectInterval.lifecycleEvents"
@@ -394,6 +401,53 @@ function formatIntervalStacks(interval) {
   return `${status} · ${interval.activeAtScenarioEnd ? '场景结束时仍生效' : '已结束'}`;
 }
 
+function formatIntervalModifiers(interval) {
+  const modifierRows = [];
+  const seen = new Set();
+  for (const event of interval?.lifecycleEvents ?? []) {
+    const modifiers = [
+      ...(event.modifiers ?? []),
+      ...(event.after?.modifiers ?? []),
+      ...(event.before?.modifiers ?? []),
+    ];
+    for (const modifier of modifiers) {
+      const text = formatBattlePropertyModifier(modifier, interval);
+      if (text && !seen.has(text)) {
+        seen.add(text);
+        modifierRows.push(text);
+      }
+    }
+  }
+  return modifierRows.join(' · ');
+}
+
+function formatBattlePropertyModifier(modifier, interval) {
+  if (modifier?.kind !== 'battle-property') return '';
+  const attributeLabels = {
+    1: '攻击力',
+    3: '物理防御',
+    4: '魔法防御',
+    229: '调谐强度',
+  };
+  const attributeLabel =
+    attributeLabels[Number(modifier.attributeId)] ??
+    `属性 ${modifier.attributeId}`;
+  const value = Number(modifier.valueRaw);
+  if (!Number.isFinite(value)) return attributeLabel;
+  const signed = value > 0 ? '+' : '';
+  if (modifier.bucket === 'dynamicPercent') {
+    return `${attributeLabel} ${signed}${formatCompactNumber(value / 100)}%`;
+  }
+  const stackSuffix = Number(interval?.maxStacks) > 1 ? '/层' : '';
+  return `${attributeLabel} ${signed}${formatCompactNumber(value)}${stackSuffix}`;
+}
+
+function formatCompactNumber(value) {
+  return new Intl.NumberFormat('zh-CN', {
+    maximumFractionDigits: 2,
+  }).format(Number(value) || 0);
+}
+
 function formatTrackingStatus(value) {
   if (value.appliedToCalculators) return '已应用';
   if (value.trackingStatus === 'unapplied') return '未应用';
@@ -497,6 +551,14 @@ function formatLifecycleStack(event) {
 .effect-interval-review-heading small {
   color: #9da9b2;
   font-size: 11px;
+}
+
+.effect-interval-modifiers {
+  margin: 0;
+  padding: 0 12px 8px;
+  color: #a9c8c0;
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .effect-interval-lifecycle {

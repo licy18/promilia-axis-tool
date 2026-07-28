@@ -71,6 +71,7 @@ export function createVerifiedActionMechanicsTrace({
     specialResourceEvents.map(event => event.payload?.change)
   );
   const actionBinding = resolution?.actionBinding;
+  const visibleHitBindings = resolveVisibleHitBindings(resolution);
   const controlSkillId =
     actionBinding?.executionControlSkillId ??
     actionBinding?.controlSkillId ??
@@ -91,31 +92,29 @@ export function createVerifiedActionMechanicsTrace({
       resolution?.packageHash ?? verifiedCombatRuntime.packageHash ?? '',
     bindingIdentity: actionBinding?.identity ?? '',
     controlSkillId,
-    hitBindingCount: resolution?.hits?.length ?? 0,
-    hitBindings: (resolution?.allHits ?? resolution?.hits ?? []).map(
-      (hit, index) => {
-        const display = createCombatSourceDisplayLabel({
-          sourceText: hit.displayLabel ?? hit.name,
-          referenceKind: hit.referenceKind,
-          sequence: hit.hitIndex ?? index + 1,
-          sourceIdentity: hit.sourceIdentity,
-        });
-        return {
-          identity: hit.hitIdentity,
-          label: display.displayLabel,
-          rawSourceName: hit.rawSourceName ?? display.rawSourceName,
-          sourceNameStatus: hit.sourceNameStatus ?? display.sourceNameStatus,
-          frame: Number(hit.trigger?.impactFrame ?? hit.trigger?.startFrame),
-          sourceKind:
-            hit.referenceKind === 'bulletElements' ? 'projectile' : 'direct',
-          sourceEvidenceStatus: hit.sourceEvidenceStatus ?? 'applied',
-          scenarioRuntimeStatus: hit.scenarioRuntimeStatus ?? 'source-verified',
-          willHit: !(resolution?.disabledHitIdentities ?? []).includes(
-            hit.hitIdentity
-          ),
-        };
-      }
-    ),
+    hitBindingCount: visibleHitBindings.length,
+    hitBindings: visibleHitBindings.map((hit, index) => {
+      const display = createCombatSourceDisplayLabel({
+        sourceText: hit.displayLabel ?? hit.name,
+        referenceKind: hit.referenceKind,
+        sequence: hit.hitIndex ?? index + 1,
+        sourceIdentity: hit.sourceIdentity,
+      });
+      return {
+        identity: hit.hitIdentity,
+        label: display.displayLabel,
+        rawSourceName: hit.rawSourceName ?? display.rawSourceName,
+        sourceNameStatus: hit.sourceNameStatus ?? display.sourceNameStatus,
+        frame: Number(hit.trigger?.impactFrame ?? hit.trigger?.startFrame),
+        sourceKind:
+          hit.referenceKind === 'bulletElements' ? 'projectile' : 'direct',
+        sourceEvidenceStatus: hit.sourceEvidenceStatus ?? 'applied',
+        scenarioRuntimeStatus: hit.scenarioRuntimeStatus ?? 'source-verified',
+        willHit: !(resolution?.disabledHitIdentities ?? []).includes(
+          hit.hitIdentity
+        ),
+      };
+    }),
     disabledHitCount: resolution?.disabledHitIdentities?.length ?? 0,
     effectBindingCount: resolution?.effects?.length ?? 0,
     runtimeHitCount: hitEvents.length,
@@ -224,6 +223,30 @@ export function createVerifiedActionMechanicsTrace({
       },
     ],
   };
+}
+
+function resolveVisibleHitBindings(resolution) {
+  const allHits = resolution?.allHits ?? resolution?.hits ?? [];
+  if (
+    !Array.isArray(resolution?.conditionalHitGroupResults) ||
+    !allHits.some(hit => hit.conditionalGroupIdentity)
+  ) {
+    return allHits;
+  }
+  const materializedHitIdentities = new Set(
+    (resolution?.hits ?? []).map(hit => hit.hitIdentity)
+  );
+  const appliedGroupIdentities = new Set(
+    resolution.conditionalHitGroupResults
+      .filter(result => result.applied)
+      .map(result => result.groupIdentity)
+  );
+  return allHits.filter(
+    hit =>
+      !hit.conditionalGroupIdentity ||
+      materializedHitIdentities.has(hit.hitIdentity) ||
+      appliedGroupIdentities.has(hit.conditionalGroupIdentity)
+  );
 }
 
 export function resolveVerifiedActionRuntimeResolution(runtime, actionId) {

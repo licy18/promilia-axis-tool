@@ -11,12 +11,8 @@ import {
   createEffectSourceDisplayLabel,
   isSourceDisplayTextSafe,
 } from '../src/domain/sourceDisplayText.js';
-import {
-  createCharacterCombatOutputRecords,
-} from './character-combat/character-combat-profile-pipeline.mjs';
-import {
-  createCharacterCombatStatDependencies,
-} from './character-combat/character-combat-contract-compiler.mjs';
+import { createCharacterCombatOutputRecords } from './character-combat/character-combat-profile-pipeline.mjs';
+import { createCharacterCombatStatDependencies } from './character-combat/character-combat-contract-compiler.mjs';
 import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
 import {
   augmentCharacterCombatActionCandidates,
@@ -470,11 +466,7 @@ export async function createVerifiedCombatMechanicsBuild({
         occupancyResolver: resolveVerifiedActionInputOccupancy,
       });
     },
-    resolveNormalAttackTiming({
-      control,
-      subSkillIndex,
-      nextControlSkillId,
-    }) {
+    resolveNormalAttackTiming({ control, subSkillIndex, nextControlSkillId }) {
       const variant = control?.variants?.find(
         item => Number(item.subSkillIndex) === Number(subSkillIndex)
       );
@@ -567,8 +559,8 @@ export async function createVerifiedCombatMechanicsBuild({
           Number(compilation.ownerId) === Number(goldRecipe?.ownerId)
       );
       if (!goldRecipe || !goldCompilation) return;
-      xiaoyuHiddenInputDerivationAudit =
-        createXiaoyuHiddenInputDerivationAudit({
+      xiaoyuHiddenInputDerivationAudit = createXiaoyuHiddenInputDerivationAudit(
+        {
           characterCatalog,
           controlBySkillId: new Map(
             controlBindings.map(control => [control.controlSkillId, control])
@@ -577,7 +569,8 @@ export async function createVerifiedCombatMechanicsBuild({
           attackInputChains: goldCompilation.contracts.attackInputChains,
           publicActionForms: goldCompilation.contracts.publicActionForms,
           contextEdges: goldCompilation.contracts.contextEdges,
-        });
+        }
+      );
       actionVariantGraph.hiddenInputDerivationCatalog = {
         schemaVersion: xiaoyuHiddenInputDerivationAudit.schemaVersion,
         kind: 'xiaoyu-hidden-input-derivation-catalog',
@@ -648,11 +641,7 @@ export async function createVerifiedCombatMechanicsBuild({
         sharedContext: { semanticEffectCatalog },
       };
     },
-    createStatDependenciesForOwner({
-      ownerId,
-      compilation,
-      semanticEffects,
-    }) {
+    createStatDependenciesForOwner({ ownerId, compilation, semanticEffects }) {
       return createCharacterCombatStatDependencies({
         ownerId,
         staticPropertyCatalog,
@@ -7282,9 +7271,7 @@ function createControlRuntimeHits(control) {
           element.conditionalGroupIdentity ??
           null,
         runtimeCondition:
-          element.trigger?.runtimeCondition ??
-          element.runtimeCondition ??
-          null,
+          element.trigger?.runtimeCondition ?? element.runtimeCondition ?? null,
         hitIndex,
         hitIdentity,
       };
@@ -7494,11 +7481,9 @@ function createSemanticEffectRuntimeCatalog(catalog, passiveProfiles = []) {
         ) &&
         (profile.triggerBindings ?? []).some(
           trigger =>
-            Number(trigger.controlSkillId) ===
-              Number(effect.controlSkillId) &&
+            Number(trigger.controlSkillId) === Number(effect.controlSkillId) &&
             Number(trigger.subSkillIndex) === Number(effect.mapIndex) &&
-            Number(trigger.triggerFrame) ===
-              Number(effect.trigger?.startFrame)
+            Number(trigger.triggerFrame) === Number(effect.trigger?.startFrame)
         )
     );
   const semanticEffects = catalog.semanticEffects.filter(
@@ -7666,12 +7651,20 @@ function createSemanticEffectCandidate({
     ),
     action => action.actionIdentity
   );
+  const verifiedCharacterBinding = hasVerifiedCharacterCombatEffectBinding(
+    rawEffects,
+    node.elementId
+  );
+  const formulaRuntime = createSemanticFormulaRuntimeContract(node, {
+    verifiedCharacterBinding,
+  });
   const reasons = createSemanticEffectReasons({
     role,
     node,
     rawEffects,
     trigger,
     target,
+    formulaRuntime,
   });
   const resolution = resolveSemanticPlacementResolution({ trigger, target });
   const classification = resolveSemanticMechanicClassification({
@@ -7684,8 +7677,7 @@ function createSemanticEffectCandidate({
   const stack = resolveEffectStackContract(node.lifecycle);
   const boundLifecycle = rawEffects.find(
     effect =>
-      effect.status ===
-        'verified-action-effect-lifecycle-binding-applied' &&
+      effect.status === 'verified-action-effect-lifecycle-binding-applied' &&
       Number(effect.elementId) === Number(node.elementId) &&
       effect.lifecycle
   )?.lifecycle;
@@ -7718,7 +7710,9 @@ function createSemanticEffectCandidate({
     placementResolution: resolution,
     staticallyResolvable: resolution === 'static-resolved',
     lifecycle: {
-      durationMs: resolveSemanticEffectDuration(node, relationPath, root),
+      durationMs:
+        boundLifecycle?.durationMs ??
+        resolveSemanticEffectDuration(node, relationPath, root),
       tags: node.lifecycle.tags,
       combineType: node.lifecycle.combineType,
       maxCount: node.lifecycle.maxCount,
@@ -7729,7 +7723,7 @@ function createSemanticEffectCandidate({
     },
     mechanic: node.mechanic,
     formula: node.formula,
-    formulaRuntime: createSemanticFormulaRuntimeContract(node),
+    formulaRuntime,
     propertyChange: node.propertyChange && {
       ...node.propertyChange,
       bucket:
@@ -7781,7 +7775,10 @@ function classifySemanticEffectRole(node, root) {
   return 'gameplay-effect';
 }
 
-function createSemanticFormulaRuntimeContract(node) {
+function createSemanticFormulaRuntimeContract(
+  node,
+  { verifiedCharacterBinding = false } = {}
+) {
   const commonFunctionId = Number(node.formula?.commonFunctionId);
   const baseFunctionId = Number(node.formula?.baseFunctionId);
   if (commonFunctionId === 1 && baseFunctionId === 5) {
@@ -7789,6 +7786,32 @@ function createSemanticFormulaRuntimeContract(node) {
       registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
       family: 'literal-a-with-common-ratio',
       evaluator: 'q16.16-literal-a-times-g',
+      status: 'applied',
+      applied: true,
+    };
+  }
+  if (
+    verifiedCharacterBinding &&
+    commonFunctionId === 1 &&
+    baseFunctionId === 3
+  ) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'basis-point-property-a-with-common-ratio',
+      evaluator: 'q16.16-basis-point-a-times-g',
+      status: 'applied',
+      applied: true,
+    };
+  }
+  if (
+    verifiedCharacterBinding &&
+    commonFunctionId === 1 &&
+    baseFunctionId === 2008
+  ) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'source-tuning-ratio-with-common-ratio',
+      evaluator: 'q16.16-source-tuning-times-a-times-g',
       status: 'applied',
       applied: true,
     };
@@ -7812,8 +7835,13 @@ function createSemanticFormulaRuntimeContract(node) {
 }
 
 function resolveSemanticEffectTarget(node, trigger, rawEffects) {
-  const appliedTarget = rawEffects.find(effect =>
-    ['team-tuning-pool', 'enemy'].includes(effect.target?.kind)
+  const appliedTarget = rawEffects.find(
+    effect =>
+      effect.classification === 'applied' &&
+      effect.target?.kind &&
+      effect.target.kind !== 'unresolved' &&
+      (['team-tuning-pool', 'enemy'].includes(effect.target.kind) ||
+        effect.status === 'verified-action-effect-lifecycle-binding-applied')
   )?.target;
   if (node.tuningMark || node.tuningOverlimit) {
     return {
@@ -7822,6 +7850,15 @@ function resolveSemanticEffectTarget(node, trigger, rawEffects) {
       enumName: null,
       enumMember: null,
       sourceField: 'verified-tuning-mechanics',
+      runtimeReason: null,
+    };
+  }
+  if (appliedTarget) {
+    return {
+      ...trigger.target,
+      ...appliedTarget,
+      resolution: 'static-resolved',
+      sourceField: 'verified-character-combat-effect-binding',
       runtimeReason: null,
     };
   }
@@ -7846,6 +7883,7 @@ function createSemanticEffectReasons({
   rawEffects,
   trigger,
   target,
+  formulaRuntime,
 }) {
   const reasons = [
     ...node.reasons,
@@ -7855,6 +7893,11 @@ function createSemanticEffectReasons({
     .filter(Boolean)
     .filter(reason => !reason.startsWith('effect-target-'))
     .filter(reason => reason !== 'effect-trigger-frame-missing')
+    .filter(
+      reason =>
+        !formulaRuntime.applied ||
+        reason !== 'property-formula-not-literal-function-5'
+    )
     .filter(
       reason =>
         role !== 'wrapper' ||
@@ -7873,6 +7916,15 @@ function createSemanticEffectReasons({
     reasons.push('semantic-condition-not-standalone-gameplay-effect');
   }
   return dedupeBy(reasons, value => value);
+}
+
+function hasVerifiedCharacterCombatEffectBinding(rawEffects, elementId) {
+  return rawEffects.some(
+    effect =>
+      effect.status === 'verified-action-effect-lifecycle-binding-applied' &&
+      effect.classification === 'applied' &&
+      Number(effect.elementId) === Number(elementId)
+  );
 }
 
 function normalizeSemanticEffectReason(reason) {
@@ -12193,9 +12245,7 @@ function findRequiredBinding(bindings, controlBySkillId, predicate) {
 
 function getAuditAttackInputSegments(mapping) {
   return (
-    mapping?.attackInputSourceSegments ??
-    mapping?.attackInputSegments ??
-    []
+    mapping?.attackInputSourceSegments ?? mapping?.attackInputSegments ?? []
   );
 }
 

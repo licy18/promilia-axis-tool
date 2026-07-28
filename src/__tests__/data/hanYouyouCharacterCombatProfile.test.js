@@ -49,7 +49,9 @@ describe('M10-B2 Han Youyou character combat profile', () => {
     });
     expect(ownerContract.contracts.publicActions).toHaveLength(10);
     expect(
-      ownerContract.contracts.publicActions.filter(action => action.runtimeReady)
+      ownerContract.contracts.publicActions.filter(
+        action => action.runtimeReady
+      )
     ).toHaveLength(10);
     expect(ownerContract.contracts.actionForms).toHaveLength(14);
     expect(
@@ -61,10 +63,14 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       executionFormCount: 14,
       controlCount: 30,
       hitCount: 73,
+      targetStateProfileCount: 1,
+      targetStateTransactionCount: 8,
+      conditionalHitGroupCount: 2,
+      runtimeEffectBindingCount: 6,
       passiveCount: 2,
       switchTriggerCount: 1,
     });
-    expect(sourceManifest.summary.identityCount).toBe(473);
+    expect(sourceManifest.summary.identityCount).toBe(490);
     expect(reachableGraph.summary).toMatchObject({
       controlCount: 30,
       exclusionCount: 7,
@@ -72,6 +78,9 @@ describe('M10-B2 Han Youyou character combat profile', () => {
         'public-action': 10,
         'action-form': 14,
         hit: 73,
+        'target-state': 1,
+        'conditional-hit-group': 2,
+        'runtime-effect': 6,
         'passive-listener': 2,
         'switch-trigger': 1,
       },
@@ -97,9 +106,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       [5, 10100305, 0, 85],
     ]);
     expect(
-      goldenTrace.actual.actions.selectionByActionId[
-        'han-charged-stage-one'
-      ]
+      goldenTrace.actual.actions.selectionByActionId['han-charged-stage-one']
     ).toMatchObject({
       semanticName: '重击1段',
       controlSkillId: 10100310,
@@ -107,18 +114,14 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       actualDurationFrames: 65,
     });
     expect(
-      goldenTrace.actual.actions.selectionByActionId[
-        'han-charged-stage-two'
-      ]
+      goldenTrace.actual.actions.selectionByActionId['han-charged-stage-two']
     ).toMatchObject({
       semanticName: '重击2段',
       controlSkillId: 10100341,
       subSkillIndex: 0,
       actualDurationFrames: 71,
     });
-    expect(
-      goldenTrace.actual.combat.ownerHitCountByActionId
-    ).toMatchObject({
+    expect(goldenTrace.actual.combat.ownerHitCountByActionId).toMatchObject({
       'han-normal-a1': 1,
       'han-normal-a2': 2,
       'han-normal-a3': 3,
@@ -219,12 +222,76 @@ describe('M10-B2 Han Youyou character combat profile', () => {
           state.stateIdentity === FIREWORK_STATE_IDENTITY
       )
     ).toBe(true);
+    expect(
+      profile.coverage.find(item => item.dimension === 'stateMachines')
+    ).toMatchObject({
+      status: 'applied',
+      recordCount: 11,
+      appliedCount: 11,
+      unresolvedCount: 0,
+    });
+    expect(
+      profile.coverage.find(item => item.dimension === 'dynamicProperties')
+    ).toMatchObject({
+      status: 'static-evidence-gap',
+      recordCount: 8,
+      appliedCount: 7,
+      unresolvedCount: 1,
+    });
+  });
+
+  it('publishes both independent Ultimate tuning effects to the semantic runtime catalog', () => {
+    const ultimateEffects =
+      mechanicsPackage.semanticEffectCatalog.semanticEffects.filter(
+        effect =>
+          Number(effect.controlSkillId) === 10100313 &&
+          [101003205, 101003207].includes(Number(effect.elementId))
+      );
+    expect(ultimateEffects).toHaveLength(2);
+    expect(
+      ultimateEffects
+        .map(effect => ({
+          elementId: effect.elementId,
+          targetKind: effect.target.kind,
+          durationMs: effect.lifecycle.durationMs,
+          stackDelta: effect.lifecycle.stackDelta,
+          maxStacks: effect.lifecycle.maxStacks,
+          classification: effect.classification,
+        }))
+        .sort((left, right) => left.elementId - right.elementId)
+    ).toEqual([
+      {
+        elementId: 101003205,
+        targetKind: 'team-actors',
+        durationMs: 24000,
+        stackDelta: 2,
+        maxStacks: 2,
+        classification: 'applied',
+      },
+      {
+        elementId: 101003207,
+        targetKind: 'controlling-actor',
+        durationMs: 15000,
+        stackDelta: 1,
+        maxStacks: 1,
+        classification: 'applied',
+      },
+    ]);
+    expect(
+      mechanicsPackage.semanticEffectCatalog.formulas.find(
+        formula =>
+          formula.formulaIdentity ===
+          ultimateEffects.find(effect => Number(effect.elementId) === 101003207)
+            .formulaIdentity
+      )?.formula
+    ).toMatchObject({
+      commonFunctionId: 1,
+      baseFunctionId: 2008,
+    });
   });
 
   it('replays an authoritative three-person golden and fails on a tampered Firework settlement', () => {
-    expect(goldenTrace.status).toBe(
-      'authoritative-golden-runtime-verified'
-    );
+    expect(goldenTrace.status).toBe('authoritative-golden-runtime-verified');
     expect(goldenTrace.validation).toMatchObject({
       passed: true,
       failedCount: 0,
@@ -264,13 +331,35 @@ describe('M10-B2 Han Youyou character combat profile', () => {
     expect(goldenTrace.actual.effects).toMatchObject({
       passiveMaxStacks: 1,
       firstPassiveMaxStackFrame: 2029,
+      selectedEffectSummaryByElementId: {
+        101003205: {
+          effectNames: ['全队调谐强度提升'],
+          targetIds: ['actor-101003', 'actor-101010', 'actor-103002'],
+          appliedEventCount: 3,
+          expiredEventCount: 3,
+          firstAppliedFrame: 208,
+          firstExpiredFrame: 1648,
+          maxStacks: 2,
+          formulaValues: [18],
+        },
+        101003207: {
+          effectNames: ['主控角色调谐强度提升'],
+          targetIds: ['actor-101003'],
+          appliedEventCount: 1,
+          expiredEventCount: 1,
+          firstAppliedFrame: 208,
+          firstExpiredFrame: 1108,
+          maxStacks: 1,
+          formulaValues: [1019.9066162109375],
+        },
+      },
     });
     expect(goldenTrace.actual.dynamicProperties).toMatchObject({
       maxPercentRawByAttributeId: { 1: 1300 },
-      maxExtraRawByAttributeId: { 229: 36 },
+      maxExtraRawByAttributeId: { 229: 1055.9066162109375 },
     });
     expect(goldenTrace.actual.comparison).toMatchObject({
-      damageDelta: 1960,
+      damageDelta: 2051,
     });
 
     const tampered = structuredClone(goldenTrace.actual);

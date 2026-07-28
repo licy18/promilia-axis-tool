@@ -47,26 +47,9 @@
   "compiler": {
     "timingPolicy": "verified-input-reopen",
     "reachableControlSkillIds": [
-      10101001,
-      10101002,
-      10101003,
-      10101004,
-      10101005,
-      10101010,
-      10101011,
-      10101012,
-      10101013,
-      10101014,
-      10101015,
-      10101021,
-      10101024,
-      10101025,
-      10101026,
-      10101027,
-      10101041,
-      10101042,
-      10101049,
-      10101061
+      10101001, 10101002, 10101003, 10101004, 10101005, 10101010, 10101011,
+      10101012, 10101013, 10101014, 10101015, 10101021, 10101024, 10101025,
+      10101026, 10101027, 10101041, 10101042, 10101049, 10101061
     ],
     "contextInputEdges": [
       {
@@ -692,7 +675,7 @@
         "combat.ownerTotalHpDamage": 131213,
         "combat.ownerTotalToughnessDamage": 3704,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 546061,
+        "combat.enemy.finalHp": 545947,
         "resources.thresholdClearCount": 1,
         "resources.transformCount": 1,
         "resources.refreshCount": 1,

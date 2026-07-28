@@ -381,8 +381,7 @@ export function createCharacterCombatOwnerArtifacts({
   if (
     !compiledOwnerContract ||
     Number(compiledOwnerContract.ownerId) !== ownerId ||
-    compiledOwnerContract.status !==
-      'character-combat-owner-contracts-compiled'
+    compiledOwnerContract.status !== 'character-combat-owner-contracts-compiled'
   ) {
     throw new Error(
       `character combat compiled owner contracts missing: ${ownerId}`
@@ -393,7 +392,9 @@ export function createCharacterCombatOwnerArtifacts({
   const ownerContextEdges = sortByIdentity(
     compiledContracts.timingInputEdges ?? []
   );
-  const ownerVariantEdges = sortByIdentity(compiledContracts.variantEdges ?? []);
+  const ownerVariantEdges = sortByIdentity(
+    compiledContracts.variantEdges ?? []
+  );
   const attackInputChains = sortByIdentity(
     compiledContracts.attackInputChains ?? []
   );
@@ -406,6 +407,18 @@ export function createCharacterCombatOwnerArtifacts({
   const actionEffectBindings = sortByIdentity(
     compiledContracts.actionEffectBindings ?? []
   );
+  const targetStateProfiles = sortByIdentity(
+    compiledContracts.targetStateProfiles ?? []
+  );
+  const targetStateTransactions = sortByIdentity(
+    compiledContracts.targetStateTransactions ?? []
+  );
+  const conditionalHitGroups = sortByIdentity(
+    compiledContracts.conditionalHitGroups ?? []
+  );
+  const runtimeEffectBindings = sortByIdentity(
+    compiledContracts.runtimeEffectBindings ?? []
+  );
   const actionForms = sortByIdentity(compiledContracts.actionForms ?? []);
   const specialResourceProfiles = sortByIdentity(
     compiledContracts.resourceProfiles ?? []
@@ -417,9 +430,7 @@ export function createCharacterCombatOwnerArtifacts({
     compiledContracts.stateMachines ?? []
   );
   const passives = sortByIdentity(compiledContracts.passives ?? []);
-  const switchTriggers = sortByIdentity(
-    compiledContracts.switchTriggers ?? []
-  );
+  const switchTriggers = sortByIdentity(compiledContracts.switchTriggers ?? []);
   const controls = sortByIdentity(compiledContracts.controls ?? []);
   const hits = sortByIdentity(compiledContracts.hits ?? []);
   const rawEffects = sortByIdentity(compiledContracts.effects?.raw ?? []);
@@ -471,6 +482,10 @@ export function createCharacterCombatOwnerArtifacts({
     specialResourceProfiles,
     resourceTransactions,
     thresholdTransitions,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
     passives,
     switchTriggers,
     statDependencies,
@@ -494,6 +509,10 @@ export function createCharacterCombatOwnerArtifacts({
       specialResourceProfiles,
       resourceTransactions,
       thresholdTransitions,
+      targetStateProfiles,
+      targetStateTransactions,
+      conditionalHitGroups,
+      runtimeEffectBindings,
       passives,
       switchTriggers,
       semanticEffects,
@@ -510,6 +529,10 @@ export function createCharacterCombatOwnerArtifacts({
     specialResourceProfiles,
     resourceTransactions,
     thresholdTransitions,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
     passives,
     switchTriggers,
     hits,
@@ -527,6 +550,10 @@ export function createCharacterCombatOwnerArtifacts({
     specialResourceProfiles,
     resourceTransactions,
     thresholdTransitions,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
     passives,
     switchTriggers,
     semanticEffects,
@@ -544,6 +571,10 @@ export function createCharacterCombatOwnerArtifacts({
     specialResourceProfiles,
     resourceTransactions,
     thresholdTransitions,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
     passives,
     switchTriggers,
     coverage,
@@ -602,6 +633,10 @@ export function createCharacterCombatOwnerArtifacts({
     resourceProfiles: specialResourceProfiles,
     resourceTransactions,
     stateMachines: thresholdTransitions,
+    targetStateProfiles,
+    targetStateTransactions,
+    conditionalHitGroups,
+    runtimeEffectBindings,
     effects: {
       raw: rawEffects,
       semantic: semanticEffects,
@@ -634,8 +669,7 @@ export function createCharacterCombatOwnerArtifacts({
     characterComplete: lifecycle.characterComplete,
     maturityGates: lifecycle.gates,
     completionState: lifecycle.pipelineMaturity,
-    targetPipelineMaturity:
-      recipe.targetPipelineMaturity ?? 'profile-compiled',
+    targetPipelineMaturity: recipe.targetPipelineMaturity ?? 'profile-compiled',
     owner: {
       ownerKind: 'actor',
       ownerId,
@@ -775,9 +809,7 @@ export function validateCharacterCombatProfile({
     issues.push('pipeline-maturity-invalid');
   }
   if (
-    !CHARACTER_COMBAT_COVERAGE_STATES.includes(
-      profile.combatCoverageState
-    ) ||
+    !CHARACTER_COMBAT_COVERAGE_STATES.includes(profile.combatCoverageState) ||
     profile.characterComplete !==
       (profile.combatCoverageState === 'complete' &&
         profile.pipelineMaturity === 'ui-verified')
@@ -1092,7 +1124,11 @@ function createCoverage(input) {
         ])
       : createCoverageStatus('static-evidence-gap', []),
     buffsAndDebuffs: statusForRecords(
-      [...input.semanticEffects, ...input.passives],
+      [
+        ...input.semanticEffects,
+        ...input.passives,
+        ...input.runtimeEffectBindings,
+      ],
       item => item.classification === 'applied' || item.applied === true,
       item => item.reasons
     ),
@@ -1102,7 +1138,19 @@ function createCoverage(input) {
       item => item.reasons
     ),
     dynamicProperties: statusForRecords(
-      input.statDependencies.dynamic,
+      [
+        ...input.statDependencies.dynamic,
+        ...input.runtimeEffectBindings.flatMap(binding =>
+          (binding.modifiers ?? [])
+            .filter(modifier => modifier.kind === 'battle-property')
+            .map(modifier => ({
+              ...modifier,
+              status: binding.applied ? 'applied' : binding.status,
+              sourceIdentity: binding.sourceIdentity,
+              reasons: binding.reasons,
+            }))
+        ),
+      ],
       item => item.status === 'applied',
       item => item.reasons
     ),
@@ -1119,7 +1167,12 @@ function createCoverage(input) {
       'not-applicable'
     ),
     stateMachines: statusForRecords(
-      input.thresholdTransitions,
+      [
+        ...input.thresholdTransitions,
+        ...input.targetStateProfiles,
+        ...input.targetStateTransactions,
+        ...input.conditionalHitGroups,
+      ],
       item => item.applied === true,
       item => item.reasons
     ),
@@ -1273,6 +1326,10 @@ function createReachableGraph({
   specialResourceProfiles,
   resourceTransactions,
   thresholdTransitions,
+  targetStateProfiles,
+  targetStateTransactions,
+  conditionalHitGroups,
+  runtimeEffectBindings,
   passives,
   switchTriggers,
   hits,
@@ -1415,6 +1472,78 @@ function createReachableGraph({
       threshold: transition.threshold,
       status: mapClassification(transition.applied),
     });
+  }
+  for (const profile of targetStateProfiles) {
+    const stateIdentity = `target-state:${profile.stateIdentity}`;
+    addNode(stateIdentity, 'target-state', {
+      targetKind: profile.targetKind,
+      durationMs: profile.durationMs,
+      capacity: profile.maxStacks,
+      status: mapClassification(profile.applied),
+      sourceIdentity: profile.sourceIdentity,
+    });
+  }
+  for (const transaction of targetStateTransactions) {
+    addEdge(
+      `control:${transaction.controlSkillId}:sub:${transaction.subSkillIndex}`,
+      `target-state:${transaction.stateIdentity}`,
+      `target-state-${transaction.operation}`,
+      {
+        triggerFrame: transaction.triggerFrame,
+        amount: transaction.amount,
+        requiresHitElementId: transaction.requiresHitElementId,
+        status: mapClassification(transaction.applied),
+        sourceIdentity: transaction.sourceIdentity,
+      }
+    );
+  }
+  for (const group of conditionalHitGroups) {
+    const groupIdentity = `conditional-hit-group:${group.groupIdentity}`;
+    addNode(groupIdentity, 'conditional-hit-group', {
+      decisionFrame: group.decisionFrame,
+      minimumStacks: group.minimumStacks,
+      status: mapClassification(group.applied),
+      sourceIdentity: group.sourceIdentity,
+    });
+    addEdge(
+      `target-state:${group.stateIdentity}`,
+      groupIdentity,
+      'conditions-hit-group',
+      {
+        status: mapClassification(group.applied),
+        sourceIdentity: group.sourceIdentity,
+      }
+    );
+    addEdge(
+      groupIdentity,
+      `control:${group.controlSkillId}:sub:${group.subSkillIndex}`,
+      'materializes-conditional-hits',
+      {
+        status: mapClassification(group.applied),
+        sourceIdentity: group.sourceIdentity,
+      }
+    );
+  }
+  for (const binding of runtimeEffectBindings) {
+    const effectIdentity = `runtime-effect:${binding.bindingIdentity}`;
+    addNode(effectIdentity, 'runtime-effect', {
+      effectId: binding.effectId,
+      targetKind: binding.targetKind,
+      status: mapClassification(binding.applied),
+      sourceIdentity: binding.sourceIdentity,
+    });
+    addEdge(
+      binding.triggerKind === 'conditional-hit-group-applied'
+        ? `conditional-hit-group:${binding.conditionalGroupIdentity}`
+        : `control:${binding.controlSkillId}:sub:${binding.subSkillIndex}`,
+      effectIdentity,
+      'triggers-runtime-effect',
+      {
+        triggerFrame: binding.triggerFrame,
+        status: mapClassification(binding.applied),
+        sourceIdentity: binding.sourceIdentity,
+      }
+    );
   }
   for (const passive of passives) {
     addNode(passive.passiveIdentity, 'passive-listener', {
@@ -1672,6 +1801,10 @@ function createRuntimeCoverage({
   specialResourceProfiles,
   resourceTransactions,
   thresholdTransitions,
+  targetStateProfiles,
+  targetStateTransactions,
+  conditionalHitGroups,
+  runtimeEffectBindings,
   passives,
   switchTriggers,
   coverage,
@@ -1722,6 +1855,10 @@ function createRuntimeCoverage({
       resourceProfileCount: specialResourceProfiles.length,
       resourceTransactionCount: resourceTransactions.length,
       thresholdTransitionCount: thresholdTransitions.length,
+      targetStateProfileCount: targetStateProfiles.length,
+      targetStateTransactionCount: targetStateTransactions.length,
+      conditionalHitGroupCount: conditionalHitGroups.length,
+      runtimeEffectBindingCount: runtimeEffectBindings.length,
       passiveCount: passives.length,
       switchTriggerCount: switchTriggers.length,
       coverageStatusCounts: countBy(coverage, item => item.status),
@@ -2077,14 +2214,12 @@ function createUnresolvedLedger({
       forcedStatus: item.status,
     });
   }
-  const rawRecords = dedupeBy(
-    records,
-    record => record.recordIdentity
-  ).sort(compareIdentity);
+  const rawRecords = dedupeBy(records, record => record.recordIdentity).sort(
+    compareIdentity
+  );
   const semanticGroups = new Map();
   for (const record of rawRecords) {
-    const impactClassification =
-      classifyUnresolvedImpactClassification(record);
+    const impactClassification = classifyUnresolvedImpactClassification(record);
     const canonicalKey = createUnresolvedCanonicalKey(
       record,
       impactClassification
@@ -2136,9 +2271,7 @@ function createUnresolvedLedger({
         record => record.impactClassification === 'wrapper-or-duplicate'
       ).length,
       unreachableOrNotApplicableCount: semanticRecords.filter(record =>
-        ['unreachable', 'not-applicable'].includes(
-          record.impactClassification
-        )
+        ['unreachable', 'not-applicable'].includes(record.impactClassification)
       ).length,
     },
   };
@@ -2377,16 +2510,19 @@ export function createActionPhaseCoverage({
         (sum, phase) => sum + phase.inputCount,
         0
       ),
-      phaseTransitionCount: phases.filter(phase => phase.phaseTransition).length,
+      phaseTransitionCount: phases.filter(phase => phase.phaseTransition)
+        .length,
       quickEntryCount: quickEntries.length,
-      appliedQuickEntryCount: quickEntries.filter(entry => entry.applied).length,
+      appliedQuickEntryCount: quickEntries.filter(entry => entry.applied)
+        .length,
       publicActionCount: publicActionReview.length,
       runtimeReadyActionCount: publicActionReview.filter(
         action => action.runtimeReady
       ).length,
       appliedResourceTransactionCount: resourceActionRows.length,
-      appliedActionEffectCount: actionEffectRows.filter(effect => effect.applied)
-        .length,
+      appliedActionEffectCount: actionEffectRows.filter(
+        effect => effect.applied
+      ).length,
     },
     phases,
     quickEntries,
@@ -2519,10 +2655,8 @@ export function createActionTransitionCoverage({
         createTransitionCoverageRow({
           ownerId,
           identity: continuityRule.ruleIdentity,
-          sourceControlSkillId:
-            continuityRule.intermediaryControlSkillId,
-          sourceSubSkillIndex:
-            continuityRule.intermediarySubSkillIndex,
+          sourceControlSkillId: continuityRule.intermediaryControlSkillId,
+          sourceSubSkillIndex: continuityRule.intermediarySubSkillIndex,
           sourcePublicAction: publicActionByControl.get(
             `${Number(continuityRule.intermediaryControlSkillId)}|${Number(
               continuityRule.intermediarySubSkillIndex
@@ -2602,9 +2736,7 @@ export function createActionTransitionCoverage({
       continue;
     }
     const target = chainSegmentByExecution.get(
-      `${Number(edge.targetControlSkillId)}|${Number(
-        edge.targetSubSkillIndex
-      )}`
+      `${Number(edge.targetControlSkillId)}|${Number(edge.targetSubSkillIndex)}`
     );
     if (!target) continue;
     const row = createTransitionCoverageRow({
@@ -2624,10 +2756,7 @@ export function createActionTransitionCoverage({
       inputCommand: edge.inputCommand,
       inputWindow:
         edge.inputWindow ??
-        createFrameWindowFromDuration(
-          edge.activationFrame,
-          edge.durationMs
-        ),
+        createFrameWindowFromDuration(edge.activationFrame, edge.durationMs),
       targetChain: target.chain,
       targetSegment: target.segment,
       transitionSemantics:
@@ -2683,8 +2812,7 @@ export function createActionTransitionCoverage({
       targetSequenceIndex: numberOrNull(target?.segment?.sequenceIndex),
       targetSemanticName:
         target?.segment?.semanticName ?? target?.segment?.label ?? null,
-      runtimeBindingIdentity:
-        appliedTransition?.transitionIdentity ?? null,
+      runtimeBindingIdentity: appliedTransition?.transitionIdentity ?? null,
       runtimeStatus: appliedTransition
         ? 'applied'
         : target
@@ -2722,8 +2850,7 @@ export function createActionTransitionCoverage({
     ).length;
     const directWindowCount = rawWindows.filter(
       window =>
-        Number(window.sourceControlSkillId) ===
-          Number(action.controlSkillId) &&
+        Number(window.sourceControlSkillId) === Number(action.controlSkillId) &&
         Number(window.sourceSubSkillIndex) ===
           Number(action.selectedSubSkillIndex)
     ).length;
@@ -2812,7 +2939,7 @@ function createTransitionCoverageRow({
         endFrame: numberOrNull(inputWindow.endFrame),
         durationFrames:
           numberOrNull(inputWindow.durationFrames) ??
-          (Number(inputWindow.endFrame) - Number(inputWindow.startFrame)),
+          Number(inputWindow.endFrame) - Number(inputWindow.startFrame),
       }
     : null;
   const sourceTransactions = resourceTransactions
@@ -2907,9 +3034,7 @@ function createTransitionCoverageRow({
     targetSequenceIndex:
       targetSequenceIndex === 'next'
         ? 'next'
-        : numberOrNull(
-            targetSequenceIndex ?? targetSegment?.sequenceIndex
-          ),
+        : numberOrNull(targetSequenceIndex ?? targetSegment?.sequenceIndex),
     targetControlSkillId: numberOrNull(targetSegment?.controlSkillId),
     targetSubSkillIndex: numberOrNull(targetSegment?.subSkillIndex),
     targetSemanticName:
@@ -2919,9 +3044,7 @@ function createTransitionCoverageRow({
     evidenceKind: evidenceKind ?? null,
     sourceIdentity: sourceIdentity ?? null,
     runtimeCoverage: applied ? 'applied' : 'not-applied',
-    workbenchCoverage: applied
-      ? 'generic-runtime-projection'
-      : 'not-covered',
+    workbenchCoverage: applied ? 'generic-runtime-projection' : 'not-covered',
     e2eCoverage: verification?.e2e ?? 'not-covered',
     status: status ?? (applied ? 'applied' : 'static-evidence-gap'),
     applied: applied === true,
@@ -2953,8 +3076,7 @@ function createFrameWindowFromDuration(startFrame, durationMs) {
 
 function compareTransitionCoverageRows(left, right) {
   return (
-    Number(left.sourceControlSkillId) -
-      Number(right.sourceControlSkillId) ||
+    Number(left.sourceControlSkillId) - Number(right.sourceControlSkillId) ||
     Number(left.sourceSubSkillIndex) - Number(right.sourceSubSkillIndex) ||
     Number(left.inputWindow?.startFrame ?? -1) -
       Number(right.inputWindow?.startFrame ?? -1) ||
@@ -3106,8 +3228,7 @@ function createGoldenFixture({ ownerId, goldenRuntime, sourcePackageHash }) {
   if (
     !goldenRuntime ||
     Number(goldenRuntime.ownerId) !== Number(ownerId) ||
-    goldenRuntime.kind !==
-      'azpr-character-combat-authoritative-golden-runtime'
+    goldenRuntime.kind !== 'azpr-character-combat-authoritative-golden-runtime'
   ) {
     throw new Error(`authoritative golden runtime missing for ${ownerId}`);
   }
@@ -3208,8 +3329,7 @@ function createAllCharacterCoverageManifest({
       progressState:
         profile?.pipelineMaturity ??
         (actions.length ? 'evidence-indexed' : 'not-started'),
-      targetPipelineMaturity:
-        recipe?.targetPipelineMaturity ?? 'ui-verified',
+      targetPipelineMaturity: recipe?.targetPipelineMaturity ?? 'ui-verified',
       combatCoverageState:
         profile?.combatCoverageState ??
         (actions.length ? 'evidence-required' : 'evidence-required'),
@@ -3378,10 +3498,11 @@ function createOwnerSummaryMarkdown({
     '',
     '## 维度状态',
     '',
-    '| 维度 | 状态 | 数量 |',
-    '| --- | --- | ---: |',
+    '| 维度 | 状态 | 已应用 | 未解析 | 总数 |',
+    '| --- | --- | ---: | ---: | ---: |',
     ...profile.coverage.map(
-      item => `| ${item.dimension} | ${item.status} | ${item.recordCount} |`
+      item =>
+        `| ${item.dimension} | ${item.status} | ${item.appliedCount ?? 0} | ${item.unresolvedCount ?? 0} | ${item.recordCount} |`
     ),
     '',
     '## 未闭环',

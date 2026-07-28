@@ -973,6 +973,7 @@
               :aria-label="formatEffectIntervalTitle(interval)"
               :data-interval-id="interval.intervalId"
               :data-effect-id="interval.effectId"
+              :data-source-element-id="interval.sourceIdentity?.elementId ?? ''"
               :data-target-kind="interval.targetKind"
               :data-target-id="interval.targetId"
               :data-source-action-id="interval.sourceActionId || ''"
@@ -989,6 +990,10 @@
                 interval.appliedToCalculators ? 'true' : 'false'
               "
               :data-lifecycle-event-count="interval.lifecycleEvents.length"
+              :data-initial-stacks="interval.initialStacks"
+              :data-final-stacks="interval.finalStacks"
+              :data-peak-stacks="interval.peakStacks"
+              :data-max-stacks="interval.maxStacks"
               :data-selected="
                 interval.intervalId === selectedEffectIntervalId
                   ? 'true'
@@ -1023,8 +1028,26 @@
                 v-for="event in interval.lifecycleEvents.slice(1)"
                 :key="event.eventId"
                 class="effect-lifecycle-marker"
-                :class="'event-' + String(event.type).toLowerCase()"
+                :class="[
+                  'event-' + String(event.type).toLowerCase(),
+                  {
+                    gain: Number(event.stackChange) > 0,
+                    consume: Number(event.stackChange) < 0,
+                  },
+                ]"
                 :style="effectLifecycleMarkerStyle(event, interval)"
+                :title="formatEffectLifecycleMarkerTitle(event, interval)"
+                :data-effect-event-id="event.eventId"
+                :data-effect-event-type="event.type"
+                :data-effect-operation="event.operation || ''"
+                :data-before-stacks="
+                  Number(event.stackBefore ?? event.before?.stacks ?? 0)
+                "
+                :data-after-stacks="
+                  Number(event.stackAfter ?? event.after?.stacks ?? 0)
+                "
+                :data-time-ms="event.timeMs"
+                data-testid="workbench-effect-lifecycle-marker"
               />
             </button>
           </div>
@@ -2764,6 +2787,18 @@ function formatEffectLifecycleOperation(type) {
   return type;
 }
 
+function formatEffectLifecycleMarkerTitle(event, interval) {
+  const before = Number(event.stackBefore ?? event.before?.stacks ?? 0);
+  const after = Number(event.stackAfter ?? event.after?.stacks ?? 0);
+  const frame = Math.round(Number(event.timeMs) / WORKBENCH_FRAME_MS);
+  return [
+    interval.effectName || interval.effectId,
+    formatEffectLifecycleOperation(event.type),
+    `${before} -> ${after} 层`,
+    `${frame}F`,
+  ].join(' · ');
+}
+
 function selectEffectInterval(interval) {
   emit('select-effect-interval', {
     intervalId: interval.intervalId,
@@ -3052,8 +3087,7 @@ function getActionReadiness(action) {
 
 function formatTimelineActionTitle(action) {
   const readiness = getActionReadiness(action);
-  const { name, executionLabel } =
-    resolveTimelineActionRuntimeIdentity(action);
+  const { name, executionLabel } = resolveTimelineActionRuntimeIdentity(action);
   const status =
     readiness.status === 'blocked'
       ? '不可执行'
@@ -3078,8 +3112,7 @@ function resolveTimelineActionRuntimeIdentity(action) {
       action.id
     ) ?? null;
   const selectedInputOption = selection?.inputSelector?.options?.find(
-    option =>
-      option.selectorIdentity === selection?.selectedInputIdentity
+    option => option.selectorIdentity === selection?.selectedInputIdentity
   );
   const controlSkillId =
     binding?.executionControlSkillId ?? binding?.controlSkillId;
@@ -5545,12 +5578,13 @@ h2 {
 .effect-lifecycle-marker {
   position: absolute;
   bottom: 0;
-  width: 2px;
-  height: 5px;
+  width: 3px;
+  height: 6px;
   background: #79c7b9;
-  transform: translateX(-1px);
+  transform: translateX(-1.5px);
 }
 
+.effect-lifecycle-marker.consume,
 .effect-lifecycle-marker.event-effect_removed,
 .effect-lifecycle-marker.event-effect_expired {
   background: #ff8792;

@@ -2,7 +2,7 @@
 
 - Owner: `103002`
 - Profile: `actor:103002:character-combat-profile:v1`
-- Hash: `8f7d5e3285301761a490ab03a95d2c794b07e9d15678b93fd11114d559a1b0b1`
+- Hash: `5a1a3fbaa9e023566acb76871535ec345f35d6d73b26d1e80d3a4f5abde43e8b`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -19,28 +19,28 @@
 
 ## 维度状态
 
-| 维度 | 状态 | 数量 |
-| --- | --- | ---: |
-| publicActions | applied | 10 |
-| hiddenAndDerivedForms | applied | 24 |
-| inputAndExecutionTiming | applied | 1 |
-| effectiveOccupancy | applied | 24 |
-| hitsAndProjectiles | static-evidence-gap | 215 |
-| hpDamage | static-evidence-gap | 130 |
-| toughnessDamage | static-evidence-gap | 130 |
-| actorSp | static-evidence-gap | 130 |
-| kiboSp | static-evidence-gap | 130 |
-| cooldowns | applied | 28 |
-| personalResources | applied | 43 |
-| teamResourcesAndMarks | applied | 1 |
-| buffsAndDebuffs | static-evidence-gap | 74 |
-| passives | applied | 1 |
-| dynamicProperties | static-evidence-gap | 12 |
-| healingAndShields | not-applicable | 0 |
-| stateMachines | not-applicable | 0 |
-| switchAndStarCarry | applied | 1 |
-| frontBackDifferences | applied | 1 |
-| loadoutAndTeamStatPropagation | applied | 1 |
+| 维度 | 状态 | 已应用 | 未解析 | 总数 |
+| --- | --- | ---: | ---: | ---: |
+| publicActions | applied | 10 | 0 | 10 |
+| hiddenAndDerivedForms | applied | 24 | 0 | 24 |
+| inputAndExecutionTiming | applied | 1 | 0 | 1 |
+| effectiveOccupancy | applied | 24 | 0 | 24 |
+| hitsAndProjectiles | static-evidence-gap | 211 | 4 | 215 |
+| hpDamage | static-evidence-gap | 15 | 115 | 130 |
+| toughnessDamage | static-evidence-gap | 15 | 115 | 130 |
+| actorSp | static-evidence-gap | 8 | 115 | 130 |
+| kiboSp | static-evidence-gap | 8 | 115 | 130 |
+| cooldowns | applied | 28 | 0 | 28 |
+| personalResources | applied | 43 | 0 | 43 |
+| teamResourcesAndMarks | applied | 1 | 0 | 1 |
+| buffsAndDebuffs | static-evidence-gap | 9 | 65 | 74 |
+| passives | applied | 1 | 0 | 1 |
+| dynamicProperties | static-evidence-gap | 6 | 6 | 12 |
+| healingAndShields | not-applicable | 0 | 0 | 0 |
+| stateMachines | not-applicable | 0 | 0 | 0 |
+| switchAndStarCarry | applied | 1 | 0 | 1 |
+| frontBackDifferences | applied | 1 | 0 | 1 |
+| loadoutAndTeamStatPropagation | applied | 1 | 0 | 1 |
 
 ## 未闭环
 

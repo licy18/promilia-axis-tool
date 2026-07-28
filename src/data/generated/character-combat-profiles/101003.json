@@ -23,7 +23,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "56e344b403b69743befdd3b29d781f6c96e3d44907c703635b57833199aa229b",
+    "packageHash": "bc92e6e153b8979cb355a74d55f9c9ee0df4175dc3c66ed97151ad5a9b9a010b",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -19016,7 +19016,7 @@
             "name": "精通加成注入 注入2层",
             "rawSourceName": "精通加成注入 注入2层",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "精通加成注入 注入2层",
+            "displayLabel": "调谐强度加成注入 注入2层",
             "kind": "inject",
             "depth": 0,
             "relationPath": [],
@@ -19110,7 +19110,7 @@
             "name": "精通加成  每层18点 最多2层",
             "rawSourceName": "精通加成  每层18点 最多2层",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "精通加成  每层18点 最多2层",
+            "displayLabel": "调谐强度加成  每层18点 最多2层",
             "kind": "property-change",
             "depth": 1,
             "relationPath": [
@@ -19231,7 +19231,7 @@
             "name": "精通加成  每层18点 最多2层",
             "rawSourceName": "精通加成  每层18点 最多2层",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "精通加成  每层18点 最多2层",
+            "displayLabel": "调谐强度加成  每层18点 最多2层",
             "kind": "property-change",
             "depth": 0,
             "relationPath": [],
@@ -19338,7 +19338,7 @@
             "name": "Buff 全队精通提升为寒悠悠精通10%",
             "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+            "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
             "kind": "inject",
             "depth": 0,
             "relationPath": [],
@@ -19433,7 +19433,7 @@
             "name": "Buff 全队精通提升为寒悠悠精通10%",
             "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+            "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
             "kind": "property-change",
             "depth": 1,
             "relationPath": [
@@ -19552,7 +19552,7 @@
             "name": "Buff 全队精通提升为寒悠悠精通10%",
             "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+            "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
             "kind": "property-change",
             "depth": 0,
             "relationPath": [],
@@ -25602,7 +25602,7 @@
             "name": "精通加成  每层18点 最多2层",
             "rawSourceName": "精通加成  每层18点 最多2层",
             "sourceNameStatus": "source-name-ready",
-            "displayLabel": "精通加成  每层18点 最多2层",
+            "displayLabel": "调谐强度加成  每层18点 最多2层",
             "kind": "property-change",
             "depth": 0,
             "relationPath": [],
@@ -35252,6 +35252,559 @@
     "resourceProfiles": [],
     "resourceTransactions": [],
     "stateMachines": [],
+    "targetStateProfiles": [
+      {
+        "stateIdentity": "enemy:firework",
+        "ownerId": 101003,
+        "name": "焰火",
+        "targetKind": "enemy",
+        "elementId": 101003079,
+        "capacityElementId": 101003171,
+        "durationMs": 10000,
+        "maxStacks": 15,
+        "expiryMode": "independent-layer",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15",
+        "status": "verified-target-state-profile-ready",
+        "applied": true
+      }
+    ],
+    "targetStateTransactions": [
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-1",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 61,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003033,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-2",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 68,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003033,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-3",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 73,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003033,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-4",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 94,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-5",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 99,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-6",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 104,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-star-skill-firework-hit-7",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 109,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 10000,
+        "requiresHitElementId": 101003108,
+        "passiveSkillId": null,
+        "priority": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      },
+      {
+        "transactionIdentity": "han-passive-10100362-final-hit-extra-firework",
+        "ownerId": 101003,
+        "stateIdentity": "enemy:firework",
+        "controlSkillId": 10100312,
+        "subSkillIndex": 0,
+        "triggerFrame": 109,
+        "frameRate": 60,
+        "operation": "gain",
+        "amount": 1,
+        "durationMs": 15000,
+        "requiresHitElementId": 101003108,
+        "passiveSkillId": 10100362,
+        "priority": 1,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079",
+        "status": "verified-target-state-transaction-ready",
+        "applied": true
+      }
+    ],
+    "conditionalHitGroups": [
+      {
+        "groupIdentity": "han-charged-stage-one-firework-explosion",
+        "ownerId": 101003,
+        "controlSkillId": 10100310,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48012601,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003110,
+        "triggerFrames": [
+          31,
+          55,
+          58,
+          62,
+          65
+        ],
+        "decisionFrame": 28,
+        "frameRate": 60,
+        "stateIdentity": "enemy:firework",
+        "minimumStacks": 1,
+        "consumePolicy": "consume-band-or-all",
+        "consumeBands": [
+          {
+            "minimumStacks": 6,
+            "amount": 6,
+            "sourceElementId": 101003136,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
+            "status": "verified-target-state-consume-band-ready",
+            "applied": true
+          }
+        ],
+        "fallbackConsumeAll": true,
+        "formulaNormalization": {
+          "kind": "target-state-condition-to-unity-common-factor",
+          "originalCommonFunctionId": 101100,
+          "normalizedCommonFunctionId": 1,
+          "stateIdentity": "enemy:firework",
+          "stateElementId": 101003079,
+          "comparison": "greater-than",
+          "threshold": 0,
+          "minimumStacks": 1,
+          "trueValue": 1,
+          "falseValue": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003110.asset/MonoBehaviour/ast_101003110__-9168566004252254787.json#elementConfigId=101003110|element_formula[101100]#IF(target.ELEMENT_LAYERS[M]>I,T,F)",
+          "status": "verified-target-state-conditional-formula-normalized",
+          "applied": true
+        },
+        "tuningMark": null,
+        "semanticName": "重击1段·焰火爆炸",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
+        "status": "verified-conditional-hit-group-ready",
+        "applied": true
+      },
+      {
+        "groupIdentity": "han-charged-stage-two-firework-explosion",
+        "ownerId": 101003,
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 48013201,
+        "sourceSubSkillIndex": 0,
+        "elementId": 101003111,
+        "triggerFrames": [
+          27,
+          51,
+          54,
+          58,
+          61
+        ],
+        "decisionFrame": 24,
+        "frameRate": 60,
+        "stateIdentity": "enemy:firework",
+        "minimumStacks": 1,
+        "consumePolicy": "consume-band-or-all",
+        "consumeBands": [
+          {
+            "minimumStacks": 10,
+            "amount": 10,
+            "sourceElementId": 101003170,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)",
+            "status": "verified-target-state-consume-band-ready",
+            "applied": true
+          },
+          {
+            "minimumStacks": 8,
+            "amount": 8,
+            "sourceElementId": 101003137,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
+            "status": "verified-target-state-consume-band-ready",
+            "applied": true
+          }
+        ],
+        "fallbackConsumeAll": true,
+        "formulaNormalization": {
+          "kind": "target-state-condition-to-unity-common-factor",
+          "originalCommonFunctionId": 101100,
+          "normalizedCommonFunctionId": 1,
+          "stateIdentity": "enemy:firework",
+          "stateElementId": 101003079,
+          "comparison": "greater-than",
+          "threshold": 0,
+          "minimumStacks": 1,
+          "trueValue": 1,
+          "falseValue": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003111.asset/MonoBehaviour/ast_101003111__4954460886115009592.json#elementConfigId=101003111|element_formula[101100]#IF(target.ELEMENT_LAYERS[M]>I,T,F)",
+          "status": "verified-target-state-conditional-formula-normalized",
+          "applied": true
+        },
+        "tuningMark": {
+          "key": "fire",
+          "element": "火",
+          "markId": 150,
+          "maxStacks": 5,
+          "layerDurationMs": 20000,
+          "heldReadyMs": 5000,
+          "layerComponentIds": [
+            151
+          ],
+          "additionalHitComponentIds": [
+            152
+          ],
+          "persistentModifiers": [
+            {
+              "componentId": 151,
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 60,
+              "propertyTags": [],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+              "status": "verified-tuning-persistent-modifier-ready",
+              "applied": true
+            }
+          ],
+          "heldDamageTemplates": [
+            {
+              "elementConfigId": 152,
+              "damageType": 10,
+              "elementalType": 1,
+              "coefficientRaw": 308,
+              "weakBreakDamageRateBasisPoints": 7000,
+              "physicalPenetrationBasisPoints": null,
+              "magicPenetrationBasisPoints": null,
+              "elementCalculationFactorBasisPoints": null,
+              "physicalRatioBasisPoints": 10000,
+              "magicRatioBasisPoints": 0,
+              "usesTuningStrength": true,
+              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152"
+            }
+          ],
+          "heldEffect": {
+            "name": "攻击力",
+            "componentId": 151,
+            "attributeId": 1,
+            "rawPerMark": 60,
+            "perMark": 0.006,
+            "unit": "percent",
+            "perMarkReadable": "0.6%",
+            "maxFiveMarksReadable": "3%"
+          },
+          "overlimitDamage": {
+            "primaryComponentId": 196,
+            "coefficientPerConsumedMark": 0.739,
+            "formula": "N_consumed * ATK * 0.739",
+            "usesTuningStrength": true,
+            "extraDamageComponentIds": [
+              197
+            ],
+            "template": {
+              "elementConfigId": 196,
+              "damageType": 10,
+              "elementalType": 1,
+              "coefficientRaw": 7390,
+              "weakBreakDamageRateBasisPoints": 7000,
+              "physicalPenetrationBasisPoints": 5000,
+              "magicPenetrationBasisPoints": 5000,
+              "elementCalculationFactorBasisPoints": 10000,
+              "physicalRatioBasisPoints": null,
+              "magicRatioBasisPoints": null,
+              "usesTuningStrength": true,
+              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196"
+            }
+          },
+          "overlimitExtra": {
+            "kind": "damage_over_time",
+            "name": "火属性持续调谐伤害",
+            "componentId": 197,
+            "coefficientPerMark": 0.1232,
+            "intervalSeconds": 1,
+            "durationSeconds": 6,
+            "expectedTickCount": 6,
+            "note": "初始命中后附加持续伤害；标准配置每1秒触发一次，持续6秒。"
+          },
+          "overlimitPacket": {
+            "elementId": 199,
+            "pathId": "2917355649561243897",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=2917355649561243897"
+          },
+          "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897",
+          "status": "verified-tuning-profile-ready",
+          "applied": true,
+          "profileKey": "fire",
+          "stackDelta": 1,
+          "triggerFrame": 25
+        },
+        "semanticName": "重击2段·焰火爆炸",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
+        "status": "verified-conditional-hit-group-ready",
+        "applied": true
+      }
+    ],
+    "runtimeEffectBindings": [
+      {
+        "bindingIdentity": "han-firework-explosion-controlled-attack-passive",
+        "ownerId": 101003,
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
+        "controlSkillId": 10100310,
+        "subSkillIndex": 0,
+        "triggerFrame": 29,
+        "frameRate": 60,
+        "targetKind": "controlled-actor",
+        "effectId": "battle-element:480124006",
+        "effectName": "焰火爆炸·主控攻击力提升",
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "kind": "battle-property",
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "valueRaw": 1000,
+            "propertyTags": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000"
+          }
+        ],
+        "directSp": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-team-tuning-stage-one",
+        "ownerId": 101003,
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
+        "controlSkillId": 10100310,
+        "subSkillIndex": 0,
+        "triggerFrame": 29,
+        "frameRate": 60,
+        "targetKind": "team-actors",
+        "effectId": "battle-element:101003205",
+        "effectName": "焰火爆炸·全队调谐提升",
+        "durationMs": 24000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 2,
+        "modifiers": [
+          {
+            "kind": "battle-property",
+            "attributeId": 229,
+            "bucket": "dynamicExtra",
+            "valueRaw": 18,
+            "propertyTags": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205#attributeID=229;function=5;A=18"
+          }
+        ],
+        "directSp": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-sp-stage-one",
+        "ownerId": 101003,
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
+        "controlSkillId": 10100310,
+        "subSkillIndex": 0,
+        "triggerFrame": 29,
+        "frameRate": 60,
+        "targetKind": "source-actor",
+        "effectId": "battle-element:101003125",
+        "effectName": "烟花引爆成功 | Sp +2",
+        "durationMs": null,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [],
+        "directSp": {
+          "elementId": 101003125,
+          "value": 2,
+          "enhanceable": false,
+          "shareType": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125#A=20000/10000"
+        },
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-controlled-attack-passive-stage-two",
+        "ownerId": 101003,
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "triggerFrame": 25,
+        "frameRate": 60,
+        "targetKind": "controlled-actor",
+        "effectId": "battle-element:480124006",
+        "effectName": "焰火爆炸·主控攻击力提升",
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "kind": "battle-property",
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "valueRaw": 1000,
+            "propertyTags": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000"
+          }
+        ],
+        "directSp": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-team-tuning-stage-two",
+        "ownerId": 101003,
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "triggerFrame": 25,
+        "frameRate": 60,
+        "targetKind": "team-actors",
+        "effectId": "battle-element:101003205",
+        "effectName": "焰火爆炸·全队调谐提升",
+        "durationMs": 24000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 2,
+        "modifiers": [
+          {
+            "kind": "battle-property",
+            "attributeId": 229,
+            "bucket": "dynamicExtra",
+            "valueRaw": 18,
+            "propertyTags": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205#attributeID=229;function=5;A=18"
+          }
+        ],
+        "directSp": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "han-firework-explosion-sp-stage-two",
+        "ownerId": 101003,
+        "triggerKind": "conditional-hit-group-applied",
+        "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
+        "controlSkillId": 10100341,
+        "subSkillIndex": 0,
+        "triggerFrame": 25,
+        "frameRate": 60,
+        "targetKind": "source-actor",
+        "effectId": "battle-element:101003125",
+        "effectName": "烟花引爆成功 | Sp +2",
+        "durationMs": null,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [],
+        "directSp": {
+          "elementId": 101003125,
+          "value": 2,
+          "enhanceable": false,
+          "shareType": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125#A=20000/10000"
+        },
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      }
+    ],
     "effects": {
       "raw": [
         {
@@ -37536,7 +38089,7 @@
           "name": "Buff 全队精通提升为寒悠悠精通10%",
           "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+          "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
           "kind": "property-change",
           "depth": 1,
           "relationPath": [
@@ -37655,7 +38208,7 @@
           "name": "Buff 全队精通提升为寒悠悠精通10%",
           "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+          "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
           "kind": "property-change",
           "depth": 0,
           "relationPath": [],
@@ -37761,7 +38314,7 @@
           "name": "精通加成  每层18点 最多2层",
           "rawSourceName": "精通加成  每层18点 最多2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成  每层18点 最多2层",
+          "displayLabel": "调谐强度加成  每层18点 最多2层",
           "kind": "property-change",
           "depth": 1,
           "relationPath": [
@@ -37882,7 +38435,7 @@
           "name": "精通加成  每层18点 最多2层",
           "rawSourceName": "精通加成  每层18点 最多2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成  每层18点 最多2层",
+          "displayLabel": "调谐强度加成  每层18点 最多2层",
           "kind": "property-change",
           "depth": 0,
           "relationPath": [],
@@ -37989,7 +38542,7 @@
           "name": "精通加成注入 注入2层",
           "rawSourceName": "精通加成注入 注入2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成注入 注入2层",
+          "displayLabel": "调谐强度加成注入 注入2层",
           "kind": "inject",
           "depth": 0,
           "relationPath": [],
@@ -38083,7 +38636,7 @@
           "name": "Buff 全队精通提升为寒悠悠精通10%",
           "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+          "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
           "kind": "inject",
           "depth": 0,
           "relationPath": [],
@@ -40874,7 +41427,7 @@
           "name": "精通加成  每层18点 最多2层",
           "rawSourceName": "精通加成  每层18点 最多2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成  每层18点 最多2层",
+          "displayLabel": "调谐强度加成  每层18点 最多2层",
           "kind": "property-change",
           "depth": 0,
           "relationPath": [],
@@ -44469,7 +45022,7 @@
           "name": "Buff 全队精通提升为寒悠悠精通10%",
           "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+          "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
           "kind": "property-change",
           "role": "gameplay-effect",
           "conditional": false,
@@ -44504,13 +45057,13 @@
           "target": {
             "code": 1,
             "kind": "controlling-actor",
-            "sourceField": "directInjectTargetType",
+            "sourceField": "verified-character-combat-effect-binding",
             "containerField": "directInjectTargetType",
             "enumName": "EDirectInjectTargetType",
             "enumMember": "ControllingHero",
             "resolution": "static-resolved",
             "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.ControllingHero"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
           },
           "placementResolution": "static-resolved",
           "staticallyResolvable": true,
@@ -44527,10 +45080,10 @@
           "mechanic": null,
           "formulaRuntime": {
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
-            "family": "unsupported-1-2008",
-            "evaluator": null,
-            "status": "unresolved",
-            "applied": false
+            "family": "source-tuning-ratio-with-common-ratio",
+            "evaluator": "q16.16-source-tuning-times-a-times-g",
+            "status": "applied",
+            "applied": true
           },
           "propertyChange": {
             "changeType": 0,
@@ -44547,7 +45100,7 @@
           "tuningMark": null,
           "tuningOverlimit": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -44578,9 +45131,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "property-formula-not-literal-function-5"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10100313|0|elements|6|-87352517346442030|148|1"
           ],
@@ -44635,7 +45186,7 @@
           "name": "Buff 全队精通提升为寒悠悠精通10%",
           "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+          "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
           "kind": "property-change",
           "role": "gameplay-effect",
           "conditional": false,
@@ -44796,7 +45347,7 @@
           "name": "精通加成  每层18点 最多2层",
           "rawSourceName": "精通加成  每层18点 最多2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成  每层18点 最多2层",
+          "displayLabel": "调谐强度加成  每层18点 最多2层",
           "kind": "property-change",
           "role": "gameplay-effect",
           "conditional": false,
@@ -44831,13 +45382,13 @@
           "target": {
             "code": 3,
             "kind": "team-actors",
-            "sourceField": "directInjectTargetType",
+            "sourceField": "verified-character-combat-effect-binding",
             "containerField": "directInjectTargetType",
             "enumName": "EDirectInjectTargetType",
             "enumMember": "AllHero",
             "resolution": "static-resolved",
             "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.AllHero"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
           },
           "placementResolution": "static-resolved",
           "staticallyResolvable": true,
@@ -44962,7 +45513,7 @@
           "name": "精通加成  每层18点 最多2层",
           "rawSourceName": "精通加成  每层18点 最多2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成  每层18点 最多2层",
+          "displayLabel": "调谐强度加成  每层18点 最多2层",
           "kind": "property-change",
           "role": "gameplay-effect",
           "conditional": false,
@@ -45124,7 +45675,7 @@
           "name": "精通加成注入 注入2层",
           "rawSourceName": "精通加成注入 注入2层",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "精通加成注入 注入2层",
+          "displayLabel": "调谐强度加成注入 注入2层",
           "kind": "inject",
           "role": "wrapper",
           "conditional": false,
@@ -45285,7 +45836,7 @@
           "name": "Buff 全队精通提升为寒悠悠精通10%",
           "rawSourceName": "Buff 全队精通提升为寒悠悠精通10%",
           "sourceNameStatus": "source-name-ready",
-          "displayLabel": "Buff 全队精通提升为寒悠悠精通10%",
+          "displayLabel": "Buff 全队调谐强度提升为寒悠悠调谐强度10%",
           "kind": "inject",
           "role": "wrapper",
           "conditional": false,
@@ -46804,20 +47355,20 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
+            "code": null,
             "kind": "enemy",
-            "sourceField": "targetType",
+            "sourceField": "verified-character-combat-effect-binding",
             "containerField": "elementBaseDatas",
             "enumName": "ETargetType",
             "enumMember": "Enemy",
             "resolution": "static-resolved",
             "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
           },
           "placementResolution": "static-resolved",
           "staticallyResolvable": true,
           "lifecycle": {
-            "durationMs": 114514,
+            "durationMs": 8000,
             "tags": [
               1
             ],
@@ -46831,10 +47382,10 @@
           "mechanic": null,
           "formulaRuntime": {
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
-            "family": "unsupported-1-3",
-            "evaluator": null,
-            "status": "unresolved",
-            "applied": false
+            "family": "basis-point-property-a-with-common-ratio",
+            "evaluator": "q16.16-basis-point-a-times-g",
+            "status": "applied",
+            "applied": true
           },
           "propertyChange": {
             "changeType": 0,
@@ -46851,7 +47402,7 @@
           "tuningMark": null,
           "tuningOverlimit": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -46882,9 +47433,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "property-formula-not-literal-function-5"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10100322|0|elements|2|4373635720509741260|57|1"
           ],
@@ -47135,20 +47684,20 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
+            "code": null,
             "kind": "enemy",
-            "sourceField": "targetType",
+            "sourceField": "verified-character-combat-effect-binding",
             "containerField": "elementBaseDatas",
             "enumName": "ETargetType",
             "enumMember": "Enemy",
             "resolution": "static-resolved",
             "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
           },
           "placementResolution": "static-resolved",
           "staticallyResolvable": true,
           "lifecycle": {
-            "durationMs": 114514,
+            "durationMs": 8000,
             "tags": [
               1
             ],
@@ -47162,10 +47711,10 @@
           "mechanic": null,
           "formulaRuntime": {
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
-            "family": "unsupported-1-3",
-            "evaluator": null,
-            "status": "unresolved",
-            "applied": false
+            "family": "basis-point-property-a-with-common-ratio",
+            "evaluator": "q16.16-basis-point-a-times-g",
+            "status": "applied",
+            "applied": true
           },
           "propertyChange": {
             "changeType": 0,
@@ -47182,7 +47731,7 @@
           "tuningMark": null,
           "tuningOverlimit": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -47213,9 +47762,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "property-formula-not-literal-function-5"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10100322|0|elements|2|4373635720509741260|57|1"
           ],
@@ -48269,10 +48816,10 @@
     "sourceCompilation": {
       "compilerVersion": 3,
       "recipeIdentity": "actor:101003:character-combat-recipe:v1",
-      "recipeHash": "810daac0f553adc514465c4042e44f392fb875c717e3ab0d234efe281cd2daaa",
+      "recipeHash": "84c703845cbe902e10a128174694e5eaad092740770f387ecf2f29e3450c7be5",
       "compilerInputHash": "3236a06e2c3da561fd4dd99c8ff92e2cb38857a6f61985ee403a09f4fc0b3f50",
       "recipeContractHash": "a34e35e14f7cbdc7ca8ceca63796aa12c2f2d450adc87745daa51faf8b0d41b0",
-      "ownerContractHash": "634c0f0ef89f8d3f90a5bb36ea6e545ae0bbc66ecf9918517b4baf98dfb51f32"
+      "ownerContractHash": "bcfb3fc68aab0fa8ea13affaee6e3d353ac0650d5db77b91bf4d690d5df1dbac"
     },
     "operators": [
       "public-action-binding",
@@ -48733,10 +49280,16 @@
     {
       "dimension": "buffsAndDebuffs",
       "status": "static-evidence-gap",
-      "recordCount": 42,
-      "appliedCount": 9,
-      "unresolvedCount": 33,
+      "recordCount": 48,
+      "appliedCount": 18,
+      "unresolvedCount": 30,
       "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100361.asset/MonoBehaviour/skill_control_10100361__-4454120741835547178.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003186.asset/MonoBehaviour/ast_101003186__865127997397410363.json#elementConfigId=101003186|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset|NewTable/skill.rows[id=10100361]|Battle/Element/ast_101003186.asset|Battle/Element/ast_480124006.asset|Battle/Element/ast_480126003.asset",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100362.asset/MonoBehaviour/skill_control_10100362__-8535174754551404571.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003151.asset/MonoBehaviour/ast_101003151__-4894023131109751821.json#elementConfigId=101003151|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset"
       ]
@@ -48755,12 +49308,16 @@
     {
       "dimension": "dynamicProperties",
       "status": "static-evidence-gap",
-      "recordCount": 4,
-      "appliedCount": 3,
+      "recordCount": 8,
+      "appliedCount": 7,
       "unresolvedCount": 1,
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5652413049857383353"
       ]
@@ -48775,11 +49332,23 @@
     },
     {
       "dimension": "stateMachines",
-      "status": "not-applicable",
-      "recordCount": 0,
-      "appliedCount": 0,
+      "status": "applied",
+      "recordCount": 11,
+      "appliedCount": 11,
       "unresolvedCount": 0,
-      "sourceIdentities": []
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003152.asset/MonoBehaviour/ast_101003152__5194050471337437672.json#elementConfigId=101003152|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|NewTable/skill.rows[id=10100362]|Battle/Element/ast_101003151.asset|Battle/Element/ast_101003152.asset#A=1;targetElement=101003079",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)"
+      ]
     },
     {
       "dimension": "switchAndStarCarry",
@@ -49640,7 +50209,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "514e31bb950ae4986889c7b9360aafe236d7c989a380a0df5c8708cef331c51f"
+    "deterministicInputHash": "7f246a427d4184b042582f6d506bbb29a465d72c3fdcbb1ddabe17bf95825b8c"
   },
-  "profileHash": "a6af55d6d7582e3574b2823cced25208a4006c4ee641ed7cde581cb938382381"
+  "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7"
 }

@@ -85,6 +85,47 @@ describe('EffectTimelinePanel', () => {
       .trigger('click');
     expect(wrapper.emitted('edit-source-action')?.at(-1)?.[0]).toBe('action-b');
   });
+
+  it('shows the verified property change of a selected effect interval', () => {
+    const wrapper = mount(EffectTimelinePanel, {
+      props: {
+        effectTimeline: { events: [] },
+        selectedEffectInterval: {
+          intervalId: 'actor|actor-a|tuning|interval-1',
+          effectId: 'battle-element:101003207',
+          effectName: '主控角色调谐强度提升',
+          targetName: '寒悠悠',
+          startFrame: 148,
+          endFrame: 1048,
+          maxStacks: 1,
+          peakStacks: 1,
+          activeAtScenarioEnd: false,
+          appliedToCalculators: true,
+          lifecycleEvents: [
+            {
+              eventId: 'tuning-apply',
+              type: 'EFFECT_APPLIED',
+              after: {
+                modifiers: [
+                  {
+                    kind: 'battle-property',
+                    attributeId: 229,
+                    bucket: 'dynamicExtra',
+                    valueRaw: 1019.9066162109375,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(
+      wrapper.get('[data-testid="workbench-effect-interval-modifiers"]').text()
+    ).toBe('调谐强度 +1,019.91');
+    expect(wrapper.text()).not.toContain('精通');
+  });
 });
 
 function createRelation(overrides) {

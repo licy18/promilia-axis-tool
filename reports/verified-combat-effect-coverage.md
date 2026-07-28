@@ -9,23 +9,25 @@
 - 去重语义效果：3581
 - 最终玩法效果：1819
 - 结构包装/条件：1762
-- 语义可计算：397
+- 语义可计算：400
 - 语义明确零：2
-- 语义未解析：1420
+- 语义未解析：1417
 
 ## 语义放置
 
 - runtime-dependent: 107
-- static-evidence-gap: 430
-- static-resolved: 1282
+- static-evidence-gap: 506
+- static-resolved: 1206
 
 ## 公式族
 
+- basis-point-property-a-with-common-ratio: 2
 - literal-a-with-common-ratio: 742
+- source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
 - unsupported-1-0: 61
 - unsupported-1-2: 180
-- unsupported-1-3: 317
+- unsupported-1-3: 315
 - unsupported-1-4: 23
 - unsupported-1-11: 19
 - unsupported-1-101: 2
@@ -37,7 +39,7 @@
 - unsupported-1-116: 29
 - unsupported-1-120: 26
 - unsupported-1-122: 15
-- unsupported-1-2008: 2
+- unsupported-1-2008: 1
 - unsupported-1-107202: 8
 - unsupported-1-107203: 8
 - unsupported-22-12: 1
@@ -69,13 +71,13 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 430
+- effect-target-static-evidence-gap: 515
 - effect-trigger-frame-static-evidence-gap: 430
 - heal-formula-not-literal-function-5: 50
 - nested-damage-runtime-family-unimplemented: 468
 - property-change-type-not-battle-property: 1
 - property-conditions-not-expanded: 37
-- property-formula-not-literal-function-5: 398
+- property-formula-not-literal-function-5: 395
 - runtime-target-from-projectile-collision: 93
 - runtime-target-selection-ally: 19
 - runtime-trigger-projectile-collision-frame: 93

@@ -280,6 +280,52 @@ describe('EventLogPanel', () => {
     expect(row.text()).toContain('消耗 专注 -> actor-a / 1 层');
   });
 
+  it('shows target-state gain and consume transactions as stack causality', () => {
+    const wrapper = mount(EventLogPanel, {
+      props: {
+        eventLog: [
+          {
+            type: 'VERIFIED_TARGET_STATE_CHANGE',
+            timeMs: 1000,
+            actionId: 'han-star-skill',
+            payload: {
+              stateIdentity: 'enemy:firework',
+              stateName: '焰火',
+              operation: 'gain',
+              beforeValue: 7,
+              change: 1,
+              afterValue: 8,
+            },
+          },
+          {
+            type: 'VERIFIED_TARGET_STATE_CHANGE',
+            timeMs: 2000,
+            actionId: 'han-charged-stage-one',
+            payload: {
+              stateIdentity: 'enemy:firework',
+              stateName: '焰火',
+              operation: 'consume',
+              beforeValue: 8,
+              change: -6,
+              afterValue: 2,
+            },
+          },
+        ],
+      },
+    });
+
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-event-log-row"]')
+        .map(row => row.text())
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('焰火 7 -> 8 层（获得+1）'),
+        expect.stringContaining('焰火 8 -> 2 层（消耗-6）'),
+      ])
+    );
+  });
+
   it('windows large event and runtime logs while keeping an offscreen selection reachable', async () => {
     const eventLog = Array.from({ length: 1000 }, (_, index) => ({
       type: 'ACTION_START',

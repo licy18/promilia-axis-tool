@@ -942,15 +942,43 @@ describe('TimelineGridPreview', () => {
       intervalId: 'actor|actor-a|focus|interval-1',
       effectId: 'focus',
       effectName: '专注',
+      sourceIdentity: {
+        elementId: 101003207,
+        pathId: '-4841411980842434486',
+      },
       targetKind: 'actor',
       targetId: 'actor-a',
       targetName: '末音',
       startMs: 0,
       endMs: 2000,
       lifecycleEvents: [
-        { eventId: 'focus-apply', type: 'EFFECT_APPLIED', timeMs: 0 },
-        { eventId: 'focus-refresh', type: 'EFFECT_REFRESHED', timeMs: 1000 },
-        { eventId: 'focus-expire', type: 'EFFECT_EXPIRED', timeMs: 2000 },
+        {
+          eventId: 'focus-apply',
+          type: 'EFFECT_APPLIED',
+          operation: 'apply',
+          timeMs: 0,
+          stackBefore: 0,
+          stackAfter: 1,
+          stackChange: 1,
+        },
+        {
+          eventId: 'focus-refresh',
+          type: 'EFFECT_REFRESHED',
+          operation: 'apply',
+          timeMs: 1000,
+          stackBefore: 1,
+          stackAfter: 2,
+          stackChange: 1,
+        },
+        {
+          eventId: 'focus-expire',
+          type: 'EFFECT_EXPIRED',
+          operation: 'expire',
+          timeMs: 2000,
+          stackBefore: 2,
+          stackAfter: 0,
+          stackChange: -2,
+        },
       ],
       selectionEventId: 'focus-expire',
       peakStacks: 2,
@@ -1000,7 +1028,12 @@ describe('TimelineGridPreview', () => {
       'data-effect-id': 'focus',
       'data-target-kind': 'actor',
       'data-target-id': 'actor-a',
+      'data-source-element-id': '101003207',
       'data-lifecycle-event-count': '3',
+      'data-initial-stacks': '1',
+      'data-final-stacks': '0',
+      'data-peak-stacks': '2',
+      'data-max-stacks': '3',
     });
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-row"]')
@@ -1024,6 +1057,28 @@ describe('TimelineGridPreview', () => {
     expect(intervals[1].text()).toContain('未应用');
     expect(wrapper.text()).toContain('训练假人');
     expect(wrapper.findAll('.effect-lifecycle-marker')).toHaveLength(3);
+    expect(
+      intervals[0]
+        .findAll('[data-testid="workbench-effect-lifecycle-marker"]')
+        .map(marker => marker.attributes())
+    ).toEqual([
+      expect.objectContaining({
+        'data-effect-event-id': 'focus-refresh',
+        'data-effect-operation': 'apply',
+        'data-before-stacks': '1',
+        'data-after-stacks': '2',
+        'data-time-ms': '1000',
+        title: '专注 · 刷新 · 1 -> 2 层 · 60F',
+      }),
+      expect.objectContaining({
+        'data-effect-event-id': 'focus-expire',
+        'data-effect-operation': 'expire',
+        'data-before-stacks': '2',
+        'data-after-stacks': '0',
+        'data-time-ms': '2000',
+        title: '专注 · 到期 · 2 -> 0 层 · 120F',
+      }),
+    ]);
 
     await intervals[1].trigger('click');
     expect(wrapper.emitted('select-effect-interval')?.at(-1)?.[0]).toEqual({

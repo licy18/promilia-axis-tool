@@ -1,5 +1,7 @@
 import {
+  createBattlePropertyEffectDisplayLabel,
   createCombatSourceDisplayLabel,
+  createEffectSourceDisplayLabel,
   inspectSourceDisplayText,
   isSourceDisplayTextSafe,
 } from '../../domain/sourceDisplayText';
@@ -40,5 +42,36 @@ describe('source display text', () => {
         sequence: 3,
       }).displayLabel
     ).toBe('追加命中 3');
+  });
+
+  it('uses Azur Promilia tuning terminology without mutating raw evidence', () => {
+    expect(
+      createEffectSourceDisplayLabel({
+        sourceText: '精通加成',
+      })
+    ).toMatchObject({
+      displayLabel: '调谐强度加成',
+      rawSourceName: '精通加成',
+    });
+    expect(
+      createBattlePropertyEffectDisplayLabel({
+        sourceText: 'Buff 全队精通提升',
+        attributeId: 229,
+        targetKind: 'team-actors',
+      })
+    ).toMatchObject({
+      displayLabel: '全队调谐强度提升',
+      rawSourceName: 'Buff 全队精通提升',
+    });
+    expect(
+      createBattlePropertyEffectDisplayLabel({
+        sourceText: 'Buff 主控精通提升',
+        attributeId: 229,
+        targetKind: 'controlling-actor',
+      })
+    ).toMatchObject({
+      displayLabel: '主控角色调谐强度提升',
+      rawSourceName: 'Buff 主控精通提升',
+    });
   });
 });

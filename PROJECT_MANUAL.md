@@ -1742,9 +1742,26 @@ Workbench 在保留完整模拟数据与小玉机制结果的前提下，将曲�
 
 101010 与 103002 两条 120 秒权威金标已按共享衰减规则逐事件复核。小玉轴的三层火印在 23.45 秒完成最后刷新，31 秒段消费最早两层，剩余层仍在 43.45 秒衰减；雷印单层满 20 秒衰减，风印在 1.7 秒内全消费。红宝石轴的单层火印在 9.9 秒内全消费，单层雷印满 20 秒衰减。两轴均无满 5 层重施，故旧模型与正确模型在这些特定事件排列下恰好同轨，伤害和动态属性期望无需修改。完整时点、旧新对照和回归范围见 `reports/tuning-mark-legacy-axis-recheck-101010-103002-20260728.md`；该结论不豁免其他长间隔或满层轴的重算。
 
-### M10-B2 寒悠悠单角色战斗解析已完成，等待产品复验（2026-07-28）
+### M10-B2 寒悠悠首轮实现完成，产品复验未通过（2026-07-28）
 
-寒悠悠 10 个公开动作、30 个可达 control、14 个执行形态已进入声明式角色编译链；五段普攻、两段蓄力重击、焰火 15 层目标状态、星鸣技逐命中叠层、重击条件消费、两个被动、攻击/调谐动态属性、直接 SP、火印记和三值结果由同一运行时驱动。43 条 authoritative golden、138 文件/835 测试和 62/62 production preview 全部通过，桌面与窄屏真实拖拽及回载一致。角色继续标记为 `runtime-applied / partial`、`characterComplete=false`，保留 11 项 runtime capture 和 25 个玩法影响缺口；总 JS gzip `756,715B` 超硬门槛 `16,715B` 作为独立发布风险记录。本阶段停在产品复验点，不启动下一角色。
+寒悠悠 10 个公开动作、30 个可达 control、14 个执行形态已进入声明式角色编译链；五段普攻、两段蓄力重击、焰火 15 层目标状态、星鸣技逐命中叠层、重击条件消费、两个被动、攻击/调谐动态属性、直接 SP、火印记和三值结果由同一运行时驱动。43 条 authoritative golden、138 文件/835 测试和 62/62 production preview 曾全部通过，但产品复验发现这些守门没有证明完整因果链，因此不能据此判定角色验收通过。角色继续标记为 `runtime-applied / partial`、`characterComplete=false`，保留 11 项 runtime capture 和 25 个玩法影响缺口；总 JS gzip `756,715B` 超硬门槛 `16,715B` 仅作为独立发布风险记录。
+
+### M10-B2-R1 实施完成与后续路线重整（2026-07-28）
+
+M10-B2-R1 已完成实施，等待产品复验。真实公共入口现锁定 `E hit -> 焰火 0 -> 8 -> 重击消费至 2 -> 5 次条件爆炸 -> Buff/SP -> 后续属性与三值`；关闭一段 E hit、移走 E、撤销和保存回载均由同一重放链重算，无焰火时检查器只显示 4 次重击本体命中。引爆后的主控攻击力 `+10% / 24s`、全队调谐强度 `+18/层 / 24s / 最多2层` 和寒悠悠 SP `+2` 均可追溯；星决技 148F 的全队 `2层 / 24s / +36` 与主控 `1层 / 15s / 寒悠悠基础调谐强度10%` 作为不同来源、目标和生命周期并存，前台统一显示“调谐强度”。
+
+当前 120 秒 golden 有 61 条精确断言；140 个测试文件/846 条测试、62/62 production preview、41/41 必需能力及 character/verified、production imports、Workbench data、action status、applied-source 守门通过。角色仍为 `runtime-applied / partial`、`characterComplete=false`，42 条 semantic unresolved 中 25 条影响玩法结果，因此尚未标记 `visually-accepted`。Workbench gzip `368,459B` 合规，总 JS gzip `757,854B` 超硬门槛 `17,854B`，只记录为既有发布风险；当前不压包、不启动下一角色或 M11。
+
+R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
+
+1. `M11-A`：抽出唯一权威的无 UI 战斗核心，Node 与 Workbench 对同一输入生成相同 trace/hash。
+2. `M11-B`：建立版本化 Machine Axis JSON Schema 和 `catalog/validate/simulate/compare/explain` CLI。
+3. `M11-C`：将 Workbench 收敛为同一 trace 的可视化验收台，保留动作、曲线、状态、Buff、hit 与因果检查。
+4. `M11-D`：建立角色场景矩阵及 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready` 四态门禁。
+5. `M12-A/B`：在已验收角色上实现批量评估与可解释搜索器。
+6. `M12-C`：以末音和少量候选队友做首个最佳配队/输出轴试点，Top-N 结果必须回灌 Workbench 人工复验。
+
+机器接口与网页不得维护两套战斗逻辑。AI 不能替代运行时证据和产品验收，未达到 `optimization-ready` 的角色不得进入正式最优解。新的视觉特效、非必要响应式适配、拖拽手感细修、包体压缩和全角色盲目批量接入暂缓；包体继续记录，但只在对外发布时作为阻断门。详细阶段目标与验收条件见 `DEVELOPMENT_PLAN.md` 的 M11/M12 章节。
 
 ## 10. 文档维护规则
 

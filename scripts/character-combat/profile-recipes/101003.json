@@ -7,66 +7,26 @@
   "mechanicsDiscovery": {
     "ownerId": 101003,
     "normalAttackSkillId": 10100301,
-    "chargedControlSkillIds": [
-      10100310,
-      10100341
-    ],
+    "chargedControlSkillIds": [10100310, 10100341],
     "starSkillControlSkillId": 10100312,
     "ultimateControlSkillId": 10100313,
     "starCarryControlSkillId": 10100322,
     "limitCounterControlSkillId": 10100325,
     "perfectParryControlSkillId": 10100327,
     "perfectParryExecutionControlSkillId": 10100349,
-    "passiveSkillIds": [
-      10100361,
-      10100362
-    ],
-    "fireworkMarkerElementIds": [
-      101003079,
-      101003171
-    ],
+    "passiveSkillIds": [10100361, 10100362],
+    "fireworkMarkerElementIds": [101003079, 101003171],
     "teamTuningElementId": 101003205
   },
   "compiler": {
     "timingPolicy": "verified-input-reopen",
     "reachableControlSkillIds": [
-      10100301,
-      10100302,
-      10100303,
-      10100304,
-      10100305,
-      10100310,
-      10100311,
-      10100312,
-      10100313,
-      10100314,
-      10100315,
-      10100316,
-      10100322,
-      10100324,
-      10100325,
-      10100326,
-      10100327,
-      10100331,
-      10100341,
-      10100342,
-      10100343,
-      10100344,
-      10100345,
-      10100346,
-      10100347,
-      10100348,
-      10100349,
-      10100360,
-      10100361,
-      10100362,
-      48005901,
-      48006001,
-      48012401,
-      48012501,
-      48012601,
-      48013201,
-      48013301
+      10100301, 10100302, 10100303, 10100304, 10100305, 10100310, 10100311,
+      10100312, 10100313, 10100314, 10100315, 10100316, 10100322, 10100324,
+      10100325, 10100326, 10100327, 10100331, 10100341, 10100342, 10100343,
+      10100344, 10100345, 10100346, 10100347, 10100348, 10100349, 10100360,
+      10100361, 10100362, 48005901, 48006001, 48012401, 48012501, 48012601,
+      48013201, 48013301
     ],
     "publicActionDeclarations": [],
     "contextInputEdges": [
@@ -190,9 +150,7 @@
       {
         "selectorIdentity": "han-charged-stage-selector",
         "publicControlSkillId": 10100310,
-        "actionKinds": [
-          "charged-attack"
-        ],
+        "actionKinds": ["charged-attack"],
         "kind": "charge-tier",
         "mode": "hold",
         "decisionFrame": 0,
@@ -390,9 +348,7 @@
         "sourceControlSkillId": 48005901,
         "sourceSubSkillIndex": 0,
         "elementId": 101003156,
-        "triggerFrames": [
-          38
-        ],
+        "triggerFrames": [38],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -405,11 +361,7 @@
         "sourceControlSkillId": 48005901,
         "sourceSubSkillIndex": 0,
         "elementId": 101003182,
-        "triggerFrames": [
-          59,
-          68,
-          77
-        ],
+        "triggerFrames": [59, 68, 77],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -422,9 +374,7 @@
         "sourceControlSkillId": 48006001,
         "sourceSubSkillIndex": 0,
         "elementId": 101003157,
-        "triggerFrames": [
-          50
-        ],
+        "triggerFrames": [50],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -437,11 +387,7 @@
         "sourceControlSkillId": 48006001,
         "sourceSubSkillIndex": 0,
         "elementId": 101003179,
-        "triggerFrames": [
-          65,
-          74,
-          83
-        ],
+        "triggerFrames": [65, 74, 83],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -454,11 +400,7 @@
         "sourceControlSkillId": 48012401,
         "sourceSubSkillIndex": 0,
         "elementId": 101003104,
-        "triggerFrames": [
-          30,
-          40,
-          51
-        ],
+        "triggerFrames": [30, 40, 51],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -473,9 +415,7 @@
         "sourceReferenceKind": "bulletElements",
         "targetReferenceKind": "bulletElements",
         "elementId": 101003094,
-        "triggerFrames": [
-          24
-        ],
+        "triggerFrames": [24],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -488,13 +428,7 @@
         "sourceControlSkillId": 48012501,
         "sourceSubSkillIndex": 0,
         "elementId": 101003105,
-        "triggerFrames": [
-          27,
-          35,
-          43,
-          53,
-          66
-        ],
+        "triggerFrames": [27, 35, 43, 53, 66],
         "frameCount": 1,
         "targetCode": 0,
         "targetKind": "enemy",
@@ -631,13 +565,7 @@
         "sourceControlSkillId": 48012601,
         "sourceSubSkillIndex": 0,
         "elementId": 101003110,
-        "triggerFrames": [
-          31,
-          55,
-          58,
-          62,
-          65
-        ],
+        "triggerFrames": [31, 55, 58, 62, 65],
         "decisionFrame": 28,
         "stateIdentity": "enemy:firework",
         "minimumStacks": 1,
@@ -661,13 +589,7 @@
         "sourceControlSkillId": 48013201,
         "sourceSubSkillIndex": 0,
         "elementId": 101003111,
-        "triggerFrames": [
-          27,
-          51,
-          54,
-          58,
-          61
-        ],
+        "triggerFrames": [27, 51, 54, 58, 61],
         "decisionFrame": 24,
         "stateIdentity": "enemy:firework",
         "minimumStacks": 1,
@@ -795,11 +717,7 @@
       {
         "skillId": 10100361,
         "runtimeGenerationMode": "target-state-runtime",
-        "sourceElementIds": [
-          101003186,
-          480124006,
-          480126003
-        ],
+        "sourceElementIds": [101003186, 480124006, 480126003],
         "runtimeBindingIdentities": [
           "han-firework-explosion-controlled-attack-passive",
           "han-firework-explosion-controlled-attack-passive-stage-two"
@@ -816,10 +734,7 @@
       {
         "skillId": 10100362,
         "runtimeGenerationMode": "target-state-runtime",
-        "sourceElementIds": [
-          101003151,
-          101003152
-        ],
+        "sourceElementIds": [101003151, 101003152],
         "targetStateTransactionIdentities": [
           "han-passive-10100362-final-hit-extra-firework"
         ],
@@ -849,11 +764,7 @@
     "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
     "durationFrames": 7200,
     "frameRate": 60,
-    "teamCharacterIds": [
-      101003,
-      101010,
-      103002
-    ],
+    "teamCharacterIds": [101003, 101010, 103002],
     "initialControlledCharacterId": 101003,
     "initialActorSp": {
       "101003": 100,
@@ -1003,15 +914,11 @@
     ],
     "comparison": {
       "comparisonIdentity": "m10-b2:101003:soulessence-stat-propagation",
-      "clearLoadoutCharacterIds": [
-        101003
-      ],
+      "clearLoadoutCharacterIds": [101003],
       "compareActionKey": "han-ultimate"
     },
     "traceSelectors": {
-      "passiveEffectIds": [
-        "battle-element:480124006"
-      ],
+      "passiveEffectIds": ["battle-element:480124006"],
       "stateEffectIds": [
         "battle-element:101003079",
         "battle-element:101003205",
@@ -1030,11 +937,7 @@
       "exact": {
         "project.durationMs": 120000,
         "project.actionCount": 13,
-        "project.teamCharacterIds": [
-          101003,
-          101010,
-          103002
-        ],
+        "project.teamCharacterIds": [101003, 101010, 103002],
         "actions.selectionByActionId.han-normal-a1.semanticName": "普通攻击 A1",
         "actions.selectionByActionId.han-normal-a5.semanticName": "普通攻击 A5",
         "actions.selectionByActionId.han-charged-stage-one.controlSkillId": 10100310,
@@ -1047,7 +950,7 @@
         "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
         "combat.ownerHitCountByActionId.han-star-skill": 7,
         "combat.ownerHitCountByActionId.han-ultimate": 7,
-        "combat.ownerTotalHpDamage": 68765,
+        "combat.ownerTotalHpDamage": 69372,
         "combat.ownerTotalToughnessDamage": 6069,
         "resources.targetStateSummary.profileCount": 1,
         "resources.targetStateSummary.eventCount": 10,
@@ -1069,9 +972,45 @@
         "resources.tuningMarkAcquireByActionId.han-ultimate.totalDelta": 3,
         "effects.passiveMaxStacks": 1,
         "effects.firstPassiveMaxStackFrame": 2029,
+        "effects.selectedEffectSummaryByElementId.101003205.effectNames": [
+          "全队调谐强度提升"
+        ],
+        "effects.selectedEffectSummaryByElementId.101003205.targetKinds": [
+          "actor"
+        ],
+        "effects.selectedEffectSummaryByElementId.101003205.targetIds": [
+          "actor-101003",
+          "actor-101010",
+          "actor-103002"
+        ],
+        "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount": 3,
+        "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount": 3,
+        "effects.selectedEffectSummaryByElementId.101003205.firstAppliedFrame": 208,
+        "effects.selectedEffectSummaryByElementId.101003205.firstExpiredFrame": 1648,
+        "effects.selectedEffectSummaryByElementId.101003205.maxStacks": 2,
+        "effects.selectedEffectSummaryByElementId.101003205.formulaValues": [
+          18
+        ],
+        "effects.selectedEffectSummaryByElementId.101003207.effectNames": [
+          "主控角色调谐强度提升"
+        ],
+        "effects.selectedEffectSummaryByElementId.101003207.targetKinds": [
+          "actor"
+        ],
+        "effects.selectedEffectSummaryByElementId.101003207.targetIds": [
+          "actor-101003"
+        ],
+        "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount": 1,
+        "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount": 1,
+        "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame": 208,
+        "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame": 1108,
+        "effects.selectedEffectSummaryByElementId.101003207.maxStacks": 1,
+        "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [
+          1019.9066162109375
+        ],
         "dynamicProperties.maxPercentRawByAttributeId.1": 1300,
-        "dynamicProperties.maxExtraRawByAttributeId.229": 36,
-        "comparison.damageDelta": 1960
+        "dynamicProperties.maxExtraRawByAttributeId.229": 1055.9066162109375,
+        "comparison.damageDelta": 2051
       },
       "greaterThan": {
         "resources.actorSpByActorId.actor-101003.currentValue": 0,

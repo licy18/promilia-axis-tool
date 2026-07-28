@@ -5,7 +5,7 @@
   "ownerId": 101010,
   "ownerName": "涂山小玉",
   "recipeIdentity": "actor:101010:character-combat-recipe:v1",
-  "recipeHash": "788e4e0ef7d9e4bab5014e6e3f53a71e1b2e6cacdb693ca8463e17dc77eca5e4",
+  "recipeHash": "b6a138de755dfba9d41c29ba325c1c0cb3b6cd92551bf526034570d55c9f5cc5",
   "compilerInputHash": "3527fde1e265b926f403e32c40f8f3b15ee188a91803841e597f1ca1eef33363",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": false,
@@ -118432,10 +118432,9 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/skill_control_10101012__-2381657275272288454.json#skillResourceMaps[0].elements[4]"
           },
           "target": {
-            "kind": "enemy",
+            "kind": "unresolved",
             "code": null,
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
-            "resolution": "static-resolved",
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
             "sourceField": "verified-tuning-mechanics",
@@ -124616,17 +124615,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType"
           },
           "target": {
-            "kind": "team-tuning-pool",
-            "code": 750,
-            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954",
-            "resolution": "static-resolved",
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
             "sourceField": "verified-tuning-mechanics",
             "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": 10000,
             "tags": [
@@ -124706,7 +124704,8 @@
             }
           },
           "reasons": [
-            "tuning-mark-relation-notDelElementDataList-unresolved"
+            "tuning-mark-relation-notDelElementDataList-unresolved",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|21|-1458914462506140012|element:1474042154774785480|272|0"
@@ -124801,17 +124800,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType"
           },
           "target": {
-            "kind": "team-tuning-pool",
-            "code": 750,
-            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954",
-            "resolution": "static-resolved",
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
             "sourceField": "verified-tuning-mechanics",
             "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": 10000,
             "tags": [
@@ -124892,7 +124890,8 @@
           },
           "reasons": [
             "tuning-mark-relation-elementDataList-unresolved",
-            "tuning-mark-relation-notDelElementDataList-unresolved"
+            "tuning-mark-relation-notDelElementDataList-unresolved",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|18|-4364670297239232442|element:1474042154774785480|264|0"
@@ -124976,10 +124975,9 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]"
           },
           "target": {
-            "kind": "team-tuning-pool",
-            "code": 750,
-            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954",
-            "resolution": "static-resolved",
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
             "sourceField": "verified-tuning-mechanics",
@@ -125642,10 +125640,9 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[13]"
           },
           "target": {
-            "kind": "enemy",
+            "kind": "unresolved",
             "code": null,
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
-            "resolution": "static-resolved",
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
             "sourceField": "verified-tuning-mechanics",
@@ -126799,10 +126796,9 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[6]"
           },
           "target": {
-            "kind": "enemy",
+            "kind": "unresolved",
             "code": null,
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
-            "resolution": "static-resolved",
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
             "sourceField": "verified-tuning-mechanics",
@@ -130724,7 +130720,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=-4529113272733101309"
     }
   },
-  "contractHash": "cd2fe8a1604c731dda2f3486d59b811210e41bd09fb29505f62e8f0a7f5c3004",
+  "contractHash": "d9cbd563612647ef4abd21cd6d8868b30a89248cd1827ff2cd5954118006e1da",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,

@@ -142,6 +142,22 @@
       "status": "applied"
     },
     {
+      "nodeIdentity": "conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "nodeKind": "conditional-hit-group",
+      "decisionFrame": 28,
+      "minimumStacks": 1,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)"
+    },
+    {
+      "nodeIdentity": "conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "nodeKind": "conditional-hit-group",
+      "decisionFrame": 24,
+      "minimumStacks": 1,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)"
+    },
+    {
       "nodeIdentity": "control:10100301",
       "nodeKind": "control",
       "controlSkillId": 10100301,
@@ -1222,11 +1238,68 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/skill_control_10100349__-5645879531883966019.json#skillResourceMaps[1].elements[2]|battle-element-assets.jsonl#path_id=5289435691496660442"
     },
     {
+      "nodeIdentity": "runtime-effect:han-firework-explosion-controlled-attack-passive",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:480124006",
+      "targetKind": "controlled-actor",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset"
+    },
+    {
+      "nodeIdentity": "runtime-effect:han-firework-explosion-controlled-attack-passive-stage-two",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:480124006",
+      "targetKind": "controlled-actor",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset"
+    },
+    {
+      "nodeIdentity": "runtime-effect:han-firework-explosion-sp-stage-one",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:101003125",
+      "targetKind": "source-actor",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186"
+    },
+    {
+      "nodeIdentity": "runtime-effect:han-firework-explosion-sp-stage-two",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:101003125",
+      "targetKind": "source-actor",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186"
+    },
+    {
+      "nodeIdentity": "runtime-effect:han-firework-explosion-team-tuning-stage-one",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:101003205",
+      "targetKind": "team-actors",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset"
+    },
+    {
+      "nodeIdentity": "runtime-effect:han-firework-explosion-team-tuning-stage-two",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:101003205",
+      "targetKind": "team-actors",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset"
+    },
+    {
       "nodeIdentity": "switch-trigger:101003:on-exit",
       "nodeKind": "switch-trigger",
       "triggerPhase": "on-exit",
       "status": "applied",
       "sourceIdentity": "characters.items[id=101003].skillSlots[slot=201,skillId=10100322]"
+    },
+    {
+      "nodeIdentity": "target-state:enemy:firework",
+      "nodeKind": "target-state",
+      "targetKind": "enemy",
+      "durationMs": 10000,
+      "capacity": 15,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15"
     }
   ],
   "edges": [
@@ -1415,6 +1488,76 @@
       "from": "actor|101003|10100322|2|10100327",
       "to": "control:10100327",
       "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-one-firework-explosion->materializes-conditional-hits->control:10100310:sub:0",
+      "from": "conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "to": "control:10100310:sub:0",
+      "relation": "materializes-conditional-hits",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-one-firework-explosion->triggers-runtime-effect->runtime-effect:han-firework-explosion-controlled-attack-passive",
+      "from": "conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "to": "runtime-effect:han-firework-explosion-controlled-attack-passive",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 29,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-one-firework-explosion->triggers-runtime-effect->runtime-effect:han-firework-explosion-sp-stage-one",
+      "from": "conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "to": "runtime-effect:han-firework-explosion-sp-stage-one",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 29,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-one-firework-explosion->triggers-runtime-effect->runtime-effect:han-firework-explosion-team-tuning-stage-one",
+      "from": "conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "to": "runtime-effect:han-firework-explosion-team-tuning-stage-one",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 29,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-two-firework-explosion->materializes-conditional-hits->control:10100341:sub:0",
+      "from": "conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "to": "control:10100341:sub:0",
+      "relation": "materializes-conditional-hits",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-two-firework-explosion->triggers-runtime-effect->runtime-effect:han-firework-explosion-controlled-attack-passive-stage-two",
+      "from": "conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "to": "runtime-effect:han-firework-explosion-controlled-attack-passive-stage-two",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 25,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-two-firework-explosion->triggers-runtime-effect->runtime-effect:han-firework-explosion-sp-stage-two",
+      "from": "conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "to": "runtime-effect:han-firework-explosion-sp-stage-two",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 25,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003125.asset/MonoBehaviour/ast_101003125__5321190105994553273.json#elementConfigId=101003125|Battle/Element/ast_101003125.asset#A=20000/10000;passiveMarker=101003186"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:han-charged-stage-two-firework-explosion->triggers-runtime-effect->runtime-effect:han-firework-explosion-team-tuning-stage-two",
+      "from": "conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "to": "runtime-effect:han-firework-explosion-team-tuning-stage-two",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 25,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset"
     },
     {
       "edgeIdentity": "control:10100301->has-subskill->control:10100301:sub:0",
@@ -1670,6 +1813,17 @@
       "from": "control:10100312:sub:0",
       "to": "hit:10100312|0|elements|2|642115531928830562|99|5",
       "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10100312:sub:0->target-state-gain->target-state:enemy:firework",
+      "from": "control:10100312:sub:0",
+      "to": "target-state:enemy:firework",
+      "relation": "target-state-gain",
+      "triggerFrame": 61,
+      "amount": 1,
+      "requiresHitElementId": 101003033,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F"
     },
     {
       "edgeIdentity": "control:10100312:sub:0->triggers-passive->actor:101003:passive:10100362",
@@ -2158,6 +2312,22 @@
       "to": "actor|101003|10100322|0|10100322",
       "relation": "derives-star-carry",
       "status": "applied"
+    },
+    {
+      "edgeIdentity": "target-state:enemy:firework->conditions-hit-group->conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "from": "target-state:enemy:firework",
+      "to": "conditional-hit-group:han-charged-stage-one-firework-explosion",
+      "relation": "conditions-hit-group",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)"
+    },
+    {
+      "edgeIdentity": "target-state:enemy:firework->conditions-hit-group->conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "from": "target-state:enemy:firework",
+      "to": "conditional-hit-group:han-charged-stage-two-firework-explosion",
+      "relation": "conditions-hit-group",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)"
     }
   ],
   "exclusions": [
@@ -2212,28 +2382,35 @@
     }
   ],
   "summary": {
-    "nodeCount": 162,
-    "edgeCount": 146,
+    "nodeCount": 171,
+    "edgeCount": 157,
     "controlCount": 30,
     "exclusionCount": 7,
     "nodeKindCounts": {
       "action-form": 14,
+      "conditional-hit-group": 2,
       "control": 30,
       "control-variant": 32,
       "hit": 73,
       "passive-listener": 2,
       "public-action": 10,
-      "switch-trigger": 1
+      "runtime-effect": 6,
+      "switch-trigger": 1,
+      "target-state": 1
     },
     "edgeRelationCounts": {
+      "conditions-hit-group": 2,
       "context-input-derived": 1,
       "derives-star-carry": 1,
       "emits-hit": 73,
       "executes-control": 24,
       "has-form": 12,
       "has-subskill": 32,
-      "triggers-passive": 3
+      "materializes-conditional-hits": 2,
+      "target-state-gain": 8,
+      "triggers-passive": 3,
+      "triggers-runtime-effect": 6
     }
   },
-  "profileHash": "a6af55d6d7582e3574b2823cced25208a4006c4ee641ed7cde581cb938382381"
+  "profileHash": "d6bf2110297d017144624397fac24fa828fa4248a331bebf4a9eb61861b5f7a7"
 }

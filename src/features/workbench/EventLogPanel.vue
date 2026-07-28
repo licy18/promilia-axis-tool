@@ -997,6 +997,19 @@ watch(
 );
 
 function formatPayload(event) {
+  if (event.type === 'VERIFIED_TARGET_STATE_CHANGE') {
+    const payload = event.payload ?? {};
+    const operation =
+      {
+        gain: '获得',
+        consume: '消耗',
+        expire: '到期',
+        clear: '清空',
+      }[payload.operation] ??
+      payload.operation ??
+      '变化';
+    return `${payload.stateName || payload.stateIdentity || '目标状态'} ${Number(payload.beforeValue) || 0} -> ${Number(payload.afterValue) || 0} 层（${operation}${formatSigned(payload.change)}）`;
+  }
   if (event.relationKind?.startsWith('effect-')) {
     const operation =
       event.relationKind === 'effect-trigger'

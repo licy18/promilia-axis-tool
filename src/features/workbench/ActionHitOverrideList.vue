@@ -13,6 +13,11 @@
       :key="hit.identity"
       class="row"
       :data-hit-identity="hit.identity"
+      :data-hit-label="hit.label"
+      :data-hit-frame="hit.frame"
+      :data-will-hit="hit.willHit ? 'true' : 'false'"
+      :data-source-kind="hit.sourceKind || ''"
+      :data-scenario-runtime-status="hit.scenarioRuntimeStatus || ''"
       data-testid="workbench-hit-override-row"
       :title="hit.identity"
     >

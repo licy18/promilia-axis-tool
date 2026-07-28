@@ -186,6 +186,98 @@ describe('verified Battle effect generation', () => {
     expect(generation.actionResolutionById.size).toBe(0);
   });
 
+  it('keeps same-frame property effects distinct by element identity', () => {
+    const action = {
+      id: 'same-frame-tuning-effects',
+      type: 'skill',
+      actorId: 'actor-101003',
+      actor: {
+        id: 'actor-101003',
+        stats: {
+          tuningStrength: 100,
+        },
+      },
+      startMs: 0,
+      durationMs: frameToMs(180),
+    };
+    const generation = createVerifiedBattleEffectGeneration({
+      scenario: {
+        actions: [action],
+        actors: [
+          action.actor,
+          {
+            id: 'actor-101007',
+          },
+        ],
+        combatScenario: {},
+      },
+      controlledActorTimeline: {
+        initialActor: {
+          actorId: 'actor-101007',
+          characterId: 101007,
+          actorName: 'fixture-controlled-actor',
+        },
+        transitions: [],
+      },
+      actionResolutionById: new Map([
+        [
+          action.id,
+          {
+            ready: true,
+            packageId: 'fixture-package',
+            packageHash: 'fixture-hash',
+            actionBinding: {
+              identity: 'fixture-action-binding',
+              controlVariantSkillLevel: 1,
+            },
+            controlBinding: {
+              frameRate: 60,
+            },
+            semanticEffects: [
+              createPropertyEffect({
+                semanticIdentity: 'team-tuning',
+                elementId: 101003205,
+                pathId: '-4841411980842434486',
+                targetKind: 'team-actors',
+                durationMs: 24000,
+                stackDelta: 2,
+                maxStacks: 2,
+                a: 18,
+              }),
+              createPropertyEffect({
+                semanticIdentity: 'controlled-tuning',
+                elementId: 101003207,
+                pathId: '-5652413049857383353',
+                targetKind: 'controlling-actor',
+                durationMs: 15000,
+                a: 1000,
+                baseFunctionId: 2008,
+              }),
+            ],
+          },
+        ],
+      ]),
+    });
+
+    expect(
+      generation.effectCommands.map(command => [
+        command.effectId,
+        command.sourceIdentity.elementId,
+        command.targetId,
+        command.durationMs,
+      ])
+    ).toEqual([
+      ['battle-element:-4841411980842434486', 101003205, 'actor-101003', 24000],
+      ['battle-element:-4841411980842434486', 101003205, 'actor-101007', 24000],
+      ['battle-element:-5652413049857383353', 101003207, 'actor-101007', 15000],
+    ]);
+    expect(
+      generation.effectCommands.filter(
+        command => command.targetId === 'actor-101007'
+      )
+    ).toHaveLength(2);
+  });
+
   it('drops applied and unresolved effect rows at an immediate interrupt boundary', () => {
     const action = {
       id: 'contextually-interrupted-effect-source',
@@ -230,9 +322,9 @@ describe('verified Battle effect generation', () => {
       ]),
     });
 
-    expect(
-      generation.unresolved.map(effect => effect.effectIdentity)
-    ).toEqual(['effect-before-interrupt']);
+    expect(generation.unresolved.map(effect => effect.effectIdentity)).toEqual([
+      'effect-before-interrupt',
+    ]);
   });
 });
 
@@ -282,6 +374,50 @@ function createFireKiboScenario() {
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
   return compileProject(project, getWorkbenchGameData());
+}
+
+function createPropertyEffect({
+  semanticIdentity,
+  elementId,
+  pathId,
+  targetKind,
+  durationMs,
+  stackDelta = 1,
+  maxStacks = 1,
+  a,
+  baseFunctionId = 5,
+}) {
+  return {
+    semanticIdentity,
+    elementId,
+    pathId,
+    role: 'gameplay-effect',
+    classification: 'applied',
+    trigger: {
+      startFrame: 148,
+    },
+    target: {
+      kind: targetKind,
+    },
+    propertyChange: {
+      attributeId: 229,
+      bucket: 'dynamicExtra',
+    },
+    lifecycle: {
+      durationMs,
+      stackMode: 'stack',
+      stackDelta,
+      maxStacks,
+    },
+    formula: {
+      commonFunctionId: 1,
+      baseFunctionId,
+      paramsByLevel: {
+        1: [a, 0, 0, 0, 0, 0, 10000],
+      },
+    },
+    sourceIdentities: [`fixture:${semanticIdentity}`],
+  };
 }
 
 function sumDamage(runtime, actionId) {
