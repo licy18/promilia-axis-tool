@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azpr.local/schemas/azpr-machine-axis-v1.schema.json",
+  "title": "Azur Promilia Machine Axis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractName",
+    "dataIdentity",
+    "scenario",
+    "actions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractName": { "const": "AzPrMachineAxis" },
+    "kind": { "const": "azpr-machine-axis" },
+    "dataIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verifiedMechanicsPackageId",
+        "verifiedMechanicsPackageHash",
+        "mechanicsProfileId"
+      ],
+      "properties": {
+        "verifiedMechanicsPackageId": { "type": "string", "minLength": 1 },
+        "verifiedMechanicsPackageHash": { "type": "string", "minLength": 1 },
+        "mechanicsProfileId": { "type": "string", "minLength": 1 },
+        "mechanicsProfileVersion": {
+          "type": ["string", "number", "null"]
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "fps",
+        "durationFrames",
+        "team",
+        "enemy",
+        "initialRuntimeState",
+        "critical"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "fps": { "type": "integer", "minimum": 1 },
+        "durationFrames": { "type": "integer", "minimum": 1 },
+        "team": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/teamSlot" }
+        },
+        "enemy": { "$ref": "#/$defs/enemy" },
+        "initialRuntimeState": { "type": "object" },
+        "critical": { "$ref": "#/$defs/critical" }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/action" }
+    },
+    "metadata": { "type": "object" }
+  },
+  "$defs": {
+    "teamSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slotId", "characterId"],
+      "properties": {
+        "slotId": { "type": "string", "minLength": 1 },
+        "characterId": { "type": "integer", "minimum": 1 },
+        "level": { "type": ["integer", "null"], "minimum": 1 },
+        "initialSp": { "type": ["number", "null"] },
+        "loadout": { "type": "object" },
+        "cultivation": { "type": "object" }
+      }
+    },
+    "enemy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enemyId"],
+      "properties": {
+        "enemyId": { "type": "integer", "minimum": 1 },
+        "level": { "type": ["integer", "null"], "minimum": 1 },
+        "hpMultiplier": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "defenseMultiplier": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0
+        },
+        "toughnessMultiplier": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0
+        },
+        "initialToughnessRatio": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "elementDefenseOverrides": { "type": "object" }
+      }
+    },
+    "critical": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy"],
+      "properties": {
+        "policy": {
+          "enum": ["sampled", "expected", "critical", "non-critical"]
+        },
+        "seed": { "type": ["string", "integer", "null"] }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "owner", "intent", "schedule"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "owner": { "$ref": "#/$defs/owner" },
+        "intent": { "$ref": "#/$defs/intent" },
+        "schedule": { "$ref": "#/$defs/schedule" },
+        "hitOverrides": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/hitOverride" }
+        },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["actor", "kibo", "enemy", "system"] },
+        "slotId": { "type": ["string", "null"] }
+      }
+    },
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["public-action", "switch", "wait"] },
+        "publicActionId": { "type": ["integer", "null"], "minimum": 1 },
+        "actionKind": { "type": ["string", "null"] },
+        "targetSlotId": { "type": ["string", "null"] },
+        "durationFrames": { "type": ["integer", "null"], "minimum": 0 },
+        "semanticVariant": {
+          "anyOf": [{ "$ref": "#/$defs/semanticVariant" }, { "type": "null" }]
+        },
+        "attackInput": {
+          "anyOf": [{ "$ref": "#/$defs/attackInput" }, { "type": "null" }]
+        }
+      }
+    },
+    "semanticVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selectorIdentity": { "type": ["string", "null"] },
+        "selectorKind": { "type": ["string", "null"] },
+        "publicVariantIndex": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "chargeTier": { "type": ["integer", "null"], "minimum": 1 },
+        "mode": { "enum": ["press", "hold", null] }
+      }
+    },
+    "attackInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequenceIndex"],
+      "properties": {
+        "sequenceIndex": { "type": "integer", "minimum": 1 },
+        "groupId": { "type": ["string", "null"] }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "enum": ["absolute", "after-previous-end", "after-action-end"]
+        },
+        "frame": { "type": ["integer", "null"], "minimum": 0 },
+        "actionId": { "type": ["string", "null"] },
+        "offsetFrames": { "type": "integer" }
+      }
+    },
+    "hitOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "landed": { "enum": ["inherit", "hit", "miss"] },
+        "criticalMode": {
+          "enum": ["inherit", "sampled", "expected", "critical", "non-critical"]
+        },
+        "criticalRoll": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9999
+        }
+      }
+    }
+  }
+}
