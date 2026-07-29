@@ -5,12 +5,7 @@ import {
   validateWorkbenchAnalysisReport,
 } from '../../domain/workbenchAnalysisReport';
 import { createWorkbenchGameDataCompatibilityReport } from '../../domain/workbenchGameDataCatalog';
-import {
-  createWorkbenchProject,
-  getWorkbenchGameData,
-} from '../../domain/workbenchProjectFactory';
-import { compileProject } from '../../simulation/compiler/compileProject';
-import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createWorkbenchProject } from '../../domain/workbenchProjectFactory';
 import {
   DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
   createWorkbenchProfileCompatibilityReport,
@@ -19,6 +14,7 @@ import { projectCycleSections } from '../../simulation/projection/projectCycleSe
 import { projectEffectRuntimeIntervals } from '../../simulation/projection/projectEffectIntervals';
 import { projectWorkbenchScenarioComparison } from '../../simulation/projection/projectScenarioComparison';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
+import { WORKBENCH_HEADLESS_COMBAT_CORE } from './workbenchHeadlessCombatCore';
 
 export const WORKBENCH_ANALYSIS_REPRODUCIBILITY_CONTRACT_NAME =
   'AzPrWorkbenchAnalysisReportReproducibilityAudit';
@@ -139,13 +135,15 @@ export function replayWorkbenchAnalysisReportSource(
     cycleBoundaries: draft.cycleBoundaries,
     initialRuntimeState: draft.initialRuntimeState,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
+    combatScenario: draft.combatScenario,
     durationMs: positiveNumberOrNull(durationMs) ?? undefined,
   });
-  const scenario = compileProject(project, getWorkbenchGameData(), {
-    threeValueMechanicsProfileCatalog:
-      DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  const canonicalRun = WORKBENCH_HEADLESS_COMBAT_CORE.simulate({
+    schemaVersion: 1,
+    project,
   });
-  const simulationResult = simulateScenario(scenario);
+  const scenario = canonicalRun.compilation.scenario;
+  const simulationResult = canonicalRun.simulation;
   const runtimeOutputs = simulationResult.runtimeOutputs;
   const effectIntervals = projectEffectRuntimeIntervals({
     effectTimeline: runtimeOutputs.effectTimeline,
@@ -174,6 +172,7 @@ export function replayWorkbenchAnalysisReportSource(
 
   return {
     source,
+    canonicalRun,
     project,
     scenario,
     simulationResult,
@@ -385,6 +384,11 @@ function createReplaySourceSummary(replay) {
     actionCount: replay.scenario.actions.length,
     appliedTransactionCount:
       replay.runtimeOutputs.hitTransactions?.transactions?.length ?? 0,
+    canonicalInputHash: replay.canonicalRun.inputHash,
+    canonicalDataHash: replay.canonicalRun.dataHash,
+    canonicalTraceHash: replay.canonicalRun.traceHash,
+    criticalPolicy: replay.canonicalRun.trace.critical?.policy ?? null,
+    criticalSeed: replay.canonicalRun.trace.critical?.seed ?? null,
   };
 }
 

@@ -70,7 +70,10 @@ export function normalizeCriticalSeed(value) {
   return text;
 }
 
-export function validateCombatCriticalScenario(value = null) {
+export function validateCombatCriticalScenario(
+  value = null,
+  { actions = [] } = {}
+) {
   const normalized = normalizeCombatCriticalScenario(value);
   const issues = [];
   if (value != null && (typeof value !== 'object' || Array.isArray(value))) {
@@ -114,10 +117,17 @@ export function validateCombatCriticalScenario(value = null) {
       message: `unsupported critical random algorithm: ${randomAlgorithm}`,
     });
   }
-  if (
-    normalized.policy === COMBAT_CRITICAL_POLICIES.SAMPLED &&
-    normalized.seed == null
-  ) {
+  const requiresSampledRandomSource =
+    normalized.policy === COMBAT_CRITICAL_POLICIES.SAMPLED ||
+    (Array.isArray(actions) &&
+      actions.some(action =>
+        Object.values(action?.hitOverrides ?? {}).some(
+          override =>
+            normalizeActionHitCriticalPolicy(override?.criticalPolicy) ===
+            COMBAT_CRITICAL_POLICIES.SAMPLED
+        )
+      ));
+  if (requiresSampledRandomSource && normalized.seed == null) {
     issues.push({
       code: 'critical-sampled-seed-required',
       field: 'combatScenario.critical.seed',
@@ -128,7 +138,24 @@ export function validateCombatCriticalScenario(value = null) {
     valid: issues.length === 0,
     normalized,
     issues,
+    requiresSampledRandomSource,
   };
+}
+
+export function calculateEffectiveCriticalThresholdBasisPoints({
+  sourceCriticalRate = 0,
+  targetCriticalRateDefense = 0,
+} = {}) {
+  const sourceBasisPoints = Math.round(
+    (Number(sourceCriticalRate) || 0) * 10_000
+  );
+  const targetDefenseBasisPoints = Math.round(
+    (Number(targetCriticalRateDefense) || 0) * 10_000
+  );
+  return Math.min(
+    10_000,
+    Math.max(0, sourceBasisPoints - targetDefenseBasisPoints)
+  );
 }
 
 function normalizeText(value) {

@@ -1,4 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
+import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
+import { createWorkbenchActionDraft } from '../../domain/workbenchProjectFactory';
 import {
   createWorkbenchContributionAnalysisReport,
   createWorkbenchScenarioComparisonAnalysisReport,
@@ -14,6 +21,17 @@ import {
 } from '../../features/workbench/workbenchAnalysisReportReproducibility';
 import { projectWorkbenchScenarioComparison } from '../../simulation/projection/projectScenarioComparison';
 
+const PANGPANG_CHARACTER_ID = 101007;
+const PANGPANG_SKILL_ID = 10100701;
+const PANGPANG_MAPPING = verifiedCombatMechanicsPackage.actionMappings.find(
+  mapping =>
+    mapping.ownerId === PANGPANG_CHARACTER_ID &&
+    mapping.actionKind === 'normal-attack'
+);
+const PANGPANG_A3 = PANGPANG_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 3
+);
+const PANGPANG_HIT_IDENTITY = PANGPANG_A3.selectedHitIdentities[0];
 describe('Workbench analysis report reproducibility', () => {
   it('exactly replays a frozen contribution report through current runtime', () => {
     const source = createSource('current');
@@ -81,6 +99,91 @@ describe('Workbench analysis report reproducibility', () => {
     });
   });
 
+  it('replays sampled policy, seed, hit overrides, events, rolls, and canonical hash through the same core', () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    try {
+      const source = createSource('current', draft => {
+        draft.mechanicsProfileSelection =
+          createVerifiedWorkbenchMechanicsProfileSelection();
+        draft.combatScenario = {
+          projectile: { targetDistance: 0, defaultWillHit: true },
+          critical: {
+            policy: 'sampled',
+            seed: 'analysis-report-seed',
+          },
+        };
+        draft.actionDrafts = [
+          createWorkbenchActionDraft({
+            id: 'analysis-pangpang-a3',
+            type: 'skill',
+            actorCharacterId: PANGPANG_CHARACTER_ID,
+            skillId: PANGPANG_SKILL_ID,
+            actionVariantIndex: 0,
+            startMs: 0,
+            durationMs: (PANGPANG_A3.durationFrames * 1000) / 60,
+            durationFrames: PANGPANG_A3.durationFrames,
+            attackGroupId: 'analysis-pangpang-chain',
+            attackSequenceIndex: PANGPANG_A3.sequenceIndex,
+            attackSequenceTotal: PANGPANG_A3.sequenceTotal,
+            attackInput: PANGPANG_A3,
+            actionScheduling: PANGPANG_A3.actionScheduling,
+            hitOverrides: {
+              [PANGPANG_HIT_IDENTITY]: {
+                willHit: true,
+                criticalPolicy: 'sampled',
+              },
+            },
+          }),
+        ];
+        draft.selectedActionId = 'analysis-pangpang-a3';
+      });
+      const original = replayWorkbenchAnalysisReportSource(source, {
+        durationMs: 30000,
+      });
+      const report = createWorkbenchContributionAnalysisReport({
+        project: original.project,
+        source: createReportSourceInput(source),
+        contributionProjection: original.contributionProjection,
+        runtimeOutputs: original.runtimeOutputs,
+        exportedAt: '2026-07-29T00:00:00.000Z',
+      });
+      const replayed = replayWorkbenchAnalysisReportSource(report.sources[0], {
+        durationMs: 30000,
+      });
+      const audit = auditWorkbenchAnalysisReportReproducibility(report);
+      const originalBranch =
+        original.canonicalRun.trace.damage[0].formula.randomBranch;
+      const replayedBranch =
+        replayed.canonicalRun.trace.damage[0].formula.randomBranch;
+
+      expect(original.scenario.combatScenario.critical).toMatchObject({
+        policy: 'sampled',
+        seed: 'analysis-report-seed',
+      });
+      expect(replayed.scenario.combatScenario.critical).toEqual(
+        original.scenario.combatScenario.critical
+      );
+      expect(replayedBranch).toEqual(originalBranch);
+      expect(replayed.canonicalRun.trace).toEqual(original.canonicalRun.trace);
+      expect(replayed.canonicalRun.traceHash).toBe(
+        original.canonicalRun.traceHash
+      );
+      expect(audit).toMatchObject({
+        status: WORKBENCH_ANALYSIS_REPRODUCIBILITY_STATUSES.EXACT,
+        sources: [
+          {
+            role: 'current',
+            canonicalInputHash: original.canonicalRun.inputHash,
+            canonicalTraceHash: original.canonicalRun.traceHash,
+            criticalPolicy: 'sampled',
+            criticalSeed: 'analysis-report-seed',
+          },
+        ],
+      });
+    } finally {
+      clearInstalledVerifiedCombatMechanicsPackage();
+    }
+  });
   it('reports minimal frozen-output drift without mutating the report', () => {
     const source = createSource('current');
     const replay = replayWorkbenchAnalysisReportSource(source, {

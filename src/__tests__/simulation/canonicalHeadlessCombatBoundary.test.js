@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { extname, join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 describe('canonical headless combat boundary', () => {
@@ -17,4 +17,33 @@ describe('canonical headless combat boundary', () => {
     expect(source).not.toMatch(/\b(window|document|localStorage)\s*[.[]/);
     expect(source).not.toMatch(/\b(pixel|pointer|drag|drop)\b/i);
   });
+
+  it('keeps Workbench production consumers behind the canonical core', () => {
+    const productionFiles = [
+      ...collectProductionFiles(
+        resolve(process.cwd(), 'src/features/workbench')
+      ),
+      resolve(process.cwd(), 'src/views/Workbench.vue'),
+    ];
+    const violations = productionFiles.flatMap(file => {
+      const source = readFileSync(file, 'utf8');
+      const directImports = [
+        /from ['"][^'"]*simulation\/compiler\/compileProject['"]/,
+        /from ['"][^'"]*simulation\/engine\/simulateScenario['"]/,
+      ];
+      return directImports
+        .filter(pattern => pattern.test(source))
+        .map(pattern => `${file}:${pattern.source}`);
+    });
+
+    expect(violations).toEqual([]);
+  });
 });
+
+function collectProductionFiles(root) {
+  return readdirSync(root, { withFileTypes: true }).flatMap(entry => {
+    const path = join(root, entry.name);
+    if (entry.isDirectory()) return collectProductionFiles(path);
+    return ['.js', '.vue'].includes(extname(entry.name)) ? [path] : [];
+  });
+}

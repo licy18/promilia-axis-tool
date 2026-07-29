@@ -1782,9 +1782,9 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 当前客户端已确认在每个符合条件的 `DamageElement` 执行前以 `RandomUtility.Range(0, 10000)` 生成并保存独立 `criticalRandom`，再按 roll 与有效暴击阈值比较；该构建的整数 Range 正常路径调用 `UnityEngine.Random.Range`。因此正式语义是逐 hit 的运行时伪随机采样，不是固定暴击序列或自动期望值。工具的游戏采样模式会使用显式 seed 保持可复现，但只承诺复原分布与判定尺度，不承诺从轴输入还原客户端可能被其他系统消费的全局 RNG 序列。
 
 M11 输入合同相应增加场景级 `sampled / expected / critical / non-critical` 暴击策略和 seed；每个稳定 hit identity 分开保存命中覆盖及 `inherit / sampled / expected / critical / non-critical` 暴击覆盖。Workbench 检查面必须能逐 hit 选择是否命中、强制暴击、强制不暴击、随机或期望值，并展示实际暴击率、roll/阈值或期望贡献。期望模式不得伪造暴击事件；遇到会改变 Buff、资源或派生的暴击副作用时，必须带权分支或显式阻断。证据、RVA 与验收边界见 `reports/m11/critical-sampling-evidence-20260729.md`。
-### M11-A Canonical Headless Combat Core 已完成，等待产品验收（2026-07-29）
+### M11-A-R1 Canonical Headless Combat Core 正确性收口完成，等待产品复验（2026-07-29）
 
-唯一无头核心现提供 `catalog / compile / validate / simulate / evaluate / explain` 六个纯接口，Workbench 与 Node 对同一场景消费同一编译、模拟和 canonical trace/hash。场景级四模式暴击、显式 seed、逐 hit 覆盖、可复现采样及 expected 分支阻断已接入；小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人 golden 在显式 `non-critical` 下保持原 replay/summary hash。完整 146 文件/892 测试、62/62 production preview、41/41 必需能力和全部来源/漂移守门通过。Workbench gzip `375,546B`、总 JS gzip `768,217B` 继续作为对外发布风险单列；M11-B 未启动。
+唯一无头核心继续提供 `catalog / compile / validate / simulate / evaluate / explain` 六个纯接口。R1 统一了场景级与逐 hit `sampled` 的 seed/随机源门禁，隔离资源预检与最终随机序列，按命中时目标属性 102 应用 `CRI_DEFENSE`，并让 Workbench 分析报告复现只调用 canonical core。小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人 golden 的 replay/summary hash 无漂移；canonical trace hash 已按新增暴击追踪字段更新。完整 146 文件/901 测试、62/62 production preview、41/41 必需能力和全部来源/漂移守门通过。Workbench gzip `375,287B`、总 JS gzip `768,160B` 继续作为对外发布风险单列；M11-B 未启动。
 
 ## 10. 文档维护规则
 

@@ -4,6 +4,7 @@ import {
   COMBAT_CRITICAL_POLICIES,
   COMBAT_CRITICAL_SCENARIO_CONTRACT,
   COMBAT_CRITICAL_SCENARIO_SCHEMA_VERSION,
+  calculateEffectiveCriticalThresholdBasisPoints,
   normalizeCombatCriticalScenario,
   resolveActionHitCriticalPolicy,
   validateCombatCriticalScenario,
@@ -38,6 +39,60 @@ describe('combat critical policy', () => {
     });
   });
 
+  it('requires a seed when any action hit resolves to sampled', () => {
+    const actions = [
+      {
+        id: 'verified-action',
+        hitOverrides: {
+          'verified-hit': { criticalPolicy: 'sampled' },
+        },
+      },
+    ];
+
+    expect(
+      validateCombatCriticalScenario({ policy: 'non-critical' }, { actions })
+    ).toMatchObject({
+      valid: false,
+      requiresSampledRandomSource: true,
+      issues: [{ code: 'critical-sampled-seed-required' }],
+    });
+    expect(
+      validateCombatCriticalScenario(
+        { policy: 'non-critical', seed: 'hit-seed' },
+        { actions }
+      )
+    ).toMatchObject({
+      valid: true,
+      requiresSampledRandomSource: true,
+    });
+  });
+
+  it('clamps CRI minus CRI_DEFENSE to the client 0..10000 threshold', () => {
+    expect(
+      calculateEffectiveCriticalThresholdBasisPoints({
+        sourceCriticalRate: 0.3,
+        targetCriticalRateDefense: 0,
+      })
+    ).toBe(3000);
+    expect(
+      calculateEffectiveCriticalThresholdBasisPoints({
+        sourceCriticalRate: 0.3,
+        targetCriticalRateDefense: 0.125,
+      })
+    ).toBe(1750);
+    expect(
+      calculateEffectiveCriticalThresholdBasisPoints({
+        sourceCriticalRate: 0.1,
+        targetCriticalRateDefense: 0.5,
+      })
+    ).toBe(0);
+    expect(
+      calculateEffectiveCriticalThresholdBasisPoints({
+        sourceCriticalRate: 1.5,
+        targetCriticalRateDefense: -0.2,
+      })
+    ).toBe(10000);
+  });
   it('rejects unsupported versioned contract values instead of falling back', () => {
     expect(
       validateCombatCriticalScenario({

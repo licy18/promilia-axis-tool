@@ -279,8 +279,10 @@ function createAppliedSourceBinding({
   projectDurationMs,
 }) {
   const transactions = (runtimeOutputs?.hitTransactions?.transactions ?? [])
-    .filter(transaction =>
-      isTransactionInsideWindow(transaction, window, projectDurationMs)
+    .filter(
+      transaction =>
+        normalizeText(transaction?.actionId) &&
+        isTransactionInsideWindow(transaction, window, projectDurationMs)
     )
     .map(transaction => ({
       transactionId: normalizeText(transaction.transactionId),

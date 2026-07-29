@@ -27,6 +27,7 @@ import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimelin
 import {
   ACTION_HIT_CRITICAL_POLICIES,
   COMBAT_CRITICAL_POLICIES,
+  calculateEffectiveCriticalThresholdBasisPoints,
   resolveActionHitCriticalPolicy,
 } from '../../domain/combatCriticalPolicy';
 import { createCriticalSampleKey } from '../runtime/criticalRandomSource';
@@ -1840,8 +1841,19 @@ function applyHitDescriptor({
     attributeId: 4,
     baseRaw: scenario?.enemy?.stats?.magicalDefense,
   });
+  const targetCriticalRateDefenseResult = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: scenario?.enemy?.id,
+    timeMs: descriptor.timeMs,
+    attributeId: 102,
+    baseRaw: getAttribute(scenario?.enemy, 'CRI_DEFENSE') ?? 0,
+  });
   const targetDefense = numberOrNull(targetDefenseResult.value);
   const targetMagicDefense = numberOrNull(targetMagicDefenseResult.value);
+  const targetCriticalRateDefense = basisPoints(
+    targetCriticalRateDefenseResult.value
+  );
   let inputIssue = null;
   if (!source.ready) inputIssue = source.status;
   else if (!enemyProfile?.applied) {
@@ -1865,6 +1877,7 @@ function applyHitDescriptor({
     scenario,
     descriptor,
     criticalRandomSource,
+    targetCriticalRateDefense,
   });
   if (!randomBranch.ready) {
     return {
@@ -2044,6 +2057,7 @@ function applyHitDescriptor({
           target: collectDynamicPropertyTrace([
             targetDefenseResult,
             targetMagicDefenseResult,
+            targetCriticalRateDefenseResult,
           ]),
         },
         rawDamage: hpDamage,
@@ -2494,7 +2508,12 @@ function resolveCriticalBranch(
   action,
   hit,
   source,
-  { scenario, descriptor, criticalRandomSource } = {}
+  {
+    scenario,
+    descriptor,
+    criticalRandomSource,
+    targetCriticalRateDefense = 0,
+  } = {}
 ) {
   const hitIdentity = resolveCriticalHitIdentity(hit);
   const persisted =
@@ -2514,11 +2533,13 @@ function resolveCriticalBranch(
           hitIdentity,
           scenarioCritical.policy
         );
-  const criticalThreshold = clampInteger(
-    Math.trunc((Number(source.criticalRate) || 0) * 10_000),
-    0,
-    10_000
-  );
+  const sourceCriticalRate = Number(source.criticalRate) || 0;
+  const normalizedTargetCriticalRateDefense =
+    Number(targetCriticalRateDefense) || 0;
+  const criticalThreshold = calculateEffectiveCriticalThresholdBasisPoints({
+    sourceCriticalRate,
+    targetCriticalRateDefense: normalizedTargetCriticalRateDefense,
+  });
   const sampleKey = createCriticalSampleKey({
     actionId: action.id,
     hitIdentity,
@@ -2533,8 +2554,13 @@ function resolveCriticalBranch(
     hitIdentity,
     sampleKey,
     criticalThreshold,
-    criticalRate: Number(source.criticalRate) || 0,
-    targetCriticalRateDefense: 0,
+    criticalRate: sourceCriticalRate,
+    sourceCriticalRate,
+    sourceCriticalRateBasisPoints: Math.round(sourceCriticalRate * 10_000),
+    targetCriticalRateDefense: normalizedTargetCriticalRateDefense,
+    targetCriticalRateDefenseBasisPoints: Math.round(
+      normalizedTargetCriticalRateDefense * 10_000
+    ),
     replayable: true,
   };
 
@@ -2550,8 +2576,8 @@ function resolveCriticalBranch(
       criticalRoll: persistedRoll,
       critical: isCriticalHit({
         randomRoll: normalizedRoll,
-        criticalRate: source.criticalRate,
-        targetCriticalRateDefense: 0,
+        criticalRate: sourceCriticalRate,
+        targetCriticalRateDefense: normalizedTargetCriticalRateDefense,
       }),
     };
   }

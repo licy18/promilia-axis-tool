@@ -5659,7 +5659,10 @@ test('[effect-interval-review] reviews an effect interval and refreshes it from 
   await openActionInspector(page);
   await page.getByTestId('workbench-effect-add').click();
   await page.getByTestId('workbench-effect-name-input').fill('生产增益');
-  await page.getByTestId('workbench-effect-name-input').press('Tab');
+  await page.getByTestId('workbench-effect-name-input').dispatchEvent('change');
+  await expect(page.getByTestId('workbench-effect-command-row')).toContainText(
+    '生产增益'
+  );
   await page.getByTestId('workbench-effect-duration-frame-input').fill('120');
   await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
 
@@ -5698,7 +5701,10 @@ test('[action-effect-relations] keeps action, effect, log, and six energy tracks
   await openActionInspector(page);
   await page.getByTestId('workbench-effect-add').click();
   await page.getByTestId('workbench-effect-name-input').fill('关系测试增益');
-  await page.getByTestId('workbench-effect-name-input').press('Tab');
+  await page.getByTestId('workbench-effect-name-input').dispatchEvent('change');
+  await expect(page.getByTestId('workbench-effect-command-row')).toContainText(
+    '关系测试增益'
+  );
   await openRuntimeReviewTab(page, 'effect');
 
   const workbench = page.locator('main.workbench');

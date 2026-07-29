@@ -47,8 +47,10 @@ export function createCanonicalHeadlessCombatCore({
 
   function compile(input, options = {}) {
     if (isCompilation(input)) return input;
+    const projectInput = input?.project ?? input;
     const criticalValidation = validateCombatCriticalScenario(
-      resolveCoreCriticalInput(input)
+      resolveCoreCriticalInput(input),
+      { actions: projectInput?.actions }
     );
     if (!criticalValidation.valid) {
       throw new CanonicalHeadlessCombatValidationError(

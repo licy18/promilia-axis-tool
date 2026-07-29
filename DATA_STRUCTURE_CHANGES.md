@@ -27782,3 +27782,11 @@ action.hitOverrides[hitIdentity]
 All runtime SP, HP, toughness, Buff, resource, and critical results continue to use the existing simulation trace; no result is persisted as a UI projection. `sampled` consumes one deterministic xorshift32 value per eligible hit in normalized event order and records seed, stream index, roll, threshold, and outcome. `expected` computes weighted damage without emitting a fake critical event; if a critical branch would alter Buff, resource, shield, or later state, validation returns an explicit branch-required diagnostic. `critical` and `non-critical` force only the critical decision and do not bypass hit eligibility or other mechanics.
 
 Old projects without `combatScenario.critical` normalize to explicit `non-critical`, preserving the three M10 golden baselines. Existing `hitOverrides[].criticalRoll` remains readable for compatibility; new writes use the scenario contract and `criticalPolicy`. Local drafts, project JSON, share links, PNG metadata, scheme copies, undo/redo, and reload all preserve the same normalized critical input. No Workbench project schema version bump is required because the new fields are optional and handled by the shared normalizers.
+
+## 456. Canonical critical stream R1 / Analysis replay
+
+`validateCombatCriticalScenario(value, { actions })` 现在同时扫描场景策略和逐 hit 覆盖。只要任一可达 hit 的有效策略为 `sampled`，输入就必须带显式 seed，并在预检与最终结算分别创建同 seed 的独立确定性随机源；最终规范 trace 的首个采样索引始终从 0 开始，预检结果不得消费正式序列。
+
+暴击分支在命中时读取来源 `CRI` 与目标属性 102 `CRI_DEFENSE`，并按 `clamp(CRI - CRI_DEFENSE, 0, 10000)` 生成 `criticalThreshold`。分支 trace 保留 `sourceCriticalRate`、`sourceCriticalRateBasisPoints`、`targetCriticalRateDefense`、`targetCriticalRateDefenseBasisPoints`、`criticalThreshold`、roll 与 stream index，便于重放和解释命中时动态属性变化。
+
+Workbench 分析报告复现通过 `WORKBENCH_HEADLESS_COMBAT_CORE` 重建并保存 canonical input/trace hash、暴击 policy 与 seed，不再直接调用底层 `compileProject` 或 `simulateScenario`。报告的 action source bindings 只冻结带 `actionId` 的动作交易；自动回能等系统交易仍完整保留在 canonical trace，避免把系统事件错误归入某个动作来源。

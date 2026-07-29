@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-A / Canonical Headless Combat Core 已完成，等待产品验收**。M10 的小玉、红宝石与寒悠悠功能面已通过产品验收并关闭；寒悠悠隐藏大招爆炸按当前客户端未删净废案归为 `not-applicable / legacy-unreachable`，不再生成 capture 或阻断零距离模拟，三角色权威 replay hash 保持不变。包体超限继续只作为对外发布风险，不阻断 M11 无头核心；M11-B 尚未启动。
+当前里程碑：**M11-A-R1 / Canonical Headless Combat Core 正确性收口已完成，等待产品复验**。逐 hit sampled 随机源、预检随机流隔离、目标 `CRI_DEFENSE` 与 Workbench 分析报告唯一调用链均已闭环；三角色权威 replay/summary hash 保持不变。包体超限继续只作为对外发布风险；M11-B 尚未启动。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -795,7 +795,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 上游静态证据确认：当前客户端对每个符合条件的 `DamageElement` 在执行前调用 `RandomUtility.Range(0, 10000)`，把整数结果写入该元素自己的 `criticalRandom`，随后按 `criticalRandom < 有效暴击阈值` 判定。当前构建的整数 Range 落到 `UnityEngine.Random.Range`，因此游戏语义是逐伤害元素的运行时伪随机采样，不是固定暴击序列或期望值结算。完整证据和建模边界见 `reports/m11/critical-sampling-evidence-20260729.md`。
 
-#### M11-A：Canonical Headless Combat Core（已完成，等待产品验收）
+#### M11-A：Canonical Headless Combat Core（R1 正确性收口已完成，等待产品复验）
 
 - 定义无 UI 的纯接口，至少覆盖 `catalog`、`compile`、`validate`、`simulate`、`evaluate` 和 `explain`。
 - 输入包含数据/profile 版本、队伍与装配、敌人、初始状态、战斗时长、语义动作意图、场景级暴击策略及随机种子；输出包含归一执行计划、合法性诊断、逐帧事件、状态快照、三值/资源/Buff 变化、贡献拆分、因果链及输入哈希。
@@ -806,7 +806,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 验收门：不启动浏览器即可完成确定性模拟；输入顺序、同帧优先级、状态到期、派生和暴击结果有精确断言；同 seed 的采样结果可复现，期望值模式不产生伪暴击副作用；三条金标准在迁移前后无语义漂移。
 
-阶段结果：唯一无头核心已提供 `catalog / compile / validate / simulate / evaluate / explain` 六个接口，Workbench 的权威编译、模拟、方案对比和放置评估均消费同一核心。场景暴击合同已覆盖 `sampled / expected / critical / non-critical`、显式 seed 和逐 hit 覆盖；小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人四份 golden 均以 `non-critical` 策略迁移，原 replay/summary hash 无漂移，Node 与 Workbench 同输入的 canonical trace/hash 一致。完整 146 文件/892 测试、62/62 production preview、41/41 必需能力及全部来源/漂移守门通过；Workbench gzip `375,546B`、总 JS gzip `768,217B` 的既有发布风险继续单列，不在本阶段压缩。
+阶段结果：唯一无头核心已提供 `catalog / compile / validate / simulate / evaluate / explain` 六个接口，Workbench 的权威编译、模拟、方案对比、放置评估与分析报告复现均消费同一核心。R1 使场景级或逐 hit 的 `sampled` 都在校验期要求 seed 并创建确定性随机源，资源预检与最终结算使用隔离随机流；命中时从目标属性 102 读取 `CRI_DEFENSE`，trace 分别保留来源暴击率、目标减暴、有效阈值和 roll。小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人四份 golden 的 replay/summary hash 无漂移，canonical trace hash 按新追踪合同更新。完整 146 文件/901 测试、62/62 production preview、41/41 必需能力及全部来源/漂移守门通过；Workbench gzip `375,287B`、总 JS gzip `768,160B` 的既有发布风险继续单列，不在本阶段压缩。
 
 #### M11-B：Machine Axis Contract 与 CLI
 
@@ -898,6 +898,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 | M10-B2      | 寒悠悠按真实命中叠加/消费焰火并驱动重击、Buff 与三值          | 两段蓄力、目标状态运行时、被动效果、golden 与真实 Workbench         |
 | M10-B2-R1   | 从公共入口看清并验证寒悠悠完整状态与效果因果链                | 焰火层数/消费、5 次爆炸、双 Buff、SP、后续属性与强负例              |
 | M11-A       | 不启动网页即可确定性编译并模拟完整排轴                        | 无 UI 核心、版本化输入、权威 trace/hash 与三角色金标准              |
+| M11-A-R1    | sampled、减暴与报告复现共享唯一确定性调用链                   | seed 门禁、随机流隔离、CRI_DEFENSE、canonical report replay         |
 | M11-B       | AI/脚本通过 JSON 与 CLI 建轴、校验、模拟、比较和解释           | Machine Axis Schema、结构化错误、导入导出与来源追溯                 |
 | M11-C       | 在页面复验机器轴的动作形态、资源、Buff、hit 和因果            | trace 同源、机制检查器、桌面验收场景                                |
 | M11-D       | 只有经过机器与可视化双验收的角色可用于优化                    | 四态成熟度、场景矩阵、缺口阻断与产品签收                            |
@@ -966,7 +967,8 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 57. 实施完成，等待产品复验：M10-A 小玉闭环缺口修复已接通普通 A3/A4、95F 星携技块后的 109F 延迟结算、带成功招架前置的 `10101049/sub1`、缘结阈值风印记 `+2` 和玉未央真实触发边界；141 文件/867 测试、62/62 production preview、两道漂移审计、生产数据守门与构建通过。M11、下一角色和包体优化继续暂停。
 58. 实施完成，等待产品复验：M10-B1 已消费上游完整 Typetree 重导出，恢复星鸣技 7 段真实命中和第 0F 补弹、火印记、强化入口；公开形态 10/10 runtime-ready，123 条 authoritative golden、141 文件/871 测试和 62/62 production preview 通过。红宝石总 Profile 仍为 `runtime-applied / partial`；M11、下一角色和包体优化继续暂停。
 59. 已完成并通过功能验收：M10 收口将寒悠悠隐藏大招爆炸归为当前客户端 `not-applicable / legacy-unreachable` 废案，capture 由 11 降至 10、零距离阻断由 1 降至 0；小玉 117、红宝石 123、寒悠悠 76 条 golden 的 replay/summary hash 均无漂移。M10 正式关闭，当前进入 M11-A；包体超限只保留为对外发布风险。
-60. 实施完成，等待产品验收：M11-A 已建立唯一 Canonical Headless Combat Core，Node 与 Workbench 共用 `catalog / compile / validate / simulate / evaluate / explain` 和同一 canonical trace/hash；四模式暴击、显式 seed、逐 hit 覆盖及确定性采样已接入，小玉、红宝石、寒悠悠 golden 零语义漂移。146 文件/892 测试、62/62 production preview、41/41 必需能力及全部漂移/来源守门通过；包体超限继续仅作为发布风险，M11-B 尚未启动。
+60. 实施完成：M11-A 已建立唯一 Canonical Headless Combat Core，Node 与 Workbench 共用 `catalog / compile / validate / simulate / evaluate / explain` 和同一 canonical trace/hash；四模式暴击、显式 seed、逐 hit 覆盖及确定性采样已接入。
+61. 实施完成，等待产品复验：M11-A-R1 已修复逐 hit `sampled` 随机源与 seed 门禁、预检随机序列污染、目标 `CRI_DEFENSE` 和分析报告旧调用链。小玉 117、红宝石 123、寒悠悠 76 条 golden 的 replay/summary hash 无漂移；146 文件/901 测试、62/62 production preview、41/41 必需能力及全部漂移/来源守门通过。包体超限继续仅作为发布风险，M11-B 尚未启动。
 
 ## 8. 风险和取舍
 

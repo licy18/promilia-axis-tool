@@ -19,6 +19,7 @@ import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG } from '../../simulation/
 
 const PANGPANG_CHARACTER_ID = 101007;
 const PANGPANG_SKILL_ID = 10100701;
+const MUYIN_ULTIMATE_SKILL_ID = 10900113;
 const PANGPANG_MAPPING = verifiedCombatMechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === PANGPANG_CHARACTER_ID &&
@@ -143,6 +144,125 @@ describe('canonical headless combat core', () => {
     expect(other.traceHash).not.toBe(first.traceHash);
   });
 
+  it('creates a sampled stream for a real per-hit override under a non-critical scenario', () => {
+    const core = createCore();
+    const run = core.simulate(
+      createVerifiedProject({
+        critical: { policy: 'non-critical', seed: 'per-hit-seed' },
+        hitOverrides: {
+          [PANGPANG_HIT_IDENTITY]: {
+            willHit: true,
+            criticalPolicy: 'sampled',
+          },
+        },
+      })
+    );
+    const branch = getRandomBranch(run);
+
+    expect(run.validationIssues ?? []).toEqual([]);
+    expect(getDamage(run)).toBeGreaterThan(0);
+    expect(branch).toMatchObject({
+      policy: 'seeded-sampled',
+      randomSeed: 'per-hit-seed',
+      criticalStreamIndex: 0,
+      criticalRoll: expect.any(Number),
+      criticalThreshold: expect.any(Number),
+    });
+  });
+
+  it('rejects a sampled per-hit override without a seed during validate', () => {
+    const core = createCore();
+    const project = createVerifiedProject({
+      critical: { policy: 'non-critical' },
+      hitOverrides: {
+        [PANGPANG_HIT_IDENTITY]: {
+          willHit: true,
+          criticalPolicy: 'sampled',
+        },
+      },
+    });
+
+    expect(core.validate(project)).toMatchObject({
+      valid: false,
+      issues: [{ code: 'critical-sampled-seed-required' }],
+    });
+    expect(() => core.simulate(project)).toThrow(
+      'Canonical headless combat input is invalid'
+    );
+  });
+
+  it('starts the final sampled stream at zero after resource preflight blocks an action', () => {
+    const core = createCore();
+    const onlyHit = core.simulate(
+      createVerifiedProject({
+        critical: { policy: 'sampled', seed: 'preflight-isolation' },
+      })
+    );
+    const withBlockedUltimate = core.simulate(
+      createVerifiedProject({
+        critical: { policy: 'sampled', seed: 'preflight-isolation' },
+        includeBlockedUltimate: true,
+      })
+    );
+    const onlyBranch = getRandomBranch(onlyHit);
+    const blockedBranch = getRandomBranch(withBlockedUltimate);
+
+    expect(
+      withBlockedUltimate.simulation.verifiedCombatRuntime.executionBlocks
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'm11-blocked-muyin-ultimate',
+        }),
+      ])
+    );
+    expect(blockedBranch.criticalStreamIndex).toBe(0);
+    expect(blockedBranch.criticalRoll).toBe(onlyBranch.criticalRoll);
+    expect(blockedBranch.critical).toBe(onlyBranch.critical);
+    expect(getDamage(withBlockedUltimate)).toBe(getDamage(onlyHit));
+    expect(
+      withBlockedUltimate.trace.damage.find(
+        event => event.actionId === 'verified-pangpang-a3'
+      )?.formula.randomBranch
+    ).toEqual(
+      onlyHit.trace.damage.find(
+        event => event.actionId === 'verified-pangpang-a3'
+      )?.formula.randomBranch
+    );
+  });
+
+  it('reads enemy CRI_DEFENSE for the real hit and exposes the full threshold trace', () => {
+    const core = createCore();
+    const baseline = core.simulate(
+      createVerifiedProject({
+        critical: { policy: 'sampled', seed: 'defense-seed' },
+        targetCriticalDefenseRaw: 0,
+      })
+    );
+    const defended = core.simulate(
+      createVerifiedProject({
+        critical: { policy: 'sampled', seed: 'defense-seed' },
+        targetCriticalDefenseRaw: 1250,
+      })
+    );
+    const baselineBranch = getRandomBranch(baseline);
+    const defendedBranch = getRandomBranch(defended);
+
+    expect(baselineBranch).toMatchObject({
+      sourceCriticalRate: expect.any(Number),
+      targetCriticalRateDefense: 0,
+      criticalThreshold: expect.any(Number),
+      criticalRoll: expect.any(Number),
+    });
+    expect(defendedBranch).toMatchObject({
+      sourceCriticalRate: baselineBranch.sourceCriticalRate,
+      targetCriticalRateDefense: 0.125,
+      criticalRoll: baselineBranch.criticalRoll,
+    });
+    expect(defendedBranch.criticalThreshold).toBe(
+      Math.max(0, baselineBranch.criticalThreshold - 1250)
+    );
+  });
   it('rejects sampled simulation without a seed before compilation', () => {
     const core = createCore();
     const project = createVerifiedProject({
@@ -241,7 +361,12 @@ function createCore() {
   });
 }
 
-function createVerifiedProject({ critical = null, hitOverrides = null } = {}) {
+function createVerifiedProject({
+  critical = null,
+  hitOverrides = null,
+  includeBlockedUltimate = false,
+  targetCriticalDefenseRaw = null,
+} = {}) {
   const teamSlots = createDefaultWorkbenchTeamSlots();
   const actorConfigs = createDefaultWorkbenchActorConfigs(
     DEFAULT_WORKBENCH_SELECTION
@@ -262,11 +387,25 @@ function createVerifiedProject({ critical = null, hitOverrides = null } = {}) {
     actionScheduling: PANGPANG_A3.actionScheduling,
     hitOverrides,
   });
-  return createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+  const actions = [action];
+  if (includeBlockedUltimate) {
+    actions.push(
+      createWorkbenchActionDraft({
+        id: 'm11-blocked-muyin-ultimate',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: MUYIN_ULTIMATE_SKILL_ID,
+        actionVariantIndex: 0,
+        startMs: 100,
+        durationMs: 800,
+      })
+    );
+  }
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
     durationMs: 2000,
     teamSlots,
     actorConfigs,
-    actions: [action],
+    actions,
     combatScenario: {
       projectile: { targetDistance: 0, defaultWillHit: true },
       critical,
@@ -274,6 +413,22 @@ function createVerifiedProject({ critical = null, hitOverrides = null } = {}) {
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
+  if (targetCriticalDefenseRaw != null) {
+    const existing = project.enemy.baseAttributes.find(
+      attribute => attribute.key === 'CRI_DEFENSE'
+    );
+    if (existing) existing.value = targetCriticalDefenseRaw;
+    else {
+      project.enemy.baseAttributes.push({
+        id: 102,
+        key: 'CRI_DEFENSE',
+        name: '暴击抵抗',
+        value: targetCriticalDefenseRaw,
+        isRatio: true,
+      });
+    }
+  }
+  return project;
 }
 
 function getDamage(run) {

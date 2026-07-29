@@ -16,7 +16,13 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
 import { compileProject } from '../../simulation/compiler/compileProject';
+import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
+import { createActionRuleDiagnostics } from '../../simulation/runtime/actionRuleDiagnostics';
+import { createControlledActorTimeline } from '../../simulation/runtime/controlledActorTimeline';
+import { createDeterministicCriticalRandomSource } from '../../simulation/runtime/criticalRandomSource';
+import { createEffectRuntimeTimeline } from '../../simulation/runtime/effectRuntimeTimeline';
 import {
   calculateAutoSp,
   calculateRealDamage,
@@ -428,7 +434,8 @@ describe('verified combat mechanics runtime', () => {
     ).toEqual([37, 44, 49, 54, 59, 64, 69]);
     expect(
       baselineHits.every(
-        event => event.payload.rawDamage > 0 && event.payload.toughnessDamage > 0
+        event =>
+          event.payload.rawDamage > 0 && event.payload.toughnessDamage > 0
       )
     ).toBe(true);
     expect(
@@ -486,10 +493,12 @@ describe('verified combat mechanics runtime', () => {
     ).toMatchObject({ timeMs: 0, profileKey: 'fire', before: 0, after: 1 });
 
     expect(
-      simulateRubyStarSkill({}, 6)
-        .verifiedCombatRuntime.specialResourceRuntime.resourceEvents.find(
-          event => event.actionId === 'verified-ruby-star-skill'
-        )
+      simulateRubyStarSkill(
+        {},
+        6
+      ).verifiedCombatRuntime.specialResourceRuntime.resourceEvents.find(
+        event => event.actionId === 'verified-ruby-star-skill'
+      )
     ).toMatchObject({
       timeMs: 0,
       payload: { beforeValue: 6, afterValue: 12 },
@@ -560,10 +569,11 @@ describe('verified combat mechanics runtime', () => {
       kiboRecovery: [0.979996, 0.979996, 0.979996, 0.979996],
     });
 
-    const disabledIdentity =
-      XIAOYU_CONTROL_BINDING_BY_ID.get(10101004).hits.find(
-        hit => hit.mapIndex === 0 && hit.trigger.impactFrame === 18
-      ).hitIdentity;
+    const disabledIdentity = XIAOYU_CONTROL_BINDING_BY_ID.get(
+      10101004
+    ).hits.find(
+      hit => hit.mapIndex === 0 && hit.trigger.impactFrame === 18
+    ).hitIdentity;
     const disabled = simulateXiaoyuRepairScenario({
       actions: [
         createXiaoyuAttackInputAction(
@@ -658,8 +668,7 @@ describe('verified combat mechanics runtime', () => {
     expect(
       accepted.verifiedTuningMarkGeneration.events.filter(
         event =>
-          event.actionId === 'xiaoyu-perfect-parry' &&
-          event.kind === 'consume'
+          event.actionId === 'xiaoyu-perfect-parry' && event.kind === 'consume'
       )
     ).toHaveLength(1);
     expect(
@@ -738,13 +747,12 @@ describe('verified combat mechanics runtime', () => {
         ['threshold-clear', 100, 0],
         ['transform', 0, 0],
       ]);
-      const windAcquire =
-        result.verifiedTuningMarkGeneration.events.filter(
-          event =>
-            event.actionId === action.id &&
-            event.kind === 'acquire' &&
-            event.profileKey === 'wind'
-        );
+      const windAcquire = result.verifiedTuningMarkGeneration.events.filter(
+        event =>
+          event.actionId === action.id &&
+          event.kind === 'acquire' &&
+          event.profileKey === 'wind'
+      );
       expect(windAcquire).toHaveLength(1);
       expect(windAcquire[0]).toMatchObject({
         before: 0,
@@ -1425,6 +1433,65 @@ describe('verified combat mechanics runtime', () => {
     });
   });
 
+  it('reads dynamic enemy CRI_DEFENSE at the verified hit frame', () => {
+    const scenario = createPangpangCriticalScenario();
+    const baseline = runVerifiedRuntimeWithEnemyCriticalDefense(scenario, []);
+    const defended = runVerifiedRuntimeWithEnemyCriticalDefense(scenario, [
+      {
+        sourceActionId: null,
+        effectId: 'fixture:enemy-critical-defense',
+        effectName: '敌方暴击抵抗',
+        operation: 'apply',
+        targetKind: 'enemy',
+        targetId: scenario.enemy.id,
+        timeMs: 500,
+        durationMs: 2000,
+        stackMode: 'refresh',
+        stackDelta: 1,
+        maxStacks: 1,
+        modifiers: [
+          {
+            kind: 'battle-property',
+            attributeId: 102,
+            bucket: 'dynamicExtra',
+            valueRaw: 1250,
+            sourceIdentity: {
+              packageId: 'fixture-package',
+              effectIdentity: 'fixture:enemy-critical-defense',
+              actionBindingIdentity: 'fixture:enemy-critical-defense-source',
+            },
+          },
+        ],
+        sourceIdentity: {
+          packageId: 'fixture-package',
+          effectIdentity: 'fixture:enemy-critical-defense',
+          actionBindingIdentity: 'fixture:enemy-critical-defense-source',
+        },
+        sourceStatus: 'verified-battle-effect-generated',
+        generatedVerified: true,
+        appliedToCalculators: true,
+      },
+    ]);
+    const baselineEvent = baseline.damageEvents[0];
+    const defendedEvent = defended.damageEvents[0];
+    const baselineBranch = baselineEvent.payload.formulaBreakdown.randomBranch;
+    const defendedBranch = defendedEvent.payload.formulaBreakdown.randomBranch;
+
+    expect(defendedBranch.criticalRoll).toBe(baselineBranch.criticalRoll);
+    expect(defendedBranch).toMatchObject({
+      sourceCriticalRate: baselineBranch.sourceCriticalRate,
+      targetCriticalRateDefense: 0.125,
+      targetCriticalRateDefenseBasisPoints: 1250,
+      criticalThreshold: Math.max(0, baselineBranch.criticalThreshold - 1250),
+    });
+    expect(defendedEvent.payload.dynamicPropertyTrace.target).toContainEqual(
+      expect.objectContaining({
+        attributeId: 102,
+        dynamicExtraRaw: 1250,
+        value: 1250,
+      })
+    );
+  });
   it('keeps the verified weakness multiplier and clamp order with independent loss percentages', () => {
     const vector = calculateWeaknessDamage({
       outputDamageRaw: qFromFloat(123.456),
@@ -1470,6 +1537,72 @@ describe('verified combat mechanics runtime', () => {
   });
 });
 
+function createPangpangCriticalScenario() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const actorConfigs = createDefaultWorkbenchActorConfigs(
+    DEFAULT_WORKBENCH_SELECTION
+  ).map(config => ({ ...config, initialSp: 0 }));
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    durationMs: 3000,
+    teamSlots,
+    actorConfigs,
+    actions: [
+      createWorkbenchActionDraft({
+        id: 'verified-pangpang-critical-defense',
+        type: 'skill',
+        actorCharacterId: PANGPANG_CHARACTER_ID,
+        skillId: PANGPANG_SKILL_ID,
+        actionVariantIndex: 0,
+        startMs: 1000,
+        durationMs: 600,
+        ...createPangpangAttackInputFields('pangpang-critical-defense-chain'),
+        hitOverrides: {
+          [PANGPANG_ATTACK_INPUT.selectedHitIdentities[0]]: {
+            willHit: true,
+            criticalPolicy: 'sampled',
+          },
+        },
+      }),
+    ],
+    combatScenario: {
+      projectile: { targetDistance: 0, defaultWillHit: true },
+      critical: { policy: 'non-critical', seed: 'dynamic-defense-seed' },
+    },
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return compileProject(project, getWorkbenchGameData());
+}
+
+function runVerifiedRuntimeWithEnemyCriticalDefense(
+  scenario,
+  generatedCommands
+) {
+  const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+  const actionExecutionPlan = createActionExecutionPlan({
+    scenario,
+    actionRuleDiagnostics,
+  });
+  const controlledActorTimeline = createControlledActorTimeline({
+    scenario,
+    actionExecutionPlan,
+  });
+  const effectTimeline = createEffectRuntimeTimeline({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+    generatedCommands,
+  });
+  return createVerifiedCombatRuntime({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+    effectTimeline,
+    criticalRandomSource: createDeterministicCriticalRandomSource({
+      seed: 'dynamic-defense-seed',
+    }),
+  });
+}
 function frameTimeMs(frame) {
   return frame * (1000 / 60);
 }
@@ -1543,8 +1676,7 @@ function createXiaoyuRepairProject({
     })
   );
   const controlledActor = teamSlots.find(
-    slot =>
-      Number(slot.characterId) === Number(initialControlledCharacterId)
+    slot => Number(slot.characterId) === Number(initialControlledCharacterId)
   );
   const initialRuntimeState = {
     controlledActor: {
@@ -1570,18 +1702,15 @@ function createXiaoyuRepairProject({
               elementName: XIAOYU_WIND_MARK.element,
               decayRemainingMs: 20_000,
               heldReadyRemainingMs: 0,
-              layers: Array.from(
-                { length: tuningMarkLayers },
-                (_, index) => ({
-                  remainingDurationMs: 20_000,
-                  sourceActionId: `initial-wind-${index + 1}`,
-                  sourceActorId: `actor-${XIAOYU_CHARACTER_ID}`,
-                  sourceIdentity: {
-                    profile: XIAOYU_WIND_MARK.sourceIdentity,
-                    layer: index + 1,
-                  },
-                })
-              ),
+              layers: Array.from({ length: tuningMarkLayers }, (_, index) => ({
+                remainingDurationMs: 20_000,
+                sourceActionId: `initial-wind-${index + 1}`,
+                sourceActorId: `actor-${XIAOYU_CHARACTER_ID}`,
+                sourceIdentity: {
+                  profile: XIAOYU_WIND_MARK.sourceIdentity,
+                  layer: index + 1,
+                },
+              })),
             },
           ]
         : [],
@@ -1676,8 +1805,7 @@ function expectXiaoyuHitSettlement(
   { frames, actorRecovery, kiboRecovery }
 ) {
   const hits = result.verifiedCombatRuntime.damageEvents.filter(
-    event =>
-      event.actionId === actionId && event.type === 'VERIFIED_COMBAT_HIT'
+    event => event.actionId === actionId && event.type === 'VERIFIED_COMBAT_HIT'
   );
   expect(hits.map(event => Math.round(event.timeMs * 60 * 0.001))).toEqual(
     frames

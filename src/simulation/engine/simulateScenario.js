@@ -73,10 +73,10 @@ export function simulateScenario(
     scenario,
     actionExecutionPlan,
     controlledActorTimeline,
-    criticalRandomSource: criticalRuntime.randomSource,
+    criticalRandomSource: criticalRuntime.createPreflightRandomSource(),
   });
-  let verifiedCombatRuntime = runtimeBundle.verifiedCombatRuntime;
-  const verifiedExecutionBlocks = verifiedCombatRuntime.executionBlocks ?? [];
+  const verifiedExecutionBlocks =
+    runtimeBundle.verifiedCombatRuntime.executionBlocks ?? [];
   if (verifiedExecutionBlocks.length > 0) {
     actionRuleDiagnostics = applyVerifiedResourceExecutionBlocks({
       actionRuleDiagnostics,
@@ -90,17 +90,17 @@ export function simulateScenario(
       scenario,
       actionExecutionPlan,
     });
-    runtimeBundle = createVerifiedRuntimeBundle({
-      scenario,
-      actionExecutionPlan,
-      controlledActorTimeline,
-      criticalRandomSource: criticalRuntime.randomSource,
-    });
-    verifiedCombatRuntime = attachVerifiedExecutionBlocks(
-      runtimeBundle.verifiedCombatRuntime,
-      verifiedExecutionBlocks
-    );
   }
+  runtimeBundle = createVerifiedRuntimeBundle({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+    criticalRandomSource: criticalRuntime.createFinalRandomSource(),
+  });
+  const verifiedCombatRuntime = attachVerifiedExecutionBlocks(
+    runtimeBundle.verifiedCombatRuntime,
+    verifiedExecutionBlocks
+  );
   const actionReadinessByActionId = new Map(
     actionRuleDiagnostics.readinessTimeline.actions.map(action => [
       action.actionId,
@@ -330,7 +330,8 @@ function createVerifiedRuntimeBundle({
 
 function createCriticalRuntime({ scenario, criticalRandomSource }) {
   const validation = validateCombatCriticalScenario(
-    scenario?.combatScenario?.critical
+    scenario?.combatScenario?.critical,
+    { actions: scenario?.actions }
   );
   if (!validation.valid) {
     const error = new TypeError(validation.issues[0].message);
@@ -338,16 +339,17 @@ function createCriticalRuntime({ scenario, criticalRandomSource }) {
     error.issues = validation.issues;
     throw error;
   }
-  const randomSource =
-    criticalRandomSource ??
-    (validation.normalized.policy === 'sampled'
+  const createSeededRandomSource = () =>
+    validation.requiresSampledRandomSource
       ? createDeterministicCriticalRandomSource({
           seed: validation.normalized.seed,
         })
-      : null);
+      : null;
   return {
     contract: validation.normalized,
-    randomSource,
+    createPreflightRandomSource: createSeededRandomSource,
+    createFinalRandomSource: () =>
+      criticalRandomSource ?? createSeededRandomSource(),
   };
 }
 
