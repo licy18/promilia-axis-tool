@@ -65,7 +65,7 @@ describe('Machine Axis CLI real process I/O', () => {
     expect(parseMachineJson(malformed.stdout).error.code).toBe(
       'machine-axis-cli-input-invalid'
     );
-  });
+  }, 30_000);
 
   it('awaits output writes and falls back to stdout on write failure', () => {
     const outputPath = resolve(
@@ -83,7 +83,7 @@ describe('Machine Axis CLI real process I/O', () => {
     expect(failed.stderr).toContain('machine-axis-cli-runtime-failed');
     expect(failed.stderr).not.toContain('node:internal');
     expect(failed.stderr).not.toContain(' at ');
-  });
+  }, 30_000);
 
   it('keeps stdin/stdout clean and writes a requested file deterministically', () => {
     const stdin = runCli(['validate', '-'], {

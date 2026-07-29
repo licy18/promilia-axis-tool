@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reportKind": "m11-b-machine-axis-contract-cli-acceptance",
   "generatedOn": "2026-07-29",
-  "status": "m11-b-r1-implementation-complete-awaiting-product-acceptance",
-  "baselineCommit": "bb62c99",
+  "status": "m11-b-r2-implementation-complete-awaiting-product-acceptance",
+  "baselineCommit": "3b51f05",
   "implementationUnits": [
     {
       "identity": "contract",
@@ -19,6 +19,10 @@
     },
     {
       "identity": "m11-b-r1-contract-closeout",
+      "commitReference": "this-commit"
+    },
+    {
+      "identity": "m11-b-r2-acceptance-closeout",
       "commitReference": "this-commit"
     }
   ],
@@ -124,8 +128,8 @@
     "algorithm": "fnv1a64-utf8-v1",
     "input": "1670cb62718bc08b",
     "data": "c49a239709b43a16",
-    "trace": "daad78c39e6416ee",
-    "evaluation": "8332f529cd763fb8"
+    "trace": "fa0f3130b8c77583",
+    "evaluation": "8b144d1df218405e"
   },
   "interop": {
     "apiCliWorkbenchHashParity": true,
@@ -202,7 +206,7 @@
       "files": 151,
       "tests": 931,
       "passed": true,
-      "isolation": "bb62c99 plus M11-B-R1 files; concurrent kibo-headless WIP excluded"
+      "isolation": "3b51f05 plus M11-B-R2 files; concurrent kibo-headless WIP excluded"
     },
     "productionPreview": {
       "tests": 62,
@@ -321,8 +325,29 @@
       "algorithm": "fnv1a64-utf8-v1",
       "input": "1670cb62718bc08b",
       "data": "c49a239709b43a16",
-      "trace": "daad78c39e6416ee",
-      "evaluation": "8332f529cd763fb8"
+      "trace": "fa0f3130b8c77583",
+      "evaluation": "8b144d1df218405e"
+    }
+  },
+  "r2": {
+    "status": "verification-complete-awaiting-product-acceptance",
+    "processIoTestTimeoutMs": 30000,
+    "childProcessGuardTimeoutMs": 120000,
+    "canonicalHashes": {
+      "algorithm": "fnv1a64-utf8-v1",
+      "input": "1670cb62718bc08b",
+      "data": "c49a239709b43a16",
+      "trace": "fa0f3130b8c77583",
+      "evaluation": "8b144d1df218405e"
+    },
+    "reproducibilityRuns": 2,
+    "reportSynchronizationGuard": "acceptance fixture test compares top-level, r1, and r2 canonicalHashes with the canonical service result",
+    "verification": {
+      "focusedVitest": "7 files / 43 tests passed",
+      "fullVitest": "151 files / 931 tests passed",
+      "audits": "6 / 6 clean",
+      "build": "passed",
+      "productionPreview": "62 / 62 tests and 41 / 41 required capabilities passed"
     }
   }
 }
