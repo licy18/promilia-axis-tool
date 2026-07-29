@@ -39,16 +39,16 @@ export async function createCharacterCombatGoldenRuntime({
     const contextScheduling = await vite.ssrLoadModule(
       '/src/domain/verifiedActionContextScheduling.js'
     );
-    const compiler = await vite.ssrLoadModule(
-      '/src/simulation/compiler/compileProject.js'
-    );
-    const engine = await vite.ssrLoadModule(
-      '/src/simulation/engine/simulateScenario.js'
+    const headlessModule = await vite.ssrLoadModule(
+      '/src/simulation/headless/canonicalHeadlessCombatCore.js'
     );
 
     packageModule.installVerifiedCombatMechanicsPackage(
       createRuntimeInstallPackage(mechanicsPackage)
     );
+    const headlessCore = headlessModule.createCanonicalHeadlessCombatCore({
+      gameData: factory.getWorkbenchGameData(),
+    });
     const primary = runGoldenScenario({
       mechanicsPackage,
       recipe,
@@ -56,8 +56,7 @@ export async function createCharacterCombatGoldenRuntime({
       factory,
       mechanicsSelection,
       contextScheduling,
-      compiler,
-      engine,
+      headlessCore,
     });
     const comparison = runGoldenComparison({
       mechanicsPackage,
@@ -67,8 +66,7 @@ export async function createCharacterCombatGoldenRuntime({
       factory,
       mechanicsSelection,
       contextScheduling,
-      compiler,
-      engine,
+      headlessCore,
     });
     const actual = createGoldenActualProjection({
       ownerId: Number(recipe.ownerId),
@@ -93,8 +91,18 @@ export async function createCharacterCombatGoldenRuntime({
       durationMs: Number(primary.project.time?.durationMs),
       frameRate: Number(scenarioRecipe.frameRate) || DEFAULT_FRAME_RATE,
       sourcePackageHash: mechanicsPackage.packageHash,
-      compilerPath: 'src/simulation/compiler/compileProject.js',
-      simulatorPath: 'src/simulation/engine/simulateScenario.js',
+      compilerPath:
+        'src/simulation/headless/canonicalHeadlessCombatCore.js#compile',
+      simulatorPath:
+        'src/simulation/headless/canonicalHeadlessCombatCore.js#simulate',
+      headlessCore: {
+        schemaVersion: primary.headlessRun.schemaVersion,
+        inputHash: primary.headlessRun.inputHash,
+        traceHash: primary.headlessRun.traceHash,
+        dataHash: primary.headlessRun.dataHash,
+        criticalPolicy:
+          primary.compiledScenario.combatScenario?.critical?.policy ?? null,
+      },
       actual,
       expected: scenarioRecipe.expectedRuntime ?? null,
       validation,
@@ -114,8 +122,7 @@ function runGoldenScenario({
   factory,
   mechanicsSelection,
   contextScheduling,
-  compiler,
-  engine,
+  headlessCore,
 }) {
   const omitted = new Set(omittedActionKeys);
   const teamSlots = createTeamSlots(scenarioRecipe);
@@ -232,15 +239,19 @@ function runGoldenScenario({
     mechanicsProfileSelection:
       mechanicsSelection.createVerifiedWorkbenchMechanicsProfileSelection(),
   });
-  const compiledScenario = compiler.compileProject(
+  const compilation = headlessCore.compile({
+    schemaVersion: 1,
     project,
-    factory.getWorkbenchGameData()
-  );
-  const result = engine.simulateScenario(compiledScenario);
+    critical: {
+      policy: 'non-critical',
+    },
+  });
+  const headlessRun = headlessCore.simulate(compilation);
   return {
     project,
-    compiledScenario,
-    result,
+    compiledScenario: compilation.scenario,
+    result: headlessRun.simulation,
+    headlessRun,
   };
 }
 
@@ -252,8 +263,7 @@ function runGoldenComparison({
   factory,
   mechanicsSelection,
   contextScheduling,
-  compiler,
-  engine,
+  headlessCore,
 }) {
   const comparisonRecipe = scenarioRecipe.comparison;
   if (!comparisonRecipe) return null;
@@ -266,8 +276,7 @@ function runGoldenComparison({
     factory,
     mechanicsSelection,
     contextScheduling,
-    compiler,
-    engine,
+    headlessCore,
   });
   const actionKey = String(comparisonRecipe.compareActionKey ?? '');
   const primaryDamage = sumActionDamage(primary.result, actionKey);

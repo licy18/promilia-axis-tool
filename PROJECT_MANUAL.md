@@ -1777,6 +1777,15 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 
 生成包、owner profile 与 golden 已从同一轮完整数据确定性重建；小玉 117 条、红宝石 123 条 authoritative golden 断言通过。完整 Vitest 为 141 文件/873 用例，5 条受影响真实 Workbench 场景及完整 production preview 62/62、41/41 必需能力通过，两道生成漂移及全部生产数据/来源守门均 clean。详细范围与去重前后数据见 `reports/m10/reexport-subskill-scope-20260729.md`。Workbench gzip `370,771B`、总 JS gzip `761,316B` 的既有发布风险继续单列，本轮不做包体优化，也不启动下一角色或 M11。
 
+### M11 暴击采样上游结论与计划修订（2026-07-29）
+
+当前客户端已确认在每个符合条件的 `DamageElement` 执行前以 `RandomUtility.Range(0, 10000)` 生成并保存独立 `criticalRandom`，再按 roll 与有效暴击阈值比较；该构建的整数 Range 正常路径调用 `UnityEngine.Random.Range`。因此正式语义是逐 hit 的运行时伪随机采样，不是固定暴击序列或自动期望值。工具的游戏采样模式会使用显式 seed 保持可复现，但只承诺复原分布与判定尺度，不承诺从轴输入还原客户端可能被其他系统消费的全局 RNG 序列。
+
+M11 输入合同相应增加场景级 `sampled / expected / critical / non-critical` 暴击策略和 seed；每个稳定 hit identity 分开保存命中覆盖及 `inherit / sampled / expected / critical / non-critical` 暴击覆盖。Workbench 检查面必须能逐 hit 选择是否命中、强制暴击、强制不暴击、随机或期望值，并展示实际暴击率、roll/阈值或期望贡献。期望模式不得伪造暴击事件；遇到会改变 Buff、资源或派生的暴击副作用时，必须带权分支或显式阻断。证据、RVA 与验收边界见 `reports/m11/critical-sampling-evidence-20260729.md`。
+### M11-A Canonical Headless Combat Core 已完成，等待产品验收（2026-07-29）
+
+唯一无头核心现提供 `catalog / compile / validate / simulate / evaluate / explain` 六个纯接口，Workbench 与 Node 对同一场景消费同一编译、模拟和 canonical trace/hash。场景级四模式暴击、显式 seed、逐 hit 覆盖、可复现采样及 expected 分支阻断已接入；小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人 golden 在显式 `non-critical` 下保持原 replay/summary hash。完整 146 文件/892 测试、62/62 production preview、41/41 必需能力和全部来源/漂移守门通过。Workbench gzip `375,546B`、总 JS gzip `768,217B` 继续作为对外发布风险单列；M11-B 未启动。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

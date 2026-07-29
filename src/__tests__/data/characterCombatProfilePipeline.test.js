@@ -1274,7 +1274,9 @@ describe('M10 character combat profile pipeline', () => {
     ).toHaveLength(0);
     expect(
       profile.contracts.actionForms.every(
-        item => PROFILE_STATUSES.has(item.status) && item.applied === (item.status === 'applied')
+        item =>
+          PROFILE_STATUSES.has(item.status) &&
+          item.applied === (item.status === 'applied')
       )
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
@@ -1372,8 +1374,10 @@ describe('M10 character combat profile pipeline', () => {
       status: 'authoritative-golden-runtime-verified',
       ownerId: 101010,
       durationMs: 120000,
-      compilerPath: 'src/simulation/compiler/compileProject.js',
-      simulatorPath: 'src/simulation/engine/simulateScenario.js',
+      compilerPath:
+        'src/simulation/headless/canonicalHeadlessCombatCore.js#compile',
+      simulatorPath:
+        'src/simulation/headless/canonicalHeadlessCombatCore.js#simulate',
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
@@ -1464,77 +1468,73 @@ describe('M10 character combat profile pipeline', () => {
       passed: false,
       failedCount: 1,
     });
-    expect(tamperedValidation.assertions.find(item => !item.passed)).toMatchObject(
-      {
-        jsonPath: 'combat.ownerTotalHpDamage',
-        expected: 699323,
-        actual: 699322,
-      }
-    );
+    expect(
+      tamperedValidation.assertions.find(item => !item.passed)
+    ).toMatchObject({
+      jsonPath: 'combat.ownerTotalHpDamage',
+      expected: 699323,
+      actual: 699322,
+    });
   });
 
-  it(
-    'rebuilds owner-only contracts into isolated staging without overwriting the full package',
-    () => {
-      const packageHashBefore = hashFile(VERIFIED_PACKAGE_PATH);
-      const scriptPath = path.join(
-        REPO_ROOT,
-        'scripts',
-        'sync-character-combat-profile.mjs'
-      );
-      const outputRoot = fs.mkdtempSync(
-        path.join(os.tmpdir(), 'azpr-character-combat-owner-cli-')
-      );
-      try {
-        const ownerRun = spawnSync(
-          process.execPath,
-          [
-            scriptPath,
-            '--owner',
-            '101010',
-            '--write',
-            '--output-root',
-            outputRoot,
-          ],
-          { cwd: REPO_ROOT, encoding: 'utf8' }
-        );
-        expect(ownerRun.status, ownerRun.stderr).toBe(0);
-        expect(ownerRun.stdout).toContain('"status": "written"');
-        expect(ownerRun.stdout).toContain('"mode": "owner"');
-        expect(ownerRun.stdout).not.toContain(
-          'character-combat-profile-catalog.json'
-        );
-        expect(
-          JSON.parse(
-            fs.readFileSync(
-              path.join(
-                outputRoot,
-                'src',
-                'data',
-                'generated',
-                'character-combat-owner-contracts',
-                '101010.json'
-              ),
-              'utf8'
-            )
-          ).contractHash
-        ).toBe(ownerContract.contractHash);
-        expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
-      } finally {
-        fs.rmSync(outputRoot, { recursive: true, force: true });
-      }
-
-      const rejectedRun = spawnSync(
+  it('rebuilds owner-only contracts into isolated staging without overwriting the full package', () => {
+    const packageHashBefore = hashFile(VERIFIED_PACKAGE_PATH);
+    const scriptPath = path.join(
+      REPO_ROOT,
+      'scripts',
+      'sync-character-combat-profile.mjs'
+    );
+    const outputRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'azpr-character-combat-owner-cli-')
+    );
+    try {
+      const ownerRun = spawnSync(
         process.execPath,
-        [scriptPath, '--owner', '999999', '--write'],
+        [
+          scriptPath,
+          '--owner',
+          '101010',
+          '--write',
+          '--output-root',
+          outputRoot,
+        ],
         { cwd: REPO_ROOT, encoding: 'utf8' }
       );
-      expect(rejectedRun.status).not.toBe(0);
-      expect(rejectedRun.stderr).toContain('invalid public character owner');
+      expect(ownerRun.status, ownerRun.stderr).toBe(0);
+      expect(ownerRun.stdout).toContain('"status": "written"');
+      expect(ownerRun.stdout).toContain('"mode": "owner"');
+      expect(ownerRun.stdout).not.toContain(
+        'character-combat-profile-catalog.json'
+      );
+      expect(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(
+              outputRoot,
+              'src',
+              'data',
+              'generated',
+              'character-combat-owner-contracts',
+              '101010.json'
+            ),
+            'utf8'
+          )
+        ).contractHash
+      ).toBe(ownerContract.contractHash);
       expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
-    },
-    180000
-  );
+    } finally {
+      fs.rmSync(outputRoot, { recursive: true, force: true });
+    }
+
+    const rejectedRun = spawnSync(
+      process.execPath,
+      [scriptPath, '--owner', '999999', '--write'],
+      { cwd: REPO_ROOT, encoding: 'utf8' }
+    );
+    expect(rejectedRun.status).not.toBe(0);
+    expect(rejectedRun.stderr).toContain('invalid public character owner');
+    expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
+  }, 180000);
 
   it('keeps source, graph, runtime, and runtime-capture artifacts traceable', () => {
     expect(sourceManifest.summary.identityCount).toBeGreaterThan(800);
@@ -1561,9 +1561,7 @@ describe('M10 character combat profile pipeline', () => {
       descriptionCoverage.entries.find(entry => entry.skillId === 10101062)
     ).toMatchObject({
       status: 'not-applicable',
-      reasons: [
-        'unnamed-secondary-passive-not-implemented-current-client',
-      ],
+      reasons: ['unnamed-secondary-passive-not-implemented-current-client'],
     });
   });
 
@@ -1623,9 +1621,7 @@ describe('M10 character combat profile pipeline', () => {
       )
     ).toBe(true);
 
-    expect(hitRows(10101003, 0)).toEqual([
-      [101010091, 18, 7000, 1599, 6100],
-    ]);
+    expect(hitRows(10101003, 0)).toEqual([[101010091, 18, 7000, 1599, 6100]]);
     expect(hitRows(10101004, 0)).toEqual([
       [101010107, 10, 7000, 2500, 9800],
       [101010107, 14, 7000, 2500, 9800],
@@ -1642,11 +1638,12 @@ describe('M10 character combat profile pipeline', () => {
       [101010175, 96],
     ]);
 
-    const perfectParry = mechanicsPackage.actionVariantGraph.publicActionForms.find(
-      form =>
-        Number(form.ownerId) === 101010 &&
-        form.publicActionKind === 'perfect-parry'
-    );
+    const perfectParry =
+      mechanicsPackage.actionVariantGraph.publicActionForms.find(
+        form =>
+          Number(form.ownerId) === 101010 &&
+          form.publicActionKind === 'perfect-parry'
+      );
     expect(perfectParry).toMatchObject({
       publicControlSkillId: 10101027,
       executionControlSkillId: 10101049,
@@ -1674,10 +1671,9 @@ describe('M10 character combat profile pipeline', () => {
       }),
     ]);
 
-    const passive =
-      mechanicsPackage.specialResourceCatalog.passiveEffects.find(
-        effect => Number(effect.ownerId) === 101010
-      );
+    const passive = mechanicsPackage.specialResourceCatalog.passiveEffects.find(
+      effect => Number(effect.ownerId) === 101010
+    );
     expect(
       passive.triggerBindings.filter(
         trigger => Number(trigger.controlSkillId) === 10101025
@@ -1698,12 +1694,8 @@ describe('M10 character combat profile pipeline', () => {
       'utf8'
     );
     expect(syncSource).not.toContain('attachXiaoyuMechanicsContracts');
-    expect(syncSource).not.toContain(
-      'recipes: [XIAOYU_PROFILE_RECIPE]'
-    );
-    expect(syncSource).not.toContain(
-      'compilations: [xiaoyuOwnerCompilation]'
-    );
+    expect(syncSource).not.toContain('recipes: [XIAOYU_PROFILE_RECIPE]');
+    expect(syncSource).not.toContain('compilations: [xiaoyuOwnerCompilation]');
     expect(syncSource).toContain('createCharacterCombatProductionBuild({');
     for (const functionName of [
       'findSkillControl',

@@ -4,6 +4,15 @@ import { simulateScenario } from './engine/simulateScenario';
 export { compileProject, CompileProjectError } from './compiler/compileProject';
 export { simulateScenario } from './engine/simulateScenario';
 export {
+  CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
+  CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT,
+  CanonicalHeadlessCombatValidationError,
+  createCanonicalCombatEvaluation,
+  createCanonicalCombatExplanation,
+  createCanonicalCombatTrace,
+  createCanonicalHeadlessCombatCore,
+} from './headless/canonicalHeadlessCombatCore';
+export {
   ACTION_EXECUTION_PLAN_CONTRACT_NAME,
   ACTION_EXECUTION_STATUSES,
   createActionExecutionPlan,

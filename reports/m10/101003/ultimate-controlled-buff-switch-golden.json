@@ -7,8 +7,15 @@
   "durationMs": 30000,
   "frameRate": 60,
   "sourcePackageHash": "489fa90ffa2f40077779b6dfa7c6508bc8b758a119a17305b0fe398ef09b9e28",
-  "compilerPath": "src/simulation/compiler/compileProject.js",
-  "simulatorPath": "src/simulation/engine/simulateScenario.js",
+  "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
+  "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
+  "headlessCore": {
+    "schemaVersion": 1,
+    "inputHash": "58e5e0ef389d8f0d",
+    "traceHash": "149efc3c5c3f1913",
+    "dataHash": "fed3617f028f9e00",
+    "criticalPolicy": "non-critical"
+  },
   "actual": {
     "project": {
       "durationMs": 30000,

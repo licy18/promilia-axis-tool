@@ -1,3 +1,5 @@
+import { normalizeCombatCriticalScenario } from './combatCriticalPolicy';
+
 export const DEFAULT_PROJECTILE_TARGET_DISTANCE = 0;
 
 export const DEFAULT_COMBAT_SCENARIO = Object.freeze({
@@ -5,6 +7,7 @@ export const DEFAULT_COMBAT_SCENARIO = Object.freeze({
     targetDistance: DEFAULT_PROJECTILE_TARGET_DISTANCE,
     defaultWillHit: true,
   }),
+  critical: Object.freeze(normalizeCombatCriticalScenario()),
 });
 
 export function normalizeCombatScenario(value = null) {
@@ -20,6 +23,7 @@ export function normalizeCombatScenario(value = null) {
           ? DEFAULT_COMBAT_SCENARIO.projectile.defaultWillHit
           : Boolean(projectile.defaultWillHit),
     },
+    critical: normalizeCombatCriticalScenario(value?.critical),
   };
 }
 

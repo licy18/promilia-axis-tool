@@ -17,14 +17,21 @@ import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattl
 import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
 import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
+import { validateCombatCriticalScenario } from '../../domain/combatCriticalPolicy';
+import { createDeterministicCriticalRandomSource } from '../runtime/criticalRandomSource';
 
 export function simulateScenario(
   inputScenario,
   {
     threeValueMechanicsAdapterRegistry = null,
     actionCooldownEvaluationAdapter = null,
+    criticalRandomSource = null,
   } = {}
 ) {
+  const criticalRuntime = createCriticalRuntime({
+    scenario: inputScenario,
+    criticalRandomSource,
+  });
   const actionVariantPreflight = isVerifiedCombatMechanicsScenario(
     inputScenario
   )
@@ -66,6 +73,7 @@ export function simulateScenario(
     scenario,
     actionExecutionPlan,
     controlledActorTimeline,
+    criticalRandomSource: criticalRuntime.randomSource,
   });
   let verifiedCombatRuntime = runtimeBundle.verifiedCombatRuntime;
   const verifiedExecutionBlocks = verifiedCombatRuntime.executionBlocks ?? [];
@@ -86,6 +94,7 @@ export function simulateScenario(
       scenario,
       actionExecutionPlan,
       controlledActorTimeline,
+      criticalRandomSource: criticalRuntime.randomSource,
     });
     verifiedCombatRuntime = attachVerifiedExecutionBlocks(
       runtimeBundle.verifiedCombatRuntime,
@@ -264,6 +273,7 @@ function createVerifiedRuntimeBundle({
   scenario,
   actionExecutionPlan,
   controlledActorTimeline,
+  criticalRandomSource,
 }) {
   const actionVariantRuntime = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedActionVariantRuntime({
@@ -278,8 +288,7 @@ function createVerifiedRuntimeBundle({
         actionExecutionPlan,
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
         controlledActorTimeline,
-        generatedDirectSpEvents:
-          actionVariantRuntime?.directSpEvents ?? [],
+        generatedDirectSpEvents: actionVariantRuntime?.directSpEvents ?? [],
       })
     : null;
   const tuningGeneration = isVerifiedCombatMechanicsScenario(scenario)
@@ -308,6 +317,7 @@ function createVerifiedRuntimeBundle({
     tuningGeneration,
     effectTimeline,
     actionVariantRuntime,
+    criticalRandomSource,
   });
   return {
     actionVariantRuntime,
@@ -315,6 +325,29 @@ function createVerifiedRuntimeBundle({
     tuningGeneration,
     effectTimeline,
     verifiedCombatRuntime,
+  };
+}
+
+function createCriticalRuntime({ scenario, criticalRandomSource }) {
+  const validation = validateCombatCriticalScenario(
+    scenario?.combatScenario?.critical
+  );
+  if (!validation.valid) {
+    const error = new TypeError(validation.issues[0].message);
+    error.code = validation.issues[0].code;
+    error.issues = validation.issues;
+    throw error;
+  }
+  const randomSource =
+    criticalRandomSource ??
+    (validation.normalized.policy === 'sampled'
+      ? createDeterministicCriticalRandomSource({
+          seed: validation.normalized.seed,
+        })
+      : null);
+  return {
+    contract: validation.normalized,
+    randomSource,
   };
 }
 

@@ -123,12 +123,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       37, 44, 49, 54, 59, 64, 69,
     ]);
     expect(hits.map(hit => hit.elementId)).toEqual([
-      103002247,
-      103002248,
-      103002248,
-      103002248,
-      103002248,
-      103002248,
+      103002247, 103002248, 103002248, 103002248, 103002248, 103002248,
       103002248,
     ]);
     expect(
@@ -196,8 +191,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     expect(hitFrames(10300249, 1)).toEqual([15, 20, 25]);
 
     for (const controlSkillId of [
-      10300201, 10300202, 10300203, 10300204, 10300225, 10300244,
-      10300249,
+      10300201, 10300202, 10300203, 10300204, 10300225, 10300244, 10300249,
     ]) {
       const hits = controls.find(
         control => Number(control.controlSkillId) === controlSkillId
@@ -211,9 +205,7 @@ describe('M10-B1 Ruby character combat profile', () => {
     const focusCounter = controls.find(
       control => Number(control.controlSkillId) === 10300249
     );
-    expect(
-      focusCounter.hits.map(hit => hit.trigger.behaviorPathId)
-    ).toEqual([
+    expect(focusCounter.hits.map(hit => hit.trigger.behaviorPathId)).toEqual([
       '-3641915522962639021',
       '4086983151447619411',
       '2941305154071279443',
@@ -974,8 +966,10 @@ describe('M10-B1 Ruby character combat profile', () => {
       status: 'authoritative-golden-runtime-verified',
       ownerId: RUBY_ID,
       durationMs: 120000,
-      compilerPath: 'src/simulation/compiler/compileProject.js',
-      simulatorPath: 'src/simulation/engine/simulateScenario.js',
+      compilerPath:
+        'src/simulation/headless/canonicalHeadlessCombatCore.js#compile',
+      simulatorPath:
+        'src/simulation/headless/canonicalHeadlessCombatCore.js#simulate',
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,

@@ -27748,3 +27748,37 @@ runtimeEffectBindings[]
 `AzPrVerifiedTargetStateRuntime` 在模拟过程中按稳定 state/transaction/group identity 维护目标状态层、独立到期任务、条件命中组与消费结果；命中未发生时不生成依赖交易或后续效果。条件组应用后再由现有动态属性、调谐印记和 SP 运行时消费 `runtimeEffectBindings`，不建立角色专用旁路。`actionMappings` 另可从声明式 `inputVariantSelectors` 和 `single-control-verified-occupancy` 生成选定 control/subskill 与权威占轴；完整动画、命中包络和规划时长仍分离保存。
 
 这些记录均由 recipe 和原始 Battle 证据重新生成，不持久化到用户项目；本地草稿、JSON、分享链接、PNG 和循环回放只保存动作意图，刷新后从同一 verified package 确定性重建目标状态与效果结果。
+## 455. Canonical headless combat core v1 / Critical scenario v1
+
+`createCanonicalHeadlessCombatCore()` is the single UI-independent entry point for combat compilation and simulation. It exposes `catalog`, `compile`, `validate`, `simulate`, `evaluate`, and `explain`; all six consume the same normalized project/scenario input and emit a stable run envelope:
+
+```text
+CanonicalHeadlessCombatRun
+  contractName / schemaVersion
+  inputHash / traceHash / dataIdentityHash
+  validation
+  compiledScenario / executionPlan
+  canonicalTrace
+  simulation / evaluation / explanation
+```
+
+`canonicalTrace` is a compact semantic projection of the authoritative simulation result. It preserves stable action, hit, effect, resource, target-state, and diagnostic identities without UI coordinates or DOM state. Workbench calls the same core for authoritative compile/simulate, comparison baselines, and placement compilation; browser-only state is outside the contract. Project document timestamps are excluded from `inputHash`, while mechanics-relevant action timing, loadout, initial state, hit overrides, and combat scenario fields remain included.
+
+`combatScenario.critical` uses `AzPrCombatCriticalScenario` schema v1:
+
+```text
+critical
+  contractName = AzPrCombatCriticalScenario
+  schemaVersion = 1
+  policy = sampled | expected | critical | non-critical
+  seed
+  randomAlgorithm = seeded-xorshift32-stream-v1
+
+action.hitOverrides[hitIdentity]
+  willHit
+  criticalPolicy = inherit | sampled | expected | critical | non-critical
+```
+
+All runtime SP, HP, toughness, Buff, resource, and critical results continue to use the existing simulation trace; no result is persisted as a UI projection. `sampled` consumes one deterministic xorshift32 value per eligible hit in normalized event order and records seed, stream index, roll, threshold, and outcome. `expected` computes weighted damage without emitting a fake critical event; if a critical branch would alter Buff, resource, shield, or later state, validation returns an explicit branch-required diagnostic. `critical` and `non-critical` force only the critical decision and do not bypass hit eligibility or other mechanics.
+
+Old projects without `combatScenario.critical` normalize to explicit `non-critical`, preserving the three M10 golden baselines. Existing `hitOverrides[].criticalRoll` remains readable for compatibility; new writes use the scenario contract and `criticalPolicy`. Local drafts, project JSON, share links, PNG metadata, scheme copies, undo/redo, and reload all preserve the same normalized critical input. No Workbench project schema version bump is required because the new fields are optional and handled by the shared normalizers.

@@ -1,3 +1,5 @@
+import { normalizeActionHitCriticalPolicy } from './combatCriticalPolicy';
+
 export function normalizeActionHitOverrides(value = null) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
   return Object.fromEntries(
@@ -7,11 +9,16 @@ export function normalizeActionHitOverrides(value = null) {
         if (!hitIdentity || !override || typeof override !== 'object') {
           return null;
         }
+        const criticalPolicy =
+          override.criticalPolicy == null
+            ? null
+            : normalizeActionHitCriticalPolicy(override.criticalPolicy);
         return [
           hitIdentity,
           {
             willHit:
               override.willHit == null ? true : Boolean(override.willHit),
+            ...(criticalPolicy ? { criticalPolicy } : {}),
           },
         ];
       })

@@ -24,6 +24,7 @@ export default defineConfig({
           if (
             [
               '/domain/actionHitOverrides.js',
+              '/domain/combatCriticalPolicy.js',
               '/domain/combatScenario.js',
               '/domain/timebase.js',
               '/domain/workbenchActionScheduling.js',
@@ -34,6 +35,7 @@ export default defineConfig({
           if (
             [
               '/simulation/mechanics/verifiedCombatRuntime.js',
+              '/simulation/runtime/criticalRandomSource.js',
               '/simulation/mechanics/verifiedBattleEffectGeneration.js',
               '/simulation/mechanics/verifiedActionVariantRuntime.js',
               '/simulation/mechanics/actionEffectiveTimeline.js',

@@ -45,8 +45,14 @@ describe('Workbench PNG project', () => {
       })
     );
     state.selectedActionId = 'action-0002';
+    state.combatScenario = {
+      critical: { policy: 'sampled', seed: 'png-seed-42' },
+    };
     state.actionDrafts[0].hitOverrides = {
-      'control:10900101|hit:2': { willHit: false },
+      'control:10900101|hit:2': {
+        willHit: false,
+        criticalPolicy: 'non-critical',
+      },
     };
     state.initialRuntimeState = createPngInheritedState();
     state.runtimeSampleCaptures = [
@@ -105,6 +111,13 @@ describe('Workbench PNG project', () => {
       selectedActionId: 'action-0002',
       combatScenario: {
         projectile: { targetDistance: 0, defaultWillHit: true },
+        critical: {
+          schemaVersion: 1,
+          contractName: 'AzPrCombatCriticalScenario',
+          policy: 'sampled',
+          seed: 'png-seed-42',
+          randomAlgorithm: 'seeded-xorshift32-stream-v1',
+        },
       },
       initialRuntimeState: {
         source: { sourceScenarioId: 'scenario-png-source' },
@@ -132,7 +145,10 @@ describe('Workbench PNG project', () => {
       'action-0002',
     ]);
     expect(imported.actionDrafts[0].hitOverrides).toEqual({
-      'control:10900101|hit:2': { willHit: false },
+      'control:10900101|hit:2': {
+        willHit: false,
+        criticalPolicy: 'non-critical',
+      },
     });
     expect(createWorkbenchProjectPngFileName(metadata)).toBe(
       'promilia-workbench-2026-07-10-2actions.png'

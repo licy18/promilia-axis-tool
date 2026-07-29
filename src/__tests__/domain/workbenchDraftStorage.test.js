@@ -16,6 +16,52 @@ import {
 } from '../../domain/workbenchDraftStorage';
 
 describe('workbench draft storage project files', () => {
+  it('round-trips critical policy, seed, and per-hit overrides through JSON and share code', () => {
+    const state = createWorkbenchScenarioDraftSnapshot({
+      combatScenario: {
+        critical: { policy: 'sampled', seed: 'share-seed-42' },
+      },
+      actionDrafts: [
+        {
+          id: 'critical-action',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+          hitOverrides: {
+            'control:10900101|hit:1': {
+              willHit: true,
+              criticalPolicy: 'critical',
+            },
+          },
+        },
+      ],
+    });
+    const json = parseWorkbenchProjectFile(
+      serializeWorkbenchProjectFile(state, '2026-07-29T06:00:00.000Z')
+    );
+    const shared = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(state, '2026-07-29T06:00:00.000Z')
+    );
+
+    for (const restored of [json, shared]) {
+      expect(restored.combatScenario.critical).toEqual({
+        schemaVersion: 1,
+        contractName: 'AzPrCombatCriticalScenario',
+        policy: 'sampled',
+        seed: 'share-seed-42',
+        randomAlgorithm: 'seeded-xorshift32-stream-v1',
+      });
+      expect(restored.actionDrafts[0].hitOverrides).toEqual({
+        'control:10900101|hit:1': {
+          willHit: true,
+          criticalPolicy: 'critical',
+        },
+      });
+    }
+  });
   it('stores 120 seconds by default and preserves explicit project durations', () => {
     const defaultDraft = createWorkbenchScenarioDraftSnapshot({
       actionDrafts: [],

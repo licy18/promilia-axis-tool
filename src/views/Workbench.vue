@@ -1285,10 +1285,9 @@ import {
   msToFrame,
   snapMsToFrame,
 } from '../domain/timebase';
-import { compileProject } from '../simulation/compiler/compileProject';
 import { isSwitchTriggeredDerivedAction } from '../simulation/generation/switchTriggeredActionGeneration';
 import { createActionExecutionPlan } from '../simulation/engine/actionExecutionPlan';
-import { simulateScenario } from '../simulation/engine/simulateScenario';
+import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchHeadlessCombatCore';
 import {
   ACTION_RULE_STATUSES,
   createActionRuleDiagnostics,
@@ -1298,7 +1297,6 @@ import {
   resolveControlledActorAt,
 } from '../simulation/runtime/controlledActorTimeline';
 import {
-  DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
   createWorkbenchProfileCompatibilityReport,
 } from '../simulation/mechanics/threeValueMechanicsProfileCatalog';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
@@ -1604,13 +1602,13 @@ const project = computed(() =>
     actionRelations.value
   )
 );
-const scenario = computed(() => {
+const canonicalCompilation = computed(() => {
   void runtimeDiagnosticsRevision.value;
   recordWorkbenchPerformanceOperation('authoritativeCompile');
   const startedAt = readWorkbenchPerformanceClock();
-  const result = compileProject(project.value, gameData, {
-    threeValueMechanicsProfileCatalog:
-      DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  const result = WORKBENCH_HEADLESS_COMBAT_CORE.compile({
+    schemaVersion: 1,
+    project: project.value,
   });
   recordWorkbenchPerformanceDuration(
     'authoritativeCompile',
@@ -1618,17 +1616,21 @@ const scenario = computed(() => {
   );
   return result;
 });
-const simulationResult = computed(() => {
+const scenario = computed(() => canonicalCompilation.value.scenario);
+const canonicalSimulation = computed(() => {
   void runtimeDiagnosticsRevision.value;
   recordWorkbenchPerformanceOperation('authoritativeSimulation');
   const startedAt = readWorkbenchPerformanceClock();
-  const result = simulateScenario(scenario.value);
+  const result = WORKBENCH_HEADLESS_COMBAT_CORE.simulate(
+    canonicalCompilation.value
+  );
   recordWorkbenchPerformanceDuration(
     'authoritativeSimulation',
     readWorkbenchPerformanceClock() - startedAt
   );
   return result;
 });
+const simulationResult = computed(() => canonicalSimulation.value.simulation);
 const effectiveScenarioActions = computed(
   () =>
     simulationResult.value.effectiveActionTimeline?.scenario?.actions ??
@@ -1743,18 +1745,23 @@ const comparisonBaselineProject = computed(() =>
     ? createWorkbenchProjectFromDraft(comparisonBaselineDraft.value)
     : null
 );
-const comparisonBaselineScenario = computed(() =>
+const comparisonBaselineCompilation = computed(() =>
   comparisonBaselineProject.value
-    ? compileProject(comparisonBaselineProject.value, gameData, {
-        threeValueMechanicsProfileCatalog:
-          DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+    ? WORKBENCH_HEADLESS_COMBAT_CORE.compile({
+        schemaVersion: 1,
+        project: comparisonBaselineProject.value,
       })
     : null
 );
+const comparisonBaselineScenario = computed(
+  () => comparisonBaselineCompilation.value?.scenario ?? null
+);
 const comparisonBaselineSimulationResult = computed(() => {
   void runtimeDiagnosticsRevision.value;
-  return comparisonBaselineScenario.value
-    ? simulateScenario(comparisonBaselineScenario.value)
+  return comparisonBaselineCompilation.value
+    ? WORKBENCH_HEADLESS_COMBAT_CORE.simulate(
+        comparisonBaselineCompilation.value
+      ).simulation
     : null;
 });
 const comparisonBaselineEffectIntervals = computed(() => {
@@ -5953,10 +5960,10 @@ function evaluateActionPlacementCandidate(
     candidateActions,
     relations
   );
-  const candidateScenario = compileProject(candidateProject, gameData, {
-    threeValueMechanicsProfileCatalog:
-      DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
-  });
+  const candidateScenario = WORKBENCH_HEADLESS_COMBAT_CORE.compile({
+    schemaVersion: 1,
+    project: candidateProject,
+  }).scenario;
   const actionVariantRuntime = createVerifiedActionVariantRuntime({
     scenario: candidateScenario,
     actionExecutionPlan: null,

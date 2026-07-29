@@ -20,9 +20,16 @@ import {
   qFromFloat,
   qMul,
   qToNumber,
+  runtimeIntegerize,
   tuningMarkBaseRaw,
 } from './verifiedCombatFormulaRuntime';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
+import {
+  ACTION_HIT_CRITICAL_POLICIES,
+  COMBAT_CRITICAL_POLICIES,
+  resolveActionHitCriticalPolicy,
+} from '../../domain/combatCriticalPolicy';
+import { createCriticalSampleKey } from '../runtime/criticalRandomSource';
 
 export const VERIFIED_COMBAT_MECHANICS_PROFILE_ID =
   'azpr-three-value-verified-tc-20260718';
@@ -59,6 +66,7 @@ export function createVerifiedCombatRuntime({
   tuningGeneration = null,
   effectTimeline = null,
   actionVariantRuntime = null,
+  criticalRandomSource = null,
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
@@ -271,6 +279,7 @@ export function createVerifiedCombatRuntime({
         descriptor,
         scenario,
         state,
+        criticalRandomSource,
       });
       if (!hitResult.ready) {
         eventLog.push({
@@ -1798,7 +1807,12 @@ function applyTuningPeriodicHeal({
   };
 }
 
-function applyHitDescriptor({ descriptor, scenario, state }) {
+function applyHitDescriptor({
+  descriptor,
+  scenario,
+  state,
+  criticalRandomSource,
+}) {
   const { action, resolution, hit } = descriptor;
   const source = resolveHitSource({
     action,
@@ -1847,7 +1861,21 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
     };
   }
 
-  const randomBranch = resolveCriticalBranch(action, hit, source);
+  const randomBranch = resolveCriticalBranch(action, hit, source, {
+    scenario,
+    descriptor,
+    criticalRandomSource,
+  });
+  if (!randomBranch.ready) {
+    return {
+      status: randomBranch.status,
+      reason: randomBranch.reason,
+      source,
+      randomBranch,
+      ready: false,
+      applied: false,
+    };
+  }
   const stateBefore = createEnemyStateSnapshot(enemy);
   const damageInput = {
     attack: source.attack,
@@ -1902,14 +1930,22 @@ function applyHitDescriptor({ descriptor, scenario, state }) {
     hitCountShields: enemy.hitCountShields,
   };
   const damageType = Number(hit.damage.damageType);
-  const damageResult =
-    damageType === 6
-      ? calculateRealDamage(damageInput)
-      : damageType === 10
-        ? calculateStackOverLimitDamage(damageInput)
-        : damageType === 8
-          ? { mode: 'pure-weakness', value: 0, raw: '0', trace: [] }
-          : calculateNormalDamage(damageInput);
+  const damageResolution = calculateCriticalAwareDamage({
+    damageType,
+    damageInput,
+    randomBranch,
+  });
+  if (!damageResolution.ready) {
+    return {
+      status: damageResolution.status,
+      reason: damageResolution.reason,
+      source,
+      randomBranch,
+      ready: false,
+      applied: false,
+    };
+  }
+  const damageResult = damageResolution.result;
   updateShieldState(enemy, damageResult, damageInput);
   const hpDamage = Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
   const toughnessBefore = enemy.toughness;
@@ -2454,32 +2490,269 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
   };
 }
 
-function resolveCriticalBranch(action, hit, source) {
+function resolveCriticalBranch(
+  action,
+  hit,
+  source,
+  { scenario, descriptor, criticalRandomSource } = {}
+) {
+  const hitIdentity = resolveCriticalHitIdentity(hit);
   const persisted =
+    action.mechanicsRandomBranches?.[hitIdentity] ??
     action.mechanicsRandomBranches?.[String(hit.elementId)] ??
     action.mechanicsRandomBranch ??
     null;
-  const randomRoll = numberOrNull(persisted?.criticalRoll);
-  const critical =
-    randomRoll == null
-      ? false
-      : isCriticalHit({
-          randomRoll,
-          criticalRate: source.criticalRate,
-          targetCriticalRateDefense: 0,
-        });
-  return {
-    policy:
-      randomRoll == null
-        ? 'deterministic-non-critical-baseline'
-        : 'persisted-critical-roll',
-    branchIdentity:
-      persisted?.identity ??
-      `non-critical|${action.id}|${hit.hitIndex}|${hit.elementId}`,
-    criticalRoll: randomRoll,
-    critical,
+  const persistedRoll = numberOrNull(persisted?.criticalRoll);
+  const explicitOverride =
+    action.hitOverrides?.[hitIdentity]?.criticalPolicy ?? null;
+  const scenarioCritical = scenario?.combatScenario?.critical ?? {};
+  const policy =
+    explicitOverride == null && persistedRoll != null
+      ? 'legacy-persisted-roll'
+      : resolveActionHitCriticalPolicy(
+          action,
+          hitIdentity,
+          scenarioCritical.policy
+        );
+  const criticalThreshold = clampInteger(
+    Math.trunc((Number(source.criticalRate) || 0) * 10_000),
+    0,
+    10_000
+  );
+  const sampleKey = createCriticalSampleKey({
+    actionId: action.id,
+    hitIdentity,
+    hitIndex: hit.hitIndex,
+    elementId: hit.elementId,
+    timeMs: descriptor?.timeMs,
+  });
+  const base = {
+    mode: policy,
+    status: 'critical-branch-ready',
+    ready: true,
+    hitIdentity,
+    sampleKey,
+    criticalThreshold,
+    criticalRate: Number(source.criticalRate) || 0,
+    targetCriticalRateDefense: 0,
     replayable: true,
   };
+
+  if (policy === 'legacy-persisted-roll') {
+    const normalizedRoll =
+      persistedRoll >= 0 && persistedRoll <= 1
+        ? persistedRoll
+        : persistedRoll / 10_000;
+    return {
+      ...base,
+      policy: 'persisted-critical-roll',
+      branchIdentity: persisted?.identity ?? `persisted|${sampleKey}`,
+      criticalRoll: persistedRoll,
+      critical: isCriticalHit({
+        randomRoll: normalizedRoll,
+        criticalRate: source.criticalRate,
+        targetCriticalRateDefense: 0,
+      }),
+    };
+  }
+  if (policy === COMBAT_CRITICAL_POLICIES.SAMPLED) {
+    if (!criticalRandomSource?.nextInt) {
+      return {
+        ...base,
+        status: 'critical-sampled-random-source-missing',
+        reason: 'critical-sampled-random-source-missing',
+        ready: false,
+        branchIdentity: `sampled-unresolved|${sampleKey}`,
+        criticalRoll: null,
+        critical: false,
+      };
+    }
+    const sampleContext = {
+      actionId: action.id,
+      hitIdentity,
+      hitIndex: hit.hitIndex,
+      elementId: hit.elementId,
+      timeMs: descriptor?.timeMs,
+    };
+    const sample = criticalRandomSource.nextSample
+      ? criticalRandomSource.nextSample(10_000, sampleContext)
+      : {
+          value: criticalRandomSource.nextInt(10_000, sampleContext),
+          streamIndex: null,
+          sampleKey,
+        };
+    const criticalRoll = sample.value;
+    return {
+      ...base,
+      policy: 'seeded-sampled',
+      randomAlgorithm: criticalRandomSource.algorithm ?? null,
+      randomSeed: criticalRandomSource.seed ?? scenarioCritical.seed ?? null,
+      criticalStreamIndex: sample.streamIndex,
+      sampleKey: sample.sampleKey ?? sampleKey,
+      branchIdentity: `sampled|${sample.streamIndex ?? 'external'}|${sampleKey}`,
+      criticalRoll,
+      critical: criticalRoll < criticalThreshold,
+    };
+  }
+  if (policy === COMBAT_CRITICAL_POLICIES.EXPECTED) {
+    const sideEffectIdentities = collectCriticalStateSideEffectIdentities(hit);
+    if (sideEffectIdentities.length > 0) {
+      return {
+        ...base,
+        policy: 'expected',
+        status: 'critical-expected-state-branch-unsupported',
+        reason: 'critical-expected-state-branch-unsupported',
+        ready: false,
+        branchIdentity: `expected-unresolved|${sampleKey}`,
+        criticalRoll: null,
+        critical: false,
+        sideEffectIdentities,
+      };
+    }
+    return {
+      ...base,
+      policy: 'expected',
+      branchIdentity: `expected|${sampleKey}`,
+      criticalRoll: null,
+      critical: false,
+      expected: true,
+      expectedCriticalProbabilityBasisPoints: criticalThreshold,
+    };
+  }
+  if (policy === COMBAT_CRITICAL_POLICIES.CRITICAL) {
+    return {
+      ...base,
+      policy: 'forced-critical',
+      branchIdentity: `critical|${sampleKey}`,
+      criticalRoll: null,
+      critical: true,
+    };
+  }
+  return {
+    ...base,
+    mode: ACTION_HIT_CRITICAL_POLICIES.NON_CRITICAL,
+    policy: 'deterministic-non-critical-baseline',
+    branchIdentity: `non-critical|${action.id}|${hit.hitIndex}|${hit.elementId}`,
+    criticalRoll: null,
+    critical: false,
+  };
+}
+
+function calculateCriticalAwareDamage({
+  damageType,
+  damageInput,
+  randomBranch,
+}) {
+  if (damageType === 6) {
+    return { ready: true, result: calculateRealDamage(damageInput) };
+  }
+  if (damageType === 10) {
+    return {
+      ready: true,
+      result: calculateStackOverLimitDamage(damageInput),
+    };
+  }
+  if (damageType === 8) {
+    return {
+      ready: true,
+      result: { mode: 'pure-weakness', value: 0, raw: '0', trace: [] },
+    };
+  }
+  if (!randomBranch.expected) {
+    return { ready: true, result: calculateNormalDamage(damageInput) };
+  }
+  if (
+    (damageInput.valueShields?.length ?? 0) > 0 ||
+    (damageInput.hitCountShields?.length ?? 0) > 0
+  ) {
+    return {
+      ready: false,
+      status: 'critical-expected-state-branch-unsupported',
+      reason: 'critical-expected-shield-branch-unsupported',
+    };
+  }
+  const nonCritical = calculateNormalDamage({
+    ...damageInput,
+    critical: false,
+  });
+  const critical = calculateNormalDamage({
+    ...damageInput,
+    critical: true,
+  });
+  const probabilityBasisPoints = BigInt(
+    randomBranch.expectedCriticalProbabilityBasisPoints
+  );
+  const denominator = 10_000n;
+  const raw = blendRaw(
+    BigInt(nonCritical.raw),
+    BigInt(critical.raw),
+    probabilityBasisPoints,
+    denominator
+  );
+  const preShieldRaw = blendRaw(
+    BigInt(nonCritical.preShieldRaw ?? nonCritical.raw),
+    BigInt(critical.preShieldRaw ?? critical.raw),
+    probabilityBasisPoints,
+    denominator
+  );
+  return {
+    ready: true,
+    result: {
+      ...nonCritical,
+      mode: 'normal-expected-critical',
+      raw: raw.toString(),
+      preShieldRaw: preShieldRaw.toString(),
+      value: qToNumber(raw),
+      integer: runtimeIntegerize(raw).toString(),
+      trace: [
+        ...nonCritical.trace,
+        {
+          name: 'critical_expected_value',
+          raw: raw.toString(),
+          value: qToNumber(raw),
+          probabilityBasisPoints: Number(probabilityBasisPoints),
+          nonCriticalRaw: nonCritical.raw,
+          criticalRaw: critical.raw,
+          criticalEventMaterialized: false,
+        },
+      ],
+      expectedCritical: {
+        probabilityBasisPoints: Number(probabilityBasisPoints),
+        nonCriticalRaw: nonCritical.raw,
+        criticalRaw: critical.raw,
+        criticalEventMaterialized: false,
+      },
+    },
+  };
+}
+
+function blendRaw(nonCriticalRaw, criticalRaw, numerator, denominator) {
+  return (
+    (nonCriticalRaw * (denominator - numerator) + criticalRaw * numerator) /
+    denominator
+  );
+}
+
+function resolveCriticalHitIdentity(hit) {
+  return String(
+    hit.identity ??
+      hit.hitIdentity ??
+      hit.sourceIdentity ??
+      `${hit.elementId}|${hit.hitIndex}`
+  );
+}
+
+function collectCriticalStateSideEffectIdentities(hit) {
+  return [
+    ...(hit.criticalStateEffectIdentities ?? []),
+    ...(hit.damage?.criticalStateEffectIdentities ?? []),
+  ]
+    .map(value => String(value ?? '').trim())
+    .filter(Boolean);
+}
+
+function clampInteger(value, minimum, maximum) {
+  return Math.min(maximum, Math.max(minimum, Math.trunc(Number(value) || 0)));
 }
 
 function createActorSpSource(actorState, state, timeMs) {

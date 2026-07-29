@@ -151,6 +151,13 @@ describe('workbench project actor configuration', () => {
 
     expect(project.combatScenario).toEqual({
       projectile: { targetDistance: 0, defaultWillHit: true },
+      critical: {
+        schemaVersion: 1,
+        contractName: 'AzPrCombatCriticalScenario',
+        policy: 'non-critical',
+        seed: null,
+        randomAlgorithm: 'seeded-xorshift32-stream-v1',
+      },
     });
     expect(project.actions[0]).toMatchObject({
       controlSubSkillIndex: 0,
