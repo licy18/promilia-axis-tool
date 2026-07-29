@@ -10,6 +10,10 @@ export const ATTACK_INPUT_CHAIN_SELECTION_SOURCES = Object.freeze({
   RUNTIME_PROJECTED: 'runtime-projected',
   USER_EXPLICIT: 'user-explicit',
 });
+export const ATTACK_INPUT_EXPANSION_MODES = Object.freeze({
+  CHAIN: 'chain',
+  SINGLE_INPUT: 'single-input',
+});
 
 export function normalizeAttackInputSegments(segments = []) {
   const values = (Array.isArray(segments) ? segments : [])
@@ -45,6 +49,9 @@ export function normalizeAttackInputActionFields(source = {}) {
   const attackInputChainSelectionSource = normalizeText(
     source.attackInputChainSelectionSource
   );
+  const attackInputExpansionMode = normalizeAttackInputExpansionMode(
+    source.attackInputExpansionMode
+  );
   const segment = normalizeAttackInputSegment({
     ...(source.attackInput ?? {}),
     sequenceIndex:
@@ -57,6 +64,9 @@ export function normalizeAttackInputActionFields(source = {}) {
       ...(attackInputIntent ? { attackInputIntent } : {}),
       ...(attackInputChainSelectionSource
         ? { attackInputChainSelectionSource }
+        : {}),
+      ...(attackInputExpansionMode
+        ? { attackInputExpansionMode }
         : {}),
       ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
     };
@@ -72,6 +82,9 @@ export function normalizeAttackInputActionFields(source = {}) {
     ...(attackInputIntent ? { attackInputIntent } : {}),
     ...(attackInputChainSelectionSource
       ? { attackInputChainSelectionSource }
+      : {}),
+    ...(attackInputExpansionMode
+      ? { attackInputExpansionMode }
       : {}),
     attackInput: segment,
     ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
@@ -538,6 +551,13 @@ function formatPlanningDuration(scheduling) {
   return `通用规划 ${scheduling.planningDurationFrames}F`;
 }
 
+function normalizeAttackInputExpansionMode(value) {
+  const mode = normalizeText(value);
+  return Object.values(ATTACK_INPUT_EXPANSION_MODES).includes(mode)
+    ? mode
+    : null;
+}
+
 function normalizeLinkWindow(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const startFrame = nonNegativeIntegerOrNull(value.startFrame);
@@ -570,6 +590,8 @@ function collectRuntimeAttackInputIntentGroups(actions) {
       action.attackInputIntent.selectionMode !== 'runtime-context' ||
       action.attackInputChainSelectionSource ===
         ATTACK_INPUT_CHAIN_SELECTION_SOURCES.USER_EXPLICIT ||
+      action.attackInputExpansionMode ===
+        ATTACK_INPUT_EXPANSION_MODES.SINGLE_INPUT ||
       !action.attackGroupId
     ) {
       continue;

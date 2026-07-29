@@ -334,6 +334,56 @@ describe('workbench normal attack input chain', () => {
     });
   });
 
+  it('keeps Machine Axis single-input intents independent instead of expanding their public chain', () => {
+    const mapping = findNormalAttack(103002);
+    const [singleInput] = createChain(mapping, 103002, frameToMs(34));
+    const sourceA3 = {
+      id: 'ruby-source-a3',
+      type: 'skill',
+      skillId: 10300201,
+      actorCharacterId: 103002,
+      startMs: 0,
+      durationMs: frameToMs(79),
+      attackInput: {
+        controlSkillId: 10300203,
+        selectedSubSkillIndex: 0,
+      },
+    };
+    const action = {
+      ...singleInput,
+      attackInputExpansionMode: 'single-input',
+    };
+    const result = reconcileWorkbenchAttackInputIntentGroups({
+      actions: [sourceA3, action],
+      graph: mechanicsPackage.actionVariantGraph,
+      variantRuntime: {
+        ready: true,
+        initialState: [
+          {
+            actorId: 'actor-ruby',
+            characterId: 103002,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 6,
+            maxValue: 12,
+          },
+        ],
+        resourceEvents: [],
+        activeSwitchWindows: [],
+        selections: [
+          {
+            actionId: sourceA3.id,
+            executionControlSkillId: 10300203,
+            selectedSubSkillIndex: 0,
+          },
+        ],
+      },
+      resolveMapping: () => mapping,
+      resolveActorId: () => 'actor-ruby',
+    });
+
+    expect(result.changed).toBe(false);
+    expect(result.actions).toEqual([sourceA3, action]);
+  });
   it('keeps ambiguous input chains schedulable without promoting unknown timing', () => {
     const unresolved = findNormalAttack(101007);
     expect(unresolved.attackInputSegments).toHaveLength(4);

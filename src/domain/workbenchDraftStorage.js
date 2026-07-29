@@ -286,6 +286,8 @@ export function createWorkbenchScenarioDraftSnapshot({
   cycleBoundaries,
   initialRuntimeState,
   combatScenario,
+  projectIdentity,
+  projectTransport,
   runtimeSampleCaptures,
   selectedActionId,
 } = {}) {
@@ -343,11 +345,30 @@ export function createWorkbenchScenarioDraftSnapshot({
       },
     }),
     combatScenario: normalizeCombatScenario(combatScenario),
+    projectIdentity: normalizeWorkbenchProjectIdentity(projectIdentity),
+    projectTransport: normalizeWorkbenchProjectTransport(projectTransport),
     runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
       runtimeSampleCaptures
     ),
     selectedActionId: normalizedSelectedActionId,
   };
+}
+
+function normalizeWorkbenchProjectIdentity(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return { id: '', name: '', createdAt: '', updatedAt: '' };
+  }
+  return {
+    id: String(value.id ?? '').trim(),
+    name: String(value.name ?? '').trim(),
+    createdAt: String(value.createdAt ?? '').trim(),
+    updatedAt: String(value.updatedAt ?? '').trim(),
+  };
+}
+
+function normalizeWorkbenchProjectTransport(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  return JSON.parse(JSON.stringify(value));
 }
 
 export function createWorkbenchProjectFileSnapshot(

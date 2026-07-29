@@ -137,18 +137,15 @@ export function createMachineAxisService({
 
   function validate(machineAxis, options = {}) {
     try {
-      const compilation = compile(machineAxis, options);
-      const run = core.simulate(compilation.canonicalCompilation, options);
-      const issues = collectExecutionIssues(run, compilation.actionResolutions);
+      const prepared = prepareValidated(machineAxis, options);
+      const { compilation, run, issues } = prepared;
       return {
         schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
         contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
         kind: 'azpr-machine-axis-validation',
-        valid: issues.length === 0,
+        valid: prepared.valid,
         issues,
-        warnings:
-          compilation.canonicalCompilation.scenario.diagnostics
-            ?.validationWarnings ?? [],
+        warnings: prepared.warnings,
         hashes: {
           input: compilation.hashes.input,
           data: compilation.hashes.data,
@@ -210,12 +207,30 @@ export function createMachineAxisService({
     );
   }
 
-  function simulateCanonical(machineAxis, options = {}) {
+  function prepareValidated(machineAxis, options = {}) {
     const compilation = compile(machineAxis, options);
     const run = core.simulate(compilation.canonicalCompilation, options);
     const issues = collectExecutionIssues(run, compilation.actionResolutions);
-    if (issues.length) throw new MachineAxisValidationError(issues);
-    return { compilation, run };
+    return {
+      valid: issues.length === 0,
+      issues,
+      warnings:
+        compilation.canonicalCompilation.scenario.diagnostics
+          ?.validationWarnings ?? [],
+      compilation,
+      run,
+    };
+  }
+
+  function simulateCanonical(machineAxis, options = {}) {
+    const prepared = prepareValidated(machineAxis, options);
+    if (!prepared.valid) {
+      throw new MachineAxisValidationError(prepared.issues);
+    }
+    return {
+      compilation: prepared.compilation,
+      run: prepared.run,
+    };
   }
   function prepare(machineAxis) {
     const contractValidation = validateMachineAxisContract(machineAxis);
@@ -369,6 +384,7 @@ export function createMachineAxisService({
     explain,
     compare,
     prepare,
+    prepareValidated,
   });
 }
 

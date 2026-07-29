@@ -1,13 +1,19 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
+import { createWorkbenchDraftSnapshot } from '../../domain/workbenchDraftStorage';
+import { createWorkbenchProject } from '../../domain/workbenchProjectFactory';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../../features/workbench/workbenchHeadlessCombatCore';
 import { runMachineAxisCli } from '../../machine-axis/machineAxisCli';
 import {
   MachineAxisValidationError,
   createMachineAxisService,
 } from '../../machine-axis/machineAxisService';
-import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
+import {
+  createWorkbenchDraftFromMachineAxisImport,
+  createWorkbenchMachineAxisAdapter,
+} from '../../machine-axis/workbenchMachineAxisAdapter';
+import { resolveWorkbenchMachineAxisConfigurationProjection } from '../../machine-axis/workbenchMachineAxisProjectProjection';
 
 const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
 
@@ -168,6 +174,49 @@ describe('Workbench Machine Axis adapter', () => {
         })
       );
     }
+  });
+  it('rebuilds an imported contract through a persisted Workbench draft', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const imported = adapter.importContract(fixture);
+    const persistedDraft = JSON.parse(
+      JSON.stringify(
+        createWorkbenchDraftSnapshot(
+          createWorkbenchDraftFromMachineAxisImport(imported),
+          null
+        )
+      )
+    );
+    const rebuilt = createWorkbenchProject(persistedDraft.selection, {
+      ...persistedDraft,
+      ...resolveWorkbenchMachineAxisConfigurationProjection({
+        configurationLibrary: persistedDraft.configurationLibrary,
+        configurationSelection: persistedDraft.configurationSelection,
+        projectTransport: persistedDraft.projectTransport,
+      }),
+      actions: persistedDraft.actionDrafts,
+    });
+    const exported = adapter.exportProject(rebuilt);
+    const originalRun = adapter.simulate(fixture);
+    const rebuiltRun = WORKBENCH_HEADLESS_COMBAT_CORE.simulate(rebuilt);
+
+    expect(
+      persistedDraft.actionDrafts.find(action => action.id === 'a3-sampled')
+    ).toMatchObject({ attackInputExpansionMode: 'single-input' });
+    expect(
+      rebuilt.actions.find(action => action.id === 'a3-sampled')
+    ).not.toHaveProperty('attackInputExpansionMode');
+    expect(rebuilt.id).toBe(fixture.scenario.id);
+    expect(rebuilt.name).toBe(fixture.scenario.name);
+    expect(exported.actions.map(action => action.schedule)).toEqual(
+      fixture.actions.map(action => ({
+        mode: action.schedule.mode,
+        frame: action.schedule.frame ?? null,
+        actionId: action.schedule.actionId ?? null,
+        offsetFrames: action.schedule.offsetFrames ?? 0,
+      }))
+    );
+    expect(rebuiltRun.hashes).toEqual(originalRun.hashes);
   });
   it('projects Workbench edits and rejects unsupported project actions', () => {
     const service = createMachineAxisService();

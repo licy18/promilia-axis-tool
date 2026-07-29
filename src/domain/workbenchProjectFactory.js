@@ -683,8 +683,12 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       : actionTypeLabel(titleAction.type);
 
   return createProject({
-    id: 'workbench-editable-slice',
-    name: `工作台：${character.name} / ${titleActionName} / ${enemy.name}`,
+    id:
+      String(actionPatch.projectIdentity?.id ?? '').trim() ||
+      'workbench-editable-slice',
+    name:
+      String(actionPatch.projectIdentity?.name ?? '').trim() ||
+      `工作台：${character.name} / ${titleActionName} / ${enemy.name}`,
     durationMs,
     actors,
     teamSlots,
@@ -711,6 +715,12 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     ),
     combatScenario: normalizeCombatScenario(actionPatch.combatScenario),
     metadata: {
+      ...(actionPatch.projectIdentity?.createdAt
+        ? { createdAt: actionPatch.projectIdentity.createdAt }
+        : {}),
+      ...(actionPatch.projectIdentity?.updatedAt
+        ? { updatedAt: actionPatch.projectIdentity.updatedAt }
+        : {}),
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',
       sourceCharacterId: character.id,
@@ -727,6 +737,12 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       gameDataReferenceContract,
       gameDataCompatibilityReport:
         actionPatch.gameDataCompatibilityReport ?? null,
+      transport:
+        actionPatch.projectTransport &&
+        typeof actionPatch.projectTransport === 'object' &&
+        !Array.isArray(actionPatch.projectTransport)
+          ? JSON.parse(JSON.stringify(actionPatch.projectTransport))
+          : {},
       mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(
         actionPatch.mechanicsProfileSelection
       ),
@@ -1127,7 +1143,10 @@ function createProjectActionFromDraft(
       draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
     generationBatch: draft.generationBatch,
-    attackInputFields: draft,
+    attackInputFields: {
+      ...draft,
+      attackInputExpansionMode: null,
+    },
     effectCommands,
   });
 }

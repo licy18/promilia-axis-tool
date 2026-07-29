@@ -1,4 +1,6 @@
 import { ACTION_TYPES } from '../domain/projectSchema';
+import { createWorkbenchScenarioDraftSnapshot } from '../domain/workbenchDraftStorage';
+import { createWorkbenchActionDraft } from '../domain/workbenchProjectFactory';
 import { getInstalledVerifiedCombatMechanicsPackage } from '../data/verifiedCombatMechanicsPackage';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchHeadlessCombatCore';
 import {
@@ -23,15 +25,19 @@ export function createWorkbenchMachineAxisAdapter({
   core = WORKBENCH_HEADLESS_COMBAT_CORE,
 } = {}) {
   function importContract(machineAxis) {
-    const prepared = service.prepare(machineAxis);
-    if (!prepared.valid) throw new MachineAxisValidationError(prepared.issues);
+    const prepared = service.prepareValidated(machineAxis);
+    if (!prepared.valid) {
+      throw new MachineAxisValidationError(prepared.issues);
+    }
     return {
       schemaVersion: WORKBENCH_MACHINE_AXIS_ADAPTER_SCHEMA_VERSION,
       contractName: WORKBENCH_MACHINE_AXIS_ADAPTER_CONTRACT_NAME,
       kind: 'azpr-machine-axis-workbench-import',
-      contract: prepared.contract,
-      project: prepared.project,
-      actionResolutions: prepared.actionResolutions,
+      contract: prepared.compilation.contract,
+      project: prepared.compilation.project,
+      actionResolutions: prepared.compilation.actionResolutions,
+      canonicalCompilation: prepared.compilation.canonicalCompilation,
+      canonicalRun: prepared.run,
     };
   }
 
@@ -47,12 +53,8 @@ export function createWorkbenchMachineAxisAdapter({
     return validation.normalized;
   }
 
-  function simulate(machineAxis, options = {}) {
-    const imported = importContract(machineAxis);
-    return core.simulate(
-      { schemaVersion: 1, project: imported.project },
-      options
-    );
+  function simulate(machineAxis) {
+    return importContract(machineAxis).canonicalRun;
   }
 
   return Object.freeze({
@@ -75,6 +77,84 @@ export function exportWorkbenchProjectToMachineAxis(project, options = {}) {
   );
 }
 
+export function createWorkbenchDraftFromMachineAxisImport(imported) {
+  const project = imported?.project;
+  if (!project || typeof project !== 'object') {
+    throw new MachineAxisValidationError([
+      diagnostic(
+        'machine-axis-workbench-import-project-required',
+        'project',
+        'A prepared Machine Axis project is required'
+      ),
+    ]);
+  }
+  const actorsById = new Map(
+    (project.actors ?? []).map(actor => [String(actor.id), actor])
+  );
+  const machineActionsById = new Map(
+    (imported.contract?.actions ?? []).map(action => [String(action.id), action])
+  );
+  const teamSlots = structuredClone(project.metadata?.teamSlots ?? []);
+  const firstSkillAction = (project.actions ?? []).find(
+    action => action.type === ACTION_TYPES.SKILL
+  );
+  const selection = {
+    characterId: Number(teamSlots[0]?.characterId),
+    secondaryCharacterId: Number(teamSlots[1]?.characterId),
+    skillId: Number(firstSkillAction?.skillId),
+    enemyId: Number(project.enemy?.enemyId),
+  };
+  const actionDrafts = (project.actions ?? []).map(action => {
+    const actor = actorsById.get(String(action.actorId));
+    const kiboId =
+      action.type === ACTION_TYPES.KIBO_EVENT
+        ? Number(actor?.loadout?.kiboId) || null
+        : null;
+    const machineAction = machineActionsById.get(String(action.id));
+    const isMachineSingleInput =
+      machineAction?.intent?.actionKind === 'normal-attack' &&
+      machineAction.intent.attackInput;
+    return createWorkbenchActionDraft({
+      ...action,
+      ...(isMachineSingleInput
+        ? { attackInputExpansionMode: 'single-input' }
+        : {}),
+      actorCharacterId: Number(actor?.characterId),
+      targetCharacterId: Number(action.targetCharacterId),
+      kiboId,
+      name: action.name,
+      durationFrames: action.timing?.durationFrames ?? action.durationFrames,
+      timingSource: action.timing?.source ?? action.source?.timingSource,
+      timingStatus: action.timing?.status,
+      timingReasons: action.timing?.reasons,
+      timingSourceIdentity: action.timing?.sourceIdentity,
+      needsTimingData: action.timing?.needsTimingData,
+    });
+  });
+  return createWorkbenchScenarioDraftSnapshot({
+    durationMs: project.time?.durationMs,
+    selection,
+    teamSlots,
+    actorConfigs: project.metadata?.actorConfigs,
+    enemyConfig: project.metadata?.enemyConfig,
+    configurationSelection: project.metadata?.configurationSelection,
+    mechanicsProfileSelection: project.metadata?.mechanicsProfileSelection,
+    actionDrafts,
+    actionRelations: project.actionRelations,
+    cycleBoundaries: project.cycleBoundaries,
+    initialRuntimeState: project.initialRuntimeState,
+    combatScenario: project.combatScenario,
+    projectIdentity: {
+      id: project.id,
+      name: project.name,
+      createdAt: project.metadata?.createdAt,
+      updatedAt: project.metadata?.updatedAt,
+    },
+    runtimeSampleCaptures: project.metadata?.runtimeSampleCaptures,
+    projectTransport: project.metadata?.transport,
+    selectedActionId: actionDrafts[0]?.id ?? '',
+  });
+}
 function createContractFromProject(project, { service, metadata } = {}) {
   if (!project || typeof project !== 'object' || Array.isArray(project)) {
     throw new MachineAxisValidationError([

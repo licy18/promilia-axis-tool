@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import machineAxisFixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import {
   createDefaultWorkbenchDraftState,
   createWorkbenchProjectFileSnapshot,
@@ -24,6 +25,27 @@ const ONE_PIXEL_PNG_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
 
 describe('Workbench project file receiver', () => {
+  it('routes a Machine Axis contract without treating it as a Workbench project', async () => {
+    const file = new File(
+      [JSON.stringify(machineAxisFixture)],
+      'm11-b-three-actor-120s.json',
+      { type: 'application/json' }
+    );
+    const result = await receiveWorkbenchProjectFile(file);
+    const onMachineAxis = vi.fn(() => true);
+
+    expect(result).toMatchObject({
+      kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.MACHINE_AXIS,
+      contract: { contractName: 'AzPrMachineAxis' },
+    });
+    await expect(
+      processWorkbenchProjectFile(file, { onMachineAxis })
+    ).resolves.toBe(true);
+    expect(onMachineAxis).toHaveBeenCalledWith(
+      expect.objectContaining({ contractName: 'AzPrMachineAxis' }),
+      '已导入 Machine Axis'
+    );
+  });
   it('receives a versioned JSON project through the existing parser', async () => {
     const snapshot = createWorkbenchProjectFileSnapshot(
       createDefaultWorkbenchDraftState(),

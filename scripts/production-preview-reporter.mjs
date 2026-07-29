@@ -43,6 +43,7 @@ const REQUIRED_CAPABILITIES = [
   'workspace-scenarios',
   'workspace-layout',
   'narrow-main-flow',
+  'm11-c-canonical-trace-workbench',
 ];
 
 export default class ProductionPreviewReporter {

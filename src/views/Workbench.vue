@@ -10,6 +10,9 @@
     :data-timeline-playback-range-end-frame="timelinePlaybackRange.endFrame"
     :data-runtime-diagnostics-status="runtimeDiagnosticsStatus"
     :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
+    :data-canonical-trace-hash="canonicalTraceIndex.traceHash"
+    :data-canonical-trace-action-count="canonicalTraceIndex.summary.actionCount"
+    :data-machine-axis-import-active="machineAxisImportSession ? 'true' : 'false'"
     :data-selected-action-count="selectedActionIds.length"
     :data-action-relation-count="actionRelations.length"
     :data-selected-action-relation-id="selectedActionRelationId"
@@ -142,6 +145,14 @@
                 <span>方案对比</span>
               </button>
               <button
+                data-testid="workbench-open-machine-axis"
+                type="button"
+                @click="openWorkbenchMachineAxisDialog"
+              >
+                <Document class="button-icon" />
+                <span>Machine Axis</span>
+              </button>
+              <button
                 data-testid="workbench-export-project"
                 type="button"
                 @click="exportProjectFile"
@@ -234,6 +245,18 @@
       @load-preset="loadWorkbenchPreset"
       @duplicate-preset="duplicateWorkbenchPresetEntry"
       @delete-preset="deleteWorkbenchPresetEntry"
+    />
+
+    <WorkbenchMachineAxisDialog
+      :visible="machineAxisDialogVisible"
+      :diagnostics="machineAxisImportDiagnostics"
+      :hashes="canonicalSimulation.hashes"
+      :summary="machineAxisDialogSummary"
+      :status="machineAxisDialogStatus"
+      @close="closeWorkbenchMachineAxisDialog"
+      @import-file="openProjectImport"
+      @load-fixture="loadM11bMachineAxisFixture"
+      @export="exportCurrentMachineAxis"
     />
 
     <WorkbenchScenarioComparisonDialog
@@ -916,6 +939,20 @@
           </div>
 
           <div
+            v-if="effectiveSideInspectorPanel === 'canonical-trace'"
+            class="side-stack-panel"
+            data-inspector-panel-key="canonical-trace"
+            data-testid="workbench-side-inspector-panel"
+          >
+            <CanonicalTraceInspectorPanel
+              :trace-index="canonicalTraceIndex"
+              :selected-action-id="selectedActionId"
+              @locate-fact="locateCanonicalTraceFact"
+              @update-hit-override="updateCanonicalTraceHitOverride"
+            />
+          </div>
+
+          <div
             v-if="effectiveSideInspectorPanel === 'runtime-detail'"
             class="side-stack-panel"
             :data-inspector-panel-order="sideInspectorPanelOrders.runtimeDetail"
@@ -1056,6 +1093,7 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
+  shallowRef,
   watch,
 } from 'vue';
 import {
@@ -1093,6 +1131,8 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchActionContextMenu from '../features/workbench/WorkbenchActionContextMenu.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
+import { createCanonicalTraceViewIndex } from '../features/workbench/canonicalTraceViewIndex';
+import { resolveWorkbenchMachineAxisConfigurationProjection } from '../machine-axis/workbenchMachineAxisProjectProjection';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
 import {
   installWorkbenchPerformanceInstrumentation,
@@ -1310,6 +1350,12 @@ import { projectCycleSections } from '../simulation/projection/projectCycleSecti
 import { projectCycleBoundaryInheritance } from '../simulation/projection/projectCycleBoundaryInheritance';
 import { projectWorkbenchScenarioComparison } from '../simulation/projection/projectScenarioComparison';
 
+const CanonicalTraceInspectorPanel = defineAsyncComponent(
+  () => import('../features/workbench/CanonicalTraceInspectorPanel.vue')
+);
+const WorkbenchMachineAxisDialog = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchMachineAxisDialog.vue')
+);
 const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchScenarioComparisonDialog.vue')
 );
@@ -1435,6 +1481,12 @@ const initialRuntimeState = ref(
 const combatScenario = ref(
   normalizeCombatScenario(initialDraft.combatScenario)
 );
+const projectIdentity = ref(
+  cloneWorkbenchHistoryValue(initialDraft.projectIdentity)
+);
+const projectTransport = shallowRef(
+  cloneWorkbenchHistoryValue(initialDraft.projectTransport)
+);
 const scenarioWorkspace = ref(
   cloneWorkbenchHistoryValue(initialDraft.scenarioWorkspace)
 );
@@ -1482,6 +1534,10 @@ const sideInspectorActivePanel = ref('');
 const draftStatus = ref('未保存草稿');
 const projectShareUrl = ref('');
 const presetDialogVisible = ref(false);
+const machineAxisDialogVisible = ref(false);
+const machineAxisDialogStatus = ref('');
+const machineAxisImportDiagnostics = ref([]);
+const machineAxisImportSession = shallowRef(null);
 const workbenchPresets = ref([]);
 const workbenchTimelineFragments = ref([]);
 const workbenchTimelineFragmentViews = computed(() =>
@@ -1604,11 +1660,15 @@ const project = computed(() =>
 );
 const canonicalCompilation = computed(() => {
   void runtimeDiagnosticsRevision.value;
+  const currentProject = project.value;
+  if (machineAxisImportSession.value?.canonicalCompilation) {
+    return machineAxisImportSession.value.canonicalCompilation;
+  }
   recordWorkbenchPerformanceOperation('authoritativeCompile');
   const startedAt = readWorkbenchPerformanceClock();
   const result = WORKBENCH_HEADLESS_COMBAT_CORE.compile({
     schemaVersion: 1,
-    project: project.value,
+    project: currentProject,
   });
   recordWorkbenchPerformanceDuration(
     'authoritativeCompile',
@@ -1619,6 +1679,9 @@ const canonicalCompilation = computed(() => {
 const scenario = computed(() => canonicalCompilation.value.scenario);
 const canonicalSimulation = computed(() => {
   void runtimeDiagnosticsRevision.value;
+  if (machineAxisImportSession.value?.canonicalRun) {
+    return machineAxisImportSession.value.canonicalRun;
+  }
   recordWorkbenchPerformanceOperation('authoritativeSimulation');
   const startedAt = readWorkbenchPerformanceClock();
   const result = WORKBENCH_HEADLESS_COMBAT_CORE.simulate(
@@ -1630,7 +1693,24 @@ const canonicalSimulation = computed(() => {
   );
   return result;
 });
+const canonicalTraceIndex = computed(() =>
+  createCanonicalTraceViewIndex(canonicalSimulation.value, {
+    actionResolutions:
+      machineAxisImportSession.value?.actionResolutions ?? [],
+    requestedActions: machineAxisImportSession.value?.contract?.actions ?? [],
+  })
+);
 const simulationResult = computed(() => canonicalSimulation.value.simulation);
+const machineAxisDialogSummary = computed(() => ({
+  requestedActionCount:
+    machineAxisImportSession.value?.contract?.actions?.length ??
+    actionDrafts.value.length,
+  executedActionCount:
+    canonicalTraceIndex.value.actionViews.filter(
+      action => action.execution?.execute !== false
+    ).length,
+  factCount: canonicalTraceIndex.value.factsByIdentity.size,
+}));
 const effectiveScenarioActions = computed(
   () =>
     simulationResult.value.effectiveActionTimeline?.scenario?.actions ??
@@ -2037,6 +2117,7 @@ const sideInspectorPanelOptions = computed(() => {
   if (sideInspectorActionEditId.value) {
     return [
       { key: 'properties', label: '动作' },
+      { key: 'canonical-trace', label: '追踪' },
       { key: 'runtime-detail', label: '运行' },
       { key: 'action-rules', label: '规则' },
       { key: 'analysis', label: '分析' },
@@ -2046,6 +2127,7 @@ const sideInspectorPanelOptions = computed(() => {
     return selectedActionId.value
       ? [
           { key: 'properties', label: '动作' },
+          { key: 'canonical-trace', label: '追踪' },
           { key: 'runtime-detail', label: '运行' },
           { key: 'action-rules', label: '规则' },
           { key: 'analysis', label: '分析' },
@@ -2058,6 +2140,7 @@ const sideInspectorPanelOptions = computed(() => {
   if (selectedActionId.value) {
     return [
       { key: 'properties', label: '动作' },
+      { key: 'canonical-trace', label: '追踪' },
       { key: 'runtime-detail', label: '运行' },
       { key: 'action-rules', label: '规则' },
       { key: 'analysis', label: '分析' },
@@ -5890,9 +5973,12 @@ function createWorkbenchProjectFromDraft(draft) {
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,
-    configurationLibrary:
-      draft.configurationLibrary ?? configurationLibrary.value,
-    configurationSelection: draft.configurationSelection,
+    ...resolveWorkbenchMachineAxisConfigurationProjection({
+      configurationLibrary:
+        draft.configurationLibrary ?? configurationLibrary.value,
+      configurationSelection: draft.configurationSelection,
+      projectTransport: draft.projectTransport,
+    }),
     gameDataBinding: draft.gameDataBinding ?? gameDataBinding.value,
     gameDataCompatibilityReport: gameDataCompatibility,
     mechanicsProfileSelection: draft.mechanicsProfileSelection,
@@ -5902,6 +5988,8 @@ function createWorkbenchProjectFromDraft(draft) {
     cycleBoundaries: draft.cycleBoundaries,
     initialRuntimeState: draft.initialRuntimeState,
     combatScenario: draft.combatScenario,
+    projectIdentity: draft.projectIdentity,
+    projectTransport: draft.projectTransport,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
   });
 }
@@ -5915,8 +6003,11 @@ function createCurrentWorkbenchProjectForActions(
     teamSlots: teamSlots.value,
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
-    configurationLibrary: configurationLibrary.value,
-    configurationSelection: configurationSelection.value,
+    ...resolveWorkbenchMachineAxisConfigurationProjection({
+      configurationLibrary: configurationLibrary.value,
+      configurationSelection: configurationSelection.value,
+      projectTransport: projectTransport.value,
+    }),
     gameDataBinding: gameDataBinding.value,
     gameDataCompatibilityReport: gameDataCompatibilityReport.value,
     mechanicsProfileSelection: mechanicsProfileSelection.value,
@@ -5927,6 +6018,8 @@ function createCurrentWorkbenchProjectForActions(
     cycleBoundaries: cycleBoundaries.value,
     initialRuntimeState: initialRuntimeState.value,
     combatScenario: combatScenario.value,
+    projectIdentity: projectIdentity.value,
+    projectTransport: projectTransport.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
   });
 }
@@ -6074,6 +6167,8 @@ function getCurrentWorkbenchScenarioState() {
     cycleBoundaries: cycleBoundaries.value,
     initialRuntimeState: initialRuntimeState.value,
     combatScenario: combatScenario.value,
+    projectIdentity: projectIdentity.value,
+    projectTransport: projectTransport.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
     selectedActionId: selectedActionId.value,
   };
@@ -6387,6 +6482,115 @@ function clearWorkbenchHashQueryParam(name) {
   window.history.replaceState(window.history.state, '', url.toString());
 }
 
+function openWorkbenchMachineAxisDialog() {
+  machineAxisDialogVisible.value = true;
+}
+
+function closeWorkbenchMachineAxisDialog() {
+  machineAxisDialogVisible.value = false;
+}
+
+async function loadM11bMachineAxisFixture() {
+  try {
+    machineAxisDialogStatus.value = '正在载入 120 秒验收轴';
+    const fixtureModule = await import(
+      '../../fixtures/machine-axis/m11-b-three-actor-120s.json'
+    );
+    await importWorkbenchMachineAxisContract(
+      fixtureModule.default,
+      '已载入 M11-B 120 秒验收轴'
+    );
+  } catch (error) {
+    showMachineAxisImportFailure(error);
+  }
+}
+
+async function importWorkbenchMachineAxisContract(contract, statusText) {
+  try {
+    machineAxisDialogStatus.value = '正在验证 Machine Axis';
+    machineAxisImportDiagnostics.value = [];
+    await loadVerifiedCombatMechanicsPackage();
+    const adapterModule = await import(
+      '../machine-axis/workbenchMachineAxisAdapter'
+    );
+    const adapter = adapterModule.createWorkbenchMachineAxisAdapter();
+    const imported = adapter.importContract(contract);
+    const draft = adapterModule.createWorkbenchDraftFromMachineAxisImport(
+      imported
+    );
+    if (!applyImportedProjectDraft(draft, statusText)) return false;
+    machineAxisImportSession.value = {
+      contract: imported.contract,
+      actionResolutions: imported.actionResolutions,
+      canonicalCompilation: imported.canonicalCompilation,
+      canonicalRun: imported.canonicalRun,
+    };
+    machineAxisDialogVisible.value = true;
+    await nextTick();
+    machineAxisDialogStatus.value = [
+      statusText,
+      `${imported.contract.actions.length} 个机器输入`,
+      `${canonicalTraceIndex.value.actionViews.length} 个实际执行项`,
+    ].join(' · ');
+    return true;
+  } catch (error) {
+    showMachineAxisImportFailure(error);
+    return false;
+  }
+}
+
+function showMachineAxisImportFailure(error) {
+  const issues = Array.isArray(error?.issues) ? error.issues : [];
+  machineAxisImportDiagnostics.value = issues.length
+    ? issues.map(issue => ({
+        severity: issue.severity ?? 'error',
+        code: issue.code ?? 'machine-axis-import-invalid',
+        path: issue.path ?? 'contract',
+        message: issue.message ?? String(error?.message ?? 'Machine Axis 输入无效'),
+        actionId: issue.actionId ?? null,
+        hitIdentity: issue.hitIdentity ?? null,
+      }))
+    : [
+        {
+          severity: 'error',
+          code: 'machine-axis-import-invalid',
+          path: 'contract',
+          message: String(error?.message ?? 'Machine Axis 输入无效'),
+          actionId: null,
+          hitIdentity: null,
+        },
+      ];
+  machineAxisDialogStatus.value = 'Machine Axis 未导入，当前项目保持不变';
+  machineAxisDialogVisible.value = true;
+}
+
+async function exportCurrentMachineAxis() {
+  if (typeof document === 'undefined' || typeof Blob === 'undefined') {
+    machineAxisDialogStatus.value = 'Machine Axis 导出不可用';
+    return false;
+  }
+  try {
+    const adapterModule = await import(
+      '../machine-axis/workbenchMachineAxisAdapter'
+    );
+    const contract = adapterModule.exportWorkbenchProjectToMachineAxis(
+      project.value
+    );
+    const blob = new Blob([JSON.stringify(contract, null, 2)], {
+      type: 'application/json',
+    });
+    const safeId = String(project.value.id ?? 'workbench')
+      .replace(/[^a-z0-9_-]+/gi, '-')
+      .replace(/^-+|-+$/g, '') || 'workbench';
+    downloadWorkbenchBlob(blob, `${safeId}.machine-axis.json`);
+    machineAxisDialogStatus.value = `已导出 ${contract.actions.length} 个机器输入`;
+    machineAxisImportDiagnostics.value = [];
+    return true;
+  } catch (error) {
+    showMachineAxisImportFailure(error);
+    return false;
+  }
+}
 function openProjectImport() {
   projectImportInput.value?.click?.();
 }
@@ -6410,6 +6614,7 @@ async function receiveWorkbenchProjectFile(file, source = 'picker') {
   await receiver.processWorkbenchProjectFile(file, {
     source,
     onProject: applyImportedProjectDraft,
+    onMachineAxis: importWorkbenchMachineAxisContract,
     onAnalysisReport: (report, validation, statusText) => {
       openWorkbenchAnalysisReport(report, statusText);
       importedAnalysisReportValidation.value = validation;
@@ -6517,6 +6722,7 @@ function applyImportedRuntimeSampleCaptures(captures) {
 }
 
 function applyImportedProjectDraft(draft, statusText) {
+  machineAxisImportSession.value = null;
   const compatibility = createWorkbenchProfileCompatibilityReport(draft);
   if (!compatibility.importAllowed) {
     draftStatus.value = '项目机制配置不兼容';
@@ -6649,6 +6855,8 @@ function applyWorkbenchScenarioDraftState(draft) {
     draft.initialRuntimeState
   );
   combatScenario.value = normalizeCombatScenario(draft.combatScenario);
+  projectIdentity.value = cloneWorkbenchHistoryValue(draft.projectIdentity);
+  projectTransport.value = cloneWorkbenchHistoryValue(draft.projectTransport);
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     draft.runtimeSampleCaptures
   );
@@ -6706,8 +6914,18 @@ function clearWorkbenchProjectTransientState() {
 }
 
 function markDraftDirty() {
+  invalidateMachineAxisCanonicalRun();
   projectShareUrl.value = '';
   draftStatus.value = '有未保存改动';
+}
+
+function invalidateMachineAxisCanonicalRun() {
+  if (!machineAxisImportSession.value?.canonicalRun) return;
+  machineAxisImportSession.value = {
+    ...machineAxisImportSession.value,
+    canonicalCompilation: null,
+    canonicalRun: null,
+  };
 }
 
 function recordWorkbenchHistorySnapshot() {
@@ -6915,6 +7133,8 @@ function createWorkbenchHistorySnapshot() {
       cycleBoundaries: cycleBoundaries.value,
       initialRuntimeState: initialRuntimeState.value,
       combatScenario: combatScenario.value,
+      projectIdentity: projectIdentity.value,
+      projectTransport: projectTransport.value,
       runtimeSampleCaptures: runtimeSampleCaptures.value,
       selectedActionId: selectedActionId.value,
     },
@@ -6935,6 +7155,8 @@ function createWorkbenchHistorySnapshot() {
     cycleBoundaries: draftSnapshot.cycleBoundaries,
     initialRuntimeState: draftSnapshot.initialRuntimeState,
     combatScenario: draftSnapshot.combatScenario,
+    projectIdentity: draftSnapshot.projectIdentity,
+    projectTransport: draftSnapshot.projectTransport,
     runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
     selectedActionIds: selectedActionIds.value,
@@ -7005,6 +7227,8 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
     snapshot.initialRuntimeState
   );
   combatScenario.value = normalizeCombatScenario(snapshot.combatScenario);
+  projectIdentity.value = cloneWorkbenchHistoryValue(snapshot.projectIdentity);
+  projectTransport.value = cloneWorkbenchHistoryValue(snapshot.projectTransport);
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures
   );
@@ -8976,6 +9200,84 @@ function selectTimelineIdentity(identity = {}) {
   }
 }
 
+function locateCanonicalTraceFact({
+  actionId = '',
+  identity = '',
+  timeMs = 0,
+} = {}) {
+  const normalizedActionId = String(actionId ?? '');
+  if (
+    normalizedActionId &&
+    effectiveScenarioActionById.value.has(normalizedActionId)
+  ) {
+    setWorkbenchActionSelection([normalizedActionId], normalizedActionId, {
+      anchorActionId: normalizedActionId,
+    });
+  }
+  const fact = canonicalTraceIndex.value.factsByIdentity.get(String(identity));
+  if (fact?.kind === 'effect') {
+    const effect = fact.value;
+    const selected =
+      effect.startMs != null
+        ? selectEffectInterval({
+            intervalId: effect.identity,
+            actionId: normalizedActionId,
+            timeMs: effect.startMs,
+          })
+        : selectEffectEvent(effect.identity);
+    if (selected) {
+      sideInspectorActivePanel.value = 'runtime-detail';
+      return;
+    }
+  }
+  selectTimelineFrame({
+    timeMs: Number(timeMs) || 0,
+    source: 'canonical-trace-fact',
+  });
+  dismissedSideInspectorKey.value = '';
+  sideInspectorActivePanel.value = 'canonical-trace';
+}
+
+function updateCanonicalTraceHitOverride({
+  actionId,
+  hitIdentity,
+  landed = 'inherit',
+  criticalMode = 'inherit',
+} = {}) {
+  if (
+    String(actionId ?? '') !== String(selectedActionId.value) ||
+    !String(hitIdentity ?? '').trim()
+  ) {
+    return false;
+  }
+  const selectedAction = effectiveScenarioActionById.value.get(
+    String(selectedActionId.value)
+  );
+  const editableActionId =
+    selectedAction?.derivedAction?.readOnly === true
+      ? selectedAction.parentActionId
+      : selectedActionId.value;
+  const sourceAction = findActionDraftById(editableActionId);
+  if (!sourceAction) return false;
+  const nextHitOverrides = {
+    ...(sourceAction.hitOverrides ?? {}),
+  };
+  const nextOverride = {
+    ...(nextHitOverrides[hitIdentity] ?? {}),
+  };
+  if (landed === 'inherit') delete nextOverride.willHit;
+  else nextOverride.willHit = landed === 'hit';
+  if (criticalMode === 'inherit') delete nextOverride.criticalPolicy;
+  else nextOverride.criticalPolicy = criticalMode;
+  if (Object.keys(nextOverride).length) {
+    nextHitOverrides[hitIdentity] = nextOverride;
+  } else {
+    delete nextHitOverrides[hitIdentity];
+  }
+  updateAction({ hitOverrides: nextHitOverrides });
+  sideInspectorActivePanel.value = 'canonical-trace';
+  return true;
+}
 function dismissSideInspector() {
   dismissedSideInspectorKey.value = sideInspectorSelectionKey.value;
 }

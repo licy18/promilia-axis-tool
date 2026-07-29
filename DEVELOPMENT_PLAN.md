@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-B-R2 / Machine Axis 验收稳定性收口已实施完成，等待产品验收**。M11-A-R1 已在 `80c5f35` 通过独立复验；Machine Axis v1、五命令 CLI 与 Workbench 双向 adapter 继续共享唯一 canonical core 和同一 trace/hash。R2 只修复真实进程测试的并发超时边界并锁定验收报告 canonical hash 与正式夹具运行结果一致。包体超限继续只作为对外发布风险；M11-C 尚未启动。
+当前里程碑：**M11-C / Visual Verification Workbench 已完成，等待产品验收**。M11-B-R2 已在 `8da52fb9daa8d849c14b1d737d0d723e9ab077d5` 通过产品验收；M11-C 已把 Workbench 接到同一 canonical trace/index 与 Machine Axis v1 互通链。包体超限继续只作为对外发布风险，不启动 M11-D。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -808,7 +808,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 阶段结果：唯一无头核心已提供 `catalog / compile / validate / simulate / evaluate / explain` 六个接口，Workbench 的权威编译、模拟、方案对比、放置评估与分析报告复现均消费同一核心。R1 使场景级或逐 hit 的 `sampled` 都在校验期要求 seed 并创建确定性随机源，资源预检与最终结算使用隔离随机流；命中时从目标属性 102 读取 `CRI_DEFENSE`，trace 分别保留来源暴击率、目标减暴、有效阈值和 roll。小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人四份 golden 的 replay/summary hash 无漂移，canonical trace hash 按新追踪合同更新。完整 146 文件/901 测试、62/62 production preview、41/41 必需能力及全部来源/漂移守门通过；Workbench gzip `375,287B`、总 JS gzip `768,160B` 的既有发布风险继续单列，不在本阶段压缩。
 
-#### M11-B：Machine Axis Contract 与 CLI（R2 收口完成，等待产品验收）
+#### M11-B：Machine Axis Contract 与 CLI（已通过产品验收）
 
 - 建立版本化 JSON Schema，支持绝对帧、`after previous/end`、偏移、切人、用户可选 variant、逐 hit 的命中与暴击覆盖、初始资源、敌人参数、目标时长、场景级 `criticalPolicy` 和 `randomSeed`。
 - 每个稳定 hit identity 分别保存 `landed: inherit|hit|miss` 与 `criticalMode: inherit|sampled|expected|critical|non-critical`；两者互不代偿。`miss` 必须关闭该 hit 的伤害、削韧、回能和命中效果；暴击模式只作用于实际命中且本来可暴击的分支。变体改变后无法解析的旧 hit override 必须报机器诊断，不得按显示序号误绑到新 hit。
@@ -818,9 +818,9 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 - 机器轴可直接导入 Workbench，Workbench 也可导出同一语义合同。
 
 验收门：一条命令可完成完整长轴模拟、对比和解释；保存重放稳定；命中、随机/强制/期望暴击均可按 hit round-trip；任何结果都能回到具体 action/hit/effect、暴击决策及来源版本。
-阶段结果：R1 让 Machine Axis 直接消费正式奇波动作投影，`catalog` 现完整覆盖 122 只奇波、366 个 signature/active/break 动作；FPS 合同诚实锁定 60，CLI 输入/输出失败分别稳定返回 INPUT=3 与 RUNTIME=5，输出写入失败会把版本化错误回退到 stdout。更新后的 120 秒 fixture 含 14 个机器输入与 16 个最终执行项，三名角色均实际入轴，迅狼星决技消耗 `100 -> 0`，红宝石公开普攻按重放状态解析为 E1 并消耗弹药 `6 -> 5`；API、CLI、Workbench 得到相同 `input/data/trace/evaluation` hash `1670cb62718bc08b / c49a239709b43a16 / fa0f3130b8c77583 / 8b144d1df218405e`。R2 为真实 CLI 子进程 I/O 用例设置 30 秒测试边界，并由正式夹具同时校验报告顶层、R1 与 R2 canonical hash。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力和六道来源/漂移审计通过；四份 M10 golden 无漂移。Workbench gzip `375,306B`、总 JS gzip `768,501B` 的既有超限继续仅作为对外发布风险；M11-C 未启动。
+阶段结果：R1 让 Machine Axis 直接消费正式奇波动作投影，`catalog` 现完整覆盖 122 只奇波、366 个 signature/active/break 动作；FPS 合同诚实锁定 60，CLI 输入/输出失败分别稳定返回 INPUT=3 与 RUNTIME=5，输出写入失败会把版本化错误回退到 stdout。更新后的 120 秒 fixture 含 14 个机器输入与 16 个最终执行项，三名角色均实际入轴，迅狼星决技消耗 `100 -> 0`，红宝石公开普攻按重放状态解析为 E1 并消耗弹药 `6 -> 5`；API、CLI、Workbench 得到相同 `input/data/trace/evaluation` hash `1670cb62718bc08b / c49a239709b43a16 / fa0f3130b8c77583 / 8b144d1df218405e`。R2 为真实 CLI 子进程 I/O 用例设置 30 秒测试边界，并由正式夹具同时校验报告顶层、R1 与 R2 canonical hash。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力和六道来源/漂移审计通过；四份 M10 golden 无漂移。M11-B-R2 已在 `8da52fb` 通过产品验收；Workbench gzip `375,306B`、总 JS gzip `768,501B` 的既有超限继续仅作为对外发布风险。
 
-#### M11-C：Visual Verification Workbench
+#### M11-C：Visual Verification Workbench（已完成，等待产品验收）
 
 - 当前网页收敛为权威 trace 的编辑与验收表面，保留动作块、操作轴、三值/能量/印记/特殊资源曲线、Buff/状态区间和逐 hit 编辑。
 - 检查面为每个 hit 提供相互独立的命中选择和暴击选择；暴击使用 `继承 / 随机 / 期望 / 暴击 / 不暴击`，默认继承场景策略。页面显示命中时刻的有效暴击率、抗暴、暴伤，以及采样模式的 roll/阈值/结果或期望模式的概率加权贡献，不在曲线上增加装饰性暴击点。
@@ -829,6 +829,8 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 - 本阶段优先保证桌面内部验收效率。窄屏精修、动画、装饰、非必要拖拽手感和包体压缩不作为阶段阻断门。
 
 验收门：人可以从页面直接发现条件未生效、派生错形态、Buff 漏失、同帧顺序错误、hit 未结算和暴击分支错误；页面每个可见事实都能映射到 trace identity，导入导出后逐 hit 选择不漂移。
+
+阶段结果：Workbench 现按 canonical trace hash 构建 memoized action/hit/effect/resource/state 索引；检查面显示请求/实际形态、control/subskill、执行时序、诊断、逐 hit 命中与五种暴击策略，以及来源、目标和生命周期互不合并的效果/资源事实。Machine Axis 冷启动导入会先等待正式 verified mechanics 包，120 秒 fixture 的 14 个机器输入/16 个实际执行项及 `1670cb62718bc08b / c49a239709b43a16 / fa0f3130b8c77583 / 8b144d1df218405e` 四 hash 在导入、编辑、撤销和导出中保持合同一致；无效导入不覆盖当前项目。寒悠悠同帧 24 秒全队与 15 秒主控效果按独立 identity 显示并保留切人继承，韧性恢复与真实削韧按事件类型分开。完整 Vitest 153 文件/943 测试、六道审计、production build、63/63 production preview 与 42/42 必需能力通过；Workbench gzip `380,833B`、总 JS gzip `800,681B` 仅记录为既有发布风险。桌面证据为 `reports/m11-c-canonical-trace-workbench-desktop.png`。当前停止并等待产品验收。
 
 #### M11-D：角色机制验收协议
 
@@ -970,7 +972,8 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 59. 已完成并通过功能验收：M10 收口将寒悠悠隐藏大招爆炸归为当前客户端 `not-applicable / legacy-unreachable` 废案，capture 由 11 降至 10、零距离阻断由 1 降至 0；小玉 117、红宝石 123、寒悠悠 76 条 golden 的 replay/summary hash 均无漂移。M10 正式关闭，当前进入 M11-A；包体超限只保留为对外发布风险。
 60. 实施完成：M11-A 已建立唯一 Canonical Headless Combat Core，Node 与 Workbench 共用 `catalog / compile / validate / simulate / evaluate / explain` 和同一 canonical trace/hash；四模式暴击、显式 seed、逐 hit 覆盖及确定性采样已接入。
 61. 已完成并通过产品验收：M11-A-R1 已在 `80c5f35` 关闭逐 hit `sampled` 随机源与 seed 门禁、预检随机序列污染、目标 `CRI_DEFENSE` 和分析报告旧调用链；四份 golden 的 replay/summary hash 无漂移。
-62. R2 收口完成，等待产品复验：Machine Axis 已补齐 122 只奇波/366 动作入口，固定 60 FPS，修正真实 CLI I/O 错误合同，并把 fixture 扩为三角色实际切入、红宝石弹药与真实奇波动作共同参与的 120 秒轴；R2 进一步关闭并发测试超时与验收报告 canonical hash 漂移。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力及六道审计通过；M11-C 未启动，包体超限继续仅作为发布风险。
+62. 已完成并通过产品验收：M11-B-R2 在 8da52fb 关闭并发测试超时与验收报告 canonical hash 漂移；122 只奇波/366 动作、固定 60 FPS、真实 CLI I/O、三角色 120 秒 fixture、六道审计与 62/62 production preview 均通过。
+63. 已完成，等待产品验收：M11-C 已将 Workbench 收敛为 canonical trace 的可视编辑与验收表面，接通 Machine Axis 导入导出、稳定 trace identity、逐 hit 命中/暴击编辑和效果/资源因果检查；完整 153/943、63/63、42/42 与六道审计通过，不启动第四角色、M11-D/M12、包体优化或未验收奇波机制接入。
 
 ## 8. 风险和取舍
 

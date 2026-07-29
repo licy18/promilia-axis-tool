@@ -1,7 +1,8 @@
+export { MACHINE_AXIS_TRANSPORT_METADATA_KEY } from './machineAxisTransport';
+
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
 export const MACHINE_AXIS_KIND = 'azpr-machine-axis';
-export const MACHINE_AXIS_TRANSPORT_METADATA_KEY = 'machineAxis';
 export const MACHINE_AXIS_SUPPORTED_FPS = 60;
 
 export const MACHINE_AXIS_SCHEDULE_MODES = Object.freeze([

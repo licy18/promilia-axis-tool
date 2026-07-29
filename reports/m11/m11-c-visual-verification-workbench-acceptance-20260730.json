@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "m11-c-visual-verification-workbench-acceptance",
+  "generatedAt": "2026-07-29T18:30:27.1659627Z",
+  "baseCommit": "8da52fb9daa8d849c14b1d737d0d723e9ab077d5",
+  "status": "implementation-complete-awaiting-product-acceptance",
+  "canonicalContract": {
+    "core": "WORKBENCH_HEADLESS_COMBAT_CORE",
+    "traceViewIndex": "memoized-by-canonical-trace-hash",
+    "uiMechanicsCalculation": "forbidden",
+    "editRecalculation": "committed-edits-only"
+  },
+  "machineAxisFixture": {
+    "path": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+    "durationSeconds": 120,
+    "requestedActionCount": 14,
+    "executedActionCount": 16,
+    "actorCount": 3,
+    "switchCount": 2,
+    "kiboAction": {
+      "publicActionId": 50000102,
+      "hitCount": 9,
+      "energyBefore": 100,
+      "energyAfter": 0
+    },
+    "rubyAction": {
+      "controlSkillId": 10300201,
+      "subSkillIndex": 1,
+      "ammoBefore": 6,
+      "ammoAfter": 5
+    }
+  },
+  "canonicalHashes": {
+    "algorithm": "fnv1a64-utf8-v1",
+    "input": "1670cb62718bc08b",
+    "data": "c49a239709b43a16",
+    "trace": "fa0f3130b8c77583",
+    "evaluation": "8b144d1df218405e"
+  },
+  "verifiedCapabilities": {
+    "machineAxisColdImport": true,
+    "machineAxisRoundTrip": true,
+    "invalidImportNonDestructive": true,
+    "stableHitIdentityOverrides": true,
+    "staleHitDiagnostic": true,
+    "fiveCriticalModes": true,
+    "expectedModeNoSyntheticCriticalEvent": true,
+    "distinctSameFrameEffects": true,
+    "controlledEffectInheritance": true,
+    "toughnessRecoverySeparatedFromDamage": true,
+    "inspectorClosable": true
+  },
+  "verification": {
+    "vitest": {
+      "status": "passed",
+      "fileCount": 153,
+      "testCount": 943,
+      "command": "npm test -- --run"
+    },
+    "audits": [
+      "npm run audit:character-combat",
+      "npm run audit:verified-combat",
+      "npm run audit:production-imports:check",
+      "npm run audit:workbench-data:check",
+      "npm run audit:action-status:check",
+      "npm run audit:applied-source-bindings:check"
+    ],
+    "productionBuild": {
+      "status": "passed",
+      "command": "npm run build"
+    },
+    "productionPreview": {
+      "status": "passed",
+      "passed": 63,
+      "total": 63,
+      "requiredCapabilitiesPassed": 42,
+      "requiredCapabilitiesTotal": 42,
+      "command": "npm run test:e2e:production-preview"
+    },
+    "bundle": {
+      "status": "known-release-risk",
+      "initialEntryWithinBudget": true,
+      "workbenchGzipBytes": 380833,
+      "workbenchBudgetBytes": 370000,
+      "totalJavaScriptGzipBytes": 800681,
+      "totalJavaScriptBudgetBytes": 740000,
+      "optimizationPerformed": false
+    }
+  },
+  "evidence": {
+    "desktopScreenshot": {
+      "path": "reports/m11-c-canonical-trace-workbench-desktop.png",
+      "bytes": 145527,
+      "sha256": "b8335236e1fff5e6a172b0e2acb0fc9940b764e98634a1a7bef9036754c8bc89"
+    },
+    "productionPreviewReport": "reports/production-preview-acceptance.json",
+    "productionImportAudit": "reports/production-import-audit.json",
+    "bundleComposition": "reports/bundle-composition.json"
+  },
+  "stopBoundary": [
+    "M11-D",
+    "M12",
+    "fourth-character",
+    "bundle-optimization",
+    "unaccepted-kibo-mechanics"
+  ]
+}

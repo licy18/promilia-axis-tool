@@ -76,7 +76,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     testInfo.title.includes('[m10-b1-r2-ruby-replay]') ||
     testInfo.title.includes('[m10-b1-r2-switch-cooldown]') ||
     testInfo.title.includes('[m10-b1-r3-ruby-star-carry-entry]') ||
-    testInfo.title.includes('[m10-b2-han-firework-runtime]')
+    testInfo.title.includes('[m10-b2-han-firework-runtime]') ||
+    testInfo.title.includes('[m11-c-canonical-trace-workbench]')
   ) {
     return;
   }
@@ -8306,6 +8307,42 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     path: 'reports/m10-b2-r1-han-causal-chain-desktop.png',
   });
 
+  const ultimateActionId = await ultimateAction.getAttribute('data-action-id');
+  expect(ultimateActionId).toBeTruthy();
+  await ultimateAction.click();
+  const hanTraceInspector = await openActionInspectorPanel(
+    page,
+    'canonical-trace',
+    ultimateActionId
+  );
+  const hanTraceIntervals = hanTraceInspector.getByTestId(
+    'canonical-trace-effect-interval'
+  );
+  const hanTeamTraceIntervals = hanTraceIntervals.filter({
+    hasText: '全队调谐强度提升',
+  });
+  const hanControlledTraceInterval = hanTraceIntervals.filter({
+    hasText: '主控角色调谐强度提升',
+  });
+  await expect(hanTeamTraceIntervals).toHaveCount(3);
+  await expect(hanControlledTraceInterval).toHaveCount(2);
+  await expect(hanTeamTraceIntervals.first()).toContainText(
+    '1948F - 3388F · 2 层'
+  );
+  await expect(hanControlledTraceInterval.first()).toContainText(
+    'actor-101003 · 1948F - 2100F · 1 层'
+  );
+  await expect(hanControlledTraceInterval.last()).toContainText(
+    `actor-${tuningBuffTargetCharacterId} · 2100F - 2848F · 1 层`
+  );
+  const hanIntervalIdentities = await hanTraceIntervals.evaluateAll(rows =>
+    rows.map(row => row.dataset.effectIdentity).filter(Boolean)
+  );
+  expect(new Set(hanIntervalIdentities).size).toBe(
+    hanIntervalIdentities.length
+  );
+
+  await closeInspectorIfVisible(page);
   await page.setViewportSize({ width: 390, height: 900 });
   await closeInspectorIfVisible(page);
   await expectPageWithoutHorizontalOverflow(page);
@@ -8796,6 +8833,224 @@ test('[m10-b1-r3-ruby-star-carry-entry] replays a real switch into Ruby thunder 
   });
 });
 
+test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trips one canonical Machine Axis trace', async ({
+  page,
+}) => {
+  test.setTimeout(240_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.getByTestId('workbench-scenario-bar')).toBeVisible();
+
+  await clickProjectMenuCommand(page, 'workbench-open-machine-axis');
+  const dialog = page.getByTestId('workbench-machine-axis-dialog');
+  await expect(dialog).toBeVisible();
+  await dialog.getByTestId('workbench-machine-axis-load-fixture').click();
+  await expect(dialog.getByTestId('machine-axis-status')).toContainText(
+    '已载入 M11-B 120 秒验收轴',
+    { timeout: 30_000 }
+  );
+
+  const workbench = page.locator('main.workbench');
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await expect(workbench).toHaveAttribute(
+    'data-canonical-trace-hash',
+    'fa0f3130b8c77583'
+  );
+  await expect(workbench).toHaveAttribute(
+    'data-canonical-trace-action-count',
+    '16'
+  );
+  await expect(workbench).toHaveAttribute(
+    'data-machine-axis-import-active',
+    'true'
+  );
+  await expect(dialog.getByTestId('machine-axis-summary')).toContainText(
+    '机器输入 14'
+  );
+  await expect(dialog.getByTestId('machine-axis-summary')).toContainText(
+    '实际执行 16'
+  );
+
+  for (const actionId of [
+    'xunlang-signature',
+    'a3-sampled',
+    'switch-to-xiaoyu',
+    'xiaoyu-charged',
+    'switch-to-ruby',
+    'ruby-enhanced-e1-intent',
+  ]) {
+    await expect(
+      timeline.locator(
+        `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+      )
+    ).toHaveCount(1);
+  }
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="switch-to-xiaoyu"][data-switch-event="true"]'
+    )
+  ).toHaveAttribute('data-duration-ms', '0');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="switch-to-ruby"][data-switch-event="true"]'
+    )
+  ).toHaveAttribute('data-duration-ms', '0');
+
+  const downloadPromise = page.waitForEvent('download');
+  await dialog.getByTestId('workbench-machine-axis-export').click();
+  const download = await downloadPromise;
+  const exportedPath = await download.path();
+  if (!exportedPath) {
+    throw new Error('Machine Axis export did not produce a local download');
+  }
+  const exportedContract = JSON.parse(await readFile(exportedPath, 'utf8'));
+  expect(exportedContract.actions).toHaveLength(14);
+  const { stdout: exportedRunJson } = await execFileAsync(
+    process.execPath,
+    ['scripts/run-machine-axis-cli.mjs', 'simulate', exportedPath],
+    {
+      cwd: process.cwd(),
+      maxBuffer: 64 * 1024 * 1024,
+      timeout: 120_000,
+    }
+  );
+  const exportedRun = JSON.parse(exportedRunJson);
+  expect(exportedRun.hashes).toEqual({
+    algorithm: 'fnv1a64-utf8-v1',
+    input: '1670cb62718bc08b',
+    data: 'c49a239709b43a16',
+    trace: 'fa0f3130b8c77583',
+    evaluation: '8b144d1df218405e',
+  });
+
+  const invalidContract = JSON.parse(
+    await readFile('fixtures/machine-axis/m11-b-three-actor-120s.json', 'utf8')
+  );
+  invalidContract.actions[1].intent.publicActionId = 99999999;
+  await page.getByTestId('workbench-import-project-file').setInputFiles({
+    name: 'invalid-machine-axis.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(invalidContract)),
+  });
+  await expect(dialog.getByTestId('machine-axis-status')).toContainText(
+    '当前项目保持不变'
+  );
+  await expect(
+    dialog
+      .getByTestId('machine-axis-import-diagnostics')
+      .locator(
+        '[data-diagnostic-code="machine-axis-public-action-unknown"]'
+      )
+  ).toHaveCount(1);
+  await expect(workbench).toHaveAttribute(
+    'data-canonical-trace-hash',
+    'fa0f3130b8c77583'
+  );
+  await expect(workbench).toHaveAttribute(
+    'data-canonical-trace-action-count',
+    '16'
+  );
+  await dialog.getByTestId('workbench-close-machine-axis').click();
+  await expect(dialog).toHaveCount(0);
+
+  const openTraceAction = async actionId => {
+    const action = timeline.locator(
+      `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+    );
+    await action.scrollIntoViewIfNeeded();
+    await action.click();
+    const inspector = await openActionInspectorPanel(
+      page,
+      'canonical-trace',
+      actionId
+    );
+    return {
+      action,
+      inspector: inspector.getByTestId(
+        'workbench-canonical-trace-inspector'
+      ),
+    };
+  };
+
+  const xunlang = await openTraceAction('xunlang-signature');
+  await expect(
+    xunlang.inspector.getByTestId('canonical-trace-hit-row')
+  ).toHaveCount(9);
+  await expect(
+    xunlang.inspector.locator(
+      '[data-testid="canonical-trace-resource-event"][data-resource-identity*="kibo"]'
+    )
+  ).toContainText('100 → 0');
+
+  const ruby = await openTraceAction('ruby-enhanced-e1-intent');
+  await expect(ruby.inspector).toContainText('control 10300201 / sub 1');
+  await expect(
+    ruby.inspector.locator(
+      '[data-testid="canonical-trace-resource-event"][data-resource-identity="actor:103002:element:103002047"]'
+    )
+  ).toContainText('6 → 5');
+
+  const criticalCases = [
+    ['a3-inherit', 'hit', 'inherit'],
+    ['a3-sampled', 'hit', 'sampled'],
+    ['a3-expected', 'hit', 'expected'],
+    ['a3-critical', 'hit', 'critical'],
+    ['a3-non-critical', 'hit', 'non-critical'],
+    ['a3-miss', 'miss', 'inherit'],
+  ];
+  for (const [actionId, landed, criticalMode] of criticalCases) {
+    const { inspector } = await openTraceAction(actionId);
+    const hit = inspector.getByTestId('canonical-trace-hit-row');
+    await expect(hit).toHaveCount(1);
+    await expect(hit.getByTestId('canonical-trace-hit-landed')).toHaveValue(
+      landed
+    );
+    await expect(
+      hit.getByTestId('canonical-trace-hit-critical-mode')
+    ).toHaveValue(criticalMode);
+  }
+
+  const sampled = await openTraceAction('a3-sampled');
+  const sampledHit = sampled.inspector.getByTestId(
+    'canonical-trace-hit-row'
+  );
+  await expect(sampledHit).toContainText('CRI_DEFENSE');
+  await expect(sampledHit).toContainText('阈值');
+  await expect(sampledHit).toContainText('Roll');
+  await expect(sampledHit).toContainText('2345');
+  const originalTraceHash = await workbench.getAttribute(
+    'data-canonical-trace-hash'
+  );
+  await sampledHit.getByTestId('canonical-trace-hit-landed').selectOption(
+    'miss'
+  );
+  await expect(workbench).not.toHaveAttribute(
+    'data-canonical-trace-hash',
+    originalTraceHash
+  );
+  await expect(
+    sampled.inspector.getByTestId('canonical-trace-hit-landed')
+  ).toHaveValue('miss');
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(workbench).toHaveAttribute(
+    'data-canonical-trace-hash',
+    originalTraceHash
+  );
+  await expect(
+    sampled.inspector.getByTestId('canonical-trace-hit-landed')
+  ).toHaveValue('hit');
+  await expect(page.locator('body')).not.toContainText('�');
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: 'reports/m11-c-canonical-trace-workbench-desktop.png',
+  });
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await expect(page.getByTestId('workbench-side-inspector')).toHaveCount(0);
+  await expect(timeline).toBeVisible();
+});
 function formatRuntimeFrameLabel(frameIndex) {
   return `${Math.floor(frameIndex / 60)}s${frameIndex % 60}f`;
 }
