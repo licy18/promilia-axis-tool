@@ -41,7 +41,9 @@
     "test:e2e:workbench-performance": "npm run build && playwright test --config playwright.performance.config.js",
     "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
     "test:trial-release": "npm run test -- --run && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:action-status:check && npm run audit:verified-combat && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "machine-axis": "node scripts/run-machine-axis-cli.mjs",
+    "machine-axis:build": "vite build --config vite.machine-axis-cli.config.js"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

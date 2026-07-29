@@ -2516,23 +2516,26 @@ function resolveCriticalBranch(
   } = {}
 ) {
   const hitIdentity = resolveCriticalHitIdentity(hit);
+  const hitOverride = action.hitOverrides?.[hitIdentity] ?? null;
+  const capturedRoll = numberOrNull(hitOverride?.criticalRoll);
   const persisted =
     action.mechanicsRandomBranches?.[hitIdentity] ??
     action.mechanicsRandomBranches?.[String(hit.elementId)] ??
     action.mechanicsRandomBranch ??
     null;
-  const persistedRoll = numberOrNull(persisted?.criticalRoll);
-  const explicitOverride =
-    action.hitOverrides?.[hitIdentity]?.criticalPolicy ?? null;
+  const persistedRoll = capturedRoll ?? numberOrNull(persisted?.criticalRoll);
+  const explicitOverride = hitOverride?.criticalPolicy ?? null;
   const scenarioCritical = scenario?.combatScenario?.critical ?? {};
   const policy =
-    explicitOverride == null && persistedRoll != null
-      ? 'legacy-persisted-roll'
-      : resolveActionHitCriticalPolicy(
-          action,
-          hitIdentity,
-          scenarioCritical.policy
-        );
+    capturedRoll != null
+      ? 'captured-critical-roll'
+      : explicitOverride == null && persistedRoll != null
+        ? 'legacy-persisted-roll'
+        : resolveActionHitCriticalPolicy(
+            action,
+            hitIdentity,
+            scenarioCritical.policy
+          );
   const sourceCriticalRate = Number(source.criticalRate) || 0;
   const normalizedTargetCriticalRateDefense =
     Number(targetCriticalRateDefense) || 0;
@@ -2564,15 +2567,21 @@ function resolveCriticalBranch(
     replayable: true,
   };
 
-  if (policy === 'legacy-persisted-roll') {
+  if (
+    policy === 'captured-critical-roll' ||
+    policy === 'legacy-persisted-roll'
+  ) {
     const normalizedRoll =
       persistedRoll >= 0 && persistedRoll <= 1
         ? persistedRoll
         : persistedRoll / 10_000;
     return {
       ...base,
-      policy: 'persisted-critical-roll',
-      branchIdentity: persisted?.identity ?? `persisted|${sampleKey}`,
+      policy,
+      branchIdentity:
+        policy === 'captured-critical-roll'
+          ? `captured|${sampleKey}`
+          : (persisted?.identity ?? `persisted|${sampleKey}`),
       criticalRoll: persistedRoll,
       critical: isCriticalHit({
         randomRoll: normalizedRoll,

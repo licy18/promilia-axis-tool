@@ -13,12 +13,15 @@ export function normalizeActionHitOverrides(value = null) {
           override.criticalPolicy == null
             ? null
             : normalizeActionHitCriticalPolicy(override.criticalPolicy);
+        const criticalRoll = normalizeCriticalRoll(override.criticalRoll);
         return [
           hitIdentity,
           {
-            willHit:
-              override.willHit == null ? true : Boolean(override.willHit),
+            ...(override.willHit == null
+              ? {}
+              : { willHit: Boolean(override.willHit) }),
             ...(criticalPolicy ? { criticalPolicy } : {}),
+            ...(criticalRoll != null ? { criticalRoll } : {}),
           },
         ];
       })
@@ -43,4 +46,12 @@ export function resolveActionHitWillHit(
 function normalizeText(value) {
   const text = String(value ?? '').trim();
   return text || null;
+}
+
+function normalizeCriticalRoll(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 && number < 10_000
+    ? number
+    : null;
 }

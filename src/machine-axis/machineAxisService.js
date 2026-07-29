@@ -1,0 +1,1233 @@
+import { ACTION_TYPES } from '../domain/projectSchema';
+import {
+  createWorkbenchActionDraft,
+  createWorkbenchProject,
+  getSkillsForCharacter,
+  getWorkbenchGameData,
+  getWorkbenchLoadoutOptions,
+} from '../domain/workbenchProjectFactory';
+import { getSkillActionCatalog } from '../domain/skillActionCatalog';
+import { frameToMs } from '../domain/timebase';
+import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
+import {
+  getInstalledVerifiedCombatMechanicsPackage,
+  getVerifiedCombatActionMapping,
+} from '../data/verifiedCombatMechanicsPackage';
+import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchHeadlessCombatCore';
+import {
+  createMachineAxisDiagnostic,
+  resolveMachineAxisSchedules,
+  validateMachineAxisContract,
+} from './machineAxisContract';
+
+export const MACHINE_AXIS_SERVICE_SCHEMA_VERSION = 1;
+export const MACHINE_AXIS_SERVICE_CONTRACT_NAME = 'AzPrMachineAxisService';
+
+export function createMachineAxisService({
+  core = WORKBENCH_HEADLESS_COMBAT_CORE,
+  gameData = getWorkbenchGameData(),
+} = {}) {
+  function catalog() {
+    const mechanicsPackage = requireMechanicsPackage();
+    const coreCatalog = core.catalog();
+    const publicActions = gameData.characters.flatMap(character =>
+      createActorCatalogEntries(character, gameData)
+    );
+    const kibos = getWorkbenchLoadoutOptions().kibos.map(kibo => ({
+      id: Number(kibo.id),
+      name: kibo.name ?? null,
+      actions: (kibo.actions ?? []).map(action => ({
+        publicActionId: Number(action.skillId),
+        actionKind: action.kind,
+        name: action.name ?? null,
+        cooldownMs: action.cooldownMs ?? null,
+      })),
+    }));
+    const value = {
+      schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+      contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+      kind: 'azpr-machine-axis-catalog',
+      dataIdentity: {
+        verifiedMechanicsPackageId: mechanicsPackage.packageId,
+        verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
+        mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
+        mechanicsProfileVersion: 1,
+      },
+      characters: coreCatalog.characters,
+      publicActions,
+      kibos,
+      enemies: coreCatalog.enemies,
+      summary: {
+        characterCount: coreCatalog.summary.characterCount,
+        publicActionCount: publicActions.length,
+        kiboCount: kibos.length,
+        enemyCount: coreCatalog.summary.enemyCount,
+      },
+    };
+    return { ...value, catalogHash: hashCanonicalValue(value) };
+  }
+
+  function compile(machineAxis, options = {}) {
+    const prepared = prepare(machineAxis);
+    if (!prepared.valid) throw new MachineAxisValidationError(prepared.issues);
+    const canonicalCompilation = core.compile(
+      { schemaVersion: 1, project: prepared.project },
+      options
+    );
+    const identityIssues = validateCompiledDataIdentity(
+      prepared.contract,
+      canonicalCompilation.dataIdentity
+    );
+    if (identityIssues.length) {
+      throw new MachineAxisValidationError(identityIssues);
+    }
+    return {
+      schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+      contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+      kind: 'azpr-machine-axis-compilation',
+      contract: prepared.contract,
+      project: prepared.project,
+      actionResolutions: prepared.actionResolutions,
+      canonicalCompilation,
+      diagnostics: prepared.issues,
+      hashes: canonicalCompilation.hashes,
+      dataIdentity: canonicalCompilation.dataIdentity,
+    };
+  }
+
+  function validate(machineAxis, options = {}) {
+    try {
+      const compilation = compile(machineAxis, options);
+      const run = core.simulate(compilation.canonicalCompilation, options);
+      const issues = collectExecutionIssues(run, compilation.actionResolutions);
+      return {
+        schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+        contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+        kind: 'azpr-machine-axis-validation',
+        valid: issues.length === 0,
+        issues,
+        warnings:
+          compilation.canonicalCompilation.scenario.diagnostics
+            ?.validationWarnings ?? [],
+        hashes: {
+          input: compilation.hashes.input,
+          data: compilation.hashes.data,
+          trace: run.hashes.trace,
+        },
+        actionResolutions: compilation.actionResolutions,
+      };
+    } catch (error) {
+      return {
+        schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+        contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+        kind: 'azpr-machine-axis-validation',
+        valid: false,
+        issues: normalizeMachineAxisIssues(error),
+        warnings: [],
+        hashes: { input: null, data: null, trace: null },
+        actionResolutions: [],
+      };
+    }
+  }
+
+  function simulate(machineAxis, options = {}) {
+    const { compilation, run } = simulateCanonical(machineAxis, options);
+    return {
+      schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+      contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+      kind: 'azpr-machine-axis-run',
+      contract: compilation.contract,
+      actionResolutions: compilation.actionResolutions,
+      trace: run.trace,
+      evaluation: run.evaluation,
+      hashes: run.hashes,
+      inputHash: run.inputHash,
+      dataHash: run.dataHash,
+      traceHash: run.traceHash,
+    };
+  }
+
+  function evaluate(machineAxis, options = {}) {
+    return simulate(machineAxis, options).evaluation;
+  }
+
+  function explain(machineAxis, selector = {}, options = {}) {
+    const { run } = simulateCanonical(machineAxis, options);
+    return {
+      schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+      contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+      kind: 'azpr-machine-axis-explanation',
+      selector,
+      hashes: run.hashes,
+      explanation: core.explain(run, selector, options),
+    };
+  }
+
+  function compare(left, right, options = {}) {
+    return createMachineAxisComparison(
+      simulate(left, options),
+      simulate(right, options)
+    );
+  }
+
+  function simulateCanonical(machineAxis, options = {}) {
+    const compilation = compile(machineAxis, options);
+    const run = core.simulate(compilation.canonicalCompilation, options);
+    const issues = collectExecutionIssues(run, compilation.actionResolutions);
+    if (issues.length) throw new MachineAxisValidationError(issues);
+    return { compilation, run };
+  }
+  function prepare(machineAxis) {
+    const contractValidation = validateMachineAxisContract(machineAxis);
+    const contract = contractValidation.normalized;
+    const issues = [...contractValidation.issues];
+    if (!contractValidation.valid) {
+      return {
+        valid: false,
+        contract,
+        project: null,
+        actionResolutions: [],
+        issues,
+      };
+    }
+    issues.push(...validateSourceDataIdentity(contract));
+    issues.push(...validateScenarioCatalogReferences(contract, gameData));
+    const teamBySlot = new Map(
+      contract.scenario.team.map((slot, position) => [
+        slot.slotId,
+        { ...slot, position },
+      ])
+    );
+    const templates = contract.actions.map((action, index) =>
+      createActionTemplate({
+        action,
+        index,
+        contract,
+        teamBySlot,
+        gameData,
+        issues,
+      })
+    );
+    const scheduleResult = resolveMachineAxisSchedules(contract.actions, {
+      resolveDurationFrames: action =>
+        templates.find(template => template?.actionId === action.id)
+          ?.durationFrames ?? null,
+    });
+    issues.push(...scheduleResult.issues);
+    const actionDrafts = templates
+      .filter(Boolean)
+      .map(template => {
+        const schedule = scheduleResult.byActionId[template.actionId];
+        return schedule
+          ? createWorkbenchActionDraft({
+              ...template.draft,
+              startMs: frameToMs(schedule.startFrame),
+            })
+          : null;
+      })
+      .filter(Boolean);
+    if (issues.length) {
+      return {
+        valid: false,
+        contract,
+        project: null,
+        actionResolutions: templates
+          .filter(Boolean)
+          .map(item => item.resolution),
+        issues,
+      };
+    }
+    const first = contract.scenario.team[0];
+    const second = contract.scenario.team[1];
+    const project = createWorkbenchProject(
+      {
+        characterId: first.characterId,
+        secondaryCharacterId: second.characterId,
+        enemyId: contract.scenario.enemy.enemyId,
+      },
+      {
+        durationMs: frameToMs(contract.scenario.durationFrames),
+        teamSlots: contract.scenario.team.map((slot, position) => ({
+          slotId: slot.slotId,
+          position,
+          characterId: slot.characterId,
+        })),
+        actorConfigs: contract.scenario.team.map(slot => ({
+          characterId: slot.characterId,
+          level: slot.level,
+          initialSp: slot.initialSp,
+          loadout: slot.loadout,
+          cultivation: slot.cultivation,
+        })),
+        enemyConfig: contract.scenario.enemy,
+        actions: actionDrafts,
+        initialRuntimeState: contract.scenario.initialRuntimeState,
+        combatScenario: { critical: contract.scenario.critical },
+        mechanicsProfileSelection: {
+          profileId: contract.dataIdentity.mechanicsProfileId,
+          profileVersion:
+            Number(contract.dataIdentity.mechanicsProfileVersion) || 1,
+        },
+      }
+    );
+    project.id = contract.scenario.id;
+    project.name = contract.scenario.name;
+    for (const template of templates.filter(Boolean)) {
+      issues.push(
+        ...validateResolvedHitOverrides({
+          machineAction: template.machineAction,
+          availableHitIdentities:
+            template.resolution.availableHitIdentities ?? [],
+          actionIndex: template.index,
+        })
+      );
+    }
+    return {
+      valid: issues.length === 0,
+      contract,
+      project,
+      actionResolutions: templates.filter(Boolean).map(template => ({
+        ...template.resolution,
+        startFrame: scheduleResult.byActionId[template.actionId]?.startFrame,
+      })),
+      issues,
+    };
+  }
+
+  return Object.freeze({
+    schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+    contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+    catalog,
+    compile,
+    validate,
+    simulate,
+    evaluate,
+    explain,
+    compare,
+    prepare,
+  });
+}
+
+export class MachineAxisValidationError extends Error {
+  constructor(issues) {
+    super('Machine Axis input is invalid');
+    this.name = 'MachineAxisValidationError';
+    this.issues = issues;
+  }
+}
+function createActionTemplate({
+  action,
+  index,
+  contract,
+  teamBySlot,
+  gameData,
+  issues,
+}) {
+  const ownerSlot = teamBySlot.get(action.owner.slotId);
+  if (action.owner.kind !== 'system' && !ownerSlot) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-owner-slot-missing',
+        `actions.${index}.owner.slotId`,
+        `Unknown owner slot: ${action.owner.slotId}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  if (action.intent.kind === 'wait') {
+    return {
+      actionId: action.id,
+      index,
+      machineAction: action,
+      durationFrames: action.intent.durationFrames,
+      draft: {
+        id: action.id,
+        type: ACTION_TYPES.WAIT,
+        actorCharacterId:
+          ownerSlot?.characterId ?? contract.scenario.team[0].characterId,
+        durationMs: frameToMs(action.intent.durationFrames),
+        note: action.note,
+      },
+      resolution: {
+        actionId: action.id,
+        intentKind: 'wait',
+        durationFrames: action.intent.durationFrames,
+      },
+    };
+  }
+  if (action.intent.kind === 'switch') {
+    const targetSlot = teamBySlot.get(action.intent.targetSlotId);
+    if (!targetSlot) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-switch-target-slot-missing',
+          `actions.${index}.intent.targetSlotId`,
+          `Unknown switch target slot: ${action.intent.targetSlotId}`,
+          { actionId: action.id }
+        )
+      );
+      return null;
+    }
+    return {
+      actionId: action.id,
+      index,
+      machineAction: action,
+      durationFrames: 0,
+      draft: {
+        id: action.id,
+        type: ACTION_TYPES.SWITCH,
+        actorCharacterId: ownerSlot.characterId,
+        targetCharacterId: targetSlot.characterId,
+        durationMs: 0,
+        note: action.note,
+      },
+      resolution: {
+        actionId: action.id,
+        intentKind: 'switch',
+        sourceSlotId: ownerSlot.slotId,
+        targetSlotId: targetSlot.slotId,
+        targetCharacterId: targetSlot.characterId,
+        durationFrames: 0,
+      },
+    };
+  }
+  if (action.owner.kind === 'kibo') {
+    return createKiboActionTemplate({ action, index, ownerSlot, issues });
+  }
+  if (action.owner.kind !== 'actor') {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-public-action-owner-unsupported',
+        `actions.${index}.owner.kind`,
+        `Public action owner is not supported: ${action.owner.kind}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  return createActorActionTemplate({
+    action,
+    index,
+    ownerSlot,
+    gameData,
+    issues,
+  });
+}
+
+function createActorActionTemplate({
+  action,
+  index,
+  ownerSlot,
+  gameData,
+  issues,
+}) {
+  const skills = getSkillsForCharacter(ownerSlot.characterId);
+  const skill = skills.find(
+    entry => Number(entry.id) === Number(action.intent.publicActionId)
+  );
+  if (!skill) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-public-action-unknown',
+        `actions.${index}.intent.publicActionId`,
+        `Unknown public action ${action.intent.publicActionId} for character ${ownerSlot.characterId}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  const catalogCandidates = getSkillActionCatalog(skills, 1).filter(
+    entry =>
+      Number(entry.skillId) === Number(action.intent.publicActionId) &&
+      (!action.intent.actionKind || entry.kind === action.intent.actionKind)
+  );
+  if (catalogCandidates.length !== 1) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        catalogCandidates.length
+          ? 'machine-axis-public-action-ambiguous'
+          : 'machine-axis-public-action-kind-missing',
+        `actions.${index}.intent.actionKind`,
+        `Unable to select one public action form for ${action.intent.publicActionId}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  const entry = catalogCandidates[0];
+  const mapping = getVerifiedCombatActionMapping({
+    type: ACTION_TYPES.SKILL,
+    skillId: entry.skillId,
+    actionVariantIndex: entry.actionVariantIndex,
+    actor: { characterId: ownerSlot.characterId },
+  });
+  if (!mapping) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-public-action-mapping-missing',
+        `actions.${index}.intent`,
+        `Verified mapping is missing for ${entry.id}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  const segment =
+    mapping.actionKind === 'normal-attack'
+      ? resolveAttackInputSegment(action, mapping, index, issues)
+      : null;
+  if (mapping.actionKind === 'normal-attack' && !segment) return null;
+  const durationFrames =
+    positiveIntegerOrNull(segment?.effectiveDurationFrames) ??
+    positiveIntegerOrNull(segment?.durationFrames) ??
+    positiveIntegerOrNull(mapping.actionTiming?.occupancy?.durationFrames) ??
+    positiveIntegerOrNull(mapping.actionScheduling?.durationFrames);
+  if (durationFrames == null) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-action-duration-unresolved',
+        `actions.${index}.intent`,
+        `Action duration is unresolved for ${entry.id}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  const scheduling = resolveWorkbenchActionScheduling({
+    timingStatus: 'applied',
+    durationFrames,
+    actionScheduling: segment?.actionScheduling ?? mapping.actionScheduling,
+  });
+  const semanticVariant = resolveSemanticVariantSelection({
+    action,
+    entry,
+    mapping,
+    ownerId: ownerSlot.characterId,
+    index,
+    issues,
+  });
+  if (action.intent.semanticVariant && !semanticVariant) return null;
+  const attackInputFields = segment
+    ? createAttackInputFields(action, mapping, segment)
+    : {};
+  return {
+    actionId: action.id,
+    index,
+    machineAction: action,
+    durationFrames,
+    draft: {
+      id: action.id,
+      type: ACTION_TYPES.SKILL,
+      actorCharacterId: ownerSlot.characterId,
+      skillId: entry.skillId,
+      actionVariantIndex: entry.actionVariantIndex,
+      durationMs: scheduling.durationMs,
+      durationFrames,
+      timingSource:
+        segment?.durationBasis ??
+        mapping.actionTiming?.occupancy?.sourceKind ??
+        'verified-machine-axis',
+      timingStatus: 'applied',
+      timingReasons: [],
+      timingSourceIdentity:
+        segment?.durationSourceIdentity ??
+        mapping.actionTiming?.occupancy?.sourceIdentity ??
+        mapping.bindingSourceIdentity,
+      needsTimingData: false,
+      controlSubSkillIndex:
+        segment?.selectedSubSkillIndex ?? mapping.selectedSubSkillIndex,
+      variantInputSelection: semanticVariant,
+      actionScheduling:
+        segment?.actionScheduling ?? mapping.actionScheduling ?? null,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
+      hitOverrides: toProjectHitOverrides(action.hitOverrides),
+      note: action.note,
+      ...attackInputFields,
+    },
+    resolution: {
+      actionId: action.id,
+      intentKind: 'public-action',
+      ownerKind: 'actor',
+      ownerSlotId: ownerSlot.slotId,
+      ownerId: ownerSlot.characterId,
+      publicActionId: entry.skillId,
+      actionKind: mapping.actionKind,
+      publicVariantIndex: entry.actionVariantIndex,
+      durationFrames,
+      mappingIdentity: mapping.identity,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
+      availableHitIdentities: collectMappingHitIdentities(mapping, segment),
+      semanticVariant,
+    },
+  };
+}
+
+function createKiboActionTemplate({ action, index, ownerSlot, issues }) {
+  const kiboId = Number(ownerSlot.loadout?.kiboId);
+  const kibo = getWorkbenchLoadoutOptions().kibos.find(
+    entry => Number(entry.id) === kiboId
+  );
+  const publicAction = kibo?.actions?.find(
+    entry => Number(entry.skillId) === Number(action.intent.publicActionId)
+  );
+  if (!kibo || !publicAction) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-kibo-action-unknown',
+        `actions.${index}.intent.publicActionId`,
+        `Unknown kibo action ${action.intent.publicActionId} for ${kiboId || 'unconfigured kibo'}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  const mapping = getVerifiedCombatActionMapping({
+    type: ACTION_TYPES.KIBO_EVENT,
+    skillId: publicAction.skillId,
+    actionVariantIndex: 0,
+    kiboId,
+    actor: {
+      characterId: ownerSlot.characterId,
+      loadout: { kiboId },
+    },
+  });
+  const durationFrames = positiveIntegerOrNull(
+    mapping?.actionTiming?.occupancy?.durationFrames
+  );
+  if (!mapping || durationFrames == null) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-kibo-action-mapping-missing',
+        `actions.${index}.intent`,
+        `Verified kibo action mapping is missing for ${publicAction.skillId}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  return {
+    actionId: action.id,
+    index,
+    machineAction: action,
+    durationFrames,
+    draft: {
+      id: action.id,
+      type: ACTION_TYPES.KIBO_EVENT,
+      actorCharacterId: ownerSlot.characterId,
+      kiboId,
+      skillId: publicAction.skillId,
+      name: publicAction.name,
+      eventType: publicAction.kind,
+      durationMs: frameToMs(durationFrames),
+      durationFrames,
+      timingSource: mapping.actionTiming.occupancy.sourceKind,
+      timingStatus: 'applied',
+      timingSourceIdentity:
+        mapping.actionTiming.occupancy.sourceIdentity ??
+        mapping.bindingSourceIdentity,
+      needsTimingData: false,
+      controlSubSkillIndex: mapping.selectedSubSkillIndex,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
+      hitOverrides: toProjectHitOverrides(action.hitOverrides),
+      note: action.note,
+    },
+    resolution: {
+      actionId: action.id,
+      intentKind: 'public-action',
+      ownerKind: 'kibo',
+      ownerSlotId: ownerSlot.slotId,
+      ownerId: kiboId,
+      publicActionId: publicAction.skillId,
+      actionKind: publicAction.kind,
+      publicVariantIndex: 0,
+      durationFrames,
+      mappingIdentity: mapping.identity,
+      sourceEvidenceStatus: mapping.sourceEvidenceStatus,
+      scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
+      availableHitIdentities: collectMappingHitIdentities(mapping),
+    },
+  };
+}
+function resolveAttackInputSegment(action, mapping, index, issues) {
+  const sequenceIndex = action.intent.attackInput?.sequenceIndex;
+  if (!sequenceIndex) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-input-required',
+        `actions.${index}.intent.attackInput.sequenceIndex`,
+        'Normal attacks require a semantic input sequenceIndex',
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  const candidates = (
+    mapping.attackInputSourceSegments ??
+    mapping.attackInputSegments ??
+    []
+  ).filter(segment => Number(segment.sequenceIndex) === sequenceIndex);
+  if (candidates.length !== 1) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        candidates.length
+          ? 'machine-axis-normal-attack-input-ambiguous'
+          : 'machine-axis-normal-attack-input-missing',
+        `actions.${index}.intent.attackInput.sequenceIndex`,
+        `Unable to resolve normal attack input ${sequenceIndex}`,
+        { actionId: action.id }
+      )
+    );
+    return null;
+  }
+  return candidates[0];
+}
+
+function createAttackInputFields(action, mapping, segment) {
+  return {
+    attackGroupId:
+      action.intent.attackInput?.groupId ?? `machine-axis-${action.id}`,
+    attackSequenceIndex: segment.sequenceIndex,
+    attackSequenceTotal: segment.sequenceTotal,
+    attackChainSequenceIndex:
+      segment.chainSequenceIndex ?? segment.sequenceIndex,
+    attackInputChainIdentity:
+      segment.attackInputChainIdentity ??
+      mapping.attackInputChainIdentity ??
+      null,
+    attackInputChainSelectionSource: 'runtime-projected',
+    attackInputIntent: {
+      schemaVersion: 1,
+      contractName: 'AzPrWorkbenchAttackInputIntent',
+      kind: 'public-normal-attack',
+      selectionMode: 'runtime-context',
+      sourceSkillId: mapping.sourceSkillId,
+      actionVariantIndex: mapping.actionVariantIndex,
+      sourceIdentity:
+        mapping.bindingSourceIdentity ??
+        `machine-axis-public-normal-attack:${mapping.sourceSkillId}`,
+    },
+    attackInput: segment,
+  };
+}
+
+function validateResolvedHitOverrides({
+  machineAction,
+  availableHitIdentities,
+  actionIndex,
+}) {
+  const requested = Object.keys(machineAction.hitOverrides);
+  if (!requested.length) return [];
+  const available = new Set(availableHitIdentities);
+  const issues = [];
+  for (const hitIdentity of requested) {
+    const hit = findInstalledHitByIdentity(hitIdentity);
+    if (!available.has(hitIdentity) || !hit) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-hit-identity-stale',
+          `actions.${actionIndex}.hitOverrides.${hitIdentity}`,
+          `Hit identity is not valid for the resolved action: ${hitIdentity}`,
+          { actionId: machineAction.id, hitIdentity }
+        )
+      );
+      continue;
+    }
+    const mode = machineAction.hitOverrides[hitIdentity].criticalMode;
+    if (
+      !['inherit', 'non-critical'].includes(mode) &&
+      !isHitCriticalEligible(hit)
+    ) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-hit-critical-override-unsupported',
+          `actions.${actionIndex}.hitOverrides.${hitIdentity}.criticalMode`,
+          `Hit does not support critical mode ${mode}`,
+          { actionId: machineAction.id, hitIdentity }
+        )
+      );
+    }
+  }
+  return issues;
+}
+
+function toProjectHitOverrides(overrides) {
+  return Object.fromEntries(
+    Object.entries(overrides ?? {}).map(([hitIdentity, override]) => [
+      hitIdentity,
+      {
+        ...(override.landed === 'hit'
+          ? { willHit: true }
+          : override.landed === 'miss'
+            ? { willHit: false }
+            : {}),
+        ...(override.criticalMode !== 'inherit'
+          ? { criticalPolicy: override.criticalMode }
+          : {}),
+        ...(override.criticalRoll != null
+          ? { criticalRoll: override.criticalRoll }
+          : {}),
+      },
+    ])
+  );
+}
+
+function collectMappingHitIdentities(mapping, segment = null) {
+  return [
+    ...new Set(
+      [
+        ...(segment?.selectedHitIdentities ?? []),
+        ...(segment?.actionTiming?.hits ?? []).map(hit => hit.hitIdentity),
+        ...(mapping.selectedHitIdentities ?? []),
+        ...(mapping.actionTiming?.hits ?? []).map(hit => hit.hitIdentity),
+      ].filter(Boolean)
+    ),
+  ].sort((left, right) => left.localeCompare(right, 'en'));
+}
+
+function resolveSemanticVariantSelection({
+  action,
+  entry,
+  mapping,
+  ownerId,
+  index,
+  issues,
+}) {
+  const requested = action.intent.semanticVariant;
+  if (!requested) return null;
+  const mechanicsPackage = requireMechanicsPackage();
+  const contracts = (
+    mechanicsPackage.actionVariantGraph?.derivedControlContracts ?? []
+  ).filter(
+    contract =>
+      Number(contract.ownerId) === Number(ownerId) &&
+      (contract.publicActions ?? []).some(
+        publicAction =>
+          Number(publicAction.sourceSkillId) === Number(entry.skillId) &&
+          publicAction.actionKind === mapping.actionKind
+      )
+  );
+  const options = contracts.flatMap(contract => [
+    ...(contract.inputSelector?.options ?? []),
+    ...(contract.chargeTier ?? []),
+  ]);
+  const selected = options.find(
+    option => option.selectorIdentity === requested.selectorIdentity
+  );
+  if (!selected) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-semantic-variant-stale',
+        `actions.${index}.intent.semanticVariant.selectorIdentity`,
+        `Semantic variant is not available for the resolved public action: ${requested.selectorIdentity}`,
+        {
+          actionId: action.id,
+          selectorIdentity: requested.selectorIdentity,
+          availableSelectorIdentities: [
+            ...new Set(
+              options.map(option => option.selectorIdentity).filter(Boolean)
+            ),
+          ].sort((left, right) => left.localeCompare(right, 'en')),
+        }
+      )
+    );
+    return null;
+  }
+  if (
+    requested.publicVariantIndex != null &&
+    selected.publicVariantIndex != null &&
+    Number(requested.publicVariantIndex) !== Number(selected.publicVariantIndex)
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-semantic-variant-index-mismatch',
+        `actions.${index}.intent.semanticVariant.publicVariantIndex`,
+        'Semantic variant index does not match its stable selector identity',
+        {
+          actionId: action.id,
+          selectorIdentity: requested.selectorIdentity,
+          expectedPublicVariantIndex: selected.publicVariantIndex,
+        }
+      )
+    );
+    return null;
+  }
+  return {
+    ...requested,
+    selectorIdentity: selected.selectorIdentity,
+    selectorKind:
+      requested.selectorKind ??
+      contracts.find(contract =>
+        (contract.inputSelector?.options ?? []).includes(selected)
+      )?.inputSelector?.kind ??
+      'input-controlled',
+    publicVariantIndex:
+      requested.publicVariantIndex ?? selected.publicVariantIndex ?? null,
+    chargeTier: requested.chargeTier ?? selected.chargeTier ?? null,
+    mode:
+      requested.mode ??
+      contracts.find(contract =>
+        (contract.inputSelector?.options ?? []).includes(selected)
+      )?.inputSelector?.mode ??
+      null,
+    sourceIdentity: selected.sourceIdentity ?? null,
+    resolutionStatus: selected.resolutionStatus ?? null,
+  };
+}
+
+function validateScenarioCatalogReferences(contract, gameData) {
+  const issues = [];
+  const loadoutOptions = getWorkbenchLoadoutOptions();
+  const characters = new Set(
+    (gameData.characters ?? []).map(character => Number(character.id))
+  );
+  const enemies = new Set(
+    (gameData.enemies ?? []).map(enemy => Number(enemy.id))
+  );
+  const kibos = new Set(loadoutOptions.kibos.map(kibo => Number(kibo.id)));
+  const soulessences = new Set(
+    loadoutOptions.soulessences.map(item => Number(item.id))
+  );
+  for (const [index, slot] of contract.scenario.team.entries()) {
+    const path = `scenario.team.${index}`;
+    if (!characters.has(Number(slot.characterId))) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-character-unknown',
+          `${path}.characterId`,
+          `Unknown character id: ${slot.characterId}`
+        )
+      );
+    }
+    const loadout = slot.loadout ?? {};
+    if (loadout.kiboId != null && !kibos.has(Number(loadout.kiboId))) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-loadout-kibo-unknown',
+          `${path}.loadout.kiboId`,
+          `Unknown kibo id: ${loadout.kiboId}`
+        )
+      );
+    }
+    if (
+      loadout.soulessenceId != null &&
+      !soulessences.has(Number(loadout.soulessenceId))
+    ) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-loadout-soulessence-unknown',
+          `${path}.loadout.soulessenceId`,
+          `Unknown soulessence id: ${loadout.soulessenceId}`
+        )
+      );
+    }
+    for (const [slotKey, equipmentId] of Object.entries(
+      loadout.equipment ?? {}
+    )) {
+      if (equipmentId == null) continue;
+      const validIds = new Set(
+        (loadoutOptions.equipment[slotKey] ?? []).map(item => Number(item.id))
+      );
+      if (!validIds.has(Number(equipmentId))) {
+        issues.push(
+          createMachineAxisDiagnostic(
+            'machine-axis-loadout-equipment-invalid',
+            `${path}.loadout.equipment.${slotKey}`,
+            `Equipment ${equipmentId} is not valid for slot ${slotKey}`
+          )
+        );
+      }
+    }
+  }
+  if (!enemies.has(Number(contract.scenario.enemy.enemyId))) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-enemy-unknown',
+        'scenario.enemy.enemyId',
+        `Unknown enemy id: ${contract.scenario.enemy.enemyId}`
+      )
+    );
+  }
+  return issues;
+}
+
+function collectSemanticVariants(ownerId, entry, mapping) {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  const contracts = (
+    mechanicsPackage?.actionVariantGraph?.derivedControlContracts ?? []
+  ).filter(
+    contract =>
+      Number(contract.ownerId) === Number(ownerId) &&
+      (contract.publicActions ?? []).some(
+        publicAction =>
+          Number(publicAction.sourceSkillId) === Number(entry.skillId) &&
+          publicAction.actionKind === mapping?.actionKind
+      )
+  );
+  const values = contracts.flatMap(contract =>
+    [
+      ...(contract.inputSelector?.options ?? []),
+      ...(contract.chargeTier ?? []),
+    ].map(option => ({
+      selectorIdentity: option.selectorIdentity,
+      selectorKind: contract.inputSelector?.kind ?? contract.controlSource,
+      label: option.label ?? null,
+      publicVariantIndex: option.publicVariantIndex ?? null,
+      chargeTier: option.chargeTier ?? null,
+      mode: contract.inputSelector?.mode ?? null,
+      resolutionStatus: option.resolutionStatus ?? contract.resolutionStatus,
+      sourceIdentity: option.sourceIdentity ?? contract.sourceIdentity,
+    }))
+  );
+  return [
+    ...new Map(
+      values
+        .filter(value => value.selectorIdentity)
+        .map(value => [value.selectorIdentity, value])
+    ).values(),
+  ].sort((left, right) =>
+    left.selectorIdentity.localeCompare(right.selectorIdentity, 'en')
+  );
+}
+function createActorCatalogEntries(character, gameData) {
+  const skills = gameData.skills.filter(
+    skill => Number(skill.characterId) === Number(character.id)
+  );
+  return getSkillActionCatalog(skills, 1).map(entry => {
+    const mapping = getVerifiedCombatActionMapping({
+      type: ACTION_TYPES.SKILL,
+      skillId: entry.skillId,
+      actionVariantIndex: entry.actionVariantIndex,
+      actor: { characterId: character.id },
+    });
+    return {
+      ownerKind: 'actor',
+      ownerId: Number(character.id),
+      ownerName: character.name ?? null,
+      publicActionId: Number(entry.skillId),
+      actionKind: entry.kind,
+      name: entry.label,
+      publicVariantIndex: entry.actionVariantIndex,
+      schedulable: mapping?.schedulable ?? false,
+      sourceEvidenceStatus: mapping?.sourceEvidenceStatus ?? 'unresolved',
+      scenarioRuntimeStatus: mapping?.scenarioRuntimeStatus ?? 'unresolved',
+      durationFrames: mapping?.actionTiming?.occupancy?.durationFrames ?? null,
+      attackInputs: (mapping?.attackInputSegments ?? []).map(segment => ({
+        sequenceIndex: segment.sequenceIndex,
+        label: segment.label,
+        durationFrames:
+          segment.effectiveDurationFrames ?? segment.durationFrames ?? null,
+        hitIdentities: segment.selectedHitIdentities ?? [],
+      })),
+      hitIdentities: collectMappingHitIdentities(mapping ?? {}),
+      semanticVariants: collectSemanticVariants(character.id, entry, mapping),
+      mappingIdentity: mapping?.identity ?? null,
+    };
+  });
+}
+
+function validateSourceDataIdentity(contract) {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  if (!mechanicsPackage) {
+    return [
+      createMachineAxisDiagnostic(
+        'machine-axis-mechanics-package-not-installed',
+        'dataIdentity',
+        'Verified combat mechanics package is not installed'
+      ),
+    ];
+  }
+  const issues = [];
+  if (
+    contract.dataIdentity.verifiedMechanicsPackageId !==
+    mechanicsPackage.packageId
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-data-package-id-mismatch',
+        'dataIdentity.verifiedMechanicsPackageId',
+        'Machine Axis package identity does not match installed data'
+      )
+    );
+  }
+  if (
+    contract.dataIdentity.verifiedMechanicsPackageHash !==
+    mechanicsPackage.packageHash
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-data-package-hash-mismatch',
+        'dataIdentity.verifiedMechanicsPackageHash',
+        'Machine Axis package hash does not match installed data'
+      )
+    );
+  }
+  return issues;
+}
+
+function validateCompiledDataIdentity(contract, actual) {
+  return actual.mechanicsProfileId === contract.dataIdentity.mechanicsProfileId
+    ? []
+    : [
+        createMachineAxisDiagnostic(
+          'machine-axis-mechanics-profile-mismatch',
+          'dataIdentity.mechanicsProfileId',
+          `Resolved profile ${actual.mechanicsProfileId} does not match requested profile ${contract.dataIdentity.mechanicsProfileId}`
+        ),
+      ];
+}
+
+function collectExecutionIssues(run, actionResolutions) {
+  const machineActionIds = new Set(
+    actionResolutions.map(entry => String(entry.actionId))
+  );
+  return (run.trace.executionPlan.actions ?? [])
+    .filter(
+      entry =>
+        machineActionIds.has(String(entry.actionId)) && entry.execute === false
+    )
+    .map((entry, index) =>
+      createMachineAxisDiagnostic(
+        'machine-axis-action-not-executable',
+        `executionPlan.actions.${index}`,
+        `Action ${entry.actionId} is not executable: ${entry.skipReason ?? entry.status}`,
+        { actionId: entry.actionId }
+      )
+    );
+}
+
+function createMachineAxisComparison(left, right) {
+  const leftDamage = indexDamage(left.trace.damage);
+  const rightDamage = indexDamage(right.trace.damage);
+  const hitKeys = [...new Set([...leftDamage.keys(), ...rightDamage.keys()])];
+  return {
+    schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+    contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
+    kind: 'azpr-machine-axis-comparison',
+    left: { hashes: left.hashes, evaluation: left.evaluation },
+    right: { hashes: right.hashes, evaluation: right.evaluation },
+    delta: subtractNumericRecords(
+      right.evaluation.totals,
+      left.evaluation.totals
+    ),
+    actions: compareIdentityRows(
+      left.evaluation.byAction,
+      right.evaluation.byAction
+    ),
+    hits: hitKeys
+      .sort((a, b) => a.localeCompare(b, 'en'))
+      .map(identity => ({
+        identity,
+        left: leftDamage.get(identity) ?? null,
+        right: rightDamage.get(identity) ?? null,
+        delta: subtractNumericRecords(
+          rightDamage.get(identity),
+          leftDamage.get(identity)
+        ),
+      })),
+  };
+}
+
+function indexDamage(events = []) {
+  const result = new Map();
+  for (const event of events) {
+    const identity = `${event.actionId}|${event.hitIdentity ?? event.hitKey ?? event.hitIndex}`;
+    const row = result.get(identity) ?? {
+      identity,
+      actionId: event.actionId,
+      hitIdentity: event.hitIdentity ?? null,
+      hitCount: 0,
+      hpDamage: 0,
+      toughnessDamage: 0,
+    };
+    row.hitCount += 1;
+    row.hpDamage += Number(event.rawDamage) || 0;
+    row.toughnessDamage += Number(event.toughnessDamage) || 0;
+    result.set(identity, row);
+  }
+  return result;
+}
+
+function compareIdentityRows(leftRows = [], rightRows = []) {
+  const left = new Map(leftRows.map(row => [row.identity, row]));
+  const right = new Map(rightRows.map(row => [row.identity, row]));
+  return [...new Set([...left.keys(), ...right.keys()])]
+    .sort((a, b) => a.localeCompare(b, 'en'))
+    .map(identity => ({
+      identity,
+      left: left.get(identity) ?? null,
+      right: right.get(identity) ?? null,
+      delta: subtractNumericRecords(right.get(identity), left.get(identity)),
+    }));
+}
+
+function subtractNumericRecords(right = null, left = null) {
+  const keys = new Set([
+    ...Object.keys(right ?? {}),
+    ...Object.keys(left ?? {}),
+  ]);
+  return Object.fromEntries(
+    [...keys]
+      .filter(
+        key =>
+          typeof right?.[key] === 'number' || typeof left?.[key] === 'number'
+      )
+      .map(key => [
+        key,
+        (Number(right?.[key]) || 0) - (Number(left?.[key]) || 0),
+      ])
+  );
+}
+
+function normalizeMachineAxisIssues(error) {
+  if (Array.isArray(error?.issues)) return error.issues;
+  return [
+    createMachineAxisDiagnostic(
+      'machine-axis-internal-error',
+      '',
+      error?.message ?? String(error)
+    ),
+  ];
+}
+
+function findInstalledHitByIdentity(hitIdentity) {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  const bindings = [
+    ...(mechanicsPackage?.controlBindings ?? []),
+    ...(mechanicsPackage?.actionVariantControlBindings ?? []),
+  ];
+  for (const binding of bindings) {
+    const hit = (binding.hits ?? []).find(
+      entry => entry.hitIdentity === hitIdentity
+    );
+    if (hit) return hit;
+  }
+  return null;
+}
+
+function isHitCriticalEligible(hit) {
+  return ![6, 10].includes(Number(hit?.damage?.damageType));
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function requireMechanicsPackage() {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  if (!mechanicsPackage) {
+    throw new MachineAxisValidationError([
+      createMachineAxisDiagnostic(
+        'machine-axis-mechanics-package-not-installed',
+        '',
+        'Verified combat mechanics package is not installed'
+      ),
+    ]);
+  }
+  return mechanicsPackage;
+}

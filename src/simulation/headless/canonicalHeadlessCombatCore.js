@@ -268,9 +268,11 @@ function projectTraceAction(action) {
     controlSkillId:
       action.selectedActionForm?.controlSkillId ??
       action.actionVariantResolution?.controlSkillId ??
+      action.attackInput?.controlSkillId ??
       null,
     subSkillIndex:
       action.selectedActionForm?.subSkillIndex ??
+      action.attackInput?.selectedSubSkillIndex ??
       action.controlSubSkillIndex ??
       null,
     semanticName:
