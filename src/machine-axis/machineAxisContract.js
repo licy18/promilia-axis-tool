@@ -1,6 +1,7 @@
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
 export const MACHINE_AXIS_KIND = 'azpr-machine-axis';
+export const MACHINE_AXIS_TRANSPORT_METADATA_KEY = 'machineAxis';
 
 export const MACHINE_AXIS_SCHEDULE_MODES = Object.freeze([
   'absolute',
@@ -58,6 +59,7 @@ export function normalizeMachineAxisContract(value = {}) {
       team: normalizeTeam(scenario.team),
       enemy: normalizeEnemy(scenario.enemy),
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
+      projectile: normalizeProjectile(scenario.projectile),
       critical: normalizeCritical(scenario.critical),
     },
     actions: actions.map((action, index) =>
@@ -237,6 +239,7 @@ function normalizeMachineAxisAction(value, index) {
       actionKind: textOrNull(intent.actionKind),
       targetSlotId: textOrNull(intent.targetSlotId),
       durationFrames: nonNegativeIntegerOrNull(intent.durationFrames),
+      level: positiveIntegerOrNull(intent.level),
       semanticVariant: normalizeSemanticVariant(intent.semanticVariant),
       attackInput: normalizeAttackInput(intent.attackInput),
     },
@@ -346,6 +349,14 @@ function normalizeEnemy(value) {
   };
 }
 
+function normalizeProjectile(value) {
+  const source = isRecord(value) ? value : {};
+  return {
+    targetDistance: nonNegativeNumberOrNull(source.targetDistance) ?? 0,
+    defaultWillHit:
+      source.defaultWillHit == null ? true : Boolean(source.defaultWillHit),
+  };
+}
 function normalizeCritical(value) {
   const source = isRecord(value) ? value : {};
   return {
@@ -698,26 +709,36 @@ function textOrNull(value) {
 }
 
 function finiteNumberOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
 
+function nonNegativeNumberOrNull(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) && number >= 0 ? number : null;
+}
 function positiveNumberOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : null;
 }
 
 function integerOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) ? number : null;
 }
 
 function nonNegativeIntegerOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) && number >= 0 ? number : null;
 }
 
 function positiveIntegerOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) && number > 0 ? number : null;
 }

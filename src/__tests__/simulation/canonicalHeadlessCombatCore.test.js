@@ -84,6 +84,9 @@ describe('canonical headless combat core', () => {
     const timestampOnly = structuredClone(first);
     timestampOnly.metadata.createdAt = '2026-07-30T00:00:00.000Z';
     timestampOnly.metadata.updatedAt = '2026-07-30T00:00:00.000Z';
+    timestampOnly.metadata.transport = {
+      machineAxis: { schedulesByActionId: { action: { mode: 'absolute' } } },
+    };
     const changedAction = structuredClone(timestampOnly);
     changedAction.actions[0].startMs = 100;
 

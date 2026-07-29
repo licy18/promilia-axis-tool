@@ -38,8 +38,13 @@ const testEntryFiles = [
   ...(await collectFiles(path.join(sourceRoot, '__tests__'))),
   ...(await collectFiles(path.join(repositoryRoot, 'e2e'))),
 ].filter(filePath => codeExtensions.has(path.extname(filePath)));
+const productionEntryFiles = [
+  path.join(sourceRoot, 'main.js'),
+  path.join(repositoryRoot, 'scripts', 'machine-axis-cli-entry.mjs'),
+  path.join(sourceRoot, 'machine-axis', 'workbenchMachineAxisAdapter.js'),
+];
 
-const productionTrace = await traceImports([path.join(sourceRoot, 'main.js')]);
+const productionTrace = await traceImports(productionEntryFiles);
 const testTrace = await traceImports(testEntryFiles);
 const productionFiles = sourceCodeFiles
   .filter(filePath => productionTrace.has(filePath))
@@ -64,7 +69,7 @@ const report = {
   schemaVersion: 1,
   kind: 'production-import-audit',
   entrypoints: {
-    production: ['src/main.js'],
+    production: productionEntryFiles.map(toRepositoryPath).sort(),
     tests: testEntryFiles.map(toRepositoryPath).sort(),
   },
   summary: {

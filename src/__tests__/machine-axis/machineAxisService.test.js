@@ -175,6 +175,67 @@ describe('Machine Axis service', () => {
     expect(() => service.simulate(invalid)).toThrow(MachineAxisValidationError);
   });
 
+  it('rejects critical overrides for a real non-critical-eligible hit', () => {
+    const hit = findMechanicsHit(PANGPANG_A3_HIT);
+    const originalDamageType = hit.damage.damageType;
+    hit.damage.damageType = 6;
+    try {
+      const validation = createMachineAxisService().validate(
+        createAxis({
+          hitOverrides: {
+            [PANGPANG_A3_HIT]: {
+              landed: 'hit',
+              criticalMode: 'critical',
+            },
+          },
+        })
+      );
+
+      expect(validation.valid).toBe(false);
+      expect(validation.issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-hit-critical-override-unsupported',
+          actionId: 'pangpang-a3',
+          hitIdentity: PANGPANG_A3_HIT,
+        })
+      );
+    } finally {
+      hit.damage.damageType = originalDamageType;
+    }
+  });
+
+  it('rejects expected mode when a real hit has critical-only state effects', () => {
+    const hit = findMechanicsHit(PANGPANG_A3_HIT);
+    const originalIdentities = hit.criticalStateEffectIdentities;
+    hit.criticalStateEffectIdentities = ['synthetic:critical-state-effect'];
+    try {
+      const validation = createMachineAxisService().validate(
+        createAxis({
+          hitOverrides: {
+            [PANGPANG_A3_HIT]: {
+              landed: 'hit',
+              criticalMode: 'expected',
+            },
+          },
+        })
+      );
+
+      expect(validation.valid).toBe(false);
+      expect(validation.issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-hit-expected-state-branch-unsupported',
+          actionId: 'pangpang-a3',
+          hitIdentity: PANGPANG_A3_HIT,
+        })
+      );
+    } finally {
+      if (originalIdentities === undefined) {
+        delete hit.criticalStateEffectIdentities;
+      } else {
+        hit.criticalStateEffectIdentities = originalIdentities;
+      }
+    }
+  });
   it('resolves relative schedules and rejects conflicting actions', () => {
     const service = createMachineAxisService();
     const pangpang = {
@@ -255,3 +316,15 @@ describe('Machine Axis service', () => {
     );
   });
 });
+function findMechanicsHit(hitIdentity) {
+  for (const binding of [
+    ...(mechanicsPackage.controlBindings ?? []),
+    ...(mechanicsPackage.actionVariantControlBindings ?? []),
+  ]) {
+    const hit = (binding.hits ?? []).find(
+      candidate => candidate.hitIdentity === hitIdentity
+    );
+    if (hit) return hit;
+  }
+  throw new Error(`Missing verified hit: ${hitIdentity}`);
+}

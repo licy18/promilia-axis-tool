@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "reportKind": "m11-b-machine-axis-contract-cli-acceptance",
+  "generatedOn": "2026-07-29",
+  "status": "implementation-complete-awaiting-product-acceptance",
+  "baselineCommit": "80c5f35",
+  "implementationUnits": [
+    {
+      "identity": "contract",
+      "commit": "4ea7762"
+    },
+    {
+      "identity": "cli",
+      "commit": "f42dd74"
+    },
+    {
+      "identity": "workbench-interop",
+      "commitReference": "this-commit"
+    }
+  ],
+  "contract": {
+    "contractName": "AzPrMachineAxis",
+    "schemaVersion": 1,
+    "schemaPath": "schemas/azpr-machine-axis-v1.schema.json",
+    "semanticScheduling": [
+      "absolute",
+      "after-previous-end",
+      "after-action-end"
+    ],
+    "hitLandedModes": ["inherit", "hit", "miss"],
+    "hitCriticalModes": [
+      "inherit",
+      "sampled",
+      "expected",
+      "critical",
+      "non-critical"
+    ],
+    "capturedCriticalRoll": true,
+    "projectileScenario": true
+  },
+  "cli": {
+    "commands": ["catalog", "validate", "simulate", "compare", "explain"],
+    "formats": ["json", "jsonl"],
+    "stdinStdout": true,
+    "fileInputOutput": true,
+    "stdoutMachineJsonOnly": true,
+    "exitCodes": {
+      "success": 0,
+      "usage": 2,
+      "input": 3,
+      "validation": 4,
+      "runtime": 5
+    },
+    "canonicalCoreOnly": true
+  },
+  "catalogSummary": {
+    "characterCount": 20,
+    "publicActionCount": 179,
+    "kiboCount": 122,
+    "enemyCount": 208
+  },
+  "fixture": {
+    "path": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+    "teamSize": 3,
+    "fps": 60,
+    "durationFrames": 7200,
+    "inputActionCount": 8,
+    "resolvedActionCount": 8,
+    "validationIssueCount": 0
+  },
+  "canonicalHashes": {
+    "algorithm": "fnv1a64-utf8-v1",
+    "input": "ee0ba83dd60f7599",
+    "data": "571336af2729eb4a",
+    "trace": "56c76f6f7a931676",
+    "evaluation": "11aaa473e49ae7a2"
+  },
+  "interop": {
+    "apiCliWorkbenchHashParity": true,
+    "traceParity": true,
+    "evaluationParity": true,
+    "workbenchRoundTripStable": true,
+    "relativeSchedulingPreservedUntilEdited": true,
+    "semanticVariantPreserved": true,
+    "initialResourcesPreserved": true,
+    "projectileScenarioPreserved": true,
+    "hitOverridesPreserved": true,
+    "staleHitRejected": true,
+    "unsupportedCriticalRejected": true,
+    "expectedStateSideEffectRejected": true
+  },
+  "productionEntrypoints": [
+    "scripts/machine-axis-cli-entry.mjs",
+    "src/machine-axis/workbenchMachineAxisAdapter.js",
+    "src/main.js"
+  ],
+  "goldens": [
+    {
+      "ownerId": 101010,
+      "scenario": "xiaoyu-main",
+      "assertionCount": 117,
+      "replayHash": "92b28770851aa03ecfbcb9440c20105fdbe60630a4d3b3890a1661ba05d20501",
+      "summaryHash": "4ee14faf60a5cfa997576480923dffc2ead27719b3a455986bce94941e4f7a75",
+      "canonicalInputHash": "37d5925dba605913",
+      "canonicalTraceHash": "f10783643a130f2e",
+      "canonicalDataHash": "ea74fc131e869f82"
+    },
+    {
+      "ownerId": 103002,
+      "scenario": "ruby-main",
+      "assertionCount": 123,
+      "replayHash": "60648d22a0152c6fe05829fa26fa1f98d1c66601e68f5799b5f471186d689713",
+      "summaryHash": "8c29b166f87a1800144f39b31ecb7ab8996835bd9ff5a471ca5908b1ddadf69f",
+      "canonicalInputHash": "b76350f58ed5d7dd",
+      "canonicalTraceHash": "ad73d92c22ba9435",
+      "canonicalDataHash": "1cbe890a97bd40fd"
+    },
+    {
+      "ownerId": 101003,
+      "scenario": "han-main",
+      "assertionCount": 76,
+      "replayHash": "6ba16a71ad199b8151a9584bcd83e6d89ad88ab90a3f101c529e2fbaeb11c089",
+      "summaryHash": "87881cbd0060650f7d353d04884602cb38e52fe83fdf24b196dfbec6bca7ca2b",
+      "canonicalInputHash": "b06fe21d3dea1aa0",
+      "canonicalTraceHash": "16192a3792515bf5",
+      "canonicalDataHash": "5d9cc9a253adf8e0"
+    },
+    {
+      "ownerId": 101003,
+      "scenario": "han-controlled-buff-switch",
+      "assertionCount": 34,
+      "replayHash": "53a7d025597e6d6762e3c1530a8df5813255b738a89942fc092f7e29c9777232",
+      "summaryHash": "4ffdfc6ed2f971060b420a77369b3550ac65070071b08169a6fdb9eb3a4b670e",
+      "canonicalInputHash": "58e5e0ef389d8f0d",
+      "canonicalTraceHash": "d30279443d8e4b3f",
+      "canonicalDataHash": "fed3617f028f9e00"
+    }
+  ],
+  "verification": {
+    "focusedVitest": {
+      "files": 6,
+      "tests": 33,
+      "passed": true
+    },
+    "fullVitest": {
+      "files": 150,
+      "tests": 921,
+      "passed": true
+    },
+    "productionPreview": {
+      "tests": 62,
+      "passedTests": 62,
+      "requiredCapabilities": 41,
+      "passedCapabilities": 41,
+      "status": "passed"
+    },
+    "buildPassed": true,
+    "characterCombatAuditClean": true,
+    "verifiedCombatAuditClean": true,
+    "productionImportsAuditClean": true,
+    "workbenchDataAuditClean": true,
+    "actionStatusAuditClean": true,
+    "appliedSourceBindingAuditClean": true
+  },
+  "releaseRisk": {
+    "blocksM11B": false,
+    "workbenchGzipBytes": 375302,
+    "workbenchBudgetBytes": 370000,
+    "totalJavaScriptGzipBytes": 768250,
+    "totalJavaScriptBudgetBytes": 740000,
+    "policy": "record-only-until-external-release"
+  },
+  "nextStageStarted": false,
+  "nextStage": "M11-C"
+}

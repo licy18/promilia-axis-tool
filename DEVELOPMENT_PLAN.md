@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-A-R1 / Canonical Headless Combat Core 正确性收口已完成，等待产品复验**。逐 hit sampled 随机源、预检随机流隔离、目标 `CRI_DEFENSE` 与 Workbench 分析报告唯一调用链均已闭环；三角色权威 replay/summary hash 保持不变。包体超限继续只作为对外发布风险；M11-B 尚未启动。
+当前里程碑：**M11-B / Machine Axis Contract 与 CLI 已实施完成，等待产品验收**。M11-A-R1 已在 `80c5f35` 通过独立复验；Machine Axis v1、五命令 CLI 与 Workbench 双向 adapter 现共享唯一 canonical core 和同一 trace/hash。包体超限继续只作为对外发布风险；M11-C 尚未启动。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -795,7 +795,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 上游静态证据确认：当前客户端对每个符合条件的 `DamageElement` 在执行前调用 `RandomUtility.Range(0, 10000)`，把整数结果写入该元素自己的 `criticalRandom`，随后按 `criticalRandom < 有效暴击阈值` 判定。当前构建的整数 Range 落到 `UnityEngine.Random.Range`，因此游戏语义是逐伤害元素的运行时伪随机采样，不是固定暴击序列或期望值结算。完整证据和建模边界见 `reports/m11/critical-sampling-evidence-20260729.md`。
 
-#### M11-A：Canonical Headless Combat Core（R1 正确性收口已完成，等待产品复验）
+#### M11-A：Canonical Headless Combat Core（已完成并通过产品验收）
 
 - 定义无 UI 的纯接口，至少覆盖 `catalog`、`compile`、`validate`、`simulate`、`evaluate` 和 `explain`。
 - 输入包含数据/profile 版本、队伍与装配、敌人、初始状态、战斗时长、语义动作意图、场景级暴击策略及随机种子；输出包含归一执行计划、合法性诊断、逐帧事件、状态快照、三值/资源/Buff 变化、贡献拆分、因果链及输入哈希。
@@ -808,7 +808,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 阶段结果：唯一无头核心已提供 `catalog / compile / validate / simulate / evaluate / explain` 六个接口，Workbench 的权威编译、模拟、方案对比、放置评估与分析报告复现均消费同一核心。R1 使场景级或逐 hit 的 `sampled` 都在校验期要求 seed 并创建确定性随机源，资源预检与最终结算使用隔离随机流；命中时从目标属性 102 读取 `CRI_DEFENSE`，trace 分别保留来源暴击率、目标减暴、有效阈值和 roll。小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人四份 golden 的 replay/summary hash 无漂移，canonical trace hash 按新追踪合同更新。完整 146 文件/901 测试、62/62 production preview、41/41 必需能力及全部来源/漂移守门通过；Workbench gzip `375,287B`、总 JS gzip `768,160B` 的既有发布风险继续单列，不在本阶段压缩。
 
-#### M11-B：Machine Axis Contract 与 CLI
+#### M11-B：Machine Axis Contract 与 CLI（实施完成，等待产品验收）
 
 - 建立版本化 JSON Schema，支持绝对帧、`after previous/end`、偏移、切人、用户可选 variant、逐 hit 的命中与暴击覆盖、初始资源、敌人参数、目标时长、场景级 `criticalPolicy` 和 `randomSeed`。
 - 每个稳定 hit identity 分别保存 `landed: inherit|hit|miss` 与 `criticalMode: inherit|sampled|expected|critical|non-critical`；两者互不代偿。`miss` 必须关闭该 hit 的伤害、削韧、回能和命中效果；暴击模式只作用于实际命中且本来可暴击的分支。变体改变后无法解析的旧 hit override 必须报机器诊断，不得按显示序号误绑到新 hit。
@@ -818,6 +818,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 - 机器轴可直接导入 Workbench，Workbench 也可导出同一语义合同。
 
 验收门：一条命令可完成完整长轴模拟、对比和解释；保存重放稳定；命中、随机/强制/期望暴击均可按 hit round-trip；任何结果都能回到具体 action/hit/effect、暴击决策及来源版本。
+阶段结果：Machine Axis v1 已提供版本化 JSON Schema、公开动作/语义变体排程、独立 landed/critical 覆盖与 captured roll；`catalog / validate / simulate / compare / explain` 可在标准 Node 中处理文件、stdin/stdout 和 JSON/JSONL，并以稳定退出码返回结构化错误。Workbench 双向 adapter 保留队伍装配、初始资源、投射物场景、原始相对/绝对排程（编辑后按当前绝对帧收敛）、variant 与 hit overrides；API、CLI、Workbench 对 120 秒三人 fixture 得到相同 `input/data/trace/evaluation` hash。完整 150 文件/921 测试、62/62 production preview、41/41 必需能力及全部角色、verified、生产引用、Workbench 数据、动作状态和 applied-source 审计通过。Workbench gzip `375,302B`、总 JS gzip `768,250B` 的既有超限继续仅作为对外发布风险；M11-C 未启动。
 
 #### M11-C：Visual Verification Workbench
 
@@ -968,7 +969,8 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 58. 实施完成，等待产品复验：M10-B1 已消费上游完整 Typetree 重导出，恢复星鸣技 7 段真实命中和第 0F 补弹、火印记、强化入口；公开形态 10/10 runtime-ready，123 条 authoritative golden、141 文件/871 测试和 62/62 production preview 通过。红宝石总 Profile 仍为 `runtime-applied / partial`；M11、下一角色和包体优化继续暂停。
 59. 已完成并通过功能验收：M10 收口将寒悠悠隐藏大招爆炸归为当前客户端 `not-applicable / legacy-unreachable` 废案，capture 由 11 降至 10、零距离阻断由 1 降至 0；小玉 117、红宝石 123、寒悠悠 76 条 golden 的 replay/summary hash 均无漂移。M10 正式关闭，当前进入 M11-A；包体超限只保留为对外发布风险。
 60. 实施完成：M11-A 已建立唯一 Canonical Headless Combat Core，Node 与 Workbench 共用 `catalog / compile / validate / simulate / evaluate / explain` 和同一 canonical trace/hash；四模式暴击、显式 seed、逐 hit 覆盖及确定性采样已接入。
-61. 实施完成，等待产品复验：M11-A-R1 已修复逐 hit `sampled` 随机源与 seed 门禁、预检随机序列污染、目标 `CRI_DEFENSE` 和分析报告旧调用链。小玉 117、红宝石 123、寒悠悠 76 条 golden 的 replay/summary hash 无漂移；146 文件/901 测试、62/62 production preview、41/41 必需能力及全部漂移/来源守门通过。包体超限继续仅作为发布风险，M11-B 尚未启动。
+61. 已完成并通过产品验收：M11-A-R1 已在 `80c5f35` 关闭逐 hit `sampled` 随机源与 seed 门禁、预检随机序列污染、目标 `CRI_DEFENSE` 和分析报告旧调用链；四份 golden 的 replay/summary hash 无漂移。
+62. 实施完成，等待产品验收：M11-B 已交付 Machine Axis v1 Schema、五命令 CLI、稳定错误码和 Workbench 双向 adapter；120 秒三人 fixture 在 API/CLI/Workbench 三路得到相同 canonical hash。150 文件/921 测试、62/62 production preview、41/41 必需能力及全部漂移/来源守门通过；M11-C 未启动，包体超限继续仅作为发布风险。
 
 ## 8. 风险和取舍
 

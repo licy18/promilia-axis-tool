@@ -16,6 +16,7 @@ import {
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchHeadlessCombatCore';
 import {
+  MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
   resolveMachineAxisSchedules,
   validateMachineAxisContract,
@@ -263,7 +264,10 @@ export function createMachineAxisService({
         enemyConfig: contract.scenario.enemy,
         actions: actionDrafts,
         initialRuntimeState: contract.scenario.initialRuntimeState,
-        combatScenario: { critical: contract.scenario.critical },
+        combatScenario: {
+          projectile: contract.scenario.projectile,
+          critical: contract.scenario.critical,
+        },
         mechanicsProfileSelection: {
           profileId: contract.dataIdentity.mechanicsProfileId,
           profileVersion:
@@ -273,6 +277,16 @@ export function createMachineAxisService({
     );
     project.id = contract.scenario.id;
     project.name = contract.scenario.name;
+    project.metadata.transport = {
+      ...(project.metadata.transport ?? {}),
+      [MACHINE_AXIS_TRANSPORT_METADATA_KEY]: createMachineAxisTransportMetadata(
+        {
+          contract,
+          project,
+          fps: contract.scenario.fps,
+        }
+      ),
+    };
     for (const template of templates.filter(Boolean)) {
       issues.push(
         ...validateResolvedHitOverrides({
@@ -307,6 +321,28 @@ export function createMachineAxisService({
     compare,
     prepare,
   });
+}
+
+function createMachineAxisTransportMetadata({ contract, project, fps }) {
+  return {
+    schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
+    contractName: contract.contractName,
+    schedulesByActionId: Object.fromEntries(
+      contract.actions.map(action => [
+        action.id,
+        structuredClone(action.schedule),
+      ])
+    ),
+    actionSnapshot: (project.actions ?? []).map(action => ({
+      id: String(action.id),
+      startFrame:
+        nonNegativeIntegerOrNull(action.startFrame) ??
+        Math.round((Number(action.startMs) * fps) / 1000),
+      durationFrames:
+        nonNegativeIntegerOrNull(action.durationFrames) ??
+        Math.round((Number(action.durationMs) * fps) / 1000),
+    })),
+  };
 }
 
 export class MachineAxisValidationError extends Error {
@@ -523,6 +559,7 @@ function createActorActionTemplate({
       actorCharacterId: ownerSlot.characterId,
       skillId: entry.skillId,
       actionVariantIndex: entry.actionVariantIndex,
+      level: action.intent.level ?? 1,
       durationMs: scheduling.durationMs,
       durationFrames,
       timingSource:
@@ -556,6 +593,7 @@ function createActorActionTemplate({
       publicActionId: entry.skillId,
       actionKind: mapping.actionKind,
       publicVariantIndex: entry.actionVariantIndex,
+      level: action.intent.level ?? 1,
       durationFrames,
       mappingIdentity: mapping.identity,
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
@@ -620,6 +658,7 @@ function createKiboActionTemplate({ action, index, ownerSlot, issues }) {
       actorCharacterId: ownerSlot.characterId,
       kiboId,
       skillId: publicAction.skillId,
+      level: action.intent.level ?? 1,
       name: publicAction.name,
       eventType: publicAction.kind,
       durationMs: frameToMs(durationFrames),
@@ -645,6 +684,7 @@ function createKiboActionTemplate({ action, index, ownerSlot, issues }) {
       publicActionId: publicAction.skillId,
       actionKind: publicAction.kind,
       publicVariantIndex: 0,
+      level: action.intent.level ?? 1,
       durationFrames,
       mappingIdentity: mapping.identity,
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
@@ -747,6 +787,19 @@ function validateResolvedHitOverrides({
           'machine-axis-hit-critical-override-unsupported',
           `actions.${actionIndex}.hitOverrides.${hitIdentity}.criticalMode`,
           `Hit does not support critical mode ${mode}`,
+          { actionId: machineAction.id, hitIdentity }
+        )
+      );
+    }
+    if (
+      mode === 'expected' &&
+      collectCriticalStateEffectIdentities(hit).length
+    ) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-hit-expected-state-branch-unsupported',
+          `actions.${actionIndex}.hitOverrides.${hitIdentity}.criticalMode`,
+          'Expected critical mode cannot collapse a hit with critical-only state side effects',
           { actionId: machineAction.id, hitIdentity }
         )
       );
@@ -1213,9 +1266,27 @@ function isHitCriticalEligible(hit) {
   return ![6, 10].includes(Number(hit?.damage?.damageType));
 }
 
+function collectCriticalStateEffectIdentities(hit) {
+  return [
+    ...new Set(
+      [
+        ...(hit?.criticalStateEffectIdentities ?? []),
+        ...(hit?.damage?.criticalStateEffectIdentities ?? []),
+      ]
+        .map(value => String(value ?? '').trim())
+        .filter(Boolean)
+    ),
+  ];
+}
 function positiveIntegerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : null;
 }
 
 function requireMechanicsPackage() {

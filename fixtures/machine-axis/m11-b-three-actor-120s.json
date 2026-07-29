@@ -102,6 +102,10 @@
     "critical": {
       "policy": "sampled",
       "seed": "m11-b-fixture-seed"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
     }
   },
   "actions": [
@@ -118,7 +122,8 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "fixture-a3"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "absolute",
@@ -144,7 +149,8 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "fixture-a3"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "after-previous-end",
@@ -171,7 +177,8 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "fixture-a3"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "after-previous-end",
@@ -197,7 +204,8 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "fixture-a3"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "after-action-end",
@@ -224,7 +232,8 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "fixture-a3"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "after-previous-end",
@@ -250,7 +259,8 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "fixture-a3"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "after-previous-end",
@@ -294,7 +304,8 @@
           "publicVariantIndex": 2,
           "chargeTier": 1,
           "mode": "hold"
-        }
+        },
+        "level": 1
       },
       "schedule": {
         "mode": "after-action-end",

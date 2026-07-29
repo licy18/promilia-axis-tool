@@ -27,6 +27,7 @@ function createContract(patch = {}) {
       ],
       enemy: { enemyId: 1001 },
       initialRuntimeState: {},
+      projectile: { targetDistance: 0, defaultWillHit: true },
       critical: { policy: 'non-critical', seed: null },
     },
     actions: [],
@@ -62,6 +63,7 @@ describe('Machine Axis contract', () => {
       actionKind: 'normal-attack',
       targetSlotId: null,
       durationFrames: null,
+      level: null,
       semanticVariant: null,
       attackInput: { sequenceIndex: 3, groupId: null },
     });

@@ -43,6 +43,7 @@
         "team",
         "enemy",
         "initialRuntimeState",
+        "projectile",
         "critical"
       ],
       "properties": {
@@ -58,6 +59,7 @@
         },
         "enemy": { "$ref": "#/$defs/enemy" },
         "initialRuntimeState": { "type": "object" },
+        "projectile": { "$ref": "#/$defs/projectile" },
         "critical": { "$ref": "#/$defs/critical" }
       }
     },
@@ -116,6 +118,15 @@
         "seed": { "type": ["string", "integer", "null"] }
       }
     },
+    "projectile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targetDistance", "defaultWillHit"],
+      "properties": {
+        "targetDistance": { "type": "number", "minimum": 0 },
+        "defaultWillHit": { "type": "boolean" }
+      }
+    },
     "action": {
       "type": "object",
       "additionalProperties": false,
@@ -151,6 +162,7 @@
         "actionKind": { "type": ["string", "null"] },
         "targetSlotId": { "type": ["string", "null"] },
         "durationFrames": { "type": ["integer", "null"], "minimum": 0 },
+        "level": { "type": ["integer", "null"], "minimum": 1 },
         "semanticVariant": {
           "anyOf": [{ "$ref": "#/$defs/semanticVariant" }, { "type": "null" }]
         },

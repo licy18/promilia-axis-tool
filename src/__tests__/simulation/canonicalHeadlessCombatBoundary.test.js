@@ -18,11 +18,12 @@ describe('canonical headless combat boundary', () => {
     expect(source).not.toMatch(/\b(pixel|pointer|drag|drop)\b/i);
   });
 
-  it('keeps Workbench production consumers behind the canonical core', () => {
+  it('keeps Workbench and Machine Axis production consumers behind the canonical core', () => {
     const productionFiles = [
       ...collectProductionFiles(
         resolve(process.cwd(), 'src/features/workbench')
       ),
+      ...collectProductionFiles(resolve(process.cwd(), 'src/machine-axis')),
       resolve(process.cwd(), 'src/views/Workbench.vue'),
     ];
     const violations = productionFiles.flatMap(file => {
@@ -32,6 +33,18 @@ describe('canonical headless combat boundary', () => {
         /from ['"][^'"]*simulation\/engine\/simulateScenario['"]/,
       ];
       return directImports
+        .filter(pattern => pattern.test(source))
+        .map(pattern => `${file}:${pattern.source}`);
+    });
+
+    expect(violations).toEqual([]);
+  });
+  it('keeps Machine Axis contracts and CLI free from browser globals', () => {
+    const violations = collectProductionFiles(
+      resolve(process.cwd(), 'src/machine-axis')
+    ).flatMap(file => {
+      const source = readFileSync(file, 'utf8');
+      return [/\bVue\b/, /\b(window|document|localStorage)\s*[.[]/]
         .filter(pattern => pattern.test(source))
         .map(pattern => `${file}:${pattern.source}`);
     });

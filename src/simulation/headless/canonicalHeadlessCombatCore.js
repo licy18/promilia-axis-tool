@@ -739,6 +739,7 @@ function createCanonicalProjectInput(project) {
   const metadata = { ...(project?.metadata ?? {}) };
   delete metadata.createdAt;
   delete metadata.updatedAt;
+  delete metadata.transport;
   return {
     ...project,
     metadata,
