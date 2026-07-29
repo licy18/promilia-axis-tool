@@ -33,6 +33,8 @@ const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
 const AZPR_ROOT = 'C:\\PC2\\Codex\\AzPr';
 const BATTLE_ROOT =
   'C:\\Codex\\AzPr Extractor\\ExtractedAssets\\Unity\\default_package\\ResourcesAssets\\Config\\Battle';
+const HERO_SUBSKILL_ROOT =
+  'C:\\Codex\\AzPr Extractor\\ExtractedAssets\\Unity\\default_package\\Program\\Battle\\Character\\Config\\Hero';
 const FORMULA_ROOT = path.join(AZPR_ROOT, 'work', 'combat-formulas');
 const OUTPUT_ROOT = path.join(AZPR_ROOT, 'outputs');
 const NEW_TABLE_ROOT = path.join(
@@ -261,6 +263,8 @@ const STATIC_PROPERTY_TABLE_PATHS = Object.freeze(
   )
 );
 const bulletInjectionContractCache = new Map();
+const unityObjectFileIndexCache = new Map();
+let externalGameplayObjectFileIndexCache = null;
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
 const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
   layerControl: '-7197581663443823049',
@@ -3648,10 +3652,11 @@ function findSkillControl(
       Number(value.skillControlData?.skillId) === skillId
     ) {
       const elementRefs = collectElementRefs(value);
+      const gameplayGraph = collectSkillPlayerGameplayGraph(directory, value);
       const bulletLaunches = collectBulletLaunchContracts(
-        directory,
         value,
-        runtimePolicy
+        runtimePolicy,
+        gameplayGraph
       );
       return {
         skillId,
@@ -3661,17 +3666,23 @@ function findSkillControl(
         value,
         elementRefs,
         bulletLaunches,
-        playerEventBridges: collectSkillPlayerEventBridges(directory, value),
+        gameplayGraph,
+        playerEventBridges: collectSkillPlayerEventBridges(
+          value,
+          gameplayGraph
+        ),
         behaviorTriggers: collectBehaviorTriggers(
           directory,
           filePath,
-          elementRefs
+          elementRefs,
+          gameplayGraph
         ),
         semanticBehaviorTriggers: collectSemanticBehaviorTriggers(
           directory,
           filePath,
           elementRefs,
-          battleTargetTypeContract
+          battleTargetTypeContract,
+          gameplayGraph
         ),
       };
     }
@@ -3680,26 +3691,19 @@ function findSkillControl(
 }
 
 function collectBulletLaunchContracts(
-  directory,
   skillControl,
-  runtimePolicy = null
+  runtimePolicy = null,
+  gameplayGraph = null
 ) {
-  const objectFiles = createUnityObjectFileIndex(directory);
   const frameRate =
     positiveNumberOrNull(skillControl.skillControlData?.framePerSecond) ?? 60;
   const launches = [];
-  for (const [subSkillIndex, player] of (
-    skillControl.skillControlData?.skillPlayers ?? []
-  ).entries()) {
-    for (const [trackIndex, trackRef] of (
-      player.skillTrackDatas ?? []
-    ).entries()) {
-      const track = readReferencedUnityObject(objectFiles, trackRef);
-      for (const [behaviorLineIndex, behaviorLine] of (
-        track?.value?.behaviorlineControl ?? []
-      ).entries()) {
-        for (const behaviorRef of behaviorLine.behaviorList ?? []) {
-          const behavior = readReferencedUnityObject(objectFiles, behaviorRef);
+  for (const {
+    subSkillIndex,
+    trackIndex,
+    behaviorLineIndex,
+    behavior,
+  } of gameplayGraph?.behaviors ?? []) {
           const configs = behavior?.value?.bulletShootDataConfigs;
           const startFrame = integerOrNull(behavior?.value?.startFrame);
           if (!Array.isArray(configs) || startFrame == null || startFrame < 0) {
@@ -3791,9 +3795,6 @@ function collectBulletLaunchContracts(
             }
           }
         }
-      }
-    }
-  }
   return dedupeBy(launches, launch => launch.launchIdentity).sort(
     (left, right) =>
       left.subSkillIndex - right.subSkillIndex ||
@@ -4162,72 +4163,63 @@ function createRuntimeControlElementRefs(control) {
   return refs;
 }
 
-function collectSkillPlayerEventBridges(directory, skillControl) {
-  const objectFiles = createUnityObjectFileIndex(directory);
-  return (skillControl.skillControlData?.skillPlayers ?? []).map(
-    (player, subSkillIndex) =>
-      (player.skillTrackDatas ?? []).flatMap((trackRef, trackIndex) => {
-        const track = readReferencedUnityObject(objectFiles, trackRef);
-        return (track?.value?.behaviorlineControl ?? []).flatMap(
-          (behaviorLine, behaviorLineIndex) =>
-            (behaviorLine.behaviorList ?? []).flatMap(behaviorRef => {
-              const behavior = readReferencedUnityObject(
-                objectFiles,
-                behaviorRef
-              );
-              if (!behavior || !isEventBridgeBehavior(behavior.value))
-                return [];
-              const startFrame = integerOrNull(behavior.value.startFrame);
-              const frameCount = integerOrNull(behavior.value.frameCount);
-              if (
-                startFrame == null ||
-                startFrame < 0 ||
-                frameCount == null ||
-                frameCount <= 0
-              ) {
-                return [];
-              }
-              return [
-                {
-                  subSkillIndex,
-                  trackIndex,
-                  behaviorLineIndex,
-                  behaviorLineName:
-                    String(
-                      behaviorLine.name ?? behaviorLine.trackName ?? ''
-                    ).trim() || null,
-                  trackPathId: track?.pathId ?? null,
-                  behaviorPathId: behavior.pathId,
-                  startFrame,
-                  frameCount,
-                  endFrame: startFrame + frameCount,
-                  allowAttack:
-                    behavior.value.allowAttack === true ||
-                    Number(behavior.value.allowAttack) === 1,
-                  allowedInputCommands: collectBehaviorAllowedInputCommands(
-                    behavior.value
-                  ),
-                  bridgeType: integerOrNull(behavior.value.bridge),
-                  continuousAttackType: integerOrNull(behavior.value.type),
-                  interruptBehavior: integerOrNull(
-                    behavior.value.interruptBehavior
-                  ),
-                  targetSkillId: integerOrNull(behavior.value.skillId),
-                  skillIndex: integerOrNull(behavior.value.skillIndex),
-                  frameIndex: integerOrNull(behavior.value.frameIndex),
-                  baseOnInput:
-                    behavior.value.baseOnInput === true ||
-                    Number(behavior.value.baseOnInput) === 1,
-                  inputToIndex:
-                    behavior.value.inputToIndex === true ||
-                    Number(behavior.value.inputToIndex) === 1,
-                  sourceIdentity: `${relativeExternalPath(track.filePath)}#behaviorlineControl[${behaviorLineIndex}].behaviorList[pathId=${behavior.pathId}]|${relativeExternalPath(behavior.filePath)}`,
-                },
-              ];
-            })
-        );
-      })
+function collectSkillPlayerEventBridges(
+  skillControl,
+  gameplayGraph = null
+) {
+  const result = (skillControl.skillControlData?.skillPlayers ?? []).map(
+    () => []
   );
+  for (const {
+    subSkillIndex,
+    trackIndex,
+    track,
+    behaviorLineIndex,
+    behaviorLine,
+    behavior,
+  } of gameplayGraph?.behaviors ?? []) {
+    if (!behavior || !isEventBridgeBehavior(behavior.value)) continue;
+    const startFrame = integerOrNull(behavior.value.startFrame);
+    const frameCount = integerOrNull(behavior.value.frameCount);
+    if (
+      startFrame == null ||
+      startFrame < 0 ||
+      frameCount == null ||
+      frameCount <= 0
+    ) {
+      continue;
+    }
+    result[subSkillIndex].push({
+      subSkillIndex,
+      trackIndex,
+      behaviorLineIndex,
+      behaviorLineName:
+        String(behaviorLine.name ?? behaviorLine.trackName ?? '').trim() || null,
+      trackPathId: track?.pathId ?? null,
+      behaviorPathId: behavior.pathId,
+      startFrame,
+      frameCount,
+      endFrame: startFrame + frameCount,
+      allowAttack:
+        behavior.value.allowAttack === true ||
+        Number(behavior.value.allowAttack) === 1,
+      allowedInputCommands: collectBehaviorAllowedInputCommands(behavior.value),
+      bridgeType: integerOrNull(behavior.value.bridge),
+      continuousAttackType: integerOrNull(behavior.value.type),
+      interruptBehavior: integerOrNull(behavior.value.interruptBehavior),
+      targetSkillId: integerOrNull(behavior.value.skillId),
+      skillIndex: integerOrNull(behavior.value.skillIndex),
+      frameIndex: integerOrNull(behavior.value.frameIndex),
+      baseOnInput:
+        behavior.value.baseOnInput === true ||
+        Number(behavior.value.baseOnInput) === 1,
+      inputToIndex:
+        behavior.value.inputToIndex === true ||
+        Number(behavior.value.inputToIndex) === 1,
+      sourceIdentity: `${relativeExternalPath(track.filePath)}#behaviorlineControl[${behaviorLineIndex}].behaviorList[pathId=${behavior.pathId}]|${relativeExternalPath(behavior.filePath)}`,
+    });
+  }
+  return result;
 }
 
 function collectBehaviorAllowedInputCommands(value = {}) {
@@ -4246,8 +4238,15 @@ function collectBehaviorAllowedInputCommands(value = {}) {
 }
 
 function createUnityObjectFileIndex(directory) {
+  const cacheKey = path.resolve(directory);
+  const cached = unityObjectFileIndexCache.get(cacheKey);
+  if (cached) return cached;
   const result = new Map();
-  for (const name of fs.readdirSync(directory)) {
+  if (!fs.existsSync(directory)) {
+    unityObjectFileIndexCache.set(cacheKey, result);
+    return result;
+  }
+  for (const name of fs.readdirSync(directory).sort()) {
     if (!name.endsWith('.json')) continue;
     const match = name.match(/__(-?\d+)\.json$/);
     if (!match) continue;
@@ -4259,7 +4258,155 @@ function createUnityObjectFileIndex(directory) {
       result.set(pathId, { filePath, score });
     }
   }
+  unityObjectFileIndexCache.set(cacheKey, result);
   return result;
+}
+
+function createExternalGameplayObjectFileIndex() {
+  if (externalGameplayObjectFileIndexCache) {
+    return externalGameplayObjectFileIndexCache;
+  }
+  const result = new Map();
+  if (!fs.existsSync(HERO_SUBSKILL_ROOT)) {
+    externalGameplayObjectFileIndexCache = result;
+    return result;
+  }
+  const ownerDirectories = fs
+    .readdirSync(HERO_SUBSKILL_ROOT, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => path.join(HERO_SUBSKILL_ROOT, entry.name))
+    .sort();
+  for (const ownerDirectory of ownerDirectories) {
+    const subSkillDirectory = path.join(ownerDirectory, 'SubSkill');
+    if (!fs.existsSync(subSkillDirectory)) continue;
+    const assetDirectories = fs
+      .readdirSync(subSkillDirectory, { withFileTypes: true })
+      .filter(entry => entry.isDirectory())
+      .map(entry => path.join(subSkillDirectory, entry.name, 'MonoBehaviour'))
+      .filter(directory => fs.existsSync(directory))
+      .sort();
+    for (const directory of assetDirectories) {
+      for (const [pathId, indexed] of createUnityObjectFileIndex(directory)) {
+        const entries = result.get(pathId) ?? [];
+        entries.push(indexed);
+        result.set(pathId, entries);
+      }
+    }
+  }
+  for (const entries of result.values()) {
+    entries.sort((left, right) => left.filePath.localeCompare(right.filePath));
+  }
+  externalGameplayObjectFileIndexCache = result;
+  return result;
+}
+
+function readGameplayObjectReference(directory, reference) {
+  const fileId = integerOrNull(reference?.m_FileID) ?? 0;
+  if (fileId === 0) {
+    return readReferencedUnityObject(
+      createUnityObjectFileIndex(directory),
+      reference
+    );
+  }
+  const pathId = String(reference?.m_PathID ?? '');
+  const candidates = createExternalGameplayObjectFileIndex().get(pathId) ?? [];
+  const completeCandidates = candidates.filter(
+    candidate => !readUnityJson(candidate.filePath).stubOnly
+  );
+  if (completeCandidates.length !== 1) return null;
+  const selected = completeCandidates[0];
+  return {
+    pathId,
+    filePath: selected.filePath,
+    value: readUnityJson(selected.filePath),
+  };
+}
+
+function collectSkillPlayerGameplayGraph(directory, skillControl) {
+  const tracks = [];
+  const behaviors = [];
+  const unresolvedTrackReferences = [];
+  const unresolvedBehaviorReferences = [];
+  for (const [subSkillIndex, player] of (
+    skillControl.skillControlData?.skillPlayers ?? []
+  ).entries()) {
+    for (const [trackIndex, trackRef] of (
+      player.skillTrackDatas ?? []
+    ).entries()) {
+      const track = readGameplayObjectReference(directory, trackRef);
+      if (!track || track.value?.stubOnly) {
+        unresolvedTrackReferences.push({
+          subSkillIndex,
+          trackIndex,
+          fileId: integerOrNull(trackRef?.m_FileID),
+          pathId: String(trackRef?.m_PathID ?? ''),
+        });
+        continue;
+      }
+      tracks.push({ subSkillIndex, trackIndex, track });
+      for (const [behaviorLineIndex, behaviorLine] of (
+        track.value?.behaviorlineControl ?? []
+      ).entries()) {
+        for (const [behaviorIndex, behaviorRef] of (
+          behaviorLine.behaviorList ?? []
+        ).entries()) {
+          const behavior = readGameplayObjectReference(
+            path.dirname(track.filePath),
+            behaviorRef
+          );
+          if (!behavior || behavior.value?.stubOnly) {
+            unresolvedBehaviorReferences.push({
+              subSkillIndex,
+              trackIndex,
+              behaviorLineIndex,
+              behaviorIndex,
+              fileId: integerOrNull(behaviorRef?.m_FileID),
+              pathId: String(behaviorRef?.m_PathID ?? ''),
+              trackSourceIdentity: relativeExternalPath(track.filePath),
+            });
+            continue;
+          }
+          behaviors.push({
+            subSkillIndex,
+            trackIndex,
+            track,
+            behaviorLineIndex,
+            behaviorLine,
+            behaviorIndex,
+            behavior,
+          });
+        }
+      }
+    }
+  }
+  return {
+    tracks,
+    behaviors,
+    unresolvedTrackReferences,
+    unresolvedBehaviorReferences,
+    status:
+      unresolvedTrackReferences.length === 0 &&
+      unresolvedBehaviorReferences.length === 0
+        ? 'verified-gameplay-graph-ready'
+        : 'gameplay-graph-reference-unresolved',
+  };
+}
+
+function collectGameplayBehaviorSourceFiles(directory, mainFilePath, graph) {
+  const localFiles = fs.existsSync(directory)
+    ? fs
+        .readdirSync(directory)
+        .filter(name => name.endsWith('.json'))
+        .map(name => path.join(directory, name))
+        .filter(filePath => filePath !== mainFilePath)
+    : [];
+  return dedupeBy(
+    [
+      ...localFiles,
+      ...(graph?.behaviors ?? []).map(entry => entry.behavior.filePath),
+    ],
+    filePath => path.resolve(filePath).toLowerCase()
+  ).sort();
 }
 
 function readReferencedUnityObject(objectFiles, reference) {
@@ -4284,18 +4431,20 @@ function isEventBridgeBehavior(value) {
   );
 }
 
-function collectBehaviorTriggers(directory, mainFilePath, elementRefs) {
+function collectBehaviorTriggers(
+  directory,
+  mainFilePath,
+  elementRefs,
+  gameplayGraph = null
+) {
   const wanted = new Set(elementRefs.map(ref => ref.pathId).filter(Boolean));
   const triggers = new Map([...wanted].map(pathId => [pathId, []]));
-  for (const name of fs.readdirSync(directory)) {
-    const filePath = path.join(directory, name);
-    if (
-      filePath === mainFilePath ||
-      !name.endsWith('.json') ||
-      !fs.statSync(filePath).isFile()
-    ) {
-      continue;
-    }
+  for (const filePath of collectGameplayBehaviorSourceFiles(
+    directory,
+    mainFilePath,
+    gameplayGraph
+  )) {
+    const name = path.basename(filePath);
     const value = readUnityJson(filePath);
     const referencedPathIds = collectReferencedPathIds(value);
     for (const pathId of referencedPathIds) {
@@ -4318,15 +4467,18 @@ function collectBehaviorTriggers(directory, mainFilePath, elementRefs) {
 }
 
 function resolveBehaviorElementTarget(value, pathId) {
-  if (
-    arrayContainsPathId(value?.toOwnElementDatas, pathId) ||
-    arrayContainsPathId(value?.toOwnElements, pathId)
-  ) {
-    return {
-      code: 4,
-      kind: 'source-owner',
-      sourceField: 'toOwnElementDatas',
-    };
+  for (const field of [
+    'toOwnElementDatas',
+    'toOwnElements',
+    'toOwnElementBaseDatas',
+  ]) {
+    if (arrayContainsPathId(value?.[field], pathId)) {
+      return {
+        code: 4,
+        kind: 'source-owner',
+        sourceField: field,
+      };
+    }
   }
   if (arrayContainsPathId(value?.elementDataList, pathId)) {
     return createBehaviorTarget(
@@ -4334,8 +4486,10 @@ function resolveBehaviorElementTarget(value, pathId) {
       'directInjectTargetType'
     );
   }
-  if (arrayContainsPathId(value?.elementIdDatas, pathId)) {
-    return createBehaviorTarget(integerOrNull(value.targetType), 'targetType');
+  for (const field of ['elementIdDatas', 'elementBaseDatas']) {
+    if (arrayContainsPathId(value?.[field], pathId)) {
+      return createBehaviorTarget(integerOrNull(value.targetType), 'targetType');
+    }
   }
   return {
     code: null,
@@ -4425,19 +4579,17 @@ function collectSemanticBehaviorTriggers(
   directory,
   mainFilePath,
   elementRefs,
-  battleTargetTypeContract
+  battleTargetTypeContract,
+  gameplayGraph = null
 ) {
   const wanted = new Set(elementRefs.map(ref => ref.pathId).filter(Boolean));
   const triggers = new Map([...wanted].map(pathId => [pathId, []]));
-  for (const name of fs.readdirSync(directory)) {
-    const filePath = path.join(directory, name);
-    if (
-      filePath === mainFilePath ||
-      !name.endsWith('.json') ||
-      !fs.statSync(filePath).isFile()
-    ) {
-      continue;
-    }
+  for (const filePath of collectGameplayBehaviorSourceFiles(
+    directory,
+    mainFilePath,
+    gameplayGraph
+  )) {
+    const name = path.basename(filePath);
     const value = readUnityJson(filePath);
     const referencedPathIds = collectReferencedPathIds(value);
     for (const pathId of referencedPathIds) {

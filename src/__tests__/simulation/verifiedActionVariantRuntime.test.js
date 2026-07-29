@@ -270,7 +270,7 @@ describe('verified action variant and special resource runtime', () => {
 
     expect(runtime.resourceEvents).toEqual([
       expect.objectContaining({
-        timeMs: frameTime(40),
+        timeMs: frameTime(0),
         actionId: 'ruby-star-skill',
         payload: expect.objectContaining({
           operation: 'set-to-capacity',
@@ -287,8 +287,8 @@ describe('verified action variant and special resource runtime', () => {
         sourceActionId: 'ruby-star-skill',
         targetControlSkillId: 10300201,
         targetSubSkillIndex: 1,
-        startsAtMs: frameTime(40),
-        endsAtMs: frameTime(40) + 4000,
+        startsAtMs: frameTime(0),
+        endsAtMs: frameTime(0) + 4000,
       }),
     ]);
 
@@ -307,7 +307,7 @@ describe('verified action variant and special resource runtime', () => {
       },
     });
     expect(cappedRuntime.resourceEvents[0]).toMatchObject({
-      timeMs: frameTime(40),
+      timeMs: frameTime(0),
       payload: {
         operation: 'set-to-capacity',
         beforeValue: 12,
@@ -524,15 +524,15 @@ describe('verified action variant and special resource runtime', () => {
     },
     {
       label: 'Star Skill',
-      startFrame: 40,
-      endFrame: 280,
+      startFrame: 60,
+      endFrame: 300,
       initialAmmo: 0,
       createSource: () =>
         createActorAction({
           id: 'ruby-entry-source-star-skill',
           characterId: RUBY_ID,
           skillId: 10300212,
-          startMs: 0,
+          startMs: frameTime(60),
         }),
     },
     {

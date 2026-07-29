@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 103002,
-  "sourcePackageHash": "a0d145536afb1288bf0392d7c94c046e62901aa73adc3408b3ef404cf0449d1e",
+  "sourcePackageHash": "d9c762257ea0d4c8bb11e5b70be41e50c43f4f14e648b4d121248dd3f2f69a39",
   "actionRows": [
     {
       "actionIdentity": "actor|103002|10300201|0|10300203",
@@ -769,12 +769,12 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "runtime-evidence-required",
+      "scenarioRuntimeStatus": "source-verified",
       "rawRuntimeReady": true,
-      "runtimeReady": false,
-      "hitCount": 0,
+      "runtimeReady": true,
+      "hitCount": 7,
       "requiresDamageSettlement": true,
-      "settlementStatus": "runtime-evidence-required",
+      "settlementStatus": "applied",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|103002|10300212|0|10300212",
@@ -783,28 +783,33 @@
           "sourceSkillId": 10300212,
           "executionControlSkillId": 10300212,
           "executionSubSkillIndex": 0,
-          "hitCount": 0,
-          "settlementEvidence": [],
+          "hitCount": 7,
+          "settlementEvidence": [
+            "hit:10300212|0|elements|30|3779689614933439892|37|1",
+            "hit:10300212|0|elements|33|372918963524026542|44|2",
+            "hit:10300212|0|elements|33|372918963524026542|49|3",
+            "hit:10300212|0|elements|33|372918963524026542|54|4",
+            "hit:10300212|0|elements|33|372918963524026542|59|5",
+            "hit:10300212|0|elements|33|372918963524026542|64|6",
+            "hit:10300212|0|elements|33|372918963524026542|69|7"
+          ],
           "dimensionSummary": {
             "hp": {
-              "unresolved": 1
+              "applied": 7
             },
             "toughness": {
-              "unresolved": 1
+              "applied": 7
             },
             "actorSp": {
-              "unresolved": 1
+              "applied": 7
             },
             "kiboSp": {
-              "unresolved": 1
+              "applied": 7
             }
           },
-          "status": "runtime-evidence-required",
-          "reasons": [
-            "public-action-damage-settlement-evidence-missing",
-            "upstream-gameplay-track-stub-only"
-          ],
-          "sourceIdentity": "skill_control_10300212.asset#skillPlayers[0].skillTrackDatas[m_FileID=3,count=51]|Assets/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset#stubOnly"
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
         }
       ],
       "dimensionSummary": {
@@ -832,8 +837,6 @@
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
-        "public-action-damage-settlement-evidence-missing",
-        "trigger-frame-missing",
         "verified-action-effective-occupancy-window-unresolved"
       ]
     },
@@ -1162,7 +1165,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 3,
+      "hitCount": 6,
       "requiresDamageSettlement": true,
       "settlementStatus": "applied",
       "publicFormSettlements": [
@@ -1173,24 +1176,27 @@
           "sourceSkillId": 10300221,
           "executionControlSkillId": 10300249,
           "executionSubSkillIndex": 1,
-          "hitCount": 3,
+          "hitCount": 6,
           "settlementEvidence": [
             "hit:10300249|1|elements|0|1782654438459948567|15|1",
-            "hit:10300249|1|elements|0|1782654438459948567|20|2",
-            "hit:10300249|1|elements|0|1782654438459948567|25|3"
+            "hit:10300249|1|elements|0|1782654438459948567|15|2",
+            "hit:10300249|1|elements|0|1782654438459948567|20|3",
+            "hit:10300249|1|elements|0|1782654438459948567|20|4",
+            "hit:10300249|1|elements|0|1782654438459948567|25|5",
+            "hit:10300249|1|elements|0|1782654438459948567|25|6"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 3
+              "applied": 6
             },
             "toughness": {
-              "applied": 3
+              "applied": 6
             },
             "actorSp": {
-              "applied": 3
+              "applied": 6
             },
             "kiboSp": {
-              "applied": 3
+              "applied": 6
             }
           },
           "status": "applied",
@@ -1217,12 +1223,12 @@
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 9,
+    "runtimeReadyActionCount": 10,
     "executionFormCount": 24,
     "controlCount": 27,
-    "hitCount": 215,
+    "hitCount": 225,
     "rawEffectCount": 378,
-    "semanticEffectCount": 73,
+    "semanticEffectCount": 76,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 42,
     "thresholdTransitionCount": 0,
@@ -1238,5 +1244,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "ab17a010bf4ae7fe85f39178a933f317d6b1b9a4d659615037351d7673fc2dbe"
+  "profileHash": "040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e"
 }

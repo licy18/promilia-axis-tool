@@ -7646,6 +7646,54 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   await expect(fireMarkNode).toHaveCount(1);
   await expect(fireMarkNode).toHaveAttribute('title', /火印记 获取 · 0 -> 1/);
 
+  const stateNodesFor = laneId =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve-node"][data-action-id="${starSkillActionId}"]`
+    );
+  await expect
+    .poll(() => sumTimelineNodeEventCount(stateNodesFor('enemy-hp-curve')))
+    .toBe(8);
+  await expect
+    .poll(() =>
+      sumTimelineNodeEventCount(stateNodesFor('enemy-toughness-curve'))
+    )
+    .toBe(8);
+  await expect
+    .poll(async () => stateNodesFor('energy-actor-103002').count())
+    .toBeGreaterThan(0);
+
+  await starSkillAction.click();
+  await openActionInspectorPanel(page, 'properties', starSkillActionId);
+  const starSkillHitRows = page.getByTestId('workbench-hit-override-row');
+  await expect(starSkillHitRows).toHaveCount(7);
+  await expect
+    .poll(async () =>
+      starSkillHitRows.evaluateAll(rows =>
+        rows.map(row => Number(row.dataset.hitFrame))
+      )
+    )
+    .toEqual([37, 44, 49, 54, 59, 64, 69]);
+  const firstStarSkillHit = starSkillHitRows
+    .first()
+    .locator('input[type="checkbox"]');
+  await expect(firstStarSkillHit).toBeChecked();
+  await firstStarSkillHit.uncheck();
+  await expect
+    .poll(() => sumTimelineNodeEventCount(stateNodesFor('enemy-hp-curve')))
+    .toBe(7);
+  await expect
+    .poll(() =>
+      sumTimelineNodeEventCount(stateNodesFor('enemy-toughness-curve'))
+    )
+    .toBe(7);
+  await expect(starAmmoNode).toHaveAttribute('title', /子弹 补满 · 0 -> 12/);
+  await expect(fireMarkNode).toHaveAttribute('title', /火印记 获取 · 0 -> 1/);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect
+    .poll(() => sumTimelineNodeEventCount(stateNodesFor('enemy-hp-curve')))
+    .toBe(8);
+  await closeInspectorIfVisible(page);
+
   const starBox = await starSkillAction.boundingBox();
   const actorLaneBox = await actorLane.boundingBox();
   if (!starBox || !actorLaneBox) {
@@ -7744,7 +7792,7 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
     '火'
   );
   await page.screenshot({
-    path: 'reports/m10-b1-r1-ruby-star-skill-desktop.png',
+    path: 'reports/m10-b1-r4-ruby-star-skill-settlement-desktop.png',
   });
 
   await page.setViewportSize({ width: 390, height: 900 });
@@ -7756,7 +7804,7 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   );
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
-    path: 'reports/m10-b1-r1-ruby-star-skill-narrow.png',
+    path: 'reports/m10-b1-r4-ruby-star-skill-settlement-narrow.png',
   });
 });
 
@@ -8443,24 +8491,22 @@ test('[m10-b1-r2-switch-cooldown] suppresses cooldown-active switch children bef
     );
   await expect(suppressedRubyChild()).toHaveCount(0);
 
-  await page
-    .locator(
-      '[data-testid="workbench-action-library-actor"][data-character-id="109001"]'
-    )
-    .click();
+  const manualActorTab = page.locator(
+    '[data-testid="workbench-action-library-actor"][data-character-id="109001"]'
+  );
+  await manualActorTab.click();
+  await expect(manualActorTab).toHaveAttribute('data-active', 'true');
   const manualEntry = page.locator(
     '[data-testid="workbench-skill-entry"][data-action-kind="star-skill"][data-skill-id="10900112"]'
   );
   const manualLane = timeline.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]'
   );
-  const timelineDurationMs = Number(
-    await timeline.getAttribute('data-duration-ms')
+  await expect(manualEntry).toBeVisible();
+  const assistedMode = page.locator(
+    '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
   );
-  const manualLaneBox = await manualLane.boundingBox();
-  if (!manualLaneBox || !timelineDurationMs) {
-    throw new Error('Switch cooldown manual-action geometry is unavailable');
-  }
+  await assistedMode.click();
   const previousManualIds = new Set(
     await timeline
       .locator(
@@ -8470,12 +8516,13 @@ test('[m10-b1-r2-switch-cooldown] suppresses cooldown-active switch children bef
         actions.map(action => action.getAttribute('data-action-id'))
       )
   );
-  await dragLocatorTo(page, manualEntry, manualLane, {
-    targetPosition: {
-      x: (frameToMs(1120) / timelineDurationMs) * manualLaneBox.width,
-      y: 72,
-    },
+  await beginPointerDragTo(page, manualEntry, manualLane, {
+    targetPosition: { x: 280, y: 82 },
   });
+  await expect(
+    timeline.getByTestId('workbench-action-placement-ghost')
+  ).toBeVisible();
+  await page.mouse.up();
   const newManualIds = await timeline
     .locator(
       '[data-testid="workbench-timeline-action"][data-skill-id="10900112"]'

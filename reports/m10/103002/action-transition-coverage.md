@@ -1,9 +1,9 @@
 # 103002 动作衔接与派生闭包
 
 - 公开动作：10
-- 原始控制窗口：146
+- 原始控制窗口：159
 - 语义转移：53/53
-- 仅索引未接入窗口：18
+- 仅索引未接入窗口：19
 - 玩法影响缺口：0
 
 ## 已归一转移
@@ -57,7 +57,7 @@
 | hidden-control 10300210/sub2 | state-activation | [24,264) | gain@24F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | verified-action-variant-edge-ready |
 | hidden-control 10300210/sub2 | state-activation | [24,144) | gain@24F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | verified-action-variant-edge-ready |
 | hidden-control 10300210/sub2 | state-activation | [33,153) | gain@24F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | verified-action-variant-edge-ready |
-| star-skill 10300212/sub0 | state-activation | [40,280) | set-to-capacity@40F；tuning-mark:fire@40F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | applied |
+| star-skill 10300212/sub0 | state-activation | [0,240) | set-to-capacity@0F；tuning-mark:fire@0F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | applied |
 | ultimate 10300213/sub0 | state-activation | [297,417) | set-to-capacity@113F；action-effect:-@114F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | verified-action-variant-edge-ready |
 | ultimate 10300213/sub0 | state-activation | [329,537) | set-to-capacity@113F；action-effect:-@114F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | applied |
 | dodge-attack 10300215/sub0 | input-window | [30,246) | - | ruby-enhanced-twelve-inputs / null | resume-next-chain-segment | applied |

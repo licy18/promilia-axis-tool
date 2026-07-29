@@ -19,7 +19,7 @@
 | --- | --- | --- | --- | --- |
 | ruby-normal-default-three-inputs#3 | [34,79) | ruby-enhanced-twelve-inputs | resource-at-least | applied |
 | 10300210/sub0 | 24F + 4000ms | 10300201/sub1 | resource-at-least | applied |
-| 10300212/sub0 | 40F + 4000ms | 10300201/sub1 | resource-at-least | applied |
+| 10300212/sub0 | 0F + 4000ms | 10300201/sub1 | resource-at-least | applied |
 | 10300213/sub0 | 297F + 4000ms | 10300201/sub1 | resource-at-least | applied |
 | 10300221/sub0 | 80F + 533.3333333333334ms | 10300201/sub1 | resource-at-least | applied |
 | 10300210/sub0 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
@@ -40,7 +40,7 @@
 | charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges |
 | dodge-attack | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
 | plunging-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；inject-wrapper-classified-through-child-edges |
-| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；property-formula-not-literal-function-5；trigger-frame-missing；verified-action-effective-occupancy-window-unresolved |
+| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；property-formula-not-literal-function-5；verified-action-effective-occupancy-window-unresolved |
 | star-combo | 是 | applied |  |
 | ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges；judgment-condition-runtime-unimplemented；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；pack-lifecycle-runtime-unimplemented |
 | star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved |

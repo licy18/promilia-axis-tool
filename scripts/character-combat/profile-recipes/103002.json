@@ -298,12 +298,12 @@
         "sourceElementId": 103002246,
         "targetControlSkillId": 10300201,
         "targetSubSkillIndex": 1,
-        "activationFrame": 40,
-        "decisionFrame": 40,
+        "activationFrame": 0,
+        "decisionFrame": 0,
         "durationMs": 4000,
         "inputWindow": {
-          "startFrame": 40,
-          "endFrame": 280
+          "startFrame": 0,
+          "endFrame": 240
         },
         "inputCommand": "normal-attack",
         "condition": {
@@ -314,7 +314,7 @@
         "verification": {
           "e2e": "m10-b1-r1-ruby-star-skill"
         },
-        "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002246]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+        "sourceIdentity": "skill_control_10300212.asset#skillPlayers[0].skillTrackDatas[pathId=6206346057604752421]|Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-4402154218792328155.json#startFrame=0|elementBaseDatas[elementConfigId=103002246]"
       },
       {
         "bindingIdentity": "ruby-ultimate-end-quick-enhanced-entry",
@@ -369,11 +369,11 @@
         "subSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
-        "triggerFrame": 40,
+        "triggerFrame": 0,
         "frameCount": 1,
         "tuningMarkProfileKey": "fire",
         "stackDelta": 1,
-        "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=150]|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+        "sourceIdentity": "skill_control_10300212.asset#skillPlayers[0].skillTrackDatas[pathId=4323823202662442021]|Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame=0|elementBaseDatas[elementConfigId=150]"
       },
       {
         "bindingIdentity": "ruby-star-carry-thunder-tuning-mark",
@@ -431,14 +431,14 @@
               "controlSkillId": 10300212,
               "subSkillIndex": 0,
               "sourceElementId": 103002048,
-              "triggerFrameStatus": "missing"
+              "triggerFrameStatus": "present"
             },
             "status": "applied",
             "operation": "set-to-capacity",
-            "triggerFrame": 40,
+            "triggerFrame": 0,
             "frameRate": 60,
             "impactClassification": "gameplay-resource-transaction",
-            "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].elements[elementConfigId=103002048]|Battle/Element/ast_103002048.asset#inject-ammo-capacity-12|skill_control_10300212.asset#Play_SFX_CHAR_103002_Skill_ShotGun_Cast02@40F"
+            "sourceIdentity": "Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset#MonoBehaviour_4452502413130359845@0F|Battle/Element/ast_103002048.asset#inject-ammo-capacity-12"
           },
           {
             "match": {
@@ -484,8 +484,8 @@
         ],
         "expectedOperationCounts": {
           "total": 42,
-          "applied": 22,
-          "notApplicable": 20,
+          "applied": 23,
+          "notApplicable": 19,
           "unresolved": 0
         }
       }
@@ -517,90 +517,6 @@
     ]
   },
   "unresolvedRecords": [
-    {
-      "identity": "actor:103002:public-form:10300212:0:star-skill:damage-settlement",
-      "sourceKind": "public-form-settlement",
-      "status": "runtime-evidence-required",
-      "publicActionIdentity": "actor|103002|10300212|0|10300212",
-      "publicFormId": "actor|103002|10300212|0|10300212:default",
-      "sourceSkillId": 10300212,
-      "actionKind": "star-skill",
-      "controlSkillId": 10300212,
-      "subSkillIndex": 0,
-      "reasons": [
-        "public-action-damage-settlement-evidence-missing",
-        "upstream-gameplay-track-stub-only"
-      ],
-      "sourceIdentity": "skill_control_10300212.asset#skillPlayers[0].skillTrackDatas[m_FileID=3,count=51]|Assets/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset#stubOnly",
-      "metadata": {
-        "externalFileId": 3,
-        "externalReferenceCount": 51,
-        "stubOnlyCount": 51,
-        "missingAssetType": "MonoBehaviour gameplay track",
-        "sourceControlPath": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json",
-        "externalContainerPath": "Assets/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset",
-        "bundleLogicalName": "d_sh_assets_program_battle_character_config_hero_103002_subskill_ast_17425494451660000",
-        "packName": "abwdpb46vrubxs3pg8v6w",
-        "minimumReExtractionRequirement": [
-          "re-export all 51 MonoBehaviour objects with full Typetree fields instead of stubOnly records",
-          "preserve behaviorline start/end/event frames and referenced PathIDs",
-          "follow terminal projectile, bulletElement, DamageElement, Weakness and SP recovery identities"
-        ],
-        "missingPathIds": [
-          "5957483931528029221",
-          "-246322824799624155",
-          "-6087899203335068635",
-          "-2778328306856664027",
-          "22628759081870373",
-          "3256317224281400357",
-          "4323823202662442021",
-          "6206346057604752421",
-          "-2682215277328243675",
-          "805760739485443109",
-          "1048622601383207973",
-          "1553494324971791397",
-          "3992104768943514661",
-          "-4187129909986040795",
-          "-8424556453177695195",
-          "7886784368735839269",
-          "5830212135913546789",
-          "3892851800423621669",
-          "788664350356759589",
-          "-3662477458538601435",
-          "1826057318709683237",
-          "2054179597311566885",
-          "8380842163079242789",
-          "-6201047052139076571",
-          "-2815441006498651099",
-          "4152704983443989541",
-          "-926875130927029211",
-          "5992250958480434213",
-          "1625497683546432549",
-          "1088856365742580773",
-          "-1317446306578144219",
-          "-3756045265434614747",
-          "7415075929057027109",
-          "-5430033777088371675",
-          "3502920035705316389",
-          "-4046017094457465819",
-          "7889635087500272677",
-          "990330041335309349",
-          "-8047220362516863963",
-          "-2060078837072567259",
-          "-4905969201797045211",
-          "-8059926054526622683",
-          "-5417347957468470235",
-          "-8896876593677442011",
-          "-2499626671469665243",
-          "-1998576373197478875",
-          "554122593863492645",
-          "-2540485794898549723",
-          "61261743196890149",
-          "2366731865314452517",
-          "5112223355471684645"
-        ]
-      }
-    },
     {
       "identity": "actor:103002:legacy-elements:103002252-103002253",
       "sourceKind": "legacy-unreachable-element",
@@ -844,13 +760,18 @@
         "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
-        "combat.damageEventCount": 223,
-        "combat.ownerDamageEventCount": 221,
-        "combat.ownerHitEventCount": 101,
-        "combat.ownerTotalHpDamage": 164643,
+        "combat.damageEventCount": 231,
+        "combat.ownerDamageEventCount": 229,
+        "combat.ownerHitEventCount": 108,
+        "combat.ownerHitCountByActionId.ruby-star-skill": 7,
+        "combat.ownerHitSummaryByActionId.ruby-star-skill.hitCount": 7,
+        "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [1887, 1894, 1899, 1904, 1909, 1914, 1919],
+        "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 664,
+        "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 464,
+        "combat.ownerTotalHpDamage": 167362,
         "combat.ownerTotalToughnessDamage": 2190,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 698063,
+        "combat.enemy.finalHp": 695344,
         "resources.specialResourceTrace.0.actionId": "ruby-reload",
         "resources.specialResourceTrace.0.frame": 24,
         "resources.specialResourceTrace.0.beforeValue": 0,
@@ -864,7 +785,7 @@
         "resources.specialResourceTrace.6.change": -1,
         "resources.specialResourceTrace.6.afterValue": 0,
         "resources.specialResourceTrace.7.actionId": "ruby-star-skill",
-        "resources.specialResourceTrace.7.frame": 1890,
+        "resources.specialResourceTrace.7.frame": 1850,
         "resources.specialResourceTrace.7.change": 12,
         "resources.specialResourceTrace.7.afterValue": 12,
         "resources.specialResourceTrace.8.actionId": "ruby-ultimate",
@@ -878,7 +799,7 @@
         "resources.specialResourceTrace.10.change": 1,
         "resources.specialResourceTrace.10.afterValue": 12,
         "resources.tuningMarkTrace.0.actionId": "ruby-star-skill",
-        "resources.tuningMarkTrace.0.frame": 1890,
+        "resources.tuningMarkTrace.0.frame": 1850,
         "resources.tuningMarkTrace.0.kind": "acquire",
         "resources.tuningMarkTrace.0.profileKey": "fire",
         "resources.tuningMarkTrace.0.markId": 150,
@@ -894,8 +815,8 @@
         "resources.actorSpByActorId.actor-103002.autoRecovery.1.totalChange": 16.329152,
         "resources.actorSpByActorId.actor-103002.actionTransactions.0.actionId": "ruby-ultimate",
         "resources.actorSpByActorId.actor-103002.actionTransactions.0.change": -100,
-        "resources.actorSpByActorId.actor-101010.currentValue": 13.548798,
-        "resources.actorSpByActorId.actor-101003.currentValue": 13.02771,
+        "resources.actorSpByActorId.actor-101010.currentValue": 13.848785,
+        "resources.actorSpByActorId.actor-101003.currentValue": 13.327698,
         "resources.kiboSpBySlotId.team-slot-1.kiboId": 500039,
         "resources.kiboSpBySlotId.team-slot-1.initialValue": 100,
         "resources.kiboSpBySlotId.team-slot-1.currentValue": 13.559189,

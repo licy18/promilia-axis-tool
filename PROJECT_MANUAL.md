@@ -1771,11 +1771,11 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 
 小玉 golden 与生成报告已按逐动作、逐命中和逐资源事务重建；星决技刷新是否再次给予风印记继续保留为 `runtime-evidence-needed`，无名第二被动和 legacy 元素边界不变。141 个测试文件、867 条用例、62/62 production preview、两道生成漂移、生产数据/来源守门和 production build 通过。独立机制验收确认玩法结果通过；Workbench gzip `370,692B`、总 JS gzip `761,260B` 的既有发布风险继续单列，本轮不压包。
 
-### M10-B1 红宝石星鸣技结算证据门禁已收口，等待上游重提取与产品复验（2026-07-28）
+### M10-B1 红宝石星鸣技重导出结算已接入，等待产品复验（2026-07-29）
 
-红宝石星鸣技的补满弹药、火印记和强化普攻快速入口继续由真实运行时结算，但当前提取物中 51 条外部 gameplay track 全部为 `stubOnly`，无法证明终端弹体、命中帧、DamageElement、削韧和 SP 链。本轮没有按描述中的 280% 伪造命中；覆盖报告改为按 `public action form + subskill + description clause` 独立验收，星携合击不再替星鸣技满足伤害条款，当前状态为 `9/10 runtime-ready`、`runtime-applied / partial`，并新增一项上游阻断 capture。
+上游确认旧缺口由 MonoBehaviour stub 导出造成，原始 bundle 与完整 Typetree 正常。增量重同步现恢复 `10300212/sub0` 在 37/44/49/54/59/64/69F 的 7 段真实命中，以及施法第 0F 的补满弹药、火印记和强化普攻快速入口；每段伤害、削韧、角色/奇波 SP 均由源 DamageElement 结算，逐 hit 关闭不会误关施法资源效果。公开形态覆盖按自身 clause 验收，星携合击不再替星鸣技代偿伤害。
 
-golden 重放现使用来源动作自己的普攻段，并保留 nullable subskill 与完美招架 `sub1` 语义；小玉、寒悠悠和红宝石既有 actual trace/replay hash 均无行为漂移。生成 JSON 固定 LF 检出，避免 Windows CRLF 改变参与 source manifest 的原始 SHA-256。上游按报告中的 51 个 PathID 重提取完整 Typetree 后，才可继续接入星鸣技逐 hit 三值结算；M11、下一角色和包体优化保持暂停。当前 Workbench gzip `370,687B`、总 JS gzip `761,244B` 继续作为已知发布风险单列。
+红宝石 authoritative golden 更新为 123 条断言，完整单测 141 文件/871 条、production preview 62/62、41/41 必需能力与全部来源/漂移守门通过。角色当前为 10/10 runtime-ready、`zero-distance-simulation-complete=true`，但仍有 4 项实机 capture 与 429 条静态证据缺口，因此保持 `runtime-applied / partial`、`characterComplete=false`。Workbench gzip `370,688B`、总 JS gzip `761,243B` 的既有发布风险继续单列，本轮不做包体优化，也不启动下一角色或 M11。
 
 ## 10. 文档维护规则
 

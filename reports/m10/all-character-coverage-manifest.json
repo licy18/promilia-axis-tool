@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "a0d145536afb1288bf0392d7c94c046e62901aa73adc3408b3ef404cf0449d1e",
+  "sourcePackageHash": "d9c762257ea0d4c8bb11e5b70be41e50c43f4f14e648b4d121248dd3f2f69a39",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "8010949bc5f1cc917c6228d6b3c6ce6b2b259317dfaed90ecb8168af791d586e"
+      "profileHash": "4fcd2d615672546c1abb2df59e627b48810dd73266b7d199b748e7b70cfd8199"
     },
     {
       "ownerId": 103002,
@@ -112,14 +112,14 @@
       "targetPipelineMaturity": "ui-verified",
       "combatCoverageState": "partial",
       "characterComplete": false,
-      "zeroDistanceSimulationComplete": false,
+      "zeroDistanceSimulationComplete": true,
       "realClientEvidenceComplete": false,
       "publicActionCount": 10,
       "reachableFormCount": 53,
       "indexedControlCount": 12,
       "specialResourceCount": 1,
       "stateMachineCount": 0,
-      "derivedEdgeCount": 293,
+      "derivedEdgeCount": 315,
       "passiveCount": 1,
       "unnamedSecondaryPassive": {
         "skillId": 10300262,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "ab17a010bf4ae7fe85f39178a933f317d6b1b9a4d659615037351d7673fc2dbe"
+      "profileHash": "040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "5c96aba0a759dd36372c48c6da01ed0721bb4bfe8e1f5c904e640d2ccd879973"
+      "profileHash": "cec70cd8e364e3ee02b67e42bd12d3b1a380d21514751ff65a52c604356992bc"
     },
     {
       "ownerId": 101007,
@@ -751,6 +751,7 @@
       "reviewBatch": "M10-C3",
       "mechanicFocus": [
         "切人/星携技",
+        "运行证据",
         "静态缺口"
       ],
       "estimatedWorkUnits": 1,
@@ -776,10 +777,10 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 3,
-      "runtimeReadyRatio": 0.3,
-      "staticEvidenceGapCount": 7,
-      "runtimeEvidenceRequiredCount": 0,
+      "runtimeReadyActionCount": 4,
+      "runtimeReadyRatio": 0.4,
+      "staticEvidenceGapCount": 6,
+      "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "switch-trigger"
       ],
@@ -920,9 +921,9 @@
       "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 162,
+    "totalRuntimeReadyActionCount": 163,
     "unnamedSecondaryPassiveCount": 20,
-    "zeroDistanceSimulationCompleteCount": 0,
+    "zeroDistanceSimulationCompleteCount": 1,
     "realClientEvidenceCompleteCount": 0
   }
 }

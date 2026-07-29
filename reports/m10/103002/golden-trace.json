@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "a0d145536afb1288bf0392d7c94c046e62901aa73adc3408b3ef404cf0449d1e",
+  "sourcePackageHash": "d9c762257ea0d4c8bb11e5b70be41e50c43f4f14e648b4d121248dd3f2f69a39",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -285,9 +285,9 @@
       }
     },
     "combat": {
-      "damageEventCount": 223,
-      "ownerDamageEventCount": 221,
-      "ownerHitEventCount": 101,
+      "damageEventCount": 231,
+      "ownerDamageEventCount": 229,
+      "ownerHitEventCount": 108,
       "ownerHitCountByActionId": {
         "fire-kibo-signature": 2,
         "ruby-enhanced-shot-1": 9,
@@ -298,6 +298,7 @@
         "ruby-enhanced-shot-6": 9,
         "ruby-limit-counter": 6,
         "ruby-post-ultimate-shot": 9,
+        "ruby-star-skill": 7,
         "ruby-ultimate": 25,
         "switch-back-to-ruby--on-enter--actor-103002--star-carry": 5
       },
@@ -436,6 +437,20 @@
           "totalHpDamage": 891,
           "totalToughnessDamage": 0
         },
+        "ruby-star-skill": {
+          "hitCount": 7,
+          "frames": [
+            1887,
+            1894,
+            1899,
+            1904,
+            1909,
+            1914,
+            1919
+          ],
+          "totalHpDamage": 664,
+          "totalToughnessDamage": 464
+        },
         "ruby-ultimate": {
           "hitCount": 25,
           "frames": [
@@ -481,8 +496,8 @@
           "totalToughnessDamage": 707
         }
       },
-      "ownerHitTotalHpDamage": 13464,
-      "ownerHitTotalToughnessDamage": 3288,
+      "ownerHitTotalHpDamage": 14128,
+      "ownerHitTotalToughnessDamage": 3752,
       "selectedHpDamageByActionId": {
         "ruby-enhanced-shot-1": 441,
         "ruby-enhanced-shot-2": 441,
@@ -493,14 +508,14 @@
         "ruby-post-ultimate-shot": 891,
         "ruby-ultimate": 156751
       },
-      "totalHpDamage": 164737,
+      "totalHpDamage": 167456,
       "totalToughnessDamage": 2256,
-      "ownerTotalHpDamage": 164643,
+      "ownerTotalHpDamage": 167362,
       "ownerTotalToughnessDamage": 2190,
       "enemy": {
-        "pointCount": 335,
+        "pointCount": 351,
         "initialHp": 862800,
-        "finalHp": 698063,
+        "finalHp": 695344,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 4411,
@@ -514,9 +529,9 @@
           "actorId": "actor-101003",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.02771,
+          "currentValue": 13.327698,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1206,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -544,20 +559,36 @@
               "afterValue": 1.801361
             },
             {
+              "timeMs": 31450,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.49762,
+              "change": 0.149994,
+              "afterValue": 3.647614
+            },
+            {
+              "timeMs": 31566.666666,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.65802,
+              "change": 0.149994,
+              "afterValue": 3.808014
+            },
+            {
               "timeMs": 45616.666666,
               "actionId": "ruby-post-ultimate-shot",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.975342,
+              "beforeValue": 5.27533,
               "change": 0.11499,
-              "afterValue": 5.090332
+              "afterValue": 5.39032
             },
             {
               "timeMs": 50300,
               "actionId": "ruby-limit-counter",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.569031,
+              "beforeValue": 5.869019,
               "change": 0.194946,
-              "afterValue": 5.763977
+              "afterValue": 6.063965
             }
           ]
         },
@@ -566,9 +597,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.548798,
+          "currentValue": 13.848785,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1206,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -603,20 +634,36 @@
               "afterValue": 1.801361
             },
             {
+              "timeMs": 31450,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.49762,
+              "change": 0.149994,
+              "afterValue": 3.647614
+            },
+            {
+              "timeMs": 31566.666666,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.65802,
+              "change": 0.149994,
+              "afterValue": 3.808014
+            },
+            {
               "timeMs": 45616.666666,
               "actionId": "ruby-post-ultimate-shot",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.975342,
+              "beforeValue": 5.27533,
               "change": 0.11499,
-              "afterValue": 5.090332
+              "afterValue": 5.39032
             },
             {
               "timeMs": 50300,
               "actionId": "ruby-limit-counter",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.569031,
+              "beforeValue": 5.869019,
               "change": 0.194946,
-              "afterValue": 5.763977
+              "afterValue": 6.063965
             }
           ]
         },
@@ -740,9 +787,9 @@
           "actorId": "actor-101003",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.02771,
+          "currentValue": 13.327698,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1206,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -770,20 +817,36 @@
               "afterValue": 1.801361
             },
             {
+              "timeMs": 31450,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.49762,
+              "change": 0.149994,
+              "afterValue": 3.647614
+            },
+            {
+              "timeMs": 31566.666666,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.65802,
+              "change": 0.149994,
+              "afterValue": 3.808014
+            },
+            {
               "timeMs": 45616.666666,
               "actionId": "ruby-post-ultimate-shot",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.975342,
+              "beforeValue": 5.27533,
               "change": 0.11499,
-              "afterValue": 5.090332
+              "afterValue": 5.39032
             },
             {
               "timeMs": 50300,
               "actionId": "ruby-limit-counter",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.569031,
+              "beforeValue": 5.869019,
               "change": 0.194946,
-              "afterValue": 5.763977
+              "afterValue": 6.063965
             }
           ]
         },
@@ -792,9 +855,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.548798,
+          "currentValue": 13.848785,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1206,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -829,20 +892,36 @@
               "afterValue": 1.801361
             },
             {
+              "timeMs": 31450,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.49762,
+              "change": 0.149994,
+              "afterValue": 3.647614
+            },
+            {
+              "timeMs": 31566.666666,
+              "actionId": "ruby-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.65802,
+              "change": 0.149994,
+              "afterValue": 3.808014
+            },
+            {
               "timeMs": 45616.666666,
               "actionId": "ruby-post-ultimate-shot",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.975342,
+              "beforeValue": 5.27533,
               "change": 0.11499,
-              "afterValue": 5.090332
+              "afterValue": 5.39032
             },
             {
               "timeMs": 50300,
               "actionId": "ruby-limit-counter",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.569031,
+              "beforeValue": 5.869019,
               "change": 0.194946,
-              "afterValue": 5.763977
+              "afterValue": 6.063965
             }
           ]
         },
@@ -1112,7 +1191,7 @@
           "stream": "resource",
           "eventId": null,
           "actionId": "ruby-star-skill",
-          "frame": 1890,
+          "frame": 1850,
           "operation": "set-to-capacity",
           "resourceIdentity": "actor:103002:element:103002047",
           "stateElementId": null,
@@ -1163,14 +1242,26 @@
       ],
       "tuningMarkTrace": [
         {
-          "eventIdentity": "tuning-mark|150|acquire|31500|56",
+          "eventIdentity": "tuning-mark|150|acquire|30833.333333|56",
           "actionId": "ruby-star-skill",
-          "frame": 1890,
+          "frame": 1850,
           "kind": "acquire",
           "profileKey": "fire",
           "markId": 150,
           "before": 0,
           "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|31450|10300212|0|elements|30|3779689614933439892|37|1",
+          "actionId": "ruby-star-skill",
+          "frame": 1887,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
           "after": 1,
           "maximum": 5
         },
@@ -1187,7 +1278,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|41400|58",
+          "eventIdentity": "tuning-mark|150|consume|41400|65",
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "kind": "consume",
@@ -1199,7 +1290,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|65900|104",
+          "eventIdentity": "tuning-mark|250|acquire|65900|111",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "kind": "acquire",
@@ -1223,7 +1314,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|85900|117",
+          "eventIdentity": "tuning-mark|250|expire|85900|124",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "kind": "expire",
@@ -1880,7 +1971,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "54aa78b527749ddd7d523cd3ba45365e2014ab04bcb3548108ba31aa4d236aee"
+      "baselineReplayHash": "c43bbf2e3136f2ced2a0afbf5d01a5cd50b3c56936937ddb95d9d3c141f76fae"
     },
     "trace": {
       "damage": [
@@ -2535,6 +2626,102 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1887,
+          "hitIdentity": null,
+          "rawDamage": 166,
+          "hpDamage": 166,
+          "toughnessDamage": 116,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "ruby-star-skill",
+          "frame": 1887,
+          "hitIdentity": null,
+          "rawDamage": 2055,
+          "hpDamage": 2055,
+          "toughnessDamage": 1439,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1894,
+          "hitIdentity": null,
+          "rawDamage": 83,
+          "hpDamage": 83,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1899,
+          "hitIdentity": null,
+          "rawDamage": 83,
+          "hpDamage": 83,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1904,
+          "hitIdentity": null,
+          "rawDamage": 83,
+          "hpDamage": 83,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1909,
+          "hitIdentity": null,
+          "rawDamage": 83,
+          "hpDamage": 83,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1914,
+          "hitIdentity": null,
+          "rawDamage": 83,
+          "hpDamage": 83,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-star-skill",
+          "frame": 1919,
+          "hitIdentity": null,
+          "rawDamage": 83,
+          "hpDamage": 83,
+          "toughnessDamage": 58,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "ruby-ultimate",
           "frame": 2317,
           "hitIdentity": null,
@@ -2756,7 +2943,7 @@
           "hitIdentity": null,
           "rawDamage": 49024,
           "hpDamage": 49024,
-          "toughnessDamage": 2713,
+          "toughnessDamage": 810,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4657,7 +4844,7 @@
           "stream": "resource",
           "eventId": null,
           "actionId": "ruby-star-skill",
-          "frame": 1890,
+          "frame": 1850,
           "operation": "set-to-capacity",
           "resourceIdentity": "actor:103002:element:103002047",
           "stateElementId": null,
@@ -4708,14 +4895,26 @@
       ],
       "tuningMarks": [
         {
-          "eventIdentity": "tuning-mark|150|acquire|31500|56",
+          "eventIdentity": "tuning-mark|150|acquire|30833.333333|56",
           "actionId": "ruby-star-skill",
-          "frame": 1890,
+          "frame": 1850,
           "kind": "acquire",
           "profileKey": "fire",
           "markId": 150,
           "before": 0,
           "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|31450|10300212|0|elements|30|3779689614933439892|37|1",
+          "actionId": "ruby-star-skill",
+          "frame": 1887,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
           "after": 1,
           "maximum": 5
         },
@@ -4732,7 +4931,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|41400|58",
+          "eventIdentity": "tuning-mark|150|consume|41400|65",
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "kind": "consume",
@@ -4744,7 +4943,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|65900|104",
+          "eventIdentity": "tuning-mark|250|acquire|65900|111",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "kind": "acquire",
@@ -4768,7 +4967,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|85900|117",
+          "eventIdentity": "tuning-mark|250|expire|85900|124",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "kind": "expire",
@@ -4982,9 +5181,9 @@
           ]
         },
         {
-          "eventId": "actor/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|31500|1",
+          "eventId": "actor/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|30833.333|1",
           "actionId": "ruby-star-skill",
-          "frame": 1890,
+          "frame": 1850,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
@@ -4998,7 +5197,7 @@
           "inheritType": null,
           "formulaSourceActorId": "actor-103002",
           "effectAdderActorId": "actor-103002",
-          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|30833.333",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -5015,9 +5214,9 @@
           ]
         },
         {
-          "eventId": "kibo/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|31500|1",
+          "eventId": "kibo/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|30833.333|1",
           "actionId": "ruby-star-skill",
-          "frame": 1890,
+          "frame": 1850,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
@@ -5031,7 +5230,7 @@
           "inheritType": null,
           "formulaSourceActorId": "actor-103002",
           "effectAdderActorId": "actor-103002",
-          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|30833.333",
           "beforeStacks": null,
           "afterStacks": 1,
           "stackChange": 1,
@@ -5130,7 +5329,7 @@
           "inheritType": null,
           "formulaSourceActorId": "actor-103002",
           "effectAdderActorId": "actor-103002",
-          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|30833.333",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -5163,7 +5362,7 @@
           "inheritType": null,
           "formulaSourceActorId": "actor-103002",
           "effectAdderActorId": "actor-103002",
-          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|31500",
+          "effectInstanceId": "tuning-mark:150:persistent|ruby-star-skill|30833.333",
           "beforeStacks": 1,
           "afterStacks": null,
           "stackChange": -1,
@@ -5543,7 +5742,7 @@
         }
       ]
     },
-    "summaryHash": "26b51f3b13216430c7e0b7f6d16af707e6d34dd9ffcfa86367bdcb8a683a81bf"
+    "summaryHash": "d9040ee1e901f3add7272b42d94a1f52cde0d6fe192ddcb49cb1317d7d053f10"
   },
   "expected": {
     "exact": {
@@ -5588,13 +5787,26 @@
       "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
       "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
       "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
-      "combat.damageEventCount": 223,
-      "combat.ownerDamageEventCount": 221,
-      "combat.ownerHitEventCount": 101,
-      "combat.ownerTotalHpDamage": 164643,
+      "combat.damageEventCount": 231,
+      "combat.ownerDamageEventCount": 229,
+      "combat.ownerHitEventCount": 108,
+      "combat.ownerHitCountByActionId.ruby-star-skill": 7,
+      "combat.ownerHitSummaryByActionId.ruby-star-skill.hitCount": 7,
+      "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [
+        1887,
+        1894,
+        1899,
+        1904,
+        1909,
+        1914,
+        1919
+      ],
+      "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 664,
+      "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 464,
+      "combat.ownerTotalHpDamage": 167362,
       "combat.ownerTotalToughnessDamage": 2190,
       "combat.enemy.initialHp": 862800,
-      "combat.enemy.finalHp": 698063,
+      "combat.enemy.finalHp": 695344,
       "resources.specialResourceTrace.0.actionId": "ruby-reload",
       "resources.specialResourceTrace.0.frame": 24,
       "resources.specialResourceTrace.0.beforeValue": 0,
@@ -5608,7 +5820,7 @@
       "resources.specialResourceTrace.6.change": -1,
       "resources.specialResourceTrace.6.afterValue": 0,
       "resources.specialResourceTrace.7.actionId": "ruby-star-skill",
-      "resources.specialResourceTrace.7.frame": 1890,
+      "resources.specialResourceTrace.7.frame": 1850,
       "resources.specialResourceTrace.7.change": 12,
       "resources.specialResourceTrace.7.afterValue": 12,
       "resources.specialResourceTrace.8.actionId": "ruby-ultimate",
@@ -5622,7 +5834,7 @@
       "resources.specialResourceTrace.10.change": 1,
       "resources.specialResourceTrace.10.afterValue": 12,
       "resources.tuningMarkTrace.0.actionId": "ruby-star-skill",
-      "resources.tuningMarkTrace.0.frame": 1890,
+      "resources.tuningMarkTrace.0.frame": 1850,
       "resources.tuningMarkTrace.0.kind": "acquire",
       "resources.tuningMarkTrace.0.profileKey": "fire",
       "resources.tuningMarkTrace.0.markId": 150,
@@ -5638,8 +5850,8 @@
       "resources.actorSpByActorId.actor-103002.autoRecovery.1.totalChange": 16.329152,
       "resources.actorSpByActorId.actor-103002.actionTransactions.0.actionId": "ruby-ultimate",
       "resources.actorSpByActorId.actor-103002.actionTransactions.0.change": -100,
-      "resources.actorSpByActorId.actor-101010.currentValue": 13.548798,
-      "resources.actorSpByActorId.actor-101003.currentValue": 13.02771,
+      "resources.actorSpByActorId.actor-101010.currentValue": 13.848785,
+      "resources.actorSpByActorId.actor-101003.currentValue": 13.327698,
       "resources.kiboSpBySlotId.team-slot-1.kiboId": 500039,
       "resources.kiboSpBySlotId.team-slot-1.initialValue": 100,
       "resources.kiboSpBySlotId.team-slot-1.currentValue": 13.559189,
@@ -5678,7 +5890,7 @@
   "validation": {
     "status": "authoritative-golden-runtime-expectation-passed",
     "passed": true,
-    "assertionCount": 118,
+    "assertionCount": 123,
     "failedCount": 0,
     "assertions": [
       {
@@ -5941,29 +6153,80 @@
       {
         "jsonPath": "combat.damageEventCount",
         "operator": "exact",
-        "expected": 223,
-        "actual": 223,
+        "expected": 231,
+        "actual": 231,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerDamageEventCount",
         "operator": "exact",
-        "expected": 221,
-        "actual": 221,
+        "expected": 229,
+        "actual": 229,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitEventCount",
         "operator": "exact",
-        "expected": 101,
-        "actual": 101,
+        "expected": 108,
+        "actual": 108,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitCountByActionId.ruby-star-skill",
+        "operator": "exact",
+        "expected": 7,
+        "actual": 7,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitSummaryByActionId.ruby-star-skill.hitCount",
+        "operator": "exact",
+        "expected": 7,
+        "actual": 7,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitSummaryByActionId.ruby-star-skill.frames",
+        "operator": "exact",
+        "expected": [
+          1887,
+          1894,
+          1899,
+          1904,
+          1909,
+          1914,
+          1919
+        ],
+        "actual": [
+          1887,
+          1894,
+          1899,
+          1904,
+          1909,
+          1914,
+          1919
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage",
+        "operator": "exact",
+        "expected": 664,
+        "actual": 664,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage",
+        "operator": "exact",
+        "expected": 464,
+        "actual": 464,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 164643,
-        "actual": 164643,
+        "expected": 167362,
+        "actual": 167362,
         "passed": true
       },
       {
@@ -5983,8 +6246,8 @@
       {
         "jsonPath": "combat.enemy.finalHp",
         "operator": "exact",
-        "expected": 698063,
-        "actual": 698063,
+        "expected": 695344,
+        "actual": 695344,
         "passed": true
       },
       {
@@ -6081,8 +6344,8 @@
       {
         "jsonPath": "resources.specialResourceTrace.7.frame",
         "operator": "exact",
-        "expected": 1890,
-        "actual": 1890,
+        "expected": 1850,
+        "actual": 1850,
         "passed": true
       },
       {
@@ -6179,8 +6442,8 @@
       {
         "jsonPath": "resources.tuningMarkTrace.0.frame",
         "operator": "exact",
-        "expected": 1890,
-        "actual": 1890,
+        "expected": 1850,
+        "actual": 1850,
         "passed": true
       },
       {
@@ -6291,15 +6554,15 @@
       {
         "jsonPath": "resources.actorSpByActorId.actor-101010.currentValue",
         "operator": "exact",
-        "expected": 13.548798,
-        "actual": 13.548798,
+        "expected": 13.848785,
+        "actual": 13.848785,
         "passed": true
       },
       {
         "jsonPath": "resources.actorSpByActorId.actor-101003.currentValue",
         "operator": "exact",
-        "expected": 13.02771,
-        "actual": 13.02771,
+        "expected": 13.327698,
+        "actual": 13.327698,
         "passed": true
       },
       {
@@ -6488,7 +6751,7 @@
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 164643,
+        "actual": 167362,
         "passed": true
       },
       {
@@ -6521,6 +6784,6 @@
       }
     ]
   },
-  "replayHash": "c429af6d6a2a57d04ca0027f96611e4782043c1e942fca78c804d6ec0ac5f9ca",
-  "profileHash": "ab17a010bf4ae7fe85f39178a933f317d6b1b9a4d659615037351d7673fc2dbe"
+  "replayHash": "134c7336b453a2e3d72a308564f90d319d3f506c859420adcf767d64d168229c",
+  "profileHash": "040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e"
 }

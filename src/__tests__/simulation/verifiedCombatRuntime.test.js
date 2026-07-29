@@ -75,6 +75,13 @@ const XIAOYU_CONTROL_BINDING_BY_ID = new Map(
     binding,
   ])
 );
+const RUBY_CHARACTER_ID = 103002;
+const RUBY_STAR_SKILL_ID = 10300212;
+const RUBY_KIBO_ID = 500039;
+const RUBY_STAR_SKILL_BINDING =
+  verifiedCombatMechanicsPackage.controlBindings.find(
+    binding => Number(binding.controlSkillId) === RUBY_STAR_SKILL_ID
+  );
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -401,6 +408,92 @@ describe('verified combat mechanics runtime', () => {
           .disabledHitIdentities
       ).toEqual([hit.hitIdentity]);
     }
+  });
+
+  it('settles all seven Ruby Star Skill hits and removes only a disabled hit', () => {
+    const baseline = simulateRubyStarSkill();
+    const baselineRuntime = baseline.verifiedCombatRuntime;
+    const resolution = baselineRuntime.actionResolutionById.get(
+      'verified-ruby-star-skill'
+    );
+    const baselineHits = baselineRuntime.damageEvents.filter(
+      event =>
+        event.actionId === 'verified-ruby-star-skill' &&
+        event.type === 'VERIFIED_COMBAT_HIT'
+    );
+
+    expect(resolution.allHits).toHaveLength(7);
+    expect(
+      baselineHits.map(event => Math.round((event.timeMs * 60) / 1000))
+    ).toEqual([37, 44, 49, 54, 59, 64, 69]);
+    expect(
+      baselineHits.every(
+        event => event.payload.rawDamage > 0 && event.payload.toughnessDamage > 0
+      )
+    ).toBe(true);
+    expect(
+      baselineRuntime.resourceEvents.filter(
+        event =>
+          event.actionId === 'verified-ruby-star-skill' &&
+          event.payload.reason.includes('hit-sp')
+      ).length
+    ).toBeGreaterThan(0);
+    expect(
+      baselineRuntime.kiboResourceEvents.filter(
+        event =>
+          event.actionId === 'verified-ruby-star-skill' &&
+          event.payload.reason.includes('hit-pet-sp')
+      ).length
+    ).toBeGreaterThan(0);
+
+    const disabledHit = resolution.allHits[0];
+    const disabled = simulateRubyStarSkill({
+      [disabledHit.hitIdentity]: { willHit: false },
+    });
+    const disabledRuntime = disabled.verifiedCombatRuntime;
+    const remainingHits = disabledRuntime.damageEvents.filter(
+      event =>
+        event.actionId === 'verified-ruby-star-skill' &&
+        event.type === 'VERIFIED_COMBAT_HIT'
+    );
+    expect(
+      remainingHits.map(event => Math.round((event.timeMs * 60) / 1000))
+    ).toEqual([44, 49, 54, 59, 64, 69]);
+    expect(
+      disabledRuntime.actionResolutionById.get('verified-ruby-star-skill')
+        .disabledHitIdentities
+    ).toEqual([disabledHit.hitIdentity]);
+    expect(disabledRuntime.finalState.enemy.hp).toBeGreaterThan(
+      baselineRuntime.finalState.enemy.hp
+    );
+    expect(disabledRuntime.finalState.enemy.toughness).toBeGreaterThan(
+      baselineRuntime.finalState.enemy.toughness
+    );
+    expect(
+      disabled.verifiedCombatRuntime.specialResourceRuntime.resourceEvents.find(
+        event => event.actionId === 'verified-ruby-star-skill'
+      )
+    ).toMatchObject({
+      timeMs: 0,
+      payload: { beforeValue: 0, afterValue: 12 },
+    });
+    expect(
+      disabled.verifiedTuningMarkGeneration.events.find(
+        event =>
+          event.actionId === 'verified-ruby-star-skill' &&
+          event.kind === 'acquire'
+      )
+    ).toMatchObject({ timeMs: 0, profileKey: 'fire', before: 0, after: 1 });
+
+    expect(
+      simulateRubyStarSkill({}, 6)
+        .verifiedCombatRuntime.specialResourceRuntime.resourceEvents.find(
+          event => event.actionId === 'verified-ruby-star-skill'
+        )
+    ).toMatchObject({
+      timeMs: 0,
+      payload: { beforeValue: 6, afterValue: 12 },
+    });
   });
 
   it('settles Xiaoyu normal A3 and A4 from their own projectile chains', () => {
@@ -1794,6 +1887,78 @@ function simulateVerifiedAcceptanceScenario({
   });
   const scenario = compileProject(project, getWorkbenchGameData());
   return simulateScenario(scenario);
+}
+
+function simulateRubyStarSkill(hitOverrides = {}, initialAmmo = 0) {
+  const selection = {
+    ...DEFAULT_WORKBENCH_SELECTION,
+    characterId: RUBY_CHARACTER_ID,
+    secondaryCharacterId: XIAOYU_CHARACTER_ID,
+    skillId: RUBY_STAR_SKILL_ID,
+  };
+  const teamSlots = createDefaultWorkbenchTeamSlots(selection);
+  const rubySlot = teamSlots.find(
+    slot => Number(slot.characterId) === RUBY_CHARACTER_ID
+  );
+  const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+    config => ({
+      ...config,
+      initialSp: 0,
+      loadout: {
+        ...config.loadout,
+        ...(Number(config.characterId) === RUBY_CHARACTER_ID
+          ? { kiboId: RUBY_KIBO_ID }
+          : {}),
+      },
+    })
+  );
+  const project = createWorkbenchProject(selection, {
+    durationMs: 3000,
+    teamSlots,
+    actorConfigs,
+    actions: [
+      createWorkbenchActionDraft({
+        id: 'verified-ruby-star-skill',
+        type: 'skill',
+        actorCharacterId: RUBY_CHARACTER_ID,
+        skillId: RUBY_STAR_SKILL_ID,
+        actionKind: 'star-skill',
+        actionVariantIndex: 0,
+        startMs: 0,
+        durationMs: frameTimeMs(204),
+        durationFrames: 204,
+        hitOverrides,
+      }),
+    ],
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${RUBY_CHARACTER_ID}`,
+        characterId: RUBY_CHARACTER_ID,
+      },
+      kiboEnergyBySlot: [
+        {
+          slotId: rubySlot.slotId,
+          actorId: `actor-${RUBY_CHARACTER_ID}`,
+          characterId: RUBY_CHARACTER_ID,
+          kiboId: RUBY_KIBO_ID,
+          currentValue: 0,
+          maxValue: 100,
+        },
+      ],
+      specialResourcesByActor: [
+        {
+          actorId: `actor-${RUBY_CHARACTER_ID}`,
+          characterId: RUBY_CHARACTER_ID,
+          resourceIdentity: 'actor:103002:element:103002047',
+          currentValue: initialAmmo,
+          maxValue: 12,
+        },
+      ],
+    },
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return simulateScenario(compileProject(project, getWorkbenchGameData()));
 }
 
 function simulateHanProjectileInput(hitOverrides = {}) {

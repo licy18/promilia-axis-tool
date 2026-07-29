@@ -61,7 +61,7 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
   it('keeps Ruby observable results because each mark is consumed or expires before another same-attribute gain', () => {
     expect(rubyGoldenTrace.validation.passed).toBe(true);
     expect(projectActiveTuningEvents(rubyGoldenTrace)).toEqual([
-      ['fire', 'acquire', 1890, 0, 1, 'ruby-star-skill'],
+      ['fire', 'acquire', 1850, 0, 1, 'ruby-star-skill'],
       ['fire', 'consume', 2484, 1, 0, 'ruby-ultimate'],
       [
         'thunder',
@@ -81,7 +81,7 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(rubyGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 164643,
+      ownerTotalHpDamage: 167362,
       ownerTotalToughnessDamage: 2190,
     });
     expect(

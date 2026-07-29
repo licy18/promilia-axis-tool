@@ -1756,16 +1756,26 @@
         "action-form",
         "action-settlement"
       ],
-      "status": "runtime-evidence-required",
+      "status": "applied",
       "coverageReferences": [
         "actor|103002|10300212|0|10300212",
         "actor|103002|10300212|0|10300212:default",
-        "semantic-effect:10300212|0|-1498771669867596146|static-evidence-gap",
+        "hit:10300212|0|elements|30|3779689614933439892|37|1",
+        "hit:10300212|0|elements|33|372918963524026542|44|2",
+        "hit:10300212|0|elements|33|372918963524026542|49|3",
+        "hit:10300212|0|elements|33|372918963524026542|54|4",
+        "hit:10300212|0|elements|33|372918963524026542|59|5",
+        "hit:10300212|0|elements|33|372918963524026542|64|6",
+        "hit:10300212|0|elements|33|372918963524026542|69|7",
+        "semantic-effect:10300212|0|-1498771669867596146|-6096481972427987931:0",
+        "semantic-effect:10300212|0|3663436943335475859|4452502413130359845:0",
         "semantic-effect:10300212|0|3663436943335475859|static-evidence-gap",
-        "semantic-effect:10300212|0|3879285143630828198|static-evidence-gap",
+        "semantic-effect:10300212|0|3879285143630828198|-6096481972427987931:0",
+        "semantic-effect:10300212|0|466374251647106866|-6096481972427987931:0",
         "semantic-effect:10300212|0|466374251647106866|static-evidence-gap",
+        "semantic-effect:10300212|0|6226025878936021619|4452502413130359845:0",
         "semantic-effect:10300212|0|6226025878936021619|static-evidence-gap",
-        "semantic-effect:10300212|0|8812566341439638057|static-evidence-gap"
+        "semantic-effect:10300212|0|8812566341439638057|4452502413130359845:0"
       ],
       "publicFormSettlements": [
         {
@@ -1775,34 +1785,36 @@
           "sourceSkillId": 10300212,
           "executionControlSkillId": 10300212,
           "executionSubSkillIndex": 0,
-          "hitCount": 0,
-          "settlementEvidence": [],
+          "hitCount": 7,
+          "settlementEvidence": [
+            "hit:10300212|0|elements|30|3779689614933439892|37|1",
+            "hit:10300212|0|elements|33|372918963524026542|44|2",
+            "hit:10300212|0|elements|33|372918963524026542|49|3",
+            "hit:10300212|0|elements|33|372918963524026542|54|4",
+            "hit:10300212|0|elements|33|372918963524026542|59|5",
+            "hit:10300212|0|elements|33|372918963524026542|64|6",
+            "hit:10300212|0|elements|33|372918963524026542|69|7"
+          ],
           "dimensionSummary": {
             "hp": {
-              "unresolved": 1
+              "applied": 7
             },
             "toughness": {
-              "unresolved": 1
+              "applied": 7
             },
             "actorSp": {
-              "unresolved": 1
+              "applied": 7
             },
             "kiboSp": {
-              "unresolved": 1
+              "applied": 7
             }
           },
-          "status": "runtime-evidence-required",
-          "reasons": [
-            "public-action-damage-settlement-evidence-missing",
-            "upstream-gameplay-track-stub-only"
-          ],
-          "sourceIdentity": "skill_control_10300212.asset#skillPlayers[0].skillTrackDatas[m_FileID=3,count=51]|Assets/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset#stubOnly"
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
         }
       ],
-      "reasons": [
-        "public-action-damage-settlement-evidence-missing",
-        "upstream-gameplay-track-stub-only"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/103002.hero-module.local.json"
     },
     {
@@ -1834,12 +1846,15 @@
         "ruby-normal-default-three-inputs:segment:1",
         "ruby-normal-default-three-inputs:segment:2",
         "ruby-normal-default-three-inputs:segment:3",
-        "semantic-effect:10300212|0|-1498771669867596146|static-evidence-gap",
+        "semantic-effect:10300212|0|-1498771669867596146|-6096481972427987931:0",
+        "semantic-effect:10300212|0|3663436943335475859|4452502413130359845:0",
         "semantic-effect:10300212|0|3663436943335475859|static-evidence-gap",
-        "semantic-effect:10300212|0|3879285143630828198|static-evidence-gap",
+        "semantic-effect:10300212|0|3879285143630828198|-6096481972427987931:0",
+        "semantic-effect:10300212|0|466374251647106866|-6096481972427987931:0",
         "semantic-effect:10300212|0|466374251647106866|static-evidence-gap",
+        "semantic-effect:10300212|0|6226025878936021619|4452502413130359845:0",
         "semantic-effect:10300212|0|6226025878936021619|static-evidence-gap",
-        "semantic-effect:10300212|0|8812566341439638057|static-evidence-gap",
+        "semantic-effect:10300212|0|8812566341439638057|4452502413130359845:0",
         "verified-tuning-mechanics-catalog"
       ],
       "publicFormSettlements": [],
@@ -2213,8 +2228,11 @@
         "hit:10300225|0|elements|3|-1410127030360973053|28|5",
         "hit:10300225|0|elements|3|-1410127030360973053|28|6",
         "hit:10300249|1|elements|0|1782654438459948567|15|1",
-        "hit:10300249|1|elements|0|1782654438459948567|20|2",
-        "hit:10300249|1|elements|0|1782654438459948567|25|3",
+        "hit:10300249|1|elements|0|1782654438459948567|15|2",
+        "hit:10300249|1|elements|0|1782654438459948567|20|3",
+        "hit:10300249|1|elements|0|1782654438459948567|20|4",
+        "hit:10300249|1|elements|0|1782654438459948567|25|5",
+        "hit:10300249|1|elements|0|1782654438459948567|25|6",
         "semantic-effect:10300221|0|-1715488869977622004|-8618896082664585117:54",
         "semantic-effect:10300221|0|-1715488869977622004|static-evidence-gap",
         "semantic-effect:10300221|0|-3809486317990090417|-8618896082664585117:54",
@@ -2300,24 +2318,27 @@
           "sourceSkillId": 10300221,
           "executionControlSkillId": 10300249,
           "executionSubSkillIndex": 1,
-          "hitCount": 3,
+          "hitCount": 6,
           "settlementEvidence": [
             "hit:10300249|1|elements|0|1782654438459948567|15|1",
-            "hit:10300249|1|elements|0|1782654438459948567|20|2",
-            "hit:10300249|1|elements|0|1782654438459948567|25|3"
+            "hit:10300249|1|elements|0|1782654438459948567|15|2",
+            "hit:10300249|1|elements|0|1782654438459948567|20|3",
+            "hit:10300249|1|elements|0|1782654438459948567|20|4",
+            "hit:10300249|1|elements|0|1782654438459948567|25|5",
+            "hit:10300249|1|elements|0|1782654438459948567|25|6"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 3
+              "applied": 6
             },
             "toughness": {
-              "applied": 3
+              "applied": 6
             },
             "actorSp": {
-              "applied": 3
+              "applied": 6
             },
             "kiboSp": {
-              "applied": 3
+              "applied": 6
             }
           },
           "status": "applied",
@@ -2366,10 +2387,9 @@
   "summary": {
     "entryCount": 18,
     "statusCounts": {
-      "applied": 16,
-      "not-applicable": 1,
-      "runtime-evidence-required": 1
+      "applied": 17,
+      "not-applicable": 1
     }
   },
-  "profileHash": "ab17a010bf4ae7fe85f39178a933f317d6b1b9a4d659615037351d7673fc2dbe"
+  "profileHash": "040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e"
 }
