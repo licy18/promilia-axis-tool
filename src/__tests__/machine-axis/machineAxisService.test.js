@@ -1,4 +1,6 @@
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
   createMachineAxisService,
@@ -67,6 +69,43 @@ function createAxis({
   };
 }
 
+function createKiboAxis({
+  publicActionId = 50000102,
+  actionKind = 'signature',
+  currentValue = 100,
+} = {}) {
+  const axis = createAxis({
+    actions: [
+      {
+        id: `kibo-${actionKind}`,
+        owner: { kind: 'kibo', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId,
+          actionKind,
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 0 },
+      },
+    ],
+  });
+  axis.scenario.team[0].loadout = { kiboId: 500001 };
+  axis.scenario.initialRuntimeState = {
+    kiboEnergyBySlot: [
+      {
+        slotId: 'slot-1',
+        actorId: 'actor-101007',
+        characterId: 101007,
+        kiboId: 500001,
+        kiboName: '迅狼',
+        currentValue,
+        maxValue: 100,
+      },
+    ],
+  };
+  return axis;
+}
+
 describe('Machine Axis service', () => {
   beforeEach(() => {
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
@@ -94,6 +133,209 @@ describe('Machine Axis service', () => {
       trace: expect.any(String),
       evaluation: expect.any(String),
     });
+  });
+
+  it('publishes and resolves the complete generated kibo action census', () => {
+    const service = createMachineAxisService();
+    const catalog = service.catalog();
+    const sourceActions = kiboActionCatalog.items.flatMap(item =>
+      item.actions.map(action => ({
+        kiboId: Number(item.kiboId),
+        publicActionId: Number(action.skillId),
+        actionKind: action.kind,
+      }))
+    );
+    const machineActions = catalog.kibos.flatMap(kibo =>
+      kibo.actions.map(action => ({
+        kiboId: Number(kibo.id),
+        publicActionId: Number(action.publicActionId),
+        actionKind: action.actionKind,
+      }))
+    );
+
+    expect(catalog.summary).toMatchObject({
+      kiboCount: 122,
+      kiboActionCount: 366,
+      kiboActionCountByKind: {
+        signature: 122,
+        active: 122,
+        break: 122,
+      },
+    });
+    expect(machineActions).toEqual(sourceActions);
+    for (const [publicActionId, actionKind] of [
+      [50000102, 'signature'],
+      [504004, 'active'],
+      [50000112, 'break'],
+    ]) {
+      expect(
+        service.prepare(createKiboAxis({ publicActionId, actionKind })).valid
+      ).toBe(true);
+    }
+  });
+
+  it('executes a real kibo signature with enough SP and rejects shortage precisely', () => {
+    const service = createMachineAxisService();
+    const run = service.simulate(createKiboAxis({ currentValue: 100 }));
+    expect(run.trace.actions).toContainEqual(
+      expect.objectContaining({
+        id: 'kibo-signature',
+        skillId: 50000102,
+      })
+    );
+    expect(
+      run.trace.executionPlan.actions.find(
+        action => action.actionId === 'kibo-signature'
+      )
+    ).toMatchObject({ execute: true });
+
+    const shortageAxis = createKiboAxis({ currentValue: 99 });
+    const shortage = service.validate(shortageAxis);
+    expect(shortage.valid).toBe(false);
+    expect(shortage.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-action-resource-insufficient',
+        actionId: 'kibo-signature',
+        resourceOwnerKind: 'kibo',
+        resourceOwnerId: 500001,
+        resourceIdentity: 'kibo:500001:sp',
+        currentValue: 99,
+        requiredValue: 100,
+        reason: 'verified-kibo-resource-insufficient',
+      })
+    );
+    expect(() => service.simulate(shortageAxis)).toThrow(
+      MachineAxisValidationError
+    );
+  });
+
+  it('reports concrete actor resource shortage without a failed action block', () => {
+    const axis = createAxis({
+      actions: [
+        {
+          id: 'pangpang-ultimate',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10100713,
+            actionKind: 'ultimate',
+            level: 1,
+          },
+          schedule: { mode: 'absolute', frame: 0 },
+        },
+      ],
+    });
+    axis.scenario.team[0].initialSp = 0;
+    const validation = createMachineAxisService().validate(axis);
+
+    expect(validation.valid).toBe(false);
+    expect(validation.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-action-resource-insufficient',
+        actionId: 'pangpang-ultimate',
+        resourceOwnerKind: 'actor',
+        resourceOwnerId: 101007,
+        resourceIdentity: 'actor:101007:sp',
+        currentValue: 0,
+        requiredValue: 100,
+        reason: 'verified-actor-resource-insufficient',
+      })
+    );
+    expect(() => createMachineAxisService().simulate(axis)).toThrow(
+      MachineAxisValidationError
+    );
+  });
+
+  it('rejects unsupported FPS and unknown public actions before compilation', () => {
+    const service = createMachineAxisService();
+    const unsupportedFps = createAxis();
+    unsupportedFps.scenario.fps = 30;
+    expect(service.validate(unsupportedFps).issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-fps-unsupported',
+        path: 'scenario.fps',
+      })
+    );
+
+    const unknownAction = createKiboAxis({
+      publicActionId: 59999999,
+      actionKind: 'signature',
+    });
+    expect(service.validate(unknownAction).issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-kibo-action-unknown',
+        actionId: 'kibo-signature',
+      })
+    );
+  });
+
+  it('rejects an unknown actor public action with its stable identity', () => {
+    const unknownActorAction = createAxis({
+      actions: [
+        {
+          id: 'unknown-actor-action',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 19999999,
+            actionKind: 'star-skill',
+          },
+          schedule: { mode: 'absolute', frame: 0 },
+        },
+      ],
+    });
+    expect(
+      createMachineAxisService().validate(unknownActorAction).issues
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-public-action-unknown',
+        actionId: 'unknown-actor-action',
+      })
+    );
+  });
+  it('runs the acceptance fixture as a real three-actor plus kibo axis', () => {
+    const run = createMachineAxisService().simulate(fixture);
+    const actionsById = new Map(
+      run.trace.actions.map(action => [action.id, action])
+    );
+
+    expect(actionsById.get('a3-inherit')).toMatchObject({
+      actorId: 'actor-101007',
+      controlSkillId: 10100703,
+    });
+    expect(actionsById.get('xiaoyu-charged')).toMatchObject({
+      actorId: 'actor-101010',
+      actionKind: 'charged-attack',
+    });
+    expect(actionsById.get('ruby-enhanced-e1-intent')).toMatchObject({
+      actorId: 'actor-103002',
+      name: '强化普攻 E1',
+      controlSkillId: 10300201,
+      subSkillIndex: 1,
+    });
+    expect(actionsById.get('xunlang-signature')).toMatchObject({
+      skillId: 50000102,
+    });
+    expect(run.trace.resources.kibos).toContainEqual(
+      expect.objectContaining({
+        actionId: 'xunlang-signature',
+        kiboId: 500001,
+        beforeValue: 100,
+        afterValue: 0,
+        change: -100,
+      })
+    );
+    expect(run.trace.resources.special).toContainEqual(
+      expect.objectContaining({
+        actionId: 'ruby-enhanced-e1-intent',
+        payload: expect.objectContaining({
+          resourceIdentity: 'actor:103002:element:103002047',
+          beforeValue: 6,
+          afterValue: 5,
+          change: -1,
+        }),
+      })
+    );
   });
 
   it('removes all real hit transactions when landed is miss', () => {

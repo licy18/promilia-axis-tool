@@ -40,7 +40,7 @@ export async function runMachineAxisCli(
   try {
     parsed = parseCliArguments(argv);
     if (!parsed.valid) {
-      emitResult(
+      await emitResult(
         io,
         parsed.options,
         createCliError('machine-axis-cli-usage', parsed.message)
@@ -48,28 +48,10 @@ export async function runMachineAxisCli(
       return MACHINE_AXIS_CLI_EXIT_CODES.USAGE;
     }
     const result = await executeCommand(parsed, service, io);
-    emitResult(io, parsed.options, result.value);
+    await emitResult(io, parsed.options, result.value);
     return result.exitCode;
   } catch (error) {
-    const exitCode =
-      error?.cliExitCode ??
-      (error?.issues?.length
-        ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
-        : MACHINE_AXIS_CLI_EXIT_CODES.RUNTIME);
-    const code =
-      exitCode === MACHINE_AXIS_CLI_EXIT_CODES.INPUT
-        ? 'machine-axis-cli-input-invalid'
-        : exitCode === MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
-          ? 'machine-axis-cli-validation-failed'
-          : 'machine-axis-cli-runtime-failed';
-    const value = createCliError(
-      code,
-      error?.message ?? String(error),
-      error?.issues ?? []
-    );
-    emitResult(io, parsed.options, value);
-    io.writeStderr(`${value.error.code}: ${value.error.message}\n`);
-    return exitCode;
+    return emitCliFailure({ error, parsed, io });
   }
 }
 
@@ -189,10 +171,19 @@ async function executeCommand(parsed, service, io) {
 }
 
 async function readContracts(location, options, io) {
-  const text =
-    !location || location === '-'
-      ? await io.readStdin()
-      : await io.readFile(location);
+  let text;
+  try {
+    text =
+      !location || location === '-'
+        ? await io.readStdin()
+        : await io.readFile(location);
+  } catch (error) {
+    const wrapped = new Error(
+      `Unable to read Machine Axis input: ${error.message}`
+    );
+    wrapped.cliExitCode = MACHINE_AXIS_CLI_EXIT_CODES.INPUT;
+    throw wrapped;
+  }
   try {
     if (options.format === 'jsonl') {
       return String(text)
@@ -234,18 +225,63 @@ function applyCliOverrides(value, options) {
   };
 }
 
-function emitResult(io, options, value) {
+async function emitResult(io, options, value) {
+  const text = serializeResult(options, value);
+  if (options.output && options.output !== '-') {
+    try {
+      await io.writeFile(options.output, text);
+      return;
+    } catch (error) {
+      const wrapped = new Error(
+        `Unable to write Machine Axis output: ${error.message}`
+      );
+      wrapped.cliExitCode = MACHINE_AXIS_CLI_EXIT_CODES.RUNTIME;
+      wrapped.outputWriteFailed = true;
+      throw wrapped;
+    }
+  }
+  await io.writeStdout(text);
+}
+
+function serializeResult(options, value) {
   const values =
     options.format === 'jsonl' && Array.isArray(value) ? value : [value];
-  const text =
-    options.format === 'jsonl'
-      ? `${values.map(item => JSON.stringify(item)).join('\n')}\n`
-      : `${JSON.stringify(value, null, 2)}\n`;
-  if (options.output && options.output !== '-') {
-    io.writeFile(options.output, text);
-  } else {
-    io.writeStdout(text);
+  return options.format === 'jsonl'
+    ? `${values.map(item => JSON.stringify(item)).join('\n')}\n`
+    : `${JSON.stringify(value, null, 2)}\n`;
+}
+
+async function emitCliFailure({ error, parsed, io }) {
+  const exitCode =
+    error?.cliExitCode ??
+    (error?.issues?.length
+      ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+      : MACHINE_AXIS_CLI_EXIT_CODES.RUNTIME);
+  const code =
+    exitCode === MACHINE_AXIS_CLI_EXIT_CODES.INPUT
+      ? 'machine-axis-cli-input-invalid'
+      : exitCode === MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+        ? 'machine-axis-cli-validation-failed'
+        : 'machine-axis-cli-runtime-failed';
+  const value = createCliError(
+    code,
+    error?.message ?? String(error),
+    error?.issues ?? []
+  );
+  const fallbackToStdout = async () => {
+    await io.writeStdout(serializeResult(parsed.options, value));
+  };
+  try {
+    if (error?.outputWriteFailed) {
+      await fallbackToStdout();
+    } else {
+      await emitResult(io, parsed.options, value);
+    }
+  } catch {
+    await fallbackToStdout();
   }
+  await io.writeStderr(`${value.error.code}: ${value.error.message}\n`);
+  return exitCode;
 }
 
 function createCliError(code, message, issues = []) {

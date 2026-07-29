@@ -4,6 +4,7 @@ import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchH
 import {
   MACHINE_AXIS_CONTRACT_NAME,
   MACHINE_AXIS_SCHEMA_VERSION,
+  MACHINE_AXIS_SUPPORTED_FPS,
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   normalizeMachineAxisContract,
   validateMachineAxisContract,
@@ -89,6 +90,7 @@ function createContractFromProject(project, { service, metadata } = {}) {
   const teamSlots = [...(project.team?.slots ?? [])].sort(
     (left, right) => Number(left.position ?? 0) - Number(right.position ?? 0)
   );
+  const preservedSlotIds = resolvePreservedMachineAxisSlotIds(project);
   const actorsByCharacterId = new Map(
     (project.actors ?? []).map(actor => [Number(actor.characterId), actor])
   );
@@ -105,10 +107,14 @@ function createContractFromProject(project, { service, metadata } = {}) {
         ),
       ]);
     }
-    slotsByActorId.set(String(actor.id), slot);
-    slotsByCharacterId.set(Number(actor.characterId), slot);
+    const machineSlot = {
+      ...slot,
+      slotId: preservedSlotIds.get(String(slot.slotId)) ?? String(slot.slotId),
+    };
+    slotsByActorId.set(String(actor.id), machineSlot);
+    slotsByCharacterId.set(Number(actor.characterId), machineSlot);
     return {
-      slotId: String(slot.slotId),
+      slotId: machineSlot.slotId,
       characterId: Number(actor.characterId),
       level: positiveIntegerOrNull(actor.level),
       initialSp: finiteNumberOrNull(actor.initialSp),
@@ -116,7 +122,18 @@ function createContractFromProject(project, { service, metadata } = {}) {
       cultivation: copyPlainRecord(actor.cultivation),
     };
   });
-  const fps = positiveIntegerOrNull(project.time?.fps) ?? 60;
+  const fps =
+    positiveIntegerOrNull(project.time?.fps) ?? MACHINE_AXIS_SUPPORTED_FPS;
+  if (fps !== MACHINE_AXIS_SUPPORTED_FPS) {
+    throw new MachineAxisValidationError([
+      diagnostic(
+        'machine-axis-fps-unsupported',
+        'project.time.fps',
+        `Machine Axis currently supports only ${MACHINE_AXIS_SUPPORTED_FPS} FPS`,
+        { actualFps: fps, supportedFps: MACHINE_AXIS_SUPPORTED_FPS }
+      ),
+    ]);
+  }
   const preservedSchedules = resolvePreservedMachineAxisSchedules(project, fps);
   const actions = (project.actions ?? []).map((action, index) =>
     createMachineActionFromProject({
@@ -155,7 +172,10 @@ function createContractFromProject(project, { service, metadata } = {}) {
         initialToughnessRatio: finiteNumberOrNull(enemy.initialToughnessRatio),
         elementDefenseOverrides: copyPlainRecord(enemy.elementDefenseOverrides),
       },
-      initialRuntimeState: copyPlainRecord(project.initialRuntimeState),
+      initialRuntimeState: remapWorkbenchInitialRuntimeState(
+        project.initialRuntimeState,
+        preservedSlotIds
+      ),
       projectile: {
         targetDistance:
           nonNegativeNumberOrNull(
@@ -296,6 +316,30 @@ function createMachineActionFromProject({
   };
 }
 
+function resolvePreservedMachineAxisSlotIds(project) {
+  const transport =
+    project.metadata?.transport?.[MACHINE_AXIS_TRANSPORT_METADATA_KEY];
+  return new Map(
+    Object.entries(transport?.slotIdsByCanonicalSlotId ?? {}).map(
+      ([canonicalSlotId, machineSlotId]) => [
+        String(canonicalSlotId),
+        String(machineSlotId),
+      ]
+    )
+  );
+}
+
+function remapWorkbenchInitialRuntimeState(initialRuntimeState, slotIds) {
+  const value = copyPlainRecord(initialRuntimeState);
+  if (Array.isArray(value.kiboEnergyBySlot)) {
+    value.kiboEnergyBySlot = value.kiboEnergyBySlot.map(entry => ({
+      ...entry,
+      slotId: slotIds.get(String(entry.slotId)) ?? entry.slotId,
+    }));
+  }
+  return value;
+}
+
 function resolvePreservedMachineAxisSchedules(project, fps) {
   const transport =
     project.metadata?.transport?.[MACHINE_AXIS_TRANSPORT_METADATA_KEY];
@@ -411,6 +455,7 @@ function nonNegativeNumberOrNull(value) {
 
 function diagnostic(code, path, message, details = {}) {
   return {
+    ...details,
     severity: 'error',
     code,
     path,

@@ -67,10 +67,21 @@ describe('Workbench Machine Axis adapter', () => {
     );
 
     expect(exported.scenario).toMatchObject({
+      fps: 60,
       durationFrames: 7200,
       projectile: { targetDistance: 0, defaultWillHit: true },
       critical: { policy: 'sampled', seed: 'm11-b-fixture-seed' },
       initialRuntimeState: {
+        kiboEnergyBySlot: [
+          expect.objectContaining({
+            slotId: 'slot-1',
+            kiboId: 500001,
+            currentValue: 100,
+            maxValue: 100,
+          }),
+          expect.any(Object),
+          expect.any(Object),
+        ],
         specialResourcesByActor: [
           expect.objectContaining({
             resourceIdentity: 'actor:103002:element:103002047',
@@ -82,6 +93,12 @@ describe('Workbench Machine Axis adapter', () => {
     });
     expect(exported.actions.map(action => action.id)).toEqual(
       fixture.actions.map(action => action.id)
+    );
+    expect(exported.actions.map(action => action.owner)).toEqual(
+      fixture.actions.map(action => ({
+        kind: action.owner.kind,
+        slotId: action.owner.slotId ?? null,
+      }))
     );
     expect(exported.actions.map(action => action.schedule)).toEqual(
       fixture.actions.map(action => ({
@@ -125,6 +142,33 @@ describe('Workbench Machine Axis adapter', () => {
     expect(restoredRun.trace).toEqual(originalRun.trace);
   }, 30_000);
 
+  it('rejects non-60 FPS on import and export', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const unsupportedContract = structuredClone(fixture);
+    unsupportedContract.scenario.fps = 30;
+    expect(() => adapter.importContract(unsupportedContract)).toThrow(
+      MachineAxisValidationError
+    );
+
+    const imported = adapter.importContract(fixture);
+    const unsupportedProject = structuredClone(imported.project);
+    unsupportedProject.time.fps = 30;
+    expect(() => adapter.exportProject(unsupportedProject)).toThrow(
+      MachineAxisValidationError
+    );
+    try {
+      adapter.exportProject(unsupportedProject);
+    } catch (error) {
+      expect(error.issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-fps-unsupported',
+          actualFps: 30,
+          supportedFps: 60,
+        })
+      );
+    }
+  });
   it('projects Workbench edits and rejects unsupported project actions', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
@@ -141,7 +185,9 @@ describe('Workbench Machine Axis adapter', () => {
       exported.actions.find(item => item.id === 'a3-sampled').schedule
     ).toEqual({
       mode: 'absolute',
-      frame: imported.actionResolutions[1].startFrame + 60,
+      frame:
+        imported.actionResolutions.find(item => item.actionId === 'a3-sampled')
+          .startFrame + 60,
       actionId: null,
       offsetFrames: 0,
     });

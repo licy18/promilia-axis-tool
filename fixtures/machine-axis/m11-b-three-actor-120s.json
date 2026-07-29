@@ -62,7 +62,7 @@
           "characterId": 101007,
           "kiboId": 500001,
           "kiboName": "迅狼",
-          "currentValue": 40,
+          "currentValue": 100,
           "maxValue": 100
         },
         {
@@ -109,6 +109,23 @@
     }
   },
   "actions": [
+    {
+      "id": "xunlang-signature",
+      "owner": {
+        "kind": "kibo",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 50000102,
+        "actionKind": "signature",
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 0
+      }
+    },
     {
       "id": "a3-inherit",
       "owner": {
@@ -312,9 +329,113 @@
         "actionId": "switch-to-xiaoyu",
         "offsetFrames": 180
       }
+    },
+    {
+      "id": "switch-to-ruby",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-2"
+      },
+      "intent": {
+        "kind": "switch",
+        "targetSlotId": "slot-3"
+      },
+      "schedule": {
+        "mode": "after-action-end",
+        "actionId": "xiaoyu-charged",
+        "offsetFrames": 120
+      }
+    },
+    {
+      "id": "ruby-a1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-3"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "fixture-ruby-normal"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-action-end",
+        "actionId": "switch-to-ruby",
+        "offsetFrames": 180
+      }
+    },
+    {
+      "id": "ruby-a2",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-3"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "fixture-ruby-normal"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 0
+      }
+    },
+    {
+      "id": "ruby-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-3"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "fixture-ruby-normal"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 0
+      }
+    },
+    {
+      "id": "ruby-enhanced-e1-intent",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-3"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "fixture-ruby-enhanced"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 0
+      },
+      "note": "Public normal-attack intent resolves to E1 from A3 context and ammo."
     }
   ],
   "metadata": {
-    "purpose": "M11-B API/CLI/Workbench canonical parity fixture"
+    "purpose": "M11-B API/CLI/Workbench canonical parity fixture",
+    "participants": ["101007", "101010", "103002", "kibo:500001"],
+    "resourceProof": "ruby-enhanced-e1-intent consumes actor:103002:element:103002047 from 6 to 5"
   }
 }

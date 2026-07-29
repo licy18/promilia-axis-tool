@@ -1,5 +1,6 @@
 import { ACTION_TYPES } from '../domain/projectSchema';
 import {
+  DEFAULT_WORKBENCH_TEAM_SLOTS,
   createWorkbenchActionDraft,
   createWorkbenchProject,
   getSkillsForCharacter,
@@ -9,10 +10,12 @@ import {
 import { getSkillActionCatalog } from '../domain/skillActionCatalog';
 import { frameToMs } from '../domain/timebase';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
+import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
 import {
   getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMapping,
 } from '../data/verifiedCombatMechanicsPackage';
+import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchHeadlessCombatCore';
 import {
@@ -25,26 +28,56 @@ import {
 export const MACHINE_AXIS_SERVICE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SERVICE_CONTRACT_NAME = 'AzPrMachineAxisService';
 
+const DEFAULT_KIBO_ACTION_CATALOG = projectWorkbenchKiboActionCatalog(
+  generatedWorkbenchKiboActionCatalog
+);
+
 export function createMachineAxisService({
   core = WORKBENCH_HEADLESS_COMBAT_CORE,
   gameData = getWorkbenchGameData(),
+  kiboActionCatalog = DEFAULT_KIBO_ACTION_CATALOG,
 } = {}) {
+  const projectedKiboCatalog =
+    kiboActionCatalog === DEFAULT_KIBO_ACTION_CATALOG
+      ? kiboActionCatalog
+      : projectWorkbenchKiboActionCatalog(kiboActionCatalog);
+  const kiboNames = new Map(
+    getWorkbenchLoadoutOptions().kibos.map(kibo => [
+      Number(kibo.id),
+      kibo.name ?? null,
+    ])
+  );
+  const kiboCatalogById = new Map(
+    projectedKiboCatalog.items.map(kibo => [Number(kibo.kiboId), kibo])
+  );
   function catalog() {
     const mechanicsPackage = requireMechanicsPackage();
     const coreCatalog = core.catalog();
     const publicActions = gameData.characters.flatMap(character =>
       createActorCatalogEntries(character, gameData)
     );
-    const kibos = getWorkbenchLoadoutOptions().kibos.map(kibo => ({
-      id: Number(kibo.id),
-      name: kibo.name ?? null,
-      actions: (kibo.actions ?? []).map(action => ({
+    const kibos = projectedKiboCatalog.items.map(kibo => ({
+      id: Number(kibo.kiboId),
+      name: kiboNames.get(Number(kibo.kiboId)) ?? null,
+      actions: kibo.actions.map(action => ({
         publicActionId: Number(action.skillId),
         actionKind: action.kind,
         name: action.name ?? null,
+        durationFrames: action.durationFrames ?? null,
         cooldownMs: action.cooldownMs ?? null,
       })),
     }));
+    const kiboActionCountByKind = Object.fromEntries(
+      ['signature', 'active', 'break'].map(kind => [
+        kind,
+        kibos.reduce(
+          (count, kibo) =>
+            count +
+            kibo.actions.filter(action => action.actionKind === kind).length,
+          0
+        ),
+      ])
+    );
     const value = {
       schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
       contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
@@ -63,6 +96,11 @@ export function createMachineAxisService({
         characterCount: coreCatalog.summary.characterCount,
         publicActionCount: publicActions.length,
         kiboCount: kibos.length,
+        kiboActionCount: kibos.reduce(
+          (count, kibo) => count + kibo.actions.length,
+          0
+        ),
+        kiboActionCountByKind,
         enemyCount: coreCatalog.summary.enemyCount,
       },
     };
@@ -200,6 +238,12 @@ export function createMachineAxisService({
         { ...slot, position },
       ])
     );
+    const canonicalSlotIdByMachineSlotId = new Map(
+      contract.scenario.team.map((slot, position) => [
+        slot.slotId,
+        DEFAULT_WORKBENCH_TEAM_SLOTS[position].slotId,
+      ])
+    );
     const templates = contract.actions.map((action, index) =>
       createActionTemplate({
         action,
@@ -207,6 +251,7 @@ export function createMachineAxisService({
         contract,
         teamBySlot,
         gameData,
+        kiboCatalogById,
         issues,
       })
     );
@@ -263,7 +308,10 @@ export function createMachineAxisService({
         })),
         enemyConfig: contract.scenario.enemy,
         actions: actionDrafts,
-        initialRuntimeState: contract.scenario.initialRuntimeState,
+        initialRuntimeState: remapMachineAxisInitialRuntimeState(
+          contract.scenario.initialRuntimeState,
+          canonicalSlotIdByMachineSlotId
+        ),
         combatScenario: {
           projectile: contract.scenario.projectile,
           critical: contract.scenario.critical,
@@ -284,6 +332,7 @@ export function createMachineAxisService({
           contract,
           project,
           fps: contract.scenario.fps,
+          canonicalSlotIdByMachineSlotId,
         }
       ),
     };
@@ -323,10 +372,20 @@ export function createMachineAxisService({
   });
 }
 
-function createMachineAxisTransportMetadata({ contract, project, fps }) {
+function createMachineAxisTransportMetadata({
+  contract,
+  project,
+  fps,
+  canonicalSlotIdByMachineSlotId,
+}) {
   return {
     schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
     contractName: contract.contractName,
+    slotIdsByCanonicalSlotId: Object.fromEntries(
+      [...canonicalSlotIdByMachineSlotId.entries()].map(
+        ([machineSlotId, canonicalSlotId]) => [canonicalSlotId, machineSlotId]
+      )
+    ),
     schedulesByActionId: Object.fromEntries(
       contract.actions.map(action => [
         action.id,
@@ -345,6 +404,22 @@ function createMachineAxisTransportMetadata({ contract, project, fps }) {
   };
 }
 
+function remapMachineAxisInitialRuntimeState(
+  initialRuntimeState,
+  canonicalSlotIdByMachineSlotId
+) {
+  const value = structuredClone(initialRuntimeState ?? {});
+  if (Array.isArray(value.kiboEnergyBySlot)) {
+    value.kiboEnergyBySlot = value.kiboEnergyBySlot.map(entry => ({
+      ...entry,
+      slotId:
+        canonicalSlotIdByMachineSlotId.get(String(entry.slotId)) ??
+        entry.slotId,
+    }));
+  }
+  return value;
+}
+
 export class MachineAxisValidationError extends Error {
   constructor(issues) {
     super('Machine Axis input is invalid');
@@ -358,6 +433,7 @@ function createActionTemplate({
   contract,
   teamBySlot,
   gameData,
+  kiboCatalogById,
   issues,
 }) {
   const ownerSlot = teamBySlot.get(action.owner.slotId);
@@ -430,7 +506,13 @@ function createActionTemplate({
     };
   }
   if (action.owner.kind === 'kibo') {
-    return createKiboActionTemplate({ action, index, ownerSlot, issues });
+    return createKiboActionTemplate({
+      action,
+      index,
+      ownerSlot,
+      kiboCatalogById,
+      issues,
+    });
   }
   if (action.owner.kind !== 'actor') {
     issues.push(
@@ -604,21 +686,43 @@ function createActorActionTemplate({
   };
 }
 
-function createKiboActionTemplate({ action, index, ownerSlot, issues }) {
+function createKiboActionTemplate({
+  action,
+  index,
+  ownerSlot,
+  kiboCatalogById,
+  issues,
+}) {
   const kiboId = Number(ownerSlot.loadout?.kiboId);
-  const kibo = getWorkbenchLoadoutOptions().kibos.find(
-    entry => Number(entry.id) === kiboId
+  const kibo = kiboCatalogById.get(kiboId) ?? null;
+  if (!kibo) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-kibo-unknown',
+        `actions.${index}.owner.slotId`,
+        `No generated public action catalog exists for ${kiboId || 'unconfigured kibo'}`,
+        { actionId: action.id, kiboId: kiboId || null }
+      )
+    );
+    return null;
+  }
+  const publicAction = kibo.actions.find(
+    entry =>
+      Number(entry.skillId) === Number(action.intent.publicActionId) &&
+      (!action.intent.actionKind || entry.kind === action.intent.actionKind)
   );
-  const publicAction = kibo?.actions?.find(
-    entry => Number(entry.skillId) === Number(action.intent.publicActionId)
-  );
-  if (!kibo || !publicAction) {
+  if (!publicAction) {
     issues.push(
       createMachineAxisDiagnostic(
         'machine-axis-kibo-action-unknown',
         `actions.${index}.intent.publicActionId`,
-        `Unknown kibo action ${action.intent.publicActionId} for ${kiboId || 'unconfigured kibo'}`,
-        { actionId: action.id }
+        `Unknown kibo action ${action.intent.publicActionId} for ${kiboId}`,
+        {
+          actionId: action.id,
+          kiboId,
+          publicActionId: action.intent.publicActionId,
+          actionKind: action.intent.actionKind ?? null,
+        }
       )
     );
     return null;
@@ -707,8 +811,8 @@ function resolveAttackInputSegment(action, mapping, index, issues) {
     return null;
   }
   const candidates = (
-    mapping.attackInputSourceSegments ??
     mapping.attackInputSegments ??
+    mapping.attackInputSourceSegments ??
     []
   ).filter(segment => Number(segment.sequenceIndex) === sequenceIndex);
   if (candidates.length !== 1) {
@@ -1135,22 +1239,69 @@ function validateCompiledDataIdentity(contract, actual) {
 }
 
 function collectExecutionIssues(run, actionResolutions) {
-  const machineActionIds = new Set(
-    actionResolutions.map(entry => String(entry.actionId))
+  const resolutionByActionId = new Map(
+    actionResolutions.map(entry => [String(entry.actionId), entry])
   );
-  return (run.trace.executionPlan.actions ?? [])
-    .filter(
-      entry =>
-        machineActionIds.has(String(entry.actionId)) && entry.execute === false
+  const resourceBlockByActionId = new Map(
+    (run.simulation?.verifiedCombatRuntime?.executionBlocks ?? []).map(
+      block => [String(block.actionId), block]
     )
-    .map((entry, index) =>
+  );
+  return (run.trace.executionPlan.actions ?? []).flatMap((entry, planIndex) => {
+    const actionId = String(entry.actionId);
+    const resolution = resolutionByActionId.get(actionId);
+    if (!resolution || entry.execute !== false) return [];
+    const block = resourceBlockByActionId.get(actionId);
+    if (block) {
+      const ownerKind = block.ownerKind ?? resolution.ownerKind;
+      const ownerId =
+        ownerKind === 'kibo'
+          ? Number(block.kiboId ?? resolution.ownerId)
+          : Number(resolution.ownerId);
+      const resourceIdentity = `${ownerKind}:${ownerId}:sp`;
+      const insufficient =
+        block.status === 'violated' &&
+        Number.isFinite(Number(block.currentValue)) &&
+        Number.isFinite(Number(block.requiredValue));
+      return [
+        createMachineAxisDiagnostic(
+          insufficient
+            ? 'machine-axis-action-resource-insufficient'
+            : 'machine-axis-action-resource-unresolved',
+          `executionPlan.actions.${planIndex}`,
+          insufficient
+            ? `Action ${actionId} requires ${block.requiredValue} ${ownerKind} SP, current ${block.currentValue}/${block.maxValue}`
+            : `Action ${actionId} resource precondition is unresolved: ${block.reason}`,
+          {
+            actionId,
+            resourceOwnerKind: ownerKind,
+            resourceOwnerId: ownerId,
+            resourceIdentity,
+            currentValue: block.currentValue ?? null,
+            requiredValue: block.requiredValue ?? null,
+            maxValue: block.maxValue ?? null,
+            valueUnit: block.valueUnit ?? 'absolute-sp-points',
+            reason: block.reason ?? entry.skipReason ?? entry.status,
+            sourceIdentity: block.sourceIdentity ?? null,
+            canonicalDiagnosticCode: block.code ?? null,
+          }
+        ),
+      ];
+    }
+    return [
       createMachineAxisDiagnostic(
         'machine-axis-action-not-executable',
-        `executionPlan.actions.${index}`,
-        `Action ${entry.actionId} is not executable: ${entry.skipReason ?? entry.status}`,
-        { actionId: entry.actionId }
-      )
-    );
+        `executionPlan.actions.${planIndex}`,
+        `Action ${actionId} is not executable: ${entry.skipReason ?? entry.status}`,
+        {
+          actionId,
+          reason: entry.skipReason ?? entry.status,
+          violationCodes: entry.violationCodes ?? [],
+          diagnosticIds: entry.diagnosticIds ?? [],
+        }
+      ),
+    ];
+  });
 }
 
 function createMachineAxisComparison(left, right) {

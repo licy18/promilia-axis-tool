@@ -49,7 +49,7 @@
       "properties": {
         "id": { "type": "string", "minLength": 1 },
         "name": { "type": "string", "minLength": 1 },
-        "fps": { "type": "integer", "minimum": 1 },
+        "fps": { "const": 60 },
         "durationFrames": { "type": "integer", "minimum": 1 },
         "team": {
           "type": "array",

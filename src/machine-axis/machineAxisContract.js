@@ -2,6 +2,7 @@ export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
 export const MACHINE_AXIS_KIND = 'azpr-machine-axis';
 export const MACHINE_AXIS_TRANSPORT_METADATA_KEY = 'machineAxis';
+export const MACHINE_AXIS_SUPPORTED_FPS = 60;
 
 export const MACHINE_AXIS_SCHEDULE_MODES = Object.freeze([
   'absolute',
@@ -53,9 +54,10 @@ export function normalizeMachineAxisContract(value = {}) {
     scenario: {
       id: textOrNull(scenario.id) ?? 'machine-axis-scenario',
       name: textOrNull(scenario.name) ?? 'Machine Axis Scenario',
-      fps: positiveIntegerOrNull(scenario.fps) ?? 60,
+      fps: positiveIntegerOrNull(scenario.fps) ?? MACHINE_AXIS_SUPPORTED_FPS,
       durationFrames:
-        positiveIntegerOrNull(scenario.durationFrames) ?? 60 * 120,
+        positiveIntegerOrNull(scenario.durationFrames) ??
+        MACHINE_AXIS_SUPPORTED_FPS * 120,
       team: normalizeTeam(scenario.team),
       enemy: normalizeEnemy(scenario.enemy),
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
@@ -401,12 +403,13 @@ function validateDataIdentity(value, issues) {
 }
 
 function validateScenario(value, issues) {
-  if (value.fps <= 0) {
+  if (value.fps !== MACHINE_AXIS_SUPPORTED_FPS) {
     issues.push(
       diagnostic(
-        'machine-axis-fps-invalid',
+        'machine-axis-fps-unsupported',
         'scenario.fps',
-        'fps must be a positive integer'
+        `Machine Axis currently supports only ${MACHINE_AXIS_SUPPORTED_FPS} FPS`,
+        { actualFps: value.fps, supportedFps: MACHINE_AXIS_SUPPORTED_FPS }
       )
     );
   }
@@ -678,6 +681,7 @@ function validateSampledSeed(contract, issues) {
 
 function diagnostic(code, path, message, details = {}) {
   return {
+    ...details,
     severity: 'error',
     code,
     path,

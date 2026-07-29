@@ -1782,13 +1782,15 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 当前客户端已确认在每个符合条件的 `DamageElement` 执行前以 `RandomUtility.Range(0, 10000)` 生成并保存独立 `criticalRandom`，再按 roll 与有效暴击阈值比较；该构建的整数 Range 正常路径调用 `UnityEngine.Random.Range`。因此正式语义是逐 hit 的运行时伪随机采样，不是固定暴击序列或自动期望值。工具的游戏采样模式会使用显式 seed 保持可复现，但只承诺复原分布与判定尺度，不承诺从轴输入还原客户端可能被其他系统消费的全局 RNG 序列。
 
 M11 输入合同相应增加场景级 `sampled / expected / critical / non-critical` 暴击策略和 seed；每个稳定 hit identity 分开保存命中覆盖及 `inherit / sampled / expected / critical / non-critical` 暴击覆盖。Workbench 检查面必须能逐 hit 选择是否命中、强制暴击、强制不暴击、随机或期望值，并展示实际暴击率、roll/阈值或期望贡献。期望模式不得伪造暴击事件；遇到会改变 Buff、资源或派生的暴击副作用时，必须带权分支或显式阻断。证据、RVA 与验收边界见 `reports/m11/critical-sampling-evidence-20260729.md`。
+
 ### M11-A-R1 Canonical Headless Combat Core 已通过产品验收（2026-07-29）
 
 唯一无头核心继续提供 `catalog / compile / validate / simulate / evaluate / explain` 六个纯接口。R1 统一了场景级与逐 hit `sampled` 的 seed/随机源门禁，隔离资源预检与最终随机序列，按命中时目标属性 102 应用 `CRI_DEFENSE`，并让 Workbench 分析报告复现只调用 canonical core。小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人 golden 的 replay/summary hash 无漂移；canonical trace hash 已按新增暴击追踪字段更新。完整 146 文件/901 测试、62/62 production preview、41/41 必需能力和全部来源/漂移守门通过。Workbench gzip `375,287B`、总 JS gzip `768,160B` 继续作为对外发布风险单列；独立复验在 `80c5f35` 通过，随后进入 M11-B。
 
-### M11-B Machine Axis Contract 与 CLI 实施完成，等待产品验收（2026-07-29）
+### M11-B-R1 Machine Axis Contract 与 CLI 整改完成，等待产品验收（2026-07-29）
 
-Machine Axis v1 已建立版本化 Schema、语义排程、逐 hit 命中/暴击覆盖与 captured roll；标准 Node CLI 提供 `catalog / validate / simulate / compare / explain`，支持文件、stdin/stdout 和 JSON/JSONL，错误以稳定退出码和结构化诊断返回。Workbench 双向 adapter 与 CLI/API 共用唯一 canonical core；120 秒三人 fixture 三路 hash 一致，项目往返保留队伍、装配、初始资源、相对/绝对排程、variant 和 hit overrides。完整 150 文件/921 测试、62/62 production preview、41/41 必需能力及全部漂移/来源守门通过。四份 M10 golden 的 replay/summary hash 不变；canonical trace hash仅因 captured-roll 输入合同扩展而确定性更新。Workbench gzip `375,302B`、总 JS gzip `768,250B` 继续作为对外发布风险，M11-C 未启动。
+Machine Axis v1 继续通过唯一 canonical core 提供版本化 Schema、语义排程、逐 hit 命中/暴击覆盖、captured roll 和五命令 CLI。R1 补齐正式奇波目录的 122 只奇波/366 个公开动作，合同固定 60 FPS，文件读取失败稳定返回 INPUT=3，异步写出失败稳定返回 RUNTIME=5 并将版本化错误回退到 stdout；资源不足诊断保留 owner、identity、current/required 且不生成失败占轴块。120 秒 fixture 现含三名角色实际切入、红宝石弹药交易和真实奇波动作，API/CLI/Workbench 的 canonical hash 一致。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力及六道审计通过，四份 M10 golden 无漂移。Workbench gzip `375,306B`、总 JS gzip `768,501B` 继续作为对外发布风险，M11-C 未启动。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

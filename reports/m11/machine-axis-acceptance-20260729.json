@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reportKind": "m11-b-machine-axis-contract-cli-acceptance",
   "generatedOn": "2026-07-29",
-  "status": "implementation-complete-awaiting-product-acceptance",
-  "baselineCommit": "80c5f35",
+  "status": "m11-b-r1-implementation-complete-awaiting-product-acceptance",
+  "baselineCommit": "bb62c99",
   "implementationUnits": [
     {
       "identity": "contract",
@@ -15,6 +15,10 @@
     },
     {
       "identity": "workbench-interop",
+      "commitReference": "this-commit"
+    },
+    {
+      "identity": "m11-b-r1-contract-closeout",
       "commitReference": "this-commit"
     }
   ],
@@ -57,6 +61,12 @@
     "characterCount": 20,
     "publicActionCount": 179,
     "kiboCount": 122,
+    "kiboActionCount": 366,
+    "kiboActionCountByKind": {
+      "signature": 122,
+      "active": 122,
+      "break": 122
+    },
     "enemyCount": 208
   },
   "fixture": {
@@ -64,16 +74,58 @@
     "teamSize": 3,
     "fps": 60,
     "durationFrames": 7200,
-    "inputActionCount": 8,
-    "resolvedActionCount": 8,
-    "validationIssueCount": 0
+    "inputActionCount": 14,
+    "resolvedActionCount": 14,
+    "validationIssueCount": 0,
+    "participants": [
+      {
+        "slotId": "slot-1",
+        "characterId": 101007,
+        "actionIds": [
+          "a3-inherit",
+          "a3-sampled",
+          "a3-expected",
+          "a3-critical",
+          "a3-non-critical",
+          "a3-miss"
+        ],
+        "kiboActionIds": ["xunlang-signature"]
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "actionIds": ["xiaoyu-charged"],
+        "switchActionIds": ["switch-to-xiaoyu"]
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 103002,
+        "actionIds": [
+          "ruby-a1",
+          "ruby-a2",
+          "ruby-a3",
+          "ruby-enhanced-e1-intent"
+        ],
+        "switchActionIds": ["switch-to-ruby"],
+        "specialResourceProof": {
+          "identity": "actor:103002:element:103002047",
+          "before": 6,
+          "after": 5
+        }
+      }
+    ],
+    "derivedActionIds": [
+      "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+      "switch-to-ruby--on-enter--actor-103002--star-carry"
+    ],
+    "executionPlanActionCount": 16
   },
   "canonicalHashes": {
     "algorithm": "fnv1a64-utf8-v1",
-    "input": "ee0ba83dd60f7599",
-    "data": "571336af2729eb4a",
-    "trace": "56c76f6f7a931676",
-    "evaluation": "11aaa473e49ae7a2"
+    "input": "1670cb62718bc08b",
+    "data": "c49a239709b43a16",
+    "trace": "daad78c39e6416ee",
+    "evaluation": "8332f529cd763fb8"
   },
   "interop": {
     "apiCliWorkbenchHashParity": true,
@@ -87,7 +139,11 @@
     "hitOverridesPreserved": true,
     "staleHitRejected": true,
     "unsupportedCriticalRejected": true,
-    "expectedStateSideEffectRejected": true
+    "expectedStateSideEffectRejected": true,
+    "fpsFixedAt60": true,
+    "kiboActionRoundTripStable": true,
+    "kiboInitialEnergyRoundTripStable": true,
+    "slotIdentityRoundTripStable": true
   },
   "productionEntrypoints": [
     "scripts/machine-axis-cli-entry.mjs",
@@ -138,14 +194,15 @@
   ],
   "verification": {
     "focusedVitest": {
-      "files": 6,
-      "tests": 33,
+      "files": 7,
+      "tests": 43,
       "passed": true
     },
     "fullVitest": {
-      "files": 150,
-      "tests": 921,
-      "passed": true
+      "files": 151,
+      "tests": 931,
+      "passed": true,
+      "isolation": "bb62c99 plus M11-B-R1 files; concurrent kibo-headless WIP excluded"
     },
     "productionPreview": {
       "tests": 62,
@@ -164,12 +221,108 @@
   },
   "releaseRisk": {
     "blocksM11B": false,
-    "workbenchGzipBytes": 375302,
+    "workbenchGzipBytes": 375306,
     "workbenchBudgetBytes": 370000,
-    "totalJavaScriptGzipBytes": 768250,
+    "totalJavaScriptGzipBytes": 768501,
     "totalJavaScriptBudgetBytes": 740000,
     "policy": "record-only-until-external-release"
   },
   "nextStageStarted": false,
-  "nextStage": "M11-C"
+  "nextStage": "M11-C",
+  "r1": {
+    "status": "implementation-complete-awaiting-product-acceptance",
+    "failureToPassEvidence": [
+      {
+        "identity": "kibo-machine-axis-entry",
+        "before": "122 kibos exposed zero actions; 50000102 returned machine-axis-kibo-action-unknown",
+        "after": "122 kibos and 366 actions exposed; 50000102 executes at 100 SP and validates as machine-axis-action-resource-insufficient at 99 SP"
+      },
+      {
+        "identity": "fps-contract",
+        "before": "30 FPS validated while fixed 60 FPS conversion still produced 1000ms/1233.333333ms timing",
+        "after": "schema and adapters accept only 60 FPS; 30 FPS returns machine-axis-fps-unsupported"
+      },
+      {
+        "identity": "cli-file-io",
+        "before": "missing input exited 5; failed output write produced an unhandled exit 1 and Node stack",
+        "after": "missing/malformed input exit 3; failed output write exit 5 with versioned JSON fallback on stdout and concise stderr"
+      },
+      {
+        "identity": "acceptance-fixture",
+        "before": "three-person roster but only two actors acted, no Ruby switch/action, no kibo action",
+        "after": "all three actors participate, two exact switch events execute, Ruby ammo is consumed, and a real kibo signature executes"
+      }
+    ],
+    "kiboCatalog": {
+      "kiboCount": 122,
+      "actionCount": 366,
+      "representatives": [
+        {
+          "kind": "signature",
+          "kiboId": 500001,
+          "publicActionId": 50000102
+        },
+        {
+          "kind": "active",
+          "kiboId": 500001,
+          "publicActionId": 504004
+        },
+        {
+          "kind": "break",
+          "kiboId": 500001,
+          "publicActionId": 50000112
+        }
+      ]
+    },
+    "fps": {
+      "supported": 60,
+      "rejectedExample": 30,
+      "errorCode": "machine-axis-fps-unsupported"
+    },
+    "cliIo": {
+      "missingInput": {
+        "exitCode": 3,
+        "errorCode": "machine-axis-cli-input-invalid"
+      },
+      "malformedJson": {
+        "exitCode": 3,
+        "errorCode": "machine-axis-cli-input-invalid"
+      },
+      "unwritableOutput": {
+        "exitCode": 5,
+        "errorCode": "machine-axis-cli-runtime-failed",
+        "versionedJsonFallbackToStdout": true,
+        "nodeStackExposed": false
+      },
+      "stdinStdout": {
+        "exitCode": 0,
+        "stdoutMachineJsonOnly": true
+      },
+      "fileOutput": {
+        "exitCode": 0,
+        "stdoutEmpty": true
+      }
+    },
+    "resourceDiagnostics": {
+      "fields": [
+        "actionId",
+        "resourceOwnerKind",
+        "resourceOwnerId",
+        "resourceIdentity",
+        "currentValue",
+        "requiredValue",
+        "maxValue",
+        "reason",
+        "sourceIdentity"
+      ],
+      "invalidActionMaterialized": false
+    },
+    "canonicalHashes": {
+      "algorithm": "fnv1a64-utf8-v1",
+      "input": "1670cb62718bc08b",
+      "data": "c49a239709b43a16",
+      "trace": "daad78c39e6416ee",
+      "evaluation": "8332f529cd763fb8"
+    }
+  }
 }
