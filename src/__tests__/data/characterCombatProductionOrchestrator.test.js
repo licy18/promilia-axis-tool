@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import characterCatalog from '../../data/generated/characters.json';
 import { applyCharacterCombatAttackInputPhaseMappings } from '../../../scripts/character-combat/character-combat-contract-compiler.mjs';
 import {
+  createCharacterCombatControlPolicyIndex,
   createCharacterCombatProductionBuild,
   discoverCharacterCombatRecipes,
 } from '../../../scripts/character-combat/character-combat-production-orchestrator.mjs';
@@ -18,6 +19,46 @@ afterEach(() => {
 });
 
 describe('character combat production orchestration', () => {
+  it('applies an owner default control policy and lets explicit controls extend it', () => {
+    const policies = createCharacterCombatControlPolicyIndex([
+      {
+        ownerId: 990001,
+        sourceIdentity: 'fixture:owner-990001',
+        compiler: {
+          reachableControlSkillIds: [99000101, 99000102],
+        },
+        runtimePolicies: {
+          defaultControlPolicy: {
+            behaviorTriggerScope: 'skill-player',
+            sourceIdentity: 'fixture:default-control-policy',
+          },
+          controlPolicies: [
+            {
+              controlSkillId: 99000102,
+              bulletInjectionMode: 'recursive-static-timed',
+              sourceIdentity: 'fixture:explicit-control-policy',
+            },
+          ],
+        },
+      },
+    ]);
+
+    expect(policies.get(99000101)).toMatchObject({
+      ownerId: 990001,
+      controlSkillId: 99000101,
+      behaviorTriggerScope: 'skill-player',
+    });
+    expect(policies.get(99000101)?.sourceIdentity).toContain(
+      'fixture:default-control-policy|controlSkillId=99000101'
+    );
+    expect(policies.get(99000102)).toMatchObject({
+      ownerId: 990001,
+      controlSkillId: 99000102,
+      behaviorTriggerScope: 'skill-player',
+      bulletInjectionMode: 'recursive-static-timed',
+      sourceIdentity: 'fixture:explicit-control-policy',
+    });
+  });
   it('publishes a declarative default attack phase without owner-specific compiler branches', () => {
     const mechanicsPackage = {
       actionMappings: [

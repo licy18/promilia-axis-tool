@@ -6,7 +6,7 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "d9c762257ea0d4c8bb11e5b70be41e50c43f4f14e648b4d121248dd3f2f69a39",
+  "sourcePackageHash": "2046849c343b33e1c86403e529ce3c2051a0577bb2e46de1fc07b32c1db9eaf9",
   "compilerPath": "src/simulation/compiler/compileProject.js",
   "simulatorPath": "src/simulation/engine/simulateScenario.js",
   "actual": {
@@ -501,9 +501,9 @@
       }
     },
     "combat": {
-      "damageEventCount": 427,
-      "ownerDamageEventCount": 252,
-      "ownerHitEventCount": 120,
+      "damageEventCount": 422,
+      "ownerDamageEventCount": 247,
+      "ownerHitEventCount": 115,
       "ownerHitCountByActionId": {
         "jade-limit-counter": 8,
         "jade-perfect-parry": 2,
@@ -519,7 +519,7 @@
         "threshold-burst-a1": 9,
         "threshold-burst-a2": 12,
         "threshold-burst-a3": 5,
-        "threshold-charged": 10,
+        "threshold-charged": 5,
         "threshold-enhanced-special-charged": 2,
         "ultimate-burst-a1": 9,
         "ultimate-burst-a2": 12,
@@ -695,21 +695,16 @@
           "totalToughnessDamage": 175
         },
         "threshold-charged": {
-          "hitCount": 10,
+          "hitCount": 5,
           "frames": [
             43,
-            43,
-            48,
             48,
             53,
-            53,
             58,
-            58,
-            63,
             63
           ],
-          "totalHpDamage": 400,
-          "totalToughnessDamage": 390
+          "totalHpDamage": 200,
+          "totalToughnessDamage": 195
         },
         "threshold-enhanced-special-charged": {
           "hitCount": 2,
@@ -796,19 +791,19 @@
           "totalToughnessDamage": 0
         }
       },
-      "ownerHitTotalHpDamage": 9942,
-      "ownerHitTotalToughnessDamage": 1961,
+      "ownerHitTotalHpDamage": 9742,
+      "ownerHitTotalToughnessDamage": 1766,
       "selectedHpDamageByActionId": {
         "jade-star-derived-charged": 0,
         "jade-star-skill": 0,
-        "threshold-charged": 5813
+        "threshold-charged": 5613
       },
       "totalHpDamage": 862800,
       "totalToughnessDamage": 0,
       "ownerTotalHpDamage": 699322,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
-        "pointCount": 619,
+        "pointCount": 609,
         "initialHp": 862800,
         "finalHp": 0,
         "maxHp": 862800,
@@ -4864,7 +4859,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|5400|37",
+          "eventIdentity": "tuning-mark|750|consume|5400|32",
           "actionId": "threshold-enhanced-special-charged",
           "frame": 324,
           "kind": "consume",
@@ -4888,7 +4883,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|9650|41",
+          "eventIdentity": "tuning-mark|750|consume|9650|36",
           "actionId": "ultimate-refresh",
           "frame": 579,
           "kind": "consume",
@@ -4900,7 +4895,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|20216.666667|96",
+          "eventIdentity": "tuning-mark|150|acquire|20216.666667|91",
           "actionId": "han-star-skill",
           "frame": 1213,
           "kind": "acquire",
@@ -4924,7 +4919,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|20333.333334|95",
+          "eventIdentity": "tuning-mark|150|acquire|20333.333334|90",
           "actionId": "han-star-skill",
           "frame": 1220,
           "kind": "acquire",
@@ -4936,7 +4931,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|23400|104",
+          "eventIdentity": "tuning-mark|250|acquire|23400|99",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1404,
           "kind": "acquire",
@@ -4960,7 +4955,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|23450|110",
+          "eventIdentity": "tuning-mark|150|acquire|23450|105",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
           "kind": "acquire",
@@ -4996,7 +4991,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|31400|117",
+          "eventIdentity": "tuning-mark|150|consume|31400|112",
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "kind": "consume",
@@ -5008,7 +5003,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|31666.666667|116",
+          "eventIdentity": "tuning-mark|150|consume|31666.666667|111",
           "actionId": "ruby-ultimate",
           "frame": 1900,
           "kind": "consume",
@@ -5080,7 +5075,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|acquire|41050|158",
+          "eventIdentity": "tuning-mark|750|acquire|41050|153",
           "actionId": "normal-a5",
           "frame": 2463,
           "kind": "acquire",
@@ -5092,7 +5087,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|42750|167",
+          "eventIdentity": "tuning-mark|750|consume|42750|162",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "kind": "consume",
@@ -5104,7 +5099,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|43400|188",
+          "eventIdentity": "tuning-mark|250|expire|43400|183",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 2604,
           "kind": "expire",
@@ -5116,7 +5111,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|43450|189",
+          "eventIdentity": "tuning-mark|150|expire|43450|184",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 2607,
           "kind": "expire",
@@ -6079,9 +6074,9 @@
       "clearLoadoutCharacterIds": [
         101010
       ],
-      "primaryDamage": 5813,
-      "baselineDamage": 2451,
-      "damageDelta": 3362,
+      "primaryDamage": 5613,
+      "baselineDamage": 2366,
+      "damageDelta": 3247,
       "primaryDynamicPropertySources": [
         {
           "attributeId": 1,
@@ -6124,22 +6119,10 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "10a5019712b8f18d503a646b92f2439ec92615fcdd4602bc8e03852538cfc8b1"
+      "baselineReplayHash": "ce71a7262b2d819081fb7de5152d859c285d96a717944f5ef152553997bac7f8"
     },
     "trace": {
       "damage": [
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "threshold-charged",
-          "frame": 43,
-          "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
@@ -6180,30 +6163,6 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "threshold-charged",
-          "frame": 48,
-          "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "threshold-charged",
-          "frame": 53,
-          "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "threshold-charged",
           "frame": 53,
           "hitIdentity": null,
           "rawDamage": 40,
@@ -6217,30 +6176,6 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "threshold-charged",
           "frame": 58,
-          "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "threshold-charged",
-          "frame": 58,
-          "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "threshold-charged",
-          "frame": 63,
           "hitIdentity": null,
           "rawDamage": 40,
           "hpDamage": 40,
@@ -6604,7 +6539,7 @@
           "hitIdentity": null,
           "rawDamage": 151579,
           "hpDamage": 151579,
-          "toughnessDamage": 1744,
+          "toughnessDamage": 1939,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -10910,8 +10845,8 @@
           "actionId": "normal-special-charged",
           "frame": 2565,
           "hitIdentity": null,
-          "rawDamage": 129456,
-          "hpDamage": 129456,
+          "rawDamage": 129656,
+          "hpDamage": 129656,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -11411,7 +11346,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|5400|37",
+          "eventIdentity": "tuning-mark|750|consume|5400|32",
           "actionId": "threshold-enhanced-special-charged",
           "frame": 324,
           "kind": "consume",
@@ -11435,7 +11370,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|9650|41",
+          "eventIdentity": "tuning-mark|750|consume|9650|36",
           "actionId": "ultimate-refresh",
           "frame": 579,
           "kind": "consume",
@@ -11447,7 +11382,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|20216.666667|96",
+          "eventIdentity": "tuning-mark|150|acquire|20216.666667|91",
           "actionId": "han-star-skill",
           "frame": 1213,
           "kind": "acquire",
@@ -11471,7 +11406,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|20333.333334|95",
+          "eventIdentity": "tuning-mark|150|acquire|20333.333334|90",
           "actionId": "han-star-skill",
           "frame": 1220,
           "kind": "acquire",
@@ -11483,7 +11418,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|23400|104",
+          "eventIdentity": "tuning-mark|250|acquire|23400|99",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 1404,
           "kind": "acquire",
@@ -11507,7 +11442,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|acquire|23450|110",
+          "eventIdentity": "tuning-mark|150|acquire|23450|105",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
           "kind": "acquire",
@@ -11543,7 +11478,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|31400|117",
+          "eventIdentity": "tuning-mark|150|consume|31400|112",
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "kind": "consume",
@@ -11555,7 +11490,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|31666.666667|116",
+          "eventIdentity": "tuning-mark|150|consume|31666.666667|111",
           "actionId": "ruby-ultimate",
           "frame": 1900,
           "kind": "consume",
@@ -11627,7 +11562,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|acquire|41050|158",
+          "eventIdentity": "tuning-mark|750|acquire|41050|153",
           "actionId": "normal-a5",
           "frame": 2463,
           "kind": "acquire",
@@ -11639,7 +11574,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|42750|167",
+          "eventIdentity": "tuning-mark|750|consume|42750|162",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "kind": "consume",
@@ -11651,7 +11586,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|43400|188",
+          "eventIdentity": "tuning-mark|250|expire|43400|183",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 2604,
           "kind": "expire",
@@ -11663,7 +11598,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|43450|189",
+          "eventIdentity": "tuning-mark|150|expire|43450|184",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 2607,
           "kind": "expire",
@@ -13394,7 +13329,7 @@
         }
       ]
     },
-    "summaryHash": "2377dcc5493ed4ecb6eed51c0ee5203e5ea582b657719c54d2c397e84fb94a72"
+    "summaryHash": "4ee14faf60a5cfa997576480923dffc2ead27719b3a455986bce94941e4f7a75"
   },
   "expected": {
     "exact": {
@@ -13433,11 +13368,11 @@
       "actions.selectionByActionId.jade-perfect-parry.controlSkillId": 10101049,
       "actions.selectionByActionId.jade-perfect-parry.subSkillIndex": 1,
       "actions.selectionByActionId.jade-perfect-parry.actualDurationFrames": 36,
-      "combat.damageEventCount": 427,
-      "combat.ownerDamageEventCount": 252,
-      "combat.ownerHitEventCount": 120,
-      "combat.ownerHitTotalHpDamage": 9942,
-      "combat.ownerHitTotalToughnessDamage": 1961,
+      "combat.damageEventCount": 422,
+      "combat.ownerDamageEventCount": 247,
+      "combat.ownerHitEventCount": 115,
+      "combat.ownerHitTotalHpDamage": 9742,
+      "combat.ownerHitTotalToughnessDamage": 1766,
       "combat.ownerTotalHpDamage": 699322,
       "combat.ownerTotalToughnessDamage": 0,
       "combat.enemy.initialHp": 862800,
@@ -13542,9 +13477,9 @@
       "effects.burstTransitions.2.operation": "expire",
       "dynamicProperties.maxPercentRawByAttributeId.1": 1500,
       "dynamicProperties.maxPercentRawByAttributeId.229": 9600,
-      "comparison.primaryDamage": 5813,
-      "comparison.baselineDamage": 2451,
-      "comparison.damageDelta": 3362
+      "comparison.primaryDamage": 5613,
+      "comparison.baselineDamage": 2366,
+      "comparison.damageDelta": 3247
     },
     "greaterThan": {
       "combat.ownerTotalHpDamage": 0,
@@ -13806,36 +13741,36 @@
       {
         "jsonPath": "combat.damageEventCount",
         "operator": "exact",
-        "expected": 427,
-        "actual": 427,
+        "expected": 422,
+        "actual": 422,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerDamageEventCount",
         "operator": "exact",
-        "expected": 252,
-        "actual": 252,
+        "expected": 247,
+        "actual": 247,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitEventCount",
         "operator": "exact",
-        "expected": 120,
-        "actual": 120,
+        "expected": 115,
+        "actual": 115,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitTotalHpDamage",
         "operator": "exact",
-        "expected": 9942,
-        "actual": 9942,
+        "expected": 9742,
+        "actual": 9742,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitTotalToughnessDamage",
         "operator": "exact",
-        "expected": 1961,
-        "actual": 1961,
+        "expected": 1766,
+        "actual": 1766,
         "passed": true
       },
       {
@@ -14404,22 +14339,22 @@
       {
         "jsonPath": "comparison.primaryDamage",
         "operator": "exact",
-        "expected": 5813,
-        "actual": 5813,
+        "expected": 5613,
+        "actual": 5613,
         "passed": true
       },
       {
         "jsonPath": "comparison.baselineDamage",
         "operator": "exact",
-        "expected": 2451,
-        "actual": 2451,
+        "expected": 2366,
+        "actual": 2366,
         "passed": true
       },
       {
         "jsonPath": "comparison.damageDelta",
         "operator": "exact",
-        "expected": 3362,
-        "actual": 3362,
+        "expected": 3247,
+        "actual": 3247,
         "passed": true
       },
       {
@@ -14433,18 +14368,18 @@
         "jsonPath": "combat.ownerHitTotalToughnessDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 1961,
+        "actual": 1766,
         "passed": true
       },
       {
         "jsonPath": "comparison.damageDelta",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 3362,
+        "actual": 3247,
         "passed": true
       }
     ]
   },
-  "replayHash": "cb8d090d7c45809a47bb7d41e7521c2eed20bfacb5bda29a0f6c0027581fc441",
-  "profileHash": "4fcd2d615672546c1abb2df59e627b48810dd73266b7d199b748e7b70cfd8199"
+  "replayHash": "92b28770851aa03ecfbcb9440c20105fdbe60630a4d3b3890a1661ba05d20501",
+  "profileHash": "9ffbddd8b8a560707d9518907f4e9df1d58ffd12cb14c8caea5cff851db21027"
 }

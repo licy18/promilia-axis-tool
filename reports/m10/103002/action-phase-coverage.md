@@ -3,7 +3,7 @@
 - 阶段：2（已应用 2）
 - 输入段：15
 - 阶段切换：1
-- 快速入口：13/13
+- 快速入口：10/10
 - 公开动作就绪：10/10
 
 ## 动作阶段
@@ -23,12 +23,9 @@
 | 10300213/sub0 | 297F + 4000ms | 10300201/sub1 | resource-at-least | applied |
 | 10300221/sub0 | 80F + 533.3333333333334ms | 10300201/sub1 | resource-at-least | applied |
 | 10300210/sub0 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
-| 10300210/sub0 | 33F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
-| 10300210/sub1 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub1 | 33F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub2 | 24F + 4000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300210/sub2 | 24F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
-| 10300210/sub2 | 33F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300213/sub0 | 297F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 | 10300226/sub0 | 35F + 2000ms | 10300201/sub1 | resource-at-least | verified-action-variant-edge-ready |
 

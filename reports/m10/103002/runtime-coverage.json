@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 103002,
-  "sourcePackageHash": "d9c762257ea0d4c8bb11e5b70be41e50c43f4f14e648b4d121248dd3f2f69a39",
+  "sourcePackageHash": "2046849c343b33e1c86403e529ce3c2051a0577bb2e46de1fc07b32c1db9eaf9",
   "actionRows": [
     {
       "actionIdentity": "actor|103002|10300201|0|10300203",
@@ -18,7 +18,7 @@
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 122,
+      "hitCount": 46,
       "requiresDamageSettlement": true,
       "settlementStatus": "applied",
       "publicFormSettlements": [
@@ -29,30 +29,24 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300201,
           "executionSubSkillIndex": 1,
-          "hitCount": 9,
+          "hitCount": 3,
           "settlementEvidence": [
             "hit:10300201|1|elements|33|6530960959018090325|17|1",
-            "hit:10300201|1|elements|33|6530960959018090325|19|2",
-            "hit:10300201|1|elements|33|6530960959018090325|21|3",
-            "hit:10300201|1|elements|33|6530960959018090325|24|4",
-            "hit:10300201|1|elements|33|6530960959018090325|26|5",
-            "hit:10300201|1|elements|33|6530960959018090325|26|6",
-            "hit:10300201|1|elements|33|6530960959018090325|29|7",
-            "hit:10300201|1|elements|33|6530960959018090325|31|8",
-            "hit:10300201|1|elements|33|6530960959018090325|36|9"
+            "hit:10300201|1|elements|33|6530960959018090325|21|2",
+            "hit:10300201|1|elements|33|6530960959018090325|26|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 9
+              "applied": 3
             },
             "toughness": {
-              "applied": 9
+              "applied": 3
             },
             "actorSp": {
-              "applied": 9
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 9
+              "applied": 3
             }
           },
           "status": "applied",
@@ -66,33 +60,25 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300204,
           "executionSubSkillIndex": 0,
-          "hitCount": 12,
+          "hitCount": 4,
           "settlementEvidence": [
-            "hit:10300204|0|elements|7|6530960959018090325|17|1",
-            "hit:10300204|0|elements|7|6530960959018090325|19|2",
-            "hit:10300204|0|elements|7|6530960959018090325|21|3",
-            "hit:10300204|0|elements|7|6530960959018090325|24|4",
-            "hit:10300204|0|elements|7|6530960959018090325|25|5",
-            "hit:10300204|0|elements|7|6530960959018090325|26|6",
-            "hit:10300204|0|elements|7|6530960959018090325|29|7",
-            "hit:10300204|0|elements|7|6530960959018090325|29|8",
-            "hit:10300204|0|elements|7|6530960959018090325|31|9",
-            "hit:10300204|0|elements|7|6530960959018090325|34|10",
-            "hit:10300204|0|elements|7|6530960959018090325|36|11",
-            "hit:10300204|0|elements|7|6530960959018090325|40|12"
+            "hit:10300204|0|elements|7|6530960959018090325|19|1",
+            "hit:10300204|0|elements|7|6530960959018090325|24|2",
+            "hit:10300204|0|elements|7|6530960959018090325|29|3",
+            "hit:10300204|0|elements|7|6530960959018090325|34|4"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 12
+              "applied": 4
             },
             "toughness": {
-              "applied": 12
+              "applied": 4
             },
             "actorSp": {
-              "applied": 12
+              "applied": 4
             },
             "kiboSp": {
-              "applied": 12
+              "applied": 4
             }
           },
           "status": "applied",
@@ -106,33 +92,25 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300204,
           "executionSubSkillIndex": 1,
-          "hitCount": 12,
+          "hitCount": 4,
           "settlementEvidence": [
-            "hit:10300204|1|elements|12|6530960959018090325|17|1",
-            "hit:10300204|1|elements|12|6530960959018090325|19|2",
-            "hit:10300204|1|elements|12|6530960959018090325|21|3",
-            "hit:10300204|1|elements|12|6530960959018090325|24|4",
-            "hit:10300204|1|elements|12|6530960959018090325|25|5",
-            "hit:10300204|1|elements|12|6530960959018090325|26|6",
-            "hit:10300204|1|elements|12|6530960959018090325|29|7",
-            "hit:10300204|1|elements|12|6530960959018090325|29|8",
-            "hit:10300204|1|elements|12|6530960959018090325|31|9",
-            "hit:10300204|1|elements|12|6530960959018090325|34|10",
-            "hit:10300204|1|elements|12|6530960959018090325|36|11",
-            "hit:10300204|1|elements|12|6530960959018090325|40|12"
+            "hit:10300204|1|elements|12|6530960959018090325|26|1",
+            "hit:10300204|1|elements|12|6530960959018090325|31|2",
+            "hit:10300204|1|elements|12|6530960959018090325|36|3",
+            "hit:10300204|1|elements|12|6530960959018090325|40|4"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 12
+              "applied": 4
             },
             "toughness": {
-              "applied": 12
+              "applied": 4
             },
             "actorSp": {
-              "applied": 12
+              "applied": 4
             },
             "kiboSp": {
-              "applied": 12
+              "applied": 4
             }
           },
           "status": "applied",
@@ -178,30 +156,24 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300201,
           "executionSubSkillIndex": 2,
-          "hitCount": 9,
+          "hitCount": 3,
           "settlementEvidence": [
-            "hit:10300201|2|elements|12|6530960959018090325|17|1",
-            "hit:10300201|2|elements|12|6530960959018090325|19|2",
-            "hit:10300201|2|elements|12|6530960959018090325|21|3",
-            "hit:10300201|2|elements|12|6530960959018090325|24|4",
-            "hit:10300201|2|elements|12|6530960959018090325|26|5",
-            "hit:10300201|2|elements|12|6530960959018090325|26|6",
-            "hit:10300201|2|elements|12|6530960959018090325|29|7",
-            "hit:10300201|2|elements|12|6530960959018090325|31|8",
-            "hit:10300201|2|elements|12|6530960959018090325|36|9"
+            "hit:10300201|2|elements|12|6530960959018090325|19|1",
+            "hit:10300201|2|elements|12|6530960959018090325|24|2",
+            "hit:10300201|2|elements|12|6530960959018090325|29|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 9
+              "applied": 3
             },
             "toughness": {
-              "applied": 9
+              "applied": 3
             },
             "actorSp": {
-              "applied": 9
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 9
+              "applied": 3
             }
           },
           "status": "applied",
@@ -215,30 +187,24 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300201,
           "executionSubSkillIndex": 3,
-          "hitCount": 9,
+          "hitCount": 3,
           "settlementEvidence": [
-            "hit:10300201|3|elements|12|6530960959018090325|17|1",
-            "hit:10300201|3|elements|12|6530960959018090325|19|2",
-            "hit:10300201|3|elements|12|6530960959018090325|21|3",
-            "hit:10300201|3|elements|12|6530960959018090325|24|4",
-            "hit:10300201|3|elements|12|6530960959018090325|26|5",
-            "hit:10300201|3|elements|12|6530960959018090325|26|6",
-            "hit:10300201|3|elements|12|6530960959018090325|29|7",
-            "hit:10300201|3|elements|12|6530960959018090325|31|8",
-            "hit:10300201|3|elements|12|6530960959018090325|36|9"
+            "hit:10300201|3|elements|12|6530960959018090325|26|1",
+            "hit:10300201|3|elements|12|6530960959018090325|31|2",
+            "hit:10300201|3|elements|12|6530960959018090325|36|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 9
+              "applied": 3
             },
             "toughness": {
-              "applied": 9
+              "applied": 3
             },
             "actorSp": {
-              "applied": 9
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 9
+              "applied": 3
             }
           },
           "status": "applied",
@@ -252,30 +218,24 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300202,
           "executionSubSkillIndex": 1,
-          "hitCount": 9,
+          "hitCount": 3,
           "settlementEvidence": [
             "hit:10300202|1|elements|12|6530960959018090325|17|1",
-            "hit:10300202|1|elements|12|6530960959018090325|19|2",
-            "hit:10300202|1|elements|12|6530960959018090325|21|3",
-            "hit:10300202|1|elements|12|6530960959018090325|24|4",
-            "hit:10300202|1|elements|12|6530960959018090325|26|5",
-            "hit:10300202|1|elements|12|6530960959018090325|26|6",
-            "hit:10300202|1|elements|12|6530960959018090325|29|7",
-            "hit:10300202|1|elements|12|6530960959018090325|31|8",
-            "hit:10300202|1|elements|12|6530960959018090325|36|9"
+            "hit:10300202|1|elements|12|6530960959018090325|21|2",
+            "hit:10300202|1|elements|12|6530960959018090325|26|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 9
+              "applied": 3
             },
             "toughness": {
-              "applied": 9
+              "applied": 3
             },
             "actorSp": {
-              "applied": 9
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 9
+              "applied": 3
             }
           },
           "status": "applied",
@@ -289,30 +249,24 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300202,
           "executionSubSkillIndex": 2,
-          "hitCount": 9,
+          "hitCount": 3,
           "settlementEvidence": [
-            "hit:10300202|2|elements|12|6530960959018090325|17|1",
-            "hit:10300202|2|elements|12|6530960959018090325|19|2",
-            "hit:10300202|2|elements|12|6530960959018090325|21|3",
-            "hit:10300202|2|elements|12|6530960959018090325|24|4",
-            "hit:10300202|2|elements|12|6530960959018090325|26|5",
-            "hit:10300202|2|elements|12|6530960959018090325|26|6",
-            "hit:10300202|2|elements|12|6530960959018090325|29|7",
-            "hit:10300202|2|elements|12|6530960959018090325|31|8",
-            "hit:10300202|2|elements|12|6530960959018090325|36|9"
+            "hit:10300202|2|elements|12|6530960959018090325|19|1",
+            "hit:10300202|2|elements|12|6530960959018090325|24|2",
+            "hit:10300202|2|elements|12|6530960959018090325|29|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 9
+              "applied": 3
             },
             "toughness": {
-              "applied": 9
+              "applied": 3
             },
             "actorSp": {
-              "applied": 9
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 9
+              "applied": 3
             }
           },
           "status": "applied",
@@ -326,30 +280,24 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300202,
           "executionSubSkillIndex": 3,
-          "hitCount": 9,
+          "hitCount": 3,
           "settlementEvidence": [
-            "hit:10300202|3|elements|12|6530960959018090325|17|1",
-            "hit:10300202|3|elements|12|6530960959018090325|19|2",
-            "hit:10300202|3|elements|12|6530960959018090325|21|3",
-            "hit:10300202|3|elements|12|6530960959018090325|24|4",
-            "hit:10300202|3|elements|12|6530960959018090325|26|5",
-            "hit:10300202|3|elements|12|6530960959018090325|26|6",
-            "hit:10300202|3|elements|12|6530960959018090325|29|7",
-            "hit:10300202|3|elements|12|6530960959018090325|31|8",
-            "hit:10300202|3|elements|12|6530960959018090325|36|9"
+            "hit:10300202|3|elements|12|6530960959018090325|26|1",
+            "hit:10300202|3|elements|12|6530960959018090325|31|2",
+            "hit:10300202|3|elements|12|6530960959018090325|36|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 9
+              "applied": 3
             },
             "toughness": {
-              "applied": 9
+              "applied": 3
             },
             "actorSp": {
-              "applied": 9
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 9
+              "applied": 3
             }
           },
           "status": "applied",
@@ -363,33 +311,25 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300203,
           "executionSubSkillIndex": 1,
-          "hitCount": 12,
+          "hitCount": 4,
           "settlementEvidence": [
             "hit:10300203|1|elements|12|6530960959018090325|17|1",
-            "hit:10300203|1|elements|12|6530960959018090325|19|2",
-            "hit:10300203|1|elements|12|6530960959018090325|21|3",
-            "hit:10300203|1|elements|12|6530960959018090325|24|4",
-            "hit:10300203|1|elements|12|6530960959018090325|25|5",
-            "hit:10300203|1|elements|12|6530960959018090325|26|6",
-            "hit:10300203|1|elements|12|6530960959018090325|29|7",
-            "hit:10300203|1|elements|12|6530960959018090325|29|8",
-            "hit:10300203|1|elements|12|6530960959018090325|31|9",
-            "hit:10300203|1|elements|12|6530960959018090325|34|10",
-            "hit:10300203|1|elements|12|6530960959018090325|35|11",
-            "hit:10300203|1|elements|12|6530960959018090325|39|12"
+            "hit:10300203|1|elements|12|6530960959018090325|21|2",
+            "hit:10300203|1|elements|12|6530960959018090325|25|3",
+            "hit:10300203|1|elements|12|6530960959018090325|29|4"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 12
+              "applied": 4
             },
             "toughness": {
-              "applied": 12
+              "applied": 4
             },
             "actorSp": {
-              "applied": 12
+              "applied": 4
             },
             "kiboSp": {
-              "applied": 12
+              "applied": 4
             }
           },
           "status": "applied",
@@ -403,33 +343,25 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300203,
           "executionSubSkillIndex": 2,
-          "hitCount": 12,
+          "hitCount": 4,
           "settlementEvidence": [
-            "hit:10300203|2|elements|12|6530960959018090325|17|1",
-            "hit:10300203|2|elements|12|6530960959018090325|19|2",
-            "hit:10300203|2|elements|12|6530960959018090325|21|3",
-            "hit:10300203|2|elements|12|6530960959018090325|24|4",
-            "hit:10300203|2|elements|12|6530960959018090325|25|5",
-            "hit:10300203|2|elements|12|6530960959018090325|26|6",
-            "hit:10300203|2|elements|12|6530960959018090325|29|7",
-            "hit:10300203|2|elements|12|6530960959018090325|29|8",
-            "hit:10300203|2|elements|12|6530960959018090325|31|9",
-            "hit:10300203|2|elements|12|6530960959018090325|34|10",
-            "hit:10300203|2|elements|12|6530960959018090325|35|11",
-            "hit:10300203|2|elements|12|6530960959018090325|39|12"
+            "hit:10300203|2|elements|12|6530960959018090325|19|1",
+            "hit:10300203|2|elements|12|6530960959018090325|24|2",
+            "hit:10300203|2|elements|12|6530960959018090325|29|3",
+            "hit:10300203|2|elements|12|6530960959018090325|34|4"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 12
+              "applied": 4
             },
             "toughness": {
-              "applied": 12
+              "applied": 4
             },
             "actorSp": {
-              "applied": 12
+              "applied": 4
             },
             "kiboSp": {
-              "applied": 12
+              "applied": 4
             }
           },
           "status": "applied",
@@ -443,33 +375,25 @@
           "sourceSkillId": 10300201,
           "executionControlSkillId": 10300203,
           "executionSubSkillIndex": 3,
-          "hitCount": 12,
+          "hitCount": 4,
           "settlementEvidence": [
-            "hit:10300203|3|elements|12|6530960959018090325|17|1",
-            "hit:10300203|3|elements|12|6530960959018090325|19|2",
-            "hit:10300203|3|elements|12|6530960959018090325|21|3",
-            "hit:10300203|3|elements|12|6530960959018090325|24|4",
-            "hit:10300203|3|elements|12|6530960959018090325|25|5",
-            "hit:10300203|3|elements|12|6530960959018090325|26|6",
-            "hit:10300203|3|elements|12|6530960959018090325|29|7",
-            "hit:10300203|3|elements|12|6530960959018090325|29|8",
-            "hit:10300203|3|elements|12|6530960959018090325|31|9",
-            "hit:10300203|3|elements|12|6530960959018090325|34|10",
-            "hit:10300203|3|elements|12|6530960959018090325|35|11",
-            "hit:10300203|3|elements|12|6530960959018090325|39|12"
+            "hit:10300203|3|elements|12|6530960959018090325|26|1",
+            "hit:10300203|3|elements|12|6530960959018090325|31|2",
+            "hit:10300203|3|elements|12|6530960959018090325|35|3",
+            "hit:10300203|3|elements|12|6530960959018090325|39|4"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 12
+              "applied": 4
             },
             "toughness": {
-              "applied": 12
+              "applied": 4
             },
             "actorSp": {
-              "applied": 12
+              "applied": 4
             },
             "kiboSp": {
-              "applied": 12
+              "applied": 4
             }
           },
           "status": "applied",
@@ -1091,7 +1015,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 6,
+      "hitCount": 3,
       "requiresDamageSettlement": true,
       "settlementStatus": "applied",
       "publicFormSettlements": [
@@ -1102,27 +1026,24 @@
           "sourceSkillId": 10300221,
           "executionControlSkillId": 10300225,
           "executionSubSkillIndex": 0,
-          "hitCount": 6,
+          "hitCount": 3,
           "settlementEvidence": [
             "hit:10300225|0|elements|3|-1410127030360973053|18|1",
-            "hit:10300225|0|elements|3|-1410127030360973053|18|2",
-            "hit:10300225|0|elements|3|-1410127030360973053|23|3",
-            "hit:10300225|0|elements|3|-1410127030360973053|23|4",
-            "hit:10300225|0|elements|3|-1410127030360973053|28|5",
-            "hit:10300225|0|elements|3|-1410127030360973053|28|6"
+            "hit:10300225|0|elements|3|-1410127030360973053|23|2",
+            "hit:10300225|0|elements|3|-1410127030360973053|28|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 6
+              "applied": 3
             },
             "toughness": {
-              "applied": 6
+              "applied": 3
             },
             "actorSp": {
-              "applied": 6
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 6
+              "applied": 3
             }
           },
           "status": "applied",
@@ -1165,7 +1086,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 6,
+      "hitCount": 3,
       "requiresDamageSettlement": true,
       "settlementStatus": "applied",
       "publicFormSettlements": [
@@ -1176,27 +1097,24 @@
           "sourceSkillId": 10300221,
           "executionControlSkillId": 10300249,
           "executionSubSkillIndex": 1,
-          "hitCount": 6,
+          "hitCount": 3,
           "settlementEvidence": [
             "hit:10300249|1|elements|0|1782654438459948567|15|1",
-            "hit:10300249|1|elements|0|1782654438459948567|15|2",
-            "hit:10300249|1|elements|0|1782654438459948567|20|3",
-            "hit:10300249|1|elements|0|1782654438459948567|20|4",
-            "hit:10300249|1|elements|0|1782654438459948567|25|5",
-            "hit:10300249|1|elements|0|1782654438459948567|25|6"
+            "hit:10300249|1|elements|0|1782654438459948567|20|2",
+            "hit:10300249|1|elements|0|1782654438459948567|25|3"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 6
+              "applied": 3
             },
             "toughness": {
-              "applied": 6
+              "applied": 3
             },
             "actorSp": {
-              "applied": 6
+              "applied": 3
             },
             "kiboSp": {
-              "applied": 6
+              "applied": 3
             }
           },
           "status": "applied",
@@ -1226,9 +1144,9 @@
     "runtimeReadyActionCount": 10,
     "executionFormCount": 24,
     "controlCount": 27,
-    "hitCount": 225,
-    "rawEffectCount": 378,
-    "semanticEffectCount": 76,
+    "hitCount": 124,
+    "rawEffectCount": 215,
+    "semanticEffectCount": 59,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 42,
     "thresholdTransitionCount": 0,
@@ -1244,5 +1162,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e"
+  "profileHash": "93b39de764d1ff691af12df89932e4f9818d33a419445b96ec68d401777d99e4"
 }

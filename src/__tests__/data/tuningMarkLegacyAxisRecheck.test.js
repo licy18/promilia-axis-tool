@@ -81,7 +81,7 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(rubyGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 167362,
+      ownerTotalHpDamage: 164509,
       ownerTotalToughnessDamage: 2190,
     });
     expect(

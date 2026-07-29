@@ -64,6 +64,27 @@ export function createCharacterCombatControlPolicyIndex(recipes) {
   const policies = new Map();
   for (const recipe of recipes ?? []) {
     const ownerId = Number(recipe.ownerId);
+    const defaultPolicy = recipe.runtimePolicies?.defaultControlPolicy ?? null;
+    if (defaultPolicy) {
+      for (const controlSkillId of collectCharacterCombatRequiredControlSkillIds([
+        recipe,
+      ])) {
+        if (policies.has(controlSkillId)) {
+          throw new Error(
+            `duplicate character combat control policy: ${controlSkillId}`
+          );
+        }
+        policies.set(controlSkillId, {
+          ...defaultPolicy,
+          ownerId,
+          controlSkillId,
+          sourceIdentity: `${
+            defaultPolicy.sourceIdentity ??
+            `${recipe.sourceIdentity ?? `actor:${ownerId}:recipe`}|runtimePolicies.defaultControlPolicy`
+          }|controlSkillId=${controlSkillId}`,
+        });
+      }
+    }
     for (const policy of recipe.runtimePolicies?.controlPolicies ?? []) {
       const controlSkillId = Number(policy.controlSkillId);
       if (!Number.isInteger(controlSkillId)) {
@@ -71,17 +92,20 @@ export function createCharacterCombatControlPolicyIndex(recipes) {
           `character combat control policy id invalid: ${ownerId}/${policy.controlSkillId}`
         );
       }
-      if (policies.has(controlSkillId)) {
+      const inheritedPolicy = policies.get(controlSkillId);
+      if (inheritedPolicy && inheritedPolicy.ownerId !== ownerId) {
         throw new Error(
           `duplicate character combat control policy: ${controlSkillId}`
         );
       }
       policies.set(controlSkillId, {
+        ...inheritedPolicy,
         ...policy,
         ownerId,
         controlSkillId,
         sourceIdentity:
           policy.sourceIdentity ??
+          inheritedPolicy?.sourceIdentity ??
           `${recipe.sourceIdentity ?? `actor:${ownerId}:recipe`}|runtimePolicies.controlPolicies[controlSkillId=${controlSkillId}]`,
       });
     }

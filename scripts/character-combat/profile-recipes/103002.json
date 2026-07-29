@@ -37,6 +37,12 @@
     "passiveWrapperElementId": 103002275,
     "passivePropertyElementId": 103002276
   },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:103002#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
   "compiler": {
     "timingPolicy": "verified-input-reopen",
     "reachableControlSkillIds": [
@@ -400,19 +406,7 @@
         "sourceIdentity": "skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#self-property@114F|Battle/Element/ast_103002275.asset#combineNumber=6|NewTable/skill.rows[id=10300213]#gain-six-red-heat"
       }
     ],
-    "actionHitBindings": [
-      {
-        "bindingIdentity": "ruby-focus-dodge-counter-three-hits",
-        "controlSkillId": 10300249,
-        "subSkillIndex": 1,
-        "elementId": 103002147,
-        "triggerFrames": [15, 20, 25],
-        "frameCount": 1,
-        "targetCode": 0,
-        "targetKind": "enemy",
-        "sourceIdentity": "skill_control_10300249.subskill.bundle#MonoBehaviour_-3641915522962639021@15F|MonoBehaviour_4086983151447619411@20F|MonoBehaviour_2941305154071279443@25F|Battle/Element/ast_103002147.asset#counter-hit-1-3"
-      }
-    ],
+    "actionHitBindings": [],
     "specialResources": [
       {
         "resourceElementId": 103002047,
@@ -523,6 +517,13 @@
       "status": "not-applicable",
       "reasons": ["legacy-or-unreachable-current-client"],
       "sourceIdentity": "Battle/Element/ast_103002252.asset#pathId=5283540782453142555|Battle/Element/ast_103002253.asset#pathId=-5597493967702633568|current-skill-control-103002-closure#referenceCount=0"
+    },
+    {
+      "identity": "actor:103002:internal-control:10300253",
+      "sourceKind": "internal-unreachable-control",
+      "status": "not-applicable",
+      "reasons": ["reexported-subskill-container-unreachable-from-current-skill-list"],
+      "sourceIdentity": "Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500135400000.asset|skill_control_10300253.asset#skillResourceMaps=2|NewTable/skill+skillsub_logic#referenceCount=0|current-public-action-closure#referenceCount=0"
     }
   ],
   "goldenScenario": {
@@ -760,18 +761,18 @@
         "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
-        "combat.damageEventCount": 231,
-        "combat.ownerDamageEventCount": 229,
-        "combat.ownerHitEventCount": 108,
+        "combat.damageEventCount": 186,
+        "combat.ownerDamageEventCount": 184,
+        "combat.ownerHitEventCount": 63,
         "combat.ownerHitCountByActionId.ruby-star-skill": 7,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.hitCount": 7,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [1887, 1894, 1899, 1904, 1909, 1914, 1919],
         "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 664,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 464,
-        "combat.ownerTotalHpDamage": 167362,
+        "combat.ownerTotalHpDamage": 164509,
         "combat.ownerTotalToughnessDamage": 2190,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 695344,
+        "combat.enemy.finalHp": 698197,
         "resources.specialResourceTrace.0.actionId": "ruby-reload",
         "resources.specialResourceTrace.0.frame": 24,
         "resources.specialResourceTrace.0.beforeValue": 0,
@@ -840,9 +841,9 @@
         "effects.passiveTrace.9.targetId": "actor-103002",
         "dynamicProperties.ownerSources.0.attributeId": 1,
         "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
-        "comparison.primaryDamage": 891,
-        "comparison.baselineDamage": 378,
-        "comparison.damageDelta": 513
+        "comparison.primaryDamage": 297,
+        "comparison.baselineDamage": 126,
+        "comparison.damageDelta": 171
       },
       "greaterThan": {
         "combat.ownerTotalHpDamage": 0,

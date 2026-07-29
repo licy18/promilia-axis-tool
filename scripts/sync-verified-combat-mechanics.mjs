@@ -4392,6 +4392,23 @@ function collectSkillPlayerGameplayGraph(directory, skillControl) {
   };
 }
 
+function createGameplayBehaviorSubSkillIndex(gameplayGraph) {
+  const result = new Map();
+  for (const entry of gameplayGraph?.behaviors ?? []) {
+    const pathId = String(entry.behavior?.pathId ?? '');
+    if (!pathId) continue;
+    const indexes = result.get(pathId) ?? new Set();
+    indexes.add(Number(entry.subSkillIndex));
+    result.set(pathId, indexes);
+  }
+  return new Map(
+    [...result.entries()].map(([pathId, indexes]) => [
+      pathId,
+      [...indexes].sort((left, right) => left - right),
+    ])
+  );
+}
+
 function collectGameplayBehaviorSourceFiles(directory, mainFilePath, graph) {
   const localFiles = fs.existsSync(directory)
     ? fs
@@ -4439,6 +4456,8 @@ function collectBehaviorTriggers(
 ) {
   const wanted = new Set(elementRefs.map(ref => ref.pathId).filter(Boolean));
   const triggers = new Map([...wanted].map(pathId => [pathId, []]));
+  const subSkillIndexesByBehavior =
+    createGameplayBehaviorSubSkillIndex(gameplayGraph);
   for (const filePath of collectGameplayBehaviorSourceFiles(
     directory,
     mainFilePath,
@@ -4450,8 +4469,11 @@ function collectBehaviorTriggers(
     for (const pathId of referencedPathIds) {
       if (!wanted.has(pathId)) continue;
       const target = resolveBehaviorElementTarget(value, pathId);
+      const behaviorPathId = path.basename(name, '.json').split('__').at(-1);
       triggers.get(pathId).push({
-        behaviorPathId: path.basename(name, '.json').split('__').at(-1),
+        behaviorPathId,
+        subSkillIndexes:
+          subSkillIndexesByBehavior.get(String(behaviorPathId)) ?? null,
         startFrame: integerOrNull(value.startFrame),
         frameCount: integerOrNull(value.frameCount),
         behaviorIndex: integerOrNull(value.behaviorIndex),
@@ -4584,6 +4606,8 @@ function collectSemanticBehaviorTriggers(
 ) {
   const wanted = new Set(elementRefs.map(ref => ref.pathId).filter(Boolean));
   const triggers = new Map([...wanted].map(pathId => [pathId, []]));
+  const subSkillIndexesByBehavior =
+    createGameplayBehaviorSubSkillIndex(gameplayGraph);
   for (const filePath of collectGameplayBehaviorSourceFiles(
     directory,
     mainFilePath,
@@ -4599,8 +4623,11 @@ function collectSemanticBehaviorTriggers(
         pathId,
         battleTargetTypeContract
       );
+      const behaviorPathId = path.basename(name, '.json').split('__').at(-1);
       triggers.get(pathId).push({
-        behaviorPathId: path.basename(name, '.json').split('__').at(-1),
+        behaviorPathId,
+        subSkillIndexes:
+          subSkillIndexesByBehavior.get(String(behaviorPathId)) ?? null,
         startFrame: integerOrNull(value.startFrame),
         frameCount: integerOrNull(value.frameCount),
         behaviorIndex: integerOrNull(value.behaviorIndex),
@@ -4616,9 +4643,28 @@ function collectSemanticBehaviorTriggers(
       dedupeBy(
         entries,
         entry =>
-          `${entry.behaviorPathId}|${entry.startFrame}|${entry.target.sourceField}|${entry.target.code}`
+          `${entry.behaviorPathId}|${entry.startFrame}|${entry.target.sourceField}|${entry.target.code}|${(entry.subSkillIndexes ?? []).join(',')}`
       ),
     ])
+  );
+}
+
+function selectBehaviorTriggersForSubSkill(
+  triggerMap,
+  pathId,
+  subSkillIndex,
+  scopeMode
+) {
+  const entries = pathId ? (triggerMap?.get(pathId) ?? []) : [];
+  if (scopeMode !== 'skill-player') return entries;
+  const scopedEntries = entries.filter(
+    entry =>
+      Array.isArray(entry.subSkillIndexes) &&
+      entry.subSkillIndexes.length > 0
+  );
+  if (scopedEntries.length === 0) return entries;
+  return scopedEntries.filter(entry =>
+    entry.subSkillIndexes.includes(Number(subSkillIndex))
   );
 }
 
@@ -5086,7 +5132,12 @@ function createControlBinding({
     const indexedRecord = uniqueIndexed.length === 1 ? uniqueIndexed[0] : null;
     const tree = indexedRecord?.typetree ?? null;
     const triggers = dedupeBy(
-      (ref.pathId ? control.behaviorTriggers.get(ref.pathId) : []) ?? [],
+      selectBehaviorTriggersForSubSkill(
+        control.behaviorTriggers,
+        ref.pathId,
+        ref.mapIndex,
+        control.runtimePolicy?.behaviorTriggerScope
+      ),
       value => `${value.behaviorPathId}|${value.startFrame}`
     ).filter(trigger => Number.isInteger(trigger.startFrame));
     const elementId = Number(tree?.elementConfigId);
@@ -5914,9 +5965,12 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
         [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0
       );
     });
-    const staticTriggers = root.rootPathId
-      ? (control.behaviorTriggers.get(root.rootPathId) ?? [])
-      : [];
+    const staticTriggers = selectBehaviorTriggersForSubSkill(
+      control.behaviorTriggers,
+      root.rootPathId,
+      root.mapIndex,
+      control.runtimePolicy?.behaviorTriggerScope
+    );
     const scenarioTriggers =
       control.runtimePolicy?.runtimeEffectsUseScenarioTriggers === true
         ? (elements.find(
@@ -8224,9 +8278,12 @@ function createSemanticRootTriggerContracts(binding, root) {
       },
     ];
   }
-  const sourceTriggers = root.rootPathId
-    ? (binding.semanticBehaviorTriggers?.get(root.rootPathId) ?? [])
-    : [];
+  const sourceTriggers = selectBehaviorTriggersForSubSkill(
+    binding.semanticBehaviorTriggers,
+    root.rootPathId,
+    root.mapIndex,
+    binding.runtimePolicy?.behaviorTriggerScope
+  );
   if (sourceTriggers.length === 0) {
     return [
       {

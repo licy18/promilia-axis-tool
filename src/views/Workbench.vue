@@ -1209,6 +1209,7 @@ import {
 import {
   createVerifiedWorkbenchMechanicsProfileSelection,
   normalizeWorkbenchMechanicsProfileSelection,
+  VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID,
 } from '../domain/workbenchMechanicsProfileSelection';
 import {
   createWorkbenchAnalysisReportFileName,
@@ -1379,6 +1380,21 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
 
 function readWorkbenchPerformanceClock() {
   return globalThis.performance?.now?.() ?? Date.now();
+}
+
+async function ensureVerifiedCombatMechanicsForInsertion() {
+  if (
+    mechanicsProfileSelection.value?.profileId !==
+    VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID
+  ) {
+    return true;
+  }
+  try {
+    await loadVerifiedCombatMechanicsPackage();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 const AUTO_DELAY_NOTE_PATTERN =
@@ -3602,6 +3618,10 @@ function rebindTimelineActionDraftToCharacter(action, targetCharacterId) {
 }
 
 async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
+  if (!(await ensureVerifiedCombatMechanicsForInsertion())) {
+    draftStatus.value = '战斗机制数据加载失败，暂时无法加入动作';
+    return false;
+  }
   const actorCharacterId = Number(
     insertOptions.actorCharacterId ??
       actionLibraryActor.value?.characterId ??
@@ -4107,6 +4127,12 @@ async function insertTimelineEntry({ entry, laneId, startMs }) {
 }
 
 async function createTimelineEntryInsertionRequest(options = {}) {
+  if (!(await ensureVerifiedCombatMechanicsForInsertion())) {
+    return {
+      blockedMessage: '战斗机制数据加载失败，暂时无法加入动作',
+      draftPatches: [],
+    };
+  }
   const request = createTimelineEntryDraftRequest(options);
   if (!request || request.blockedMessage) {
     return request;

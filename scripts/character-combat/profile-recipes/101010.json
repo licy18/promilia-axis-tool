@@ -34,6 +34,10 @@
     "perfectParryRuntimeControlSkillId": 10101049
   },
   "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:101010#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    },
     "controlPolicies": [
       {
         "controlSkillId": 10101003,
@@ -765,11 +769,11 @@
         "actions.selectionByActionId.jade-perfect-parry.controlSkillId": 10101049,
         "actions.selectionByActionId.jade-perfect-parry.subSkillIndex": 1,
         "actions.selectionByActionId.jade-perfect-parry.actualDurationFrames": 36,
-        "combat.damageEventCount": 427,
-        "combat.ownerDamageEventCount": 252,
-        "combat.ownerHitEventCount": 120,
-        "combat.ownerHitTotalHpDamage": 9942,
-        "combat.ownerHitTotalToughnessDamage": 1961,
+        "combat.damageEventCount": 422,
+        "combat.ownerDamageEventCount": 247,
+        "combat.ownerHitEventCount": 115,
+        "combat.ownerHitTotalHpDamage": 9742,
+        "combat.ownerHitTotalToughnessDamage": 1766,
         "combat.ownerTotalHpDamage": 699322,
         "combat.ownerTotalToughnessDamage": 0,
         "combat.enemy.initialHp": 862800,
@@ -841,9 +845,9 @@
         "effects.burstTransitions.2.operation": "expire",
         "dynamicProperties.maxPercentRawByAttributeId.1": 1500,
         "dynamicProperties.maxPercentRawByAttributeId.229": 9600,
-        "comparison.primaryDamage": 5813,
-        "comparison.baselineDamage": 2451,
-        "comparison.damageDelta": 3362
+        "comparison.primaryDamage": 5613,
+        "comparison.baselineDamage": 2366,
+        "comparison.damageDelta": 3247
       },
       "greaterThan": {
         "combat.ownerTotalHpDamage": 0,

@@ -6,28 +6,28 @@
 - 直接元素根：4357
 - 原始引用边：1637
 - 效果图节点：3693
-- 去重语义效果：3613
-- 最终玩法效果：1841
-- 结构包装/条件：1772
-- 语义可计算：403
+- 去重语义效果：3428
+- 最终玩法效果：1805
+- 结构包装/条件：1623
+- 语义可计算：373
 - 语义明确零：2
-- 语义未解析：1436
+- 语义未解析：1430
 
 ## 语义放置
 
 - runtime-dependent: 115
 - static-evidence-gap: 504
-- static-resolved: 1222
+- static-resolved: 1186
 
 ## 公式族
 
 - basis-point-property-a-with-common-ratio: 2
-- literal-a-with-common-ratio: 746
+- literal-a-with-common-ratio: 716
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
 - unsupported-1-0: 64
 - unsupported-1-2: 180
-- unsupported-1-3: 318
+- unsupported-1-3: 312
 - unsupported-1-4: 23
 - unsupported-1-11: 19
 - unsupported-1-101: 2
@@ -52,10 +52,10 @@
 
 ## 原始边审计
 
-- 效果绑定：3891
+- 效果绑定：3686
 - 可计算：336
 - 明确零：2
-- 未解析：3553
+- 未解析：3348
 
 ## 元素类型
 
@@ -76,8 +76,8 @@
 - heal-formula-not-literal-function-5: 52
 - nested-damage-runtime-family-unimplemented: 473
 - property-change-type-not-battle-property: 1
-- property-conditions-not-expanded: 39
-- property-formula-not-literal-function-5: 398
+- property-conditions-not-expanded: 33
+- property-formula-not-literal-function-5: 392
 - runtime-target-from-projectile-collision: 101
 - runtime-target-selection-ally: 19
 - runtime-trigger-projectile-collision-frame: 101

@@ -2,7 +2,7 @@
 
 - Owner: `103002`
 - Profile: `actor:103002:character-combat-profile:v1`
-- Hash: `040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e`
+- Hash: `93b39de764d1ff691af12df89932e4f9818d33a419445b96ec68d401777d99e4`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -10,9 +10,9 @@
 - 执行形态：24
 - 可达 control：27
 - 窗口：1
-- Hit：225
-- 来源 identity：1950
-- 战斗图：339 nodes / 502 edges
+- Hit：124
+- 来源 identity：1800
+- 战斗图：238 nodes / 401 edges
 - 描述覆盖：18
 - Runtime ready 动作：10/10
 - Runtime capture：4
@@ -29,7 +29,7 @@
 | hiddenAndDerivedForms | applied | 24 | 0 | 24 |
 | inputAndExecutionTiming | applied | 1 | 0 | 1 |
 | effectiveOccupancy | applied | 24 | 0 | 24 |
-| hitsAndProjectiles | static-evidence-gap | 221 | 4 | 225 |
+| hitsAndProjectiles | static-evidence-gap | 120 | 4 | 124 |
 | hpDamage | static-evidence-gap | 15 | 115 | 130 |
 | toughnessDamage | static-evidence-gap | 15 | 115 | 130 |
 | actorSp | static-evidence-gap | 8 | 115 | 130 |
@@ -37,9 +37,9 @@
 | cooldowns | applied | 27 | 0 | 27 |
 | personalResources | applied | 43 | 0 | 43 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | static-evidence-gap | 10 | 67 | 77 |
+| buffsAndDebuffs | static-evidence-gap | 7 | 53 | 60 |
 | passives | applied | 1 | 0 | 1 |
-| dynamicProperties | static-evidence-gap | 6 | 6 | 12 |
+| dynamicProperties | static-evidence-gap | 3 | 6 | 9 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
 | stateMachines | not-applicable | 0 | 0 | 0 |
 | switchAndStarCarry | applied | 1 | 0 | 1 |
@@ -49,6 +49,6 @@
 ## 未闭环
 
 - runtime-evidence-required: 4
-- static-evidence-gap: 429
+- static-evidence-gap: 449
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

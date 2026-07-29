@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101010,
-  "sourcePackageHash": "d9c762257ea0d4c8bb11e5b70be41e50c43f4f14e648b4d121248dd3f2f69a39",
+  "sourcePackageHash": "2046849c343b33e1c86403e529ce3c2051a0577bb2e46de1fc07b32c1db9eaf9",
   "actionRows": [
     {
       "actionIdentity": "actor|101010|10101001|0|10101003",
@@ -328,7 +328,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "rawRuntimeReady": true,
       "runtimeReady": true,
-      "hitCount": 29,
+      "hitCount": 19,
       "requiresDamageSettlement": true,
       "settlementStatus": "applied",
       "publicFormSettlements": [
@@ -339,31 +339,26 @@
           "sourceSkillId": 10101001,
           "executionControlSkillId": 10101010,
           "executionSubSkillIndex": 1,
-          "hitCount": 10,
+          "hitCount": 5,
           "settlementEvidence": [
             "hit:10101010|1|elements|0|-8304317819766733523|43|1",
-            "hit:10101010|1|elements|0|-8304317819766733523|43|2",
-            "hit:10101010|1|elements|0|-8304317819766733523|48|3",
-            "hit:10101010|1|elements|0|-8304317819766733523|48|4",
-            "hit:10101010|1|elements|0|-8304317819766733523|53|5",
-            "hit:10101010|1|elements|0|-8304317819766733523|53|6",
-            "hit:10101010|1|elements|0|-8304317819766733523|58|7",
-            "hit:10101010|1|elements|0|-8304317819766733523|58|8",
-            "hit:10101010|1|elements|0|-8304317819766733523|63|10",
-            "hit:10101010|1|elements|0|-8304317819766733523|63|9"
+            "hit:10101010|1|elements|0|-8304317819766733523|48|2",
+            "hit:10101010|1|elements|0|-8304317819766733523|53|3",
+            "hit:10101010|1|elements|0|-8304317819766733523|58|4",
+            "hit:10101010|1|elements|0|-8304317819766733523|63|5"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 10
+              "applied": 5
             },
             "toughness": {
-              "applied": 10
+              "applied": 5
             },
             "actorSp": {
-              "applied": 10
+              "applied": 5
             },
             "kiboSp": {
-              "applied": 10
+              "applied": 5
             }
           },
           "status": "applied",
@@ -440,31 +435,26 @@
           "sourceSkillId": 10101001,
           "executionControlSkillId": 10101010,
           "executionSubSkillIndex": 0,
-          "hitCount": 10,
+          "hitCount": 5,
           "settlementEvidence": [
             "hit:10101010|0|elements|0|-8304317819766733523|43|1",
-            "hit:10101010|0|elements|0|-8304317819766733523|43|2",
-            "hit:10101010|0|elements|0|-8304317819766733523|48|3",
-            "hit:10101010|0|elements|0|-8304317819766733523|48|4",
-            "hit:10101010|0|elements|0|-8304317819766733523|53|5",
-            "hit:10101010|0|elements|0|-8304317819766733523|53|6",
-            "hit:10101010|0|elements|0|-8304317819766733523|58|7",
-            "hit:10101010|0|elements|0|-8304317819766733523|58|8",
-            "hit:10101010|0|elements|0|-8304317819766733523|63|10",
-            "hit:10101010|0|elements|0|-8304317819766733523|63|9"
+            "hit:10101010|0|elements|0|-8304317819766733523|48|2",
+            "hit:10101010|0|elements|0|-8304317819766733523|53|3",
+            "hit:10101010|0|elements|0|-8304317819766733523|58|4",
+            "hit:10101010|0|elements|0|-8304317819766733523|63|5"
           ],
           "dimensionSummary": {
             "hp": {
-              "applied": 10
+              "applied": 5
             },
             "toughness": {
-              "applied": 10
+              "applied": 5
             },
             "actorSp": {
-              "applied": 10
+              "applied": 5
             },
             "kiboSp": {
-              "applied": 10
+              "applied": 5
             }
           },
           "status": "applied",
@@ -1129,9 +1119,9 @@
     "runtimeReadyActionCount": 10,
     "executionFormCount": 21,
     "controlCount": 20,
-    "hitCount": 117,
-    "rawEffectCount": 333,
-    "semanticEffectCount": 137,
+    "hitCount": 107,
+    "rawEffectCount": 273,
+    "semanticEffectCount": 121,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 30,
     "thresholdTransitionCount": 1,
@@ -1147,5 +1137,5 @@
       "static-evidence-gap": 8
     }
   },
-  "profileHash": "4fcd2d615672546c1abb2df59e627b48810dd73266b7d199b748e7b70cfd8199"
+  "profileHash": "9ffbddd8b8a560707d9518907f4e9df1d58ffd12cb14c8caea5cff851db21027"
 }

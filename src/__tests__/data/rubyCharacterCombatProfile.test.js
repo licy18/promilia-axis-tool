@@ -39,8 +39,8 @@ describe('M10-B1 Ruby character combat profile', () => {
         publicActionCount: 10,
         reachableControlCount: 27,
         executionFormCount: 24,
-        hitCount: 225,
-        semanticEffectCount: 76,
+        hitCount: 124,
+        semanticEffectCount: 59,
         excludedControlCount: 6,
       },
       validation: {
@@ -90,7 +90,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       runtimeReadyActionCount: 10,
       executionFormCount: 24,
       controlCount: 27,
-      hitCount: 225,
+      hitCount: 124,
       resourceProfileCount: 1,
       resourceTransactionCount: 42,
       passiveCount: 1,
@@ -104,7 +104,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       nodeKindCounts: {
         'public-action': 10,
         'action-form': 24,
-        hit: 225,
+        hit: 124,
         'personal-resource': 1,
         'passive-listener': 1,
         'switch-trigger': 1,
@@ -156,6 +156,77 @@ describe('M10-B1 Ruby character combat profile', () => {
       hits.every(hit =>
         hit.trigger.sourceIdentity.includes(
           'Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset'
+        )
+      )
+    ).toBe(true);
+  });
+
+  it('keeps re-exported behavior tracks scoped to their owning subskill', () => {
+    const controls = [
+      ...mechanicsPackage.controlBindings,
+      ...mechanicsPackage.actionVariantControlBindings,
+    ];
+    const hitFrames = (controlSkillId, subSkillIndex) =>
+      controls
+        .find(control => Number(control.controlSkillId) === controlSkillId)
+        ?.hits.filter(hit => Number(hit.mapIndex) === subSkillIndex)
+        .map(hit => Number(hit.trigger.startFrame)) ?? [];
+
+    expect(hitFrames(10300201, 0)).toEqual([11]);
+    expect(hitFrames(10300201, 1)).toEqual([17, 21, 26]);
+    expect(hitFrames(10300201, 2)).toEqual([19, 24, 29]);
+    expect(hitFrames(10300201, 3)).toEqual([26, 31, 36]);
+    expect(hitFrames(10300202, 0)).toEqual([13]);
+    expect(hitFrames(10300202, 1)).toEqual([17, 21, 26]);
+    expect(hitFrames(10300202, 2)).toEqual([19, 24, 29]);
+    expect(hitFrames(10300202, 3)).toEqual([26, 31, 36]);
+    expect(hitFrames(10300203, 0)).toEqual([18, 23]);
+    expect(hitFrames(10300203, 1)).toEqual([17, 21, 25, 29]);
+    expect(hitFrames(10300203, 2)).toEqual([19, 24, 29, 34]);
+    expect(hitFrames(10300203, 3)).toEqual([26, 31, 35, 39]);
+    expect(hitFrames(10300204, 0)).toEqual([19, 24, 29, 34]);
+    expect(hitFrames(10300204, 1)).toEqual([26, 31, 36, 40]);
+    expect(hitFrames(10300204, 2)).toEqual([29, 33, 39, 45]);
+    expect(hitFrames(10300204, 3)).toEqual([17, 21, 25, 29]);
+    expect(hitFrames(10300204, 4)).toEqual([28, 33]);
+    expect(hitFrames(10300225, 0)).toEqual([18, 23, 28]);
+    expect(hitFrames(10300225, 1)).toEqual([18, 23, 28]);
+    expect(hitFrames(10300244, 0)).toEqual([29, 33, 39, 45]);
+    expect(hitFrames(10300244, 1)).toEqual([29, 33, 39, 45]);
+    expect(hitFrames(10300249, 1)).toEqual([15, 20, 25]);
+
+    for (const controlSkillId of [
+      10300201, 10300202, 10300203, 10300204, 10300225, 10300244,
+      10300249,
+    ]) {
+      const hits = controls.find(
+        control => Number(control.controlSkillId) === controlSkillId
+      ).hits;
+      const semanticKeys = hits.map(
+        hit => `${hit.mapIndex}|${hit.elementId}|${hit.trigger.startFrame}`
+      );
+      expect(new Set(semanticKeys).size).toBe(semanticKeys.length);
+    }
+
+    const focusCounter = controls.find(
+      control => Number(control.controlSkillId) === 10300249
+    );
+    expect(
+      focusCounter.hits.map(hit => hit.trigger.behaviorPathId)
+    ).toEqual([
+      '-3641915522962639021',
+      '4086983151447619411',
+      '2941305154071279443',
+    ]);
+    expect(
+      focusCounter.hits.some(hit =>
+        String(hit.trigger.behaviorPathId).startsWith('character-combat:')
+      )
+    ).toBe(false);
+    expect(
+      sourceManifest.entries.some(entry =>
+        entry.sourceIdentity.includes(
+          'Hero/103002/SubSkill/ast_17387499981690000.asset'
         )
       )
     ).toBe(true);
@@ -584,16 +655,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       amountByLevel: { 1: 1 },
       applied: true,
     });
-    expect(ownerContract.contracts.actionHitBindings).toEqual([
-      expect.objectContaining({
-        bindingIdentity: 'ruby-focus-dodge-counter-three-hits',
-        controlSkillId: 10300249,
-        subSkillIndex: 1,
-        elementId: 103002147,
-        triggerFrames: [15, 20, 25],
-        applied: true,
-      }),
-    ]);
+    expect(ownerContract.contracts.actionHitBindings).toEqual([]);
     expect(
       ownerContract.contracts.publicActions.find(
         action => action.actionKind === 'perfect-parry'
@@ -680,8 +742,8 @@ describe('M10-B1 Ruby character combat profile', () => {
       summary: {
         publicActionCount: 10,
         rawWindowCount: 159,
-        semanticTransitionCount: 53,
-        appliedTransitionCount: 53,
+        semanticTransitionCount: 37,
+        appliedTransitionCount: 37,
         gameplayGapCount: 0,
       },
     });
@@ -798,20 +860,20 @@ describe('M10-B1 Ruby character combat profile', () => {
       rawRecordIdentities: ['actor:103002:skill:10300262'],
     });
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 454,
-      rawRecordCount: 623,
+      semanticRecordCount: 475,
+      rawRecordCount: 483,
       semanticStatusCounts: {
-        'not-applicable': 21,
+        'not-applicable': 22,
         'runtime-evidence-required': 4,
-        'static-evidence-gap': 429,
+        'static-evidence-gap': 449,
       },
       impactClassificationCounts: {
         'gameplay-impacting': 51,
-        'not-applicable': 21,
-        'superseded-by-semantic-transition-closure': 233,
+        'not-applicable': 22,
+        'superseded-by-semantic-transition-closure': 253,
         'wrapper-or-duplicate': 149,
       },
-      transitionCandidateSupersededCount: 233,
+      transitionCandidateSupersededCount: 253,
     });
     expect(
       unresolvedLedger.records.some(record =>
@@ -839,6 +901,13 @@ describe('M10-B1 Ruby character combat profile', () => {
     ]);
     expect(JSON.stringify(ownerContract.contracts)).not.toContain('103002252');
     expect(JSON.stringify(ownerContract.contracts)).not.toContain('103002253');
+    expect(JSON.stringify(ownerContract.contracts)).not.toContain('10300253');
+    expect(JSON.stringify(unresolvedLedger.rawRecords)).toContain(
+      'actor:103002:internal-control:10300253'
+    );
+    expect(JSON.stringify(unresolvedLedger.rawRecords)).toContain(
+      'reexported-subskill-container-unreachable-from-current-skill-list'
+    );
     expect(runtimeCapturePlan).toMatchObject({
       ownerId: RUBY_ID,
       status: 'runtime-evidence-required',
@@ -924,8 +993,8 @@ describe('M10-B1 Ruby character combat profile', () => {
         blockedActionIds: ['ruby-insufficient-shot'],
       },
       combat: {
-        ownerDamageEventCount: 229,
-        ownerHitEventCount: 108,
+        ownerDamageEventCount: 184,
+        ownerHitEventCount: 63,
         ownerHitCountByActionId: {
           'ruby-star-skill': 7,
         },
@@ -937,11 +1006,11 @@ describe('M10-B1 Ruby character combat profile', () => {
             totalToughnessDamage: 464,
           },
         },
-        ownerTotalHpDamage: 167362,
+        ownerTotalHpDamage: 164509,
         ownerTotalToughnessDamage: 2190,
         enemy: {
           initialHp: 862800,
-          finalHp: 695344,
+          finalHp: 698197,
         },
       },
       effects: {
@@ -963,9 +1032,9 @@ describe('M10-B1 Ruby character combat profile', () => {
         ]),
       },
       comparison: {
-        primaryDamage: 891,
-        baselineDamage: 378,
-        damageDelta: 513,
+        primaryDamage: 297,
+        baselineDamage: 126,
+        damageDelta: 171,
       },
     });
     expect(

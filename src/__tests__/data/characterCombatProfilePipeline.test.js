@@ -1261,7 +1261,7 @@ describe('M10 character combat profile pipeline', () => {
       executionFormCount: 21,
       reachableControlCount: 20,
       verifiedWindowCount: 89,
-      hitCount: 117,
+      hitCount: 107,
     });
     expect(profile.contracts.actionForms).toHaveLength(21);
     expect(
@@ -1279,7 +1279,7 @@ describe('M10 character combat profile pipeline', () => {
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
       semanticRecordCount: 239,
-      rawRecordCount: 414,
+      rawRecordCount: 354,
       impactClassificationCounts: {
         'gameplay-impacting': 106,
         'not-applicable': 37,
@@ -1288,7 +1288,7 @@ describe('M10 character combat profile pipeline', () => {
       },
     });
     expect(unresolvedLedger.records).toHaveLength(239);
-    expect(unresolvedLedger.rawRecords).toHaveLength(414);
+    expect(unresolvedLedger.rawRecords).toHaveLength(354);
     expect(
       unresolvedLedger.records.every(
         record =>
@@ -1340,7 +1340,7 @@ describe('M10 character combat profile pipeline', () => {
         item => Number(item.ownerId) === 101010
       )
     ).toEqual(ownerContract.contracts.passives);
-    expect(ownerContract.contracts.effects.semantic).toHaveLength(137);
+    expect(ownerContract.contracts.effects.semantic).toHaveLength(121);
     expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(7);
 
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
@@ -1385,11 +1385,11 @@ describe('M10 character combat profile pipeline', () => {
       project: { durationMs: 120000, actionCount: 27 },
       actions: { blockedActionIds: [] },
       combat: {
-        damageEventCount: 427,
-        ownerDamageEventCount: 252,
-        ownerHitEventCount: 120,
-        ownerHitTotalHpDamage: 9942,
-        ownerHitTotalToughnessDamage: 1961,
+        damageEventCount: 422,
+        ownerDamageEventCount: 247,
+        ownerHitEventCount: 115,
+        ownerHitTotalHpDamage: 9742,
+        ownerHitTotalToughnessDamage: 1766,
         ownerTotalHpDamage: 699322,
         ownerTotalToughnessDamage: 0,
         enemy: { initialHp: 862800, finalHp: 0 },
@@ -1424,9 +1424,9 @@ describe('M10 character combat profile pipeline', () => {
         },
       },
       comparison: {
-        primaryDamage: 5813,
-        baselineDamage: 2451,
-        damageDelta: 3362,
+        primaryDamage: 5613,
+        baselineDamage: 2366,
+        damageDelta: 3247,
       },
     });
     expect(
@@ -1551,7 +1551,7 @@ describe('M10 character combat profile pipeline', () => {
       runtimeReadyActionCount: 10,
       executionFormCount: 21,
       controlCount: 20,
-      hitCount: 117,
+      hitCount: 107,
       resourceProfileCount: 1,
       thresholdTransitionCount: 1,
       passiveCount: 1,
@@ -1583,6 +1583,45 @@ describe('M10 character combat profile pipeline', () => {
           Number(hit.energy?.recoverSp),
           Number(hit.energy?.petRecoverSp),
         ]) ?? [];
+
+    const chargedControl = controls.find(
+      control => Number(control.controlSkillId) === 10101010
+    );
+    const chargedRows = subSkillIndex =>
+      chargedControl.hits
+        .filter(hit => Number(hit.mapIndex) === subSkillIndex)
+        .map(hit => [
+          Number(hit.trigger.startFrame),
+          String(hit.trigger.behaviorPathId),
+        ]);
+    expect(chargedRows(0)).toEqual([
+      [43, '-7087146377509109421'],
+      [48, '3159062773038481747'],
+      [53, '-6642754396445245101'],
+      [58, '-3998789852959243949'],
+      [63, '3369248819098059091'],
+    ]);
+    expect(chargedRows(1)).toEqual([
+      [43, '5616861838181937694'],
+      [48, '6305672671372980766'],
+      [53, '5364022371415306782'],
+      [58, '-7487986393461280226'],
+      [63, '-7430536628355255778'],
+    ]);
+    expect(chargedRows(2)).toEqual([
+      [20, '583489754312209092'],
+      [31, '757619108977373892'],
+      [36, '-3644096868183838012'],
+      [41, '-3418413001291009340'],
+      [46, '7192528456660021956'],
+    ]);
+    expect(
+      sourceManifest.entries.some(entry =>
+        entry.sourceIdentity.includes(
+          'Hero/101010/SubSkill/ast_17351310762410000.asset'
+        )
+      )
+    ).toBe(true);
 
     expect(hitRows(10101003, 0)).toEqual([
       [101010091, 18, 7000, 1599, 6100],

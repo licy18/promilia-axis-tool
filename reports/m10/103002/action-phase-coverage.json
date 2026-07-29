@@ -8,8 +8,8 @@
     "appliedPhaseCount": 2,
     "inputSegmentCount": 15,
     "phaseTransitionCount": 1,
-    "quickEntryCount": 13,
-    "appliedQuickEntryCount": 13,
+    "quickEntryCount": 10,
+    "appliedQuickEntryCount": 10,
     "publicActionCount": 10,
     "runtimeReadyActionCount": 10,
     "appliedResourceTransactionCount": 23,
@@ -379,51 +379,11 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
       },
       "status": "verified-action-variant-edge-ready",
       "applied": true,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_3801464132547709921__3801464132547709921.json#startFrame|directInjectTargetType"
-    },
-    {
-      "bindingIdentity": null,
-      "sourceControlSkillId": 10300210,
-      "sourceSubSkillIndex": 0,
-      "sourceElementId": 103002181,
-      "inputCommand": "normal-attack",
-      "activationFrame": 33,
-      "durationMs": 2000,
-      "targetControlSkillId": 10300201,
-      "targetSubSkillIndex": 1,
-      "condition": {
-        "kind": "resource-at-least",
-        "resourceIdentity": "actor:103002:element:103002047",
-        "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
-      },
-      "status": "verified-action-variant-edge-ready",
-      "applied": true,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-7376074334440870749__-7376074334440870749.json#startFrame|directInjectTargetType"
-    },
-    {
-      "bindingIdentity": null,
-      "sourceControlSkillId": 10300210,
-      "sourceSubSkillIndex": 1,
-      "sourceElementId": 103002181,
-      "inputCommand": "normal-attack",
-      "activationFrame": 24,
-      "durationMs": 2000,
-      "targetControlSkillId": 10300201,
-      "targetSubSkillIndex": 1,
-      "condition": {
-        "kind": "resource-at-least",
-        "resourceIdentity": "actor:103002:element:103002047",
-        "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
-      },
-      "status": "verified-action-variant-edge-ready",
-      "applied": true,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_3801464132547709921__3801464132547709921.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_868011296907042207__868011296907042207.json#startFrame|directInjectTargetType"
     },
     {
       "bindingIdentity": null,
@@ -439,7 +399,7 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
       },
       "status": "verified-action-variant-edge-ready",
       "applied": true,
@@ -459,7 +419,7 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
       },
       "status": "verified-action-variant-edge-ready",
       "applied": true,
@@ -479,31 +439,11 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
       },
       "status": "verified-action-variant-edge-ready",
       "applied": true,
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[2].elements[16]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_3801464132547709921__3801464132547709921.json#startFrame|directInjectTargetType"
-    },
-    {
-      "bindingIdentity": null,
-      "sourceControlSkillId": 10300210,
-      "sourceSubSkillIndex": 2,
-      "sourceElementId": 103002181,
-      "inputCommand": "normal-attack",
-      "activationFrame": 33,
-      "durationMs": 2000,
-      "targetControlSkillId": 10300201,
-      "targetSubSkillIndex": 1,
-      "condition": {
-        "kind": "resource-at-least",
-        "resourceIdentity": "actor:103002:element:103002047",
-        "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
-      },
-      "status": "verified-action-variant-edge-ready",
-      "applied": true,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[2].elements[16]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-7376074334440870749__-7376074334440870749.json#startFrame|directInjectTargetType"
     },
     {
       "bindingIdentity": null,
@@ -519,7 +459,7 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
       },
       "status": "verified-action-variant-edge-ready",
       "applied": true,
@@ -539,7 +479,7 @@
         "kind": "resource-at-least",
         "resourceIdentity": "actor:103002:element:103002047",
         "value": 1,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
       },
       "status": "verified-action-variant-edge-ready",
       "applied": true,
@@ -553,7 +493,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_5535908167720225823__5535908167720225823.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300201,
@@ -561,7 +501,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[2].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-4466651111794072532__-4466651111794072532.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[2].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_4168474814757765775__4168474814757765775.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300201,
@@ -577,7 +517,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-1305692138374085803__-1305692138374085803.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_1803843296392014934__1803843296392014934.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300202,
@@ -593,7 +533,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[3].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-1305692138374085803__-1305692138374085803.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[3].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-568653254920070201__-568653254920070201.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300203,
@@ -601,7 +541,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_28307586741003142__28307586741003142.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_2975752204161737821__2975752204161737821.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300203,
@@ -617,7 +557,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[3].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_28307586741003142__28307586741003142.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[3].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_8682986315989514405__8682986315989514405.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300204,
@@ -633,7 +573,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-243149956882255032__-243149956882255032.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_7071336793222845800__7071336793222845800.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300204,
@@ -641,7 +581,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[2].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-243149956882255032__-243149956882255032.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[2].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_3540093518933148845__3540093518933148845.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300204,
@@ -649,7 +589,7 @@
       "operation": "consume",
       "triggerFrame": 0,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[3].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-243149956882255032__-243149956882255032.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[3].elements[0]|battle-element-assets.jsonl#path_id=-7754027710660938209|IL2CPP:-6202966891751637497|immuneType|immuneLayerType|elementDataList|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_7307621539445855302__7307621539445855302.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300205,
@@ -673,7 +613,7 @@
       "operation": "gain",
       "triggerFrame": 24,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[2].elements[12]|battle-element-assets.jsonl#path_id=-3943091103073882723|IL2CPP:-7197581663443823049|injectElementDataList|formulaParams.formulaParamValues[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-821589745850868321__-821589745850868321.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[2].elements[12]|battle-element-assets.jsonl#path_id=-3943091103073882723|IL2CPP:-7197581663443823049|injectElementDataList|formulaParams.formulaParamValues[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_5368306601510636513__5368306601510636513.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300212,
@@ -705,7 +645,7 @@
       "operation": "gain",
       "triggerFrame": 15,
       "resourceIdentity": "actor:103002:element:103002047",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300225.asset/MonoBehaviour/skill_control_10300225__115650319527559791.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=3663436943335475859|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300225.asset/MonoBehaviour/MonoBehaviour_-6513216096915397460__-6513216096915397460.json#startFrame|directInjectTargetType"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300225.asset/MonoBehaviour/skill_control_10300225__115650319527559791.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=3663436943335475859|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300225.asset/MonoBehaviour/MonoBehaviour_8716756417110375640__8716756417110375640.json#startFrame|directInjectTargetType"
     },
     {
       "controlSkillId": 10300243,
@@ -899,5 +839,5 @@
       "status": "applied"
     }
   ],
-  "profileHash": "040aad5783fba41e08b5b30eabaa26bbdcba557cdcb000a6e3a2adfdc37a464e"
+  "profileHash": "93b39de764d1ff691af12df89932e4f9818d33a419445b96ec68d401777d99e4"
 }
