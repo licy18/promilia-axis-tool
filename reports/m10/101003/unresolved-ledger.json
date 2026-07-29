@@ -2,29 +2,29 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 101003,
-  "profileHash": "ab91926c53c168d4af27237e5c8175453b1dd20a8d866aa4d72f89c68798a594",
+  "profileHash": "de3750d15e71a76864279419f83ce255f71510bda1a90862cb4aff935a204b28",
   "summary": {
     "semanticRecordCount": 42,
     "rawRecordCount": 54,
     "semanticStatusCounts": {
-      "not-applicable": 1,
-      "runtime-evidence-required": 11,
+      "not-applicable": 2,
+      "runtime-evidence-required": 10,
       "static-evidence-gap": 30
     },
     "rawStatusCounts": {
-      "not-applicable": 1,
-      "runtime-evidence-required": 11,
+      "not-applicable": 2,
+      "runtime-evidence-required": 10,
       "static-evidence-gap": 42
     },
     "impactClassificationCounts": {
-      "gameplay-impacting": 25,
-      "not-applicable": 1,
+      "gameplay-impacting": 24,
+      "not-applicable": 2,
       "wrapper-or-duplicate": 16
     },
-    "gameplayImpactingCount": 25,
+    "gameplayImpactingCount": 24,
     "wrapperOrDuplicateCount": 16,
     "transitionCandidateSupersededCount": 0,
-    "unreachableOrNotApplicableCount": 1
+    "unreachableOrNotApplicableCount": 2
   },
   "records": [
     {
@@ -277,28 +277,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "hit:10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:2d4c15f8d18869639a4f",
-      "ownerId": 101003,
-      "sourceKind": "runtime-trigger",
-      "status": "runtime-evidence-required",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "ultimate-hidden-firework-explosion-trigger-reachability-runtime-evidence-required"
-      ],
-      "sourceIdentity": "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset",
-      "sourceIdentities": [
-        "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "actor:101003:ultimate:hidden-firework-explosion"
       ],
       "rawRecordCount": 1
     },
@@ -752,6 +730,29 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:b2639386cb3efac079bb",
+      "ownerId": 101003,
+      "sourceKind": "legacy-unreachable-element",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "hidden-ultimate-firework-explosion-discarded-current-client",
+        "legacy-or-unreachable-current-client"
+      ],
+      "sourceIdentity": "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset",
+      "sourceIdentities": [
+        "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "actor:101003:ultimate:hidden-firework-explosion"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:b3f52c79063901f10960",
       "ownerId": 101003,
       "sourceKind": "hit",
@@ -1091,10 +1092,11 @@
     {
       "recordIdentity": "actor:101003:ultimate:hidden-firework-explosion",
       "ownerId": 101003,
-      "sourceKind": "runtime-trigger",
-      "status": "runtime-evidence-required",
+      "sourceKind": "legacy-unreachable-element",
+      "status": "not-applicable",
       "reasons": [
-        "ultimate-hidden-firework-explosion-trigger-reachability-runtime-evidence-required"
+        "hidden-ultimate-firework-explosion-discarded-current-client",
+        "legacy-or-unreachable-current-client"
       ],
       "sourceIdentity": "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset",
       "referenceKind": null,

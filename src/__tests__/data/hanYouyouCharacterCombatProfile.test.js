@@ -492,15 +492,32 @@ describe('M10-B2 Han Youyou character combat profile', () => {
     });
   });
 
-  it('keeps the hidden Ultimate explosion in the runtime-evidence ledger instead of applying it', () => {
-    expect(runtimeCapturePlan.summary.captureCount).toBe(11);
+  it('classifies the unreachable hidden Ultimate explosion as non-gameplay legacy evidence', () => {
+    expect(runtimeCapturePlan.summary.captureCount).toBe(10);
+    expect(runtimeCapturePlan.summary.zeroDistanceBlockingCaptureCount).toBe(0);
     expect(
-      unresolvedLedger.records.some(record =>
-        record.reasons?.includes(
-          'ultimate-hidden-firework-explosion-trigger-reachability-runtime-evidence-required'
-        )
+      runtimeCapturePlan.entries.some(
+        entry =>
+          entry.sourceIdentity ===
+          'Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset'
       )
-    ).toBe(true);
+    ).toBe(false);
+    expect(unresolvedLedger.records).toContainEqual(
+      expect.objectContaining({
+        sourceKind: 'legacy-unreachable-element',
+        rawRecordIdentities: [
+          'actor:101003:ultimate:hidden-firework-explosion',
+        ],
+        status: 'not-applicable',
+        impactClassification: 'not-applicable',
+        reasons: expect.arrayContaining([
+          'legacy-or-unreachable-current-client',
+          'hidden-ultimate-firework-explosion-discarded-current-client',
+        ]),
+        sourceIdentity:
+          'Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset',
+      })
+    );
     expect(profile.characterComplete).toBe(false);
   });
 });

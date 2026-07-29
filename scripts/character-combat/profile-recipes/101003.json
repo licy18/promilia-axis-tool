@@ -722,10 +722,11 @@
   "unresolvedRecords": [
     {
       "identity": "actor:101003:ultimate:hidden-firework-explosion",
-      "sourceKind": "runtime-trigger",
-      "status": "runtime-evidence-required",
+      "sourceKind": "legacy-unreachable-element",
+      "status": "not-applicable",
       "reasons": [
-        "ultimate-hidden-firework-explosion-trigger-reachability-runtime-evidence-required"
+        "legacy-or-unreachable-current-client",
+        "hidden-ultimate-firework-explosion-discarded-current-client"
       ],
       "sourceIdentity": "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset"
     }

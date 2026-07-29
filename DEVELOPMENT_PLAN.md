@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M10 / 小玉与红宝石 SubSkill 重导出接入已完成，等待产品复验**。上游完整重导出恢复 65 个容器、1,377 个对象并确认问题域 0 个 stub；同步器现按 skill-player/subskill 归属 behavior track，已修复红宝石星鸣技、其他受影响技能以及小玉重击形态的跨 subskill 重复命中/效果。两名角色公开动作均为 10/10 runtime-ready，但总 Profile 继续诚实保持 `runtime-applied / partial`。M11、下一角色与包体优化继续暂停。
+当前里程碑：**M11-A / Canonical Headless Combat Core 实施中**。M10 的小玉、红宝石与寒悠悠功能面已通过产品验收并关闭；寒悠悠隐藏大招爆炸按当前客户端未删净废案归为 `not-applicable / legacy-unreachable`，不再生成 capture 或阻断零距离模拟，三角色权威 replay hash 保持不变。包体超限继续只作为对外发布风险，不阻断 M11 无头核心。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -769,25 +769,25 @@ M10 固定当前客户端 20 名公开角色为角色分母；每名角色的动
 - 阶段收口将所有带容量的角色个人资源接入通用初值控件；红宝石弹药以 `initialRuntimeState.specialResourcesByActor` 为唯一真值，支持 `0..12` 整数初值、历史事务与五载体重放，并从 0 帧重新决定 A/E 链。红宝石现为 `zero-distance-simulation-complete=true`、`real-client-evidence-complete=false`：初始弹药不再要求实机采样，剩余 4 项 capture 仅保留真实投射物时序证据。按完整重导出清理跨 subskill 重复边及三个假缺口后，semantic/raw/gameplay-impacting 分母为 `475/483/51`；123 条 golden 断言通过，角色总 Profile 仍诚实保持 `runtime-applied / partial`。
 - 完整重导出确认问题域共有 66 个容器、1,487 个完整对象、0 个 stub，773/773 条外部 gameplay track 与 281/281 条 FileID=3 引用完整。同步器现以 `behaviorTriggerScope=skill-player` 按 subskill 过滤命中、运行时效果和语义效果，并由通用 orchestrator 把 owner 默认策略应用到全部 required controls；修复范围覆盖红宝石 `10300201/02/03/04/10/12/14/24/25/44/49` 与小玉 `10101010/10101042`，去除跨形态重复归属而不删除真实 hit。红宝石与小玉分别保持 `24`/`21` 个执行形态、`124`/`107` 个 hit，公开动作均为 10/10 runtime-ready；`10300253` 作为当前 SkillList 不可达证据保留。完整审计见 `reports/m10/reexport-subskill-scope-20260729.json`。
 
-##### M10-B2：寒悠悠（101003）单角色战斗解析与接入（首轮实现完成，R1 已完成实施并等待产品复验）
+##### M10-B2：寒悠悠（101003）单角色战斗解析与接入（已通过功能验收并关闭）
 
 - Discovery 固定得到 10 个公开动作、30 个可达 control、14 个执行形态、73 个命中和 40 个语义效果；7 个不可达/包装 control 保留排除理由。10 个公开动作均进入 runtime-ready，五段普攻与两段蓄力重击使用各自真实 control/subskill 和有效占轴。
 - 通用 compiler v3 新增声明式敌方目标状态、逐命中状态交易、条件命中组和运行时效果绑定。寒悠悠 `焰火` 使用 `element 101003079`、容量 15、逐层 10 秒；星鸣技七次真实命中各叠一层。无名第二被动 `10100362` 按当前客户端产品边界为 `not-applicable`，不再生成末次命中额外层。重击一段按 `>=6` 消耗 6 层、否则全消；重击二段按 `>=10 / >=8 / 否则全消` 结算，并在来源帧增加 1 枚火属性调谐印记。
 - 焰火爆炸触发的主控攻击力 `+10% / 24s`、全队调谐 `+18 / 24s / 最多2层` 与寒悠悠直接 SP `+2` 复用统一 effect/runtime；运行时和 UI 不含寒悠悠 ID 分支。星鸣技动作块使用 93F 已验证重新输入占轴，完整 180F 动画和 61–109F 命中仍独立保留。
 - 120 秒 authoritative golden 以真实 compiler + simulation 生成 76 条断言：寒悠悠总 HP/韧性变化为 `69,372 / 6,069`，两次爆炸共直接回复 4 SP，动态攻击与调谐、火印记、前后台角色/奇波 SP、切人继承及装配传播均有精确结果；golden hash 为 `ad078bd41e8f5ed75937f5e00a420c7d87cb4d9f9050a0709b81024ba0c5c6a5`。
 - 真实 Workbench 已覆盖公共入口拖入星鸣技与重击、逐 hit 开关、无焰火负例、撤销/重做、刷新回载、主控 Buff 切人迁移和星决技双 Buff；1440x900 和 390x900 均无新增溢出。141 个测试文件/859 条测试、62/62 production preview、41/41 必需能力以及 character/verified、production imports、Workbench data、action status、applied-source 守门均通过。
-- 角色状态仍为 `runtime-applied / partial`、`characterComplete=false`：42 条 semantic unresolved 中有 11 项 runtime evidence、30 项 static evidence gap、1 项 not-applicable，其中 25 项影响玩法结果。Workbench gzip `370,420B` 超主块门槛 `420B`；总 JS gzip `760,188B` 超 740,000B 硬门槛 `20,188B`，本阶段只记录独立发布风险，不转去压包或启动下一角色。
+- 角色状态仍为 `runtime-applied / partial`、`characterComplete=false`：42 条 semantic 记录中有 10 项 runtime evidence、30 项 static evidence gap、2 项 not-applicable，其中 24 项影响玩法结果。隐藏大招爆炸按当前客户端废案归入 `legacy-unreachable`，不再生成 capture 或阻断零距离模拟。Workbench 与总 JS 超门槛继续只记录为对外发布风险，不阻断 M11。
 
 共同工程边界：总 JavaScript gzip 的发布硬门槛为 740,000B，735,000B 仅作预警；初始入口 120,000B、Workbench 主块 370,000B 继续守门。该门槛继续约束对外试用和正式发布，但不阻断 M11/M12 的无头核心、内部验收台与批量模拟里程碑；这些阶段只记录体积变化，不以逐字节压缩替代机制正确性和机器能力。
 
-##### M10-B2-R1：寒悠悠产品复验整改（实施完成，等待产品复验）
+##### M10-B2-R1：寒悠悠产品复验整改（已通过功能验收并关闭）
 
 - 首轮产品复验未通过。既有 E2E 只证明页面出现过焰火区间和任意三值节点，没有证明焰火消费、5 次派生爆炸、Buff/SP 后果和后续属性影响；星决技同帧的 24 秒全队调谐与 15 秒主控调谐效果也未被分别验证。
 - R1 已从公共动作入口锁定完整因果链：星鸣技七段真实命中形成焰火 `0 -> 7`，重击一段消费 6 层至 1 层并物化 5 次爆炸，检查器和 HP/韧性节点明确区分 4 次本体命中与 5 次条件命中；关闭一段 E hit 得到 `6 -> 0`，移走 E 后只保留 4 次本体命中，撤销和保存重放恢复同一结果。
 - 引爆后果分别显示主控攻击力 `+10% / 24s`、全队调谐强度 `+18/层 / 24s / 最多2层` 与寒悠悠 SP `+2`。星决技 148F 同时生成两条独立身份：全队 2 层 `+36 / 24s`，以及触发时主控角色获得寒悠悠基础调谐强度 10% 的 15 秒效果；同属性、同帧效果不再互相吞并，用户界面统一使用“调谐强度”术语。
 - 切人继承只由 `inheritType` 决定，团队元素布尔值单独保留。寒悠悠 `480124006`（Self）与 `101003206/207`（Source）在精确切人帧迁移目标并保留原始到期、层数及公式来源；全队效果不复制，小玉 `101010206` 与红宝石 `103002275` 均锁定 `transferCount=0`。全量 82 个非零继承元素的字段矩阵已进入审计。
 - 当前 20 名角色的无名第二被动统一归类为 `unnamed-secondary-passive-not-implemented-current-client`，保留来源但不生成 listener、capture 或玩法缺口；命名第一被动不受影响。
-- 页面只增加机制验收必需的层数、派生命中、来源元素、目标、属性修正和生命周期信息；无焰火时不会展示未物化的爆炸候选。R1 尚待产品复验，未达到 `visually-accepted`，不启动 M11 或下一个角色。
+- 页面只增加机制验收必需的层数、派生命中、来源元素、目标、属性修正和生命周期信息；无焰火时不会展示未物化的爆炸候选。M10 功能验收已通过并关闭，下一阶段直接进入 M11-A；第四角色、包体优化和非验收 UI 继续暂停。
 
 ### M11：无头核心、机器排轴与可视化验收台
 
@@ -963,6 +963,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 56. 路线已重整：M10-B2-R1 收口后进入 M11 无头核心、机器排轴合同、可视化验收台和角色验收协议，再进入 M12 批量评估、搜索器与末音试点。UI 美化、非必要响应式、包体压缩和全角色盲目扩张暂缓。
 57. 实施完成，等待产品复验：M10-A 小玉闭环缺口修复已接通普通 A3/A4、95F 星携技块后的 109F 延迟结算、带成功招架前置的 `10101049/sub1`、缘结阈值风印记 `+2` 和玉未央真实触发边界；141 文件/867 测试、62/62 production preview、两道漂移审计、生产数据守门与构建通过。M11、下一角色和包体优化继续暂停。
 58. 实施完成，等待产品复验：M10-B1 已消费上游完整 Typetree 重导出，恢复星鸣技 7 段真实命中和第 0F 补弹、火印记、强化入口；公开形态 10/10 runtime-ready，123 条 authoritative golden、141 文件/871 测试和 62/62 production preview 通过。红宝石总 Profile 仍为 `runtime-applied / partial`；M11、下一角色和包体优化继续暂停。
+59. 已完成并通过功能验收：M10 收口将寒悠悠隐藏大招爆炸归为当前客户端 `not-applicable / legacy-unreachable` 废案，capture 由 11 降至 10、零距离阻断由 1 降至 0；小玉 117、红宝石 123、寒悠悠 76 条 golden 的 replay/summary hash 均无漂移。M10 正式关闭，当前进入 M11-A；包体超限只保留为对外发布风险。
 
 ## 8. 风险和取舍
 
