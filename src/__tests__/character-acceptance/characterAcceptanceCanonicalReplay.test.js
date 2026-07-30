@@ -12,9 +12,9 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: '0e47ad979b3435d3',
-      data: 'b876395e3c5dd8a4',
-      trace: '04a2619176b027ca',
+      input: 'b68f6b308cadffef',
+      data: 'f7070a1029b8e28e',
+      trace: 'a9757fa81eea8640',
       evaluation: '0fd60b7a5e36bf3f',
     },
   },
@@ -22,9 +22,9 @@ const cases = [
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: '96eb19e2597cba9a',
-      data: '62e80540b9246b8c',
-      trace: '6cc9d01e738ecf23',
+      input: 'e8023f1957065362',
+      data: '798c91ebe7d68066',
+      trace: '401f9253b45da01d',
       evaluation: 'acb7c806efac81fd',
     },
   },
@@ -32,9 +32,9 @@ const cases = [
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: '536c0c644a1f4c71',
-      data: '3918a166ded263d5',
-      trace: 'ab94789246358651',
+      input: '1939195f1fd0e469',
+      data: 'e7636e8d46e8bafb',
+      trace: '7a279fa394da35c5',
       evaluation: '4c63c4f319819d6e',
     },
   },
@@ -138,11 +138,7 @@ describe('M11-D canonical character scenario batch', () => {
       subSkillIndex: 1,
     });
     expect(
-      findResourceEvent(
-        ruby,
-        'ruby-chain-e1',
-        'actor:103002:element:103002047'
-      )
+      findResourceEvent(ruby, 'ruby-chain-e1', 'actor:103002:element:103002047')
     ).toMatchObject({
       payload: { beforeValue: 6, afterValue: 5, change: -1 },
     });

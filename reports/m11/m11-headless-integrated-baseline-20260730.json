@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "reportKind": "m11-headless-integrated-baseline",
+  "generatedOn": "2026-07-30",
+  "status": "merged-derived-audits-clean-pending-package-clean-room-and-external-audit",
+  "integration": {
+    "roleBaselineCommit": "9cabdd4f79d75c2921e34e4d9f8a9dcde693fd78",
+    "acceptedRoleSubjectCommit": "899edea0c5a1f718153ebe86712ecd8c31aabf7d",
+    "kiboStageCommit": "76cc2d4d3737450280feb734d32d4c4b48de692e",
+    "integrationCommit": "fadc2901118872f6eb4e98d641d2fefe481788e6",
+    "mergeMethod": "cherry-pick-with-conflict-resolution-and-derived-output-regeneration",
+    "packageUsesMergedVersionOnly": true
+  },
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "4ec79c36082e873f7750e12a0b763de1ce9e51e608e1d43ad540a2423d9abd56"
+  },
+  "machineAxis": {
+    "fixturePath": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+    "canonicalHashes": {
+      "algorithm": "fnv1a64-utf8-v1",
+      "input": "145fe728a2af4e5f",
+      "data": "441ba62e01f5a5bc",
+      "trace": "8db64058ef954f02",
+      "evaluation": "8332f529cd763fb8"
+    }
+  },
+  "characterAcceptance": {
+    "summary": {
+      "ownerCount": 3,
+      "runtimeIntegratedCount": 3,
+      "visuallyAcceptedCount": 0,
+      "optimizationReadyCount": 0,
+      "machineScenarioPassCount": 3,
+      "workbenchRoundTripPassCount": 3,
+      "sourceGapCount": 181,
+      "acceptanceGapCount": 706,
+      "nonBlockingSourceCount": 575,
+      "functionalBlockers": 887,
+      "performanceAndBundleRisksBlocking": false
+    },
+    "owners": [
+      {
+        "ownerId": 101003,
+        "ownerName": "寒悠悠",
+        "maturityState": "runtime-integrated",
+        "optimizationReady": false,
+        "canonicalHashes": {
+          "algorithm": "fnv1a64-utf8-v1",
+          "input": "1939195f1fd0e469",
+          "data": "e7636e8d46e8bafb",
+          "trace": "7a279fa394da35c5",
+          "evaluation": "4c63c4f319819d6e"
+        },
+        "qualificationSubjectHash": "4e2ed46389263f2d",
+        "productVisualAcceptance": "pending"
+      },
+      {
+        "ownerId": 101010,
+        "ownerName": "涂山小玉",
+        "maturityState": "runtime-integrated",
+        "optimizationReady": false,
+        "canonicalHashes": {
+          "algorithm": "fnv1a64-utf8-v1",
+          "input": "b68f6b308cadffef",
+          "data": "f7070a1029b8e28e",
+          "trace": "a9757fa81eea8640",
+          "evaluation": "0fd60b7a5e36bf3f"
+        },
+        "qualificationSubjectHash": "f329cbc1ad08f2d7",
+        "productVisualAcceptance": "pending"
+      },
+      {
+        "ownerId": 103002,
+        "ownerName": "红宝石",
+        "maturityState": "runtime-integrated",
+        "optimizationReady": false,
+        "canonicalHashes": {
+          "algorithm": "fnv1a64-utf8-v1",
+          "input": "e8023f1957065362",
+          "data": "798c91ebe7d68066",
+          "trace": "401f9253b45da01d",
+          "evaluation": "acb7c806efac81fd"
+        },
+        "qualificationSubjectHash": "550cf7a4640f8e29",
+        "productVisualAcceptance": "pending"
+      }
+    ],
+    "priorProductAcceptance": {
+      "status": "not-carried-forward",
+      "reason": "merged runtime changed verified package identity and canonical replay/summary outputs",
+      "reacceptanceRequired": true
+    }
+  },
+  "kibo": {
+    "denominators": {
+      "kiboCount": 122,
+      "publicActionCount": 366,
+      "fixedSkillUniqueCount": 172,
+      "pvePassiveOccurrenceCount": 133,
+      "pvePassiveUniqueCount": 44,
+      "pvpPassiveOccurrenceCount": 122,
+      "pvpPassiveUniqueCount": 122
+    },
+    "summary": {
+      "fixedSkillClassification": {
+        "evidenceClosed": 147,
+        "scenarioAssumed": 0,
+        "unresolved": 25
+      },
+      "pvePassiveMechanics": {
+        "evidenceClosed": 35,
+        "scenarioAssumed": 0,
+        "unresolved": 9
+      },
+      "pvpPassiveClassification": {
+        "evidenceClosed": 122,
+        "scenarioAssumed": 0,
+        "unresolved": 0
+      },
+      "publicActionClosure": {
+        "evidenceClosed": 132,
+        "scenarioAssumed": 53,
+        "unresolved": 181
+      },
+      "fixedSkillScopeClasses": {
+        "non-combat-capability": 20,
+        "pve-combat-action-support": 127,
+        "unresolved": 25
+      },
+      "publicActionKinds": {
+        "active": 122,
+        "break": 122,
+        "signature": 122
+      },
+      "traitTextMatchCount": 249,
+      "propertyFieldMirrorMismatchCount": 3
+    },
+    "maturity": {
+      "kiboCount": 122,
+      "machineOptimizationReadyCount": 0,
+      "machineOptimizationReadyKiboIds": [],
+      "actionClosure": {
+        "evidenceClosed": 132,
+        "scenarioAssumed": 53,
+        "unresolved": 181
+      },
+      "pvePassiveMechanics": {
+        "evidenceClosed": 35,
+        "scenarioAssumed": 0,
+        "unresolved": 9
+      },
+      "fixedSkillClassification": {
+        "evidenceClosed": 147,
+        "scenarioAssumed": 0,
+        "unresolved": 25
+      }
+    }
+  },
+  "verification": {
+    "focusedTests": {
+      "status": "passed",
+      "files": 18,
+      "tests": 142
+    },
+    "derivedAudits": {
+      "status": "passed",
+      "characterCombat": "clean",
+      "verifiedCombat": "clean",
+      "characterAcceptance": "clean",
+      "kiboHeadless": "clean"
+    },
+    "packagedCleanRoom": "pending"
+  }
+}

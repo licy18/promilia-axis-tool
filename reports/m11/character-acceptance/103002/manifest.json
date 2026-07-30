@@ -9,9 +9,9 @@
   },
   "source": {
     "profileIdentity": "actor:103002:character-combat-profile:v1",
-    "profileHash": "93b39de764d1ff691af12df89932e4f9818d33a419445b96ec68d401777d99e4",
+    "profileHash": "6ef85ee6af6d213c69ac737bcb5db79e4393cc623b2c03b3835d8ad436c0fcaf",
     "profileValidationStatus": "character-combat-profile-valid",
-    "sourcePackageHash": "2046849c343b33e1c86403e529ce3c2051a0577bb2e46de1fc07b32c1db9eaf9",
+    "sourcePackageHash": "992f1ef347f53672e0e870a3d9c17fef9a9f70638d864cd27d915d0de0ead0de",
     "pipelineMaturity": "runtime-applied",
     "combatCoverageState": "partial",
     "characterComplete": false,
@@ -24,12 +24,12 @@
         "evidenceIdentity": "m10-b1:103002:120s-three-actor-golden",
         "reportPath": "reports/m10/103002/golden-trace.json",
         "status": "passed",
-        "replayHash": "60648d22a0152c6fe05829fa26fa1f98d1c66601e68f5799b5f471186d689713",
-        "summaryHash": "8c29b166f87a1800144f39b31ecb7ab8996835bd9ff5a471ca5908b1ddadf69f",
+        "replayHash": "0b19a52bc1e46f9f7f9eee28a38e054117c5dbd7fecde3c3112b29635c2477d1",
+        "summaryHash": "c469716e1b6641e5e6fd1e35faf8fccde9b8b5d14ef56e401a4c908caa6fdd57",
         "canonicalHashes": {
-          "input": "b76350f58ed5d7dd",
-          "data": "1cbe890a97bd40fd",
-          "trace": "5232fd0950d6a5ed",
+          "input": "28548bd658dd5c95",
+          "data": "c61cf000dddae67b",
+          "trace": "57d99013f1949273",
           "evaluation": null
         },
         "assertionCount": 123
@@ -44,15 +44,15 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "96eb19e2597cba9a",
-          "data": "62e80540b9246b8c",
-          "trace": "6cc9d01e738ecf23",
+          "input": "e8023f1957065362",
+          "data": "798c91ebe7d68066",
+          "trace": "401f9253b45da01d",
           "evaluation": "acb7c806efac81fd"
         },
         "actionCount": 10,
         "executedActionCount": 10,
         "traceIndex": {
-          "traceHash": "6cc9d01e738ecf23",
+          "traceHash": "401f9253b45da01d",
           "actionCount": 10,
           "hitCount": 13,
           "effectEventCount": 2,
@@ -68,19 +68,19 @@
       }
     ],
     "productVisualAcceptance": {
-      "status": "accepted",
+      "status": "pending",
       "scenarioIdentities": [
         "m11-d-103002-visual-acceptance"
       ],
-      "acceptanceCommit": "899edea0c5a1f718153ebe86712ecd8c31aabf7d",
-      "recordIdentity": "character-product-acceptance:103002:899edea0c5a1f718153ebe86712ecd8c31aabf7d:5f53cef881161db5",
-      "qualificationSubjectHash": "5f53cef881161db5",
-      "scenarioSetHash": "2bbd808801a3ef39",
-      "bindingStatus": "verified",
+      "acceptanceCommit": null,
+      "recordIdentity": null,
+      "qualificationSubjectHash": null,
+      "scenarioSetHash": null,
+      "bindingStatus": "not-requested",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002:899edea0c5a1f718153ebe86712ecd8c31aabf7d:5f53cef881161db5",
-        "qualificationSubjectHash": "5f53cef881161db5",
-        "scenarioSetHash": "2bbd808801a3ef39",
+        "recordIdentity": "character-product-acceptance:103002::550cf7a4640f8e29",
+        "qualificationSubjectHash": "550cf7a4640f8e29",
+        "scenarioSetHash": "c1537da174d9731b",
         "scenarioIdentities": [
           "m11-d-103002-visual-acceptance"
         ]
@@ -19924,7 +19924,7 @@
         "runnerKind": "canonical-character-golden",
         "inputReference": {
           "reportPath": "reports/m10/103002/golden-trace.json",
-          "reportHash": "7a160dc283351886",
+          "reportHash": "02c0526040c08307",
           "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 103002 --assert-clean"
         },
         "execution": {
@@ -19932,9 +19932,9 @@
           "stableReplay": true,
           "workbenchRoundTrip": "not-applicable",
           "canonicalHashes": {
-            "input": "b76350f58ed5d7dd",
-            "data": "1cbe890a97bd40fd",
-            "trace": "5232fd0950d6a5ed",
+            "input": "28548bd658dd5c95",
+            "data": "c61cf000dddae67b",
+            "trace": "57d99013f1949273",
             "evaluation": null
           }
         },
@@ -21277,7 +21277,7 @@
             "assertionHash": "4e0ca9761fbfa162"
           }
         ],
-        "scenarioCaseHash": "b7033b2c1d7d5ce0"
+        "scenarioCaseHash": "85a2793d5d5e9c35"
       },
       {
         "schemaVersion": 1,
@@ -21285,7 +21285,7 @@
         "runnerKind": "machine-axis",
         "inputReference": {
           "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-          "inputHash": "96eb19e2597cba9a",
+          "inputHash": "e8023f1957065362",
           "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-visual.json"
         },
         "execution": {
@@ -21294,9 +21294,9 @@
           "workbenchRoundTrip": "passed",
           "canonicalHashes": {
             "algorithm": "fnv1a64-utf8-v1",
-            "input": "96eb19e2597cba9a",
-            "data": "62e80540b9246b8c",
-            "trace": "6cc9d01e738ecf23",
+            "input": "e8023f1957065362",
+            "data": "798c91ebe7d68066",
+            "trace": "401f9253b45da01d",
             "evaluation": "acb7c806efac81fd"
           }
         },
@@ -22446,7 +22446,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "d8155f555b259fec"
+        "scenarioCaseHash": "4339740b88467713"
       }
     ],
     "summary": {
@@ -22459,7 +22459,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "8d863076503dcf08"
+    "scenarioSetHash": "ca7067a567503103"
   },
   "coverageContext": {
     "denominator": {
@@ -60676,15 +60676,14 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "b47ce43469e7a671"
+    "sourceOfTruthHash": "2da74dde1af4e163"
   },
-  "qualificationSubjectHash": "5f53cef881161db5",
+  "qualificationSubjectHash": "550cf7a4640f8e29",
   "maturity": {
-    "currentState": "visually-accepted",
+    "currentState": "runtime-integrated",
     "earnedStates": [
       "extracted",
-      "runtime-integrated",
-      "visually-accepted"
+      "runtime-integrated"
     ],
     "optimizationReady": false,
     "facts": {
@@ -60696,7 +60695,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": true,
+      "productVisualAccepted": false,
       "matrixRequiredCount": 709,
       "matrixPassedCount": 36,
       "matrixComplete": false,
@@ -60706,10 +60705,11 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": true,
+      "visuallyAccepted": false,
       "optimizationReady": false
     },
     "blockers": [
+      "acceptance-product-visual-signoff-pending",
       "acceptance-required-matrix-incomplete",
       "acceptance-blocking-ledger-not-empty"
     ]
@@ -60718,5 +60718,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "1b346b0de5230d17"
+  "manifestHash": "9f2c078089d4e6db"
 }
