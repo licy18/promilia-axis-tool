@@ -47,7 +47,8 @@
     "machine-axis": "node scripts/run-machine-axis-cli.mjs",
     "machine-axis:build": "vite build --config vite.machine-axis-cli.config.js",
     "data:sync-kibo-headless": "node scripts/generate-kibo-headless-census.mjs --write",
-    "audit:kibo-headless": "node scripts/generate-kibo-headless-census.mjs --assert-clean"
+    "audit:kibo-headless": "node scripts/generate-kibo-headless-census.mjs --assert-clean",
+    "audit:package:m11-headless": "node scripts/build-m11-headless-audit-package.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

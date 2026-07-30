@@ -17,7 +17,7 @@ import {
 } from '../data/verifiedCombatMechanicsPackage';
 import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
-import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../features/workbench/workbenchHeadlessCombatCore';
+import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHeadlessCombatCore';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -33,7 +33,7 @@ const DEFAULT_KIBO_ACTION_CATALOG = projectWorkbenchKiboActionCatalog(
 );
 
 export function createMachineAxisService({
-  core = WORKBENCH_HEADLESS_COMBAT_CORE,
+  core = DEFAULT_HEADLESS_COMBAT_CORE,
   gameData = getWorkbenchGameData(),
   kiboActionCatalog = DEFAULT_KIBO_ACTION_CATALOG,
 } = {}) {
