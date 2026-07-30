@@ -1,6 +1,9 @@
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
+import { deriveCharacterAcceptanceArtifacts } from '../../src/character-acceptance/characterAcceptanceDerivation.js';
 import {
   CHARACTER_ACCEPTANCE_CONTRACT_NAME,
+  CHARACTER_ACCEPTANCE_MANIFEST_INDEX_CONTRACT_NAME,
+  CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION,
   CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY,
   CHARACTER_ACCEPTANCE_SCHEMA_VERSION,
   UNNAMED_SECONDARY_PASSIVE_REASON,
@@ -41,6 +44,20 @@ export function createCharacterAcceptanceManifest({
   const goldenEvidence = goldens.map(({ path, report }) =>
     createGoldenEvidence(path, report)
   );
+  const requirementInventory = {
+    records: createCharacterAcceptanceRequirementSources({
+      profile,
+    }),
+  };
+  const sourceGapInventory = {
+    records: structuredClone(unresolvedLedger?.records ?? []),
+  };
+  const scenarioCases = {
+    records: createCharacterAcceptanceScenarioCaseSources({
+      goldens,
+      visualScenario,
+    }),
+  };
   const evidence = {
     canonicalGoldens: goldenEvidence,
     machineScenarios: [toPublicVisualScenarioEvidence(visualScenario)],
@@ -50,27 +67,14 @@ export function createCharacterAcceptanceManifest({
       acceptanceCommit:
         recipe.productVisualAcceptance?.acceptanceCommit ?? null,
       recordIdentity: recipe.productVisualAcceptance?.recordIdentity ?? null,
+      qualificationSubjectHash:
+        recipe.productVisualAcceptance?.qualificationSubjectHash ?? null,
+      scenarioSetHash: recipe.productVisualAcceptance?.scenarioSetHash ?? null,
       automatedEvidence: structuredClone(
         recipe.productVisualAcceptance?.automatedEvidence ?? []
       ),
     },
   };
-  const matrix = createCharacterAcceptanceMatrix({
-    profile,
-    runtimeCoverage,
-    goldens,
-    visualScenario,
-  });
-  const notApplicableRecords = createNotApplicableRecords(unresolvedLedger);
-  const ledger = createCharacterAcceptanceLedger({
-    unresolvedLedger,
-    matrix,
-  });
-  const coverage = createCharacterAcceptanceCoverage(matrix, {
-    profile,
-    runtimeCoverage,
-    notApplicableRecords,
-  });
   const input = {
     schemaVersion: CHARACTER_ACCEPTANCE_SCHEMA_VERSION,
     contractName: CHARACTER_ACCEPTANCE_CONTRACT_NAME,
@@ -93,10 +97,13 @@ export function createCharacterAcceptanceManifest({
       realClientEvidenceComplete: profile.realClientEvidenceComplete === true,
     },
     evidence,
-    matrix,
-    coverage,
-    ledger,
-    notApplicableRecords,
+    requirementInventory,
+    sourceGapInventory,
+    scenarioCases,
+    coverageContext: {
+      denominator: structuredClone(profile.denominator ?? {}),
+      runtimeCoverageSummary: structuredClone(runtimeCoverage?.summary ?? {}),
+    },
   };
   return finalizeCharacterAcceptanceManifest(input);
 }
@@ -107,214 +114,157 @@ export function createCharacterAcceptanceMatrix({
   goldens,
   visualScenario,
 }) {
-  const requirements = [];
-  const executedForms = collectExecutedForms(goldens, visualScenario);
-  const searchableEvidence = [
-    ...goldens.map(({ report }) => JSON.stringify(report.actual ?? {})),
-    JSON.stringify(visualScenario.traceProjection ?? {}),
-  ].join('|');
-  const runtimeRows = runtimeCoverage?.actionRows ?? [];
+  return deriveCharacterAcceptanceArtifacts({
+    requirementInventory: {
+      records: createCharacterAcceptanceRequirementSources({ profile }),
+    },
+    sourceGapInventory: { records: [] },
+    scenarioCases: {
+      records: createCharacterAcceptanceScenarioCaseSources({
+        goldens,
+        visualScenario,
+      }),
+    },
+    denominator: profile.denominator ?? {},
+    runtimeCoverageSummary: runtimeCoverage?.summary ?? {},
+  }).matrix;
+}
 
+export function createCharacterAcceptanceRequirementSources({ profile }) {
+  const ownerId = Number(profile.owner?.ownerId);
+  const requirements = [];
   for (const [dimension, contractKey] of CONTRACT_DIMENSIONS) {
     const records = flattenContractRecords(
       profile.contracts?.[contractKey],
       contractKey
     );
     records.forEach((record, index) => {
-      const subjectIdentity = resolveContractIdentity(
-        record,
-        dimension,
-        index
-      );
-      const contractApplied = isAppliedRecord(record);
+      const subjectIdentity = resolveContractIdentity(record, dimension, index);
       const notApplicable = isNotApplicableRecord(record);
-      const scenarioCovered = isRecordCoveredByScenario({
-        record,
-        dimension,
-        executedForms,
-        searchableEvidence,
-        runtimeRows,
-        visualScenario,
-      });
       requirements.push({
         requirementIdentity: 'contract:' + dimension + ':' + subjectIdentity,
         dimension,
         subjectIdentity,
-        required: !notApplicable,
-        status: notApplicable
+        sourceDisposition: notApplicable
           ? 'not-applicable'
-          : contractApplied && scenarioCovered
-            ? 'passed'
-            : 'blocked',
+          : isAppliedRecord(record)
+            ? 'applied'
+            : 'gap',
         contractStatus: record.status ?? (record.applied ? 'applied' : null),
-        evidenceScenarioIds: scenarioCovered
-          ? collectEvidenceScenarioIds(goldens, visualScenario)
-          : [],
+        impactClassification:
+          record.impactClassification ??
+          (notApplicable ? 'not-applicable' : 'gameplay-impacting'),
+        coverageSelector: createContractCoverageSelector({
+          record,
+          dimension,
+          ownerId,
+        }),
         sourceIdentities: collectSourceIdentities(record),
         reasons: notApplicable
-          ? record.reasons ?? ['not-applicable']
-          : contractApplied
-            ? scenarioCovered
-              ? []
-              : ['acceptance-scenario-evidence-missing']
+          ? normalizeReasons(record).length
+            ? normalizeReasons(record)
+            : ['source-confirmed-not-applicable']
+          : isAppliedRecord(record)
+            ? []
             : normalizeReasons(record),
       });
     });
   }
-
-  const semanticRequirements = [
+  return [
     ...new Map(
       requirements.map(requirement => [
         requirement.requirementIdentity,
         requirement,
       ])
     ).values(),
-    ...createProtocolRequirements({
-      profile,
-      goldens,
-      visualScenario,
-    }),
+    ...createProtocolRequirementSources(ownerId),
   ].sort((left, right) =>
     left.requirementIdentity.localeCompare(right.requirementIdentity)
   );
-  return {
-    requirements: semanticRequirements,
-    summary: summarizeRequirements(semanticRequirements),
-  };
 }
 
-export function createCharacterAcceptanceLedger({
-  unresolvedLedger,
-  matrix,
+export function createCharacterAcceptanceScenarioCaseSources({
+  goldens,
+  visualScenario,
 }) {
-  const records = [];
-  for (const record of unresolvedLedger?.records ?? []) {
-    if (record.impactClassification !== 'gameplay-impacting') continue;
-    records.push({
-      recordIdentity: 'source-gap:' + record.recordIdentity,
-      status: normalizeLedgerStatus(record),
-      reason: normalizeReasons(record).join('|') || 'source-evidence-gap',
-      sourceKind: record.sourceKind ?? null,
-      sourceIdentities: uniqueStrings([
-        ...(record.sourceIdentities ?? []),
-        record.sourceIdentity,
-      ]),
-      blocking: true,
-    });
-  }
-  for (const requirement of matrix.requirements) {
-    if (!requirement.required || requirement.status !== 'blocked') continue;
-    records.push({
-      recordIdentity:
-        'acceptance-gap:' + hashCanonicalValue(requirement.requirementIdentity),
-      status: 'static-evidence-gap',
-      reason:
-        requirement.reasons[0] ?? 'acceptance-scenario-evidence-missing',
-      requirementIdentity: requirement.requirementIdentity,
-      sourceIdentities: requirement.sourceIdentities,
-      blocking: true,
-    });
-  }
-  const deduped = [...new Map(records.map(record => [record.recordIdentity, record])).values()]
-    .sort((left, right) => left.recordIdentity.localeCompare(right.recordIdentity));
-  return {
-    records: deduped,
-    summary: {
-      recordCount: deduped.length,
-      statusCounts: countBy(deduped, record => record.status),
-      reasonCounts: countBy(deduped, record => record.reason),
-    },
-  };
+  return [
+    ...goldens.map(golden => createGoldenScenarioCaseSource(golden)),
+    createVisualScenarioCaseSource(visualScenario),
+  ];
 }
 
-export function createNotApplicableRecords(unresolvedLedger) {
-  return (unresolvedLedger?.records ?? [])
-    .filter(
-      record =>
-        record.status === 'not-applicable' ||
-        record.impactClassification === 'not-applicable'
-    )
-    .map(record => ({
-      recordIdentity: 'not-applicable:' + record.recordIdentity,
-      status: 'not-applicable',
-      reason: normalizeReasons(record)[0] ?? 'not-applicable',
-      sourceKind: record.sourceKind ?? null,
-      sourceIdentities: uniqueStrings([
-        ...(record.sourceIdentities ?? []),
-        record.sourceIdentity,
-        ...(record.rawRecordIdentities ?? []),
-      ]),
-    }))
-    .sort((left, right) => left.recordIdentity.localeCompare(right.recordIdentity));
-}
-
-export function createCharacterAcceptanceCoverage(
-  matrix,
-  { profile, runtimeCoverage, notApplicableRecords }
-) {
-  const dimensions = {};
-  for (const requirement of matrix.requirements) {
-    const summary = dimensions[requirement.dimension] ?? {
-      total: 0,
-      passed: 0,
-      blocked: 0,
-      notApplicable: 0,
-    };
-    summary.total += 1;
-    if (requirement.status === 'passed') summary.passed += 1;
-    if (requirement.status === 'blocked') summary.blocked += 1;
-    if (requirement.status === 'not-applicable') summary.notApplicable += 1;
-    dimensions[requirement.dimension] = summary;
-  }
-  return {
-    denominator: structuredClone(profile.denominator ?? {}),
-    runtimeCoverageSummary: structuredClone(runtimeCoverage?.summary ?? {}),
-    dimensions,
-    unnamedSecondaryPassive: {
-      reason: UNNAMED_SECONDARY_PASSIVE_REASON,
-      recordCount: notApplicableRecords.filter(
-        record => record.reason === UNNAMED_SECONDARY_PASSIVE_REASON
-      ).length,
-      records: notApplicableRecords
-        .filter(record => record.reason === UNNAMED_SECONDARY_PASSIVE_REASON)
-        .map(record => record.recordIdentity),
-    },
-  };
-}
-
-export function createCharacterAcceptanceCatalog(manifests) {
+export function createCharacterAcceptanceManifestIndex(manifests) {
   const entries = [...manifests]
-    .sort((left, right) => Number(left.owner.ownerId) - Number(right.owner.ownerId))
+    .sort(
+      (left, right) => Number(left.owner.ownerId) - Number(right.owner.ownerId)
+    )
     .map(manifest => ({
       ownerId: Number(manifest.owner.ownerId),
-      ownerName: manifest.owner.ownerName,
-      maturityState: manifest.maturity.currentState,
-      earnedStates: manifest.maturity.earnedStates,
-      optimizationReady: manifest.maturity.optimizationReady,
-      blockers: manifest.maturity.blockers,
-      blockingLedgerCount: manifest.maturity.facts.blockingLedgerCount,
-      matrixRequiredCount: manifest.maturity.facts.matrixRequiredCount,
-      matrixPassedCount: manifest.maturity.facts.matrixPassedCount,
       manifestHash: manifest.manifestHash,
+      qualificationSubjectHash: manifest.qualificationSubjectHash,
+      sourceOfTruthHash: manifest.derivation.sourceOfTruthHash,
+      requirementInventoryHash: manifest.requirementInventory.inventoryHash,
+      scenarioSetHash: manifest.scenarioCases.scenarioSetHash,
       profileHash: manifest.source.profileHash,
-      visualScenarioIds:
-        manifest.evidence.productVisualAcceptance.scenarioIdentities,
+      catalogEntryHash: hashCanonicalValue(
+        createCharacterAcceptanceCatalogEntry(manifest)
+      ),
     }));
+  const value = {
+    schemaVersion: CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION,
+    contractName: CHARACTER_ACCEPTANCE_MANIFEST_INDEX_CONTRACT_NAME,
+    kind: 'azpr-character-acceptance-manifest-index',
+    protocolIdentity: CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY,
+    entries,
+  };
+  return { ...value, indexHash: hashCanonicalValue(value) };
+}
+
+export function createCharacterAcceptanceCatalog(
+  manifests,
+  manifestIndex = createCharacterAcceptanceManifestIndex(manifests)
+) {
+  const entries = [...manifests]
+    .sort(
+      (left, right) => Number(left.owner.ownerId) - Number(right.owner.ownerId)
+    )
+    .map(createCharacterAcceptanceCatalogEntry);
   const value = {
     schemaVersion: 1,
     contractName: 'AzPrCharacterAcceptanceCatalog',
     kind: 'azpr-character-acceptance-catalog',
     protocolIdentity: CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY,
+    manifestIndexHash: manifestIndex.indexHash,
     entries,
     summary: {
       ownerCount: entries.length,
       maturityCounts: countBy(entries, entry => entry.maturityState),
-      optimizationReadyCount: entries.filter(entry => entry.optimizationReady).length,
+      optimizationReadyCount: entries.filter(entry => entry.optimizationReady)
+        .length,
     },
   };
   return { ...value, catalogHash: hashCanonicalValue(value) };
 }
 
+function createCharacterAcceptanceCatalogEntry(manifest) {
+  return {
+    ownerId: Number(manifest.owner.ownerId),
+    ownerName: manifest.owner.ownerName,
+    maturityState: manifest.maturity.currentState,
+    earnedStates: manifest.maturity.earnedStates,
+    optimizationReady: manifest.maturity.optimizationReady,
+    blockers: manifest.maturity.blockers,
+    blockingLedgerCount: manifest.maturity.facts.blockingLedgerCount,
+    matrixRequiredCount: manifest.maturity.facts.matrixRequiredCount,
+    matrixPassedCount: manifest.maturity.facts.matrixPassedCount,
+    manifestHash: manifest.manifestHash,
+    qualificationSubjectHash: manifest.qualificationSubjectHash,
+    sourceOfTruthHash: manifest.derivation.sourceOfTruthHash,
+    profileHash: manifest.source.profileHash,
+    visualScenarioIds:
+      manifest.evidence.productVisualAcceptance.scenarioIdentities,
+  };
+}
 export function validateUnnamedSecondaryPassiveBoundary(
   manifest,
   expectedSkillId
@@ -369,250 +319,432 @@ function toPublicVisualScenarioEvidence(scenario) {
   };
 }
 
-function createProtocolRequirements({ profile, goldens, visualScenario }) {
-  const ownerId = Number(profile.owner?.ownerId);
-  const goldenTexts = goldens.map(({ report }) => JSON.stringify(report.actual ?? {}));
-  const combinedGolden = goldenTexts.join('|');
-  const effectOperations = new Set(
-    goldens.flatMap(({ report }) =>
-      (report.actual?.trace?.effects ?? []).map(effect => effect.operation)
-    )
-  );
-  const allScenarioIds = collectEvidenceScenarioIds(goldens, visualScenario);
-  const critical = visualScenario.criticalMatrix ?? {};
-  const rows = [];
-  const add = (identity, dimension, passed, reasons = []) => {
-    rows.push({
-      requirementIdentity: 'protocol:' + ownerId + ':' + identity,
-      dimension,
-      subjectIdentity: identity,
-      required: true,
-      status: passed ? 'passed' : 'blocked',
-      evidenceScenarioIds: passed ? allScenarioIds : [],
-      sourceIdentities: passed
-        ? [visualScenario.fixturePath, ...goldens.map(golden => golden.path)]
-        : [],
-      reasons: passed ? [] : reasons,
-    });
-  };
-
-  add(
-    'normal-trigger-positive',
-    'scenario-positive',
-    goldens.every(({ report }) => report.validation?.passed === true),
-    ['authoritative-positive-scenario-missing']
-  );
-  add(
-    'condition-insufficient-negative',
-    'scenario-negative',
-    goldens.some(({ report }) =>
-      (report.actual?.actions?.blockedActionIds ?? []).length > 0
-    ),
-    ['insufficient-condition-negative-scenario-missing']
-  );
-  add(
-    'input-window-inside-outside-boundaries',
-    'window-boundary',
-    false,
-    ['exact-window-boundary-scenario-matrix-missing']
-  );
-  add(
-    'resource-exact-and-insufficient',
-    'resource-boundary',
-    /threshold|beforeValue|afterValue|blockedActionIds/.test(combinedGolden),
-    ['resource-boundary-scenario-missing']
-  );
-  add(
-    'buff-apply-refresh-stack-expire',
-    'buff-lifecycle',
-    ['apply', 'expire'].every(operation => effectOperations.has(operation)) &&
-      (effectOperations.has('refresh') || effectOperations.has('stack')),
-    ['complete-buff-lifecycle-scenario-missing']
-  );
-  add(
-    'hit-landed-and-miss',
-    'hit-override',
-    critical.missSuppressesHit === true,
-    ['hit-miss-scenario-missing']
-  );
-  add(
-    'foreground-background-switch',
-    'controlled-actor',
-    combinedGolden.includes('verified-auto-sp-background') &&
-      combinedGolden.includes('verified-auto-sp-foreground') &&
-      combinedGolden.includes('switch'),
-    ['foreground-background-switch-scenario-missing']
-  );
-  add(
-    'save-import-replay',
-    'persistence-replay',
-    visualScenario.workbenchRoundTrip === 'passed' &&
-      visualScenario.stableReplay === true,
-    ['machine-axis-workbench-round-trip-failed']
-  );
-  add(
-    'critical-sampled-same-seed',
-    'critical',
-    critical.sameSeedReplay === true,
-    ['critical-sampled-replay-missing']
-  );
-  add(
-    'critical-integer-threshold-boundary',
-    'critical',
-    critical.integerThresholdBoundary === true,
-    ['critical-integer-threshold-boundary-missing']
-  );
-  add(
-    'critical-per-hit-modes',
-    'critical',
-    critical.perHitModes === true,
-    ['critical-per-hit-mode-matrix-missing']
-  );
-  add(
-    'critical-miss-coexistence',
-    'critical',
-    critical.missSuppressesHit === true,
-    ['critical-miss-coexistence-missing']
-  );
-  add(
-    'critical-expected-no-random-side-effect',
-    'critical',
-    critical.expectedNoCriticalEvent === true,
-    ['critical-expected-side-effect-guard-missing']
-  );
-  add(
-    'critical-rate-zero',
-    'critical',
-    false,
-    ['critical-zero-rate-scenario-missing']
-  );
-  add(
-    'critical-rate-one-hundred-percent',
-    'critical',
-    false,
-    ['critical-full-rate-scenario-missing']
-  );
-  add(
-    'critical-pre-hit-attribute-change',
-    'critical',
-    false,
-    ['critical-pre-hit-attribute-change-scenario-missing']
-  );
-  add(
-    'critical-non-crittable-rejection',
-    'critical',
-    false,
-    ['critical-non-crittable-negative-scenario-missing']
-  );
-  return rows;
+function createProtocolRequirementSources(ownerId) {
+  const sourceIdentity =
+    'protocol:m11-d-character-acceptance-v1:owner:' + ownerId;
+  const definitions = [
+    [
+      'normal-trigger-positive',
+      'scenario-positive',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'normal-trigger-positive',
+        expectedValue: true,
+      },
+      'authoritative-positive-scenario-missing',
+    ],
+    [
+      'condition-insufficient-negative',
+      'scenario-negative',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'condition-insufficient-negative',
+        expectedValue: true,
+      },
+      'insufficient-condition-negative-scenario-missing',
+    ],
+    [
+      'input-window-inside-outside-boundaries',
+      'window-boundary',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'input-window-inside-outside-boundaries',
+        expectedValue: true,
+      },
+      'exact-window-boundary-scenario-matrix-missing',
+    ],
+    [
+      'resource-exact-and-insufficient',
+      'resource-boundary',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'resource-exact-and-insufficient',
+        expectedValue: true,
+      },
+      'resource-boundary-scenario-missing',
+    ],
+    [
+      'buff-apply-refresh-stack-expire',
+      'buff-lifecycle',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'buff-apply-refresh-stack-expire',
+        expectedValue: true,
+      },
+      'complete-buff-lifecycle-scenario-missing',
+    ],
+    [
+      'hit-landed-and-miss',
+      'hit-override',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:missSuppressesHit',
+        expectedValue: true,
+      },
+      'hit-miss-scenario-missing',
+    ],
+    [
+      'foreground-background-switch',
+      'controlled-actor',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'foreground-background-switch',
+        expectedValue: true,
+      },
+      'foreground-background-switch-scenario-missing',
+    ],
+    [
+      'save-import-replay',
+      'persistence-replay',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'workbench-import-export-round-trip',
+        expectedValue: true,
+      },
+      'machine-axis-workbench-round-trip-failed',
+    ],
+    [
+      'critical-sampled-same-seed',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:sameSeedReplay',
+        expectedValue: true,
+      },
+      'critical-sampled-replay-missing',
+    ],
+    [
+      'critical-integer-threshold-boundary',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:integerThresholdBoundary',
+        expectedValue: true,
+      },
+      'critical-integer-threshold-boundary-missing',
+    ],
+    [
+      'critical-per-hit-modes',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:perHitModes',
+        expectedValue: true,
+      },
+      'critical-per-hit-mode-matrix-missing',
+    ],
+    [
+      'critical-miss-coexistence',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:missSuppressesHit',
+        expectedValue: true,
+      },
+      'critical-miss-coexistence-missing',
+    ],
+    [
+      'critical-expected-no-random-side-effect',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:expectedNoCriticalEvent',
+        expectedValue: true,
+      },
+      'critical-expected-side-effect-guard-missing',
+    ],
+    [
+      'critical-rate-zero',
+      'critical',
+      { kind: 'critical-effective-threshold', expectedBasisPoints: 0 },
+      'critical-zero-rate-scenario-missing',
+    ],
+    [
+      'critical-rate-one-hundred-percent',
+      'critical',
+      { kind: 'critical-effective-threshold', expectedBasisPoints: 10000 },
+      'critical-full-rate-scenario-missing',
+    ],
+    [
+      'critical-pre-hit-attribute-change',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:preHitAttributeChange',
+        expectedValue: true,
+      },
+      'critical-pre-hit-attribute-change-scenario-missing',
+    ],
+    [
+      'critical-non-crittable-rejection',
+      'critical',
+      {
+        kind: 'scenario-fact',
+        factIdentity: 'critical:nonCrittableRejection',
+        expectedValue: true,
+      },
+      'critical-non-crittable-negative-scenario-missing',
+    ],
+  ];
+  return definitions.map(([identity, dimension, selector, reason]) => ({
+    requirementIdentity: 'protocol:' + ownerId + ':' + identity,
+    dimension,
+    subjectIdentity: identity,
+    sourceDisposition: 'applied',
+    contractStatus: 'protocol-required',
+    impactClassification: 'gameplay-impacting',
+    coverageSelector: selector,
+    sourceIdentities: [sourceIdentity],
+    reasons: [reason],
+  }));
 }
 
-function collectExecutedForms(goldens, visualScenario) {
-  const keys = new Set();
-  for (const { report } of goldens) {
-    for (const selection of Object.values(
-      report.actual?.actions?.selectionByActionId ?? {}
-    )) {
-      addExecutedForm(keys, selection?.controlSkillId, selection?.subSkillIndex);
-    }
-  }
-  for (const selection of visualScenario.traceProjection?.variantSelections ?? []) {
-    addExecutedForm(keys, selection?.controlSkillId, selection?.subSkillIndex);
-  }
-  return keys;
-}
-
-function addExecutedForm(keys, controlSkillId, subSkillIndex) {
-  const control = Number(controlSkillId);
-  const sub = Number(subSkillIndex);
-  if (Number.isInteger(control) && Number.isInteger(sub)) {
-    keys.add(control + '|' + sub);
-  }
-}
-
-function isRecordCoveredByScenario({
-  record,
-  dimension,
-  executedForms,
-  searchableEvidence,
-  runtimeRows,
-  visualScenario,
-}) {
-  const control = firstInteger(
+function createContractCoverageSelector({ record, dimension, ownerId }) {
+  const controlSkillId = firstInteger(
     record.executionControlSkillId,
     record.controlSkillId,
     record.sourceControlSkillId,
     record.publicControlSkillId
   );
-  const sub = firstInteger(
+  const subSkillIndex = firstInteger(
     record.executionSubSkillIndex,
     record.subSkillIndex,
     record.sourceSubSkillIndex,
     record.selectedSubSkillIndex
   );
-  if (control != null && sub != null && executedForms.has(control + '|' + sub)) {
-    return true;
-  }
   if (
-    control != null &&
-    sub == null &&
-    ['public-action', 'switch-trigger'].includes(dimension) &&
-    [...executedForms].some(identity => identity.startsWith(control + '|'))
+    ['public-action', 'action-form', 'switch-trigger'].includes(dimension) &&
+    controlSkillId != null &&
+    subSkillIndex != null
   ) {
-    return true;
+    return {
+      kind: 'action-form',
+      ownerId,
+      controlSkillId,
+      subSkillIndex,
+    };
+  }
+  if (dimension === 'hit' && record.hitIdentity) {
+    return { kind: 'hit', hitIdentity: String(record.hitIdentity) };
   }
   if (
-    control != null &&
-    (record.trigger?.subSkillIndexes ?? []).some(index =>
-      executedForms.has(control + '|' + Number(index))
+    ['effect', 'action-effect-binding', 'runtime-effect-binding'].includes(
+      dimension
     )
   ) {
-    return true;
+    const effectIdentity = resolveEffectIdentity(record);
+    return effectIdentity ? { kind: 'effect', effectIdentity } : null;
   }
   if (
-    dimension === 'hit' &&
-    visualScenario.traceProjection?.hitIdentities?.includes(record.hitIdentity)
+    ['resource-profile', 'resource-transaction'].includes(dimension) &&
+    record.resourceIdentity
   ) {
-    return true;
+    return {
+      kind: 'resource',
+      resourceIdentity: String(record.resourceIdentity),
+    };
   }
-  if (dimension === 'public-action') {
-    const identity = record.actionIdentity ?? record.publicActionIdentity;
-    const runtimeRow = runtimeRows.find(
-      row =>
-        (identity && row.actionIdentity === identity) ||
-        (record.sourceSkillId != null &&
-          Number(row.sourceSkillId) === Number(record.sourceSkillId))
-    );
-    if (!runtimeRow?.runtimeReady) return false;
+  if (
+    ['target-state-profile', 'target-state-transaction'].includes(dimension) &&
+    record.stateIdentity
+  ) {
+    return { kind: 'state', stateIdentity: String(record.stateIdentity) };
   }
-  return evidenceTokens(record).some(token => searchableEvidence.includes(token));
+  return null;
 }
 
-function evidenceTokens(record) {
-  const elementId = Number(record.elementId);
-  const battleIdentities = [
-    ...(record.battleIdentities ?? []),
-    ...(record.rootBattleIdentities ?? []),
-  ];
-  return uniqueStrings([
-    record.formIdentity,
-    record.actionIdentity,
-    record.publicActionIdentity,
-    record.hitIdentity,
-    record.resourceIdentity,
-    record.transitionIdentity,
-    record.effectId,
-    record.effectIdentity,
-    record.semanticIdentity,
-    record.passiveIdentity,
-    record.profileIdentity,
-    record.groupIdentity,
-    record.stateIdentity,
-    Number.isInteger(elementId) ? String(elementId) : null,
-    Number.isInteger(elementId) ? 'battle-element:' + elementId : null,
-    Number.isInteger(elementId) ? 'tuning-mark:' + elementId : null,
-    ...battleIdentities.map(identity => 'battle-element:' + identity),
-  ]).filter(token => token.length >= 6);
+function createGoldenScenarioCaseSource({ path, report }) {
+  return {
+    scenarioIdentity: report.scenarioIdentity,
+    runnerKind: 'canonical-character-golden',
+    inputReference: {
+      reportPath: path,
+      reportHash: hashCanonicalValue(report),
+      replayCommand:
+        'node scripts/sync-character-combat-profile.mjs --owner ' +
+        Number(report.ownerId) +
+        ' --assert-clean',
+    },
+    execution: {
+      status: report.validation?.passed ? 'passed' : 'failed',
+      stableReplay: Boolean(report.replayHash),
+      workbenchRoundTrip: 'not-applicable',
+      canonicalHashes: {
+        input: report.headlessCore?.inputHash ?? null,
+        data: report.headlessCore?.dataHash ?? null,
+        trace: report.headlessCore?.traceHash ?? null,
+        evaluation: null,
+      },
+    },
+    traceProjection: createGoldenTraceProjection(report),
+    assertionDefinitions: [],
+  };
+}
+
+function createVisualScenarioCaseSource(visualScenario) {
+  return {
+    scenarioIdentity: visualScenario.scenarioIdentity,
+    runnerKind: 'machine-axis',
+    inputReference: {
+      fixturePath: visualScenario.fixturePath,
+      inputHash: visualScenario.canonicalHashes?.input ?? null,
+      replayCommand:
+        'node scripts/machine-axis-cli.mjs simulate --input ' +
+        visualScenario.fixturePath,
+    },
+    execution: {
+      status: visualScenario.status,
+      stableReplay: visualScenario.stableReplay,
+      workbenchRoundTrip: visualScenario.workbenchRoundTrip,
+      canonicalHashes: visualScenario.canonicalHashes,
+    },
+    traceProjection: createVisualTraceProjection(visualScenario),
+    assertionDefinitions: structuredClone(
+      visualScenario.assertionResults ?? []
+    ),
+  };
+}
+
+function createGoldenTraceProjection(report) {
+  const selections = Object.entries(
+    report.actual?.actions?.selectionByActionId ?? {}
+  );
+  const effects = report.actual?.trace?.effects ?? [];
+  const resourceEvents = report.actual?.trace?.specialResources ?? [];
+  const targetStates = report.actual?.trace?.targetStates ?? [];
+  const effectOperations = new Set(
+    effects.map(effect => effect.operation).filter(Boolean)
+  );
+  const actorSpRows = Object.values(
+    report.actual?.resources?.actorSpByActorId ?? {}
+  );
+  const autoRecoveryReasons = new Set(
+    actorSpRows.flatMap(row =>
+      (row.autoRecovery ?? []).map(event => event.reason)
+    )
+  );
+  const hasSwitch = selections.some(([actionId]) =>
+    actionId.startsWith('switch-')
+  );
+  return {
+    actionForms: selections.map(([actionId, selection]) => ({
+      projectionIdentity:
+        'golden-action-form:' + report.scenarioIdentity + ':' + actionId,
+      actionId,
+      ownerId: Number(selection.ownerId),
+      controlSkillId: Number(selection.controlSkillId),
+      subSkillIndex: Number(selection.subSkillIndex),
+      semanticName: selection.semanticName ?? null,
+    })),
+    hits: (report.actual?.trace?.damage ?? [])
+      .filter(event => event.hitIdentity)
+      .map((event, index) => ({
+        projectionIdentity:
+          'golden-hit:' + report.scenarioIdentity + ':' + index,
+        actionId: event.actionId ?? null,
+        hitIdentity: event.hitIdentity,
+        frame: event.frame ?? null,
+      })),
+    effects: effects.map((event, index) => ({
+      projectionIdentity:
+        'golden-effect:' + report.scenarioIdentity + ':' + index,
+      actionId: event.actionId ?? null,
+      effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
+      operation: event.operation ?? null,
+      targetId: event.targetId ?? null,
+    })),
+    resources: resourceEvents.map((event, index) => ({
+      projectionIdentity:
+        'golden-resource:' + report.scenarioIdentity + ':' + index,
+      actionId: event.actionId ?? null,
+      resourceIdentity: event.resourceIdentity ?? null,
+      operation: event.operation ?? null,
+      beforeValue: event.beforeValue ?? null,
+      afterValue: event.afterValue ?? null,
+    })),
+    states: targetStates.map((event, index) => ({
+      projectionIdentity:
+        'golden-state:' + report.scenarioIdentity + ':' + index,
+      actionId: event.actionId ?? null,
+      stateIdentity: event.stateIdentity ?? null,
+      operation: event.operation ?? null,
+      beforeValue: event.beforeValue ?? null,
+      afterValue: event.afterValue ?? null,
+    })),
+    diagnostics: (report.actual?.actions?.blockedActionIds ?? []).map(
+      actionId => ({
+        projectionIdentity:
+          'golden-blocked:' + report.scenarioIdentity + ':' + actionId,
+        actionId,
+        code: 'golden-action-blocked',
+      })
+    ),
+    criticalDecisions: [],
+    facts: {
+      'normal-trigger-positive': report.validation?.passed === true,
+      'condition-insufficient-negative':
+        (report.actual?.actions?.blockedActionIds ?? []).length > 0,
+      'resource-exact-and-insufficient':
+        resourceEvents.length > 0 &&
+        (report.actual?.actions?.blockedActionIds ?? []).length > 0,
+      'buff-apply-refresh-stack-expire':
+        effectOperations.has('apply') &&
+        effectOperations.has('expire') &&
+        (effectOperations.has('refresh') || effectOperations.has('stack')),
+      'foreground-background-switch':
+        hasSwitch &&
+        autoRecoveryReasons.has('verified-auto-sp-background') &&
+        autoRecoveryReasons.has('verified-auto-sp-foreground'),
+    },
+  };
+}
+
+function createVisualTraceProjection(visualScenario) {
+  const projection = visualScenario.traceProjection ?? {};
+  const facts = Object.fromEntries(
+    (visualScenario.assertionResults ?? []).map(assertion => [
+      assertion.assertionIdentity ?? assertion.identity,
+      assertion.status === 'passed' || assertion.passed === true,
+    ])
+  );
+  return {
+    actionForms: structuredClone(
+      projection.actionForms ?? projection.variantSelections ?? []
+    ),
+    hits: structuredClone(
+      projection.hits ??
+        (projection.hitIdentities ?? []).map(hitIdentity => ({ hitIdentity }))
+    ),
+    effects: structuredClone(
+      projection.effects ?? projection.effectOperations ?? []
+    ),
+    resources: structuredClone(
+      projection.resources ?? projection.resourceEvents ?? []
+    ),
+    states: structuredClone(projection.states ?? []),
+    diagnostics: structuredClone(projection.diagnostics ?? []),
+    criticalDecisions: structuredClone(projection.criticalDecisions ?? []),
+    facts: {
+      ...structuredClone(projection.facts ?? {}),
+      ...facts,
+    },
+  };
+}
+
+function resolveEffectIdentity(record) {
+  const value =
+    record.effectId ??
+    record.effectIdentity ??
+    record.runtimeEffectId ??
+    record.elementId ??
+    record.battleIdentity ??
+    null;
+  if (value == null) return null;
+  if (/^battle-element:/.test(String(value))) return String(value);
+  const numeric = Number(value);
+  return Number.isInteger(numeric)
+    ? 'battle-element:' + numeric
+    : String(value);
 }
 
 function flattenContractRecords(value, contractKey) {
@@ -629,12 +761,12 @@ function flattenContractRecords(value, contractKey) {
 function looksLikeContractRecord(value) {
   return Boolean(
     value.applied != null ||
-      value.status ||
-      value.sourceIdentity ||
-      value.formIdentity ||
-      value.hitIdentity ||
-      value.profileIdentity ||
-      value.transitionIdentity
+    value.status ||
+    value.sourceIdentity ||
+    value.formIdentity ||
+    value.hitIdentity ||
+    value.profileIdentity ||
+    value.transitionIdentity
   );
 }
 
@@ -683,21 +815,8 @@ function isNotApplicableRecord(record) {
   );
 }
 
-function normalizeLedgerStatus(record) {
-  const reasons = normalizeReasons(record);
-  if (reasons.some(reason => reason.includes('formula'))) {
-    return 'unknown-formula';
-  }
-  return record.status === 'runtime-evidence-required'
-    ? 'runtime-evidence-required'
-    : 'static-evidence-gap';
-}
-
 function normalizeReasons(record) {
-  return uniqueStrings([
-    ...(record.reasons ?? []),
-    record.reason,
-  ]);
+  return uniqueStrings([...(record.reasons ?? []), record.reason]);
 }
 
 function collectSourceIdentities(record) {
@@ -705,28 +824,6 @@ function collectSourceIdentities(record) {
     ...(record.sourceIdentities ?? []),
     record.sourceIdentity,
   ]);
-}
-
-function collectEvidenceScenarioIds(goldens, visualScenario) {
-  return uniqueStrings([
-    visualScenario.scenarioIdentity,
-    ...goldens.map(({ report }) => report.scenarioIdentity),
-  ]);
-}
-
-function summarizeRequirements(requirements) {
-  const required = requirements.filter(row => row.required);
-  return {
-    requirementCount: requirements.length,
-    requiredCount: required.length,
-    passedCount: required.filter(row => row.status === 'passed').length,
-    blockedCount: required.filter(row => row.status === 'blocked').length,
-    notApplicableCount: requirements.filter(
-      row => row.status === 'not-applicable'
-    ).length,
-    statusCounts: countBy(requirements, row => row.status),
-    dimensionCounts: countBy(requirements, row => row.dimension),
-  };
 }
 
 function firstInteger(...values) {
@@ -744,10 +841,12 @@ function uniqueStrings(values) {
 
 function countBy(rows, selector) {
   return Object.fromEntries(
-    [...rows.reduce((map, row) => {
-      const key = String(selector(row));
-      map.set(key, (map.get(key) ?? 0) + 1);
-      return map;
-    }, new Map())].sort(([left], [right]) => left.localeCompare(right))
+    [
+      ...rows.reduce((map, row) => {
+        const key = String(selector(row));
+        map.set(key, (map.get(key) ?? 0) + 1);
+        return map;
+      }, new Map()),
+    ].sort(([left], [right]) => left.localeCompare(right))
   );
 }

@@ -1,14 +1,15 @@
-# M11-D 角色机制验收协议
+# M11-D-R1 角色机制验收协议
 
-- 基线：308dd07fbbb8fe0759062e9dcc02c65b0fd46115
-- 状态：实现完成，等待产品验收
-- 规则：成熟度完全由 golden、canonical 重放、Workbench 往返、矩阵、ledger 与产品记录推导。
+- 初始基线：308dd07fbbb8fe0759062e9dcc02c65b0fd46115
+- R1 基线：5add67feb2a0ced22453df78d1408312a9e33fdb
+- 状态：可信派生收口完成，等待产品复验
+- 规则：requirement、scenario case、coverage edge、ledger 与成熟度均从 committed source-of-truth 和 canonical replay 派生。
 - 性能、包体和外部 CPU 抖动仅记录，不参与功能资格判定。
 
-| 角色 | 成熟度 | 矩阵通过/必需 | 阻断 ledger | optimization-ready |
-|---|---:|---:|---:|---:|
-| 寒悠悠 (101003) | runtime-integrated | 132/243 | 135 | 否 |
-| 涂山小玉 (101010) | runtime-integrated | 174/407 | 339 | 否 |
-| 红宝石 (103002) | runtime-integrated | 185/709 | 575 | 否 |
+| 角色 | 成熟度 | 矩阵通过/必需 | source gap | acceptance gap | optimization-ready |
+|---|---:|---:|---:|---:|---:|
+| 寒悠悠 (101003) | runtime-integrated | 62/243 | 24 | 140 | 否 |
+| 涂山小玉 (101010) | runtime-integrated | 56/407 | 106 | 203 | 否 |
+| 红宝石 (103002) | runtime-integrated | 36/709 | 51 | 363 | 否 |
 
-三份 Machine Axis 场景均由唯一 canonical core 重放并通过 Workbench 导入/导出；当前产品可视验收记录仍为 pending，且既有 gameplay-impacting 证据缺口继续阻断优化资格。
+三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。

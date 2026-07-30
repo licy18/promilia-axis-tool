@@ -12,6 +12,12 @@
     "owner",
     "source",
     "evidence",
+    "requirementInventory",
+    "sourceGapInventory",
+    "scenarioCases",
+    "coverageContext",
+    "qualificationSubjectHash",
+    "derivation",
     "matrix",
     "coverage",
     "ledger",
@@ -36,10 +42,7 @@
     "owner": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "ownerId",
-        "ownerName"
-      ],
+      "required": ["ownerId", "ownerName"],
       "properties": {
         "ownerId": {
           "type": "integer",
@@ -108,10 +111,7 @@
     },
     "matrix": {
       "type": "object",
-      "required": [
-        "requirements",
-        "summary"
-      ],
+      "required": ["requirements", "summary"],
       "properties": {
         "requirements": {
           "type": "array",
@@ -123,17 +123,14 @@
           "type": "object"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "coverage": {
       "type": "object"
     },
     "ledger": {
       "type": "object",
-      "required": [
-        "records",
-        "summary"
-      ],
+      "required": ["records", "summary"],
       "properties": {
         "records": {
           "type": "array",
@@ -145,7 +142,7 @@
           "type": "object"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "notApplicableRecords": {
       "type": "array",
@@ -162,18 +159,150 @@
     "manifestHash": {
       "type": "string",
       "pattern": "^[0-9a-f]{16}$"
+    },
+    "requirementInventory": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "kind",
+        "records",
+        "summary",
+        "inventoryHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "character-acceptance-requirement-inventory"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "summary": {
+          "type": "object"
+        },
+        "inventoryHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "sourceGapInventory": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "kind",
+        "records",
+        "summary",
+        "inventoryHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "character-acceptance-source-gap-inventory"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "summary": {
+          "type": "object"
+        },
+        "inventoryHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "scenarioCases": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "kind",
+        "records",
+        "summary",
+        "scenarioSetHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "character-acceptance-scenario-case-set"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "summary": {
+          "type": "object"
+        },
+        "scenarioSetHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "coverageContext": {
+      "type": "object",
+      "required": ["denominator", "runtimeCoverageSummary"],
+      "properties": {
+        "denominator": {
+          "type": "object"
+        },
+        "runtimeCoverageSummary": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "qualificationSubjectHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$"
+    },
+    "derivation": {
+      "type": "object",
+      "required": [
+        "status",
+        "inputIncludedDerivedArtifacts",
+        "sourceOfTruthHash"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "derived-artifacts-verified",
+            "provided-derived-artifacts-mismatch"
+          ]
+        },
+        "inputIncludedDerivedArtifacts": {
+          "type": "boolean"
+        },
+        "sourceOfTruthHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "$defs": {
     "hashes": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "input",
-        "data",
-        "trace",
-        "evaluation"
-      ],
+      "required": ["input", "data", "trace", "evaluation"],
       "properties": {
         "input": {
           "type": "string",
@@ -188,10 +317,7 @@
           "pattern": "^[0-9a-f]{16}$"
         },
         "evaluation": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "pattern": "^[0-9a-f]{16}$"
         }
       }
@@ -251,19 +377,13 @@
           "type": "string"
         },
         "status": {
-          "enum": [
-            "passed",
-            "failed"
-          ]
+          "enum": ["passed", "failed"]
         },
         "stableReplay": {
           "type": "boolean"
         },
         "workbenchRoundTrip": {
-          "enum": [
-            "passed",
-            "failed"
-          ]
+          "enum": ["passed", "failed"]
         },
         "canonicalHashes": {
           "$ref": "#/$defs/hashes"
@@ -273,18 +393,10 @@
     },
     "productAcceptance": {
       "type": "object",
-      "required": [
-        "status",
-        "scenarioIdentities",
-        "automatedEvidence"
-      ],
+      "required": ["status", "scenarioIdentities", "automatedEvidence"],
       "properties": {
         "status": {
-          "enum": [
-            "pending",
-            "accepted",
-            "rejected"
-          ]
+          "enum": ["pending", "accepted", "rejected"]
         },
         "scenarioIdentities": {
           "type": "array",
@@ -293,16 +405,10 @@
           }
         },
         "acceptanceCommit": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "recordIdentity": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "automatedEvidence": {
           "type": "array",
@@ -333,7 +439,7 @@
           }
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "requirement": {
       "type": "object",
@@ -361,11 +467,7 @@
           "type": "boolean"
         },
         "status": {
-          "enum": [
-            "passed",
-            "blocked",
-            "not-applicable"
-          ]
+          "enum": ["passed", "blocked", "not-applicable"]
         },
         "evidenceScenarioIds": {
           "type": "array",
@@ -425,12 +527,7 @@
     },
     "notApplicable": {
       "type": "object",
-      "required": [
-        "recordIdentity",
-        "status",
-        "reason",
-        "sourceIdentities"
-      ],
+      "required": ["recordIdentity", "status", "reason", "sourceIdentities"],
       "properties": {
         "recordIdentity": {
           "type": "string"

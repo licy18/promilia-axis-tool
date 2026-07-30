@@ -1,40 +1,39 @@
-# M11-D State
+# M11-D-R1 State
 
 ## Goal
 
-Build the versioned character-mechanics acceptance protocol for owners 101010, 103002, and 101003 on top of the canonical headless core, Machine Axis, and Workbench trace import.
+Make character acceptance maturity, N/A classification, coverage, ledger, and optimizer eligibility reproducibly derived from committed source contracts plus executed canonical scenarios for owners 101010, 103002, and 101003.
 
 ## Baseline
 
-- Git commit: `308dd07fbbb8fe0759062e9dcc02c65b0fd46115`
+- R1 baseline: `5add67feb2a0ced22453df78d1408312a9e33fdb`
 - Worktree: `C:\Codex\AzPr Axis\.worktrees\promilia-m11d`
 - Branch: `feature/m11-d-character-acceptance`
 
 ## Current Status
 
-- Implementation complete; waiting for M11-D product acceptance.
-- Versioned protocol/schema, generator, validator, catalog, and canonical optimizer gate are implemented.
-- Three 120-second Machine Axis fixtures replay deterministically and round-trip through Workbench.
-- Automated Workbench screenshots are linked by scenario identity and SHA-256, but product visual signoff remains pending.
-- All three owners derive `runtime-integrated`; none is `optimization-ready`.
-- Blocking ledgers remain explicit: 101010=339, 103002=575, 101003=135.
+- R1 implementation and self-verification complete; waiting for product revalidation.
+- Requirement inventory, scenario cases, trace projections, coverage edges, source/acceptance gaps, N/A records, maturity, manifest index, and catalog are one deterministic derivation chain.
+- Forged N/A/required/summary/ledger/signoff and rehashed catalog entries are rejected by validator and canonical optimizer gate.
+- All three owners remain honestly `runtime-integrated`; none is `optimization-ready`.
+- Unique blockers: 887 total = 181 source gaps + 706 acceptance scenario gaps. 575 wrapper/N/A source records are nonblocking.
 
 ## Verification
 
-- Focused regression: 6 files / 39 tests passed.
-- Character acceptance drift audit: clean.
-- Six source/data audits: clean.
+- Focused protocol/canonical replay: 4 files / 28 tests passed.
+- Character acceptance generation and assert-clean audit: passed.
+- Character combat, verified combat, production imports, Workbench data, action status, and applied-source audits: clean.
 - Production build: passed.
-- M11-D production visual import: 1/1 passed across all three owners.
-- Default full Vitest: 145/156 files and 947/964 tests passed; all 17 failures were timeout-only under external load, with zero assertion mismatches.
+- M11-D public Workbench import E2E: 1/1 passed.
+- M10 golden/replay inputs were not changed; character/verified audits report zero drift.
 
 ## Decisions
 
-- Automated Workbench import proves replay and visual availability, not product signoff.
-- Existing gameplay-impacting gaps remain blockers; partial profiles cannot enter optimization.
-- Unnamed secondary passives remain auditable N/A records and never block maturity.
-- Performance, bundle size, and external CPU timeout risk are nonblocking; assertion, mechanics, hash, or replay failures remain blocking.
+- Repo-local committed source-of-truth and deterministic regeneration are sufficient; no cryptographic signing or external service.
+- A passed requirement must have an exact edge to a passed assertion in a replayable scenario case.
+- Source evidence gaps and acceptance coverage gaps are counted separately and deduplicated.
+- Performance, bundle size, and external CPU timeout risk remain nonblocking.
 
 ## Stop Boundary
 
-Wait for M11-D product acceptance. Do not start M12, a fourth character, parallel kibo WIP integration, bundle optimization, or UI polish.
+Wait for M11-D-R1 product revalidation. Do not start M12, a fourth character, parallel kibo WIP integration, bundle optimization, or UI polish.

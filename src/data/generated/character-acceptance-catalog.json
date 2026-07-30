@@ -3,6 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
+  "manifestIndexHash": "3014a6d3b477bac7",
   "entries": [
     {
       "ownerId": 101003,
@@ -18,10 +19,12 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 135,
+      "blockingLedgerCount": 164,
       "matrixRequiredCount": 243,
-      "matrixPassedCount": 132,
-      "manifestHash": "f21054a145cbae24",
+      "matrixPassedCount": 62,
+      "manifestHash": "a1fbf88fca1213d2",
+      "qualificationSubjectHash": "c224b6eabd8f3b0b",
+      "sourceOfTruthHash": "bec9e1e1912279b1",
       "profileHash": "de3750d15e71a76864279419f83ce255f71510bda1a90862cb4aff935a204b28",
       "visualScenarioIds": [
         "m11-d-101003-visual-acceptance"
@@ -41,10 +44,12 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 339,
+      "blockingLedgerCount": 309,
       "matrixRequiredCount": 407,
-      "matrixPassedCount": 174,
-      "manifestHash": "7d76b4052c5e5f7c",
+      "matrixPassedCount": 56,
+      "manifestHash": "aabe0f95c8e9aed7",
+      "qualificationSubjectHash": "9c83cafe4af99de5",
+      "sourceOfTruthHash": "6a2259777ca91b12",
       "profileHash": "9ffbddd8b8a560707d9518907f4e9df1d58ffd12cb14c8caea5cff851db21027",
       "visualScenarioIds": [
         "m11-d-101010-visual-acceptance"
@@ -64,10 +69,12 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 575,
+      "blockingLedgerCount": 414,
       "matrixRequiredCount": 709,
-      "matrixPassedCount": 185,
-      "manifestHash": "8b534293b4155d7f",
+      "matrixPassedCount": 36,
+      "manifestHash": "874e967770ca0b19",
+      "qualificationSubjectHash": "5f53cef881161db5",
+      "sourceOfTruthHash": "b47ce43469e7a671",
       "profileHash": "93b39de764d1ff691af12df89932e4f9818d33a419445b96ec68d401777d99e4",
       "visualScenarioIds": [
         "m11-d-103002-visual-acceptance"
@@ -81,5 +88,5 @@
     },
     "optimizationReadyCount": 0
   },
-  "catalogHash": "214f62a2d0ba1fd0"
+  "catalogHash": "642fa473d22d3a13"
 }

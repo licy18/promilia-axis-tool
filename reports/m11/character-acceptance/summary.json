@@ -2,8 +2,27 @@
   "schemaVersion": 1,
   "kind": "m11-d-character-acceptance-protocol-report",
   "baselineCommit": "308dd07fbbb8fe0759062e9dcc02c65b0fd46115",
-  "status": "implementation-complete-awaiting-product-acceptance",
+  "status": "r1-implementation-complete-awaiting-product-acceptance",
   "protocolIdentity": "m11-d-character-acceptance-v1",
+  "r1": {
+    "baseCommit": "5add67feb2a0ced22453df78d1408312a9e33fdb",
+    "status": "implementation-complete-awaiting-product-acceptance",
+    "trustModel": "repo-local-derived-source-of-truth",
+    "derivation": {
+      "requirementInventory": "source-contract-derived",
+      "scenarioCases": "canonical-replay-derived",
+      "coverageEdges": "selector-and-assertion-derived",
+      "ledger": "deduplicated-source-and-acceptance-gaps",
+      "publication": "committed-manifest-index-bound"
+    },
+    "verification": {
+      "focusedVitest": "4 files / 28 tests passed",
+      "characterAcceptanceAudit": "clean",
+      "existingSixAudits": "clean",
+      "productionBuild": "passed",
+      "focusedProductionE2E": "1/1 passed"
+    }
+  },
   "owners": [
     {
       "ownerId": 101003,
@@ -15,16 +34,19 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 135,
+      "blockingLedgerCount": 164,
+      "sourceGapCount": 24,
+      "acceptanceGapCount": 140,
+      "nonBlockingSourceCount": 18,
       "matrix": {
         "requirementCount": 243,
         "requiredCount": 243,
-        "passedCount": 132,
-        "blockedCount": 111,
+        "passedCount": 62,
+        "blockedCount": 181,
         "notApplicableCount": 0,
         "statusCounts": {
-          "blocked": 111,
-          "passed": 132
+          "blocked": 181,
+          "passed": 62
         },
         "dimensionCounts": {
           "action-effect-binding": 11,
@@ -53,7 +75,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "f21054a145cbae24",
+      "manifestHash": "a1fbf88fca1213d2",
+      "sourceOfTruthHash": "bec9e1e1912279b1",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "536c0c644a1f4c71",
@@ -72,16 +95,19 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 339,
+      "blockingLedgerCount": 309,
+      "sourceGapCount": 106,
+      "acceptanceGapCount": 203,
+      "nonBlockingSourceCount": 133,
       "matrix": {
         "requirementCount": 407,
         "requiredCount": 407,
-        "passedCount": 174,
-        "blockedCount": 233,
+        "passedCount": 56,
+        "blockedCount": 351,
         "notApplicableCount": 0,
         "statusCounts": {
-          "blocked": 233,
-          "passed": 174
+          "blocked": 351,
+          "passed": 56
         },
         "dimensionCounts": {
           "action-form": 21,
@@ -109,7 +135,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "7d76b4052c5e5f7c",
+      "manifestHash": "aabe0f95c8e9aed7",
+      "sourceOfTruthHash": "6a2259777ca91b12",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "0e47ad979b3435d3",
@@ -128,16 +155,19 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 575,
+      "blockingLedgerCount": 414,
+      "sourceGapCount": 51,
+      "acceptanceGapCount": 363,
+      "nonBlockingSourceCount": 424,
       "matrix": {
         "requirementCount": 709,
         "requiredCount": 709,
-        "passedCount": 185,
-        "blockedCount": 524,
+        "passedCount": 36,
+        "blockedCount": 673,
         "notApplicableCount": 0,
         "statusCounts": {
-          "blocked": 524,
-          "passed": 185
+          "blocked": 673,
+          "passed": 36
         },
         "dimensionCounts": {
           "action-effect-binding": 3,
@@ -166,7 +196,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "8b534293b4155d7f",
+      "manifestHash": "874e967770ca0b19",
+      "sourceOfTruthHash": "b47ce43469e7a671",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "96eb19e2597cba9a",
@@ -176,7 +207,8 @@
       }
     }
   ],
-  "catalogHash": "214f62a2d0ba1fd0",
+  "catalogHash": "642fa473d22d3a13",
+  "manifestIndexHash": "3014a6d3b477bac7",
   "summary": {
     "ownerCount": 3,
     "runtimeIntegratedCount": 3,
@@ -184,7 +216,10 @@
     "optimizationReadyCount": 0,
     "machineScenarioPassCount": 3,
     "workbenchRoundTripPassCount": 3,
-    "functionalBlockers": 1049,
+    "sourceGapCount": 181,
+    "acceptanceGapCount": 706,
+    "nonBlockingSourceCount": 575,
+    "functionalBlockers": 887,
     "performanceAndBundleRisksBlocking": false
   }
 }

@@ -1,4 +1,1031 @@
 {
+  "schemaVersion": 1,
+  "kind": "character-acceptance-coverage-edge-set",
+  "edges": [
+    {
+      "requirementIdentity": "protocol:103002:foreground-background-switch",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:foreground-background-switch",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "foreground-background-switch",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "40d77802e738a442",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:014939315d4ea017"
+    },
+    {
+      "requirementIdentity": "protocol:103002:hit-landed-and-miss",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "critical:missSuppressesHit",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:missSuppressesHit",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "3c35e1935d9fc8c7",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:03e615c46dc9d16a"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300212|0|10300212",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
+      "selector": {
+        "controlSkillId": 10300212,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "aba006896df201af",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0621f65ceba5ab01"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-resource:machine-resource:m11-d-103002-visual-acceptance:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "f66f29b52c1e5b1f",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0d7a276b2bd5acd2"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
+      "selector": {
+        "controlSkillId": 10300210,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6c1cf072dbf72502",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1bc50f5919d7a3fe"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:3",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "fa6f4db76fc7efc6",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1bf58ced1a6c3fa4"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:6",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "1e1d88b926c24fcb",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1cafc5919f9aa734"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-low",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "5d3928e4f9d8b08c",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:20c3451c4d47c0b6"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:1",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "8aa31bc99dd135d8",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2589ea9b48ba06c6"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-sampled-same-seed",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "critical:sameSeedReplay",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:sameSeedReplay",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "dd94f7da1761129f",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3664d2050c78c687"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|0|10300221",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry",
+      "selector": {
+        "controlSkillId": 10300221,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6c776da9f3bd0b21",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3798e0d7ab10e2f1"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:4",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-4",
+      "selector": {
+        "controlSkillId": 10300202,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "803db38ddf2aa781",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:39f81469f440b388"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:6",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "1e1d88b926c24fcb",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3ce2b255f7aa46a9"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:3",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-3",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 3
+      },
+      "assertionHash": "af8716ca06b8cd93",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3eaefc213bd04839"
+    },
+    {
+      "requirementIdentity": "protocol:103002:hit-landed-and-miss",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:missSuppressesHit",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "7843eb41a7032eaa",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3f70b3f7c8f3b248"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-critical",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "94262839b085ab54",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3f8e644b684f1eb4"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:7",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "822e7fe9d32af858",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:47df42961642a703"
+    },
+    {
+      "requirementIdentity": "protocol:103002:resource-exact-and-insufficient",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:resource-exact-and-insufficient",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "resource-exact-and-insufficient",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "2e3cbdabad081057",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:482744c6596bbaee"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-integer-threshold-boundary",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "critical:integerThresholdBoundary",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:integerThresholdBoundary",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "79dcc2399ce52a22",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:48715d7a5b2dd464"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:1",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-post-ultimate-shot",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "333d569fb458dc0f",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4af90ddb60ead608"
+    },
+    {
+      "requirementIdentity": "protocol:103002:save-import-replay",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "1ebb23438e769331",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4c4cc885182218a5"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300213|0|10300213:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
+      "selector": {
+        "controlSkillId": 10300213,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "be848496354693c9",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4d552dbb0dadb85e"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
+      "selector": {
+        "controlSkillId": 10300210,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6c1cf072dbf72502",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:52c03040b024b87e"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:10",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "a3ee817b9cfec2c8",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:564b19de1d16796f"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a1",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "d2c86e264530ff45",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5b42209fea1031f8"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-miss-critical",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "898c0484a62587bd",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:63c5854f649bd86c"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-per-hit-modes",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "critical:perHitModes",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:perHitModes",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "f484e3a91cd8fefb",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:67569d4144c7fd1f"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:1",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "8aa31bc99dd135d8",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6be38f9a03a05d63"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:4",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "1c7e430cb334a135",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7671935085581459"
+    },
+    {
+      "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|21|2",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:10",
+      "selector": {
+        "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+        "kind": "hit"
+      },
+      "assertionHash": "232377e41385d649",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7b818f5216d320c7"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-integer-threshold-boundary",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:critical:integerThresholdBoundary",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:integerThresholdBoundary",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "4cecf6c5644b328f",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:80139c90797bc624"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:2",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "cd6e3ed0f3fe1c47",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:82d6afc90b0a2b1e"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-miss-coexistence",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "critical:missSuppressesHit",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:missSuppressesHit",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "3c35e1935d9fc8c7",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9680fad4afd6ca2a"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:3",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3",
+      "selector": {
+        "controlSkillId": 10300203,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "fe954dc281c4a9cd",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9813dfa95a7e4f7a"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:2",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a2",
+      "selector": {
+        "controlSkillId": 10300202,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "c377c98adf71b387",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:98167c86442788a7"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-non-critical",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6bb13127d18b25c6",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:98c132e51875e999"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3",
+      "selector": {
+        "controlSkillId": 10300203,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "fe954dc281c4a9cd",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9b770033c3383747"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:9",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "4e0ca9761fbfa162",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9dcc40d1e1a1dd04"
+    },
+    {
+      "requirementIdentity": "protocol:103002:save-import-replay",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "58a76707b981af64",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9e7dfd0fa0002942"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-sampled-same-seed",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:critical:sameSeedReplay",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:sameSeedReplay",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "ed42b1efb79e6d7e",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a1fd768605b797a4"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:4",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "1c7e430cb334a135",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a65ab13c69365f24"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-expected-no-random-side-effect",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "critical:expectedNoCriticalEvent",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:expectedNoCriticalEvent",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "0ae5ba891416f049",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a6ae368b20c4785a"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:2",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "cd6e3ed0f3fe1c47",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a75ac46e2332718b"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:6",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-6",
+      "selector": {
+        "controlSkillId": 10300202,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 3
+      },
+      "assertionHash": "2a5bb1168714936d",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a7b5aa337246d1c8"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:7",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "822e7fe9d32af858",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a8ae1e02a946c78a"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "76e53e8f07e496b9",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a97df50e4ca9a0cf"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|1|10300225",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
+      "selector": {
+        "controlSkillId": 10300225,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "b475d58d093fd557",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ad244722fa67a5f7"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300213|0|10300213",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
+      "selector": {
+        "controlSkillId": 10300213,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "be848496354693c9",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b3e61f5d73364eaa"
+    },
+    {
+      "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|26|3",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:11",
+      "selector": {
+        "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+        "kind": "hit"
+      },
+      "assertionHash": "567e415d3de7af41",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b4cd90fa3c16ca67"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-miss-coexistence",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:missSuppressesHit",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "7843eb41a7032eaa",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b9d67e3f9bf279c0"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:1",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-1",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "00e0798cf7b3761f",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ba011a499c712f87"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-boundary",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "926d8a1b8917f036",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bb7d6a9eb0f8d07f"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300221|0|10300221:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry",
+      "selector": {
+        "controlSkillId": 10300221,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6c776da9f3bd0b21",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bce3508b103b8455"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:8",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "eed7d5ff83cd0aad",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c159bfc12f1b14c2"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:2",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-2",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 2
+      },
+      "assertionHash": "6cd3f4394374b5d7",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c53c3b1e5a9c9bce"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:5",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-5",
+      "selector": {
+        "controlSkillId": 10300202,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 2
+      },
+      "assertionHash": "6990e1c4d15f472f",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c53dddf14581a8fd"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:10",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "a3ee817b9cfec2c8",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c9f575cacee9d5ce"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:3",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "fa6f4db76fc7efc6",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ce01633c307a8125"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-per-hit-modes",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:critical:perHitModes",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:perHitModes",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "738c235f9d2b11ce",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ce75805423ea4c8f"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "76e53e8f07e496b9",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cfab3f82c0337ada"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-e1",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "4782be8764ba071a",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cfe1fb73612b1339"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:5",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "8e7ec751b35fcbbc",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d2589bbc9f003b2e"
+    },
+    {
+      "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|17|1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:9",
+      "selector": {
+        "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+        "kind": "hit"
+      },
+      "assertionHash": "8007eabc93fd199d",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d2af3c2a79d879d7"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-resource:machine-resource:m11-d-103002-visual-acceptance:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "f66f29b52c1e5b1f",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d6677e4d0831246d"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300212|0|10300212:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
+      "selector": {
+        "controlSkillId": 10300212,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "aba006896df201af",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d8cbb2540045a569"
+    },
+    {
+      "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-expected",
+      "selector": {
+        "controlSkillId": 10300201,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "007c005d8478f611",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d993432bedd95323"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:8",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "eed7d5ff83cd0aad",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ea21d1cc9b553e8b"
+    },
+    {
+      "requirementIdentity": "protocol:103002:critical-expected-no-random-side-effect",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "scenario-fact:critical:expectedNoCriticalEvent",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "critical:expectedNoCriticalEvent",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "da63209df112da08",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:eba7c970dcd7a6ef"
+    },
+    {
+      "requirementIdentity": "protocol:103002:condition-insufficient-negative",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:condition-insufficient-negative",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "condition-insufficient-negative",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "8dcbd8bfae14e266",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ee0c5dae160d6f38"
+    },
+    {
+      "requirementIdentity": "protocol:103002:normal-trigger-positive",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:normal-trigger-positive",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "normal-trigger-positive",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "21786c93092c79ff",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ee74de82382cda05"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300221|1|10300225:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
+      "selector": {
+        "controlSkillId": 10300225,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "b475d58d093fd557",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ef76c3d7c4f63cb7"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:9",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "4e0ca9761fbfa162",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f9a9410d51860785"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:5",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:103002:element:103002047"
+      },
+      "assertionHash": "8e7ec751b35fcbbc",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:fbc375621663a0cf"
+    }
+  ],
   "denominator": {
     "publicActionCount": 10,
     "reachableControlCount": 27,
@@ -31,157 +1058,13 @@
       "static-evidence-gap": 7
     }
   },
-  "dimensions": {
-    "action-effect-binding": {
-      "total": 3,
-      "passed": 3,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "action-form": {
-      "total": 24,
-      "passed": 14,
-      "blocked": 10,
-      "notApplicable": 0
-    },
-    "attack-input-chain": {
-      "total": 2,
-      "passed": 0,
-      "blocked": 2,
-      "notApplicable": 0
-    },
-    "control-window": {
-      "total": 159,
-      "passed": 57,
-      "blocked": 102,
-      "notApplicable": 0
-    },
-    "effect": {
-      "total": 59,
-      "passed": 2,
-      "blocked": 57,
-      "notApplicable": 0
-    },
-    "hit": {
-      "total": 124,
-      "passed": 58,
-      "blocked": 66,
-      "notApplicable": 0
-    },
-    "input-timing": {
-      "total": 1,
-      "passed": 0,
-      "blocked": 1,
-      "notApplicable": 0
-    },
-    "passive": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "public-action": {
-      "total": 10,
-      "passed": 6,
-      "blocked": 4,
-      "notApplicable": 0
-    },
-    "resource-profile": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "resource-transaction": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "stat-dependency": {
-      "total": 1,
-      "passed": 0,
-      "blocked": 1,
-      "notApplicable": 0
-    },
-    "switch-trigger": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "variant-edge": {
-      "total": 301,
-      "passed": 26,
-      "blocked": 275,
-      "notApplicable": 0
-    },
-    "variant-window": {
-      "total": 4,
-      "passed": 4,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "buff-lifecycle": {
-      "total": 1,
-      "passed": 0,
-      "blocked": 1,
-      "notApplicable": 0
-    },
-    "scenario-negative": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "critical": {
-      "total": 9,
-      "passed": 5,
-      "blocked": 4,
-      "notApplicable": 0
-    },
-    "controlled-actor": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "hit-override": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "window-boundary": {
-      "total": 1,
-      "passed": 0,
-      "blocked": 1,
-      "notApplicable": 0
-    },
-    "scenario-positive": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "resource-boundary": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
-    },
-    "persistence-replay": {
-      "total": 1,
-      "passed": 1,
-      "blocked": 0,
-      "notApplicable": 0
+  "summary": {
+    "edgeCount": 73,
+    "coveredRequirementCount": 36,
+    "scenarioCounts": {
+      "m10-b1:103002:120s-three-actor-golden": 43,
+      "m11-d-103002-visual-acceptance": 30
     }
   },
-  "unnamedSecondaryPassive": {
-    "reason": "unnamed-secondary-passive-not-implemented-current-client",
-    "recordCount": 1,
-    "records": [
-      "not-applicable:semantic-gap:f99d6438e13c8329c688"
-    ]
-  }
+  "coverageHash": "93862d5369d9c5a8"
 }

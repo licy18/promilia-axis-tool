@@ -1,6 +1,10 @@
 import generatedCharacterAcceptanceCatalog from '../data/generated/character-acceptance-catalog.json';
+import generatedManifestIndex from '../data/generated/character-acceptance-manifest-index.json';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
-import { CharacterAcceptanceError } from './characterAcceptanceProtocol.js';
+import {
+  CharacterAcceptanceError,
+  validateCharacterAcceptanceManifestIndex,
+} from './characterAcceptanceProtocol.js';
 
 export const CHARACTER_ACCEPTANCE_CATALOG_SCHEMA_VERSION = 1;
 export const CHARACTER_ACCEPTANCE_CATALOG_CONTRACT_NAME =
@@ -46,7 +50,10 @@ export function assertCharacterIsOptimizationReady(ownerId) {
   return entry;
 }
 
-export function validateCharacterAcceptanceCatalog(catalog) {
+export function validateCharacterAcceptanceCatalog(
+  catalog,
+  { publishedManifestIndex = generatedManifestIndex } = {}
+) {
   const issues = [];
   if (catalog?.schemaVersion !== CHARACTER_ACCEPTANCE_CATALOG_SCHEMA_VERSION) {
     issues.push('character-acceptance-catalog-schema-version-invalid');
@@ -56,6 +63,15 @@ export function validateCharacterAcceptanceCatalog(catalog) {
   }
   if (!Array.isArray(catalog?.entries)) {
     issues.push('character-acceptance-catalog-entries-required');
+  }
+  const indexValidation = validateCharacterAcceptanceManifestIndex(
+    publishedManifestIndex
+  );
+  for (const issue of indexValidation.issues) {
+    issues.push('character-acceptance-catalog-manifest-index-invalid:' + issue);
+  }
+  if (catalog?.manifestIndexHash !== publishedManifestIndex?.indexHash) {
+    issues.push('character-acceptance-catalog-manifest-index-hash-mismatch');
   }
   const ownerIds = new Set();
   for (const entry of catalog?.entries ?? []) {
@@ -70,6 +86,31 @@ export function validateCharacterAcceptanceCatalog(catalog) {
     ) {
       issues.push(
         `character-acceptance-catalog-ready-state-invalid:${ownerId}`
+      );
+    }
+    const publishedEntry = (publishedManifestIndex?.entries ?? []).find(
+      candidate => Number(candidate?.ownerId) === ownerId
+    );
+    if (
+      !publishedEntry ||
+      publishedEntry.manifestHash !== entry?.manifestHash ||
+      publishedEntry.qualificationSubjectHash !==
+        entry?.qualificationSubjectHash ||
+      publishedEntry.sourceOfTruthHash !== entry?.sourceOfTruthHash ||
+      publishedEntry.profileHash !== entry?.profileHash ||
+      publishedEntry.catalogEntryHash !== hashCanonicalValue(entry)
+    ) {
+      issues.push(
+        `character-acceptance-catalog-manifest-index-mismatch:${ownerId}`
+      );
+    }
+  }
+  for (const publishedEntry of publishedManifestIndex?.entries ?? []) {
+    if (!ownerIds.has(Number(publishedEntry?.ownerId))) {
+      issues.push(
+        `character-acceptance-catalog-owner-missing:${Number(
+          publishedEntry?.ownerId
+        )}`
       );
     }
   }

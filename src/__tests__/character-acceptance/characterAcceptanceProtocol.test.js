@@ -1,8 +1,10 @@
 import {
   UNNAMED_SECONDARY_PASSIVE_REASON,
+  assertCharacterOptimizationReady,
   finalizeCharacterAcceptanceManifest,
   validateCharacterAcceptanceManifest,
 } from '../../character-acceptance/characterAcceptanceProtocol';
+import xiaoyuManifest from '../../../reports/m11/character-acceptance/101010/manifest.json';
 
 function createManifestInput({
   productVisualStatus = 'accepted',
@@ -13,7 +15,8 @@ function createManifestInput({
   ledger = [],
   profileValid = true,
 } = {}) {
-  return {
+  const scenarioIdentity = 'synthetic-scenario';
+  const input = {
     schemaVersion: 1,
     contractName: 'AzPrCharacterAcceptanceProtocol',
     kind: 'azpr-character-acceptance-manifest',
@@ -46,7 +49,7 @@ function createManifestInput({
       ],
       machineScenarios: [
         {
-          scenarioIdentity: 'synthetic-scenario',
+          scenarioIdentity,
           fixturePath: 'fixtures/synthetic.json',
           status: scenarioStatus,
           stableReplay,
@@ -60,17 +63,16 @@ function createManifestInput({
         },
       ],
       productVisualAcceptance: {
-        status: productVisualStatus,
-        scenarioIdentities: ['synthetic-scenario'],
+        status: 'pending',
+        scenarioIdentities: [scenarioIdentity],
         acceptanceCommit:
-          productVisualStatus === 'accepted' ? 'synthetic-commit' : null,
-        recordIdentity:
-          productVisualStatus === 'accepted'
-            ? 'synthetic-product-acceptance'
-            : null,
+          productVisualStatus === 'accepted' ? 'a'.repeat(40) : null,
+        recordIdentity: null,
+        qualificationSubjectHash: null,
+        scenarioSetHash: null,
         automatedEvidence: [
           {
-            scenarioIdentity: 'synthetic-scenario',
+            scenarioIdentity,
             status: 'automated-workbench-import-passed',
             screenshotPath: 'reports/synthetic.png',
             screenshotSha256: '0'.repeat(64),
@@ -78,39 +80,99 @@ function createManifestInput({
         ],
       },
     },
-    matrix: {
-      requirements: [
+    requirementInventory: {
+      records: [
         {
           requirementIdentity: 'synthetic:required',
           dimension: 'action-form',
           subjectIdentity: 'synthetic-form',
-          required: true,
-          status: matrixStatus,
-          evidenceScenarioIds:
-            matrixStatus === 'passed' ? ['synthetic-scenario'] : [],
+          sourceDisposition: 'applied',
+          contractStatus: 'applied',
+          impactClassification: 'gameplay-impacting',
+          coverageSelector: {
+            kind: 'action-form',
+            ownerId: 999001,
+            controlSkillId: 99900101,
+            subSkillIndex: 0,
+          },
           sourceIdentities: ['synthetic-source'],
-          reasons:
-            matrixStatus === 'passed' ? [] : ['synthetic-gap'],
+          reasons: [],
         },
       ],
-      summary: {},
     },
-    coverage: {},
-    ledger: { records: ledger, summary: {} },
-    notApplicableRecords: [],
-    maturity: {
-      currentState: 'optimization-ready',
-      earnedStates: ['optimization-ready'],
-      optimizationReady: true,
+    sourceGapInventory: {
+      records: ledger.map(record => ({
+        ...record,
+        impactClassification: 'gameplay-impacting',
+      })),
+    },
+    scenarioCases: {
+      records: [
+        {
+          scenarioIdentity,
+          runnerKind: 'machine-axis',
+          inputReference: {
+            fixturePath: 'fixtures/synthetic.json',
+            inputHash: '0000000000000001',
+          },
+          execution: {
+            status: scenarioStatus,
+            stableReplay,
+            workbenchRoundTrip,
+            canonicalHashes: {
+              input: '0000000000000001',
+              data: '0000000000000002',
+              trace: '0000000000000003',
+              evaluation: '0000000000000004',
+            },
+          },
+          traceProjection: {
+            actionForms:
+              matrixStatus === 'passed'
+                ? [
+                    {
+                      projectionIdentity: 'synthetic-action-form',
+                      actionId: 'synthetic-action',
+                      ownerId: 999001,
+                      controlSkillId: 99900101,
+                      subSkillIndex: 0,
+                    },
+                  ]
+                : [],
+            hits: [],
+            effects: [],
+            resources: [],
+            states: [],
+            diagnostics: [],
+            criticalDecisions: [],
+            facts: {},
+          },
+        },
+      ],
+    },
+    coverageContext: {
+      denominator: {},
+      runtimeCoverageSummary: {},
     },
   };
+  if (productVisualStatus !== 'accepted') return input;
+
+  const preview = finalizeCharacterAcceptanceManifest(input);
+  const binding = preview.evidence.productVisualAcceptance.bindingExpectation;
+  input.evidence.productVisualAcceptance = {
+    ...input.evidence.productVisualAcceptance,
+    status: 'accepted',
+    scenarioIdentities: binding.scenarioIdentities,
+    recordIdentity: binding.recordIdentity,
+    qualificationSubjectHash: binding.qualificationSubjectHash,
+    scenarioSetHash: binding.scenarioSetHash,
+  };
+  return input;
 }
 
 describe('character acceptance protocol', () => {
   it('derives optimization-ready only from fully reproducible facts', () => {
-    const manifest = finalizeCharacterAcceptanceManifest(
-      createManifestInput()
-    );
+    const manifest = finalizeCharacterAcceptanceManifest(createManifestInput());
 
     expect(manifest.maturity).toMatchObject({
       currentState: 'optimization-ready',
@@ -123,7 +185,9 @@ describe('character acceptance protocol', () => {
       optimizationReady: true,
       blockers: [],
     });
-    expect(validateCharacterAcceptanceManifest(manifest)).toMatchObject({
+    expect(
+      validateCharacterAcceptanceManifest(manifest, { checkPublication: false })
+    ).toMatchObject({
       valid: true,
       issues: [],
     });
@@ -173,12 +237,12 @@ describe('character acceptance protocol', () => {
   });
 
   it('rejects hand-authored maturity and unnamed-passive leakage into the blocking ledger', () => {
-    const manifest = finalizeCharacterAcceptanceManifest(
-      createManifestInput()
-    );
+    const manifest = finalizeCharacterAcceptanceManifest(createManifestInput());
     manifest.maturity.currentState = 'extracted';
     manifest.maturity.optimizationReady = false;
-    const tampered = validateCharacterAcceptanceManifest(manifest);
+    const tampered = validateCharacterAcceptanceManifest(manifest, {
+      checkPublication: false,
+    });
     expect(tampered.valid).toBe(false);
     expect(tampered.issues).toContain(
       'character-acceptance-maturity-not-derived'
@@ -200,8 +264,18 @@ describe('character acceptance protocol', () => {
         ],
       })
     );
-    expect(passiveLeak.validation.issues).toContain(
-      'character-acceptance-unnamed-passive-must-be-not-applicable:unnamed-passive-leak'
+    expect(passiveLeak.ledger.records).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ reason: UNNAMED_SECONDARY_PASSIVE_REASON }),
+      ])
+    );
+    expect(passiveLeak.notApplicableRecords).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          status: 'not-applicable',
+          reason: UNNAMED_SECONDARY_PASSIVE_REASON,
+        }),
+      ])
     );
 
     const visualGapInput = createManifestInput();
@@ -209,6 +283,58 @@ describe('character acceptance protocol', () => {
     const visualGap = finalizeCharacterAcceptanceManifest(visualGapInput);
     expect(visualGap.validation.issues).toContain(
       'character-acceptance-visual-evidence-missing:synthetic-scenario'
+    );
+  });
+
+  it('rejects N/A, empty-ledger, and fake-signoff qualification forged from a committed manifest', () => {
+    const forgedInput = structuredClone(xiaoyuManifest);
+    for (const requirement of forgedInput.matrix.requirements) {
+      if (!requirement.required) continue;
+      requirement.status = 'not-applicable';
+      requirement.required = false;
+      requirement.evidenceScenarioIds = [];
+      requirement.reasons = ['forged-not-applicable'];
+    }
+    forgedInput.matrix.summary = {
+      requirementCount: forgedInput.matrix.requirements.length,
+      requiredCount: 0,
+      passedCount: 0,
+      blockedCount: 0,
+      notApplicableCount: forgedInput.matrix.requirements.length,
+      statusCounts: {
+        'not-applicable': forgedInput.matrix.requirements.length,
+      },
+      dimensionCounts: {},
+    };
+    forgedInput.ledger = {
+      records: [],
+      summary: {
+        recordCount: 0,
+        statusCounts: {},
+        reasonCounts: {},
+      },
+    };
+    forgedInput.evidence.productVisualAcceptance = {
+      ...forgedInput.evidence.productVisualAcceptance,
+      status: 'accepted',
+      acceptanceCommit: 'fake',
+      recordIdentity: 'fake',
+    };
+
+    const forged = finalizeCharacterAcceptanceManifest(forgedInput);
+    const validation = validateCharacterAcceptanceManifest(forged);
+
+    expect(forged.maturity.optimizationReady).toBe(false);
+    expect(validation.valid).toBe(false);
+    expect(validation.issues).toEqual(
+      expect.arrayContaining([
+        'character-acceptance-derived-artifacts-mismatch',
+        'character-acceptance-product-record-binding-invalid',
+        'character-acceptance-publication-index-mismatch',
+      ])
+    );
+    expect(() => assertCharacterOptimizationReady(forged)).toThrow(
+      'character-acceptance-manifest-invalid'
     );
   });
 });

@@ -1,0 +1,2547 @@
+{
+  "schemaVersion": 1,
+  "kind": "character-acceptance-scenario-case-set",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "runnerKind": "canonical-character-golden",
+      "inputReference": {
+        "reportPath": "reports/m10/103002/golden-trace.json",
+        "reportHash": "7a160dc283351886",
+        "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 103002 --assert-clean"
+      },
+      "execution": {
+        "status": "passed",
+        "stableReplay": true,
+        "workbenchRoundTrip": "not-applicable",
+        "canonicalHashes": {
+          "input": "b76350f58ed5d7dd",
+          "data": "1cbe890a97bd40fd",
+          "trace": "5232fd0950d6a5ed",
+          "evaluation": null
+        }
+      },
+      "traceProjection": {
+        "actionForms": [
+          {
+            "actionId": "fire-kibo-signature",
+            "ownerId": 103002,
+            "controlSkillId": 50003901,
+            "subSkillIndex": 0,
+            "semanticName": "炎灼角羊事件",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:fire-kibo-signature"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-1",
+            "ownerId": 103002,
+            "controlSkillId": 10300201,
+            "subSkillIndex": 1,
+            "semanticName": "强化普攻 E1",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-1"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-2",
+            "ownerId": 103002,
+            "controlSkillId": 10300201,
+            "subSkillIndex": 2,
+            "semanticName": "强化普攻 E2",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-2"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-3",
+            "ownerId": 103002,
+            "controlSkillId": 10300201,
+            "subSkillIndex": 3,
+            "semanticName": "强化普攻 E3",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-3"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-4",
+            "ownerId": 103002,
+            "controlSkillId": 10300202,
+            "subSkillIndex": 1,
+            "semanticName": "强化普攻 E4",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-4"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-5",
+            "ownerId": 103002,
+            "controlSkillId": 10300202,
+            "subSkillIndex": 2,
+            "semanticName": "强化普攻 E5",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-5"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-6",
+            "ownerId": 103002,
+            "controlSkillId": 10300202,
+            "subSkillIndex": 3,
+            "semanticName": "强化普攻 E6",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-6"
+          },
+          {
+            "actionId": "ruby-limit-counter",
+            "ownerId": 103002,
+            "controlSkillId": 10300225,
+            "subSkillIndex": 0,
+            "semanticName": "极限反击",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter"
+          },
+          {
+            "actionId": "ruby-post-ultimate-shot",
+            "ownerId": 103002,
+            "controlSkillId": 10300201,
+            "subSkillIndex": 1,
+            "semanticName": "强化普攻 E1",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-post-ultimate-shot"
+          },
+          {
+            "actionId": "ruby-reload",
+            "ownerId": 103002,
+            "controlSkillId": 10300210,
+            "subSkillIndex": 0,
+            "semanticName": "重击",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload"
+          },
+          {
+            "actionId": "ruby-star-skill",
+            "ownerId": 103002,
+            "controlSkillId": 10300212,
+            "subSkillIndex": 0,
+            "semanticName": "星鸣技",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill"
+          },
+          {
+            "actionId": "ruby-ultimate",
+            "ownerId": 103002,
+            "controlSkillId": 10300213,
+            "subSkillIndex": 0,
+            "semanticName": "星决技",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate"
+          },
+          {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "ownerId": 103002,
+            "controlSkillId": 10300221,
+            "subSkillIndex": 0,
+            "semanticName": "一瞬的灼热",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "ownerId": 101010,
+            "controlSkillId": 10101021,
+            "subSkillIndex": 0,
+            "semanticName": "星携技",
+            "projectionIdentity": "golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-to-xiaoyu--on-enter--actor-101010--star-carry"
+          }
+        ],
+        "hits": [],
+        "effects": [
+          {
+            "actionId": "ruby-enhanced-shot-1",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:0"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-2",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:1"
+          },
+          {
+            "actionId": "ruby-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "remove",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:10"
+          },
+          {
+            "actionId": "ruby-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "remove",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:11"
+          },
+          {
+            "actionId": "ruby-post-ultimate-shot",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:12"
+          },
+          {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:13"
+          },
+          {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:14"
+          },
+          {
+            "actionId": "ruby-post-ultimate-shot",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "expire",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:15"
+          },
+          {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:16"
+          },
+          {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:17"
+          },
+          {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "operation": "expire",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:18"
+          },
+          {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "operation": "expire",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:19"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-3",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:2"
+          },
+          {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "remove",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:20"
+          },
+          {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "remove",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:21"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-4",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:3"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-5",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:4"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-6",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:5"
+          },
+          {
+            "actionId": "ruby-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:6"
+          },
+          {
+            "actionId": "ruby-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:7"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-6",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "expire",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:8"
+          },
+          {
+            "actionId": "ruby-ultimate",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "golden-effect:m10-b1:103002:120s-three-actor-golden:9"
+          }
+        ],
+        "resources": [
+          {
+            "actionId": "ruby-reload",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "gain",
+            "beforeValue": 0,
+            "afterValue": 6,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:0"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-1",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 6,
+            "afterValue": 5,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:1"
+          },
+          {
+            "actionId": "ruby-limit-counter",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "gain",
+            "beforeValue": 11,
+            "afterValue": 12,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:10"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-2",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 5,
+            "afterValue": 4,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:2"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-3",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 4,
+            "afterValue": 3,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:3"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-4",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 3,
+            "afterValue": 2,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:4"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-5",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 2,
+            "afterValue": 1,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:5"
+          },
+          {
+            "actionId": "ruby-enhanced-shot-6",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 1,
+            "afterValue": 0,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:6"
+          },
+          {
+            "actionId": "ruby-star-skill",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "set-to-capacity",
+            "beforeValue": 0,
+            "afterValue": 12,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:7"
+          },
+          {
+            "actionId": "ruby-ultimate",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "set-to-capacity",
+            "beforeValue": 12,
+            "afterValue": 12,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:8"
+          },
+          {
+            "actionId": "ruby-post-ultimate-shot",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 12,
+            "afterValue": 11,
+            "projectionIdentity": "golden-resource:m10-b1:103002:120s-three-actor-golden:9"
+          }
+        ],
+        "states": [],
+        "diagnostics": [
+          {
+            "actionId": "ruby-insufficient-shot",
+            "code": "golden-action-blocked",
+            "projectionIdentity": "golden-blocked:m10-b1:103002:120s-three-actor-golden:ruby-insufficient-shot"
+          }
+        ],
+        "criticalDecisions": [],
+        "facts": {
+          "buff-apply-refresh-stack-expire": false,
+          "condition-insufficient-negative": true,
+          "foreground-background-switch": true,
+          "normal-trigger-positive": true,
+          "resource-exact-and-insufficient": true
+        }
+      },
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "assertions": [
+        {
+          "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "buff-apply-refresh-stack-expire",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "blocked",
+          "actualProjectionIdentities": [],
+          "reasons": [
+            "scenario-assertion-not-satisfied"
+          ],
+          "assertionHash": "45e239727ee1b097"
+        },
+        {
+          "assertionIdentity": "scenario-fact:condition-insufficient-negative",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "condition-insufficient-negative",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:condition-insufficient-negative"
+          ],
+          "reasons": [],
+          "assertionHash": "8dcbd8bfae14e266"
+        },
+        {
+          "assertionIdentity": "scenario-fact:foreground-background-switch",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "foreground-background-switch",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:foreground-background-switch"
+          ],
+          "reasons": [],
+          "assertionHash": "40d77802e738a442"
+        },
+        {
+          "assertionIdentity": "scenario-fact:normal-trigger-positive",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "normal-trigger-positive",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:normal-trigger-positive"
+          ],
+          "reasons": [],
+          "assertionHash": "21786c93092c79ff"
+        },
+        {
+          "assertionIdentity": "scenario-fact:resource-exact-and-insufficient",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "resource-exact-and-insufficient",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:resource-exact-and-insufficient"
+          ],
+          "reasons": [],
+          "assertionHash": "2e3cbdabad081057"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:fire-kibo-signature",
+          "selector": {
+            "actionId": "fire-kibo-signature",
+            "controlSkillId": 50003901,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:fire-kibo-signature"
+          ],
+          "reasons": [],
+          "assertionHash": "d5eb447b3f4eebc2"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-1",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-1",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 1
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-1"
+          ],
+          "reasons": [],
+          "assertionHash": "00e0798cf7b3761f"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-2",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-2",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 2
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-2"
+          ],
+          "reasons": [],
+          "assertionHash": "6cd3f4394374b5d7"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-3",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-3",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 3
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-3"
+          ],
+          "reasons": [],
+          "assertionHash": "af8716ca06b8cd93"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-4",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-4",
+            "controlSkillId": 10300202,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 1
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-4"
+          ],
+          "reasons": [],
+          "assertionHash": "803db38ddf2aa781"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-5",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-5",
+            "controlSkillId": 10300202,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 2
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-5"
+          ],
+          "reasons": [],
+          "assertionHash": "6990e1c4d15f472f"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-6",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-6",
+            "controlSkillId": 10300202,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 3
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-enhanced-shot-6"
+          ],
+          "reasons": [],
+          "assertionHash": "2a5bb1168714936d"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
+          "selector": {
+            "actionId": "ruby-limit-counter",
+            "controlSkillId": 10300225,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter"
+          ],
+          "reasons": [],
+          "assertionHash": "b475d58d093fd557"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-post-ultimate-shot",
+          "selector": {
+            "actionId": "ruby-post-ultimate-shot",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 1
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-post-ultimate-shot"
+          ],
+          "reasons": [],
+          "assertionHash": "333d569fb458dc0f"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
+          "selector": {
+            "actionId": "ruby-reload",
+            "controlSkillId": 10300210,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload"
+          ],
+          "reasons": [],
+          "assertionHash": "6c1cf072dbf72502"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
+          "selector": {
+            "actionId": "ruby-star-skill",
+            "controlSkillId": 10300212,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill"
+          ],
+          "reasons": [],
+          "assertionHash": "aba006896df201af"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
+          "selector": {
+            "actionId": "ruby-ultimate",
+            "controlSkillId": 10300213,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate"
+          ],
+          "reasons": [],
+          "assertionHash": "be848496354693c9"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry",
+          "selector": {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "controlSkillId": 10300221,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry"
+          ],
+          "reasons": [],
+          "assertionHash": "6c776da9f3bd0b21"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "controlSkillId": 10101021,
+            "kind": "action-form",
+            "ownerId": 101010,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-to-xiaoyu--on-enter--actor-101010--star-carry"
+          ],
+          "reasons": [],
+          "assertionHash": "9db1d685ddb549af"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:0",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-1",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:0"
+          ],
+          "reasons": [],
+          "assertionHash": "8156572933fb837e"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:1",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-2",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:1"
+          ],
+          "reasons": [],
+          "assertionHash": "2bd71397f63471a5"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:10",
+          "selector": {
+            "actionId": "ruby-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:10",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:11"
+          ],
+          "reasons": [],
+          "assertionHash": "3e14ae38fe5b210f"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:11",
+          "selector": {
+            "actionId": "ruby-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:10",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:11"
+          ],
+          "reasons": [],
+          "assertionHash": "4edd61b9df09469a"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:12",
+          "selector": {
+            "actionId": "ruby-post-ultimate-shot",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:12"
+          ],
+          "reasons": [],
+          "assertionHash": "45d25dae645bfdf4"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:13",
+          "selector": {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:13",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:14"
+          ],
+          "reasons": [],
+          "assertionHash": "74164ffc3f39cae8"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:14",
+          "selector": {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:13",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:14"
+          ],
+          "reasons": [],
+          "assertionHash": "791ec5752afce9cb"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:15",
+          "selector": {
+            "actionId": "ruby-post-ultimate-shot",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:15"
+          ],
+          "reasons": [],
+          "assertionHash": "b601b4f475b9c21b"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:16",
+          "selector": {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:16",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:17"
+          ],
+          "reasons": [],
+          "assertionHash": "e3797cc3c9c76deb"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:17",
+          "selector": {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:16",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:17"
+          ],
+          "reasons": [],
+          "assertionHash": "0f131efce0278a8c"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:18",
+          "selector": {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:18",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:19"
+          ],
+          "reasons": [],
+          "assertionHash": "e56c6df4fb4cb8ec"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:19",
+          "selector": {
+            "actionId": "fire-kibo-signature",
+            "effectIdentity": "battle-element:540016",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:18",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:19"
+          ],
+          "reasons": [],
+          "assertionHash": "f56ee1f65b870c5f"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:2",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-3",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:2"
+          ],
+          "reasons": [],
+          "assertionHash": "5a6e499f6ae576ec"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:20",
+          "selector": {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:20",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:21"
+          ],
+          "reasons": [],
+          "assertionHash": "e2bb243426458a18"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:21",
+          "selector": {
+            "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:20",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:21"
+          ],
+          "reasons": [],
+          "assertionHash": "71f0f0c9e5e4ec01"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:3",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-4",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:3"
+          ],
+          "reasons": [],
+          "assertionHash": "1b02c8eafb43ce4b"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:4",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-5",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:4"
+          ],
+          "reasons": [],
+          "assertionHash": "caae12b31f6aa2aa"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:5",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-6",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:5"
+          ],
+          "reasons": [],
+          "assertionHash": "81fa77dc4dd810c1"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:6",
+          "selector": {
+            "actionId": "ruby-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:6",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:7"
+          ],
+          "reasons": [],
+          "assertionHash": "577af9bb95b5306f"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:7",
+          "selector": {
+            "actionId": "ruby-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:6",
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:7"
+          ],
+          "reasons": [],
+          "assertionHash": "ec3488e2fdd929c0"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:8",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-6",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:8"
+          ],
+          "reasons": [],
+          "assertionHash": "d1c4c5d50b6c7ee2"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b1:103002:120s-three-actor-golden:9",
+          "selector": {
+            "actionId": "ruby-ultimate",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b1:103002:120s-three-actor-golden:9"
+          ],
+          "reasons": [],
+          "assertionHash": "d129c42b3cde1b9c"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:0",
+          "selector": {
+            "actionId": "ruby-reload",
+            "kind": "resource",
+            "operation": "gain",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:0"
+          ],
+          "reasons": [],
+          "assertionHash": "76e53e8f07e496b9"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:1",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-1",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:1"
+          ],
+          "reasons": [],
+          "assertionHash": "8aa31bc99dd135d8"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:10",
+          "selector": {
+            "actionId": "ruby-limit-counter",
+            "kind": "resource",
+            "operation": "gain",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:10"
+          ],
+          "reasons": [],
+          "assertionHash": "a3ee817b9cfec2c8"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:2",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-2",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:2"
+          ],
+          "reasons": [],
+          "assertionHash": "cd6e3ed0f3fe1c47"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:3",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-3",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:3"
+          ],
+          "reasons": [],
+          "assertionHash": "fa6f4db76fc7efc6"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:4",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-4",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:4"
+          ],
+          "reasons": [],
+          "assertionHash": "1c7e430cb334a135"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:5",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-5",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:5"
+          ],
+          "reasons": [],
+          "assertionHash": "8e7ec751b35fcbbc"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:6",
+          "selector": {
+            "actionId": "ruby-enhanced-shot-6",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:6"
+          ],
+          "reasons": [],
+          "assertionHash": "1e1d88b926c24fcb"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:7",
+          "selector": {
+            "actionId": "ruby-star-skill",
+            "kind": "resource",
+            "operation": "set-to-capacity",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:7"
+          ],
+          "reasons": [],
+          "assertionHash": "822e7fe9d32af858"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:8",
+          "selector": {
+            "actionId": "ruby-ultimate",
+            "kind": "resource",
+            "operation": "set-to-capacity",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:8"
+          ],
+          "reasons": [],
+          "assertionHash": "eed7d5ff83cd0aad"
+        },
+        {
+          "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:9",
+          "selector": {
+            "actionId": "ruby-post-ultimate-shot",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-resource:m10-b1:103002:120s-three-actor-golden:9"
+          ],
+          "reasons": [],
+          "assertionHash": "4e0ca9761fbfa162"
+        }
+      ],
+      "scenarioCaseHash": "b7033b2c1d7d5ce0"
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "runnerKind": "machine-axis",
+      "inputReference": {
+        "fixturePath": "fixtures/character-acceptance/103002-visual.json",
+        "inputHash": "96eb19e2597cba9a",
+        "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-visual.json"
+      },
+      "execution": {
+        "status": "passed",
+        "stableReplay": true,
+        "workbenchRoundTrip": "passed",
+        "canonicalHashes": {
+          "algorithm": "fnv1a64-utf8-v1",
+          "input": "96eb19e2597cba9a",
+          "data": "62e80540b9246b8c",
+          "trace": "6cc9d01e738ecf23",
+          "evaluation": "acb7c806efac81fd"
+        }
+      },
+      "traceProjection": {
+        "actionForms": [
+          {
+            "actionId": "103002-critical-critical",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-critical"
+          },
+          {
+            "actionId": "103002-critical-expected",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-expected"
+          },
+          {
+            "actionId": "103002-critical-miss-critical",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-miss-critical"
+          },
+          {
+            "actionId": "103002-critical-non-critical",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-non-critical"
+          },
+          {
+            "actionId": "103002-critical-sampled-boundary",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-boundary"
+          },
+          {
+            "actionId": "103002-critical-sampled-low",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-low"
+          },
+          {
+            "actionId": "ruby-chain-a1",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 15,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a1"
+          },
+          {
+            "actionId": "ruby-chain-a2",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A2",
+            "controlSkillId": 10300202,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a2"
+          },
+          {
+            "actionId": "ruby-chain-a3",
+            "ownerId": 103002,
+            "semanticName": "普通攻击 A3",
+            "controlSkillId": 10300203,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 34,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "ownerId": 103002,
+            "semanticName": "强化普攻 E1",
+            "controlSkillId": 10300201,
+            "subSkillIndex": 1,
+            "actualDurationFrames": 24,
+            "projectionIdentity": "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-e1"
+          }
+        ],
+        "hits": [
+          {
+            "actionId": "103002-critical-sampled-low",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:0"
+          },
+          {
+            "actionId": "103002-critical-sampled-boundary",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:1"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:10"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:11"
+          },
+          {
+            "actionId": "103002-critical-expected",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:2"
+          },
+          {
+            "actionId": "103002-critical-critical",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:3"
+          },
+          {
+            "actionId": "103002-critical-non-critical",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:4"
+          },
+          {
+            "actionId": "ruby-chain-a1",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:5"
+          },
+          {
+            "actionId": "ruby-chain-a2",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:6"
+          },
+          {
+            "actionId": "ruby-chain-a3",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:7"
+          },
+          {
+            "actionId": "ruby-chain-a3",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:8"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-103002-visual-acceptance:9"
+          }
+        ],
+        "effects": [
+          {
+            "actionId": "ruby-chain-e1",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "projectionIdentity": "machine-effect:m11-d-103002-visual-acceptance:0"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "effectIdentity": "battle-element:103002275",
+            "operation": "expire",
+            "targetId": "actor-103002",
+            "projectionIdentity": "machine-effect:m11-d-103002-visual-acceptance:1"
+          }
+        ],
+        "resources": [
+          {
+            "actionId": "ruby-chain-e1",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "operation": "consume",
+            "beforeValue": 6,
+            "afterValue": 5,
+            "projectionIdentity": "machine-resource:m11-d-103002-visual-acceptance:0"
+          }
+        ],
+        "states": [],
+        "diagnostics": [
+          {
+            "actionId": "103002-critical-sampled-low",
+            "code": "attack-input-chain-incomplete",
+            "status": "unresolved",
+            "projectionIdentity": "machine-diagnostic:m11-d-103002-visual-acceptance:0"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "code": "attack-input-chain-incomplete",
+            "status": "unresolved",
+            "projectionIdentity": "machine-diagnostic:m11-d-103002-visual-acceptance:1"
+          }
+        ],
+        "criticalDecisions": [
+          {
+            "actionId": "103002-critical-sampled-low",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "mode": "captured-critical-roll",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 499,
+            "critical": true,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:0"
+          },
+          {
+            "actionId": "103002-critical-sampled-boundary",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "mode": "captured-critical-roll",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 500,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:1"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 8516,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:10"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 3866,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:11"
+          },
+          {
+            "actionId": "103002-critical-expected",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "mode": "expected",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": null,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:2"
+          },
+          {
+            "actionId": "103002-critical-critical",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "mode": "critical",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": null,
+            "critical": true,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:3"
+          },
+          {
+            "actionId": "103002-critical-non-critical",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "mode": "non-critical",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": null,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:4"
+          },
+          {
+            "actionId": "ruby-chain-a1",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 2284,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:5"
+          },
+          {
+            "actionId": "ruby-chain-a2",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 5300,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:6"
+          },
+          {
+            "actionId": "ruby-chain-a3",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 941,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:7"
+          },
+          {
+            "actionId": "ruby-chain-a3",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 763,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:8"
+          },
+          {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 138,
+            "critical": true,
+            "projectionIdentity": "machine-critical:m11-d-103002-visual-acceptance:9"
+          }
+        ],
+        "facts": {
+          "canonical-same-input-replay": true,
+          "critical:expectedNoCriticalEvent": true,
+          "critical:integerThresholdBoundary": true,
+          "critical:missSuppressesHit": true,
+          "critical:perHitModes": true,
+          "critical:sameSeedReplay": true,
+          "machine-axis-validation": true,
+          "probe:special-resource-change:ruby-chain-e1": true,
+          "probe:variant-selection:ruby-chain-e1": true,
+          "workbench-import-export-round-trip": true
+        }
+      },
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "assertions": [
+        {
+          "assertionIdentity": "canonical-same-input-replay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "canonical-same-input-replay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:canonical-same-input-replay"
+          ],
+          "reasons": [],
+          "assertionHash": "6bfbd52a7b1bb1ee"
+        },
+        {
+          "assertionIdentity": "critical:expectedNoCriticalEvent",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:expectedNoCriticalEvent",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:expectedNoCriticalEvent"
+          ],
+          "reasons": [],
+          "assertionHash": "0ae5ba891416f049"
+        },
+        {
+          "assertionIdentity": "critical:integerThresholdBoundary",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:integerThresholdBoundary",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:integerThresholdBoundary"
+          ],
+          "reasons": [],
+          "assertionHash": "79dcc2399ce52a22"
+        },
+        {
+          "assertionIdentity": "critical:missSuppressesHit",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:missSuppressesHit",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:missSuppressesHit"
+          ],
+          "reasons": [],
+          "assertionHash": "3c35e1935d9fc8c7"
+        },
+        {
+          "assertionIdentity": "critical:perHitModes",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:perHitModes",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:perHitModes"
+          ],
+          "reasons": [],
+          "assertionHash": "f484e3a91cd8fefb"
+        },
+        {
+          "assertionIdentity": "critical:sameSeedReplay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:sameSeedReplay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:sameSeedReplay"
+          ],
+          "reasons": [],
+          "assertionHash": "dd94f7da1761129f"
+        },
+        {
+          "assertionIdentity": "machine-axis-validation",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "machine-axis-validation",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:machine-axis-validation"
+          ],
+          "reasons": [],
+          "assertionHash": "f794adbd347bf2f5"
+        },
+        {
+          "assertionIdentity": "probe:special-resource-change:ruby-chain-e1",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "probe:special-resource-change:ruby-chain-e1",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:probe:special-resource-change:ruby-chain-e1"
+          ],
+          "reasons": [],
+          "assertionHash": "5c1639a8d0b2d602"
+        },
+        {
+          "assertionIdentity": "probe:variant-selection:ruby-chain-e1",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "probe:variant-selection:ruby-chain-e1",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:probe:variant-selection:ruby-chain-e1"
+          ],
+          "reasons": [],
+          "assertionHash": "253fb60d73396d17"
+        },
+        {
+          "assertionIdentity": "scenario-fact:canonical-same-input-replay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "canonical-same-input-replay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:canonical-same-input-replay"
+          ],
+          "reasons": [],
+          "assertionHash": "d839bd0118db1f5b"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:expectedNoCriticalEvent",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:expectedNoCriticalEvent",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:expectedNoCriticalEvent"
+          ],
+          "reasons": [],
+          "assertionHash": "da63209df112da08"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:integerThresholdBoundary",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:integerThresholdBoundary",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:integerThresholdBoundary"
+          ],
+          "reasons": [],
+          "assertionHash": "4cecf6c5644b328f"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:missSuppressesHit",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:missSuppressesHit"
+          ],
+          "reasons": [],
+          "assertionHash": "7843eb41a7032eaa"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:perHitModes",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:perHitModes",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:perHitModes"
+          ],
+          "reasons": [],
+          "assertionHash": "738c235f9d2b11ce"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:sameSeedReplay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:sameSeedReplay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:sameSeedReplay"
+          ],
+          "reasons": [],
+          "assertionHash": "ed42b1efb79e6d7e"
+        },
+        {
+          "assertionIdentity": "scenario-fact:machine-axis-validation",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "machine-axis-validation",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:machine-axis-validation"
+          ],
+          "reasons": [],
+          "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:probe:special-resource-change:ruby-chain-e1",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "probe:special-resource-change:ruby-chain-e1",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:probe:special-resource-change:ruby-chain-e1"
+          ],
+          "reasons": [],
+          "assertionHash": "d59e1580422665f7"
+        },
+        {
+          "assertionIdentity": "scenario-fact:probe:variant-selection:ruby-chain-e1",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "probe:variant-selection:ruby-chain-e1",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:probe:variant-selection:ruby-chain-e1"
+          ],
+          "reasons": [],
+          "assertionHash": "d6c44f6805bf1b0e"
+        },
+        {
+          "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "workbench-import-export-round-trip",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:workbench-import-export-round-trip"
+          ],
+          "reasons": [],
+          "assertionHash": "58a76707b981af64"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-critical",
+          "selector": {
+            "actionId": "103002-critical-critical",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-critical"
+          ],
+          "reasons": [],
+          "assertionHash": "94262839b085ab54"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-expected",
+          "selector": {
+            "actionId": "103002-critical-expected",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-expected"
+          ],
+          "reasons": [],
+          "assertionHash": "007c005d8478f611"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-miss-critical",
+          "selector": {
+            "actionId": "103002-critical-miss-critical",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-miss-critical"
+          ],
+          "reasons": [],
+          "assertionHash": "898c0484a62587bd"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-non-critical",
+          "selector": {
+            "actionId": "103002-critical-non-critical",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-non-critical"
+          ],
+          "reasons": [],
+          "assertionHash": "6bb13127d18b25c6"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-boundary",
+          "selector": {
+            "actionId": "103002-critical-sampled-boundary",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-boundary"
+          ],
+          "reasons": [],
+          "assertionHash": "926d8a1b8917f036"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-low",
+          "selector": {
+            "actionId": "103002-critical-sampled-low",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:103002-critical-sampled-low"
+          ],
+          "reasons": [],
+          "assertionHash": "5d3928e4f9d8b08c"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a1",
+          "selector": {
+            "actionId": "ruby-chain-a1",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a1"
+          ],
+          "reasons": [],
+          "assertionHash": "d2c86e264530ff45"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a2",
+          "selector": {
+            "actionId": "ruby-chain-a2",
+            "controlSkillId": 10300202,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a2"
+          ],
+          "reasons": [],
+          "assertionHash": "c377c98adf71b387"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3",
+          "selector": {
+            "actionId": "ruby-chain-a3",
+            "controlSkillId": 10300203,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3"
+          ],
+          "reasons": [],
+          "assertionHash": "fe954dc281c4a9cd"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-e1",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "controlSkillId": 10300201,
+            "kind": "action-form",
+            "ownerId": 103002,
+            "subSkillIndex": 1
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-e1"
+          ],
+          "reasons": [],
+          "assertionHash": "4782be8764ba071a"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-effect:m11-d-103002-visual-acceptance:0",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-effect:m11-d-103002-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "68eec00fc29d10e7"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-effect:m11-d-103002-visual-acceptance:1",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "effectIdentity": "battle-element:103002275",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-effect:m11-d-103002-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "84a0b985a717ef40"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:0",
+          "selector": {
+            "actionId": "103002-critical-sampled-low",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "1ff36e0186ae4916"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:1",
+          "selector": {
+            "actionId": "103002-critical-sampled-boundary",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "24369be30e0296b6"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:10",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:10"
+          ],
+          "reasons": [],
+          "assertionHash": "232377e41385d649"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:11",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:11"
+          ],
+          "reasons": [],
+          "assertionHash": "567e415d3de7af41"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:2",
+          "selector": {
+            "actionId": "103002-critical-expected",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "90d26563b1895b5f"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:3",
+          "selector": {
+            "actionId": "103002-critical-critical",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "80b2663e5d994f94"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:4",
+          "selector": {
+            "actionId": "103002-critical-non-critical",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "523e54e5807e904a"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:5",
+          "selector": {
+            "actionId": "ruby-chain-a1",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:5"
+          ],
+          "reasons": [],
+          "assertionHash": "470e03cc41f5f02f"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:6",
+          "selector": {
+            "actionId": "ruby-chain-a2",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:6"
+          ],
+          "reasons": [],
+          "assertionHash": "306f823c705deb02"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:7",
+          "selector": {
+            "actionId": "ruby-chain-a3",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:7"
+          ],
+          "reasons": [],
+          "assertionHash": "3747b6a2b881862b"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:8",
+          "selector": {
+            "actionId": "ruby-chain-a3",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:8"
+          ],
+          "reasons": [],
+          "assertionHash": "da01fa50205dfc63"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-103002-visual-acceptance:9",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-103002-visual-acceptance:9"
+          ],
+          "reasons": [],
+          "assertionHash": "8007eabc93fd199d"
+        },
+        {
+          "assertionIdentity": "trace-resource:machine-resource:m11-d-103002-visual-acceptance:0",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "kind": "resource",
+            "operation": "consume",
+            "resourceIdentity": "actor:103002:element:103002047"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-resource:m11-d-103002-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "f66f29b52c1e5b1f"
+        },
+        {
+          "assertionIdentity": "workbench-import-export-round-trip",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "workbench-import-export-round-trip",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:workbench-import-export-round-trip"
+          ],
+          "reasons": [],
+          "assertionHash": "1ebb23438e769331"
+        }
+      ],
+      "scenarioCaseHash": "d8155f555b259fec"
+    }
+  ],
+  "summary": {
+    "scenarioCount": 2,
+    "executionPassedCount": 2,
+    "assertionCount": 97,
+    "assertionPassedCount": 96,
+    "runnerKindCounts": {
+      "canonical-character-golden": 1,
+      "machine-axis": 1
+    }
+  },
+  "scenarioSetHash": "8d863076503dcf08"
+}

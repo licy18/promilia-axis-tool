@@ -1,10 +1,15 @@
+import generatedManifestIndex from '../data/generated/character-acceptance-manifest-index.json' with { type: 'json' };
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
+import { deriveCharacterAcceptanceArtifacts } from './characterAcceptanceDerivation.js';
 
 export const CHARACTER_ACCEPTANCE_SCHEMA_VERSION = 1;
 export const CHARACTER_ACCEPTANCE_CONTRACT_NAME =
   'AzPrCharacterAcceptanceProtocol';
 export const CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY =
   'm11-d-character-acceptance-v1';
+export const CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION = 1;
+export const CHARACTER_ACCEPTANCE_MANIFEST_INDEX_CONTRACT_NAME =
+  'AzPrCharacterAcceptanceManifestIndex';
 
 export const CHARACTER_ACCEPTANCE_MATURITY_STATES = Object.freeze([
   'extracted',
@@ -27,12 +32,45 @@ export function finalizeCharacterAcceptanceManifest(input) {
   delete base.maturity;
   delete base.validation;
   delete base.manifestHash;
+  delete base.qualificationSubjectHash;
+  delete base.derivation;
+  const derivedArtifacts = deriveManifestArtifacts(base);
+  const providedArtifacts = pickDerivedArtifacts(base);
+  const providedDerivedArtifacts = hasProvidedDerivedArtifacts(base);
+  const derivedArtifactsMismatch =
+    providedDerivedArtifacts &&
+    canonical(providedArtifacts) !== canonical(derivedArtifacts);
+  Object.assign(base, derivedArtifacts);
+  const qualificationSubjectHash = hashCanonicalValue(
+    createQualificationSubject(base)
+  );
+  base.evidence = {
+    ...(base.evidence ?? {}),
+    productVisualAcceptance: deriveProductVisualAcceptance({
+      productVisualAcceptance: base.evidence?.productVisualAcceptance ?? {},
+      ownerId: base.owner?.ownerId,
+      qualificationSubjectHash,
+      scenarioCases: base.scenarioCases,
+    }),
+  };
+  base.derivation = {
+    status: derivedArtifactsMismatch
+      ? 'provided-derived-artifacts-mismatch'
+      : 'derived-artifacts-verified',
+    inputIncludedDerivedArtifacts: providedDerivedArtifacts,
+    sourceOfTruthHash: hashCanonicalValue({
+      requirementInventoryHash: base.requirementInventory.inventoryHash,
+      sourceGapInventoryHash: base.sourceGapInventory.inventoryHash,
+      scenarioSetHash: base.scenarioCases.scenarioSetHash,
+    }),
+  };
   const maturity = deriveCharacterAcceptanceMaturity(
     collectCharacterAcceptanceFacts(base)
   );
-  const draft = { ...base, maturity };
+  const draft = { ...base, qualificationSubjectHash, maturity };
   const issues = collectCharacterAcceptanceManifestIssues(draft, {
     checkHash: false,
+    checkPublication: false,
   });
   const value = {
     ...draft,
@@ -76,7 +114,8 @@ export function collectCharacterAcceptanceFacts(manifest = {}) {
     scenarios.length > 0 &&
     scenarios.every(scenario => scenario?.workbenchRoundTrip === 'passed');
   const productVisualAccepted =
-    manifest.evidence?.productVisualAcceptance?.status === 'accepted';
+    manifest.evidence?.productVisualAcceptance?.status === 'accepted' &&
+    manifest.evidence?.productVisualAcceptance?.bindingStatus === 'verified';
   const functionalFailureCount =
     goldens.filter(golden => golden?.status !== 'passed').length +
     scenarios.filter(scenario => scenario?.status !== 'passed').length;
@@ -87,8 +126,8 @@ export function collectCharacterAcceptanceFacts(manifest = {}) {
       'character-combat-profile-valid',
     sourceEvidenceIndexed: Boolean(
       manifest.source?.profileIdentity &&
-        manifest.source?.profileHash &&
-        manifest.source?.sourcePackageHash
+      manifest.source?.profileHash &&
+      manifest.source?.sourcePackageHash
     ),
     canonicalGoldenCount: goldens.length,
     canonicalGoldenPassed,
@@ -165,9 +204,17 @@ export function deriveCharacterAcceptanceMaturity(facts = {}) {
   };
 }
 
-export function validateCharacterAcceptanceManifest(manifest) {
+export function validateCharacterAcceptanceManifest(
+  manifest,
+  {
+    publishedManifestIndex = generatedManifestIndex,
+    checkPublication = true,
+  } = {}
+) {
   const issues = collectCharacterAcceptanceManifestIssues(manifest, {
     checkHash: true,
+    checkPublication,
+    publishedManifestIndex,
   });
   return {
     valid: issues.length === 0,
@@ -178,8 +225,8 @@ export function validateCharacterAcceptanceManifest(manifest) {
   };
 }
 
-export function assertCharacterOptimizationReady(manifest) {
-  const validation = validateCharacterAcceptanceManifest(manifest);
+export function assertCharacterOptimizationReady(manifest, options) {
+  const validation = validateCharacterAcceptanceManifest(manifest, options);
   if (!validation.valid) {
     throw new CharacterAcceptanceError(
       'character-acceptance-manifest-invalid',
@@ -195,6 +242,46 @@ export function assertCharacterOptimizationReady(manifest) {
   return manifest;
 }
 
+export function validateCharacterAcceptanceManifestIndex(index) {
+  const issues = [];
+  if (
+    index?.schemaVersion !== CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION
+  ) {
+    issues.push('character-acceptance-manifest-index-schema-version-invalid');
+  }
+  if (
+    index?.contractName !== CHARACTER_ACCEPTANCE_MANIFEST_INDEX_CONTRACT_NAME
+  ) {
+    issues.push('character-acceptance-manifest-index-contract-name-invalid');
+  }
+  if (index?.kind !== 'azpr-character-acceptance-manifest-index') {
+    issues.push('character-acceptance-manifest-index-kind-invalid');
+  }
+  if (index?.protocolIdentity !== CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY) {
+    issues.push('character-acceptance-manifest-index-protocol-invalid');
+  }
+  if (!Array.isArray(index?.entries)) {
+    issues.push('character-acceptance-manifest-index-entries-required');
+  }
+  const owners = new Set();
+  for (const entry of index?.entries ?? []) {
+    const ownerId = Number(entry?.ownerId);
+    if (!Number.isInteger(ownerId) || owners.has(ownerId)) {
+      issues.push(
+        'character-acceptance-manifest-index-owner-invalid:' + ownerId
+      );
+    }
+    owners.add(ownerId);
+  }
+  if (index && typeof index === 'object') {
+    const copy = structuredClone(index);
+    delete copy.indexHash;
+    if (index.indexHash !== hashCanonicalValue(copy)) {
+      issues.push('character-acceptance-manifest-index-hash-mismatch');
+    }
+  }
+  return { valid: issues.length === 0, issues };
+}
 export class CharacterAcceptanceError extends Error {
   constructor(code, details = []) {
     super(code);
@@ -204,7 +291,14 @@ export class CharacterAcceptanceError extends Error {
   }
 }
 
-function collectCharacterAcceptanceManifestIssues(manifest, { checkHash }) {
+function collectCharacterAcceptanceManifestIssues(
+  manifest,
+  {
+    checkHash,
+    checkPublication = false,
+    publishedManifestIndex = generatedManifestIndex,
+  }
+) {
   const issues = [];
   if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest)) {
     return ['character-acceptance-manifest-object-required'];
@@ -232,6 +326,18 @@ function collectCharacterAcceptanceManifestIssues(manifest, { checkHash }) {
   }
   if (!Array.isArray(manifest.evidence?.machineScenarios)) {
     issues.push('character-acceptance-machine-scenarios-required');
+  }
+  if (!Array.isArray(manifest.requirementInventory?.records)) {
+    issues.push('character-acceptance-requirement-inventory-required');
+  }
+  if (!Array.isArray(manifest.sourceGapInventory?.records)) {
+    issues.push('character-acceptance-source-gap-inventory-required');
+  }
+  if (!Array.isArray(manifest.scenarioCases?.records)) {
+    issues.push('character-acceptance-scenario-cases-required');
+  }
+  if (!Array.isArray(manifest.coverage?.edges)) {
+    issues.push('character-acceptance-coverage-edges-required');
   }
   if (!Array.isArray(manifest.matrix?.requirements)) {
     issues.push('character-acceptance-matrix-requirements-required');
@@ -287,6 +393,16 @@ function collectCharacterAcceptanceManifestIssues(manifest, { checkHash }) {
     }
   }
 
+  const expectedArtifacts = deriveManifestArtifacts(manifest);
+  if (
+    canonical(pickDerivedArtifacts(manifest)) !== canonical(expectedArtifacts)
+  ) {
+    issues.push('character-acceptance-derived-artifacts-mismatch');
+  }
+  if (manifest.derivation?.status !== 'derived-artifacts-verified') {
+    issues.push('character-acceptance-derived-artifacts-mismatch');
+  }
+
   const productVisual = manifest.evidence?.productVisualAcceptance ?? {};
   const scenarioIdentities = new Set(
     (manifest.evidence?.machineScenarios ?? []).map(
@@ -320,13 +436,11 @@ function collectCharacterAcceptanceManifestIssues(manifest, { checkHash }) {
       );
     }
   }
-  if (productVisual.status === 'accepted') {
-    if (!String(productVisual.acceptanceCommit ?? '').trim()) {
-      issues.push('character-acceptance-product-commit-required');
-    }
-    if (!String(productVisual.recordIdentity ?? '').trim()) {
-      issues.push('character-acceptance-product-record-required');
-    }
+  if (
+    productVisual.status === 'accepted' &&
+    productVisual.bindingStatus !== 'verified'
+  ) {
+    issues.push('character-acceptance-product-record-binding-invalid');
   }
 
   const expectedMaturity = deriveCharacterAcceptanceMaturity(
@@ -341,6 +455,39 @@ function collectCharacterAcceptanceManifestIssues(manifest, { checkHash }) {
   ) {
     issues.push('character-acceptance-optimization-ready-state-invalid');
   }
+  const expectedQualificationSubjectHash = hashCanonicalValue(
+    createQualificationSubject(manifest)
+  );
+  if (manifest.qualificationSubjectHash !== expectedQualificationSubjectHash) {
+    issues.push('character-acceptance-qualification-subject-hash-mismatch');
+  }
+  if (checkPublication) {
+    const indexValidation = validateCharacterAcceptanceManifestIndex(
+      publishedManifestIndex
+    );
+    for (const issue of indexValidation.issues) {
+      issues.push('character-acceptance-publication-index-invalid:' + issue);
+    }
+    const publishedEntry = (publishedManifestIndex?.entries ?? []).find(
+      entry => Number(entry?.ownerId) === Number(manifest.owner?.ownerId)
+    );
+    if (!publishedEntry) {
+      issues.push('character-acceptance-publication-index-entry-missing');
+    } else if (
+      publishedEntry.manifestHash !== manifest.manifestHash ||
+      publishedEntry.qualificationSubjectHash !==
+        manifest.qualificationSubjectHash ||
+      publishedEntry.sourceOfTruthHash !==
+        manifest.derivation?.sourceOfTruthHash ||
+      publishedEntry.requirementInventoryHash !==
+        manifest.requirementInventory?.inventoryHash ||
+      publishedEntry.scenarioSetHash !==
+        manifest.scenarioCases?.scenarioSetHash ||
+      publishedEntry.profileHash !== manifest.source?.profileHash
+    ) {
+      issues.push('character-acceptance-publication-index-mismatch');
+    }
+  }
   if (checkHash) {
     const expectedHash = hashCanonicalValue(withoutManifestHash(manifest));
     if (manifest.manifestHash !== expectedHash) {
@@ -348,6 +495,128 @@ function collectCharacterAcceptanceManifestIssues(manifest, { checkHash }) {
     }
   }
   return issues;
+}
+
+function deriveManifestArtifacts(manifest) {
+  return deriveCharacterAcceptanceArtifacts({
+    requirementInventory: manifest.requirementInventory ?? { records: [] },
+    sourceGapInventory: manifest.sourceGapInventory ?? { records: [] },
+    scenarioCases: manifest.scenarioCases ?? { records: [] },
+    denominator:
+      manifest.coverageContext?.denominator ??
+      manifest.coverage?.denominator ??
+      {},
+    runtimeCoverageSummary:
+      manifest.coverageContext?.runtimeCoverageSummary ??
+      manifest.coverage?.runtimeCoverageSummary ??
+      {},
+  });
+}
+
+function pickDerivedArtifacts(manifest) {
+  return {
+    requirementInventory: manifest.requirementInventory,
+    sourceGapInventory: manifest.sourceGapInventory,
+    scenarioCases: manifest.scenarioCases,
+    coverage: manifest.coverage,
+    matrix: manifest.matrix,
+    ledger: manifest.ledger,
+    notApplicableRecords: manifest.notApplicableRecords,
+  };
+}
+
+function hasProvidedDerivedArtifacts(manifest) {
+  return ['coverage', 'matrix', 'ledger', 'notApplicableRecords'].some(
+    key => manifest[key] != null
+  );
+}
+
+function createQualificationSubject(manifest) {
+  return {
+    schemaVersion: manifest.schemaVersion,
+    contractName: manifest.contractName,
+    protocolIdentity: manifest.protocolIdentity,
+    owner: manifest.owner,
+    source: manifest.source,
+    coverageContext: manifest.coverageContext,
+    canonicalGoldens: manifest.evidence?.canonicalGoldens ?? [],
+    machineScenarios: manifest.evidence?.machineScenarios ?? [],
+    requirementInventory: manifest.requirementInventory,
+    sourceGapInventory: manifest.sourceGapInventory,
+    scenarioCases: manifest.scenarioCases,
+    coverage: manifest.coverage,
+    matrix: manifest.matrix,
+    ledger: manifest.ledger,
+    notApplicableRecords: manifest.notApplicableRecords,
+  };
+}
+
+function deriveProductVisualAcceptance({
+  productVisualAcceptance,
+  ownerId,
+  qualificationSubjectHash,
+  scenarioCases,
+}) {
+  const automatedEvidence = structuredClone(
+    productVisualAcceptance.automatedEvidence ?? []
+  );
+  const scenarioIdentities = [
+    ...new Set(
+      automatedEvidence
+        .map(evidence => evidence?.scenarioIdentity)
+        .filter(Boolean)
+    ),
+  ].sort();
+  const scenarioSetHash = hashCanonicalValue(
+    scenarioIdentities.map(scenarioIdentity => {
+      const scenario = (scenarioCases?.records ?? []).find(
+        record => record.scenarioIdentity === scenarioIdentity
+      );
+      return {
+        scenarioIdentity,
+        scenarioCaseHash: scenario?.scenarioCaseHash ?? null,
+      };
+    })
+  );
+  const acceptanceCommit = productVisualAcceptance.acceptanceCommit ?? null;
+  const expectedRecordIdentity =
+    'character-product-acceptance:' +
+    Number(ownerId) +
+    ':' +
+    String(acceptanceCommit ?? '') +
+    ':' +
+    qualificationSubjectHash;
+  const accepted = productVisualAcceptance.status === 'accepted';
+  const bindingVerified =
+    accepted &&
+    /^[0-9a-f]{40}$/.test(String(acceptanceCommit ?? '')) &&
+    productVisualAcceptance.recordIdentity === expectedRecordIdentity &&
+    productVisualAcceptance.qualificationSubjectHash ===
+      qualificationSubjectHash &&
+    productVisualAcceptance.scenarioSetHash === scenarioSetHash &&
+    canonical(productVisualAcceptance.scenarioIdentities ?? []) ===
+      canonical(scenarioIdentities);
+  return {
+    status: productVisualAcceptance.status ?? 'pending',
+    scenarioIdentities,
+    acceptanceCommit,
+    recordIdentity: productVisualAcceptance.recordIdentity ?? null,
+    qualificationSubjectHash:
+      productVisualAcceptance.qualificationSubjectHash ?? null,
+    scenarioSetHash: productVisualAcceptance.scenarioSetHash ?? null,
+    bindingStatus: accepted
+      ? bindingVerified
+        ? 'verified'
+        : 'invalid'
+      : 'not-requested',
+    bindingExpectation: {
+      recordIdentity: expectedRecordIdentity,
+      qualificationSubjectHash,
+      scenarioSetHash,
+      scenarioIdentities,
+    },
+    automatedEvidence,
+  };
 }
 
 function collectDuplicateIdentityIssue(
@@ -359,7 +628,8 @@ function collectDuplicateIdentityIssue(
   const seen = new Set();
   for (const row of rows ?? []) {
     const identity = String(row?.[identityKey] ?? '');
-    if (!identity || seen.has(identity)) issues.push(`${issueCode}:${identity}`);
+    if (!identity || seen.has(identity))
+      issues.push(`${issueCode}:${identity}`);
     seen.add(identity);
   }
 }
