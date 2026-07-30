@@ -14,6 +14,7 @@ import {
 } from 'node:fs/promises';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { build } from 'vite';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const REPO_ROOT = resolve(dirname(SCRIPT_PATH), '..');
@@ -162,7 +163,7 @@ await main();
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   assertTrackedTreeClean();
-  if (!options.skipBuild) buildCliBundle();
+  if (!options.skipBuild) await buildCliBundle();
 
   const sourceMap = JSON.parse(await readFile(CLI_SOURCE_MAP_PATH, 'utf8'));
   const sourceClosure = await collectSourceClosure(sourceMap);
@@ -333,21 +334,12 @@ function assertTrackedTreeClean() {
   }
 }
 
-function buildCliBundle() {
-  const npmExecutable = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  const result = spawnSync(
-    npmExecutable,
-    ['run', 'machine-axis:build', '--', '--sourcemap'],
-    {
-      cwd: REPO_ROOT,
-      stdio: 'inherit',
-      shell: false,
-    }
-  );
-  if (result.error) throw result.error;
-  if (result.status !== 0) {
-    throw new Error(`Machine Axis CLI build failed with ${result.status}`);
-  }
+async function buildCliBundle() {
+  await build({
+    configFile: resolve(REPO_ROOT, 'vite.machine-axis-cli.config.js'),
+    logLevel: 'silent',
+    build: { sourcemap: true },
+  });
 }
 
 async function collectSourceClosure(sourceMap) {
