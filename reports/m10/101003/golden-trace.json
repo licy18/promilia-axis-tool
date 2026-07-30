@@ -11,8 +11,8 @@
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "8c1a4acddf5e3b54",
-    "traceHash": "286263c7b85fbcf1",
+    "inputHash": "011ce71e135bc69f",
+    "traceHash": "26f7b53dac7e5b9e",
     "dataHash": "7599ed503c1d0c06",
     "criticalPolicy": "non-critical"
   },
@@ -462,26 +462,26 @@
             2941,
             2957
           ],
-          "totalHpDamage": 500,
-          "totalToughnessDamage": 0
+          "totalHpDamage": 466,
+          "totalToughnessDamage": 24
         }
       },
-      "ownerHitTotalHpDamage": 20226,
-      "ownerHitTotalToughnessDamage": 1808,
+      "ownerHitTotalHpDamage": 20192,
+      "ownerHitTotalToughnessDamage": 1832,
       "selectedHpDamageByActionId": {
         "han-charged-stage-one": 5052,
         "han-charged-stage-two": 23449,
         "han-star-skill": 4179,
         "han-ultimate": 3293
       },
-      "totalHpDamage": 78403,
+      "totalHpDamage": 78369,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 78183,
+      "ownerTotalHpDamage": 78149,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
         "pointCount": 374,
         "initialHp": 862800,
-        "finalHp": 784397,
+        "finalHp": 784431,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 6667,
@@ -647,9 +647,9 @@
               "timeMs": 39900,
               "actionId": "han-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.732239,
+              "beforeValue": 18.71141,
               "change": 0.399994,
-              "afterValue": 19.132233
+              "afterValue": 19.111404
             },
             {
               "timeMs": 43616.666666,
@@ -794,9 +794,9 @@
               "timeMs": 39900,
               "actionId": "han-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 7.456787,
+              "beforeValue": 7.446381,
               "change": 0.199997,
-              "afterValue": 7.656784
+              "afterValue": 7.646378
             },
             {
               "timeMs": 43616.666666,
@@ -934,9 +934,9 @@
               "timeMs": 39900,
               "actionId": "han-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 7.456787,
+              "beforeValue": 7.446381,
               "change": 0.199997,
-              "afterValue": 7.656784
+              "afterValue": 7.646378
             },
             {
               "timeMs": 43616.666666,
@@ -1162,9 +1162,9 @@
               "timeMs": 39900,
               "actionId": "han-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.732239,
+              "beforeValue": 18.71141,
               "change": 0.399994,
-              "afterValue": 19.132233
+              "afterValue": 19.111404
             },
             {
               "timeMs": 43616.666666,
@@ -1309,9 +1309,9 @@
               "timeMs": 39900,
               "actionId": "han-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 7.456787,
+              "beforeValue": 7.446381,
               "change": 0.199997,
-              "afterValue": 7.656784
+              "afterValue": 7.646378
             },
             {
               "timeMs": 43616.666666,
@@ -1449,9 +1449,9 @@
               "timeMs": 39900,
               "actionId": "han-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 7.456787,
+              "beforeValue": 7.446381,
               "change": 0.199997,
-              "afterValue": 7.656784
+              "afterValue": 7.646378
             },
             {
               "timeMs": 43616.666666,
@@ -3798,7 +3798,7 @@
           1019.9066162109375
         ]
       },
-      "baselineReplayHash": "21a53a1d2c61416236f6b12647aa66de931afc928eb72c36b86be303bb3f63b4"
+      "baselineReplayHash": "83302c73ef6cfd03aaef08a4bcc59de8cc8d2a7b0c5564a05f778346c7f94290"
     },
     "trace": {
       "damage": [
@@ -4500,18 +4500,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-charged-stage-one",
-          "frame": 2028,
-          "hitIdentity": null,
-          "rawDamage": 77,
-          "hpDamage": 77,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
           "actionId": "han-star-skill",
           "frame": 2028,
@@ -4519,6 +4507,18 @@
           "rawDamage": 0,
           "hpDamage": 0,
           "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-charged-stage-one",
+          "frame": 2028,
+          "hitIdentity": null,
+          "rawDamage": 77,
+          "hpDamage": 77,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4560,18 +4560,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-charged-stage-one",
-          "frame": 2040,
-          "hitIdentity": null,
-          "rawDamage": 85,
-          "hpDamage": 85,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
           "actionId": "han-star-skill",
           "frame": 2040,
@@ -4579,6 +4567,18 @@
           "rawDamage": 0,
           "hpDamage": 0,
           "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-charged-stage-one",
+          "frame": 2040,
+          "hitIdentity": null,
+          "rawDamage": 85,
+          "hpDamage": 85,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4632,18 +4632,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-charged-stage-one",
-          "frame": 2058,
-          "hitIdentity": null,
-          "rawDamage": 944,
-          "hpDamage": 944,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
           "actionId": "han-star-skill",
           "frame": 2058,
@@ -4651,6 +4639,18 @@
           "rawDamage": 0,
           "hpDamage": 0,
           "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-charged-stage-one",
+          "frame": 2058,
+          "hitIdentity": null,
+          "rawDamage": 944,
+          "hpDamage": 944,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -5076,18 +5076,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-charged-stage-two",
-          "frame": 2208,
-          "hitIdentity": null,
-          "rawDamage": 1898,
-          "hpDamage": 1898,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
           "actionId": "han-star-skill",
           "frame": 2208,
@@ -5095,6 +5083,18 @@
           "rawDamage": 0,
           "hpDamage": 0,
           "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "han-charged-stage-two",
+          "frame": 2208,
+          "hitIdentity": null,
+          "rawDamage": 1898,
+          "hpDamage": 1898,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -5832,18 +5832,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_TUNING_DAMAGE",
-          "actionId": "han-limit-counter",
-          "frame": 2617,
-          "hitIdentity": null,
-          "rawDamage": 8465,
-          "hpDamage": 8465,
-          "toughnessDamage": 5925,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-limit-counter",
           "frame": 2617,
@@ -5851,6 +5839,18 @@
           "rawDamage": 69,
           "hpDamage": 69,
           "toughnessDamage": 48,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "han-limit-counter",
+          "frame": 2617,
+          "hitIdentity": null,
+          "rawDamage": 8465,
+          "hpDamage": 8465,
+          "toughnessDamage": 5925,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -5880,25 +5880,25 @@
         },
         {
           "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+          "frame": 2929,
+          "hitIdentity": null,
+          "rawDamage": 35,
+          "hpDamage": 35,
+          "toughnessDamage": 24,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
           "eventType": "VERIFIED_TUNING_DAMAGE",
           "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
           "frame": 2929,
           "hitIdentity": null,
           "rawDamage": 7716,
           "hpDamage": 7716,
-          "toughnessDamage": 598,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
-          "frame": 2929,
-          "hitIdentity": null,
-          "rawDamage": 69,
-          "hpDamage": 69,
-          "toughnessDamage": 0,
+          "toughnessDamage": 574,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -9646,7 +9646,7 @@
         }
       ]
     },
-    "summaryHash": "ef73489ade8947f53adcef412095625d60fd75aa5465b44848ebecc70f2abb23"
+    "summaryHash": "d351f50dbe3193e2d64502259f4931a5c1469471381a15e62da13041536a5bf4"
   },
   "expected": {
     "exact": {
@@ -9669,7 +9669,7 @@
       "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
       "combat.ownerHitCountByActionId.han-star-skill": 7,
       "combat.ownerHitCountByActionId.han-ultimate": 7,
-      "combat.ownerTotalHpDamage": 78183,
+      "combat.ownerTotalHpDamage": 78149,
       "combat.ownerTotalToughnessDamage": 0,
       "resources.targetStateSummary.profileCount": 1,
       "resources.targetStateSummary.eventCount": 9,
@@ -9874,8 +9874,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 78183,
-        "actual": 78183,
+        "expected": 78149,
+        "actual": 78149,
         "passed": true
       },
       {
@@ -10336,6 +10336,6 @@
       }
     ]
   },
-  "replayHash": "5d3224c71bc82df933b3682824ed556411a881c679810d34497b74d24acf314d",
-  "profileHash": "c572b58c6e73b8d48d0a4e26326c5e70ff46ce1a7c8886408739a138387b2b22"
+  "replayHash": "137be22bc495b21000dc8eed03ba50d16e31a592fe57208c58b0145b7ba07e77",
+  "profileHash": "74a3faacb0851c2fb1f1920a9b7ce5180325d01790d5fbaa09246d2aaf1bc2e0"
 }

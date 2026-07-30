@@ -235,6 +235,13 @@ export function createVerifiedCombatRuntime({
     descriptors,
     controlledActorTimeline,
   });
+  annotateRuntimeDescriptorOrder(
+    descriptors,
+    positiveNumber(
+      scenario?.time?.fps ?? scenario?.time?.frameRate,
+      FRAME_RATE
+    )
+  );
   descriptors.sort(compareDescriptors);
 
   const state = createRuntimeState({
@@ -3777,10 +3784,14 @@ function resolveCriticalBranch(
     policy === 'captured-critical-roll' ||
     policy === 'legacy-persisted-roll'
   ) {
+    const criticalRollUnit =
+      policy === 'captured-critical-roll'
+        ? 'basis-points'
+        : 'normalized-unit-interval';
     const normalizedRoll =
-      persistedRoll >= 0 && persistedRoll <= 1
-        ? persistedRoll
-        : persistedRoll / 10_000;
+      criticalRollUnit === 'basis-points'
+        ? persistedRoll / 10_000
+        : persistedRoll;
     return {
       ...base,
       policy,
@@ -3789,6 +3800,8 @@ function resolveCriticalBranch(
           ? `captured|${sampleKey}`
           : (persisted?.identity ?? `persisted|${sampleKey}`),
       criticalRoll: persistedRoll,
+      criticalRollUnit,
+      normalizedCriticalRoll: normalizedRoll,
       critical: isCriticalHit({
         randomRoll: normalizedRoll,
         criticalRate: sourceCriticalRate,
@@ -4357,8 +4370,18 @@ function createResourceExecutionBlockedEvent(block) {
 function appendRuntimeEvent(target, event, state) {
   const runtimeSequenceIndex = state.nextRuntimeSequenceIndex;
   state.nextRuntimeSequenceIndex += 1;
+  event.absoluteFrame = Number.isInteger(event.absoluteFrame)
+    ? event.absoluteFrame
+    : timeToFrame(event.timeMs);
+  event.runtimePhase = event.runtimePhase ?? 'settlement';
+  event.runtimePhasePriority = Number(event.runtimePhasePriority) || 0;
+  event.runtimePriority = Number(event.runtimePriority) || 0;
   event.runtimeSequenceIndex = runtimeSequenceIndex;
   if (event.payload) {
+    event.payload.absoluteFrame = event.absoluteFrame;
+    event.payload.runtimePhase = event.runtimePhase;
+    event.payload.runtimePhasePriority = event.runtimePhasePriority;
+    event.payload.runtimePriority = event.runtimePriority;
     event.payload.runtimeSequenceIndex = runtimeSequenceIndex;
   }
   target.push(event);
@@ -4579,7 +4602,20 @@ function ratioToRaw(value, fallbackRaw = 0) {
   return number == null ? fallbackRaw : number * 10000;
 }
 
-function compareDescriptors(left, right) {
+function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
+  descriptors.forEach((descriptor, sourceSequence) => {
+    const order = resolveDescriptorOrder(descriptor.kind);
+    descriptor.absoluteFrame = Number.isInteger(descriptor.absoluteFrame)
+      ? descriptor.absoluteFrame
+      : timeToFrame(descriptor.timeMs, frameRate);
+    descriptor.runtimePhase = order.phase;
+    descriptor.runtimePhasePriority = order.phasePriority;
+    descriptor.runtimePriority = order.priority;
+    descriptor.sourceSequence = sourceSequence;
+  });
+}
+
+function resolveDescriptorOrder(kind) {
   const priority = {
     'action-cost': 0,
     'passive-vital-change': 1,
@@ -4595,31 +4631,53 @@ function compareDescriptors(left, right) {
     'manual-resource': 4,
     'auto-sp-tick': 5,
   };
+  const phaseByKind = {
+    'action-cost': ['pre-action', 0],
+    'passive-vital-change': ['state-transition', 1],
+    'weakness-state-tick': ['state-transition', 1],
+    'direct-sp': ['direct-effect', 2],
+    'direct-heal': ['direct-effect', 2],
+    'direct-shield': ['direct-effect', 2],
+    'passive-periodic-heal': ['direct-effect', 2],
+    'passive-periodic-heal-contract-unresolved': ['direct-effect', 2],
+    hit: ['combat-hit', 3],
+    'passive-derived-hit': ['combat-hit', 3],
+    'tuning-combat': ['post-hit-resource', 4],
+    'manual-resource': ['post-hit-resource', 4],
+    'auto-sp-tick': ['automatic-recovery', 5],
+  };
+  const [phase, phasePriority] = phaseByKind[kind] ?? ['unresolved', 9];
+  return { phase, phasePriority, priority: priority[kind] ?? 9 };
+}
+
+function compareDescriptors(left, right) {
   return (
-    left.timeMs - right.timeMs ||
-    (priority[left.kind] ?? 9) - (priority[right.kind] ?? 9) ||
-    String(left.action?.id ?? '').localeCompare(
-      String(right.action?.id ?? '')
-    ) ||
-    String(left.schedule?.id ?? '').localeCompare(
-      String(right.schedule?.id ?? '')
-    ) ||
-    Number(left.hit?.hitIndex ?? 0) - Number(right.hit?.hitIndex ?? 0)
+    left.absoluteFrame - right.absoluteFrame ||
+    left.runtimePhasePriority - right.runtimePhasePriority ||
+    left.runtimePriority - right.runtimePriority ||
+    left.sourceSequence - right.sourceSequence
   );
 }
 
 function compareEvents(left, right) {
   return (
-    Number(left.timeMs) - Number(right.timeMs) ||
+    resolveEventAbsoluteFrame(left) - resolveEventAbsoluteFrame(right) ||
+    Number(left.runtimePhasePriority ?? 0) -
+      Number(right.runtimePhasePriority ?? 0) ||
+    Number(left.runtimePriority ?? 0) - Number(right.runtimePriority ?? 0) ||
     Number(left.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) -
-      Number(right.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER) ||
-    String(left.actionId ?? '').localeCompare(String(right.actionId ?? '')) ||
-    String(left.hitKey ?? '').localeCompare(String(right.hitKey ?? ''))
+      Number(right.runtimeSequenceIndex ?? Number.MAX_SAFE_INTEGER)
   );
 }
 
-function timeToFrame(timeMs) {
-  return Math.max(0, Math.round((Number(timeMs) * FRAME_RATE) / 1000));
+function resolveEventAbsoluteFrame(event) {
+  return Number.isInteger(event.absoluteFrame)
+    ? event.absoluteFrame
+    : timeToFrame(event.timeMs);
+}
+
+function timeToFrame(timeMs, frameRate = FRAME_RATE) {
+  return Math.round((Number(timeMs) * Number(frameRate)) / 1000);
 }
 
 function roundValue(value) {

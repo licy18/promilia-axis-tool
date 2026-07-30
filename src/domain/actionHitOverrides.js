@@ -14,6 +14,9 @@ export function normalizeActionHitOverrides(value = null) {
             ? null
             : normalizeActionHitCriticalPolicy(override.criticalPolicy);
         const criticalRoll = normalizeCriticalRoll(override.criticalRoll);
+        const criticalRollUnit = normalizeCriticalRollUnit(
+          override.criticalRollUnit
+        );
         return [
           hitIdentity,
           {
@@ -22,6 +25,9 @@ export function normalizeActionHitOverrides(value = null) {
               : { willHit: Boolean(override.willHit) }),
             ...(criticalPolicy ? { criticalPolicy } : {}),
             ...(criticalRoll != null ? { criticalRoll } : {}),
+            ...(criticalRoll != null && criticalRollUnit
+              ? { criticalRollUnit }
+              : {}),
           },
         ];
       })
@@ -53,5 +59,11 @@ function normalizeCriticalRoll(value) {
   const number = Number(value);
   return Number.isInteger(number) && number >= 0 && number < 10_000
     ? number
+    : null;
+}
+
+function normalizeCriticalRollUnit(value) {
+  return value === 'basis-points' || value === 'normalized-unit-interval'
+    ? value
     : null;
 }

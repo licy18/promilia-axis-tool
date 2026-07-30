@@ -8,7 +8,7 @@ import {
   getWorkbenchLoadoutOptions,
 } from '../domain/workbenchProjectFactory';
 import { getSkillActionCatalog } from '../domain/skillActionCatalog';
-import { frameToMs } from '../domain/timebase';
+import { frameToMs, msToFrame } from '../domain/timebase';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
 import {
@@ -18,6 +18,8 @@ import {
 import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHeadlessCombatCore';
+import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
+import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -110,10 +112,9 @@ export function createMachineAxisService({
   function compile(machineAxis, options = {}) {
     const prepared = prepare(machineAxis);
     if (!prepared.valid) throw new MachineAxisValidationError(prepared.issues);
-    const canonicalCompilation = core.compile(
-      { schemaVersion: 1, project: prepared.project },
-      options
-    );
+    const canonicalCompilation =
+      prepared.canonicalCompilation ??
+      core.compile({ schemaVersion: 1, project: prepared.project }, options);
     const identityIssues = validateCompiledDataIdentity(
       prepared.contract,
       canonicalCompilation.dataIdentity
@@ -138,14 +139,15 @@ export function createMachineAxisService({
   function validate(machineAxis, options = {}) {
     try {
       const prepared = prepareValidated(machineAxis, options);
-      const { compilation, run, issues } = prepared;
+      const { compilation, run, issues, warnings, classification } = prepared;
       return {
         schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
         contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
         kind: 'azpr-machine-axis-validation',
         valid: prepared.valid,
         issues,
-        warnings: prepared.warnings,
+        warnings,
+        classification,
         hashes: {
           input: compilation.hashes.input,
           data: compilation.hashes.data,
@@ -154,13 +156,17 @@ export function createMachineAxisService({
         actionResolutions: compilation.actionResolutions,
       };
     } catch (error) {
+      const issues = normalizeMachineAxisIssues(error);
       return {
         schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
         contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
         kind: 'azpr-machine-axis-validation',
         valid: false,
-        issues: normalizeMachineAxisIssues(error),
+        issues,
         warnings: [],
+        classification: createFailedMachineAxisValidationClassification(
+          issues
+        ),
         hashes: { input: null, data: null, trace: null },
         actionResolutions: [],
       };
@@ -211,12 +217,18 @@ export function createMachineAxisService({
     const compilation = compile(machineAxis, options);
     const run = core.simulate(compilation.canonicalCompilation, options);
     const issues = collectExecutionIssues(run, compilation.actionResolutions);
+    const warnings = collectExecutionWarnings({
+      compilation,
+      run,
+    });
     return {
       valid: issues.length === 0,
       issues,
-      warnings:
-        compilation.canonicalCompilation.scenario.diagnostics
-          ?.validationWarnings ?? [],
+      warnings,
+      classification: createMachineAxisValidationClassification({
+        issues,
+        warnings,
+      }),
       compilation,
       run,
     };
@@ -276,6 +288,17 @@ export function createMachineAxisService({
           ?.durationFrames ?? null,
     });
     issues.push(...scheduleResult.issues);
+    if (issues.length) {
+      return {
+        valid: false,
+        contract,
+        project: null,
+        actionResolutions: templates
+          .filter(Boolean)
+          .map(item => item.resolution),
+        issues,
+      };
+    }
     const actionDrafts = templates
       .filter(Boolean)
       .map(template => {
@@ -288,20 +311,9 @@ export function createMachineAxisService({
           : null;
       })
       .filter(Boolean);
-    if (issues.length) {
-      return {
-        valid: false,
-        contract,
-        project: null,
-        actionResolutions: templates
-          .filter(Boolean)
-          .map(item => item.resolution),
-        issues,
-      };
-    }
     const first = contract.scenario.team[0];
     const second = contract.scenario.team[1];
-    const project = createWorkbenchProject(
+    let project = createWorkbenchProject(
       {
         characterId: first.characterId,
         secondaryCharacterId: second.characterId,
@@ -340,6 +352,31 @@ export function createMachineAxisService({
     );
     project.id = contract.scenario.id;
     project.name = contract.scenario.name;
+    let finalScheduleResult = scheduleResult;
+    let canonicalCompilation = null;
+    let actionVariantPreflight = null;
+    let resolvedDurationFramesByActionId = new Map(
+      templates
+        .filter(Boolean)
+        .map(template => [template.actionId, template.durationFrames])
+    );
+    if (!issues.length) {
+      const stabilization = stabilizeMachineAxisScheduling({
+        contract,
+        project,
+        templates: templates.filter(Boolean),
+        core,
+      });
+      issues.push(...stabilization.issues);
+      if (stabilization.valid) {
+        project = stabilization.project;
+        finalScheduleResult = stabilization.scheduleResult;
+        canonicalCompilation = stabilization.canonicalCompilation;
+        actionVariantPreflight = stabilization.actionVariantPreflight;
+        resolvedDurationFramesByActionId =
+          stabilization.durationFramesByActionId;
+      }
+    }
     project.metadata.transport = {
       ...(project.metadata.transport ?? {}),
       [MACHINE_AXIS_TRANSPORT_METADATA_KEY]: createMachineAxisTransportMetadata(
@@ -365,11 +402,31 @@ export function createMachineAxisService({
       valid: issues.length === 0,
       contract,
       project,
-      actionResolutions: templates.filter(Boolean).map(template => ({
-        ...template.resolution,
-        startFrame: scheduleResult.byActionId[template.actionId]?.startFrame,
-      })),
+      actionResolutions: templates.filter(Boolean).map(template => {
+        const variantSelection = actionVariantPreflight?.selectionByActionId.get(
+          template.actionId
+        );
+        return {
+          ...template.resolution,
+          index: template.index,
+          startFrame:
+            finalScheduleResult.byActionId[template.actionId]?.startFrame,
+          durationFrames:
+            resolvedDurationFramesByActionId.get(template.actionId) ??
+            template.durationFrames,
+          resolvedControlSkillId:
+            variantSelection?.executionControlSkillId ??
+            variantSelection?.controlSkillId ??
+            null,
+          resolvedSubSkillIndex:
+            variantSelection?.selectedSubSkillIndex ?? null,
+          variantResolutionStatus: variantSelection?.status ?? null,
+          variantResolutionSourceIdentity:
+            variantSelection?.sourceIdentity ?? null,
+        };
+      }),
       issues,
+      canonicalCompilation,
     };
   }
 
@@ -386,6 +443,221 @@ export function createMachineAxisService({
     prepare,
     prepareValidated,
   });
+}
+
+function stabilizeMachineAxisScheduling({ contract, project, templates, core }) {
+  let workingProject = project;
+  const maxPasses = Math.max(3, Math.min(12, templates.length + 1));
+  for (let pass = 0; pass < maxPasses; pass += 1) {
+    const canonicalCompilation = core.compile({
+      schemaVersion: 1,
+      project: workingProject,
+    });
+    const actionVariantPreflight = createVerifiedActionVariantRuntime({
+      scenario: canonicalCompilation.scenario,
+      actionExecutionPlan: null,
+    });
+    if (actionVariantPreflight?.status !== 'verified-action-variant-runtime-ready') {
+      return createSchedulingFailure(
+        'machine-axis-schedule-variant-preflight-unavailable',
+        'Verified action variant preflight is unavailable',
+        {
+          reason: actionVariantPreflight?.reason ??
+            actionVariantPreflight?.status ??
+            'unknown',
+        }
+      );
+    }
+    const effectiveTimeline = projectScenarioEffectiveActionTimeline({
+      scenario: canonicalCompilation.scenario,
+      actionResolutionById: actionVariantPreflight.actionResolutionById,
+      actionSelectionById: actionVariantPreflight.selectionByActionId,
+    });
+    const projectActionById = new Map(
+      (canonicalCompilation.scenario.actions ?? []).map(action => [
+        String(action.id),
+        action,
+      ])
+    );
+    const effectiveActionById = new Map(
+      (effectiveTimeline.scenario.actions ?? []).map(action => [
+        String(action.id),
+        action,
+      ])
+    );
+    const durationFramesByActionId = new Map();
+    const scheduleSpanFramesByActionId = new Map();
+    const durationIssues = [];
+    for (const template of templates) {
+      const projectAction = projectActionById.get(String(template.actionId));
+      const effectiveAction = effectiveActionById.get(String(template.actionId));
+      const runtimeResolution =
+        actionVariantPreflight.actionResolutionById.get(template.actionId);
+      const durationFrames = resolvePreflightDurationFrames({
+        template,
+        effectiveAction,
+        runtimeResolution,
+      });
+      if (durationFrames == null) {
+        durationIssues.push(
+          createMachineAxisDiagnostic(
+            'machine-axis-schedule-duration-unresolved',
+            `actions.${template.index}.schedule`,
+            `Context-resolved duration is unavailable for action ${template.actionId}`,
+            {
+              actionId: template.actionId,
+              reason:
+                runtimeResolution?.status ??
+                'context-resolved-effective-duration-missing',
+              sourceEvidenceStatus:
+                runtimeResolution?.sourceEvidenceStatus ??
+                template.resolution.sourceEvidenceStatus ??
+                null,
+            }
+          )
+        );
+        continue;
+      }
+      durationFramesByActionId.set(template.actionId, durationFrames);
+      const requestedStartMs = Number(projectAction?.startMs);
+      const effectiveEndMs =
+        Number(effectiveAction?.startMs) + Number(effectiveAction?.durationMs);
+      const scheduleSpanFrames =
+        Number.isFinite(requestedStartMs) && Number.isFinite(effectiveEndMs)
+          ? msToFrame(effectiveEndMs - requestedStartMs)
+          : durationFrames;
+      scheduleSpanFramesByActionId.set(
+        template.actionId,
+        Math.max(0, scheduleSpanFrames)
+      );
+    }
+    if (durationIssues.length) {
+      return {
+        valid: false,
+        issues: durationIssues,
+        project: workingProject,
+        scheduleResult: null,
+        canonicalCompilation: null,
+        actionVariantPreflight,
+        durationFramesByActionId,
+      };
+    }
+    const scheduleResult = resolveMachineAxisSchedules(contract.actions, {
+      scenarioDurationFrames: contract.scenario.durationFrames,
+      resolveDurationFrames: action =>
+        scheduleSpanFramesByActionId.get(action.id) ?? null,
+    });
+    if (!scheduleResult.valid) {
+      return {
+        valid: false,
+        issues: scheduleResult.issues,
+        project: workingProject,
+        scheduleResult,
+        canonicalCompilation: null,
+        actionVariantPreflight,
+        durationFramesByActionId,
+      };
+    }
+    const nextProject = applyResolvedMachineAxisTimeline({
+      project: workingProject,
+      scheduleResult,
+      durationFramesByActionId,
+    });
+    if (machineAxisTimelineEqual(workingProject, nextProject, templates)) {
+      return {
+        valid: true,
+        issues: [],
+        project: workingProject,
+        scheduleResult,
+        canonicalCompilation,
+        actionVariantPreflight,
+        durationFramesByActionId,
+        passCount: pass + 1,
+      };
+    }
+    workingProject = nextProject;
+  }
+  return createSchedulingFailure(
+    'machine-axis-schedule-context-not-converged',
+    'Context-resolved Machine Axis schedule did not converge',
+    { maxPasses }
+  );
+}
+
+function resolvePreflightDurationFrames({
+  template,
+  effectiveAction,
+  runtimeResolution,
+}) {
+  if (!effectiveAction) return null;
+  const binding = runtimeResolution?.actionBinding ?? null;
+  const sourcedDurationFrames =
+    nonNegativeIntegerOrNull(binding?.effectiveOccupancyFrames) ??
+    nonNegativeIntegerOrNull(binding?.actualDurationFrames) ??
+    nonNegativeIntegerOrNull(
+      binding?.actionTiming?.occupancy?.durationFrames
+    );
+  if (sourcedDurationFrames != null) return sourcedDurationFrames;
+  if (runtimeResolution) return null;
+  const projectedDurationFrames = msToFrame(effectiveAction.durationMs);
+  if (projectedDurationFrames >= 0) return projectedDurationFrames;
+  return nonNegativeIntegerOrNull(template.durationFrames);
+}
+
+function applyResolvedMachineAxisTimeline({
+  project,
+  scheduleResult,
+  durationFramesByActionId,
+}) {
+  return {
+    ...project,
+    actions: (project.actions ?? []).map(action => {
+      const schedule = scheduleResult.byActionId[String(action.id)];
+      if (!schedule) return action;
+      const durationFrames =
+        durationFramesByActionId.get(String(action.id)) ??
+        nonNegativeIntegerOrNull(action.durationFrames) ??
+        msToFrame(action.durationMs);
+      return {
+        ...action,
+        startFrame: schedule.startFrame,
+        startMs: frameToMs(schedule.startFrame),
+        durationFrames,
+        durationMs: frameToMs(durationFrames),
+      };
+    }),
+  };
+}
+
+function machineAxisTimelineEqual(left, right, templates) {
+  const leftById = new Map(
+    (left.actions ?? []).map(action => [String(action.id), action])
+  );
+  const rightById = new Map(
+    (right.actions ?? []).map(action => [String(action.id), action])
+  );
+  return templates.every(template => {
+    const leftAction = leftById.get(String(template.actionId));
+    const rightAction = rightById.get(String(template.actionId));
+    return (
+      msToFrame(leftAction?.startMs) === msToFrame(rightAction?.startMs) &&
+      msToFrame(leftAction?.durationMs) === msToFrame(rightAction?.durationMs)
+    );
+  });
+}
+
+function createSchedulingFailure(code, message, details = {}) {
+  return {
+    valid: false,
+    issues: [
+      createMachineAxisDiagnostic(code, 'actions', message, details),
+    ],
+    project: null,
+    scheduleResult: null,
+    canonicalCompilation: null,
+    actionVariantPreflight: null,
+    durationFramesByActionId: new Map(),
+  };
 }
 
 function createMachineAxisTransportMetadata({
@@ -942,7 +1214,10 @@ function toProjectHitOverrides(overrides) {
           ? { criticalPolicy: override.criticalMode }
           : {}),
         ...(override.criticalRoll != null
-          ? { criticalRoll: override.criticalRoll }
+          ? {
+              criticalRoll: override.criticalRoll,
+              criticalRollUnit: 'basis-points',
+            }
           : {}),
       },
     ])
@@ -1318,6 +1593,203 @@ function collectExecutionIssues(run, actionResolutions) {
       ),
     ];
   });
+}
+
+function collectExecutionWarnings({ compilation, run }) {
+  const warnings = [];
+  const seen = new Set();
+  const add = warning => {
+    const key = [
+      warning.code,
+      warning.actionId ?? '',
+      warning.path ?? '',
+      warning.reason ?? '',
+    ].join('|');
+    if (seen.has(key)) return;
+    seen.add(key);
+    warnings.push({ ...warning, severity: 'warning' });
+  };
+  for (const warning of
+    compilation.canonicalCompilation.scenario.diagnostics
+      ?.validationWarnings ?? []) {
+    if (warning && typeof warning === 'object') {
+      add({
+        code: warning.code ?? 'machine-axis-canonical-validation-warning',
+        path: warning.path ?? 'scenario',
+        message: warning.message ?? String(warning.reason ?? warning.code),
+        ...warning,
+      });
+    } else {
+      add({
+        code: 'machine-axis-canonical-validation-warning',
+        path: 'scenario',
+        message: String(warning),
+      });
+    }
+  }
+  for (const resolution of compilation.actionResolutions ?? []) {
+    const sourceEvidenceStatus = String(
+      resolution.sourceEvidenceStatus ?? ''
+    );
+    const scenarioRuntimeStatus = String(
+      resolution.scenarioRuntimeStatus ?? ''
+    );
+    const variantResolutionStatus = String(
+      resolution.variantResolutionStatus ?? ''
+    );
+    if (isEvidenceOpenStatus(sourceEvidenceStatus)) {
+      add({
+        code: 'machine-axis-source-evidence-open',
+        path: `actions.${resolution.index ?? 0}`,
+        actionId: resolution.actionId,
+        sourceEvidenceStatus,
+        reason: sourceEvidenceStatus,
+        message: `Action ${resolution.actionId} has open source evidence: ${sourceEvidenceStatus}`,
+      });
+    }
+    if (isScenarioAssumptionStatus(scenarioRuntimeStatus)) {
+      add({
+        code: 'machine-axis-scenario-assumption',
+        path: `actions.${resolution.index ?? 0}`,
+        actionId: resolution.actionId,
+        scenarioRuntimeStatus,
+        reason: scenarioRuntimeStatus,
+        message: `Action ${resolution.actionId} is runnable under scenario assumption: ${scenarioRuntimeStatus}`,
+      });
+    } else if (isEvidenceOpenStatus(scenarioRuntimeStatus)) {
+      add({
+        code: 'machine-axis-scenario-runtime-evidence-open',
+        path: `actions.${resolution.index ?? 0}`,
+        actionId: resolution.actionId,
+        scenarioRuntimeStatus,
+        reason: scenarioRuntimeStatus,
+        message: `Action ${resolution.actionId} has open scenario runtime evidence: ${scenarioRuntimeStatus}`,
+      });
+    }
+    if (isEvidenceOpenStatus(variantResolutionStatus)) {
+      add({
+        code: 'machine-axis-variant-resolution-open',
+        path: `actions.${resolution.index ?? 0}.intent.semanticVariant`,
+        actionId: resolution.actionId,
+        variantResolutionStatus,
+        reason: variantResolutionStatus,
+        message: `Action ${resolution.actionId} variant resolution remains open: ${variantResolutionStatus}`,
+      });
+    }
+  }
+  for (const entry of run.trace.executionPlan.actions ?? []) {
+    if (entry.status !== 'scheduled-with-unresolved-conditions') continue;
+    add({
+      code: 'machine-axis-action-conditions-unresolved',
+      path: `executionPlan.actions.${entry.actionIndex ?? 0}`,
+      actionId: entry.actionId,
+      unresolvedCodes: entry.unresolvedCodes ?? [],
+      reason: entry.readinessStatus ?? entry.status,
+      message: `Action ${entry.actionId} executes with unresolved conditions`,
+    });
+  }
+  for (const group of groupSimultaneousCrossOwnerActions(
+    compilation.actionResolutions
+  )) {
+    add({
+      code: 'machine-axis-same-frame-order-unresolved',
+      path: 'actions',
+      absoluteFrame: group.absoluteFrame,
+      actionIds: group.actionIds,
+      ownerKinds: group.ownerKinds,
+      reason: 'same-frame-cross-owner-order-not-specified',
+      message: `Same-frame actor/kibo order at frame ${group.absoluteFrame} is not specified`,
+    });
+  }
+  return warnings;
+}
+
+function createMachineAxisValidationClassification({ issues, warnings }) {
+  if (issues.length > 0) {
+    return {
+      schemaStatus: 'schema-valid',
+      runnabilityStatus: 'not-runnable',
+      evidenceStatus: 'not-evaluated',
+    };
+  }
+  const hasAssumptions = warnings.some(warning =>
+    [
+      'machine-axis-scenario-assumption',
+      'machine-axis-action-conditions-unresolved',
+      'machine-axis-same-frame-order-unresolved',
+    ].includes(warning.code)
+  );
+  return {
+    schemaStatus: 'schema-valid',
+    runnabilityStatus:
+      warnings.length > 0 || hasAssumptions
+        ? 'runnable-with-assumptions'
+        : 'runnable',
+    evidenceStatus: warnings.length > 0 ? 'evidence-open' : 'evidence-closed',
+  };
+}
+
+function createFailedMachineAxisValidationClassification(issues) {
+  const schemaInvalid = issues.some(issue =>
+    isRawSchemaIssueCode(issue.code)
+  );
+  return {
+    schemaStatus: schemaInvalid ? 'schema-invalid' : 'schema-valid',
+    runnabilityStatus: 'not-runnable',
+    evidenceStatus: 'not-evaluated',
+  };
+}
+
+function isRawSchemaIssueCode(code) {
+  return (
+    String(code).startsWith('machine-axis-schema-') ||
+    [
+      'machine-axis-contract-invalid',
+      'machine-axis-contract-name-unsupported',
+      'machine-axis-kind-unsupported',
+      'machine-axis-fps-unsupported',
+    ].includes(code)
+  );
+}
+
+function groupSimultaneousCrossOwnerActions(actionResolutions = []) {
+  const byFrame = new Map();
+  for (const resolution of actionResolutions) {
+    if (!Number.isInteger(resolution.startFrame)) continue;
+    if (!['actor', 'kibo'].includes(resolution.ownerKind)) continue;
+    const group = byFrame.get(resolution.startFrame) ?? [];
+    group.push(resolution);
+    byFrame.set(resolution.startFrame, group);
+  }
+  return [...byFrame.entries()].flatMap(([absoluteFrame, entries]) => {
+    const ownerKinds = [...new Set(entries.map(entry => entry.ownerKind))];
+    if (!(ownerKinds.includes('actor') && ownerKinds.includes('kibo'))) {
+      return [];
+    }
+    return [
+      {
+        absoluteFrame,
+        actionIds: entries.map(entry => entry.actionId),
+        ownerKinds: entries.map(entry => entry.ownerKind),
+      },
+    ];
+  });
+}
+
+function isScenarioAssumptionStatus(status) {
+  return status.startsWith('scenario-assumed-');
+}
+
+function isEvidenceOpenStatus(status) {
+  if (!status) return false;
+  return [
+    'unresolved',
+    'runtime-dependent',
+    'runtime-evidence',
+    'static-evidence-gap',
+    'not-yet-modeled',
+    'partially-resolved',
+  ].some(token => status.includes(token));
 }
 
 function createMachineAxisComparison(left, right) {

@@ -1799,6 +1799,12 @@ Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource
 
 R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。产品已签收基线 `899edea0c5a1f718153ebe86712ecd8c31aabf7d`，三角色因此成为 `visually-accepted`；181 个 source gap 与 706 个 acceptance gap 仍构成 887 个唯一功能阻断，所以 `optimizationReadyCount` 继续为 0。M11-D 已关闭并停止等待下一指令，M12 明确未启动。
 
+### M11-R 外部审计整改完成，等待外部复审（2026-07-30）
+
+合并基线 `290da378944dde1f8e477022710044a74805b7fb` 已完成 M11-01..09 整改：Machine Axis raw Schema 在归一化前严格校验；captured roll 固定为 basis points；负帧、越界和未知实际时长被结构化拒绝；相对排程消费实际 variant/effective occupancy；动作与效果使用统一 `[0,duration]`；验证状态、统计守恒和同帧整数顺序均显式化。不同角色可按产品合同携带同名奇波，CD 与资源按 `actorId+kiboId` 的 runtime entity 隔离。
+
+18 文件/138 条无头回归、三角色与奇波重放、character/verified/acceptance/kibo 及四道生产来源审计和 production build 均通过。排序修正更新了三角色主 golden，但每项均有逐帧原因和新强断言；寒悠悠切人专用 golden 业务 hash 不变。合并前的三角色可视签收不自动恢复，当前 `visuallyAcceptedCount=0`、`optimizationReadyCount=0`。本阶段只生成新的 merged-only 审计包并等待外部复审；旧被拒包保留，M12、UI、性能、包体和新增角色继续锁定。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

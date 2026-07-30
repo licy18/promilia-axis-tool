@@ -746,6 +746,11 @@ function createSkillCooldownEvaluation(
     const ownerKind =
       action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor';
     const ownerId = ownerKind === 'kibo' ? action.kiboId : action.actorId;
+    const runtimeOwnerIdentity = createCooldownRuntimeOwnerIdentity({
+      action,
+      ownerKind,
+      ownerId,
+    });
     const baseCooldown = createSkillCooldownRequirement(action);
     if (!baseCooldown) {
       const cooldownPolicy = {
@@ -802,7 +807,7 @@ function createSkillCooldownEvaluation(
       evaluation,
     };
     const cooldownIdentity = cooldown.source?.subSkillId ?? action.skillId;
-    const key = `${ownerKind}|${ownerId}|${cooldownIdentity}`;
+    const key = `${ownerKind}|${runtimeOwnerIdentity}|${cooldownIdentity}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
     const chargesBefore = cloneCooldownCharges(state.charges);
@@ -829,6 +834,7 @@ function createSkillCooldownEvaluation(
         actorName: action.actor?.name ?? action.actorId,
         ownerKind,
         ownerId,
+        runtimeOwnerIdentity,
         kiboId: action.kiboId ?? null,
         blockingActionId: blocking.sourceActionId,
         blockingActionName: blocking.sourceActionName,
@@ -885,8 +891,10 @@ function createSkillCooldownEvaluation(
       actorName: action.actor?.name ?? action.actorId,
       ownerKind,
       ownerId,
+      runtimeOwnerIdentity,
       kiboId: action.kiboId ?? null,
       skillId: action.skillId,
+      actionOrderIndex,
       chargeIndex: consumedCharge.chargeIndex,
       cooldownCount: cooldown.cooldownCount,
       startMs: action.startMs,
@@ -948,7 +956,7 @@ function createSkillCooldownEvaluation(
       (left, right) =>
         left.startMs - right.startMs ||
         left.endMs - right.endMs ||
-        left.windowId.localeCompare(right.windowId)
+        left.actionOrderIndex - right.actionOrderIndex
     ),
   };
 }
@@ -1009,11 +1017,16 @@ function createAcceptedSkillStartTransition({
     actionId: action.id,
     actionName: action.name ?? action.id,
     actionOrderIndex,
-    orderKey: `${Number(action.startMs) || 0}|${String(action.id)}`,
+    orderKey: `${Number(action.startMs) || 0}|${actionOrderIndex}`,
     timeMs: Number(action.startMs) || 0,
     actorId: action.actorId ?? null,
     ownerKind,
     ownerId,
+    runtimeOwnerIdentity: createCooldownRuntimeOwnerIdentity({
+      action,
+      ownerKind,
+      ownerId,
+    }),
     kiboId: action.kiboId ?? null,
     skillId: action.skillId ?? null,
     cooldownPolicy,
@@ -1092,6 +1105,15 @@ function createCooldownReadinessSnapshot({
     ownerKind: action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
     ownerId:
       action.type === ACTION_TYPES.KIBO_EVENT ? action.kiboId : action.actorId,
+    runtimeOwnerIdentity: createCooldownRuntimeOwnerIdentity({
+      action,
+      ownerKind:
+        action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
+      ownerId:
+        action.type === ACTION_TYPES.KIBO_EVENT
+          ? action.kiboId
+          : action.actorId,
+    }),
     kiboId: action.kiboId ?? null,
     skillId: action.skillId ?? null,
     availableBefore: countAvailableCharges(chargesBefore, action.startMs),
@@ -1109,6 +1131,12 @@ function createCooldownReadinessSnapshot({
     trackingStatus: 'applied-to-readiness',
     appliedToSimulationResults: false,
   };
+}
+
+function createCooldownRuntimeOwnerIdentity({ action, ownerKind, ownerId }) {
+  return ownerKind === 'kibo'
+    ? `${String(action.actorId)}|kibo:${Number(action.kiboId)}`
+    : `actor:${String(ownerId)}`;
 }
 
 function countAvailableCharges(charges, timeMs) {

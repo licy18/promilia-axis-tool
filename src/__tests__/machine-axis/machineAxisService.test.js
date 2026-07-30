@@ -52,6 +52,10 @@ function createAxis({
       enemy: { enemyId: 300032 },
       initialRuntimeState: {},
       critical,
+      projectile: {
+        targetDistance: 0,
+        defaultWillHit: true,
+      },
     },
     actions: actions ?? [
       {

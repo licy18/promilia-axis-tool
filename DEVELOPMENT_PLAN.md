@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-D 已通过产品验收，停止等待下一指令**。M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成可信派生门禁并通过产品验收；M12 尚未启动且保持锁定。包体超限与纯性能抖动继续只作为发布风险记录。
+当前里程碑：**M11-R 外部审计整改完成，等待外部复审**。整改从合并基线 `290da378944dde1f8e477022710044a74805b7fb` 修复 M11-01..09，并保持三角色、122 只奇波/366 个公开动作与全部来源审计可重放；合并前 visual acceptance 不自动继承，`optimization-ready=0`。M12 尚未启动且保持锁定，包体和性能继续只记录风险。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -843,6 +843,12 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 阶段结果：R1 将 requirement inventory、可执行 scenario case、结构化 trace projection、精确 coverage edge、source/acceptance ledger 和成熟度收拢为单向可信派生链；manifest 与 catalog 均绑定 committed manifest index，篡改 N/A、required/summary、ledger、签收或 catalog 后即使重算自身 hash 也会被 validator 与 canonical gate 拒绝。产品已对 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成可视签收，小玉、红宝石、寒悠悠因此升至 `visually-accepted`；但矩阵与功能 ledger 仍有阻断，三者继续保持 `optimization-ready=0`。精确归因后的矩阵通过/必需为小玉 `56/407`、红宝石 `36/709`、寒悠悠 `62/243`；887 个唯一功能阻断拆为 181 个上游 source gap 与 706 个 acceptance scenario gap，另有 575 个 wrapper/N/A 来源记录明确非阻断。聚焦回归、验收幂等审计、六道既有审计、production build 和可视导入均通过，玩法 golden/hash 无漂移。M11-D 已通过产品验收并停止，M12 未启动。
 
+#### M11-R：外部审计整改（等待外部复审）
+
+M11-01..09 已在合并运行时统一整改：captured roll 固定 basis points；公共 CLI 先校验 raw Schema；排程拒绝负帧与越界；相对排程先解析实际 variant/effective occupancy；动作与效果共用 `[0,duration]`；validate 分开 schema、runnable 与 evidence；统计拆分战斗 hit、状态事件、实际削韧与恢复；产品确认同名奇波可跨角色重复并按 `actorId+kiboId` 隔离 CD/资源；同帧事件按整数帧、phase、priority、source sequence 排序。未知条件、零距离假设和无来源同帧顺序继续保持 warning/evidence-open。
+
+整改后的 18 文件/138 条无头回归、三角色/奇波 replay、八道生成与来源审计及 production build 通过。合并前 visual acceptance 不携带到新 runtime，三角色当前保持 `runtime-integrated`、`visuallyAcceptedCount=0`、`optimizationReadyCount=0`；详细 disposition 见 `reports/m11/m11-external-audit-remediation-20260730.{json,md}`。完成独立提交后只生成新的 merged-only 审计包并等待外部复审，M12 继续锁定。
+
 ### M12：批量评估、搜索与末音试点
 
 #### M12-A：Batch Evaluator
@@ -907,6 +913,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 | M11-B       | AI/脚本通过 JSON 与 CLI 建轴、校验、模拟、比较和解释           | Machine Axis Schema、结构化错误、导入导出与来源追溯                 |
 | M11-C       | 在页面复验机器轴的动作形态、资源、Buff、hit 和因果            | trace 同源、机制检查器、桌面验收场景                                |
 | M11-D       | 只有经过机器与可视化双验收的角色可用于优化                    | 四态成熟度、场景矩阵、缺口阻断与产品签收                            |
+| M11-R       | 清零外部审计的 M11-01..09 边界缺陷并保留证据状态              | raw Schema、两阶段排轴、统一 horizon、守恒、实例 CD 与整数帧顺序     |
 | M12-A       | 批量评估大量合法队伍和轴                                      | 并行模拟、贡献指标、性能基准与无语义降级                            |
 | M12-B       | 搜索可解释的候选队伍和输出轴 Top-N                            | 事件边界搜索、状态合并、剪枝、版本和可信度                          |
 | M12-C       | 为末音生成并复验持续、爆发和削韧候选方案                      | 固定场景、候选队友闭环、Top-N 回灌 Workbench                        |
@@ -977,6 +984,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 62. 已完成并通过产品验收：M11-B-R2 在 8da52fb 关闭并发测试超时与验收报告 canonical hash 漂移；122 只奇波/366 动作、固定 60 FPS、真实 CLI I/O、三角色 120 秒 fixture、六道审计与 62/62 production preview 均通过。
 63. 已通过产品验收：M11-C 在 `308dd07` 完成 canonical trace 可视编辑与复验闭环。
 64. 已完成并通过产品验收：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；三角色已取得 `visually-accepted`，但尚未取得 `optimization-ready`。当前停止等待下一指令，M12、第四角色、包体优化和未验收奇波机制接入均未启动。
+65. 已完成，等待外部复审：M11-R 从合并基线 `290da378944dde1f8e477022710044a74805b7fb` 关闭 M11-01..09；同名奇波按产品合同可跨角色重复并以 runtime entity 隔离 CD/资源，未知证据继续显式开放。18 文件/138 条无头回归、八道审计和构建通过；M12 保持锁定。
 
 ## 8. 风险和取舍
 

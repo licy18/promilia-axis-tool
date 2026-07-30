@@ -11,8 +11,8 @@
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "705e9b883dbb501f",
-    "traceHash": "7c8b7fc08f68eeb0",
+    "inputHash": "72ca4938941bc6cf",
+    "traceHash": "122f72e0abc96fc2",
     "dataHash": "4dc4a209fd7e89ec",
     "criticalPolicy": "non-critical"
   },
@@ -642,7 +642,7 @@
             2565,
             2565
           ],
-          "totalHpDamage": 0,
+          "totalHpDamage": 250,
           "totalToughnessDamage": 0
         },
         "switch-back-to-xiaoyu--on-enter--actor-101010--star-carry": {
@@ -798,7 +798,7 @@
           "totalToughnessDamage": 0
         }
       },
-      "ownerHitTotalHpDamage": 9742,
+      "ownerHitTotalHpDamage": 9992,
       "ownerHitTotalToughnessDamage": 1766,
       "selectedHpDamageByActionId": {
         "jade-star-derived-charged": 0,
@@ -807,7 +807,7 @@
       },
       "totalHpDamage": 862800,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 699319,
+      "ownerTotalHpDamage": 699416,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
         "pointCount": 609,
@@ -1018,9 +1018,9 @@
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.149139,
+              "beforeValue": 4.138733,
               "change": 0.10495,
-              "afterValue": 4.254089
+              "afterValue": 4.243683
             },
             {
               "timeMs": 14083.333334,
@@ -1042,9 +1042,9 @@
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.505615,
+              "beforeValue": 4.495209,
               "change": 0.10495,
-              "afterValue": 4.610565
+              "afterValue": 4.600159
             },
             {
               "timeMs": 14816.666667,
@@ -1357,9 +1357,9 @@
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.519974,
+              "beforeValue": 4.499145,
               "change": 0.2099,
-              "afterValue": 4.729874
+              "afterValue": 4.709045
             },
             {
               "timeMs": 14083.333334,
@@ -1381,9 +1381,9 @@
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.232986,
+              "beforeValue": 5.212158,
               "change": 0.2099,
-              "afterValue": 5.442886
+              "afterValue": 5.422058
             },
             {
               "timeMs": 14816.666667,
@@ -1564,25 +1564,25 @@
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
-              "reason": "tuning-overlimit-direct-sp",
+              "reason": "verified-hit-sp-recovery",
               "beforeValue": 14.778549,
+              "change": 0.369995,
+              "afterValue": 15.148544
+            },
+            {
+              "timeMs": 42750,
+              "actionId": "normal-special-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 15.148544,
+              "change": 0.369995,
+              "afterValue": 15.518539
+            },
+            {
+              "timeMs": 42750,
+              "actionId": "normal-special-charged",
+              "reason": "tuning-overlimit-direct-sp",
+              "beforeValue": 15.518539,
               "change": 2,
-              "afterValue": 16.778549
-            },
-            {
-              "timeMs": 42750,
-              "actionId": "normal-special-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 16.778549,
-              "change": 0.369995,
-              "afterValue": 17.148544
-            },
-            {
-              "timeMs": 42750,
-              "actionId": "normal-special-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 17.148544,
-              "change": 0.369995,
               "afterValue": 17.518539
             },
             {
@@ -2006,9 +2006,9 @@
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 23.239913,
+              "beforeValue": 23.219085,
               "change": 0.809998,
-              "afterValue": 24.049911
+              "afterValue": 24.029083
             },
             {
               "timeMs": 14083.333334,
@@ -2030,9 +2030,9 @@
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 25.753219,
+              "beforeValue": 25.732391,
               "change": 0.809998,
-              "afterValue": 26.563217
+              "afterValue": 26.542389
             },
             {
               "timeMs": 14816.666667,
@@ -2659,9 +2659,9 @@
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.149139,
+              "beforeValue": 4.138733,
               "change": 0.10495,
-              "afterValue": 4.254089
+              "afterValue": 4.243683
             },
             {
               "timeMs": 14083.333334,
@@ -2683,9 +2683,9 @@
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.505615,
+              "beforeValue": 4.495209,
               "change": 0.10495,
-              "afterValue": 4.610565
+              "afterValue": 4.600159
             },
             {
               "timeMs": 14816.666667,
@@ -2998,9 +2998,9 @@
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.519974,
+              "beforeValue": 4.499145,
               "change": 0.2099,
-              "afterValue": 4.729874
+              "afterValue": 4.709045
             },
             {
               "timeMs": 14083.333334,
@@ -3022,9 +3022,9 @@
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.232986,
+              "beforeValue": 5.212158,
               "change": 0.2099,
-              "afterValue": 5.442886
+              "afterValue": 5.422058
             },
             {
               "timeMs": 14816.666667,
@@ -3205,25 +3205,25 @@
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
-              "reason": "tuning-overlimit-direct-sp",
+              "reason": "verified-hit-sp-recovery",
               "beforeValue": 14.778549,
+              "change": 0.369995,
+              "afterValue": 15.148544
+            },
+            {
+              "timeMs": 42750,
+              "actionId": "normal-special-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 15.148544,
+              "change": 0.369995,
+              "afterValue": 15.518539
+            },
+            {
+              "timeMs": 42750,
+              "actionId": "normal-special-charged",
+              "reason": "tuning-overlimit-direct-sp",
+              "beforeValue": 15.518539,
               "change": 2,
-              "afterValue": 16.778549
-            },
-            {
-              "timeMs": 42750,
-              "actionId": "normal-special-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 16.778549,
-              "change": 0.369995,
-              "afterValue": 17.148544
-            },
-            {
-              "timeMs": 42750,
-              "actionId": "normal-special-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 17.148544,
-              "change": 0.369995,
               "afterValue": 17.518539
             },
             {
@@ -3647,9 +3647,9 @@
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 23.239913,
+              "beforeValue": 23.219085,
               "change": 0.809998,
-              "afterValue": 24.049911
+              "afterValue": 24.029083
             },
             {
               "timeMs": 14083.333334,
@@ -3671,9 +3671,9 @@
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 25.753219,
+              "beforeValue": 25.732391,
               "change": 0.809998,
-              "afterValue": 26.563217
+              "afterValue": 26.542389
             },
             {
               "timeMs": 14816.666667,
@@ -4257,9 +4257,9 @@
             2565
           ],
           "changes": [
-            2,
             0.369995,
-            0.369995
+            0.369995,
+            2
           ],
           "totalChange": 2.73999,
           "reasons": [
@@ -6126,7 +6126,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "97622898e6ccbd4f6b302bca0b758448317e9291b8d0f50dd29bb665fa2eb343"
+      "baselineReplayHash": "246e9f8fc884cc09bd86de8e19a7b6148588803d3b803caef96d1fea5b1e2ee8"
     },
     "trace": {
       "damage": [
@@ -8496,18 +8496,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_TUNING_DAMAGE",
-          "actionId": "han-star-skill",
-          "frame": 1218,
-          "hitIdentity": null,
-          "rawDamage": 567,
-          "hpDamage": 567,
-          "toughnessDamage": 397,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-star-skill",
           "frame": 1218,
@@ -8515,6 +8503,18 @@
           "rawDamage": 16,
           "hpDamage": 16,
           "toughnessDamage": 11,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "han-star-skill",
+          "frame": 1218,
+          "hitIdentity": null,
+          "rawDamage": 567,
+          "hpDamage": 567,
+          "toughnessDamage": 397,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -8940,25 +8940,25 @@
         },
         {
           "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "ruby-ultimate",
+          "frame": 1884,
+          "hitIdentity": null,
+          "rawDamage": 97,
+          "hpDamage": 97,
+          "toughnessDamage": 68,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
           "eventType": "VERIFIED_TUNING_DAMAGE",
           "actionId": "ruby-ultimate",
           "frame": 1884,
           "hitIdentity": null,
           "rawDamage": 20870,
           "hpDamage": 20870,
-          "toughnessDamage": 2584,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "ruby-ultimate",
-          "frame": 1884,
-          "hitIdentity": null,
-          "rawDamage": 194,
-          "hpDamage": 194,
-          "toughnessDamage": 0,
+          "toughnessDamage": 2516,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -10392,18 +10392,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "normal-a4",
-          "frame": 2412,
-          "hitIdentity": null,
-          "rawDamage": 70,
-          "hpDamage": 70,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
           "actionId": "ruby-ultimate",
           "frame": 2412,
@@ -10411,6 +10399,18 @@
           "rawDamage": 0,
           "hpDamage": 0,
           "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "normal-a4",
+          "frame": 2412,
+          "hitIdentity": null,
+          "rawDamage": 70,
+          "hpDamage": 70,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -10452,18 +10452,6 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "normal-a4",
-          "frame": 2424,
-          "hitIdentity": null,
-          "rawDamage": 70,
-          "hpDamage": 70,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
           "actionId": "ruby-ultimate",
           "frame": 2424,
@@ -10471,6 +10459,18 @@
           "rawDamage": 0,
           "hpDamage": 0,
           "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "normal-a4",
+          "frame": 2424,
+          "hitIdentity": null,
+          "rawDamage": 70,
+          "hpDamage": 70,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -10848,36 +10848,36 @@
         },
         {
           "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "normal-special-charged",
+          "frame": 2565,
+          "hitIdentity": null,
+          "rawDamage": 125,
+          "hpDamage": 125,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "normal-special-charged",
+          "frame": 2565,
+          "hitIdentity": null,
+          "rawDamage": 125,
+          "hpDamage": 125,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
           "eventType": "VERIFIED_TUNING_DAMAGE",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "hitIdentity": null,
-          "rawDamage": 129653,
-          "hpDamage": 129653,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "normal-special-charged",
-          "frame": 2565,
-          "hitIdentity": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
-          "toughnessDamage": 0,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "normal-special-charged",
-          "frame": 2565,
-          "hitIdentity": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
+          "rawDamage": 129500,
+          "hpDamage": 129500,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -13369,7 +13369,7 @@
         }
       ]
     },
-    "summaryHash": "f9c492ef3bf54aee60c44520412b954188f8642a504ab2670b5cfc7c7db1dc15"
+    "summaryHash": "54a32104fb2d405723422a6dd7987864b6e993f7bac4a60ce2d3c54cdbadb810"
   },
   "expected": {
     "exact": {
@@ -13411,9 +13411,9 @@
       "combat.damageEventCount": 422,
       "combat.ownerDamageEventCount": 247,
       "combat.ownerHitEventCount": 115,
-      "combat.ownerHitTotalHpDamage": 9742,
+      "combat.ownerHitTotalHpDamage": 9992,
       "combat.ownerHitTotalToughnessDamage": 1766,
-      "combat.ownerTotalHpDamage": 699319,
+      "combat.ownerTotalHpDamage": 699416,
       "combat.ownerTotalToughnessDamage": 0,
       "combat.enemy.initialHp": 862800,
       "combat.enemy.finalHp": 0,
@@ -13430,6 +13430,7 @@
         2424
       ],
       "combat.ownerHitSummaryByActionId.normal-a4.totalHpDamage": 280,
+      "combat.ownerHitSummaryByActionId.normal-special-charged.totalHpDamage": 250,
       "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.hitCount": 2,
       "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.frames": [
         2255,
@@ -13530,7 +13531,7 @@
   "validation": {
     "status": "authoritative-golden-runtime-expectation-passed",
     "passed": true,
-    "assertionCount": 117,
+    "assertionCount": 118,
     "failedCount": 0,
     "assertions": [
       {
@@ -13802,8 +13803,8 @@
       {
         "jsonPath": "combat.ownerHitTotalHpDamage",
         "operator": "exact",
-        "expected": 9742,
-        "actual": 9742,
+        "expected": 9992,
+        "actual": 9992,
         "passed": true
       },
       {
@@ -13816,8 +13817,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 699319,
-        "actual": 699319,
+        "expected": 699416,
+        "actual": 699416,
         "passed": true
       },
       {
@@ -13895,6 +13896,13 @@
         "operator": "exact",
         "expected": 280,
         "actual": 280,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitSummaryByActionId.normal-special-charged.totalHpDamage",
+        "operator": "exact",
+        "expected": 250,
+        "actual": 250,
         "passed": true
       },
       {
@@ -14401,7 +14409,7 @@
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 699319,
+        "actual": 699416,
         "passed": true
       },
       {
@@ -14420,6 +14428,6 @@
       }
     ]
   },
-  "replayHash": "d79f0985690b9dbc365376f0e7d8e6bf9cb2388c7bb2e084d0675116867947ce",
-  "profileHash": "11c7df959c7f903a55468250a3bfaf54d90450b40471f5c85765cdde4f5c0bff"
+  "replayHash": "ecb91f7ad71fec39d58411ae79ade18493ae88bf5a77ce1b3ea57697f8ef6e51",
+  "profileHash": "8e3936cd24c7919b26c3c82ec89441847cc774db90d3dc593d9051d30ecfea45"
 }

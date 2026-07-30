@@ -223,6 +223,7 @@ export async function createKiboHeadlessCensus({
     kiboDocument.generatedAt ??
     publicRuntimeCoverage.generatedAt ??
     'source-generated-at-unavailable';
+  const reportSources = createPortableReportSources(sources);
   const mechanicsCatalog = createPassiveMechanicsCatalog({
     generatedAt,
     pvePassiveSkills,
@@ -240,7 +241,7 @@ export async function createKiboHeadlessCensus({
       pvpPassiveOccurrenceCount: pvpOccurrences.length,
       pvpPassiveUniqueCount: pvpPassiveSkills.length,
     },
-    sources,
+    sources: reportSources,
     fixedSkills,
     pvePassiveSkills,
     pvpPassiveSkills,
@@ -270,13 +271,21 @@ export async function createKiboHeadlessCensus({
     pvePassiveSkills,
     pvpPassiveSkills,
     publicActions: actionRows,
-    sources,
+    sources: reportSources,
   });
 
   return {
     census,
     mechanicsCatalog,
     maturityMatrix,
+  };
+}
+
+function createPortableReportSources(sources) {
+  return {
+    ...sources,
+    kibos: 'src/data/generated/kibos.json',
+    publicRuntimeCoverage: 'reports/verified-public-runtime-coverage.json',
   };
 }
 

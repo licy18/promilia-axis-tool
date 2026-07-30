@@ -105,4 +105,45 @@ describe('Machine Axis CLI real process I/O', () => {
       valid: true,
     });
   }, 30_000);
+
+  it('rejects raw Schema violations before normalization with exit 4', () => {
+    const invalid = structuredClone(fixture);
+    delete invalid.scenario.projectile.defaultWillHit;
+    invalid.scenario.unpublishedFlag = true;
+    invalid.scenario.projectile.targetDistance = '0';
+
+    const result = runCli(['validate', '-'], {
+      input: JSON.stringify(invalid),
+    });
+    const output = parseMachineJson(result.stdout);
+
+    expect(result.status).toBe(4);
+    expect(result.stderr).not.toContain('node:internal');
+    expect(result.stderr).not.toContain(' at ');
+    expect(output).toMatchObject({
+      kind: 'azpr-machine-axis-validation',
+      valid: false,
+      classification: {
+        schemaStatus: 'schema-invalid',
+        runnabilityStatus: 'not-runnable',
+        evidenceStatus: 'not-evaluated',
+      },
+    });
+    expect(output.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-schema-required',
+          path: 'scenario.projectile.defaultWillHit',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-schema-additional-property',
+          path: 'scenario.unpublishedFlag',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-schema-type',
+          path: 'scenario.projectile.targetDistance',
+        }),
+      ])
+    );
+  }, 30_000);
 });

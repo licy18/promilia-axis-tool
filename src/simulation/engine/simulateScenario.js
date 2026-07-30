@@ -586,6 +586,7 @@ function createCooldownStartEvent(action, cooldown = null) {
       cooldownCount: cooldown.cooldownCount,
       ownerKind: cooldown.ownerKind,
       ownerId: cooldown.ownerId,
+      runtimeOwnerIdentity: cooldown.runtimeOwnerIdentity ?? null,
       kiboId: cooldown.kiboId,
       skillId: cooldown.skillId,
       sourceKind:
