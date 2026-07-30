@@ -16,6 +16,7 @@ import {
 import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattleEffectGeneration';
 import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
 import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
+import { createVerifiedKiboPassiveGeneration } from '../mechanics/verifiedKiboPassiveGeneration';
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
 import { validateCombatCriticalScenario } from '../../domain/combatCriticalPolicy';
 import { createDeterministicCriticalRandomSource } from '../runtime/criticalRandomSource';
@@ -57,44 +58,23 @@ export function simulateScenario(
     },
   ];
 
-  let actionRuleDiagnostics = createActionRuleDiagnostics({
+  const admission = createStableVerifiedAdmission({
     scenario,
     cooldownEvaluationAdapter: actionCooldownEvaluationAdapter,
+    criticalRuntime,
   });
-  let actionExecutionPlan = createActionExecutionPlan({
-    scenario,
+  const {
     actionRuleDiagnostics,
-  });
-  let controlledActorTimeline = createControlledActorTimeline({
-    scenario,
     actionExecutionPlan,
-  });
+    controlledActorTimeline,
+    verifiedExecutionBlocks,
+  } = admission;
   let runtimeBundle = createVerifiedRuntimeBundle({
     scenario,
     actionExecutionPlan,
     controlledActorTimeline,
-    criticalRandomSource: criticalRuntime.createPreflightRandomSource(),
-  });
-  const verifiedExecutionBlocks =
-    runtimeBundle.verifiedCombatRuntime.executionBlocks ?? [];
-  if (verifiedExecutionBlocks.length > 0) {
-    actionRuleDiagnostics = applyVerifiedResourceExecutionBlocks({
-      actionRuleDiagnostics,
-      executionBlocks: verifiedExecutionBlocks,
-    });
-    actionExecutionPlan = createActionExecutionPlan({
-      scenario,
-      actionRuleDiagnostics,
-    });
-    controlledActorTimeline = createControlledActorTimeline({
-      scenario,
-      actionExecutionPlan,
-    });
-  }
-  runtimeBundle = createVerifiedRuntimeBundle({
-    scenario,
-    actionExecutionPlan,
-    controlledActorTimeline,
+    acceptedSkillStartTransitions:
+      actionRuleDiagnostics.acceptedSkillStartTransitions,
     criticalRandomSource: criticalRuntime.createFinalRandomSource(),
   });
   const verifiedCombatRuntime = attachVerifiedExecutionBlocks(
@@ -246,7 +226,7 @@ export function simulateScenario(
 
   eventLog.sort(
     (a, b) =>
-      a.timeMs - b.timeMs || eventPriority(a.type) - eventPriority(b.type)
+      a.timeMs - b.timeMs || eventPriority(a.type, a) - eventPriority(b.type, b)
   );
 
   return projectSimulationResult({
@@ -261,6 +241,7 @@ export function simulateScenario(
     actionEffectRelationGraph,
     verifiedCombatRuntime,
     verifiedBattleEffectGeneration: runtimeBundle.effectGeneration,
+    verifiedKiboPassiveGeneration: runtimeBundle.kiboPassiveGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
     verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
     effectiveActionTimeline,
@@ -269,10 +250,108 @@ export function simulateScenario(
   });
 }
 
+function createStableVerifiedAdmission({
+  scenario,
+  cooldownEvaluationAdapter,
+  criticalRuntime,
+}) {
+  const executionBlockByKey = new Map();
+  const maximumPassCount = Math.max(2, (scenario.actions?.length ?? 0) + 1);
+  let lastPass = null;
+  for (let passIndex = 0; passIndex < maximumPassCount; passIndex += 1) {
+    const verifiedExecutionBlocks = [...executionBlockByKey.values()].sort(
+      compareExecutionBlocks
+    );
+    let actionRuleDiagnostics = createActionRuleDiagnostics({
+      scenario,
+      cooldownEvaluationAdapter,
+      externallyBlockedActionIds: verifiedExecutionBlocks.map(
+        block => block.actionId
+      ),
+    });
+    if (verifiedExecutionBlocks.length > 0) {
+      actionRuleDiagnostics = applyVerifiedResourceExecutionBlocks({
+        actionRuleDiagnostics,
+        executionBlocks: verifiedExecutionBlocks,
+      });
+    }
+    const actionExecutionPlan = createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics,
+    });
+    const controlledActorTimeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+    const runtimeBundle = createVerifiedRuntimeBundle({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      acceptedSkillStartTransitions:
+        actionRuleDiagnostics.acceptedSkillStartTransitions,
+      criticalRandomSource: criticalRuntime.createPreflightRandomSource(),
+    });
+    const discoveredBlocks =
+      runtimeBundle.verifiedCombatRuntime.executionBlocks ?? [];
+    let addedBlockCount = 0;
+    for (const block of discoveredBlocks) {
+      const key = `${block.code}|${block.actionId}`;
+      if (executionBlockByKey.has(key)) continue;
+      executionBlockByKey.set(key, block);
+      addedBlockCount += 1;
+    }
+    lastPass = {
+      actionRuleDiagnostics,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      runtimeBundle,
+      passCount: passIndex + 1,
+    };
+    if (addedBlockCount === 0) {
+      return {
+        ...lastPass,
+        actionRuleDiagnostics: {
+          ...actionRuleDiagnostics,
+          admissionReplay: {
+            status: 'verified-admission-replay-stable',
+            passCount: passIndex + 1,
+            resourceBlockCount: executionBlockByKey.size,
+          },
+        },
+        verifiedExecutionBlocks,
+      };
+    }
+  }
+  const verifiedExecutionBlocks = [...executionBlockByKey.values()].sort(
+    compareExecutionBlocks
+  );
+  return {
+    ...lastPass,
+    actionRuleDiagnostics: {
+      ...lastPass.actionRuleDiagnostics,
+      admissionReplay: {
+        status: 'verified-admission-replay-max-pass-conservative',
+        passCount: maximumPassCount,
+        resourceBlockCount: verifiedExecutionBlocks.length,
+      },
+    },
+    verifiedExecutionBlocks,
+  };
+}
+
+function compareExecutionBlocks(left, right) {
+  return (
+    Number(left.timeMs) - Number(right.timeMs) ||
+    String(left.actionId).localeCompare(String(right.actionId)) ||
+    String(left.code).localeCompare(String(right.code))
+  );
+}
+
 function createVerifiedRuntimeBundle({
   scenario,
   actionExecutionPlan,
   controlledActorTimeline,
+  acceptedSkillStartTransitions = null,
   criticalRandomSource,
 }) {
   const actionVariantRuntime = isVerifiedCombatMechanicsScenario(scenario)
@@ -299,6 +378,14 @@ function createVerifiedRuntimeBundle({
         actionVariantRuntime,
       })
     : null;
+  const kiboPassiveGeneration = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedKiboPassiveGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        acceptedSkillStartTransitions,
+      })
+    : null;
   const effectTimeline = createEffectRuntimeTimeline({
     scenario,
     actionExecutionPlan,
@@ -307,6 +394,7 @@ function createVerifiedRuntimeBundle({
       ...(actionVariantRuntime?.effectCommands ?? []),
       ...(effectGeneration?.effectCommands ?? []),
       ...(tuningGeneration?.effectCommands ?? []),
+      ...(kiboPassiveGeneration?.effectCommands ?? []),
     ],
   });
   const verifiedCombatRuntime = createVerifiedCombatRuntime({
@@ -317,11 +405,13 @@ function createVerifiedRuntimeBundle({
     tuningGeneration,
     effectTimeline,
     actionVariantRuntime,
+    kiboPassiveGeneration,
     criticalRandomSource,
   });
   return {
     actionVariantRuntime,
     effectGeneration,
+    kiboPassiveGeneration,
     tuningGeneration,
     effectTimeline,
     verifiedCombatRuntime,
@@ -688,7 +778,15 @@ function createDamageEvent(action, enemy) {
   };
 }
 
-function eventPriority(type) {
+function eventPriority(type, event = null) {
+  if (
+    ['EFFECT_APPLIED', 'EFFECT_REFRESHED', 'EFFECT_INHERITED'].includes(type) &&
+    ['current-skill-condition', 'accepted-skill-start'].includes(
+      event?.sourceIdentity?.triggerEvent
+    )
+  ) {
+    return 7;
+  }
   const priorities = {
     SCENARIO_START: 0,
     EFFECT_EXPIRED: 1,
@@ -696,11 +794,15 @@ function eventPriority(type) {
     ACTION_START: 2,
     TIMING_DATA_MISSING: 3,
     RESOURCE_CHANGE: 4,
+    VERIFIED_RESOURCE_CHANGE: 4,
+    VERIFIED_KIBO_RESOURCE_CHANGE: 4,
     EFFECT_INHERITED: 5,
     EFFECT_APPLIED: 5,
     EFFECT_REFRESHED: 5,
     EFFECT_REMOVED: 5,
     COOLDOWN_START: 6,
+    VERIFIED_KIBO_PASSIVE_VITAL_DAMAGE: 8,
+    VERIFIED_KIBO_PASSIVE_VITAL_DAMAGE_SUPPRESSED: 8,
     DAMAGE_PROJECTED: 7,
     WAIT: 8,
     SWITCH: 9,

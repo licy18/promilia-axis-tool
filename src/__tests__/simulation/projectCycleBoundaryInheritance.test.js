@@ -24,6 +24,8 @@ describe('cycle boundary inheritance projection', () => {
         shiftedBoundaryCount: 1,
         inheritedEnergyActorCount: 1,
         inheritedKiboEnergyCount: 1,
+        inheritedActorVitalCount: 2,
+        inheritedKiboVitalCount: 1,
         inheritedControlledActorId: 'actor-2',
         inheritedEffectCount: 1,
         inheritedTuningMarkLayerCount: 2,
@@ -68,6 +70,29 @@ describe('cycle boundary inheritance projection', () => {
           kiboId: 500469,
           currentValue: 0.5,
           maxValue: 1,
+        },
+      ],
+      actorVitalsByActor: [
+        {
+          actorId: 'actor-1',
+          currentValue: 720,
+          maxValue: 1000,
+          valueShields: [{ value: 30 }],
+        },
+        {
+          actorId: 'actor-2',
+          currentValue: 800,
+          maxValue: 800,
+        },
+      ],
+      kiboVitalsBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-1',
+          kiboId: 500469,
+          currentValue: 430,
+          maxValue: 500,
+          valueShields: [{ value: 10 }],
         },
       ],
       controlledActor: { actorId: 'actor-2', characterId: 102 },
@@ -119,6 +144,16 @@ describe('cycle boundary inheritance projection', () => {
     expect(state.enemy.breakElapsedMs).toBe(500);
     expect(state.selfEnergyByActor[0].currentValue).toBe(25);
     expect(state.kiboEnergyBySlot[0].currentValue).toBe(0.5);
+    expect(state.actorVitalsByActor[0]).toMatchObject({
+      actorId: 'actor-1',
+      currentValue: 720,
+      maxValue: 1000,
+    });
+    expect(state.kiboVitalsBySlot[0]).toMatchObject({
+      slotId: 'team-slot-1',
+      currentValue: 430,
+      maxValue: 500,
+    });
     expect(state.activeEffects.map(effect => effect.effectId)).toEqual([
       'focus',
     ]);
@@ -441,7 +476,71 @@ function createRuntimeOutputs() {
           hitCountShields: [],
           profileSourceIdentity: 'enemy-profile-1',
         },
+        actorVitals: [
+          {
+            actorId: 'actor-1',
+            currentHp: 700,
+            maximumHp: 1000,
+            valueShields: [],
+          },
+          {
+            actorId: 'actor-2',
+            currentHp: 800,
+            maximumHp: 800,
+            valueShields: [],
+          },
+        ],
+        kiboVitals: [
+          {
+            slotId: 'team-slot-1',
+            actorId: 'actor-1',
+            kiboId: 500469,
+            currentHp: 400,
+            maximumHp: 500,
+            valueShields: [],
+          },
+        ],
       },
+      vitalEvents: [
+        {
+          type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL',
+          timeMs: 500,
+          runtimeSequenceIndex: 0,
+          targetId: 'actor-1',
+          payload: {
+            targetKind: 'actor',
+            afterValue: 720,
+            maxValue: 1000,
+            valueShields: [{ value: 30 }],
+          },
+        },
+        {
+          type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL',
+          timeMs: 600,
+          runtimeSequenceIndex: 1,
+          targetId: 'actor-1',
+          payload: {
+            targetKind: 'kibo',
+            targetSlotId: 'team-slot-1',
+            targetKiboId: 500469,
+            afterValue: 430,
+            maxValue: 500,
+            valueShields: [{ value: 10 }],
+          },
+        },
+        {
+          type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL',
+          timeMs: 1000,
+          runtimeSequenceIndex: 2,
+          targetId: 'actor-1',
+          payload: {
+            targetKind: 'actor',
+            afterValue: 900,
+            maxValue: 1000,
+            valueShields: [],
+          },
+        },
+      ],
       damageEvents: [
         {
           timeMs: 500,

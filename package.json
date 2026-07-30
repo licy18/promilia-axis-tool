@@ -26,6 +26,8 @@
     "audit:verified-combat": "node scripts/sync-verified-combat-mechanics.mjs --assert-clean",
     "data:sync-character-combat": "node scripts/sync-character-combat-profile.mjs --write",
     "audit:character-combat": "node scripts/sync-character-combat-profile.mjs --all --assert-clean",
+    "data:sync-kibo-headless": "node scripts/generate-kibo-headless-census.mjs --write",
+    "audit:kibo-headless": "node scripts/generate-kibo-headless-census.mjs --assert-clean",
     "data:sync-action-icons": "node scripts/sync-workbench-action-icons.mjs",
     "data:sync-loadout-icons": "node scripts/sync-workbench-loadout-icons.mjs",
     "data:generate-runtime-capture-manifest": "node scripts/generate-runtime-capture-hook-manifest.mjs",

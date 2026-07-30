@@ -7,7 +7,7 @@ import {
 import { frameToMs } from '../../domain/timebase';
 
 describe('action rule diagnostics', () => {
-  it('reports actor-lane overlap, confirmed cooldown violations, and unapplied preview SP costs', () => {
+  it('reports actor-lane overlap without consuming cooldown and keeps unapplied preview SP costs unresolved', () => {
     const scenario = {
       actors: [createActor()],
       actions: [
@@ -45,11 +45,11 @@ describe('action rule diagnostics', () => {
       status: 'action-rules-violated',
       executable: false,
       summary: {
-        diagnosticCount: 3,
-        violationCount: 2,
+        diagnosticCount: 2,
+        violationCount: 1,
         unresolvedCount: 1,
         laneOverlapCount: 1,
-        cooldownViolationCount: 1,
+        cooldownViolationCount: 0,
         unresolvedSpPreconditionCount: 1,
         appliedToSimulationResults: false,
       },
@@ -64,18 +64,6 @@ describe('action rule diagnostics', () => {
           suggestedStartMs: 1000,
           editFieldKey: 'startMs',
           severity: 'error',
-        }),
-        expect.objectContaining({
-          code: ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE,
-          actionId: 'action-2',
-          blockingActionId: 'action-1',
-          cooldownMs: 5000,
-          readyAtMs: 5000,
-          remainingMs: 4500,
-          suggestedStartMs: 5000,
-          source: expect.objectContaining({
-            fieldPath: 'skillsub_logic.rows[skillId=1001].coolDown',
-          }),
         }),
         expect.objectContaining({
           code: ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED,
@@ -97,7 +85,7 @@ describe('action rule diagnostics', () => {
         readyActionCount: 1,
         blockedActionCount: 1,
         unresolvedActionCount: 1,
-        cooldownTrackedActionCount: 2,
+        cooldownTrackedActionCount: 1,
         cooldownWindowCount: 1,
         appliedToSimulationResults: false,
       },
@@ -125,16 +113,8 @@ describe('action rule diagnostics', () => {
         actionId: 'action-2',
         status: 'blocked',
         executable: false,
-        violationCodes: expect.arrayContaining([
-          ACTION_RULE_CODES.LANE_OVERLAP,
-          ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE,
-        ]),
-        cooldown: expect.objectContaining({
-          status: 'blocked-no-charge-ready',
-          availableBefore: 0,
-          availableAfter: 0,
-          windowId: null,
-        }),
+        violationCodes: [ACTION_RULE_CODES.LANE_OVERLAP],
+        cooldown: null,
       }),
       expect.objectContaining({
         actionId: 'action-3',

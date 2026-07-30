@@ -191,6 +191,12 @@ export function createEffectRuntimeTimeline({
       emitEvent,
     });
     if (descriptor.kind === 'controlled-actor-transition') {
+      clearBattlefieldExitEffects({
+        transition: descriptor.transition,
+        activeByInstanceKey,
+        scenario,
+        emitEvent,
+      });
       transferControlledActorEffects({
         transition: descriptor.transition,
         activeByInstanceKey,
@@ -367,14 +373,23 @@ function createInheritedRuntimeEffectState(effect) {
     inheritType: normalizeEffectInheritType(effect.inheritType),
     inheritanceContainerElementId:
       strictNumberOrNull(effect.inheritanceContainerElementId) ?? null,
-    inheritanceContainerPathId:
-      effect.inheritanceContainerPathId ?? null,
-    inheritanceSourceIdentity:
-      effect.inheritanceSourceIdentity ?? null,
+    inheritanceContainerPathId: effect.inheritanceContainerPathId ?? null,
+    inheritanceSourceIdentity: effect.inheritanceSourceIdentity ?? null,
     formulaSourceActorId:
       effect.formulaSourceActorId ?? effect.sourceActorId ?? null,
     effectAdderActorId:
       effect.effectAdderActorId ?? effect.sourceActorId ?? null,
+    clearCarrierActorId:
+      effect.clearCarrierActorId ??
+      ([EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+        effect.targetKind
+      )
+        ? effect.targetId
+        : null),
+    expiration: effect.expiration ?? null,
+    expirationTriggers: uniqueValues(effect.expirationTriggers),
+    clearType: strictNumberOrNull(effect.clearType),
+    clearTypeFlags: uniqueValues(effect.clearTypeFlags),
     effectInstanceId:
       effect.effectInstanceId ??
       createEffectInstanceId({
@@ -521,6 +536,13 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     timeMs: roundEffectValue(timeMs),
     frameIndex: msToFrame(timeMs, strictNumberOrNull(scenario.time?.fps) ?? 60),
     durationMs: strictNumberOrNull(command.durationMs),
+    expiration: command.expiration ?? null,
+    expirationTriggers: uniqueValues(command.expirationTriggers),
+    clearType: strictNumberOrNull(command.clearType),
+    clearTypeFlags: uniqueValues([
+      ...(command.clearTypeFlags ?? []),
+      ...(command.expirationTriggers ?? []),
+    ]),
     stackMode: command.stackMode,
     stackDelta: positiveIntegerOrDefault(command.stackDelta, 1),
     maxStacks: positiveIntegerOrDefault(command.maxStacks, 1),
@@ -540,12 +562,13 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     inheritType: normalizeEffectInheritType(command.inheritType),
     inheritanceContainerElementId:
       strictNumberOrNull(command.inheritanceContainerElementId) ?? null,
-    inheritanceContainerPathId:
-      command.inheritanceContainerPathId ?? null,
-    inheritanceSourceIdentity:
-      command.inheritanceSourceIdentity ?? null,
+    inheritanceContainerPathId: command.inheritanceContainerPathId ?? null,
+    inheritanceSourceIdentity: command.inheritanceSourceIdentity ?? null,
     formulaSourceActorId:
-      command.formulaSourceActorId ?? command.sourceActorId ?? action?.actorId ?? null,
+      command.formulaSourceActorId ??
+      command.sourceActorId ??
+      action?.actorId ??
+      null,
     effectAdderActorId:
       command.effectAdderActorId ??
       resolveInitialEffectAdderActorId({
@@ -557,6 +580,13 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
           null,
         targetId,
       }),
+    clearCarrierActorId:
+      command.clearCarrierActorId ??
+      ([EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+        command.targetKind
+      )
+        ? targetId
+        : null),
     modifiers: Array.isArray(command.modifiers)
       ? command.modifiers.map(modifier => ({ ...modifier }))
       : [],
@@ -723,6 +753,66 @@ function transferControlledActorEffects({
   }
 }
 
+function clearBattlefieldExitEffects({
+  transition,
+  activeByInstanceKey,
+  scenario,
+  emitEvent,
+}) {
+  const exitingActorId = String(transition?.beforeActor?.actorId ?? '').trim();
+  if (!exitingActorId) return;
+  const dueEffects = sortEffectStates(
+    [...activeByInstanceKey.values()].filter(
+      effect =>
+        effect.active === true &&
+        (shouldClearForCarrierExit(effect, exitingActorId) ||
+          shouldClearForSourceExit(effect, exitingActorId))
+    )
+  );
+  for (const effect of dueEffects) {
+    if (activeByInstanceKey.get(effect.instanceKey) !== effect) continue;
+    activeByInstanceKey.delete(effect.instanceKey);
+    emitEvent(
+      createEffectRuntimeEvent({
+        type: EFFECT_RUNTIME_EVENT_TYPES.REMOVED,
+        command: null,
+        before: effect,
+        after: null,
+        scenario,
+        timeMs: transition.timeMs,
+        status: 'effect-runtime-executor-exit-battlefield-cleared',
+        transition,
+      })
+    );
+  }
+}
+
+function shouldClearForCarrierExit(effect, exitingActorId) {
+  const clearType = Number(effect.clearType) || 0;
+  const configured =
+    (clearType & 16) !== 0 ||
+    effect.clearTypeFlags?.includes('executorExitBattleFieldClear');
+  return (
+    configured &&
+    String(
+      effect.clearCarrierActorId ??
+        ([EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+          effect.targetKind
+        )
+          ? effect.targetId
+          : '')
+    ) === exitingActorId
+  );
+}
+
+function shouldClearForSourceExit(effect, exitingActorId) {
+  const clearType = Number(effect.clearType) || 0;
+  const configured =
+    (clearType & 8) !== 0 ||
+    effect.clearTypeFlags?.includes('sourceExitBattleFieldClear');
+  return configured && String(effect.sourceActorId ?? '') === exitingActorId;
+}
+
 function expireRuntimeEffects({
   activeByInstanceKey,
   timeMs,
@@ -770,6 +860,10 @@ function createRuntimeEffectState(command) {
     appliedAtMs: command.timeMs,
     updatedAtMs: command.timeMs,
     durationMs: command.durationMs,
+    expiration: command.expiration,
+    expirationTriggers: command.expirationTriggers,
+    clearType: command.clearType,
+    clearTypeFlags: command.clearTypeFlags,
     expiresAtMs:
       command.durationMs == null
         ? null
@@ -794,6 +888,7 @@ function createRuntimeEffectState(command) {
     inheritanceSourceIdentity: command.inheritanceSourceIdentity,
     formulaSourceActorId: command.formulaSourceActorId,
     effectAdderActorId: command.effectAdderActorId,
+    clearCarrierActorId: command.clearCarrierActorId,
     effectInstanceId: createEffectInstanceId({
       effectId: command.effectId,
       sourceActionId: command.sourceActionId,
@@ -818,6 +913,16 @@ function refreshRuntimeEffectState(existing, command) {
     updatedAtMs: command.timeMs,
     durationMs:
       command.durationMs == null ? existing.durationMs : command.durationMs,
+    expiration: command.expiration ?? existing.expiration ?? null,
+    expirationTriggers: uniqueValues([
+      ...(existing.expirationTriggers ?? []),
+      ...(command.expirationTriggers ?? []),
+    ]),
+    clearType: command.clearType ?? existing.clearType ?? null,
+    clearTypeFlags: uniqueValues([
+      ...(existing.clearTypeFlags ?? []),
+      ...(command.clearTypeFlags ?? []),
+    ]),
     expiresAtMs,
     stacks,
     maxStacks,
@@ -837,8 +942,7 @@ function refreshRuntimeEffectState(existing, command) {
     inheritOnControlledActorSwitch:
       command.inheritOnControlledActorSwitch === true ||
       existing.inheritOnControlledActorSwitch === true,
-    inheritType:
-      command.inheritType ?? existing.inheritType ?? null,
+    inheritType: command.inheritType ?? existing.inheritType ?? null,
     inheritanceContainerElementId:
       command.inheritanceContainerElementId ??
       existing.inheritanceContainerElementId ??
@@ -861,6 +965,14 @@ function refreshRuntimeEffectState(existing, command) {
       existing.effectAdderActorId ??
       existing.sourceActorId ??
       null,
+    clearCarrierActorId:
+      command.clearCarrierActorId ??
+      existing.clearCarrierActorId ??
+      ([EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+        existing.targetKind
+      )
+        ? existing.targetId
+        : null),
     appliedToCalculators:
       command.appliedToCalculators === true ||
       existing.appliedToCalculators === true,
@@ -923,7 +1035,7 @@ function createEffectRuntimeEvent({
     instanceKey,
     previousInstanceKey:
       type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED
-        ? before?.instanceKey ?? null
+        ? (before?.instanceKey ?? null)
         : null,
     commandId: command?.commandId ?? null,
     relationId: command?.commandId
@@ -938,7 +1050,9 @@ function createEffectRuntimeEvent({
         ? 'inherit'
         : type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED
           ? 'transfer'
-          : 'expire'),
+          : type === EFFECT_RUNTIME_EVENT_TYPES.REMOVED
+            ? 'remove'
+            : 'expire'),
     stackMode: command?.stackMode ?? null,
     stackBefore,
     stackAfter,

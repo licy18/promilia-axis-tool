@@ -7125,6 +7125,7 @@ function createStaticPropertyCatalog({
         tableKey: row.attrID,
         isRatio: Number(row.isRatio) === 1,
         rawScale: Number(row.isCalRatio) === 1 ? 10000 : 1,
+        defaultRaw: Number(row.attrDefault),
         groupId: integerOrNull(rawGroupId),
         groupType: integerOrNull(rawGroupType),
         minimum: row.useMininumValue ? Number(row.minimumValue) : null,

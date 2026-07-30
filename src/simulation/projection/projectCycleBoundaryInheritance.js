@@ -85,6 +85,10 @@ export function projectCycleBoundaryInheritance({
         initialRuntimeState?.selfEnergyByActor?.length ?? 0,
       inheritedKiboEnergyCount:
         initialRuntimeState?.kiboEnergyBySlot?.length ?? 0,
+      inheritedActorVitalCount:
+        initialRuntimeState?.actorVitalsByActor?.length ?? 0,
+      inheritedKiboVitalCount:
+        initialRuntimeState?.kiboVitalsBySlot?.length ?? 0,
       inheritedControlledActorId:
         initialRuntimeState?.controlledActor?.actorId ?? null,
       inheritedEffectCount: initialRuntimeState?.activeEffects?.length ?? 0,
@@ -139,6 +143,12 @@ export function createInitialRuntimeStateAtBoundary({
     curves: runtimeOutputs?.resourceCurves?.curvesByKibo,
     boundaryTimeMs,
   });
+  const { actorVitalsByActor, kiboVitalsBySlot } =
+    createFriendlyVitalStatesAtBoundary({
+      scenario,
+      verifiedCombatRuntime: runtimeOutputs?.verifiedCombatRuntime,
+      boundaryTimeMs,
+    });
 
   for (const snapshot of sortRuntimeSnapshots(stateSnapshots.snapshots)) {
     if (!isBeforeBoundary(snapshot.timeMs, boundaryTimeMs)) {
@@ -191,6 +201,8 @@ export function createInitialRuntimeStateAtBoundary({
     },
     selfEnergyByActor: [...energyStateByActor.values()],
     kiboEnergyBySlot,
+    actorVitalsByActor,
+    kiboVitalsBySlot,
     activeEffects: createInheritedActiveEffectsAtBoundary(
       runtimeOutputs?.effectTimeline?.events,
       boundaryTimeMs
@@ -206,6 +218,81 @@ export function createInitialRuntimeStateAtBoundary({
       boundaryTimeMs,
     }),
   });
+}
+
+function createFriendlyVitalStatesAtBoundary({
+  scenario,
+  verifiedCombatRuntime,
+  boundaryTimeMs,
+}) {
+  if (!verifiedCombatRuntime?.ready) {
+    return { actorVitalsByActor: [], kiboVitalsBySlot: [] };
+  }
+  const actorById = new Map(
+    (scenario?.actors ?? []).map(actor => [String(actor.id), actor])
+  );
+  const actorVitals = new Map(
+    (verifiedCombatRuntime.initialState?.actorVitals ?? []).map(entry => {
+      const actor = actorById.get(String(entry.actorId));
+      return [
+        String(entry.actorId),
+        {
+          actorId: String(entry.actorId),
+          characterId: actor?.characterId ?? null,
+          actorName: actor?.name ?? null,
+          currentValue: finiteNumberOrNull(entry.currentHp),
+          maxValue: finiteNumberOrNull(entry.maximumHp),
+          valueShields: cloneValue(entry.valueShields ?? []),
+        },
+      ];
+    })
+  );
+  const kiboVitals = new Map(
+    (verifiedCombatRuntime.initialState?.kiboVitals ?? []).map(entry => [
+      String(entry.slotId),
+      {
+        slotId: String(entry.slotId),
+        actorId: entry.actorId == null ? null : String(entry.actorId),
+        characterId: actorById.get(String(entry.actorId))?.characterId ?? null,
+        kiboId: Number(entry.kiboId),
+        kiboName: null,
+        currentValue: finiteNumberOrNull(entry.currentHp),
+        maxValue: finiteNumberOrNull(entry.maximumHp),
+        valueShields: cloneValue(entry.valueShields ?? []),
+      },
+    ])
+  );
+  const vitalEvents = [...(verifiedCombatRuntime.vitalEvents ?? [])].sort(
+    (left, right) =>
+      nonNegativeNumber(left.timeMs) - nonNegativeNumber(right.timeMs) ||
+      nonNegativeNumber(left.runtimeSequenceIndex) -
+        nonNegativeNumber(right.runtimeSequenceIndex)
+  );
+  for (const event of vitalEvents) {
+    if (!isBeforeBoundary(event.timeMs, boundaryTimeMs)) break;
+    const payload = event.payload ?? {};
+    const targetKind = payload.targetKind;
+    const target =
+      targetKind === 'actor'
+        ? actorVitals.get(String(event.targetId))
+        : targetKind === 'kibo'
+          ? kiboVitals.get(String(payload.targetSlotId))
+          : null;
+    if (!target) continue;
+    target.currentValue =
+      finiteNumberOrNull(payload.afterValue ?? payload.after) ??
+      target.currentValue;
+    target.maxValue =
+      finiteNumberOrNull(payload.maxValue ?? payload.maximum) ??
+      target.maxValue;
+    if (Array.isArray(payload.valueShields)) {
+      target.valueShields = cloneValue(payload.valueShields);
+    }
+  }
+  return {
+    actorVitalsByActor: [...actorVitals.values()],
+    kiboVitalsBySlot: [...kiboVitals.values()],
+  };
 }
 
 function createInheritedSpecialResourcesAtBoundary({

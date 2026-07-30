@@ -147,12 +147,35 @@ describe('verified Battle effect generation', () => {
       effectCommandCount: 4,
       generatedCount: 4,
     });
+    expect(integrated.verifiedKiboPassiveGeneration.effectCommands).toEqual([
+      expect.objectContaining({
+        sourceActionId: 'fire-kibo-signature',
+        sourceKiboId: FIRE_KIBO_ID,
+        effectId: 'kibo-passive:520040:520040002',
+        targetKind: 'enemy',
+        durationMs: null,
+        stackMode: 'stack',
+        maxStacks: 6,
+        sourceIdentity: expect.objectContaining({
+          passiveSkillId: 520040,
+          triggerElementId: 520040001,
+          effectElementId: 520040002,
+        }),
+        modifiers: [
+          expect.objectContaining({
+            attributeId: 62,
+            bucket: 'dynamicExtra',
+            valueRaw: -100,
+          }),
+        ],
+      }),
+    ]);
     expect(integrated.effectTimeline.summary).toMatchObject({
-      calculatorAppliedEffectCount: 8,
+      calculatorAppliedEffectCount: 9,
     });
     expect(
       sumDamage(integrated.verifiedCombatRuntime, 'fire-kibo-signature')
-    ).toBe(appliedDamage);
+    ).toBeGreaterThan(appliedDamage);
     expect(
       withEffect.damageEvents.flatMap(
         event => event.payload.dynamicPropertyTrace.source

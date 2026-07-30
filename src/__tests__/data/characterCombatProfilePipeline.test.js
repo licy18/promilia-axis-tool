@@ -1394,7 +1394,7 @@ describe('M10 character combat profile pipeline', () => {
         ownerHitEventCount: 115,
         ownerHitTotalHpDamage: 9742,
         ownerHitTotalToughnessDamage: 1766,
-        ownerTotalHpDamage: 699322,
+        ownerTotalHpDamage: 699319,
         ownerTotalToughnessDamage: 0,
         enemy: { initialHp: 862800, finalHp: 0 },
       },
@@ -1437,7 +1437,7 @@ describe('M10 character combat profile pipeline', () => {
       goldenTrace.actual.resources.actorSpByActorId['actor-101010']
     ).toMatchObject({
       initialValue: 100,
-      currentValue: 35.35611,
+      currentValue: 35.418732,
       autoRecovery: [
         {
           reason: 'verified-auto-sp-background',
@@ -1445,7 +1445,7 @@ describe('M10 character combat profile pipeline', () => {
         },
         {
           reason: 'verified-auto-sp-foreground',
-          totalChange: 19.953224,
+          totalChange: 20.015864,
         },
       ],
     });
@@ -1454,7 +1454,7 @@ describe('M10 character combat profile pipeline', () => {
     ).toMatchObject({
       kiboId: 500003,
       initialValue: 0,
-      currentValue: 79.271744,
+      currentValue: 81.026352,
     });
     expect(goldenTrace.replayHash).toMatch(/^[a-f0-9]{64}$/);
 
@@ -1472,8 +1472,8 @@ describe('M10 character combat profile pipeline', () => {
       tamperedValidation.assertions.find(item => !item.passed)
     ).toMatchObject({
       jsonPath: 'combat.ownerTotalHpDamage',
-      expected: 699323,
-      actual: 699322,
+      expected: 699320,
+      actual: 699319,
     });
   });
 

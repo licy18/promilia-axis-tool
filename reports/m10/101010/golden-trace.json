@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "2046849c343b33e1c86403e529ce3c2051a0577bb2e46de1fc07b32c1db9eaf9",
+  "sourcePackageHash": "992f1ef347f53672e0e870a3d9c17fef9a9f70638d864cd27d915d0de0ead0de",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "37d5925dba605913",
-    "traceHash": "f10783643a130f2e",
-    "dataHash": "ea74fc131e869f82",
+    "inputHash": "705e9b883dbb501f",
+    "traceHash": "a07bdfab5a89b594",
+    "dataHash": "4dc4a209fd7e89ec",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -807,7 +807,7 @@
       },
       "totalHpDamage": 862800,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 699322,
+      "ownerTotalHpDamage": 699319,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
         "pointCount": 609,
@@ -826,14 +826,14 @@
           "actorId": "actor-101003",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 20.398361,
+          "currentValue": 20.691101,
           "maxValue": 100,
           "eventCount": 1255,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
               "count": 1159,
-              "totalChange": 12.060554,
+              "totalChange": 12.148714,
               "firstTimeMs": 100,
               "lastTimeMs": 120000
             },
@@ -858,433 +858,433 @@
               "timeMs": 1466.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.325683,
-              "change": 0.134995,
-              "afterValue": 0.460678
+              "beforeValue": 0.333801,
+              "change": 0.150055,
+              "afterValue": 0.483856
             },
             {
               "timeMs": 2166.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.533523,
-              "change": 0.134995,
-              "afterValue": 0.668518
+              "beforeValue": 0.564819,
+              "change": 0.150055,
+              "afterValue": 0.714874
             },
             {
               "timeMs": 2583.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.710144,
-              "change": 0.10495,
-              "afterValue": 0.815094
+              "beforeValue": 0.761139,
+              "change": 0.116653,
+              "afterValue": 0.877792
             },
             {
               "timeMs": 2666.666667,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.8255,
-              "change": 0.10495,
-              "afterValue": 0.93045
+              "beforeValue": 0.889359,
+              "change": 0.116653,
+              "afterValue": 1.006012
             },
             {
               "timeMs": 2900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.951263,
-              "change": 0.10495,
-              "afterValue": 1.056213
+              "beforeValue": 1.029145,
+              "change": 0.116653,
+              "afterValue": 1.145798
             },
             {
               "timeMs": 2983.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.06662,
-              "change": 0.10495,
-              "afterValue": 1.17157
+              "beforeValue": 1.157364,
+              "change": 0.116653,
+              "afterValue": 1.274017
             },
             {
               "timeMs": 3400,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.213196,
-              "change": 0.10495,
-              "afterValue": 1.318146
+              "beforeValue": 1.320282,
+              "change": 0.116653,
+              "afterValue": 1.436935
             },
             {
               "timeMs": 3500,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.328552,
-              "change": 0.10495,
-              "afterValue": 1.433502
+              "beforeValue": 1.448502,
+              "change": 0.116653,
+              "afterValue": 1.565155
             },
             {
               "timeMs": 3600,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.443909,
-              "change": 0.10495,
-              "afterValue": 1.548859
+              "beforeValue": 1.576722,
+              "change": 0.116653,
+              "afterValue": 1.693375
             },
             {
               "timeMs": 3700,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.559265,
-              "change": 0.10495,
-              "afterValue": 1.664215
+              "beforeValue": 1.704941,
+              "change": 0.116653,
+              "afterValue": 1.821594
             },
             {
               "timeMs": 3800,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.674622,
-              "change": 0.10495,
-              "afterValue": 1.779572
+              "beforeValue": 1.833161,
+              "change": 0.116653,
+              "afterValue": 1.949814
             },
             {
               "timeMs": 3900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.789978,
-              "change": 0.10495,
-              "afterValue": 1.894928
+              "beforeValue": 1.96138,
+              "change": 0.116653,
+              "afterValue": 2.078033
             },
             {
               "timeMs": 4000,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.905334,
-              "change": 0.10495,
-              "afterValue": 2.010284
+              "beforeValue": 2.0896,
+              "change": 0.116653,
+              "afterValue": 2.206253
             },
             {
               "timeMs": 4100,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.020691,
-              "change": 0.10495,
-              "afterValue": 2.125641
+              "beforeValue": 2.21782,
+              "change": 0.116653,
+              "afterValue": 2.334473
             },
             {
               "timeMs": 4233.333333,
               "actionId": "threshold-burst-a3",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.146453,
-              "change": 0.134995,
-              "afterValue": 2.281448
+              "beforeValue": 2.357605,
+              "change": 0.150055,
+              "afterValue": 2.50766
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.39592,
-              "change": 0.084991,
-              "afterValue": 2.480911
+              "beforeValue": 2.634888,
+              "change": 0.094482,
+              "afterValue": 2.72937
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.480912,
-              "change": 0.084991,
-              "afterValue": 2.565903
+              "beforeValue": 2.729371,
+              "change": 0.094482,
+              "afterValue": 2.823853
             },
             {
               "timeMs": 11916.666667,
               "actionId": "jade-limit-counter",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.252731,
+              "beforeValue": 3.535614,
               "change": 0.125,
-              "afterValue": 3.377731
+              "afterValue": 3.660614
             },
             {
               "timeMs": 12883.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.471389,
+              "beforeValue": 3.754272,
               "change": 0.134995,
-              "afterValue": 3.606384
+              "afterValue": 3.889267
             },
             {
               "timeMs": 13583.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.679229,
+              "beforeValue": 3.962112,
               "change": 0.134995,
-              "afterValue": 3.814224
+              "afterValue": 4.097107
             },
             {
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.866257,
+              "beforeValue": 4.149139,
               "change": 0.10495,
-              "afterValue": 3.971207
+              "afterValue": 4.254089
             },
             {
               "timeMs": 14083.333334,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.971207,
+              "beforeValue": 4.254089,
               "change": 0.10495,
-              "afterValue": 4.076157
+              "afterValue": 4.359039
             },
             {
               "timeMs": 14316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.107376,
+              "beforeValue": 4.390259,
               "change": 0.10495,
-              "afterValue": 4.212326
+              "afterValue": 4.495209
             },
             {
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.222732,
+              "beforeValue": 4.505615,
               "change": 0.10495,
-              "afterValue": 4.327682
+              "afterValue": 4.610565
             },
             {
               "timeMs": 14816.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.369308,
+              "beforeValue": 4.652191,
               "change": 0.10495,
-              "afterValue": 4.474258
+              "afterValue": 4.757141
             },
             {
               "timeMs": 14916.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.484665,
+              "beforeValue": 4.767548,
               "change": 0.10495,
-              "afterValue": 4.589615
+              "afterValue": 4.872498
             },
             {
               "timeMs": 15016.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.600021,
+              "beforeValue": 4.882904,
               "change": 0.10495,
-              "afterValue": 4.704971
+              "afterValue": 4.987854
             },
             {
               "timeMs": 15116.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.715378,
+              "beforeValue": 4.99826,
               "change": 0.10495,
-              "afterValue": 4.820328
+              "afterValue": 5.10321
             },
             {
               "timeMs": 15216.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.830734,
+              "beforeValue": 5.113617,
               "change": 0.10495,
-              "afterValue": 4.935684
+              "afterValue": 5.218567
             },
             {
               "timeMs": 15316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.946091,
+              "beforeValue": 5.228973,
               "change": 0.10495,
-              "afterValue": 5.051041
+              "afterValue": 5.333923
             },
             {
               "timeMs": 15416.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.061447,
+              "beforeValue": 5.34433,
               "change": 0.10495,
-              "afterValue": 5.166397
+              "afterValue": 5.44928
             },
             {
               "timeMs": 15516.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.176804,
+              "beforeValue": 5.459686,
               "change": 0.10495,
-              "afterValue": 5.281754
+              "afterValue": 5.564636
             },
             {
               "timeMs": 15650,
               "actionId": "ultimate-burst-a3",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.29216,
+              "beforeValue": 5.575042,
               "change": 0.134995,
-              "afterValue": 5.427155
+              "afterValue": 5.710037
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.552033,
+              "beforeValue": 5.834916,
               "change": 0.084991,
-              "afterValue": 5.637024
+              "afterValue": 5.919907
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.637024,
+              "beforeValue": 5.919907,
               "change": 0.084991,
-              "afterValue": 5.722015
+              "afterValue": 6.004898
             },
             {
               "timeMs": 20183.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.253021,
+              "beforeValue": 6.535904,
               "change": 0.479889,
-              "afterValue": 6.73291
+              "afterValue": 7.015793
             },
             {
               "timeMs": 20733.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.85788,
+              "beforeValue": 7.140762,
               "change": 0.479889,
-              "afterValue": 7.337769
+              "afterValue": 7.620651
             },
             {
               "timeMs": 38533.333333,
               "actionId": "normal-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 9.367295,
+              "beforeValue": 9.650177,
               "change": 0.334991,
-              "afterValue": 9.702286
+              "afterValue": 9.985168
             },
             {
               "timeMs": 38866.666667,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 9.733505,
+              "beforeValue": 10.016388,
               "change": 0.144943,
-              "afterValue": 9.878448
+              "afterValue": 10.161331
             },
             {
               "timeMs": 39050,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 9.899262,
+              "beforeValue": 10.182144,
               "change": 0.144943,
-              "afterValue": 10.044205
+              "afterValue": 10.327087
             },
             {
               "timeMs": 39550,
               "actionId": "normal-a3",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.096237,
+              "beforeValue": 10.37912,
               "change": 0.079941,
-              "afterValue": 10.176178
+              "afterValue": 10.459061
             },
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.238617,
+              "beforeValue": 10.5215,
               "change": 0.125,
-              "afterValue": 10.363617
+              "afterValue": 10.6465
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.374023,
+              "beforeValue": 10.656906,
               "change": 0.125,
-              "afterValue": 10.499023
+              "afterValue": 10.781906
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.50943,
+              "beforeValue": 10.792313,
               "change": 0.125,
-              "afterValue": 10.63443
+              "afterValue": 10.917313
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.63443,
+              "beforeValue": 10.917313,
               "change": 0.125,
-              "afterValue": 10.75943
+              "afterValue": 11.042313
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.832275,
+              "beforeValue": 11.115158,
               "change": 0.074997,
-              "afterValue": 10.907272
+              "afterValue": 11.190155
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.084182,
+              "beforeValue": 11.376922,
               "change": 0.184998,
-              "afterValue": 11.26918
+              "afterValue": 11.56192
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.26918,
+              "beforeValue": 11.56192,
               "change": 0.184998,
-              "afterValue": 11.454178
+              "afterValue": 11.746918
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.71434,
+              "beforeValue": 12.00708,
               "change": 0.179993,
-              "afterValue": 11.894333
+              "afterValue": 12.187073
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.956772,
+              "beforeValue": 12.249511,
               "change": 0.179993,
-              "afterValue": 12.136765
+              "afterValue": 12.429504
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.344894,
+              "beforeValue": 12.637634,
               "change": 0.184998,
-              "afterValue": 12.529892
+              "afterValue": 12.822632
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.529892,
+              "beforeValue": 12.822631,
               "change": 0.184998,
-              "afterValue": 12.71489
+              "afterValue": 13.007629
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.995865,
+              "beforeValue": 13.288605,
               "change": 0.084991,
-              "afterValue": 13.080856
+              "afterValue": 13.373596
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 13.184922,
+              "beforeValue": 13.477662,
               "change": 0.084991,
-              "afterValue": 13.269913
+              "afterValue": 13.562653
             }
           ]
         },
@@ -1293,7 +1293,7 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 35.35611,
+          "currentValue": 35.418732,
           "maxValue": 100,
           "eventCount": 1181,
           "autoRecovery": [
@@ -1307,7 +1307,7 @@
             {
               "reason": "verified-auto-sp-foreground",
               "count": 958,
-              "totalChange": 19.953224,
+              "totalChange": 20.015864,
               "firstTimeMs": 6000,
               "lastTimeMs": 120000
             }
@@ -1325,313 +1325,313 @@
               "timeMs": 9650,
               "actionId": "ultimate-refresh",
               "reason": "tuning-overlimit-direct-sp",
-              "beforeValue": 0.770645,
+              "beforeValue": 0.813553,
               "change": 2,
-              "afterValue": 2.770645
+              "afterValue": 2.813553
             },
             {
               "timeMs": 11916.666667,
               "actionId": "jade-limit-counter",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 3.249695,
+              "beforeValue": 3.292603,
               "change": 0.25,
-              "afterValue": 3.499695
+              "afterValue": 3.542603
             },
             {
               "timeMs": 12883.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 3.687149,
+              "beforeValue": 3.730057,
               "change": 0.269989,
-              "afterValue": 3.957138
+              "afterValue": 4.000046
             },
             {
               "timeMs": 13583.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.102936,
+              "beforeValue": 4.145844,
               "change": 0.269989,
-              "afterValue": 4.372925
+              "afterValue": 4.415833
             },
             {
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.477066,
+              "beforeValue": 4.519974,
               "change": 0.2099,
-              "afterValue": 4.686966
+              "afterValue": 4.729874
             },
             {
               "timeMs": 14083.333334,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.686966,
+              "beforeValue": 4.729874,
               "change": 0.2099,
-              "afterValue": 4.896866
+              "afterValue": 4.939774
             },
             {
               "timeMs": 14316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.95935,
+              "beforeValue": 5.002258,
               "change": 0.2099,
-              "afterValue": 5.16925
+              "afterValue": 5.212158
             },
             {
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.190079,
+              "beforeValue": 5.232986,
               "change": 0.2099,
-              "afterValue": 5.399979
+              "afterValue": 5.442886
             },
             {
               "timeMs": 14816.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.483292,
+              "beforeValue": 5.526199,
               "change": 0.2099,
-              "afterValue": 5.693192
+              "afterValue": 5.736099
             },
             {
               "timeMs": 14916.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.71402,
+              "beforeValue": 5.756927,
               "change": 0.2099,
-              "afterValue": 5.92392
+              "afterValue": 5.966827
             },
             {
               "timeMs": 15016.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.944748,
+              "beforeValue": 5.987656,
               "change": 0.2099,
-              "afterValue": 6.154648
+              "afterValue": 6.197556
             },
             {
               "timeMs": 15116.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.175476,
+              "beforeValue": 6.218384,
               "change": 0.2099,
-              "afterValue": 6.385376
+              "afterValue": 6.428284
             },
             {
               "timeMs": 15216.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.406204,
+              "beforeValue": 6.449112,
               "change": 0.2099,
-              "afterValue": 6.616104
+              "afterValue": 6.659012
             },
             {
               "timeMs": 15316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.636932,
+              "beforeValue": 6.67984,
               "change": 0.2099,
-              "afterValue": 6.846832
+              "afterValue": 6.88974
             },
             {
               "timeMs": 15416.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.86766,
+              "beforeValue": 6.910568,
               "change": 0.2099,
-              "afterValue": 7.07756
+              "afterValue": 7.120468
             },
             {
               "timeMs": 15516.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 7.098389,
+              "beforeValue": 7.141296,
               "change": 0.2099,
-              "afterValue": 7.308289
+              "afterValue": 7.351196
             },
             {
               "timeMs": 15650,
               "actionId": "ultimate-burst-a3",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 7.329117,
+              "beforeValue": 7.372025,
               "change": 0.269989,
-              "afterValue": 7.599106
+              "afterValue": 7.642014
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 7.849045,
+              "beforeValue": 7.891953,
               "change": 0.169998,
-              "afterValue": 8.019043
+              "afterValue": 8.061951
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 8.019043,
+              "beforeValue": 8.061951,
               "change": 0.169998,
-              "afterValue": 8.189041
+              "afterValue": 8.231949
             },
             {
               "timeMs": 20183.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 8.688782,
+              "beforeValue": 8.73169,
               "change": 0.239944,
-              "afterValue": 8.928726
+              "afterValue": 8.971634
             },
             {
               "timeMs": 20733.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 8.991166,
+              "beforeValue": 9.034073,
               "change": 0.239944,
-              "afterValue": 9.23111
+              "afterValue": 9.274017
             },
             {
               "timeMs": 38533.333333,
               "actionId": "normal-a1",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 11.281479,
+              "beforeValue": 11.324387,
               "change": 0.669998,
-              "afterValue": 11.951477
+              "afterValue": 11.994385
             },
             {
               "timeMs": 38866.666667,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 12.013962,
+              "beforeValue": 12.05687,
               "change": 0.289886,
-              "afterValue": 12.303848
+              "afterValue": 12.346756
             },
             {
               "timeMs": 39050,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 12.345505,
+              "beforeValue": 12.388413,
               "change": 0.289886,
-              "afterValue": 12.635391
+              "afterValue": 12.678299
             },
             {
               "timeMs": 39550,
               "actionId": "normal-a3",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 12.739532,
+              "beforeValue": 12.78244,
               "change": 0.159897,
-              "afterValue": 12.899429
+              "afterValue": 12.942337
             },
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.024399,
+              "beforeValue": 13.067307,
               "change": 0.25,
-              "afterValue": 13.274399
+              "afterValue": 13.317307
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.295227,
+              "beforeValue": 13.338135,
               "change": 0.25,
-              "afterValue": 13.545227
+              "afterValue": 13.588135
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.566055,
+              "beforeValue": 13.608963,
               "change": 0.25,
-              "afterValue": 13.816055
+              "afterValue": 13.858963
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.816055,
+              "beforeValue": 13.858963,
               "change": 0.25,
-              "afterValue": 14.066055
+              "afterValue": 14.108963
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.211853,
+              "beforeValue": 14.254761,
               "change": 0.149994,
-              "afterValue": 14.361847
+              "afterValue": 14.404755
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "tuning-overlimit-direct-sp",
-              "beforeValue": 14.715927,
+              "beforeValue": 14.778549,
               "change": 2,
-              "afterValue": 16.715927
+              "afterValue": 16.778549
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 16.715927,
+              "beforeValue": 16.778549,
               "change": 0.369995,
-              "afterValue": 17.085922
+              "afterValue": 17.148544
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 17.085922,
+              "beforeValue": 17.148544,
               "change": 0.369995,
-              "afterValue": 17.455917
+              "afterValue": 17.518539
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 17.976624,
+              "beforeValue": 18.039246,
               "change": 0.359985,
-              "afterValue": 18.336609
+              "afterValue": 18.399231
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.461579,
+              "beforeValue": 18.524201,
               "change": 0.359985,
-              "afterValue": 18.821564
+              "afterValue": 18.884186
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.238129,
+              "beforeValue": 19.300751,
               "change": 0.369995,
-              "afterValue": 19.608124
+              "afterValue": 19.670746
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.608124,
+              "beforeValue": 19.670746,
               "change": 0.369995,
-              "afterValue": 19.978119
+              "afterValue": 20.040741
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.540482,
+              "beforeValue": 20.603104,
               "change": 0.169998,
-              "afterValue": 20.71048
+              "afterValue": 20.773102
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.918762,
+              "beforeValue": 20.981384,
               "change": 0.169998,
-              "afterValue": 21.08876
+              "afterValue": 21.151382
             }
           ]
         },
@@ -1640,14 +1640,14 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 13.311615,
+          "currentValue": 13.321472,
           "maxValue": 100,
           "eventCount": 952,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
               "count": 834,
-              "totalChange": 8.678604,
+              "totalChange": 8.688464,
               "firstTimeMs": 36700,
               "lastTimeMs": 120000
             },
@@ -1744,65 +1744,65 @@
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.997436,
+              "beforeValue": 4.007293,
               "change": 0.184998,
-              "afterValue": 4.182434
+              "afterValue": 4.192291
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.182434,
+              "beforeValue": 4.192291,
               "change": 0.184998,
-              "afterValue": 4.367432
+              "afterValue": 4.377289
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.627594,
+              "beforeValue": 4.637451,
               "change": 0.179993,
-              "afterValue": 4.807587
+              "afterValue": 4.817444
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.870025,
+              "beforeValue": 4.879882,
               "change": 0.179993,
-              "afterValue": 5.050018
+              "afterValue": 5.059875
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.258148,
+              "beforeValue": 5.268005,
               "change": 0.184998,
-              "afterValue": 5.443146
+              "afterValue": 5.453003
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.443145,
+              "beforeValue": 5.453002,
               "change": 0.184998,
-              "afterValue": 5.628143
+              "afterValue": 5.638
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.909119,
+              "beforeValue": 5.918976,
               "change": 0.084991,
-              "afterValue": 5.99411
+              "afterValue": 6.003967
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 6.098176,
+              "beforeValue": 6.108033,
               "change": 0.084991,
-              "afterValue": 6.183167
+              "afterValue": 6.193024
             }
           ]
         }
@@ -1814,7 +1814,7 @@
           "actorId": "actor-101010",
           "kiboId": 500003,
           "initialValue": 0,
-          "currentValue": 79.271744,
+          "currentValue": 81.026352,
           "maxValue": 100,
           "eventCount": 1255,
           "autoRecovery": [
@@ -1828,7 +1828,7 @@
             {
               "reason": "verified-auto-sp-foreground",
               "count": 1017,
-              "totalChange": 21.182076,
+              "totalChange": 21.359086,
               "firstTimeMs": 100,
               "lastTimeMs": 120000
             }
@@ -1846,433 +1846,433 @@
               "timeMs": 1466.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 1.681489,
-              "change": 1.039886,
-              "afterValue": 2.721375
+              "beforeValue": 1.697831,
+              "change": 1.155914,
+              "afterValue": 2.853745
             },
             {
               "timeMs": 2166.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 2.867173,
-              "change": 1.039886,
-              "afterValue": 3.907059
+              "beforeValue": 3.015885,
+              "change": 1.155914,
+              "afterValue": 4.171799
             },
             {
               "timeMs": 2583.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 3.990371,
-              "change": 0.809998,
-              "afterValue": 4.800369
+              "beforeValue": 4.26445,
+              "change": 0.900375,
+              "afterValue": 5.164825
             },
             {
               "timeMs": 2666.666667,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 4.821197,
-              "change": 0.809998,
-              "afterValue": 5.631195
+              "beforeValue": 5.187989,
+              "change": 0.900375,
+              "afterValue": 6.088364
             },
             {
               "timeMs": 2900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 5.672851,
-              "change": 0.809998,
-              "afterValue": 6.482849
+              "beforeValue": 6.13469,
+              "change": 0.900375,
+              "afterValue": 7.035065
             },
             {
               "timeMs": 2983.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 6.503677,
-              "change": 0.809998,
-              "afterValue": 7.313675
+              "beforeValue": 7.058228,
+              "change": 0.900375,
+              "afterValue": 7.958603
             },
             {
               "timeMs": 3400,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 7.396987,
-              "change": 0.809998,
-              "afterValue": 8.206985
+              "beforeValue": 8.051255,
+              "change": 0.900375,
+              "afterValue": 8.95163
             },
             {
               "timeMs": 3500,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 8.227813,
-              "change": 0.809998,
-              "afterValue": 9.037811
+              "beforeValue": 8.974793,
+              "change": 0.900375,
+              "afterValue": 9.875168
             },
             {
               "timeMs": 3600,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 9.058639,
-              "change": 0.809998,
-              "afterValue": 9.868637
+              "beforeValue": 9.898331,
+              "change": 0.900375,
+              "afterValue": 10.798706
             },
             {
               "timeMs": 3700,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 9.889465,
-              "change": 0.809998,
-              "afterValue": 10.699463
+              "beforeValue": 10.821869,
+              "change": 0.900375,
+              "afterValue": 11.722244
             },
             {
               "timeMs": 3800,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 10.720291,
-              "change": 0.809998,
-              "afterValue": 11.530289
+              "beforeValue": 11.745407,
+              "change": 0.900375,
+              "afterValue": 12.645782
             },
             {
               "timeMs": 3900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 11.551117,
-              "change": 0.809998,
-              "afterValue": 12.361115
+              "beforeValue": 12.668946,
+              "change": 0.900375,
+              "afterValue": 13.569321
             },
             {
               "timeMs": 4000,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 12.381942,
-              "change": 0.809998,
-              "afterValue": 13.19194
+              "beforeValue": 13.592484,
+              "change": 0.900375,
+              "afterValue": 14.492859
             },
             {
               "timeMs": 4100,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 13.212768,
-              "change": 0.809998,
-              "afterValue": 14.022766
+              "beforeValue": 14.516022,
+              "change": 0.900375,
+              "afterValue": 15.416397
             },
             {
               "timeMs": 4233.333333,
               "actionId": "threshold-burst-a3",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 14.064423,
-              "change": 1.039886,
-              "afterValue": 15.104309
+              "beforeValue": 15.462723,
+              "change": 1.155914,
+              "afterValue": 16.618637
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 15.33342,
-              "change": 0.649887,
-              "afterValue": 15.983307
+              "beforeValue": 16.873428,
+              "change": 0.722397,
+              "afterValue": 17.595825
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 15.983307,
-              "change": 0.649887,
-              "afterValue": 16.633194
+              "beforeValue": 17.595825,
+              "change": 0.722397,
+              "afterValue": 18.318222
             },
             {
               "timeMs": 11916.666667,
               "actionId": "jade-limit-counter",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 18.007858,
+              "beforeValue": 19.742752,
               "change": 0.979996,
-              "afterValue": 18.987854
+              "afterValue": 20.722748
             },
             {
               "timeMs": 12883.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 19.175309,
+              "beforeValue": 20.910203,
               "change": 1.039886,
-              "afterValue": 20.215195
+              "afterValue": 21.950089
             },
             {
               "timeMs": 13583.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 20.360993,
+              "beforeValue": 22.095887,
               "change": 1.039886,
-              "afterValue": 21.400879
+              "afterValue": 23.135773
             },
             {
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 21.50502,
+              "beforeValue": 23.239913,
               "change": 0.809998,
-              "afterValue": 22.315018
+              "afterValue": 24.049911
             },
             {
               "timeMs": 14083.333334,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 22.315017,
+              "beforeValue": 24.049911,
               "change": 0.809998,
-              "afterValue": 23.125015
+              "afterValue": 24.859909
             },
             {
               "timeMs": 14316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 23.1875,
+              "beforeValue": 24.922393,
               "change": 0.809998,
-              "afterValue": 23.997498
+              "afterValue": 25.732391
             },
             {
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 24.018325,
+              "beforeValue": 25.753219,
               "change": 0.809998,
-              "afterValue": 24.828323
+              "afterValue": 26.563217
             },
             {
               "timeMs": 14816.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 24.911636,
+              "beforeValue": 26.64653,
               "change": 0.809998,
-              "afterValue": 25.721634
+              "afterValue": 27.456528
             },
             {
               "timeMs": 14916.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 25.742462,
+              "beforeValue": 27.477356,
               "change": 0.809998,
-              "afterValue": 26.55246
+              "afterValue": 28.287354
             },
             {
               "timeMs": 15016.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 26.573288,
+              "beforeValue": 28.308181,
               "change": 0.809998,
-              "afterValue": 27.383286
+              "afterValue": 29.118179
             },
             {
               "timeMs": 15116.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 27.404113,
+              "beforeValue": 29.139007,
               "change": 0.809998,
-              "afterValue": 28.214111
+              "afterValue": 29.949005
             },
             {
               "timeMs": 15216.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 28.234939,
+              "beforeValue": 29.969833,
               "change": 0.809998,
-              "afterValue": 29.044937
+              "afterValue": 30.779831
             },
             {
               "timeMs": 15316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 29.065765,
+              "beforeValue": 30.800659,
               "change": 0.809998,
-              "afterValue": 29.875763
+              "afterValue": 31.610657
             },
             {
               "timeMs": 15416.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 29.896591,
+              "beforeValue": 31.631485,
               "change": 0.809998,
-              "afterValue": 30.706589
+              "afterValue": 32.441483
             },
             {
               "timeMs": 15516.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 30.727417,
+              "beforeValue": 32.46231,
               "change": 0.809998,
-              "afterValue": 31.537415
+              "afterValue": 33.272308
             },
             {
               "timeMs": 15650,
               "actionId": "ultimate-burst-a3",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 31.558243,
+              "beforeValue": 33.293137,
               "change": 1.039886,
-              "afterValue": 32.598129
+              "afterValue": 34.333023
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 32.848068,
+              "beforeValue": 34.582962,
               "change": 0.649887,
-              "afterValue": 33.497955
+              "afterValue": 35.232849
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 33.497955,
+              "beforeValue": 35.232849,
               "change": 0.649887,
-              "afterValue": 34.147842
+              "afterValue": 35.882736
             },
             {
               "timeMs": 20183.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 34.835175,
+              "beforeValue": 36.570069,
               "change": 1.859985,
-              "afterValue": 36.69516
+              "afterValue": 38.430054
             },
             {
               "timeMs": 20733.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 36.82013,
+              "beforeValue": 38.555024,
               "change": 1.859985,
-              "afterValue": 38.680115
+              "afterValue": 40.415009
             },
             {
               "timeMs": 38533.333333,
               "actionId": "normal-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 42.387543,
+              "beforeValue": 44.122437,
               "change": 2.599899,
-              "afterValue": 44.987442
+              "afterValue": 46.722336
             },
             {
               "timeMs": 38866.666667,
               "actionId": "normal-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 45.049926,
+              "beforeValue": 46.78482,
               "change": 1.139893,
-              "afterValue": 46.189819
+              "afterValue": 47.924713
             },
             {
               "timeMs": 39050,
               "actionId": "normal-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 46.231475,
+              "beforeValue": 47.966369,
               "change": 1.139893,
-              "afterValue": 47.371368
+              "afterValue": 49.106262
             },
             {
               "timeMs": 39550,
               "actionId": "normal-a3",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 47.47551,
+              "beforeValue": 49.210404,
               "change": 0.609985,
-              "afterValue": 48.085495
+              "afterValue": 49.820389
             },
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 48.210464,
+              "beforeValue": 49.945358,
               "change": 0.979996,
-              "afterValue": 49.19046
+              "afterValue": 50.925354
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 49.211288,
+              "beforeValue": 50.946182,
               "change": 0.979996,
-              "afterValue": 50.191284
+              "afterValue": 51.926178
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 50.212112,
+              "beforeValue": 51.947006,
               "change": 0.979996,
-              "afterValue": 51.192108
+              "afterValue": 52.927002
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 51.192108,
+              "beforeValue": 52.927002,
               "change": 0.979996,
-              "afterValue": 52.172104
+              "afterValue": 53.906998
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 52.317901,
+              "beforeValue": 54.052795,
               "change": 0.599991,
-              "afterValue": 52.917892
+              "afterValue": 54.652786
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 53.271973,
+              "beforeValue": 55.026581,
               "change": 1.449997,
-              "afterValue": 54.72197
+              "afterValue": 56.476578
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 54.72197,
+              "beforeValue": 56.476578,
               "change": 1.449997,
-              "afterValue": 56.171967
+              "afterValue": 57.926575
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 56.692673,
+              "beforeValue": 58.447281,
               "change": 1.399887,
-              "afterValue": 58.09256
+              "afterValue": 59.847168
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 58.217529,
+              "beforeValue": 59.972138,
               "change": 1.399887,
-              "afterValue": 59.617416
+              "afterValue": 61.372025
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 60.033981,
+              "beforeValue": 61.788589,
               "change": 1.449997,
-              "afterValue": 61.483978
+              "afterValue": 63.238586
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 61.483978,
+              "beforeValue": 63.238586,
               "change": 1.449997,
-              "afterValue": 62.933975
+              "afterValue": 64.688583
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 63.496338,
+              "beforeValue": 65.250946,
               "change": 0.649887,
-              "afterValue": 64.146225
+              "afterValue": 65.900833
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 64.354508,
+              "beforeValue": 66.109116,
               "change": 0.649887,
-              "afterValue": 65.004395
+              "afterValue": 66.759003
             }
           ]
         },
@@ -2294,14 +2294,14 @@
           "actorId": "actor-103002",
           "kiboId": 500039,
           "initialValue": 100,
-          "currentValue": 37.738159,
+          "currentValue": 37.758133,
           "maxValue": 100,
           "eventCount": 874,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
               "count": 834,
-              "totalChange": 17.370552,
+              "totalChange": 17.390527,
               "firstTimeMs": 36700,
               "lastTimeMs": 120000
             },
@@ -2398,65 +2398,65 @@
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 11.738388,
+              "beforeValue": 11.758362,
               "change": 1.449997,
-              "afterValue": 13.188385
+              "afterValue": 13.208359
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 13.188385,
+              "beforeValue": 13.208359,
               "change": 1.449997,
-              "afterValue": 14.638382
+              "afterValue": 14.658356
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 15.159088,
+              "beforeValue": 15.179062,
               "change": 1.399887,
-              "afterValue": 16.558975
+              "afterValue": 16.578949
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 16.683945,
+              "beforeValue": 16.703919,
               "change": 1.399887,
-              "afterValue": 18.083832
+              "afterValue": 18.103806
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 18.500397,
+              "beforeValue": 18.52037,
               "change": 1.449997,
-              "afterValue": 19.950394
+              "afterValue": 19.970367
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 19.950394,
+              "beforeValue": 19.970367,
               "change": 1.449997,
-              "afterValue": 21.400391
+              "afterValue": 21.420364
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 21.962753,
+              "beforeValue": 21.982727,
               "change": 0.649887,
-              "afterValue": 22.61264
+              "afterValue": 22.632614
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 22.820923,
+              "beforeValue": 22.840897,
               "change": 0.649887,
-              "afterValue": 23.47081
+              "afterValue": 23.490784
             }
           ]
         }
@@ -2467,14 +2467,14 @@
           "actorId": "actor-101003",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 20.398361,
+          "currentValue": 20.691101,
           "maxValue": 100,
           "eventCount": 1255,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
               "count": 1159,
-              "totalChange": 12.060554,
+              "totalChange": 12.148714,
               "firstTimeMs": 100,
               "lastTimeMs": 120000
             },
@@ -2499,433 +2499,433 @@
               "timeMs": 1466.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.325683,
-              "change": 0.134995,
-              "afterValue": 0.460678
+              "beforeValue": 0.333801,
+              "change": 0.150055,
+              "afterValue": 0.483856
             },
             {
               "timeMs": 2166.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.533523,
-              "change": 0.134995,
-              "afterValue": 0.668518
+              "beforeValue": 0.564819,
+              "change": 0.150055,
+              "afterValue": 0.714874
             },
             {
               "timeMs": 2583.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.710144,
-              "change": 0.10495,
-              "afterValue": 0.815094
+              "beforeValue": 0.761139,
+              "change": 0.116653,
+              "afterValue": 0.877792
             },
             {
               "timeMs": 2666.666667,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.8255,
-              "change": 0.10495,
-              "afterValue": 0.93045
+              "beforeValue": 0.889359,
+              "change": 0.116653,
+              "afterValue": 1.006012
             },
             {
               "timeMs": 2900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.951263,
-              "change": 0.10495,
-              "afterValue": 1.056213
+              "beforeValue": 1.029145,
+              "change": 0.116653,
+              "afterValue": 1.145798
             },
             {
               "timeMs": 2983.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.06662,
-              "change": 0.10495,
-              "afterValue": 1.17157
+              "beforeValue": 1.157364,
+              "change": 0.116653,
+              "afterValue": 1.274017
             },
             {
               "timeMs": 3400,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.213196,
-              "change": 0.10495,
-              "afterValue": 1.318146
+              "beforeValue": 1.320282,
+              "change": 0.116653,
+              "afterValue": 1.436935
             },
             {
               "timeMs": 3500,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.328552,
-              "change": 0.10495,
-              "afterValue": 1.433502
+              "beforeValue": 1.448502,
+              "change": 0.116653,
+              "afterValue": 1.565155
             },
             {
               "timeMs": 3600,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.443909,
-              "change": 0.10495,
-              "afterValue": 1.548859
+              "beforeValue": 1.576722,
+              "change": 0.116653,
+              "afterValue": 1.693375
             },
             {
               "timeMs": 3700,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.559265,
-              "change": 0.10495,
-              "afterValue": 1.664215
+              "beforeValue": 1.704941,
+              "change": 0.116653,
+              "afterValue": 1.821594
             },
             {
               "timeMs": 3800,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.674622,
-              "change": 0.10495,
-              "afterValue": 1.779572
+              "beforeValue": 1.833161,
+              "change": 0.116653,
+              "afterValue": 1.949814
             },
             {
               "timeMs": 3900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.789978,
-              "change": 0.10495,
-              "afterValue": 1.894928
+              "beforeValue": 1.96138,
+              "change": 0.116653,
+              "afterValue": 2.078033
             },
             {
               "timeMs": 4000,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 1.905334,
-              "change": 0.10495,
-              "afterValue": 2.010284
+              "beforeValue": 2.0896,
+              "change": 0.116653,
+              "afterValue": 2.206253
             },
             {
               "timeMs": 4100,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.020691,
-              "change": 0.10495,
-              "afterValue": 2.125641
+              "beforeValue": 2.21782,
+              "change": 0.116653,
+              "afterValue": 2.334473
             },
             {
               "timeMs": 4233.333333,
               "actionId": "threshold-burst-a3",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.146453,
-              "change": 0.134995,
-              "afterValue": 2.281448
+              "beforeValue": 2.357605,
+              "change": 0.150055,
+              "afterValue": 2.50766
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.39592,
-              "change": 0.084991,
-              "afterValue": 2.480911
+              "beforeValue": 2.634888,
+              "change": 0.094482,
+              "afterValue": 2.72937
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 2.480912,
-              "change": 0.084991,
-              "afterValue": 2.565903
+              "beforeValue": 2.729371,
+              "change": 0.094482,
+              "afterValue": 2.823853
             },
             {
               "timeMs": 11916.666667,
               "actionId": "jade-limit-counter",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.252731,
+              "beforeValue": 3.535614,
               "change": 0.125,
-              "afterValue": 3.377731
+              "afterValue": 3.660614
             },
             {
               "timeMs": 12883.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.471389,
+              "beforeValue": 3.754272,
               "change": 0.134995,
-              "afterValue": 3.606384
+              "afterValue": 3.889267
             },
             {
               "timeMs": 13583.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.679229,
+              "beforeValue": 3.962112,
               "change": 0.134995,
-              "afterValue": 3.814224
+              "afterValue": 4.097107
             },
             {
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.866257,
+              "beforeValue": 4.149139,
               "change": 0.10495,
-              "afterValue": 3.971207
+              "afterValue": 4.254089
             },
             {
               "timeMs": 14083.333334,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.971207,
+              "beforeValue": 4.254089,
               "change": 0.10495,
-              "afterValue": 4.076157
+              "afterValue": 4.359039
             },
             {
               "timeMs": 14316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.107376,
+              "beforeValue": 4.390259,
               "change": 0.10495,
-              "afterValue": 4.212326
+              "afterValue": 4.495209
             },
             {
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.222732,
+              "beforeValue": 4.505615,
               "change": 0.10495,
-              "afterValue": 4.327682
+              "afterValue": 4.610565
             },
             {
               "timeMs": 14816.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.369308,
+              "beforeValue": 4.652191,
               "change": 0.10495,
-              "afterValue": 4.474258
+              "afterValue": 4.757141
             },
             {
               "timeMs": 14916.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.484665,
+              "beforeValue": 4.767548,
               "change": 0.10495,
-              "afterValue": 4.589615
+              "afterValue": 4.872498
             },
             {
               "timeMs": 15016.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.600021,
+              "beforeValue": 4.882904,
               "change": 0.10495,
-              "afterValue": 4.704971
+              "afterValue": 4.987854
             },
             {
               "timeMs": 15116.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.715378,
+              "beforeValue": 4.99826,
               "change": 0.10495,
-              "afterValue": 4.820328
+              "afterValue": 5.10321
             },
             {
               "timeMs": 15216.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.830734,
+              "beforeValue": 5.113617,
               "change": 0.10495,
-              "afterValue": 4.935684
+              "afterValue": 5.218567
             },
             {
               "timeMs": 15316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.946091,
+              "beforeValue": 5.228973,
               "change": 0.10495,
-              "afterValue": 5.051041
+              "afterValue": 5.333923
             },
             {
               "timeMs": 15416.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.061447,
+              "beforeValue": 5.34433,
               "change": 0.10495,
-              "afterValue": 5.166397
+              "afterValue": 5.44928
             },
             {
               "timeMs": 15516.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.176804,
+              "beforeValue": 5.459686,
               "change": 0.10495,
-              "afterValue": 5.281754
+              "afterValue": 5.564636
             },
             {
               "timeMs": 15650,
               "actionId": "ultimate-burst-a3",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.29216,
+              "beforeValue": 5.575042,
               "change": 0.134995,
-              "afterValue": 5.427155
+              "afterValue": 5.710037
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.552033,
+              "beforeValue": 5.834916,
               "change": 0.084991,
-              "afterValue": 5.637024
+              "afterValue": 5.919907
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.637024,
+              "beforeValue": 5.919907,
               "change": 0.084991,
-              "afterValue": 5.722015
+              "afterValue": 6.004898
             },
             {
               "timeMs": 20183.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.253021,
+              "beforeValue": 6.535904,
               "change": 0.479889,
-              "afterValue": 6.73291
+              "afterValue": 7.015793
             },
             {
               "timeMs": 20733.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.85788,
+              "beforeValue": 7.140762,
               "change": 0.479889,
-              "afterValue": 7.337769
+              "afterValue": 7.620651
             },
             {
               "timeMs": 38533.333333,
               "actionId": "normal-a1",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 9.367295,
+              "beforeValue": 9.650177,
               "change": 0.334991,
-              "afterValue": 9.702286
+              "afterValue": 9.985168
             },
             {
               "timeMs": 38866.666667,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 9.733505,
+              "beforeValue": 10.016388,
               "change": 0.144943,
-              "afterValue": 9.878448
+              "afterValue": 10.161331
             },
             {
               "timeMs": 39050,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 9.899262,
+              "beforeValue": 10.182144,
               "change": 0.144943,
-              "afterValue": 10.044205
+              "afterValue": 10.327087
             },
             {
               "timeMs": 39550,
               "actionId": "normal-a3",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.096237,
+              "beforeValue": 10.37912,
               "change": 0.079941,
-              "afterValue": 10.176178
+              "afterValue": 10.459061
             },
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.238617,
+              "beforeValue": 10.5215,
               "change": 0.125,
-              "afterValue": 10.363617
+              "afterValue": 10.6465
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.374023,
+              "beforeValue": 10.656906,
               "change": 0.125,
-              "afterValue": 10.499023
+              "afterValue": 10.781906
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.50943,
+              "beforeValue": 10.792313,
               "change": 0.125,
-              "afterValue": 10.63443
+              "afterValue": 10.917313
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.63443,
+              "beforeValue": 10.917313,
               "change": 0.125,
-              "afterValue": 10.75943
+              "afterValue": 11.042313
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.832275,
+              "beforeValue": 11.115158,
               "change": 0.074997,
-              "afterValue": 10.907272
+              "afterValue": 11.190155
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.084182,
+              "beforeValue": 11.376922,
               "change": 0.184998,
-              "afterValue": 11.26918
+              "afterValue": 11.56192
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.26918,
+              "beforeValue": 11.56192,
               "change": 0.184998,
-              "afterValue": 11.454178
+              "afterValue": 11.746918
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.71434,
+              "beforeValue": 12.00708,
               "change": 0.179993,
-              "afterValue": 11.894333
+              "afterValue": 12.187073
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.956772,
+              "beforeValue": 12.249511,
               "change": 0.179993,
-              "afterValue": 12.136765
+              "afterValue": 12.429504
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.344894,
+              "beforeValue": 12.637634,
               "change": 0.184998,
-              "afterValue": 12.529892
+              "afterValue": 12.822632
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.529892,
+              "beforeValue": 12.822631,
               "change": 0.184998,
-              "afterValue": 12.71489
+              "afterValue": 13.007629
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.995865,
+              "beforeValue": 13.288605,
               "change": 0.084991,
-              "afterValue": 13.080856
+              "afterValue": 13.373596
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 13.184922,
+              "beforeValue": 13.477662,
               "change": 0.084991,
-              "afterValue": 13.269913
+              "afterValue": 13.562653
             }
           ]
         },
@@ -2934,7 +2934,7 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 35.35611,
+          "currentValue": 35.418732,
           "maxValue": 100,
           "eventCount": 1181,
           "autoRecovery": [
@@ -2948,7 +2948,7 @@
             {
               "reason": "verified-auto-sp-foreground",
               "count": 958,
-              "totalChange": 19.953224,
+              "totalChange": 20.015864,
               "firstTimeMs": 6000,
               "lastTimeMs": 120000
             }
@@ -2966,313 +2966,313 @@
               "timeMs": 9650,
               "actionId": "ultimate-refresh",
               "reason": "tuning-overlimit-direct-sp",
-              "beforeValue": 0.770645,
+              "beforeValue": 0.813553,
               "change": 2,
-              "afterValue": 2.770645
+              "afterValue": 2.813553
             },
             {
               "timeMs": 11916.666667,
               "actionId": "jade-limit-counter",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 3.249695,
+              "beforeValue": 3.292603,
               "change": 0.25,
-              "afterValue": 3.499695
+              "afterValue": 3.542603
             },
             {
               "timeMs": 12883.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 3.687149,
+              "beforeValue": 3.730057,
               "change": 0.269989,
-              "afterValue": 3.957138
+              "afterValue": 4.000046
             },
             {
               "timeMs": 13583.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.102936,
+              "beforeValue": 4.145844,
               "change": 0.269989,
-              "afterValue": 4.372925
+              "afterValue": 4.415833
             },
             {
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.477066,
+              "beforeValue": 4.519974,
               "change": 0.2099,
-              "afterValue": 4.686966
+              "afterValue": 4.729874
             },
             {
               "timeMs": 14083.333334,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.686966,
+              "beforeValue": 4.729874,
               "change": 0.2099,
-              "afterValue": 4.896866
+              "afterValue": 4.939774
             },
             {
               "timeMs": 14316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 4.95935,
+              "beforeValue": 5.002258,
               "change": 0.2099,
-              "afterValue": 5.16925
+              "afterValue": 5.212158
             },
             {
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.190079,
+              "beforeValue": 5.232986,
               "change": 0.2099,
-              "afterValue": 5.399979
+              "afterValue": 5.442886
             },
             {
               "timeMs": 14816.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.483292,
+              "beforeValue": 5.526199,
               "change": 0.2099,
-              "afterValue": 5.693192
+              "afterValue": 5.736099
             },
             {
               "timeMs": 14916.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.71402,
+              "beforeValue": 5.756927,
               "change": 0.2099,
-              "afterValue": 5.92392
+              "afterValue": 5.966827
             },
             {
               "timeMs": 15016.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 5.944748,
+              "beforeValue": 5.987656,
               "change": 0.2099,
-              "afterValue": 6.154648
+              "afterValue": 6.197556
             },
             {
               "timeMs": 15116.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.175476,
+              "beforeValue": 6.218384,
               "change": 0.2099,
-              "afterValue": 6.385376
+              "afterValue": 6.428284
             },
             {
               "timeMs": 15216.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.406204,
+              "beforeValue": 6.449112,
               "change": 0.2099,
-              "afterValue": 6.616104
+              "afterValue": 6.659012
             },
             {
               "timeMs": 15316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.636932,
+              "beforeValue": 6.67984,
               "change": 0.2099,
-              "afterValue": 6.846832
+              "afterValue": 6.88974
             },
             {
               "timeMs": 15416.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.86766,
+              "beforeValue": 6.910568,
               "change": 0.2099,
-              "afterValue": 7.07756
+              "afterValue": 7.120468
             },
             {
               "timeMs": 15516.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 7.098389,
+              "beforeValue": 7.141296,
               "change": 0.2099,
-              "afterValue": 7.308289
+              "afterValue": 7.351196
             },
             {
               "timeMs": 15650,
               "actionId": "ultimate-burst-a3",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 7.329117,
+              "beforeValue": 7.372025,
               "change": 0.269989,
-              "afterValue": 7.599106
+              "afterValue": 7.642014
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 7.849045,
+              "beforeValue": 7.891953,
               "change": 0.169998,
-              "afterValue": 8.019043
+              "afterValue": 8.061951
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 8.019043,
+              "beforeValue": 8.061951,
               "change": 0.169998,
-              "afterValue": 8.189041
+              "afterValue": 8.231949
             },
             {
               "timeMs": 20183.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 8.688782,
+              "beforeValue": 8.73169,
               "change": 0.239944,
-              "afterValue": 8.928726
+              "afterValue": 8.971634
             },
             {
               "timeMs": 20733.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 8.991166,
+              "beforeValue": 9.034073,
               "change": 0.239944,
-              "afterValue": 9.23111
+              "afterValue": 9.274017
             },
             {
               "timeMs": 38533.333333,
               "actionId": "normal-a1",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 11.281479,
+              "beforeValue": 11.324387,
               "change": 0.669998,
-              "afterValue": 11.951477
+              "afterValue": 11.994385
             },
             {
               "timeMs": 38866.666667,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 12.013962,
+              "beforeValue": 12.05687,
               "change": 0.289886,
-              "afterValue": 12.303848
+              "afterValue": 12.346756
             },
             {
               "timeMs": 39050,
               "actionId": "normal-a2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 12.345505,
+              "beforeValue": 12.388413,
               "change": 0.289886,
-              "afterValue": 12.635391
+              "afterValue": 12.678299
             },
             {
               "timeMs": 39550,
               "actionId": "normal-a3",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 12.739532,
+              "beforeValue": 12.78244,
               "change": 0.159897,
-              "afterValue": 12.899429
+              "afterValue": 12.942337
             },
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.024399,
+              "beforeValue": 13.067307,
               "change": 0.25,
-              "afterValue": 13.274399
+              "afterValue": 13.317307
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.295227,
+              "beforeValue": 13.338135,
               "change": 0.25,
-              "afterValue": 13.545227
+              "afterValue": 13.588135
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.566055,
+              "beforeValue": 13.608963,
               "change": 0.25,
-              "afterValue": 13.816055
+              "afterValue": 13.858963
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.816055,
+              "beforeValue": 13.858963,
               "change": 0.25,
-              "afterValue": 14.066055
+              "afterValue": 14.108963
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.211853,
+              "beforeValue": 14.254761,
               "change": 0.149994,
-              "afterValue": 14.361847
+              "afterValue": 14.404755
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "tuning-overlimit-direct-sp",
-              "beforeValue": 14.715927,
+              "beforeValue": 14.778549,
               "change": 2,
-              "afterValue": 16.715927
+              "afterValue": 16.778549
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 16.715927,
+              "beforeValue": 16.778549,
               "change": 0.369995,
-              "afterValue": 17.085922
+              "afterValue": 17.148544
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 17.085922,
+              "beforeValue": 17.148544,
               "change": 0.369995,
-              "afterValue": 17.455917
+              "afterValue": 17.518539
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 17.976624,
+              "beforeValue": 18.039246,
               "change": 0.359985,
-              "afterValue": 18.336609
+              "afterValue": 18.399231
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.461579,
+              "beforeValue": 18.524201,
               "change": 0.359985,
-              "afterValue": 18.821564
+              "afterValue": 18.884186
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.238129,
+              "beforeValue": 19.300751,
               "change": 0.369995,
-              "afterValue": 19.608124
+              "afterValue": 19.670746
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.608124,
+              "beforeValue": 19.670746,
               "change": 0.369995,
-              "afterValue": 19.978119
+              "afterValue": 20.040741
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.540482,
+              "beforeValue": 20.603104,
               "change": 0.169998,
-              "afterValue": 20.71048
+              "afterValue": 20.773102
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.918762,
+              "beforeValue": 20.981384,
               "change": 0.169998,
-              "afterValue": 21.08876
+              "afterValue": 21.151382
             }
           ]
         },
@@ -3281,14 +3281,14 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 13.311615,
+          "currentValue": 13.321472,
           "maxValue": 100,
           "eventCount": 952,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
               "count": 834,
-              "totalChange": 8.678604,
+              "totalChange": 8.688464,
               "firstTimeMs": 36700,
               "lastTimeMs": 120000
             },
@@ -3385,65 +3385,65 @@
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.997436,
+              "beforeValue": 4.007293,
               "change": 0.184998,
-              "afterValue": 4.182434
+              "afterValue": 4.192291
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.182434,
+              "beforeValue": 4.192291,
               "change": 0.184998,
-              "afterValue": 4.367432
+              "afterValue": 4.377289
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.627594,
+              "beforeValue": 4.637451,
               "change": 0.179993,
-              "afterValue": 4.807587
+              "afterValue": 4.817444
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.870025,
+              "beforeValue": 4.879882,
               "change": 0.179993,
-              "afterValue": 5.050018
+              "afterValue": 5.059875
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.258148,
+              "beforeValue": 5.268005,
               "change": 0.184998,
-              "afterValue": 5.443146
+              "afterValue": 5.453003
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.443145,
+              "beforeValue": 5.453002,
               "change": 0.184998,
-              "afterValue": 5.628143
+              "afterValue": 5.638
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.909119,
+              "beforeValue": 5.918976,
               "change": 0.084991,
-              "afterValue": 5.99411
+              "afterValue": 6.003967
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 6.098176,
+              "beforeValue": 6.108033,
               "change": 0.084991,
-              "afterValue": 6.183167
+              "afterValue": 6.193024
             }
           ]
         }
@@ -3455,7 +3455,7 @@
           "actorId": "actor-101010",
           "kiboId": 500003,
           "initialValue": 0,
-          "currentValue": 79.271744,
+          "currentValue": 81.026352,
           "maxValue": 100,
           "eventCount": 1255,
           "autoRecovery": [
@@ -3469,7 +3469,7 @@
             {
               "reason": "verified-auto-sp-foreground",
               "count": 1017,
-              "totalChange": 21.182076,
+              "totalChange": 21.359086,
               "firstTimeMs": 100,
               "lastTimeMs": 120000
             }
@@ -3487,433 +3487,433 @@
               "timeMs": 1466.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 1.681489,
-              "change": 1.039886,
-              "afterValue": 2.721375
+              "beforeValue": 1.697831,
+              "change": 1.155914,
+              "afterValue": 2.853745
             },
             {
               "timeMs": 2166.666667,
               "actionId": "threshold-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 2.867173,
-              "change": 1.039886,
-              "afterValue": 3.907059
+              "beforeValue": 3.015885,
+              "change": 1.155914,
+              "afterValue": 4.171799
             },
             {
               "timeMs": 2583.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 3.990371,
-              "change": 0.809998,
-              "afterValue": 4.800369
+              "beforeValue": 4.26445,
+              "change": 0.900375,
+              "afterValue": 5.164825
             },
             {
               "timeMs": 2666.666667,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 4.821197,
-              "change": 0.809998,
-              "afterValue": 5.631195
+              "beforeValue": 5.187989,
+              "change": 0.900375,
+              "afterValue": 6.088364
             },
             {
               "timeMs": 2900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 5.672851,
-              "change": 0.809998,
-              "afterValue": 6.482849
+              "beforeValue": 6.13469,
+              "change": 0.900375,
+              "afterValue": 7.035065
             },
             {
               "timeMs": 2983.333333,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 6.503677,
-              "change": 0.809998,
-              "afterValue": 7.313675
+              "beforeValue": 7.058228,
+              "change": 0.900375,
+              "afterValue": 7.958603
             },
             {
               "timeMs": 3400,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 7.396987,
-              "change": 0.809998,
-              "afterValue": 8.206985
+              "beforeValue": 8.051255,
+              "change": 0.900375,
+              "afterValue": 8.95163
             },
             {
               "timeMs": 3500,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 8.227813,
-              "change": 0.809998,
-              "afterValue": 9.037811
+              "beforeValue": 8.974793,
+              "change": 0.900375,
+              "afterValue": 9.875168
             },
             {
               "timeMs": 3600,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 9.058639,
-              "change": 0.809998,
-              "afterValue": 9.868637
+              "beforeValue": 9.898331,
+              "change": 0.900375,
+              "afterValue": 10.798706
             },
             {
               "timeMs": 3700,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 9.889465,
-              "change": 0.809998,
-              "afterValue": 10.699463
+              "beforeValue": 10.821869,
+              "change": 0.900375,
+              "afterValue": 11.722244
             },
             {
               "timeMs": 3800,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 10.720291,
-              "change": 0.809998,
-              "afterValue": 11.530289
+              "beforeValue": 11.745407,
+              "change": 0.900375,
+              "afterValue": 12.645782
             },
             {
               "timeMs": 3900,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 11.551117,
-              "change": 0.809998,
-              "afterValue": 12.361115
+              "beforeValue": 12.668946,
+              "change": 0.900375,
+              "afterValue": 13.569321
             },
             {
               "timeMs": 4000,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 12.381942,
-              "change": 0.809998,
-              "afterValue": 13.19194
+              "beforeValue": 13.592484,
+              "change": 0.900375,
+              "afterValue": 14.492859
             },
             {
               "timeMs": 4100,
               "actionId": "threshold-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 13.212768,
-              "change": 0.809998,
-              "afterValue": 14.022766
+              "beforeValue": 14.516022,
+              "change": 0.900375,
+              "afterValue": 15.416397
             },
             {
               "timeMs": 4233.333333,
               "actionId": "threshold-burst-a3",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 14.064423,
-              "change": 1.039886,
-              "afterValue": 15.104309
+              "beforeValue": 15.462723,
+              "change": 1.155914,
+              "afterValue": 16.618637
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 15.33342,
-              "change": 0.649887,
-              "afterValue": 15.983307
+              "beforeValue": 16.873428,
+              "change": 0.722397,
+              "afterValue": 17.595825
             },
             {
               "timeMs": 5400,
               "actionId": "threshold-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 15.983307,
-              "change": 0.649887,
-              "afterValue": 16.633194
+              "beforeValue": 17.595825,
+              "change": 0.722397,
+              "afterValue": 18.318222
             },
             {
               "timeMs": 11916.666667,
               "actionId": "jade-limit-counter",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 18.007858,
+              "beforeValue": 19.742752,
               "change": 0.979996,
-              "afterValue": 18.987854
+              "afterValue": 20.722748
             },
             {
               "timeMs": 12883.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 19.175309,
+              "beforeValue": 20.910203,
               "change": 1.039886,
-              "afterValue": 20.215195
+              "afterValue": 21.950089
             },
             {
               "timeMs": 13583.333334,
               "actionId": "ultimate-burst-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 20.360993,
+              "beforeValue": 22.095887,
               "change": 1.039886,
-              "afterValue": 21.400879
+              "afterValue": 23.135773
             },
             {
               "timeMs": 14000,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 21.50502,
+              "beforeValue": 23.239913,
               "change": 0.809998,
-              "afterValue": 22.315018
+              "afterValue": 24.049911
             },
             {
               "timeMs": 14083.333334,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 22.315017,
+              "beforeValue": 24.049911,
               "change": 0.809998,
-              "afterValue": 23.125015
+              "afterValue": 24.859909
             },
             {
               "timeMs": 14316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 23.1875,
+              "beforeValue": 24.922393,
               "change": 0.809998,
-              "afterValue": 23.997498
+              "afterValue": 25.732391
             },
             {
               "timeMs": 14400,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 24.018325,
+              "beforeValue": 25.753219,
               "change": 0.809998,
-              "afterValue": 24.828323
+              "afterValue": 26.563217
             },
             {
               "timeMs": 14816.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 24.911636,
+              "beforeValue": 26.64653,
               "change": 0.809998,
-              "afterValue": 25.721634
+              "afterValue": 27.456528
             },
             {
               "timeMs": 14916.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 25.742462,
+              "beforeValue": 27.477356,
               "change": 0.809998,
-              "afterValue": 26.55246
+              "afterValue": 28.287354
             },
             {
               "timeMs": 15016.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 26.573288,
+              "beforeValue": 28.308181,
               "change": 0.809998,
-              "afterValue": 27.383286
+              "afterValue": 29.118179
             },
             {
               "timeMs": 15116.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 27.404113,
+              "beforeValue": 29.139007,
               "change": 0.809998,
-              "afterValue": 28.214111
+              "afterValue": 29.949005
             },
             {
               "timeMs": 15216.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 28.234939,
+              "beforeValue": 29.969833,
               "change": 0.809998,
-              "afterValue": 29.044937
+              "afterValue": 30.779831
             },
             {
               "timeMs": 15316.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 29.065765,
+              "beforeValue": 30.800659,
               "change": 0.809998,
-              "afterValue": 29.875763
+              "afterValue": 31.610657
             },
             {
               "timeMs": 15416.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 29.896591,
+              "beforeValue": 31.631485,
               "change": 0.809998,
-              "afterValue": 30.706589
+              "afterValue": 32.441483
             },
             {
               "timeMs": 15516.666667,
               "actionId": "ultimate-burst-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 30.727417,
+              "beforeValue": 32.46231,
               "change": 0.809998,
-              "afterValue": 31.537415
+              "afterValue": 33.272308
             },
             {
               "timeMs": 15650,
               "actionId": "ultimate-burst-a3",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 31.558243,
+              "beforeValue": 33.293137,
               "change": 1.039886,
-              "afterValue": 32.598129
+              "afterValue": 34.333023
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 32.848068,
+              "beforeValue": 34.582962,
               "change": 0.649887,
-              "afterValue": 33.497955
+              "afterValue": 35.232849
             },
             {
               "timeMs": 16816.666667,
               "actionId": "ultimate-enhanced-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 33.497955,
+              "beforeValue": 35.232849,
               "change": 0.649887,
-              "afterValue": 34.147842
+              "afterValue": 35.882736
             },
             {
               "timeMs": 20183.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 34.835175,
+              "beforeValue": 36.570069,
               "change": 1.859985,
-              "afterValue": 36.69516
+              "afterValue": 38.430054
             },
             {
               "timeMs": 20733.333334,
               "actionId": "han-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 36.82013,
+              "beforeValue": 38.555024,
               "change": 1.859985,
-              "afterValue": 38.680115
+              "afterValue": 40.415009
             },
             {
               "timeMs": 38533.333333,
               "actionId": "normal-a1",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 42.387543,
+              "beforeValue": 44.122437,
               "change": 2.599899,
-              "afterValue": 44.987442
+              "afterValue": 46.722336
             },
             {
               "timeMs": 38866.666667,
               "actionId": "normal-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 45.049926,
+              "beforeValue": 46.78482,
               "change": 1.139893,
-              "afterValue": 46.189819
+              "afterValue": 47.924713
             },
             {
               "timeMs": 39050,
               "actionId": "normal-a2",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 46.231475,
+              "beforeValue": 47.966369,
               "change": 1.139893,
-              "afterValue": 47.371368
+              "afterValue": 49.106262
             },
             {
               "timeMs": 39550,
               "actionId": "normal-a3",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 47.47551,
+              "beforeValue": 49.210404,
               "change": 0.609985,
-              "afterValue": 48.085495
+              "afterValue": 49.820389
             },
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 48.210464,
+              "beforeValue": 49.945358,
               "change": 0.979996,
-              "afterValue": 49.19046
+              "afterValue": 50.925354
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 49.211288,
+              "beforeValue": 50.946182,
               "change": 0.979996,
-              "afterValue": 50.191284
+              "afterValue": 51.926178
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 50.212112,
+              "beforeValue": 51.947006,
               "change": 0.979996,
-              "afterValue": 51.192108
+              "afterValue": 52.927002
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 51.192108,
+              "beforeValue": 52.927002,
               "change": 0.979996,
-              "afterValue": 52.172104
+              "afterValue": 53.906998
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 52.317901,
+              "beforeValue": 54.052795,
               "change": 0.599991,
-              "afterValue": 52.917892
+              "afterValue": 54.652786
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 53.271973,
+              "beforeValue": 55.026581,
               "change": 1.449997,
-              "afterValue": 54.72197
+              "afterValue": 56.476578
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 54.72197,
+              "beforeValue": 56.476578,
               "change": 1.449997,
-              "afterValue": 56.171967
+              "afterValue": 57.926575
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 56.692673,
+              "beforeValue": 58.447281,
               "change": 1.399887,
-              "afterValue": 58.09256
+              "afterValue": 59.847168
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 58.217529,
+              "beforeValue": 59.972138,
               "change": 1.399887,
-              "afterValue": 59.617416
+              "afterValue": 61.372025
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 60.033981,
+              "beforeValue": 61.788589,
               "change": 1.449997,
-              "afterValue": 61.483978
+              "afterValue": 63.238586
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 61.483978,
+              "beforeValue": 63.238586,
               "change": 1.449997,
-              "afterValue": 62.933975
+              "afterValue": 64.688583
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 63.496338,
+              "beforeValue": 65.250946,
               "change": 0.649887,
-              "afterValue": 64.146225
+              "afterValue": 65.900833
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 64.354508,
+              "beforeValue": 66.109116,
               "change": 0.649887,
-              "afterValue": 65.004395
+              "afterValue": 66.759003
             }
           ]
         },
@@ -3935,14 +3935,14 @@
           "actorId": "actor-103002",
           "kiboId": 500039,
           "initialValue": 100,
-          "currentValue": 37.738159,
+          "currentValue": 37.758133,
           "maxValue": 100,
           "eventCount": 874,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
               "count": 834,
-              "totalChange": 17.370552,
+              "totalChange": 17.390527,
               "firstTimeMs": 36700,
               "lastTimeMs": 120000
             },
@@ -4039,65 +4039,65 @@
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 11.738388,
+              "beforeValue": 11.758362,
               "change": 1.449997,
-              "afterValue": 13.188385
+              "afterValue": 13.208359
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 13.188385,
+              "beforeValue": 13.208359,
               "change": 1.449997,
-              "afterValue": 14.638382
+              "afterValue": 14.658356
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 15.159088,
+              "beforeValue": 15.179062,
               "change": 1.399887,
-              "afterValue": 16.558975
+              "afterValue": 16.578949
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 16.683945,
+              "beforeValue": 16.703919,
               "change": 1.399887,
-              "afterValue": 18.083832
+              "afterValue": 18.103806
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 18.500397,
+              "beforeValue": 18.52037,
               "change": 1.449997,
-              "afterValue": 19.950394
+              "afterValue": 19.970367
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 19.950394,
+              "beforeValue": 19.970367,
               "change": 1.449997,
-              "afterValue": 21.400391
+              "afterValue": 21.420364
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 21.962753,
+              "beforeValue": 21.982727,
               "change": 0.649887,
-              "afterValue": 22.61264
+              "afterValue": 22.632614
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-pet-sp-shared-recovery",
-              "beforeValue": 22.820923,
+              "beforeValue": 22.840897,
               "change": 0.649887,
-              "afterValue": 23.47081
+              "afterValue": 23.490784
             }
           ]
         }
@@ -4538,10 +4538,10 @@
             130
           ],
           "changes": [
-            1.039886,
-            1.039886
+            1.155914,
+            1.155914
           ],
-          "totalChange": 2.079772,
+          "totalChange": 2.311828,
           "reasons": [
             "verified-hit-pet-sp-shared-recovery"
           ]
@@ -4563,20 +4563,20 @@
             246
           ],
           "changes": [
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998,
-            0.809998
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375,
+            0.900375
           ],
-          "totalChange": 9.719976,
+          "totalChange": 10.8045,
           "reasons": [
             "verified-hit-pet-sp-shared-recovery"
           ]
@@ -4587,9 +4587,9 @@
             254
           ],
           "changes": [
-            1.039886
+            1.155914
           ],
-          "totalChange": 1.039886,
+          "totalChange": 1.155914,
           "reasons": [
             "verified-hit-pet-sp-shared-recovery"
           ]
@@ -4614,10 +4614,10 @@
             324
           ],
           "changes": [
-            0.649887,
-            0.649887
+            0.722397,
+            0.722397
           ],
-          "totalChange": 1.299774,
+          "totalChange": 1.444794,
           "reasons": [
             "verified-hit-pet-sp-shared-recovery"
           ]
@@ -6126,7 +6126,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "ce71a7262b2d819081fb7de5152d859c285d96a717944f5ef152553997bac7f8"
+      "baselineReplayHash": "97622898e6ccbd4f6b302bca0b758448317e9291b8d0f50dd29bb665fa2eb343"
     },
     "trace": {
       "damage": [
@@ -9676,8 +9676,8 @@
           "actionId": "fire-kibo-signature",
           "frame": 2135,
           "hitIdentity": null,
-          "rawDamage": 316,
-          "hpDamage": 316,
+          "rawDamage": 319,
+          "hpDamage": 319,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -10852,8 +10852,8 @@
           "actionId": "normal-special-charged",
           "frame": 2565,
           "hitIdentity": null,
-          "rawDamage": 129656,
-          "hpDamage": 129656,
+          "rawDamage": 129653,
+          "hpDamage": 129653,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -11789,6 +11789,39 @@
       ],
       "conditionalHitGroups": [],
       "effects": [
+        {
+          "eventId": "kibo/actor-101010/kibo-passive:520048:520048001/verified-calculator|EFFECT_APPLIED|0|1",
+          "actionId": null,
+          "frame": 0,
+          "effectId": "kibo-passive:520048:520048001",
+          "runtimeEffectId": "kibo-passive:520048:520048001",
+          "sourceElementId": null,
+          "effectName": "潮湿",
+          "targetKind": "kibo",
+          "targetId": "actor-101010",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101010",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101010",
+          "effectAdderActorId": "actor-101010",
+          "effectInstanceId": "kibo-passive:520048:520048001|unknown-action|0",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 62,
+              "bucket": "dynamicExtra",
+              "valueRaw": 3000,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
         {
           "eventId": "actor/actor-101010/battle-element:101010206/verified-calculator|EFFECT_APPLIED|16.667|1",
           "actionId": "threshold-charged",
@@ -13336,7 +13369,7 @@
         }
       ]
     },
-    "summaryHash": "4ee14faf60a5cfa997576480923dffc2ead27719b3a455986bce94941e4f7a75"
+    "summaryHash": "f9c492ef3bf54aee60c44520412b954188f8642a504ab2670b5cfc7c7db1dc15"
   },
   "expected": {
     "exact": {
@@ -13380,7 +13413,7 @@
       "combat.ownerHitEventCount": 115,
       "combat.ownerHitTotalHpDamage": 9742,
       "combat.ownerHitTotalToughnessDamage": 1766,
-      "combat.ownerTotalHpDamage": 699322,
+      "combat.ownerTotalHpDamage": 699319,
       "combat.ownerTotalToughnessDamage": 0,
       "combat.enemy.initialHp": 862800,
       "combat.enemy.finalHp": 0,
@@ -13415,11 +13448,11 @@
       "resources.tuningMarkAcquireByActionId.threshold-charged.eventCount": 1,
       "resources.tuningMarkAcquireByActionId.threshold-charged.totalDelta": 2,
       "resources.actorSpByActorId.actor-101010.initialValue": 100,
-      "resources.actorSpByActorId.actor-101010.currentValue": 35.35611,
+      "resources.actorSpByActorId.actor-101010.currentValue": 35.418732,
       "resources.actorSpByActorId.actor-101010.autoRecovery.0.reason": "verified-auto-sp-background",
       "resources.actorSpByActorId.actor-101010.autoRecovery.0.totalChange": 1.904298,
       "resources.actorSpByActorId.actor-101010.autoRecovery.1.reason": "verified-auto-sp-foreground",
-      "resources.actorSpByActorId.actor-101010.autoRecovery.1.totalChange": 19.953224,
+      "resources.actorSpByActorId.actor-101010.autoRecovery.1.totalChange": 20.015864,
       "resources.actorSpByActorId.actor-101010.actionTransactions.0.actionId": "ultimate-refresh",
       "resources.actorSpByActorId.actor-101010.actionTransactions.0.reason": "verified-skill-cost",
       "resources.actorSpByActorId.actor-101010.actionTransactions.0.beforeValue": 100,
@@ -13447,7 +13480,7 @@
       "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.totalChange": 0.339996,
       "resources.kiboSpBySlotId.team-slot-1.kiboId": 500003,
       "resources.kiboSpBySlotId.team-slot-1.initialValue": 0,
-      "resources.kiboSpBySlotId.team-slot-1.currentValue": 79.271744,
+      "resources.kiboSpBySlotId.team-slot-1.currentValue": 81.026352,
       "resources.ownerKiboSpTransactionsByActionId.normal-a3.eventCount": 1,
       "resources.ownerKiboSpTransactionsByActionId.normal-a3.frames": [
         2373
@@ -13783,8 +13816,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 699322,
-        "actual": 699322,
+        "expected": 699319,
+        "actual": 699319,
         "passed": true
       },
       {
@@ -13963,8 +13996,8 @@
       {
         "jsonPath": "resources.actorSpByActorId.actor-101010.currentValue",
         "operator": "exact",
-        "expected": 35.35611,
-        "actual": 35.35611,
+        "expected": 35.418732,
+        "actual": 35.418732,
         "passed": true
       },
       {
@@ -13991,8 +14024,8 @@
       {
         "jsonPath": "resources.actorSpByActorId.actor-101010.autoRecovery.1.totalChange",
         "operator": "exact",
-        "expected": 19.953224,
-        "actual": 19.953224,
+        "expected": 20.015864,
+        "actual": 20.015864,
         "passed": true
       },
       {
@@ -14137,8 +14170,8 @@
       {
         "jsonPath": "resources.kiboSpBySlotId.team-slot-1.currentValue",
         "operator": "exact",
-        "expected": 79.271744,
-        "actual": 79.271744,
+        "expected": 81.026352,
+        "actual": 81.026352,
         "passed": true
       },
       {
@@ -14368,7 +14401,7 @@
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 699322,
+        "actual": 699319,
         "passed": true
       },
       {
@@ -14387,6 +14420,6 @@
       }
     ]
   },
-  "replayHash": "92b28770851aa03ecfbcb9440c20105fdbe60630a4d3b3890a1661ba05d20501",
-  "profileHash": "9ffbddd8b8a560707d9518907f4e9df1d58ffd12cb14c8caea5cff851db21027"
+  "replayHash": "d79f0985690b9dbc365376f0e7d8e6bf9cb2388c7bb2e084d0675116867947ce",
+  "profileHash": "11c7df959c7f903a55468250a3bfaf54d90450b40471f5c85765cdde4f5c0bff"
 }

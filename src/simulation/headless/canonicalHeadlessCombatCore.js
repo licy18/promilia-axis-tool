@@ -349,7 +349,14 @@ function projectRuntimePayload(payload = null) {
     'actionType',
     'skillId',
     'sourceActorId',
+    'sourceKiboId',
+    'sourceSlotId',
+    'sourcePosition',
     'targetActorId',
+    'targetKind',
+    'targetKiboId',
+    'targetSlotId',
+    'targetPosition',
     'fromActorId',
     'afterActorId',
     'resource',
@@ -359,6 +366,11 @@ function projectRuntimePayload(payload = null) {
     'stateName',
     'effectId',
     'effectIdentity',
+    'rootEffectId',
+    'rootElementId',
+    'healElementId',
+    'passiveSkillId',
+    'passiveName',
     'elementId',
     'hitIdentity',
     'hitKey',
@@ -369,25 +381,78 @@ function projectRuntimePayload(payload = null) {
     'status',
     'confidence',
     'change',
+    'requestedChange',
+    'overheal',
     'beforeValue',
     'afterValue',
     'currentValue',
     'maxValue',
+    'maximum',
+    'frameIndex',
+    'tickIndex',
+    'thresholdMs',
+    'intervalMs',
+    'conditionMatched',
+    'coefficientRaw',
+    'baseFormulaValue',
+    'baseNominalHeal',
+    'sourceMaxHp',
+    'sourceShootHealUpRaw',
+    'targetSufferHealUpRaw',
+    'healUpFactor',
+    'globalMultiplier',
+    'roundingPolicy',
+    'configuredPostFunctionRuntimeStatus',
+    'sourceAttributionStatus',
+    'sourceSelectionPolicy',
     'durationMs',
     'stateDurationMs',
     'expiresAtMs',
     'layers',
     'stacks',
     'appliedToCalculators',
+    'applied',
   ];
   for (const key of scalarKeys) {
     if (payload[key] !== undefined) result[key] = payload[key];
   }
-  for (const key of ['diagnosticIds', 'violationCodes', 'unresolvedCodes']) {
+  for (const key of [
+    'diagnosticIds',
+    'violationCodes',
+    'unresolvedCodes',
+    'unresolvedReasons',
+  ]) {
     if (Array.isArray(payload[key])) result[key] = payload[key];
   }
   if (payload.sourceIdentity != null) {
     result.sourceIdentity = projectSourceIdentity(payload.sourceIdentity);
+  }
+  if (Array.isArray(payload.contributingSources)) {
+    result.contributingSources = payload.contributingSources.map(source => ({
+      sourceActorId: source.sourceActorId ?? null,
+      sourceActorName: source.sourceActorName ?? null,
+      sourceKiboId: source.sourceKiboId ?? null,
+      sourceSlotId: source.sourceSlotId ?? null,
+      sourcePosition: source.sourcePosition ?? null,
+    }));
+  }
+  if (payload.formulaSource != null) {
+    result.formulaSource = payload.formulaSource;
+  }
+  if (Array.isArray(payload.valueShields)) {
+    result.valueShields = payload.valueShields;
+  }
+  if (payload.formulaAttributeTrace != null) {
+    result.formulaAttributeTrace = payload.formulaAttributeTrace;
+  }
+  if (payload.targetMaximumHpResolution != null) {
+    result.targetMaximumHpResolution = payload.targetMaximumHpResolution;
+  }
+  if (payload.formulaAttributeResolution != null) {
+    result.formulaAttributeResolution = payload.formulaAttributeResolution;
+  }
+  if (payload.sameTimeVitalOrderConflict != null) {
+    result.sameTimeVitalOrderConflict = payload.sameTimeVitalOrderConflict;
   }
   if (payload.stateTransaction != null) {
     result.stateTransaction = payload.stateTransaction;
@@ -595,7 +660,7 @@ function projectDiagnostics(simulation) {
 
 function projectSourceIdentity(value) {
   if (value == null || typeof value !== 'object') return value ?? null;
-  return {
+  const result = {
     identity: value.identity ?? value.sourceIdentity ?? null,
     sourceKind: value.sourceKind ?? null,
     sourcePath: value.sourcePath ?? value.path ?? null,
@@ -604,6 +669,43 @@ function projectSourceIdentity(value) {
     packageId: value.packageId ?? null,
     packageHash: value.packageHash ?? null,
   };
+  for (const key of [
+    'catalogKind',
+    'actionBindingIdentity',
+    'effectIdentity',
+    'triggerEvent',
+    'kiboId',
+    'passiveSkillId',
+    'triggerElementId',
+    'triggerPathId',
+    'effectElementId',
+    'effectPathId',
+    'directInjectTargetType',
+    'directInjectTargetName',
+    'sourceSlotId',
+    'sourcePosition',
+    'projectedFromContainer',
+    'projectionScope',
+    'teamElementTag',
+    'teamElementTagName',
+    'finalTargetKind',
+    'finalTargetId',
+    'finalTargetActorId',
+    'finalTargetKiboId',
+    'sourceSelectionPolicy',
+    'sourceAttributionStatus',
+  ]) {
+    if (value[key] !== undefined) result[key] = value[key];
+  }
+  if (Array.isArray(value.provenance)) {
+    result.provenance = [...value.provenance];
+  }
+  if (Array.isArray(value.contributingSources)) {
+    result.contributingSources = value.contributingSources.map(source => ({
+      ...source,
+    }));
+  }
+  return result;
 }
 
 function projectNumericRecord(value) {

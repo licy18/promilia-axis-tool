@@ -335,10 +335,37 @@ describe('verified combat mechanics runtime', () => {
       'verified-muyin-charged': { hitCount: 3, hp: 191, toughness: 188 },
       'verified-wind-kibo-active': {
         hitCount: 6,
-        hp: 630,
-        toughness: 126,
+        hp: 719,
+        toughness: 143,
       },
     });
+    expect(
+      result.verifiedCombatRuntime.damageEvents
+        .filter(event => event.actionId === 'verified-wind-kibo-active')
+        .flatMap(event => event.payload.dynamicPropertyTrace.target)
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attributeId: 3,
+          dynamicPercentRaw: -2500,
+        }),
+        expect.objectContaining({
+          attributeId: 4,
+          dynamicPercentRaw: -2500,
+        }),
+      ])
+    );
+    expect(result.verifiedKiboPassiveGeneration.summary).toMatchObject({
+      effectCommandCount: 6,
+      evidenceClosedDefinitionCount: 35,
+      scenarioAssumedDefinitionCount: 0,
+      unresolvedDefinitionCount: 9,
+    });
+    expect(
+      result.effectTimeline.activeEffects.find(
+        effect => effect.effectId === 'kibo-passive:520084:520084002'
+      )
+    ).toMatchObject({ stacks: 5, targetKind: 'enemy' });
     expect(
       result.verifiedCombatRuntime.damageEvents.find(
         event =>
@@ -662,8 +689,8 @@ describe('verified combat mechanics runtime', () => {
     const accepted = simulateXiaoyuPerfectParry({ includePrerequisite: true });
     expectXiaoyuHitSettlement(accepted, 'xiaoyu-perfect-parry', {
       frames: [91, 156],
-      actorRecovery: [0.169998, 0.169998],
-      kiboRecovery: [0.649887, 0.649887],
+      actorRecovery: [0.179474, 0.169998],
+      kiboRecovery: [0.686127, 0.649887],
     });
     expect(
       accepted.verifiedTuningMarkGeneration.events.filter(

@@ -18,6 +18,7 @@ import {
   calculateWeaknessDamage,
   isCriticalHit,
   qFromFloat,
+  qFromInt,
   qMul,
   qToNumber,
   runtimeIntegerize,
@@ -67,6 +68,7 @@ export function createVerifiedCombatRuntime({
   tuningGeneration = null,
   effectTimeline = null,
   actionVariantRuntime = null,
+  kiboPassiveGeneration = null,
   criticalRandomSource = null,
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
@@ -178,6 +180,47 @@ export function createVerifiedCombatRuntime({
       tuningEvent,
     });
   }
+  for (const command of kiboPassiveGeneration?.derivedDamageCommands ?? []) {
+    const action = (scenario?.actions ?? []).find(
+      item => item.id === command.sourceActionId
+    );
+    const resolution = actionResolutionById.get(command.sourceActionId);
+    if (!action || !resolution?.ready) continue;
+    descriptors.push({
+      kind: 'passive-derived-hit',
+      timeMs: command.timeMs,
+      action,
+      resolution,
+      hit: command.hit,
+      passiveDerivedDamageCommand: command,
+    });
+  }
+  for (const command of kiboPassiveGeneration?.vitalChangeCommands ?? []) {
+    const action = (scenario?.actions ?? []).find(
+      item => item.id === command.sourceActionId
+    );
+    const resolution = actionResolutionById.get(command.sourceActionId);
+    if (!action || !resolution?.ready) continue;
+    descriptors.push({
+      kind: 'passive-vital-change',
+      timeMs: command.timeMs,
+      action,
+      resolution,
+      passiveVitalChangeCommand: command,
+    });
+  }
+  for (const schedule of kiboPassiveGeneration?.periodicVitalSchedules ?? []) {
+    descriptors.push(
+      ...createPeriodicVitalDescriptors({
+        schedule,
+        durationMs: nonNegativeNumber(scenario?.time?.durationMs),
+        frameRate: positiveNumber(
+          scenario?.time?.fps ?? scenario?.time?.frameRate,
+          FRAME_RATE
+        ),
+      })
+    );
+  }
 
   const durationMs = nonNegativeNumber(scenario?.time?.durationMs);
   for (
@@ -188,6 +231,10 @@ export function createVerifiedCombatRuntime({
     descriptors.push({ kind: 'weakness-state-tick', timeMs });
     descriptors.push({ kind: 'auto-sp-tick', timeMs });
   }
+  annotatePeriodicVitalOrderConflicts({
+    descriptors,
+    controlledActorTimeline,
+  });
   descriptors.sort(compareDescriptors);
 
   const state = createRuntimeState({
@@ -199,6 +246,7 @@ export function createVerifiedCombatRuntime({
   const damageEvents = [];
   const resourceEvents = [];
   const kiboResourceEvents = [];
+  const vitalEvents = [];
   const eventLog = [];
   const hitRecoveryAtByIdentity = new Map();
   const executionBlocks = [...(actionVariantRuntime?.executionBlocks ?? [])];
@@ -267,15 +315,61 @@ export function createVerifiedCombatRuntime({
     }
     if (descriptor.kind === 'direct-heal') {
       const event = applyDirectHealDescriptor({ descriptor, state });
-      if (event) eventLog.push(event);
+      if (event) {
+        appendRuntimeEvent(vitalEvents, event, state);
+        eventLog.push(event);
+      }
+      continue;
+    }
+    if (descriptor.kind === 'passive-vital-change') {
+      const event = applyKiboPassiveVitalChangeDescriptor({
+        descriptor,
+        state,
+      });
+      appendRuntimeEvent(vitalEvents, event, state);
+      eventLog.push(event);
       continue;
     }
     if (descriptor.kind === 'direct-shield') {
       const event = applyDirectShieldDescriptor({ descriptor, state });
-      if (event) eventLog.push(event);
+      if (event) {
+        appendRuntimeEvent(vitalEvents, event, state);
+        eventLog.push(event);
+      }
       continue;
     }
-    if (descriptor.kind === 'hit') {
+    if (descriptor.kind === 'passive-periodic-heal') {
+      const event = applyKiboPassivePeriodicHealDescriptor({
+        descriptor,
+        scenario,
+        state,
+      });
+      if (event) {
+        appendRuntimeEvent(vitalEvents, event, state);
+        eventLog.push(event);
+      }
+      continue;
+    }
+    if (descriptor.kind === 'passive-periodic-heal-contract-unresolved') {
+      const event = createKiboPassivePeriodicHealEvent({
+        descriptor,
+        schedule: descriptor.schedule,
+        applied: false,
+        reason: 'periodic-heal-schedule-contract-unresolved',
+        payload: {
+          ...createKiboPassivePeriodicHealPayload({
+            descriptor,
+            schedule: descriptor.schedule,
+          }),
+          unresolvedReasons: descriptor.unresolvedReasons,
+          appliedToCalculators: false,
+        },
+      });
+      appendRuntimeEvent(vitalEvents, event, state);
+      eventLog.push(event);
+      continue;
+    }
+    if (['hit', 'passive-derived-hit'].includes(descriptor.kind)) {
       const hitResult = applyHitDescriptor({
         descriptor,
         scenario,
@@ -294,14 +388,16 @@ export function createVerifiedCombatRuntime({
       }
       appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
       eventLog.push(hitResult.damageEvent);
-      applyHitRecovery({
-        descriptor,
-        hitResult,
-        state,
-        hitRecoveryAtByIdentity,
-        resourceEvents,
-        kiboResourceEvents,
-      });
+      if (descriptor.kind === 'hit') {
+        applyHitRecovery({
+          descriptor,
+          hitResult,
+          state,
+          hitRecoveryAtByIdentity,
+          resourceEvents,
+          kiboResourceEvents,
+        });
+      }
       continue;
     }
     if (descriptor.kind === 'tuning-combat') {
@@ -316,12 +412,18 @@ export function createVerifiedCombatRuntime({
         appendRuntimeEvent(damageEvents, tuningResult.damageEvent, state);
         eventLog.push(tuningResult.damageEvent);
       }
-      if (tuningResult?.event) eventLog.push(tuningResult.event);
+      if (tuningResult?.event) {
+        if (tuningResult.event.type === 'VERIFIED_TUNING_PERIODIC_HEAL') {
+          appendRuntimeEvent(vitalEvents, tuningResult.event, state);
+        }
+        eventLog.push(tuningResult.event);
+      }
     }
   }
 
   resourceEvents.sort(compareEvents);
   kiboResourceEvents.sort(compareEvents);
+  vitalEvents.sort(compareEvents);
   damageEvents.sort(compareEvents);
   eventLog.push(...resourceEvents, ...kiboResourceEvents);
   eventLog.sort(compareEvents);
@@ -340,10 +442,12 @@ export function createVerifiedCombatRuntime({
     damageEvents,
     resourceEvents,
     kiboResourceEvents,
+    vitalEvents,
     eventLog,
     executionBlocks,
     effectGeneration,
     tuningGeneration,
+    kiboPassiveGeneration,
     tuningMarkRuntime: tuningGeneration
       ? {
           events: tuningGeneration.events,
@@ -367,6 +471,9 @@ export function createVerifiedCombatRuntime({
       hitEventCount: damageEvents.filter(
         event => event.type === 'VERIFIED_COMBAT_HIT'
       ).length,
+      kiboPassiveDerivedDamageEventCount: damageEvents.filter(
+        event => event.payload.kiboPassiveDerivedDamage === true
+      ).length,
       toughnessStateEventCount: damageEvents.filter(
         event => event.type === 'VERIFIED_TOUGHNESS_STATE_CHANGE'
       ).length,
@@ -383,6 +490,19 @@ export function createVerifiedCombatRuntime({
       ).length,
       resourceEventCount: resourceEvents.length,
       kiboResourceEventCount: kiboResourceEvents.length,
+      vitalEventCount: vitalEvents.length,
+      kiboPassivePeriodicHealEventCount: vitalEvents.filter(
+        event => event.type === 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL'
+      ).length,
+      kiboPassivePeriodicHealSuppressedEventCount: vitalEvents.filter(
+        event => event.type === 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL_SUPPRESSED'
+      ).length,
+      kiboPassiveVitalDamageEventCount: vitalEvents.filter(
+        event => event.type === 'VERIFIED_KIBO_PASSIVE_VITAL_DAMAGE'
+      ).length,
+      kiboPassiveVitalDamageSuppressedEventCount: vitalEvents.filter(
+        event => event.type === 'VERIFIED_KIBO_PASSIVE_VITAL_DAMAGE_SUPPRESSED'
+      ).length,
       breakTriggerCount: damageEvents.filter(
         event => event.payload.breakState?.triggered
       ).length,
@@ -403,6 +523,507 @@ export function createVerifiedCombatRuntime({
     },
     applied: true,
   };
+}
+
+function applyKiboPassiveVitalChangeDescriptor({ descriptor, state }) {
+  const command = descriptor.passiveVitalChangeCommand;
+  const contract = resolveKiboPassiveVitalDamageContract(command);
+  const basePayload = createKiboPassiveVitalDamagePayload({
+    command,
+    contract,
+  });
+  if (!contract.ready) {
+    return createKiboPassiveVitalDamageEvent({
+      descriptor,
+      command,
+      applied: false,
+      reason: 'kibo-passive-vital-damage-contract-unresolved',
+      payload: {
+        ...basePayload,
+        beforeValue: null,
+        requestedDamage: null,
+        appliedDamage: 0,
+        change: 0,
+        afterValue: null,
+        maxValue: null,
+        lethal: false,
+        unresolvedReasons: contract.unresolvedReasons,
+        appliedToCalculators: false,
+      },
+    });
+  }
+  const target = {
+    kind: command.targetKind,
+    id: command.targetId,
+  };
+  const vital = resolveFriendlyVitalState(state, target);
+  if (!vital) {
+    return createKiboPassiveVitalDamageEvent({
+      descriptor,
+      command,
+      applied: false,
+      reason: 'kibo-passive-vital-target-state-missing',
+      payload: {
+        ...basePayload,
+        beforeValue: null,
+        requestedDamage: null,
+        appliedDamage: 0,
+        change: 0,
+        afterValue: null,
+        maxValue: null,
+        lethal: false,
+        unresolvedReasons: ['kibo-passive-vital-target-state-missing'],
+        appliedToCalculators: false,
+      },
+    });
+  }
+  const maximum = refreshFriendlyVitalMaximumAt({
+    state,
+    target,
+    timeMs: descriptor.timeMs,
+  });
+  if (!maximum.ready) {
+    return createKiboPassiveVitalDamageEvent({
+      descriptor,
+      command,
+      applied: false,
+      reason: 'kibo-passive-vital-maximum-hp-unresolved',
+      payload: {
+        ...basePayload,
+        beforeValue: roundValue(vital.currentHp),
+        requestedDamage: null,
+        appliedDamage: 0,
+        change: 0,
+        afterValue: roundValue(vital.currentHp),
+        maxValue: roundValue(vital.maximumHp),
+        lethal: false,
+        unresolvedReasons: ['kibo-passive-vital-maximum-hp-unresolved'],
+        maximumResolution: maximum,
+        appliedToCalculators: false,
+      },
+    });
+  }
+  const before = Number(vital.currentHp);
+  const valueShieldsBefore = vital.valueShields.map(shield => ({ ...shield }));
+  if (!(before > 0)) {
+    return createKiboPassiveVitalDamageEvent({
+      descriptor,
+      command,
+      applied: false,
+      reason: 'kibo-passive-vital-target-already-dead',
+      payload: {
+        ...basePayload,
+        beforeValue: roundValue(before),
+        requestedDamage: 0,
+        appliedDamage: 0,
+        change: 0,
+        afterValue: roundValue(before),
+        maxValue: roundValue(vital.maximumHp),
+        lethal: false,
+        valueShieldsBefore,
+        valueShieldsAfter: vital.valueShields.map(shield => ({ ...shield })),
+        unresolvedReasons: [],
+        appliedToCalculators: true,
+      },
+    });
+  }
+
+  const formulaRaw = qDivNearestPositive(
+    qMul(qFromFloat(before), qFromInt(contract.coefficientRaw)),
+    qFromInt(10_000)
+  );
+  const damageResult = calculateRealDamage({
+    baseRaw: formulaRaw,
+    worldEventConflictPer: 1,
+    hitLocationRatio: 1,
+    blockMiscellaneous: true,
+    miscellaneous: 1,
+    inWeakState: false,
+    breakDamageUp: 0,
+    currentHp: before,
+    minimumRemainingHp: contract.minimumRemainingHp,
+  });
+  const requestedDamage = Math.max(0, Number(damageResult.value));
+  const appliedDamage = Math.min(before, requestedDamage);
+  vital.currentHp = clampNumber(before - appliedDamage, 0, vital.maximumHp);
+  const lethal = before > 0 && vital.currentHp <= 0;
+  const unresolvedReasons = lethal
+    ? ['kibo-passive-self-kill-future-hit-death-scheduler-unresolved']
+    : [];
+  return createKiboPassiveVitalDamageEvent({
+    descriptor,
+    command,
+    applied: appliedDamage > 0,
+    reason:
+      appliedDamage > 0
+        ? 'kibo-passive-vital-damage-applied'
+        : 'kibo-passive-vital-damage-no-effective-change',
+    payload: {
+      ...basePayload,
+      beforeValue: roundValue(before),
+      currentHpSnapshot: roundValue(before),
+      coefficientRaw: contract.coefficientRaw,
+      coefficientBasisPoints: contract.coefficientRaw,
+      baseFormulaRaw: formulaRaw.toString(),
+      baseFormulaValue: roundValue(qToNumber(formulaRaw)),
+      requestedDamage: roundValue(requestedDamage),
+      appliedDamage: roundValue(appliedDamage),
+      change: roundValue(-appliedDamage),
+      afterValue: roundValue(vital.currentHp),
+      maxValue: roundValue(vital.maximumHp),
+      lethal,
+      minimumNominalDamage: 1,
+      minimumRemainingHp: contract.minimumRemainingHp,
+      roundingPolicy: 'q16-nearest-then-midpoint-to-even',
+      formulaResult: damageResult,
+      shieldsBypassed: true,
+      valueShieldsBefore,
+      valueShieldsAfter: vital.valueShields.map(shield => ({ ...shield })),
+      synchronousSkillStartPolicy: lethal
+        ? 'continues-after-before-skill-self-kill'
+        : 'not-applicable-target-survived',
+      unresolvedReasons,
+      appliedToCalculators: true,
+    },
+  });
+}
+
+function resolveKiboPassiveVitalDamageContract(command) {
+  const vitalChange = command?.vitalChange ?? {};
+  const formula = vitalChange.formula ?? {};
+  const damage = vitalChange.damage ?? {};
+  const minimumHpPolicy = vitalChange.minimumHpPolicy ?? {};
+  const eventPolicy = vitalChange.eventPolicy ?? {};
+  const nativeFormula = command?.nativeEvidenceContract?.formula103 ?? {};
+  const unresolvedReasons = [];
+  if (command?.kind !== 'damage' || vitalChange.kind !== 'damage') {
+    unresolvedReasons.push('kibo-passive-vital-operation-unsupported');
+  }
+  if (
+    command?.targetKind !== EFFECT_TARGET_KINDS.KIBO ||
+    vitalChange.runtimeTargetKind !== EFFECT_TARGET_KINDS.KIBO ||
+    String(command?.sourceActorId) !== String(command?.targetId) ||
+    Number(command?.sourceKiboId) !== Number(command?.targetKiboId)
+  ) {
+    unresolvedReasons.push('kibo-passive-vital-owner-target-contract-invalid');
+  }
+  if (
+    Number(formula.commonFunctionId) !== 1 ||
+    formula.commonExpression !== 'G/10000' ||
+    Number(formula.baseFunctionId) !== 103 ||
+    formula.baseExpression !== '(self.CURRENT_HEALTH*A)/10000' ||
+    vitalChange.sourceAttribute?.valueKind !== 'current-vital' ||
+    vitalChange.sourceAttribute?.entityRole !== 'element-owner-equipped-kibo'
+  ) {
+    unresolvedReasons.push(
+      'kibo-passive-current-health-formula-contract-invalid'
+    );
+  }
+  const coefficientRaw = Number(formula.coefficientRaw);
+  if (!Number.isInteger(coefficientRaw) || coefficientRaw < 0) {
+    unresolvedReasons.push('kibo-passive-vital-coefficient-invalid');
+  }
+  if (
+    Number(damage.damageType) !== 6 ||
+    damage.damageTypeName !== 'Real' ||
+    Number(damage.physicalRatioBasisPoints) !== 0 ||
+    Number(damage.magicRatioBasisPoints) !== 0 ||
+    vitalChange.shieldPolicy !== 'bypass' ||
+    vitalChange.restraintPolicy !== 'bypass'
+  ) {
+    unresolvedReasons.push('kibo-passive-real-damage-route-contract-invalid');
+  }
+  if (
+    Number(minimumHpPolicy.damageMinimumValueType) !== 0 ||
+    Number(minimumHpPolicy.minimumHpValue) !== 0 ||
+    Number(minimumHpPolicy.nominalDamageMinimum) !== 1 ||
+    minimumHpPolicy.minimumRemainingHp !== null ||
+    minimumHpPolicy.canReduceTargetToZero !== true
+  ) {
+    unresolvedReasons.push('kibo-passive-minimum-hp-policy-contract-invalid');
+  }
+  if (
+    vitalChange.integerization?.mode !== 'q16-round-to-nearest-ties-to-even' ||
+    eventPolicy.ignoreDamageEvent !== true ||
+    eventPolicy.attackerSideBeforeAfterAttackEvents !== 'suppressed' ||
+    eventPolicy.receiveSideEvents !==
+      'dispatch-depends-on-main-control-status-unresolved'
+  ) {
+    unresolvedReasons.push('kibo-passive-vital-event-policy-contract-invalid');
+  }
+  if (
+    vitalChange.auxiliaryFormula?.runtimeRead !== false ||
+    vitalChange.auxiliaryFormula?.policy !==
+      'ignored-by-damage-element-real-output-path'
+  ) {
+    unresolvedReasons.push('kibo-passive-auxiliary-formula-contract-invalid');
+  }
+  if (
+    nativeFormula.formulaIdIsBlocked !== true ||
+    !(nativeFormula.blockedFormulaIds ?? []).includes(103) ||
+    nativeFormula.blockedConsequence !==
+      'skip-battle-config-miscellaneous-damage-multiplier'
+  ) {
+    unresolvedReasons.push('kibo-passive-formula-block-policy-unresolved');
+  }
+  if (
+    command?.trigger?.event !== 'skill-before' ||
+    command?.trigger?.activationOrder !==
+      'after-resource-and-cooldown-before-skill-start'
+  ) {
+    unresolvedReasons.push('kibo-passive-before-skill-order-contract-invalid');
+  }
+  return {
+    ready: unresolvedReasons.length === 0,
+    unresolvedReasons,
+    coefficientRaw: Number.isInteger(coefficientRaw) ? coefficientRaw : null,
+    minimumRemainingHp: null,
+  };
+}
+
+function createKiboPassiveVitalDamagePayload({ command, contract }) {
+  const vitalChange = command?.vitalChange ?? {};
+  return {
+    status: 'verified-kibo-passive-vital-damage',
+    passiveSkillId: command?.passiveSkillId ?? null,
+    passiveName: command?.passiveName ?? null,
+    sourceActorId: command?.sourceActorId ?? null,
+    sourceKiboId: command?.sourceKiboId ?? null,
+    sourceSlotId: command?.sourceSlotId ?? null,
+    sourcePosition: command?.sourcePosition ?? null,
+    targetKind: command?.targetKind ?? null,
+    targetActorId: command?.targetActorId ?? command?.targetId ?? null,
+    targetKiboId: command?.targetKiboId ?? null,
+    targetSlotId: command?.targetSlotId ?? null,
+    targetPosition: command?.targetPosition ?? null,
+    triggerElementId: command?.trigger?.sourceElementId ?? null,
+    vitalElementId: vitalChange.sourceElementId ?? null,
+    damageType: vitalChange.damage?.damageType ?? null,
+    damageTypeName: vitalChange.damage?.damageTypeName ?? null,
+    formulaId: vitalChange.formula?.baseFunctionId ?? null,
+    shieldPolicy: vitalChange.shieldPolicy ?? null,
+    restraintPolicy: vitalChange.restraintPolicy ?? null,
+    ignoreDamageEvent: vitalChange.eventPolicy?.ignoreDamageEvent === true,
+    attackerSideBeforeAfterAttackEvents:
+      vitalChange.eventPolicy?.attackerSideBeforeAfterAttackEvents ?? null,
+    receiveSideEvents: vitalChange.eventPolicy?.receiveSideEvents ?? null,
+    auxiliaryFormula: vitalChange.auxiliaryFormula ?? null,
+    activationOrder: command?.trigger?.activationOrder ?? null,
+    sourceIdentity: command?.sourceIdentity ?? null,
+    nativeEvidenceContract: command?.nativeEvidenceContract ?? null,
+    contractReady: contract.ready,
+  };
+}
+
+function createKiboPassiveVitalDamageEvent({
+  descriptor,
+  command,
+  applied,
+  reason,
+  payload,
+}) {
+  return {
+    type: applied
+      ? 'VERIFIED_KIBO_PASSIVE_VITAL_DAMAGE'
+      : 'VERIFIED_KIBO_PASSIVE_VITAL_DAMAGE_SUPPRESSED',
+    timeMs: descriptor.timeMs,
+    actionId: command?.sourceActionId ?? descriptor.action?.id ?? null,
+    actorId: command?.sourceActorId ?? descriptor.action?.actorId ?? null,
+    targetId: command?.targetId ?? null,
+    payload: {
+      ...payload,
+      applied,
+      reason,
+    },
+  };
+}
+
+function qDivNearestPositive(left, right) {
+  if (left < 0n || right <= 0n) {
+    throw new RangeError(
+      'qDivNearestPositive requires left >= 0 and right > 0'
+    );
+  }
+  const numerator = left << 16n;
+  const quotient = numerator / right;
+  const remainder = numerator % right;
+  return quotient + (remainder * 2n >= right ? 1n : 0n);
+}
+
+function createPeriodicVitalDescriptors({ schedule, durationMs, frameRate }) {
+  const intervalMs = positiveNumber(schedule?.trigger?.intervalMs, null);
+  const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
+  const unresolvedReasons = [];
+  if (intervalMs == null) {
+    unresolvedReasons.push('periodic-heal-trigger-interval-invalid');
+  }
+  if (schedule?.trigger?.firstTriggerPolicy !== 'first-positive-delta-update') {
+    unresolvedReasons.push('periodic-heal-first-trigger-policy-unsupported');
+  }
+  if (
+    schedule?.trigger?.laterTriggerThreshold !==
+    'strict-elapsed-greater-than-ordinal-interval'
+  ) {
+    unresolvedReasons.push('periodic-heal-later-trigger-threshold-unsupported');
+  }
+  if (
+    schedule?.trigger?.event !== 'time-loop' ||
+    schedule?.trigger?.timeExeFirstFrame !== true ||
+    schedule?.trigger?.exactThresholdTriggers !== false ||
+    schedule?.trigger?.sparseUpdateCatchUp !==
+      'at-most-one-trigger-per-update' ||
+    schedule?.trigger?.conditionFailureConsumesPeriod !== true ||
+    schedule?.trigger?.frequencyPolicy !== 'unlimited'
+  ) {
+    unresolvedReasons.push('periodic-heal-trigger-contract-invalid');
+  }
+  if (
+    ![EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+      schedule?.targetKind
+    ) ||
+    schedule?.targetId == null ||
+    schedule?.rootEffectId == null
+  ) {
+    unresolvedReasons.push('periodic-heal-target-or-root-identity-invalid');
+  }
+  if (
+    schedule?.condition?.kind !== 'target-current-hp-ratio' ||
+    Number(schedule?.condition?.formulaId) !== 211 ||
+    schedule?.condition?.evaluationEntity !== 'team-copy-executor-self' ||
+    Number(schedule?.condition?.maxHpAttributeId) !== 5 ||
+    Number(schedule?.condition?.thresholdBasisPoints) !== 10000 ||
+    schedule?.condition?.operator !== 'strict-less-than'
+  ) {
+    unresolvedReasons.push('periodic-heal-condition-contract-invalid');
+  }
+  if (
+    schedule?.heal?.kind !== 'heal' ||
+    schedule?.heal?.target !== 'team-copy-holder-self' ||
+    Number(schedule?.heal?.damageType) !== 5 ||
+    Number(schedule?.heal?.formula?.commonFunctionId) !== 1 ||
+    Number(schedule?.heal?.formula?.executionGateScaleRaw) !== 10000 ||
+    Number(schedule?.heal?.formula?.baseFunctionId) !== 104 ||
+    positiveNumber(schedule?.heal?.formula?.coefficientRaw, null) == null ||
+    Number(schedule?.heal?.formula?.minimumNominalHeal) !== 1 ||
+    Number(schedule?.heal?.formula?.maxHpAttributeId) !== 5 ||
+    schedule?.heal?.formula?.configuredPostRuntimeStatus !==
+      'configured-but-unread-by-damage-element-parse-and-get-output-heal'
+  ) {
+    unresolvedReasons.push('periodic-heal-formula-contract-invalid');
+  }
+  if (
+    schedule?.heal?.outputClamp !== 'min-nominal-and-max-hp-minus-current-hp' ||
+    schedule?.heal?.fullHealthPolicy !== 'no-hp-change-and-no-heal-record' ||
+    schedule?.heal?.deadTargetPolicy !==
+      'before-execute-hp-less-than-or-equal-zero-rejects' ||
+    Number(schedule?.heal?.healModifierAttributes?.sourceAttributeId) !== 23 ||
+    Number(schedule?.heal?.healModifierAttributes?.targetAttributeId) !== 24
+  ) {
+    unresolvedReasons.push(
+      'periodic-heal-lifecycle-or-modifier-contract-invalid'
+    );
+  }
+  if (unresolvedReasons.length > 0) {
+    return [
+      {
+        kind: 'passive-periodic-heal-contract-unresolved',
+        timeMs: 0,
+        frameIndex: null,
+        tickIndex: null,
+        thresholdMs: null,
+        schedule,
+        unresolvedReasons,
+      },
+    ];
+  }
+  const descriptors = [];
+  const maximumOrdinal = Math.floor(Number(durationMs) / intervalMs) + 1;
+  for (let tickIndex = 0; tickIndex <= maximumOrdinal; tickIndex += 1) {
+    const thresholdMs = tickIndex * intervalMs;
+    const frameIndex =
+      Math.floor((thresholdMs * normalizedFrameRate) / 1000) + 1;
+    const timeMs = roundValue((frameIndex * 1000) / normalizedFrameRate);
+    if (timeMs > durationMs) break;
+    descriptors.push({
+      kind: 'passive-periodic-heal',
+      timeMs,
+      frameIndex,
+      tickIndex,
+      thresholdMs,
+      schedule,
+    });
+  }
+  return descriptors;
+}
+
+function annotatePeriodicVitalOrderConflicts({
+  descriptors,
+  controlledActorTimeline,
+}) {
+  const descriptorsByTargetAndTime = new Map();
+  for (const descriptor of descriptors) {
+    const target = resolveVitalMutationDescriptorTarget({
+      descriptor,
+      controlledActorTimeline,
+    });
+    if (!target) continue;
+    const key = `${roundValue(descriptor.timeMs)}|${target.kind}|${String(
+      target.id
+    )}`;
+    const rows = descriptorsByTargetAndTime.get(key) ?? [];
+    rows.push(descriptor);
+    descriptorsByTargetAndTime.set(key, rows);
+  }
+  for (const rows of descriptorsByTargetAndTime.values()) {
+    const periodicRows = rows.filter(
+      descriptor => descriptor.kind === 'passive-periodic-heal'
+    );
+    if (periodicRows.length === 0 || rows.length === 1) continue;
+    const conflict = {
+      reason: 'same-time-friendly-hp-mutation-native-order-unresolved',
+      descriptorCount: rows.length,
+      descriptorKinds: [...new Set(rows.map(row => row.kind))].sort(),
+    };
+    for (const descriptor of periodicRows) {
+      descriptor.vitalOrderConflict = conflict;
+    }
+  }
+}
+
+function resolveVitalMutationDescriptorTarget({
+  descriptor,
+  controlledActorTimeline,
+}) {
+  if (descriptor.kind === 'passive-periodic-heal') {
+    return {
+      kind: descriptor.schedule?.targetKind,
+      id: descriptor.schedule?.targetId,
+    };
+  }
+  if (descriptor.kind === 'direct-heal') {
+    const target = descriptor.directEvent?.target;
+    return [EFFECT_TARGET_KINDS.ACTOR, EFFECT_TARGET_KINDS.KIBO].includes(
+      target?.kind
+    )
+      ? target
+      : null;
+  }
+  if (
+    descriptor.kind === 'tuning-combat' &&
+    descriptor.tuningEvent?.kind === 'periodic-heal'
+  ) {
+    const controlledActor = resolveControlledActorAt(
+      controlledActorTimeline,
+      descriptor.timeMs
+    );
+    return controlledActor?.actorId == null
+      ? null
+      : {
+          kind: EFFECT_TARGET_KINDS.ACTOR,
+          id: controlledActor.actorId,
+        };
+  }
+  return null;
 }
 
 function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
@@ -562,30 +1183,64 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
   );
   const actorVitals = new Map(
     [...actorEnergy.values()].map(entry => {
-      const maximumHp = positiveNumber(
+      const inherited = scenario?.initialRuntimeState?.actorVitalsByActor?.find(
+        value =>
+          value.actorId === entry.actor.id ||
+          Number(value.characterId) === Number(entry.actor.characterId)
+      );
+      const baseMaximumHp = positiveNumber(
         entry.attributesById.get(5) ?? entry.actor.stats?.maxHp,
-        1
+        null
       );
       return [
-        entry.actor.id,
+        String(entry.actor.id),
         {
           actorId: entry.actor.id,
-          currentHp: maximumHp,
-          maximumHp,
-          valueShields: [],
+          currentHp: numberOrNull(inherited?.currentValue),
+          maximumHp: null,
+          baseMaximumHp,
+          inheritedMaximumHpSnapshot: numberOrNull(inherited?.maxValue),
+          hasInheritedCurrentHp: numberOrNull(inherited?.currentValue) != null,
+          valueShields: normalizeValueShields(inherited?.valueShields),
         },
       ];
     })
   );
-  return {
+  const kiboVitals = new Map(
+    [...kiboEnergy.values()].map(entry => {
+      const inherited = scenario?.initialRuntimeState?.kiboVitalsBySlot?.find(
+        value =>
+          value.slotId === entry.slotId &&
+          Number(value.kiboId) === Number(entry.kiboId)
+      );
+      const baseMaximumHp = positiveNumber(entry.attributesById.get(5), null);
+      return [
+        String(entry.actorId),
+        {
+          slotId: entry.slotId,
+          actorId: entry.actorId,
+          kiboId: entry.kiboId,
+          currentHp: numberOrNull(inherited?.currentValue),
+          maximumHp: null,
+          baseMaximumHp,
+          inheritedMaximumHpSnapshot: numberOrNull(inherited?.maxValue),
+          hasInheritedCurrentHp: numberOrNull(inherited?.currentValue) != null,
+          valueShields: normalizeValueShields(inherited?.valueShields),
+        },
+      ];
+    })
+  );
+  const state = {
     actorEnergy,
     actorVitals,
     kiboEnergy,
+    kiboVitals,
     kiboProfileById,
     slotIdByActorId,
     attributeDefinitionById,
     attributeIdByKey,
     effectTimeline,
+    vitalDiagnostics: [],
     nextRuntimeSequenceIndex: 0,
     enemy: {
       enemyId: Number.isInteger(enemyId) ? enemyId : null,
@@ -619,6 +1274,8 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
       ),
     },
   };
+  initializeFriendlyVitalsAt(state, 0);
+  return state;
 }
 
 function createStaticKiboRuntimeProfile(staticKibo) {
@@ -692,12 +1349,11 @@ function resolveRuntimeAttribute({
   propertyTags = [],
 }) {
   const normalizedAttributeId = Number(attributeId);
-  const normalizedBase = numberOrNull(baseRaw);
-  if (!Number.isInteger(normalizedAttributeId) || normalizedBase == null) {
+  if (!Number.isInteger(normalizedAttributeId)) {
     return {
       attributeId: normalizedAttributeId,
-      value: normalizedBase,
-      baseRaw: normalizedBase,
+      value: null,
+      baseRaw: null,
       dynamicBaseRaw: 0,
       dynamicPercentRaw: 0,
       dynamicExtraRaw: 0,
@@ -730,6 +1386,34 @@ function resolveRuntimeAttribute({
             : Number(modifier.valueRaw) * Number(effect.stacks ?? 1),
       }))
   );
+  const definition = state.attributeDefinitionById.get(normalizedAttributeId);
+  const explicitBaseRaw = numberOrNull(baseRaw);
+  const definitionDefaultRaw = numberOrNull(definition?.defaultRaw);
+  const materializedFromDefinitionDefault =
+    explicitBaseRaw == null &&
+    modifiers.length > 0 &&
+    definitionDefaultRaw != null;
+  const normalizedBase = materializedFromDefinitionDefault
+    ? definitionDefaultRaw
+    : explicitBaseRaw;
+  if (normalizedBase == null) {
+    return {
+      attributeId: normalizedAttributeId,
+      value: null,
+      baseRaw: null,
+      baseValueSource: null,
+      dynamicBaseRaw: 0,
+      dynamicPercentRaw: 0,
+      dynamicExtraRaw: 0,
+      dynamicForceRaw: null,
+      appliedEffects: modifiers,
+      status:
+        modifiers.length > 0
+          ? 'verified-dynamic-property-default-missing'
+          : 'verified-static-property-base-missing',
+      ready: false,
+    };
+  }
   const dynamicForceModifiers = modifiers.filter(
     modifier => modifier.bucket === 'dynamicForce'
   );
@@ -768,7 +1452,6 @@ function resolveRuntimeAttribute({
     dynamicForceRaw == null
       ? qToNumber(multipliedRaw + qFromFloat(dynamicExtraRaw))
       : dynamicForceRaw;
-  const definition = state.attributeDefinitionById.get(normalizedAttributeId);
   if (numberOrNull(definition?.minimum) != null) {
     value = Math.max(value, Number(definition.minimum));
   }
@@ -779,6 +1462,9 @@ function resolveRuntimeAttribute({
     attributeId: normalizedAttributeId,
     value: roundValue(value),
     baseRaw: normalizedBase,
+    baseValueSource: materializedFromDefinitionDefault
+      ? 'battle_info.attrDefault-on-dynamic-property-materialization'
+      : 'static-runtime-attribute',
     dynamicBaseRaw: 0,
     dynamicPercentRaw,
     dynamicExtraRaw,
@@ -875,6 +1561,7 @@ function collectDynamicPropertyTrace(results) {
     .map(result => ({
       attributeId: result.attributeId,
       baseRaw: result.baseRaw,
+      baseValueSource: result.baseValueSource ?? null,
       dynamicBaseRaw: result.dynamicBaseRaw,
       dynamicPercentRaw: result.dynamicPercentRaw,
       dynamicExtraRaw: result.dynamicExtraRaw,
@@ -1410,6 +2097,345 @@ function applyDirectSpEnhancement(value, enhanceable, spGetUp) {
     : roundValue(value);
 }
 
+function applyKiboPassivePeriodicHealDescriptor({
+  descriptor,
+  scenario,
+  state,
+}) {
+  const schedule = descriptor.schedule;
+  const target = {
+    kind: schedule.targetKind,
+    id: schedule.targetId,
+  };
+  const basePayload = createKiboPassivePeriodicHealPayload({
+    descriptor,
+    schedule,
+  });
+  if (descriptor.vitalOrderConflict) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason: 'periodic-heal-same-time-vital-order-unresolved',
+      payload: {
+        ...basePayload,
+        sameTimeVitalOrderConflict: descriptor.vitalOrderConflict,
+        appliedToCalculators: false,
+      },
+    });
+  }
+  const activeRoot = resolveActiveEffectsAt(
+    state.effectTimeline,
+    descriptor.timeMs,
+    {
+      targetKind: target.kind,
+      targetId: target.id,
+    }
+  ).find(effect => effect.effectId === schedule.rootEffectId);
+  if (!activeRoot) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason: 'periodic-heal-root-effect-inactive',
+      payload: basePayload,
+    });
+  }
+  const targetMaximum = refreshFriendlyVitalMaximumAt({
+    state,
+    target,
+    timeMs: descriptor.timeMs,
+  });
+  const targetVital = resolveFriendlyVitalState(state, target);
+  if (!targetVital || !targetMaximum.ready) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason: targetMaximum.reason ?? 'periodic-heal-target-vital-unresolved',
+      payload: {
+        ...basePayload,
+        appliedToCalculators: false,
+        targetMaximumHpResolution: targetMaximum,
+      },
+    });
+  }
+  const before = Number(targetVital.currentHp);
+  const targetMaxHp = Number(targetVital.maximumHp);
+  if (!(targetMaxHp > 0) || before >= targetMaxHp) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason: 'periodic-heal-target-current-hp-ratio-not-below-one',
+      payload: {
+        ...basePayload,
+        beforeValue: roundValue(before),
+        requestedChange: null,
+        change: 0,
+        afterValue: roundValue(before),
+        maxValue: roundValue(targetMaxHp),
+        overheal: 0,
+        conditionMatched: false,
+        valueShields: targetVital.valueShields.map(shield => ({ ...shield })),
+      },
+    });
+  }
+  if (before <= 0) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason: 'periodic-heal-dead-target-before-execute-rejected',
+      payload: {
+        ...basePayload,
+        appliedToCalculators: false,
+        beforeValue: roundValue(before),
+        requestedChange: null,
+        change: 0,
+        afterValue: roundValue(before),
+        maxValue: roundValue(targetMaxHp),
+        overheal: 0,
+        conditionMatched: true,
+        valueShields: targetVital.valueShields.map(shield => ({ ...shield })),
+      },
+    });
+  }
+  if (
+    schedule.sourceAttributionStatus !== 'native-first-root-source-verified' ||
+    !schedule.formulaSource
+  ) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason:
+        schedule.sourceAttributionStatus ===
+        'native-cover-survivor-order-unresolved'
+          ? 'periodic-heal-native-cover-survivor-order-unresolved'
+          : 'periodic-heal-root-attacker-unresolved',
+      payload: {
+        ...basePayload,
+        appliedToCalculators: false,
+        beforeValue: roundValue(before),
+        requestedChange: null,
+        change: 0,
+        afterValue: roundValue(before),
+        maxValue: roundValue(targetMaxHp),
+        overheal: 0,
+        conditionMatched: true,
+        valueShields: targetVital.valueShields.map(shield => ({ ...shield })),
+      },
+    });
+  }
+  const formulaSource = {
+    kind: schedule.formulaSource.targetKind,
+    id: schedule.formulaSource.targetId,
+  };
+  const sourceMaximum = resolveFriendlyMaximumHpAt({
+    state,
+    target: formulaSource,
+    timeMs: descriptor.timeMs,
+  });
+  const sourceHealUp = resolveFriendlyRuntimeAttribute({
+    state,
+    target: formulaSource,
+    timeMs: descriptor.timeMs,
+    attributeId: schedule.heal?.healModifierAttributes?.sourceAttributeId,
+    fallbackRaw: 0,
+  });
+  const targetHealUp = resolveFriendlyRuntimeAttribute({
+    state,
+    target,
+    timeMs: descriptor.timeMs,
+    attributeId: schedule.heal?.healModifierAttributes?.targetAttributeId,
+    fallbackRaw: 0,
+  });
+  if (!sourceMaximum.ready || !sourceHealUp.ready || !targetHealUp.ready) {
+    return createKiboPassivePeriodicHealEvent({
+      descriptor,
+      schedule,
+      applied: false,
+      reason: 'periodic-heal-formula-attribute-unresolved',
+      payload: {
+        ...basePayload,
+        appliedToCalculators: false,
+        beforeValue: roundValue(before),
+        requestedChange: null,
+        change: 0,
+        afterValue: roundValue(before),
+        maxValue: roundValue(targetMaxHp),
+        overheal: 0,
+        conditionMatched: true,
+        formulaAttributeResolution: {
+          sourceMaximum,
+          sourceHealUp,
+          targetHealUp,
+        },
+        valueShields: targetVital.valueShields.map(shield => ({ ...shield })),
+      },
+    });
+  }
+  const coefficientRaw = Number(schedule.heal?.formula?.coefficientRaw);
+  const baseFormulaValue = qToNumber(
+    qMul(qFromFloat(sourceMaximum.value), qFromFloat(coefficientRaw / 10000))
+  );
+  const minimumNominalHeal = positiveNumber(
+    schedule.heal?.formula?.minimumNominalHeal,
+    1
+  );
+  const baseNominalHeal = Math.max(baseFormulaValue, minimumNominalHeal);
+  const healUpFactor =
+    1 + (Number(sourceHealUp.value) + Number(targetHealUp.value)) / 10000;
+  const globalMultiplier = positiveNumber(
+    scenario?.combatScenario?.healing?.globalMultiplier,
+    1
+  );
+  const modifiedNominalHealRaw = qMul(
+    qMul(qFromFloat(baseNominalHeal), qFromFloat(healUpFactor)),
+    qFromFloat(globalMultiplier)
+  );
+  const requestedChange = Number(runtimeIntegerize(modifiedNominalHealRaw));
+  targetVital.currentHp = clampNumber(before + requestedChange, 0, targetMaxHp);
+  const change = targetVital.currentHp - before;
+  return createKiboPassivePeriodicHealEvent({
+    descriptor,
+    schedule,
+    applied: change > 0,
+    reason:
+      change > 0
+        ? 'periodic-heal-applied'
+        : 'periodic-heal-no-positive-effective-change',
+    payload: {
+      ...basePayload,
+      beforeValue: roundValue(before),
+      requestedChange: roundValue(requestedChange),
+      change: roundValue(change),
+      afterValue: roundValue(targetVital.currentHp),
+      maxValue: roundValue(targetMaxHp),
+      overheal: roundValue(Math.max(0, requestedChange - change)),
+      conditionMatched: true,
+      coefficientRaw,
+      baseFormulaValue: roundValue(baseFormulaValue),
+      baseNominalHeal: roundValue(baseNominalHeal),
+      sourceMaxHp: roundValue(sourceMaximum.value),
+      sourceShootHealUpRaw: roundValue(sourceHealUp.value),
+      targetSufferHealUpRaw: roundValue(targetHealUp.value),
+      healUpFactor: roundValue(healUpFactor),
+      globalMultiplier: roundValue(globalMultiplier),
+      roundingPolicy: 'nearest-ties-to-even',
+      configuredPostFunctionRuntimeStatus:
+        schedule.heal?.formula?.configuredPostRuntimeStatus ?? null,
+      formulaSource: { ...schedule.formulaSource },
+      valueShields: targetVital.valueShields.map(shield => ({ ...shield })),
+      formulaAttributeTrace: {
+        sourceMaximum,
+        sourceHealUp,
+        targetHealUp,
+      },
+    },
+  });
+}
+
+function resolveFriendlyRuntimeAttribute({
+  state,
+  target,
+  timeMs,
+  attributeId,
+  fallbackRaw = null,
+}) {
+  const normalizedAttributeId = Number(attributeId);
+  if (!Number.isInteger(normalizedAttributeId)) {
+    return {
+      ready: false,
+      reason: 'friendly-runtime-attribute-id-invalid',
+      value: null,
+    };
+  }
+  const stateEntry =
+    target.kind === EFFECT_TARGET_KINDS.ACTOR
+      ? state.actorEnergy.get(String(target.id))
+      : target.kind === EFFECT_TARGET_KINDS.KIBO
+        ? [...state.kiboEnergy.values()].find(
+            entry => String(entry.actorId) === String(target.id)
+          )
+        : null;
+  if (!stateEntry) {
+    return {
+      ready: false,
+      reason: 'friendly-runtime-attribute-owner-missing',
+      value: null,
+    };
+  }
+  return resolveRuntimeAttribute({
+    state,
+    targetKind: target.kind,
+    targetId: target.id,
+    timeMs,
+    attributeId: normalizedAttributeId,
+    baseRaw:
+      stateEntry.attributesById?.get(normalizedAttributeId) ?? fallbackRaw,
+  });
+}
+
+function createKiboPassivePeriodicHealPayload({ descriptor, schedule }) {
+  return {
+    status: 'verified-kibo-passive-periodic-heal',
+    passiveSkillId: schedule.passiveSkillId,
+    passiveName: schedule.passiveName,
+    rootEffectId: schedule.rootEffectId,
+    rootElementId: schedule.rootElementId,
+    healElementId: schedule.heal?.sourceElementId ?? null,
+    targetKind: schedule.targetKind,
+    targetActorId: schedule.targetActorId ?? schedule.targetId,
+    targetKiboId: schedule.targetKiboId ?? null,
+    targetSlotId: schedule.targetSlotId ?? null,
+    targetPosition: schedule.targetPosition ?? null,
+    frameIndex: descriptor.frameIndex,
+    tickIndex: descriptor.tickIndex,
+    thresholdMs: descriptor.thresholdMs,
+    intervalMs: schedule.trigger?.intervalMs ?? null,
+    sourceAttributionStatus: schedule.sourceAttributionStatus,
+    sourceSelectionPolicy: schedule.sourceSelectionPolicy,
+    contributingSources: (schedule.contributingSources ?? []).map(source => ({
+      ...source,
+    })),
+    sourceIdentity: schedule.sourceIdentity,
+    appliedToCalculators: true,
+  };
+}
+
+function createKiboPassivePeriodicHealEvent({
+  descriptor,
+  schedule,
+  applied,
+  reason,
+  payload,
+}) {
+  const singleSource =
+    schedule.contributingSources?.length === 1
+      ? schedule.contributingSources[0]
+      : null;
+  return {
+    type: applied
+      ? 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL'
+      : 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL_SUPPRESSED',
+    timeMs: descriptor.timeMs,
+    actionId: null,
+    actorId: singleSource?.sourceActorId ?? null,
+    targetId: schedule.targetId,
+    payload: {
+      ...payload,
+      applied,
+      reason,
+      sourceActorId: singleSource?.sourceActorId ?? null,
+      sourceKiboId: singleSource?.sourceKiboId ?? null,
+      sourceSlotId: singleSource?.sourceSlotId ?? null,
+      sourcePosition: singleSource?.sourcePosition ?? null,
+    },
+  };
+}
+
 function directSpShareRatio(shareType) {
   if (Number(shareType) === 1) return 0.5;
   if (Number(shareType) === 2) return 1;
@@ -1450,8 +2476,13 @@ function applyDirectHealDescriptor({ descriptor, state }) {
       maximum: state.enemy.maxHp,
     });
   }
-  const vital = state.actorVitals.get(directEvent.target.id);
+  const vital = resolveFriendlyVitalState(state, directEvent.target);
   if (!vital) return null;
+  refreshFriendlyVitalMaximumAt({
+    state,
+    target: directEvent.target,
+    timeMs: descriptor.timeMs,
+  });
   const before = vital.currentHp;
   vital.currentHp = clampNumber(
     vital.currentHp + directEvent.value,
@@ -1464,6 +2495,7 @@ function applyDirectHealDescriptor({ descriptor, state }) {
     before,
     after: vital.currentHp,
     maximum: vital.maximumHp,
+    vital,
   });
 }
 
@@ -1482,7 +2514,7 @@ function applyDirectShieldDescriptor({ descriptor, state }) {
       maximum: null,
     });
   }
-  const vital = state.actorVitals.get(directEvent.target.id);
+  const vital = resolveFriendlyVitalState(state, directEvent.target);
   if (!vital) return null;
   vital.valueShields.push({
     value: directEvent.value,
@@ -1494,11 +2526,24 @@ function applyDirectShieldDescriptor({ descriptor, state }) {
     before: 0,
     after: directEvent.value,
     maximum: null,
+    vital,
   });
 }
 
-function createDirectVitalEvent({ type, descriptor, before, after, maximum }) {
+function createDirectVitalEvent({
+  type,
+  descriptor,
+  before,
+  after,
+  maximum,
+  vital = null,
+}) {
   const directEvent = descriptor.directEvent;
+  const requestedChange =
+    type === 'VERIFIED_DIRECT_HEAL'
+      ? Number(directEvent.value)
+      : Number(after) - Number(before);
+  const change = Number(after) - Number(before);
   return {
     type,
     timeMs: descriptor.timeMs,
@@ -1507,14 +2552,152 @@ function createDirectVitalEvent({ type, descriptor, before, after, maximum }) {
     targetId: directEvent.target.id,
     payload: {
       before: roundValue(before),
-      change: roundValue(after - before),
+      change: roundValue(change),
       after: roundValue(after),
       maximum: maximum == null ? null : roundValue(maximum),
+      beforeValue: roundValue(before),
+      requestedChange: roundValue(requestedChange),
+      afterValue: roundValue(after),
+      maxValue: maximum == null ? null : roundValue(maximum),
+      overheal:
+        type === 'VERIFIED_DIRECT_HEAL'
+          ? roundValue(Math.max(0, requestedChange - change))
+          : 0,
+      targetKind: directEvent.target.kind,
+      targetSlotId: vital?.slotId ?? null,
+      targetKiboId: vital?.kiboId ?? null,
+      valueShields: vital
+        ? vital.valueShields.map(shield => ({ ...shield }))
+        : [],
       effectIdentity: directEvent.effect.effectIdentity,
       sourceIdentity: directEvent.sourceIdentity,
       appliedToCalculators: true,
     },
   };
+}
+
+function resolveFriendlyVitalState(state, target) {
+  if (target?.kind === EFFECT_TARGET_KINDS.ACTOR) {
+    return state.actorVitals.get(String(target.id));
+  }
+  if (target?.kind === EFFECT_TARGET_KINDS.KIBO) {
+    return state.kiboVitals.get(String(target.id));
+  }
+  return null;
+}
+
+function initializeFriendlyVitalsAt(state, timeMs) {
+  for (const vital of state.actorVitals.values()) {
+    initializeFriendlyVitalAt({
+      state,
+      target: { kind: EFFECT_TARGET_KINDS.ACTOR, id: vital.actorId },
+      vital,
+      timeMs,
+    });
+  }
+  for (const vital of state.kiboVitals.values()) {
+    initializeFriendlyVitalAt({
+      state,
+      target: { kind: EFFECT_TARGET_KINDS.KIBO, id: vital.actorId },
+      vital,
+      timeMs,
+    });
+  }
+}
+
+function initializeFriendlyVitalAt({ state, target, vital, timeMs }) {
+  const maximum = resolveFriendlyMaximumHpAt({
+    state,
+    target,
+    timeMs,
+  });
+  const fallbackMaximum = positiveNumber(
+    vital.baseMaximumHp ?? vital.inheritedMaximumHpSnapshot,
+    1
+  );
+  const maximumHp = maximum.ready
+    ? positiveNumber(maximum.value, fallbackMaximum)
+    : fallbackMaximum;
+  if (!maximum.ready) {
+    state.vitalDiagnostics.push({
+      status: 'friendly-max-hp-runtime-unresolved',
+      targetKind: target.kind,
+      targetId: String(target.id),
+      timeMs,
+      reason: maximum.reason,
+      inheritedMaximumHpSnapshot: vital.inheritedMaximumHpSnapshot,
+    });
+  }
+  vital.maximumHp = maximumHp;
+  vital.currentHp = clampNumber(
+    vital.hasInheritedCurrentHp ? vital.currentHp : maximumHp,
+    0,
+    maximumHp
+  );
+}
+
+function resolveFriendlyMaximumHpAt({ state, target, timeMs }) {
+  const vital = resolveFriendlyVitalState(state, target);
+  if (!vital) {
+    return {
+      ready: false,
+      reason: 'friendly-vital-state-missing',
+      value: null,
+    };
+  }
+  let baseMaximumHp = positiveNumber(vital.baseMaximumHp, null);
+  if (baseMaximumHp == null) {
+    const activeMaxHpModifiers = resolveActiveEffectsAt(
+      state.effectTimeline,
+      timeMs,
+      {
+        targetKind: target.kind,
+        targetId: target.id,
+        calculatorOnly: true,
+      }
+    ).flatMap(effect =>
+      (effect.modifiers ?? []).filter(
+        modifier =>
+          modifier.kind === 'battle-property' &&
+          Number(modifier.attributeId) === 5
+      )
+    );
+    if (
+      activeMaxHpModifiers.length > 0 ||
+      positiveNumber(vital.inheritedMaximumHpSnapshot, null) == null
+    ) {
+      return {
+        ready: false,
+        reason:
+          activeMaxHpModifiers.length > 0
+            ? 'friendly-max-hp-base-missing-with-active-modifier'
+            : 'friendly-max-hp-base-missing',
+        value: null,
+        activeMaxHpModifiers,
+      };
+    }
+    baseMaximumHp = vital.inheritedMaximumHpSnapshot;
+  }
+  return resolveRuntimeAttribute({
+    state,
+    targetKind: target.kind,
+    targetId: target.id,
+    timeMs,
+    attributeId: 5,
+    baseRaw: baseMaximumHp,
+  });
+}
+
+function refreshFriendlyVitalMaximumAt({ state, target, timeMs }) {
+  const vital = resolveFriendlyVitalState(state, target);
+  if (!vital) return { ready: false, reason: 'friendly-vital-state-missing' };
+  const maximum = resolveFriendlyMaximumHpAt({ state, target, timeMs });
+  if (!maximum.ready || positiveNumber(maximum.value, null) == null) {
+    return maximum;
+  }
+  vital.maximumHp = Number(maximum.value);
+  vital.currentHp = clampNumber(vital.currentHp, 0, vital.maximumHp);
+  return { ...maximum, vital };
 }
 
 function applyTuningCombatDescriptor({
@@ -2018,7 +3201,11 @@ function applyHitDescriptor({
       descriptor.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
   }
   const stateAfter = createEnemyStateSnapshot(enemy);
-  const hitKey = `verified-hit-${hit.hitIndex}-${hit.elementId}`;
+  const passiveDerivedDamageCommand =
+    descriptor.passiveDerivedDamageCommand ?? null;
+  const hitKey = passiveDerivedDamageCommand
+    ? `verified-${passiveDerivedDamageCommand.id}`
+    : `verified-hit-${hit.hitIndex}-${hit.elementId}`;
   const shieldAbsorbed = Math.max(
     0,
     qToNumber(
@@ -2043,6 +3230,19 @@ function applyHitDescriptor({
       hitSkillId: resolution.actionBinding.controlSkillId,
       payload: {
         verifiedCombat: true,
+        kiboPassiveDerivedDamage: passiveDerivedDamageCommand != null,
+        passiveSkillId: passiveDerivedDamageCommand?.passiveSkillId ?? null,
+        sourceKiboId: passiveDerivedDamageCommand?.sourceKiboId ?? null,
+        triggerHitIdentity:
+          passiveDerivedDamageCommand?.triggerHitIdentity ?? null,
+        derivedHitIdentity:
+          passiveDerivedDamageCommand?.derivedHitIdentity ?? null,
+        ignoreDamageEvent:
+          passiveDerivedDamageCommand?.ignoreDamageEvent === true,
+        emitsDamageTriggerEvents:
+          passiveDerivedDamageCommand?.emitsDamageTriggerEvents === true,
+        recursivePassiveTrigger:
+          passiveDerivedDamageCommand?.recursivePassiveTrigger === true,
         packageId: resolution.packageId,
         packageHash: resolution.packageHash,
         bindingIdentity: resolution.actionBinding.identity,
@@ -3181,6 +4381,20 @@ function weaknessStateEventLabel(kind) {
 }
 
 function createFinalState(state, timeMs = 0) {
+  for (const vital of state.actorVitals.values()) {
+    refreshFriendlyVitalMaximumAt({
+      state,
+      target: { kind: EFFECT_TARGET_KINDS.ACTOR, id: vital.actorId },
+      timeMs,
+    });
+  }
+  for (const vital of state.kiboVitals.values()) {
+    refreshFriendlyVitalMaximumAt({
+      state,
+      target: { kind: EFFECT_TARGET_KINDS.KIBO, id: vital.actorId },
+      timeMs,
+    });
+  }
   return {
     enemy: {
       enemyId: state.enemy.enemyId,
@@ -3226,8 +4440,27 @@ function createFinalState(state, timeMs = 0) {
       actorId: entry.actorId,
       currentHp: roundValue(entry.currentHp),
       maximumHp: roundValue(entry.maximumHp),
+      baseMaximumHp: numberOrNull(entry.baseMaximumHp),
+      inheritedMaximumHpSnapshot: numberOrNull(
+        entry.inheritedMaximumHpSnapshot
+      ),
+      hasInheritedCurrentHp: entry.hasInheritedCurrentHp === true,
       valueShields: entry.valueShields.map(shield => ({ ...shield })),
     })),
+    kiboVitals: [...state.kiboVitals.values()].map(entry => ({
+      slotId: entry.slotId,
+      actorId: entry.actorId,
+      kiboId: entry.kiboId,
+      currentHp: roundValue(entry.currentHp),
+      maximumHp: roundValue(entry.maximumHp),
+      baseMaximumHp: numberOrNull(entry.baseMaximumHp),
+      inheritedMaximumHpSnapshot: numberOrNull(
+        entry.inheritedMaximumHpSnapshot
+      ),
+      hasInheritedCurrentHp: entry.hasInheritedCurrentHp === true,
+      valueShields: entry.valueShields.map(shield => ({ ...shield })),
+    })),
+    vitalDiagnostics: state.vitalDiagnostics.map(entry => ({ ...entry })),
     kiboEnergy: [...state.kiboEnergy.values()].map(entry => ({
       slotId: entry.slotId,
       actorId: entry.actorId,
@@ -3252,6 +4485,7 @@ function createUnavailableRuntime({ enabled, reason }) {
     damageEvents: [],
     resourceEvents: [],
     kiboResourceEvents: [],
+    vitalEvents: [],
     eventLog: [],
     executionBlocks: [],
     initialState: null,
@@ -3262,12 +4496,18 @@ function createUnavailableRuntime({ enabled, reason }) {
       unresolvedActionResolutionCount: 0,
       damageEventCount: 0,
       hitEventCount: 0,
+      kiboPassiveDerivedDamageEventCount: 0,
       toughnessStateEventCount: 0,
       normalRecoveryEventCount: 0,
       breakRecoveryEventCount: 0,
       breakExitCount: 0,
       resourceEventCount: 0,
       kiboResourceEventCount: 0,
+      vitalEventCount: 0,
+      kiboPassivePeriodicHealEventCount: 0,
+      kiboPassivePeriodicHealSuppressedEventCount: 0,
+      kiboPassiveVitalDamageEventCount: 0,
+      kiboPassiveVitalDamageSuppressedEventCount: 0,
       breakTriggerCount: 0,
       shieldedHitCount: 0,
       resourceBlockedActionCount: 0,
@@ -3326,11 +4566,15 @@ function ratioToRaw(value, fallbackRaw = 0) {
 function compareDescriptors(left, right) {
   const priority = {
     'action-cost': 0,
+    'passive-vital-change': 1,
     'weakness-state-tick': 1,
     'direct-sp': 2,
     'direct-heal': 2,
     'direct-shield': 2,
+    'passive-periodic-heal': 2,
+    'passive-periodic-heal-contract-unresolved': 2,
     hit: 3,
+    'passive-derived-hit': 3,
     'tuning-combat': 4,
     'manual-resource': 4,
     'auto-sp-tick': 5,
@@ -3340,6 +4584,9 @@ function compareDescriptors(left, right) {
     (priority[left.kind] ?? 9) - (priority[right.kind] ?? 9) ||
     String(left.action?.id ?? '').localeCompare(
       String(right.action?.id ?? '')
+    ) ||
+    String(left.schedule?.id ?? '').localeCompare(
+      String(right.schedule?.id ?? '')
     ) ||
     Number(left.hit?.hitIndex ?? 0) - Number(right.hit?.hitIndex ?? 0)
   );

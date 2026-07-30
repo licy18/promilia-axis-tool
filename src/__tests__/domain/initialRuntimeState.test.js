@@ -48,6 +48,27 @@ describe('initial runtime state', () => {
           maxValue: 1,
         },
       ],
+      actorVitalsByActor: [
+        {
+          actorId: 'actor-1',
+          characterId: 101,
+          actorName: '末音',
+          currentHp: 750,
+          maximumHp: 1000,
+          valueShields: [{ value: 50 }],
+        },
+      ],
+      kiboVitalsBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-1',
+          characterId: 101,
+          kiboId: 500469,
+          kiboName: '重岩蹄',
+          currentHp: 300,
+          maximumHp: 500,
+        },
+      ],
       activeEffects: [
         {
           instanceKey: 'actor|actor-1|focus',
@@ -93,7 +114,7 @@ describe('initial runtime state', () => {
     });
 
     expect(state).toMatchObject({
-      schemaVersion: 6,
+      schemaVersion: 7,
       contractName: 'AzPrInitialRuntimeState',
       status: 'initial-runtime-state-inherited',
       source: {
@@ -130,6 +151,26 @@ describe('initial runtime state', () => {
           actorId: 'actor-1',
           kiboId: 500469,
           currentValue: 0.75,
+        },
+      ],
+      actorVitalsByActor: [
+        {
+          actorId: 'actor-1',
+          characterId: 101,
+          currentValue: 750,
+          maxValue: 1000,
+          valueUnit: 'hp',
+          valueShields: [{ value: 50 }],
+        },
+      ],
+      kiboVitalsBySlot: [
+        {
+          slotId: 'team-slot-1',
+          actorId: 'actor-1',
+          kiboId: 500469,
+          currentValue: 300,
+          maxValue: 500,
+          valueUnit: 'hp',
         },
       ],
       activeEffects: [
@@ -179,7 +220,7 @@ describe('initial runtime state', () => {
         },
       })
     ).toMatchObject({
-      schemaVersion: 6,
+      schemaVersion: 7,
       status: 'initial-runtime-state-ready',
       controlledActor: {
         actorId: 'actor-2',
@@ -190,6 +231,8 @@ describe('initial runtime state', () => {
       enemy: null,
       selfEnergyByActor: [],
       kiboEnergyBySlot: [],
+      actorVitalsByActor: [],
+      kiboVitalsBySlot: [],
       activeEffects: [],
       specialResourcesByActor: [],
     });
@@ -209,6 +252,31 @@ describe('initial runtime state', () => {
         ],
       })
     ).toBeNull();
+  });
+
+  it('drops non-positive optional vital maximum snapshots', () => {
+    const state = normalizeInitialRuntimeState({
+      actorVitalsByActor: [
+        { actorId: 'actor-1', currentValue: 10, maxValue: 0 },
+      ],
+      kiboVitalsBySlot: [
+        {
+          slotId: 'team-slot-1',
+          kiboId: 500469,
+          currentValue: 20,
+          maximumHp: -1,
+        },
+      ],
+    });
+
+    expect(state.actorVitalsByActor[0]).toMatchObject({
+      currentValue: 10,
+      maxValue: null,
+    });
+    expect(state.kiboVitalsBySlot[0]).toMatchObject({
+      currentValue: 20,
+      maxValue: null,
+    });
   });
 
   it('normalizes one shared tuning decay timer and migrates legacy layer timers', () => {
