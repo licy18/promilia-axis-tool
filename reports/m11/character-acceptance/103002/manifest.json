@@ -68,17 +68,17 @@
       }
     ],
     "productVisualAcceptance": {
-      "status": "pending",
+      "status": "accepted",
       "scenarioIdentities": [
         "m11-d-103002-visual-acceptance"
       ],
-      "acceptanceCommit": null,
-      "recordIdentity": null,
-      "qualificationSubjectHash": null,
-      "scenarioSetHash": null,
-      "bindingStatus": "not-requested",
+      "acceptanceCommit": "899edea0c5a1f718153ebe86712ecd8c31aabf7d",
+      "recordIdentity": "character-product-acceptance:103002:899edea0c5a1f718153ebe86712ecd8c31aabf7d:5f53cef881161db5",
+      "qualificationSubjectHash": "5f53cef881161db5",
+      "scenarioSetHash": "2bbd808801a3ef39",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002::5f53cef881161db5",
+        "recordIdentity": "character-product-acceptance:103002:899edea0c5a1f718153ebe86712ecd8c31aabf7d:5f53cef881161db5",
         "qualificationSubjectHash": "5f53cef881161db5",
         "scenarioSetHash": "2bbd808801a3ef39",
         "scenarioIdentities": [
@@ -60680,10 +60680,11 @@
   },
   "qualificationSubjectHash": "5f53cef881161db5",
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "visually-accepted",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted"
     ],
     "optimizationReady": false,
     "facts": {
@@ -60695,7 +60696,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 709,
       "matrixPassedCount": 36,
       "matrixComplete": false,
@@ -60705,11 +60706,10 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": false,
+      "visuallyAccepted": true,
       "optimizationReady": false
     },
     "blockers": [
-      "acceptance-product-visual-signoff-pending",
       "acceptance-required-matrix-incomplete",
       "acceptance-blocking-ledger-not-empty"
     ]
@@ -60718,5 +60718,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "874e967770ca0b19"
+  "manifestHash": "1b346b0de5230d17"
 }

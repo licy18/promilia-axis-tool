@@ -27,10 +27,9 @@
     {
       "ownerId": 101003,
       "ownerName": "寒悠悠",
-      "maturityState": "runtime-integrated",
+      "maturityState": "visually-accepted",
       "optimizationReady": false,
       "blockers": [
-        "acceptance-product-visual-signoff-pending",
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
@@ -75,7 +74,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "a1fbf88fca1213d2",
+      "manifestHash": "ce7538251697867d",
       "sourceOfTruthHash": "bec9e1e1912279b1",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -88,10 +87,9 @@
     {
       "ownerId": 101010,
       "ownerName": "涂山小玉",
-      "maturityState": "runtime-integrated",
+      "maturityState": "visually-accepted",
       "optimizationReady": false,
       "blockers": [
-        "acceptance-product-visual-signoff-pending",
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
@@ -135,7 +133,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "aabe0f95c8e9aed7",
+      "manifestHash": "3df0420b56daa8e4",
       "sourceOfTruthHash": "6a2259777ca91b12",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -148,10 +146,9 @@
     {
       "ownerId": 103002,
       "ownerName": "红宝石",
-      "maturityState": "runtime-integrated",
+      "maturityState": "visually-accepted",
       "optimizationReady": false,
       "blockers": [
-        "acceptance-product-visual-signoff-pending",
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
@@ -196,7 +193,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "874e967770ca0b19",
+      "manifestHash": "1b346b0de5230d17",
       "sourceOfTruthHash": "b47ce43469e7a671",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -207,12 +204,12 @@
       }
     }
   ],
-  "catalogHash": "642fa473d22d3a13",
-  "manifestIndexHash": "3014a6d3b477bac7",
+  "catalogHash": "3f5fc382949b0eb1",
+  "manifestIndexHash": "fa3efc4758a6749d",
   "summary": {
     "ownerCount": 3,
     "runtimeIntegratedCount": 3,
-    "visuallyAcceptedCount": 0,
+    "visuallyAcceptedCount": 3,
     "optimizationReadyCount": 0,
     "machineScenarioPassCount": 3,
     "workbenchRoundTripPassCount": 3,

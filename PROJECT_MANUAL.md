@@ -1795,9 +1795,9 @@ Machine Axis v1 继续通过唯一 canonical core 提供版本化 Schema、语�
 
 Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource/state 索引，并接通 Machine Axis v1 的冷启动导入、精确导出、无效输入保护与逐 hit 命中/暴击编辑。暴伤、expected 两分支/概率/核心加权值和事件物化状态均直接消费 canonical settlement；标准轴显示 `150%` 与 `6.2 / 6 / 10 / 5% / false`，缺字段显示未知。M11-C 已在 `308dd07fbbb8fe0759062e9dcc02c65b0fd46115` 通过产品验收并进入 M11-D；包体超限和纯性能抖动继续只记录为发布风险。
 
-### M11-D-R1 角色机制验收可信派生收口，等待产品复验（2026-07-30）
+### M11-D 角色机制验收协议已通过产品验收（2026-07-30）
 
-R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。三角色机器重放与 Workbench 导入保持通过，但产品可视签收和真实功能/场景缺口仍阻断，因此均保持 `runtime-integrated`、不得进入优化器；无名第二被动及非玩法 wrapper 继续可审计但不阻断。
+R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。产品已签收基线 `899edea0c5a1f718153ebe86712ecd8c31aabf7d`，三角色因此成为 `visually-accepted`；181 个 source gap 与 706 个 acceptance gap 仍构成 887 个唯一功能阻断，所以 `optimizationReadyCount` 继续为 0。M11-D 已关闭并停止等待下一指令，M12 明确未启动。
 
 ## 10. 文档维护规则
 

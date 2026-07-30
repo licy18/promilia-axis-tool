@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-D-R1 / 角色机制验收可信派生收口完成，等待产品复验**。M11-C 已在 `308dd07fbbb8fe0759062e9dcc02c65b0fd46115` 通过产品验收；包体超限与纯性能抖动继续只作为发布风险记录，不阻断 M11-D。
+当前里程碑：**M11-D 已通过产品验收，停止等待下一指令**。M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成可信派生门禁并通过产品验收；M12 尚未启动且保持锁定。包体超限与纯性能抖动继续只作为发布风险记录。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -841,7 +841,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 验收门：每个 `optimization-ready` 角色都有机器断言、可视场景和产品验收记录；暴击相关机制必须声明能否进入精确期望模式；任一门失败都会撤销优化资格。
 
-阶段结果：R1 将 requirement inventory、可执行 scenario case、结构化 trace projection、精确 coverage edge、source/acceptance ledger 和成熟度收拢为单向可信派生链；manifest 与 catalog 均绑定 committed manifest index，篡改 N/A、required/summary、ledger、签收或 catalog 后即使重算自身 hash 也会被 validator 与 canonical gate 拒绝。小玉、红宝石、寒悠悠继续通过确定性重放与 Workbench 导入，但产品可视签收仍为 pending，因此均诚实停在 `runtime-integrated`、`optimization-ready=0`。精确归因后的矩阵通过/必需为小玉 `56/407`、红宝石 `36/709`、寒悠悠 `62/243`；887 个唯一功能阻断拆为 181 个上游 source gap 与 706 个 acceptance scenario gap，另有 575 个 wrapper/N/A 来源记录明确非阻断。聚焦回归 `4 文件 / 28 测试`、验收幂等审计、六道既有审计、production build 和三角色可视导入 `1/1` 通过；玩法 golden/hash 无漂移。当前停在 M11-D-R1 产品复验点，不进入 M12。
+阶段结果：R1 将 requirement inventory、可执行 scenario case、结构化 trace projection、精确 coverage edge、source/acceptance ledger 和成熟度收拢为单向可信派生链；manifest 与 catalog 均绑定 committed manifest index，篡改 N/A、required/summary、ledger、签收或 catalog 后即使重算自身 hash 也会被 validator 与 canonical gate 拒绝。产品已对 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成可视签收，小玉、红宝石、寒悠悠因此升至 `visually-accepted`；但矩阵与功能 ledger 仍有阻断，三者继续保持 `optimization-ready=0`。精确归因后的矩阵通过/必需为小玉 `56/407`、红宝石 `36/709`、寒悠悠 `62/243`；887 个唯一功能阻断拆为 181 个上游 source gap 与 706 个 acceptance scenario gap，另有 575 个 wrapper/N/A 来源记录明确非阻断。聚焦回归、验收幂等审计、六道既有审计、production build 和可视导入均通过，玩法 golden/hash 无漂移。M11-D 已通过产品验收并停止，M12 未启动。
 
 ### M12：批量评估、搜索与末音试点
 
@@ -976,7 +976,7 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 61. 已完成并通过产品验收：M11-A-R1 已在 `80c5f35` 关闭逐 hit `sampled` 随机源与 seed 门禁、预检随机序列污染、目标 `CRI_DEFENSE` 和分析报告旧调用链；四份 golden 的 replay/summary hash 无漂移。
 62. 已完成并通过产品验收：M11-B-R2 在 8da52fb 关闭并发测试超时与验收报告 canonical hash 漂移；122 只奇波/366 动作、固定 60 FPS、真实 CLI I/O、三角色 120 秒 fixture、六道审计与 62/62 production preview 均通过。
 63. 已通过产品验收：M11-C 在 `308dd07` 完成 canonical trace 可视编辑与复验闭环。
-64. 等待产品复验：M11-D-R1 已完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；三角色仍为 `runtime-integrated`、尚未取得 `optimization-ready`，不启动第四角色、M12、包体优化或未验收奇波机制接入。
+64. 已完成并通过产品验收：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；三角色已取得 `visually-accepted`，但尚未取得 `optimization-ready`。当前停止等待下一指令，M12、第四角色、包体优化和未验收奇波机制接入均未启动。
 
 ## 8. 风险和取舍
 

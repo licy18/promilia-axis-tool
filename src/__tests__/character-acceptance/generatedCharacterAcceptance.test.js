@@ -45,7 +45,7 @@ describe('generated character acceptance manifests', () => {
     ]);
     expect(generatedCatalog.summary).toMatchObject({
       ownerCount: 3,
-      maturityCounts: { 'runtime-integrated': 3 },
+      maturityCounts: { 'visually-accepted': 3 },
       optimizationReadyCount: 0,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
@@ -75,7 +75,7 @@ describe('generated character acceptance manifests', () => {
     );
     expect(WORKBENCH_HEADLESS_COMBAT_CORE.acceptanceFor(101010)).toMatchObject({
       ownerId: 101010,
-      maturityState: 'runtime-integrated',
+      maturityState: 'visually-accepted',
       optimizationReady: false,
     });
     expect(() =>
@@ -113,21 +113,26 @@ describe('generated character acceptance manifests', () => {
   });
 
   it.each(owners)(
-    'derives $ownerId as runtime-integrated and keeps it outside the optimizer',
+    'derives $ownerId as visually-accepted and keeps it outside the optimizer',
     ({ ownerId, manifest }) => {
       expect(validateCharacterAcceptanceManifest(manifest)).toMatchObject({
         valid: true,
         issues: [],
       });
       expect(manifest.maturity).toMatchObject({
-        currentState: 'runtime-integrated',
+        currentState: 'visually-accepted',
         optimizationReady: false,
         gates: {
           extracted: true,
           runtimeIntegrated: true,
-          visuallyAccepted: false,
+          visuallyAccepted: true,
           optimizationReady: false,
         },
+      });
+      expect(manifest.evidence.productVisualAcceptance).toMatchObject({
+        status: 'accepted',
+        acceptanceCommit: '899edea0c5a1f718153ebe86712ecd8c31aabf7d',
+        bindingStatus: 'verified',
       });
       expect(
         manifest.evidence.productVisualAcceptance.automatedEvidence
@@ -141,10 +146,12 @@ describe('generated character acceptance manifests', () => {
       ]);
       expect(manifest.maturity.blockers).toEqual(
         expect.arrayContaining([
-          'acceptance-product-visual-signoff-pending',
           'acceptance-required-matrix-incomplete',
           'acceptance-blocking-ledger-not-empty',
         ])
+      );
+      expect(manifest.maturity.blockers).not.toContain(
+        'acceptance-product-visual-signoff-pending'
       );
       expect(() => assertCharacterIsOptimizationReady(ownerId)).toThrow(
         'character-not-optimization-ready'

@@ -2,9 +2,14 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
+    "status": "accepted",
+    "acceptanceCommit": "899edea0c5a1f718153ebe86712ecd8c31aabf7d",
+    "recordIdentity": "character-product-acceptance:101003:899edea0c5a1f718153ebe86712ecd8c31aabf7d:c224b6eabd8f3b0b",
+    "qualificationSubjectHash": "c224b6eabd8f3b0b",
+    "scenarioSetHash": "4ce869f3e456d905",
+    "scenarioIdentities": [
+      "m11-d-101003-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101003-visual-acceptance",

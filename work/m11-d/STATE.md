@@ -1,4 +1,4 @@
-# M11-D-R1 State
+# M11-D Product Acceptance State
 
 ## Goal
 
@@ -12,10 +12,10 @@ Make character acceptance maturity, N/A classification, coverage, ledger, and op
 
 ## Current Status
 
-- R1 implementation and self-verification complete; waiting for product revalidation.
+- M11-D-R1 passed product acceptance; this follow-up records the accepted baseline and republishes the derived manifests.
 - Requirement inventory, scenario cases, trace projections, coverage edges, source/acceptance gaps, N/A records, maturity, manifest index, and catalog are one deterministic derivation chain.
 - Forged N/A/required/summary/ledger/signoff and rehashed catalog entries are rejected by validator and canonical optimizer gate.
-- All three owners remain honestly `runtime-integrated`; none is `optimization-ready`.
+- All three owners are `visually-accepted`; none is `optimization-ready`.
 - Unique blockers: 887 total = 181 source gaps + 706 acceptance scenario gaps. 575 wrapper/N/A source records are nonblocking.
 
 ## Verification
@@ -36,4 +36,4 @@ Make character acceptance maturity, N/A classification, coverage, ledger, and op
 
 ## Stop Boundary
 
-Wait for M11-D-R1 product revalidation. Do not start M12, a fourth character, parallel kibo WIP integration, bundle optimization, or UI polish.
+M11-D-R1 passed product acceptance against commit `899edea0c5a1f718153ebe86712ecd8c31aabf7d`. The three owners are visually accepted but remain outside optimization while functional and scenario blockers exist. Stop and wait for the next user instruction; M12, a fourth character, parallel kibo WIP integration, bundle optimization, and UI polish remain locked.
