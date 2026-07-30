@@ -17,7 +17,7 @@ describe('canonicalTraceViewIndex', () => {
     const second = createCanonicalTraceViewIndex(run);
 
     expect(second).toBe(first);
-    expect(first.traceHash).toBe('fa0f3130b8c77583');
+    expect(first.traceHash).toBe('017c87abc8087efc');
     expect(first.actionViews).toHaveLength(16);
 
     const kibo = first.actionsById.get('xunlang-signature');
@@ -67,17 +67,37 @@ describe('canonicalTraceViewIndex', () => {
         effectiveThresholdBasisPoints: 500,
         sourceCriticalRateBasisPoints: 500,
         targetCriticalDefenseBasisPoints: 0,
+        sourceCriticalDamageMultiplier: 1.5,
+        sourceCriticalDamageBasisPoints: 15000,
         eventMaterialized: false,
       },
     });
-    expect(index.actionsById.get('a3-expected').hits[0]).toMatchObject({
+    const expectedHit = index.actionsById.get('a3-expected').hits[0];
+    expect(expectedHit).toMatchObject({
       criticalMode: 'expected',
       critical: {
         expected: true,
         expectedProbabilityBasisPoints: 500,
+        sourceCriticalDamageMultiplier: 1.5,
+        sourceCriticalDamageBasisPoints: 15000,
+        expectedResult: {
+          probabilityBasisPoints: 500,
+          nonCriticalRaw: '393216',
+          nonCriticalValue: 6,
+          criticalRaw: '655360',
+          criticalValue: 10,
+          weightedRaw: '406323',
+          weightedValue: 6.1999969482421875,
+          weightedInteger: '6',
+          criticalEventMaterialized: false,
+        },
         eventMaterialized: false,
       },
     });
+    expect(expectedHit.critical.sourceCriticalDamageMultiplier).toBeCloseTo(
+      1.5,
+      4
+    );
     expect(index.actionsById.get('a3-critical').hits[0]).toMatchObject({
       criticalMode: 'critical',
       critical: { critical: true, eventMaterialized: true },
@@ -88,20 +108,39 @@ describe('canonicalTraceViewIndex', () => {
     });
   });
 
+  it('preserves missing expected materialization evidence as unknown', () => {
+    const missingEvidenceRun = structuredClone(run);
+    missingEvidenceRun.hashes.trace = 'missing-expected-materialization';
+    missingEvidenceRun.traceHash = 'missing-expected-materialization';
+    const event = missingEvidenceRun.trace.damage.find(
+      item => item.actionId === 'a3-expected'
+    );
+    delete event.formula.verifiedResult.expectedCritical
+      .criticalEventMaterialized;
+
+    const critical =
+      createCanonicalTraceViewIndex(missingEvidenceRun).actionsById.get(
+        'a3-expected'
+      ).hits[0].critical;
+    expect(critical.expectedResult.criticalEventMaterialized).toBeNull();
+    expect(critical.eventMaterialized).toBeNull();
+  });
+
   it('marks obsolete override identities as stale instead of rebinding them', () => {
     const staleRun = structuredClone(run);
     staleRun.hashes.traceHash = 'stale-hit-fixture';
     staleRun.traceHash = 'stale-hit-fixture';
-    staleRun.trace.actions.find(action => action.id === 'a3-inherit').hitOverrides = {
+    staleRun.trace.actions.find(
+      action => action.id === 'a3-inherit'
+    ).hitOverrides = {
       'obsolete-hit-identity': {
         willHit: false,
         criticalPolicy: 'critical',
       },
     };
 
-    const action = createCanonicalTraceViewIndex(staleRun).actionsById.get(
-      'a3-inherit'
-    );
+    const action =
+      createCanonicalTraceViewIndex(staleRun).actionsById.get('a3-inherit');
     expect(action.hits).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -180,9 +219,8 @@ describe('canonicalTraceViewIndex', () => {
       },
     };
 
-    const action = createCanonicalTraceViewIndex(synthetic).actionsById.get(
-      'action-1'
-    );
+    const action =
+      createCanonicalTraceViewIndex(synthetic).actionsById.get('action-1');
     const index = createCanonicalTraceViewIndex(synthetic);
     expect(index.traceHash).toBe('runtime-effect-interval-fixture');
     expect(index.summary.effectIntervalCount).toBe(1);
@@ -274,9 +312,8 @@ describe('canonicalTraceViewIndex', () => {
       },
     };
 
-    const action = createCanonicalTraceViewIndex(synthetic).actionsById.get(
-      'action-1'
-    );
+    const action =
+      createCanonicalTraceViewIndex(synthetic).actionsById.get('action-1');
     expect(action.effectEvents).toHaveLength(2);
     expect(action.effectEvents.map(event => event.identity)).toEqual([
       'effect-a',

@@ -2539,6 +2539,8 @@ function resolveCriticalBranch(
   const sourceCriticalRate = Number(source.criticalRate) || 0;
   const normalizedTargetCriticalRateDefense =
     Number(targetCriticalRateDefense) || 0;
+  const sourceCriticalDamageMultiplier =
+    numberOrNull(source.criticalDamage) ?? 1;
   const criticalThreshold = calculateEffectiveCriticalThresholdBasisPoints({
     sourceCriticalRate,
     targetCriticalRateDefense: normalizedTargetCriticalRateDefense,
@@ -2563,6 +2565,10 @@ function resolveCriticalBranch(
     targetCriticalRateDefense: normalizedTargetCriticalRateDefense,
     targetCriticalRateDefenseBasisPoints: Math.round(
       normalizedTargetCriticalRateDefense * 10_000
+    ),
+    sourceCriticalDamageMultiplier,
+    sourceCriticalDamageBasisPoints: Math.round(
+      sourceCriticalDamageMultiplier * 10_000
     ),
     replayable: true,
   };
@@ -2730,15 +2736,20 @@ function calculateCriticalAwareDamage({
     probabilityBasisPoints,
     denominator
   );
+  const weightedRaw = raw.toString();
+  const weightedValue = qToNumber(raw);
+  const weightedInteger = runtimeIntegerize(raw).toString();
+  const nonCriticalValue = qToNumber(BigInt(nonCritical.raw));
+  const criticalValue = qToNumber(BigInt(critical.raw));
   return {
     ready: true,
     result: {
       ...nonCritical,
       mode: 'normal-expected-critical',
-      raw: raw.toString(),
+      raw: weightedRaw,
       preShieldRaw: preShieldRaw.toString(),
-      value: qToNumber(raw),
-      integer: runtimeIntegerize(raw).toString(),
+      value: weightedValue,
+      integer: weightedInteger,
       trace: [
         ...nonCritical.trace,
         {
@@ -2754,7 +2765,12 @@ function calculateCriticalAwareDamage({
       expectedCritical: {
         probabilityBasisPoints: Number(probabilityBasisPoints),
         nonCriticalRaw: nonCritical.raw,
+        nonCriticalValue,
         criticalRaw: critical.raw,
+        criticalValue,
+        weightedRaw,
+        weightedValue,
+        weightedInteger,
         criticalEventMaterialized: false,
       },
     },

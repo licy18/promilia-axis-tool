@@ -33,8 +33,8 @@
         <div>
           <dt>执行</dt>
           <dd>
-            control {{ action.resolved.controlSkillId ?? 'N/A' }} /
-            sub {{ action.resolved.subSkillIndex ?? 'N/A' }}
+            control {{ action.resolved.controlSkillId ?? 'N/A' }} / sub
+            {{ action.resolved.subSkillIndex ?? 'N/A' }}
           </dd>
         </div>
         <div>
@@ -73,7 +73,9 @@
       </section>
 
       <section class="trace-section">
-        <h3>命中 <span>{{ action.hits.length }}</span></h3>
+        <h3>
+          命中 <span>{{ action.hits.length }}</span>
+        </h3>
         <div
           v-for="hit in action.hits"
           :key="hit.identity"
@@ -92,8 +94,9 @@
             <strong>{{ hit.label }}</strong>
             <span>
               {{ hit.frame == null ? '未结算' : `${hit.frame}F` }}
-              · HP -{{ formatNumber(hit.contribution.hpDamage) }}
-              · 韧性 -{{ formatNumber(hit.contribution.toughnessDamage) }}
+              · HP -{{ formatNumber(hit.contribution.hpDamage) }} · 韧性 -{{
+                formatNumber(hit.contribution.toughnessDamage)
+              }}
             </span>
           </button>
           <label>
@@ -131,14 +134,16 @@
           </div>
           <dl v-else-if="hit.critical" class="trace-critical-grid">
             <div>
-              <dt>CRI</dt>
-              <dd>
-                {{ formatBasisPoints(hit.critical.sourceCriticalRateBasisPoints) }}
+              <dt>来源暴击率</dt>
+              <dd data-testid="canonical-trace-critical-source-rate">
+                {{
+                  formatBasisPoints(hit.critical.sourceCriticalRateBasisPoints)
+                }}
               </dd>
             </div>
             <div>
-              <dt>CRI_DEFENSE</dt>
-              <dd>
+              <dt>目标抗暴</dt>
+              <dd data-testid="canonical-trace-critical-target-defense">
                 {{
                   formatBasisPoints(
                     hit.critical.targetCriticalDefenseBasisPoints
@@ -147,37 +152,82 @@
               </dd>
             </div>
             <div>
-              <dt>阈值</dt>
-              <dd>
+              <dt>有效暴击率</dt>
+              <dd data-testid="canonical-trace-critical-effective-rate">
                 {{
                   formatBasisPoints(hit.critical.effectiveThresholdBasisPoints)
                 }}
               </dd>
             </div>
-            <div v-if="hit.critical.roll != null">
-              <dt>Roll</dt>
-              <dd>
-                {{ hit.critical.roll }} ·
-                {{ hit.critical.critical ? '暴击' : '未暴击' }}
-              </dd>
-            </div>
-            <div v-if="hit.critical.expected">
-              <dt>期望贡献</dt>
-              <dd>
+            <div>
+              <dt>暴伤</dt>
+              <dd data-testid="canonical-trace-critical-damage">
                 {{
                   formatBasisPoints(
-                    hit.critical.expectedProbabilityBasisPoints
+                    hit.critical.sourceCriticalDamageBasisPoints
                   )
                 }}
-                · 不生成暴击事件
               </dd>
             </div>
+            <div v-if="hit.critical.roll != null">
+              <dt>采样 Roll</dt>
+              <dd data-testid="canonical-trace-critical-roll">
+                {{ hit.critical.roll }} ·
+                <span data-testid="canonical-trace-sampled-result">
+                  {{ hit.critical.critical ? '暴击' : '未暴击' }}
+                </span>
+              </dd>
+            </div>
+            <template v-if="hit.critical.expectedResult">
+              <div>
+                <dt>期望加权伤害</dt>
+                <dd data-testid="canonical-trace-expected-weighted-damage">
+                  {{ formatNumber(hit.critical.expectedResult.weightedValue) }}
+                </dd>
+              </div>
+              <div>
+                <dt>暴击概率</dt>
+                <dd data-testid="canonical-trace-expected-probability">
+                  {{
+                    formatBasisPoints(
+                      hit.critical.expectedResult.probabilityBasisPoints
+                    )
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>非暴击分支</dt>
+                <dd data-testid="canonical-trace-expected-non-critical">
+                  {{
+                    formatNumber(hit.critical.expectedResult.nonCriticalValue)
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>暴击分支</dt>
+                <dd data-testid="canonical-trace-expected-critical">
+                  {{ formatNumber(hit.critical.expectedResult.criticalValue) }}
+                </dd>
+              </div>
+              <div>
+                <dt>暴击事件</dt>
+                <dd data-testid="canonical-trace-critical-event-materialized">
+                  {{
+                    criticalEventMaterializedLabel(
+                      hit.critical.expectedResult.criticalEventMaterialized
+                    )
+                  }}
+                </dd>
+              </div>
+            </template>
           </dl>
         </div>
       </section>
 
       <section v-if="action.effectEvents.length" class="trace-section">
-        <h3>效果事务 <span>{{ action.effectEvents.length }}</span></h3>
+        <h3>
+          效果事务 <span>{{ action.effectEvents.length }}</span>
+        </h3>
         <button
           v-for="effect in action.effectEvents"
           :key="effect.identity"
@@ -191,8 +241,7 @@
           <strong>{{ effect.name }}</strong>
           <span>
             {{ operationLabel(effect.operation) }} ·
-            {{ formatOwnerTarget(effect) }} ·
-            {{ formatFrame(effect.timeMs) }}F
+            {{ formatOwnerTarget(effect) }} · {{ formatFrame(effect.timeMs) }}F
           </span>
           <small>
             {{ formatBeforeAfter(effect.before, effect.after) }}
@@ -205,7 +254,9 @@
       </section>
 
       <section v-if="action.effectIntervals.length" class="trace-section">
-        <h3>效果区间 <span>{{ action.effectIntervals.length }}</span></h3>
+        <h3>
+          效果区间 <span>{{ action.effectIntervals.length }}</span>
+        </h3>
         <button
           v-for="interval in action.effectIntervals"
           :key="interval.identity"
@@ -221,7 +272,9 @@
             {{ formatOwnerTarget(interval) }} ·
             {{ formatFrame(interval.startMs) }}F -
             {{
-              interval.endMs == null ? '持续' : `${formatFrame(interval.endMs)}F`
+              interval.endMs == null
+                ? '持续'
+                : `${formatFrame(interval.endMs)}F`
             }}
             · {{ interval.stacks ?? 1 }} 层
           </span>
@@ -230,7 +283,9 @@
       </section>
 
       <section v-if="action.resourceTransactions.length" class="trace-section">
-        <h3>资源事务 <span>{{ action.resourceTransactions.length }}</span></h3>
+        <h3>
+          资源事务 <span>{{ action.resourceTransactions.length }}</span>
+        </h3>
         <button
           v-for="resource in action.resourceTransactions"
           :key="resource.identity"
@@ -294,10 +349,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits([
-  'locate-fact',
-  'update-hit-override',
-]);
+const emit = defineEmits(['locate-fact', 'update-hit-override']);
 
 const action = computed(
   () => props.traceIndex?.actionsById?.get(props.selectedActionId) ?? null
@@ -309,11 +361,7 @@ const requestedLabel = computed(() => {
     intent.semanticVariant?.selectorIdentity ??
     intent.semanticVariant?.chargeTier ??
     '';
-  return [
-    intent.actionKind ?? intent.kind,
-    intent.publicActionId,
-    variant,
-  ]
+  return [intent.actionKind ?? intent.kind, intent.publicActionId, variant]
     .filter(value => value != null && value !== '')
     .join(' · ');
 });
@@ -339,7 +387,9 @@ function updateCriticalMode(hit, event) {
 function locateHit(hit) {
   locate(
     hit.timeMs ??
-      (hit.frame == null ? action.value.schedule.startMs : hit.frame * (1000 / 60)),
+      (hit.frame == null
+        ? action.value.schedule.startMs
+        : hit.frame * (1000 / 60)),
     hit.factIdentity
   );
 }
@@ -373,6 +423,12 @@ function formatBasisPoints(value) {
   return Number.isFinite(number)
     ? `${Number((number / 100).toFixed(2))}%`
     : 'N/A';
+}
+
+function criticalEventMaterializedLabel(value) {
+  if (value === true) return '生成暴击事件';
+  if (value === false) return '不生成暴击事件';
+  return '未提供';
 }
 
 function operationLabel(value) {

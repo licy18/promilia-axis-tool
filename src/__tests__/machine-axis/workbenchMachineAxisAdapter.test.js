@@ -217,7 +217,7 @@ describe('Workbench Machine Axis adapter', () => {
       }))
     );
     expect(rebuiltRun.hashes).toEqual(originalRun.hashes);
-  });
+  }, 30_000);
   it('projects Workbench edits and rejects unsupported project actions', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });

@@ -68,8 +68,7 @@ export function clearCanonicalTraceViewIndexCache() {
 
 export function classifyCanonicalToughnessFact(event) {
   const signedChange = finiteNumber(event?.toughnessDamage) ?? 0;
-  const isStateChange =
-    event?.eventType === 'VERIFIED_TOUGHNESS_STATE_CHANGE';
+  const isStateChange = event?.eventType === 'VERIFIED_TOUGHNESS_STATE_CHANGE';
   if (!isStateChange) {
     return {
       kind: 'toughness-damage',
@@ -150,9 +149,7 @@ function buildTraceViewIndex({
     const execution = executionById.get(actionId) ?? null;
     const readiness = readinessById.get(actionId) ?? null;
     const damageEvents = damageByActionId.get(actionId) ?? [];
-    const actionDiagnostics = [
-      ...(diagnosticsByActionId.get(actionId) ?? []),
-    ];
+    const actionDiagnostics = [...(diagnosticsByActionId.get(actionId) ?? [])];
     const hitResult = createActionHitViews({
       action,
       machineResolution,
@@ -176,10 +173,7 @@ function buildTraceViewIndex({
       actionId,
       name: String(action.name ?? variant?.semanticName ?? actionId),
       type: action.type ?? null,
-      requested: createRequestedActionView(
-        requestedById.get(actionId),
-        action
-      ),
+      requested: createRequestedActionView(requestedById.get(actionId), action),
       resolved: {
         semanticName:
           variant?.semanticName ?? action.semanticName ?? action.name ?? null,
@@ -353,9 +347,12 @@ function createActionHitViews({
       const branch =
         settlements.find(event => event.formula?.randomBranch)?.formula
           ?.randomBranch ?? null;
-      const expected =
-        settlements.find(event => event.formula?.verifiedResult?.expectedCritical)
-          ?.formula?.verifiedResult?.expectedCritical ?? null;
+      const expectedSettlement = settlements.find(
+        event => event.formula?.verifiedResult?.expectedCritical
+      );
+      const expectedVerifiedResult =
+        expectedSettlement?.formula?.verifiedResult ?? null;
+      const expected = expectedVerifiedResult?.expectedCritical ?? null;
       const sourceCriticalRateBasisPoints =
         finiteNumber(branch?.sourceCriticalRateBasisPoints) ??
         rateToBasisPoints(branch?.sourceCriticalRate);
@@ -368,6 +365,36 @@ function createActionHitViews({
           (sourceCriticalRateBasisPoints ?? 0) -
             (targetCriticalDefenseBasisPoints ?? 0)
         );
+      const expectedResult = expected
+        ? {
+            probabilityBasisPoints: finiteNumber(
+              expected.probabilityBasisPoints
+            ),
+            nonCriticalRaw:
+              expected.nonCriticalRaw == null
+                ? null
+                : String(expected.nonCriticalRaw),
+            nonCriticalValue: finiteNumber(expected.nonCriticalValue),
+            criticalRaw:
+              expected.criticalRaw == null
+                ? null
+                : String(expected.criticalRaw),
+            criticalValue: finiteNumber(expected.criticalValue),
+            weightedRaw:
+              expectedVerifiedResult?.raw == null
+                ? null
+                : String(expectedVerifiedResult.raw),
+            weightedValue: finiteNumber(expectedVerifiedResult?.value),
+            weightedInteger:
+              expectedVerifiedResult?.integer == null
+                ? null
+                : String(expectedVerifiedResult.integer),
+            criticalEventMaterialized:
+              typeof expected.criticalEventMaterialized === 'boolean'
+                ? expected.criticalEventMaterialized
+                : null,
+          }
+        : null;
       return {
         identity,
         factIdentity,
@@ -405,8 +432,7 @@ function createActionHitViews({
           hpDamage: sumNumbers(settlements, event => event.rawDamage),
           toughnessDamage: sumNumbers(
             settlements.filter(
-              event =>
-                event.eventType !== 'VERIFIED_TOUGHNESS_STATE_CHANGE'
+              event => event.eventType !== 'VERIFIED_TOUGHNESS_STATE_CHANGE'
             ),
             event => event.toughnessDamage
           ),
@@ -418,15 +444,22 @@ function createActionHitViews({
               sourceCriticalRateBasisPoints,
               targetCriticalDefenseBasisPoints,
               effectiveThresholdBasisPoints,
+              sourceCriticalDamageMultiplier: finiteNumber(
+                branch.sourceCriticalDamageMultiplier
+              ),
+              sourceCriticalDamageBasisPoints: finiteNumber(
+                branch.sourceCriticalDamageBasisPoints
+              ),
               roll: finiteNumber(branch.criticalRoll),
               critical: branch.critical === true,
               expected: branch.expected === true,
               expectedProbabilityBasisPoints:
-                finiteNumber(branch.expectedCriticalProbabilityBasisPoints) ??
-                finiteNumber(expected?.probabilityBasisPoints),
+                finiteNumber(expected?.probabilityBasisPoints) ??
+                finiteNumber(branch.expectedCriticalProbabilityBasisPoints),
+              expectedResult,
               eventMaterialized:
                 branch.expected === true
-                  ? false
+                  ? (expectedResult?.criticalEventMaterialized ?? null)
                   : branch.critical === true,
               streamIndex: finiteNumber(branch.criticalStreamIndex),
               randomSeed: branch.randomSeed ?? null,
@@ -446,7 +479,9 @@ function collectVisibleHitDefinitions(resolution) {
     return allHits.filter(hit => hit?.hitIdentity);
   }
   const materialized = new Set(
-    asArray(resolution?.hits).map(hit => hit?.hitIdentity).filter(Boolean)
+    asArray(resolution?.hits)
+      .map(hit => hit?.hitIdentity)
+      .filter(Boolean)
   );
   const appliedGroups = new Set(
     resolution.conditionalHitGroupResults
@@ -652,7 +687,10 @@ function createStateBeforeAfter({ effectEvents, resourceTransactions }) {
 function resolveCanonicalEffectIntervals({ trace, effectTimeline }) {
   const canonicalIntervals = asArray(trace.effects?.intervals);
   if (canonicalIntervals.length > 0) {
-    const runtimeIntervalsById = mapById(effectTimeline?.intervals, 'intervalId');
+    const runtimeIntervalsById = mapById(
+      effectTimeline?.intervals,
+      'intervalId'
+    );
     return canonicalIntervals.map(interval => ({
       ...(runtimeIntervalsById.get(String(interval?.intervalId ?? '')) ?? {}),
       ...interval,

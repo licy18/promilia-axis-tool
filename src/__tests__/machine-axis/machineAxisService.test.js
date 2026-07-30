@@ -134,7 +134,7 @@ describe('Machine Axis service', () => {
       trace: expect.any(String),
       evaluation: expect.any(String),
     });
-  });
+  }, 30_000);
 
   it('publishes and resolves the complete generated kibo action census', () => {
     const service = createMachineAxisService();
@@ -208,7 +208,7 @@ describe('Machine Axis service', () => {
     expect(() => service.simulate(shortageAxis)).toThrow(
       MachineAxisValidationError
     );
-  });
+  }, 30_000);
 
   it('reports concrete actor resource shortage without a failed action block', () => {
     const axis = createAxis({

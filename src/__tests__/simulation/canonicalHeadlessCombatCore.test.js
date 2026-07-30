@@ -342,13 +342,26 @@ describe('canonical headless combat core', () => {
       policy: 'expected',
       expected: true,
       criticalRoll: null,
+      sourceCriticalDamageMultiplier: 1.5,
+      sourceCriticalDamageBasisPoints: 15000,
     });
     expect(getFormula(expected)).toMatchObject({
       mode: 'normal-expected-critical',
       expectedCritical: {
+        probabilityBasisPoints: expect.any(Number),
+        nonCriticalRaw: expect.any(String),
+        nonCriticalValue: expect.any(Number),
+        criticalRaw: expect.any(String),
+        criticalValue: expect.any(Number),
+        weightedRaw: expect.any(String),
+        weightedValue: expect.any(Number),
+        weightedInteger: expect.any(String),
         criticalEventMaterialized: false,
       },
     });
+    expect(getFormula(expected).expectedCritical.weightedValue).toBe(
+      getDamage(expected)
+    );
     expect(getDamage(expected)).toBeGreaterThanOrEqual(getDamage(nonCritical));
     expect(getDamage(expected)).toBeLessThanOrEqual(getDamage(critical));
   });

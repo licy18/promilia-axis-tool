@@ -43,10 +43,23 @@ function createIndex() {
           sourceCriticalRateBasisPoints: 500,
           targetCriticalDefenseBasisPoints: 100,
           effectiveThresholdBasisPoints: 400,
+          sourceCriticalDamageMultiplier: 1.5,
+          sourceCriticalDamageBasisPoints: 15000,
           roll: null,
           critical: false,
           expected: true,
           expectedProbabilityBasisPoints: 400,
+          expectedResult: {
+            probabilityBasisPoints: 400,
+            nonCriticalRaw: '393216',
+            nonCriticalValue: 6,
+            criticalRaw: '655360',
+            criticalValue: 10,
+            weightedRaw: '403701',
+            weightedValue: 6.1599884033203125,
+            weightedInteger: '6',
+            criticalEventMaterialized: false,
+          },
           eventMaterialized: false,
         },
       },
@@ -125,7 +138,62 @@ describe('CanonicalTraceInspectorPanel', () => {
     expect(wrapper.text()).toContain('主控角色调谐强度提升');
     expect(wrapper.text()).toContain('韧性恢复');
     expect(wrapper.text()).not.toContain('负削韧');
-    expect(wrapper.text()).toContain('不生成暴击事件');
+    expect(
+      wrapper.get('[data-testid="canonical-trace-critical-source-rate"]').text()
+    ).toBe('5%');
+    expect(
+      wrapper
+        .get('[data-testid="canonical-trace-critical-target-defense"]')
+        .text()
+    ).toBe('1%');
+    expect(
+      wrapper
+        .get('[data-testid="canonical-trace-critical-effective-rate"]')
+        .text()
+    ).toBe('4%');
+    expect(
+      wrapper.get('[data-testid="canonical-trace-critical-damage"]').text()
+    ).toBe('150%');
+    expect(
+      wrapper
+        .get('[data-testid="canonical-trace-expected-weighted-damage"]')
+        .text()
+    ).toBe('6.16');
+    expect(
+      wrapper.get('[data-testid="canonical-trace-expected-probability"]').text()
+    ).toBe('4%');
+    expect(
+      wrapper
+        .get('[data-testid="canonical-trace-expected-non-critical"]')
+        .text()
+    ).toBe('6');
+    expect(
+      wrapper.get('[data-testid="canonical-trace-expected-critical"]').text()
+    ).toBe('10');
+    expect(
+      wrapper
+        .get('[data-testid="canonical-trace-critical-event-materialized"]')
+        .text()
+    ).toBe('不生成暴击事件');
+  });
+
+  it('does not invent an expected critical event decision when trace omits it', () => {
+    const index = createIndex();
+    index.actionsById.get(
+      'action-1'
+    ).hits[0].critical.expectedResult.criticalEventMaterialized = null;
+    const wrapper = mount(CanonicalTraceInspectorPanel, {
+      props: {
+        traceIndex: index,
+        selectedActionId: 'action-1',
+      },
+    });
+
+    expect(
+      wrapper
+        .get('[data-testid="canonical-trace-critical-event-materialized"]')
+        .text()
+    ).toBe('未提供');
   });
 
   it('emits stable landed and critical overrides from real controls', async () => {

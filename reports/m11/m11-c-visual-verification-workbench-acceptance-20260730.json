@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "kind": "m11-c-visual-verification-workbench-acceptance",
-  "generatedAt": "2026-07-29T18:30:27.1659627Z",
+  "generatedAt": "2026-07-30T01:58:29.273Z",
   "baseCommit": "8da52fb9daa8d849c14b1d737d0d723e9ab077d5",
-  "status": "implementation-complete-awaiting-product-acceptance",
+  "status": "r1-verification-complete-awaiting-product-acceptance",
   "canonicalContract": {
     "core": "WORKBENCH_HEADLESS_COMBAT_CORE",
     "traceViewIndex": "memoized-by-canonical-trace-hash",
@@ -34,7 +34,7 @@
     "algorithm": "fnv1a64-utf8-v1",
     "input": "1670cb62718bc08b",
     "data": "c49a239709b43a16",
-    "trace": "fa0f3130b8c77583",
+    "trace": "017c87abc8087efc",
     "evaluation": "8b144d1df218405e"
   },
   "verifiedCapabilities": {
@@ -48,13 +48,16 @@
     "distinctSameFrameEffects": true,
     "controlledEffectInheritance": true,
     "toughnessRecoverySeparatedFromDamage": true,
-    "inspectorClosable": true
+    "inspectorClosable": true,
+    "criticalDamageComesFromCanonicalTrace": true,
+    "expectedWeightedResultComesFromCanonicalSettlement": true,
+    "criticalEventMaterializationIsTriState": true
   },
   "verification": {
     "vitest": {
       "status": "passed",
       "fileCount": 153,
-      "testCount": 943,
+      "testCount": 945,
       "command": "npm test -- --run"
     },
     "audits": [
@@ -75,7 +78,8 @@
       "total": 63,
       "requiredCapabilitiesPassed": 42,
       "requiredCapabilitiesTotal": 42,
-      "command": "npm run test:e2e:production-preview"
+      "command": "npx playwright test --config playwright.production.config.js",
+      "priorSuiteLoadObservation": "two unrelated legacy timing scenarios each timed out once and passed isolated; the final complete production run passed 63/63 without product changes"
     },
     "bundle": {
       "status": "known-release-risk",
@@ -85,13 +89,19 @@
       "totalJavaScriptGzipBytes": 800681,
       "totalJavaScriptBudgetBytes": 740000,
       "optimizationPerformed": false
+    },
+    "focusedVitest": {
+      "status": "passed",
+      "fileCount": 7,
+      "testCount": 151,
+      "command": "npm test -- --run src/__tests__/simulation/canonicalHeadlessCombatCore.test.js src/__tests__/simulation/canonicalHeadlessCombatBoundary.test.js src/__tests__/features/canonicalTraceViewIndex.test.js src/__tests__/features/CanonicalTraceInspectorPanel.test.js src/__tests__/machine-axis/machineAxisService.test.js src/__tests__/machine-axis/workbenchMachineAxisAdapter.test.js src/__tests__/views/Workbench.test.js"
     }
   },
   "evidence": {
     "desktopScreenshot": {
       "path": "reports/m11-c-canonical-trace-workbench-desktop.png",
-      "bytes": 145527,
-      "sha256": "b8335236e1fff5e6a172b0e2acb0fc9940b764e98634a1a7bef9036754c8bc89"
+      "bytes": 147387,
+      "sha256": "56b819fedce9e64ea8cb696da6ec04ec7cad19bd9e191dae81d78c169b3e016d"
     },
     "productionPreviewReport": "reports/production-preview-acceptance.json",
     "productionImportAudit": "reports/production-import-audit.json",
@@ -103,5 +113,50 @@
     "fourth-character",
     "bundle-optimization",
     "unaccepted-kibo-mechanics"
-  ]
+  ],
+  "r1Commit": {
+    "reference": "git-self",
+    "meaning": "the focused M11-C-R1 Git commit containing this report"
+  },
+  "r1": {
+    "canonicalCriticalEvidence": {
+      "sourceCriticalDamageMultiplier": 1.5,
+      "sourceCriticalDamageBasisPoints": 15000,
+      "sampled": {
+        "sourceCriticalRateBasisPoints": 500,
+        "targetCriticalDefenseBasisPoints": 0,
+        "effectiveCriticalRateBasisPoints": 500,
+        "rollBasisPoints": 2345,
+        "result": "non-critical"
+      },
+      "expected": {
+        "weightedValue": 6.1999969482421875,
+        "weightedRaw": 406323,
+        "nonCriticalValue": 6,
+        "nonCriticalRaw": 393216,
+        "criticalValue": 10,
+        "criticalRaw": 655360,
+        "probabilityBasisPoints": 500,
+        "criticalEventMaterialized": false
+      },
+      "missingMaterializationFieldDisplay": "unknown",
+      "source": "canonical runtime randomBranch and formula.verifiedResult.expectedCritical"
+    },
+    "testBudgets": {
+      "scope": "local-only",
+      "timeoutMs": 30000,
+      "tests": [
+        "real verified Pangpang A3 Machine Axis simulation",
+        "real kibo signature energy success and shortage simulation",
+        "persisted Workbench Machine Axis draft rebuild"
+      ],
+      "globalTimeoutChanged": false
+    },
+    "traceHashChange": {
+      "previous": "fa0f3130b8c77583",
+      "current": "017c87abc8087efc",
+      "reason": "canonical trace now carries source critical damage and core-computed expected branch metadata; input, data, evaluation and gameplay replay/summary semantics are unchanged"
+    },
+    "baseCommit": "03e9ea6fb753d525dcc1204a898dc96db2059b2c"
+  }
 }

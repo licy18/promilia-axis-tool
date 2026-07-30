@@ -7887,16 +7887,16 @@ test('[m10-b2-han-firework-runtime] replays Han Youyou Firework, charged forms, 
     await expect(switchAction).toHaveCount(1);
     await switchAction.click();
     const switchTarget = page.getByTestId('workbench-switch-target-select');
-    const targetOptions = await switchTarget.locator('option').evaluateAll(
-      options => options.map(option => String(option.value)).filter(Boolean)
-    );
+    const targetOptions = await switchTarget
+      .locator('option')
+      .evaluateAll(options =>
+        options.map(option => String(option.value)).filter(Boolean)
+      );
     const resolvedTargetCharacterId = targetOptions.includes(
       String(targetCharacterId)
     )
       ? String(targetCharacterId)
-      : targetOptions.find(
-          option => option !== String(sourceCharacterId)
-        );
+      : targetOptions.find(option => option !== String(sourceCharacterId));
     if (!resolvedTargetCharacterId) {
       throw new Error(
         `No switch target is available for ${sourceCharacterId} at frame ${frame}`
@@ -8856,7 +8856,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   await expect(workbench).toHaveAttribute(
     'data-canonical-trace-hash',
-    'fa0f3130b8c77583'
+    '017c87abc8087efc'
   );
   await expect(workbench).toHaveAttribute(
     'data-canonical-trace-action-count',
@@ -8921,7 +8921,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     algorithm: 'fnv1a64-utf8-v1',
     input: '1670cb62718bc08b',
     data: 'c49a239709b43a16',
-    trace: 'fa0f3130b8c77583',
+    trace: '017c87abc8087efc',
     evaluation: '8b144d1df218405e',
   });
 
@@ -8940,13 +8940,11 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   await expect(
     dialog
       .getByTestId('machine-axis-import-diagnostics')
-      .locator(
-        '[data-diagnostic-code="machine-axis-public-action-unknown"]'
-      )
+      .locator('[data-diagnostic-code="machine-axis-public-action-unknown"]')
   ).toHaveCount(1);
   await expect(workbench).toHaveAttribute(
     'data-canonical-trace-hash',
-    'fa0f3130b8c77583'
+    '017c87abc8087efc'
   );
   await expect(workbench).toHaveAttribute(
     'data-canonical-trace-action-count',
@@ -8968,9 +8966,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     );
     return {
       action,
-      inspector: inspector.getByTestId(
-        'workbench-canonical-trace-inspector'
-      ),
+      inspector: inspector.getByTestId('workbench-canonical-trace-inspector'),
     };
   };
 
@@ -9013,19 +9009,55 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   }
 
   const sampled = await openTraceAction('a3-sampled');
-  const sampledHit = sampled.inspector.getByTestId(
-    'canonical-trace-hit-row'
-  );
-  await expect(sampledHit).toContainText('CRI_DEFENSE');
-  await expect(sampledHit).toContainText('阈值');
-  await expect(sampledHit).toContainText('Roll');
-  await expect(sampledHit).toContainText('2345');
+  const sampledHit = sampled.inspector.getByTestId('canonical-trace-hit-row');
+  await expect(sampledHit).toContainText('采样 Roll');
+  await expect(
+    sampledHit.getByTestId('canonical-trace-critical-source-rate')
+  ).toHaveText('5%');
+  await expect(
+    sampledHit.getByTestId('canonical-trace-critical-target-defense')
+  ).toHaveText('0%');
+  await expect(
+    sampledHit.getByTestId('canonical-trace-critical-effective-rate')
+  ).toHaveText('5%');
+  await expect(
+    sampledHit.getByTestId('canonical-trace-critical-damage')
+  ).toHaveText('150%');
+  await expect(
+    sampledHit.getByTestId('canonical-trace-critical-roll')
+  ).toContainText('2345');
+  await expect(
+    sampledHit.getByTestId('canonical-trace-sampled-result')
+  ).toHaveText('未暴击');
+
+  const expected = await openTraceAction('a3-expected');
+  const expectedHit = expected.inspector.getByTestId('canonical-trace-hit-row');
+  await expect(
+    expectedHit.getByTestId('canonical-trace-critical-damage')
+  ).toHaveText('150%');
+  await expect(
+    expectedHit.getByTestId('canonical-trace-expected-weighted-damage')
+  ).toHaveText('6.2');
+  await expect(
+    expectedHit.getByTestId('canonical-trace-expected-probability')
+  ).toHaveText('5%');
+  await expect(
+    expectedHit.getByTestId('canonical-trace-expected-non-critical')
+  ).toHaveText('6');
+  await expect(
+    expectedHit.getByTestId('canonical-trace-expected-critical')
+  ).toHaveText('10');
+  await expect(
+    expectedHit.getByTestId('canonical-trace-critical-event-materialized')
+  ).toHaveText('不生成暴击事件');
+
+  await openTraceAction('a3-sampled');
   const originalTraceHash = await workbench.getAttribute(
     'data-canonical-trace-hash'
   );
-  await sampledHit.getByTestId('canonical-trace-hit-landed').selectOption(
-    'miss'
-  );
+  await sampledHit
+    .getByTestId('canonical-trace-hit-landed')
+    .selectOption('miss');
   await expect(workbench).not.toHaveAttribute(
     'data-canonical-trace-hash',
     originalTraceHash
