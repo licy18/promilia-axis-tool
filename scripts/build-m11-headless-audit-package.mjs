@@ -302,7 +302,7 @@ async function main() {
 function parseArgs(argv) {
   const options = {
     date: '20260730',
-    outputParent: resolve(REPO_ROOT, '..', 'outputs'),
+    outputParent: defaultOutputParent(),
     force: false,
     skipBuild: false,
   };
@@ -321,6 +321,15 @@ function parseArgs(argv) {
     throw new Error('--date must use YYYYMMDD');
   }
   return options;
+}
+
+function defaultOutputParent() {
+  const commonGitDirectory = resolve(
+    REPO_ROOT,
+    git(['rev-parse', '--git-common-dir'])
+  );
+  const primaryRepositoryRoot = dirname(commonGitDirectory);
+  return resolve(primaryRepositoryRoot, '..', 'outputs');
 }
 
 function assertTrackedTreeClean() {
