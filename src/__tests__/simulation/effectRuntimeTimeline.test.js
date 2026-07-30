@@ -215,6 +215,100 @@ describe('effect runtime timeline', () => {
     ]);
   });
 
+  it('distinguishes numeric source-exit and carrier-exit clear flags across targets', () => {
+    const scenario = {
+      time: { durationMs: 1000, fps: 60 },
+      actors: [
+        { id: 'actor-source' },
+        { id: 'actor-next' },
+        { id: 'actor-third' },
+      ],
+      actions: [],
+      initialRuntimeState: { activeEffects: [] },
+    };
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      controlledActorTimeline: {
+        initialActor: { actorId: 'actor-source' },
+        transitions: [
+          createControlledActorTransition({
+            id: 'source-exits',
+            timeMs: 200,
+            beforeActorId: 'actor-source',
+            afterActorId: 'actor-next',
+          }),
+          createControlledActorTransition({
+            id: 'carrier-exits',
+            timeMs: 300,
+            beforeActorId: 'actor-next',
+            afterActorId: 'actor-third',
+          }),
+        ],
+      },
+      generatedCommands: [
+        createVerifiedGeneratedEffectCommand({
+          id: 'source-exit-effect',
+          effectId: 'source-exit-effect',
+          semanticTargetKind: 'actor',
+          targetId: 'actor-next',
+          timeMs: 100,
+          durationMs: null,
+          inheritType: null,
+          inheritOnControlledActorSwitch: false,
+          clearType: 8,
+        }),
+        createVerifiedGeneratedEffectCommand({
+          id: 'carrier-exit-effect',
+          effectId: 'carrier-exit-effect',
+          semanticTargetKind: 'actor',
+          targetId: 'actor-next',
+          timeMs: 100,
+          durationMs: null,
+          inheritType: null,
+          inheritOnControlledActorSwitch: false,
+          clearType: 16,
+        }),
+      ],
+    });
+
+    expect(
+      resolveActiveEffectsAt(timeline, 250).map(effect => effect.effectId)
+    ).toEqual(['carrier-exit-effect']);
+    expect(
+      timeline.events
+        .filter(event => event.type === 'EFFECT_REMOVED')
+        .map(event => ({
+          effectId: event.effectId,
+          timeMs: event.timeMs,
+          operation: event.operation,
+          transition: event.controlledActorTransitionActionId,
+          clearType: event.before.clearType,
+          sourceActorId: event.before.sourceActorId,
+          clearCarrierActorId: event.before.clearCarrierActorId,
+        }))
+    ).toEqual([
+      {
+        effectId: 'source-exit-effect',
+        timeMs: 200,
+        operation: 'remove',
+        transition: 'source-exits',
+        clearType: 8,
+        sourceActorId: 'actor-source',
+        clearCarrierActorId: 'actor-next',
+      },
+      {
+        effectId: 'carrier-exit-effect',
+        timeMs: 300,
+        operation: 'remove',
+        transition: 'carrier-exits',
+        clearType: 16,
+        sourceActorId: 'actor-source',
+        clearCarrierActorId: 'actor-next',
+      },
+    ]);
+    expect(resolveActiveEffectsAt(timeline, 300)).toEqual([]);
+  });
+
   it('keeps corrupt source names auditable without publishing them as effect labels', () => {
     const timeline = createEffectRuntimeTimeline({
       scenario: {
@@ -861,6 +955,8 @@ function createVerifiedGeneratedEffectCommand({
   durationMs,
   inheritType,
   inheritOnControlledActorSwitch = true,
+  clearType = null,
+  clearTypeFlags = [],
 }) {
   return {
     id,
@@ -881,6 +977,8 @@ function createVerifiedGeneratedEffectCommand({
     semanticTargetKind,
     inheritOnControlledActorSwitch,
     inheritType,
+    clearType,
+    clearTypeFlags,
     inheritanceSourceIdentity: 'fixture:element-container',
     sourceStatus: 'verified-battle-effect-generated',
     confidence: 'high',

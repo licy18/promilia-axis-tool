@@ -45,7 +45,9 @@
     "test:trial-release": "npm run test -- --run && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:action-status:check && npm run audit:verified-combat && npm run audit:character-acceptance && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
     "test:coverage": "vitest run --coverage",
     "machine-axis": "node scripts/run-machine-axis-cli.mjs",
-    "machine-axis:build": "vite build --config vite.machine-axis-cli.config.js"
+    "machine-axis:build": "vite build --config vite.machine-axis-cli.config.js",
+    "data:sync-kibo-headless": "node scripts/generate-kibo-headless-census.mjs --write",
+    "audit:kibo-headless": "node scripts/generate-kibo-headless-census.mjs --assert-clean"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

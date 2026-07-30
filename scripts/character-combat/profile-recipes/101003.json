@@ -25,8 +25,8 @@
       10100312, 10100313, 10100314, 10100315, 10100316, 10100322, 10100324,
       10100325, 10100326, 10100327, 10100331, 10100341, 10100342, 10100343,
       10100344, 10100345, 10100346, 10100347, 10100348, 10100349, 10100360,
-      10100361, 48005901, 48006001, 48012401, 48012501, 48012601,
-      48013201, 48013301
+      10100361, 48005901, 48006001, 48012401, 48012501, 48012601, 48013201,
+      48013301
     ],
     "publicActionDeclarations": [],
     "contextInputEdges": [
@@ -866,9 +866,7 @@
           "effects.inheritanceTransfers.0.formulaSourceActorId": "actor-101003",
           "effects.inheritanceTransfers.0.effectAdderActorId": "actor-101003",
           "effects.inheritanceTransfers.0.expiresAtMs": 18466.667,
-          "effects.inheritanceTransfers.0.formulaValues": [
-            1042.0045928955078
-          ],
+          "effects.inheritanceTransfers.0.formulaValues": [1042.0045928955078],
           "comparison.primaryEffectFormulaValuesById.battle-element:101003207": [
             1042.0045928955078
           ],
@@ -1069,7 +1067,7 @@
         "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
         "combat.ownerHitCountByActionId.han-star-skill": 7,
         "combat.ownerHitCountByActionId.han-ultimate": 7,
-        "combat.ownerTotalHpDamage": 78158,
+        "combat.ownerTotalHpDamage": 78183,
         "combat.ownerTotalToughnessDamage": 0,
         "resources.targetStateSummary.profileCount": 1,
         "resources.targetStateSummary.eventCount": 9,

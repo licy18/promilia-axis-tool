@@ -1,4 +1,4 @@
-export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 6;
+export const INITIAL_RUNTIME_STATE_SCHEMA_VERSION = 7;
 export const INITIAL_RUNTIME_STATE_CONTRACT_NAME = 'AzPrInitialRuntimeState';
 
 export function normalizeInitialRuntimeState(value, defaults = {}) {
@@ -19,6 +19,12 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
   const kiboEnergyBySlot = normalizeInitialKiboEnergyStates(
     sourceValue.kiboEnergyBySlot
   );
+  const actorVitalsByActor = normalizeInitialActorVitalStates(
+    sourceValue.actorVitalsByActor
+  );
+  const kiboVitalsBySlot = normalizeInitialKiboVitalStates(
+    sourceValue.kiboVitalsBySlot
+  );
   const activeEffects = normalizeInitialActiveEffects(
     sourceValue.activeEffects
   );
@@ -31,6 +37,8 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     !enemy &&
     selfEnergyByActor.length === 0 &&
     kiboEnergyBySlot.length === 0 &&
+    actorVitalsByActor.length === 0 &&
+    kiboVitalsBySlot.length === 0 &&
     activeEffects.length === 0 &&
     tuningMarks.length === 0 &&
     specialResourcesByActor.length === 0
@@ -50,6 +58,8 @@ export function normalizeInitialRuntimeState(value, defaults = {}) {
     enemy,
     selfEnergyByActor,
     kiboEnergyBySlot,
+    actorVitalsByActor,
+    kiboVitalsBySlot,
     activeEffects,
     tuningMarks,
     specialResourcesByActor,
@@ -189,6 +199,69 @@ function normalizeInitialKiboEnergyStates(values) {
         maxValue: nonNegativeNumberOrNull(value?.maxValue),
         valueUnit: 'sp',
         baselineStatus: 'baseline-inherited-from-cycle-boundary',
+      },
+    ];
+  });
+}
+
+function normalizeInitialActorVitalStates(values) {
+  const usedActorIds = new Set();
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const actorId = optionalText(value?.actorId);
+    const currentValue = nonNegativeNumberOrNull(
+      value?.currentValue ?? value?.currentHp
+    );
+    if (!actorId || currentValue == null || usedActorIds.has(actorId)) {
+      return [];
+    }
+    usedActorIds.add(actorId);
+    const maxValue = positiveNumberOrNull(value?.maxValue ?? value?.maximumHp);
+    return [
+      {
+        actorId,
+        characterId: numberOrNull(value?.characterId),
+        actorName: optionalText(value?.actorName),
+        currentValue:
+          maxValue == null ? currentValue : Math.min(currentValue, maxValue),
+        maxValue,
+        valueUnit: 'hp',
+        valueShields: normalizeInitialValueShields(value?.valueShields),
+        baselineStatus:
+          optionalText(value?.baselineStatus) ??
+          'baseline-inherited-from-cycle-boundary',
+      },
+    ];
+  });
+}
+
+function normalizeInitialKiboVitalStates(values) {
+  const usedSlotIds = new Set();
+  return (Array.isArray(values) ? values : []).flatMap(value => {
+    const slotId = optionalText(value?.slotId);
+    const kiboId = positiveIntegerOrNull(value?.kiboId);
+    const currentValue = nonNegativeNumberOrNull(
+      value?.currentValue ?? value?.currentHp
+    );
+    if (!slotId || !kiboId || currentValue == null || usedSlotIds.has(slotId)) {
+      return [];
+    }
+    usedSlotIds.add(slotId);
+    const maxValue = positiveNumberOrNull(value?.maxValue ?? value?.maximumHp);
+    return [
+      {
+        slotId,
+        actorId: optionalText(value?.actorId),
+        characterId: numberOrNull(value?.characterId),
+        kiboId,
+        kiboName: optionalText(value?.kiboName),
+        currentValue:
+          maxValue == null ? currentValue : Math.min(currentValue, maxValue),
+        maxValue,
+        valueUnit: 'hp',
+        valueShields: normalizeInitialValueShields(value?.valueShields),
+        baselineStatus:
+          optionalText(value?.baselineStatus) ??
+          'baseline-inherited-from-cycle-boundary',
       },
     ];
   });

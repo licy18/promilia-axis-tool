@@ -522,7 +522,9 @@
       "identity": "actor:103002:internal-control:10300253",
       "sourceKind": "internal-unreachable-control",
       "status": "not-applicable",
-      "reasons": ["reexported-subskill-container-unreachable-from-current-skill-list"],
+      "reasons": [
+        "reexported-subskill-container-unreachable-from-current-skill-list"
+      ],
       "sourceIdentity": "Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500135400000.asset|skill_control_10300253.asset#skillResourceMaps=2|NewTable/skill+skillsub_logic#referenceCount=0|current-public-action-closure#referenceCount=0"
     }
   ],
@@ -766,13 +768,15 @@
         "combat.ownerHitEventCount": 63,
         "combat.ownerHitCountByActionId.ruby-star-skill": 7,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.hitCount": 7,
-        "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [1887, 1894, 1899, 1904, 1909, 1914, 1919],
+        "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [
+          1887, 1894, 1899, 1904, 1909, 1914, 1919
+        ],
         "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 664,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 464,
-        "combat.ownerTotalHpDamage": 164509,
-        "combat.ownerTotalToughnessDamage": 2190,
+        "combat.ownerTotalHpDamage": 164523,
+        "combat.ownerTotalToughnessDamage": 2198,
         "combat.enemy.initialHp": 862800,
-        "combat.enemy.finalHp": 698197,
+        "combat.enemy.finalHp": 698183,
         "resources.specialResourceTrace.0.actionId": "ruby-reload",
         "resources.specialResourceTrace.0.frame": 24,
         "resources.specialResourceTrace.0.beforeValue": 0,

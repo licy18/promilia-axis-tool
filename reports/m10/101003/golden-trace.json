@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "2046849c343b33e1c86403e529ce3c2051a0577bb2e46de1fc07b32c1db9eaf9",
+  "sourcePackageHash": "992f1ef347f53672e0e870a3d9c17fef9a9f70638d864cd27d915d0de0ead0de",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "b06fe21d3dea1aa0",
-    "traceHash": "de133e5fe89f0595",
-    "dataHash": "5d9cc9a253adf8e0",
+    "inputHash": "8c1a4acddf5e3b54",
+    "traceHash": "a4fa5e43670cd0a1",
+    "dataHash": "7599ed503c1d0c06",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -351,7 +351,7 @@
             3438,
             3442
           ],
-          "totalHpDamage": 381,
+          "totalHpDamage": 406,
           "totalToughnessDamage": 0
         },
         "han-limit-counter": {
@@ -466,7 +466,7 @@
           "totalToughnessDamage": 0
         }
       },
-      "ownerHitTotalHpDamage": 20201,
+      "ownerHitTotalHpDamage": 20226,
       "ownerHitTotalToughnessDamage": 1808,
       "selectedHpDamageByActionId": {
         "han-charged-stage-one": 5052,
@@ -474,14 +474,14 @@
         "han-star-skill": 4179,
         "han-ultimate": 3293
       },
-      "totalHpDamage": 78378,
+      "totalHpDamage": 78403,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 78158,
+      "ownerTotalHpDamage": 78183,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
         "pointCount": 374,
         "initialHp": 862800,
-        "finalHp": 784422,
+        "finalHp": 784397,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 6667,
@@ -3798,7 +3798,7 @@
           1019.9066162109375
         ]
       },
-      "baselineReplayHash": "95c9e0defebe3691240026918ba5cd8ba28d2a4fbd36195c957c3280e13b3736"
+      "baselineReplayHash": "21a53a1d2c61416236f6b12647aa66de931afc928eb72c36b86be303bb3f63b4"
     },
     "trace": {
       "damage": [
@@ -6820,8 +6820,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3338,
           "hitIdentity": null,
-          "rawDamage": 68,
-          "hpDamage": 68,
+          "rawDamage": 71,
+          "hpDamage": 71,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -6856,8 +6856,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3349,
           "hitIdentity": null,
-          "rawDamage": 68,
-          "hpDamage": 68,
+          "rawDamage": 73,
+          "hpDamage": 73,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -7048,8 +7048,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3438,
           "hitIdentity": null,
-          "rawDamage": 63,
-          "hpDamage": 63,
+          "rawDamage": 70,
+          "hpDamage": 70,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -7060,8 +7060,8 @@
           "actionId": "han-kibo-signature",
           "frame": 3442,
           "hitIdentity": null,
-          "rawDamage": 63,
-          "hpDamage": 63,
+          "rawDamage": 73,
+          "hpDamage": 73,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -9051,6 +9051,105 @@
           ]
         },
         {
+          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_APPLIED|55450.001|1",
+          "actionId": "han-kibo-signature",
+          "frame": 3327,
+          "effectId": "kibo-passive:520090:520090002",
+          "runtimeEffectId": "kibo-passive:520090:520090002",
+          "sourceElementId": null,
+          "effectName": "锐利武器",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 75450.001,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 400,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|55633.334|2",
+          "actionId": "han-kibo-signature",
+          "frame": 3338,
+          "effectId": "kibo-passive:520090:520090002",
+          "runtimeEffectId": "kibo-passive:520090:520090002",
+          "sourceElementId": null,
+          "effectName": "锐利武器",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
+          "beforeStacks": 1,
+          "afterStacks": 2,
+          "stackChange": 1,
+          "expiresAtMs": 75633.334,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 400,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|55816.668|3",
+          "actionId": "han-kibo-signature",
+          "frame": 3349,
+          "effectId": "kibo-passive:520090:520090002",
+          "runtimeEffectId": "kibo-passive:520090:520090002",
+          "sourceElementId": null,
+          "effectName": "锐利武器",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
+          "beforeStacks": 2,
+          "afterStacks": 3,
+          "stackChange": 1,
+          "expiresAtMs": 75816.668,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 400,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
           "eventId": "enemy/enemy-300032/battle-element:-15343624725538709/source:switch-away-from-han--on-exit--actor-101003--star-carry/verified-calculator|EFFECT_EXPIRED|57283.333|1",
           "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
           "frame": 3437,
@@ -9113,6 +9212,72 @@
               "valueRaw": -800,
               "formulaFamily": "basis-point-property-a-with-common-ratio",
               "formulaValue": -800
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|57300.001|4",
+          "actionId": "han-kibo-signature",
+          "frame": 3438,
+          "effectId": "kibo-passive:520090:520090002",
+          "runtimeEffectId": "kibo-passive:520090:520090002",
+          "sourceElementId": null,
+          "effectName": "锐利武器",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
+          "beforeStacks": 3,
+          "afterStacks": 4,
+          "stackChange": 1,
+          "expiresAtMs": 77300.001,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 400,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|57366.668|5",
+          "actionId": "han-kibo-signature",
+          "frame": 3442,
+          "effectId": "kibo-passive:520090:520090002",
+          "runtimeEffectId": "kibo-passive:520090:520090002",
+          "sourceElementId": null,
+          "effectName": "锐利武器",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
+          "beforeStacks": 4,
+          "afterStacks": 5,
+          "stackChange": 1,
+          "expiresAtMs": 77366.668,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 400,
+              "formulaFamily": null,
+              "formulaValue": null
             }
           ]
         },
@@ -9315,6 +9480,39 @@
           ]
         },
         {
+          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_EXPIRED|77366.668|5",
+          "actionId": "han-kibo-signature",
+          "frame": 4642,
+          "effectId": "kibo-passive:520090:520090002",
+          "runtimeEffectId": "kibo-passive:520090:520090002",
+          "sourceElementId": null,
+          "effectName": "锐利武器",
+          "targetKind": "kibo",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
+          "beforeStacks": 5,
+          "afterStacks": null,
+          "stackChange": -5,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 400,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|89283.333|9",
           "actionId": "han-ultimate",
           "frame": 5357,
@@ -9448,7 +9646,7 @@
         }
       ]
     },
-    "summaryHash": "87881cbd0060650f7d353d04884602cb38e52fe83fdf24b196dfbec6bca7ca2b"
+    "summaryHash": "ef73489ade8947f53adcef412095625d60fd75aa5465b44848ebecc70f2abb23"
   },
   "expected": {
     "exact": {
@@ -9471,7 +9669,7 @@
       "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
       "combat.ownerHitCountByActionId.han-star-skill": 7,
       "combat.ownerHitCountByActionId.han-ultimate": 7,
-      "combat.ownerTotalHpDamage": 78158,
+      "combat.ownerTotalHpDamage": 78183,
       "combat.ownerTotalToughnessDamage": 0,
       "resources.targetStateSummary.profileCount": 1,
       "resources.targetStateSummary.eventCount": 9,
@@ -9676,8 +9874,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 78158,
-        "actual": 78158,
+        "expected": 78183,
+        "actual": 78183,
         "passed": true
       },
       {
@@ -10138,6 +10336,6 @@
       }
     ]
   },
-  "replayHash": "6ba16a71ad199b8151a9584bcd83e6d89ad88ab90a3f101c529e2fbaeb11c089",
-  "profileHash": "de3750d15e71a76864279419f83ce255f71510bda1a90862cb4aff935a204b28"
+  "replayHash": "5d3224c71bc82df933b3682824ed556411a881c679810d34497b74d24acf314d",
+  "profileHash": "c572b58c6e73b8d48d0a4e26326c5e70ff46ce1a7c8886408739a138387b2b22"
 }

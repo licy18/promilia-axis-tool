@@ -1000,11 +1000,11 @@ describe('M10-B1 Ruby character combat profile', () => {
             totalToughnessDamage: 464,
           },
         },
-        ownerTotalHpDamage: 164509,
-        ownerTotalToughnessDamage: 2190,
+        ownerTotalHpDamage: 164523,
+        ownerTotalToughnessDamage: 2198,
         enemy: {
           initialHp: 862800,
-          finalHp: 698197,
+          finalHp: 698183,
         },
       },
       effects: {

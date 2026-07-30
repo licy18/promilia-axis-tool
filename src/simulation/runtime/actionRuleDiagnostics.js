@@ -4,6 +4,7 @@ import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchM
 import { getVerifiedCombatActionMapping } from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
 import { isSwitchTriggeredDerivedAction } from '../generation/switchTriggeredActionGeneration';
+import { createVerifiedKiboCooldownModifierSession } from '../mechanics/verifiedKiboCooldownModifierSession';
 
 export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
   'AzPrActionRuleDiagnostics';
@@ -26,6 +27,8 @@ export const ACTION_RULE_CODES = Object.freeze({
   JOINT_ATTACK_PAIR_MISSING: 'joint-attack-pair-missing',
   JOINT_ATTACK_FRAME_MISMATCH: 'joint-attack-frame-mismatch',
   STAR_CARRY_SWITCH_TRIGGER_REQUIRED: 'star-carry-switch-trigger-required',
+  KIBO_PASSIVE_SKILL_TAG_UNRESOLVED:
+    'kibo-passive-cooldown-skill-tag-unresolved',
 });
 
 export const ACTION_RULE_STATUSES = Object.freeze({
@@ -36,17 +39,13 @@ export const ACTION_RULE_STATUSES = Object.freeze({
 export function createActionRuleDiagnostics({
   scenario = {},
   cooldownEvaluationAdapter = null,
+  externallyBlockedActionIds = [],
 } = {}) {
   const actions = [...(scenario.actions ?? [])].sort(compareActions);
-  const cooldownEvaluation = createSkillCooldownEvaluation(actions, {
-    scenario,
-    cooldownEvaluationAdapter,
-  });
-  const diagnostics = [
+  const nonCooldownDiagnostics = [
     ...createLaneOverlapDiagnostics(actions),
     ...createSwitchFrameConflictDiagnostics(actions, scenario.time?.fps),
     ...createStandaloneStarCarryDiagnostics(actions),
-    ...cooldownEvaluation.diagnostics,
     ...createSkillSpPreconditionDiagnostics(
       actions,
       scenario.actors ?? [],
@@ -57,6 +56,24 @@ export function createActionRuleDiagnostics({
       actions,
       scenario.actors ?? [],
       scenario.time?.fps
+    ),
+  ];
+  const preblockedActionIds = new Set([
+    ...externallyBlockedActionIds.map(String),
+    ...nonCooldownDiagnostics
+      .filter(item => item.status === ACTION_RULE_STATUSES.VIOLATED)
+      .map(item => String(item.actionId)),
+  ]);
+  const cooldownEvaluation = createSkillCooldownEvaluation(actions, {
+    scenario,
+    cooldownEvaluationAdapter,
+    preblockedActionIds,
+  });
+  const diagnostics = [
+    ...nonCooldownDiagnostics,
+    ...cooldownEvaluation.diagnostics,
+    ...createKiboCooldownSessionDiagnostics(
+      cooldownEvaluation.cooldownModifierSession
     ),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
@@ -90,7 +107,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 14,
+      ruleCount: 15,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -99,6 +116,7 @@ export function createActionRuleDiagnostics({
         .length,
       affectedActionCount: affectedActionIds.length,
       affectedActionIds,
+      externallyBlockedActionCount: externallyBlockedActionIds.length,
       laneOverlapCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.LANE_OVERLAP
       ).length,
@@ -139,6 +157,9 @@ export function createActionRuleDiagnostics({
         readinessTimeline.summary.cooldownModifiedWindowCount,
       appliedToSimulationResults: false,
     },
+    acceptedSkillStartTransitions:
+      cooldownEvaluation.acceptedSkillStartTransitions,
+    cooldownModifierSession: cooldownEvaluation.cooldownModifierSession,
     appliedToSimulationResults: false,
   };
 }
@@ -436,8 +457,7 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
             relativeStartFrame,
             suggestedStartMs:
               Number(action.startMs) +
-              ((tooEarly ? linkWindow.startFrame : latestStartFrame) *
-                1000) /
+              ((tooEarly ? linkWindow.startFrame : latestStartFrame) * 1000) /
                 (Number(fps) || 60),
             editFieldKey: 'startMs',
           },
@@ -698,13 +718,21 @@ function createSwitchFrameConflictDiagnostics(actions, fps = 60) {
 
 function createSkillCooldownEvaluation(
   actions,
-  { scenario = null, cooldownEvaluationAdapter = null } = {}
+  {
+    scenario = null,
+    cooldownEvaluationAdapter = null,
+    preblockedActionIds = new Set(),
+  } = {}
 ) {
   const cooldownStateBySkillOwner = new Map();
   const diagnostics = [];
   const snapshotsByActionId = new Map();
   const cooldownWindows = [];
-  for (const action of actions) {
+  const acceptedSkillStartTransitions = [];
+  const cooldownModifierSession = createVerifiedKiboCooldownModifierSession({
+    scenario,
+  });
+  for (const [actionOrderIndex, action] of actions.entries()) {
     if (
       ![ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action.type) ||
       !action.actorId ||
@@ -712,14 +740,39 @@ function createSkillCooldownEvaluation(
     ) {
       continue;
     }
-    const baseCooldown = createSkillCooldownRequirement(action);
-    if (!baseCooldown) {
+    if (preblockedActionIds.has(String(action.id))) {
       continue;
     }
     const ownerKind =
       action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor';
     const ownerId = ownerKind === 'kibo' ? action.kiboId : action.actorId;
-    const evaluation = createActionCooldownEvaluation({
+    const baseCooldown = createSkillCooldownRequirement(action);
+    if (!baseCooldown) {
+      const cooldownPolicy = {
+        setCd: false,
+        source: 'no-positive-cooldown-requirement',
+      };
+      const passiveTransitions = cooldownModifierSession.onActionAccepted({
+        action,
+        ownerKind,
+        ownerId,
+        actionOrderIndex,
+        cooldownPolicy,
+      });
+      acceptedSkillStartTransitions.push(
+        createAcceptedSkillStartTransition({
+          action,
+          ownerKind,
+          ownerId,
+          actionOrderIndex,
+          cooldownPolicy,
+          cooldownWindowId: null,
+          passiveTransitions,
+        })
+      );
+      continue;
+    }
+    let evaluation = createActionCooldownEvaluation({
       action,
       ownerKind,
       ownerId,
@@ -731,14 +784,24 @@ function createSkillCooldownEvaluation(
     if (!evaluation) {
       continue;
     }
+    const verifiedKiboEvaluation = cooldownModifierSession.evaluate({
+      action,
+      ownerKind,
+      ownerId,
+      baseCooldown: evaluation.base,
+      currentEffectiveCooldown: evaluation.effective,
+    });
+    evaluation = applyVerifiedKiboCooldownEvaluation({
+      evaluation,
+      verifiedKiboEvaluation,
+    });
     const cooldown = {
       ...baseCooldown,
       cooldownMs: evaluation.effective.durationMs,
       cooldownCount: evaluation.effective.chargeCount,
       evaluation,
     };
-    const cooldownIdentity =
-      cooldown.source?.subSkillId ?? action.skillId;
+    const cooldownIdentity = cooldown.source?.subSkillId ?? action.skillId;
     const key = `${ownerKind}|${ownerId}|${cooldownIdentity}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
@@ -839,7 +902,29 @@ function createSkillCooldownEvaluation(
       trackingStatus: 'applied-to-readiness',
       appliedToSimulationResults: false,
     };
+    const cooldownPolicy = {
+      setCd: true,
+      source: cooldown.source?.sourceKind ?? 'positive-cooldown-requirement',
+    };
+    const passiveTransitions = cooldownModifierSession.onActionAccepted({
+      action,
+      ownerKind,
+      ownerId,
+      actionOrderIndex,
+      cooldownPolicy,
+    });
+    const acceptedSkillStartTransition = createAcceptedSkillStartTransition({
+      action,
+      ownerKind,
+      ownerId,
+      actionOrderIndex,
+      cooldownPolicy,
+      cooldownWindowId: window.windowId,
+      passiveTransitions,
+    });
+    window.acceptedSkillStartTransition = acceptedSkillStartTransition;
     cooldownWindows.push(window);
+    acceptedSkillStartTransitions.push(acceptedSkillStartTransition);
     snapshotsByActionId.set(
       action.id,
       createCooldownReadinessSnapshot({
@@ -857,6 +942,8 @@ function createSkillCooldownEvaluation(
   return {
     diagnostics,
     snapshotsByActionId,
+    acceptedSkillStartTransitions,
+    cooldownModifierSession: cooldownModifierSession.snapshot(),
     cooldownWindows: cooldownWindows.sort(
       (left, right) =>
         left.startMs - right.startMs ||
@@ -864,6 +951,110 @@ function createSkillCooldownEvaluation(
         left.windowId.localeCompare(right.windowId)
     ),
   };
+}
+
+function applyVerifiedKiboCooldownEvaluation({
+  evaluation,
+  verifiedKiboEvaluation,
+}) {
+  if (
+    !verifiedKiboEvaluation ||
+    verifiedKiboEvaluation.status ===
+      'verified-kibo-cooldown-modifier-not-applicable'
+  ) {
+    return evaluation;
+  }
+  const effectiveDurationMs = Number(
+    verifiedKiboEvaluation.effectiveDurationMs
+  );
+  const durationChanged =
+    Number.isFinite(effectiveDurationMs) &&
+    effectiveDurationMs !== evaluation.effective.durationMs;
+  const modifiers = [
+    ...(evaluation.modifiers ?? []),
+    ...(verifiedKiboEvaluation.modifiers ?? []),
+  ];
+  return {
+    ...evaluation,
+    status:
+      durationChanged || modifiers.length > 0
+        ? 'cooldown-evaluation-adapted'
+        : evaluation.status,
+    upstreamStatus: evaluation.status,
+    effective: {
+      ...evaluation.effective,
+      durationMs: Number.isFinite(effectiveDurationMs)
+        ? effectiveDurationMs
+        : evaluation.effective.durationMs,
+    },
+    modifiers,
+    appliedModifierCount: modifiers.length,
+    verifiedKiboPassiveCooldown: verifiedKiboEvaluation,
+  };
+}
+
+function createAcceptedSkillStartTransition({
+  action,
+  ownerKind,
+  ownerId,
+  actionOrderIndex,
+  cooldownPolicy,
+  cooldownWindowId,
+  passiveTransitions,
+}) {
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-accepted-skill-start-transition',
+    status: 'accepted-skill-start',
+    actionId: action.id,
+    actionName: action.name ?? action.id,
+    actionOrderIndex,
+    orderKey: `${Number(action.startMs) || 0}|${String(action.id)}`,
+    timeMs: Number(action.startMs) || 0,
+    actorId: action.actorId ?? null,
+    ownerKind,
+    ownerId,
+    kiboId: action.kiboId ?? null,
+    skillId: action.skillId ?? null,
+    cooldownPolicy,
+    cooldownWindowId,
+    passiveTransitions,
+    appliedToSimulationResults: true,
+  };
+}
+
+function createKiboCooldownSessionDiagnostics(session) {
+  return (session?.unresolvedTransitions ?? []).map(transition => ({
+    schemaVersion: 1,
+    id: createDiagnosticId(
+      ACTION_RULE_CODES.KIBO_PASSIVE_SKILL_TAG_UNRESOLVED,
+      transition.actionId,
+      transition.passiveSkillId,
+      transition.sourceElementId
+    ),
+    code: ACTION_RULE_CODES.KIBO_PASSIVE_SKILL_TAG_UNRESOLVED,
+    ruleKey: 'verified-kibo-passive-accepted-skill-start-condition',
+    status: ACTION_RULE_STATUSES.UNRESOLVED,
+    severity: 'warning',
+    actionId: transition.actionId,
+    actionIds: [transition.actionId],
+    actionName: transition.actionName,
+    actorId: transition.actorId,
+    ownerKind: transition.ownerKind,
+    ownerId: transition.ownerId,
+    kiboId: transition.kiboId,
+    timeMs: transition.timeMs,
+    message: `${transition.actionName ?? transition.actionId} 已通过动作准入，但奇波被动 ${transition.passiveSkillId} 的真实 skillTag 无法解析，未增加冷却层数`,
+    source: {
+      sourceKind: 'azpr-kibo-passive-mechanics-catalog',
+      sourceStatus: transition.reason,
+      passiveSkillId: transition.passiveSkillId,
+      sourceElementId: transition.sourceElementId,
+      skillTagSource: transition.skillTagSource,
+      provenance: transition.provenance,
+    },
+    appliedToSimulationResults: true,
+  }));
 }
 
 function createSkillCooldownState(cooldown) {

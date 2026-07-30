@@ -774,7 +774,7 @@
         "combat.ownerHitEventCount": 115,
         "combat.ownerHitTotalHpDamage": 9742,
         "combat.ownerHitTotalToughnessDamage": 1766,
-        "combat.ownerTotalHpDamage": 699322,
+        "combat.ownerTotalHpDamage": 699319,
         "combat.ownerTotalToughnessDamage": 0,
         "combat.enemy.initialHp": 862800,
         "combat.enemy.finalHp": 0,
@@ -782,13 +782,19 @@
         "combat.ownerHitSummaryByActionId.normal-a3.frames": [2373],
         "combat.ownerHitSummaryByActionId.normal-a3.totalHpDamage": 40,
         "combat.ownerHitSummaryByActionId.normal-a4.hitCount": 4,
-        "combat.ownerHitSummaryByActionId.normal-a4.frames": [2412, 2416, 2420, 2424],
+        "combat.ownerHitSummaryByActionId.normal-a4.frames": [
+          2412, 2416, 2420, 2424
+        ],
         "combat.ownerHitSummaryByActionId.normal-a4.totalHpDamage": 280,
         "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.hitCount": 2,
-        "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.frames": [2255, 2309],
+        "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.frames": [
+          2255, 2309
+        ],
         "combat.ownerHitSummaryByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.totalHpDamage": 448,
         "combat.ownerHitSummaryByActionId.jade-perfect-parry.hitCount": 2,
-        "combat.ownerHitSummaryByActionId.jade-perfect-parry.frames": [3031, 3096],
+        "combat.ownerHitSummaryByActionId.jade-perfect-parry.frames": [
+          3031, 3096
+        ],
         "combat.ownerHitSummaryByActionId.jade-perfect-parry.totalToughnessDamage": 102,
         "resources.thresholdClearCount": 1,
         "resources.transformCount": 1,
@@ -796,11 +802,11 @@
         "resources.tuningMarkAcquireByActionId.threshold-charged.eventCount": 1,
         "resources.tuningMarkAcquireByActionId.threshold-charged.totalDelta": 2,
         "resources.actorSpByActorId.actor-101010.initialValue": 100,
-        "resources.actorSpByActorId.actor-101010.currentValue": 35.35611,
+        "resources.actorSpByActorId.actor-101010.currentValue": 35.418732,
         "resources.actorSpByActorId.actor-101010.autoRecovery.0.reason": "verified-auto-sp-background",
         "resources.actorSpByActorId.actor-101010.autoRecovery.0.totalChange": 1.904298,
         "resources.actorSpByActorId.actor-101010.autoRecovery.1.reason": "verified-auto-sp-foreground",
-        "resources.actorSpByActorId.actor-101010.autoRecovery.1.totalChange": 19.953224,
+        "resources.actorSpByActorId.actor-101010.autoRecovery.1.totalChange": 20.015864,
         "resources.actorSpByActorId.actor-101010.actionTransactions.0.actionId": "ultimate-refresh",
         "resources.actorSpByActorId.actor-101010.actionTransactions.0.reason": "verified-skill-cost",
         "resources.actorSpByActorId.actor-101010.actionTransactions.0.beforeValue": 100,
@@ -810,24 +816,32 @@
         "resources.ownerActorSpTransactionsByActionId.normal-a3.frames": [2373],
         "resources.ownerActorSpTransactionsByActionId.normal-a3.totalChange": 0.159897,
         "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount": 4,
-        "resources.ownerActorSpTransactionsByActionId.normal-a4.frames": [2412, 2416, 2420, 2424],
+        "resources.ownerActorSpTransactionsByActionId.normal-a4.frames": [
+          2412, 2416, 2420, 2424
+        ],
         "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange": 1,
         "resources.ownerActorSpTransactionsByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.eventCount": 0,
         "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.eventCount": 2,
-        "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.frames": [3031, 3096],
+        "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.frames": [
+          3031, 3096
+        ],
         "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.totalChange": 0.339996,
         "resources.kiboSpBySlotId.team-slot-1.kiboId": 500003,
         "resources.kiboSpBySlotId.team-slot-1.initialValue": 0,
-        "resources.kiboSpBySlotId.team-slot-1.currentValue": 79.271744,
+        "resources.kiboSpBySlotId.team-slot-1.currentValue": 81.026352,
         "resources.ownerKiboSpTransactionsByActionId.normal-a3.eventCount": 1,
         "resources.ownerKiboSpTransactionsByActionId.normal-a3.frames": [2373],
         "resources.ownerKiboSpTransactionsByActionId.normal-a3.totalChange": 0.609985,
         "resources.ownerKiboSpTransactionsByActionId.normal-a4.eventCount": 4,
-        "resources.ownerKiboSpTransactionsByActionId.normal-a4.frames": [2412, 2416, 2420, 2424],
+        "resources.ownerKiboSpTransactionsByActionId.normal-a4.frames": [
+          2412, 2416, 2420, 2424
+        ],
         "resources.ownerKiboSpTransactionsByActionId.normal-a4.totalChange": 3.919984,
         "resources.ownerKiboSpTransactionsByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.eventCount": 0,
         "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.eventCount": 2,
-        "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.frames": [3031, 3096],
+        "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.frames": [
+          3031, 3096
+        ],
         "resources.ownerKiboSpTransactionsByActionId.jade-perfect-parry.totalChange": 1.299774,
         "effects.passiveApplyCountByActionId.jade-limit-counter": 0,
         "effects.passiveApplyCountByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry": 1,
