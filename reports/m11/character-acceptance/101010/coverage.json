@@ -1,0 +1,181 @@
+{
+  "denominator": {
+    "publicActionCount": 10,
+    "reachableControlCount": 20,
+    "executionFormCount": 21,
+    "verifiedWindowCount": 89,
+    "hitCount": 107,
+    "semanticEffectCount": 121,
+    "excludedControlCount": 6
+  },
+  "runtimeCoverageSummary": {
+    "actionCount": 10,
+    "runtimeReadyActionCount": 10,
+    "executionFormCount": 21,
+    "controlCount": 20,
+    "hitCount": 107,
+    "rawEffectCount": 273,
+    "semanticEffectCount": 121,
+    "resourceProfileCount": 1,
+    "resourceTransactionCount": 30,
+    "thresholdTransitionCount": 1,
+    "targetStateProfileCount": 0,
+    "targetStateTransactionCount": 0,
+    "conditionalHitGroupCount": 0,
+    "runtimeEffectBindingCount": 0,
+    "passiveCount": 1,
+    "switchTriggerCount": 1,
+    "coverageStatusCounts": {
+      "applied": 11,
+      "not-applicable": 1,
+      "static-evidence-gap": 8
+    }
+  },
+  "dimensions": {
+    "action-form": {
+      "total": 21,
+      "passed": 16,
+      "blocked": 5,
+      "notApplicable": 0
+    },
+    "attack-input-chain": {
+      "total": 2,
+      "passed": 0,
+      "blocked": 2,
+      "notApplicable": 0
+    },
+    "control-window": {
+      "total": 95,
+      "passed": 59,
+      "blocked": 36,
+      "notApplicable": 0
+    },
+    "effect": {
+      "total": 121,
+      "passed": 1,
+      "blocked": 120,
+      "notApplicable": 0
+    },
+    "hit": {
+      "total": 107,
+      "passed": 72,
+      "blocked": 35,
+      "notApplicable": 0
+    },
+    "input-timing": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "passive": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "public-action": {
+      "total": 10,
+      "passed": 6,
+      "blocked": 4,
+      "notApplicable": 0
+    },
+    "resource-profile": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "resource-transaction": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "stat-dependency": {
+      "total": 1,
+      "passed": 0,
+      "blocked": 1,
+      "notApplicable": 0
+    },
+    "state-machine": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "switch-trigger": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "variant-edge": {
+      "total": 27,
+      "passed": 3,
+      "blocked": 24,
+      "notApplicable": 0
+    },
+    "buff-lifecycle": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "scenario-negative": {
+      "total": 1,
+      "passed": 0,
+      "blocked": 1,
+      "notApplicable": 0
+    },
+    "critical": {
+      "total": 9,
+      "passed": 5,
+      "blocked": 4,
+      "notApplicable": 0
+    },
+    "controlled-actor": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "hit-override": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "window-boundary": {
+      "total": 1,
+      "passed": 0,
+      "blocked": 1,
+      "notApplicable": 0
+    },
+    "scenario-positive": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "resource-boundary": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    },
+    "persistence-replay": {
+      "total": 1,
+      "passed": 1,
+      "blocked": 0,
+      "notApplicable": 0
+    }
+  },
+  "unnamedSecondaryPassive": {
+    "reason": "unnamed-secondary-passive-not-implemented-current-client",
+    "recordCount": 1,
+    "records": [
+      "not-applicable:semantic-gap:dc17bd374ee5fc884e75"
+    ]
+  }
+}

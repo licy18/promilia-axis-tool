@@ -1791,9 +1791,13 @@ M11 输入合同相应增加场景级 `sampled / expected / critical / non-criti
 
 Machine Axis v1 继续通过唯一 canonical core 提供版本化 Schema、语义排程、逐 hit 命中/暴击覆盖、captured roll 和五命令 CLI。R1 补齐正式奇波目录的 122 只奇波/366 个公开动作，合同固定 60 FPS，文件读取失败稳定返回 INPUT=3，异步写出失败稳定返回 RUNTIME=5 并将版本化错误回退到 stdout；资源不足诊断保留 owner、identity、current/required 且不生成失败占轴块。120 秒 fixture 现含三名角色实际切入、红宝石弹药交易和真实奇波动作，API/CLI/Workbench 的 canonical hash 一致。R2 为真实子进程 I/O 用例设置 30 秒测试边界，并由正式夹具测试直接守住验收报告 canonical hash，防止并发负载抖动和陈旧报告再次漏过。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力及六道审计通过，四份 M10 golden 无漂移。M11-B-R2 已在 `8da52fb9daa8d849c14b1d737d0d723e9ab077d5` 通过产品验收；Workbench gzip `375,306B`、总 JS gzip `768,501B` 继续作为对外发布风险。
 
-### M11-C-R1 Visual Verification Workbench 验证完成，等待产品复验（2026-07-30）
+### M11-C Visual Verification Workbench 已通过产品验收（2026-07-30）
 
-Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource/state 索引，并接通 Machine Axis v1 的冷启动导入、精确导出、无效输入保护与逐 hit 命中/暴击编辑。R1 将暴伤、expected 两分支/概率/核心加权值和事件物化状态全部改为直接消费 canonical settlement；标准轴显示 `150%` 与 `6.2 / 6 / 10 / 5% / false`，缺字段显示未知。trace hash 因新增元数据更新为 `017c87abc8087efc`，input/data/evaluation 与玩法 hash 不变；仅三个真实 canonical 重放用例使用局部 30 秒预算。完整 Vitest 153 文件/945 测试、六道审计、production build、63/63 production preview 与 42/42 必需能力通过；Workbench gzip `380,833B`、总 JS gzip `800,681B` 继续只作为对外发布风险。当前停在 M11-C-R1 产品复验点，不启动 M11-D/M12、第四角色、包体优化或未验收奇波机制接入。
+Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource/state 索引，并接通 Machine Axis v1 的冷启动导入、精确导出、无效输入保护与逐 hit 命中/暴击编辑。暴伤、expected 两分支/概率/核心加权值和事件物化状态均直接消费 canonical settlement；标准轴显示 `150%` 与 `6.2 / 6 / 10 / 5% / false`，缺字段显示未知。M11-C 已在 `308dd07fbbb8fe0759062e9dcc02c65b0fd46115` 通过产品验收并进入 M11-D；包体超限和纯性能抖动继续只记录为发布风险。
+
+### M11-D 角色机制验收协议已实现，等待产品验收（2026-07-30）
+
+版本化协议现从 canonical golden、Machine Axis 重放、Workbench 往返、场景矩阵、缺口 ledger 与产品记录派生成熟度，canonical core 同时暴露优化资格门禁。小玉、红宝石、寒悠悠的机器与自动可视证据均已落盘，但产品可视签收与功能矩阵仍有阻断，因此三者都保持 `runtime-integrated`、不得进入优化器；无名第二被动继续按当前客户端未实装记为 N/A。
 
 ## 10. 文档维护规则
 

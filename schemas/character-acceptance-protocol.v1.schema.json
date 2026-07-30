@@ -1,0 +1,509 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azpr.local/schemas/character-acceptance-protocol.v1.schema.json",
+  "title": "AzPr Character Acceptance Protocol v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractName",
+    "kind",
+    "protocolIdentity",
+    "owner",
+    "source",
+    "evidence",
+    "matrix",
+    "coverage",
+    "ledger",
+    "notApplicableRecords",
+    "maturity",
+    "validation",
+    "manifestHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "contractName": {
+      "const": "AzPrCharacterAcceptanceProtocol"
+    },
+    "kind": {
+      "const": "azpr-character-acceptance-manifest"
+    },
+    "protocolIdentity": {
+      "const": "m11-d-character-acceptance-v1"
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ownerId",
+        "ownerName"
+      ],
+      "properties": {
+        "ownerId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ownerName": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "profileIdentity",
+        "profileHash",
+        "profileValidationStatus",
+        "sourcePackageHash"
+      ],
+      "properties": {
+        "profileIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profileHash": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profileValidationStatus": {
+          "const": "character-combat-profile-valid"
+        },
+        "sourcePackageHash": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "canonicalGoldens",
+        "machineScenarios",
+        "productVisualAcceptance"
+      ],
+      "properties": {
+        "canonicalGoldens": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/golden"
+          }
+        },
+        "machineScenarios": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/scenario"
+          }
+        },
+        "productVisualAcceptance": {
+          "$ref": "#/$defs/productAcceptance"
+        }
+      },
+      "additionalProperties": false
+    },
+    "matrix": {
+      "type": "object",
+      "required": [
+        "requirements",
+        "summary"
+      ],
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirement"
+          }
+        },
+        "summary": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object"
+    },
+    "ledger": {
+      "type": "object",
+      "required": [
+        "records",
+        "summary"
+      ],
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ledger"
+          }
+        },
+        "summary": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "notApplicableRecords": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/notApplicable"
+      }
+    },
+    "maturity": {
+      "$ref": "#/$defs/maturity"
+    },
+    "validation": {
+      "type": "object"
+    },
+    "manifestHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$"
+    }
+  },
+  "$defs": {
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input",
+        "data",
+        "trace",
+        "evaluation"
+      ],
+      "properties": {
+        "input": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "data": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "trace": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "evaluation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{16}$"
+        }
+      }
+    },
+    "golden": {
+      "type": "object",
+      "required": [
+        "evidenceIdentity",
+        "reportPath",
+        "status",
+        "replayHash",
+        "summaryHash",
+        "canonicalHashes",
+        "assertionCount"
+      ],
+      "properties": {
+        "evidenceIdentity": {
+          "type": "string"
+        },
+        "reportPath": {
+          "type": "string"
+        },
+        "status": {
+          "const": "passed"
+        },
+        "replayHash": {
+          "type": "string"
+        },
+        "summaryHash": {
+          "type": "string"
+        },
+        "canonicalHashes": {
+          "$ref": "#/$defs/hashes"
+        },
+        "assertionCount": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "scenario": {
+      "type": "object",
+      "required": [
+        "scenarioIdentity",
+        "fixturePath",
+        "status",
+        "stableReplay",
+        "workbenchRoundTrip",
+        "canonicalHashes"
+      ],
+      "properties": {
+        "scenarioIdentity": {
+          "type": "string"
+        },
+        "fixturePath": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed"
+          ]
+        },
+        "stableReplay": {
+          "type": "boolean"
+        },
+        "workbenchRoundTrip": {
+          "enum": [
+            "passed",
+            "failed"
+          ]
+        },
+        "canonicalHashes": {
+          "$ref": "#/$defs/hashes"
+        }
+      },
+      "additionalProperties": true
+    },
+    "productAcceptance": {
+      "type": "object",
+      "required": [
+        "status",
+        "scenarioIdentities",
+        "automatedEvidence"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "accepted",
+            "rejected"
+          ]
+        },
+        "scenarioIdentities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "acceptanceCommit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recordIdentity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "automatedEvidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "scenarioIdentity",
+              "status",
+              "screenshotPath",
+              "screenshotSha256"
+            ],
+            "properties": {
+              "scenarioIdentity": {
+                "type": "string"
+              },
+              "status": {
+                "const": "automated-workbench-import-passed"
+              },
+              "screenshotPath": {
+                "type": "string"
+              },
+              "screenshotSha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "requirement": {
+      "type": "object",
+      "required": [
+        "requirementIdentity",
+        "dimension",
+        "subjectIdentity",
+        "required",
+        "status",
+        "evidenceScenarioIds",
+        "sourceIdentities",
+        "reasons"
+      ],
+      "properties": {
+        "requirementIdentity": {
+          "type": "string"
+        },
+        "dimension": {
+          "type": "string"
+        },
+        "subjectIdentity": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "blocked",
+            "not-applicable"
+          ]
+        },
+        "evidenceScenarioIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceIdentities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "ledger": {
+      "type": "object",
+      "required": [
+        "recordIdentity",
+        "status",
+        "reason",
+        "sourceIdentities",
+        "blocking"
+      ],
+      "properties": {
+        "recordIdentity": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "runtime-evidence-required",
+            "static-evidence-gap",
+            "unknown-formula"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "sourceIdentities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blocking": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "notApplicable": {
+      "type": "object",
+      "required": [
+        "recordIdentity",
+        "status",
+        "reason",
+        "sourceIdentities"
+      ],
+      "properties": {
+        "recordIdentity": {
+          "type": "string"
+        },
+        "status": {
+          "const": "not-applicable"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "sourceIdentities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "maturity": {
+      "type": "object",
+      "required": [
+        "currentState",
+        "earnedStates",
+        "optimizationReady",
+        "facts",
+        "gates",
+        "blockers"
+      ],
+      "properties": {
+        "currentState": {
+          "anyOf": [
+            {
+              "enum": [
+                "extracted",
+                "runtime-integrated",
+                "visually-accepted",
+                "optimization-ready"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "earnedStates": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "extracted",
+              "runtime-integrated",
+              "visually-accepted",
+              "optimization-ready"
+            ]
+          }
+        },
+        "optimizationReady": {
+          "type": "boolean"
+        },
+        "facts": {
+          "type": "object"
+        },
+        "gates": {
+          "type": "object"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

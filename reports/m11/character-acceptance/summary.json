@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "kind": "m11-d-character-acceptance-protocol-report",
+  "baselineCommit": "308dd07fbbb8fe0759062e9dcc02c65b0fd46115",
+  "status": "implementation-complete-awaiting-product-acceptance",
+  "protocolIdentity": "m11-d-character-acceptance-v1",
+  "owners": [
+    {
+      "ownerId": 101003,
+      "ownerName": "寒悠悠",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 135,
+      "matrix": {
+        "requirementCount": 243,
+        "requiredCount": 243,
+        "passedCount": 132,
+        "blockedCount": 111,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 111,
+          "passed": 132
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 11,
+          "action-form": 14,
+          "attack-input-chain": 1,
+          "buff-lifecycle": 1,
+          "conditional-hit-group": 2,
+          "control-window": 57,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 40,
+          "hit": 73,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "runtime-effect-binding": 6,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "target-state-profile": 1,
+          "target-state-transaction": 7,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "f21054a145cbae24",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "536c0c644a1f4c71",
+        "data": "3918a166ded263d5",
+        "trace": "ab94789246358651",
+        "evaluation": "4c63c4f319819d6e"
+      }
+    },
+    {
+      "ownerId": 101010,
+      "ownerName": "涂山小玉",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 339,
+      "matrix": {
+        "requirementCount": 407,
+        "requiredCount": 407,
+        "passedCount": 174,
+        "blockedCount": 233,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 233,
+          "passed": 174
+        },
+        "dimensionCounts": {
+          "action-form": 21,
+          "attack-input-chain": 2,
+          "buff-lifecycle": 1,
+          "control-window": 95,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 121,
+          "hit": 107,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "resource-profile": 1,
+          "resource-transaction": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "state-machine": 1,
+          "switch-trigger": 1,
+          "variant-edge": 27,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "7d76b4052c5e5f7c",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "0e47ad979b3435d3",
+        "data": "b876395e3c5dd8a4",
+        "trace": "04a2619176b027ca",
+        "evaluation": "0fd60b7a5e36bf3f"
+      }
+    },
+    {
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 575,
+      "matrix": {
+        "requirementCount": 709,
+        "requiredCount": 709,
+        "passedCount": 185,
+        "blockedCount": 524,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 524,
+          "passed": 185
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 3,
+          "action-form": 24,
+          "attack-input-chain": 2,
+          "buff-lifecycle": 1,
+          "control-window": 159,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 59,
+          "hit": 124,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "resource-profile": 1,
+          "resource-transaction": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "variant-edge": 301,
+          "variant-window": 4,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "8b534293b4155d7f",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "96eb19e2597cba9a",
+        "data": "62e80540b9246b8c",
+        "trace": "6cc9d01e738ecf23",
+        "evaluation": "acb7c806efac81fd"
+      }
+    }
+  ],
+  "catalogHash": "214f62a2d0ba1fd0",
+  "summary": {
+    "ownerCount": 3,
+    "runtimeIntegratedCount": 3,
+    "visuallyAcceptedCount": 0,
+    "optimizationReadyCount": 0,
+    "machineScenarioPassCount": 3,
+    "workbenchRoundTripPassCount": 3,
+    "functionalBlockers": 1049,
+    "performanceAndBundleRisksBlocking": false
+  }
+}

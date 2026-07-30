@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "489fa90ffa2f40077779b6dfa7c6508bc8b758a119a17305b0fe398ef09b9e28",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m11-d-103002-visual-acceptance",
+    "name": "M11-D 红宝石可视验收轴",
+    "fps": 60,
+    "durationFrames": 7200,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 101003,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "specialResourcesByActor": [
+        {
+          "actorId": "actor-101010",
+          "characterId": 101010,
+          "actorName": "涂山小玉",
+          "resourceIdentity": "actor:101010:element:101010115",
+          "resourceName": "缘结值",
+          "currentValue": 0,
+          "maxValue": 100,
+          "inputStep": 1,
+          "scenarioConfigurable": true,
+          "baselineStatus": "scenario-configurable-initial-state"
+        },
+        {
+          "actorId": "actor-103002",
+          "characterId": 103002,
+          "actorName": "红宝石",
+          "resourceIdentity": "actor:103002:element:103002047",
+          "resourceName": "弹药",
+          "currentValue": 6,
+          "maxValue": 12,
+          "inputStep": 1,
+          "scenarioConfigurable": true,
+          "baselineStatus": "scenario-configurable-initial-state"
+        }
+      ]
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m11-d-103002-critical-seed"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    }
+  },
+  "actions": [
+    {
+      "id": "103002-critical-sampled-low",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-103002-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 0
+      },
+      "hitOverrides": {
+        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 499
+        }
+      }
+    },
+    {
+      "id": "103002-critical-sampled-boundary",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-103002-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 5
+      },
+      "hitOverrides": {
+        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 500
+        }
+      }
+    },
+    {
+      "id": "103002-critical-expected",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-103002-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 5
+      },
+      "hitOverrides": {
+        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+          "landed": "hit",
+          "criticalMode": "expected"
+        }
+      }
+    },
+    {
+      "id": "103002-critical-critical",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-103002-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 5
+      },
+      "hitOverrides": {
+        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+          "landed": "hit",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "103002-critical-non-critical",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-103002-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 5
+      },
+      "hitOverrides": {
+        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+          "landed": "hit",
+          "criticalMode": "non-critical"
+        }
+      }
+    },
+    {
+      "id": "103002-critical-miss-critical",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-103002-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 5
+      },
+      "hitOverrides": {
+        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+          "landed": "miss",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "ruby-chain-a1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-ruby-normal"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 120
+      }
+    },
+    {
+      "id": "ruby-chain-a2",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "m11-d-ruby-normal"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 0
+      }
+    },
+    {
+      "id": "ruby-chain-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "m11-d-ruby-normal"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 0
+      }
+    },
+    {
+      "id": "ruby-chain-e1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "m11-d-ruby-enhanced"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "after-previous-end",
+        "offsetFrames": 0
+      }
+    }
+  ],
+  "metadata": {
+    "purpose": "M11-D character acceptance visual and critical matrix",
+    "ownerId": 103002,
+    "requiredWorkbenchImport": true,
+    "criticalHitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0"
+  }
+}

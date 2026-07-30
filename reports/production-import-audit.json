@@ -16,6 +16,9 @@
       "e2e/workbench-long-axis.spec.js",
       "e2e/workbench-performance.spec.js",
       "e2e/workbench-production-preview.spec.js",
+      "src/__tests__/character-acceptance/characterAcceptanceCanonicalReplay.test.js",
+      "src/__tests__/character-acceptance/characterAcceptanceProtocol.test.js",
+      "src/__tests__/character-acceptance/generatedCharacterAcceptance.test.js",
       "src/__tests__/data/azprGenerated.test.js",
       "src/__tests__/data/characterCombatHeadlessMigration.test.js",
       "src/__tests__/data/characterCombatProductBoundaries.test.js",
@@ -172,14 +175,15 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 185,
-    "productionReachableCount": 181,
+    "sourceCodeFileCount": 187,
+    "productionReachableCount": 183,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
     "unreferencedCount": 0,
     "productionReachableByArea": {
       "src": 2,
+      "src/character-acceptance": 2,
       "src/data": 5,
       "src/data/generated": 1,
       "src/domain": 45,
@@ -208,6 +212,8 @@
   },
   "productionReachableFiles": [
     "src/App.vue",
+    "src/character-acceptance/characterAcceptanceCatalog.js",
+    "src/character-acceptance/characterAcceptanceProtocol.js",
     "src/data/azprGenerated.js",
     "src/data/generated/verified-sp-unit-runtime.js",
     "src/data/verifiedCombatMechanicsPackage.js",

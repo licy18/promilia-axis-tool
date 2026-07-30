@@ -13,6 +13,11 @@ import {
   validateCombatCriticalScenario,
 } from '../../domain/combatCriticalPolicy';
 import { getInstalledVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
+import {
+  assertCharacterIsOptimizationReady,
+  getCharacterAcceptanceCatalog,
+  getCharacterAcceptanceEntry,
+} from '../../character-acceptance/characterAcceptanceCatalog';
 
 export const CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION = 1;
 export const CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT =
@@ -160,6 +165,18 @@ export function createCanonicalHeadlessCombatCore({
     return createCanonicalCombatExplanation(run, selector);
   }
 
+  function acceptanceCatalog() {
+    return getCharacterAcceptanceCatalog();
+  }
+
+  function acceptanceFor(ownerId) {
+    return getCharacterAcceptanceEntry(ownerId);
+  }
+
+  function assertOptimizationReady(ownerId) {
+    return assertCharacterIsOptimizationReady(ownerId);
+  }
+
   return Object.freeze({
     schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
     contractName: CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT,
@@ -169,6 +186,9 @@ export function createCanonicalHeadlessCombatCore({
     simulate,
     evaluate,
     explain,
+    acceptanceCatalog,
+    acceptanceFor,
+    assertOptimizationReady,
   });
 }
 

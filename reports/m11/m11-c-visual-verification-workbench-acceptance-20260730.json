@@ -3,7 +3,7 @@
   "kind": "m11-c-visual-verification-workbench-acceptance",
   "generatedAt": "2026-07-30T02:46:39.094Z",
   "baseCommit": "8da52fb9daa8d849c14b1d737d0d723e9ab077d5",
-  "status": "r2-verification-complete-awaiting-product-acceptance",
+  "status": "product-accepted-entered-m11-d",
   "canonicalContract": {
     "core": "WORKBENCH_HEADLESS_COMBAT_CORE",
     "traceViewIndex": "memoized-by-canonical-trace-hash",
@@ -108,7 +108,6 @@
     "bundleComposition": "reports/bundle-composition.json"
   },
   "stopBoundary": [
-    "M11-D",
     "M12",
     "fourth-character",
     "bundle-optimization",
@@ -251,5 +250,10 @@
         "non-replayable-result"
       ]
     }
+  },
+  "productAcceptance": {
+    "status": "passed",
+    "baselineCommit": "308dd07fbbb8fe0759062e9dcc02c65b0fd46115",
+    "nextMilestone": "M11-D"
   }
 }

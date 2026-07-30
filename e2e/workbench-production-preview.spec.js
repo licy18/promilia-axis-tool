@@ -9083,6 +9083,109 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   await expect(page.getByTestId('workbench-side-inspector')).toHaveCount(0);
   await expect(timeline).toBeVisible();
 });
+test('[m11-d-character-acceptance-visual-import] imports each owner acceptance fixture through the public Workbench file entry', async ({
+  page,
+}) => {
+  test.setTimeout(300_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.getByTestId('workbench-scenario-bar')).toBeVisible();
+
+  const cases = [
+    {
+      ownerId: 101010,
+      fixturePath: 'fixtures/character-acceptance/101010-visual.json',
+      traceHash: '04a2619176b027ca',
+      actionId: 'xiaoyu-burst-a1',
+      expectedTraceText: 'control 10101001 / sub 1',
+    },
+    {
+      ownerId: 103002,
+      fixturePath: 'fixtures/character-acceptance/103002-visual.json',
+      traceHash: '6cc9d01e738ecf23',
+      actionId: 'ruby-chain-e1',
+      expectedTraceText: 'control 10300201 / sub 1',
+      resourceIdentity: 'actor:103002:element:103002047',
+      resourceText: '6 → 5',
+    },
+    {
+      ownerId: 101003,
+      fixturePath: 'fixtures/character-acceptance/101003-visual.json',
+      traceHash: 'ab94789246358651',
+      actionId: 'han-firework-charged',
+      expectedTraceText: 'control 10100310 / sub 0',
+    },
+  ];
+
+  for (const entry of cases) {
+    const fixtureText = await readFile(entry.fixturePath, 'utf8');
+    await page.getByTestId('workbench-import-project-file').setInputFiles({
+      name: entry.ownerId + '-m11-d-acceptance.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(fixtureText),
+    });
+    const dialog = page.getByTestId('workbench-machine-axis-dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByTestId('machine-axis-status')).toContainText(
+      '已导入 Machine Axis',
+      { timeout: 30_000 }
+    );
+
+    const workbench = page.locator('main.workbench');
+    const timeline = page.getByTestId('workbench-timeline-grid-preview');
+    await expect(workbench).toHaveAttribute(
+      'data-canonical-trace-hash',
+      entry.traceHash
+    );
+    await expect(workbench).toHaveAttribute(
+      'data-machine-axis-import-active',
+      'true'
+    );
+    await dialog.getByTestId('workbench-close-machine-axis').click();
+    await expect(dialog).toHaveCount(0);
+
+    const action = timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="' +
+        entry.actionId +
+        '"]'
+    );
+    await expect(action).toHaveCount(1);
+    await action.scrollIntoViewIfNeeded();
+    await action.click();
+    const panel = await openActionInspectorPanel(
+      page,
+      'canonical-trace',
+      entry.actionId
+    );
+    const inspector = panel.getByTestId('workbench-canonical-trace-inspector');
+    await expect(inspector).toContainText(entry.expectedTraceText);
+    await expect(
+      inspector.getByTestId('canonical-trace-hit-row').first()
+    ).toBeVisible();
+    if (entry.resourceIdentity) {
+      await expect(
+        inspector.locator(
+          '[data-testid="canonical-trace-resource-event"][data-resource-identity="' +
+            entry.resourceIdentity +
+            '"]'
+        )
+      ).toContainText(entry.resourceText);
+    }
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({
+      path:
+        'reports/m11-d-character-acceptance-' +
+        entry.ownerId +
+        '-desktop.png',
+    });
+    await page.getByTestId('workbench-close-side-inspector').click();
+    await expect(page.getByTestId('workbench-side-inspector')).toHaveCount(0);
+  }
+});
+
 function formatRuntimeFrameLabel(frameIndex) {
   return `${Math.floor(frameIndex / 60)}s${frameIndex % 60}f`;
 }

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceCatalog",
+  "kind": "azpr-character-acceptance-catalog",
+  "protocolIdentity": "m11-d-character-acceptance-v1",
+  "entries": [
+    {
+      "ownerId": 101003,
+      "ownerName": "寒悠悠",
+      "maturityState": "runtime-integrated",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated"
+      ],
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 135,
+      "matrixRequiredCount": 243,
+      "matrixPassedCount": 132,
+      "manifestHash": "f21054a145cbae24",
+      "profileHash": "de3750d15e71a76864279419f83ce255f71510bda1a90862cb4aff935a204b28",
+      "visualScenarioIds": [
+        "m11-d-101003-visual-acceptance"
+      ]
+    },
+    {
+      "ownerId": 101010,
+      "ownerName": "涂山小玉",
+      "maturityState": "runtime-integrated",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated"
+      ],
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 339,
+      "matrixRequiredCount": 407,
+      "matrixPassedCount": 174,
+      "manifestHash": "7d76b4052c5e5f7c",
+      "profileHash": "9ffbddd8b8a560707d9518907f4e9df1d58ffd12cb14c8caea5cff851db21027",
+      "visualScenarioIds": [
+        "m11-d-101010-visual-acceptance"
+      ]
+    },
+    {
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "maturityState": "runtime-integrated",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated"
+      ],
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 575,
+      "matrixRequiredCount": 709,
+      "matrixPassedCount": 185,
+      "manifestHash": "8b534293b4155d7f",
+      "profileHash": "93b39de764d1ff691af12df89932e4f9818d33a419445b96ec68d401777d99e4",
+      "visualScenarioIds": [
+        "m11-d-103002-visual-acceptance"
+      ]
+    }
+  ],
+  "summary": {
+    "ownerCount": 3,
+    "maturityCounts": {
+      "runtime-integrated": 3
+    },
+    "optimizationReadyCount": 0
+  },
+  "catalogHash": "214f62a2d0ba1fd0"
+}
