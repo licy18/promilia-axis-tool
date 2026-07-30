@@ -158,8 +158,6 @@ const AUDIT_TEST_PATHS = [
   'src/__tests__/data/characterCombatHeadlessMigration.test.js',
 ];
 
-await main();
-
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   assertTrackedTreeClean();
@@ -1264,3 +1262,5 @@ async function walkFiles(root) {
   }
   return files;
 }
+
+await main();
