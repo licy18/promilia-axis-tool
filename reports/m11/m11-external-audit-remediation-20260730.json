@@ -229,9 +229,11 @@
     "uiE2eReason": "External remediation scope is the headless core and packaging boundary only."
   },
   "postCommitPackaging": {
-    "status": "required-after-remediation-commit",
+    "status": "fulfilled-by-enclosing-audit-package",
     "newPackageOnly": true,
     "preserveRejectedPackage": true,
+    "responseDocument": "AUDIT_RESPONSE.md",
+    "internalAcceptance": "audit/internal-acceptance.json",
     "requiredSmokeCommands": [
       "catalog",
       "validate",

@@ -36,4 +36,4 @@
 - Production build 通过；既有 Sass、循环 chunk 和大 chunk 警告仅记录，不属于本轮整改。
 - 标准 120 秒轴 canonical hash：`a8dd9bfcdf4fad86 / 4e36871189392dc1 / 75fd655bba918b53 / 0b410dc9255d2654`。
 
-整改提交后将从该提交生成新的 merged-only 审计目录与 ZIP，执行干净解压 manifest 校验及 `catalog / validate / simulate / explain / compare` 五命令冒烟。旧包不会覆盖。
+本对照表会随 merged-only 审计包一并交付。包生成后必须执行干净解压 manifest 校验及 `catalog / validate / simulate / explain / compare` 五命令冒烟；旧包不会覆盖。正式逐项答复见包根目录 `AUDIT_RESPONSE.md`。

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "m11-headless-remediation-internal-acceptance",
+  "acceptedOn": "2026-07-30",
+  "reviewedCodeCommit": "62273af158c7a1c303b6768a1ab409d5dd5a7b80",
+  "result": "accepted-for-external-rereview",
+  "externalApproval": false,
+  "blockingFindings": [],
+  "verification": {
+    "authoritativeHeadlessRegression": {
+      "status": "passed",
+      "fileCount": 17,
+      "testCount": 144,
+      "testTimeoutMs": 30000
+    },
+    "isolatedAxisBoundaryRegression": {
+      "status": "passed",
+      "fileCount": 1,
+      "testCount": 21
+    },
+    "initialDefaultTimeoutRun": {
+      "passedFileCount": 16,
+      "totalFileCount": 17,
+      "passedTestCount": 143,
+      "totalTestCount": 144,
+      "assertionMismatchCount": 0,
+      "timeoutCount": 1,
+      "resolution": "The cold criticalRoll=0 case passed in the isolated boundary run and in the authoritative 30-second-timeout run."
+    },
+    "audits": {
+      "characterCombat": "clean",
+      "verifiedCombat": "clean",
+      "characterAcceptance": "clean",
+      "kiboHeadless": "clean",
+      "productionImports": "clean",
+      "workbenchData": "clean",
+      "actionStatus": "clean",
+      "appliedSourceBindings": "clean"
+    }
+  },
+  "qualification": {
+    "runtimeIntegratedCharacters": 3,
+    "visuallyAcceptedCharacters": 0,
+    "optimizationReadyCharacters": 0,
+    "optimizationReadyKibos": 0,
+    "functionalCharacterBlockers": 887,
+    "priorVisualAcceptanceCarriedForward": false
+  },
+  "remainingBoundaries": {
+    "currentlyEvidenceBlocked": 350,
+    "kiboScenarioAssumptions": 53,
+    "kiboUnresolvedPublicActions": 181,
+    "unknownCrossOwnerSameFrameOrder": "evidence-open",
+    "clientGlobalRngConsumptionSequence": "runtime-evidence-required"
+  },
+  "decision": "The remediation is internally accepted for packaging and external re-review. M11 is not declared externally approved, and M12 remains locked."
+}

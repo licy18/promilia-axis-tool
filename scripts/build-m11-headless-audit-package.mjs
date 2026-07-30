@@ -65,6 +65,30 @@ const EVIDENCE_PATHS = [
     'evidence/m11-headless-integrated-baseline.json',
   ],
   [
+    'reports/m11/m11-external-audit-response-20260730.md',
+    'AUDIT_RESPONSE.md',
+  ],
+  [
+    'reports/m11/m11-external-audit-remediation-20260730.md',
+    'audit/remediation-dispositions.md',
+  ],
+  [
+    'reports/m11/m11-external-audit-remediation-20260730.json',
+    'audit/remediation-dispositions.json',
+  ],
+  [
+    'reports/m11/m11-internal-remediation-acceptance-20260730.json',
+    'audit/internal-acceptance.json',
+  ],
+  [
+    'src/__tests__/machine-axis/axisBoundary.test.js',
+    'audit/regressions/axisBoundary.test.js',
+  ],
+  [
+    'src/__tests__/machine-axis/machineAxisCliProcess.test.js',
+    'audit/regressions/machineAxisCliProcess.test.js',
+  ],
+  [
     'src/data/generated/character-combat-owner-contracts',
     'evidence/generated/character-combat-owner-contracts',
   ],
@@ -899,6 +923,9 @@ async function writePackageDocuments({
     '- `fixtures/`：合并后数据身份绑定的代表性排轴输入。',
     '- `evidence/`：合并后重新生成的角色、奇波、golden、缺口账本和来源定位。',
     '- `audit/`：文件校验、无头边界记录、测试记录和 smoke test。',
+    '- `AUDIT_RESPONSE.md`：针对上一轮 M11-01 至 M11-09 的逐项整改答复与复审请求。',
+    '- `audit/internal-acceptance.json`：本轮独立内部验收结果；不代表外部审计已经批准。',
+    '- `audit/regressions/`：上一轮反例对应的无头边界测试源码，供审计方检查整改覆盖。',
     '',
     '## 快速验证',
     '',
@@ -1050,6 +1077,8 @@ function createAuditRequestDocument({ commit, integratedReport, unresolved }) {
     '# 外部审计需求',
     '',
     `审计对象仅为合并提交 \`${commit}\` 生成的本包。不要以两个阶段分支分别给结论。`,
+    '',
+    '本包是对上一轮 `Request changes` 的复审提交。请先阅读 `AUDIT_RESPONSE.md` 和 `audit/remediation-dispositions.json`，再沿用 M11-01 至 M11-09 编号逐项复测；内部验收不替代外部结论。',
     '',
     '## 必查问题',
     '',
