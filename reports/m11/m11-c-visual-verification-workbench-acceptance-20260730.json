@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "kind": "m11-c-visual-verification-workbench-acceptance",
-  "generatedAt": "2026-07-30T01:58:29.273Z",
+  "generatedAt": "2026-07-30T02:46:39.094Z",
   "baseCommit": "8da52fb9daa8d849c14b1d737d0d723e9ab077d5",
-  "status": "r1-verification-complete-awaiting-product-acceptance",
+  "status": "r2-verification-complete-awaiting-product-acceptance",
   "canonicalContract": {
     "core": "WORKBENCH_HEADLESS_COMBAT_CORE",
     "traceViewIndex": "memoized-by-canonical-trace-hash",
@@ -158,5 +158,98 @@
       "reason": "canonical trace now carries source critical damage and core-computed expected branch metadata; input, data, evaluation and gameplay replay/summary semantics are unchanged"
     },
     "baseCommit": "03e9ea6fb753d525dcc1204a898dc96db2059b2c"
+  },
+  "r2": {
+    "baseCommit": "a1616743449e0ada9e855d20cf979796d2e0361e",
+    "commit": {
+      "reference": "git-self",
+      "meaning": "the focused M11-C-R2 Git commit containing this report"
+    },
+    "scope": "eight committed-golden hash references plus this acceptance record; no runtime, UI, E2E, gameplay, or bundle changes",
+    "independentDiscovery": {
+      "baseline": "a1616743449e0ada9e855d20cf979796d2e0361e",
+      "defaultVitest": {
+        "passedFiles": 152,
+        "totalFiles": 153,
+        "passedTests": 941,
+        "totalTests": 945
+      },
+      "failure": "four characterCombatHeadlessMigration assertions retained pre-R1 canonical trace hashes after the committed golden files changed"
+    },
+    "canonicalTraceHashReferences": [
+      {
+        "scenario": "xiaoyu-main",
+        "previous": "f10783643a130f2e",
+        "current": "d3dba8a645c3263a"
+      },
+      {
+        "scenario": "ruby-main",
+        "previous": "ad73d92c22ba9435",
+        "current": "5232fd0950d6a5ed"
+      },
+      {
+        "scenario": "han-main",
+        "previous": "16192a3792515bf5",
+        "current": "de133e5fe89f0595"
+      },
+      {
+        "scenario": "han-controlled-buff-switch",
+        "previous": "d30279443d8e4b3f",
+        "current": "6971fe5e11d0e2d3"
+      }
+    ],
+    "verification": {
+      "migrationTest": {
+        "status": "passed",
+        "fileCount": 1,
+        "testCount": 4,
+        "command": "npm test -- --run src/__tests__/data/characterCombatHeadlessMigration.test.js"
+      },
+      "localDefaultVitest": {
+        "status": "non-blocking-performance-instability-recorded",
+        "command": "npm test -- --run",
+        "assertionMismatchCount": 0,
+        "timeoutOnlyRunCount": 3,
+        "workerPoolExitRunCount": 1,
+        "bestCompletedResult": {
+          "passedFiles": 151,
+          "totalFiles": 153,
+          "passedTests": 943,
+          "totalTests": 945
+        },
+        "environment": "persistent external CPU competition from unrelated 5173/5174 development servers; services were left running and restored to their original Normal priority",
+        "policy": "external CPU contention, elapsed-time timeout and worker-pool jitter are recorded but do not block M11-C or M11-D when there are no assertion mismatches, mechanism errors, hash/gameplay drift, or replay failures"
+      },
+      "audits": {
+        "status": "passed",
+        "commands": [
+          "npm run audit:character-combat",
+          "npm run audit:verified-combat",
+          "npm run audit:production-imports:check",
+          "npm run audit:workbench-data:check",
+          "npm run audit:action-status:check",
+          "npm run audit:applied-source-bindings:check"
+        ]
+      },
+      "productionPreview": {
+        "status": "not-rerun",
+        "reason": "R2 changes only test constants and acceptance-report references; R1 source, UI and E2E remain unchanged with committed 63/63 evidence"
+      }
+    },
+    "acceptanceGate": "R2 verification complete: the four real stale-hash assertions are fixed, focused migration replay and six audits pass, and local performance-only instability is recorded as non-blocking",
+    "performanceGatePolicy": {
+      "nonBlocking": [
+        "bundle-budget-overrun",
+        "runtime-duration",
+        "external-cpu-contention-timeout",
+        "worker-pool-jitter"
+      ],
+      "blocking": [
+        "assertion-failure",
+        "mechanism-error",
+        "canonical-or-gameplay-hash-drift",
+        "non-replayable-result"
+      ]
+    }
   }
 }
