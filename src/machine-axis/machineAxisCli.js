@@ -17,6 +17,7 @@ const COMMANDS = new Set([
   'simulate',
   'compare',
   'explain',
+  'batch',
 ]);
 const VALUED_OPTIONS = new Set([
   '--input',
@@ -30,6 +31,9 @@ const VALUED_OPTIONS = new Set([
   '--hit',
   '--effect',
   '--frame',
+  '--jobs',
+  '--burst-window-ms',
+  '--seeds',
 ]);
 const OUTPUT_FORMATS = new Set(['json', 'jsonl']);
 const CRITICAL_POLICIES = new Set(Object.values(COMBAT_CRITICAL_POLICIES));
@@ -89,6 +93,9 @@ export function parseCliArguments(argv = []) {
     format: 'json',
     criticalPolicy: null,
     seed: null,
+    jobs: null,
+    burstWindowMs: null,
+    seeds: null,
     selector: {},
   };
   const positional = [];
@@ -143,6 +150,39 @@ export function parseCliArguments(argv = []) {
         };
       }
       options.selector.frame = frame;
+    } else if (flag === '--jobs') {
+      const jobs = Number(value);
+      if (!Number.isInteger(jobs) || jobs < 1) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --jobs: ${value}`,
+        };
+      }
+      options.jobs = jobs;
+    } else if (flag === '--burst-window-ms') {
+      const windowMs = Number(value);
+      if (!Number.isFinite(windowMs) || windowMs <= 0) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --burst-window-ms: ${value}`,
+        };
+      }
+      options.burstWindowMs = windowMs;
+    } else if (flag === '--seeds') {
+      const seeds = parseCsvSeeds(value);
+      if (seeds.length === 0) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --seeds: ${value}`,
+        };
+      }
+      options.seeds = seeds;
     }
   }
   if (!COMMANDS.has(command)) {
@@ -159,6 +199,14 @@ export function parseCliArguments(argv = []) {
       command,
       options,
       message: `Unsupported format: ${options.format}`,
+    };
+  }
+  if (command === 'batch' && options.format === 'jsonl') {
+    return {
+      valid: false,
+      command,
+      options,
+      message: 'batch only supports json output',
     };
   }
   if (
@@ -207,6 +255,13 @@ function takeRequiredOptionValue({ flag, inlineValue, values }) {
   return { valid: true, value: nextValue };
 }
 
+function parseCsvSeeds(value) {
+  return String(value)
+    .split(',')
+    .map(seed => seed.trim())
+    .filter(Boolean);
+}
+
 async function executeCommand(parsed, service, io) {
   const { command, options } = parsed;
   if (command === 'catalog') {
@@ -226,6 +281,24 @@ async function executeCommand(parsed, service, io) {
         applyCliOverrides(left, options),
         applyCliOverrides(right, options)
       ),
+    };
+  }
+  if (command === 'batch') {
+    const [envelope] = await readContracts(options.input, options, io);
+    const value = await service.evaluateBatch(envelope, {
+      jobs: options.jobs,
+      burstWindowMs: options.burstWindowMs,
+      seeds:
+        options.seeds ??
+        (options.seed != null ? [String(options.seed)] : undefined),
+      criticalPolicy: options.criticalPolicy,
+    });
+    return {
+      exitCode:
+        value?.valid === false
+          ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+          : MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value,
     };
   }
   const inputs = await readContracts(options.input, options, io);

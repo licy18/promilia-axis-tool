@@ -186,12 +186,121 @@ describe('Machine Axis CLI', () => {
     );
   });
 
+  it('runs batch evaluation envelopes and reports aggregate summary', async () => {
+    const envelope = {
+      kind: 'azpr-machine-axis-batch',
+      runs: [
+        { label: 'first', axis: cloneFixture() },
+        {
+          label: 'second',
+          axis: cloneFixture(),
+          options: { criticalPolicy: 'expected' },
+        },
+      ],
+    };
+    const harness = createHarness({ stdin: JSON.stringify(envelope) });
+    const exitCode = await runMachineAxisCli(['batch', '-'], harness.io);
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
+    const report = parseJson(harness.output.stdout);
+    expect(report).toMatchObject({
+      kind: 'azpr-machine-axis-batch-evaluation',
+      valid: true,
+      status: 'ok',
+      summary: {
+        runCount: 2,
+        okCount: 2,
+        failedCount: 0,
+        jobs: 4,
+      },
+    });
+    expect(report.runs.map(run => run.label)).toEqual(['first', 'second']);
+    expect(report.runs[1].critical.policy).toBe('expected');
+    expect(harness.output.stderr).toBe('');
+  }, 30_000);
+
+  it('applies CLI jobs, burst window and seeds overrides to a batch', async () => {
+    const envelope = {
+      kind: 'azpr-machine-axis-batch',
+      runs: [{ label: 'sampled', axis: cloneFixture() }],
+    };
+    const harness = createHarness({ stdin: JSON.stringify(envelope) });
+    const exitCode = await runMachineAxisCli(
+      [
+        'batch',
+        '-',
+        '--jobs',
+        '2',
+        '--burst-window-ms',
+        '5000',
+        '--seeds',
+        'seed-a,seed-b',
+      ],
+      harness.io
+    );
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
+    const report = parseJson(harness.output.stdout);
+    expect(report.summary.jobs).toBe(2);
+    expect(report.runs[0]).toMatchObject({
+      mode: 'sampled',
+      seeds: ['seed-a', 'seed-b'],
+      status: 'ok',
+    });
+    expect(report.runs[0].samples).toHaveLength(2);
+    expect(report.runs[0].metrics).toBeUndefined();
+    expect(report.runs[0].sampling.count).toBe(2);
+    expect(report.runs[0].sampling.metrics.hpDamage.count).toBe(2);
+  }, 30_000);
+
+  it('returns validation exit code for malformed batch envelopes', async () => {
+    const harness = createHarness({
+      stdin: JSON.stringify({ kind: 'azpr-machine-axis-batch', runs: [] }),
+    });
+    const exitCode = await runMachineAxisCli(['batch', '-'], harness.io);
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION);
+    const report = parseJson(harness.output.stdout);
+    expect(report).toMatchObject({
+      kind: 'azpr-machine-axis-batch-evaluation',
+      valid: false,
+      status: 'invalid',
+    });
+    expect(
+      report.issues.some(issue => issue.code === 'batch-runs-required')
+    ).toBe(true);
+  }, 30_000);
+
+  it('reads batch envelopes from files and writes structured output', async () => {
+    const envelope = {
+      kind: 'azpr-machine-axis-batch',
+      runs: [{ label: 'file-run', axis: cloneFixture() }],
+    };
+    const harness = createHarness({
+      files: { 'batch.json': JSON.stringify(envelope) },
+    });
+    const exitCode = await runMachineAxisCli(
+      ['batch', 'batch.json', '--output', 'batch-report.json'],
+      harness.io
+    );
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
+    expect(harness.output.stdout).toBe('');
+    const report = parseJson(harness.output.files['batch-report.json']);
+    expect(report.runs[0].label).toBe('file-run');
+    expect(report.summary.okCount).toBe(1);
+  }, 30_000);
+
   it.each([
     ['catalog', '--output'],
     ['catalog', '--output', '--format', 'json'],
     ['validate', '--critical-policy'],
     ['validate', '--input'],
     ['explain', 'axis.json', '--frame', 'nope'],
+    ['batch', '--jobs'],
+    ['batch', '--jobs', '0'],
+    ['batch', '--jobs', 'x'],
+    ['batch', '--burst-window-ms'],
+    ['batch', '--burst-window-ms', '-5'],
+    ['batch', '--seeds'],
+    ['batch', '--seeds', ','],
+    ['batch', '-', '--format', 'jsonl'],
   ])(
     'rejects valued-option usage before reading input or calling the service',
     async (...args) => {

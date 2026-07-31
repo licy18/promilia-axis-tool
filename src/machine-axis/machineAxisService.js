@@ -21,6 +21,7 @@ import { hashCanonicalValue } from '../simulation/headless/canonicalSerializatio
 import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHeadlessCombatCore';
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
+import { createMachineAxisBatchEvaluator } from './machineAxisBatchEvaluator';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -211,6 +212,13 @@ export function createMachineAxisService({
     return createMachineAxisComparison(
       simulate(left, options),
       simulate(right, options)
+    );
+  }
+
+  function evaluateBatch(envelope, options = {}) {
+    return createMachineAxisBatchEvaluator({ service: api }).evaluate(
+      envelope,
+      options
     );
   }
 
@@ -449,7 +457,7 @@ export function createMachineAxisService({
     };
   }
 
-  return Object.freeze({
+  const api = Object.freeze({
     schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
     catalog,
@@ -459,9 +467,11 @@ export function createMachineAxisService({
     evaluate,
     explain,
     compare,
+    evaluateBatch,
     prepare,
     prepareValidated,
   });
+  return api;
 }
 
 function stabilizeMachineAxisScheduling({ contract, project, templates, core }) {
