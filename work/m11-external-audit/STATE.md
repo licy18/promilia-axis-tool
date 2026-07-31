@@ -1,8 +1,8 @@
-# M11-R2 External Audit Remediation
+# M11 External Audit Closure
 
 ## Goal
 
-Close the short rereview findings against `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6`: upstream M11-09 source ordering, valued CLI options, and canonical warning paths. M11-01 through M11-08 remain externally closed.
+Preserve the externally accepted M11 headless core baseline and its evidence boundaries. The final reviewed commit is `64603640bda82d6ab3d869e98d70696f73caeef7`; M12 remains locked.
 
 ## Branch And Worktree
 
@@ -13,6 +13,8 @@ Close the short rereview findings against `6601ebd1d53748fc4eaeea3ecf3dec9fc891c
 
 ## Current Status
 
+- Final external short review passed with no new P0-P3 findings.
+- M11-01 through M11-09 and the R2 CLI/path follow-ups are externally closed.
 - Raw Machine Axis array order is recorded before compile and propagated as source sequence through derived actions and runtime.
 - Renaming only action IDs preserves Kibo then actor execution and produces `468 / 468` HP damage in the external counterexample.
 - CLI valued-option failures return exit 2 before I/O; warning paths resolve to plan indexes 1 and 15.
@@ -22,16 +24,17 @@ Close the short rereview findings against `6601ebd1d53748fc4eaeea3ecf3dec9fc891c
 - Headless focused regression is 22 files / 212 tests passed; axis boundary is 23/23 and Machine Axis boundary/CLI is 40/40.
 - Eight deterministic audits are clean and production build passes.
 - Independent acceptance of `2c5aaf6a46a0...` found 10 stale test-only migration hash references. They now match the already committed authoritative golden reports; no runtime or golden file changed, and the final 22/212 regression passes.
-- Remediation disposition is recorded in `reports/m11/m11-external-audit-remediation-20260730.{json,md}`.
-- Next: commit the independent acceptance follow-up, then build and clean-room smoke a new merged-only audit package and run the external counterexample against its extraction.
+- Remediation disposition is recorded in `reports/m11/m11-external-audit-remediation-20260730.{json,md}`; final closure is recorded in `reports/m11/m11-external-audit-final-acceptance-20260731.json`.
+- The existing merged-only audit package and SHA remain unchanged.
+- External acceptance closes the M11 headless audit only. It does not confer character/Kibo visual acceptance or optimization readiness; both current counts remain zero.
 
 ## Done Criteria
 
-- M11-09/P2/P3 have code, focused tests, disposition, and explicit remaining evidence boundaries.
+- M11-01 through M11-09 and R2-P2/P3 are externally closed with explicit remaining evidence boundaries.
 - Headless/core regressions and all data/evidence audits pass without treating performance or bundle size as blockers.
 - One focused remediation commit exists.
 - A new merged-only audit directory and ZIP are generated, verified from a clean extraction, and pass CLI catalog/validate/simulate/explain/compare smoke.
-- Stop at external short rereview; M12 remains locked.
+- Stop after external closure; M12 remains locked until the user explicitly unlocks it.
 
 ## Do Not Repeat
 

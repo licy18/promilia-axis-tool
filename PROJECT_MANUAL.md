@@ -1795,15 +1795,15 @@ Machine Axis v1 继续通过唯一 canonical core 提供版本化 Schema、语�
 
 Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource/state 索引，并接通 Machine Axis v1 的冷启动导入、精确导出、无效输入保护与逐 hit 命中/暴击编辑。暴伤、expected 两分支/概率/核心加权值和事件物化状态均直接消费 canonical settlement；标准轴显示 `150%` 与 `6.2 / 6 / 10 / 5% / false`，缺字段显示未知。M11-C 已在 `308dd07fbbb8fe0759062e9dcc02c65b0fd46115` 通过产品验收并进入 M11-D；包体超限和纯性能抖动继续只记录为发布风险。
 
-### M11-D 角色机制验收协议已通过产品验收（2026-07-30）
+### M11-D 角色机制验收协议实现已完成（2026-07-30）
 
-R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。产品已签收基线 `899edea0c5a1f718153ebe86712ecd8c31aabf7d`，三角色因此成为 `visually-accepted`；181 个 source gap 与 706 个 acceptance gap 仍构成 887 个唯一功能阻断，所以 `optimizationReadyCount` 继续为 0。M11-D 已关闭并停止等待下一指令，M12 明确未启动。
+R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。`899edea0c5a1f718153ebe86712ecd8c31aabf7d` 的角色单边产品签收未带入最终合并外审基线；181 个 source gap 与 706 个 acceptance gap 仍构成 887 个唯一功能阻断。当前三角色保持 `runtime-integrated`，`visuallyAcceptedCount=0`、`optimizationReadyCount=0`；视觉资格需按最终合并基线重新验收，M12 明确未启动。
 
-### M11-R2 短整改完成，等待外部短复审（2026-07-31）
+### M11 无头核心外部审计已通过并关闭（2026-07-31）
 
-M11-01..08 已由外部复审关闭。R2 基线 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 将 Machine Axis 原始数组顺序在 compile 前固化为 source sequence，并贯穿派生、诊断和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 取值参数统一在 I/O 前校验，warning path 使用 canonical plan 真实索引。不同角色可携带同名奇波，CD 与资源按 `actorId+kiboId` 隔离。
+M11-01..08 已由前轮外部复审关闭。R2 基线 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 将 Machine Axis 原始数组顺序在 compile 前固化为 source sequence，并贯穿派生、诊断和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 取值参数统一在 I/O 前校验，warning path 使用 canonical plan 真实索引。不同角色可携带同名奇波，CD 与资源按 `actorId+kiboId` 隔离。
 
-22 文件/195 条无头回归、axis boundary 23/23、Machine Axis boundary/CLI 40/40、八道审计和 production build 均通过。外部 ID 重命名反例两份都按奇波→角色执行且总伤为 468；标准轴 data/evaluation 不变。三角色当前 `visuallyAcceptedCount=0`、`optimizationReadyCount=0`。本阶段只生成新的 merged-only 审计包并等待外部短复审；所有旧包保留，M12、UI、性能、包体和新增角色继续锁定。
+最终外部短复核在 `64603640bda82d6ab3d869e98d70696f73caeef7` 通过且无新增 P0-P3：M11-09 关闭，ID 重命名反例为 `468 / 468`；CLI 参数边界 `7/7` 在 I/O 前以 exit 2 拒绝非法输入；warning path 指向 `executionPlan.actions.1` 与 `.15`；官方完整性校验和五命令 smoke 均通过。既有审计包与 SHA 不变。该通过只关闭 M11 无头核心外审，不代表角色/奇波已经视觉验收或优化就绪；当前两项计数均为 0，M12 继续锁定。
 
 ## 10. 文档维护规则
 

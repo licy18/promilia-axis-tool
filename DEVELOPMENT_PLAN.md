@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-R2 短整改完成，等待外部短复审**。外部已关闭 M11-01..08；R2 从 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 收口 M11-09 上游 source sequence、CLI 取值参数和 warning path。不同角色可携带同名奇波，CD/资源按运行实体隔离；三角色与 122 只奇波/366 个公开动作继续可重放，`optimization-ready=0`。M12 保持锁定。
+当前里程碑：**M11 无头核心外部审计已通过并关闭**。最终审计基线为 `64603640bda82d6ab3d869e98d70696f73caeef7`，M11-01..09 与 R2 CLI/path 跟进项全部关闭且无新增 P0-P3。不同角色可携带同名奇波，CD/资源按运行实体隔离；未知跨 owner 同帧顺序继续由场景输入数组显式给出。外审通过不授予角色或奇波可视验收、优化资格，当前 `visually-accepted=0`、`optimization-ready=0`；M12 保持锁定，等待用户明确解锁。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -841,13 +841,13 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 验收门：每个 `optimization-ready` 角色都有机器断言、可视场景和产品验收记录；暴击相关机制必须声明能否进入精确期望模式；任一门失败都会撤销优化资格。
 
-阶段结果：R1 将 requirement inventory、可执行 scenario case、结构化 trace projection、精确 coverage edge、source/acceptance ledger 和成熟度收拢为单向可信派生链；manifest 与 catalog 均绑定 committed manifest index，篡改 N/A、required/summary、ledger、签收或 catalog 后即使重算自身 hash 也会被 validator 与 canonical gate 拒绝。产品已对 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成可视签收，小玉、红宝石、寒悠悠因此升至 `visually-accepted`；但矩阵与功能 ledger 仍有阻断，三者继续保持 `optimization-ready=0`。精确归因后的矩阵通过/必需为小玉 `56/407`、红宝石 `36/709`、寒悠悠 `62/243`；887 个唯一功能阻断拆为 181 个上游 source gap 与 706 个 acceptance scenario gap，另有 575 个 wrapper/N/A 来源记录明确非阻断。聚焦回归、验收幂等审计、六道既有审计、production build 和可视导入均通过，玩法 golden/hash 无漂移。M11-D 已通过产品验收并停止，M12 未启动。
+阶段结果：R1 将 requirement inventory、可执行 scenario case、结构化 trace projection、精确 coverage edge、source/acceptance ledger 和成熟度收拢为单向可信派生链；manifest 与 catalog 均绑定 committed manifest index，篡改 N/A、required/summary、ledger、签收或 catalog 后即使重算自身 hash 也会被 validator 与 canonical gate 拒绝。`899edea0c5a1f718153ebe86712ecd8c31aabf7d` 曾完成角色单边产品签收，但该资格未带入最终合并外审基线；当前三角色保持 `runtime-integrated`，`visually-accepted=0`、`optimization-ready=0`。精确归因后的矩阵通过/必需为小玉 `56/407`、红宝石 `36/709`、寒悠悠 `62/243`；887 个唯一功能阻断拆为 181 个上游 source gap 与 706 个 acceptance scenario gap，另有 575 个 wrapper/N/A 来源记录明确非阻断。聚焦回归、验收幂等审计、六道既有审计、production build 和可视导入均通过，玩法 golden/hash 无漂移。M11-D 协议实现已完成，后续视觉资格仍需按最终合并基线重新验收；M12 未启动。
 
-#### M11-R：外部审计整改（R2 等待外部短复审）
+#### M11-R：外部审计整改（已通过并关闭）
 
-M11-01..08 已由外部复审关闭。R2 将原始 Machine Axis actions 数组顺序在 compile 前固化为 source sequence，并贯穿派生动作、诊断、执行块和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 缺值/非法值在 I/O 前统一返回 exit 2，warning path 使用 canonical plan 真实索引。产品确认同名奇波可跨角色重复并按 `actorId+kiboId` 隔离 CD/资源；客户端未知的跨 owner 同帧优先级仍保持 evidence-open，但数组顺序作为场景显式顺序。
+M11-01..08 已在前轮外部复审关闭。R2 将原始 Machine Axis actions 数组顺序在 compile 前固化为 source sequence，并贯穿派生动作、诊断、执行块和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 缺值/非法值在 I/O 前统一返回 exit 2，warning path 使用 canonical plan 真实索引。产品确认同名奇波可跨角色重复并按 `actorId+kiboId` 隔离 CD/资源；客户端未知的跨 owner 同帧优先级仍保持 evidence-open，但数组顺序作为场景显式顺序。
 
-R2 的 22 文件/195 条无头回归、axis boundary 23/23、Machine Axis boundary/CLI 40/40、三角色/奇波 replay、八道生成与来源审计及 production build 通过。外部 ID 重命名反例两份均保持奇波→角色且总伤为 468；标准轴 data/evaluation 不变。三角色保持 `runtime-integrated`、`visuallyAcceptedCount=0`、`optimizationReadyCount=0`；完成独立提交后只生成新的 merged-only 审计包并等待外部短复审，M12 继续锁定。
+最终外部短复核基线 `64603640bda82d6ab3d869e98d70696f73caeef7` 无新增 P0-P3，M11-09、CLI 参数边界和 warning path 全部关闭。ID 重命名反例为 `468 / 468`，CLI 参数边界 `7/7`，warning path 精确指向 `executionPlan.actions.1` 与 `.15`；官方完整性校验和五命令 smoke 均通过。现有 merged-only 审计包与 SHA 保持不变。该结论只关闭 M11 无头核心外审，不授予角色/奇波视觉验收或优化资格；三角色保持 `runtime-integrated`、`visuallyAcceptedCount=0`、`optimizationReadyCount=0`，M12 继续锁定。
 
 ### M12：批量评估、搜索与末音试点
 
@@ -983,8 +983,8 @@ R2 的 22 文件/195 条无头回归、axis boundary 23/23、Machine Axis bounda
 61. 已完成并通过产品验收：M11-A-R1 已在 `80c5f35` 关闭逐 hit `sampled` 随机源与 seed 门禁、预检随机序列污染、目标 `CRI_DEFENSE` 和分析报告旧调用链；四份 golden 的 replay/summary hash 无漂移。
 62. 已完成并通过产品验收：M11-B-R2 在 8da52fb 关闭并发测试超时与验收报告 canonical hash 漂移；122 只奇波/366 动作、固定 60 FPS、真实 CLI I/O、三角色 120 秒 fixture、六道审计与 62/62 production preview 均通过。
 63. 已通过产品验收：M11-C 在 `308dd07` 完成 canonical trace 可视编辑与复验闭环。
-64. 已完成并通过产品验收：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；三角色已取得 `visually-accepted`，但尚未取得 `optimization-ready`。当前停止等待下一指令，M12、第四角色、包体优化和未验收奇波机制接入均未启动。
-65. 已完成，等待外部短复审：M11-R2 从 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 修复 M11-09 上游 ID 排序、CLI 取值参数和 warning path；M11-01..08 保持外部关闭。同名奇波按 runtime entity 隔离 CD/资源；22 文件/195 条无头回归、八道审计和构建通过；M12 保持锁定。
+64. 已完成协议实现：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；该角色单边可视签收未带入最终合并外审基线，当前 `visually-accepted=0`、`optimization-ready=0`。M12、第四角色、包体优化和未验收奇波机制接入均未启动。
+65. 已完成并通过最终外部短复核：M11 无头核心外审在 `64603640bda82d6ab3d869e98d70696f73caeef7` 关闭，M11-01..09 与 R2 CLI/path 跟进项无新增 P0-P3；现有审计包和 SHA 不变。此结论不授予角色/奇波视觉验收或优化资格，M12 保持锁定，等待用户明确解锁。
 
 ## 8. 风险和取舍
 
