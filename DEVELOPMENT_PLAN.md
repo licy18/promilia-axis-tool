@@ -849,6 +849,10 @@ M11-01..08 已在前轮外部复审关闭。R2 将原始 Machine Axis actions �
 
 最终外部短复核基线 `64603640bda82d6ab3d869e98d70696f73caeef7` 无新增 P0-P3，M11-09、CLI 参数边界和 warning path 全部关闭。ID 重命名反例为 `468 / 468`，CLI 参数边界 `7/7`，warning path 精确指向 `executionPlan.actions.1` 与 `.15`；官方完整性校验和五命令 smoke 均通过。现有 merged-only 审计包与 SHA 保持不变。该结论只关闭 M11 无头核心外审，不授予角色/奇波视觉验收或优化资格；三角色保持 `runtime-integrated`、`visuallyAcceptedCount=0`、`optimizationReadyCount=0`，M12 继续锁定。
 
+#### M11-R3：基线清理（已通过）
+
+Workbench 草稿快照与项目重建路径现在持久化并恢复 Machine Axis source sequence，持久化重建后的 input/trace hash 与权威基线 `c91f9da64e02ef84 / d10c45fb73dc7c6f` 一致，M11-09 的数组顺序语义在 Workbench 侧同样成立；空 draft 不再被误标为根序列 0。同时把审计基线自带的陈旧测试期望同步到已提交权威 golden 报告（旧 trace hash `017c87…`、expected 临界分支、assertionCount、调谐印记伤害），并将 M11-01 边界用例超时放宽到 15s 消除并行负载误报。全量回归 165 文件 / 1100 测试通过。
+
 ### M12：批量评估、搜索与末音试点
 
 #### M12-A：Batch Evaluator

@@ -1805,6 +1805,10 @@ M11-01..08 已由前轮外部复审关闭。R2 基线 `6601ebd1d53748fc4eaeea3ec
 
 最终外部短复核在 `64603640bda82d6ab3d869e98d70696f73caeef7` 通过且无新增 P0-P3：M11-09 关闭，ID 重命名反例为 `468 / 468`；CLI 参数边界 `7/7` 在 I/O 前以 exit 2 拒绝非法输入；warning path 指向 `executionPlan.actions.1` 与 `.15`；官方完整性校验和五命令 smoke 均通过。既有审计包与 SHA 不变。该通过只关闭 M11 无头核心外审，不代表角色/奇波已经视觉验收或优化就绪；当前两项计数均为 0，M12 继续锁定。
 
+### M11-R3 基线清理（2026-07-31，已通过）
+
+Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis source sequence，持久化重建后 input/trace hash 与权威基线 `c91f9da64e02ef84 / d10c45fb73dc7c6f` 一致；空 draft 不再被误标为根序列 0。陈旧测试期望已同步到已提交权威 golden 报告（旧 trace hash `017c87…`、expected 临界分支、assertionCount、调谐印记伤害），M11-01 边界用例超时放宽至 15s。全量回归 165 文件 / 1100 测试通过。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
