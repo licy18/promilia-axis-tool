@@ -1,4 +1,5 @@
 import { getAzprWorkbenchSeed } from '../data/azprGenerated';
+import { attachActionSourceSequence } from './actionSourceSequence';
 import { WORKBENCH_FRAME_MS, msToFrame, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
@@ -198,6 +199,9 @@ export function createWorkbenchActionDraft({
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
+  sourceSequenceIndex = null,
+  sourceSequencePath = null,
+  sourceSequenceSource = null,
   hitOverrides = null,
   note = '',
   insertion = null,
@@ -244,6 +248,11 @@ export function createWorkbenchActionDraft({
         })
       : null;
   const normalizedTimingReasons = normalizeTextArray(timingReasons);
+  const sourceSequence = normalizeDraftSourceSequence({
+    sourceSequenceIndex,
+    sourceSequencePath,
+    sourceSequenceSource,
+  });
   const hasTimingContract = Boolean(
     positiveIntegerOrNull(durationFrames) ||
     textOrNull(timingSource) ||
@@ -310,6 +319,7 @@ export function createWorkbenchActionDraft({
     note,
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
+    ...(sourceSequence ?? {}),
     ...normalizeAttackInputActionFields({ id: actionId, ...attackInputFields }),
     ...(statusGeneration
       ? { statusGeneration: statusGeneration.descriptor }
@@ -320,6 +330,38 @@ export function createWorkbenchActionDraft({
       resolvedEffectCommands,
       actionId
     ),
+  };
+}
+
+export function normalizeDraftSourceSequence({
+  sourceSequenceIndex = null,
+  sourceSequencePath = null,
+  sourceSequenceSource = null,
+} = {}) {
+  const rootIndex =
+    sourceSequenceIndex == null || sourceSequenceIndex === ''
+      ? null
+      : nonNegativeIntegerOrNull(sourceSequenceIndex);
+  const path =
+    Array.isArray(sourceSequencePath) && sourceSequencePath.length > 0
+      ? sourceSequencePath.map(entry =>
+          entry == null || entry === ''
+            ? null
+            : nonNegativeIntegerOrNull(entry)
+        )
+      : null;
+  const normalizedPath =
+    path && path.every(item => item != null)
+      ? path
+      : rootIndex == null
+        ? null
+        : [rootIndex];
+  if (!normalizedPath) return null;
+  return {
+    sourceSequenceIndex: normalizedPath[0],
+    sourceSequencePath: normalizedPath,
+    sourceSequenceSource:
+      textOrNull(sourceSequenceSource) ?? 'workbench-draft-source-sequence',
   };
 }
 
@@ -682,7 +724,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       ? firstSkill.name
       : actionTypeLabel(titleAction.type);
 
-  return createProject({
+  const builtProject = createProject({
     id:
       String(actionPatch.projectIdentity?.id ?? '').trim() ||
       'workbench-editable-slice',
@@ -755,6 +797,24 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
         'verified-static-properties-applied-dynamic-effects-unapplied',
     },
   });
+  const sourceSequenceDraftByActionId = new Map(
+    actionDrafts
+      .filter(draft => draft.sourceSequenceIndex != null)
+      .map(draft => [String(draft.id), draft])
+  );
+  return {
+    ...builtProject,
+    actions: builtProject.actions.map(action => {
+      const draft = sourceSequenceDraftByActionId.get(String(action.id));
+      return draft
+        ? attachActionSourceSequence(
+            action,
+            draft.sourceSequenceIndex,
+            draft.sourceSequenceSource ?? 'workbench-draft-source-sequence'
+          )
+        : action;
+    }),
+  };
 }
 
 function normalizeProjectConfigurationLibraryForSource(library = {}) {
@@ -909,6 +969,9 @@ export function normalizeWorkbenchActionDrafts(
           actionScheduling: draft.actionScheduling,
           sourceEvidenceStatus: draft.sourceEvidenceStatus,
           scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+          sourceSequenceIndex: draft.sourceSequenceIndex,
+          sourceSequencePath: draft.sourceSequencePath,
+          sourceSequenceSource: draft.sourceSequenceSource,
           hitOverrides: draft.hitOverrides,
           note: draft.note,
           insertion: draft.insertion,
@@ -961,6 +1024,9 @@ export function normalizeWorkbenchActionDrafts(
         actionScheduling: draft.actionScheduling,
         sourceEvidenceStatus: draft.sourceEvidenceStatus,
         scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+        sourceSequenceIndex: draft.sourceSequenceIndex,
+        sourceSequencePath: draft.sourceSequencePath,
+        sourceSequenceSource: draft.sourceSequenceSource,
         hitOverrides: draft.hitOverrides,
         note: draft.note,
         insertion: draft.insertion,

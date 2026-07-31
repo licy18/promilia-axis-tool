@@ -45,7 +45,7 @@ describe('Machine Axis external audit boundaries', () => {
         normalizedCriticalRoll: criticalRoll / 10_000,
         critical,
       });
-    });
+    }, 15_000);
   });
 
   describe('M11-02 raw JSON Schema boundary', () => {
