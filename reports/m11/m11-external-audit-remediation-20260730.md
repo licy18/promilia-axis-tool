@@ -25,7 +25,8 @@ R2 基线为 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6`，原始合并审计基�
 
 ## 验证
 
-- 无头聚焦回归：22 文件 / 195 测试通过；`axisBoundary` 23/23，Machine Axis boundary/CLI 三文件 40/40。
+- 无头聚焦回归：22 文件 / 212 测试通过；`axisBoundary` 23/23，Machine Axis boundary/CLI 三文件 40/40。
+- 独立验收首次发现迁移测试仍保留 10 个旧 hash 引用；引用同步到已提交权威 golden 后 212/212 通过，运行时和 golden 均未修改。
 - 漂移与来源审计：character combat、verified combat、character acceptance、kibo headless、production imports、Workbench data、action status、applied source bindings 全部 clean。
 - Production build 通过；既有 Sass、循环 chunk 和大 chunk 警告仅记录，不属于本轮整改。
 - 标准 120 秒轴 canonical hash：`c91f9da64e02ef84 / 4e36871189392dc1 / d10c45fb73dc7c6f / 0b410dc9255d2654`。

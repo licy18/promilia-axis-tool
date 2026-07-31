@@ -11,12 +11,12 @@ const GOLDENS = [
     report: xiaoyuGolden,
     assertionCount: 118,
     replayHash:
-      'ecb91f7ad71fec39d58411ae79ade18493ae88bf5a77ce1b3ea57697f8ef6e51',
+      'e5554f9784c187379bf116bd61745fc553d73d3cd1ccbec9d77f3ce261b31c8f',
     summaryHash:
-      '54a32104fb2d405723422a6dd7987864b6e993f7bac4a60ce2d3c54cdbadb810',
+      '414b19d2ff6a15b55dd9db8bbfdcf5721ee247818df24f5acb14afefec1d26db',
     inputHash: '72ca4938941bc6cf',
     dataHash: '4dc4a209fd7e89ec',
-    traceHash: '122f72e0abc96fc2',
+    traceHash: 'a090e99be40eab55',
   },
   {
     identity: 'ruby-main',
@@ -29,7 +29,7 @@ const GOLDENS = [
       'f9144e8d2724b63653363556774ce8d5f64e33439edd39a684e18f12f3f0e2bd',
     inputHash: '2fe4cbd1ab781ea4',
     dataHash: 'c61cf000dddae67b',
-    traceHash: 'a23f07ca343cb657',
+    traceHash: '1a61d2cd42373b74',
   },
   {
     identity: 'han-main',
@@ -37,12 +37,12 @@ const GOLDENS = [
     report: hanGolden,
     assertionCount: 76,
     replayHash:
-      '137be22bc495b21000dc8eed03ba50d16e31a592fe57208c58b0145b7ba07e77',
+      '959ef025317d708d58aa7a18a1314c59639ad87545e590ef5121306d8fb2b822',
     summaryHash:
-      'd351f50dbe3193e2d64502259f4931a5c1469471381a15e62da13041536a5bf4',
+      'f0d7a64facfc7226a82d9c1413bc9e56a6b7507b96a5827836cff992ec54d397',
     inputHash: '011ce71e135bc69f',
     dataHash: '7599ed503c1d0c06',
-    traceHash: '26f7b53dac7e5b9e',
+    traceHash: 'a5712c99adc1ef9a',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -50,12 +50,12 @@ const GOLDENS = [
     report: hanSwitchGolden,
     assertionCount: 34,
     replayHash:
-      '53a7d025597e6d6762e3c1530a8df5813255b738a89942fc092f7e29c9777232',
+      'da81d2d42159e3763872ea6ce885cfb04838c6049da368aae5bb8ea41ac1a62f',
     summaryHash:
-      '4ffdfc6ed2f971060b420a77369b3550ac65070071b08169a6fdb9eb3a4b670e',
+      '381b5f437e61be54bc6daccf1a0acdcda88f2f6f5ea2510c88f0bc9e6071193f',
     inputHash: 'f7aac189e3dfee8e',
     dataHash: '75e283bd81aac633',
-    traceHash: '0a85e9c33441f5b1',
+    traceHash: '7e01bdff2796a8d6',
   },
 ];
 

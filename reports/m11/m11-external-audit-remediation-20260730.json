@@ -10,7 +10,8 @@
     "branch": "fix/m11-external-audit-r2",
     "auditReport": "doc/promilia-axis-m11-headless-rereview-6601ebd1d537-20260731.md",
     "counterexample": "doc/recheck-m11-6601.mjs",
-    "releaseBranch": "release/m11-headless-external-audit"
+    "releaseBranch": "release/m11-headless-external-audit",
+    "r2ImplementationCommit": "2c5aaf6a46a0e5ea31d996fcfcd44f1729e084ed"
   },
   "scope": {
     "m12Locked": true,
@@ -247,7 +248,7 @@
   "verification": {
     "focusedTests": {
       "fileCount": 22,
-      "testCount": 195,
+      "testCount": 212,
       "status": "passed"
     },
     "axisBoundaryTests": {
@@ -272,7 +273,14 @@
     },
     "productionBuild": "passed",
     "uiE2eRun": false,
-    "uiE2eReason": "External remediation scope is the headless core and packaging boundary only."
+    "uiE2eReason": "External remediation scope is the headless core and packaging boundary only.",
+    "independentAcceptance": {
+      "status": "passed-after-stale-reference-sync",
+      "initialResult": "21/22 files and 208/212 tests passed; four stale migration hash references failed",
+      "followUp": "10 test-only hash references synchronized to already committed authoritative golden reports",
+      "finalResult": "22/22 files and 212/212 tests passed",
+      "runtimeOrGoldenChanged": false
+    }
   },
   "postCommitPackaging": {
     "status": "fulfilled-by-enclosing-audit-package",
