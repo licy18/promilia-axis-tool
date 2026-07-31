@@ -20,6 +20,11 @@ import { createVerifiedKiboPassiveGeneration } from '../mechanics/verifiedKiboPa
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
 import { validateCombatCriticalScenario } from '../../domain/combatCriticalPolicy';
 import { createDeterministicCriticalRandomSource } from '../runtime/criticalRandomSource';
+import {
+  compareActionSourceSequence,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
+import { msToFrame } from '../../domain/timebase';
 
 export function simulateScenario(
   inputScenario,
@@ -256,6 +261,9 @@ function createStableVerifiedAdmission({
   criticalRuntime,
 }) {
   const executionBlockByKey = new Map();
+  const actionById = new Map(
+    (scenario.actions ?? []).map(action => [String(action.id), action])
+  );
   const maximumPassCount = Math.max(2, (scenario.actions?.length ?? 0) + 1);
   let lastPass = null;
   for (let passIndex = 0; passIndex < maximumPassCount; passIndex += 1) {
@@ -294,7 +302,12 @@ function createStableVerifiedAdmission({
     const discoveredBlocks =
       runtimeBundle.verifiedCombatRuntime.executionBlocks ?? [];
     let addedBlockCount = 0;
-    for (const block of discoveredBlocks) {
+    for (const discoveredBlock of discoveredBlocks) {
+      const block = attachExecutionBlockSourceSequence(
+        discoveredBlock,
+        actionById.get(String(discoveredBlock.actionId)),
+        scenario.time?.fps
+      );
       const key = `${block.code}|${block.actionId}`;
       if (executionBlockByKey.has(key)) continue;
       executionBlockByKey.set(key, block);
@@ -341,10 +354,25 @@ function createStableVerifiedAdmission({
 
 function compareExecutionBlocks(left, right) {
   return (
-    Number(left.timeMs) - Number(right.timeMs) ||
-    String(left.actionId).localeCompare(String(right.actionId)) ||
+    Number(left.absoluteFrame) - Number(right.absoluteFrame) ||
+    compareActionSourceSequence(left, right) ||
     String(left.code).localeCompare(String(right.code))
   );
+}
+
+function attachExecutionBlockSourceSequence(block, action, fps = 60) {
+  const sourceSequencePath = getActionSourceSequencePath(action);
+  return {
+    ...block,
+    absoluteFrame: Number.isInteger(block.absoluteFrame)
+      ? block.absoluteFrame
+      : msToFrame(block.timeMs, fps),
+    sourceSequenceIndex:
+      action?.sourceSequenceIndex ?? sourceSequencePath?.[0] ?? null,
+    sourceSequencePath,
+    sourceSequenceSource:
+      action?.sourceSequenceSource ?? 'scenario-action-array-order',
+  };
 }
 
 function createVerifiedRuntimeBundle({
@@ -586,6 +614,7 @@ function createCooldownStartEvent(action, cooldown = null) {
       cooldownCount: cooldown.cooldownCount,
       ownerKind: cooldown.ownerKind,
       ownerId: cooldown.ownerId,
+      runtimeOwnerIdentity: cooldown.runtimeOwnerIdentity ?? null,
       kiboId: cooldown.kiboId,
       skillId: cooldown.skillId,
       sourceKind:

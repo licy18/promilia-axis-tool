@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "kind": "m11-d-character-acceptance-protocol-report",
+  "baselineCommit": "308dd07fbbb8fe0759062e9dcc02c65b0fd46115",
+  "status": "r1-implementation-complete-awaiting-product-acceptance",
+  "protocolIdentity": "m11-d-character-acceptance-v1",
+  "r1": {
+    "baseCommit": "5add67feb2a0ced22453df78d1408312a9e33fdb",
+    "status": "implementation-complete-awaiting-product-acceptance",
+    "trustModel": "repo-local-derived-source-of-truth",
+    "derivation": {
+      "requirementInventory": "source-contract-derived",
+      "scenarioCases": "canonical-replay-derived",
+      "coverageEdges": "selector-and-assertion-derived",
+      "ledger": "deduplicated-source-and-acceptance-gaps",
+      "publication": "committed-manifest-index-bound"
+    },
+    "verification": {
+      "focusedVitest": "4 files / 28 tests passed",
+      "characterAcceptanceAudit": "clean",
+      "existingSixAudits": "clean",
+      "productionBuild": "passed",
+      "focusedProductionE2E": "1/1 passed"
+    }
+  },
+  "owners": [
+    {
+      "ownerId": 101003,
+      "ownerName": "寒悠悠",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 164,
+      "sourceGapCount": 24,
+      "acceptanceGapCount": 140,
+      "nonBlockingSourceCount": 18,
+      "matrix": {
+        "requirementCount": 243,
+        "requiredCount": 243,
+        "passedCount": 62,
+        "blockedCount": 181,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 181,
+          "passed": 62
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 11,
+          "action-form": 14,
+          "attack-input-chain": 1,
+          "buff-lifecycle": 1,
+          "conditional-hit-group": 2,
+          "control-window": 57,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 40,
+          "hit": 73,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "runtime-effect-binding": 6,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "target-state-profile": 1,
+          "target-state-transaction": 7,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "1a0ad774485ebc3c",
+      "sourceOfTruthHash": "0b46c998fd30f592",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "4f1d0de8f49a7a71",
+        "data": "bd97d21b31ba7ad2",
+        "trace": "06673d9754f7afb3",
+        "evaluation": "920e7363ae12290d"
+      }
+    },
+    {
+      "ownerId": 101010,
+      "ownerName": "涂山小玉",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 309,
+      "sourceGapCount": 106,
+      "acceptanceGapCount": 203,
+      "nonBlockingSourceCount": 133,
+      "matrix": {
+        "requirementCount": 407,
+        "requiredCount": 407,
+        "passedCount": 56,
+        "blockedCount": 351,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 351,
+          "passed": 56
+        },
+        "dimensionCounts": {
+          "action-form": 21,
+          "attack-input-chain": 2,
+          "buff-lifecycle": 1,
+          "control-window": 95,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 121,
+          "hit": 107,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "resource-profile": 1,
+          "resource-transaction": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "state-machine": 1,
+          "switch-trigger": 1,
+          "variant-edge": 27,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "6e57e5448347df4a",
+      "sourceOfTruthHash": "ae853c439802295f",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "89fb3af1e3576d49",
+        "data": "f6f7c5d3594c2d3f",
+        "trace": "c4a65d4de52dbffc",
+        "evaluation": "adc4612197816c14"
+      }
+    },
+    {
+      "ownerId": 103002,
+      "ownerName": "红宝石",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 414,
+      "sourceGapCount": 51,
+      "acceptanceGapCount": 363,
+      "nonBlockingSourceCount": 424,
+      "matrix": {
+        "requirementCount": 709,
+        "requiredCount": 709,
+        "passedCount": 36,
+        "blockedCount": 673,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 673,
+          "passed": 36
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 3,
+          "action-form": 24,
+          "attack-input-chain": 2,
+          "buff-lifecycle": 1,
+          "control-window": 159,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 59,
+          "hit": 124,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "resource-profile": 1,
+          "resource-transaction": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "variant-edge": 301,
+          "variant-window": 4,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "ee005858664920b6",
+      "sourceOfTruthHash": "9bee5bb99f242891",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "adc8d065e717a7ba",
+        "data": "3fc97b635e348b67",
+        "trace": "ad7f82c1e5d254be",
+        "evaluation": "b06186eaa569be69"
+      }
+    }
+  ],
+  "catalogHash": "3c696998171a56b2",
+  "manifestIndexHash": "24843f0d90cabf5c",
+  "summary": {
+    "ownerCount": 3,
+    "runtimeIntegratedCount": 3,
+    "visuallyAcceptedCount": 0,
+    "optimizationReadyCount": 0,
+    "machineScenarioPassCount": 3,
+    "workbenchRoundTripPassCount": 3,
+    "sourceGapCount": 181,
+    "acceptanceGapCount": 706,
+    "nonBlockingSourceCount": 575,
+    "functionalBlockers": 887,
+    "performanceAndBundleRisksBlocking": false
+  }
+}

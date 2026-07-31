@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m11-d-101010-visual-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-101010-desktop.png",
+        "screenshotSha256": "bb9774a3243a219e36240771fb3cee37d612dfbb1ca971c6249265aa59da34c1"
+      }
+    ]
+  },
+  "ownerId": 101010,
+  "fixturePath": "fixtures/character-acceptance/101010-visual.json",
+  "goldenReports": [
+    "reports/m10/101010/golden-trace.json"
+  ],
+  "unnamedSecondaryPassiveSkillId": 10101062,
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "xiaoyu-burst-a1",
+      "controlSkillId": 10101001,
+      "subSkillIndex": 1,
+      "semanticName": "爆发普通攻击 A1"
+    }
+  ]
+}

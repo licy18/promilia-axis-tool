@@ -1,5 +1,6 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { isFrameWithinVerifiedInputWindow } from '../../domain/verifiedActionContextScheduling';
+import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import { getVerifiedCombatActionMapping } from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
@@ -275,7 +276,7 @@ function createJointAttackDiagnostic({
     (left, right) =>
       Math.abs(Number(left.startMs) - Number(action.startMs)) -
         Math.abs(Number(right.startMs) - Number(action.startMs)) ||
-      String(left.id).localeCompare(String(right.id))
+      compareActionSourceSequence(left, right)
   )[0];
   if (!nearest) {
     return createJointAttackDiagnosticRecord({
@@ -703,11 +704,15 @@ function createSwitchFrameConflictDiagnostics(actions, fps = 60) {
           (((Number(frameIndex) + 1) * 1000) / frameRate).toFixed(6)
         ),
         editFieldKey: 'startMs',
-        message: `${action.name ?? action.id} 与 ${accepted.name ?? accepted.id} 位于同一帧；按 action id 稳定保留 ${accepted.id}`,
+        message: `${action.name ?? action.id} 与 ${accepted.name ?? accepted.id} 位于同一帧；按场景 source sequence 保留 ${accepted.id}`,
         source: {
-          sourceKind: 'azpr-exact-frame-switch-event-contract',
+          sourceKind: 'azpr-exact-frame-source-sequence-contract',
           sourceStatus: 'project-switch-frame-conflict-confirmed',
-          fieldPaths: ['action.startMs', 'action.id'],
+          fieldPaths: [
+            'action.startMs',
+            'action.sourceSequenceIndex',
+            'action.sourceSequencePath',
+          ],
         },
         appliedToSimulationResults: true,
       });
@@ -746,6 +751,11 @@ function createSkillCooldownEvaluation(
     const ownerKind =
       action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor';
     const ownerId = ownerKind === 'kibo' ? action.kiboId : action.actorId;
+    const runtimeOwnerIdentity = createCooldownRuntimeOwnerIdentity({
+      action,
+      ownerKind,
+      ownerId,
+    });
     const baseCooldown = createSkillCooldownRequirement(action);
     if (!baseCooldown) {
       const cooldownPolicy = {
@@ -802,7 +812,7 @@ function createSkillCooldownEvaluation(
       evaluation,
     };
     const cooldownIdentity = cooldown.source?.subSkillId ?? action.skillId;
-    const key = `${ownerKind}|${ownerId}|${cooldownIdentity}`;
+    const key = `${ownerKind}|${runtimeOwnerIdentity}|${cooldownIdentity}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
     const chargesBefore = cloneCooldownCharges(state.charges);
@@ -829,6 +839,7 @@ function createSkillCooldownEvaluation(
         actorName: action.actor?.name ?? action.actorId,
         ownerKind,
         ownerId,
+        runtimeOwnerIdentity,
         kiboId: action.kiboId ?? null,
         blockingActionId: blocking.sourceActionId,
         blockingActionName: blocking.sourceActionName,
@@ -885,8 +896,10 @@ function createSkillCooldownEvaluation(
       actorName: action.actor?.name ?? action.actorId,
       ownerKind,
       ownerId,
+      runtimeOwnerIdentity,
       kiboId: action.kiboId ?? null,
       skillId: action.skillId,
+      actionOrderIndex,
       chargeIndex: consumedCharge.chargeIndex,
       cooldownCount: cooldown.cooldownCount,
       startMs: action.startMs,
@@ -948,7 +961,7 @@ function createSkillCooldownEvaluation(
       (left, right) =>
         left.startMs - right.startMs ||
         left.endMs - right.endMs ||
-        left.windowId.localeCompare(right.windowId)
+        left.actionOrderIndex - right.actionOrderIndex
     ),
   };
 }
@@ -1009,11 +1022,16 @@ function createAcceptedSkillStartTransition({
     actionId: action.id,
     actionName: action.name ?? action.id,
     actionOrderIndex,
-    orderKey: `${Number(action.startMs) || 0}|${String(action.id)}`,
+    orderKey: `${Number(action.startMs) || 0}|${actionOrderIndex}`,
     timeMs: Number(action.startMs) || 0,
     actorId: action.actorId ?? null,
     ownerKind,
     ownerId,
+    runtimeOwnerIdentity: createCooldownRuntimeOwnerIdentity({
+      action,
+      ownerKind,
+      ownerId,
+    }),
     kiboId: action.kiboId ?? null,
     skillId: action.skillId ?? null,
     cooldownPolicy,
@@ -1092,6 +1110,15 @@ function createCooldownReadinessSnapshot({
     ownerKind: action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
     ownerId:
       action.type === ACTION_TYPES.KIBO_EVENT ? action.kiboId : action.actorId,
+    runtimeOwnerIdentity: createCooldownRuntimeOwnerIdentity({
+      action,
+      ownerKind:
+        action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
+      ownerId:
+        action.type === ACTION_TYPES.KIBO_EVENT
+          ? action.kiboId
+          : action.actorId,
+    }),
     kiboId: action.kiboId ?? null,
     skillId: action.skillId ?? null,
     availableBefore: countAvailableCharges(chargesBefore, action.startMs),
@@ -1109,6 +1136,12 @@ function createCooldownReadinessSnapshot({
     trackingStatus: 'applied-to-readiness',
     appliedToSimulationResults: false,
   };
+}
+
+function createCooldownRuntimeOwnerIdentity({ action, ownerKind, ownerId }) {
+  return ownerKind === 'kibo'
+    ? `${String(action.actorId)}|kibo:${Number(action.kiboId)}`
+    : `actor:${String(ownerId)}`;
 }
 
 function countAvailableCharges(charges, timeMs) {
@@ -1307,6 +1340,8 @@ function createActionRange(action) {
     startMs,
     endMs: startMs + durationMs,
     contextActionId: action.runtimeContextActionId ?? null,
+    sourceSequenceIndex: action.sourceSequenceIndex ?? null,
+    sourceSequencePath: action.sourceSequencePath ?? null,
   };
 }
 
@@ -1317,7 +1352,7 @@ function createDiagnosticId(code, ...parts) {
 function compareActions(left, right) {
   return (
     Number(left.startMs) - Number(right.startMs) ||
-    String(left.id).localeCompare(String(right.id))
+    compareActionSourceSequence(left, right)
   );
 }
 
@@ -1325,7 +1360,7 @@ function compareRanges(left, right) {
   return (
     left.startMs - right.startMs ||
     left.endMs - right.endMs ||
-    left.actionId.localeCompare(right.actionId)
+    compareActionSourceSequence(left, right)
   );
 }
 

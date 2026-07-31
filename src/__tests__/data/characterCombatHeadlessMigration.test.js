@@ -9,27 +9,27 @@ const GOLDENS = [
     identity: 'xiaoyu-main',
     ownerId: 101010,
     report: xiaoyuGolden,
-    assertionCount: 117,
+    assertionCount: 118,
     replayHash:
-      'd79f0985690b9dbc365376f0e7d8e6bf9cb2388c7bb2e084d0675116867947ce',
+      'e5554f9784c187379bf116bd61745fc553d73d3cd1ccbec9d77f3ce261b31c8f',
     summaryHash:
-      'f9c492ef3bf54aee60c44520412b954188f8642a504ab2670b5cfc7c7db1dc15',
-    inputHash: '705e9b883dbb501f',
+      '414b19d2ff6a15b55dd9db8bbfdcf5721ee247818df24f5acb14afefec1d26db',
+    inputHash: '72ca4938941bc6cf',
     dataHash: '4dc4a209fd7e89ec',
-    traceHash: 'a07bdfab5a89b594',
+    traceHash: 'a090e99be40eab55',
   },
   {
     identity: 'ruby-main',
     ownerId: 103002,
     report: rubyGolden,
-    assertionCount: 123,
+    assertionCount: 129,
     replayHash:
-      '0b19a52bc1e46f9f7f9eee28a38e054117c5dbd7fecde3c3112b29635c2477d1',
+      'c16d0d7d0f2648b8d83f7219a8ad886e4eb85fbb8dcca7fd1610472ae6ec9f35',
     summaryHash:
-      'c469716e1b6641e5e6fd1e35faf8fccde9b8b5d14ef56e401a4c908caa6fdd57',
-    inputHash: '28548bd658dd5c95',
+      'f9144e8d2724b63653363556774ce8d5f64e33439edd39a684e18f12f3f0e2bd',
+    inputHash: '2fe4cbd1ab781ea4',
     dataHash: 'c61cf000dddae67b',
-    traceHash: '3675b4fdbb2691d7',
+    traceHash: '1a61d2cd42373b74',
   },
   {
     identity: 'han-main',
@@ -37,12 +37,12 @@ const GOLDENS = [
     report: hanGolden,
     assertionCount: 76,
     replayHash:
-      '5d3224c71bc82df933b3682824ed556411a881c679810d34497b74d24acf314d',
+      '959ef025317d708d58aa7a18a1314c59639ad87545e590ef5121306d8fb2b822',
     summaryHash:
-      'ef73489ade8947f53adcef412095625d60fd75aa5465b44848ebecc70f2abb23',
-    inputHash: '8c1a4acddf5e3b54',
+      'f0d7a64facfc7226a82d9c1413bc9e56a6b7507b96a5827836cff992ec54d397',
+    inputHash: '011ce71e135bc69f',
     dataHash: '7599ed503c1d0c06',
-    traceHash: 'a4fa5e43670cd0a1',
+    traceHash: 'a5712c99adc1ef9a',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -50,12 +50,12 @@ const GOLDENS = [
     report: hanSwitchGolden,
     assertionCount: 34,
     replayHash:
-      '53a7d025597e6d6762e3c1530a8df5813255b738a89942fc092f7e29c9777232',
+      'da81d2d42159e3763872ea6ce885cfb04838c6049da368aae5bb8ea41ac1a62f',
     summaryHash:
-      '4ffdfc6ed2f971060b420a77369b3550ac65070071b08169a6fdb9eb3a4b670e',
-    inputHash: '2a3d5665405c92b5',
-    dataHash: 'ae547d57a9ed29ca',
-    traceHash: '602f3db82eea7d87',
+      '381b5f437e61be54bc6daccf1a0acdcda88f2f6f5ea2510c88f0bc9e6071193f',
+    inputHash: 'f7aac189e3dfee8e',
+    dataHash: '75e283bd81aac633',
+    traceHash: '7e01bdff2796a8d6',
   },
 ];
 

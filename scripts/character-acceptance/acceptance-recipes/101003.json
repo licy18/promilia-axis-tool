@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m11-d-101003-visual-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-101003-desktop.png",
+        "screenshotSha256": "150dffb65cea0d0a3e013b3b0f095b419aa39c4f0ef658b4717b627b58d29386"
+      }
+    ]
+  },
+  "ownerId": 101003,
+  "fixturePath": "fixtures/character-acceptance/101003-visual.json",
+  "goldenReports": [
+    "reports/m10/101003/golden-trace.json",
+    "reports/m10/101003/ultimate-controlled-buff-switch-golden.json"
+  ],
+  "unnamedSecondaryPassiveSkillId": 10100362,
+  "probes": [
+    {
+      "kind": "conditional-hit-group",
+      "actionId": "han-firework-charged",
+      "groupIdentity": "han-charged-stage-one-firework-explosion",
+      "beforeStacks": 7,
+      "consumedStacks": 6,
+      "afterStacks": 1,
+      "applied": true
+    }
+  ]
+}

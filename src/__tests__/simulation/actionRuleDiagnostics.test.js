@@ -192,20 +192,20 @@ describe('action rule diagnostics', () => {
     expect(result.diagnostics).toEqual([
       expect.objectContaining({
         code: ACTION_RULE_CODES.SWITCH_FRAME_CONFLICT,
-        actionId: 'switch-z',
-        blockingActionId: 'switch-a',
+        actionId: 'switch-a',
+        blockingActionId: 'switch-z',
         frameIndex: 60,
         suggestedStartMs: frameToMs(61),
       }),
     ]);
     expect(
       result.readinessTimeline.actions.find(
-        action => action.actionId === 'switch-a'
+        action => action.actionId === 'switch-z'
       )
     ).toMatchObject({ executable: true, status: 'ready' });
     expect(
       result.readinessTimeline.actions.find(
-        action => action.actionId === 'switch-z'
+        action => action.actionId === 'switch-a'
       )
     ).toMatchObject({ executable: false, status: 'blocked' });
   });

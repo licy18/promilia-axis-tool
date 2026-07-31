@@ -20,10 +20,16 @@ describe('switch triggered star-carry generation', () => {
   afterEach(() => clearInstalledVerifiedCombatMechanicsPackage());
 
   it('derives the real exit and enter actions from one exact-frame switch', () => {
+    const sourceSwitch = {
+      ...switchAction('switch-1', 1000, 101003, 101007),
+      sourceSequenceIndex: 4,
+      sourceSequencePath: [4],
+      sourceSequenceSource: 'test-input-order',
+    };
     const result = generate({
       actors: [actor(101003), actor(101007)],
       initialActorId: 'actor-101003',
-      switches: [switchAction('switch-1', 1000, 101003, 101007)],
+      switches: [sourceSwitch],
     });
     expect(result.summary).toMatchObject({
       switchEventCount: 1,
@@ -58,6 +64,10 @@ describe('switch triggered star-carry generation', () => {
         }),
       ])
     );
+    expect(result.actions.map(action => action.sourceSequencePath)).toEqual([
+      [4, 0],
+      [4, 1],
+    ]);
   });
 
   it('does not invent a child for a source gap or initial front actor', () => {
@@ -95,12 +105,12 @@ describe('switch triggered star-carry generation', () => {
       switches: [second, first],
     });
     expect(
-      result.actions.every(action => action.parentActionId === 'switch-a')
+      result.actions.every(action => action.parentActionId === 'switch-b')
     ).toBe(true);
     expect(result.bindings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          switchEventId: 'switch-b',
+          switchEventId: 'switch-a',
           resolutionStatus: 'parent-switch-rejected',
           reasons: ['parent-switch-frame-conflict'],
         }),

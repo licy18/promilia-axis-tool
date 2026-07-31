@@ -1,7 +1,9 @@
+export { MACHINE_AXIS_TRANSPORT_METADATA_KEY } from './machineAxisTransport';
+import { validateRawMachineAxisSchema } from './machineAxisSchemaValidation';
+
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
 export const MACHINE_AXIS_KIND = 'azpr-machine-axis';
-export const MACHINE_AXIS_TRANSPORT_METADATA_KEY = 'machineAxis';
 export const MACHINE_AXIS_SUPPORTED_FPS = 60;
 
 export const MACHINE_AXIS_SCHEDULE_MODES = Object.freeze([
@@ -72,7 +74,16 @@ export function normalizeMachineAxisContract(value = {}) {
 }
 
 export function validateMachineAxisContract(value = {}) {
-  const issues = [];
+  const issues = validateRawMachineAxisSchema(value);
+  if (issues.some(issue => issue.severity === 'error')) {
+    return {
+      schemaVersion: MACHINE_AXIS_SCHEMA_VERSION,
+      kind: 'azpr-machine-axis-contract-validation',
+      valid: false,
+      issues,
+      normalized: null,
+    };
+  }
   if (!isRecord(value)) {
     issues.push(
       diagnostic(
@@ -125,7 +136,7 @@ export function validateMachineAxisContract(value = {}) {
 
 export function resolveMachineAxisSchedules(
   actions,
-  { resolveDurationFrames } = {}
+  { resolveDurationFrames, scenarioDurationFrames = null } = {}
 ) {
   const source = Array.isArray(actions) ? actions : [];
   const issues = [];
@@ -205,6 +216,53 @@ export function resolveMachineAxisSchedules(
       relatedActionId: schedule.actionId ?? null,
       offsetFrames: schedule.offsetFrames,
     };
+    if (startFrame < 0) {
+      issues.push(
+        diagnostic(
+          'machine-axis-schedule-start-before-zero',
+          `actions.${index}.schedule`,
+          `Action ${action.id} starts before frame zero`,
+          { actionId: action.id, startFrame }
+        )
+      );
+    }
+    if (
+      Number.isInteger(scenarioDurationFrames) &&
+      startFrame > scenarioDurationFrames
+    ) {
+      issues.push(
+        diagnostic(
+          'machine-axis-schedule-start-after-horizon',
+          `actions.${index}.schedule`,
+          `Action ${action.id} starts after the scenario horizon`,
+          { actionId: action.id, startFrame, scenarioDurationFrames }
+        )
+      );
+    }
+    const actionDurationFrames = normalizeDuration(
+      resolveDurationFrames?.(action, result)
+    );
+    if (
+      Number.isInteger(scenarioDurationFrames) &&
+      actionDurationFrames != null &&
+      startFrame <= scenarioDurationFrames &&
+      startFrame + actionDurationFrames > scenarioDurationFrames
+    ) {
+      issues.push(
+        diagnostic(
+          'machine-axis-action-crosses-horizon',
+          `actions.${index}.schedule`,
+          `Action ${action.id} crosses the scenario horizon`,
+          {
+            actionId: action.id,
+            startFrame,
+            endFrame: startFrame + actionDurationFrames,
+            durationFrames: actionDurationFrames,
+            scenarioDurationFrames,
+          }
+        )
+      );
+    }
     resolved.set(action.id, result);
     return result;
   }

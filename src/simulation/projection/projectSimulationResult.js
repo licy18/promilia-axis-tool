@@ -1511,6 +1511,13 @@ export function projectSimulationResult({
     eventType: event.type,
     stateEventKind: event.payload.stateEventKind ?? null,
     timeMs: event.timeMs,
+    absoluteFrame: event.absoluteFrame ?? event.payload.absoluteFrame ?? null,
+    runtimePhase: event.runtimePhase ?? event.payload.runtimePhase ?? null,
+    runtimePhasePriority:
+      event.runtimePhasePriority ?? event.payload.runtimePhasePriority ?? null,
+    runtimePriority:
+      event.runtimePriority ?? event.payload.runtimePriority ?? null,
+    runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     actionId: event.actionId,
     actorId: event.actorId,
     targetId: event.targetId,
@@ -1533,6 +1540,12 @@ export function projectSimulationResult({
   }));
 
   const resourceTimeline = resourceEvents.map(event => ({
+    absoluteFrame: event.absoluteFrame ?? event.payload.absoluteFrame ?? null,
+    runtimePhase: event.runtimePhase ?? event.payload.runtimePhase ?? null,
+    runtimePhasePriority:
+      event.runtimePhasePriority ?? event.payload.runtimePhasePriority ?? null,
+    runtimePriority:
+      event.runtimePriority ?? event.payload.runtimePriority ?? null,
     runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -1551,6 +1564,12 @@ export function projectSimulationResult({
   }));
 
   const kiboResourceTimeline = kiboResourceEvents.map(event => ({
+    absoluteFrame: event.absoluteFrame ?? event.payload.absoluteFrame ?? null,
+    runtimePhase: event.runtimePhase ?? event.payload.runtimePhase ?? null,
+    runtimePhasePriority:
+      event.runtimePhasePriority ?? event.payload.runtimePhasePriority ?? null,
+    runtimePriority:
+      event.runtimePriority ?? event.payload.runtimePriority ?? null,
     runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     timeMs: event.timeMs,
     actionId: event.actionId,

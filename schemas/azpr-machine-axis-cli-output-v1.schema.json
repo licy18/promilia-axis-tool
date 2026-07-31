@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azpr.local/schemas/azpr-machine-axis-cli-output-v1.schema.json",
+  "title": "Azur Promilia Machine Axis CLI Output Envelopes",
+  "description": "Stable top-level envelopes for Machine Axis CLI v1. Trace and evidence payloads remain extensible and are identified by canonical hashes.",
+  "oneOf": [
+    { "$ref": "#/$defs/catalog" },
+    { "$ref": "#/$defs/validation" },
+    { "$ref": "#/$defs/run" },
+    { "$ref": "#/$defs/explanation" },
+    { "$ref": "#/$defs/comparison" },
+    { "$ref": "#/$defs/error" }
+  ],
+  "$defs": {
+    "hashes": {
+      "type": "object",
+      "required": ["input", "data", "trace"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "input": { "type": "string", "minLength": 1 },
+        "data": { "type": "string", "minLength": 1 },
+        "trace": { "type": "string", "minLength": 1 },
+        "evaluation": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "serviceEnvelope": {
+      "type": "object",
+      "required": ["schemaVersion", "contractName", "kind"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "contractName": { "const": "AzPrMachineAxisService" },
+        "kind": { "type": "string" }
+      }
+    },
+    "catalog": {
+      "allOf": [
+        { "$ref": "#/$defs/serviceEnvelope" },
+        {
+          "type": "object",
+          "required": [
+            "dataIdentity",
+            "characters",
+            "publicActions",
+            "kibos",
+            "enemies",
+            "summary",
+            "catalogHash"
+          ],
+          "properties": {
+            "kind": { "const": "azpr-machine-axis-catalog" },
+            "dataIdentity": { "type": "object" },
+            "characters": { "type": "array" },
+            "publicActions": { "type": "array" },
+            "kibos": { "type": "array" },
+            "enemies": { "type": "array" },
+            "summary": { "type": "object" },
+            "catalogHash": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "validation": {
+      "allOf": [
+        { "$ref": "#/$defs/serviceEnvelope" },
+        {
+          "type": "object",
+          "required": ["valid", "issues", "warnings", "hashes"],
+          "properties": {
+            "kind": { "const": "azpr-machine-axis-validation" },
+            "valid": { "type": "boolean" },
+            "issues": { "type": "array" },
+            "warnings": { "type": "array" },
+            "hashes": { "$ref": "#/$defs/hashes" },
+            "actionResolutions": { "type": "array" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "run": {
+      "allOf": [
+        { "$ref": "#/$defs/serviceEnvelope" },
+        {
+          "type": "object",
+          "required": [
+            "contract",
+            "actionResolutions",
+            "trace",
+            "evaluation",
+            "hashes"
+          ],
+          "properties": {
+            "kind": { "const": "azpr-machine-axis-run" },
+            "contract": { "type": "object" },
+            "actionResolutions": { "type": "array" },
+            "trace": { "type": "object" },
+            "evaluation": { "type": "object" },
+            "hashes": { "$ref": "#/$defs/hashes" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "explanation": {
+      "allOf": [
+        { "$ref": "#/$defs/serviceEnvelope" },
+        {
+          "type": "object",
+          "required": ["selector", "hashes", "explanation"],
+          "properties": {
+            "kind": { "const": "azpr-machine-axis-explanation" },
+            "selector": { "type": "object" },
+            "hashes": { "$ref": "#/$defs/hashes" },
+            "explanation": { "type": "object" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "comparison": {
+      "allOf": [
+        { "$ref": "#/$defs/serviceEnvelope" },
+        {
+          "type": "object",
+          "required": ["left", "right", "delta", "actions", "hits"],
+          "properties": {
+            "kind": { "const": "azpr-machine-axis-comparison" },
+            "left": { "type": "object" },
+            "right": { "type": "object" },
+            "delta": { "type": "object" },
+            "actions": { "type": "object" },
+            "hits": { "type": "object" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "error": {
+      "type": "object",
+      "required": ["schemaVersion", "contractName", "kind", "error"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "contractName": { "const": "AzPrMachineAxisCli" },
+        "kind": { "const": "azpr-machine-axis-cli-error" },
+        "error": {
+          "type": "object",
+          "required": ["code", "message", "issues"],
+          "properties": {
+            "code": { "type": "string", "minLength": 1 },
+            "message": { "type": "string" },
+            "issues": { "type": "array" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

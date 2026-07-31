@@ -69,12 +69,24 @@ export function createActionEffectRuntimeInput({
   );
   const blockedCommandCount =
     inputCommands.length - executableInputCommands.length;
-  const commands = executableInputCommands
+  const normalizedCommands = executableInputCommands
     .map(entry =>
       normalizeEffectRuntimeCommand(entry, validationIssues, scenario)
     )
     .filter(Boolean)
-    .sort(compareEffectRuntimeCommands)
+    .sort(compareEffectRuntimeCommands);
+  const scenarioHorizonFrame = resolveScenarioHorizonFrame(scenario);
+  const afterHorizonCommandCount = normalizedCommands.filter(
+    command =>
+      scenarioHorizonFrame != null &&
+      Number(command.frameIndex) > scenarioHorizonFrame
+  ).length;
+  const commands = normalizedCommands
+    .filter(
+      command =>
+        scenarioHorizonFrame == null ||
+        Number(command.frameIndex) <= scenarioHorizonFrame
+    )
     .map((command, runtimeSequenceIndex) => ({
       ...command,
       runtimeSequenceIndex,
@@ -101,6 +113,7 @@ export function createActionEffectRuntimeInput({
       executableInputCommandCount: executableInputCommands.length,
       blockedCommandCount,
       commandCount: commands.length,
+      afterHorizonCommandCount,
       ignoredCommandCount: inputCommands.length - commands.length,
       actionCount: uniqueValues(commands.map(command => command.sourceActionId))
         .length,
@@ -182,6 +195,7 @@ export function createEffectRuntimeTimeline({
   const runtimeDescriptors = createEffectRuntimeDescriptors({
     commands: input.commands,
     controlledActorTimeline,
+    scenario,
   });
   for (const descriptor of runtimeDescriptors) {
     expireRuntimeEffects({
@@ -658,33 +672,59 @@ function applyRuntimeEffectCommand({
   );
 }
 
-function createEffectRuntimeDescriptors({ commands, controlledActorTimeline }) {
+function createEffectRuntimeDescriptors({
+  commands,
+  controlledActorTimeline,
+  scenario,
+}) {
+  const horizonFrame = resolveScenarioHorizonFrame(scenario);
   return [
     ...(commands ?? []).map(command => ({
       kind: 'effect-command',
+      absoluteFrame: Number(command.frameIndex),
       timeMs: command.timeMs,
+      phase: 'effect-command',
       priority: 0,
-      identity: command.commandId,
+      sequence: Number(command.runtimeSequenceIndex),
       command,
       transition: null,
     })),
     ...(controlledActorTimeline?.transitions ?? [])
       .filter(transition => transition.applied === true)
-      .map(transition => ({
+      .map((transition, transitionIndex) => ({
         kind: 'controlled-actor-transition',
+        absoluteFrame:
+          strictNumberOrNull(transition.absoluteFrame) ??
+          strictNumberOrNull(transition.frameIndex) ??
+          msToFrame(
+            transition.timeMs,
+            strictNumberOrNull(scenario?.time?.fps) ?? 60
+          ),
         timeMs: roundEffectValue(transition.timeMs),
+        phase: 'controlled-actor-transition',
         priority: 1,
-        identity:
-          transition.transitionId ?? transition.actionId ?? 'controlled-switch',
+        sequence: transitionIndex,
         command: null,
         transition,
+        transitionIndex,
       })),
-  ].sort(
-    (left, right) =>
-      left.timeMs - right.timeMs ||
-      left.priority - right.priority ||
-      String(left.identity).localeCompare(String(right.identity))
-  );
+  ]
+    .filter(
+      descriptor =>
+        horizonFrame == null || descriptor.absoluteFrame <= horizonFrame
+    )
+    .sort(
+      (left, right) =>
+        left.absoluteFrame - right.absoluteFrame ||
+        left.priority - right.priority ||
+        left.sequence - right.sequence
+    );
+}
+
+function resolveScenarioHorizonFrame(scenario) {
+  const durationMs = strictNumberOrNull(scenario?.time?.durationMs);
+  const frameRate = strictNumberOrNull(scenario?.time?.fps) ?? 60;
+  return durationMs == null ? null : msToFrame(durationMs, frameRate);
 }
 
 function transferControlledActorEffects({
@@ -1022,6 +1062,14 @@ function createEffectRuntimeEvent({
     eventType: type,
     type,
     timeMs: normalizedTimeMs,
+    absoluteFrame: msToFrame(
+      normalizedTimeMs,
+      strictNumberOrNull(scenario.time?.fps) ?? 60
+    ),
+    runtimePhase: transition
+      ? 'controlled-actor-transition'
+      : 'effect-command',
+    runtimePriority: transition ? 1 : 0,
     frameIndex: msToFrame(
       normalizedTimeMs,
       strictNumberOrNull(scenario.time?.fps) ?? 60
@@ -1162,10 +1210,10 @@ function resolveInitialEffectAdderActorId({
 
 function compareEffectRuntimeCommands(left, right) {
   return (
-    left.timeMs - right.timeMs ||
+    left.frameIndex - right.frameIndex ||
     left.sourceActionIndex - right.sourceActionIndex ||
     left.sourceCommandIndex - right.sourceCommandIndex ||
-    left.commandId.localeCompare(right.commandId)
+    0
   );
 }
 

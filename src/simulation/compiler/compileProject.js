@@ -16,6 +16,7 @@ import {
   createThreeValueMechanicsProfileCatalog,
   resolveThreeValueMechanicsProfileCatalogSelection,
 } from '../mechanics/threeValueMechanicsProfileCatalog';
+import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 
 export class CompileProjectError extends Error {
   constructor(issues) {
@@ -161,8 +162,8 @@ export function compileProject(
   );
 
   const team = compileTeam(project.team, actorsById);
-  const baseActions = project.actions
-    .map(action =>
+  const baseActions = sortActionsByStartAndSourceSequence(
+    project.actions.map(action =>
       compileAction(
         action,
         actorsById,
@@ -171,7 +172,7 @@ export function compileProject(
         actionGameDataReferences.get(action.id) ?? null
       )
     )
-    .sort((a, b) => a.startMs - b.startMs || a.id.localeCompare(b.id));
+  );
   const switchTriggerGeneration = createSwitchTriggeredActionGeneration({
     actions: baseActions,
     actors,
@@ -195,8 +196,8 @@ export function compileProject(
   const derivedActions = switchTriggerGeneration.actions.map(action =>
     compileAction(action, actorsById, enemy, skillsById)
   );
-  const actions = [...baseActionsWithSwitchBindings, ...derivedActions].sort(
-    (a, b) => a.startMs - b.startMs || a.id.localeCompare(b.id)
+  const actions = sortActionsByStartAndSourceSequence(
+    [...baseActionsWithSwitchBindings, ...derivedActions]
   );
 
   return {
@@ -240,6 +241,22 @@ export function compileProject(
         .map(action => action.id),
     },
   };
+}
+
+function sortActionsByStartAndSourceSequence(actions) {
+  return actions
+    .map((action, sourceIndex) => ({ action, sourceIndex }))
+    .sort(
+      (left, right) =>
+        Number(left.action.startMs) - Number(right.action.startMs) ||
+        compareActionSourceSequence(
+          left.action,
+          right.action,
+          left.sourceIndex,
+          right.sourceIndex
+        )
+    )
+    .map(entry => entry.action);
 }
 
 function compileTeam(team, actorsById) {

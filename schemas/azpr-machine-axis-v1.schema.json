@@ -65,6 +65,7 @@
     },
     "actions": {
       "type": "array",
+      "description": "Semantic action intents in explicit source sequence. When client evidence does not define the order of simultaneous cross-owner inputs, array order is the scenario-authored order; action ids are identities only and never ordering tiebreakers.",
       "items": { "$ref": "#/$defs/action" }
     },
     "metadata": { "type": "object" }

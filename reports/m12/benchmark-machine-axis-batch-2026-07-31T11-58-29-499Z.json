@@ -1,0 +1,128 @@
+{
+  "kind": "azpr-m12-batch-benchmark",
+  "timestamp": "2026-07-31T11:58:29.510Z",
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "arch": "x64",
+    "fixture": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+    "scenarioDurationMs": 120000,
+    "runCount": 32
+  },
+  "variants": [
+    {
+      "jobs": 1,
+      "runCount": 32,
+      "okCount": 32,
+      "failedCount": 0,
+      "wallMs": 29303.94,
+      "cpuUserMs": 33688,
+      "cpuSystemMs": 1656,
+      "heapDeltaMiB": 654.79,
+      "perRunExecutionMs": {
+        "min": 794,
+        "mean": 915.625,
+        "p50": 869,
+        "p95": 844.6000000000001,
+        "max": 2137
+      }
+    },
+    {
+      "jobs": 4,
+      "runCount": 32,
+      "okCount": 32,
+      "failedCount": 0,
+      "wallMs": 27094.26,
+      "cpuUserMs": 31797,
+      "cpuSystemMs": 1329,
+      "heapDeltaMiB": 685.31,
+      "perRunExecutionMs": {
+        "min": 794,
+        "mean": 2108.125,
+        "p50": 2079.5,
+        "p95": 2250.2500000000005,
+        "max": 3554
+      }
+    },
+    {
+      "jobs": 8,
+      "runCount": 32,
+      "okCount": 32,
+      "failedCount": 0,
+      "wallMs": 26841.44,
+      "cpuUserMs": 31797,
+      "cpuSystemMs": 1625,
+      "heapDeltaMiB": 815.81,
+      "perRunExecutionMs": {
+        "min": 818,
+        "mean": 3759.78125,
+        "p50": 3712,
+        "p95": 2030.7500000000005,
+        "max": 7212
+      }
+    }
+  ],
+  "slowestRuns": [
+    {
+      "index": 0,
+      "label": "run-0",
+      "executionMs": 2137,
+      "status": "ok"
+    },
+    {
+      "index": 1,
+      "label": "run-1",
+      "executionMs": 1048,
+      "status": "ok"
+    },
+    {
+      "index": 13,
+      "label": "run-13",
+      "executionMs": 1009,
+      "status": "ok"
+    },
+    {
+      "index": 7,
+      "label": "run-7",
+      "executionMs": 999,
+      "status": "ok"
+    },
+    {
+      "index": 28,
+      "label": "run-28",
+      "executionMs": 985,
+      "status": "ok"
+    },
+    {
+      "index": 3,
+      "label": "run-3",
+      "executionMs": 971,
+      "status": "ok"
+    },
+    {
+      "index": 12,
+      "label": "run-12",
+      "executionMs": 930,
+      "status": "ok"
+    },
+    {
+      "index": 5,
+      "label": "run-5",
+      "executionMs": 899,
+      "status": "ok"
+    },
+    {
+      "index": 14,
+      "label": "run-14",
+      "executionMs": 894,
+      "status": "ok"
+    },
+    {
+      "index": 29,
+      "label": "run-29",
+      "executionMs": 886,
+      "status": "ok"
+    }
+  ],
+  "interpretation": "Baseline record only. Throughput targets are decided after reviewing this report; the batch evaluator never trades mechanism precision or legality checks for speed."
+}

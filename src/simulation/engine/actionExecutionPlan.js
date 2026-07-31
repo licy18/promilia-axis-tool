@@ -39,6 +39,10 @@ export function createActionExecutionPlan({
       actionType: action.type,
       actionIndex,
       executionIndex: execute ? executionIndex : null,
+      sourceSequenceIndex: action.sourceSequenceIndex ?? actionIndex,
+      sourceSequencePath: action.sourceSequencePath ?? [actionIndex],
+      sourceSequenceSource:
+        action.sourceSequenceSource ?? 'scenario-action-array-order',
       actorId: action.actorId ?? null,
       actorName: action.actor?.name ?? null,
       skillId: action.skillId ?? null,

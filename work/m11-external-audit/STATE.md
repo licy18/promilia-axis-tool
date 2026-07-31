@@ -1,0 +1,44 @@
+# M11 External Audit Closure
+
+## Goal
+
+Preserve the externally accepted M11 headless core baseline and its evidence boundaries. The final reviewed commit is `64603640bda82d6ab3d869e98d70696f73caeef7`; M12 remains locked.
+
+## Branch And Worktree
+
+- Branch: `fix/m11-external-audit-r2`
+- Worktree: `C:\Codex\AzPr Axis\.worktrees\promilia-m11-external-audit-r2`
+- Rereview: `C:\Codex\AzPr Axis\doc\promilia-axis-m11-headless-rereview-6601ebd1d537-20260731.md`
+- Counterexample: `C:\Codex\AzPr Axis\doc\recheck-m11-6601.mjs`
+
+## Current Status
+
+- Final external short review passed with no new P0-P3 findings.
+- M11-01 through M11-09 and the R2 CLI/path follow-ups are externally closed.
+- Raw Machine Axis array order is recorded before compile and propagated as source sequence through derived actions and runtime.
+- Renaming only action IDs preserves Kibo then actor execution and produces `468 / 468` HP damage in the external counterexample.
+- CLI valued-option failures return exit 2 before I/O; warning paths resolve to plan indexes 1 and 15.
+- Product contract allows duplicate Kibo species across different actors; cooldown and resources are isolated by `actorId+kiboId`.
+- Final generated mechanics package hash is `55a275658a36358b490ba9730f214e15cf48e0e816912f6f92d263a1986a89f9`.
+- The 120 second Machine Axis hashes are `c91f9da64e02ef84 / 4e36871189392dc1 / d10c45fb73dc7c6f / 0b410dc9255d2654`.
+- Headless focused regression is 22 files / 212 tests passed; axis boundary is 23/23 and Machine Axis boundary/CLI is 40/40.
+- Eight deterministic audits are clean and production build passes.
+- Independent acceptance of `2c5aaf6a46a0...` found 10 stale test-only migration hash references. They now match the already committed authoritative golden reports; no runtime or golden file changed, and the final 22/212 regression passes.
+- Remediation disposition is recorded in `reports/m11/m11-external-audit-remediation-20260730.{json,md}`; final closure is recorded in `reports/m11/m11-external-audit-final-acceptance-20260731.json`.
+- The existing merged-only audit package and SHA remain unchanged.
+- External acceptance closes the M11 headless audit only. It does not confer character/Kibo visual acceptance or optimization readiness; both current counts remain zero.
+
+## Done Criteria
+
+- M11-01 through M11-09 and R2-P2/P3 are externally closed with explicit remaining evidence boundaries.
+- Headless/core regressions and all data/evidence audits pass without treating performance or bundle size as blockers.
+- One focused remediation commit exists.
+- A new merged-only audit directory and ZIP are generated, verified from a clean extraction, and pass CLI catalog/validate/simulate/explain/compare smoke.
+- Stop after external closure; M12 remains locked until the user explicitly unlocks it.
+
+## Do Not Repeat
+
+- Do not repair in the dirty main worktree or in pre-merge character/kibo branches.
+- Do not preserve rejected behavioral hashes as expected truth.
+- Do not infer evidence closure from scenario assumptions.
+- Do not overwrite the rejected audit snapshot.

@@ -1,16 +1,6 @@
-import { getWorkbenchGameData } from '../../domain/workbenchProjectFactory';
-import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG } from '../../simulation/mechanics/threeValueMechanicsProfileCatalog';
-import { createCanonicalHeadlessCombatCore } from '../../simulation/headless/canonicalHeadlessCombatCore';
+import { DEFAULT_HEADLESS_COMBAT_CORE } from '../../simulation/headless/defaultHeadlessCombatCore';
 
-export const WORKBENCH_HEADLESS_COMBAT_CORE = createCanonicalHeadlessCombatCore(
-  {
-    gameData: getWorkbenchGameData(),
-    compileOptions: {
-      threeValueMechanicsProfileCatalog:
-        DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
-    },
-  }
-);
+export const WORKBENCH_HEADLESS_COMBAT_CORE = DEFAULT_HEADLESS_COMBAT_CORE;
 
 export function compileWorkbenchHeadlessCombat(project, options = {}) {
   return WORKBENCH_HEADLESS_COMBAT_CORE.compile(

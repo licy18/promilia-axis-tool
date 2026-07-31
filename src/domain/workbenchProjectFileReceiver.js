@@ -7,6 +7,7 @@ import { isPngSource } from '../utils/pngMetadata';
 
 export const WORKBENCH_PROJECT_FILE_RESULT_KINDS = Object.freeze({
   PROJECT: 'project',
+  MACHINE_AXIS: 'machine-axis',
   ANALYSIS_REPORT: 'analysis-report',
   RUNTIME_CAPTURE: 'runtime-capture',
   INVALID: 'invalid',
@@ -60,6 +61,19 @@ export async function receiveWorkbenchProjectFile(
   }
 
   const rawFile = await file.text();
+  const machineAxis = parseMachineAxisContractFile(rawFile);
+  if (machineAxis) {
+    return {
+      kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.MACHINE_AXIS,
+      sourceKind: WORKBENCH_PROJECT_FILE_SOURCE_KINDS.JSON,
+      fileName,
+      contract: machineAxis,
+      statusText:
+        source === 'drop'
+          ? '已从拖放导入 Machine Axis'
+          : '已导入 Machine Axis',
+    };
+  }
   const draft = parseWorkbenchProjectFile(rawFile);
   if (draft) {
     return {
@@ -102,6 +116,7 @@ export async function processWorkbenchProjectFile(
   {
     source = 'picker',
     onProject = () => {},
+    onMachineAxis = () => {},
     onAnalysisReport = () => {},
     onRuntimeCapture = () => {},
     onStatus = () => {},
@@ -111,6 +126,13 @@ export async function processWorkbenchProjectFile(
     const result = await receiveWorkbenchProjectFile(file, { source });
     if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.PROJECT) {
       const accepted = await onProject(result.draft, result.statusText);
+      return accepted !== false;
+    }
+    if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.MACHINE_AXIS) {
+      const accepted = await onMachineAxis(
+        result.contract,
+        result.statusText
+      );
       return accepted !== false;
     }
     if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.ANALYSIS_REPORT) {
@@ -130,6 +152,15 @@ export async function processWorkbenchProjectFile(
     onStatus('导入失败');
   }
   return false;
+}
+
+function parseMachineAxisContractFile(rawFile) {
+  try {
+    const parsed = JSON.parse(rawFile);
+    return parsed?.contractName === 'AzPrMachineAxis' ? parsed : null;
+  } catch {
+    return null;
+  }
 }
 
 export function isWorkbenchProjectTextFile(file) {

@@ -1,4 +1,5 @@
 import { createMachineAxisService } from './machineAxisService';
+import { COMBAT_CRITICAL_POLICIES } from '../domain/combatCriticalPolicy';
 
 export const MACHINE_AXIS_CLI_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CLI_CONTRACT_NAME = 'AzPrMachineAxisCli';
@@ -16,7 +17,26 @@ const COMMANDS = new Set([
   'simulate',
   'compare',
   'explain',
+  'batch',
 ]);
+const VALUED_OPTIONS = new Set([
+  '--input',
+  '--output',
+  '--left',
+  '--right',
+  '--format',
+  '--critical-policy',
+  '--seed',
+  '--action',
+  '--hit',
+  '--effect',
+  '--frame',
+  '--jobs',
+  '--burst-window-ms',
+  '--seeds',
+]);
+const OUTPUT_FORMATS = new Set(['json', 'jsonl']);
+const CRITICAL_POLICIES = new Set(Object.values(COMBAT_CRITICAL_POLICIES));
 
 export async function runMachineAxisCli(
   argv,
@@ -40,10 +60,17 @@ export async function runMachineAxisCli(
   try {
     parsed = parseCliArguments(argv);
     if (!parsed.valid) {
+      const usageError = createCliError(
+        'machine-axis-cli-usage',
+        parsed.message
+      );
       await emitResult(
         io,
         parsed.options,
-        createCliError('machine-axis-cli-usage', parsed.message)
+        usageError
+      );
+      await io.writeStderr(
+        `${usageError.error.code}: ${usageError.error.message}\n`
       );
       return MACHINE_AXIS_CLI_EXIT_CODES.USAGE;
     }
@@ -66,6 +93,9 @@ export function parseCliArguments(argv = []) {
     format: 'json',
     criticalPolicy: null,
     seed: null,
+    jobs: null,
+    burstWindowMs: null,
+    seeds: null,
     selector: {},
   };
   const positional = [];
@@ -76,27 +106,83 @@ export function parseCliArguments(argv = []) {
       continue;
     }
     const [flag, inlineValue] = String(token).split(/=(.*)/s, 2);
-    const takeValue = () =>
-      inlineValue != null && inlineValue !== '' ? inlineValue : values.shift();
-    if (flag === '--input') options.input = takeValue();
-    else if (flag === '--output') options.output = takeValue();
-    else if (flag === '--left') options.left = takeValue();
-    else if (flag === '--right') options.right = takeValue();
-    else if (flag === '--format') options.format = takeValue();
-    else if (flag === '--critical-policy') {
-      options.criticalPolicy = takeValue();
-    } else if (flag === '--seed') options.seed = takeValue();
-    else if (flag === '--action') options.selector.actionId = takeValue();
-    else if (flag === '--hit') options.selector.hitIdentity = takeValue();
-    else if (flag === '--effect') options.selector.effectId = takeValue();
-    else if (flag === '--frame') options.selector.frame = Number(takeValue());
-    else {
+    if (!VALUED_OPTIONS.has(flag)) {
       return {
         valid: false,
         command,
         options,
         message: `Unknown option: ${flag}`,
       };
+    }
+    const parsedValue = takeRequiredOptionValue({
+      flag,
+      inlineValue,
+      values,
+    });
+    if (!parsedValue.valid) {
+      return {
+        valid: false,
+        command,
+        options,
+        message: parsedValue.message,
+      };
+    }
+    const value = parsedValue.value;
+    if (flag === '--input') options.input = value;
+    else if (flag === '--output') options.output = value;
+    else if (flag === '--left') options.left = value;
+    else if (flag === '--right') options.right = value;
+    else if (flag === '--format') options.format = value;
+    else if (flag === '--critical-policy') {
+      options.criticalPolicy = value;
+    } else if (flag === '--seed') options.seed = value;
+    else if (flag === '--action') options.selector.actionId = value;
+    else if (flag === '--hit') options.selector.hitIdentity = value;
+    else if (flag === '--effect') options.selector.effectId = value;
+    else if (flag === '--frame') {
+      const frame = Number(value);
+      if (!Number.isFinite(frame) || !Number.isInteger(frame)) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --frame: ${value}`,
+        };
+      }
+      options.selector.frame = frame;
+    } else if (flag === '--jobs') {
+      const jobs = Number(value);
+      if (!Number.isInteger(jobs) || jobs < 1) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --jobs: ${value}`,
+        };
+      }
+      options.jobs = jobs;
+    } else if (flag === '--burst-window-ms') {
+      const windowMs = Number(value);
+      if (!Number.isFinite(windowMs) || windowMs <= 0) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --burst-window-ms: ${value}`,
+        };
+      }
+      options.burstWindowMs = windowMs;
+    } else if (flag === '--seeds') {
+      const seeds = parseCsvSeeds(value);
+      if (seeds.length === 0) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --seeds: ${value}`,
+        };
+      }
+      options.seeds = seeds;
     }
   }
   if (!COMMANDS.has(command)) {
@@ -107,12 +193,31 @@ export function parseCliArguments(argv = []) {
       message: `Unknown command: ${command ?? 'missing'}`,
     };
   }
-  if (!['json', 'jsonl'].includes(options.format)) {
+  if (!OUTPUT_FORMATS.has(options.format)) {
     return {
       valid: false,
       command,
       options,
       message: `Unsupported format: ${options.format}`,
+    };
+  }
+  if (command === 'batch' && options.format === 'jsonl') {
+    return {
+      valid: false,
+      command,
+      options,
+      message: 'batch only supports json output',
+    };
+  }
+  if (
+    options.criticalPolicy != null &&
+    !CRITICAL_POLICIES.has(options.criticalPolicy)
+  ) {
+    return {
+      valid: false,
+      command,
+      options,
+      message: `Unsupported critical policy: ${options.criticalPolicy}`,
     };
   }
   if (command === 'compare') {
@@ -130,6 +235,31 @@ export function parseCliArguments(argv = []) {
     options.input = options.input ?? positional[0] ?? '-';
   }
   return { valid: true, command, options };
+}
+
+function takeRequiredOptionValue({ flag, inlineValue, values }) {
+  if (inlineValue != null) {
+    return inlineValue === ''
+      ? { valid: false, message: `Missing value for ${flag}` }
+      : { valid: true, value: inlineValue };
+  }
+  const nextValue = values[0];
+  if (
+    nextValue == null ||
+    String(nextValue).trim() === '' ||
+    String(nextValue).startsWith('--')
+  ) {
+    return { valid: false, message: `Missing value for ${flag}` };
+  }
+  values.shift();
+  return { valid: true, value: nextValue };
+}
+
+function parseCsvSeeds(value) {
+  return String(value)
+    .split(',')
+    .map(seed => seed.trim())
+    .filter(Boolean);
 }
 
 async function executeCommand(parsed, service, io) {
@@ -151,6 +281,24 @@ async function executeCommand(parsed, service, io) {
         applyCliOverrides(left, options),
         applyCliOverrides(right, options)
       ),
+    };
+  }
+  if (command === 'batch') {
+    const [envelope] = await readContracts(options.input, options, io);
+    const value = await service.evaluateBatch(envelope, {
+      jobs: options.jobs,
+      burstWindowMs: options.burstWindowMs,
+      seeds:
+        options.seeds ??
+        (options.seed != null ? [String(options.seed)] : undefined),
+      criticalPolicy: options.criticalPolicy,
+    });
+    return {
+      exitCode:
+        value?.valid === false
+          ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+          : MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value,
     };
   }
   const inputs = await readContracts(options.input, options, io);

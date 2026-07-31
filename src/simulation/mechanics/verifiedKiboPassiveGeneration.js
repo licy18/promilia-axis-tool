@@ -5,6 +5,7 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_KIBO_PASSIVE_GENERATION_CONTRACT_NAME =
@@ -166,7 +167,7 @@ export function createVerifiedKiboPassiveGeneration({
   const orderedActions = [...(scenario.actions ?? [])].sort(
     (left, right) =>
       Number(left.startMs) - Number(right.startMs) ||
-      String(left.id).localeCompare(String(right.id))
+      compareActionSourceSequence(left, right)
   );
   for (const action of orderedActions) {
     if (executionByActionId.get(action.id)?.execute === false) continue;

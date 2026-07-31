@@ -11,6 +11,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import machineAxisFixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
@@ -92,6 +93,7 @@ vi.mock(
 );
 
 vi.mock('../../data/workbenchKiboActionCatalog', () => ({
+  projectWorkbenchKiboActionCatalog: catalog => catalog,
   loadWorkbenchKiboActionCatalog: async () => ({
     schemaVersion: 1,
     kind: 'workbench-kibo-action-catalog',
@@ -12507,6 +12509,174 @@ describe('Workbench view', () => {
     wrapper.unmount();
     clearInstalledVerifiedCombatMechanicsPackage();
   });
+
+  it('imports, inspects, edits, and rejects Machine Axis through the real Workbench surface', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    await import('../../machine-axis/workbenchMachineAxisAdapter');
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    resetWorkbenchPerformanceCounters();
+
+    await wrapper.get('[data-testid="workbench-open-machine-axis"]').trigger('click');
+    await settleWorkbenchAsyncPanels();
+    expect(getWorkbenchPerformanceCounters()).toMatchObject({
+      authoritativeCompile: 0,
+      authoritativeSimulation: 0,
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-machine-axis-load-fixture"]')
+      .trigger('click');
+
+    await vi.waitFor(
+      () => {
+        expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+          'data-canonical-trace-hash': 'd10c45fb73dc7c6f',
+          'data-canonical-trace-action-count': '16',
+          'data-machine-axis-import-active': 'true',
+        });
+      },
+      { timeout: 30_000 }
+    );
+    await settleWorkbenchAsyncPanels();
+
+    expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
+      '机器输入 14'
+    );
+    expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
+      '实际执行 16'
+    );
+    expect(wrapper.get('[data-testid="machine-axis-status"]').text()).toContain(
+      '已载入 M11-B 120 秒验收轴'
+    );
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-timeline-action"][data-action-id="xunlang-signature"]'
+      ).exists()
+    ).toBe(true);
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-timeline-action"][data-action-id="ruby-enhanced-e1-intent"]'
+      ).exists()
+    ).toBe(true);
+
+    await wrapper
+      .get('[data-testid="workbench-close-machine-axis"]')
+      .trigger('click');
+    await wrapper
+      .get(
+        '[data-testid="workbench-timeline-action"][data-action-id="a3-sampled"]'
+      )
+      .trigger('click');
+    await settleWorkbenchAsyncPanels();
+    resetWorkbenchPerformanceCounters();
+    await selectSideInspectorPanel(wrapper, 'canonical-trace');
+    expect(getWorkbenchPerformanceCounters()).toMatchObject({
+      authoritativeCompile: 0,
+      authoritativeSimulation: 0,
+    });
+
+    const inspector = wrapper.get(
+      '[data-testid="workbench-canonical-trace-inspector"]'
+    );
+    expect(inspector.attributes('data-trace-hash')).toBe('d10c45fb73dc7c6f');
+    expect(inspector.text()).toContain('control 10100703 / sub 0');
+    const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
+    const landedSelect = hitRow.get(
+      '[data-testid="canonical-trace-hit-landed"]'
+    );
+    const criticalSelect = hitRow.get(
+      '[data-testid="canonical-trace-hit-critical-mode"]'
+    );
+    expect(landedSelect.element.value).toBe('hit');
+    expect(criticalSelect.element.value).toBe('sampled');
+    expect(hitRow.text()).toContain('Roll');
+    expect(hitRow.text()).toContain('2345');
+
+    resetWorkbenchPerformanceCounters();
+    await landedSelect.setValue('miss');
+    await vi.waitFor(
+      () => {
+        expect(
+          wrapper
+            .get('[data-testid="canonical-trace-hit-landed"]')
+            .element.value
+        ).toBe('miss');
+        expect(
+          wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
+        ).not.toBe('d10c45fb73dc7c6f');
+      },
+      { timeout: 30_000 }
+    );
+    expect(getWorkbenchPerformanceCounters()).toMatchObject({
+      authoritativeCompile: 1,
+      authoritativeSimulation: 1,
+    });
+
+    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+    await vi.waitFor(
+      () => {
+        expect(
+          wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
+        ).toBe('d10c45fb73dc7c6f');
+        expect(
+          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
+        ).toBe('hit');
+      },
+      { timeout: 30_000 }
+    );
+
+    const projectHashBeforeInvalidImport = wrapper
+      .get('main.workbench')
+      .attributes('data-canonical-trace-hash');
+    const actionIdsBeforeInvalidImport = wrapper
+      .findAll('[data-testid="workbench-timeline-action"]')
+      .map(action => action.attributes('data-action-id'));
+    const invalidContract = structuredClone(machineAxisFixture);
+    invalidContract.actions[1].intent.publicActionId = 99999999;
+    const invalidFile = new File(
+      [JSON.stringify(invalidContract)],
+      'invalid-machine-axis.json',
+      { type: 'application/json' }
+    );
+    const fileInput = wrapper.get(
+      '[data-testid="workbench-import-project-file"]'
+    );
+    Object.defineProperty(fileInput.element, 'files', {
+      configurable: true,
+      value: [invalidFile],
+    });
+    await fileInput.trigger('change');
+    await settleWorkbenchAsyncPanels();
+
+    expect(wrapper.get('[data-testid="machine-axis-status"]').text()).toContain(
+      '当前项目保持不变'
+    );
+    expect(
+      wrapper
+        .get('[data-testid="machine-axis-import-diagnostics"]')
+        .find('[data-diagnostic-code="machine-axis-public-action-unknown"]')
+        .exists()
+    ).toBe(true);
+    expect(
+      wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
+    ).toBe(projectHashBeforeInvalidImport);
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-timeline-action"]')
+        .map(action => action.attributes('data-action-id'))
+    ).toEqual(actionIdsBeforeInvalidImport);
+  }, 120_000);
 });
 
 function createStateCurvePanelProps() {

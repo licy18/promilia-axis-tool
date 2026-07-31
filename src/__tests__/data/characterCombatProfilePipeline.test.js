@@ -1381,7 +1381,7 @@ describe('M10 character combat profile pipeline', () => {
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
-        assertionCount: 117,
+        assertionCount: 118,
         failedCount: 0,
       },
     });
@@ -1392,9 +1392,9 @@ describe('M10 character combat profile pipeline', () => {
         damageEventCount: 422,
         ownerDamageEventCount: 247,
         ownerHitEventCount: 115,
-        ownerHitTotalHpDamage: 9742,
+        ownerHitTotalHpDamage: 9992,
         ownerHitTotalToughnessDamage: 1766,
-        ownerTotalHpDamage: 699319,
+        ownerTotalHpDamage: 699416,
         ownerTotalToughnessDamage: 0,
         enemy: { initialHp: 862800, finalHp: 0 },
       },
@@ -1472,8 +1472,8 @@ describe('M10 character combat profile pipeline', () => {
       tamperedValidation.assertions.find(item => !item.passed)
     ).toMatchObject({
       jsonPath: 'combat.ownerTotalHpDamage',
-      expected: 699320,
-      actual: 699319,
+      expected: 699417,
+      actual: 699416,
     });
   });
 

@@ -105,4 +105,78 @@ describe('Machine Axis CLI real process I/O', () => {
       valid: true,
     });
   }, 30_000);
+
+  it('rejects raw Schema violations before normalization with exit 4', () => {
+    const invalid = structuredClone(fixture);
+    delete invalid.scenario.projectile.defaultWillHit;
+    invalid.scenario.unpublishedFlag = true;
+    invalid.scenario.projectile.targetDistance = '0';
+
+    const result = runCli(['validate', '-'], {
+      input: JSON.stringify(invalid),
+    });
+    const output = parseMachineJson(result.stdout);
+
+    expect(result.status).toBe(4);
+    expect(result.stderr).not.toContain('node:internal');
+    expect(result.stderr).not.toContain(' at ');
+    expect(output).toMatchObject({
+      kind: 'azpr-machine-axis-validation',
+      valid: false,
+      classification: {
+        schemaStatus: 'schema-invalid',
+        runnabilityStatus: 'not-runnable',
+        evidenceStatus: 'not-evaluated',
+      },
+    });
+    expect(output.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-schema-required',
+          path: 'scenario.projectile.defaultWillHit',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-schema-additional-property',
+          path: 'scenario.unpublishedFlag',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-schema-type',
+          path: 'scenario.projectile.targetDistance',
+        }),
+      ])
+    );
+  }, 30_000);
+
+  it.each([
+    [['catalog', '--output'], 'Missing value for --output'],
+    [
+      ['validate', '--critical-policy'],
+      'Missing value for --critical-policy',
+    ],
+    [['validate', '--input'], 'Missing value for --input'],
+    [
+      ['explain', resolve(tempRoot ?? '', 'unused-axis.json'), '--frame', 'nope'],
+      'Invalid value for --frame',
+    ],
+  ])(
+    'rejects missing or invalid valued options before command execution',
+    (args, expectedMessage) => {
+      const result = runCli(args);
+      const output = parseMachineJson(result.stdout);
+
+      expect(result.status).toBe(2);
+      expect(output).toMatchObject({
+        kind: 'azpr-machine-axis-cli-error',
+        error: {
+          code: 'machine-axis-cli-usage',
+          message: expect.stringContaining(expectedMessage),
+        },
+      });
+      expect(output.kind).not.toBe('azpr-machine-axis-catalog');
+      expect(result.stderr).toContain('machine-axis-cli-usage');
+      expect(result.stderr).not.toContain('node:internal');
+      expect(result.stderr).not.toContain(' at ');
+    },
+    30_000
+  );
 });

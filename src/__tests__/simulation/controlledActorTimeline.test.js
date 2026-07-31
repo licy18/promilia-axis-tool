@@ -123,18 +123,18 @@ describe('controlled actor runtime timeline', () => {
       actionExecutionPlan,
     });
 
-    expect(actionExecutionPlan.executedActionIds).toContain('switch-a');
-    expect(actionExecutionPlan.skippedActionIds).toEqual(['switch-z']);
+    expect(actionExecutionPlan.executedActionIds).toContain('switch-z');
+    expect(actionExecutionPlan.skippedActionIds).toEqual(['switch-a']);
     expect(
       timeline.transitions.map(transition => [
         transition.actionId,
         transition.status,
       ])
     ).toEqual([
-      ['switch-a', 'controlled-actor-switch-applied'],
-      ['switch-z', 'controlled-actor-switch-skipped'],
+      ['switch-z', 'controlled-actor-switch-applied'],
+      ['switch-a', 'controlled-actor-switch-skipped'],
     ]);
-    expect(timeline.finalActor.actorId).toBe('actor-b');
+    expect(timeline.finalActor.actorId).toBe('actor-c');
   });
 });
 

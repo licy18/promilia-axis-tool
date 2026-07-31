@@ -13,6 +13,11 @@ import {
   validateCombatCriticalScenario,
 } from '../../domain/combatCriticalPolicy';
 import { getInstalledVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
+import {
+  assertCharacterIsOptimizationReady,
+  getCharacterAcceptanceCatalog,
+  getCharacterAcceptanceEntry,
+} from '../../character-acceptance/characterAcceptanceCatalog';
 
 export const CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION = 1;
 export const CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT =
@@ -160,6 +165,18 @@ export function createCanonicalHeadlessCombatCore({
     return createCanonicalCombatExplanation(run, selector);
   }
 
+  function acceptanceCatalog() {
+    return getCharacterAcceptanceCatalog();
+  }
+
+  function acceptanceFor(ownerId) {
+    return getCharacterAcceptanceEntry(ownerId);
+  }
+
+  function assertOptimizationReady(ownerId) {
+    return assertCharacterIsOptimizationReady(ownerId);
+  }
+
   return Object.freeze({
     schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
     contractName: CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT,
@@ -169,6 +186,9 @@ export function createCanonicalHeadlessCombatCore({
     simulate,
     evaluate,
     explain,
+    acceptanceCatalog,
+    acceptanceFor,
+    assertOptimizationReady,
   });
 }
 
@@ -265,6 +285,9 @@ function projectTraceAction(action) {
     skillId: action.skillId ?? null,
     startMs: action.startMs,
     durationMs: action.durationMs,
+    sourceSequenceIndex: action.sourceSequenceIndex ?? null,
+    sourceSequencePath: action.sourceSequencePath ?? null,
+    sourceSequenceSource: action.sourceSequenceSource ?? null,
     controlSkillId:
       action.selectedActionForm?.controlSkillId ??
       action.actionVariantResolution?.controlSkillId ??
@@ -293,6 +316,9 @@ function projectExecutionPlan(plan = {}) {
       status: entry.status,
       execute: entry.execute,
       executionIndex: entry.executionIndex,
+      sourceSequenceIndex: entry.sourceSequenceIndex ?? null,
+      sourceSequencePath: entry.sourceSequencePath ?? null,
+      sourceSequenceSource: entry.sourceSequenceSource ?? null,
       startMs: entry.startMs,
       durationMs: entry.durationMs,
       readinessStatus: entry.readinessStatus,
@@ -333,6 +359,10 @@ function projectRuntimeEvent(event = {}) {
     id: event.id ?? event.eventId ?? null,
     type: event.type ?? event.kind ?? null,
     timeMs: event.timeMs ?? null,
+    absoluteFrame: event.absoluteFrame ?? event.frameIndex ?? null,
+    runtimePhase: event.runtimePhase ?? null,
+    runtimePhasePriority: event.runtimePhasePriority ?? null,
+    runtimePriority: event.runtimePriority ?? null,
     runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     actionId: event.actionId ?? null,
     actorId: event.actorId ?? null,
@@ -348,6 +378,10 @@ function projectRuntimePayload(payload = null) {
     'actionName',
     'actionType',
     'skillId',
+    'ownerKind',
+    'ownerId',
+    'runtimeOwnerIdentity',
+    'kiboId',
     'sourceActorId',
     'sourceKiboId',
     'sourceSlotId',
@@ -406,6 +440,10 @@ function projectRuntimePayload(payload = null) {
     'sourceAttributionStatus',
     'sourceSelectionPolicy',
     'durationMs',
+    'cooldownMs',
+    'baseCooldownMs',
+    'endsAtMs',
+    'cooldownCount',
     'stateDurationMs',
     'expiresAtMs',
     'layers',
@@ -470,6 +508,11 @@ function projectDamageEvent(event = {}) {
     eventType: event.eventType ?? null,
     stateEventKind: event.stateEventKind ?? null,
     timeMs: event.timeMs,
+    absoluteFrame: event.absoluteFrame ?? null,
+    runtimePhase: event.runtimePhase ?? null,
+    runtimePhasePriority: event.runtimePhasePriority ?? null,
+    runtimePriority: event.runtimePriority ?? null,
+    runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     actionId: event.actionId,
     actorId: event.actorId,
     targetId: event.targetId,
@@ -505,6 +548,10 @@ function projectEffectEvent(event = {}) {
     eventId: event.eventId ?? event.id ?? null,
     actionId: event.actionId ?? null,
     timeMs: event.timeMs ?? null,
+    absoluteFrame: event.absoluteFrame ?? event.frameIndex ?? null,
+    runtimePhase: event.runtimePhase ?? null,
+    runtimePriority: event.runtimePriority ?? null,
+    runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
     effectId: event.effectId ?? null,
     effectName: event.effectName ?? null,
     operation: event.operation ?? event.kind ?? null,
@@ -724,21 +771,29 @@ function projectNumericRecord(value) {
 export function createCanonicalCombatEvaluation(simulation) {
   const byAction = new Map();
   const byActor = new Map();
+  const totals = createEmptyCombatContribution('totals');
   for (const event of simulation.damageTimeline ?? []) {
     const actionId = String(event.actionId ?? 'unattributed');
     const actorId = String(event.actorId ?? 'unattributed');
     accumulateContribution(byAction, actionId, event);
     accumulateContribution(byActor, actorId, event);
+    accumulateContributionValue(totals, event);
   }
   return canonicalizeValue({
     schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
     kind: 'azpr-canonical-combat-evaluation',
     durationMs: simulation.scenario?.durationMs ?? 0,
     totals: {
-      hpDamage: simulation.summary?.totalRawDamage ?? 0,
-      toughnessDamage: simulation.summary?.totalProjectedToughnessDamage ?? 0,
+      hpDamage: totals.hpDamage,
+      toughnessDamage: totals.inflictedToughnessDamage,
+      combatHitCount: totals.combatHitCount,
+      stateEventCount: totals.stateEventCount,
+      inflictedToughnessDamage: totals.inflictedToughnessDamage,
+      recoveredToughness: totals.recoveredToughness,
+      netToughnessDamage:
+        totals.inflictedToughnessDamage - totals.recoveredToughness,
       selfEnergyDelta: simulation.summary?.totalSelfEnergyDelta ?? 0,
-      projectedHitCount: simulation.summary?.projectedHitCount ?? 0,
+      projectedHitCount: totals.combatHitCount,
       executedActionCount: simulation.summary?.executedActionCount ?? 0,
       skippedActionCount: simulation.summary?.skippedActionCount ?? 0,
     },
@@ -844,8 +899,21 @@ function createCanonicalProjectInput(project) {
   delete metadata.transport;
   return {
     ...project,
+    actions: (project?.actions ?? []).map(createCanonicalActionInput),
     metadata,
   };
+}
+
+function createCanonicalActionInput(action) {
+  const value = { ...action };
+  delete value.startFrame;
+  delete value.endFrame;
+  delete value.durationFrames;
+  if (value.timing && typeof value.timing === 'object') {
+    value.timing = { ...value.timing };
+    delete value.timing.animationTimeMs;
+  }
+  return value;
 }
 
 function resolveCoreCriticalInput(input) {
@@ -910,16 +978,39 @@ function createDataIdentity({ scenario, gameData }) {
 }
 
 function accumulateContribution(target, identity, event) {
-  const current = target.get(identity) ?? {
+  const current = target.get(identity) ?? createEmptyCombatContribution(identity);
+  accumulateContributionValue(current, event);
+  target.set(identity, current);
+}
+
+function createEmptyCombatContribution(identity) {
+  return {
     identity,
     hpDamage: 0,
     toughnessDamage: 0,
     hitCount: 0,
+    combatHitCount: 0,
+    stateEventCount: 0,
+    inflictedToughnessDamage: 0,
+    recoveredToughness: 0,
+    netToughnessDamage: 0,
   };
-  current.hpDamage += Number(event.rawDamage) || 0;
-  current.toughnessDamage += Number(event.toughnessDamage) || 0;
-  current.hitCount += 1;
-  target.set(identity, current);
+}
+
+function accumulateContributionValue(current, event) {
+  const toughnessDamage = Number(event.toughnessDamage) || 0;
+  if (event.stateEventKind) {
+    current.stateEventCount += 1;
+    current.recoveredToughness += Math.max(0, -toughnessDamage);
+  } else {
+    current.hpDamage += Number(event.rawDamage) || 0;
+    current.combatHitCount += 1;
+    current.hitCount += 1;
+    current.inflictedToughnessDamage += Math.max(0, toughnessDamage);
+  }
+  current.toughnessDamage = current.inflictedToughnessDamage;
+  current.netToughnessDamage =
+    current.inflictedToughnessDamage - current.recoveredToughness;
 }
 
 function normalizeValidationIssues(error) {

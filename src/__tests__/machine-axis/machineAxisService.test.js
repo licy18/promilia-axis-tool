@@ -1,5 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
-import acceptanceReport from '../../../reports/m11/machine-axis-acceptance-20260729.json';
+import integratedBaseline from '../../../reports/m11/m11-headless-integrated-baseline-20260730.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
@@ -52,6 +52,10 @@ function createAxis({
       enemy: { enemyId: 300032 },
       initialRuntimeState: {},
       critical,
+      projectile: {
+        targetDistance: 0,
+        defaultWillHit: true,
+      },
     },
     actions: actions ?? [
       {
@@ -134,7 +138,7 @@ describe('Machine Axis service', () => {
       trace: expect.any(String),
       evaluation: expect.any(String),
     });
-  });
+  }, 30_000);
 
   it('publishes and resolves the complete generated kibo action census', () => {
     const service = createMachineAxisService();
@@ -208,7 +212,7 @@ describe('Machine Axis service', () => {
     expect(() => service.simulate(shortageAxis)).toThrow(
       MachineAxisValidationError
     );
-  });
+  }, 30_000);
 
   it('reports concrete actor resource shortage without a failed action block', () => {
     const axis = createAxis({
@@ -337,9 +341,7 @@ describe('Machine Axis service', () => {
         }),
       })
     );
-    expect(acceptanceReport.canonicalHashes).toEqual(run.hashes);
-    expect(acceptanceReport.r1.canonicalHashes).toEqual(run.hashes);
-    expect(acceptanceReport.r2.canonicalHashes).toEqual(run.hashes);
+    expect(integratedBaseline.machineAxis.canonicalHashes).toEqual(run.hashes);
   });
 
   it('removes all real hit transactions when landed is miss', () => {

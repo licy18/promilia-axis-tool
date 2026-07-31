@@ -1787,9 +1787,27 @@ M11 输入合同相应增加场景级 `sampled / expected / critical / non-criti
 
 唯一无头核心继续提供 `catalog / compile / validate / simulate / evaluate / explain` 六个纯接口。R1 统一了场景级与逐 hit `sampled` 的 seed/随机源门禁，隔离资源预检与最终随机序列，按命中时目标属性 102 应用 `CRI_DEFENSE`，并让 Workbench 分析报告复现只调用 canonical core。小玉、红宝石、寒悠悠及寒悠悠主控 Buff 切人 golden 的 replay/summary hash 无漂移；canonical trace hash 已按新增暴击追踪字段更新。完整 146 文件/901 测试、62/62 production preview、41/41 必需能力和全部来源/漂移守门通过。Workbench gzip `375,287B`、总 JS gzip `768,160B` 继续作为对外发布风险单列；独立复验在 `80c5f35` 通过，随后进入 M11-B。
 
-### M11-B-R2 Machine Axis Contract 与 CLI 收口完成，等待产品验收（2026-07-29）
+### M11-B-R2 Machine Axis Contract 与 CLI 已通过产品验收（2026-07-29）
 
-Machine Axis v1 继续通过唯一 canonical core 提供版本化 Schema、语义排程、逐 hit 命中/暴击覆盖、captured roll 和五命令 CLI。R1 补齐正式奇波目录的 122 只奇波/366 个公开动作，合同固定 60 FPS，文件读取失败稳定返回 INPUT=3，异步写出失败稳定返回 RUNTIME=5 并将版本化错误回退到 stdout；资源不足诊断保留 owner、identity、current/required 且不生成失败占轴块。120 秒 fixture 现含三名角色实际切入、红宝石弹药交易和真实奇波动作，API/CLI/Workbench 的 canonical hash 一致。R2 为真实子进程 I/O 用例设置 30 秒测试边界，并由正式夹具测试直接守住验收报告 canonical hash，防止并发负载抖动和陈旧报告再次漏过。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力及六道审计通过，四份 M10 golden 无漂移。Workbench gzip `375,306B`、总 JS gzip `768,501B` 继续作为对外发布风险，M11-C 未启动。
+Machine Axis v1 继续通过唯一 canonical core 提供版本化 Schema、语义排程、逐 hit 命中/暴击覆盖、captured roll 和五命令 CLI。R1 补齐正式奇波目录的 122 只奇波/366 个公开动作，合同固定 60 FPS，文件读取失败稳定返回 INPUT=3，异步写出失败稳定返回 RUNTIME=5 并将版本化错误回退到 stdout；资源不足诊断保留 owner、identity、current/required 且不生成失败占轴块。120 秒 fixture 现含三名角色实际切入、红宝石弹药交易和真实奇波动作，API/CLI/Workbench 的 canonical hash 一致。R2 为真实子进程 I/O 用例设置 30 秒测试边界，并由正式夹具测试直接守住验收报告 canonical hash，防止并发负载抖动和陈旧报告再次漏过。聚焦 7 文件/43 测试、隔离完整 151 文件/931 测试、62/62 production preview、41/41 必需能力及六道审计通过，四份 M10 golden 无漂移。M11-B-R2 已在 `8da52fb9daa8d849c14b1d737d0d723e9ab077d5` 通过产品验收；Workbench gzip `375,306B`、总 JS gzip `768,501B` 继续作为对外发布风险。
+
+### M11-C Visual Verification Workbench 已通过产品验收（2026-07-30）
+
+Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource/state 索引，并接通 Machine Axis v1 的冷启动导入、精确导出、无效输入保护与逐 hit 命中/暴击编辑。暴伤、expected 两分支/概率/核心加权值和事件物化状态均直接消费 canonical settlement；标准轴显示 `150%` 与 `6.2 / 6 / 10 / 5% / false`，缺字段显示未知。M11-C 已在 `308dd07fbbb8fe0759062e9dcc02c65b0fd46115` 通过产品验收并进入 M11-D；包体超限和纯性能抖动继续只记录为发布风险。
+
+### M11-D 角色机制验收协议实现已完成（2026-07-30）
+
+R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。`899edea0c5a1f718153ebe86712ecd8c31aabf7d` 的角色单边产品签收未带入最终合并外审基线；181 个 source gap 与 706 个 acceptance gap 仍构成 887 个唯一功能阻断。当前三角色保持 `runtime-integrated`，`visuallyAcceptedCount=0`、`optimizationReadyCount=0`；视觉资格需按最终合并基线重新验收，M12 明确未启动。
+
+### M11 无头核心外部审计已通过并关闭（2026-07-31）
+
+M11-01..08 已由前轮外部复审关闭。R2 基线 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 将 Machine Axis 原始数组顺序在 compile 前固化为 source sequence，并贯穿派生、诊断和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 取值参数统一在 I/O 前校验，warning path 使用 canonical plan 真实索引。不同角色可携带同名奇波，CD 与资源按 `actorId+kiboId` 隔离。
+
+最终外部短复核在 `64603640bda82d6ab3d869e98d70696f73caeef7` 通过且无新增 P0-P3：M11-09 关闭，ID 重命名反例为 `468 / 468`；CLI 参数边界 `7/7` 在 I/O 前以 exit 2 拒绝非法输入；warning path 指向 `executionPlan.actions.1` 与 `.15`；官方完整性校验和五命令 smoke 均通过。既有审计包与 SHA 不变。该通过只关闭 M11 无头核心外审，不代表角色/奇波已经视觉验收或优化就绪；当前两项计数均为 0，M12 继续锁定。
+
+### M11-R3 基线清理（2026-07-31，已通过）
+
+Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis source sequence，持久化重建后 input/trace hash 与权威基线 `c91f9da64e02ef84 / d10c45fb73dc7c6f` 一致；空 draft 不再被误标为根序列 0。陈旧测试期望已同步到已提交权威 golden 报告（旧 trace hash `017c87…`、expected 临界分支、assertionCount、调谐印记伤害），M11-01 边界用例超时放宽至 15s。全量回归 165 文件 / 1100 测试通过。
 
 ## 10. 文档维护规则
 
