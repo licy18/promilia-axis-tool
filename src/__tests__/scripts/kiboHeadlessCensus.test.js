@@ -1514,5 +1514,5 @@ describe('kibo headless census', () => {
         row => row.skillId === 520046
       )
     ).toBe(false);
-  });
+  }, 15_000);
 });

@@ -18,6 +18,7 @@ const COMMANDS = new Set([
   'compare',
   'explain',
   'batch',
+  'search',
 ]);
 const VALUED_OPTIONS = new Set([
   '--input',
@@ -34,6 +35,12 @@ const VALUED_OPTIONS = new Set([
   '--jobs',
   '--burst-window-ms',
   '--seeds',
+  '--beam-width',
+  '--top-n',
+  '--max-depth',
+  '--objective',
+  '--max-actions-per-owner',
+  '--max-kibo-actions',
 ]);
 const OUTPUT_FORMATS = new Set(['json', 'jsonl']);
 const CRITICAL_POLICIES = new Set(Object.values(COMBAT_CRITICAL_POLICIES));
@@ -96,6 +103,12 @@ export function parseCliArguments(argv = []) {
     jobs: null,
     burstWindowMs: null,
     seeds: null,
+    beamWidth: null,
+    topN: null,
+    maxDepth: null,
+    objective: null,
+    maxActionsPerOwner: null,
+    maxKiboActions: null,
     selector: {},
   };
   const positional = [];
@@ -183,6 +196,34 @@ export function parseCliArguments(argv = []) {
         };
       }
       options.seeds = seeds;
+    } else if (['--beam-width', '--top-n', '--max-depth', '--max-actions-per-owner', '--max-kibo-actions'].includes(flag)) {
+      const number = Number(value);
+      if (!Number.isInteger(number) || number < 1) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for ${flag}: ${value}`,
+        };
+      }
+      if (flag === '--beam-width') options.beamWidth = number;
+      else if (flag === '--top-n') options.topN = number;
+      else if (flag === '--max-depth') options.maxDepth = number;
+      else if (flag === '--max-actions-per-owner') {
+        options.maxActionsPerOwner = number;
+      } else {
+        options.maxKiboActions = number;
+      }
+    } else if (flag === '--objective') {
+      if (!['damage', 'burst', 'toughness'].includes(value)) {
+        return {
+          valid: false,
+          command,
+          options,
+          message: `Invalid value for --objective: ${value}`,
+        };
+      }
+      options.objective = value;
     }
   }
   if (!COMMANDS.has(command)) {
@@ -201,12 +242,15 @@ export function parseCliArguments(argv = []) {
       message: `Unsupported format: ${options.format}`,
     };
   }
-  if (command === 'batch' && options.format === 'jsonl') {
+  if (
+    ['batch', 'search'].includes(command) &&
+    options.format === 'jsonl'
+  ) {
     return {
       valid: false,
       command,
       options,
-      message: 'batch only supports json output',
+      message: `${command} only supports json output`,
     };
   }
   if (
@@ -298,6 +342,33 @@ async function executeCommand(parsed, service, io) {
         value?.valid === false
           ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
           : MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value,
+    };
+  }
+  if (command === 'search') {
+    const [envelope] = await readContracts(options.input, options, io);
+    const contract = applyCliOverrides(
+      envelope?.contract ?? envelope,
+      options
+    );
+    const value = await service.search(
+      {
+        contract,
+        options: envelope?.contract ? (envelope.options ?? {}) : {},
+      },
+      {
+        beamWidth: options.beamWidth,
+        topN: options.topN,
+        maxDepth: options.maxDepth,
+        objective: options.objective,
+        maxActionsPerOwner: options.maxActionsPerOwner,
+        maxKiboActions: options.maxKiboActions,
+        burstWindowMs: options.burstWindowMs,
+        jobs: options.jobs,
+      }
+    );
+    return {
+      exitCode: MACHINE_AXIS_CLI_EXIT_CODES.OK,
       value,
     };
   }

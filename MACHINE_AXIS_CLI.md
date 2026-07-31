@@ -19,6 +19,7 @@ node scripts/run-machine-axis-cli.mjs simulate fixtures/machine-axis/m11-b-three
 node scripts/run-machine-axis-cli.mjs compare --left fixtures/machine-axis/m11-b-three-actor-120s.json --right fixtures/machine-axis/m11-b-three-actor-120s.json
 node scripts/run-machine-axis-cli.mjs explain fixtures/machine-axis/m11-b-three-actor-120s.json --action a3-sampled
 node scripts/run-machine-axis-cli.mjs batch fixtures/machine-axis/m12-batch-example.json --jobs 4 --output work/m12/batch-report.json
+node scripts/run-machine-axis-cli.mjs search fixtures/machine-axis/m12-search-example.json --beam-width 2 --top-n 3 --output work/m12/search-report.json
 ```
 
 Use `-` for stdin. `--format jsonl` reads and writes one contract/result per line. `--critical-policy` and `--seed` are explicit input overrides and therefore change the canonical input hash.
@@ -75,6 +76,49 @@ Per-run report fields:
 Sampled runs (`seeds` with one or more seeds) run each seed under `policy: sampled` and report `sampling.metrics` with `count`, `mean`, sample `variance`, `stdDev`, `min`, `max`, and `p5`/`p25`/`p50`/`p75`/`p95` quantiles. `expected` is the deterministic comparison default for pure-damage hits; forced `critical`/`non-critical`, and `expected` on hits with critical state effects, are rejected in favor of explicit seeded sampling unless an exact weighted-branch policy is proven.
 
 Batch failures are row-level: invalid contracts, sampled-policy misuse, and runtime errors are reported per run while the rest of the batch continues. The batch report is a single JSON document; `batch` does not accept `--format jsonl`.
+
+## Search
+
+`search` runs event-boundary beam search over candidate output axes and returns an interpretable Top-N. The engine reuses the canonical core: every candidate is evaluated through `createMachineAxisService().simulate` and the M12-A critical-policy safety gate is preserved; the search never enumerates frame by frame and never invents derived actions.
+
+Input is a search envelope:
+
+```json
+{
+  "kind": "azpr-machine-axis-search",
+  "contract": { "...": "full machine axis contract" },
+  "options": {
+    "beamWidth": 8,
+    "topN": 5,
+    "maxDepth": 24,
+    "objective": "damage",
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 3,
+    "includeKibo": true,
+    "includeSwitch": true,
+    "includeNormalAttacks": true
+  }
+}
+```
+
+CLI options override envelope options and take precedence: `--beam-width`, `--top-n`, `--max-depth`, `--objective` (`damage` | `burst` | `toughness`), `--max-actions-per-owner`, `--max-kibo-actions`, plus shared `--burst-window-ms`, `--jobs`, `--critical-policy`, `--seed`, `--seeds`, `--output`.
+
+```powershell
+node scripts/run-machine-axis-cli.mjs search fixtures/machine-axis/m12-search-example.json --output work/m12/search-report.json
+node scripts/run-machine-axis-cli.mjs search - --objective burst --top-n 3
+```
+
+Every result row contains:
+
+- `rank`, `score`, and `deltaVsRank1`
+- `team` (slot/character/kibo/initial SP), full `axis` contract (directly importable into the Workbench), and `hashes` (`input`/`data`/`trace`)
+- `legality` (`valid`, issues, warnings, classification, invalid action count)
+- `criticalPolicy` and the scenario assumptions (enemy, critical policy/seed, initial energy, duration, objective)
+- `coverageTrust`: counts of assumption/evidence-open warnings with a note that official conclusions require M12-C accepted characters
+- `metrics` (damage, DPS, burst window, toughness, resource surplus, idle, non-executable actions) and `contributions` by actor/action
+- `causalExplanation`: the generated action sequence with frames and the end state (resources, cooldowns, enemy)
+
+`search` reports a single JSON document and does not accept `--format jsonl`. Exit codes follow the same contract: `0` success, `2` usage, `3` input read/parse, `4` invalid search envelope.
 
 ## Exit Codes
 

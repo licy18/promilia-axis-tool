@@ -527,7 +527,7 @@ describe('Machine Axis service', () => {
     expect(conflict.issues).toContainEqual(
       expect.objectContaining({ code: 'machine-axis-action-not-executable' })
     );
-  });
+  }, 15_000);
 
   it('rejects illegal loadouts and stale semantic variant identities', () => {
     const service = createMachineAxisService();

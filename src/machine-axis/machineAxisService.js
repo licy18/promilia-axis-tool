@@ -22,6 +22,8 @@ import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHead
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
 import { createMachineAxisBatchEvaluator } from './machineAxisBatchEvaluator';
+import { createMachineAxisSearchEngine } from './machineAxisSearchEngine';
+import { createMachineAxisSearchReport } from './machineAxisSearchReport';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -220,6 +222,64 @@ export function createMachineAxisService({
       envelope,
       options
     );
+  }
+
+  async function search(envelope, options = {}) {
+    const contract = Object.prototype.hasOwnProperty.call(
+      envelope ?? {},
+      'contract'
+    )
+      ? envelope.contract
+      : envelope;
+    if (!contract || typeof contract !== 'object' || Array.isArray(contract)) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-contract-required',
+          'contract',
+          'Search envelope requires a machine axis contract'
+        ),
+      ]);
+    }
+    if (
+      envelope?.kind != null &&
+      envelope.kind !== 'azpr-machine-axis-search'
+    ) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-kind-unsupported',
+          'kind',
+          `unsupported search kind: ${envelope.kind}`
+        ),
+      ]);
+    }
+    const envelopeOptions = envelope?.options ?? {};
+    const mergedOptions = {
+      ...envelopeOptions,
+      ...pickDefined(options, [
+        'beamWidth',
+        'topN',
+        'maxDepth',
+        'objective',
+        'maxActionsPerOwner',
+        'maxKiboActions',
+        'burstWindowMs',
+        'jobs',
+        'includeKibo',
+        'includeSwitch',
+        'includeNormalAttacks',
+      ]),
+    };
+    const engine = createMachineAxisSearchEngine({ service: api });
+    const searchResult = await engine.search({
+      contract,
+      options: mergedOptions,
+    });
+    return createMachineAxisSearchReport({
+      searchResult,
+      contract,
+      service: api,
+      options: mergedOptions,
+    });
   }
 
   function prepareValidated(machineAxis, options = {}) {
@@ -468,6 +528,7 @@ export function createMachineAxisService({
     explain,
     compare,
     evaluateBatch,
+    search,
     prepare,
     prepareValidated,
   });
@@ -1957,6 +2018,15 @@ function nonNegativeIntegerOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) && number >= 0 ? number : null;
+}
+
+function pickDefined(source, keys) {
+  const result = {};
+  for (const key of keys) {
+    const value = source?.[key];
+    if (value !== undefined && value !== null) result[key] = value;
+  }
+  return result;
 }
 
 function requireMechanicsPackage() {
