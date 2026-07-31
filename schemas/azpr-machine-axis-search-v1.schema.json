@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azpr.local/schemas/azpr-machine-axis-search-v1.schema.json",
+  "title": "Azur Promilia Machine Axis Search Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractName",
+    "kind",
+    "scenario",
+    "dataIdentity",
+    "objective",
+    "summary",
+    "results"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractName": { "const": "AzPrMachineAxisSearchReport" },
+    "kind": { "const": "azpr-machine-axis-search-report" },
+    "scenario": { "$ref": "#/$defs/scenarioAssumptions" },
+    "dataIdentity": { "type": "object" },
+    "objective": {
+      "enum": ["damage", "burst", "toughness"]
+    },
+    "summary": { "$ref": "#/$defs/searchSummary" },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/searchResult" }
+    }
+  },
+  "$defs": {
+    "scenarioAssumptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "durationFrames", "fps", "enemy", "critical"],
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "durationFrames": { "type": ["integer", "null"] },
+        "fps": { "type": "integer" },
+        "enemy": { "type": "object" },
+        "critical": { "type": "object" },
+        "initialEnergy": { "type": "object" },
+        "projectile": { "type": ["object", "null"] }
+      }
+    },
+    "searchSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "steps",
+        "candidatesEvaluated",
+        "invalidCandidates",
+        "mergedCandidates",
+        "prunedCandidates",
+        "beamWidth",
+        "topN",
+        "objective",
+        "horizonFrames"
+      ],
+      "properties": {
+        "steps": { "type": "integer" },
+        "candidatesEvaluated": { "type": "integer" },
+        "invalidCandidates": { "type": "integer" },
+        "mergedCandidates": { "type": "integer" },
+        "prunedCandidates": { "type": "integer" },
+        "expandedCandidates": { "type": "integer" },
+        "completedCandidates": { "type": "integer" },
+        "beamWidth": { "type": "integer" },
+        "topN": { "type": "integer" },
+        "objective": { "enum": ["damage", "burst", "toughness"] },
+        "horizonFrames": { "type": "integer" },
+        "wallTimeMs": { "type": "number" }
+      }
+    },
+    "searchResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "score",
+        "team",
+        "axis",
+        "hashes",
+        "legality",
+        "criticalPolicy",
+        "coverageTrust",
+        "metrics",
+        "causalExplanation"
+      ],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1 },
+        "score": { "type": "number" },
+        "deltaVsRank1": { "type": "number" },
+        "team": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["slotId", "characterId"],
+            "properties": {
+              "slotId": { "type": "string" },
+              "characterId": { "type": "integer" },
+              "level": { "type": ["integer", "null"] },
+              "initialSp": { "type": ["number", "null"] },
+              "kiboId": { "type": ["integer", "null"] }
+            }
+          }
+        },
+        "axis": { "type": "object" },
+        "hashes": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": ["input", "data", "trace"]
+            },
+            { "type": "null" }
+          ]
+        },
+        "legality": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["valid", "issues", "warnings"],
+          "properties": {
+            "valid": { "type": "boolean" },
+            "issues": { "type": "array" },
+            "warnings": { "type": "array" },
+            "classification": { "type": ["object", "null"] },
+            "invalidActionCount": { "type": "integer" }
+          }
+        },
+        "criticalPolicy": { "type": "object" },
+        "coverageTrust": { "type": "object" },
+        "metrics": { "type": "object" },
+        "contributions": { "type": ["object", "null"] },
+        "causalExplanation": { "type": "object" }
+      }
+    }
+  }
+}

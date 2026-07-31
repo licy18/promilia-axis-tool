@@ -868,6 +868,10 @@ Workbench 草稿快照与项目重建路径现在持久化并恢复 Machine Axis
 - 使用动作语法、beam search、等价状态 hash 合并和上界剪枝；外层枚举队伍，内层搜索输出轴。
 - 输出带场景假设、数据版本、合法性、暴击策略/seed 集、覆盖可信度和因果解释的 Top-N 结果，不给脱离前提的单一“最佳答案”。
 
+#### M12-B 已交付（2026-07-31）
+
+事件边界搜索器已实现：`machineAxisSearchState.js`（等价状态快照 + fnv1a 状态 hash + 事件边界节点）、`machineAxisSearchGenerator.js`（候选动作生成，复用已验证目录与核心映射）、`machineAxisSearchEngine.js`（beam + 等价合并 + 保守上界剪枝，确定性）、`machineAxisSearchReport.js`（Top-N 报告契约）。CLI 新增 `search` 命令，schema `schemas/azpr-machine-axis-search-v1.schema.json`，示例 `fixtures/machine-axis/m12-search-example.json`。全部候选经 `service.simulate` 评估，暴击安全门沿用 M12-A；无逐帧枚举、无自造派生动作；Top-N 轴可回灌 Workbench（草稿重建 hash 一致）。全量回归 169 文件 / 1127 测试通过。M12-B 仅做功能验证（3 个 `runtime-integrated` 角色），正式最优结论待 M12-C 已验收角色；M12-C 未解锁。
+
 #### M12-C：末音试点
 
 - 先完整验收末音和一小组候选队友，不等待全角色完成。

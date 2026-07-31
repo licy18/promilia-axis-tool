@@ -1765,6 +1765,10 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 
 机器接口与网页不得维护两套战斗逻辑。AI 不能替代运行时证据和产品验收，未达到 `optimization-ready` 的角色不得进入正式最优解。新的视觉特效、非必要响应式适配、拖拽手感细修、包体压缩和全角色盲目批量接入暂缓；包体继续记录，但只在对外发布时作为阻断门。详细阶段目标与验收条件见 `DEVELOPMENT_PLAN.md` 的 M11/M12 章节。
 
+### M12-B 事件边界搜索器已交付（2026-07-31）
+
+实现事件边界节点/等价状态 hash（`machineAxisSearchState.js`）、候选动作生成（`machineAxisSearchGenerator.js`）、beam + 等价合并 + 保守上界剪枝主循环（`machineAxisSearchEngine.js`）与 Top-N 报告契约（`machineAxisSearchReport.js`）；CLI `search`、schema `azpr-machine-axis-search-v1.schema.json`、示例 `m12-search-example.json`。候选全部经 `service.simulate` 评估，暴击安全门沿用 M12-A，无逐帧枚举、无自造派生动作；Top-N 轴可回灌 Workbench（重建 hash 一致）。全量回归 169 文件 / 1127 测试通过。M12-B 为功能验证（3 个 `runtime-integrated` 角色）；正式最优结论与 M12-C 末音试点仍锁定，等待用户解锁。
+
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 
 普通 A3 与普通 A4 现分别按 `18F` 和 `10/14/18/22F` 的真实投射物链结算，A4 四次 hit 与爆发 A2 十二段保持独立。入场星携技保持 `95F` 占轴但允许 `55F/109F` 命中在块外继续结算，逐 hit 选择统一写回父切人事件；完美招架反击由 `successful-parry` 场景前置驱动 `10101049/sub1` 的两次命中。缘结阈值事务会同时清空资源、进入爆发并获得 2 层风印记；极限反击本体不再因仅开放派生窗口而误触发玉未央。

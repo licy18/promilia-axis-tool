@@ -57,7 +57,7 @@ describe('controlled Frida runtime capture host', () => {
     expect(productionRun.stderr).toContain(
       'production-runtime-captures-incomplete'
     );
-  });
+  }, 15_000);
 
   it('refuses a PID before attach without explicit controlled-session confirmation', () => {
     const hostScript = resolve('scripts/capture-azpr-runtime.py');

@@ -287,6 +287,50 @@ describe('Machine Axis CLI', () => {
     expect(report.summary.okCount).toBe(1);
   }, 30_000);
 
+  it('runs search envelopes and returns a Top-N report', async () => {
+    const envelope = {
+      kind: 'azpr-machine-axis-search',
+      contract: cloneFixture(),
+      options: {
+        beamWidth: 2,
+        topN: 2,
+        maxDepth: 2,
+        maxActionsPerOwner: 2,
+        maxKiboActions: 1,
+        includeSwitch: false,
+        objective: 'damage',
+      },
+    };
+    const harness = createHarness({ stdin: JSON.stringify(envelope) });
+    const exitCode = await runMachineAxisCli(['search', '-'], harness.io);
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
+    const report = parseJson(harness.output.stdout);
+    expect(report).toMatchObject({
+      kind: 'azpr-machine-axis-search-report',
+      objective: 'damage',
+      summary: { beamWidth: 2, topN: 2 },
+    });
+    expect(report.results.length).toBeGreaterThan(0);
+    expect(report.results.length).toBeLessThanOrEqual(2);
+    expect(report.results[0].axis.actions.length).toBeGreaterThan(0);
+    expect(harness.output.stderr).toBe('');
+  }, 120_000);
+
+  it('returns validation exit code for malformed search envelopes', async () => {
+    const harness = createHarness({
+      stdin: JSON.stringify({
+        kind: 'azpr-machine-axis-search',
+        contract: {},
+      }),
+    });
+    const exitCode = await runMachineAxisCli(['search', '-'], harness.io);
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION);
+    expect(parseJson(harness.output.stdout)).toMatchObject({
+      kind: 'azpr-machine-axis-cli-error',
+      error: { code: 'machine-axis-cli-validation-failed' },
+    });
+  }, 30_000);
+
   it.each([
     ['catalog', '--output'],
     ['catalog', '--output', '--format', 'json'],
@@ -301,6 +345,12 @@ describe('Machine Axis CLI', () => {
     ['batch', '--seeds'],
     ['batch', '--seeds', ','],
     ['batch', '-', '--format', 'jsonl'],
+    ['search', '--beam-width'],
+    ['search', '--beam-width', '0'],
+    ['search', '--top-n', 'x'],
+    ['search', '--max-depth', '-1'],
+    ['search', '--objective', 'nope'],
+    ['search', '-', '--format', 'jsonl'],
   ])(
     'rejects valued-option usage before reading input or calling the service',
     async (...args) => {
