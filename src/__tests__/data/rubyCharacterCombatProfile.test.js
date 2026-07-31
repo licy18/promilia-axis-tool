@@ -973,7 +973,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       validation: {
         status: 'authoritative-golden-runtime-expectation-passed',
         passed: true,
-        assertionCount: 123,
+        assertionCount: 129,
         failedCount: 0,
       },
     });
@@ -1000,11 +1000,11 @@ describe('M10-B1 Ruby character combat profile', () => {
             totalToughnessDamage: 464,
           },
         },
-        ownerTotalHpDamage: 164523,
+        ownerTotalHpDamage: 164311,
         ownerTotalToughnessDamage: 2198,
         enemy: {
           initialHp: 862800,
-          finalHp: 698183,
+          finalHp: 698395,
         },
       },
       effects: {

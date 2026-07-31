@@ -17,7 +17,7 @@ describe('canonicalTraceViewIndex', () => {
     const second = createCanonicalTraceViewIndex(run);
 
     expect(second).toBe(first);
-    expect(first.traceHash).toBe('017c87abc8087efc');
+    expect(first.traceHash).toBe('d10c45fb73dc7c6f');
     expect(first.actionViews).toHaveLength(16);
 
     const kibo = first.actionsById.get('xunlang-signature');
@@ -82,13 +82,13 @@ describe('canonicalTraceViewIndex', () => {
         sourceCriticalDamageBasisPoints: 15000,
         expectedResult: {
           probabilityBasisPoints: 500,
-          nonCriticalRaw: '393216',
-          nonCriticalValue: 6,
-          criticalRaw: '655360',
-          criticalValue: 10,
-          weightedRaw: '406323',
-          weightedValue: 6.1999969482421875,
-          weightedInteger: '6',
+          nonCriticalRaw: '524288',
+          nonCriticalValue: 8,
+          criticalRaw: '851968',
+          criticalValue: 13,
+          weightedRaw: '540672',
+          weightedValue: 8.25,
+          weightedInteger: '8',
           criticalEventMaterialized: false,
         },
         eventMaterialized: false,

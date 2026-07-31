@@ -846,4 +846,73 @@ describe('workbench project actor configuration', () => {
       ],
     });
   });
+
+  describe('machine axis source sequence draft persistence', () => {
+    it('keeps source sequence through draft normalization and project rebuild', () => {
+      const draft = createWorkbenchActionDraft({
+        id: 'a3-inherit',
+        type: ACTION_TYPES.SKILL,
+        skillId: 10100701,
+        actorCharacterId: 101007,
+        sourceSequenceIndex: 1,
+        sourceSequencePath: [1],
+        sourceSequenceSource: 'machine-axis-input-array-order',
+      });
+      expect(draft).toMatchObject({
+        sourceSequenceIndex: 1,
+        sourceSequencePath: [1],
+        sourceSequenceSource: 'machine-axis-input-array-order',
+      });
+      const [normalized] = normalizeWorkbenchActionDrafts([draft], 101007);
+      expect(normalized).toMatchObject({
+        sourceSequenceIndex: 1,
+        sourceSequencePath: [1],
+        sourceSequenceSource: 'machine-axis-input-array-order',
+      });
+      const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+        actions: [normalized],
+      });
+      expect(project.actions[0]).toMatchObject({
+        id: 'a3-inherit',
+        sourceSequenceIndex: 1,
+        sourceSequencePath: [1],
+        sourceSequenceSource: 'machine-axis-input-array-order',
+      });
+    });
+
+    it('does not invent source sequence for plain workbench drafts', () => {
+      const plain = createWorkbenchActionDraft({
+        id: 'plain-action',
+        type: ACTION_TYPES.SKILL,
+        skillId: 10100701,
+        actorCharacterId: 101007,
+      });
+      expect(plain.sourceSequenceIndex).toBeUndefined();
+      expect(plain.sourceSequencePath).toBeUndefined();
+      expect(plain.sourceSequenceSource).toBeUndefined();
+      const [normalized] = normalizeWorkbenchActionDrafts([plain], 101007);
+      expect(normalized.sourceSequenceIndex).toBeUndefined();
+      expect(normalized.sourceSequencePath).toBeUndefined();
+      expect(normalized.sourceSequenceSource).toBeUndefined();
+      const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+        actions: [normalized],
+      });
+      expect(project.actions[0].sourceSequenceIndex).toBeUndefined();
+      expect(project.actions[0].sourceSequencePath).toBeUndefined();
+    });
+
+    it('keeps a zero root sequence distinct from a missing one', () => {
+      const draft = createWorkbenchActionDraft({
+        id: 'first-action',
+        type: ACTION_TYPES.SKILL,
+        skillId: 10100701,
+        actorCharacterId: 101007,
+        sourceSequenceIndex: 0,
+      });
+      expect(draft).toMatchObject({
+        sourceSequenceIndex: 0,
+        sourceSequencePath: [0],
+      });
+    });
+  });
 });
