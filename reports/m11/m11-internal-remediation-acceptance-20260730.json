@@ -1,31 +1,29 @@
 {
   "schemaVersion": 1,
   "kind": "m11-headless-remediation-internal-acceptance",
-  "acceptedOn": "2026-07-30",
-  "reviewedCodeCommit": "62273af158c7a1c303b6768a1ab409d5dd5a7b80",
-  "result": "accepted-for-external-rereview",
+  "acceptedOn": "2026-07-31",
+  "reviewedCodeCommit": "git-self",
+  "baseCommit": "6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6",
+  "result": "verification-complete-awaiting-external-short-rereview",
   "externalApproval": false,
   "blockingFindings": [],
   "verification": {
     "authoritativeHeadlessRegression": {
       "status": "passed",
-      "fileCount": 17,
-      "testCount": 144,
+      "fileCount": 22,
+      "testCount": 195,
       "testTimeoutMs": 30000
     },
     "isolatedAxisBoundaryRegression": {
       "status": "passed",
       "fileCount": 1,
-      "testCount": 21
+      "testCount": 23
     },
-    "initialDefaultTimeoutRun": {
-      "passedFileCount": 16,
-      "totalFileCount": 17,
-      "passedTestCount": 143,
-      "totalTestCount": 144,
-      "assertionMismatchCount": 0,
-      "timeoutCount": 1,
-      "resolution": "The cold criticalRoll=0 case passed in the isolated boundary run and in the authoritative 30-second-timeout run."
+    "cliBoundaryRegression": {
+      "status": "passed",
+      "fileCount": 3,
+      "testCount": 40,
+      "realProcessCoverage": true
     },
     "audits": {
       "characterCombat": "clean",
@@ -50,8 +48,8 @@
     "currentlyEvidenceBlocked": 350,
     "kiboScenarioAssumptions": 53,
     "kiboUnresolvedPublicActions": 181,
-    "unknownCrossOwnerSameFrameOrder": "evidence-open",
+    "unknownCrossOwnerSameFrameOrder": "evidence-open-with-explicit-scenario-array-order",
     "clientGlobalRngConsumptionSequence": "runtime-evidence-required"
   },
-  "decision": "The remediation is internally accepted for packaging and external re-review. M11 is not declared externally approved, and M12 remains locked."
+  "decision": "M11-01 through M11-08 remain externally closed. The M11-09 upstream ordering fix and the CLI/path follow-ups are internally verified for a short external re-review. M11 is not declared externally approved, and M12 remains locked."
 }

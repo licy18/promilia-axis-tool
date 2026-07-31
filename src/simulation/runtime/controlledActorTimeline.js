@@ -1,4 +1,5 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 
 export const CONTROLLED_ACTOR_TIMELINE_SCHEMA_VERSION = 1;
 export const CONTROLLED_ACTOR_TIMELINE_CONTRACT_NAME =
@@ -130,7 +131,7 @@ function sortSwitchActions(actions) {
     .sort(
       (left, right) =>
         nonNegativeNumber(left.startMs) - nonNegativeNumber(right.startMs) ||
-        String(left.id).localeCompare(String(right.id))
+        compareActionSourceSequence(left, right)
     );
 }
 

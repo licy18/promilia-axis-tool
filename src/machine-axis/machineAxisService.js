@@ -1,4 +1,5 @@
 import { ACTION_TYPES } from '../domain/projectSchema';
+import { attachActionSourceSequence } from '../domain/actionSourceSequence';
 import {
   DEFAULT_WORKBENCH_TEAM_SLOTS,
   createWorkbenchActionDraft,
@@ -350,6 +351,22 @@ export function createMachineAxisService({
         },
       }
     );
+    const sourceSequenceByActionId = new Map(
+      templates
+        .filter(Boolean)
+        .map(template => [String(template.actionId), template.index])
+    );
+    project = {
+      ...project,
+      actions: (project.actions ?? []).map((action, projectActionIndex) =>
+        attachActionSourceSequence(
+          action,
+          sourceSequenceByActionId.get(String(action.id)) ??
+            projectActionIndex,
+          'machine-axis-input-array-order'
+        )
+      ),
+    };
     project.id = contract.scenario.id;
     project.name = contract.scenario.name;
     let finalScheduleResult = scheduleResult;
@@ -409,6 +426,8 @@ export function createMachineAxisService({
         return {
           ...template.resolution,
           index: template.index,
+          sourceSequenceIndex: template.index,
+          sourceSequencePath: [template.index],
           startFrame:
             finalScheduleResult.byActionId[template.actionId]?.startFrame,
           durationFrames:
@@ -1677,11 +1696,13 @@ function collectExecutionWarnings({ compilation, run }) {
       });
     }
   }
-  for (const entry of run.trace.executionPlan.actions ?? []) {
+  for (const [planIndex, entry] of (
+    run.trace.executionPlan.actions ?? []
+  ).entries()) {
     if (entry.status !== 'scheduled-with-unresolved-conditions') continue;
     add({
       code: 'machine-axis-action-conditions-unresolved',
-      path: `executionPlan.actions.${entry.actionIndex ?? 0}`,
+      path: `executionPlan.actions.${planIndex}`,
       actionId: entry.actionId,
       unresolvedCodes: entry.unresolvedCodes ?? [],
       reason: entry.readinessStatus ?? entry.status,

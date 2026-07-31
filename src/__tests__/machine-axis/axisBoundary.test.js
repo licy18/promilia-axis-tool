@@ -594,6 +594,60 @@ describe('Machine Axis external audit boundaries', () => {
           .sort((left, right) => left - right)
       );
     }, 30_000);
+
+    it('keeps same-frame combat semantics stable when action identities change', () => {
+      const service = createMachineAxisService();
+      const actorIdSortsFirst = service.simulate(
+        createSameFrameCombatAxis({
+          kiboActionId: 'z-kibo-input-first',
+          actorActionId: 'a-actor-input-second',
+        })
+      );
+      const kiboIdSortsFirst = service.simulate(
+        createSameFrameCombatAxis({
+          kiboActionId: 'a-kibo-input-first',
+          actorActionId: 'z-actor-input-second',
+        })
+      );
+
+      expect(projectSameFrameCombatSemantics(actorIdSortsFirst)).toEqual(
+        projectSameFrameCombatSemantics(kiboIdSortsFirst)
+      );
+      expect(
+        projectSameFrameCombatSemantics(actorIdSortsFirst)
+          .executionOwnerOrder
+      ).toEqual(['kibo', 'actor']);
+      expect(
+        actorIdSortsFirst.trace.executionPlan.actions.map(action => ({
+          sourceSequenceIndex: action.sourceSequenceIndex,
+          sourceSequencePath: action.sourceSequencePath,
+        }))
+      ).toEqual([
+        { sourceSequenceIndex: 0, sourceSequencePath: [0] },
+        { sourceSequenceIndex: 1, sourceSequencePath: [1] },
+      ]);
+      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(468);
+      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(468);
+    }, 30_000);
+
+    it('points unresolved condition warnings at canonical plan indices', () => {
+      const validation = createMachineAxisService().validate(cloneFixture());
+      const warningsByActionId = new Map(
+        validation.warnings
+          .filter(
+            warning =>
+              warning.code === 'machine-axis-action-conditions-unresolved'
+          )
+          .map(warning => [warning.actionId, warning])
+      );
+
+      expect(warningsByActionId.get('a3-inherit')?.path).toBe(
+        'executionPlan.actions.1'
+      );
+      expect(
+        warningsByActionId.get('ruby-enhanced-e1-intent')?.path
+      ).toBe('executionPlan.actions.15');
+    }, 30_000);
   });
 });
 
@@ -657,6 +711,118 @@ function createGeneratedEffect(effectId, absoluteFrame) {
     stackDelta: 1,
     maxStacks: 1,
     sourceActionId: `source-${effectId}`,
+  };
+}
+
+function createSameFrameCombatAxis({ kiboActionId, actorActionId }) {
+  const axis = cloneFixture();
+  const originalSlot1 = structuredClone(axis.scenario.team[0]);
+  const originalSlot3 = structuredClone(axis.scenario.team[2]);
+  axis.scenario.team[0] = {
+    ...originalSlot3,
+    slotId: 'slot-1',
+    loadout: { kiboId: 500001 },
+  };
+  axis.scenario.team[2] = {
+    ...originalSlot1,
+    slotId: 'slot-3',
+    loadout: { kiboId: 500003 },
+  };
+  axis.scenario.initialRuntimeState.kiboEnergyBySlot[0] = {
+    slotId: 'slot-1',
+    actorId: 'actor-103002',
+    characterId: 103002,
+    kiboId: 500001,
+    kiboName: '迅狼',
+    currentValue: 100,
+    maxValue: 100,
+  };
+  axis.scenario.initialRuntimeState.kiboEnergyBySlot[2] = {
+    slotId: 'slot-3',
+    actorId: 'actor-101007',
+    characterId: 101007,
+    kiboId: 500003,
+    kiboName: '水灵偶',
+    currentValue: 60,
+    maxValue: 100,
+  };
+  axis.scenario.enemy.initialToughnessRatio = 0.0001;
+  axis.scenario.critical = {
+    policy: 'non-critical',
+    seed: 'same-frame-order-probe',
+  };
+  const kiboAction = structuredClone(
+    axis.actions.find(action => action.id === 'xunlang-signature')
+  );
+  axis.actions = [
+    {
+      ...kiboAction,
+      id: kiboActionId,
+      owner: { kind: 'kibo', slotId: 'slot-1' },
+      schedule: { mode: 'absolute', frame: 60 },
+    },
+    {
+      id: actorActionId,
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300221,
+        actionKind: 'perfect-parry',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 60 },
+      hitOverrides: {
+        '10300249|1|elements|0|1782654438459948567|15|1': {
+          landed: 'miss',
+        },
+      },
+      note: null,
+    },
+  ];
+  return axis;
+}
+
+function projectSameFrameCombatSemantics(run) {
+  const ownerKindByActionId = new Map(
+    run.actionResolutions.map(resolution => [
+      resolution.actionId,
+      resolution.ownerKind,
+    ])
+  );
+  return {
+    executionOwnerOrder: run.trace.executionPlan.actions.map(action =>
+      ownerKindByActionId.get(action.actionId)
+    ),
+    frame80Damage: run.trace.damage
+      .filter(event => event.absoluteFrame === 80)
+      .map(event => ({
+        ownerKind: ownerKindByActionId.get(event.actionId),
+        hitIndex: event.hitIndex,
+        rawDamage: event.rawDamage,
+        toughnessDamage: event.toughnessDamage,
+      })),
+    totals: {
+      hpDamage: run.evaluation.totals.hpDamage,
+      inflictedToughnessDamage:
+        run.evaluation.totals.inflictedToughnessDamage,
+      recoveredToughness: run.evaluation.totals.recoveredToughness,
+    },
+    resourceEvents: {
+      actorSp: run.trace.resources.actors.map(event => ({
+        ownerKind: ownerKindByActionId.get(event.actionId),
+        absoluteFrame: event.absoluteFrame,
+        change: event.change,
+        beforeValue: event.beforeValue,
+        afterValue: event.afterValue,
+      })),
+      kiboSp: run.trace.resources.kibos.map(event => ({
+        ownerKind: ownerKindByActionId.get(event.actionId),
+        absoluteFrame: event.absoluteFrame,
+        change: event.change,
+        beforeValue: event.beforeValue,
+        afterValue: event.afterValue,
+      })),
+    },
   };
 }
 

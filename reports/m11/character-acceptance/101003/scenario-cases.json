@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "d07a25a8dd6f7cf9",
+        "reportHash": "34dbd23776106be4",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -18,7 +18,7 @@
         "canonicalHashes": {
           "input": "f7aac189e3dfee8e",
           "data": "75e283bd81aac633",
-          "trace": "0a85e9c33441f5b1",
+          "trace": "7e01bdff2796a8d6",
           "evaluation": null
         }
       },
@@ -808,7 +808,7 @@
           "assertionHash": "a105b0c3214ea211"
         }
       ],
-      "scenarioCaseHash": "adb9d0630725a0f6"
+      "scenarioCaseHash": "e70267f7b15aecc7"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +816,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "e276c3f37a3475c8",
+        "reportHash": "5a807c36ddd50554",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -826,7 +826,7 @@
         "canonicalHashes": {
           "input": "011ce71e135bc69f",
           "data": "7599ed503c1d0c06",
-          "trace": "26f7b53dac7e5b9e",
+          "trace": "a5712c99adc1ef9a",
           "evaluation": null
         }
       },
@@ -3347,7 +3347,7 @@
           "assertionHash": "9b24a5aeab528c8e"
         }
       ],
-      "scenarioCaseHash": "bc619431c4434c68"
+      "scenarioCaseHash": "0a72e8b93848ea32"
     },
     {
       "schemaVersion": 1,
@@ -3355,7 +3355,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101003-visual.json",
-        "inputHash": "a07888e46fc3ec01",
+        "inputHash": "4f1d0de8f49a7a71",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101003-visual.json"
       },
       "execution": {
@@ -3364,9 +3364,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "a07888e46fc3ec01",
+          "input": "4f1d0de8f49a7a71",
           "data": "bd97d21b31ba7ad2",
-          "trace": "942735d40b46200f",
+          "trace": "06673d9754f7afb3",
           "evaluation": "920e7363ae12290d"
         }
       },
@@ -5789,7 +5789,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "1a95ed6fd3231b73"
+      "scenarioCaseHash": "e32668d852e223f1"
     }
   ],
   "summary": {
@@ -5802,5 +5802,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "249d74f48c394d71"
+  "scenarioSetHash": "32e555024e94db79"
 }

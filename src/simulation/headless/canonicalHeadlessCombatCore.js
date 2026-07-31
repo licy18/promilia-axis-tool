@@ -285,6 +285,9 @@ function projectTraceAction(action) {
     skillId: action.skillId ?? null,
     startMs: action.startMs,
     durationMs: action.durationMs,
+    sourceSequenceIndex: action.sourceSequenceIndex ?? null,
+    sourceSequencePath: action.sourceSequencePath ?? null,
+    sourceSequenceSource: action.sourceSequenceSource ?? null,
     controlSkillId:
       action.selectedActionForm?.controlSkillId ??
       action.actionVariantResolution?.controlSkillId ??
@@ -313,6 +316,9 @@ function projectExecutionPlan(plan = {}) {
       status: entry.status,
       execute: entry.execute,
       executionIndex: entry.executionIndex,
+      sourceSequenceIndex: entry.sourceSequenceIndex ?? null,
+      sourceSequencePath: entry.sourceSequencePath ?? null,
+      sourceSequenceSource: entry.sourceSequenceSource ?? null,
       startMs: entry.startMs,
       durationMs: entry.durationMs,
       readinessStatus: entry.readinessStatus,

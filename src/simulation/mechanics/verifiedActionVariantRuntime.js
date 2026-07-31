@@ -20,6 +20,10 @@ import {
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
 import { applyVerifiedTargetStateRuntime } from './verifiedTargetStateRuntime';
+import {
+  compareActionSourceSequence,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -174,7 +178,12 @@ export function createVerifiedActionVariantRuntime({
     .sort(
       (left, right) =>
         Number(left.action.startMs) - Number(right.action.startMs) ||
-        left.index - right.index
+        compareActionSourceSequence(
+          left.action,
+          right.action,
+          left.index,
+          right.index
+        )
     );
 
   const actionResolutionById = new Map();
@@ -2154,6 +2163,7 @@ function createResourceExecutionBlock({
   operations,
 }) {
   return {
+    ...createActionSourceSequenceFields(action),
     code: 'VERIFIED_SPECIAL_RESOURCE_INSUFFICIENT',
     status: 'blocked',
     reason: 'verified-special-resource-insufficient',
@@ -2181,6 +2191,7 @@ function createVariantExecutionBlock({
   activeSelection,
 }) {
   return {
+    ...createActionSourceSequenceFields(action),
     code: 'VERIFIED_ACTION_VARIANT_AMBIGUOUS',
     status: 'unresolved',
     reason: 'verified-action-variant-selection-ambiguous',
@@ -2210,6 +2221,7 @@ function createInputVariantExecutionBlock({
   inputSelection,
 }) {
   return {
+    ...createActionSourceSequenceFields(action),
     code: 'VERIFIED_ACTION_INPUT_VARIANT_REQUIRED',
     status: 'unresolved',
     reason: 'verified-action-input-variant-unresolved',
@@ -2238,6 +2250,7 @@ function createExecutionPrerequisiteBlock({
 }) {
   const prerequisite = directExecutionForm?.executionPrerequisite;
   return {
+    ...createActionSourceSequenceFields(action),
     code: 'VERIFIED_ACTION_EXECUTION_PREREQUISITE_MISSING',
     status: 'blocked',
     reason:
@@ -2267,6 +2280,7 @@ function createExecutionPrerequisiteBlock({
 
 function createAttackChainExecutionBlock({ action, actorState, chain }) {
   return {
+    ...createActionSourceSequenceFields(action),
     code: 'VERIFIED_ATTACK_INPUT_CHAIN_COMPLETE',
     status: 'blocked',
     reason: 'verified-attack-input-chain-complete',
@@ -2285,6 +2299,17 @@ function createAttackChainExecutionBlock({ action, actorState, chain }) {
     requiredValue: null,
     currentValue: actorState?.current ?? null,
     maxValue: actorState?.profile?.capacity ?? null,
+  };
+}
+
+function createActionSourceSequenceFields(action) {
+  const sourceSequencePath = getActionSourceSequencePath(action);
+  return {
+    sourceSequenceIndex:
+      action?.sourceSequenceIndex ?? sourceSequencePath?.[0] ?? null,
+    sourceSequencePath,
+    sourceSequenceSource:
+      action?.sourceSequenceSource ?? 'scenario-action-array-order',
   };
 }
 

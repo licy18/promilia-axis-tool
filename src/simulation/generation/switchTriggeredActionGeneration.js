@@ -1,6 +1,11 @@
 import { ACTION_TYPES, createSkillAction } from '../../domain/projectSchema';
 import { frameToMs, msToFrame } from '../../domain/timebase';
 import {
+  attachDerivedActionSourceSequence,
+  compareActionSourceSequence,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
+import {
   getVerifiedCombatActionMappingByIdentity,
   getVerifiedSwitchTriggerProfile,
 } from '../../data/verifiedCombatMechanicsPackage';
@@ -79,7 +84,7 @@ export function createSwitchTriggeredActionGeneration({
       { triggerPhase: 'on-exit', owner: beforeActor },
       { triggerPhase: 'on-enter', owner: targetActor },
     ];
-    for (const phaseOwner of phaseOwners) {
+    for (const [phaseSequenceIndex, phaseOwner] of phaseOwners.entries()) {
       const result = createPhaseBinding({
         switchAction,
         frameIndex,
@@ -87,6 +92,7 @@ export function createSwitchTriggeredActionGeneration({
         beforeActor,
         targetActor,
         phaseOwner,
+        phaseSequenceIndex,
         skillsById,
         targetId,
         cooldownReadyAtByOwnerAction,
@@ -158,6 +164,7 @@ function createPhaseBinding({
   beforeActor,
   targetActor,
   phaseOwner,
+  phaseSequenceIndex,
   skillsById,
   targetId,
   cooldownReadyAtByOwnerAction,
@@ -194,6 +201,10 @@ function createPhaseBinding({
     contractName: SWITCH_TRIGGER_BINDING_CONTRACT_NAME,
     bindingId,
     switchEventId: switchAction.id,
+    sourceSequenceIndex: switchAction.sourceSequenceIndex ?? null,
+    sourceSequencePath:
+      getActionSourceSequencePath(switchAction) ?? null,
+    localSourceSequenceIndex: phaseSequenceIndex,
     triggerPhase: phaseOwner.triggerPhase,
     sourceOwnerId: beforeActor?.id ?? null,
     sourceOwnerCharacterId: beforeActor?.characterId ?? null,
@@ -295,23 +306,28 @@ function createPhaseBinding({
   });
   return {
     binding: materializedBinding,
-    action: {
-      ...action,
-      durationFrames,
-      name: skill.name ?? action.name,
-      actionKind: 'star-carry',
-      parentActionId: switchAction.id,
-      hitOverrides: switchAction.hitOverrides ?? null,
-      switchTriggerBinding: materializedBinding,
-      derivedAction: {
-        schemaVersion: 1,
-        kind: SWITCH_TRIGGERED_ACTION_KIND,
+    action: attachDerivedActionSourceSequence(
+      {
+        ...action,
+        durationFrames,
+        name: skill.name ?? action.name,
+        actionKind: 'star-carry',
         parentActionId: switchAction.id,
-        bindingId,
+        hitOverrides: switchAction.hitOverrides ?? null,
+        switchTriggerBinding: materializedBinding,
+        derivedAction: {
+          schemaVersion: 1,
+          kind: SWITCH_TRIGGERED_ACTION_KIND,
+          parentActionId: switchAction.id,
+          bindingId,
+          readOnly: true,
+        },
         readOnly: true,
       },
-      readOnly: true,
-    },
+      switchAction,
+      phaseSequenceIndex,
+      'switch-trigger-parent-local-order'
+    ),
   };
 }
 
@@ -440,7 +456,7 @@ function groupBy(values, keyOf) {
 function compareActions(left, right) {
   return (
     Number(left.startMs) - Number(right.startMs) ||
-    String(left.id).localeCompare(String(right.id))
+    compareActionSourceSequence(left, right)
   );
 }
 

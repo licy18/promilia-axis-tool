@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M11-R 外部审计整改完成，等待外部复审**。整改从合并基线 `290da378944dde1f8e477022710044a74805b7fb` 修复 M11-01..09，并保持三角色、122 只奇波/366 个公开动作与全部来源审计可重放；合并前 visual acceptance 不自动继承，`optimization-ready=0`。M12 尚未启动且保持锁定，包体和性能继续只记录风险。
+当前里程碑：**M11-R2 短整改完成，等待外部短复审**。外部已关闭 M11-01..08；R2 从 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 收口 M11-09 上游 source sequence、CLI 取值参数和 warning path。不同角色可携带同名奇波，CD/资源按运行实体隔离；三角色与 122 只奇波/366 个公开动作继续可重放，`optimization-ready=0`。M12 保持锁定。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -843,11 +843,11 @@ M11 不另写第二套简化模拟器，而是把现有生成、编译、状态�
 
 阶段结果：R1 将 requirement inventory、可执行 scenario case、结构化 trace projection、精确 coverage edge、source/acceptance ledger 和成熟度收拢为单向可信派生链；manifest 与 catalog 均绑定 committed manifest index，篡改 N/A、required/summary、ledger、签收或 catalog 后即使重算自身 hash 也会被 validator 与 canonical gate 拒绝。产品已对 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成可视签收，小玉、红宝石、寒悠悠因此升至 `visually-accepted`；但矩阵与功能 ledger 仍有阻断，三者继续保持 `optimization-ready=0`。精确归因后的矩阵通过/必需为小玉 `56/407`、红宝石 `36/709`、寒悠悠 `62/243`；887 个唯一功能阻断拆为 181 个上游 source gap 与 706 个 acceptance scenario gap，另有 575 个 wrapper/N/A 来源记录明确非阻断。聚焦回归、验收幂等审计、六道既有审计、production build 和可视导入均通过，玩法 golden/hash 无漂移。M11-D 已通过产品验收并停止，M12 未启动。
 
-#### M11-R：外部审计整改（等待外部复审）
+#### M11-R：外部审计整改（R2 等待外部短复审）
 
-M11-01..09 已在合并运行时统一整改：captured roll 固定 basis points；公共 CLI 先校验 raw Schema；排程拒绝负帧与越界；相对排程先解析实际 variant/effective occupancy；动作与效果共用 `[0,duration]`；validate 分开 schema、runnable 与 evidence；统计拆分战斗 hit、状态事件、实际削韧与恢复；产品确认同名奇波可跨角色重复并按 `actorId+kiboId` 隔离 CD/资源；同帧事件按整数帧、phase、priority、source sequence 排序。未知条件、零距离假设和无来源同帧顺序继续保持 warning/evidence-open。
+M11-01..08 已由外部复审关闭。R2 将原始 Machine Axis actions 数组顺序在 compile 前固化为 source sequence，并贯穿派生动作、诊断、执行块和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 缺值/非法值在 I/O 前统一返回 exit 2，warning path 使用 canonical plan 真实索引。产品确认同名奇波可跨角色重复并按 `actorId+kiboId` 隔离 CD/资源；客户端未知的跨 owner 同帧优先级仍保持 evidence-open，但数组顺序作为场景显式顺序。
 
-整改后的 18 文件/138 条无头回归、三角色/奇波 replay、八道生成与来源审计及 production build 通过。合并前 visual acceptance 不携带到新 runtime，三角色当前保持 `runtime-integrated`、`visuallyAcceptedCount=0`、`optimizationReadyCount=0`；详细 disposition 见 `reports/m11/m11-external-audit-remediation-20260730.{json,md}`。完成独立提交后只生成新的 merged-only 审计包并等待外部复审，M12 继续锁定。
+R2 的 22 文件/195 条无头回归、axis boundary 23/23、Machine Axis boundary/CLI 40/40、三角色/奇波 replay、八道生成与来源审计及 production build 通过。外部 ID 重命名反例两份均保持奇波→角色且总伤为 468；标准轴 data/evaluation 不变。三角色保持 `runtime-integrated`、`visuallyAcceptedCount=0`、`optimizationReadyCount=0`；完成独立提交后只生成新的 merged-only 审计包并等待外部短复审，M12 继续锁定。
 
 ### M12：批量评估、搜索与末音试点
 
@@ -984,7 +984,7 @@ M11-01..09 已在合并运行时统一整改：captured roll 固定 basis points
 62. 已完成并通过产品验收：M11-B-R2 在 8da52fb 关闭并发测试超时与验收报告 canonical hash 漂移；122 只奇波/366 动作、固定 60 FPS、真实 CLI I/O、三角色 120 秒 fixture、六道审计与 62/62 production preview 均通过。
 63. 已通过产品验收：M11-C 在 `308dd07` 完成 canonical trace 可视编辑与复验闭环。
 64. 已完成并通过产品验收：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；三角色已取得 `visually-accepted`，但尚未取得 `optimization-ready`。当前停止等待下一指令，M12、第四角色、包体优化和未验收奇波机制接入均未启动。
-65. 已完成，等待外部复审：M11-R 从合并基线 `290da378944dde1f8e477022710044a74805b7fb` 关闭 M11-01..09；同名奇波按产品合同可跨角色重复并以 runtime entity 隔离 CD/资源，未知证据继续显式开放。18 文件/138 条无头回归、八道审计和构建通过；M12 保持锁定。
+65. 已完成，等待外部短复审：M11-R2 从 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 修复 M11-09 上游 ID 排序、CLI 取值参数和 warning path；M11-01..08 保持外部关闭。同名奇波按 runtime entity 隔离 CD/资源；22 文件/195 条无头回归、八道审计和构建通过；M12 保持锁定。
 
 ## 8. 风险和取舍
 

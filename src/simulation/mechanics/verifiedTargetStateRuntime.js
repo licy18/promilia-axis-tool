@@ -5,6 +5,10 @@ import {
 } from '../../domain/projectSchema';
 import { isControlledActorEffectTargetKind } from '../../domain/effectTargetSemantics';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
+import {
+  compareActionSourceSequence,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
 
 export const VERIFIED_TARGET_STATE_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedTargetStateRuntime';
@@ -255,7 +259,7 @@ export function applyVerifiedTargetStateRuntime({
   directSpEvents.sort(
     (left, right) =>
       Number(left.timeMs) - Number(right.timeMs) ||
-      String(left.eventIdentity).localeCompare(String(right.eventIdentity))
+      compareActionSourceSequence(left.action, right.action)
   );
   return {
     schemaVersion: 1,
@@ -555,6 +559,7 @@ function createTargetStateEffectCommand({
 }) {
   const nextExpiryMs = state.layers[0]?.expiresAtMs ?? null;
   return {
+    ...createActionSourceSequenceFields(action),
     id: `verified-target-state|${state.profile.stateIdentity}|${timeMs}|${operation}|${sequence}`,
     sourceActionId: action?.id ?? null,
     sourceActionName: action?.name ?? state.profile.name,
@@ -625,6 +630,7 @@ function emitRuntimeBinding({
   }
   for (const target of targets) {
     effectCommands.push({
+      ...createActionSourceSequenceFields(action),
       id: `verified-runtime-effect|${action.id}|${binding.bindingIdentity}|${target.kind}:${target.id}`,
       sourceActionId: action.id,
       sourceActionName: action.name,
@@ -774,6 +780,7 @@ function comparePending(left, right) {
   return (
     Number(left.timeMs) - Number(right.timeMs) ||
     Number(left.priority) - Number(right.priority) ||
+    compareActionSourceSequence(left.action, right.action) ||
     String(
       left.transaction?.transactionIdentity ??
         left.group?.groupIdentity ??
@@ -805,8 +812,19 @@ function compareEvents(left, right) {
 function compareCommands(left, right) {
   return (
     Number(left.timeMs) - Number(right.timeMs) ||
-    String(left.id).localeCompare(String(right.id))
+    compareActionSourceSequence(left, right)
   );
+}
+
+function createActionSourceSequenceFields(action) {
+  const sourceSequencePath = getActionSourceSequencePath(action);
+  return {
+    sourceSequenceIndex:
+      action?.sourceSequenceIndex ?? sourceSequencePath?.[0] ?? null,
+    sourceSequencePath,
+    sourceSequenceSource:
+      action?.sourceSequenceSource ?? 'scenario-action-array-order',
+  };
 }
 
 function roundValue(value) {

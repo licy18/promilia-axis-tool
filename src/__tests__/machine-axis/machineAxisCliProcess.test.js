@@ -146,4 +146,37 @@ describe('Machine Axis CLI real process I/O', () => {
       ])
     );
   }, 30_000);
+
+  it.each([
+    [['catalog', '--output'], 'Missing value for --output'],
+    [
+      ['validate', '--critical-policy'],
+      'Missing value for --critical-policy',
+    ],
+    [['validate', '--input'], 'Missing value for --input'],
+    [
+      ['explain', resolve(tempRoot ?? '', 'unused-axis.json'), '--frame', 'nope'],
+      'Invalid value for --frame',
+    ],
+  ])(
+    'rejects missing or invalid valued options before command execution',
+    (args, expectedMessage) => {
+      const result = runCli(args);
+      const output = parseMachineJson(result.stdout);
+
+      expect(result.status).toBe(2);
+      expect(output).toMatchObject({
+        kind: 'azpr-machine-axis-cli-error',
+        error: {
+          code: 'machine-axis-cli-usage',
+          message: expect.stringContaining(expectedMessage),
+        },
+      });
+      expect(output.kind).not.toBe('azpr-machine-axis-catalog');
+      expect(result.stderr).toContain('machine-axis-cli-usage');
+      expect(result.stderr).not.toContain('node:internal');
+      expect(result.stderr).not.toContain(' at ');
+    },
+    30_000
+  );
 });

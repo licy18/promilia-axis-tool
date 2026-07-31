@@ -32,6 +32,10 @@ import {
   resolveActionHitCriticalPolicy,
 } from '../../domain/combatCriticalPolicy';
 import { createCriticalSampleKey } from '../runtime/criticalRandomSource';
+import {
+  compareSourceSequencePaths,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
 
 export const VERIFIED_COMBAT_MECHANICS_PROFILE_ID =
   'azpr-three-value-verified-tc-20260718';
@@ -4341,6 +4345,10 @@ function createResourceExecutionBlock({
     executable: false,
     actionId: descriptor.action.id,
     actionName: descriptor.action.name ?? descriptor.action.id,
+    sourceSequenceIndex: descriptor.sourceSequenceIndex ?? null,
+    sourceSequencePath: descriptor.sourceSequencePath ?? null,
+    sourceSequenceSource:
+      descriptor.action.sourceSequenceSource ?? 'scenario-action-array-order',
     actorId: descriptor.action.actorId ?? null,
     ownerKind: resolution.actionBinding.ownerKind,
     slotId: resourceState?.slotId ?? null,
@@ -4605,6 +4613,9 @@ function ratioToRaw(value, fallbackRaw = 0) {
 function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
   descriptors.forEach((descriptor, sourceSequence) => {
     const order = resolveDescriptorOrder(descriptor.kind);
+    const actionSourceSequencePath = getActionSourceSequencePath(
+      descriptor.action
+    );
     descriptor.absoluteFrame = Number.isInteger(descriptor.absoluteFrame)
       ? descriptor.absoluteFrame
       : timeToFrame(descriptor.timeMs, frameRate);
@@ -4612,6 +4623,11 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
     descriptor.runtimePhasePriority = order.phasePriority;
     descriptor.runtimePriority = order.priority;
     descriptor.sourceSequence = sourceSequence;
+    descriptor.sourceSequenceIndex =
+      actionSourceSequencePath?.[0] ?? null;
+    descriptor.sourceSequencePath = actionSourceSequencePath
+      ? [...actionSourceSequencePath, sourceSequence]
+      : [Number.MAX_SAFE_INTEGER, sourceSequence];
   });
 }
 
@@ -4655,6 +4671,10 @@ function compareDescriptors(left, right) {
     left.absoluteFrame - right.absoluteFrame ||
     left.runtimePhasePriority - right.runtimePhasePriority ||
     left.runtimePriority - right.runtimePriority ||
+    compareSourceSequencePaths(
+      left.sourceSequencePath,
+      right.sourceSequencePath
+    ) ||
     left.sourceSequence - right.sourceSequence
   );
 }

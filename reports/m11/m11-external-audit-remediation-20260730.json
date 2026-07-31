@@ -1,12 +1,15 @@
 {
   "schemaVersion": 1,
   "reportKind": "m11-headless-external-audit-remediation",
-  "generatedOn": "2026-07-30",
-  "status": "verification-complete-awaiting-external-re-review",
+  "generatedOn": "2026-07-31",
+  "status": "verification-complete-awaiting-external-short-rereview",
   "baseline": {
-    "commit": "290da378944dde1f8e477022710044a74805b7fb",
-    "branch": "fix/m11-external-audit-remediation",
-    "auditReport": "doc/promilia-axis-m11-headless-audit-20260730.md",
+    "commit": "6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6",
+    "originalAuditCommit": "290da378944dde1f8e477022710044a74805b7fb",
+    "r1RemediationCommit": "62273af158c7a1c303b6768a1ab409d5dd5a7b80",
+    "branch": "fix/m11-external-audit-r2",
+    "auditReport": "doc/promilia-axis-m11-headless-rereview-6601ebd1d537-20260731.md",
+    "counterexample": "doc/recheck-m11-6601.mjs",
     "releaseBranch": "release/m11-headless-external-audit"
   },
   "scope": {
@@ -23,9 +26,9 @@
     "machineAxisFixture": "fixtures/machine-axis/m11-b-three-actor-120s.json",
     "machineAxisCanonicalHashes": {
       "algorithm": "fnv1a64-utf8-v1",
-      "input": "a8dd9bfcdf4fad86",
+      "input": "c91f9da64e02ef84",
       "data": "4e36871189392dc1",
-      "trace": "75fd655bba918b53",
+      "trace": "d10c45fb73dc7c6f",
       "evaluation": "0b410dc9255d2654"
     }
   },
@@ -33,7 +36,7 @@
     {
       "auditId": "M11-01",
       "severity": "P1",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Captured critical roll units",
       "code": [
         "src/domain/actionHitOverrides.js",
@@ -49,7 +52,7 @@
     {
       "auditId": "M11-02",
       "severity": "P1",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Raw public Schema boundary",
       "code": [
         "src/machine-axis/machineAxisSchemaValidation.js",
@@ -65,7 +68,7 @@
     {
       "auditId": "M11-03",
       "severity": "P1",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Negative frame and horizon validation",
       "code": [
         "src/machine-axis/machineAxisSchemaValidation.js",
@@ -80,7 +83,7 @@
     {
       "auditId": "M11-04",
       "severity": "P1",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Context-resolved action durations",
       "code": [
         "src/machine-axis/machineAxisService.js"
@@ -94,7 +97,7 @@
     {
       "auditId": "M11-05",
       "severity": "P1",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Shared scenario horizon",
       "code": [
         "src/machine-axis/machineAxisContract.js",
@@ -109,7 +112,7 @@
     {
       "auditId": "M11-06",
       "severity": "P2",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Validation semantics",
       "code": [
         "src/machine-axis/machineAxisService.js"
@@ -123,7 +126,7 @@
     {
       "auditId": "M11-07",
       "severity": "P2",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Evaluation conservation",
       "code": [
         "src/simulation/headless/canonicalHeadlessCombatCore.js",
@@ -138,7 +141,7 @@
     {
       "auditId": "M11-08",
       "severity": "P2",
-      "status": "remediated",
+      "status": "externally-closed",
       "title": "Duplicate Kibo runtime ownership",
       "code": [
         "src/simulation/runtime/actionRuleDiagnostics.js",
@@ -154,19 +157,52 @@
     {
       "auditId": "M11-09",
       "severity": "P2",
-      "status": "remediated",
+      "status": "remediated-r2-awaiting-external-short-rereview",
       "title": "Deterministic same-frame ordering",
       "code": [
+        "src/domain/actionSourceSequence.js",
+        "src/machine-axis/machineAxisService.js",
+        "src/simulation/compiler/compileProject.js",
+        "src/simulation/generation/switchTriggeredActionGeneration.js",
+        "src/simulation/runtime/actionRuleDiagnostics.js",
+        "src/simulation/engine/simulateScenario.js",
         "src/simulation/mechanics/verifiedCombatRuntime.js",
-        "src/simulation/runtime/effectRuntimeTimeline.js",
-        "src/simulation/projection/projectSimulationResult.js",
         "src/simulation/headless/canonicalHeadlessCombatCore.js"
       ],
       "tests": [
         "src/__tests__/machine-axis/axisBoundary.test.js#M11-09 same-frame ordering"
       ],
-      "conclusion": "Runtime descriptors compare integer absoluteFrame, explicit phase priority, runtime priority, and source sequence. timeMs and action identity are no longer ordering tiebreakers. Unknown simultaneous actor/Kibo input ordering is exposed as a scenario warning.",
-      "remainingEvidenceBoundary": "A cross-owner same-frame input without verified phase or explicit scenario order remains evidence-open; the engine does not invent an action-ID winner."
+      "conclusion": "Machine Axis records the raw actions array order as sourceSequenceIndex before project compilation. The sequence propagates through compile, derived actions, diagnostics, execution blocks, runtime descriptors, and canonical trace. Renaming action IDs no longer changes frame-80 Break, damage, toughness, or resources; both external counterexample variants preserve Kibo then actor input order and total 468 HP damage.",
+      "remainingEvidenceBoundary": "Cross-owner same-frame order remains evidence-open when client evidence is unavailable. The public contract treats the input array order as an explicit scenario order and never uses action identity to select a branch."
+    },
+    {
+      "auditId": "M11-R2-P2",
+      "severity": "P2",
+      "status": "remediated-awaiting-external-short-rereview",
+      "title": "CLI valued-option validation",
+      "code": [
+        "src/machine-axis/machineAxisCli.js"
+      ],
+      "tests": [
+        "src/__tests__/machine-axis/machineAxisCli.test.js",
+        "src/__tests__/machine-axis/machineAxisCliProcess.test.js"
+      ],
+      "conclusion": "All valued options reject missing, empty, or next-flag values before input I/O or service execution. --frame requires a finite integer, format and critical policy enums are validated in the CLI parser, and every option failure returns machine-axis-cli-usage with exit 2.",
+      "remainingEvidenceBoundary": null
+    },
+    {
+      "auditId": "M11-R2-P3",
+      "severity": "P3",
+      "status": "remediated-awaiting-external-short-rereview",
+      "title": "Canonical execution warning paths",
+      "code": [
+        "src/machine-axis/machineAxisService.js"
+      ],
+      "tests": [
+        "src/__tests__/machine-axis/axisBoundary.test.js#M11-R2 warning paths"
+      ],
+      "conclusion": "Unresolved-condition warnings use the actual canonical execution-plan array index. The standard fixture now points a3-inherit to executionPlan.actions.1 and ruby-enhanced-e1-intent to executionPlan.actions.15.",
+      "remainingEvidenceBoundary": null
     }
   ],
   "behavioralCorrections": [
@@ -174,15 +210,15 @@
       "ownerId": 101003,
       "reason": "A controlled-actor inherited buff transfers at the switch frame before the derived on-exit star-carry hits.",
       "assertionCount": 76,
-      "replayHash": "137be22bc495b21000dc8eed03ba50d16e31a592fe57208c58b0145b7ba07e77",
-      "summaryHash": "d351f50dbe3193e2d64502259f4931a5c1469471381a15e62da13041536a5bf4"
+      "replayHash": "959ef025317d708d58aa7a18a1314c59639ad87545e590ef5121306d8fb2b822",
+      "summaryHash": "f0d7a64facfc7226a82d9c1413bc9e56a6b7507b96a5827836cff992ec54d397"
     },
     {
       "ownerId": 101010,
       "reason": "Source sequence settles the same-frame normal special charged hits before the competing state transition.",
       "assertionCount": 118,
-      "replayHash": "ecb91f7ad71fec39d58411ae79ade18493ae88bf5a77ce1b3ea57697f8ef6e51",
-      "summaryHash": "54a32104fb2d405723422a6dd7987864b6e993f7bac4a60ce2d3c54cdbadb810"
+      "replayHash": "e5554f9784c187379bf116bd61745fc553d73d3cd1ccbec9d77f3ce261b31c8f",
+      "summaryHash": "414b19d2ff6a15b55dd9db8bbfdcf5721ee247818df24f5acb14afefec1d26db"
     },
     {
       "ownerId": 103002,
@@ -210,8 +246,18 @@
   },
   "verification": {
     "focusedTests": {
-      "fileCount": 18,
-      "testCount": 138,
+      "fileCount": 22,
+      "testCount": 195,
+      "status": "passed"
+    },
+    "axisBoundaryTests": {
+      "fileCount": 1,
+      "testCount": 23,
+      "status": "passed"
+    },
+    "cliBoundaryTests": {
+      "fileCount": 3,
+      "testCount": 40,
       "status": "passed"
     },
     "audits": {

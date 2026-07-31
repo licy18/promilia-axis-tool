@@ -1799,11 +1799,11 @@ Workbench 已按 canonical trace hash 建立 memoized action/hit/effect/resource
 
 R1 将来源 requirement、可执行 scenario case、结构化 trace、精确 coverage edge、去重 ledger 与成熟度改为同一条可重算派生链，并用 committed manifest index 绑定 manifest、catalog 与 canonical core 资格门禁。产品已签收基线 `899edea0c5a1f718153ebe86712ecd8c31aabf7d`，三角色因此成为 `visually-accepted`；181 个 source gap 与 706 个 acceptance gap 仍构成 887 个唯一功能阻断，所以 `optimizationReadyCount` 继续为 0。M11-D 已关闭并停止等待下一指令，M12 明确未启动。
 
-### M11-R 外部审计整改完成，等待外部复审（2026-07-30）
+### M11-R2 短整改完成，等待外部短复审（2026-07-31）
 
-合并基线 `290da378944dde1f8e477022710044a74805b7fb` 已完成 M11-01..09 整改：Machine Axis raw Schema 在归一化前严格校验；captured roll 固定为 basis points；负帧、越界和未知实际时长被结构化拒绝；相对排程消费实际 variant/effective occupancy；动作与效果使用统一 `[0,duration]`；验证状态、统计守恒和同帧整数顺序均显式化。不同角色可按产品合同携带同名奇波，CD 与资源按 `actorId+kiboId` 的 runtime entity 隔离。
+M11-01..08 已由外部复审关闭。R2 基线 `6601ebd1d53748fc4eaeea3ecf3dec9fc891cce6` 将 Machine Axis 原始数组顺序在 compile 前固化为 source sequence，并贯穿派生、诊断和 runtime；action ID 不再决定同帧 Break、伤害或资源。CLI 取值参数统一在 I/O 前校验，warning path 使用 canonical plan 真实索引。不同角色可携带同名奇波，CD 与资源按 `actorId+kiboId` 隔离。
 
-18 文件/138 条无头回归、三角色与奇波重放、character/verified/acceptance/kibo 及四道生产来源审计和 production build 均通过。排序修正更新了三角色主 golden，但每项均有逐帧原因和新强断言；寒悠悠切人专用 golden 业务 hash 不变。合并前的三角色可视签收不自动恢复，当前 `visuallyAcceptedCount=0`、`optimizationReadyCount=0`。本阶段只生成新的 merged-only 审计包并等待外部复审；旧被拒包保留，M12、UI、性能、包体和新增角色继续锁定。
+22 文件/195 条无头回归、axis boundary 23/23、Machine Axis boundary/CLI 40/40、八道审计和 production build 均通过。外部 ID 重命名反例两份都按奇波→角色执行且总伤为 468；标准轴 data/evaluation 不变。三角色当前 `visuallyAcceptedCount=0`、`optimizationReadyCount=0`。本阶段只生成新的 merged-only 审计包并等待外部短复审；所有旧包保留，M12、UI、性能、包体和新增角色继续锁定。
 
 ## 10. 文档维护规则
 

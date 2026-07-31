@@ -185,4 +185,55 @@ describe('Machine Axis CLI', () => {
       expect.objectContaining({ code: 'machine-axis-sampled-seed-required' })
     );
   });
+
+  it.each([
+    ['catalog', '--output'],
+    ['catalog', '--output', '--format', 'json'],
+    ['validate', '--critical-policy'],
+    ['validate', '--input'],
+    ['explain', 'axis.json', '--frame', 'nope'],
+  ])(
+    'rejects valued-option usage before reading input or calling the service',
+    async (...args) => {
+      let readCount = 0;
+      let serviceCallCount = 0;
+      let stdout = '';
+      const exitCode = await runMachineAxisCli(args, {
+        service: new Proxy(
+          {},
+          {
+            get() {
+              return () => {
+                serviceCallCount += 1;
+                throw new Error('service must not execute');
+              };
+            },
+          }
+        ),
+        readFile: async () => {
+          readCount += 1;
+          throw new Error('input must not be read');
+        },
+        readStdin: async () => {
+          readCount += 1;
+          throw new Error('stdin must not be read');
+        },
+        writeFile: async () => {
+          throw new Error('usage errors must not write a requested file');
+        },
+        writeStdout: value => {
+          stdout += value;
+        },
+        writeStderr: () => {},
+      });
+
+      expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.USAGE);
+      expect(readCount).toBe(0);
+      expect(serviceCallCount).toBe(0);
+      expect(parseJson(stdout)).toMatchObject({
+        kind: 'azpr-machine-axis-cli-error',
+        error: { code: 'machine-axis-cli-usage' },
+      });
+    }
+  );
 });
