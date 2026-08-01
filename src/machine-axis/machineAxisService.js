@@ -20,6 +20,7 @@ import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCa
 import {
   createOptimizationQualificationIssuesForContract,
   getOptimizationQualificationCatalog,
+  projectResolvedOptimizationCultivationActor,
   resolveOptimizationCultivationProfile,
 } from '../optimization-qualification/optimizationQualificationProtocol';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
@@ -492,6 +493,40 @@ export function createMachineAxisService({
       .filter(Boolean);
     const first = contract.scenario.team[0];
     const second = contract.scenario.team[1];
+    const cultivationResolution = contract.scenario.cultivationProfile
+      ? resolveOptimizationCultivationProfile(
+          contract.scenario.cultivationProfile,
+          { team: contract.scenario.team }
+        )
+      : null;
+    const cultivationBySlot = new Map(
+      (cultivationResolution?.profile?.actors ?? []).map(actor => [
+        actor.slotId,
+        projectResolvedOptimizationCultivationActor(actor, {
+          profileHash: cultivationResolution.profileHash,
+        }),
+      ])
+    );
+    const actorConfigs = contract.scenario.team.map(slot => {
+      const projection = cultivationBySlot.get(slot.slotId);
+      return {
+        characterId: slot.characterId,
+        level: projection?.actorConfigPatch.level ?? slot.level,
+        initialSp: slot.initialSp,
+        loadout: {
+          ...(slot.loadout ?? {}),
+          ...(projection?.actorConfigPatch.loadout ?? {}),
+          kiboConfig: {
+            ...(slot.loadout?.kiboConfig ?? {}),
+            ...(projection?.actorConfigPatch.loadout?.kiboConfig ?? {}),
+          },
+        },
+        cultivation: {
+          ...(slot.cultivation ?? {}),
+          ...(projection?.actorConfigPatch.cultivation ?? {}),
+        },
+      };
+    });
     let project = createWorkbenchProject(
       {
         characterId: first.characterId,
@@ -505,13 +540,7 @@ export function createMachineAxisService({
           position,
           characterId: slot.characterId,
         })),
-        actorConfigs: contract.scenario.team.map(slot => ({
-          characterId: slot.characterId,
-          level: slot.level,
-          initialSp: slot.initialSp,
-          loadout: slot.loadout,
-          cultivation: slot.cultivation,
-        })),
+        actorConfigs,
         enemyConfig: contract.scenario.enemy,
         actions: actionDrafts,
         initialRuntimeState: remapMachineAxisInitialRuntimeState(
@@ -532,15 +561,12 @@ export function createMachineAxisService({
         },
       }
     );
-    const cultivationResolution = contract.scenario.cultivationProfile
-      ? resolveOptimizationCultivationProfile(
-          contract.scenario.cultivationProfile,
-          { team: contract.scenario.team }
-        )
-      : null;
     if (cultivationResolution?.valid) {
-      const cultivationBySlot = new Map(
-        cultivationResolution.profile.actors.map(actor => [actor.slotId, actor])
+      const applicationByCharacterId = new Map(
+        contract.scenario.team.map(slot => [
+          Number(slot.characterId),
+          cultivationBySlot.get(slot.slotId)?.application ?? null,
+        ])
       );
       project = {
         ...project,
@@ -550,20 +576,23 @@ export function createMachineAxisService({
           contract.scenario.cultivationProfile
         ),
         optimizationCultivationProfile: cultivationResolution.profile,
-        actorConfigs: (project.actorConfigs ?? []).map((actorConfig, index) => {
-          const machineSlot = contract.scenario.team[index];
-          const resolvedCultivation = cultivationBySlot.get(machineSlot?.slotId);
-          return resolvedCultivation
-            ? {
-                ...actorConfig,
-                level: resolvedCultivation.character.level,
-                cultivation: {
-                  ...(actorConfig.cultivation ?? {}),
-                  optimization: resolvedCultivation,
-                },
-              }
-            : actorConfig;
-        }),
+        actors: (project.actors ?? []).map(actor => ({
+          ...actor,
+          optimizationCultivationApplication:
+            applicationByCharacterId.get(Number(actor.characterId)) ?? null,
+        })),
+        metadata: {
+          ...project.metadata,
+          actorConfigs: (project.metadata?.actorConfigs ?? []).map(
+            actorConfig => ({
+              ...actorConfig,
+              optimizationCultivationApplication:
+                applicationByCharacterId.get(
+                  Number(actorConfig.characterId)
+                ) ?? null,
+            })
+          ),
+        },
       };
     }
     const sourceSequenceByActionId = new Map(

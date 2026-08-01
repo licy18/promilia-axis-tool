@@ -547,6 +547,15 @@ function applyEquipmentSources({
         attributes: level.attributes,
       })
     );
+    applyEquipmentTuningSource({
+      equipmentId,
+      slotKey,
+      sourceKind: 'equipment-tuning-main',
+      attributes: level.attributes,
+      cultivation: loadout?.equipmentCultivation?.[slotKey],
+      sources,
+      unresolved,
+    });
     const fixedSubAttributes = profile.subAttributes.filter(
       entry => entry.status === 'verified-fixed-sub-attribute'
     );
@@ -564,6 +573,18 @@ function applyEquipmentSources({
           })),
         })
       );
+      applyEquipmentTuningSource({
+        equipmentId,
+        slotKey,
+        sourceKind: 'equipment-tuning-sub',
+        attributes: fixedSubAttributes.map(entry => ({
+          id: entry.id,
+          value: entry.value,
+        })),
+        cultivation: loadout?.equipmentCultivation?.[slotKey],
+        sources,
+        unresolved,
+      });
     }
     for (const entry of profile.subAttributes.filter(
       item => item.status !== 'verified-fixed-sub-attribute'
@@ -597,6 +618,76 @@ function applyEquipmentSources({
       appliedToStaticPanel: false,
     });
   }
+}
+
+function applyEquipmentTuningSource({
+  equipmentId,
+  slotKey,
+  sourceKind,
+  attributes,
+  cultivation,
+  sources,
+  unresolved,
+}) {
+  if (!cultivation) return;
+  const tuningScore = Number(cultivation.tuningScore);
+  const formula = cultivation.tuningFormula;
+  const parameters = formula?.parameters?.map(Number) ?? [];
+  if (!Number.isInteger(tuningScore) || tuningScore < 0) {
+    unresolved.push({
+      kind: sourceKind,
+      sourceId: equipmentId,
+      slotKey,
+      reason: 'equipment-tuning-score-invalid',
+      tuningScore,
+    });
+    return;
+  }
+  if (
+    parameters.length !== 4 ||
+    parameters.some(parameter => !Number.isFinite(parameter))
+  ) {
+    unresolved.push({
+      kind: sourceKind,
+      sourceId: equipmentId,
+      slotKey,
+      reason: 'equipment-tuning-formula-unresolved',
+      sourceIdentity: formula?.sourceIdentity ?? null,
+    });
+    return;
+  }
+  const tunedAttributes = attributes.map(attribute => ({
+    id: Number(attribute.id),
+    value:
+      calculateEquipmentTunedValue(
+        Number(attribute.value),
+        tuningScore,
+        parameters
+      ) - Number(attribute.value),
+  }));
+  sources.push(
+    createAppliedSource({
+      kind: sourceKind,
+      sourceId: `${equipmentId}:${slotKey}:${tuningScore}`,
+      sourceIdentity: `${formula.sourceIdentity}|equipment:${equipmentId}|slot:${slotKey}`,
+      attributes: tunedAttributes,
+    })
+  );
+}
+
+function calculateEquipmentTunedValue(baseValue, tuningScore, parameters) {
+  const [baseBasisPoints, extraBasisPoints, scoreStepBasisPoints, baselineRaw] =
+    parameters;
+  const baselineScore = baselineRaw / 10000;
+  return (
+    Math.ceil((baseValue * baseBasisPoints) / 10000) +
+    Math.ceil(
+      baseValue *
+        (extraBasisPoints / 10000) *
+        (scoreStepBasisPoints / 10000) *
+        (tuningScore - baselineScore)
+    )
+  );
 }
 
 function aggregateStaticAttributes({ catalog, sources }) {

@@ -4,8 +4,8 @@
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-01T00:00:00.000Z",
   "rosterHash": "6b5961e83e5b1eb7",
-  "manifestsHash": "4501e3e6c1c1083c",
-  "gapLedgerHash": "4f05116efea7fae1",
+  "manifestsHash": "c6cca68ae633e3b9",
+  "gapLedgerHash": "d333c888b206d797",
   "bindingMatrixHash": "3cf1c9cc678e4193",
   "sourceSnapshotHash": "0e2fa93b88d82707",
   "denominators": {
@@ -25,9 +25,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "cfeb9250ae797fc9"
+      "manifestHash": "9073c1ce8f2bab60"
     },
     {
       "objectKind": "character",
@@ -38,9 +38,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "1633a819c9a9f552"
+      "manifestHash": "5bda0fd69cbd6b73"
     },
     {
       "objectKind": "character",
@@ -50,9 +50,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "1aac01f746200673"
+      "manifestHash": "ec490fb765505454"
     },
     {
       "objectKind": "character",
@@ -63,9 +63,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "6a283d7814c8f005"
+      "manifestHash": "c2931cf11fc7fb50"
     },
     {
       "objectKind": "character",
@@ -76,9 +76,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "8ef4b55750d12897"
+      "manifestHash": "a7b1c5b47878f8b6"
     },
     {
       "objectKind": "character",
@@ -89,9 +89,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "deca8dc5fb5fac15"
+      "manifestHash": "a7205b8d727bcfce"
     },
     {
       "objectKind": "character",
@@ -102,9 +102,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "e8631d02ca896345"
+      "manifestHash": "0c6f3a6f1ffaba84"
     },
     {
       "objectKind": "character",
@@ -115,9 +115,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "f3e65243a83925cd"
+      "manifestHash": "d4b98fe88e9458dc"
     },
     {
       "objectKind": "character",
@@ -128,9 +128,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "1c56c520909bc749"
+      "manifestHash": "795fbf0aba1917e2"
     },
     {
       "objectKind": "character",
@@ -141,9 +141,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "4fee449992d294b1"
+      "manifestHash": "1a12156b7c15710c"
     },
     {
       "objectKind": "character",
@@ -155,9 +155,9 @@
         "actor-static-profile-missing",
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-unapplied"
+        "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "d4df6a477117141a"
+      "manifestHash": "ec9232da7361744f"
     },
     {
       "objectKind": "equipment",
@@ -166,11 +166,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "57cfc9ee866f743d"
+      "manifestHash": "35dfa215cd973a58"
     },
     {
       "objectKind": "equipment",
@@ -179,11 +179,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "63e921bc7525b0da"
+      "manifestHash": "b96d2a13117ea667"
     },
     {
       "objectKind": "equipment",
@@ -192,11 +192,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "18d23a94b22f81db"
+      "manifestHash": "3e7db7ae07685a46"
     },
     {
       "objectKind": "equipment",
@@ -205,11 +205,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c42cf389f44e14e4"
+      "manifestHash": "bab0995fab1a9be9"
     },
     {
       "objectKind": "equipment",
@@ -218,11 +218,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0a64c13fb66a1151"
+      "manifestHash": "7352fec728abd14c"
     },
     {
       "objectKind": "equipment",
@@ -231,11 +231,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f1c44f36a459e8e6"
+      "manifestHash": "ac67ca5084bf700b"
     },
     {
       "objectKind": "equipment",
@@ -244,11 +244,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "527438fe39e25895"
+      "manifestHash": "f6a76f5a7138c846"
     },
     {
       "objectKind": "equipment",
@@ -257,11 +257,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "edbeda231adb3f64"
+      "manifestHash": "c4b2988b7a5c24db"
     },
     {
       "objectKind": "equipment",
@@ -270,11 +270,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "abc05b152c23d8c7"
+      "manifestHash": "cf2cf14ae920c608"
     },
     {
       "objectKind": "equipment",
@@ -283,11 +283,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4a08ce1cea3d3028"
+      "manifestHash": "62c34bb0f16f6b11"
     },
     {
       "objectKind": "equipment",
@@ -296,11 +296,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9343937d56fb8323"
+      "manifestHash": "4c3067ed0f29e63a"
     },
     {
       "objectKind": "equipment",
@@ -309,11 +309,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0f5fc96bd2050c36"
+      "manifestHash": "32de51e32c5d0f47"
     },
     {
       "objectKind": "equipment",
@@ -322,11 +322,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ac71d1d9d4301702"
+      "manifestHash": "1e15ee8e635f403d"
     },
     {
       "objectKind": "equipment",
@@ -335,11 +335,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c563f6e3f6e52457"
+      "manifestHash": "42dcd85c5d12b2bc"
     },
     {
       "objectKind": "equipment",
@@ -348,11 +348,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9b47adf9febf4b70"
+      "manifestHash": "12430d21ab1db483"
     },
     {
       "objectKind": "equipment",
@@ -361,11 +361,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5b5783d2a60afc6b"
+      "manifestHash": "266849c419598dda"
     },
     {
       "objectKind": "equipment",
@@ -374,11 +374,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0809bb4fd3b40d34"
+      "manifestHash": "5cddd02a40617535"
     },
     {
       "objectKind": "equipment",
@@ -387,11 +387,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9a860332c732c351"
+      "manifestHash": "6f564ea29406b520"
     },
     {
       "objectKind": "equipment",
@@ -400,11 +400,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0183f2f466e25e5b"
+      "manifestHash": "c2b737dfab8b51e2"
     },
     {
       "objectKind": "equipment",
@@ -413,11 +413,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f4e2bb3429e80ff0"
+      "manifestHash": "bca6e2f6a7925e89"
     },
     {
       "objectKind": "equipment",
@@ -426,11 +426,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "38903273223e39a5"
+      "manifestHash": "31834d59265e3064"
     },
     {
       "objectKind": "equipment",
@@ -439,11 +439,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6825d13136e2baee"
+      "manifestHash": "6611561e4c988f8f"
     },
     {
       "objectKind": "equipment",
@@ -452,11 +452,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e73356f82e92f777"
+      "manifestHash": "8f12d3d21e808766"
     },
     {
       "objectKind": "equipment",
@@ -465,11 +465,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "76019d281077c450"
+      "manifestHash": "034b787c0fbdd421"
     },
     {
       "objectKind": "equipment",
@@ -478,11 +478,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7942699e1522f4ab"
+      "manifestHash": "1f3d485a9edaabe0"
     },
     {
       "objectKind": "equipment",
@@ -491,11 +491,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4f5a98e646b4e92a"
+      "manifestHash": "d3679d25964a13e5"
     },
     {
       "objectKind": "equipment",
@@ -504,11 +504,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c616b10abdc7918d"
+      "manifestHash": "08cd6f43d1c86782"
     },
     {
       "objectKind": "equipment",
@@ -517,11 +517,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "bf705ae56baca022"
+      "manifestHash": "39a90072dea157df"
     },
     {
       "objectKind": "equipment",
@@ -530,11 +530,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "fe8e0b4eecb2465d"
+      "manifestHash": "08620cdfba423a28"
     },
     {
       "objectKind": "equipment",
@@ -543,11 +543,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3be4f2aed40cabdc"
+      "manifestHash": "9958e4d4289c41e1"
     },
     {
       "objectKind": "equipment",
@@ -556,11 +556,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c277e5af58683190"
+      "manifestHash": "994f2498ff3bebaf"
     },
     {
       "objectKind": "equipment",
@@ -569,11 +569,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3e7680aad4f076c5"
+      "manifestHash": "5991fe81e30fed26"
     },
     {
       "objectKind": "equipment",
@@ -582,11 +582,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "996118866e588cf6"
+      "manifestHash": "288950531e7f68ed"
     },
     {
       "objectKind": "equipment",
@@ -595,11 +595,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "278956a42ad1e329"
+      "manifestHash": "ba04672cd7ef53dc"
     },
     {
       "objectKind": "equipment",
@@ -608,11 +608,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "eee5c590cb308fba"
+      "manifestHash": "4bfe583b23d3ab47"
     },
     {
       "objectKind": "equipment",
@@ -621,11 +621,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "54e11cea73fd5537"
+      "manifestHash": "9ee834abd67a455a"
     },
     {
       "objectKind": "equipment",
@@ -634,11 +634,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5ca266373a73d528"
+      "manifestHash": "6866513126296c15"
     },
     {
       "objectKind": "equipment",
@@ -647,11 +647,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "fa40917eb513a325"
+      "manifestHash": "634fd66c1ea4ec38"
     },
     {
       "objectKind": "equipment",
@@ -660,11 +660,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "179880d46b29b627"
+      "manifestHash": "c76183d7e4b5efec"
     },
     {
       "objectKind": "equipment",
@@ -673,11 +673,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "2c3e93705769555e"
+      "manifestHash": "9bdb8ac67b35cd43"
     },
     {
       "objectKind": "equipment",
@@ -686,11 +686,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f05fe65b7ccb35c6"
+      "manifestHash": "82c84bfe977f79e5"
     },
     {
       "objectKind": "equipment",
@@ -699,11 +699,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5ea409795c4868a7"
+      "manifestHash": "c0f83daf3b3dd10a"
     },
     {
       "objectKind": "equipment",
@@ -712,11 +712,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "670a079955762545"
+      "manifestHash": "c7f8c7996ae82d06"
     },
     {
       "objectKind": "equipment",
@@ -725,11 +725,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d69e397530c2589c"
+      "manifestHash": "a1e23aa0b0867f49"
     },
     {
       "objectKind": "equipment",
@@ -738,11 +738,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "367dc5b91f4dcb25"
+      "manifestHash": "e5cc69a78709d186"
     },
     {
       "objectKind": "equipment",
@@ -751,11 +751,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "151204097114c985"
+      "manifestHash": "63045e2b314c9a88"
     },
     {
       "objectKind": "equipment",
@@ -764,11 +764,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f17497b4348e19e9"
+      "manifestHash": "134acecdc0d99b78"
     },
     {
       "objectKind": "equipment",
@@ -777,11 +777,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9f7709599cfbecd6"
+      "manifestHash": "853566006dfca9a9"
     },
     {
       "objectKind": "equipment",
@@ -790,11 +790,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3d9a894457c73682"
+      "manifestHash": "11aa233639433811"
     },
     {
       "objectKind": "equipment",
@@ -803,11 +803,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "787300cd356becb9"
+      "manifestHash": "4a52887a4f56029a"
     },
     {
       "objectKind": "equipment",
@@ -816,11 +816,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "007ca476b0351751"
+      "manifestHash": "9d90cef52dc3cd0c"
     },
     {
       "objectKind": "equipment",
@@ -829,11 +829,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1da2e1f667a2c676"
+      "manifestHash": "1bdd72876ec10653"
     },
     {
       "objectKind": "equipment",
@@ -842,11 +842,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7bd32c6604b21a7c"
+      "manifestHash": "6712abe4a077ffd3"
     },
     {
       "objectKind": "equipment",
@@ -855,11 +855,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "24ad2cdf9a67fead"
+      "manifestHash": "c4ffaf73259eb61c"
     },
     {
       "objectKind": "equipment",
@@ -868,11 +868,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9e19607747a4aed5"
+      "manifestHash": "bc338a756772b4d8"
     },
     {
       "objectKind": "equipment",
@@ -881,11 +881,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "64cd968d3ff89a20"
+      "manifestHash": "e0697fcb5a860ebb"
     },
     {
       "objectKind": "equipment",
@@ -894,11 +894,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "152766a9f875b726"
+      "manifestHash": "b15933423aba4ebf"
     },
     {
       "objectKind": "equipment",
@@ -907,11 +907,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8efa54fb29a491cd"
+      "manifestHash": "e0f97c1c530f0c84"
     },
     {
       "objectKind": "equipment",
@@ -920,11 +920,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "2d2e9ebe3625f230"
+      "manifestHash": "26bb43632ccfd411"
     },
     {
       "objectKind": "equipment",
@@ -933,11 +933,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f764234d4ff1275e"
+      "manifestHash": "f5933459624d6b51"
     },
     {
       "objectKind": "equipment",
@@ -946,11 +946,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "cc65a4e8ed4ea203"
+      "manifestHash": "b5e2664b342225b8"
     },
     {
       "objectKind": "equipment",
@@ -959,11 +959,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c7b15782e709c3b7"
+      "manifestHash": "f25b9742b67ce236"
     },
     {
       "objectKind": "equipment",
@@ -972,11 +972,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "2785f3bed66d2b92"
+      "manifestHash": "0c9cbc802ad82dd9"
     },
     {
       "objectKind": "equipment",
@@ -985,11 +985,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "a3cffcd7de00fed6"
+      "manifestHash": "732eb09260340141"
     },
     {
       "objectKind": "equipment",
@@ -998,11 +998,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9dfbe7e55c4bb10f"
+      "manifestHash": "b4429dd1200f1512"
     },
     {
       "objectKind": "equipment",
@@ -1011,11 +1011,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "eeae0dcd7a496d1b"
+      "manifestHash": "3e9e85a29fc121ec"
     },
     {
       "objectKind": "equipment",
@@ -1024,11 +1024,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c2168eece8b80cb1"
+      "manifestHash": "cba11b19041bfb4e"
     },
     {
       "objectKind": "equipment",
@@ -1037,11 +1037,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9c601607526a603a"
+      "manifestHash": "7313c17f5bc9896d"
     },
     {
       "objectKind": "equipment",
@@ -1050,11 +1050,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d1226b4b1d2cf3ee"
+      "manifestHash": "b5cd9b51eaddedcf"
     },
     {
       "objectKind": "equipment",
@@ -1063,11 +1063,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d0035e02263abbd9"
+      "manifestHash": "e20d1b9caff68ce8"
     },
     {
       "objectKind": "equipment",
@@ -1076,11 +1076,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "51b4551d683c1643"
+      "manifestHash": "ad09a01a33f7c8b8"
     },
     {
       "objectKind": "equipment",
@@ -1089,11 +1089,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "13f657e93f154156"
+      "manifestHash": "2c093f9a67d74f8b"
     },
     {
       "objectKind": "equipment",
@@ -1102,11 +1102,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d85027b8204ff08a"
+      "manifestHash": "4baa9ba12c41979b"
     },
     {
       "objectKind": "equipment",
@@ -1115,11 +1115,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8fd3228311549403"
+      "manifestHash": "3dd814bb6edc4fb4"
     },
     {
       "objectKind": "equipment",
@@ -1128,11 +1128,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d2f3464308f2b5a5"
+      "manifestHash": "fc1d6760cc53a520"
     },
     {
       "objectKind": "equipment",
@@ -1141,11 +1141,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "112e797d7a72b512"
+      "manifestHash": "79f8560678393313"
     },
     {
       "objectKind": "equipment",
@@ -1154,11 +1154,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "de5935fd9e933bdb"
+      "manifestHash": "04b89649aaf77ef2"
     },
     {
       "objectKind": "equipment",
@@ -1167,11 +1167,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c5a8b658643942f5"
+      "manifestHash": "d379232ba2576fa6"
     },
     {
       "objectKind": "equipment",
@@ -1180,11 +1180,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "939262e53d2b00e4"
+      "manifestHash": "1b00440de91de18b"
     },
     {
       "objectKind": "equipment",
@@ -1193,11 +1193,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d30d9d419ff66ee8"
+      "manifestHash": "5d2bfb74ab600bc9"
     },
     {
       "objectKind": "equipment",
@@ -1206,11 +1206,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "aa5f16001d3a53fd"
+      "manifestHash": "9c9552f40d22751a"
     },
     {
       "objectKind": "equipment",
@@ -1219,11 +1219,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "db9a7ded567061d9"
+      "manifestHash": "163feaa6bac5670a"
     },
     {
       "objectKind": "equipment",
@@ -1232,11 +1232,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0a1ff07895af6ce0"
+      "manifestHash": "a06f4ecaaeee99b5"
     },
     {
       "objectKind": "equipment",
@@ -1245,11 +1245,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "033d7798f4e24060"
+      "manifestHash": "b9f75b4c32a45d6b"
     },
     {
       "objectKind": "equipment",
@@ -1258,11 +1258,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3a38d73656cd5426"
+      "manifestHash": "00c6d2bcf72b12af"
     },
     {
       "objectKind": "equipment",
@@ -1271,11 +1271,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "30538b3534b844c3"
+      "manifestHash": "9220196ba0100bea"
     },
     {
       "objectKind": "equipment",
@@ -1284,11 +1284,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f0614a8b606162b4"
+      "manifestHash": "5fca8707f30fecfd"
     },
     {
       "objectKind": "equipment",
@@ -1297,11 +1297,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5989a77aa21d992d"
+      "manifestHash": "7dcc112a04807836"
     },
     {
       "objectKind": "equipment",
@@ -1310,11 +1310,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "76ab2dc27d217f60"
+      "manifestHash": "f77d7bf9f8566601"
     },
     {
       "objectKind": "equipment",
@@ -1323,11 +1323,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "79c250fc462313bf"
+      "manifestHash": "5da0a2c8ae18bc7e"
     },
     {
       "objectKind": "equipment",
@@ -1336,11 +1336,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e1d33d219c761954"
+      "manifestHash": "ee7a6bdf101e7567"
     },
     {
       "objectKind": "equipment",
@@ -1349,11 +1349,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ce8c000fb108e5bd"
+      "manifestHash": "880b73a329d2fc3c"
     },
     {
       "objectKind": "equipment",
@@ -1362,11 +1362,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d9cc0f598260920a"
+      "manifestHash": "ae7f17021caea8b3"
     },
     {
       "objectKind": "equipment",
@@ -1375,11 +1375,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "60f8b451a024726b"
+      "manifestHash": "91dc40f9ea0bedd0"
     },
     {
       "objectKind": "equipment",
@@ -1388,11 +1388,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3df5b5b824600966"
+      "manifestHash": "e657ab9860bbe727"
     },
     {
       "objectKind": "equipment",
@@ -1401,11 +1401,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "47f00370d555f951"
+      "manifestHash": "b7ac6af857117740"
     },
     {
       "objectKind": "equipment",
@@ -1414,11 +1414,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ec0ce5723eb057e7"
+      "manifestHash": "116afbfe8cbcabac"
     },
     {
       "objectKind": "equipment",
@@ -1427,11 +1427,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4cbf04a77ffded37"
+      "manifestHash": "f2f3595dcd4900fe"
     },
     {
       "objectKind": "equipment",
@@ -1440,11 +1440,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0880a82b9e68cc50"
+      "manifestHash": "7eb3e0c703191301"
     },
     {
       "objectKind": "equipment",
@@ -1453,11 +1453,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b40fdd10b5cd027b"
+      "manifestHash": "dfe2991771231e16"
     },
     {
       "objectKind": "equipment",
@@ -1466,11 +1466,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d350d32b3ebf00c0"
+      "manifestHash": "670a1bf92f981c03"
     },
     {
       "objectKind": "equipment",
@@ -1479,11 +1479,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "60b18b93d8f4e874"
+      "manifestHash": "23135907d8394a67"
     },
     {
       "objectKind": "equipment",
@@ -1492,11 +1492,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5aaf5c2a2699904b"
+      "manifestHash": "1a3db4755c89f160"
     },
     {
       "objectKind": "equipment",
@@ -1505,11 +1505,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "fd99f714575a3eef"
+      "manifestHash": "0029adef2adb6056"
     },
     {
       "objectKind": "equipment",
@@ -1518,11 +1518,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "cd294049ccafa300"
+      "manifestHash": "0f66d7ca25416381"
     },
     {
       "objectKind": "equipment",
@@ -1531,11 +1531,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9143919c67e89662"
+      "manifestHash": "57e776726076c155"
     },
     {
       "objectKind": "equipment",
@@ -1544,11 +1544,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d9a89ca89143272b"
+      "manifestHash": "05531d2cc39f7c3e"
     },
     {
       "objectKind": "equipment",
@@ -1557,11 +1557,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f4b2e4c3891304b3"
+      "manifestHash": "001afbe6cb6fa6c2"
     },
     {
       "objectKind": "equipment",
@@ -1570,11 +1570,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5c4bbb69b4d14f1a"
+      "manifestHash": "70b69c9934ee9cd9"
     },
     {
       "objectKind": "equipment",
@@ -1583,11 +1583,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "a0213795c364db18"
+      "manifestHash": "8bfa592f4cf5834d"
     },
     {
       "objectKind": "equipment",
@@ -1596,11 +1596,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "54c797f2519f34cb"
+      "manifestHash": "ddc588b5486c264e"
     },
     {
       "objectKind": "equipment",
@@ -1609,11 +1609,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "26d389d0d5d01c3a"
+      "manifestHash": "b63ba3b0049f013f"
     },
     {
       "objectKind": "equipment",
@@ -1622,11 +1622,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "eccc367467a79b00"
+      "manifestHash": "3ec1482b6cc8576f"
     },
     {
       "objectKind": "equipment",
@@ -1635,11 +1635,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4f8fd994c693ae9d"
+      "manifestHash": "24d30f19f7079a5e"
     },
     {
       "objectKind": "equipment",
@@ -1648,11 +1648,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "868d53dae1d43085"
+      "manifestHash": "4d619dea9319a8c8"
     },
     {
       "objectKind": "equipment",
@@ -1661,11 +1661,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e18ccfb5cc233fcc"
+      "manifestHash": "a423889caf67f7bf"
     },
     {
       "objectKind": "equipment",
@@ -1674,11 +1674,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0e32aa6da3953800"
+      "manifestHash": "9cdb5d34b5eee7df"
     },
     {
       "objectKind": "equipment",
@@ -1687,11 +1687,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "fb355a27dc43c9dd"
+      "manifestHash": "888abcd56498130c"
     },
     {
       "objectKind": "equipment",
@@ -1700,11 +1700,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6d026d268df65ad1"
+      "manifestHash": "86ea52719c5e929e"
     },
     {
       "objectKind": "equipment",
@@ -1713,11 +1713,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ef601858cbd6610b"
+      "manifestHash": "21bab2d573e58de4"
     },
     {
       "objectKind": "equipment",
@@ -1726,11 +1726,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "14a33fa9f5bba474"
+      "manifestHash": "8da4ac34101e757b"
     },
     {
       "objectKind": "equipment",
@@ -1739,11 +1739,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4adb2066fe02f8d4"
+      "manifestHash": "6f36df716cb02ac1"
     },
     {
       "objectKind": "equipment",
@@ -1752,11 +1752,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "54e879c331a77aab"
+      "manifestHash": "ec6638d59ad49996"
     },
     {
       "objectKind": "equipment",
@@ -1765,11 +1765,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "2252503205c09d3d"
+      "manifestHash": "4126b47c198629e6"
     },
     {
       "objectKind": "equipment",
@@ -1778,11 +1778,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5d7a946639ed3230"
+      "manifestHash": "22f3e39d0799d709"
     },
     {
       "objectKind": "equipment",
@@ -1791,11 +1791,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8130c30f749d23e4"
+      "manifestHash": "5d5b35db181bb879"
     },
     {
       "objectKind": "equipment",
@@ -1804,11 +1804,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8a16fc2c6d5f615d"
+      "manifestHash": "578401c15208bbc2"
     },
     {
       "objectKind": "equipment",
@@ -1817,11 +1817,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c1d9b6009bc62667"
+      "manifestHash": "1e84a0f9305b8a6e"
     },
     {
       "objectKind": "equipment",
@@ -1830,11 +1830,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1ae84416424e8588"
+      "manifestHash": "f589c3e16133aac5"
     },
     {
       "objectKind": "equipment",
@@ -1843,11 +1843,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "58509f368b3db185"
+      "manifestHash": "7b187fa4b1514760"
     },
     {
       "objectKind": "equipment",
@@ -1856,11 +1856,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "2c6e718291844bf3"
+      "manifestHash": "d4c4f63da0f999a8"
     },
     {
       "objectKind": "equipment",
@@ -1869,11 +1869,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7c212f709305a152"
+      "manifestHash": "5353ae436f187fd5"
     },
     {
       "objectKind": "equipment",
@@ -1882,11 +1882,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "31ae85d23d196206"
+      "manifestHash": "9d1d72ac79a0a123"
     },
     {
       "objectKind": "equipment",
@@ -1895,11 +1895,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5fb496317ae2969f"
+      "manifestHash": "5d6d4872a58e0f58"
     },
     {
       "objectKind": "equipment",
@@ -1908,11 +1908,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "069e8558dca08633"
+      "manifestHash": "716301f6b2327688"
     },
     {
       "objectKind": "equipment",
@@ -1921,11 +1921,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d699e33aab8433ea"
+      "manifestHash": "90b4b39bd1dcee53"
     },
     {
       "objectKind": "equipment",
@@ -1934,11 +1934,11 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-unapplied",
+        "strict-equipment-cultivation-runtime-partial",
         "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "27c09af67fca44ee"
+      "manifestHash": "e0bc8c97acc2ca5d"
     },
     {
       "objectKind": "kibo",
@@ -1948,11 +1948,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "a16e1f8b48ae61a0"
+      "manifestHash": "8238f46b3f0ca31b"
     },
     {
       "objectKind": "kibo",
@@ -1962,11 +1962,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "3b0e75aced7bdfd4"
+      "manifestHash": "8ed0a2da91962173"
     },
     {
       "objectKind": "kibo",
@@ -1976,11 +1976,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "5210549092d34bc6"
+      "manifestHash": "9406ac4e6b614dfd"
     },
     {
       "objectKind": "kibo",
@@ -1990,11 +1990,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "bc14cb1e54e74bbc"
+      "manifestHash": "fb52ecc3f784305d"
     },
     {
       "objectKind": "kibo",
@@ -2004,11 +2004,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "c1e75ad164838ae2"
+      "manifestHash": "b3b1f5153c0e6527"
     },
     {
       "objectKind": "kibo",
@@ -2018,11 +2018,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "c9d7c39a408b6159"
+      "manifestHash": "3ced624b5dad1e96"
     },
     {
       "objectKind": "kibo",
@@ -2032,11 +2032,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "2aee572578cb56c1"
+      "manifestHash": "1b07d1e758d979e4"
     },
     {
       "objectKind": "kibo",
@@ -2046,11 +2046,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "3c3a499c892aef5a"
+      "manifestHash": "7688660badf85d03"
     },
     {
       "objectKind": "kibo",
@@ -2060,12 +2060,12 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready",
         "kibo-passive-static-evidence-gap"
       ],
-      "manifestHash": "b1d4990d3fc80af6"
+      "manifestHash": "44cbf277a6590e37"
     },
     {
       "objectKind": "kibo",
@@ -2075,11 +2075,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "31a7cc8303de7917"
+      "manifestHash": "9a80c54531306554"
     },
     {
       "objectKind": "kibo",
@@ -2089,11 +2089,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "f6f533c55a96b21a"
+      "manifestHash": "a51c6a763888e9cd"
     },
     {
       "objectKind": "kibo",
@@ -2103,11 +2103,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "d4e781674ab4a892"
+      "manifestHash": "13c530f238037319"
     },
     {
       "objectKind": "kibo",
@@ -2117,11 +2117,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "2db9d0be9c22223f"
+      "manifestHash": "8fbb9383320c4df0"
     },
     {
       "objectKind": "kibo",
@@ -2131,11 +2131,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "f445a7e36e209744"
+      "manifestHash": "5842a6f6157ce3cb"
     },
     {
       "objectKind": "kibo",
@@ -2145,11 +2145,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "f1f661fcea998969"
+      "manifestHash": "a728eb3a721ea0ea"
     },
     {
       "objectKind": "kibo",
@@ -2159,11 +2159,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "420611b9e61842e2"
+      "manifestHash": "50c9417bc182aae9"
     },
     {
       "objectKind": "kibo",
@@ -2173,11 +2173,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "c68694a8d270b85b"
+      "manifestHash": "86503c3a75b1a11c"
     },
     {
       "objectKind": "kibo",
@@ -2187,11 +2187,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "8d3091c6a476051c"
+      "manifestHash": "15190d17a7eb0709"
     },
     {
       "objectKind": "kibo",
@@ -2201,11 +2201,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "ecceb35816dd0e82"
+      "manifestHash": "603e19e145bddb9f"
     },
     {
       "objectKind": "kibo",
@@ -2215,11 +2215,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "65decc0fb5145edb"
+      "manifestHash": "f0623d7234f8fc36"
     },
     {
       "objectKind": "kibo",
@@ -2229,11 +2229,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "d369add0eeeb60ab"
+      "manifestHash": "daf4268ae63b95f0"
     },
     {
       "objectKind": "kibo",
@@ -2243,11 +2243,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "4a4ba4d6c7d519fa"
+      "manifestHash": "74ac885c916cc1c7"
     },
     {
       "objectKind": "kibo",
@@ -2257,11 +2257,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "c0d48d3f8ed25e81"
+      "manifestHash": "9ec970cf7c99b73c"
     },
     {
       "objectKind": "kibo",
@@ -2271,11 +2271,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "c5037c8731cb2db8"
+      "manifestHash": "eb6f9cd05789ab3b"
     },
     {
       "objectKind": "kibo",
@@ -2285,11 +2285,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "35514d9d215235d9"
+      "manifestHash": "c98cacd78d423e28"
     },
     {
       "objectKind": "kibo",
@@ -2299,12 +2299,12 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready",
         "kibo-passive-static-evidence-gap"
       ],
-      "manifestHash": "76ac6e1756c6be9e"
+      "manifestHash": "676e78eb4dd84e9d"
     },
     {
       "objectKind": "kibo",
@@ -2314,11 +2314,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "3b6e8008e4ece2d9"
+      "manifestHash": "1fa5e6c5a84540c2"
     },
     {
       "objectKind": "kibo",
@@ -2328,12 +2328,12 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready",
         "kibo-passive-static-evidence-gap"
       ],
-      "manifestHash": "e42dbabddc1967a7"
+      "manifestHash": "b46226a824bb9148"
     },
     {
       "objectKind": "kibo",
@@ -2343,11 +2343,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "58b475865eabfc79"
+      "manifestHash": "25fead7083668720"
     },
     {
       "objectKind": "kibo",
@@ -2357,11 +2357,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "9001251c486378f8"
+      "manifestHash": "b77e7de90f13956d"
     },
     {
       "objectKind": "kibo",
@@ -2371,11 +2371,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "cf7b17f14642ce45"
+      "manifestHash": "a5004ae2f1828afe"
     },
     {
       "objectKind": "kibo",
@@ -2385,11 +2385,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "2d7d1496591f8b66"
+      "manifestHash": "1ae772cbdc04b97b"
     },
     {
       "objectKind": "kibo",
@@ -2399,11 +2399,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "be0fd1ee5e2db9a2"
+      "manifestHash": "6e99dfd6c25d9d2f"
     },
     {
       "objectKind": "kibo",
@@ -2413,11 +2413,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "125bee00805efbf4"
+      "manifestHash": "689a42942f37d013"
     },
     {
       "objectKind": "kibo",
@@ -2427,11 +2427,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "66261469f4d58e29"
+      "manifestHash": "bf1eea2fcbad7844"
     },
     {
       "objectKind": "kibo",
@@ -2441,11 +2441,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "09ee6fc0376cff13"
+      "manifestHash": "d0b82e7834b24a80"
     },
     {
       "objectKind": "kibo",
@@ -2455,11 +2455,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "295ec6f0f5e4aab7"
+      "manifestHash": "e0857c60f0c89214"
     },
     {
       "objectKind": "kibo",
@@ -2469,12 +2469,12 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready",
         "kibo-passive-static-evidence-gap"
       ],
-      "manifestHash": "28e8c0c272d364d0"
+      "manifestHash": "ba5c606112a24bb9"
     },
     {
       "objectKind": "kibo",
@@ -2484,11 +2484,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "c1673f263725b29c"
+      "manifestHash": "85838d2ca38be7a3"
     },
     {
       "objectKind": "kibo",
@@ -2498,11 +2498,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "dca2835d402c35ea"
+      "manifestHash": "ded3d25f2ffd020b"
     },
     {
       "objectKind": "kibo",
@@ -2512,11 +2512,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "a31e08142f000514"
+      "manifestHash": "0d2b8d8dc2457875"
     },
     {
       "objectKind": "kibo",
@@ -2526,11 +2526,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "2729b0a871119b74"
+      "manifestHash": "e22ef1f799052695"
     },
     {
       "objectKind": "kibo",
@@ -2540,11 +2540,11 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-not-published",
-        "strict-kibo-cultivation-runtime-unapplied",
+        "strict-kibo-cultivation-runtime-partial",
         "kibo-dna-factor-catalog-unavailable",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "d8ebaf11c9e2399c"
+      "manifestHash": "12dbcfd8be1a5415"
     },
     {
       "objectKind": "set-skill",
@@ -2698,10 +2698,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "5f5f9d7c7726864f"
+      "manifestHash": "a97b42dd2a4b6fc0"
     },
     {
       "objectKind": "soul-essence",
@@ -2711,10 +2711,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "716b18848bccc696"
+      "manifestHash": "3986e63e2adad023"
     },
     {
       "objectKind": "soul-essence",
@@ -2724,10 +2724,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "921efc83ad135865"
+      "manifestHash": "9203b6439d9233fc"
     },
     {
       "objectKind": "soul-essence",
@@ -2737,10 +2737,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "cb77c867a0f5af36"
+      "manifestHash": "9a96db1ea89338bb"
     },
     {
       "objectKind": "soul-essence",
@@ -2750,10 +2750,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "d90d3d1258304d2b"
+      "manifestHash": "f6fc191d62a9cff0"
     },
     {
       "objectKind": "soul-essence",
@@ -2763,10 +2763,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "9242c54a470b4fee"
+      "manifestHash": "072ffc0e042b4bab"
     },
     {
       "objectKind": "soul-essence",
@@ -2776,10 +2776,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "978f1a9895b9dc78"
+      "manifestHash": "57e5c986f57022db"
     },
     {
       "objectKind": "soul-essence",
@@ -2789,10 +2789,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "4e1e70f85b94ea3e"
+      "manifestHash": "81f21eaee421a1ef"
     },
     {
       "objectKind": "soul-essence",
@@ -2802,10 +2802,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "5ed6dcc0020224c2"
+      "manifestHash": "7ac9a5e6f6fe7a17"
     },
     {
       "objectKind": "soul-essence",
@@ -2815,10 +2815,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "fe0e716397761743"
+      "manifestHash": "ac68ceb48faea4dc"
     },
     {
       "objectKind": "soul-essence",
@@ -2828,10 +2828,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "985731827707bc12"
+      "manifestHash": "18a2467dc357a84b"
     },
     {
       "objectKind": "soul-essence",
@@ -2841,10 +2841,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "ca82405b2ea4f304"
+      "manifestHash": "e8d5c3caa0377a7d"
     },
     {
       "objectKind": "soul-essence",
@@ -2854,10 +2854,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "ed86789fa72164b7"
+      "manifestHash": "dea83bc89e2a01ca"
     },
     {
       "objectKind": "soul-essence",
@@ -2867,10 +2867,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "b164cf360d058fb4"
+      "manifestHash": "5d188bd9211e2a07"
     },
     {
       "objectKind": "soul-essence",
@@ -2880,10 +2880,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "29970fb46d1b4d5b"
+      "manifestHash": "5ef61f49b87623f0"
     },
     {
       "objectKind": "soul-essence",
@@ -2893,10 +2893,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "8de75cf957ab973e"
+      "manifestHash": "cdbdb7dc703d661d"
     },
     {
       "objectKind": "soul-essence",
@@ -2906,10 +2906,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "ce15a4db096c071d"
+      "manifestHash": "1d011aca305e4c6e"
     },
     {
       "objectKind": "soul-essence",
@@ -2919,10 +2919,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "c15f049f0a8a33a0"
+      "manifestHash": "e2a1d1652c68cb7b"
     },
     {
       "objectKind": "soul-essence",
@@ -2932,10 +2932,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "e0f7bddf1af93512"
+      "manifestHash": "0113708fb91b517f"
     },
     {
       "objectKind": "soul-essence",
@@ -2945,10 +2945,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "cf3be82f975b7571"
+      "manifestHash": "59cef06cda44b304"
     },
     {
       "objectKind": "soul-essence",
@@ -2958,10 +2958,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "a83ccf4518ec05a4"
+      "manifestHash": "6b534c8b49b9a989"
     },
     {
       "objectKind": "soul-essence",
@@ -2971,10 +2971,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "7ce8931fe9268341"
+      "manifestHash": "4dd8b6e47712e44e"
     },
     {
       "objectKind": "soul-essence",
@@ -2984,10 +2984,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "1258f88f01e3d9ed"
+      "manifestHash": "92a0e6a741b5fd2c"
     },
     {
       "objectKind": "soul-essence",
@@ -2997,10 +2997,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "76b405fd41c9de11"
+      "manifestHash": "1ce93932f2b502f6"
     },
     {
       "objectKind": "soul-essence",
@@ -3010,10 +3010,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "667e8fe38f05bf7a"
+      "manifestHash": "b50fd03a109bd9fb"
     },
     {
       "objectKind": "soul-essence",
@@ -3023,10 +3023,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "dbd7f302384b8bce"
+      "manifestHash": "f46414de1b39d6ed"
     },
     {
       "objectKind": "soul-essence",
@@ -3036,10 +3036,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "bd8ef65bd4e09e30"
+      "manifestHash": "14e69536fd0de4e9"
     },
     {
       "objectKind": "soul-essence",
@@ -3049,10 +3049,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "c2c11e7c6d3f5089"
+      "manifestHash": "594b7e290e91b536"
     },
     {
       "objectKind": "soul-essence",
@@ -3062,10 +3062,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "259dde1fb5325534"
+      "manifestHash": "08d958dfa28eb94b"
     },
     {
       "objectKind": "soul-essence",
@@ -3075,10 +3075,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "4823f21b32b4f7b0"
+      "manifestHash": "97479f63a971b27b"
     },
     {
       "objectKind": "soul-essence",
@@ -3088,10 +3088,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "15a252b9fbe79266"
+      "manifestHash": "c4ba1facfbe94683"
     },
     {
       "objectKind": "soul-essence",
@@ -3101,10 +3101,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "ef067955cbfbc506"
+      "manifestHash": "c166b6f23f931399"
     },
     {
       "objectKind": "soul-essence",
@@ -3114,10 +3114,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "e0b34bb8e5d3f5c4"
+      "manifestHash": "7d89c3640d237fed"
     },
     {
       "objectKind": "soul-essence",
@@ -3127,10 +3127,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "d309206e6c9b64db"
+      "manifestHash": "aa7496c2310605aa"
     },
     {
       "objectKind": "soul-essence",
@@ -3140,10 +3140,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "05ef05ec8532097a"
+      "manifestHash": "96b6b23a5fec0831"
     },
     {
       "objectKind": "soul-essence",
@@ -3153,10 +3153,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "65cbd4c036462de4"
+      "manifestHash": "806d2dae961c4169"
     },
     {
       "objectKind": "soul-essence",
@@ -3166,10 +3166,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "1c94e205f2cee440"
+      "manifestHash": "e8b59c96e77e31e7"
     },
     {
       "objectKind": "soul-essence",
@@ -3179,10 +3179,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "13890fd25351cee4"
+      "manifestHash": "cccd99c6a6ef44df"
     },
     {
       "objectKind": "soul-essence",
@@ -3192,10 +3192,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "12c1ea810543fd1d"
+      "manifestHash": "96397a2e6ee4be30"
     },
     {
       "objectKind": "soul-essence",
@@ -3205,10 +3205,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "1af0e4c88ed824c7"
+      "manifestHash": "a5a9267ef01cf7a8"
     },
     {
       "objectKind": "soul-essence",
@@ -3218,10 +3218,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "18678e9be19b4382"
+      "manifestHash": "cca256116c72a4cd"
     },
     {
       "objectKind": "soul-essence",
@@ -3231,10 +3231,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "cef2a0c97b085b0f"
+      "manifestHash": "a982815e9ed20c12"
     },
     {
       "objectKind": "soul-essence",
@@ -3244,10 +3244,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "00f2eac4283fb85f"
+      "manifestHash": "ae29773a2133439e"
     },
     {
       "objectKind": "soul-essence",
@@ -3257,10 +3257,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "d74cad037cf37bcf"
+      "manifestHash": "396e3a1d8cf9e6c0"
     },
     {
       "objectKind": "soul-essence",
@@ -3270,10 +3270,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "aa000534c4aec3f9"
+      "manifestHash": "96a93b7ad145eb3e"
     },
     {
       "objectKind": "soul-essence",
@@ -3283,10 +3283,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "c746bbce233aeaf1"
+      "manifestHash": "42cc4e4e0218e6b8"
     },
     {
       "objectKind": "soul-essence",
@@ -3296,10 +3296,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "394da7abe0bcbb23"
+      "manifestHash": "2244b86bfebd8c56"
     },
     {
       "objectKind": "soul-essence",
@@ -3309,10 +3309,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "7e4469e6845c4ef5"
+      "manifestHash": "1c2ae3006ec98740"
     },
     {
       "objectKind": "soul-essence",
@@ -3322,10 +3322,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "b4f28001881087e4"
+      "manifestHash": "ac131836f7ae8d5f"
     },
     {
       "objectKind": "soul-essence",
@@ -3335,10 +3335,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "0f9897a1e2c5e925"
+      "manifestHash": "44e29d3511442494"
     },
     {
       "objectKind": "soul-essence",
@@ -3348,10 +3348,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "03a8166e71459870"
+      "manifestHash": "54258b4111f4dd8d"
     },
     {
       "objectKind": "soul-essence",
@@ -3361,10 +3361,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "49bf99d77594e86f"
+      "manifestHash": "0de5ae36e594d470"
     },
     {
       "objectKind": "soul-essence",
@@ -3374,10 +3374,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "9e70f5593e01c036"
+      "manifestHash": "d849b2a3307dabd7"
     },
     {
       "objectKind": "soul-essence",
@@ -3387,10 +3387,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "fdb0fad7166da9cd"
+      "manifestHash": "ba8fd934d7799d9e"
     },
     {
       "objectKind": "soul-essence",
@@ -3400,10 +3400,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "e9ea5f0bf7eb7fc5"
+      "manifestHash": "dc93edc1578c6f36"
     },
     {
       "objectKind": "soul-essence",
@@ -3413,10 +3413,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "eddae171421125f0"
+      "manifestHash": "d16ea715a94a5f11"
     },
     {
       "objectKind": "soul-essence",
@@ -3426,10 +3426,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "168d6ae2a3487ee4"
+      "manifestHash": "4544bf9296085d39"
     },
     {
       "objectKind": "soul-essence",
@@ -3439,10 +3439,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "6d550821104c559a"
+      "manifestHash": "1f1884b5e4fb2321"
     },
     {
       "objectKind": "soul-essence",
@@ -3452,10 +3452,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "cda27717431b5c9e"
+      "manifestHash": "52219e9ff46f6415"
     },
     {
       "objectKind": "soul-essence",
@@ -3465,10 +3465,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "a841dcaa005e25ee"
+      "manifestHash": "f926d5eb481d304b"
     },
     {
       "objectKind": "soul-essence",
@@ -3478,10 +3478,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "224c6a7031362dd0"
+      "manifestHash": "a90ff9d1d73990cd"
     },
     {
       "objectKind": "soul-essence",
@@ -3491,10 +3491,10 @@
       "optimizationReady": false,
       "blockerCodes": [
         "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-unapplied",
+        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "eb04e7fc8f649c36"
+      "manifestHash": "9841a5fd78563839"
     }
   ],
   "admission": {
@@ -4380,6 +4380,967 @@
           1350321
         ]
       },
+      "profiles": [
+        {
+          "equipmentId": 1010111,
+          "slot": "weapon",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1010111]"
+        },
+        {
+          "equipmentId": 1010211,
+          "slot": "weapon",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1010211]"
+        },
+        {
+          "equipmentId": 1010311,
+          "slot": "weapon",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1010311]"
+        },
+        {
+          "equipmentId": 1010411,
+          "slot": "weapon",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1010411]"
+        },
+        {
+          "equipmentId": 1010511,
+          "slot": "weapon",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1010511]"
+        },
+        {
+          "equipmentId": 1010611,
+          "slot": "weapon",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1010611]"
+        },
+        {
+          "equipmentId": 1020111,
+          "slot": "top",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1020111]"
+        },
+        {
+          "equipmentId": 1020211,
+          "slot": "top",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1020211]"
+        },
+        {
+          "equipmentId": 1020311,
+          "slot": "top",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1020311]"
+        },
+        {
+          "equipmentId": 1030111,
+          "slot": "bottom",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1030111]"
+        },
+        {
+          "equipmentId": 1030211,
+          "slot": "bottom",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1030211]"
+        },
+        {
+          "equipmentId": 1030311,
+          "slot": "bottom",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1030311]"
+        },
+        {
+          "equipmentId": 1040111,
+          "slot": "earring",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1040111]"
+        },
+        {
+          "equipmentId": 1040211,
+          "slot": "earring",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1040211]"
+        },
+        {
+          "equipmentId": 1040311,
+          "slot": "earring",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1040311]"
+        },
+        {
+          "equipmentId": 1050111,
+          "slot": "ring",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1050111]"
+        },
+        {
+          "equipmentId": 1050211,
+          "slot": "ring",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1050211]"
+        },
+        {
+          "equipmentId": 1050311,
+          "slot": "ring",
+          "rarity": 1,
+          "maximumEnhancementLevel": 0,
+          "sourceIdentity": "NewTable/accessory.rows[id=1050311]"
+        },
+        {
+          "equipmentId": 1110111,
+          "slot": "weapon",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1110111]"
+        },
+        {
+          "equipmentId": 1110211,
+          "slot": "weapon",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1110211]"
+        },
+        {
+          "equipmentId": 1110311,
+          "slot": "weapon",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1110311]"
+        },
+        {
+          "equipmentId": 1110411,
+          "slot": "weapon",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1110411]"
+        },
+        {
+          "equipmentId": 1110511,
+          "slot": "weapon",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1110511]"
+        },
+        {
+          "equipmentId": 1110611,
+          "slot": "weapon",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1110611]"
+        },
+        {
+          "equipmentId": 1120111,
+          "slot": "top",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1120111]"
+        },
+        {
+          "equipmentId": 1120211,
+          "slot": "top",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1120211]"
+        },
+        {
+          "equipmentId": 1120311,
+          "slot": "top",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1120311]"
+        },
+        {
+          "equipmentId": 1130111,
+          "slot": "bottom",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1130111]"
+        },
+        {
+          "equipmentId": 1130211,
+          "slot": "bottom",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1130211]"
+        },
+        {
+          "equipmentId": 1130311,
+          "slot": "bottom",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1130311]"
+        },
+        {
+          "equipmentId": 1140111,
+          "slot": "earring",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1140111]"
+        },
+        {
+          "equipmentId": 1140211,
+          "slot": "earring",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1140211]"
+        },
+        {
+          "equipmentId": 1140311,
+          "slot": "earring",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1140311]"
+        },
+        {
+          "equipmentId": 1150111,
+          "slot": "ring",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1150111]"
+        },
+        {
+          "equipmentId": 1150211,
+          "slot": "ring",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1150211]"
+        },
+        {
+          "equipmentId": 1150311,
+          "slot": "ring",
+          "rarity": 2,
+          "maximumEnhancementLevel": 3,
+          "sourceIdentity": "NewTable/accessory.rows[id=1150311]"
+        },
+        {
+          "equipmentId": 1210011,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210011]"
+        },
+        {
+          "equipmentId": 1210111,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210111]"
+        },
+        {
+          "equipmentId": 1210121,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210121]"
+        },
+        {
+          "equipmentId": 1210211,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210211]"
+        },
+        {
+          "equipmentId": 1210221,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210221]"
+        },
+        {
+          "equipmentId": 1210311,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210311]"
+        },
+        {
+          "equipmentId": 1210321,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210321]"
+        },
+        {
+          "equipmentId": 1210411,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210411]"
+        },
+        {
+          "equipmentId": 1210421,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210421]"
+        },
+        {
+          "equipmentId": 1210511,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210511]"
+        },
+        {
+          "equipmentId": 1210521,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210521]"
+        },
+        {
+          "equipmentId": 1210611,
+          "slot": "weapon",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1210611]"
+        },
+        {
+          "equipmentId": 1220011,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220011]"
+        },
+        {
+          "equipmentId": 1220111,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220111]"
+        },
+        {
+          "equipmentId": 1220121,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220121]"
+        },
+        {
+          "equipmentId": 1220131,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220131]"
+        },
+        {
+          "equipmentId": 1220211,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220211]"
+        },
+        {
+          "equipmentId": 1220221,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220221]"
+        },
+        {
+          "equipmentId": 1220231,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220231]"
+        },
+        {
+          "equipmentId": 1220311,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220311]"
+        },
+        {
+          "equipmentId": 1220321,
+          "slot": "top",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1220321]"
+        },
+        {
+          "equipmentId": 1230011,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230011]"
+        },
+        {
+          "equipmentId": 1230111,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230111]"
+        },
+        {
+          "equipmentId": 1230121,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230121]"
+        },
+        {
+          "equipmentId": 1230131,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230131]"
+        },
+        {
+          "equipmentId": 1230211,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230211]"
+        },
+        {
+          "equipmentId": 1230221,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230221]"
+        },
+        {
+          "equipmentId": 1230231,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230231]"
+        },
+        {
+          "equipmentId": 1230311,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230311]"
+        },
+        {
+          "equipmentId": 1230321,
+          "slot": "bottom",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1230321]"
+        },
+        {
+          "equipmentId": 1240011,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240011]"
+        },
+        {
+          "equipmentId": 1240111,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240111]"
+        },
+        {
+          "equipmentId": 1240121,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240121]"
+        },
+        {
+          "equipmentId": 1240131,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240131]"
+        },
+        {
+          "equipmentId": 1240211,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240211]"
+        },
+        {
+          "equipmentId": 1240221,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240221]"
+        },
+        {
+          "equipmentId": 1240231,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240231]"
+        },
+        {
+          "equipmentId": 1240311,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240311]"
+        },
+        {
+          "equipmentId": 1240321,
+          "slot": "earring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1240321]"
+        },
+        {
+          "equipmentId": 1250011,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250011]"
+        },
+        {
+          "equipmentId": 1250111,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250111]"
+        },
+        {
+          "equipmentId": 1250121,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250121]"
+        },
+        {
+          "equipmentId": 1250131,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250131]"
+        },
+        {
+          "equipmentId": 1250211,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250211]"
+        },
+        {
+          "equipmentId": 1250221,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250221]"
+        },
+        {
+          "equipmentId": 1250231,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250231]"
+        },
+        {
+          "equipmentId": 1250311,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250311]"
+        },
+        {
+          "equipmentId": 1250321,
+          "slot": "ring",
+          "rarity": 3,
+          "maximumEnhancementLevel": 6,
+          "sourceIdentity": "NewTable/accessory.rows[id=1250321]"
+        },
+        {
+          "equipmentId": 1310011,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310011]"
+        },
+        {
+          "equipmentId": 1310111,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310111]"
+        },
+        {
+          "equipmentId": 1310112,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310112]"
+        },
+        {
+          "equipmentId": 1310121,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310121]"
+        },
+        {
+          "equipmentId": 1310211,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310211]"
+        },
+        {
+          "equipmentId": 1310212,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310212]"
+        },
+        {
+          "equipmentId": 1310221,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310221]"
+        },
+        {
+          "equipmentId": 1310311,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310311]"
+        },
+        {
+          "equipmentId": 1310312,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310312]"
+        },
+        {
+          "equipmentId": 1310321,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310321]"
+        },
+        {
+          "equipmentId": 1310411,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310411]"
+        },
+        {
+          "equipmentId": 1310412,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310412]"
+        },
+        {
+          "equipmentId": 1310421,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310421]"
+        },
+        {
+          "equipmentId": 1310511,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310511]"
+        },
+        {
+          "equipmentId": 1310512,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310512]"
+        },
+        {
+          "equipmentId": 1310521,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310521]"
+        },
+        {
+          "equipmentId": 1310611,
+          "slot": "weapon",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1310611]"
+        },
+        {
+          "equipmentId": 1320011,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320011]"
+        },
+        {
+          "equipmentId": 1320111,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320111]"
+        },
+        {
+          "equipmentId": 1320121,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320121]"
+        },
+        {
+          "equipmentId": 1320131,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320131]"
+        },
+        {
+          "equipmentId": 1320211,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320211]"
+        },
+        {
+          "equipmentId": 1320221,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320221]"
+        },
+        {
+          "equipmentId": 1320231,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320231]"
+        },
+        {
+          "equipmentId": 1320311,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320311]"
+        },
+        {
+          "equipmentId": 1320321,
+          "slot": "top",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1320321]"
+        },
+        {
+          "equipmentId": 1330011,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330011]"
+        },
+        {
+          "equipmentId": 1330111,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330111]"
+        },
+        {
+          "equipmentId": 1330121,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330121]"
+        },
+        {
+          "equipmentId": 1330131,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330131]"
+        },
+        {
+          "equipmentId": 1330211,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330211]"
+        },
+        {
+          "equipmentId": 1330221,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330221]"
+        },
+        {
+          "equipmentId": 1330231,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330231]"
+        },
+        {
+          "equipmentId": 1330311,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330311]"
+        },
+        {
+          "equipmentId": 1330321,
+          "slot": "bottom",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1330321]"
+        },
+        {
+          "equipmentId": 1340011,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340011]"
+        },
+        {
+          "equipmentId": 1340111,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340111]"
+        },
+        {
+          "equipmentId": 1340121,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340121]"
+        },
+        {
+          "equipmentId": 1340131,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340131]"
+        },
+        {
+          "equipmentId": 1340211,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340211]"
+        },
+        {
+          "equipmentId": 1340221,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340221]"
+        },
+        {
+          "equipmentId": 1340231,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340231]"
+        },
+        {
+          "equipmentId": 1340311,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340311]"
+        },
+        {
+          "equipmentId": 1340321,
+          "slot": "earring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1340321]"
+        },
+        {
+          "equipmentId": 1350011,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350011]"
+        },
+        {
+          "equipmentId": 1350111,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350111]"
+        },
+        {
+          "equipmentId": 1350121,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350121]"
+        },
+        {
+          "equipmentId": 1350131,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350131]"
+        },
+        {
+          "equipmentId": 1350211,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350211]"
+        },
+        {
+          "equipmentId": 1350221,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350221]"
+        },
+        {
+          "equipmentId": 1350231,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350231]"
+        },
+        {
+          "equipmentId": 1350311,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350311]"
+        },
+        {
+          "equipmentId": 1350321,
+          "slot": "ring",
+          "rarity": 4,
+          "maximumEnhancementLevel": 9,
+          "sourceIdentity": "NewTable/accessory.rows[id=1350321]"
+        }
+      ],
       "rarity": {
         "minimum": 1,
         "maximum": 4
@@ -4411,7 +5372,7 @@
         "sourceIdentity": "NewTable/accessory_customed.score|scoreLimit; bGoldSide/maxValue absent from current snapshot"
       },
       "tuningFormula": {
-        "status": "source-indexed-runtime-application-incomplete",
+        "status": "source-indexed-static-runtime-applied",
         "parameters": [
           8500,
           6000,
@@ -4446,5 +5407,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "69e0cea8e25f33b4"
+  "catalogHash": "917543097ed842b1"
 }

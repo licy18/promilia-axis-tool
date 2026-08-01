@@ -551,13 +551,50 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
     ),
     soulessenceLevel: optionalClampedInteger(source.soulessenceLevel, 1, 100),
     soulessenceRank: optionalClampedInteger(source.soulessenceRank, 1, 6),
+    ...(source.soulessenceStar == null
+      ? {}
+      : {
+          soulessenceStar: optionalClampedInteger(
+            source.soulessenceStar,
+            1,
+            5
+          ),
+        }),
     equipmentLevels: Object.fromEntries(
       Object.keys(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(slotKey => [
         slotKey,
         optionalClampedInteger(source.equipmentLevels?.[slotKey], 0, 9),
       ])
     ),
+    ...(source.equipmentCultivation == null
+      ? {}
+      : {
+          equipmentCultivation: Object.fromEntries(
+            Object.keys(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(slotKey => [
+              slotKey,
+              normalizeWorkbenchEquipmentCultivation(
+                source.equipmentCultivation?.[slotKey]
+              ),
+            ])
+          ),
+        }),
     kiboConfig: normalizeWorkbenchKiboConfig(source.kiboConfig),
+  };
+}
+
+function normalizeWorkbenchEquipmentCultivation(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return {
+    rarity: optionalClampedInteger(value.rarity, 1, 4),
+    enhancementLevel: optionalClampedInteger(value.enhancementLevel, 0, 9),
+    tuningScore: optionalClampedInteger(value.tuningScore, 0, 110),
+    instanceTier: ['normal', 'starborn'].includes(value.instanceTier)
+      ? value.instanceTier
+      : null,
+    tuningFormula:
+      value.tuningFormula && typeof value.tuningFormula === 'object'
+        ? structuredClone(value.tuningFormula)
+        : null,
   };
 }
 

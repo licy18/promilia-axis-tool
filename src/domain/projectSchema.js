@@ -239,7 +239,9 @@ export function createLoadout({
   soulessenceId = null,
   soulessenceLevel = null,
   soulessenceRank = null,
+  soulessenceStar = null,
   equipmentLevels = {},
+  equipmentCultivation = {},
   kiboConfig = {},
 } = {}) {
   return {
@@ -256,6 +258,7 @@ export function createLoadout({
     soulessenceId,
     soulessenceLevel,
     soulessenceRank,
+    ...(soulessenceStar == null ? {} : { soulessenceStar }),
     equipmentLevels: {
       weapon: equipmentLevels.weapon ?? null,
       top: equipmentLevels.top ?? null,
@@ -263,6 +266,18 @@ export function createLoadout({
       earring: equipmentLevels.earring ?? null,
       ring: equipmentLevels.ring ?? null,
     },
+    ...(Object.values(equipmentCultivation ?? {}).some(value => value != null)
+      ? {
+          equipmentCultivation: Object.fromEntries(
+            ['weapon', 'top', 'bottom', 'earring', 'ring'].map(slot => [
+              slot,
+              equipmentCultivation[slot] == null
+                ? null
+                : structuredClone(equipmentCultivation[slot]),
+            ])
+          ),
+        }
+      : {}),
     kiboConfig: {
       ...kiboConfig,
       comprehensionByAttribute: {

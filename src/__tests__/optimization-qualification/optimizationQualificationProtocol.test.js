@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import equipmentCatalog from '../../data/generated/equipment.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
@@ -18,7 +19,13 @@ const projectRoot = path.resolve(
   '../../..'
 );
 
-function createCultivationProfile({ bondLevel = 1, actorLevel = 80 } = {}) {
+function createCultivationProfile({
+  bondLevel = 1,
+  actorLevel = 80,
+  starGiftRank = 7,
+  enhancementLevel = 9,
+  tuningScore = 110,
+} = {}) {
   return {
     schemaVersion: 1,
     contractName: 'AzPrOptimizationCultivationProfile',
@@ -27,7 +34,7 @@ function createCultivationProfile({ bondLevel = 1, actorLevel = 80 } = {}) {
       slotId,
       character: {
         level: actorLevel,
-        starGiftRank: 7,
+        starGiftRank,
         starGiftNodeIds: [1, 2, 3, 4],
         ascensionRank: 6,
       },
@@ -46,8 +53,8 @@ function createCultivationProfile({ bondLevel = 1, actorLevel = 80 } = {}) {
           equipmentSlot,
           {
             rarity: 4,
-            enhancementLevel: 9,
-            tuningScore: 110,
+            enhancementLevel,
+            tuningScore,
             instanceTier: 'starborn',
           },
         ])
@@ -57,7 +64,16 @@ function createCultivationProfile({ bondLevel = 1, actorLevel = 80 } = {}) {
 }
 
 function createAxis({ profile = createCultivationProfile(), mode = 'research' } = {}) {
-  const equipment = qualificationCatalog.cultivation.equipment.equipmentIdsBySlot;
+  const equipmentRecords = equipmentCatalog.items.filter(
+    record => record.rarity === '4星'
+  );
+  const equipmentTypeBySlot = {
+    weapon: '武器',
+    top: '上装',
+    bottom: '下装',
+    earring: '耳环',
+    ring: '戒指',
+  };
   return {
     schemaVersion: 1,
     contractName: 'AzPrMachineAxis',
@@ -83,7 +99,11 @@ function createAxis({ profile = createCultivationProfile(), mode = 'research' } 
           equipment: Object.fromEntries(
             ['weapon', 'top', 'bottom', 'earring', 'ring'].map(slot => [
               slot,
-              equipment[slot][0],
+              Number(
+                equipmentRecords.find(
+                  record => record.type === equipmentTypeBySlot[slot]
+                ).id
+              ),
             ])
           ),
         },
@@ -146,7 +166,7 @@ describe('M12-B3 optimization qualification generation', () => {
         )
       ).toHaveLength(4);
       expect(artifacts.catalog.cultivation.equipment.tuningFormula).toEqual({
-        status: 'source-indexed-runtime-application-incomplete',
+        status: 'source-indexed-static-runtime-applied',
         parameters: [8500, 6000, 125, 200000],
         expression:
           'ceil(base*0.85)+ceil(base*0.6*0.0125*(tuningScore-20))',
@@ -226,6 +246,24 @@ describe('M12-B3 strict cultivation profile', () => {
     );
   });
 
+  it('rejects cultivation rarity that does not match the selected equipment source', () => {
+    const profile = createCultivationProfile();
+    profile.actors[0].equipment.weapon.rarity = 3;
+    const result = validateOptimizationCultivationProfile(profile, {
+      team: createAxis({ profile: createCultivationProfile() }).scenario.team,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-equipment-rarity-mismatch',
+          path: 'scenario.cultivationProfile.actors.0.equipment.weapon.rarity',
+        }),
+      ])
+    );
+  });
+
   it('puts raw and resolved cultivation into the canonical input hash', () => {
     const service = createMachineAxisService();
     const first = service.compile(createAxis({
@@ -240,6 +278,120 @@ describe('M12-B3 strict cultivation profile', () => {
       actors: expect.any(Array),
     });
     expect(first.hashes.input).not.toBe(second.hashes.input);
+  });
+
+  it('projects the supported cultivation dimensions into the authoritative static compiler', () => {
+    const service = createMachineAxisService();
+    const compilation = service.compile(createAxis());
+    const actorConfig = compilation.project.metadata.actorConfigs[0];
+    const actor = compilation.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+
+    expect(actorConfig).toMatchObject({
+      level: 80,
+      cultivation: {
+        starGiftRank: 7,
+      },
+      loadout: {
+        soulessenceLevel: 80,
+        soulessenceRank: 6,
+        equipmentLevels: {
+          weapon: 9,
+          top: 9,
+          bottom: 9,
+          earring: 9,
+          ring: 9,
+        },
+        kiboConfig: {
+          level: 80,
+          intimacyLevel: 1,
+          comprehensionByAttribute: {
+            1: 120,
+            3: 120,
+            4: 120,
+            5: 120,
+          },
+        },
+      },
+      optimizationCultivationApplication: {
+        status: 'partially-applied',
+        appliedDimensions: expect.arrayContaining([
+          'character.level',
+          'character.starGiftRank',
+          'kibo.level',
+          'kibo.talents',
+          'kibo.bondLevel',
+          'soulEssence.level',
+          'soulEssence.rank',
+          'equipment.enhancementLevel',
+          'equipment.tuningScore',
+        ]),
+        unresolvedDimensions: expect.arrayContaining([
+          'character.starGiftNodeIds',
+          'character.ascensionRank',
+          'kibo.dnaFactors',
+          'soulEssence.star',
+          'equipment.instanceTier',
+        ]),
+      },
+    });
+    expect(actor.verifiedStaticProperties.sources.map(source => source.kind)).toEqual(
+      expect.arrayContaining([
+        'star-gift-rank',
+        'soulessence-level',
+        'soulessence-rank',
+        'equipment-main',
+        'equipment-sub',
+        'equipment-tuning-main',
+        'equipment-tuning-sub',
+      ])
+    );
+    expect(
+      actor.verifiedStaticProperties.sources
+        .find(
+          source =>
+            source.kind === 'equipment-tuning-main' &&
+            source.sourceId.startsWith('1310011:weapon:')
+        )
+        .attributes.find(attribute => attribute.id === 2001)
+    ).toEqual({ id: 2001, value: 229 });
+    expect(actor.verifiedStaticKiboProperties).toMatchObject({
+      level: 80,
+      intimacyLevel: 1,
+      comprehensionByAttribute: {
+        1: 120,
+        3: 120,
+        4: 120,
+        5: 120,
+      },
+    });
+  });
+
+  it('changes static actor and inherited Kibo values with a fixed tuning score', () => {
+    const service = createMachineAxisService();
+    const low = service.compile(
+      createAxis({
+        profile: createCultivationProfile({ tuningScore: 20 }),
+      })
+    );
+    const high = service.compile(
+      createAxis({
+        profile: createCultivationProfile({ tuningScore: 110 }),
+      })
+    );
+    const lowActor = low.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+    const highActor = high.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+
+    expect(highActor.stats.attack).toBeGreaterThan(lowActor.stats.attack);
+    expect(highActor.verifiedStaticKiboProperties.stats.attack).toBeGreaterThan(
+      lowActor.verifiedStaticKiboProperties.stats.attack
+    );
+    expect(high.hashes.input).not.toBe(low.hashes.input);
   });
 
   it('round-trips the strict profile through the Workbench adapter without drift', () => {

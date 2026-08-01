@@ -402,9 +402,9 @@ function createQualificationManifests({
     }
     blockers.push(
       blocker(
-        'strict-character-cultivation-runtime-unapplied',
+        'strict-character-cultivation-runtime-partial',
         'not-implemented',
-        'Level, star gift nodes, and ascension inputs are not yet fully applied by the canonical runtime.'
+        'Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.'
       )
     );
     records.push(
@@ -440,9 +440,9 @@ function createQualificationManifests({
         'No product visual acceptance manifest exists for this Kibo.'
       ),
       blocker(
-        'strict-kibo-cultivation-runtime-unapplied',
+        'strict-kibo-cultivation-runtime-partial',
         'not-implemented',
-        'Kibo level, four talent values, DNA factors, and bond inheritance are not fully applied by the canonical runtime.'
+        'Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.'
       ),
       blocker(
         'kibo-dna-factor-catalog-unavailable',
@@ -503,9 +503,9 @@ function createQualificationManifests({
         { skillId: soul.effectSkillId }
       ),
       blocker(
-        'strict-soulessence-cultivation-runtime-unapplied',
+        'strict-soulessence-cultivation-runtime-partial',
         'not-implemented',
-        'Soul essence level, rank, and star are not fully applied by the canonical runtime.'
+        'Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.'
       ),
       blocker(
         'soulessence-visual-acceptance-not-published',
@@ -531,9 +531,9 @@ function createQualificationManifests({
   for (const item of publicEquipment) {
     const blockers = [
       blocker(
-        'strict-equipment-cultivation-runtime-unapplied',
+        'strict-equipment-cultivation-runtime-partial',
         'not-implemented',
-        'Equipment enhancement and tuning are not fully applied by the canonical runtime.'
+        'Equipment enhancement and source-backed tuning formula are applied; instance-tier legality remains evidence-blocked.'
       ),
       blocker(
         'equipment-instance-tier-source-evidence-missing',
@@ -687,6 +687,13 @@ function createCultivationCatalog({
     },
     equipment: {
       equipmentIdsBySlot: equipmentBySlot,
+      profiles: publicEquipment.map(item => ({
+        equipmentId: item.equipmentId,
+        slot: item.slot,
+        rarity: item.rarity,
+        maximumEnhancementLevel: item.maximumLevel,
+        sourceIdentity: item.sourceIdentity,
+      })),
       rarity: { minimum: 1, maximum: 4 },
       enhancementLevelByRarity: {
         1: { minimum: 0, maximum: 0 },
@@ -707,7 +714,7 @@ function createCultivationCatalog({
         status:
           equipmentScoreFormulaParameters.length === 4 &&
           equipmentScoreFormulaParameters.every(Number.isFinite)
-            ? 'source-indexed-runtime-application-incomplete'
+            ? 'source-indexed-static-runtime-applied'
             : 'evidence-insufficient',
         parameters: equipmentScoreFormulaParameters,
         expression:
@@ -1099,6 +1106,14 @@ function createImplementationCapabilities({
       ],
     },
     {
+      capabilityIdentity: 'b3-supported-cultivation-static-runtime-projection',
+      status: 'implemented',
+      evidence: [
+        'src/optimization-qualification/optimizationQualificationProtocol.js',
+        'src/simulation/mechanics/verifiedCombatStaticProperties.js',
+      ],
+    },
+    {
       capabilityIdentity: 'b3-kibo-four-talent-source-mapping',
       status: 'implemented',
       evidence: [
@@ -1116,7 +1131,7 @@ function createImplementationCapabilities({
       capabilityIdentity: 'b3-equipment-tuning-formula-source-index',
       status:
         cultivationCatalog.equipment.tuningFormula.status ===
-        'source-indexed-runtime-application-incomplete'
+        'source-indexed-static-runtime-applied'
           ? 'implemented'
           : 'evidence-insufficient',
       evidence: [cultivationCatalog.equipment.tuningFormula.sourceIdentity],

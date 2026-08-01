@@ -154,6 +154,84 @@ export function resolveOptimizationCultivationProfile(
   };
 }
 
+export function projectResolvedOptimizationCultivationActor(
+  resolvedActor,
+  { profileHash = null } = {}
+) {
+  if (!isRecord(resolvedActor)) return null;
+  const talentValues = Object.fromEntries(
+    (resolvedActor.kibo?.talents ?? []).map(talent => [
+      Number(talent.attributeId),
+      Number(talent.value),
+    ])
+  );
+  const equipmentLevels = Object.fromEntries(
+    EQUIPMENT_SLOTS.map(slot => [
+      slot,
+      Number(resolvedActor.equipment?.[slot]?.enhancementLevel),
+    ])
+  );
+  const equipmentCultivation = Object.fromEntries(
+    EQUIPMENT_SLOTS.map(slot => [
+      slot,
+      {
+        ...structuredClone(resolvedActor.equipment?.[slot]),
+        tuningFormula: structuredClone(
+          generatedQualificationCatalog.cultivation.equipment.tuningFormula
+        ),
+      },
+    ])
+  );
+  const appliedDimensions = [
+    'character.level',
+    'character.starGiftRank',
+    'kibo.level',
+    'kibo.talents',
+    'kibo.bondLevel',
+    'soulEssence.level',
+    'soulEssence.rank',
+    'equipment.enhancementLevel',
+    'equipment.tuningScore',
+  ];
+  const unresolvedDimensions = [
+    'character.starGiftNodeIds',
+    'character.ascensionRank',
+    'kibo.dnaFactors',
+    'soulEssence.star',
+    'equipment.instanceTier',
+  ];
+  return {
+    actorConfigPatch: {
+      level: Number(resolvedActor.character.level),
+      cultivation: {
+        starGiftRank: Number(resolvedActor.character.starGiftRank),
+      },
+      loadout: {
+        soulessenceLevel: Number(resolvedActor.soulEssence.level),
+        soulessenceRank: Number(resolvedActor.soulEssence.rank),
+        soulessenceStar: Number(resolvedActor.soulEssence.star),
+        equipmentLevels,
+        equipmentCultivation,
+        kiboConfig: {
+          level: Number(resolvedActor.kibo.level),
+          intimacyLevel: Number(resolvedActor.kibo.bondLevel),
+          comprehensionByAttribute: talentValues,
+        },
+      },
+    },
+    application: {
+      schemaVersion: 1,
+      contractName: 'AzPrOptimizationCultivationApplication',
+      status: 'partially-applied',
+      profileHash,
+      qualificationCatalogHash:
+        generatedQualificationCatalog.catalogHash,
+      appliedDimensions,
+      unresolvedDimensions,
+    },
+  };
+}
+
 export function validateOptimizationCultivationProfile(
   profile,
   {
@@ -320,7 +398,13 @@ export function validateOptimizationCultivationProfile(
       'machine-axis-cultivation-soulessence-star-invalid',
       issues
     );
-    validateEquipment(actor.equipment, basePath, catalog, issues);
+    validateEquipment(
+      actor.equipment,
+      basePath,
+      catalog,
+      issues,
+      team[actorIndex]?.loadout?.equipment
+    );
   });
   if (
     teamSlots.size &&
@@ -483,7 +567,13 @@ function validateKiboTalents(value, basePath, catalog, issues) {
   });
 }
 
-function validateEquipment(value, basePath, catalog, issues) {
+function validateEquipment(
+  value,
+  basePath,
+  catalog,
+  issues,
+  selectedEquipment = {}
+) {
   if (!isRecord(value)) {
     issues.push(
       createIssue(
@@ -493,6 +583,12 @@ function validateEquipment(value, basePath, catalog, issues) {
     );
     return;
   }
+  const equipmentProfiles = new Map(
+    (catalog.cultivation.equipment.profiles ?? []).map(profile => [
+      Number(profile.equipmentId),
+      profile,
+    ])
+  );
   for (const slot of EQUIPMENT_SLOTS) {
     const item = value[slot];
     const itemPath = `${basePath}.equipment.${slot}`;
@@ -503,6 +599,61 @@ function validateEquipment(value, basePath, catalog, issues) {
         })
       );
       continue;
+    }
+    const selectedEquipmentId = Number(selectedEquipment?.[slot]);
+    const equipmentProfile = equipmentProfiles.get(selectedEquipmentId);
+    if (!equipmentProfile) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-equipment-profile-missing',
+          itemPath,
+          { equipmentSlot: slot, equipmentId: selectedEquipmentId || null }
+        )
+      );
+    } else {
+      if (equipmentProfile.slot !== slot) {
+        issues.push(
+          createIssue(
+            'machine-axis-cultivation-equipment-slot-mismatch',
+            itemPath,
+            {
+              equipmentSlot: slot,
+              equipmentId: selectedEquipmentId,
+              actualSlot: equipmentProfile.slot,
+            }
+          )
+        );
+      }
+      if (Number(item.rarity) !== Number(equipmentProfile.rarity)) {
+        issues.push(
+          createIssue(
+            'machine-axis-cultivation-equipment-rarity-mismatch',
+            `${itemPath}.rarity`,
+            {
+              equipmentId: selectedEquipmentId,
+              expected: equipmentProfile.rarity,
+              actual: item.rarity,
+            }
+          )
+        );
+      }
+      if (
+        Number.isInteger(equipmentProfile.maximumEnhancementLevel) &&
+        Number(item.enhancementLevel) >
+          Number(equipmentProfile.maximumEnhancementLevel)
+      ) {
+        issues.push(
+          createIssue(
+            'machine-axis-cultivation-equipment-enhancement-unsupported',
+            `${itemPath}.enhancementLevel`,
+            {
+              equipmentId: selectedEquipmentId,
+              maximum: equipmentProfile.maximumEnhancementLevel,
+              actual: item.enhancementLevel,
+            }
+          )
+        );
+      }
     }
     validateRange(
       item.rarity,
