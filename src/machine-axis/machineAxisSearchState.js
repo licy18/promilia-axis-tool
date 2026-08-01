@@ -197,8 +197,7 @@ export function createSearchEventBoundaryNodes({
     add(frame, 'resource-change', {
       actionId: event.actionId ?? null,
       actorId: event.actorId ?? null,
-      resourceIdentity:
-        event.resourceIdentity ?? event.payload?.resourceIdentity ?? null,
+      resourceIdentity: resolveResourceEventIdentity(event),
       eventIdentity: event.eventIdentity ?? event.id ?? null,
       resumeFrame: frame + 1,
     });
@@ -250,6 +249,90 @@ export function createSearchEventBoundaryNodes({
     if (left.frame !== right.frame) return left.frame - right.frame;
     return left.kind.localeCompare(right.kind, 'en');
   });
+}
+
+export function createSearchResourceThresholdBoundary({
+  runs = [],
+  resourceIdentity = null,
+  currentValue = null,
+  requiredValue = null,
+  currentFrame = 0,
+  durationFrames = null,
+} = {}) {
+  const normalizedIdentity = String(resourceIdentity ?? '').trim();
+  const normalizedCurrent = finiteNumberOrNull(currentValue);
+  const normalizedRequired = finiteNumberOrNull(requiredValue);
+  const normalizedCurrentFrame = nonNegativeIntegerOrNull(currentFrame) ?? 0;
+  const runList = (Array.isArray(runs) ? runs : [runs]).filter(Boolean);
+  if (
+    !normalizedIdentity ||
+    normalizedCurrent == null ||
+    normalizedRequired == null ||
+    normalizedCurrent >= normalizedRequired ||
+    runList.length === 0
+  ) {
+    return null;
+  }
+  const trajectories = runList.map(run =>
+    createResourceTrajectory({
+      run,
+      resourceIdentity: normalizedIdentity,
+      currentValue: normalizedCurrent,
+      currentFrame: normalizedCurrentFrame,
+      durationFrames,
+    })
+  );
+  if (trajectories.some(trajectory => !trajectory.hasPositiveGrowth)) {
+    return null;
+  }
+  const candidateFrames = [
+    ...new Set(
+      trajectories.flatMap(trajectory =>
+        trajectory.events
+          .filter(event => event.afterValue > event.beforeValue)
+          .map(event => event.frame)
+      )
+    ),
+  ].sort((left, right) => left - right);
+  for (const frame of candidateFrames) {
+    const resumeFrame = frame + 1;
+    if (
+      frame < normalizedCurrentFrame ||
+      trajectories.some(trajectory => resumeFrame > trajectory.horizonFrames)
+    ) {
+      continue;
+    }
+    const values = trajectories.map(trajectory =>
+      resourceValueAtFrame(trajectory, frame)
+    );
+    if (values.some(value => value < normalizedRequired)) continue;
+    const sourceEvents = trajectories.map(trajectory =>
+      [...trajectory.events]
+        .reverse()
+        .find(
+          event => event.frame <= frame && event.afterValue > event.beforeValue
+        )
+    );
+    const fps = trajectories[0].fps;
+    return {
+      frame,
+      resumeFrame,
+      timeMs: roundMetric(frame * (1000 / fps)),
+      kind: 'resource-threshold',
+      resourceIdentity: normalizedIdentity,
+      currentValue: roundMetric(normalizedCurrent),
+      requiredValue: roundMetric(normalizedRequired),
+      reachedValues: values.map(roundMetric),
+      source: 'candidate-resource-condition',
+      growthSources: sourceEvents.map(event => ({
+        eventIdentity: event?.eventIdentity ?? null,
+        reason: event?.reason ?? null,
+        sourceIdentity: event?.sourceIdentity ?? null,
+      })),
+      description: `${normalizedIdentity} reaches ${normalizedRequired} at frame ${frame}`,
+    };
+  }
+  return null;
 }
 
 export function deriveExecutionNodeFrame(trace) {
@@ -660,6 +743,104 @@ function resolveEventFrame(event) {
   return Number.isFinite(timeMs) ? msToFrame(timeMs) : null;
 }
 
+function createResourceTrajectory({
+  run,
+  resourceIdentity,
+  currentValue,
+  currentFrame,
+  durationFrames,
+}) {
+  const trace = run?.trace ?? {};
+  const fps = Number(trace.scenario?.frameRate) || 60;
+  const horizonFrames =
+    positiveIntegerOrNull(durationFrames) ??
+    msToFrame(trace.scenario?.durationMs ?? 0);
+  const events = [
+    ...(trace.resources?.actors ?? []),
+    ...(trace.resources?.kibos ?? []),
+    ...(trace.resources?.special ?? []),
+    ...(trace.variants?.resourceEvents ?? []),
+  ]
+    .filter(event => resolveResourceEventIdentity(event) === resourceIdentity)
+    .map(event => normalizeResourceTrajectoryEvent(event))
+    .filter(Boolean)
+    .filter(
+      event => event.frame >= currentFrame && event.frame <= horizonFrames
+    )
+    .sort(compareResourceTrajectoryEvents);
+  return {
+    fps,
+    horizonFrames,
+    currentFrame,
+    currentValue,
+    events,
+    hasPositiveGrowth: events.some(
+      event => event.afterValue > event.beforeValue
+    ),
+  };
+}
+
+function resolveResourceEventIdentity(event) {
+  const payload = event?.payload ?? event ?? {};
+  const explicitIdentity = String(
+    event?.resourceIdentity ?? payload.resourceIdentity ?? ''
+  ).trim();
+  if (explicitIdentity) return explicitIdentity;
+  const kiboId = positiveIntegerOrNull(event?.kiboId ?? payload.kiboId);
+  if (kiboId != null) return `kibo:${kiboId}:sp`;
+  const resource = String(event?.resource ?? payload.resource ?? '');
+  const actorId = String(event?.actorId ?? payload.actorId ?? '');
+  const actorMatch = actorId.match(/^actor-(\d+)$/);
+  return resource === 'sp' && actorMatch ? `actor:${actorMatch[1]}:sp` : null;
+}
+
+function normalizeResourceTrajectoryEvent(event) {
+  const payload = event?.payload ?? event ?? {};
+  const frame = resolveEventFrame(event);
+  const beforeValue = finiteNumberOrNull(
+    event?.beforeValue ?? payload.beforeValue
+  );
+  const afterValue = finiteNumberOrNull(
+    event?.afterValue ??
+      payload.afterValue ??
+      event?.currentValue ??
+      payload.currentValue
+  );
+  if (frame == null || beforeValue == null || afterValue == null) return null;
+  return {
+    frame,
+    beforeValue,
+    afterValue,
+    runtimePhasePriority: integerOrNull(event?.runtimePhasePriority) ?? 0,
+    runtimePriority: integerOrNull(event?.runtimePriority) ?? 0,
+    runtimeSequenceIndex: integerOrNull(event?.runtimeSequenceIndex) ?? 0,
+    eventIdentity:
+      event?.eventIdentity ?? event?.id ?? event?.hitKey ?? payload.id ?? null,
+    reason: event?.reason ?? payload.reason ?? payload.operation ?? null,
+    sourceIdentity: event?.sourceIdentity ?? payload.sourceIdentity ?? null,
+  };
+}
+
+function compareResourceTrajectoryEvents(left, right) {
+  if (left.frame !== right.frame) return left.frame - right.frame;
+  if (left.runtimePhasePriority !== right.runtimePhasePriority) {
+    return left.runtimePhasePriority - right.runtimePhasePriority;
+  }
+  if (left.runtimePriority !== right.runtimePriority) {
+    return left.runtimePriority - right.runtimePriority;
+  }
+  return left.runtimeSequenceIndex - right.runtimeSequenceIndex;
+}
+
+function resourceValueAtFrame(trajectory, frame) {
+  let value = trajectory.currentValue;
+  for (const event of trajectory.events) {
+    if (event.frame > frame) break;
+    value = event.afterValue;
+  }
+  return value;
+}
+
 function isMeaningfulResourceBoundary(event) {
   const payload = event?.payload ?? event ?? {};
   const reason = String(event?.reason ?? payload.reason ?? '');
@@ -735,6 +916,12 @@ function integerOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) ? number : null;
+}
+
+function finiteNumberOrNull(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function numberOrZero(value) {

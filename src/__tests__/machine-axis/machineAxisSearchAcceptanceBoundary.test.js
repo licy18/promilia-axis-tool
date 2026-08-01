@@ -7,7 +7,10 @@ import {
   scoreCandidate,
 } from '../../machine-axis/machineAxisSearchEngine';
 import { createMachineAxisSearchAction } from '../../machine-axis/machineAxisSearchGenerator';
-import { createVerifiedActionWindowBoundaries } from '../../machine-axis/machineAxisSearchState';
+import {
+  createSearchResourceThresholdBoundary,
+  createVerifiedActionWindowBoundaries,
+} from '../../machine-axis/machineAxisSearchState';
 
 const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
 
@@ -301,9 +304,9 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     );
   }, 180_000);
 
-  it('waits on a real SP threshold resource boundary before releasing an otherwise blocked ultimate', async () => {
-    const axis = cloneFixture({ durationFrames: 1200 });
-    axis.scenario.team[0].initialSp = 99.9;
+  it('waits directly from 90 SP to the actionable 100 SP threshold before releasing the ultimate', async () => {
+    const axis = cloneFixture({ durationFrames: 3600 });
+    axis.scenario.team[0].initialSp = 90;
     const generator = createRepeatedActionGenerator({
       publicActionId: 10100713,
       actionKind: 'ultimate',
@@ -312,8 +315,8 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     const result = await engine.search({
       contract: axis,
       options: {
-        beamWidth: 6,
-        topN: 6,
+        beamWidth: 8,
+        topN: 8,
         maxDepth: 2,
         includeKibo: false,
         includeSwitch: false,
@@ -328,15 +331,131 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     expect(released.axis.actions[0].intent.kind).toBe('wait');
     expect(released.boundariesConsumed).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ kind: 'resource-change' }),
+        expect.objectContaining({
+          kind: 'resource-threshold',
+          resourceIdentity: 'actor:101007:sp',
+          currentValue: 90,
+          requiredValue: 100,
+          frame: 2886,
+          resumeFrame: 2887,
+        }),
       ])
     );
-    expect(released.axis.actions[1].schedule.frame).toBeGreaterThan(0);
+    expect(released.axis.actions[1].schedule.frame).toBe(2887);
     expect(
       released.run.trace.executionPlan.actions.find(
         entry => entry.actionId === released.axis.actions[1].id
       )?.execute
     ).toBe(true);
+  }, 180_000);
+
+  it('uses real Kibo growth for a resource threshold and never invents special-resource growth', async () => {
+    const axis = cloneFixture({ durationFrames: 1200 });
+    axis.scenario.initialRuntimeState.kiboEnergyBySlot =
+      axis.scenario.initialRuntimeState.kiboEnergyBySlot.map(entry =>
+        Number(entry.kiboId) === 500001 ? { ...entry, currentValue: 99 } : entry
+      );
+    const generator = {
+      generateNextActions({ axis: current, nextStartFrameByActor }) {
+        return [
+          actionCandidate(current, {
+            publicActionId: 50000102,
+            actionKind: 'signature',
+            ownerKind: 'kibo',
+            startFrame: nextStartFrameByActor['actor-101007'] ?? 0,
+          }),
+        ];
+      },
+    };
+    const result = await createMachineAxisSearchEngine({
+      service,
+      generator,
+    }).search({
+      contract: axis,
+      options: {
+        beamWidth: 8,
+        topN: 8,
+        maxDepth: 2,
+        includeKibo: true,
+        includeSwitch: false,
+      },
+    });
+    const released = result.results.find(entry =>
+      entry.axis.actions.some(
+        action => action.intent?.publicActionId === 50000102
+      )
+    );
+    expect(released).toBeDefined();
+    expect(released.boundariesConsumed).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'resource-threshold',
+          resourceIdentity: 'kibo:500001:sp',
+          currentValue: 99,
+          requiredValue: 100,
+          frame: 294,
+          resumeFrame: 295,
+        }),
+      ])
+    );
+    expect(
+      released.axis.actions.find(
+        action => action.intent?.publicActionId === 50000102
+      )?.schedule.frame
+    ).toBe(295);
+
+    const specialRun = {
+      trace: {
+        scenario: { durationMs: 2000, frameRate: 60 },
+        resources: {
+          actors: [],
+          kibos: [],
+          special: [
+            {
+              timeMs: 1000,
+              payload: {
+                resourceIdentity: 'actor:103002:element:103002047',
+                beforeValue: 0,
+                afterValue: 0,
+              },
+            },
+          ],
+        },
+      },
+    };
+    const growingSpecialRun = structuredClone(specialRun);
+    growingSpecialRun.trace.resources.special[0].payload.afterValue = 6;
+    growingSpecialRun.trace.resources.special[0].payload.sourceIdentity =
+      'battle-element:ruby-reload';
+    expect(
+      createSearchResourceThresholdBoundary({
+        runs: [growingSpecialRun],
+        resourceIdentity: 'actor:103002:element:103002047',
+        currentValue: 0,
+        requiredValue: 5,
+        currentFrame: 0,
+        durationFrames: 120,
+      })
+    ).toEqual(
+      expect.objectContaining({
+        kind: 'resource-threshold',
+        frame: 60,
+        resumeFrame: 61,
+        currentValue: 0,
+        requiredValue: 5,
+        reachedValues: [6],
+      })
+    );
+    expect(
+      createSearchResourceThresholdBoundary({
+        runs: [specialRun],
+        resourceIdentity: 'actor:103002:element:103002047',
+        currentValue: 0,
+        requiredValue: 1,
+        currentFrame: 0,
+        durationFrames: 120,
+      })
+    ).toBeNull();
   }, 180_000);
 
   it('uses the requested one-second burst window for score, ordering and report metrics', async () => {
@@ -426,6 +545,49 @@ describe('M12-B-R1 search acceptance boundaries', () => {
         hit.criticalStateEffectIdentities = originalIdentities;
       }
     }
+  }, 180_000);
+
+  it('keeps multi-seed actor, action and hit contributions equal to the averaged metric', async () => {
+    const report = await service.search({
+      contract: cloneFixture({ durationFrames: 7200 }),
+      options: {
+        beamWidth: 2,
+        topN: 1,
+        maxDepth: 2,
+        maxActionsPerOwner: 2,
+        maxKiboActions: 1,
+        includeSwitch: false,
+        objective: 'burst',
+        burstWindowMs: 1000,
+        seeds: ['r1-a', 'r1-b'],
+      },
+    });
+    const result = report.results[0];
+    expect(result.sampling.samples.map(sample => sample.score)).toEqual([
+      405, 425,
+    ]);
+    expect(result.score).toBe(415);
+    expect(result.metrics.hpDamage).toBe(415);
+    expect(result.metrics.burst.hpDamage).toBe(415);
+    for (const dimension of ['byActor', 'byAction', 'byHit']) {
+      const hpDamage = result.contributions[dimension].reduce(
+        (sum, entry) => sum + Number(entry.hpDamage ?? 0),
+        0
+      );
+      expect(hpDamage).toBeCloseTo(415, 8);
+    }
+    expect(result.sampling.samples).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          hashes: expect.objectContaining({ trace: expect.any(String) }),
+          contributions: expect.objectContaining({
+            byActor: expect.any(Array),
+            byAction: expect.any(Array),
+            byHit: expect.any(Array),
+          }),
+        }),
+      ])
+    );
   }, 180_000);
 
   it('enumerates candidate teams outside the inner search and ranks one cross-team Top-N', async () => {

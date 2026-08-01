@@ -1,5 +1,6 @@
 import {
   createSearchEventBoundaryNodes,
+  createSearchResourceThresholdBoundary,
   createSearchStateSnapshot,
   deriveActiveActorId,
   deriveExecutionNodeFrame,
@@ -13,6 +14,7 @@ import {
 import {
   applyCriticalOverride,
   collectCriticalStateEffectHitIdentities,
+  createContributions,
   createRunMetrics,
   DEFAULT_BURST_WINDOW_MS,
   guardCriticalStateEffectPolicy,
@@ -112,7 +114,8 @@ export function createMachineAxisSearchEngine({
         break;
       }
 
-      const evaluated = [];
+      let evaluated = [];
+      const resourceThresholdChildren = [];
       for (const child of children) {
         const childAxis = appendAction(child.parent.axis, child.next.action);
         let evaluation;
@@ -120,7 +123,18 @@ export function createMachineAxisSearchEngine({
           evaluation = await evaluateCandidateAxis(childAxis, settings);
         } catch (error) {
           stats.invalidCandidates += 1;
-          issues.push(...normalizeSearchIssues(error));
+          const childIssues = normalizeSearchIssues(error);
+          issues.push(...childIssues);
+          if (settings.includeWait) {
+            resourceThresholdChildren.push(
+              ...createResourceThresholdWaitCandidates({
+                candidate: child.parent,
+                attemptedAction: child.next,
+                issues: childIssues,
+                horizonFrames,
+              })
+            );
+          }
           continue;
         }
         stats.candidatesEvaluated += 1;
@@ -131,6 +145,40 @@ export function createMachineAxisSearchEngine({
         });
         evaluated.push(entry);
         addCompletedEntries(completed, [entry], stats);
+      }
+
+      const thresholdChildren = dedupeResourceThresholdChildren(
+        resourceThresholdChildren
+      )
+        .sort(
+          (left, right) =>
+            left.next.boundary.resumeFrame - right.next.boundary.resumeFrame
+        )
+        .slice(0, settings.maxWaitCandidates);
+      if (thresholdChildren.length > 0) {
+        const thresholdKeys = new Set(
+          thresholdChildren.map(createResourceThresholdSupersessionKey)
+        );
+        evaluated = evaluated.filter(
+          entry => !isSupersededResourceChangeWait(entry, thresholdKeys)
+        );
+      }
+      for (const child of thresholdChildren) {
+        const childAxis = appendAction(child.parent.axis, child.next.action);
+        try {
+          const evaluation = await evaluateCandidateAxis(childAxis, settings);
+          stats.candidatesEvaluated += 1;
+          const entry = createCandidateEntry({
+            ...evaluation,
+            chain: [...child.parent.chain, child.next],
+            parentLabel: child.parent.axis.scenario?.name,
+          });
+          evaluated.push(entry);
+          addCompletedEntries(completed, [entry], stats);
+        } catch (error) {
+          stats.invalidCandidates += 1;
+          issues.push(...normalizeSearchIssues(error));
+        }
       }
 
       if (evaluated.length === 0) {
@@ -246,7 +294,11 @@ export function createMachineAxisSearchEngine({
         burstWindowMs: settings.burstWindowMs,
       })
     );
+    const sampleContributions = runs.map(sample =>
+      createContributions(sample.run)
+    );
     const metrics = aggregateSearchMetrics(sampleMetrics);
+    const contributions = aggregateSearchContributions(sampleContributions);
     const score = scoreMetrics(metrics, settings.objective);
     const state = {
       ...snapshots[0],
@@ -260,6 +312,7 @@ export function createMachineAxisSearchEngine({
       sampleRuns: runs.map(sample => sample.run),
       state,
       metrics,
+      contributions,
       score,
       sampling:
         runs.length > 1 || settings.seeds?.length
@@ -273,6 +326,7 @@ export function createMachineAxisSearchEngine({
                 hashes: sample.run.hashes,
                 score: scoreMetrics(sampleMetrics[index], settings.objective),
                 metrics: sampleMetrics[index],
+                contributions: sampleContributions[index],
               })),
             }
           : null,
@@ -403,6 +457,7 @@ function createCandidateEntry({
   sampleRuns,
   state,
   metrics,
+  contributions,
   score,
   sampling,
   chain,
@@ -426,6 +481,7 @@ function createCandidateEntry({
     parentLabel,
     score,
     metrics,
+    contributions,
     sampling,
     currentFrame,
     remainingFrames,
@@ -460,49 +516,125 @@ function createBoundaryWaitCandidates(candidate, settings, horizonFrames) {
     const key = `${boundary.kind}|${boundary.source ?? ''}`;
     if (!firstByKind.has(key)) firstByKind.set(key, boundary);
   }
-  const allocatedIds = new Set(
-    (candidate.axis.actions ?? []).map(action => String(action.id ?? ''))
-  );
-  let waitOrdinal = 1;
-  const nextWaitId = () => {
-    let id;
-    do {
-      id = `search-wait-${candidate.axis.actions.length + 1}-${waitOrdinal}`;
-      waitOrdinal += 1;
-    } while (allocatedIds.has(id));
-    allocatedIds.add(id);
-    return id;
-  };
   return [...firstByKind.values()]
     .sort((left, right) => {
       if (left.frame !== right.frame) return left.frame - right.frame;
       return left.kind.localeCompare(right.kind, 'en');
     })
     .slice(0, settings.maxWaitCandidates)
-    .map(boundary => {
-      const durationFrames = boundary.resumeFrame - candidate.currentFrame;
-      const action = createMachineAxisSearchAction({
-        id: nextWaitId(),
-        ownerKind: 'system',
-        actionKind: 'wait',
-        startFrame: candidate.currentFrame,
-        durationFrames,
-      });
-      return {
-        action,
-        ownerId: 'system',
-        ownerKind: 'system',
-        slotId: null,
-        startFrame: candidate.currentFrame,
-        label: `wait-${boundary.kind}-${boundary.resumeFrame}`,
-        source: 'runtime:event-boundary',
-        sourceIdentity:
-          boundary.eventIdentity ??
-          boundary.windowIdentity ??
-          `${boundary.kind}:${boundary.frame}`,
+    .map((boundary, index) =>
+      createBoundaryWaitCandidate({
+        candidate,
         boundary,
+        ordinal: index + 1,
+      })
+    );
+}
+
+function createResourceThresholdWaitCandidates({
+  candidate,
+  attemptedAction,
+  issues,
+  horizonFrames,
+}) {
+  const runs = candidate.sampleRuns?.length
+    ? candidate.sampleRuns
+    : [candidate.run];
+  return issues
+    .filter(issue => issue.code === 'machine-axis-action-resource-insufficient')
+    .map((issue, index) => {
+      const boundary = createSearchResourceThresholdBoundary({
+        runs,
+        resourceIdentity: issue.resourceIdentity,
+        currentValue: issue.currentValue,
+        requiredValue: issue.requiredValue,
+        currentFrame: candidate.currentFrame,
+        durationFrames: horizonFrames,
+      });
+      if (!boundary) return null;
+      return {
+        parent: candidate,
+        next: createBoundaryWaitCandidate({
+          candidate,
+          boundary: {
+            ...boundary,
+            blockedActionId: attemptedAction.action.id,
+            blockedActionLabel: attemptedAction.label,
+          },
+          ordinal: index + 1,
+          prefix: 'search-resource-threshold',
+        }),
       };
-    });
+    })
+    .filter(Boolean);
+}
+
+function createBoundaryWaitCandidate({
+  candidate,
+  boundary,
+  ordinal,
+  prefix = 'search-wait',
+}) {
+  const durationFrames = boundary.resumeFrame - candidate.currentFrame;
+  const action = createMachineAxisSearchAction({
+    id: allocateWaitActionId(candidate.axis, prefix, ordinal),
+    ownerKind: 'system',
+    actionKind: 'wait',
+    startFrame: candidate.currentFrame,
+    durationFrames,
+  });
+  return {
+    action,
+    parentStateHash: candidate.stateHash,
+    ownerId: 'system',
+    ownerKind: 'system',
+    slotId: null,
+    startFrame: candidate.currentFrame,
+    label: `wait-${boundary.kind}-${boundary.resumeFrame}`,
+    source: 'runtime:event-boundary',
+    sourceIdentity:
+      boundary.eventIdentity ??
+      boundary.windowIdentity ??
+      `${boundary.kind}:${boundary.resourceIdentity ?? ''}:${boundary.frame}`,
+    boundary,
+  };
+}
+
+function allocateWaitActionId(axis, prefix, ordinal) {
+  const allocatedIds = new Set(
+    (axis.actions ?? []).map(action => String(action.id ?? ''))
+  );
+  let suffix = ordinal;
+  let id;
+  do {
+    id = `${prefix}-${axis.actions.length + 1}-${suffix}`;
+    suffix += 1;
+  } while (allocatedIds.has(id));
+  return id;
+}
+
+function dedupeResourceThresholdChildren(children) {
+  const byIdentity = new Map();
+  for (const child of children) {
+    const key = [
+      child.parent.stateHash,
+      child.next.boundary.resourceIdentity,
+      child.next.boundary.requiredValue,
+      child.next.boundary.resumeFrame,
+    ].join('|');
+    if (!byIdentity.has(key)) byIdentity.set(key, child);
+  }
+  return [...byIdentity.values()];
+}
+
+function createResourceThresholdSupersessionKey(child) {
+  return child.parent.stateHash;
+}
+
+function isSupersededResourceChangeWait(entry, thresholdKeys) {
+  const last = entry.chain.at(-1);
+  if (last?.boundary?.kind !== 'resource-change') return false;
+  return thresholdKeys.has(last.parentStateHash ?? '');
 }
 
 function deriveCandidateNextStartFrames(candidate) {
@@ -594,6 +726,66 @@ function aggregateSearchMetrics(rows) {
     },
     unresolvedActionCount: mean(row => row.unresolvedActionCount),
   };
+}
+
+function aggregateSearchContributions(rows) {
+  const sampleCount = rows.length;
+  if (sampleCount === 0) {
+    return {
+      strategy: 'mean-by-stable-identity',
+      sampleCount: 0,
+      byActor: [],
+      byAction: [],
+      byHit: [],
+    };
+  }
+  return {
+    strategy: 'mean-by-stable-identity',
+    sampleCount,
+    byActor: averageContributionRows(rows.map(row => row.byActor)),
+    byAction: averageContributionRows(rows.map(row => row.byAction)),
+    byHit: averageContributionRows(rows.map(row => row.byHit)),
+  };
+}
+
+function averageContributionRows(sampleRows) {
+  const metadataNumberKeys = new Set(['firstTimeMs', 'lastTimeMs']);
+  const rowsByIdentity = sampleRows.map(
+    rows => new Map((rows ?? []).map(row => [String(row.identity), row]))
+  );
+  const identities = new Set(rowsByIdentity.flatMap(rows => [...rows.keys()]));
+  return [...identities]
+    .sort((left, right) => left.localeCompare(right, 'en'))
+    .map(identity => {
+      const matchingRows = rowsByIdentity.map(
+        rows => rows.get(identity) ?? null
+      );
+      const representative = matchingRows.find(Boolean) ?? { identity };
+      const numericKeys = new Set(
+        matchingRows.flatMap(row =>
+          Object.entries(row ?? {})
+            .filter(
+              ([key, value]) =>
+                Number.isFinite(value) && !metadataNumberKeys.has(key)
+            )
+            .map(([key]) => key)
+        )
+      );
+      return {
+        ...representative,
+        ...Object.fromEntries(
+          [...numericKeys]
+            .sort((left, right) => left.localeCompare(right, 'en'))
+            .map(key => [
+              key,
+              matchingRows.reduce(
+                (sum, row) => sum + numberOrZero(row?.[key]),
+                0
+              ) / sampleRows.length,
+            ])
+        ),
+      };
+    });
 }
 
 function averageNumericRecords(records) {

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "m12-b-r2-search-remediation",
+  "status": "verification-complete-awaiting-product-acceptance",
+  "baselineCommit": "eabb267fc96e5189dd016fd21063d6321e421399",
+  "remediationCommit": "git-self",
+  "dispositions": [
+    {
+      "id": "M12-B-R2-01",
+      "severity": "P1",
+      "finding": "resource-waits-use-integer-events-instead-of-actionable-thresholds",
+      "status": "closed",
+      "result": "A blocked candidate's stable resource identity, current value, and required value are combined with each canonical sample's real future resource trajectory. Search emits the earliest resource-threshold wait only when every sample has a positive growth source and reaches the requirement; generic resource-change waits from that parent state no longer consume the beam first.",
+      "code": [
+        "src/machine-axis/machineAxisSearchState.js",
+        "src/machine-axis/machineAxisSearchEngine.js"
+      ]
+    },
+    {
+      "id": "M12-B-R2-02",
+      "severity": "P2",
+      "finding": "multi-seed-contributions-use-first-sample",
+      "status": "closed",
+      "result": "Actor, action, and hit contribution rows are averaged by stable identity across the full seed set. The aggregate remains alongside per-sample metrics, contributions, and trace hashes, and all three aggregate contribution dimensions conserve the reported metric.",
+      "code": [
+        "src/machine-axis/machineAxisSearchEngine.js",
+        "src/machine-axis/machineAxisSearchReport.js"
+      ]
+    }
+  ],
+  "realCoreEvidence": {
+    "actorSpThreshold": {
+      "owner": "actor:101007",
+      "publicActionId": 10100713,
+      "resourceIdentity": "actor:101007:sp",
+      "currentValue": 90,
+      "requiredValue": 100,
+      "thresholdFrame": 2886,
+      "resumeFrame": 2887,
+      "actionStartFrame": 2887,
+      "maxDepth": 2,
+      "result": "ultimate-executed"
+    },
+    "kiboEnergyThreshold": {
+      "kiboId": 500001,
+      "publicActionId": 50000102,
+      "resourceIdentity": "kibo:500001:sp",
+      "currentValue": 99,
+      "requiredValue": 100,
+      "thresholdFrame": 294,
+      "resumeFrame": 295,
+      "actionStartFrame": 295,
+      "maxDepth": 2,
+      "result": "signature-executed"
+    },
+    "nonGrowingSpecialResource": {
+      "resourceIdentity": "actor:103002:element:103002047",
+      "currentValue": 0,
+      "requiredValue": 1,
+      "positiveGrowthSource": false,
+      "thresholdWaitGenerated": false
+    },
+    "growingSpecialResource": {
+      "resourceIdentity": "actor:103002:element:103002047",
+      "currentValue": 0,
+      "requiredValue": 5,
+      "reachedValue": 6,
+      "thresholdFrame": 60,
+      "resumeFrame": 61,
+      "positiveGrowthSource": true,
+      "thresholdWaitGenerated": true
+    },
+    "multiSeedContributionConservation": {
+      "seeds": ["r1-a", "r1-b"],
+      "sampleScores": [405, 425],
+      "aggregateScore": 415,
+      "metricsHpDamage": 415,
+      "metricsBurstHpDamage": 415,
+      "byActorHpDamage": 415,
+      "byActionHpDamage": 415,
+      "byHitHpDamage": 415,
+      "perSampleTraceHashesRetained": true
+    }
+  },
+  "regressionBaseline": {
+    "r1IndependentDepth8": {
+      "actionCount": 8,
+      "uniqueActionIdCount": 8,
+      "score": 1259,
+      "hpDamage": 1259,
+      "teamCandidateCount": 2,
+      "disposition": "retained-by-focused-real-core-regression"
+    },
+    "crossTeamTopN": "passed"
+  },
+  "verification": {
+    "focusedSearch": { "files": 6, "tests": 62, "status": "passed" },
+    "relatedHeadlessRegression": {
+      "files": 5,
+      "tests": 43,
+      "status": "passed"
+    },
+    "canonicalArchitectureBoundary": {
+      "files": 1,
+      "tests": 3,
+      "status": "passed"
+    },
+    "axisBoundary": { "files": 1, "tests": 23, "status": "passed" },
+    "lint": "passed",
+    "audits": {
+      "characterCombat": "clean",
+      "verifiedCombat": "clean",
+      "appliedSourceBindings": "clean",
+      "productionImports": "clean",
+      "workbenchData": "clean",
+      "actionStatus": "clean",
+      "characterAcceptance": "clean",
+      "kiboHeadless": "clean"
+    },
+    "productionBuild": "passed"
+  },
+  "stageBoundary": {
+    "m12B2Started": false,
+    "m12CStarted": false,
+    "next": "wait-for-m12-b-r2-product-review"
+  }
+}

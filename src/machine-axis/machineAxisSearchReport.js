@@ -104,12 +104,7 @@ function createResultRow({
       nonExecutableActions: metrics.nonExecutableActions,
       unresolvedActionCount: metrics.unresolvedActionCount,
     },
-    contributions: entry.run?.evaluation
-      ? {
-          byActor: entry.run.evaluation.byActor,
-          byAction: entry.run.evaluation.byAction,
-        }
-      : null,
+    contributions: entry.contributions ?? null,
     causalExplanation: {
       actionSequence: chain,
       endState: {
