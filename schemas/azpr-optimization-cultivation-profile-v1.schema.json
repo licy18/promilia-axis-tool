@@ -52,7 +52,7 @@
     "kiboCultivation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "talents", "dnaFactors", "bondLevel"],
+      "required": ["level", "talents", "bondLevel"],
       "properties": {
         "level": { "type": "integer", "minimum": 1, "maximum": 100 },
         "talents": {
@@ -63,7 +63,7 @@
         },
         "dnaFactors": {
           "type": "array",
-          "items": { "$ref": "#/$defs/dnaFactor" }
+          "maxItems": 0
         },
         "bondLevel": { "type": "integer", "minimum": 1, "maximum": 10 }
       }
@@ -75,15 +75,6 @@
       "properties": {
         "attributeId": { "enum": [1, 3, 4, 5] },
         "level": { "type": "integer", "minimum": 1, "maximum": 20 }
-      }
-    },
-    "dnaFactor": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["factorId", "rank"],
-      "properties": {
-        "factorId": { "type": "integer", "minimum": 1 },
-        "rank": { "type": "integer", "minimum": 1 }
       }
     },
     "soulEssenceCultivation": {

@@ -196,19 +196,31 @@ describe('M12-B3 optimization qualification generation', () => {
         sourceIdentity:
           'NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]',
       });
-      expect(artifacts.catalog.cultivation.kibo.dnaFactors).toMatchObject({
-        status: 'source-indexed-runtime-unapplied',
-        factorCount: 215,
-        linkCount: 8,
-        profiles: expect.arrayContaining([
-          expect.objectContaining({
-            factorId: 531001,
-            rank: 3,
-            skillId: 531001,
-            skillLevel: 1,
-          }),
-        ]),
+      expect(artifacts.catalog.cultivation.kibo.dnaFactors).toEqual({
+        status: 'not-applicable',
+        reason: 'kibo-dna-out-of-scope-current-version',
+        normalizedValue: [],
+        acceptedInput: 'empty-only',
+        nonEmptyInputCode:
+          'machine-axis-cultivation-kibo-dna-unsupported-in-current-version',
       });
+      expect(artifacts.roster.productScope.kiboDna).toEqual({
+        status: 'not-applicable',
+        reason: 'kibo-dna-out-of-scope-current-version',
+        canonicalValue: [],
+      });
+      expect(
+        artifacts.manifests.records.flatMap(record => record.blockers)
+      ).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: expect.stringContaining('dna') }),
+        ])
+      );
+      expect(
+        artifacts.gaps.records.some(record =>
+          String(record.code).includes('dna')
+        )
+      ).toBe(false);
       expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
         star: { minimum: 1, maximum: 4 },
         profiles: expect.arrayContaining([
@@ -317,37 +329,61 @@ describe('M12-B3 strict cultivation profile', () => {
     );
   });
 
-  it('rejects unknown or source-rank-mismatched Kibo DNA factors', () => {
-    const unknown = createCultivationProfile({
-      dnaFactors: [{ factorId: 999999, rank: 1 }],
+  it('normalizes omitted Kibo DNA to an explicit empty canonical value', () => {
+    const service = createMachineAxisService();
+    const explicit = createAxis();
+    const omitted = structuredClone(explicit);
+    omitted.scenario.cultivationProfile.actors.forEach(actor => {
+      delete actor.kibo.dnaFactors;
     });
-    const mismatched = createCultivationProfile({
-      dnaFactors: [{ factorId: 531001, rank: 2 }],
-    });
-    const team = createAxis({ profile: createCultivationProfile() }).scenario.team;
+
+    const explicitRun = service.compile(explicit);
+    const omittedRun = service.compile(omitted);
 
     expect(
-      validateOptimizationCultivationProfile(unknown, { team }).issues
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'machine-axis-cultivation-kibo-dna-factor-unknown',
-          factorId: 999999,
-        }),
-      ])
-    );
+      omittedRun.contract.scenario.cultivationProfile.actors.map(
+        actor => actor.kibo.dnaFactors
+      )
+    ).toEqual([[], [], []]);
     expect(
-      validateOptimizationCultivationProfile(mismatched, { team }).issues
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'machine-axis-cultivation-kibo-dna-rank-mismatch',
-          factorId: 531001,
-          expected: 3,
-          actual: 2,
-        }),
-      ])
+      omittedRun.project.optimizationCultivationProfile.actors.map(
+        actor => actor.kibo.dnaFactors
+      )
+    ).toEqual([[], [], []]);
+    expect(omittedRun.hashes.input).toBe(explicitRun.hashes.input);
+  });
+
+  it('rejects non-empty Kibo DNA before validate, compile, and search execution', async () => {
+    const service = createMachineAxisService();
+    const profile = createCultivationProfile({
+      dnaFactors: [{ factorId: 531001, rank: 3 }],
+    });
+    const axis = createAxis({ profile });
+    const expectedIssue = expect.objectContaining({
+      code: 'machine-axis-cultivation-kibo-dna-unsupported-in-current-version',
+      path: 'scenario.cultivationProfile.actors.0.kibo.dnaFactors',
+      status: 'unsupported-in-current-version',
+    });
+
+    expect(
+      validateOptimizationCultivationProfile(profile, {
+        team: axis.scenario.team,
+      }).issues
+    ).toEqual(expect.arrayContaining([expectedIssue]));
+    expect(service.validate(axis).issues).toEqual(
+      expect.arrayContaining([expectedIssue])
     );
+
+    let compileError = null;
+    try {
+      service.compile(axis);
+    } catch (error) {
+      compileError = error;
+    }
+    expect(compileError?.issues).toEqual(expect.arrayContaining([expectedIssue]));
+    await expect(service.search({ contract: axis })).rejects.toMatchObject({
+      issues: expect.arrayContaining([expectedIssue]),
+    });
   });
 
   it('rejects soul-essence star five and level beyond the selected rank limit', () => {
@@ -438,9 +474,8 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(first.hashes.input).not.toBe(second.hashes.input);
   });
 
-  it('resolves DNA identities and soul-essence star skill level without applying their dynamic effects', () => {
+  it('keeps empty DNA explicit while resolving the soul-essence star skill level', () => {
     const profile = createCultivationProfile({
-      dnaFactors: [{ factorId: 531001, rank: 3 }],
       soulEssenceStar: 4,
     });
     const result = resolveOptimizationCultivationProfile(profile, {
@@ -448,26 +483,17 @@ describe('M12-B3 strict cultivation profile', () => {
     });
 
     expect(result.valid).toBe(true);
-    expect(result.profile.actors[0].kibo.dnaFactors).toEqual([
-      expect.objectContaining({
-        factorId: 531001,
-        rank: 3,
-        skillId: 531001,
-        skillLevel: 1,
-      }),
-    ]);
+    expect(result.profile.actors[0].kibo.dnaFactors).toEqual([]);
     expect(result.profile.actors[0].soulEssence.effectSkill).toMatchObject({
       skillId: 1900480,
       star: 4,
       skillLevel: 4,
     });
-    const compilation = createMachineAxisService().compile(
-      createAxis({ profile })
-    );
+    const compilation = createMachineAxisService().compile(createAxis({ profile }));
     expect(
       compilation.project.metadata.actorConfigs[0]
         .optimizationCultivationApplication.unresolvedDimensions
-    ).toContain('kibo.dnaFactorRuntime');
+    ).not.toContain('kibo.dnaFactorRuntime');
   });
 
   it('projects the supported cultivation dimensions into the authoritative static compiler', () => {
@@ -514,7 +540,7 @@ describe('M12-B3 strict cultivation profile', () => {
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
-          'kibo.dnaFactorIdentity',
+          'kibo.dnaFactors',
           'soulEssence.level',
           'soulEssence.rank',
           'soulEssence.effectSkillLevel',

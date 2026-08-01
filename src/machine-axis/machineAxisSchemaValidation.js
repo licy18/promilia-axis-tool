@@ -132,10 +132,18 @@ function validateNode(schema, value, path, rootSchema) {
     if (Number.isInteger(resolvedSchema.maxItems) && value.length > resolvedSchema.maxItems) {
       issues.push(
         issue(
-          'machine-axis-schema-max-items',
+          path.endsWith('.kibo.dnaFactors')
+            ? 'machine-axis-cultivation-kibo-dna-unsupported-in-current-version'
+            : 'machine-axis-schema-max-items',
           path,
           `Expected at most ${resolvedSchema.maxItems} items`,
-          { maximum: resolvedSchema.maxItems, actual: value.length }
+          {
+            maximum: resolvedSchema.maxItems,
+            actual: value.length,
+            ...(path.endsWith('.kibo.dnaFactors')
+              ? { status: 'unsupported-in-current-version' }
+              : {}),
+          }
         )
       );
     }

@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "a5bdc5509416a810",
+  "rosterHash": "a036b7e4f6be6b73",
   "records": [
     {
       "objectKind": "character",
@@ -6162,16 +6162,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6181,9 +6171,14 @@
         "kiboId": 500001,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "340044f18b49b095"
+      "manifestHash": "0ce84e5286713b2b"
     },
     {
       "objectKind": "kibo",
@@ -6202,16 +6197,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6221,9 +6206,14 @@
         "kiboId": 500025,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "d59877b955854485"
+      "manifestHash": "694aac11bd3ccd53"
     },
     {
       "objectKind": "kibo",
@@ -6242,16 +6232,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6261,9 +6241,14 @@
         "kiboId": 500043,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "d4005b4ecc82a2ff"
+      "manifestHash": "89a38c1a5e548405"
     },
     {
       "objectKind": "kibo",
@@ -6282,16 +6267,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6301,9 +6276,14 @@
         "kiboId": 500044,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "6bef3e37e9cc6507"
+      "manifestHash": "673182e6aceb8b95"
     },
     {
       "objectKind": "kibo",
@@ -6322,16 +6302,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6341,9 +6311,14 @@
         "kiboId": 500045,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "eaaf2e3588ee5405"
+      "manifestHash": "c85cb2fb51a67707"
     },
     {
       "objectKind": "kibo",
@@ -6362,16 +6337,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6381,9 +6346,14 @@
         "kiboId": 500057,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "c43f2195bc71fc84"
+      "manifestHash": "0911b9d4f8d54050"
     },
     {
       "objectKind": "kibo",
@@ -6402,16 +6372,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6421,9 +6381,14 @@
         "kiboId": 500064,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "8db212d5b9a71f1e"
+      "manifestHash": "4fbac6641d9202fe"
     },
     {
       "objectKind": "kibo",
@@ -6442,16 +6407,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6461,9 +6416,14 @@
         "kiboId": 500065,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "ef712b5b9c245bc1"
+      "manifestHash": "c2ba5843efa49183"
     },
     {
       "objectKind": "kibo",
@@ -6482,16 +6442,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6507,9 +6457,14 @@
         "kiboId": 500082,
         "actionCount": 3,
         "passiveSkillId": 520007,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "7f59bf7651fc5e81"
+      "manifestHash": "fc4de0e802ab4625"
     },
     {
       "objectKind": "kibo",
@@ -6528,16 +6483,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6547,9 +6492,14 @@
         "kiboId": 500120,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "62d069f46c5463aa"
+      "manifestHash": "f9f84a01507e258e"
     },
     {
       "objectKind": "kibo",
@@ -6568,16 +6518,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6587,9 +6527,14 @@
         "kiboId": 500123,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "0a3c297fce1e7963"
+      "manifestHash": "32f89ee5ca34ede5"
     },
     {
       "objectKind": "kibo",
@@ -6608,16 +6553,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6627,9 +6562,14 @@
         "kiboId": 500124,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "606bcf156f12ec53"
+      "manifestHash": "4ce4c7e70aefb291"
     },
     {
       "objectKind": "kibo",
@@ -6648,16 +6588,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6667,9 +6597,14 @@
         "kiboId": 500125,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "cb9dbeddb4435126"
+      "manifestHash": "749b5c5de2efe882"
     },
     {
       "objectKind": "kibo",
@@ -6688,16 +6623,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6707,9 +6632,14 @@
         "kiboId": 500126,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "ac6e64f6c1eb7935"
+      "manifestHash": "275816ffc7a385eb"
     },
     {
       "objectKind": "kibo",
@@ -6728,16 +6658,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6747,9 +6667,14 @@
         "kiboId": 500127,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "1f27658445d58f94"
+      "manifestHash": "81e9303a2877a40c"
     },
     {
       "objectKind": "kibo",
@@ -6768,16 +6693,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6787,9 +6702,14 @@
         "kiboId": 500128,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "6ca4fb31f8c2df33"
+      "manifestHash": "867913ea3cbdb211"
     },
     {
       "objectKind": "kibo",
@@ -6808,16 +6728,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6827,9 +6737,14 @@
         "kiboId": 500129,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "2eaba06d69ee425a"
+      "manifestHash": "c4e2bc8492d0fad6"
     },
     {
       "objectKind": "kibo",
@@ -6848,16 +6763,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6867,9 +6772,14 @@
         "kiboId": 500130,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "3813dcdac2303217"
+      "manifestHash": "3a5a65a214cf3df9"
     },
     {
       "objectKind": "kibo",
@@ -6888,16 +6798,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6907,9 +6807,14 @@
         "kiboId": 500131,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "198873d9331ff7f1"
+      "manifestHash": "4e4b11435d6106af"
     },
     {
       "objectKind": "kibo",
@@ -6928,16 +6833,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6947,9 +6842,14 @@
         "kiboId": 500164,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "858c77ffab463f64"
+      "manifestHash": "fa8001d7152a62e8"
     },
     {
       "objectKind": "kibo",
@@ -6968,16 +6868,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -6987,9 +6877,14 @@
         "kiboId": 500165,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "34a1568c9474d00a"
+      "manifestHash": "a2ce13a0e5602892"
     },
     {
       "objectKind": "kibo",
@@ -7008,16 +6903,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7027,9 +6912,14 @@
         "kiboId": 500166,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "94a1ec66b953d0c9"
+      "manifestHash": "e90f19821b2c91a7"
     },
     {
       "objectKind": "kibo",
@@ -7048,16 +6938,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7067,9 +6947,14 @@
         "kiboId": 500173,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "8815673adc0e97d6"
+      "manifestHash": "759841b926284b7e"
     },
     {
       "objectKind": "kibo",
@@ -7088,16 +6973,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7107,9 +6982,14 @@
         "kiboId": 500174,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "52a87c345035290d"
+      "manifestHash": "d22b0eaf5cdc60eb"
     },
     {
       "objectKind": "kibo",
@@ -7128,16 +7008,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7147,9 +7017,14 @@
         "kiboId": 500175,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "574f8e7b38238dce"
+      "manifestHash": "436fed5b6df859ca"
     },
     {
       "objectKind": "kibo",
@@ -7168,16 +7043,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7193,9 +7058,14 @@
         "kiboId": 500185,
         "actionCount": 3,
         "passiveSkillId": 520059,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "ceec8b62c972a683"
+      "manifestHash": "22732a878b9fcb8d"
     },
     {
       "objectKind": "kibo",
@@ -7214,16 +7084,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7233,9 +7093,14 @@
         "kiboId": 500220,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "c412eab83d7a6d70"
+      "manifestHash": "69e60642f4fc673c"
     },
     {
       "objectKind": "kibo",
@@ -7254,16 +7119,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7279,9 +7134,14 @@
         "kiboId": 500231,
         "actionCount": 3,
         "passiveSkillId": 520013,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "3a58bf2b49515436"
+      "manifestHash": "7afebe681e7b2cee"
     },
     {
       "objectKind": "kibo",
@@ -7300,16 +7160,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7319,9 +7169,14 @@
         "kiboId": 500296,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "e28de2f8711eb83a"
+      "manifestHash": "4b19edd09b85cde2"
     },
     {
       "objectKind": "kibo",
@@ -7340,16 +7195,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7359,9 +7204,14 @@
         "kiboId": 500304,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "d329349d1194628b"
+      "manifestHash": "008b13ef31fb4155"
     },
     {
       "objectKind": "kibo",
@@ -7380,16 +7230,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7399,9 +7239,14 @@
         "kiboId": 500305,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "890e0ae03d2c5be8"
+      "manifestHash": "d379e9756123ca20"
     },
     {
       "objectKind": "kibo",
@@ -7420,16 +7265,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7439,9 +7274,14 @@
         "kiboId": 500306,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "b9539db37cf73ec5"
+      "manifestHash": "5d8ec6b329c3be4b"
     },
     {
       "objectKind": "kibo",
@@ -7460,16 +7300,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7479,9 +7309,14 @@
         "kiboId": 500322,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "3e1e55e0f94da50d"
+      "manifestHash": "be5ca3dd665f17af"
     },
     {
       "objectKind": "kibo",
@@ -7500,16 +7335,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7519,9 +7344,14 @@
         "kiboId": 500323,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "f83bcbaa9db80419"
+      "manifestHash": "358505221c429c4b"
     },
     {
       "objectKind": "kibo",
@@ -7540,16 +7370,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7559,9 +7379,14 @@
         "kiboId": 500324,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "cc4295ea1c2e429a"
+      "manifestHash": "8090b4d540a78e3e"
     },
     {
       "objectKind": "kibo",
@@ -7580,16 +7405,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7599,9 +7414,14 @@
         "kiboId": 500357,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "acd4df6aa7491d72"
+      "manifestHash": "2cc31ba9a185799a"
     },
     {
       "objectKind": "kibo",
@@ -7620,16 +7440,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7639,9 +7449,14 @@
         "kiboId": 500358,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "44d541b3f219ef2a"
+      "manifestHash": "43dbcde25b492eee"
     },
     {
       "objectKind": "kibo",
@@ -7660,16 +7475,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7685,9 +7490,14 @@
         "kiboId": 500360,
         "actionCount": 3,
         "passiveSkillId": 520092,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "e51976fc83a3f903"
+      "manifestHash": "2f74f99c3dafa33f"
     },
     {
       "objectKind": "kibo",
@@ -7706,16 +7516,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7725,9 +7525,14 @@
         "kiboId": 500368,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "7a0d8d1bd9d28da9"
+      "manifestHash": "fd23f28100a7d6b3"
     },
     {
       "objectKind": "kibo",
@@ -7746,16 +7551,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7765,9 +7560,14 @@
         "kiboId": 500369,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "82fd2f9110cf2999"
+      "manifestHash": "4addd81c3d80fdf3"
     },
     {
       "objectKind": "kibo",
@@ -7786,16 +7586,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7805,9 +7595,14 @@
         "kiboId": 500370,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "2538c2d456bb9153"
+      "manifestHash": "cb123e2725453035"
     },
     {
       "objectKind": "kibo",
@@ -7826,16 +7621,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7845,9 +7630,14 @@
         "kiboId": 500469,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "005cbeedd6120367"
+      "manifestHash": "27d655e2c0f2a29d"
     },
     {
       "objectKind": "kibo",
@@ -7866,16 +7656,6 @@
           "message": "No product visual acceptance manifest exists for this Kibo."
         },
         {
-          "code": "strict-kibo-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied."
-        },
-        {
-          "code": "kibo-dna-factor-runtime-unapplied",
-          "category": "not-implemented",
-          "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime."
-        },
-        {
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
@@ -7885,9 +7665,14 @@
         "kiboId": 500470,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false
+        "headlessRuntimeReady": false,
+        "kiboDna": {
+          "status": "not-applicable",
+          "reason": "kibo-dna-out-of-scope-current-version",
+          "canonicalValue": []
+        }
       },
-      "manifestHash": "86c3a415960bb9bf"
+      "manifestHash": "98e2eba036675ced"
     },
     {
       "objectKind": "set-skill",
@@ -10955,5 +10740,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "789cbfaa6f320aa6"
+  "manifestsHash": "c13b786ee8cc1f5b"
 }

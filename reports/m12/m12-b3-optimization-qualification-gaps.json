@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "a5bdc5509416a810",
+  "rosterHash": "a036b7e4f6be6b73",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "72b7f0306b083d26",
-        "a5bdc5509416a810"
+        "bb10266218ee7a04",
+        "a036b7e4f6be6b73"
       ]
     },
     {
@@ -52,10 +52,11 @@
       ]
     },
     {
-      "capabilityIdentity": "b3-kibo-dna-identity-and-rank-source-index",
+      "capabilityIdentity": "b3-kibo-dna-empty-only-product-scope",
       "status": "implemented",
       "evidence": [
-        "NewTable/pet_dna|NewTable/pet_dnalink|NewTable/pet.kiboDnaList|NewTable/skill|NewTable/skill_level|NewTable/skillsub_logic|NewTable/skillsub_ele_value"
+        "schemas/azpr-optimization-cultivation-profile-v1.schema.json",
+        "schemas/azpr-machine-axis-v1.schema.json"
       ]
     },
     {
@@ -6729,36 +6730,6 @@
       "gapHash": "c6fe42e3e51b2319"
     },
     {
-      "gapIdentity": "kibo:500001:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500001",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500001]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500001]"
-      ],
-      "details": {},
-      "gapHash": "4ce6f0469b9b32c9"
-    },
-    {
-      "gapIdentity": "kibo:500001:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500001",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500001]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500001]"
-      ],
-      "details": {},
-      "gapHash": "06ef2fecddac56db"
-    },
-    {
       "gapIdentity": "kibo:500001:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500001",
@@ -6787,36 +6758,6 @@
       ],
       "details": {},
       "gapHash": "6cce1c1090d36c11"
-    },
-    {
-      "gapIdentity": "kibo:500025:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500025",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500025]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500025]"
-      ],
-      "details": {},
-      "gapHash": "32048d660a8bdb05"
-    },
-    {
-      "gapIdentity": "kibo:500025:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500025",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500025]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500025]"
-      ],
-      "details": {},
-      "gapHash": "d2891ae270fa717f"
     },
     {
       "gapIdentity": "kibo:500025:kibo-headless-maturity-not-ready",
@@ -6849,36 +6790,6 @@
       "gapHash": "a7e95df6ecb18611"
     },
     {
-      "gapIdentity": "kibo:500043:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500043",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500043]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500043]"
-      ],
-      "details": {},
-      "gapHash": "fbb091969cb4c4b5"
-    },
-    {
-      "gapIdentity": "kibo:500043:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500043",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500043]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500043]"
-      ],
-      "details": {},
-      "gapHash": "b40f5b5648899cdf"
-    },
-    {
       "gapIdentity": "kibo:500043:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500043",
@@ -6907,36 +6818,6 @@
       ],
       "details": {},
       "gapHash": "64fc92514db70b83"
-    },
-    {
-      "gapIdentity": "kibo:500044:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500044",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500044]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500044]"
-      ],
-      "details": {},
-      "gapHash": "b74c2c464a20cbaf"
-    },
-    {
-      "gapIdentity": "kibo:500044:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500044",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500044]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500044]"
-      ],
-      "details": {},
-      "gapHash": "5bf7ec089e3921a7"
     },
     {
       "gapIdentity": "kibo:500044:kibo-headless-maturity-not-ready",
@@ -6969,36 +6850,6 @@
       "gapHash": "0cc7b72619f8af39"
     },
     {
-      "gapIdentity": "kibo:500045:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500045",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500045]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
-      ],
-      "details": {},
-      "gapHash": "81cc74be5b929039"
-    },
-    {
-      "gapIdentity": "kibo:500045:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500045",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500045]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
-      ],
-      "details": {},
-      "gapHash": "f9fff6ec549faa1b"
-    },
-    {
       "gapIdentity": "kibo:500045:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500045",
@@ -7027,36 +6878,6 @@
       ],
       "details": {},
       "gapHash": "98c8a0e9ff7e3d27"
-    },
-    {
-      "gapIdentity": "kibo:500057:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500057",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500057]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500057]"
-      ],
-      "details": {},
-      "gapHash": "0ad6180199ac1177"
-    },
-    {
-      "gapIdentity": "kibo:500057:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500057",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500057]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500057]"
-      ],
-      "details": {},
-      "gapHash": "917f3f77d307a803"
     },
     {
       "gapIdentity": "kibo:500057:kibo-headless-maturity-not-ready",
@@ -7089,36 +6910,6 @@
       "gapHash": "976e7b5b1d2c2fbf"
     },
     {
-      "gapIdentity": "kibo:500064:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500064",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500064]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500064]"
-      ],
-      "details": {},
-      "gapHash": "8a70ab8b0bef15df"
-    },
-    {
-      "gapIdentity": "kibo:500064:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500064",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500064]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500064]"
-      ],
-      "details": {},
-      "gapHash": "820d1664a88eae03"
-    },
-    {
       "gapIdentity": "kibo:500064:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500064",
@@ -7149,36 +6940,6 @@
       "gapHash": "2b3ef3f1ebf281c9"
     },
     {
-      "gapIdentity": "kibo:500065:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500065",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500065]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500065]"
-      ],
-      "details": {},
-      "gapHash": "e8af971a21c0762d"
-    },
-    {
-      "gapIdentity": "kibo:500065:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500065",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500065]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500065]"
-      ],
-      "details": {},
-      "gapHash": "8266a7b57416b9d7"
-    },
-    {
       "gapIdentity": "kibo:500065:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500065",
@@ -7207,36 +6968,6 @@
       ],
       "details": {},
       "gapHash": "15db497cf618da5f"
-    },
-    {
-      "gapIdentity": "kibo:500082:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500082",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500082]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
-      ],
-      "details": {},
-      "gapHash": "f96dbe0fd118f8cf"
-    },
-    {
-      "gapIdentity": "kibo:500082:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500082",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500082]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
-      ],
-      "details": {},
-      "gapHash": "01e375d07c0b01d3"
     },
     {
       "gapIdentity": "kibo:500082:kibo-headless-maturity-not-ready",
@@ -7286,36 +7017,6 @@
       "gapHash": "e95964f1457756f1"
     },
     {
-      "gapIdentity": "kibo:500120:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500120",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500120]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500120]"
-      ],
-      "details": {},
-      "gapHash": "f931113f0d103f1d"
-    },
-    {
-      "gapIdentity": "kibo:500120:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500120",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500120]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500120]"
-      ],
-      "details": {},
-      "gapHash": "919de8fd39f1ab1f"
-    },
-    {
       "gapIdentity": "kibo:500120:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500120",
@@ -7344,36 +7045,6 @@
       ],
       "details": {},
       "gapHash": "58191e35e4545093"
-    },
-    {
-      "gapIdentity": "kibo:500123:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500123",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500123]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500123]"
-      ],
-      "details": {},
-      "gapHash": "1bc5d7038fefdec7"
-    },
-    {
-      "gapIdentity": "kibo:500123:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500123",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500123]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500123]"
-      ],
-      "details": {},
-      "gapHash": "fe7f887c3a56398f"
     },
     {
       "gapIdentity": "kibo:500123:kibo-headless-maturity-not-ready",
@@ -7406,36 +7077,6 @@
       "gapHash": "e4a2f68cc11ff489"
     },
     {
-      "gapIdentity": "kibo:500124:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500124",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500124]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500124]"
-      ],
-      "details": {},
-      "gapHash": "ddc47a7e677f1885"
-    },
-    {
-      "gapIdentity": "kibo:500124:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500124",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500124]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500124]"
-      ],
-      "details": {},
-      "gapHash": "ce5785ddd823c467"
-    },
-    {
       "gapIdentity": "kibo:500124:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500124",
@@ -7464,36 +7105,6 @@
       ],
       "details": {},
       "gapHash": "0cb0524238d2287f"
-    },
-    {
-      "gapIdentity": "kibo:500125:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500125",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500125]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500125]"
-      ],
-      "details": {},
-      "gapHash": "6fdb06586a885a3f"
-    },
-    {
-      "gapIdentity": "kibo:500125:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500125",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500125]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500125]"
-      ],
-      "details": {},
-      "gapHash": "d21d29a401c904f3"
     },
     {
       "gapIdentity": "kibo:500125:kibo-headless-maturity-not-ready",
@@ -7526,36 +7137,6 @@
       "gapHash": "adfe96e9034dcfd9"
     },
     {
-      "gapIdentity": "kibo:500126:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500126",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500126]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500126]"
-      ],
-      "details": {},
-      "gapHash": "4ea2731e08b12b69"
-    },
-    {
-      "gapIdentity": "kibo:500126:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500126",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500126]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500126]"
-      ],
-      "details": {},
-      "gapHash": "1983cff6ae8931a3"
-    },
-    {
       "gapIdentity": "kibo:500126:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500126",
@@ -7584,36 +7165,6 @@
       ],
       "details": {},
       "gapHash": "e24b82711d5f6ff3"
-    },
-    {
-      "gapIdentity": "kibo:500127:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500127",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500127]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500127]"
-      ],
-      "details": {},
-      "gapHash": "858e0599a6d28b37"
-    },
-    {
-      "gapIdentity": "kibo:500127:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500127",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500127]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500127]"
-      ],
-      "details": {},
-      "gapHash": "a35b56ab993d62e7"
     },
     {
       "gapIdentity": "kibo:500127:kibo-headless-maturity-not-ready",
@@ -7646,36 +7197,6 @@
       "gapHash": "aa2d722eafaf5fd1"
     },
     {
-      "gapIdentity": "kibo:500128:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500128",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500128]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500128]"
-      ],
-      "details": {},
-      "gapHash": "b61bbd55347ca02d"
-    },
-    {
-      "gapIdentity": "kibo:500128:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500128",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500128]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500128]"
-      ],
-      "details": {},
-      "gapHash": "1d3cf716eba6486f"
-    },
-    {
       "gapIdentity": "kibo:500128:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500128",
@@ -7704,36 +7225,6 @@
       ],
       "details": {},
       "gapHash": "54d8a253b0990d77"
-    },
-    {
-      "gapIdentity": "kibo:500129:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500129",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500129]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500129]"
-      ],
-      "details": {},
-      "gapHash": "a329bfb5f7f322bf"
-    },
-    {
-      "gapIdentity": "kibo:500129:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500129",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500129]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500129]"
-      ],
-      "details": {},
-      "gapHash": "a8dfb50ae1fe2d23"
     },
     {
       "gapIdentity": "kibo:500129:kibo-headless-maturity-not-ready",
@@ -7766,36 +7257,6 @@
       "gapHash": "48d896fad8614747"
     },
     {
-      "gapIdentity": "kibo:500130:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500130",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500130]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500130]"
-      ],
-      "details": {},
-      "gapHash": "a34febf528840a1f"
-    },
-    {
-      "gapIdentity": "kibo:500130:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500130",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500130]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500130]"
-      ],
-      "details": {},
-      "gapHash": "ecca378c369c141b"
-    },
-    {
       "gapIdentity": "kibo:500130:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500130",
@@ -7824,36 +7285,6 @@
       ],
       "details": {},
       "gapHash": "dbb7c4b31a917231"
-    },
-    {
-      "gapIdentity": "kibo:500131:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500131",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500131]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500131]"
-      ],
-      "details": {},
-      "gapHash": "4acd9c73698eef9d"
-    },
-    {
-      "gapIdentity": "kibo:500131:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500131",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500131]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500131]"
-      ],
-      "details": {},
-      "gapHash": "4771729b91a834ff"
     },
     {
       "gapIdentity": "kibo:500131:kibo-headless-maturity-not-ready",
@@ -7886,36 +7317,6 @@
       "gapHash": "b3e39f79de0f2111"
     },
     {
-      "gapIdentity": "kibo:500164:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500164",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500164]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500164]"
-      ],
-      "details": {},
-      "gapHash": "b78834fc8368b405"
-    },
-    {
-      "gapIdentity": "kibo:500164:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500164",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500164]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500164]"
-      ],
-      "details": {},
-      "gapHash": "64cfa5aeac64c717"
-    },
-    {
       "gapIdentity": "kibo:500164:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500164",
@@ -7944,36 +7345,6 @@
       ],
       "details": {},
       "gapHash": "7de815d2feeef717"
-    },
-    {
-      "gapIdentity": "kibo:500165:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500165",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500165]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500165]"
-      ],
-      "details": {},
-      "gapHash": "a24e0a8ace2a6fc7"
-    },
-    {
-      "gapIdentity": "kibo:500165:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500165",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500165]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500165]"
-      ],
-      "details": {},
-      "gapHash": "fb8133f5e09d3673"
     },
     {
       "gapIdentity": "kibo:500165:kibo-headless-maturity-not-ready",
@@ -8006,36 +7377,6 @@
       "gapHash": "3f687822fe147ea1"
     },
     {
-      "gapIdentity": "kibo:500166:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500166",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500166]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500166]"
-      ],
-      "details": {},
-      "gapHash": "c1994107b5d23441"
-    },
-    {
-      "gapIdentity": "kibo:500166:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500166",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500166]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500166]"
-      ],
-      "details": {},
-      "gapHash": "389e1bc712b7f5db"
-    },
-    {
       "gapIdentity": "kibo:500166:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500166",
@@ -8064,36 +7405,6 @@
       ],
       "details": {},
       "gapHash": "4a1bf0950d87f979"
-    },
-    {
-      "gapIdentity": "kibo:500173:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500173",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500173]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500173]"
-      ],
-      "details": {},
-      "gapHash": "c01074ef67b9a459"
-    },
-    {
-      "gapIdentity": "kibo:500173:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500173",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500173]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500173]"
-      ],
-      "details": {},
-      "gapHash": "bac2511ef5ce0023"
     },
     {
       "gapIdentity": "kibo:500173:kibo-headless-maturity-not-ready",
@@ -8126,36 +7437,6 @@
       "gapHash": "3276b730e618dcff"
     },
     {
-      "gapIdentity": "kibo:500174:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500174",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500174]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500174]"
-      ],
-      "details": {},
-      "gapHash": "65096af9ecb9b577"
-    },
-    {
-      "gapIdentity": "kibo:500174:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500174",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500174]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500174]"
-      ],
-      "details": {},
-      "gapHash": "3f887c0495215723"
-    },
-    {
       "gapIdentity": "kibo:500174:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500174",
@@ -8186,36 +7467,6 @@
       "gapHash": "f059ad518f199fc1"
     },
     {
-      "gapIdentity": "kibo:500175:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500175",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500175]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500175]"
-      ],
-      "details": {},
-      "gapHash": "5bc1f4cf26ba80dd"
-    },
-    {
-      "gapIdentity": "kibo:500175:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500175",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500175]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500175]"
-      ],
-      "details": {},
-      "gapHash": "95bb1d52ab67bcef"
-    },
-    {
       "gapIdentity": "kibo:500175:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500175",
@@ -8244,36 +7495,6 @@
       ],
       "details": {},
       "gapHash": "5a41e974e32e01fb"
-    },
-    {
-      "gapIdentity": "kibo:500185:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500185",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500185]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
-      ],
-      "details": {},
-      "gapHash": "48f7c1ca41dc7367"
-    },
-    {
-      "gapIdentity": "kibo:500185:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500185",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500185]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
-      ],
-      "details": {},
-      "gapHash": "86db23e80427e897"
     },
     {
       "gapIdentity": "kibo:500185:kibo-headless-maturity-not-ready",
@@ -8323,36 +7544,6 @@
       "gapHash": "39bafd38c49d32e3"
     },
     {
-      "gapIdentity": "kibo:500220:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500220",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500220]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500220]"
-      ],
-      "details": {},
-      "gapHash": "11db25b789c808bf"
-    },
-    {
-      "gapIdentity": "kibo:500220:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500220",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500220]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500220]"
-      ],
-      "details": {},
-      "gapHash": "93585615f1f7a067"
-    },
-    {
       "gapIdentity": "kibo:500220:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500220",
@@ -8381,36 +7572,6 @@
       ],
       "details": {},
       "gapHash": "ea54d6453dda1f3b"
-    },
-    {
-      "gapIdentity": "kibo:500231:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500231",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500231]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500231]"
-      ],
-      "details": {},
-      "gapHash": "abf21b69d915f477"
-    },
-    {
-      "gapIdentity": "kibo:500231:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500231",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500231]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500231]"
-      ],
-      "details": {},
-      "gapHash": "263aa7859ab386b7"
     },
     {
       "gapIdentity": "kibo:500231:kibo-headless-maturity-not-ready",
@@ -8460,36 +7621,6 @@
       "gapHash": "6f28e8a70b0691d9"
     },
     {
-      "gapIdentity": "kibo:500296:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500296",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500296]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500296]"
-      ],
-      "details": {},
-      "gapHash": "c3ce24e6d8f73f51"
-    },
-    {
-      "gapIdentity": "kibo:500296:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500296",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500296]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500296]"
-      ],
-      "details": {},
-      "gapHash": "dea18af90f41eecb"
-    },
-    {
       "gapIdentity": "kibo:500296:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500296",
@@ -8518,36 +7649,6 @@
       ],
       "details": {},
       "gapHash": "a7c12914a899c631"
-    },
-    {
-      "gapIdentity": "kibo:500304:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500304",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500304]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
-      ],
-      "details": {},
-      "gapHash": "df675c0aef745915"
-    },
-    {
-      "gapIdentity": "kibo:500304:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500304",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500304]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
-      ],
-      "details": {},
-      "gapHash": "865dce8adf023b8f"
     },
     {
       "gapIdentity": "kibo:500304:kibo-headless-maturity-not-ready",
@@ -8580,36 +7681,6 @@
       "gapHash": "940a6eaa8a2c74e7"
     },
     {
-      "gapIdentity": "kibo:500305:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500305",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500305]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500305]"
-      ],
-      "details": {},
-      "gapHash": "eacdc7e90d3cddaf"
-    },
-    {
-      "gapIdentity": "kibo:500305:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500305",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500305]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500305]"
-      ],
-      "details": {},
-      "gapHash": "162436b393c9fd73"
-    },
-    {
       "gapIdentity": "kibo:500305:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500305",
@@ -8638,36 +7709,6 @@
       ],
       "details": {},
       "gapHash": "5f095fa2f1b3cd41"
-    },
-    {
-      "gapIdentity": "kibo:500306:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500306",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500306]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500306]"
-      ],
-      "details": {},
-      "gapHash": "70fe41f702ead859"
-    },
-    {
-      "gapIdentity": "kibo:500306:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500306",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500306]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500306]"
-      ],
-      "details": {},
-      "gapHash": "429bcf6b3cec09ab"
     },
     {
       "gapIdentity": "kibo:500306:kibo-headless-maturity-not-ready",
@@ -8700,36 +7741,6 @@
       "gapHash": "e94b92503b529f51"
     },
     {
-      "gapIdentity": "kibo:500322:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500322",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500322]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500322]"
-      ],
-      "details": {},
-      "gapHash": "6be33a9ac00cbf4d"
-    },
-    {
-      "gapIdentity": "kibo:500322:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500322",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500322]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500322]"
-      ],
-      "details": {},
-      "gapHash": "6c2d1f5f1958890f"
-    },
-    {
       "gapIdentity": "kibo:500322:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500322",
@@ -8758,36 +7769,6 @@
       ],
       "details": {},
       "gapHash": "50af4bbf24d6bad7"
-    },
-    {
-      "gapIdentity": "kibo:500323:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500323",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500323]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500323]"
-      ],
-      "details": {},
-      "gapHash": "5ed1d012a8f2c46f"
-    },
-    {
-      "gapIdentity": "kibo:500323:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500323",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500323]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500323]"
-      ],
-      "details": {},
-      "gapHash": "1b15173d56186273"
     },
     {
       "gapIdentity": "kibo:500323:kibo-headless-maturity-not-ready",
@@ -8820,36 +7801,6 @@
       "gapHash": "61391b573f754f99"
     },
     {
-      "gapIdentity": "kibo:500324:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500324",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500324]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500324]"
-      ],
-      "details": {},
-      "gapHash": "4b48638049194c19"
-    },
-    {
-      "gapIdentity": "kibo:500324:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500324",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500324]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500324]"
-      ],
-      "details": {},
-      "gapHash": "af991ebaa2281133"
-    },
-    {
       "gapIdentity": "kibo:500324:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500324",
@@ -8878,36 +7829,6 @@
       ],
       "details": {},
       "gapHash": "cdbacf7ac0d85a81"
-    },
-    {
-      "gapIdentity": "kibo:500357:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500357",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500357]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500357]"
-      ],
-      "details": {},
-      "gapHash": "5e5de844ba05c2b9"
-    },
-    {
-      "gapIdentity": "kibo:500357:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500357",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500357]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500357]"
-      ],
-      "details": {},
-      "gapHash": "64f79a31d1de558b"
     },
     {
       "gapIdentity": "kibo:500357:kibo-headless-maturity-not-ready",
@@ -8940,36 +7861,6 @@
       "gapHash": "532959a794b34caf"
     },
     {
-      "gapIdentity": "kibo:500358:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500358",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500358]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500358]"
-      ],
-      "details": {},
-      "gapHash": "a024f88f6f43932f"
-    },
-    {
-      "gapIdentity": "kibo:500358:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500358",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500358]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500358]"
-      ],
-      "details": {},
-      "gapHash": "5d0eda01046e6983"
-    },
-    {
       "gapIdentity": "kibo:500358:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500358",
@@ -8998,36 +7889,6 @@
       ],
       "details": {},
       "gapHash": "47abf69e591ccf99"
-    },
-    {
-      "gapIdentity": "kibo:500360:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500360",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500360]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500360]"
-      ],
-      "details": {},
-      "gapHash": "6de4ce2038e246e1"
-    },
-    {
-      "gapIdentity": "kibo:500360:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500360",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500360]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500360]"
-      ],
-      "details": {},
-      "gapHash": "69cca7b66c92fd8b"
     },
     {
       "gapIdentity": "kibo:500360:kibo-headless-maturity-not-ready",
@@ -9077,36 +7938,6 @@
       "gapHash": "fcb98561a6578589"
     },
     {
-      "gapIdentity": "kibo:500368:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500368",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500368]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500368]"
-      ],
-      "details": {},
-      "gapHash": "808005d0e0c8f781"
-    },
-    {
-      "gapIdentity": "kibo:500368:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500368",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500368]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500368]"
-      ],
-      "details": {},
-      "gapHash": "df6d21789e44ccbb"
-    },
-    {
       "gapIdentity": "kibo:500368:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500368",
@@ -9135,36 +7966,6 @@
       ],
       "details": {},
       "gapHash": "cfd4124eb0cc89a3"
-    },
-    {
-      "gapIdentity": "kibo:500369:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500369",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500369]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
-      ],
-      "details": {},
-      "gapHash": "32c5f852a9b50c1f"
-    },
-    {
-      "gapIdentity": "kibo:500369:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500369",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500369]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
-      ],
-      "details": {},
-      "gapHash": "f6737324fbd4d247"
     },
     {
       "gapIdentity": "kibo:500369:kibo-headless-maturity-not-ready",
@@ -9197,36 +7998,6 @@
       "gapHash": "ff6d6f6eabd3bb5b"
     },
     {
-      "gapIdentity": "kibo:500370:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500370",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500370]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500370]"
-      ],
-      "details": {},
-      "gapHash": "ec87e7c3156a23c7"
-    },
-    {
-      "gapIdentity": "kibo:500370:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500370",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500370]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500370]"
-      ],
-      "details": {},
-      "gapHash": "6807beb0f2b69d4f"
-    },
-    {
       "gapIdentity": "kibo:500370:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500370",
@@ -9257,36 +8028,6 @@
       "gapHash": "246924a682bd8079"
     },
     {
-      "gapIdentity": "kibo:500469:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500469",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500469]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500469]"
-      ],
-      "details": {},
-      "gapHash": "b5a7e728d3c4238d"
-    },
-    {
-      "gapIdentity": "kibo:500469:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500469",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500469]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500469]"
-      ],
-      "details": {},
-      "gapHash": "0b63f186abdba7d7"
-    },
-    {
       "gapIdentity": "kibo:500469:kibo-headless-maturity-not-ready",
       "objectKind": "kibo",
       "objectId": "500469",
@@ -9315,36 +8056,6 @@
       ],
       "details": {},
       "gapHash": "54b2688fd34b12c1"
-    },
-    {
-      "gapIdentity": "kibo:500470:strict-kibo-cultivation-runtime-partial",
-      "objectKind": "kibo",
-      "objectId": "500470",
-      "code": "strict-kibo-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500470]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500470]"
-      ],
-      "details": {},
-      "gapHash": "160af92d3b07eab5"
-    },
-    {
-      "gapIdentity": "kibo:500470:kibo-dna-factor-runtime-unapplied",
-      "objectKind": "kibo",
-      "objectId": "500470",
-      "code": "kibo-dna-factor-runtime-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500470]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500470]"
-      ],
-      "details": {},
-      "gapHash": "d6f7723ab87c4ab7"
     },
     {
       "gapIdentity": "kibo:500470:kibo-headless-maturity-not-ready",
@@ -12637,10 +11348,10 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 829,
+    "blockingUniqueGapCount": 743,
     "byCategory": {
       "evidence-insufficient": 141,
-      "not-implemented": 688
+      "not-implemented": 602
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -12648,7 +11359,6 @@
       "character-not-optimization-ready": 11,
       "equipment-instance-tier-source-evidence-missing": 137,
       "equipment-visual-acceptance-not-published": 137,
-      "kibo-dna-factor-runtime-unapplied": 43,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
@@ -12658,16 +11368,15 @@
       "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11,
       "strict-equipment-cultivation-runtime-partial": 137,
-      "strict-kibo-cultivation-runtime-partial": 43,
       "strict-soulessence-cultivation-runtime-partial": 62
     },
     "byObjectKind": {
       "character": 32,
       "equipment": 411,
-      "kibo": 176,
+      "kibo": 90,
       "set-skill": 24,
       "soul-essence": 186
     }
   },
-  "ledgerHash": "087eecd723934d7c"
+  "ledgerHash": "c03eea5e1ba08ad8"
 }

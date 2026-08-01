@@ -82,10 +82,13 @@ export function validateOptimizationQualificationCatalog(
     }
   }
   if (
-    catalog?.cultivation?.kibo?.dnaFactors?.status !==
-      'source-indexed-runtime-unapplied' ||
-    Number(catalog?.cultivation?.kibo?.dnaFactors?.factorCount) !== 215 ||
-    Number(catalog?.cultivation?.kibo?.dnaFactors?.linkCount) !== 8
+    catalog?.cultivation?.kibo?.dnaFactors?.status !== 'not-applicable' ||
+    catalog?.cultivation?.kibo?.dnaFactors?.reason !==
+      'kibo-dna-out-of-scope-current-version' ||
+    hashCanonicalValue(
+      catalog?.cultivation?.kibo?.dnaFactors?.normalizedValue
+    ) !== hashCanonicalValue([]) ||
+    catalog?.cultivation?.kibo?.dnaFactors?.acceptedInput !== 'empty-only'
   ) {
     issues.push('optimization-qualification-kibo-dna-catalog-invalid');
   }
@@ -136,12 +139,6 @@ export function resolveOptimizationCultivationProfile(
   const teamBySlot = new Map(
     team.map(slot => [String(slot.slotId), slot])
   );
-  const dnaProfileById = new Map(
-    (catalog.cultivation.kibo.dnaFactors.profiles ?? []).map(source => [
-      Number(source.factorId),
-      source,
-    ])
-  );
   const soulEssenceProfileById = new Map(
     (catalog.cultivation.soulEssence.profiles ?? []).map(source => [
       Number(source.soulEssenceId),
@@ -177,18 +174,7 @@ export function resolveOptimizationCultivationProfile(
       kibo: {
         ...structuredClone(actor.kibo),
         talents: talentRows,
-        dnaFactors: actor.kibo.dnaFactors.map(factor => {
-          const source = dnaProfileById.get(Number(factor.factorId));
-          return {
-            factorId: Number(source.factorId),
-            rank: Number(source.rank),
-            type: Number(source.type),
-            skillId: Number(source.skillId),
-            skillLevel: Number(source.skillLevel),
-            runtimeStatus: source.runtimeStatus,
-            sourceIdentities: structuredClone(source.sourceIdentities),
-          };
-        }),
+        dnaFactors: [],
         inheritanceBasisPoints: Number(bondSource.inheritanceBasisPoints),
         inheritanceRatio: Number(bondSource.inheritanceBasisPoints) / 10000,
         bondSourceIdentity: bondSource.sourceIdentity,
@@ -251,7 +237,7 @@ export function projectResolvedOptimizationCultivationActor(
     'kibo.level',
     'kibo.talents',
     'kibo.bondLevel',
-    'kibo.dnaFactorIdentity',
+    'kibo.dnaFactors',
     'soulEssence.level',
     'soulEssence.rank',
     'soulEssence.effectSkillLevel',
@@ -268,9 +254,6 @@ export function projectResolvedOptimizationCultivationActor(
       source => source.kind === 'actor-ascension-skill-unlock'
     )
       ? ['character.ascensionSkillUnlocks']
-      : []),
-    ...(resolvedActor.kibo?.dnaFactors?.length
-      ? ['kibo.dnaFactorRuntime']
       : []),
     ...(resolvedActor.soulEssence?.effectSkill
       ? ['soulEssence.effectSkillRuntime']
@@ -369,12 +352,6 @@ export function validateOptimizationCultivationProfile(
     team.map(slot => [String(slot.slotId), slot])
   );
   const teamSlots = new Set(teamBySlot.keys());
-  const dnaProfileById = new Map(
-    (catalog.cultivation.kibo.dnaFactors.profiles ?? []).map(source => [
-      Number(source.factorId),
-      source,
-    ])
-  );
   const soulEssenceProfileById = new Map(
     (catalog.cultivation.soulEssence.profiles ?? []).map(source => [
       Number(source.soulEssenceId),
@@ -524,58 +501,27 @@ export function validateOptimizationCultivationProfile(
       'machine-axis-cultivation-kibo-bond-level-invalid',
       issues
     );
-    if (!Array.isArray(actor.kibo?.dnaFactors)) {
+    if (
+      actor.kibo?.dnaFactors !== undefined &&
+      !Array.isArray(actor.kibo.dnaFactors)
+    ) {
       issues.push(
         createIssue(
-          'machine-axis-cultivation-kibo-dna-required',
+          'machine-axis-cultivation-kibo-dna-invalid',
           `${basePath}.kibo.dnaFactors`
         )
       );
-    } else {
-      const factorIds = actor.kibo.dnaFactors.map(entry => entry.factorId);
-      if (
-        actor.kibo.dnaFactors.some(
-          entry =>
-            !isPositiveInteger(entry?.factorId) ||
-            !isPositiveInteger(entry?.rank)
-        ) ||
-        new Set(factorIds).size !== factorIds.length
-      ) {
-        issues.push(
-          createIssue(
-            'machine-axis-cultivation-kibo-dna-invalid',
-            `${basePath}.kibo.dnaFactors`
-          )
-        );
-      } else {
-        actor.kibo.dnaFactors.forEach((factor, factorIndex) => {
-          const source = dnaProfileById.get(Number(factor.factorId));
-          const factorPath = `${basePath}.kibo.dnaFactors.${factorIndex}`;
-          if (!source) {
-            issues.push(
-              createIssue(
-                'machine-axis-cultivation-kibo-dna-factor-unknown',
-                `${factorPath}.factorId`,
-                { factorId: Number(factor.factorId) }
-              )
-            );
-            return;
+    } else if ((actor.kibo?.dnaFactors ?? []).length > 0) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-kibo-dna-unsupported-in-current-version',
+          `${basePath}.kibo.dnaFactors`,
+          {
+            status: 'unsupported-in-current-version',
+            actualCount: actor.kibo.dnaFactors.length,
           }
-          if (Number(factor.rank) !== Number(source.rank)) {
-            issues.push(
-              createIssue(
-                'machine-axis-cultivation-kibo-dna-rank-mismatch',
-                `${factorPath}.rank`,
-                {
-                  factorId: Number(factor.factorId),
-                  expected: Number(source.rank),
-                  actual: Number(factor.rank),
-                }
-              )
-            );
-          }
-        });
-      }
+        )
+      );
     }
     validateRange(
       actor.soulEssence?.level,

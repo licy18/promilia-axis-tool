@@ -9,12 +9,12 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "72b7f0306b083d26",
-  "rosterHash": "a5bdc5509416a810",
-  "manifestsHash": "789cbfaa6f320aa6",
-  "ledgerHash": "087eecd723934d7c",
-  "bindingMatrixHash": "329d112e08ce414a",
-  "catalogHash": "f535d05628a250ee",
+  "sourceSnapshotHash": "bb10266218ee7a04",
+  "rosterHash": "a036b7e4f6be6b73",
+  "manifestsHash": "c13b786ee8cc1f5b",
+  "ledgerHash": "c03eea5e1ba08ad8",
+  "bindingMatrixHash": "12bbd3ebe73dfe38",
+  "catalogHash": "3a122af58e041688",
   "maturityCounts": {
     "extracted": 241,
     "runtime-integrated": 24
@@ -27,10 +27,10 @@
     "set-skill": 0
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 829,
+    "blockingUniqueGapCount": 743,
     "byCategory": {
       "evidence-insufficient": 141,
-      "not-implemented": 688
+      "not-implemented": 602
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -38,7 +38,6 @@
       "character-not-optimization-ready": 11,
       "equipment-instance-tier-source-evidence-missing": 137,
       "equipment-visual-acceptance-not-published": 137,
-      "kibo-dna-factor-runtime-unapplied": 43,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
@@ -48,13 +47,12 @@
       "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11,
       "strict-equipment-cultivation-runtime-partial": 137,
-      "strict-kibo-cultivation-runtime-partial": 43,
       "strict-soulessence-cultivation-runtime-partial": 62
     },
     "byObjectKind": {
       "character": 32,
       "equipment": 411,
-      "kibo": 176,
+      "kibo": 90,
       "set-skill": 24,
       "soul-essence": 186
     }

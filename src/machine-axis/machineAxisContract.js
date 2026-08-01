@@ -75,7 +75,9 @@ export function normalizeMachineAxisContract(value = {}) {
       ...(scenario.cultivationProfile == null
         ? {}
         : {
-            cultivationProfile: structuredClone(scenario.cultivationProfile),
+            cultivationProfile: normalizeCultivationProfile(
+              scenario.cultivationProfile
+            ),
           }),
       ...(scenario.target == null
         ? {}
@@ -453,6 +455,25 @@ function normalizeTargetPolicy(value) {
     breakMode: textOrNull(source.breakMode) ?? 'enabled',
     deathTruncation: textOrNull(source.deathTruncation) ?? 'enabled',
   };
+}
+
+function normalizeCultivationProfile(value) {
+  const profile = structuredClone(value);
+  if (!isRecord(profile) || !Array.isArray(profile.actors)) return profile;
+  profile.actors = profile.actors.map(actor => {
+    if (!isRecord(actor) || !isRecord(actor.kibo)) return actor;
+    return {
+      ...actor,
+      kibo: {
+        ...actor.kibo,
+        dnaFactors:
+          actor.kibo.dnaFactors === undefined
+            ? []
+            : actor.kibo.dnaFactors,
+      },
+    };
+  });
+  return profile;
 }
 
 function normalizeOptimizationQualification(value) {
