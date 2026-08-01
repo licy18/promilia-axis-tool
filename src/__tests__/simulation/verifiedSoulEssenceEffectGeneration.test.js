@@ -27,6 +27,89 @@ const SOUL_ID = 10001;
 const SOUL_SKILL_ID = 1900480;
 const OWNER_ID = 101007;
 
+const APPLIED_SOUL_EFFECT_MATRIX = [
+  {
+    soulEssenceId: 10001,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'charged-attack',
+    durationMs: 5000,
+    stackMode: 'stack',
+    maxStacks: 4,
+    attributeId: 222,
+  },
+  {
+    soulEssenceId: 10002,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'star-skill',
+    durationMs: 12000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 53,
+  },
+  {
+    soulEssenceId: 10037,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'star-skill',
+    durationMs: 11000,
+    stackMode: 'stack',
+    maxStacks: 3,
+    attributeId: 229,
+  },
+  {
+    soulEssenceId: 10060,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'star-skill',
+    durationMs: 24000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 21,
+  },
+  {
+    soulEssenceId: 10094,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'star-skill',
+    durationMs: 15000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 21,
+  },
+  {
+    soulEssenceId: 10125,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'normal-attack',
+    durationMs: 5000,
+    stackMode: 'stack',
+    maxStacks: 15,
+    attributeId: 52,
+  },
+  {
+    soulEssenceId: 10154,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'normal-attack',
+    durationMs: 15000,
+    stackMode: 'stack',
+    maxStacks: 5,
+    attributeId: 229,
+  },
+  {
+    soulEssenceId: 10155,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'normal-attack',
+    durationMs: 15000,
+    stackMode: 'stack',
+    maxStacks: 5,
+    attributeId: 52,
+  },
+];
+
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
 });
@@ -104,6 +187,158 @@ describe('verified soul essence effect generation', () => {
       runtimeGaps: [],
     });
   });
+
+  it('covers every runtime-integrated soul through one data-driven trigger contract', () => {
+    const appliedDefinitions = soulEssenceEffectCatalog.definitions.filter(
+      definition => definition.runtimeStatus === 'runtime-applied'
+    );
+
+    expect(appliedDefinitions.map(definition => definition.soulEssenceId)).toEqual(
+      APPLIED_SOUL_EFFECT_MATRIX.map(row => row.soulEssenceId)
+    );
+    for (const expected of APPLIED_SOUL_EFFECT_MATRIX) {
+      expect(
+        appliedDefinitions.find(
+          definition => definition.soulEssenceId === expected.soulEssenceId
+        )
+      ).toMatchObject({
+        trigger: {
+          event: expected.event,
+          frameAnchor: expected.frameAnchor,
+          condition: { actionKinds: [expected.actionKind] },
+        },
+        effect: {
+          durationMs: expected.durationMs,
+          stackMode: expected.stackMode,
+          maxStacks: expected.maxStacks,
+          attributeId: expected.attributeId,
+        },
+      });
+    }
+  });
+
+  it.each(APPLIED_SOUL_EFFECT_MATRIX)(
+    'applies, suppresses, stacks or refreshes, and expires soul $soulEssenceId',
+    expected => {
+      const definition = soulEssenceEffectCatalog.definitions.find(
+        entry => entry.soulEssenceId === expected.soulEssenceId
+      );
+      const actorId = `actor-soul-${expected.soulEssenceId}`;
+      const wrongActionKind =
+        expected.actionKind === 'normal-attack'
+          ? 'charged-attack'
+          : 'normal-attack';
+      const actions = [
+        {
+          id: 'allowed-1',
+          actorId,
+          actionKind: expected.actionKind,
+          startMs: 100,
+          durationMs: 400,
+        },
+        {
+          id: 'wrong-kind',
+          actorId,
+          actionKind: wrongActionKind,
+          startMs: 700,
+          durationMs: 300,
+        },
+        {
+          id: 'allowed-2',
+          actorId,
+          actionKind: expected.actionKind,
+          startMs: 1000,
+          durationMs: 400,
+        },
+      ];
+      const scenario = {
+        time: { fps: 60, durationMs: 30_000 },
+        actors: [createSoulMatrixActor({ actorId, definition })],
+        actions,
+      };
+      const actionExecutionPlan = {
+        actions: actions.map(action => ({ actionId: action.id, execute: true })),
+      };
+      const actionResolutionById = new Map(
+        actions.map(action => [
+          action.id,
+          { actionBinding: { actionKind: action.actionKind } },
+        ])
+      );
+      const generation = createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById,
+      });
+      const timeline = createEffectRuntimeTimeline({
+        scenario,
+        actionExecutionPlan,
+        generatedCommands: generation.effectCommands,
+      });
+      const expectedCommandTimes =
+        expected.frameAnchor === 'action-end' ? [500, 1400] : [100, 1000];
+
+      expect(generation.effectCommands.map(command => command.timeMs)).toEqual(
+        expectedCommandTimes
+      );
+      expect(generation.suppressions).toEqual([
+        expect.objectContaining({
+          actionId: 'wrong-kind',
+          reason: 'soulessence-effect-action-kind-condition-not-matched',
+        }),
+      ]);
+      const afterSecondTrigger = resolveActiveEffectsAt(
+        timeline,
+        expectedCommandTimes[1],
+        {
+          targetKind: 'actor',
+          targetId: actorId,
+          calculatorOnly: true,
+        }
+      );
+      expect(afterSecondTrigger).toHaveLength(1);
+      expect(afterSecondTrigger[0]).toMatchObject({
+        stacks: expected.stackMode === 'stack' ? 2 : 1,
+        expiresAtMs: expectedCommandTimes[1] + expected.durationMs,
+      });
+      expect(
+        resolveActiveEffectsAt(
+          timeline,
+          expectedCommandTimes[1] + expected.durationMs - 1,
+          { targetKind: 'actor', targetId: actorId, calculatorOnly: true }
+        )
+      ).toHaveLength(1);
+      expect(
+        resolveActiveEffectsAt(
+          timeline,
+          expectedCommandTimes[1] + expected.durationMs,
+          { targetKind: 'actor', targetId: actorId, calculatorOnly: true }
+        )
+      ).toEqual([]);
+
+      const sameActionBoundary = resolveActiveEffectsAt(
+        timeline,
+        expectedCommandTimes[0],
+        {
+          targetKind: 'actor',
+          targetId: actorId,
+          calculatorOnly: true,
+          settlingActionId: 'allowed-1',
+        }
+      );
+      expect(sameActionBoundary).toHaveLength(
+        expected.event === 'AfterSkill' ? 0 : 1
+      );
+      expect(
+        resolveActiveEffectsAt(timeline, expectedCommandTimes[0], {
+          targetKind: 'actor',
+          targetId: actorId,
+          calculatorOnly: true,
+          settlingActionId: 'following-action',
+        })
+      ).toHaveLength(1);
+    }
+  );
 
   it('uses one generic operator for a synthetic owner and stacks at actual action ends', () => {
     const catalog = createSyntheticCatalog();
@@ -253,6 +488,12 @@ describe('verified soul essence effect generation', () => {
           trace => trace.attributeId === 222 && trace.dynamicExtraRaw === 1120
         )
     ).toBe(true);
+    expect(
+      result.verifiedCombatRuntime.damageEvents
+        .filter(event => event.actionId === 'pangpang-heavy-1')
+        .flatMap(event => event.payload.dynamicPropertyTrace?.source ?? [])
+        .some(trace => trace.attributeId === 222)
+    ).toBe(false);
     const firstToughnessDamage = result.verifiedCombatRuntime.damageEvents
       .filter(event => event.actionId === 'pangpang-heavy-1')
       .reduce((sum, event) => sum + Number(event.payload.toughnessDamage), 0);
@@ -415,5 +656,26 @@ function createSyntheticCatalog() {
         sourceIdentity: 'synthetic:source',
       },
     ],
+  };
+}
+
+function createSoulMatrixActor({ actorId, definition }) {
+  const starValue = definition.effect.valuesByStar[0];
+  return {
+    id: actorId,
+    name: actorId,
+    loadout: {
+      soulessenceId: definition.soulEssenceId,
+      soulessenceStar: starValue.star,
+      soulessenceCultivation: {
+        effectSkill: {
+          skillId: definition.effectSkillId,
+          star: starValue.star,
+          skillLevel: starValue.star,
+          runtimeStatus: 'runtime-applied',
+          sourceIdentity: `fixture:soul:${definition.soulEssenceId}`,
+        },
+      },
+    },
   };
 }

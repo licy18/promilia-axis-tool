@@ -1,5 +1,9 @@
 import generatedQualificationCatalog from '../data/generated/optimization-qualification-catalog.json';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import {
+  deriveOptimizationQualificationStageGate,
+  validateOptimizationQualificationBindingHash,
+} from './optimizationQualificationStageGate';
 
 export const OPTIMIZATION_QUALIFICATION_SCHEMA_VERSION = 1;
 export const OPTIMIZATION_QUALIFICATION_CATALOG_CONTRACT_NAME =
@@ -61,6 +65,65 @@ export function validateOptimizationQualificationCatalog(
   };
   if (hashCanonicalValue(catalog?.admission ?? {}) !== hashCanonicalValue(expectedAdmission)) {
     issues.push('optimization-qualification-catalog-admission-mismatch');
+  }
+  const stageGate = deriveOptimizationQualificationStageGate(catalog);
+  for (const reasonCode of stageGate.reasonCodes) {
+    if (!reasonCode.startsWith('optimization-qualification-object-kind-incomplete:')) {
+      issues.push(reasonCode);
+    }
+  }
+  if (!validateOptimizationQualificationBindingHash(catalog)) {
+    issues.push('optimization-qualification-binding-matrix-hash-mismatch');
+  }
+  const expectedReadyCounts = Object.fromEntries(
+    ['character', 'kibo', 'soul-essence', 'equipment', 'set-skill'].map(kind => [
+      kind,
+      (catalog?.records ?? []).filter(
+        record => record.objectKind === kind && record.optimizationReady === true
+      ).length,
+    ])
+  );
+  if (
+    hashCanonicalValue(catalog?.summary?.optimizationReadyCounts ?? {}) !==
+      hashCanonicalValue(expectedReadyCounts) ||
+    Number(catalog?.summary?.optimizationReadyTotal) !==
+      Object.values(expectedReadyCounts).reduce((sum, value) => sum + value, 0)
+  ) {
+    issues.push('optimization-qualification-ready-counts-mismatch');
+  }
+  const expectedBindingSummary = {
+    actorKiboEdgeCount: stageGate.bindings.actorKibo.total,
+    actorKiboQualifiedEdgeCount: stageGate.bindings.actorKibo.qualified,
+    actorSoulEssenceEdgeCount: stageGate.bindings.actorSoulEssence.total,
+    actorSoulEssenceCompatibleEdgeCount: (
+      catalog?.bindingMatrix?.actorSoulEssence ?? []
+    ).filter(edge => edge.compatible === true).length,
+    actorSoulEssenceQualifiedEdgeCount:
+      stageGate.bindings.actorSoulEssence.qualified,
+    actorEquipmentEdgeCount: stageGate.bindings.actorEquipment.total,
+    actorEquipmentQualifiedEdgeCount:
+      stageGate.bindings.actorEquipment.qualified,
+    setSkillThresholdCount: stageGate.bindings.setSkillThresholds.total,
+    setSkillThresholdQualifiedCount:
+      stageGate.bindings.setSkillThresholds.qualified,
+    equipmentSlotCount: Object.keys(
+      catalog?.bindingMatrix?.equipmentSlots ?? {}
+    ).length,
+  };
+  if (
+    hashCanonicalValue(catalog?.bindingMatrix?.summary ?? {}) !==
+    hashCanonicalValue(expectedBindingSummary)
+  ) {
+    issues.push('optimization-qualification-binding-summary-mismatch');
+  }
+  if (
+    hashCanonicalValue(catalog?.summary?.qualificationStage ?? null) !==
+      hashCanonicalValue(stageGate) ||
+    catalog?.summary?.formalOptimizationUnlocked !==
+      stageGate.formalOptimizationUnlocked ||
+    catalog?.summary?.m12cLocked !== stageGate.m12cLocked
+  ) {
+    issues.push('optimization-qualification-stage-gate-mismatch');
   }
   const bondLevelOne = catalog?.cultivation?.kibo?.bondLevels?.find(
     row => Number(row.level) === 1
@@ -215,7 +278,7 @@ export function resolveOptimizationCultivationProfile(
 
 export function projectResolvedOptimizationCultivationActor(
   resolvedActor,
-  { profileHash = null } = {}
+  { profileHash = null, catalog = generatedQualificationCatalog } = {}
 ) {
   if (!isRecord(resolvedActor)) return null;
   const talentValues = Object.fromEntries(
@@ -236,7 +299,7 @@ export function projectResolvedOptimizationCultivationActor(
       {
         ...structuredClone(resolvedActor.equipment?.[slot]),
         tuningFormula: structuredClone(
-          generatedQualificationCatalog.cultivation.equipment.tuningFormula
+          catalog.cultivation.equipment.tuningFormula
         ),
       },
     ])
@@ -247,7 +310,8 @@ export function projectResolvedOptimizationCultivationActor(
     'character.level',
     'character.starGiftRank',
     'character.starGiftNodeAttributes',
-    'character.ascensionAttributes',
+    'character.completedStarGiftAttributes',
+    'character.levelBreakthroughLegality',
     'kibo.level',
     'kibo.talents',
     'kibo.bondLevel',
@@ -268,9 +332,14 @@ export function projectResolvedOptimizationCultivationActor(
       ? ['character.starGiftNodeSkillLevels']
       : []),
     ...(resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
-      source => source.kind === 'actor-ascension-skill-unlock'
+      source => source.kind === 'actor-level-breakthrough-skill-unlock'
     )
-      ? ['character.ascensionSkillUnlocks']
+      ? ['character.levelBreakthroughSkillUnlocks']
+      : []),
+    ...(resolvedActor.character?.staticSources?.unappliedStaticSources?.some(
+      source => source.kind === 'actor-level-breakthrough-attribute'
+    )
+      ? ['character.levelBreakthroughAttributes']
       : []),
     ...(resolvedActor.soulEssence?.effectSkill &&
     !soulEssenceEffectRuntimeApplied
@@ -311,7 +380,7 @@ export function projectResolvedOptimizationCultivationActor(
       status: 'partially-applied',
       profileHash,
       qualificationCatalogHash:
-        generatedQualificationCatalog.catalogHash,
+        catalog.catalogHash,
       appliedDimensions,
       unresolvedDimensions,
     },
@@ -418,10 +487,10 @@ export function validateOptimizationCultivationProfile(
       issues
     );
     validateRange(
-      actor.character?.ascensionRank,
-      catalog.cultivation.character.ascensionRank,
-      `${basePath}.character.ascensionRank`,
-      'machine-axis-cultivation-ascension-rank-invalid',
+      actor.character?.levelBreakthroughRank,
+      catalog.cultivation.character.levelBreakthroughRank,
+      `${basePath}.character.levelBreakthroughRank`,
+      'machine-axis-cultivation-level-breakthrough-rank-invalid',
       issues
     );
     if (teamSlot && !characterSourceProfile) {
@@ -455,17 +524,49 @@ export function validateOptimizationCultivationProfile(
     }
     if (
       characterSourceProfile &&
-      Number(actor.character?.ascensionRank) >
-        characterSourceProfile.ascensionRanks.length
+      !characterSourceProfile.levelBreakthroughRanks.some(
+        row =>
+          Number(row.rank) ===
+          Number(actor.character?.levelBreakthroughRank)
+      )
     ) {
       issues.push(
         createIssue(
-          'machine-axis-cultivation-ascension-rank-source-missing',
-          `${basePath}.character.ascensionRank`,
+          'machine-axis-cultivation-level-breakthrough-source-missing',
+          `${basePath}.character.levelBreakthroughRank`,
           {
             characterId: Number(teamSlot.characterId),
-            maximum: characterSourceProfile.ascensionRanks.length,
-            actual: actor.character?.ascensionRank,
+            actual: actor.character?.levelBreakthroughRank,
+          }
+        )
+      );
+    }
+    const levelBreakthroughSource =
+      characterSourceProfile?.levelBreakthroughRanks.find(
+        row =>
+          Number(row.rank) ===
+          Number(actor.character?.levelBreakthroughRank)
+      );
+    if (
+      levelBreakthroughSource &&
+      (Number(actor.character?.level) <
+        Number(levelBreakthroughSource.minimumLevel) ||
+        Number(actor.character?.level) >
+          Number(levelBreakthroughSource.levelLimit))
+    ) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-level-breakthrough-combination-invalid',
+          `${basePath}.character.levelBreakthroughRank`,
+          {
+            characterId: Number(teamSlot?.characterId) || null,
+            level: Number(actor.character?.level),
+            levelBreakthroughRank: Number(
+              actor.character?.levelBreakthroughRank
+            ),
+            minimumLevel: Number(levelBreakthroughSource.minimumLevel),
+            maximumLevel: Number(levelBreakthroughSource.levelLimit),
+            sourceIdentity: levelBreakthroughSource.sourceIdentity,
           }
         )
       );
@@ -664,6 +765,7 @@ export function createOptimizationQualificationIssuesForContract(
     );
   }
   if (qualification?.mode !== 'formal') return issues;
+  const catalogValidation = validateOptimizationQualificationCatalog(catalog);
   if (qualification.catalogHash !== catalog.catalogHash) {
     issues.push(
       createIssue(
@@ -683,6 +785,25 @@ export function createOptimizationQualificationIssuesForContract(
         'scenario.cultivationProfile'
       )
     );
+  }
+  const stageGate = deriveOptimizationQualificationStageGate(catalog);
+  if (!catalogValidation.valid || !stageGate.formalOptimizationUnlocked) {
+    issues.push(
+      createIssue(
+        'optimization-qualification-stage-locked',
+        'scenario.optimizationQualification',
+        {
+          formalOptimizationUnlocked: false,
+          m12cLocked: true,
+          catalogIssues: catalogValidation.issues,
+          reasonCodes: stageGate.reasonCodes,
+          denominators: structuredClone(catalog.denominators ?? null),
+          readyCounts: structuredClone(stageGate.counts),
+          bindingSummary: structuredClone(stageGate.bindings),
+        }
+      )
+    );
+    return issues;
   }
   const recordByKey = new Map(
     catalog.records.map(record => [
@@ -720,6 +841,19 @@ export function createOptimizationQualificationIssuesForContract(
         `${basePath}.loadout.kiboId`,
         issues
       );
+      assertQualifiedBinding(
+        catalog.bindingMatrix?.actorKibo,
+        edge =>
+          String(edge.actorObjectId) === characterObjectId &&
+          Number(edge.kiboId) === Number(loadout.kiboId),
+        `${basePath}.loadout.kiboId`,
+        'actor-kibo',
+        issues,
+        {
+          actorObjectId: characterObjectId,
+          kiboId: Number(loadout.kiboId),
+        }
+      );
     }
     if (loadout.soulessenceId == null) {
       issues.push(
@@ -735,6 +869,19 @@ export function createOptimizationQualificationIssuesForContract(
         String(loadout.soulessenceId),
         `${basePath}.loadout.soulessenceId`,
         issues
+      );
+      assertQualifiedBinding(
+        catalog.bindingMatrix?.actorSoulEssence,
+        edge =>
+          String(edge.actorObjectId) === characterObjectId &&
+          Number(edge.soulEssenceId) === Number(loadout.soulessenceId),
+        `${basePath}.loadout.soulessenceId`,
+        'actor-soul-essence',
+        issues,
+        {
+          actorObjectId: characterObjectId,
+          soulEssenceId: Number(loadout.soulessenceId),
+        }
       );
     }
     for (const equipmentSlot of EQUIPMENT_SLOTS) {
@@ -755,8 +902,29 @@ export function createOptimizationQualificationIssuesForContract(
           `${basePath}.loadout.equipment.${equipmentSlot}`,
           issues
         );
+        assertQualifiedBinding(
+          catalog.bindingMatrix?.actorEquipment,
+          edge =>
+            String(edge.actorObjectId) === characterObjectId &&
+            Number(edge.equipmentId) === Number(equipmentId) &&
+            edge.slot === equipmentSlot,
+          `${basePath}.loadout.equipment.${equipmentSlot}`,
+          'actor-equipment',
+          issues,
+          {
+            actorObjectId: characterObjectId,
+            equipmentId: Number(equipmentId),
+            equipmentSlot,
+          }
+        );
       }
     }
+    validateSelectedSetSkills({
+      catalog,
+      loadout,
+      basePath,
+      issues,
+    });
   });
   return issues;
 }
@@ -774,17 +942,19 @@ function findCharacterCultivationSourceProfile(catalog, characterId) {
 function resolveCharacterCultivation(value, sourceProfile) {
   const selectedRank = Number(value.starGiftRank);
   const selectedNodeIds = new Set(value.starGiftNodeIds.map(Number));
-  const selectedRanks = sourceProfile.starGiftRanks.filter(
+  const nodeEligibleRanks = sourceProfile.starGiftRanks.filter(
     row => Number(row.rank) <= selectedRank
   );
-  const starGiftRankSources = selectedRanks.map(row => ({
-    kind: 'star-gift-rank',
-    sourceId: `${sourceProfile.characterId}:${row.rank}`,
-    rank: Number(row.rank),
-    attributes: structuredClone(row.attributes),
-    sourceIdentity: row.sourceIdentity,
-  }));
-  const selectedNodes = selectedRanks.flatMap(row =>
+  const completedStarGiftAttributeSources = sourceProfile.starGiftRanks
+    .filter(row => Number(row.rank) < selectedRank)
+    .map(row => ({
+      kind: 'star-gift-completed-rank',
+      sourceId: `${sourceProfile.characterId}:${row.rank}`,
+      rank: Number(row.rank),
+      attributes: structuredClone(row.attributes),
+      sourceIdentity: row.sourceIdentity,
+    }));
+  const selectedNodes = nodeEligibleRanks.flatMap(row =>
     row.nodes
       .filter(
         node =>
@@ -801,12 +971,23 @@ function resolveCharacterCultivation(value, sourceProfile) {
           .join('|'),
       }))
   );
-  const ascensionSources = sourceProfile.ascensionRanks
-    .filter(row => Number(row.ordinal) <= Number(value.ascensionRank))
+  const levelBreakthroughSources = sourceProfile.levelBreakthroughRanks
+    .filter(row => Number(row.rank) <= Number(value.levelBreakthroughRank))
     .map(row => ({
       ...structuredClone(row),
-      kind: 'actor-ascension',
-      sourceId: `${sourceProfile.characterId}:${row.ordinal}`,
+      kind: 'actor-level-breakthrough',
+      sourceId: `${sourceProfile.characterId}:${row.rank}`,
+    }));
+  const unappliedStaticSources = levelBreakthroughSources
+    .filter(row => row.attributes.length > 0)
+    .map(row => ({
+      kind: 'actor-level-breakthrough-attribute',
+      sourceId: row.sourceId,
+      rank: row.rank,
+      levelLimit: row.levelLimit,
+      attributes: structuredClone(row.attributes),
+      reason: 'actor-level-breakthrough-attribute-runtime-unapplied',
+      sourceIdentity: row.sourceIdentity,
     }));
   const unappliedSkillSources = [
     ...selectedNodes
@@ -821,14 +1002,14 @@ function resolveCharacterCultivation(value, sourceProfile) {
         reason: 'star-gift-node-skill-level-runtime-unapplied',
         sourceIdentity: node.sourceIdentity,
       })),
-    ...ascensionSources
+    ...levelBreakthroughSources
       .filter(row => row.unlockedSkillId)
       .map(row => ({
-        kind: 'actor-ascension-skill-unlock',
+        kind: 'actor-level-breakthrough-skill-unlock',
         sourceId: row.sourceId,
-        ordinal: row.ordinal,
+        rank: row.rank,
         skillId: row.unlockedSkillId,
-        reason: 'actor-ascension-skill-unlock-runtime-unapplied',
+        reason: 'actor-level-breakthrough-skill-unlock-runtime-unapplied',
         sourceIdentity: row.sourceIdentity,
       })),
   ];
@@ -839,7 +1020,9 @@ function resolveCharacterCultivation(value, sourceProfile) {
       schemaVersion: 1,
       contractName: 'AzPrOptimizationCharacterStaticSources',
       characterId: Number(sourceProfile.characterId),
-      starGiftRankSources,
+      levelTemplatePrecision: 'panel-round-after-source-sum',
+      completedStarGiftAttributeRank: Math.max(0, selectedRank - 1),
+      completedStarGiftAttributeSources,
       starGiftNodeSources: selectedNodes.map(node => ({
         kind: node.kind,
         sourceId: node.sourceId,
@@ -848,15 +1031,29 @@ function resolveCharacterCultivation(value, sourceProfile) {
         attributes: structuredClone(node.attributes),
         sourceIdentity: node.sourceIdentity,
       })),
-      ascensionSources: ascensionSources.map(row => ({
+      levelBreakthroughSelection: levelBreakthroughSources
+        .filter(
+          row => Number(row.rank) === Number(value.levelBreakthroughRank)
+        )
+        .map(row => ({
+          kind: row.kind,
+          sourceId: row.sourceId,
+          rank: row.rank,
+          minimumLevel: row.minimumLevel,
+          levelLimit: row.levelLimit,
+          runtimeApplicationStatus: row.runtimeApplicationStatus,
+          sourceIdentity: row.sourceIdentity,
+        }))[0],
+      levelBreakthroughSources: levelBreakthroughSources.map(row => ({
         kind: row.kind,
         sourceId: row.sourceId,
-        ordinal: row.ordinal,
-        sourceRank: row.sourceRank,
+        rank: row.rank,
+        minimumLevel: row.minimumLevel,
         levelLimit: row.levelLimit,
-        attributes: structuredClone(row.attributes),
+        runtimeApplicationStatus: row.runtimeApplicationStatus,
         sourceIdentity: row.sourceIdentity,
       })),
+      unappliedStaticSources,
       unappliedSkillSources,
     },
   };
@@ -1060,6 +1257,61 @@ function assertQualifiedRecord(recordByKey, kind, id, path, issues) {
         blockerCodes: record.blockerCodes,
       })
     );
+  }
+}
+
+function assertQualifiedBinding(
+  rows,
+  predicate,
+  path,
+  bindingKind,
+  issues,
+  details
+) {
+  const edge = (rows ?? []).find(predicate);
+  if (!edge || edge.compatible === false || edge.qualificationReady !== true) {
+    issues.push(
+      createIssue('machine-axis-optimization-binding-not-qualified', path, {
+        bindingKind,
+        ...details,
+        compatible: edge?.compatible ?? null,
+        qualificationReady: edge?.qualificationReady ?? false,
+        reason: edge?.reason ?? 'binding-edge-missing',
+      })
+    );
+  }
+}
+
+function validateSelectedSetSkills({ catalog, loadout, basePath, issues }) {
+  const equipmentProfiles = new Map(
+    (catalog.cultivation?.equipment?.profiles ?? []).map(profile => [
+      Number(profile.equipmentId),
+      profile,
+    ])
+  );
+  const pieceCountBySetId = new Map();
+  for (const equipmentId of Object.values(loadout.equipment ?? {})) {
+    const setId = Number(equipmentProfiles.get(Number(equipmentId))?.setId);
+    if (!Number.isInteger(setId) || setId <= 0) continue;
+    pieceCountBySetId.set(setId, Number(pieceCountBySetId.get(setId) ?? 0) + 1);
+  }
+  for (const [setId, count] of pieceCountBySetId) {
+    for (const edge of catalog.bindingMatrix?.setSkillThresholds ?? []) {
+      if (Number(edge.setId) !== setId || Number(edge.pieces) > count) continue;
+      if (edge.qualificationReady === true) continue;
+      issues.push(
+        createIssue(
+          'machine-axis-optimization-set-skill-not-qualified',
+          `${basePath}.loadout.equipment`,
+          {
+            setId,
+            equippedPieces: count,
+            requiredPieces: Number(edge.pieces),
+            skillId: Number(edge.skillId) || null,
+          }
+        )
+      );
+    }
   }
 }
 

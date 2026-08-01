@@ -1369,6 +1369,7 @@ function resolveRuntimeAttribute({
   attributeId,
   baseRaw,
   propertyTags = [],
+  settlingActionId = null,
 }) {
   const normalizedAttributeId = Number(attributeId);
   if (!Number.isInteger(normalizedAttributeId)) {
@@ -1388,6 +1389,7 @@ function resolveRuntimeAttribute({
     targetKind,
     targetId,
     calculatorOnly: true,
+    settlingActionId,
   });
   const modifiers = activeEffects.flatMap(effect =>
     (effect.modifiers ?? [])
@@ -1505,6 +1507,7 @@ function resolveActorRuntimeAttribute({
   timeMs,
   attributeId,
   fallbackRaw = null,
+  settlingActionId = null,
 }) {
   return resolveRuntimeAttribute({
     state,
@@ -1514,6 +1517,7 @@ function resolveActorRuntimeAttribute({
     attributeId,
     baseRaw:
       actorState?.attributesById?.get(Number(attributeId)) ?? fallbackRaw,
+    settlingActionId,
   });
 }
 
@@ -1527,6 +1531,7 @@ function resolveKiboRuntimeRatio({
   timeMs,
   attributeId,
   fallbackRaw = null,
+  settlingActionId = null,
 }) {
   return basisPoints(
     resolveRuntimeAttribute({
@@ -1537,6 +1542,7 @@ function resolveKiboRuntimeRatio({
       attributeId,
       baseRaw:
         kiboState?.attributesById?.get(Number(attributeId)) ?? fallbackRaw,
+      settlingActionId,
     }).value
   );
 }
@@ -1566,6 +1572,7 @@ function resolveKiboRatioAttribute({
     baseRaw:
       kiboState?.attributesById?.get(Number(attributeId)) ??
       fallbackBasisPoints,
+    settlingActionId: action.id,
   });
 }
 
@@ -3597,6 +3604,7 @@ function resolveWeaknessSkillDamageUp({
           timeMs,
           attributeId,
           baseRaw: kiboState?.attributesById?.get(attributeId) ?? 0,
+          settlingActionId: action?.id,
         })
       : resolveActorRuntimeAttribute({
           state,
@@ -3604,6 +3612,7 @@ function resolveWeaknessSkillDamageUp({
           timeMs,
           attributeId,
           fallbackRaw: getAttribute(action?.actor, attributeKey) ?? 0,
+          settlingActionId: action?.id,
         });
   if (!attributeResult.ready) {
     return {
@@ -3643,6 +3652,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
       attributeId: 1,
       baseRaw:
         kiboState?.attributesById?.get(1) ?? numberOrNull(profile?.attack),
+      settlingActionId: action.id,
     });
     const attack = numberOrNull(attackResult.value);
     const criticalRateResult = resolveKiboRatioAttribute({
@@ -3721,6 +3731,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
       timeMs,
       attributeId: 229,
       baseRaw: kiboState?.attributesById?.get(229) ?? 0,
+      settlingActionId: action.id,
     });
     return {
       ready: attack != null,
@@ -3763,6 +3774,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 1,
     fallbackRaw: actor?.stats?.attack,
+    settlingActionId: action.id,
   });
   const criticalRateResult = resolveActorRuntimeAttribute({
     state,
@@ -3770,6 +3782,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 7,
     fallbackRaw: ratioToRaw(actor?.stats?.critRate, 0),
+    settlingActionId: action.id,
   });
   const criticalDamageResult = resolveActorRuntimeAttribute({
     state,
@@ -3777,6 +3790,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 8,
     fallbackRaw: ratioToRaw(actor?.stats?.critDamage, 10000),
+    settlingActionId: action.id,
   });
   const damageUpResult = resolveActorRuntimeAttribute({
     state,
@@ -3784,6 +3798,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 21,
     fallbackRaw: ratioToRaw(actor?.stats?.damageAmplification, 0),
+    settlingActionId: action.id,
   });
   const physicalDamageUpResult = resolveActorRuntimeAttribute({
     state,
@@ -3791,6 +3806,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 25,
     fallbackRaw: getAttribute(actor, 'PHYSICAL_SHOOTDMGUP'),
+    settlingActionId: action.id,
   });
   const magicDamageUpResult = resolveActorRuntimeAttribute({
     state,
@@ -3798,6 +3814,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 27,
     fallbackRaw: getAttribute(actor, 'MAGIC_SHOOTDMGDUP'),
+    settlingActionId: action.id,
   });
   const elementDamageUpResult = resolveActorRuntimeAttribute({
     state,
@@ -3807,6 +3824,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
       ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[Number(hit?.damage?.elementalType)],
     fallbackRaw:
       resolveActorElementDamageUp(actor, hit?.damage?.elementalType) * 10000,
+    settlingActionId: action.id,
   });
   const physicalPenetrationResult = resolveActorRuntimeAttribute({
     state,
@@ -3814,6 +3832,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 29,
     fallbackRaw: getAttribute(actor, 'PERPIERCING') ?? 0,
+    settlingActionId: action.id,
   });
   const magicPenetrationResult = resolveActorRuntimeAttribute({
     state,
@@ -3821,6 +3840,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 30,
     fallbackRaw: getAttribute(actor, 'PERMPIERCING') ?? 0,
+    settlingActionId: action.id,
   });
   const masteryResult = resolveActorRuntimeAttribute({
     state,
@@ -3828,6 +3848,7 @@ function resolveHitSource({ action, resolution, hit, state, timeMs }) {
     timeMs,
     attributeId: 229,
     fallbackRaw: getAttribute(actor, 'MASTERY') ?? 0,
+    settlingActionId: action.id,
   });
   const attack = numberOrNull(attackResult.value);
   return {

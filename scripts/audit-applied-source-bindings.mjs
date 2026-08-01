@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
@@ -88,10 +88,9 @@ try {
     boundDrift.length === 0 &&
     unexplainedCompatibleUnbound.length === 0 &&
     missingTracks.length === 0;
-  const report = {
+  const reportBody = {
     schemaVersion: 1,
     kind: 'applied-source-binding-audit',
-    generatedAt: new Date().toISOString(),
     decision: {
       status: passed ? 'passed' : 'blocked',
       passed,
@@ -112,13 +111,43 @@ try {
     missingTracks,
     deltas,
   };
+  const previousReport = await readJsonIfExists(outputPath);
+  const semanticUnchanged = reportsHaveSameSemanticContent(
+    previousReport,
+    reportBody
+  );
+  const report = {
+    schemaVersion: reportBody.schemaVersion,
+    kind: reportBody.kind,
+    generatedAt:
+      semanticUnchanged && previousReport?.generatedAt
+        ? previousReport.generatedAt
+        : new Date().toISOString(),
+    decision: reportBody.decision,
+    summary: reportBody.summary,
+    requiredTracks: reportBody.requiredTracks,
+    missingTracks: reportBody.missingTracks,
+    deltas: reportBody.deltas,
+  };
+  const serializedReport = `${JSON.stringify(report, null, 2)}\n`;
 
-  await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+  if (!assertClean) {
+    await mkdir(path.dirname(outputPath), { recursive: true });
+    if ((await readTextIfExists(outputPath)) !== serializedReport) {
+      await writeFile(outputPath, serializedReport, 'utf8');
+    }
+  }
   process.stdout.write(
     `${report.decision.status}: ${deltas.length} applied deltas, ${boundDrift.length} drift, ${compatibleUnbound.length} compatible unbound\n`
   );
-  if (assertClean && !passed) process.exitCode = 1;
+  if (assertClean && (!passed || !semanticUnchanged)) {
+    if (!semanticUnchanged) {
+      process.stderr.write(
+        `stale: ${path.relative(repositoryRoot, outputPath)} differs from the deterministic audit result\n`
+      );
+    }
+    process.exitCode = 1;
+  }
 } finally {
   await vite.close();
 }
@@ -147,4 +176,29 @@ function createAuditDraft(drafts, fixtures) {
 function readArgument(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : null;
+}
+
+async function readJsonIfExists(filePath) {
+  const text = await readTextIfExists(filePath);
+  if (text == null) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+async function readTextIfExists(filePath) {
+  try {
+    return await readFile(filePath, 'utf8');
+  } catch (error) {
+    if (error?.code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
+function reportsHaveSameSemanticContent(previousReport, nextReportBody) {
+  if (!previousReport || typeof previousReport !== 'object') return false;
+  const { generatedAt: _generatedAt, ...previousBody } = previousReport;
+  return JSON.stringify(previousBody) === JSON.stringify(nextReportBody);
 }

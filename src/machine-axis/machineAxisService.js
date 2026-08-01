@@ -53,6 +53,7 @@ export function createMachineAxisService({
   core = DEFAULT_HEADLESS_COMBAT_CORE,
   gameData = getWorkbenchGameData(),
   kiboActionCatalog = DEFAULT_KIBO_ACTION_CATALOG,
+  optimizationQualificationCatalog = getOptimizationQualificationCatalog(),
 } = {}) {
   const projectedKiboCatalog =
     kiboActionCatalog === DEFAULT_KIBO_ACTION_CATALOG
@@ -109,7 +110,9 @@ export function createMachineAxisService({
       publicActions,
       kibos,
       enemies: coreCatalog.enemies,
-      optimizationQualification: createOptimizationQualificationCatalogProjection(),
+      optimizationQualification: createOptimizationQualificationCatalogProjection(
+        optimizationQualificationCatalog
+      ),
       summary: {
         characterCount: coreCatalog.summary.characterCount,
         publicActionCount: publicActions.length,
@@ -361,6 +364,14 @@ export function createMachineAxisService({
     }
     const results = selectTopN(teamResults, normalizedOptions.topN);
     if (results.length === 0) {
+      const qualificationStageIssues = teamFailures.flatMap(failure =>
+        (failure.issues ?? []).filter(
+          issue => issue.code === 'optimization-qualification-stage-locked'
+        )
+      );
+      if (qualificationStageIssues.length > 0) {
+        throw new MachineAxisValidationError(qualificationStageIssues);
+      }
       throw new MachineAxisValidationError([
         createMachineAxisDiagnostic(
           'machine-axis-search-no-solution',
@@ -438,7 +449,11 @@ export function createMachineAxisService({
     }
     issues.push(...validateSourceDataIdentity(contract));
     issues.push(...validateScenarioCatalogReferences(contract, gameData));
-    issues.push(...createOptimizationQualificationIssuesForContract(contract));
+    issues.push(
+      ...createOptimizationQualificationIssuesForContract(contract, {
+        catalog: optimizationQualificationCatalog,
+      })
+    );
     const teamBySlot = new Map(
       contract.scenario.team.map((slot, position) => [
         slot.slotId,
@@ -496,7 +511,10 @@ export function createMachineAxisService({
     const cultivationResolution = contract.scenario.cultivationProfile
       ? resolveOptimizationCultivationProfile(
           contract.scenario.cultivationProfile,
-          { team: contract.scenario.team }
+          {
+            team: contract.scenario.team,
+            catalog: optimizationQualificationCatalog,
+          }
         )
       : null;
     const cultivationBySlot = new Map(
@@ -504,6 +522,7 @@ export function createMachineAxisService({
         actor.slotId,
         projectResolvedOptimizationCultivationActor(actor, {
           profileHash: cultivationResolution.profileHash,
+          catalog: optimizationQualificationCatalog,
         }),
       ])
     );
@@ -1711,8 +1730,7 @@ function validateScenarioCatalogReferences(contract, gameData) {
   return issues;
 }
 
-function createOptimizationQualificationCatalogProjection() {
-  const catalog = getOptimizationQualificationCatalog();
+function createOptimizationQualificationCatalogProjection(catalog) {
   return {
     schemaVersion: catalog.schemaVersion,
     contractName: catalog.contractName,

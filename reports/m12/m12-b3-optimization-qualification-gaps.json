@@ -36,11 +36,11 @@
       ]
     },
     {
-      "capabilityIdentity": "b3-character-star-gift-node-and-ascension-static-projection",
+      "capabilityIdentity": "b3-character-star-gift-and-level-breakthrough-projection",
       "status": "implemented",
       "evidence": [
         "NewTable/talent_rank|NewTable/talent_rune",
-        "NewTable/hero_rank",
+        "NewTable/hero_rank.rankLevelLimit|attribute|skill",
         "src/simulation/mechanics/verifiedCombatStaticProperties.js"
       ]
     },
@@ -118,12 +118,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=101010]"
       ],
       "details": {},
-      "gapHash": "3793f27d4dc6f22d"
+      "gapHash": "56976c631c477664"
     },
     {
       "gapIdentity": "character:102001:character-acceptance-not-published",
@@ -160,12 +160,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=102001]"
       ],
       "details": {},
-      "gapHash": "8b0cee09467fb342"
+      "gapHash": "eaf89d9ecd8720f9"
     },
     {
       "gapIdentity": "character:103002:character-not-optimization-ready",
@@ -188,12 +188,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=103002]"
       ],
       "details": {},
-      "gapHash": "1881d6abddf7c7c6"
+      "gapHash": "20b5e9d413a34061"
     },
     {
       "gapIdentity": "character:107001:character-acceptance-not-published",
@@ -230,12 +230,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=107001]"
       ],
       "details": {},
-      "gapHash": "75353fb90effc539"
+      "gapHash": "99b78cdc683cad54"
     },
     {
       "gapIdentity": "character:107002:character-acceptance-not-published",
@@ -272,12 +272,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=107002]"
       ],
       "details": {},
-      "gapHash": "8f54a1fd53b9ea5a"
+      "gapHash": "3a082770c58a5785"
     },
     {
       "gapIdentity": "character:108001:character-acceptance-not-published",
@@ -314,12 +314,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=108001]"
       ],
       "details": {},
-      "gapHash": "9bccf5eb7cb5401c"
+      "gapHash": "ffb70c7988af46af"
     },
     {
       "gapIdentity": "character:108003:character-acceptance-not-published",
@@ -356,12 +356,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=108003]"
       ],
       "details": {},
-      "gapHash": "4cc562964833621a"
+      "gapHash": "073197faff888e59"
     },
     {
       "gapIdentity": "character:109001:character-acceptance-not-published",
@@ -398,12 +398,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=109001]"
       ],
       "details": {},
-      "gapHash": "25b1d36ba4ba514f"
+      "gapHash": "fd1c96d40417cbbe"
     },
     {
       "gapIdentity": "character:111001:character-acceptance-not-published",
@@ -440,12 +440,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=111001]"
       ],
       "details": {},
-      "gapHash": "f9493852b6f094ce"
+      "gapHash": "857541eec46e3579"
     },
     {
       "gapIdentity": "character:112001:character-acceptance-not-published",
@@ -482,12 +482,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=112001]"
       ],
       "details": {},
-      "gapHash": "750cbc1decb2bea3"
+      "gapHash": "15f6d716b1ee340e"
     },
     {
       "gapIdentity": "character:STARBORN:actor-static-profile-missing",
@@ -541,13 +541,13 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
+      "message": "Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.",
       "sourceIdentities": [
         "generated/characters.json#items[id=199001]",
         "generated/characters.json#items[id=199002]"
       ],
       "details": {},
-      "gapHash": "e0d594a9682b6a06"
+      "gapHash": "3b1596a3674421f9"
     },
     {
       "gapIdentity": "equipment:1010111:strict-equipment-cultivation-runtime-partial",
@@ -11578,5 +11578,5 @@
       "soul-essence": 170
     }
   },
-  "ledgerHash": "1d42563740f73b0e"
+  "ledgerHash": "f31dfaa6bed204c3"
 }

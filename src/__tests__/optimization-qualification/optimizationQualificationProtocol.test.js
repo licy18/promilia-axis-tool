@@ -2,16 +2,20 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import characterAttributePanels from '../../data/generated/character-attribute-panels.json';
 import equipmentCatalog from '../../data/generated/equipment.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
 import {
+  createOptimizationQualificationIssuesForContract,
   resolveOptimizationCultivationProfile,
   validateOptimizationCultivationProfile,
   validateOptimizationQualificationCatalog,
 } from '../../optimization-qualification/optimizationQualificationProtocol';
+import { deriveOptimizationQualificationStageGate } from '../../optimization-qualification/optimizationQualificationStageGate';
+import { hashCanonicalValue } from '../../simulation/headless/canonicalSerialization';
 import { createOptimizationQualificationArtifacts } from '../../../scripts/optimization-qualification/optimization-qualification-generation.mjs';
 
 const projectRoot = path.resolve(
@@ -24,7 +28,7 @@ function createCultivationProfile({
   bondLevel = 1,
   actorLevel = 80,
   starGiftRank = 7,
-  ascensionRank = 6,
+  levelBreakthroughRank = 3,
   dnaFactors = [],
   soulEssenceLevel = 80,
   soulEssenceRank = 6,
@@ -54,7 +58,7 @@ function createCultivationProfile({
           level: actorLevel,
           starGiftRank,
           starGiftNodeIds: selectedNodeIds,
-          ascensionRank,
+          levelBreakthroughRank,
         },
       kibo: {
         level: 80,
@@ -443,6 +447,31 @@ describe('M12-B3 strict cultivation profile', () => {
     );
   });
 
+  it('requires the unambiguous level-breakthrough field at the public schema boundary', () => {
+    const axis = createAxis();
+    const character = axis.scenario.cultivationProfile.actors[0].character;
+    character.ascensionRank = character.levelBreakthroughRank;
+    delete character.levelBreakthroughRank;
+
+    const prepared = createMachineAxisService().prepare(axis);
+
+    expect(prepared.valid).toBe(false);
+    expect(prepared.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-schema-required',
+          path:
+            'scenario.cultivationProfile.actors.0.character.levelBreakthroughRank',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-schema-additional-property',
+          path:
+            'scenario.cultivationProfile.actors.0.character.ascensionRank',
+        }),
+      ])
+    );
+  });
+
   it('rejects a star-gift node that does not belong to the selected character rank', () => {
     const profile = createCultivationProfile();
     profile.actors[0].character.starGiftNodeIds = [999999];
@@ -503,7 +532,7 @@ describe('M12-B3 strict cultivation profile', () => {
     ).not.toContain('kibo.dnaFactorRuntime');
   });
 
-  it('projects the supported cultivation dimensions into the authoritative static compiler', () => {
+  it('projects only completed star-gift attributes into the authoritative static compiler', () => {
     const service = createMachineAxisService();
     const compilation = service.compile(createAxis());
     const actorConfig = compilation.project.metadata.actorConfigs[0];
@@ -543,7 +572,8 @@ describe('M12-B3 strict cultivation profile', () => {
           'character.level',
           'character.starGiftRank',
           'character.starGiftNodeAttributes',
-          'character.ascensionAttributes',
+          'character.completedStarGiftAttributes',
+          'character.levelBreakthroughLegality',
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
@@ -557,7 +587,8 @@ describe('M12-B3 strict cultivation profile', () => {
         ]),
         unresolvedDimensions: expect.arrayContaining([
           'character.starGiftNodeSkillLevels',
-          'character.ascensionSkillUnlocks',
+          'character.levelBreakthroughAttributes',
+          'character.levelBreakthroughSkillUnlocks',
           'equipment.instanceTier',
         ]),
       },
@@ -567,9 +598,8 @@ describe('M12-B3 strict cultivation profile', () => {
     ).not.toContain('kibo.dnaFactorRuntime');
     expect(actor.verifiedStaticProperties.sources.map(source => source.kind)).toEqual(
       expect.arrayContaining([
-        'star-gift-rank',
+        'star-gift-completed-rank',
         'star-gift-node',
-        'actor-ascension',
         'soulessence-level',
         'soulessence-rank',
         'equipment-main',
@@ -604,7 +634,7 @@ describe('M12-B3 strict cultivation profile', () => {
     ).toBeUndefined();
   });
 
-  it('applies selected current-rank nodes and ascension attributes without folding in unselected nodes', () => {
+  it('applies current-rank nodes but only completed prior-rank attributes', () => {
     const service = createMachineAxisService();
     const fullProfile = createCultivationProfile();
     const currentNodes = fullProfile.actors[0].character.starGiftNodeIds;
@@ -613,10 +643,10 @@ describe('M12-B3 strict cultivation profile', () => {
         101010: currentNodes.slice(0, -1),
       },
     });
-    const noAscension = createCultivationProfile({ ascensionRank: 0 });
+    const previousRank = createCultivationProfile({ starGiftRank: 6 });
     const full = service.compile(createAxis({ profile: fullProfile }));
     const partial = service.compile(createAxis({ profile: withoutOneNode }));
-    const base = service.compile(createAxis({ profile: noAscension }));
+    const base = service.compile(createAxis({ profile: previousRank }));
     const fullActor = full.canonicalCompilation.scenario.actors.find(
       entry => entry.characterId === 101010
     );
@@ -637,14 +667,21 @@ describe('M12-B3 strict cultivation profile', () => {
         source => source.kind === 'star-gift-node'
       )
     ).toHaveLength(34);
-    expect(
-      fullActor.verifiedStaticProperties.sources.filter(
-        source => source.kind === 'actor-ascension'
-      )
-    ).toHaveLength(6);
+    const completedRankSources = fullActor.verifiedStaticProperties.sources.filter(
+      source => source.kind === 'star-gift-completed-rank'
+    );
+    expect(completedRankSources).toHaveLength(6);
+    expect(completedRankSources.map(source => source.sourceId)).not.toContain(
+      '101010:7'
+    );
     expect(
       baseActor.verifiedStaticProperties.sources.filter(
-        source => source.kind === 'actor-ascension'
+        source => source.kind === 'star-gift-completed-rank'
+      )
+    ).toHaveLength(5);
+    expect(
+      fullActor.verifiedStaticProperties.sources.filter(
+        source => source.kind === 'actor-level-breakthrough'
       )
     ).toHaveLength(0);
     expect(fullActor.stats).not.toEqual(partialActor.stats);
@@ -654,6 +691,107 @@ describe('M12-B3 strict cultivation profile', () => {
     );
     expect(full.hashes.input).not.toBe(partial.hashes.input);
     expect(full.hashes.input).not.toBe(base.hashes.input);
+  });
+
+  it('matches the verified level-80 rank-7 Xiaoyu naked panel without the rank-7 attribute row', () => {
+    const profile = createCultivationProfile({
+      actorLevel: 80,
+      starGiftRank: 7,
+      levelBreakthroughRank: 3,
+    });
+    const compilation = createMachineAxisService().compile(
+      createAxis({ profile })
+    );
+    const actor = compilation.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+    const panel = characterAttributePanels.items.find(
+      entry => entry.characterId === 101010
+    );
+    const nakedKinds = new Set([
+      'actor-level-template',
+      'star-gift-completed-rank',
+      'star-gift-node',
+    ]);
+    const sourceTotals = new Map();
+    for (const source of actor.verifiedStaticProperties.sources) {
+      if (!nakedKinds.has(source.kind)) continue;
+      for (const attribute of source.attributes) {
+        sourceTotals.set(
+          Number(attribute.id),
+          Number(sourceTotals.get(Number(attribute.id)) ?? 0) +
+            Number(attribute.value)
+        );
+      }
+    }
+
+    expect(panel).toMatchObject({
+      level: 80,
+      currentRank: 7,
+      rankBonusIncludedThrough: 6,
+    });
+    expect(sourceTotals.get(1)).toBeCloseTo(panel.core.attack.formulaRaw, 6);
+    expect(sourceTotals.get(3)).toBeCloseTo(
+      panel.core.physicalDefense.formulaRaw,
+      6
+    );
+    expect(sourceTotals.get(4)).toBeCloseTo(
+      panel.core.magicalDefense.formulaRaw,
+      6
+    );
+    expect(sourceTotals.get(5)).toBeCloseTo(panel.core.maxHp.formulaRaw, 6);
+    expect(sourceTotals.get(229)).toBeCloseTo(
+      panel.core.tuningStrength.formulaRaw,
+      6
+    );
+    expect(
+      actor.verifiedStaticProperties.unapplied.filter(
+        source => source.kind === 'actor-level-breakthrough-attribute'
+      )
+    ).toHaveLength(4);
+    expect(
+      actor.verifiedStaticKiboProperties.sources.find(
+        source => source.kind === 'kibo-actor-intimacy-inheritance'
+      ).sourceIdentity
+    ).toContain(actor.verifiedStaticProperties.sourceIdentity);
+  });
+
+  it('rejects level and level-breakthrough combinations outside the client rank caps', () => {
+    const team = createAxis().scenario.team;
+    const invalidBeforeBreak = createCultivationProfile({
+      actorLevel: 80,
+      levelBreakthroughRank: 0,
+    });
+    const invalidPastCap = createCultivationProfile({
+      actorLevel: 81,
+      levelBreakthroughRank: 3,
+    });
+    const legalAtCap = createCultivationProfile({
+      actorLevel: 80,
+      levelBreakthroughRank: 3,
+    });
+    const legalAfterBreak = createCultivationProfile({
+      actorLevel: 80,
+      levelBreakthroughRank: 4,
+    });
+
+    for (const invalid of [invalidBeforeBreak, invalidPastCap]) {
+      expect(
+        validateOptimizationCultivationProfile(invalid, { team }).issues
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'machine-axis-cultivation-level-breakthrough-combination-invalid',
+          }),
+        ])
+      );
+    }
+    expect(
+      validateOptimizationCultivationProfile(legalAtCap, { team }).valid
+    ).toBe(true);
+    expect(
+      validateOptimizationCultivationProfile(legalAfterBreak, { team }).valid
+    ).toBe(true);
   });
 
   it('changes static actor and inherited Kibo values with a fixed tuning score', () => {
@@ -699,7 +837,7 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(replay.hashes).toEqual(imported.canonicalRun.hashes);
   });
 
-  it('hard rejects every currently unqualified object in formal mode', () => {
+  it('locks formal optimization at the complete denominator and binding stage', () => {
     const service = createMachineAxisService();
     const prepared = service.prepare(createAxis({ mode: 'formal' }));
 
@@ -707,18 +845,102 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(prepared.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'machine-axis-optimization-object-not-qualified',
-          objectKind: 'character',
-          objectId: '101010',
-        }),
-        expect.objectContaining({
-          code: 'machine-axis-optimization-object-not-qualified',
-          objectKind: 'kibo',
-          objectId: '500001',
+          code: 'optimization-qualification-stage-locked',
+          formalOptimizationUnlocked: false,
         }),
       ])
     );
     expect(prepared.project).toBeNull();
+  });
+
+  it('derives formal unlock from complete records, admissions, sets, bindings, counts, and hashes', async () => {
+    const fullyQualified = createFullyQualifiedCatalog();
+    expect(validateOptimizationQualificationCatalog(fullyQualified)).toEqual({
+      valid: true,
+      issues: [],
+    });
+    expect(fullyQualified.summary).toMatchObject({
+      formalOptimizationUnlocked: true,
+      m12cLocked: false,
+    });
+
+    const formalContract = createFormalAxisForCatalog(fullyQualified);
+    expect(
+      createOptimizationQualificationIssuesForContract(formalContract, {
+        catalog: fullyQualified,
+      })
+    ).toEqual([]);
+
+    for (const mutate of [
+      catalog => {
+        const record = catalog.records.find(
+          entry => entry.objectKind === 'set-skill'
+        );
+        record.optimizationReady = false;
+        record.maturityState = 'runtime-integrated';
+        record.blockerCodes = ['synthetic-set-skill-gap'];
+      },
+      catalog => {
+        catalog.bindingMatrix.actorKibo[0].qualificationReady = false;
+      },
+      catalog => {
+        catalog.denominators.equipment -= 1;
+      },
+      catalog => {
+        catalog.bindingMatrixHash = 'stale-binding-hash';
+      },
+    ]) {
+      const partial = createFullyQualifiedCatalog({ mutate });
+      const contract = createFormalAxisForCatalog(partial);
+      expect(
+        createOptimizationQualificationIssuesForContract(contract, {
+          catalog: partial,
+        })
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'optimization-qualification-stage-locked',
+          }),
+        ])
+      );
+    }
+
+    const selectedObjectsGreenButSetLocked = createFullyQualifiedCatalog({
+      mutate: catalog => {
+        const record = catalog.records.find(
+          entry => entry.objectKind === 'set-skill'
+        );
+        record.optimizationReady = false;
+        record.maturityState = 'runtime-integrated';
+        record.blockerCodes = ['synthetic-set-skill-gap'];
+      },
+    });
+    const lockedAxis = createFormalAxisForCatalog(
+      selectedObjectsGreenButSetLocked
+    );
+    const service = createMachineAxisService({
+      optimizationQualificationCatalog: selectedObjectsGreenButSetLocked,
+    });
+    const expectedStageLock = expect.objectContaining({
+      code: 'optimization-qualification-stage-locked',
+    });
+
+    expect(service.prepare(lockedAxis).issues).toEqual(
+      expect.arrayContaining([expectedStageLock])
+    );
+    expect(service.validate(lockedAxis).issues).toEqual(
+      expect.arrayContaining([expectedStageLock])
+    );
+    expect(() => service.compile(lockedAxis)).toThrowError(
+      expect.objectContaining({
+        issues: expect.arrayContaining([expectedStageLock]),
+      })
+    );
+    await expect(
+      service.search({ contract: lockedAxis, options: { maxDepth: 1 } })
+    ).rejects.toMatchObject({
+      issues: expect.arrayContaining([expectedStageLock]),
+    });
   });
 
   it('keeps duplicate Kibo species legal across different actor slots', () => {
@@ -734,3 +956,130 @@ describe('M12-B3 strict cultivation profile', () => {
     ).toBe(true);
   });
 });
+
+function createFullyQualifiedCatalog({ mutate } = {}) {
+  const catalog = structuredClone(qualificationCatalog);
+  for (const record of catalog.records) {
+    record.maturityState = 'optimization-ready';
+    record.optimizationReady = true;
+    record.blockerCodes = [];
+  }
+  catalog.admission = {
+    characters: catalog.records
+      .filter(record => record.objectKind === 'character')
+      .map(record => record.objectId),
+    kibos: catalog.records
+      .filter(record => record.objectKind === 'kibo')
+      .map(record => Number(record.objectId)),
+    soulEssences: catalog.records
+      .filter(record => record.objectKind === 'soul-essence')
+      .map(record => Number(record.objectId)),
+    equipment: catalog.records
+      .filter(record => record.objectKind === 'equipment')
+      .map(record => Number(record.objectId)),
+    setSkills: catalog.records
+      .filter(record => record.objectKind === 'set-skill')
+      .map(record => record.objectId),
+  };
+  for (const edge of catalog.bindingMatrix?.actorKibo ?? []) {
+    edge.qualificationReady = true;
+  }
+  for (const edge of catalog.bindingMatrix?.actorSoulEssence ?? []) {
+    edge.qualificationReady = edge.compatible === true;
+  }
+  for (const edge of catalog.bindingMatrix?.actorEquipment ?? []) {
+    edge.qualificationReady = edge.compatible === true;
+  }
+  for (const edge of catalog.bindingMatrix?.setSkillThresholds ?? []) {
+    edge.qualificationReady = true;
+  }
+  mutate?.(catalog);
+  finalizeSyntheticQualificationCatalog(catalog);
+  return catalog;
+}
+
+function createFormalAxisForCatalog(catalog) {
+  const axis = createAxis({ mode: 'formal' });
+  axis.scenario.optimizationQualification.catalogHash = catalog.catalogHash;
+  for (const slot of axis.scenario.team) {
+    const actorObjectId = String(slot.characterId);
+    const compatibleSoul = catalog.bindingMatrix.actorSoulEssence.find(
+      edge =>
+        String(edge.actorObjectId) === actorObjectId &&
+        edge.compatible === true &&
+        edge.qualificationReady === true
+    );
+    if (compatibleSoul) {
+      slot.loadout.soulessenceId = Number(compatibleSoul.soulEssenceId);
+    }
+  }
+  return axis;
+}
+
+function finalizeSyntheticQualificationCatalog(catalog) {
+  const readyByKind = kind =>
+    catalog.records.filter(
+      record => record.objectKind === kind && record.optimizationReady
+    );
+  catalog.admission = {
+    characters: readyByKind('character').map(record => record.objectId),
+    kibos: readyByKind('kibo').map(record => Number(record.objectId)),
+    soulEssences: readyByKind('soul-essence').map(record =>
+      Number(record.objectId)
+    ),
+    equipment: readyByKind('equipment').map(record => Number(record.objectId)),
+    setSkills: readyByKind('set-skill').map(record => record.objectId),
+  };
+  if (catalog.bindingMatrix) {
+    catalog.bindingMatrix.summary = {
+      actorKiboEdgeCount: catalog.bindingMatrix.actorKibo.length,
+      actorKiboQualifiedEdgeCount: catalog.bindingMatrix.actorKibo.filter(
+        edge => edge.qualificationReady
+      ).length,
+      actorSoulEssenceEdgeCount:
+        catalog.bindingMatrix.actorSoulEssence.length,
+      actorSoulEssenceCompatibleEdgeCount:
+        catalog.bindingMatrix.actorSoulEssence.filter(edge => edge.compatible)
+          .length,
+      actorSoulEssenceQualifiedEdgeCount:
+        catalog.bindingMatrix.actorSoulEssence.filter(
+          edge => edge.qualificationReady
+        ).length,
+      actorEquipmentEdgeCount: catalog.bindingMatrix.actorEquipment.length,
+      actorEquipmentQualifiedEdgeCount:
+        catalog.bindingMatrix.actorEquipment.filter(
+          edge => edge.qualificationReady
+        ).length,
+      setSkillThresholdCount:
+        catalog.bindingMatrix.setSkillThresholds.length,
+      setSkillThresholdQualifiedCount:
+        catalog.bindingMatrix.setSkillThresholds.filter(
+          edge => edge.qualificationReady
+        ).length,
+      equipmentSlotCount: Object.keys(catalog.bindingMatrix.equipmentSlots)
+        .length,
+    };
+    const bindingValue = structuredClone(catalog.bindingMatrix);
+    delete bindingValue.bindingMatrixHash;
+    catalog.bindingMatrix.bindingMatrixHash = hashCanonicalValue(bindingValue);
+    if (catalog.bindingMatrixHash !== 'stale-binding-hash') {
+      catalog.bindingMatrixHash = catalog.bindingMatrix.bindingMatrixHash;
+    }
+  }
+  catalog.summary.optimizationReadyCounts = Object.fromEntries(
+    ['character', 'kibo', 'soul-essence', 'equipment', 'set-skill'].map(kind => [
+      kind,
+      readyByKind(kind).length,
+    ])
+  );
+  catalog.summary.optimizationReadyTotal = Object.values(
+    catalog.summary.optimizationReadyCounts
+  ).reduce((sum, value) => sum + value, 0);
+  const stageGate = deriveOptimizationQualificationStageGate(catalog);
+  catalog.summary.qualificationStage = stageGate;
+  catalog.summary.formalOptimizationUnlocked =
+    stageGate.formalOptimizationUnlocked;
+  catalog.summary.m12cLocked = stageGate.m12cLocked;
+  delete catalog.catalogHash;
+  catalog.catalogHash = hashCanonicalValue(catalog);
+}

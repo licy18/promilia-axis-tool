@@ -184,7 +184,7 @@
     "characterCultivation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "starGiftRank", "starGiftNodeIds", "ascensionRank"],
+      "required": ["level", "starGiftRank", "starGiftNodeIds", "levelBreakthroughRank"],
       "properties": {
         "level": { "type": "integer", "minimum": 1, "maximum": 100 },
         "starGiftRank": { "type": "integer", "minimum": 0, "maximum": 7 },
@@ -192,7 +192,7 @@
           "type": "array",
           "items": { "type": "integer", "minimum": 1 }
         },
-        "ascensionRank": { "type": "integer", "minimum": 0, "maximum": 6 }
+        "levelBreakthroughRank": { "type": "integer", "minimum": 0, "maximum": 5 }
       }
     },
     "kiboCultivation": {

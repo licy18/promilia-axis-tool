@@ -192,8 +192,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 201,
-    "productionReachableCount": 197,
+    "sourceCodeFileCount": 202,
+    "productionReachableCount": 198,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -207,7 +207,7 @@
       "src/features/workbench": 60,
       "src/i18n": 1,
       "src/machine-axis": 13,
-      "src/optimization-qualification": 1,
+      "src/optimization-qualification": 2,
       "src/router": 1,
       "src/simulation": 1,
       "src/simulation/compiler": 1,
@@ -361,6 +361,7 @@
     "src/machine-axis/workbenchMachineAxisProjectProjection.js",
     "src/main.js",
     "src/optimization-qualification/optimizationQualificationProtocol.js",
+    "src/optimization-qualification/optimizationQualificationStageGate.js",
     "src/router/index.js",
     "src/simulation/compiler/compileProject.js",
     "src/simulation/engine/actionExecutionPlan.js",

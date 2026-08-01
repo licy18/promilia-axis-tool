@@ -299,7 +299,12 @@ export function createEffectRuntimeTimeline({
 export function resolveActiveEffectsAt(
   timeline,
   timeMs,
-  { targetKind = null, targetId = null, calculatorOnly = false } = {}
+  {
+    targetKind = null,
+    targetId = null,
+    calculatorOnly = false,
+    settlingActionId = null,
+  } = {}
 ) {
   const activeByInstanceKey = new Map();
   for (const event of timeline?.events ?? []) {
@@ -318,6 +323,14 @@ export function resolveActiveEffectsAt(
   return sortEffectStates([...activeByInstanceKey.values()]).filter(effect => {
     if (targetKind && effect.targetKind !== targetKind) return false;
     if (targetId != null && String(effect.targetId) !== String(targetId)) {
+      return false;
+    }
+    if (
+      settlingActionId != null &&
+      String(effect.sourceActionId) === String(settlingActionId) &&
+      Number(effect.appliedAtMs) === Number(timeMs) &&
+      effect.sourceIdentity?.triggerEvent === 'AfterSkill'
+    ) {
       return false;
     }
     return !calculatorOnly || effect.appliedToCalculators === true;

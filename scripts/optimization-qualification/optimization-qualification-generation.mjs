@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
+import { deriveOptimizationQualificationStageGate } from '../../src/optimization-qualification/optimizationQualificationStageGate.js';
 import { createSoulEssenceEffectMechanicsCatalog } from './soulessence-effect-generation.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
@@ -327,6 +328,7 @@ export async function createOptimizationQualificationArtifacts({
     targetKibos,
     publicSoulEssences,
     publicEquipment,
+    setSkills,
     manifests,
   });
   const sourceSnapshot = createSourceSnapshot(sources);
@@ -508,7 +510,7 @@ function createQualificationManifests({
       blocker(
         'strict-character-cultivation-runtime-partial',
         'not-implemented',
-        'Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.'
+        'Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.'
       )
     );
     records.push(
@@ -771,17 +773,11 @@ function createCultivationCatalog({
         ),
         sourceIdentity: `NewTable/talent_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
       })),
-    ascensionRanks: sources['newTable:hero_rank.json'].value.rows
-      .filter(row => Number(row.heroId) === Number(characterId))
-      .sort((left, right) => Number(left.rank) - Number(right.rank))
-      .map(row => ({
-        ordinal: Number(row.rank) + 1,
-        sourceRank: Number(row.rank),
-        levelLimit: Number(row.rankLevelLimit),
-        attributes: parseAttributePairs(row.attribute),
-        unlockedSkillId: positiveIntegerOrNull(row.skill),
-        sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
-      })),
+    levelBreakthroughRanks: createLevelBreakthroughRanks(
+      sources['newTable:hero_rank.json'].value.rows
+        .filter(row => Number(row.heroId) === Number(characterId))
+        .sort((left, right) => Number(left.rank) - Number(right.rank))
+    ),
   }));
   const skillLevelsBySkillId = groupBy(
     sources['newTable:skill_level.json'].value.rows,
@@ -865,10 +861,15 @@ function createCultivationCatalog({
       ),
       level: { minimum: 1, maximum: 100 },
       starGiftRank: { minimum: 0, maximum: 7 },
-      ascensionRank: { minimum: 0, maximum: 6 },
+      levelBreakthroughRank: { minimum: 0, maximum: 5 },
       starGiftNodes: {
-        status: 'source-indexed-static-attributes-applied-skill-levels-unapplied',
+        status:
+          'source-indexed-current-rank-nodes-applied-prior-rank-attributes-applied',
         sourceIdentity: 'NewTable/talent_rank|NewTable/talent_rune',
+      },
+      levelBreakthrough: {
+        status: 'source-indexed-legality-applied-attributes-unapplied',
+        sourceIdentity: 'NewTable/hero_rank.rankLevelLimit|attribute|skill',
       },
       profiles: characterProfiles,
     },
@@ -917,6 +918,7 @@ function createCultivationCatalog({
       profiles: publicEquipment.map(item => ({
         equipmentId: item.equipmentId,
         slot: item.slot,
+        setId: item.setId,
         rarity: item.rarity,
         maximumEnhancementLevel: item.maximumLevel,
         sourceIdentity: item.sourceIdentity,
@@ -959,6 +961,7 @@ function createBindingMatrix({
   targetKibos,
   publicSoulEssences,
   publicEquipment,
+  setSkills,
   manifests,
 }) {
   const manifestByKey = new Map(
@@ -1001,6 +1004,30 @@ function createBindingMatrix({
       };
     })
   );
+  const actorEquipment = characterObjects.flatMap(actor =>
+    publicEquipment.map(item => ({
+      actorObjectId: String(actor.optimizationObjectId),
+      equipmentId: item.equipmentId,
+      slot: item.slot,
+      setId: item.setId,
+      compatible: true,
+      reason: 'public-equipment-slot-contract',
+      qualificationReady:
+        manifestByKey.get(`character:${actor.optimizationObjectId}`)
+          ?.optimizationReady === true &&
+        manifestByKey.get(`equipment:${item.equipmentId}`)
+          ?.optimizationReady === true,
+    }))
+  );
+  const setSkillThresholds = setSkills.map(item => ({
+    setId: item.setId,
+    pieces: item.pieces,
+    skillId: item.skillId,
+    qualificationReady:
+      manifestByKey.get(`set-skill:${item.setId}:${item.pieces}`)
+        ?.optimizationReady === true,
+    sourceIdentity: item.sourceIdentity,
+  }));
   return {
     policy: {
       duplicateKiboSpeciesAcrossDifferentActors: 'allowed',
@@ -1010,6 +1037,8 @@ function createBindingMatrix({
     },
     actorKibo,
     actorSoulEssence,
+    actorEquipment,
+    setSkillThresholds,
     equipmentSlots: Object.fromEntries(
       Object.values(EQUIPMENT_SLOT_BY_TYPE).map(slot => [
         slot,
@@ -1028,6 +1057,14 @@ function createBindingMatrix({
         edge => edge.compatible
       ).length,
       actorSoulEssenceQualifiedEdgeCount: actorSoulEssence.filter(
+        edge => edge.qualificationReady
+      ).length,
+      actorEquipmentEdgeCount: actorEquipment.length,
+      actorEquipmentQualifiedEdgeCount: actorEquipment.filter(
+        edge => edge.qualificationReady
+      ).length,
+      setSkillThresholdCount: setSkillThresholds.length,
+      setSkillThresholdQualifiedCount: setSkillThresholds.filter(
         edge => edge.qualificationReady
       ).length,
       equipmentSlotCount: Object.keys(EQUIPMENT_SLOT_BY_TYPE).length,
@@ -1051,6 +1088,39 @@ function createQualificationCatalog({
     blockerCodes: record.blockers.map(item => item.code),
     manifestHash: record.manifestHash,
   }));
+  const admission = {
+    characters: records
+      .filter(
+        record => record.objectKind === 'character' && record.optimizationReady
+      )
+      .map(record => record.objectId),
+    kibos: records
+      .filter(record => record.objectKind === 'kibo' && record.optimizationReady)
+      .map(record => Number(record.objectId)),
+    soulEssences: records
+      .filter(
+        record =>
+          record.objectKind === 'soul-essence' && record.optimizationReady
+      )
+      .map(record => Number(record.objectId)),
+    equipment: records
+      .filter(
+        record => record.objectKind === 'equipment' && record.optimizationReady
+      )
+      .map(record => Number(record.objectId)),
+    setSkills: records
+      .filter(
+        record => record.objectKind === 'set-skill' && record.optimizationReady
+      )
+      .map(record => record.objectId),
+  };
+  const embeddedBindingMatrix = structuredClone(bindingDocument);
+  const stageGate = deriveOptimizationQualificationStageGate({
+    records,
+    admission,
+    denominators: roster.denominators,
+    bindingMatrix: embeddedBindingMatrix,
+  });
   const value = {
     schemaVersion: 1,
     contractName: 'AzPrOptimizationQualificationCatalog',
@@ -1063,46 +1133,20 @@ function createQualificationCatalog({
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     denominators: roster.denominators,
     records,
-    admission: {
-      characters: records
-        .filter(
-          record =>
-            record.objectKind === 'character' && record.optimizationReady
-        )
-        .map(record => record.objectId),
-      kibos: records
-        .filter(
-          record => record.objectKind === 'kibo' && record.optimizationReady
-        )
-        .map(record => Number(record.objectId)),
-      soulEssences: records
-        .filter(
-          record =>
-            record.objectKind === 'soul-essence' && record.optimizationReady
-        )
-        .map(record => Number(record.objectId)),
-      equipment: records
-        .filter(
-          record =>
-            record.objectKind === 'equipment' && record.optimizationReady
-        )
-        .map(record => Number(record.objectId)),
-      setSkills: records
-        .filter(
-          record =>
-            record.objectKind === 'set-skill' && record.optimizationReady
-        )
-        .map(record => record.objectId),
-    },
+    admission,
+    bindingMatrix: embeddedBindingMatrix,
     cultivation: cultivationCatalog,
     summary: {
       ...manifestDocument.summary,
       gameplayBlockingGapCount: gapDocument.summary.blockingUniqueGapCount,
       bindingQualifiedEdgeCount:
         bindingDocument.summary.actorKiboQualifiedEdgeCount +
-        bindingDocument.summary.actorSoulEssenceQualifiedEdgeCount,
-      formalOptimizationUnlocked: false,
-      m12cLocked: true,
+        bindingDocument.summary.actorSoulEssenceQualifiedEdgeCount +
+        bindingDocument.summary.actorEquipmentQualifiedEdgeCount +
+        bindingDocument.summary.setSkillThresholdQualifiedCount,
+      qualificationStage: stageGate,
+      formalOptimizationUnlocked: stageGate.formalOptimizationUnlocked,
+      m12cLocked: stageGate.m12cLocked,
     },
   };
   return finalizeHash(value, 'catalogHash');
@@ -1117,7 +1161,7 @@ function createSummary({
 }) {
   return {
     phase: 'M12-B3-A',
-    status: 'checkpoint-ready-qualification-blocked',
+    status: 'b3-a-r1-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1128,8 +1172,21 @@ function createSummary({
     maturityCounts: manifestDocument.summary.maturityCounts,
     optimizationReadyCounts: manifestDocument.summary.optimizationReadyCounts,
     gapCounts: gapDocument.summary,
-    m12cLocked: true,
+    m12cLocked: catalog.summary.m12cLocked,
   };
+}
+
+function createLevelBreakthroughRanks(rows) {
+  return rows.map((row, index) => ({
+    rank: Number(row.rank),
+    minimumLevel: index === 0 ? 1 : Number(rows[index - 1].rankLevelLimit),
+    levelLimit: Number(row.rankLevelLimit),
+    attributes: parseAttributePairs(row.attribute),
+    unlockedSkillId: positiveIntegerOrNull(row.skill),
+    runtimeApplicationStatus:
+      'source-indexed-legality-applied-attributes-unapplied',
+    sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
+  }));
 }
 
 function projectCharacterOptimizationObject(character) {
@@ -1342,11 +1399,11 @@ function createImplementationCapabilities({
     },
     {
       capabilityIdentity:
-        'b3-character-star-gift-node-and-ascension-static-projection',
+        'b3-character-star-gift-and-level-breakthrough-projection',
       status: 'implemented',
       evidence: [
         cultivationCatalog.character.starGiftNodes.sourceIdentity,
-        'NewTable/hero_rank',
+        cultivationCatalog.character.levelBreakthrough.sourceIdentity,
         'src/simulation/mechanics/verifiedCombatStaticProperties.js',
       ],
     },
@@ -1469,7 +1526,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Denominators: characters ${summary.denominators.characterOptimizationObjects}, Kibo ${summary.denominators.kibos}, soul essence ${summary.denominators.soulEssences}, equipment ${summary.denominators.equipment}, set skills ${summary.denominators.setSkills}\n` +
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
-    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, character node/ascension static projection, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, tuning formula source index, duplicate-Kibo slot identity, and formal hard rejection.\n` +
+    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection plus level-breakthrough legality, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, tuning formula source index, duplicate-Kibo slot identity, and formal whole-stage rejection.\n` +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     `- Duplicate Kibo species across different actor slots: allowed; runtime owner is \`actorSlotId+kiboId\`.\n` +
     `- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n`;

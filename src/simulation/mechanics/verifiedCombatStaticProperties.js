@@ -64,6 +64,10 @@ export function compileVerifiedStaticActorProperties({
   const growthAttributes = new Map(
     growth.attributes.map(entry => [Number(entry.id), Number(entry.value)])
   );
+  const cultivation = actor?.cultivation ?? {};
+  const preserveLevelPrecision =
+    cultivation?.optimizationStaticSources?.levelTemplatePrecision ===
+    'panel-round-after-source-sum';
   const levelAttributes = [];
   for (const [attributeId, value] of heroTemplate) {
     if (CORE_ATTRIBUTE_KEYS[attributeId]) {
@@ -79,7 +83,9 @@ export function compileVerifiedStaticActorProperties({
       }
       levelAttributes.push({
         id: attributeId,
-        value: integrate((value * growthValue) / 10000),
+        value: preserveLevelPrecision
+          ? roundToFour((value * growthValue) / 10000)
+          : integrate((value * growthValue) / 10000),
       });
       continue;
     }
@@ -90,6 +96,18 @@ export function compileVerifiedStaticActorProperties({
           ? value *
             Number(mechanicsPackage.spUnitContract.actor.maxSpGrowthMultiplier)
           : value,
+      });
+      continue;
+    }
+    if (
+      preserveLevelPrecision &&
+      Number.isFinite(growthAttributes.get(attributeId))
+    ) {
+      levelAttributes.push({
+        id: attributeId,
+        value: roundToFour(
+          (value * Number(growthAttributes.get(attributeId))) / 10000
+        ),
       });
       continue;
     }
@@ -104,7 +122,6 @@ export function compileVerifiedStaticActorProperties({
     })
   );
 
-  const cultivation = actor?.cultivation ?? {};
   const strictCharacterCultivationApplied =
     applyOptimizationCharacterCultivationSources({
       characterId,
@@ -436,9 +453,8 @@ function applyOptimizationCharacterCultivationSources({
     return true;
   }
   const sourceGroups = [
-    ['starGiftRankSources', 'star-gift-rank'],
+    ['completedStarGiftAttributeSources', 'star-gift-completed-rank'],
     ['starGiftNodeSources', 'star-gift-node'],
-    ['ascensionSources', 'actor-ascension'],
   ];
   for (const [field, expectedKind] of sourceGroups) {
     for (const row of contract[field] ?? []) {
@@ -471,6 +487,12 @@ function applyOptimizationCharacterCultivationSources({
         })
       );
     }
+  }
+  for (const row of contract.unappliedStaticSources ?? []) {
+    unapplied.push({
+      ...structuredClone(row),
+      appliedToStaticPanel: false,
+    });
   }
   for (const row of contract.unappliedSkillSources ?? []) {
     unapplied.push({
@@ -1135,6 +1157,10 @@ function createKiboIssue(reason, value) {
 
 function integrate(value) {
   return Math.floor(Math.round(Number(value) * 10000) / 10000);
+}
+
+function roundToFour(value) {
+  return Math.round(Number(value) * 10000) / 10000;
 }
 
 function clampInteger(value, minimum, maximum, fallback) {
