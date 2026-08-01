@@ -1,6 +1,6 @@
 # M12-B2 可持续循环 DPS 验收说明
 
-状态：M12-B2-R1 整改完成，等待产品复验。M12-C 未启动。
+状态：M12-B2-R2 整改完成，等待产品复验。M12-B3/M12-C 未启动。
 
 ## 合同
 
@@ -9,9 +9,10 @@
 - HP 伤害按 canonical trace 的实际 hit 帧归属，`loopEndFrame` 上的事件只属于下一轮。
 - 闭环同时校验角色 SP、奇波能量、特殊资源、队伍印记、主控角色、CD、持续效果、待结算事件和最终动作形态。
 - 调谐印记层数由资源不劣门判断；同层时共享衰减余量不得缩短，多层时衰减相位视为不劣；5 秒就绪等待独立要求结束余量不大于开始余量，两端零层时计时器规范化忽略。
-- 同一语义循环会由 canonical core 连续执行两次；第二轮动作不可被资源、CD、条件、重叠或派生规则阻断，且两轮伤害必须一致。
+- 同一语义循环会由 canonical core 连续执行两次；第二轮动作不可被资源、CD、条件、重叠或派生规则阻断。`expected` 要求两轮伤害逐值一致；`sampled` 用同一语义 hit 的 cycle-local 共同随机数证明状态闭环，独立 seed run 仍用于统计真实伤害波动。
 - 无限 HP 在公式入口禁用有限当前 HP 的 minimum-HP 截断，覆盖普通、调谐/超限和真实伤害；护盾仍按原合同吸收或阻挡。
-- 奇波被动的内置 CD、累计触发次数与有限触发寿命作为 canonical 状态输出；闭环比较相对剩余 CD 与剩余寿命，不能用固定多跑几轮代替状态建模。
+- 奇波被动的内置 CD、累计触发次数与有限触发寿命作为 canonical 状态输出；生成层将 `-1` 与 `9999999` 明确归为 unlimited、小正整数归为 finite、未知值归为 evidence-open。闭环比较相对剩余 CD 与真实有限寿命，不能用固定多跑几轮代替状态建模。
+- sampled 报告结构化输出样本数、均值、样本方差、p5/p25/p50/p75/p95，以及 actor/action/hit 聚合贡献与样本均值的守恒差。
 
 ## 权威示例
 
@@ -22,9 +23,17 @@
 - 循环动作：红宝石普通攻击 A1、A2、A3。
 - 首轮与第二轮均为 `22.44996643` HP 伤害、4 个 combat hit；`cycleDps=4.48999329`。
 - actor/action/hit 三层贡献各自合计 `22.44996643`。
-- canonical hash：input `06083e73632e9e4d`，data `7b865d8e1825995a`，trace `db903427dcd1ecac`，evaluation `412605349bbf2fe3`；cycle `ddfd947ed8a3db4d`。仅 cycle hash 因新增 `kiboPassiveRuntime` 闭环维度更新。
+- canonical hash：input `06083e73632e9e4d`，data `7b865d8e1825995a`，trace `db903427dcd1ecac`，evaluation `412605349bbf2fe3`；cycle `3950fd090a8634e1`。仅 cycle hash 因新增随机证明与统计字段更新。
 - 两轮结束于 `660F`，replay horizon 保留原合同 `900F`，用于检查第二轮尾部仍待结算的延迟事件。
 - 红宝石投射物仍保留 `scenario-assumed-zero-distance` 与 `evidence-open`，循环 evaluator 没有把场景假设提升为实机证据闭合。
+
+## Sampled 64-seed 证明
+
+- seed 集：`seed-0..seed-63`；64/64 均通过资源、CD、状态、动作形态和连续重放门，没有 `machine-axis-cycle-damage-not-stable` 误拒绝。
+- 循环伤害：均值 `22.59375`、样本方差 `1.07043651`、范围 `22..26`，p5/p25/p50/p75/p95 为 `22/22/22/24/24`。
+- cycle DPS：均值 `4.51875`、样本方差 `0.04281746`、范围 `4.4..5.2`，p5/p25/p50/p75/p95 为 `4.4/4.4/4.4/4.8/4.8`。
+- actor/action/hit 三层聚合贡献均为 `22.59375`，与样本均值差均为 `0`。
+- sampled CLI hash：input `af496a2fa7032bd6`，data `a4b048471cc0a97d`，trace `679999f36cb2a38d`，evaluation `13fc3bf3db5aeb9d`，cycle `44241b3daf282045`。
 
 ## 阻断反例
 
@@ -36,11 +45,13 @@
 - 0F 循环起点使用 canonical `[0,boundary)` 前缀状态，不读取未来资源或 CD。
 - 无限目标将初始 HP 改为 1 后，normal、stack-over-limit、real 三类伤害、逐 hit 贡献和 cycle DPS 与基准精确一致。
 - 红宝石装备驮驮龙（500206）并触发 520008 后，`[540,840)` 短循环虽然前两轮伤害相同，仍因 15 秒内置 CD 相位不闭合而以 `kiboPassiveRuntime` 拒绝；有限触发次数减少同样拒绝。
+- 红宝石装备河狸仔（500261）后，520082 的 `9999999` 哨兵不再作为有限余量递减；`[420,780)` 两轮均为 `39.08999634`、3 hit，资源和状态闭环通过。
+- 520087 已由真实七次触发生成测试锁住六层上限与刷新，再由 canonical 边界测试证明 unlimited 计数不制造寿命差；520083 的真实一次性触发仍保持拒绝。
 
 ## 验证
 
-- R1 阻断聚焦：`3 文件 / 57 测试`；Machine Axis、canonical core、奇波能量/被动及公式运行时：`15 文件 / 213 测试`。
-- 小玉、红宝石、寒悠悠 golden/profile 回归：`7 文件 / 48 测试`。四份 replay hash、profile hash、数值断言与通过数不变；canonical trace hash 因新增状态字段确定性更新。
-- 更新后的角色 canonical trace hash：小玉 `a2aeaae0ffce9b33`、红宝石 `c6225e30af716e65`、寒悠悠主场景 `a652c3834ff164c1`、寒悠悠切人场景 `ed7ceee343adc03f`。
+- R2 阻断聚焦：`3 文件 / 57 测试`；完整 Machine Axis `12 文件 / 157 测试`；canonical/critical/Kibo `9 文件 / 82 测试`。
+- 小玉、红宝石、寒悠悠 golden/profile 回归：`7 文件 / 58 测试`。数值断言、input/data、profile 与通过数不变；canonical trace hash 因 unlimited 生命周期元数据确定性更新。
+- 更新后的角色 canonical trace hash：小玉 `04b5be4588776815`、红宝石 `0a73ff9507f643b7`、寒悠悠主场景 `dca80f3e3439a43d`、寒悠悠切人场景 `688ca4efcac33fa5`。
 - `character-combat`、`verified-combat`、production imports、Workbench data、action status、applied source、character acceptance、Kibo headless 八道审计均为 clean。
 - production build 通过；既有 Sass、循环 chunk 和大 chunk 提示只作为发布风险记录。性能与包体不作为本阶段阻断。

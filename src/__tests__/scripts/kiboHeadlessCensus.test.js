@@ -2,9 +2,37 @@ import { describe, expect, it } from 'vitest';
 import generatedPassiveCatalog from '../../../src/data/generated/kibo-passive-mechanics.json';
 import generatedCensus from '../../../reports/kibo-headless/kibo-mechanics-census.json';
 import generatedMaturityMatrix from '../../../reports/kibo-headless/kibo-maturity-matrix.json';
-import { createKiboHeadlessCensus } from '../../../scripts/generate-kibo-headless-census.mjs';
+import {
+  classifyTriggerCounterLifetime,
+  createKiboHeadlessCensus,
+} from '../../../scripts/generate-kibo-headless-census.mjs';
 
 describe('kibo headless census', () => {
+  it('classifies trigger counters without passive identity special cases', () => {
+    expect(classifyTriggerCounterLifetime(-1)).toMatchObject({
+      configuredTriggerCounter: -1,
+      triggerLifetime: 'unlimited',
+      maxTriggerCount: null,
+    });
+    expect(classifyTriggerCounterLifetime(9_999_999)).toMatchObject({
+      configuredTriggerCounter: 9_999_999,
+      triggerLifetime: 'unlimited',
+      maxTriggerCount: null,
+      triggerLifetimeBasis:
+        'current-client-practical-unlimited-sentinel-9999999',
+    });
+    expect(classifyTriggerCounterLifetime(1)).toMatchObject({
+      configuredTriggerCounter: 1,
+      triggerLifetime: 'finite',
+      maxTriggerCount: 1,
+    });
+    expect(classifyTriggerCounterLifetime(0)).toMatchObject({
+      configuredTriggerCounter: 0,
+      triggerLifetime: 'evidence-open',
+      maxTriggerCount: null,
+    });
+  });
+
   it('locks every Workbench kibo, public action, fixed skill and explicit gap', async () => {
     const outputs = await createKiboHeadlessCensus();
 
@@ -38,6 +66,11 @@ describe('kibo headless census', () => {
         scenarioAssumed: 53,
         unresolved: 181,
       },
+    });
+    expect(outputs.mechanicsCatalog.summary.triggerLifetime).toEqual({
+      unlimited: 10,
+      finite: 1,
+      'evidence-open': 0,
     });
     expect(
       outputs.census.fixedSkills
@@ -643,6 +676,7 @@ describe('kibo headless census', () => {
           event: 'damage-dealt',
           internalCooldownMs: 0,
           configuredTriggerCounter: 1,
+          triggerLifetime: 'finite',
           maxTriggerCount: 1,
           triggerLimitScope: 'passive-element-lifetime',
           condition: {
@@ -688,6 +722,9 @@ describe('kibo headless census', () => {
         trigger: {
           event: 'skill-before',
           activationOrder: 'before-action',
+          configuredTriggerCounter: 9999999,
+          triggerLifetime: 'unlimited',
+          maxTriggerCount: null,
           condition: {
             kind: 'skill-tag',
             logic: 'or',
@@ -811,7 +848,8 @@ describe('kibo headless census', () => {
           event: 'damage-dealt',
           activationOrder: 'after-triggering-hit',
           configuredTriggerCounter: 9999999,
-          maxTriggerCount: 9999999,
+          triggerLifetime: 'unlimited',
+          maxTriggerCount: null,
           condition: {
             kind: 'target-entity-type',
             logic: 'or',
@@ -1082,6 +1120,7 @@ describe('kibo headless census', () => {
           triggerEffectTargetName: 'Source',
           internalCooldownMs: 0,
           configuredTriggerCounter: -1,
+          triggerLifetime: 'unlimited',
           maxTriggerCount: null,
           condition: {
             kind: 'damage-type-and-elemental-type',

@@ -152,6 +152,57 @@
     "cycleDps": 4.48999329,
     "combatHitCount": 4
   },
+  "sampleStatistics": {
+    "sampleCount": 1,
+    "loopHpDamage": {
+      "count": 1,
+      "mean": 22.44996643,
+      "variance": 0,
+      "min": 22.44996643,
+      "max": 22.44996643,
+      "quantiles": {
+        "p5": 22.44996643,
+        "p25": 22.44996643,
+        "p50": 22.44996643,
+        "p75": 22.44996643,
+        "p95": 22.44996643
+      }
+    },
+    "cycleDps": {
+      "count": 1,
+      "mean": 4.48999329,
+      "variance": 0,
+      "min": 4.48999329,
+      "max": 4.48999329,
+      "quantiles": {
+        "p5": 4.48999329,
+        "p25": 4.48999329,
+        "p50": 4.48999329,
+        "p75": 4.48999329,
+        "p95": 4.48999329
+      }
+    },
+    "contributionConservation": {
+      "byActor": {
+        "sampleMean": 22.44996643,
+        "contributionMean": 22.44996643,
+        "difference": 0,
+        "conserved": true
+      },
+      "byAction": {
+        "sampleMean": 22.44996643,
+        "contributionMean": 22.44996643,
+        "difference": 0,
+        "conserved": true
+      },
+      "byHit": {
+        "sampleMean": 22.44996643,
+        "contributionMean": 22.44996643,
+        "difference": 0,
+        "conserved": true
+      }
+    }
+  },
   "contributions": {
     "byActor": [
       {
@@ -238,6 +289,11 @@
   "replayProof": {
     "stable": true,
     "issues": [],
+    "damageStabilityMode": "exact-consecutive-cycle-damage",
+    "randomDamageVariation": {
+      "independentlySampledCycleDamageMayDiffer": false,
+      "stateAndWarmupClosureStillRequired": true
+    },
     "damageStable": true,
     "firstClosure": {
       "closed": true,
@@ -1083,6 +1139,13 @@
         "trace": "db903427dcd1ecac",
         "evaluation": "412605349bbf2fe3"
       },
+      "proofHashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "06083e73632e9e4d",
+        "data": "7b865d8e1825995a",
+        "trace": "db903427dcd1ecac",
+        "evaluation": "412605349bbf2fe3"
+      },
       "firstCycle": {
         "interval": "[start,end)",
         "startFrame": 60,
@@ -1246,6 +1309,11 @@
       "replayProof": {
         "stable": true,
         "issues": [],
+        "damageStabilityMode": "exact-consecutive-cycle-damage",
+        "randomDamageVariation": {
+          "independentlySampledCycleDamageMayDiffer": false,
+          "stateAndWarmupClosureStillRequired": true
+        },
         "damageStable": true,
         "firstClosure": {
           "closed": true,
@@ -1655,7 +1723,8 @@
         "warmupActionIds": [
           "warmup-wait"
         ],
-        "replayHorizonFrame": 900
+        "replayHorizonFrame": 900,
+        "commonRandomRollCount": 0
       },
       "evidence": {
         "firstCycle": {
@@ -2034,6 +2103,6 @@
     "data": "7b865d8e1825995a",
     "trace": "db903427dcd1ecac",
     "evaluation": "412605349bbf2fe3",
-    "cycle": "ddfd947ed8a3db4d"
+    "cycle": "3950fd090a8634e1"
   }
 }

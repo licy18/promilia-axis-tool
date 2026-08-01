@@ -388,6 +388,53 @@ function createSourcePaths({ repoRoot, azprRoot, extractorBattleRoot }) {
   };
 }
 
+const PRACTICAL_UNLIMITED_TRIGGER_COUNTER = 9_999_999;
+
+export function classifyTriggerCounterLifetime(rawValue) {
+  const configuredTriggerCounter = Number(rawValue);
+  if (!Number.isInteger(configuredTriggerCounter)) {
+    return {
+      configuredTriggerCounter: null,
+      triggerLifetime: 'evidence-open',
+      maxTriggerCount: null,
+      triggerLifetimeBasis: 'trigger-counter-not-an-integer',
+    };
+  }
+  if (configuredTriggerCounter === -1) {
+    return {
+      configuredTriggerCounter,
+      triggerLifetime: 'unlimited',
+      maxTriggerCount: null,
+      triggerLifetimeBasis:
+        'negative-sentinel-not-limited-by-trigger-element-can-trigger',
+    };
+  }
+  if (configuredTriggerCounter === PRACTICAL_UNLIMITED_TRIGGER_COUNTER) {
+    return {
+      configuredTriggerCounter,
+      triggerLifetime: 'unlimited',
+      maxTriggerCount: null,
+      triggerLifetimeBasis:
+        'current-client-practical-unlimited-sentinel-9999999',
+    };
+  }
+  if (configuredTriggerCounter > 0) {
+    return {
+      configuredTriggerCounter,
+      triggerLifetime: 'finite',
+      maxTriggerCount: configuredTriggerCounter,
+      triggerLifetimeBasis:
+        'positive-limit-enforced-by-trigger-element-can-trigger',
+    };
+  }
+  return {
+    configuredTriggerCounter,
+    triggerLifetime: 'evidence-open',
+    maxTriggerCount: null,
+    triggerLifetimeBasis: 'zero-counter-runtime-semantics-not-observed',
+  };
+}
+
 function createFixedSkillRows({
   occurrences,
   skillsById,
@@ -1125,7 +1172,9 @@ async function parseVerifiedPropertyEffectPassive({
     };
   });
   const triggerCondition = parseDamageTriggerCondition(trigger.value);
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   return {
     mechanic: {
       mechanismFamily: 'on-kibo-damage-enemy-property-effect',
@@ -1138,12 +1187,7 @@ async function parseVerifiedPropertyEffectPassive({
         activationDelayMs: 0.001,
         sourceElementId: Number(trigger.value.elementConfigId),
         sourcePathId: trigger.pathId,
-        configuredTriggerCounter,
-        maxTriggerCount:
-          Number.isInteger(configuredTriggerCounter) &&
-          configuredTriggerCounter > 0
-            ? configuredTriggerCounter
-            : null,
+        ...triggerLifetime,
         triggerLimitScope: 'passive-element-lifetime',
         ...(triggerCondition ? { condition: triggerCondition } : {}),
       },
@@ -1323,7 +1367,9 @@ function parsePetOwnerDamageSourcePropertyEffectPassive({
     return null;
   }
 
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   const effectTime = Number(property.value.time);
   const combineType = Number(property.value.combineType);
   const clearType = Number(property.value.clearType);
@@ -1360,12 +1406,7 @@ function parsePetOwnerDamageSourcePropertyEffectPassive({
       activationDelayMs: 0.001,
       sourceElementId: Number(trigger.value.elementConfigId),
       sourcePathId: trigger.pathId,
-      configuredTriggerCounter,
-      maxTriggerCount:
-        Number.isInteger(configuredTriggerCounter) &&
-        configuredTriggerCounter > 0
-          ? configuredTriggerCounter
-          : null,
+      ...triggerLifetime,
       triggerLimitScope: 'passive-element-lifetime',
       condition: triggerCondition,
     },
@@ -1503,7 +1544,9 @@ function parseDamageSelfPropertyEffectPassive({
     return null;
   }
 
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   const triggerCondition = parseDamageTriggerCondition(trigger.value);
   const effects = properties.map(property => {
     const effectTime = Number(property.value.time);
@@ -1559,12 +1602,7 @@ function parseDamageSelfPropertyEffectPassive({
       activationDelayMs: 0.001,
       sourceElementId: Number(trigger.value.elementConfigId),
       sourcePathId: trigger.pathId,
-      configuredTriggerCounter,
-      maxTriggerCount:
-        Number.isInteger(configuredTriggerCounter) &&
-        configuredTriggerCounter > 0
-          ? configuredTriggerCounter
-          : null,
+      ...triggerLifetime,
       triggerLimitScope: 'passive-element-lifetime',
       ...(triggerCondition ? { condition: triggerCondition } : {}),
     },
@@ -2312,7 +2350,9 @@ function parseCurrentHealthRealDamageElement({ element, elementFormulasById }) {
 }
 
 function createBeforeSkillTriggerEvidence({ trigger, condition }) {
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   return {
     event: 'skill-before',
     sourceScope: 'equipped-kibo',
@@ -2322,11 +2362,7 @@ function createBeforeSkillTriggerEvidence({ trigger, condition }) {
     activationDelayMs: 0,
     sourceElementId: Number(trigger.value.elementConfigId),
     sourcePathId: trigger.pathId,
-    configuredTriggerCounter,
-    maxTriggerCount:
-      Number.isInteger(configuredTriggerCounter) && configuredTriggerCounter > 0
-        ? configuredTriggerCounter
-        : null,
+    ...triggerLifetime,
     triggerLimitScope: 'passive-element-lifetime',
     condition,
   };
@@ -2518,7 +2554,9 @@ function parseBeforeSkillPropertyEffectPassive({
   }));
   const effectTime = Number(property.value.time);
   const effectCombineType = Number(property.value.combineType);
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   const effect = {
     targets: targets.map(target => target.target),
     durationMs: effectTime === -1 ? null : effectTime,
@@ -2560,12 +2598,7 @@ function parseBeforeSkillPropertyEffectPassive({
       activationDelayMs: 0,
       sourceElementId: Number(trigger.value.elementConfigId),
       sourcePathId: trigger.pathId,
-      configuredTriggerCounter,
-      maxTriggerCount:
-        Number.isInteger(configuredTriggerCounter) &&
-        configuredTriggerCounter > 0
-          ? configuredTriggerCounter
-          : null,
+      ...triggerLifetime,
       triggerLimitScope: 'passive-element-lifetime',
       condition,
     },
@@ -2718,7 +2751,9 @@ function parseCompositeStaticAndDamagePropertyEffectPassive({
   const staticCombineType = Number(staticProperty.value.combineType);
   const damageTime = Number(damageProperty.value.time);
   const damageCombineType = Number(damageProperty.value.combineType);
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   const triggerCondition = parseDamageTriggerCondition(trigger.value);
   const unreachableAssetElements = elementObjects
     .filter(row => !controlResourcePathIds.includes(row.pathId))
@@ -2788,12 +2823,7 @@ function parseCompositeStaticAndDamagePropertyEffectPassive({
       activationDelayMs: 0.001,
       sourceElementId: Number(trigger.value.elementConfigId),
       sourcePathId: trigger.pathId,
-      configuredTriggerCounter,
-      maxTriggerCount:
-        Number.isInteger(configuredTriggerCounter) &&
-        configuredTriggerCounter > 0
-          ? configuredTriggerCounter
-          : null,
+      ...triggerLifetime,
       triggerLimitScope: 'passive-element-lifetime',
       ...(triggerCondition ? { condition: triggerCondition } : {}),
     },
@@ -2920,7 +2950,7 @@ function parseIncomingDamagePropertyEffectEvidence({
         triggerEffectTargetType: 1,
         triggerEffectTargetName: 'Target',
         internalCooldownMs: Number(trigger.value.triggerInv),
-        configuredTriggerCounter: Number(trigger.value.triggerCounter),
+        ...classifyTriggerCounterLifetime(trigger.value.triggerCounter),
         sustainElementId:
           Number.isInteger(sustainElementId) && sustainElementId > 0
             ? sustainElementId
@@ -3043,7 +3073,9 @@ function parseDerivedDamagePassive({
     return null;
   }
 
-  const configuredTriggerCounter = Number(trigger.value.triggerCounter);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
   const triggerCondition = parseDamageTriggerCondition(trigger.value);
   const sustainElementId = Number(trigger.value.sustainElement);
   const ratiosByLevel = Object.fromEntries(
@@ -3060,12 +3092,7 @@ function parseDerivedDamagePassive({
       activationDelayMs: 0.001,
       sourceElementId: Number(trigger.value.elementConfigId),
       sourcePathId: trigger.pathId,
-      configuredTriggerCounter,
-      maxTriggerCount:
-        Number.isInteger(configuredTriggerCounter) &&
-        configuredTriggerCounter > 0
-          ? configuredTriggerCounter
-          : null,
+      ...triggerLifetime,
       triggerLimitScope: 'passive-element-lifetime',
       sustainElementId:
         Number.isInteger(sustainElementId) && sustainElementId > 0
@@ -3933,6 +3960,17 @@ function createPassiveMechanicsCatalog({
       ...(row.unresolvedEvidence ? { evidence: row.unresolvedEvidence } : {}),
       provenance: row.provenance,
     }));
+  const triggerLifetime = {
+    unlimited: 0,
+    finite: 0,
+    'evidence-open': 0,
+  };
+  for (const definition of definitions) {
+    const classification = definition.trigger?.triggerLifetime;
+    if (Object.hasOwn(triggerLifetime, classification)) {
+      triggerLifetime[classification] += 1;
+    }
+  }
   return {
     schemaVersion: 1,
     kind: 'azpr-kibo-passive-mechanics-catalog',
@@ -3955,6 +3993,7 @@ function createPassiveMechanicsCatalog({
       evidenceClosed: definitions.length,
       scenarioAssumed: 0,
       unresolved: unresolved.length,
+      triggerLifetime,
       applied: true,
     },
     applied: true,

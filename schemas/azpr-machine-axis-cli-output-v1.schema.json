@@ -166,6 +166,7 @@
         "warmup": { "type": "object" },
         "loop": { "type": ["object", "null"] },
         "metrics": { "type": "object" },
+        "sampleStatistics": { "type": "object" },
         "contributions": { "type": "object" },
         "replayProof": { "type": "object" },
         "stateClosure": { "type": "array" },

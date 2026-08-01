@@ -914,6 +914,8 @@ describe('verified kibo passive generation', () => {
         kiboId: 500042,
         skillId: 520083,
         triggerCount: 1,
+        configuredTriggerCounter: 1,
+        triggerLifetime: 'finite',
         maxTriggerCount: 1,
         remainingTriggerCount: 0,
         triggerLimitScope: 'passive-element-lifetime',
@@ -1100,6 +1102,19 @@ describe('verified kibo passive generation', () => {
     expect(resolution.ready).toBe(true);
     expect(resolution.controlBinding.logic.skillTag).toBe('14');
     expect(generation.effectCommands).toHaveLength(14);
+    expect(generation.runtimeStates).toContainEqual(
+      expect.objectContaining({
+        actorId: baseAction.actorId,
+        kiboId: 500043,
+        skillId: 520087,
+        triggerCount: 7,
+        configuredTriggerCounter: 9999999,
+        triggerLifetime: 'unlimited',
+        maxTriggerCount: null,
+        remainingTriggerCount: null,
+      })
+    );
+    expect(generation.triggerLimitSuppressions).toEqual([]);
     expect(
       resolveActiveEffectsAt(effectTimeline, 6000, {
         targetId: baseAction.actorId,
@@ -1482,6 +1497,19 @@ describe('verified kibo passive generation', () => {
       ],
     });
     expect(damageCommands).toHaveLength(3);
+    expect(generation.runtimeStates).toContainEqual(
+      expect.objectContaining({
+        actorId: action.actorId,
+        kiboId: 500261,
+        skillId: 520082,
+        triggerCount: 3,
+        configuredTriggerCounter: 9999999,
+        triggerLifetime: 'unlimited',
+        maxTriggerCount: null,
+        remainingTriggerCount: null,
+      })
+    );
+    expect(generation.triggerLimitSuppressions).toEqual([]);
     expect(damageCommands[0]).toMatchObject({
       sourceActionId: action.id,
       targetKind: 'enemy',

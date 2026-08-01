@@ -28,6 +28,7 @@ const SUPPORTED_CRITICAL_POLICIES = new Set([
 ]);
 const VALUE_TOLERANCE = 1e-8;
 const TUNING_MARK_FRAME_TOLERANCE = 1;
+const CYCLE_SAMPLE_QUANTILES = [0.05, 0.25, 0.5, 0.75, 0.95];
 
 export function normalizeMachineAxisCycleEnvelope(value = {}) {
   const source = isRecord(value) ? value : {};
@@ -557,6 +558,7 @@ export function createCycleReplayStabilityProof({
   firstClosure,
   secondClosure,
   secondExecution,
+  damageStabilityMode = 'exact-consecutive-cycle-damage',
   tolerance = VALUE_TOLERANCE,
 } = {}) {
   const issues = [
@@ -590,6 +592,12 @@ export function createCycleReplayStabilityProof({
   return {
     stable: deduped.length === 0,
     issues: deduped,
+    damageStabilityMode,
+    randomDamageVariation: {
+      independentlySampledCycleDamageMayDiffer:
+        damageStabilityMode === 'cycle-local-common-random-numbers',
+      stateAndWarmupClosureStillRequired: true,
+    },
     damageStable: Math.abs(firstHpDamage - secondHpDamage) <= tolerance,
     firstClosure: firstClosure ?? null,
     secondClosure: secondClosure ?? null,
@@ -649,9 +657,32 @@ function evaluateCycleSample({
   });
   if (!loopPlan.valid) return rejectedSample(seed, loopPlan.issues);
 
+  const sampledFirstCycle = collectCycleDamageContributions(
+    firstPrepared.run.trace.damage,
+    {
+      startFrame: envelope.loop.startFrame,
+      endFrame: envelope.loop.endFrame,
+      fps: firstContract.scenario.fps,
+    }
+  );
+  const commonRandomPlan =
+    criticalPolicy === 'sampled'
+      ? createCycleCommonRandomReplayPlan({
+          loopPlan,
+          sourceTrace: firstPrepared.run.trace,
+          loop: envelope.loop,
+          fps: firstContract.scenario.fps,
+        })
+      : null;
+  if (commonRandomPlan && !commonRandomPlan.valid) {
+    return rejectedSample(seed, commonRandomPlan.issues);
+  }
+  const replayContract =
+    commonRandomPlan?.contract ?? loopPlan.contract;
+
   let replayPrepared;
   try {
-    replayPrepared = prepareRun(loopPlan.contract, runtimeOptions);
+    replayPrepared = prepareRun(replayContract, runtimeOptions);
   } catch (error) {
     return rejectedSample(seed, [
       cycleIssue(
@@ -686,7 +717,7 @@ function evaluateCycleSample({
       frame: envelope.loop.startFrame,
       prepared: replayPrepared,
       replayRun,
-      replayContract: loopPlan.contract,
+      replayContract,
       simulateBoundary,
       runtimeOptions,
     });
@@ -694,7 +725,7 @@ function evaluateCycleSample({
       frame: envelope.loop.endFrame,
       prepared: replayPrepared,
       replayRun,
-      replayContract: loopPlan.contract,
+      replayContract,
       simulateBoundary,
       runtimeOptions,
     });
@@ -702,7 +733,7 @@ function evaluateCycleSample({
       frame: secondEndFrame,
       prepared: replayPrepared,
       replayRun,
-      replayContract: loopPlan.contract,
+      replayContract,
       simulateBoundary,
       runtimeOptions,
     });
@@ -716,7 +747,7 @@ function evaluateCycleSample({
       ),
     ]);
   }
-  const firstCycle = collectCycleDamageContributions(
+  const proofFirstCycle = collectCycleDamageContributions(
     replayPrepared.run.trace.damage,
     {
       startFrame: envelope.loop.startFrame,
@@ -748,25 +779,38 @@ function evaluateCycleSample({
     actionResolutions: replayPrepared.compilation.actionResolutions,
   });
   const replayProof = createCycleReplayStabilityProof({
-    firstCycle,
+    firstCycle: proofFirstCycle,
     secondCycle,
     firstClosure,
     secondClosure,
     secondExecution,
+    damageStabilityMode:
+      criticalPolicy === 'sampled'
+        ? 'cycle-local-common-random-numbers'
+        : 'exact-consecutive-cycle-damage',
   });
   if (!replayProof.stable)
     return rejectedSample(seed, replayProof.issues, {
       replayProof,
-      firstCycle,
+      firstCycle: sampledFirstCycle,
       secondCycle,
-      hashes: replayPrepared.run.hashes,
+      hashes:
+        criticalPolicy === 'sampled'
+          ? firstPrepared.run.hashes
+          : replayPrepared.run.hashes,
+      proofHashes: replayPrepared.run.hashes,
     });
   return {
     valid: true,
     status: 'closed',
     seed,
-    hashes: replayPrepared.run.hashes,
-    firstCycle,
+    hashes:
+      criticalPolicy === 'sampled'
+        ? firstPrepared.run.hashes
+        : replayPrepared.run.hashes,
+    proofHashes: replayPrepared.run.hashes,
+    firstCycle:
+      criticalPolicy === 'sampled' ? sampledFirstCycle : proofFirstCycle,
     secondCycle,
     replayProof,
     state: {
@@ -789,6 +833,7 @@ function evaluateCycleSample({
       secondActionIds: [...loopPlan.secondActionIds],
       warmupActionIds: loopPlan.warmupActionIds,
       replayHorizonFrame: loopPlan.replayHorizonFrame,
+      commonRandomRollCount: commonRandomPlan?.rollCount ?? 0,
     },
   };
 }
@@ -914,6 +959,99 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
     secondToSourceActionId,
     replayHorizonFrame,
   };
+}
+
+function createCycleCommonRandomReplayPlan({
+  loopPlan,
+  sourceTrace,
+  loop,
+  fps,
+}) {
+  const rollsByActionId = new Map();
+  const issues = [];
+  for (const event of sourceTrace?.damage ?? []) {
+    if (event?.stateEventKind) continue;
+    const frame = resolveDamageFrame(event, fps);
+    if (frame == null || frame < loop.startFrame || frame >= loop.endFrame) {
+      continue;
+    }
+    const randomBranch = event.formula?.randomBranch ?? null;
+    if (randomBranch?.policy !== 'seeded-sampled') continue;
+    const actionId = textOrNull(event.actionId);
+    const hitIdentity = textOrNull(randomBranch.hitIdentity);
+    const criticalRoll = integerOrNull(randomBranch.criticalRoll);
+    if (
+      !actionId ||
+      !hitIdentity ||
+      criticalRoll == null ||
+      criticalRoll < 0 ||
+      criticalRoll >= 10_000
+    ) {
+      issues.push(
+        cycleIssue(
+          'machine-axis-cycle-common-random-roll-unresolved',
+          'replayProof.random',
+          'A sampled combat hit cannot be paired across cycle-local replay',
+          {
+            actionId,
+            hitIdentity,
+            criticalRoll,
+            frame,
+          }
+        )
+      );
+      continue;
+    }
+    const byHit = rollsByActionId.get(actionId) ?? new Map();
+    if (byHit.has(hitIdentity) && byHit.get(hitIdentity) !== criticalRoll) {
+      issues.push(
+        cycleIssue(
+          'machine-axis-cycle-common-random-hit-identity-ambiguous',
+          `actions.${actionId}.hitOverrides.${hitIdentity}`,
+          'One stable hit identity consumed multiple sampled rolls in the same cycle',
+          {
+            actionId,
+            hitIdentity,
+            firstRoll: byHit.get(hitIdentity),
+            conflictingRoll: criticalRoll,
+          }
+        )
+      );
+      continue;
+    }
+    byHit.set(hitIdentity, criticalRoll);
+    rollsByActionId.set(actionId, byHit);
+  }
+  if (issues.length > 0) return { valid: false, issues };
+
+  const contract = structuredClone(loopPlan.contract);
+  let rollCount = 0;
+  contract.actions = (contract.actions ?? []).map(action => {
+    const sourceActionId =
+      loopPlan.secondToSourceActionId.get(String(action.id)) ??
+      String(action.id);
+    const rolls = rollsByActionId.get(sourceActionId);
+    if (!rolls?.size) return action;
+    const hitOverrides = { ...(action.hitOverrides ?? {}) };
+    for (const [hitIdentity, criticalRoll] of rolls) {
+      hitOverrides[hitIdentity] = {
+        ...(hitOverrides[hitIdentity] ?? {}),
+        criticalMode: 'sampled',
+        criticalRoll,
+      };
+      rollCount += 1;
+    }
+    return { ...action, hitOverrides };
+  });
+  contract.metadata = {
+    ...(contract.metadata ?? {}),
+    cycleReplay: {
+      ...(contract.metadata?.cycleReplay ?? {}),
+      damageStabilityMode: 'cycle-local-common-random-numbers',
+      capturedRollCount: rollCount,
+    },
+  };
+  return { valid: true, issues: [], contract, rollCount };
 }
 
 function createBoundarySnapshot({
@@ -1073,6 +1211,11 @@ function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
   const fps = Number(envelope.contract.scenario.fps) || 60;
   const durationFrames = envelope.loop.endFrame - envelope.loop.startFrame;
   const aggregate = aggregateSamples(samples);
+  const sampleStatistics = createCycleSampleStatistics({
+    samples,
+    durationSeconds: durationFrames / fps,
+    aggregate,
+  });
   const warnings = dedupeIssues(
     samples.flatMap(sample => [
       ...(sample.evidence?.firstCycle?.warnings ?? []),
@@ -1115,6 +1258,7 @@ function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
       ),
       combatHitCount: aggregate.combatHitCount,
     },
+    sampleStatistics,
     contributions: aggregate.contributions,
     replayProof:
       samples.length === 1
@@ -1157,6 +1301,7 @@ function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
     critical: value.critical,
     loop: value.loop,
     metrics: value.metrics,
+    sampleStatistics: value.sampleStatistics,
     contributions: value.contributions,
     replayProof: value.replayProof,
     evidence: value.evidence,
@@ -1221,6 +1366,92 @@ function aggregateSamples(samples) {
   };
 }
 
+function createCycleSampleStatistics({ samples, durationSeconds, aggregate }) {
+  const loopHpDamage = describeCycleSampleValues(
+    samples.map(sample => Number(sample.firstCycle?.hpDamage) || 0)
+  );
+  const cycleDps = describeCycleSampleValues(
+    samples.map(sample =>
+      (Number(sample.firstCycle?.hpDamage) || 0) /
+      Math.max(VALUE_TOLERANCE, durationSeconds)
+    )
+  );
+  const contributionConservation = Object.fromEntries(
+    Object.entries(aggregate.contributions).map(([dimension, rows]) => {
+      const contributionMean = roundMetric(
+        rows.reduce((sum, row) => sum + (Number(row.hpDamage) || 0), 0)
+      );
+      const difference = roundMetric(contributionMean - loopHpDamage.mean);
+      return [
+        dimension,
+        {
+          sampleMean: loopHpDamage.mean,
+          contributionMean,
+          difference,
+          conserved: Math.abs(difference) <= VALUE_TOLERANCE,
+        },
+      ];
+    })
+  );
+  return {
+    sampleCount: samples.length,
+    loopHpDamage,
+    cycleDps,
+    contributionConservation,
+  };
+}
+
+function describeCycleSampleValues(values) {
+  if (!values.length) {
+    return {
+      count: 0,
+      mean: 0,
+      variance: 0,
+      min: 0,
+      max: 0,
+      quantiles: Object.fromEntries(
+        CYCLE_SAMPLE_QUANTILES.map(quantile => [
+          `p${Math.round(quantile * 100)}`,
+          0,
+        ])
+      ),
+    };
+  }
+  const sorted = [...values].sort((left, right) => left - right);
+  const meanValue = mean(sorted);
+  const variance =
+    sorted.length > 1
+      ? sorted.reduce(
+          (sum, value) => sum + (value - meanValue) ** 2,
+          0
+        ) /
+        (sorted.length - 1)
+      : 0;
+  return {
+    count: sorted.length,
+    mean: roundMetric(meanValue),
+    variance: roundMetric(variance),
+    min: roundMetric(sorted[0]),
+    max: roundMetric(sorted.at(-1)),
+    quantiles: Object.fromEntries(
+      CYCLE_SAMPLE_QUANTILES.map(quantile => [
+        `p${Math.round(quantile * 100)}`,
+        roundMetric(calculateCycleQuantile(sorted, quantile)),
+      ])
+    ),
+  };
+}
+
+function calculateCycleQuantile(sorted, quantile) {
+  if (sorted.length === 1) return sorted[0];
+  const position = quantile * (sorted.length - 1);
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  if (lower === upper) return sorted[lower];
+  const weight = position - lower;
+  return sorted[lower] * (1 - weight) + sorted[upper] * weight;
+}
+
 function aggregateContributionDimension(samples, key) {
   const byIdentity = new Map();
   for (const sample of samples) {
@@ -1255,6 +1486,7 @@ function projectSampleReport(sample) {
     seed: sample.seed ?? null,
     issues: sample.issues ?? [],
     hashes: sample.hashes ?? null,
+    proofHashes: sample.proofHashes ?? null,
     firstCycle: sample.firstCycle ?? null,
     secondCycle: sample.secondCycle ?? null,
     replayProof: sample.replayProof ?? null,
@@ -1533,6 +1765,11 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
               ? 0
               : Math.max(0, msToFrame(cooldownReadyAtMs - boundaryTimeMs)),
           triggerCount: Math.max(0, Number(row.triggerCount) || 0),
+          configuredTriggerCounter: integerOrNull(
+            row.configuredTriggerCounter
+          ),
+          triggerLifetime: row.triggerLifetime ?? null,
+          triggerLifetimeBasis: row.triggerLifetimeBasis ?? null,
           maxTriggerCount: integerOrNull(row.maxTriggerCount),
           remainingTriggerCount: integerOrNull(row.remainingTriggerCount),
           triggerLimitScope: row.triggerLimitScope ?? null,
@@ -1720,6 +1957,9 @@ function normalizeKiboPassiveRuntimeState(snapshot) {
         0,
         Number(row.internalCooldownRemainingFrames) || 0
       ),
+      configuredTriggerCounter: integerOrNull(row.configuredTriggerCounter),
+      triggerLifetime: row.triggerLifetime ?? null,
+      triggerLifetimeBasis: row.triggerLifetimeBasis ?? null,
       maxTriggerCount: integerOrNull(row.maxTriggerCount),
       remainingTriggerCount: integerOrNull(row.remainingTriggerCount),
       triggerLimitScope: row.triggerLimitScope ?? null,
@@ -1917,11 +2157,13 @@ function roundMetric(value) {
 }
 
 function finiteNumberOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
 
 function integerOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) ? number : null;
 }

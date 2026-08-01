@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "f212674c1d13eead",
+        "reportHash": "97a23bb9d50850ce",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -18,7 +18,7 @@
         "canonicalHashes": {
           "input": "f7aac189e3dfee8e",
           "data": "75e283bd81aac633",
-          "trace": "ed7ceee343adc03f",
+          "trace": "688ca4efcac33fa5",
           "evaluation": null
         }
       },
@@ -808,7 +808,7 @@
           "assertionHash": "a105b0c3214ea211"
         }
       ],
-      "scenarioCaseHash": "d2e01a4673fe48cf"
+      "scenarioCaseHash": "8671fd8a236f2c54"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +816,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "d1496669899ef7a9",
+        "reportHash": "64f375cff3fc7e1c",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -826,7 +826,7 @@
         "canonicalHashes": {
           "input": "011ce71e135bc69f",
           "data": "7599ed503c1d0c06",
-          "trace": "a652c3834ff164c1",
+          "trace": "dca80f3e3439a43d",
           "evaluation": null
         }
       },
@@ -3347,7 +3347,7 @@
           "assertionHash": "9b24a5aeab528c8e"
         }
       ],
-      "scenarioCaseHash": "04f3ef6046c76afc"
+      "scenarioCaseHash": "67520b620138b55e"
     },
     {
       "schemaVersion": 1,
@@ -5802,5 +5802,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "82ad00517ebfd68b"
+  "scenarioSetHash": "77360f45d6045bae"
 }

@@ -1310,8 +1310,8 @@ function createKiboPassiveRuntimeState({
   const internalCooldownMs = nonNegativeNumber(
     definition.trigger?.internalCooldownMs
   );
-  const maxTriggerCount = positiveInteger(definition.trigger?.maxTriggerCount);
-  if (!(internalCooldownMs > 0) && maxTriggerCount == null) return null;
+  const triggerLifetime = resolveTriggerLifetime(definition.trigger);
+  const maxTriggerCount = triggerLifetime.maxTriggerCount;
   const lastTriggerAtMs = numberOrNull(
     lastTriggerAtByPassiveKey.get(passiveKey)
   );
@@ -1319,6 +1319,13 @@ function createKiboPassiveRuntimeState({
     0,
     Number(triggerCountByPassiveKey.get(passiveKey)) || 0
   );
+  if (
+    !(internalCooldownMs > 0) &&
+    triggerLifetime.classification === 'unlimited' &&
+    triggerCount === 0
+  ) {
+    return null;
+  }
   return {
     stateIdentity: `kibo-passive-runtime:${passiveKey}`,
     passiveKey,
@@ -1333,6 +1340,10 @@ function createKiboPassiveRuntimeState({
         ? null
         : lastTriggerAtMs + internalCooldownMs,
     triggerCount,
+    configuredTriggerCounter:
+      triggerLifetime.configuredTriggerCounter ?? null,
+    triggerLifetime: triggerLifetime.classification,
+    triggerLifetimeBasis: triggerLifetime.basis,
     maxTriggerCount,
     remainingTriggerCount:
       maxTriggerCount == null
@@ -1409,7 +1420,9 @@ function createDamagePropertyStackCommands({
   const internalCooldownMs = nonNegativeNumber(
     definition.trigger?.internalCooldownMs
   );
-  const maxTriggerCount = positiveInteger(definition.trigger?.maxTriggerCount);
+  const maxTriggerCount = resolveTriggerLifetime(
+    definition.trigger
+  ).maxTriggerCount;
   const candidates = (resolution.hits ?? [])
     .filter(
       hit =>
@@ -1582,6 +1595,10 @@ function createDamagePropertyStackCommands({
               triggerCondition: definition.trigger?.condition ?? null,
               configuredTriggerCounter:
                 definition.trigger?.configuredTriggerCounter ?? null,
+              triggerLifetime:
+                definition.trigger?.triggerLifetime ?? null,
+              triggerLifetimeBasis:
+                definition.trigger?.triggerLifetimeBasis ?? null,
               maxTriggerCount,
               provenance: definition.provenance ?? [],
             },
@@ -1672,7 +1689,9 @@ function createDerivedDamageCommands({
   const internalCooldownMs = nonNegativeNumber(
     definition.trigger?.internalCooldownMs
   );
-  const maxTriggerCount = positiveInteger(definition.trigger?.maxTriggerCount);
+  const maxTriggerCount = resolveTriggerLifetime(
+    definition.trigger
+  ).maxTriggerCount;
   const candidates = (resolution.hits ?? [])
     .filter(
       hit =>
@@ -1868,7 +1887,9 @@ function createBeforeSkillPropertyCommands({
   });
   const triggerIdentity = `${action.id}:before-skill`;
   const triggerCount = triggerCountByPassiveKey.get(passiveKey) ?? 0;
-  const maxTriggerCount = positiveInteger(definition.trigger?.maxTriggerCount);
+  const maxTriggerCount = resolveTriggerLifetime(
+    definition.trigger
+  ).maxTriggerCount;
   if (maxTriggerCount != null && triggerCount >= maxTriggerCount) {
     triggerLimitSuppressions.push({
       actionId: action.id,
@@ -1958,6 +1979,9 @@ function createBeforeSkillPropertyCommands({
       triggerCondition: definition.trigger?.condition ?? null,
       configuredTriggerCounter:
         definition.trigger?.configuredTriggerCounter ?? null,
+      triggerLifetime: definition.trigger?.triggerLifetime ?? null,
+      triggerLifetimeBasis:
+        definition.trigger?.triggerLifetimeBasis ?? null,
       maxTriggerCount,
       triggerEffectTargetType: target.triggerEffectTargetType ?? null,
       triggerEffectTargetName: target.triggerEffectTargetName ?? null,
@@ -2709,6 +2733,58 @@ function numberOrNull(value) {
 function nonNegativeNumber(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+}
+
+function resolveTriggerLifetime(trigger = {}) {
+  const classification = String(trigger?.triggerLifetime ?? '');
+  const configuredTriggerCounter = numberOrNull(
+    trigger?.configuredTriggerCounter
+  );
+  if (classification === 'unlimited') {
+    return {
+      classification,
+      configuredTriggerCounter,
+      maxTriggerCount: null,
+      basis: trigger?.triggerLifetimeBasis ?? 'generated-unlimited',
+    };
+  }
+  if (classification === 'finite') {
+    const maxTriggerCount = positiveInteger(trigger?.maxTriggerCount);
+    return {
+      classification:
+        maxTriggerCount == null ? 'evidence-open' : classification,
+      configuredTriggerCounter,
+      maxTriggerCount,
+      basis:
+        trigger?.triggerLifetimeBasis ??
+        (maxTriggerCount == null
+          ? 'finite-trigger-limit-missing'
+          : 'generated-finite'),
+    };
+  }
+  if (classification === 'evidence-open') {
+    return {
+      classification,
+      configuredTriggerCounter,
+      maxTriggerCount: null,
+      basis: trigger?.triggerLifetimeBasis ?? 'generated-evidence-open',
+    };
+  }
+  const maxTriggerCount = positiveInteger(trigger?.maxTriggerCount);
+  if (maxTriggerCount != null) {
+    return {
+      classification: 'finite',
+      configuredTriggerCounter,
+      maxTriggerCount,
+      basis: 'legacy-positive-max-trigger-count',
+    };
+  }
+  return {
+    classification: 'unlimited',
+    configuredTriggerCounter,
+    maxTriggerCount: null,
+    basis: 'legacy-no-positive-trigger-limit',
+  };
 }
 
 function positiveInteger(value) {

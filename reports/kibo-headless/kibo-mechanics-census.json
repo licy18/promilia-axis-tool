@@ -6271,7 +6271,9 @@
           "sourceElementId": 520008001,
           "sourcePathId": "387276214635145942",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "target-entity-type",
@@ -6743,6 +6745,9 @@
           "triggerEffectTargetName": "Target",
           "internalCooldownMs": 0,
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
+          "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "sustainElementId": 500109103,
           "sustainElementRuntimeStatus": "config-field-not-read-by-trigger-element-parse"
         },
@@ -6854,7 +6859,9 @@
           "sourceElementId": 520019001,
           "sourcePathId": "-4809892902759959986",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "damage-type-and-elemental-type",
@@ -7733,7 +7740,9 @@
           "sourceElementId": 520040001,
           "sourcePathId": "-2686276575497361422",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "target-entity-type",
@@ -7840,7 +7849,9 @@
           "sourceElementId": 520041001,
           "sourcePathId": "-5942765510060648743",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime",
           "sustainElementId": 500109099,
           "sustainElementRuntimeStatus": "config-field-not-read-by-trigger-element-parse",
@@ -8179,7 +8190,9 @@
               "sourceElementId": 520044003,
               "sourcePathId": "-1650824522976294988",
               "configuredTriggerCounter": -1,
+              "triggerLifetime": "unlimited",
               "maxTriggerCount": null,
+              "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
               "triggerLimitScope": "passive-element-lifetime",
               "condition": {
                 "kind": "skill-tag",
@@ -8514,7 +8527,9 @@
               "sourceElementId": 520046003,
               "sourcePathId": "-3127374502560695197",
               "configuredTriggerCounter": -1,
+              "triggerLifetime": "unlimited",
               "maxTriggerCount": null,
+              "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
               "triggerLimitScope": "passive-element-lifetime",
               "condition": {
                 "kind": "skill-tag",
@@ -8970,7 +8985,9 @@
           "sourceElementId": 520050001,
           "sourcePathId": "-4751078895134609649",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime"
         },
         "effect": {
@@ -9076,7 +9093,9 @@
           "sourceElementId": 520051001,
           "sourcePathId": "-6441649907328806510",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime"
         },
         "effects": [
@@ -10908,7 +10927,9 @@
           "sourceElementId": 520082001,
           "sourcePathId": "8596214775048256175",
           "configuredTriggerCounter": 9999999,
-          "maxTriggerCount": 9999999,
+          "triggerLifetime": "unlimited",
+          "maxTriggerCount": null,
+          "triggerLifetimeBasis": "current-client-practical-unlimited-sentinel-9999999",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "target-entity-type",
@@ -11047,7 +11068,9 @@
           "sourceElementId": 520083001,
           "sourcePathId": "-4320235826036396573",
           "configuredTriggerCounter": 1,
+          "triggerLifetime": "finite",
           "maxTriggerCount": 1,
+          "triggerLifetimeBasis": "positive-limit-enforced-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "skill-tag",
@@ -11171,7 +11194,9 @@
           "sourceElementId": 520084001,
           "sourcePathId": "-6681634180904122105",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime"
         },
         "effect": {
@@ -11438,7 +11463,9 @@
           "sourceElementId": 520087001,
           "sourcePathId": "-6440174769355946307",
           "configuredTriggerCounter": 9999999,
-          "maxTriggerCount": 9999999,
+          "triggerLifetime": "unlimited",
+          "maxTriggerCount": null,
+          "triggerLifetimeBasis": "current-client-practical-unlimited-sentinel-9999999",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "skill-tag",
@@ -11581,7 +11608,9 @@
           "sourceElementId": 520090001,
           "sourcePathId": "266461385948490799",
           "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
           "triggerLimitScope": "passive-element-lifetime",
           "condition": {
             "kind": "target-entity-type",

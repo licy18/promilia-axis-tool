@@ -170,6 +170,68 @@ function createKiboInternalCooldownEnvelope() {
   return envelope;
 }
 
+function createKiboPassiveCycleEnvelope({
+  kiboId,
+  kiboName,
+  publicActionId,
+  actionKind = 'active',
+  warmupFrames = [],
+  loopStartFrame = 420,
+  loopEndFrame = 780,
+}) {
+  const envelope = createNormalAttackCycleEnvelope();
+  envelope.contract.scenario.id = `m12-b2-kibo-passive-${kiboId}`;
+  envelope.contract.scenario.durationFrames = loopEndFrame * 2;
+  envelope.contract.scenario.team[0].loadout = { kiboId };
+  envelope.contract.scenario.initialRuntimeState.kiboEnergyBySlot[0] = {
+    slotId: 'slot-1',
+    actorId: 'actor-103002',
+    characterId: 103002,
+    kiboId,
+    kiboName,
+    currentValue: 100,
+    maxValue: 100,
+  };
+  const createAction = (id, frame) => ({
+    id,
+    owner: { kind: 'kibo', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId,
+      actionKind,
+      level: 1,
+    },
+    schedule: { mode: 'absolute', frame },
+  });
+  envelope.contract.actions = [
+    ...warmupFrames.map((frame, index) =>
+      createAction(`warmup-kibo-active-${index + 1}`, frame)
+    ),
+    createAction('cycle-kibo-active', loopStartFrame),
+  ];
+  envelope.loop = { startFrame: loopStartFrame, endFrame: loopEndFrame };
+  envelope.options = { criticalPolicy: 'expected' };
+  return envelope;
+}
+
+function createKiboUnlimitedAfterDamageEnvelope() {
+  return createKiboPassiveCycleEnvelope({
+    kiboId: 500261,
+    kiboName: '河狸仔',
+    publicActionId: 502001,
+    warmupFrames: [60],
+  });
+}
+
+function createKiboFiniteTriggerEnvelope() {
+  return createKiboPassiveCycleEnvelope({
+    kiboId: 500040,
+    kiboName: '铁球蜥',
+    publicActionId: 50004002,
+    actionKind: 'signature',
+  });
+}
+
 function createTuningMarkBoundary({
   stacks,
   decayRemainingFrames = 0,
@@ -200,6 +262,10 @@ function createKiboPassiveBoundary({
   triggerCount = 1,
   maxTriggerCount = null,
   remainingTriggerCount = null,
+  triggerLifetime = maxTriggerCount == null ? 'unlimited' : 'finite',
+  kiboId = 500206,
+  skillId = 520008,
+  effects = [],
 }) {
   return {
     activeActorId: 'actor-1',
@@ -207,19 +273,20 @@ function createKiboPassiveBoundary({
     kibos: [],
     specialResources: [],
     cooldowns: [],
-    effects: [],
+    effects,
     pendingEvents: [],
     tuningMarks: [],
     kiboPassiveRuntime: [
       {
-        stateIdentity: 'kibo-passive-runtime:actor-1|500206|520008',
-        passiveKey: 'actor-1|500206|520008',
+        stateIdentity: `kibo-passive-runtime:actor-1|${kiboId}|${skillId}`,
+        passiveKey: `actor-1|${kiboId}|${skillId}`,
         actorId: 'actor-1',
         slotId: 'slot-1',
-        kiboId: 500206,
-        skillId: 520008,
+        kiboId,
+        skillId,
         internalCooldownRemainingFrames,
         triggerCount,
+        triggerLifetime,
         maxTriggerCount,
         remainingTriggerCount,
         triggerLimitScope: 'passive-element-lifetime',
@@ -842,6 +909,119 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
   }, 30_000);
 
+  it('accepts pure-damage sampled variance and reports conserved seed statistics', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    const seeds = Array.from({ length: 64 }, (_, index) => `seed-${index}`);
+    envelope.options = { criticalPolicy: 'sampled', seeds };
+
+    const report = createMachineAxisService().evaluateCycle(envelope);
+    const sampleDamages = report.samples.map(
+      sample => sample.firstCycle.hpDamage
+    );
+
+    expect(report.valid).toBe(true);
+    expect(report.issues).not.toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-damage-not-stable',
+      })
+    );
+    expect(new Set(sampleDamages).size).toBeGreaterThan(1);
+    expect(report.sampleStatistics).toMatchObject({
+      sampleCount: 64,
+      loopHpDamage: {
+        count: 64,
+        mean: 22.59375,
+        variance: 1.07043651,
+        quantiles: {
+          p5: 22,
+          p25: 22,
+          p50: 22,
+          p75: 24,
+          p95: 24,
+        },
+      },
+      cycleDps: {
+        count: 64,
+        mean: 4.51875,
+        variance: 0.04281746,
+        quantiles: {
+          p5: 4.4,
+          p25: 4.4,
+          p50: 4.4,
+          p75: 4.8,
+          p95: 4.8,
+        },
+      },
+      contributionConservation: {
+        byActor: {
+          sampleMean: 22.59375,
+          contributionMean: 22.59375,
+          difference: 0,
+          conserved: true,
+        },
+        byAction: {
+          sampleMean: 22.59375,
+          contributionMean: 22.59375,
+          difference: 0,
+          conserved: true,
+        },
+        byHit: {
+          sampleMean: 22.59375,
+          contributionMean: 22.59375,
+          difference: 0,
+          conserved: true,
+        },
+      },
+    });
+    expect(report.metrics.loopHpDamage).toBe(22.59375);
+    expect(report.metrics.cycleDps).toBe(4.51875);
+    expect(report.hashes).toMatchObject({
+      input: 'af496a2fa7032bd6',
+      data: 'a4b048471cc0a97d',
+      trace: '679999f36cb2a38d',
+      evaluation: '13fc3bf3db5aeb9d',
+      cycle: '44241b3daf282045',
+    });
+    expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
+    for (const dimension of ['byActor', 'byAction', 'byHit']) {
+      expect(
+        report.contributions[dimension].reduce(
+          (sum, row) => sum + row.hpDamage,
+          0
+        )
+      ).toBeCloseTo(report.sampleStatistics.loopHpDamage.mean, 8);
+    }
+    expect(
+      report.samples.every(
+        sample =>
+          sample.replayProof.damageStabilityMode ===
+            'cycle-local-common-random-numbers' &&
+          sample.replayProof.stable
+      )
+    ).toBe(true);
+  }, 120_000);
+
+  it('does not let sampled common-random proof hide a one-time warmup state leak', () => {
+    const envelope = createOneTimeWarmupBuffEnvelope();
+    envelope.options = {
+      criticalPolicy: 'sampled',
+      seeds: ['one-time-buff-a', 'one-time-buff-b'],
+    };
+
+    const report = createMachineAxisService().evaluateCycle(envelope);
+
+    expect(report.valid).toBe(false);
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: expect.stringMatching(
+            /^machine-axis-cycle-(?:state-not-closed|damage-not-stable)$/
+          ),
+        }),
+      ])
+    );
+  }, 60_000);
+
   it('keeps infinite-HP damage and contributions independent from finite initial HP', () => {
     const baseline = createMachineAxisService().evaluateCycle(
       createNormalAttackCycleEnvelope()
@@ -910,6 +1090,112 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         remainingTriggerCount: null,
       })
     );
+  }, 30_000);
+
+  it('accepts the real 520082 practical-unlimited trigger cycle', () => {
+    const service = createMachineAxisService();
+    const envelope = createKiboUnlimitedAfterDamageEnvelope();
+    const report = service.evaluateCycle(envelope);
+    const run = service.simulate(envelope.contract);
+    const passive = run.trace.state.kiboPassives.find(
+      row => row.skillId === 520082
+    );
+
+    expect(report.valid).toBe(true);
+    expect(report.metrics).toMatchObject({
+      loopHpDamage: 39.08999634,
+      combatHitCount: 3,
+    });
+    expect(passive).toMatchObject({
+      skillId: 520082,
+      triggerLifetime: 'unlimited',
+      configuredTriggerCounter: 9999999,
+      maxTriggerCount: null,
+      remainingTriggerCount: null,
+    });
+    expect(
+      report.stateClosure.flatMap(row => [
+        ...(row.start.kiboPassiveRuntime ?? []),
+        ...(row.firstEnd.kiboPassiveRuntime ?? []),
+        ...(row.secondEnd.kiboPassiveRuntime ?? []),
+      ])
+    ).not.toContainEqual(
+      expect.objectContaining({ remainingTriggerCount: expect.any(Number) })
+    );
+  }, 30_000);
+
+  it('accepts a saturated 520087 refresh boundary with an unlimited trigger lifetime', () => {
+    const effects = [
+      {
+        effectId: 'kibo-passive:520087:520087002',
+        ownerId: 'actor-1',
+        targetKind: 'actor',
+        targetId: 'actor-1',
+        stacks: 6,
+        remainingFrames: 1440,
+        sourceIdentityHash: '520087-source',
+      },
+      {
+        effectId: 'kibo-passive:520087:520087002',
+        ownerId: 'actor-1',
+        targetKind: 'kibo',
+        targetId: 'actor-1',
+        stacks: 6,
+        remainingFrames: 1440,
+        sourceIdentityHash: '520087-source',
+      },
+    ];
+    const start = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 0,
+      triggerCount: 6,
+      triggerLifetime: 'unlimited',
+      kiboId: 500043,
+      skillId: 520087,
+      effects,
+    });
+    const end = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 0,
+      triggerCount: 7,
+      triggerLifetime: 'unlimited',
+      kiboId: 500043,
+      skillId: 520087,
+      effects,
+    });
+
+    expect(compareCycleBoundaryStates(start, end)).toMatchObject({
+      closed: true,
+      stateDiffs: expect.arrayContaining([
+        expect.objectContaining({ dimension: 'effects', equal: true }),
+        expect.objectContaining({
+          dimension: 'kiboPassiveRuntime',
+          equal: true,
+        }),
+      ]),
+    });
+  });
+
+  it('keeps a real finite one-trigger Kibo passive outside closed cycles', () => {
+    const service = createMachineAxisService();
+    const envelope = createKiboFiniteTriggerEnvelope();
+    const report = service.evaluateCycle(envelope);
+    const run = service.simulate(envelope.contract);
+    const passive = run.trace.state.kiboPassives.find(
+      row => row.skillId === 520083
+    );
+
+    expect(report.valid).toBe(false);
+    expect(report.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-second-replay-not-runnable',
+      })
+    );
+    expect(passive).toMatchObject({
+      skillId: 520083,
+      triggerLifetime: 'finite',
+      configuredTriggerCounter: 1,
+      maxTriggerCount: 1,
+      remainingTriggerCount: 0,
+    });
   }, 30_000);
 
   it('keeps toughness damage independent from the break toggle', () => {
