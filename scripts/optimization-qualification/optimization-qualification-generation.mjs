@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
+import { createSoulEssenceEffectMechanicsCatalog } from './soulessence-effect-generation.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -39,6 +40,10 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     'cc9dc34abee41cd5df75472c83af2e93e1f060e5764041be498dfdfffb6a6625',
   'newTable:skill_level.json':
     '6f661653182ddf7a36a64534c7a1a6c20b42a96d73baa1e9455649340c7881bf',
+  'newTable:skillsub_ele_value.json':
+    '836178c72056b4946005cb9d48dc372627ee415f19f0fb73b55809fb1641c1ba',
+  'newTable:skillsub_logic.json':
+    'ca6da39f122466a32b229b9599ecfc34dbdbbf6e10a157c529d43d1043b8f4b7',
   'newTable:soulessence.json':
     'a8b3222840e8c28a4bb770b55f4dd9d815720493717a2c9ed0ce7471d9bbed29',
   'newTable:soulessence_level.json':
@@ -51,6 +56,10 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '10a718dcc0c9e5c989aae12c03087e2036054107748df3605cb7aae25af8c0c7',
   'newTable:talent_rune.json':
     '7c31b396c6418b48fbb8311771fb1c3a0c9bf460f6940fac38dcd62114cf9689',
+  battleElementAssets:
+    '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
+  soulEffectControlClosure:
+    'fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -89,6 +98,8 @@ const CULTIVATION_SOURCE_FILES = Object.freeze([
   'pet_talent_upgrade.json',
   'pet_favorability.json',
   'skill_level.json',
+  'skillsub_ele_value.json',
+  'skillsub_logic.json',
   'soulessence.json',
   'soulessence_level.json',
   'soulessence_rank.json',
@@ -101,6 +112,10 @@ export async function createOptimizationQualificationArtifacts({
   projectRoot,
   newTableRoot =
     'C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable',
+  battleElementAssetsPath =
+    'C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl',
+  skillControlRoot =
+    'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
   const generatedRoot = path.join(projectRoot, 'src', 'data', 'generated');
@@ -138,8 +153,6 @@ export async function createOptimizationQualificationArtifacts({
       projectRoot
     );
   }
-  assertFrozenSourceHashes(sources);
-
   const characters = sources.characters.value.items ?? [];
   const kibos = sources.kibos.value.items ?? [];
   const equipment = sources.equipment.value.items ?? [];
@@ -199,7 +212,7 @@ export async function createOptimizationQualificationArtifacts({
       profile,
     ])
   );
-  const publicSoulEssences = soulEssences
+  let publicSoulEssences = soulEssences
     .slice()
     .sort(sortByNumericId)
     .map(item =>
@@ -208,6 +221,50 @@ export async function createOptimizationQualificationArtifacts({
         soulEssenceProfilesById.get(Number(item.id)) ?? null
       )
     );
+  const soulEssenceEffects = await createSoulEssenceEffectMechanicsCatalog({
+    soulEssences: publicSoulEssences,
+    soulDefinitionRows:
+      sources['newTable:soulessence.json'].value.rows ?? [],
+    skillLogicRows:
+      sources['newTable:skillsub_logic.json'].value.rows ?? [],
+    skillElementValueRows:
+      sources['newTable:skillsub_ele_value.json'].value.rows ?? [],
+    battleElementAssetsPath,
+    skillControlRoot,
+    generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
+    projectRoot,
+  });
+  sources.battleElementAssets = {
+    ...soulEssenceEffects.sourceSnapshot.battleElements,
+    value: {
+      rowCount: soulEssenceEffects.sourceSnapshot.battleElements.rowCount,
+    },
+  };
+  sources.soulEffectControlClosure = {
+    ...soulEssenceEffects.sourceSnapshot.controlClosure,
+    value: {
+      skillCount: soulEssenceEffects.sourceSnapshot.controlClosure.skillCount,
+      fileCount: soulEssenceEffects.sourceSnapshot.controlClosure.fileCount,
+    },
+  };
+  assertFrozenSourceHashes(sources);
+  const soulEffectById = new Map(
+    soulEssenceEffects.definitions.map(definition => [
+      Number(definition.soulEssenceId),
+      definition,
+    ])
+  );
+  publicSoulEssences = publicSoulEssences.map(item => {
+    const effectMechanics =
+      soulEffectById.get(Number(item.soulEssenceId)) ?? null;
+    return {
+      ...item,
+      sourceEffectStatus: item.effectStatus,
+      effectStatus:
+        effectMechanics?.runtimeStatus ?? 'effect-mechanics-profile-missing',
+      effectMechanics,
+    };
+  });
   const equipmentProfilesById = new Map(
     (staticCatalog.equipment ?? []).map(profile => [
       Number(profile.equipmentId),
@@ -373,6 +430,7 @@ export async function createOptimizationQualificationArtifacts({
     gaps: gapDocument,
     bindingMatrix: bindingDocument,
     catalog,
+    soulEssenceEffects,
     summary,
     markdown: createMarkdownSummary(summary, catalog),
   };
@@ -532,18 +590,29 @@ function createQualificationManifests({
     );
   }
   for (const soul of publicSoulEssences) {
+    const effectApplied =
+      soul.effectMechanics?.runtimeStatus === 'runtime-applied';
     const blockers = [
-      blocker(
-        'soulessence-effect-skill-dynamic-unapplied',
-        'not-implemented',
-        'The soul essence effect skill is tracked but not applied by the dynamic runtime.',
-        { skillId: soul.effectSkillId }
-      ),
-      blocker(
-        'strict-soulessence-cultivation-runtime-partial',
-        'not-implemented',
-        'Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.'
-      ),
+      ...(effectApplied
+        ? []
+        : [
+            blocker(
+              'soulessence-effect-skill-dynamic-unapplied',
+              'not-implemented',
+              'The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.',
+              {
+                skillId: soul.effectSkillId,
+                reasons: soul.effectMechanics?.runtimeGaps ?? [
+                  'effect-mechanics-profile-missing',
+                ],
+              }
+            ),
+            blocker(
+              'strict-soulessence-cultivation-runtime-partial',
+              'not-implemented',
+              'Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied.'
+            ),
+          ]),
       blocker(
         'soulessence-visual-acceptance-not-published',
         'not-implemented',
@@ -559,7 +628,7 @@ function createQualificationManifests({
           `generated/soulessences.json#items[id=${soul.soulEssenceId}]`,
           soul.sourceIdentity,
         ].filter(Boolean),
-        maturityState: 'extracted',
+        maturityState: effectApplied ? 'runtime-integrated' : 'extracted',
         blockers,
         evidence: soul,
       })
@@ -757,8 +826,13 @@ function createCultivationCatalog({
         status:
           starLevels.length === 4 &&
           starLevels.every((row, index) => row.star === index + 1)
-            ? 'source-indexed-runtime-unapplied'
+            ? item.effectMechanics?.runtimeStatus ??
+              'source-indexed-runtime-unapplied'
             : 'static-evidence-gap',
+        mechanismFamily: item.effectMechanics?.mechanismFamily ?? null,
+        catalogDefinitionHash: item.effectMechanics
+          ? hashCanonicalValue(item.effectMechanics)
+          : null,
         sourceIdentity: `NewTable/soulessence.rows[id=${item.soulEssenceId}].reishiSkill`,
       },
       sourceIdentity: item.sourceIdentity,
@@ -823,7 +897,20 @@ function createCultivationCatalog({
       rank: { minimum: 1, maximum: 6 },
       star: { minimum: 1, maximum: 4 },
       profiles: soulEssenceProfiles,
-      effectStatus: 'dynamic-unapplied',
+      effectStatus: {
+        status:
+          publicSoulEssences.every(
+            item => item.effectMechanics?.runtimeStatus === 'runtime-applied'
+          )
+            ? 'runtime-applied'
+            : 'partially-runtime-applied',
+        runtimeAppliedCount: publicSoulEssences.filter(
+          item => item.effectMechanics?.runtimeStatus === 'runtime-applied'
+        ).length,
+        unresolvedCount: publicSoulEssences.filter(
+          item => item.effectMechanics?.runtimeStatus !== 'runtime-applied'
+        ).length,
+      },
     },
     equipment: {
       equipmentIdsBySlot: equipmentBySlot,

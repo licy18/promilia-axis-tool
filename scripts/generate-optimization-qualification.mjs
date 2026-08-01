@@ -18,6 +18,34 @@ const outputs = new Map([
       projectRoot,
       'reports',
       'm12',
+      'm12-b3-soulessence-effect-coverage.json'
+    ),
+    jsonText(artifacts.soulEssenceEffects),
+  ],
+  [
+    path.join(
+      projectRoot,
+      'reports',
+      'm12',
+      'm12-b3-soulessence-effect-coverage.md'
+    ),
+    createSoulEssenceMarkdown(artifacts.soulEssenceEffects),
+  ],
+  [
+    path.join(
+      projectRoot,
+      'src',
+      'data',
+      'generated',
+      'soulessence-effect-mechanics.json'
+    ),
+    jsonText(artifacts.soulEssenceEffects),
+  ],
+  [
+    path.join(
+      projectRoot,
+      'reports',
+      'm12',
       'm12-b3-optimization-qualification-roster.json'
     ),
     jsonText(artifacts.roster),
@@ -110,4 +138,17 @@ async function assertOutputsClean(entries) {
 
 function jsonText(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function createSoulEssenceMarkdown(catalog) {
+  const applied = catalog.definitions.filter(
+    definition => definition.runtimeStatus === 'runtime-applied'
+  );
+  return `# M12-B3 Soul Essence Effect Coverage\n\n` +
+    `- Catalog: \`${catalog.catalogHash}\`\n` +
+    `- Source closure: ${catalog.summary.controlClosureCount}/62 controls, ${catalog.summary.resourceReferenceCount} resource references, ${catalog.summary.missingResourceReferenceCount} missing\n` +
+    `- Runtime applied: ${catalog.summary.runtimeAppliedCount}/62\n` +
+    `- Runtime unresolved: ${catalog.summary.unresolvedCount}/62\n` +
+    `- Applied identities: ${applied.map(definition => `${definition.soulEssenceId}:${definition.effectSkillId}`).join(', ') || 'none'}\n` +
+    `- Policy: only source-closed trigger, condition, target, formula, lifecycle, and star values are applied; descriptions do not provide numeric runtime values.\n`;
 }

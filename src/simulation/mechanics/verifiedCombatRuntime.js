@@ -56,6 +56,9 @@ const ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE = Object.freeze({
   8: 59,
   9: 60,
 });
+const WEAKNESS_SKILL_ATTRIBUTE_KEY_BY_ACTION_KIND = Object.freeze({
+  'charged-attack': 'WDM_TAG_HEAVYATTACK',
+});
 
 export function isVerifiedCombatMechanicsScenario(scenario) {
   return (
@@ -3044,6 +3047,12 @@ function applyHitDescriptor({
     state,
     timeMs: descriptor.timeMs,
   });
+  const weaknessSkillDamageUp = resolveWeaknessSkillDamageUp({
+    action,
+    resolution,
+    state,
+    timeMs: descriptor.timeMs,
+  });
   const ratioBasisPoints = resolveHitRatio(hit, action);
   const enemy = state.enemy;
   const enemyProfile = enemy.profile;
@@ -3215,7 +3224,7 @@ function applyHitDescriptor({
     worldEventConflictPer: 1,
     typeMultiplier: weaknessTypeMultiplier,
     elementMultiplier: weaknessElementMultiplier,
-    weaknessSkillDamageUp: 1,
+    weaknessSkillDamageUp: weaknessSkillDamageUp.factor,
     weakBreakDamageRateBasisPoints: hit.damage.weakBreakDamageRateBasisPoints,
     maximum: weaknessMaximum,
     minimum: weaknessMinimum,
@@ -3303,7 +3312,12 @@ function applyHitDescriptor({
         attack: source.attack,
         attackSource: source.sourceIdentity,
         dynamicPropertyTrace: {
-          source: source.dynamicPropertyTrace ?? [],
+          source: [
+            ...(source.dynamicPropertyTrace ?? []),
+            ...collectDynamicPropertyTrace([
+              weaknessSkillDamageUp.attributeResult,
+            ]),
+          ],
           target: collectDynamicPropertyTrace([
             targetDefenseResult,
             targetMagicDefenseResult,
@@ -3326,7 +3340,15 @@ function applyHitDescriptor({
             preShieldHpDamageRaw: String(preShieldHpDamageRaw ?? '0'),
             typeMultiplier: weaknessTypeMultiplier,
             elementMultiplier: weaknessElementMultiplier,
-            weaknessSkillDamageUp: 1,
+            weaknessSkillDamageUp: weaknessSkillDamageUp.factor,
+            ...(weaknessSkillDamageUp.traceApplied
+              ? {
+                  weaknessSkillAttributeId: weaknessSkillDamageUp.attributeId,
+                  weaknessSkillAttributeKey: weaknessSkillDamageUp.attributeKey,
+                  weaknessSkillActionKind: weaknessSkillDamageUp.actionKind,
+                  weaknessSkillSourceStatus: weaknessSkillDamageUp.status,
+                }
+              : {}),
             weakBreakDamageRateBasisPoints:
               hit.damage.weakBreakDamageRateBasisPoints,
             maximum: weaknessMaximum,
@@ -3522,6 +3544,91 @@ function applyHitRecovery({
       state
     );
   }
+}
+
+function resolveWeaknessSkillDamageUp({
+  action,
+  resolution,
+  state,
+  timeMs,
+}) {
+  const actionKind = String(
+    resolution?.actionBinding?.actionKind ??
+      action?.actionKind ??
+      action?.eventType ??
+      ''
+  );
+  const attributeKey =
+    WEAKNESS_SKILL_ATTRIBUTE_KEY_BY_ACTION_KIND[actionKind] ?? null;
+  if (!attributeKey) {
+    return {
+      factor: 1,
+      actionKind,
+      attributeId: null,
+      attributeKey: null,
+      attributeResult: null,
+      status: 'weakness-skill-attribute-not-applicable',
+      traceApplied: false,
+    };
+  }
+
+  const attributeId = state.attributeIdByKey.get(attributeKey);
+  if (!Number.isInteger(attributeId)) {
+    return {
+      factor: 1,
+      actionKind,
+      attributeId: null,
+      attributeKey,
+      attributeResult: null,
+      status: 'weakness-skill-attribute-definition-missing',
+      traceApplied: false,
+    };
+  }
+
+  const ownerKind = resolution?.actionBinding?.ownerKind;
+  const actorState = state.actorEnergy.get(action?.actorId);
+  const kiboState = findKiboStateByAction(state, action);
+  const attributeResult =
+    ownerKind === 'kibo'
+      ? resolveRuntimeAttribute({
+          state,
+          targetKind: EFFECT_TARGET_KINDS.KIBO,
+          targetId: action?.actorId,
+          timeMs,
+          attributeId,
+          baseRaw: kiboState?.attributesById?.get(attributeId) ?? 0,
+        })
+      : resolveActorRuntimeAttribute({
+          state,
+          actorState,
+          timeMs,
+          attributeId,
+          fallbackRaw: getAttribute(action?.actor, attributeKey) ?? 0,
+        });
+  if (!attributeResult.ready) {
+    return {
+      factor: 1,
+      actionKind,
+      attributeId,
+      attributeKey,
+      attributeResult,
+      status:
+        attributeResult.status ?? 'weakness-skill-attribute-runtime-unresolved',
+      traceApplied: false,
+    };
+  }
+
+  return {
+    factor: basisPoints(attributeResult.value, 1),
+    actionKind,
+    attributeId,
+    attributeKey,
+    attributeResult,
+    status: 'verified-runtime-weakness-skill-attribute-applied',
+    traceApplied:
+      Number(attributeResult.value) !== 10_000 ||
+      (attributeResult.appliedEffects ?? []).length > 0,
+  };
 }
 
 function resolveHitSource({ action, resolution, hit, state, timeMs }) {

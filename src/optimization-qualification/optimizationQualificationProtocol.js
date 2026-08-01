@@ -96,12 +96,24 @@ export function validateOptimizationQualificationCatalog(
     Number(catalog?.cultivation?.soulEssence?.star?.minimum) !== 1 ||
     Number(catalog?.cultivation?.soulEssence?.star?.maximum) !== 4 ||
     catalog?.cultivation?.soulEssence?.profiles?.length !== 62 ||
-    catalog.cultivation.soulEssence.profiles.some(
-      profile =>
-        profile.effectSkill?.status !==
-          'source-indexed-runtime-unapplied' ||
-        profile.effectSkill.starLevels?.length !== 4
-    )
+    catalog.cultivation.soulEssence.profiles.some(profile => {
+      const effectSkill = profile.effectSkill;
+      const validStatus = [
+        'runtime-applied',
+        'source-indexed-runtime-unapplied',
+      ].includes(effectSkill?.status);
+      const appliedContractReady =
+        effectSkill?.status !== 'runtime-applied' ||
+        (typeof effectSkill.mechanismFamily === 'string' &&
+          effectSkill.mechanismFamily.length > 0 &&
+          typeof effectSkill.catalogDefinitionHash === 'string' &&
+          effectSkill.catalogDefinitionHash.length > 0);
+      return (
+        !validStatus ||
+        effectSkill?.starLevels?.length !== 4 ||
+        !appliedContractReady
+      );
+    })
   ) {
     issues.push(
       'optimization-qualification-soulessence-star-catalog-invalid'
@@ -229,6 +241,8 @@ export function projectResolvedOptimizationCultivationActor(
       },
     ])
   );
+  const soulEssenceEffectRuntimeApplied =
+    resolvedActor.soulEssence?.effectSkill?.runtimeStatus === 'runtime-applied';
   const appliedDimensions = [
     'character.level',
     'character.starGiftRank',
@@ -241,6 +255,9 @@ export function projectResolvedOptimizationCultivationActor(
     'soulEssence.level',
     'soulEssence.rank',
     'soulEssence.effectSkillLevel',
+    ...(soulEssenceEffectRuntimeApplied
+      ? ['soulEssence.effectSkillRuntime']
+      : []),
     'equipment.enhancementLevel',
     'equipment.tuningScore',
   ];
@@ -255,7 +272,8 @@ export function projectResolvedOptimizationCultivationActor(
     )
       ? ['character.ascensionSkillUnlocks']
       : []),
-    ...(resolvedActor.soulEssence?.effectSkill
+    ...(resolvedActor.soulEssence?.effectSkill &&
+    !soulEssenceEffectRuntimeApplied
       ? ['soulEssence.effectSkillRuntime']
       : []),
     'equipment.instanceTier',
@@ -855,7 +873,10 @@ function resolveSoulEssenceCultivation(value, sourceProfile) {
       skillId: Number(sourceProfile.effectSkill.skillId),
       star: Number(value.star),
       skillLevel: Number(starSource.skillLevel),
-      runtimeStatus: 'dynamic-unapplied',
+      runtimeStatus: sourceProfile.effectSkill.status,
+      mechanismFamily: sourceProfile.effectSkill.mechanismFamily ?? null,
+      catalogDefinitionHash:
+        sourceProfile.effectSkill.catalogDefinitionHash ?? null,
       sourceIdentity: `${sourceProfile.effectSkill.sourceIdentity}|${starSource.sourceIdentity}`,
     },
   };

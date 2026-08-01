@@ -177,7 +177,14 @@ describe('M12-B3 optimization qualification generation', () => {
           record =>
             record.code === 'soulessence-effect-skill-dynamic-unapplied'
         )
-      ).toHaveLength(62);
+      ).toHaveLength(54);
+      expect(
+        artifacts.manifests.records.filter(
+          record =>
+            record.objectKind === 'soul-essence' &&
+            record.maturityState === 'runtime-integrated'
+        )
+      ).toHaveLength(8);
       expect(
         artifacts.gaps.records.filter(
           record => record.code === 'set-skill-dynamic-unapplied'
@@ -544,13 +551,13 @@ describe('M12-B3 strict cultivation profile', () => {
           'soulEssence.level',
           'soulEssence.rank',
           'soulEssence.effectSkillLevel',
+          'soulEssence.effectSkillRuntime',
           'equipment.enhancementLevel',
           'equipment.tuningScore',
         ]),
         unresolvedDimensions: expect.arrayContaining([
           'character.starGiftNodeSkillLevels',
           'character.ascensionSkillUnlocks',
-          'soulEssence.effectSkillRuntime',
           'equipment.instanceTier',
         ]),
       },
@@ -594,12 +601,7 @@ describe('M12-B3 strict cultivation profile', () => {
       actor.verifiedStaticProperties.unapplied.find(
         source => source.kind === 'soulessence-effect-skill'
       )
-    ).toMatchObject({
-      sourceId: 1900480,
-      skillLevel: 1,
-      star: 1,
-      appliedToStaticPanel: false,
-    });
+    ).toBeUndefined();
   });
 
   it('applies selected current-rank nodes and ascension attributes without folding in unselected nodes', () => {
