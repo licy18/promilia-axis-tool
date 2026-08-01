@@ -81,6 +81,29 @@ export function validateOptimizationQualificationCatalog(
       );
     }
   }
+  if (
+    catalog?.cultivation?.kibo?.dnaFactors?.status !==
+      'source-indexed-runtime-unapplied' ||
+    Number(catalog?.cultivation?.kibo?.dnaFactors?.factorCount) !== 215 ||
+    Number(catalog?.cultivation?.kibo?.dnaFactors?.linkCount) !== 8
+  ) {
+    issues.push('optimization-qualification-kibo-dna-catalog-invalid');
+  }
+  if (
+    Number(catalog?.cultivation?.soulEssence?.star?.minimum) !== 1 ||
+    Number(catalog?.cultivation?.soulEssence?.star?.maximum) !== 4 ||
+    catalog?.cultivation?.soulEssence?.profiles?.length !== 62 ||
+    catalog.cultivation.soulEssence.profiles.some(
+      profile =>
+        profile.effectSkill?.status !==
+          'source-indexed-runtime-unapplied' ||
+        profile.effectSkill.starLevels?.length !== 4
+    )
+  ) {
+    issues.push(
+      'optimization-qualification-soulessence-star-catalog-invalid'
+    );
+  }
   if (catalog && typeof catalog === 'object') {
     const copy = structuredClone(catalog);
     delete copy.catalogHash;
@@ -113,6 +136,18 @@ export function resolveOptimizationCultivationProfile(
   const teamBySlot = new Map(
     team.map(slot => [String(slot.slotId), slot])
   );
+  const dnaProfileById = new Map(
+    (catalog.cultivation.kibo.dnaFactors.profiles ?? []).map(source => [
+      Number(source.factorId),
+      source,
+    ])
+  );
+  const soulEssenceProfileById = new Map(
+    (catalog.cultivation.soulEssence.profiles ?? []).map(source => [
+      Number(source.soulEssenceId),
+      source,
+    ])
+  );
   const actorRows = profile.actors.map(actor => {
     const teamSlot = teamBySlot.get(String(actor.slotId));
     const characterSourceProfile = findCharacterCultivationSourceProfile(
@@ -142,11 +177,26 @@ export function resolveOptimizationCultivationProfile(
       kibo: {
         ...structuredClone(actor.kibo),
         talents: talentRows,
+        dnaFactors: actor.kibo.dnaFactors.map(factor => {
+          const source = dnaProfileById.get(Number(factor.factorId));
+          return {
+            factorId: Number(source.factorId),
+            rank: Number(source.rank),
+            type: Number(source.type),
+            skillId: Number(source.skillId),
+            skillLevel: Number(source.skillLevel),
+            runtimeStatus: source.runtimeStatus,
+            sourceIdentities: structuredClone(source.sourceIdentities),
+          };
+        }),
         inheritanceBasisPoints: Number(bondSource.inheritanceBasisPoints),
         inheritanceRatio: Number(bondSource.inheritanceBasisPoints) / 10000,
         bondSourceIdentity: bondSource.sourceIdentity,
       },
-      soulEssence: structuredClone(actor.soulEssence),
+      soulEssence: resolveSoulEssenceCultivation(
+        actor.soulEssence,
+        soulEssenceProfileById.get(Number(teamSlot?.loadout?.soulessenceId))
+      ),
       equipment: structuredClone(actor.equipment),
     };
   });
@@ -201,8 +251,10 @@ export function projectResolvedOptimizationCultivationActor(
     'kibo.level',
     'kibo.talents',
     'kibo.bondLevel',
+    'kibo.dnaFactorIdentity',
     'soulEssence.level',
     'soulEssence.rank',
+    'soulEssence.effectSkillLevel',
     'equipment.enhancementLevel',
     'equipment.tuningScore',
   ];
@@ -217,8 +269,12 @@ export function projectResolvedOptimizationCultivationActor(
     )
       ? ['character.ascensionSkillUnlocks']
       : []),
-    'kibo.dnaFactors',
-    'soulEssence.star',
+    ...(resolvedActor.kibo?.dnaFactors?.length
+      ? ['kibo.dnaFactorRuntime']
+      : []),
+    ...(resolvedActor.soulEssence?.effectSkill
+      ? ['soulEssence.effectSkillRuntime']
+      : []),
     'equipment.instanceTier',
   ];
   return {
@@ -234,6 +290,11 @@ export function projectResolvedOptimizationCultivationActor(
         soulessenceLevel: Number(resolvedActor.soulEssence.level),
         soulessenceRank: Number(resolvedActor.soulEssence.rank),
         soulessenceStar: Number(resolvedActor.soulEssence.star),
+        soulessenceCultivation: {
+          effectSkill: structuredClone(
+            resolvedActor.soulEssence.effectSkill
+          ),
+        },
         equipmentLevels,
         equipmentCultivation,
         kiboConfig: {
@@ -308,6 +369,18 @@ export function validateOptimizationCultivationProfile(
     team.map(slot => [String(slot.slotId), slot])
   );
   const teamSlots = new Set(teamBySlot.keys());
+  const dnaProfileById = new Map(
+    (catalog.cultivation.kibo.dnaFactors.profiles ?? []).map(source => [
+      Number(source.factorId),
+      source,
+    ])
+  );
+  const soulEssenceProfileById = new Map(
+    (catalog.cultivation.soulEssence.profiles ?? []).map(source => [
+      Number(source.soulEssenceId),
+      source,
+    ])
+  );
   const profileSlots = new Set();
   profile.actors.forEach((actor, actorIndex) => {
     const basePath = `scenario.cultivationProfile.actors.${actorIndex}`;
@@ -474,6 +547,34 @@ export function validateOptimizationCultivationProfile(
             `${basePath}.kibo.dnaFactors`
           )
         );
+      } else {
+        actor.kibo.dnaFactors.forEach((factor, factorIndex) => {
+          const source = dnaProfileById.get(Number(factor.factorId));
+          const factorPath = `${basePath}.kibo.dnaFactors.${factorIndex}`;
+          if (!source) {
+            issues.push(
+              createIssue(
+                'machine-axis-cultivation-kibo-dna-factor-unknown',
+                `${factorPath}.factorId`,
+                { factorId: Number(factor.factorId) }
+              )
+            );
+            return;
+          }
+          if (Number(factor.rank) !== Number(source.rank)) {
+            issues.push(
+              createIssue(
+                'machine-axis-cultivation-kibo-dna-rank-mismatch',
+                `${factorPath}.rank`,
+                {
+                  factorId: Number(factor.factorId),
+                  expected: Number(source.rank),
+                  actual: Number(factor.rank),
+                }
+              )
+            );
+          }
+        });
       }
     }
     validateRange(
@@ -497,6 +598,67 @@ export function validateOptimizationCultivationProfile(
       'machine-axis-cultivation-soulessence-star-invalid',
       issues
     );
+    const selectedSoulEssenceId = Number(
+      teamSlot?.loadout?.soulessenceId
+    );
+    const soulEssenceSource = soulEssenceProfileById.get(
+      selectedSoulEssenceId
+    );
+    if (teamSlot && !soulEssenceSource) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-soulessence-source-profile-missing',
+          `${basePath}.soulEssence`,
+          { soulEssenceId: selectedSoulEssenceId || null }
+        )
+      );
+    } else if (soulEssenceSource) {
+      const rankSource = soulEssenceSource.ranks.find(
+        row => Number(row.rank) === Number(actor.soulEssence?.rank)
+      );
+      if (!rankSource) {
+        issues.push(
+          createIssue(
+            'machine-axis-cultivation-soulessence-rank-source-missing',
+            `${basePath}.soulEssence.rank`,
+            {
+              soulEssenceId: selectedSoulEssenceId,
+              rank: actor.soulEssence?.rank,
+            }
+          )
+        );
+      } else if (
+        Number(actor.soulEssence?.level) > Number(rankSource.levelLimit)
+      ) {
+        issues.push(
+          createIssue(
+            'machine-axis-cultivation-soulessence-level-exceeds-rank-limit',
+            `${basePath}.soulEssence.level`,
+            {
+              soulEssenceId: selectedSoulEssenceId,
+              rank: Number(rankSource.rank),
+              maximumLevel: Number(rankSource.levelLimit),
+              actualLevel: Number(actor.soulEssence?.level),
+            }
+          )
+        );
+      }
+      const starSource = soulEssenceSource.effectSkill.starLevels.find(
+        row => Number(row.star) === Number(actor.soulEssence?.star)
+      );
+      if (!starSource) {
+        issues.push(
+          createIssue(
+            'machine-axis-cultivation-soulessence-star-source-missing',
+            `${basePath}.soulEssence.star`,
+            {
+              soulEssenceId: selectedSoulEssenceId,
+              star: actor.soulEssence?.star,
+            }
+          )
+        );
+      }
+    }
     validateEquipment(
       actor.equipment,
       basePath,
@@ -732,6 +894,23 @@ function resolveCharacterCultivation(value, sourceProfile) {
         sourceIdentity: row.sourceIdentity,
       })),
       unappliedSkillSources,
+    },
+  };
+}
+
+function resolveSoulEssenceCultivation(value, sourceProfile) {
+  const starSource = sourceProfile.effectSkill.starLevels.find(
+    row => Number(row.star) === Number(value.star)
+  );
+  return {
+    ...structuredClone(value),
+    sourceSoulEssenceId: Number(sourceProfile.soulEssenceId),
+    effectSkill: {
+      skillId: Number(sourceProfile.effectSkill.skillId),
+      star: Number(value.star),
+      skillLevel: Number(starSource.skillLevel),
+      runtimeStatus: 'dynamic-unapplied',
+      sourceIdentity: `${sourceProfile.effectSkill.sourceIdentity}|${starSource.sourceIdentity}`,
     },
   };
 }

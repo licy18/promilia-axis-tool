@@ -560,6 +560,13 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
             5
           ),
         }),
+    ...(source.soulessenceCultivation == null
+      ? {}
+      : {
+          soulessenceCultivation: structuredClone(
+            source.soulessenceCultivation
+          ),
+        }),
     equipmentLevels: Object.fromEntries(
       Object.keys(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(slotKey => [
         slotKey,

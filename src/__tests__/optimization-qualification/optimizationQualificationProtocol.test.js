@@ -25,6 +25,10 @@ function createCultivationProfile({
   actorLevel = 80,
   starGiftRank = 7,
   ascensionRank = 6,
+  dnaFactors = [],
+  soulEssenceLevel = 80,
+  soulEssenceRank = 6,
+  soulEssenceStar = 1,
   enhancementLevel = 9,
   tuningScore = 110,
   selectedStarGiftNodeIdsByCharacterId = {},
@@ -58,10 +62,14 @@ function createCultivationProfile({
           attributeId,
           level: 10,
         })),
-        dnaFactors: [],
+        dnaFactors: structuredClone(dnaFactors),
         bondLevel,
       },
-      soulEssence: { level: 80, rank: 6, star: 1 },
+      soulEssence: {
+        level: soulEssenceLevel,
+        rank: soulEssenceRank,
+        star: soulEssenceStar,
+      },
       equipment: Object.fromEntries(
         ['weapon', 'top', 'bottom', 'earring', 'ring'].map(equipmentSlot => [
           equipmentSlot,
@@ -188,6 +196,36 @@ describe('M12-B3 optimization qualification generation', () => {
         sourceIdentity:
           'NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]',
       });
+      expect(artifacts.catalog.cultivation.kibo.dnaFactors).toMatchObject({
+        status: 'source-indexed-runtime-unapplied',
+        factorCount: 215,
+        linkCount: 8,
+        profiles: expect.arrayContaining([
+          expect.objectContaining({
+            factorId: 531001,
+            rank: 3,
+            skillId: 531001,
+            skillLevel: 1,
+          }),
+        ]),
+      });
+      expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
+        star: { minimum: 1, maximum: 4 },
+        profiles: expect.arrayContaining([
+          expect.objectContaining({
+            soulEssenceId: 10001,
+            effectSkill: expect.objectContaining({
+              skillId: 1900480,
+              starLevels: [
+                expect.objectContaining({ star: 1, skillLevel: 1 }),
+                expect.objectContaining({ star: 2, skillLevel: 2 }),
+                expect.objectContaining({ star: 3, skillLevel: 3 }),
+                expect.objectContaining({ star: 4, skillLevel: 4 }),
+              ],
+            }),
+          }),
+        ]),
+      });
       expect(artifacts.gaps.implementedCapabilities).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -279,6 +317,89 @@ describe('M12-B3 strict cultivation profile', () => {
     );
   });
 
+  it('rejects unknown or source-rank-mismatched Kibo DNA factors', () => {
+    const unknown = createCultivationProfile({
+      dnaFactors: [{ factorId: 999999, rank: 1 }],
+    });
+    const mismatched = createCultivationProfile({
+      dnaFactors: [{ factorId: 531001, rank: 2 }],
+    });
+    const team = createAxis({ profile: createCultivationProfile() }).scenario.team;
+
+    expect(
+      validateOptimizationCultivationProfile(unknown, { team }).issues
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-kibo-dna-factor-unknown',
+          factorId: 999999,
+        }),
+      ])
+    );
+    expect(
+      validateOptimizationCultivationProfile(mismatched, { team }).issues
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-kibo-dna-rank-mismatch',
+          factorId: 531001,
+          expected: 3,
+          actual: 2,
+        }),
+      ])
+    );
+  });
+
+  it('rejects soul-essence star five and level beyond the selected rank limit', () => {
+    const invalidStar = createCultivationProfile({ soulEssenceStar: 5 });
+    const invalidRankLevel = createCultivationProfile({
+      soulEssenceLevel: 80,
+      soulEssenceRank: 1,
+    });
+    const team = createAxis({ profile: createCultivationProfile() }).scenario.team;
+
+    expect(
+      validateOptimizationCultivationProfile(invalidStar, { team }).issues
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-soulessence-star-invalid',
+        }),
+      ])
+    );
+    expect(
+      validateOptimizationCultivationProfile(invalidRankLevel, { team }).issues
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-soulessence-level-exceeds-rank-limit',
+          maximumLevel: 30,
+          actualLevel: 80,
+        }),
+      ])
+    );
+  });
+
+  it('rejects soul-essence star five at the public Machine Axis schema boundary', () => {
+    const prepared = createMachineAxisService().prepare(
+      createAxis({
+        profile: createCultivationProfile({ soulEssenceStar: 5 }),
+      })
+    );
+
+    expect(prepared.valid).toBe(false);
+    expect(prepared.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-schema-maximum',
+          path: 'scenario.cultivationProfile.actors.0.soulEssence.star',
+          maximum: 4,
+          actual: 5,
+        }),
+      ])
+    );
+  });
+
   it('rejects a star-gift node that does not belong to the selected character rank', () => {
     const profile = createCultivationProfile();
     profile.actors[0].character.starGiftNodeIds = [999999];
@@ -315,6 +436,38 @@ describe('M12-B3 strict cultivation profile', () => {
       actors: expect.any(Array),
     });
     expect(first.hashes.input).not.toBe(second.hashes.input);
+  });
+
+  it('resolves DNA identities and soul-essence star skill level without applying their dynamic effects', () => {
+    const profile = createCultivationProfile({
+      dnaFactors: [{ factorId: 531001, rank: 3 }],
+      soulEssenceStar: 4,
+    });
+    const result = resolveOptimizationCultivationProfile(profile, {
+      team: createAxis({ profile }).scenario.team,
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.profile.actors[0].kibo.dnaFactors).toEqual([
+      expect.objectContaining({
+        factorId: 531001,
+        rank: 3,
+        skillId: 531001,
+        skillLevel: 1,
+      }),
+    ]);
+    expect(result.profile.actors[0].soulEssence.effectSkill).toMatchObject({
+      skillId: 1900480,
+      star: 4,
+      skillLevel: 4,
+    });
+    const compilation = createMachineAxisService().compile(
+      createAxis({ profile })
+    );
+    expect(
+      compilation.project.metadata.actorConfigs[0]
+        .optimizationCultivationApplication.unresolvedDimensions
+    ).toContain('kibo.dnaFactorRuntime');
   });
 
   it('projects the supported cultivation dimensions into the authoritative static compiler', () => {
@@ -361,20 +514,24 @@ describe('M12-B3 strict cultivation profile', () => {
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
+          'kibo.dnaFactorIdentity',
           'soulEssence.level',
           'soulEssence.rank',
+          'soulEssence.effectSkillLevel',
           'equipment.enhancementLevel',
           'equipment.tuningScore',
         ]),
         unresolvedDimensions: expect.arrayContaining([
           'character.starGiftNodeSkillLevels',
           'character.ascensionSkillUnlocks',
-          'kibo.dnaFactors',
-          'soulEssence.star',
+          'soulEssence.effectSkillRuntime',
           'equipment.instanceTier',
         ]),
       },
     });
+    expect(
+      actorConfig.optimizationCultivationApplication.unresolvedDimensions
+    ).not.toContain('kibo.dnaFactorRuntime');
     expect(actor.verifiedStaticProperties.sources.map(source => source.kind)).toEqual(
       expect.arrayContaining([
         'star-gift-rank',
@@ -406,6 +563,16 @@ describe('M12-B3 strict cultivation profile', () => {
         4: 120,
         5: 120,
       },
+    });
+    expect(
+      actor.verifiedStaticProperties.unapplied.find(
+        source => source.kind === 'soulessence-effect-skill'
+      )
+    ).toMatchObject({
+      sourceId: 1900480,
+      skillLevel: 1,
+      star: 1,
+      appliedToStaticPanel: false,
     });
   });
 

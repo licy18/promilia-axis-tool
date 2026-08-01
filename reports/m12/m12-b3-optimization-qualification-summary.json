@@ -9,12 +9,12 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "0e2fa93b88d82707",
-  "rosterHash": "6b5961e83e5b1eb7",
-  "manifestsHash": "18f56af7088c1225",
-  "ledgerHash": "d95dd2bdd11ecf54",
-  "bindingMatrixHash": "3cf1c9cc678e4193",
-  "catalogHash": "a97ba5f4ff6a397e",
+  "sourceSnapshotHash": "72b7f0306b083d26",
+  "rosterHash": "a5bdc5509416a810",
+  "manifestsHash": "789cbfaa6f320aa6",
+  "ledgerHash": "087eecd723934d7c",
+  "bindingMatrixHash": "329d112e08ce414a",
+  "catalogHash": "f535d05628a250ee",
   "maturityCounts": {
     "extracted": 241,
     "runtime-integrated": 24
@@ -29,8 +29,8 @@
   "gapCounts": {
     "blockingUniqueGapCount": 829,
     "byCategory": {
-      "evidence-insufficient": 184,
-      "not-implemented": 645
+      "evidence-insufficient": 141,
+      "not-implemented": 688
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -38,7 +38,7 @@
       "character-not-optimization-ready": 11,
       "equipment-instance-tier-source-evidence-missing": 137,
       "equipment-visual-acceptance-not-published": 137,
-      "kibo-dna-factor-catalog-unavailable": 43,
+      "kibo-dna-factor-runtime-unapplied": 43,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,

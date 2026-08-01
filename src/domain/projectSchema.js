@@ -240,6 +240,7 @@ export function createLoadout({
   soulessenceLevel = null,
   soulessenceRank = null,
   soulessenceStar = null,
+  soulessenceCultivation = null,
   equipmentLevels = {},
   equipmentCultivation = {},
   kiboConfig = {},
@@ -259,6 +260,13 @@ export function createLoadout({
     soulessenceLevel,
     soulessenceRank,
     ...(soulessenceStar == null ? {} : { soulessenceStar }),
+    ...(soulessenceCultivation == null
+      ? {}
+      : {
+          soulessenceCultivation: structuredClone(
+            soulessenceCultivation
+          ),
+        }),
     equipmentLevels: {
       weapon: equipmentLevels.weapon ?? null,
       top: equipmentLevels.top ?? null,

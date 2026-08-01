@@ -566,9 +566,19 @@ function applySoulessenceSource({
     );
   }
   if (profile.effectSkill?.skillId) {
+    const cultivationEffect = loadout?.soulessenceCultivation?.effectSkill;
     unapplied.push({
       kind: 'soulessence-effect-skill',
       sourceId: profile.effectSkill.skillId,
+      ...(Number(cultivationEffect?.skillId) ===
+      Number(profile.effectSkill.skillId)
+        ? {
+            skillLevel: Number(cultivationEffect.skillLevel),
+            star: Number(cultivationEffect.star),
+            cultivationSourceIdentity:
+              cultivationEffect.sourceIdentity ?? null,
+          }
+        : {}),
       reason: profile.effectSkill.status,
       sourceIdentity: profile.effectSkill.sourceIdentity,
       appliedToStaticPanel: false,

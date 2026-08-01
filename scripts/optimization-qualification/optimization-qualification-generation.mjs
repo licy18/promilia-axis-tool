@@ -15,6 +15,54 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe',
   verifiedMechanics:
     'f38a6c56ad1c7113bd87caa66be27118c0f3fe793e7f0c91e5a76ba80c3cca49',
+  'newTable:accessory.json':
+    '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
+  'newTable:accessory_customed.json':
+    '531e9ada45156f0151d21f959495cd7fd12e8f55a6d7b51997a9f2ac1d9dbb30',
+  'newTable:accessory_level.json':
+    '39c07d5436f4b4b505e6977c9d1ec7d85b440a446c529e4c44ef8964e1eecd93',
+  'newTable:accessory_main.json':
+    '3a62df2b012a1b78a9f8596df2fa6b228eff32b437754359f3cab296074484b8',
+  'newTable:accessory_set.json':
+    'c1968106de40dd6648658841fce5d849fc89de9f2dbfde0709656c10e0d87b47',
+  'newTable:accessory_sub_parameter.json':
+    '1f8fb9f09bd8132973cc4ddb1b517c96e5526bb5bedf982b0121e6916aac334b',
+  'newTable:game.json':
+    '0d4bd1fe373896eba7b8dc555b4fc3153c3021fbaf12402f8451a1a006d0f831',
+  'newTable:hero_break.json':
+    '502f166017f7fbbdd4b55e5b73551faf41348986d149b2ff5165a026ba96db67',
+  'newTable:hero_rank.json':
+    '6baad7776ca8b4128c4c0c4ebf18300bf473b09dd26ca7576614e3f2deaf35c0',
+  'newTable:pet.json':
+    '8f35fb26a638ad746b723af9ab0ad0c0e57c003b3c1daeb9603667120904c5fa',
+  'newTable:pet_dna.json':
+    '178cb62bd33e3d5b24fa7d71622fd6fdf9dfce7718aaa43ec8b6246ff2064ed0',
+  'newTable:pet_dnalink.json':
+    '87ed1daaaaacb53513ed77bd4cd0128024ea5548398e2acee9911b67c74e8ae8',
+  'newTable:pet_favorability.json':
+    '4c8c337cbd9a3c9d7f81907a21f947eac48bdf362765921f5adecf8496c1122e',
+  'newTable:pet_talent_upgrade.json':
+    'cc9dc34abee41cd5df75472c83af2e93e1f060e5764041be498dfdfffb6a6625',
+  'newTable:skill.json':
+    '3b0d134cbe7528eb48d0b3a467778a6115c4fa18c9f48875ae9c3a42c4f3b21a',
+  'newTable:skill_level.json':
+    '6f661653182ddf7a36a64534c7a1a6c20b42a96d73baa1e9455649340c7881bf',
+  'newTable:skillsub_ele_value.json':
+    '836178c72056b4946005cb9d48dc372627ee415f19f0fb73b55809fb1641c1ba',
+  'newTable:skillsub_logic.json':
+    'ca6da39f122466a32b229b9599ecfc34dbdbbf6e10a157c529d43d1043b8f4b7',
+  'newTable:soulessence.json':
+    'a8b3222840e8c28a4bb770b55f4dd9d815720493717a2c9ed0ce7471d9bbed29',
+  'newTable:soulessence_level.json':
+    'f12a49b9cb5a910026a7edbc0bc39231b6d00d9c8339a9f8b51980d4951b7fb6',
+  'newTable:soulessence_rank.json':
+    '48f4c975f8da914f89fde42191e80d746e62b86dbcdad2b714b2f38f3f555986',
+  'newTable:soulessence_value.json':
+    'bf21d3a7c1579ddd16c6abcb52d0a7e5dd90c007274a3fea6fc647f96a084a7b',
+  'newTable:talent_rank.json':
+    '10a718dcc0c9e5c989aae12c03087e2036054107748df3605cb7aae25af8c0c7',
+  'newTable:talent_rune.json':
+    '7c31b396c6418b48fbb8311771fb1c3a0c9bf460f6940fac38dcd62114cf9689',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -45,9 +93,17 @@ const CULTIVATION_SOURCE_FILES = Object.freeze([
   'game.json',
   'hero_break.json',
   'hero_rank.json',
+  'pet.json',
+  'pet_dna.json',
+  'pet_dnalink.json',
   'pet_talent_upgrade.json',
   'pet_favorability.json',
+  'skill.json',
+  'skill_level.json',
+  'skillsub_ele_value.json',
+  'skillsub_logic.json',
   'soulessence.json',
+  'soulessence_level.json',
   'soulessence_rank.json',
   'soulessence_value.json',
   'talent_rank.json',
@@ -442,12 +498,12 @@ function createQualificationManifests({
       blocker(
         'strict-kibo-cultivation-runtime-partial',
         'not-implemented',
-        'Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.'
+        'Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.'
       ),
       blocker(
-        'kibo-dna-factor-catalog-unavailable',
-        'evidence-insufficient',
-        'The current generated source does not expose a complete DNA factor identity and interaction catalog.'
+        'kibo-dna-factor-runtime-unapplied',
+        'not-implemented',
+        'All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.'
       ),
     ];
     if (!maturity || maturity.machineOptimizationReady !== true) {
@@ -505,7 +561,7 @@ function createQualificationManifests({
       blocker(
         'strict-soulessence-cultivation-runtime-partial',
         'not-implemented',
-        'Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.'
+        'Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.'
       ),
       blocker(
         'soulessence-visual-acceptance-not-published',
@@ -677,6 +733,127 @@ function createCultivationCatalog({
         sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
       })),
   }));
+  const skillIds = new Set(
+    sources['newTable:skill.json'].value.rows.map(row => Number(row.id))
+  );
+  const skillLevelsBySkillId = groupBy(
+    sources['newTable:skill_level.json'].value.rows,
+    row => Number(row.skillId)
+  );
+  const skillLogicBySkillId = groupBy(
+    sources['newTable:skillsub_logic.json'].value.rows,
+    row => Number(row.skillId)
+  );
+  const elementValuesBySkillId = groupBy(
+    sources['newTable:skillsub_ele_value.json'].value.rows,
+    row => Number(row.skillId)
+  );
+  const dnaProfiles = sources['newTable:pet_dna.json'].value.rows
+    .slice()
+    .sort((left, right) => Number(left.id) - Number(right.id))
+    .map(row => {
+      const factorId = Number(row.id);
+      const levelRows = skillLevelsBySkillId.get(factorId) ?? [];
+      const logicRows = skillLogicBySkillId.get(factorId) ?? [];
+      const elementRows = elementValuesBySkillId.get(factorId) ?? [];
+      return {
+        factorId,
+        rank: Number(row.rarity),
+        type: Number(row.type),
+        gradeScore: Number(row.gradeScore),
+        rare: row.isRarity === true,
+        skillId: factorId,
+        skillLevel:
+          levelRows.length === 1 ? Number(levelRows[0].level) : null,
+        skillIdentityStatus:
+          skillIds.has(factorId) && levelRows.length === 1
+            ? 'source-indexed'
+            : 'static-evidence-gap',
+        logicRowCount: logicRows.length,
+        effectElementRows: elementRows.map(element => ({
+          elementId: Number(element.elementId),
+          level: Number(element.level),
+          sourceIdentity: `NewTable/skillsub_ele_value.rows[id=${element.id},skillId=${element.skillId}]`,
+        })),
+        runtimeStatus: 'dynamic-unapplied',
+        sourceIdentities: [
+          `NewTable/pet_dna.rows[id=${row.id}]`,
+          `NewTable/skill.rows[id=${factorId}]`,
+          ...levelRows.map(
+            level =>
+              `NewTable/skill_level.rows[id=${level.id},skillId=${level.skillId},level=${level.level}]`
+          ),
+          ...logicRows.map(
+            (_, index) =>
+              `NewTable/skillsub_logic.rows[skillId=${factorId},index=${index}]`
+          ),
+        ],
+      };
+    });
+  const dnaLinks = sources['newTable:pet_dnalink.json'].value.rows.map(row => ({
+    linkId: Number(row.id),
+    requiredTypes: parseIntegerList(row.link),
+    attributeIds: parseIntegerList(row.attribute),
+    valueParam: Number(row.valueParam),
+    runtimeStatus: 'dynamic-unapplied',
+    sourceIdentity: `NewTable/pet_dnalink.rows[id=${row.id}]`,
+  }));
+  const petById = new Map(
+    sources['newTable:pet.json'].value.rows.map(row => [Number(row.id), row])
+  );
+  const kiboDnaProfiles = targetKibos.map(kibo => ({
+    kiboId: Number(kibo.kiboId),
+    sourceFactorIds: parseIntegerList(
+      petById.get(Number(kibo.kiboId))?.kiboDnaList
+    ),
+    sourceIdentity: `NewTable/pet.rows[id=${kibo.kiboId}].kiboDnaList`,
+  }));
+  const soulDefinitionById = new Map(
+    sources['newTable:soulessence.json'].value.rows.map(row => [
+      Number(row.id),
+      row,
+    ])
+  );
+  const soulRanksById = groupBy(
+    sources['newTable:soulessence_rank.json'].value.rows,
+    row => Number(row.relatedId)
+  );
+  const soulEssenceProfiles = publicSoulEssences.map(item => {
+    const definition = soulDefinitionById.get(Number(item.soulEssenceId));
+    const effectSkillId = Number(definition?.reishiSkill) || null;
+    const rankRows = (soulRanksById.get(Number(item.soulEssenceId)) ?? [])
+      .slice()
+      .sort((left, right) => Number(left.rank) - Number(right.rank));
+    const starLevels = (skillLevelsBySkillId.get(effectSkillId) ?? [])
+      .slice()
+      .sort((left, right) => Number(left.level) - Number(right.level))
+      .map(row => ({
+        star: Number(row.level),
+        skillLevel: Number(row.level),
+        sourceIdentity: `NewTable/skill_level.rows[id=${row.id},skillId=${row.skillId},level=${row.level}]`,
+      }));
+    return {
+      soulEssenceId: Number(item.soulEssenceId),
+      rarity: Number(definition?.rarity) || null,
+      maximumLevel: Number(item.maximumLevel) || null,
+      ranks: rankRows.map(row => ({
+        rank: Number(row.rank),
+        levelLimit: Number(row.rankLevelLimit),
+        sourceIdentity: `NewTable/soulessence_rank.rows[id=${row.id},relatedId=${row.relatedId},rank=${row.rank}]`,
+      })),
+      effectSkill: {
+        skillId: effectSkillId,
+        starLevels,
+        status:
+          starLevels.length === 4 &&
+          starLevels.every((row, index) => row.star === index + 1)
+            ? 'source-indexed-runtime-unapplied'
+            : 'static-evidence-gap',
+        sourceIdentity: `NewTable/soulessence.rows[id=${item.soulEssenceId}].reishiSkill`,
+      },
+      sourceIdentity: item.sourceIdentity,
+    };
+  });
   const equipmentBySlot = Object.fromEntries(
     Object.values(EQUIPMENT_SLOT_BY_TYPE).map(slot => [
       slot,
@@ -718,8 +895,20 @@ function createCultivationCatalog({
       talentLevel: { minimum: 1, maximum: 20 },
       talentValues,
       dnaFactors: {
-        status: 'evidence-insufficient',
-        sourceIdentity: null,
+        status:
+          dnaProfiles.length === 215 &&
+          dnaProfiles.every(
+            profile => profile.skillIdentityStatus === 'source-indexed'
+          )
+            ? 'source-indexed-runtime-unapplied'
+            : 'static-evidence-gap',
+        factorCount: dnaProfiles.length,
+        linkCount: dnaLinks.length,
+        profiles: dnaProfiles,
+        links: dnaLinks,
+        kiboProfiles: kiboDnaProfiles,
+        sourceIdentity:
+          'NewTable/pet_dna|NewTable/pet_dnalink|NewTable/pet.kiboDnaList|NewTable/skill|NewTable/skill_level|NewTable/skillsub_logic|NewTable/skillsub_ele_value',
       },
       bondLevel: { minimum: 1, maximum: 10 },
       bondLevels,
@@ -730,7 +919,8 @@ function createCultivationCatalog({
       soulEssenceIds: publicSoulEssences.map(item => item.soulEssenceId),
       level: { minimum: 1, maximum: 100 },
       rank: { minimum: 1, maximum: 6 },
-      star: { minimum: 1, maximum: 5 },
+      star: { minimum: 1, maximum: 4 },
+      profiles: soulEssenceProfiles,
       effectStatus: 'dynamic-unapplied',
     },
     equipment: {
@@ -1181,6 +1371,28 @@ function createImplementationCapabilities({
       ],
     },
     {
+      capabilityIdentity: 'b3-kibo-dna-identity-and-rank-source-index',
+      status:
+        cultivationCatalog.kibo.dnaFactors.status ===
+        'source-indexed-runtime-unapplied'
+          ? 'implemented'
+          : 'evidence-insufficient',
+      evidence: [cultivationCatalog.kibo.dnaFactors.sourceIdentity],
+    },
+    {
+      capabilityIdentity: 'b3-soulessence-star-skill-level-source-index',
+      status: cultivationCatalog.soulEssence.profiles.every(
+        profile =>
+          profile.effectSkill.status === 'source-indexed-runtime-unapplied'
+      )
+        ? 'implemented'
+        : 'evidence-insufficient',
+      evidence: [
+        'NewTable/soulessence.reishiSkill',
+        'NewTable/skill_level.rows[skillId=reishiSkill,level=1..4]',
+      ],
+    },
+    {
       capabilityIdentity: 'b3-kibo-bond-level-one-nine-percent',
       status: 'implemented',
       evidence: [cultivationCatalog.kibo.bondLevels[0].sourceIdentity],
@@ -1265,7 +1477,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Denominators: characters ${summary.denominators.characterOptimizationObjects}, Kibo ${summary.denominators.kibos}, soul essence ${summary.denominators.soulEssences}, equipment ${summary.denominators.equipment}, set skills ${summary.denominators.setSkills}\n` +
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
-    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, Kibo talent/bond resolution, tuning formula source index, duplicate-Kibo slot identity, and formal hard rejection.\n` +
+    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, character node/ascension static projection, Kibo talent/bond and DNA identity resolution, soul-essence star skill-level resolution, tuning formula source index, duplicate-Kibo slot identity, and formal hard rejection.\n` +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     `- Duplicate Kibo species across different actor slots: allowed; runtime owner is \`actorSlotId+kiboId\`.\n` +
     `- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n`;
@@ -1393,6 +1605,16 @@ function parseSkillPair(value) {
 function positiveIntegerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function groupBy(records, selector) {
+  return records.reduce((map, record) => {
+    const key = selector(record);
+    const rows = map.get(key) ?? [];
+    rows.push(record);
+    map.set(key, rows);
+    return map;
+  }, new Map());
 }
 
 function countBy(records, selector) {

@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "6b5961e83e5b1eb7",
+  "rosterHash": "a5bdc5509416a810",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "0e2fa93b88d82707",
-        "6b5961e83e5b1eb7"
+        "72b7f0306b083d26",
+        "a5bdc5509416a810"
       ]
     },
     {
@@ -49,6 +49,21 @@
       "status": "implemented",
       "evidence": [
         "NewTable/pet_talent_upgrade.rows[id=10]"
+      ]
+    },
+    {
+      "capabilityIdentity": "b3-kibo-dna-identity-and-rank-source-index",
+      "status": "implemented",
+      "evidence": [
+        "NewTable/pet_dna|NewTable/pet_dnalink|NewTable/pet.kiboDnaList|NewTable/skill|NewTable/skill_level|NewTable/skillsub_logic|NewTable/skillsub_ele_value"
+      ]
+    },
+    {
+      "capabilityIdentity": "b3-soulessence-star-skill-level-source-index",
+      "status": "implemented",
+      "evidence": [
+        "NewTable/soulessence.reishiSkill",
+        "NewTable/skill_level.rows[skillId=reishiSkill,level=1..4]"
       ]
     },
     {
@@ -6720,28 +6735,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500001]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500001]"
       ],
       "details": {},
-      "gapHash": "a66259c1bccf9bd9"
+      "gapHash": "4ce6f0469b9b32c9"
     },
     {
-      "gapIdentity": "kibo:500001:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500001:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500001",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500001]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500001]"
       ],
       "details": {},
-      "gapHash": "fcc97442ac562906"
+      "gapHash": "06ef2fecddac56db"
     },
     {
       "gapIdentity": "kibo:500001:kibo-headless-maturity-not-ready",
@@ -6780,28 +6795,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500025]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500025]"
       ],
       "details": {},
-      "gapHash": "00e28f052831e441"
+      "gapHash": "32048d660a8bdb05"
     },
     {
-      "gapIdentity": "kibo:500025:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500025:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500025",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500025]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500025]"
       ],
       "details": {},
-      "gapHash": "329366dbdcc58986"
+      "gapHash": "d2891ae270fa717f"
     },
     {
       "gapIdentity": "kibo:500025:kibo-headless-maturity-not-ready",
@@ -6840,28 +6855,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500043]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500043]"
       ],
       "details": {},
-      "gapHash": "f59fa8da11b06001"
+      "gapHash": "fbb091969cb4c4b5"
     },
     {
-      "gapIdentity": "kibo:500043:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500043:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500043",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500043]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500043]"
       ],
       "details": {},
-      "gapHash": "27af7a6fa3938b22"
+      "gapHash": "b40f5b5648899cdf"
     },
     {
       "gapIdentity": "kibo:500043:kibo-headless-maturity-not-ready",
@@ -6900,28 +6915,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500044]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500044]"
       ],
       "details": {},
-      "gapHash": "487091a33e2a8b8d"
+      "gapHash": "b74c2c464a20cbaf"
     },
     {
-      "gapIdentity": "kibo:500044:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500044:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500044",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500044]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500044]"
       ],
       "details": {},
-      "gapHash": "65719de5cede874c"
+      "gapHash": "5bf7ec089e3921a7"
     },
     {
       "gapIdentity": "kibo:500044:kibo-headless-maturity-not-ready",
@@ -6960,28 +6975,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500045]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
       ],
       "details": {},
-      "gapHash": "b324abfa0c5d27f9"
+      "gapHash": "81cc74be5b929039"
     },
     {
-      "gapIdentity": "kibo:500045:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500045:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500045",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500045]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
       ],
       "details": {},
-      "gapHash": "78078c4d1c0f443e"
+      "gapHash": "f9fff6ec549faa1b"
     },
     {
       "gapIdentity": "kibo:500045:kibo-headless-maturity-not-ready",
@@ -7020,28 +7035,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500057]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500057]"
       ],
       "details": {},
-      "gapHash": "3c7422db1b472dc1"
+      "gapHash": "0ad6180199ac1177"
     },
     {
-      "gapIdentity": "kibo:500057:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500057:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500057",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500057]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500057]"
       ],
       "details": {},
-      "gapHash": "8e49665fd4184ec8"
+      "gapHash": "917f3f77d307a803"
     },
     {
       "gapIdentity": "kibo:500057:kibo-headless-maturity-not-ready",
@@ -7080,28 +7095,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500064]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500064]"
       ],
       "details": {},
-      "gapHash": "29fea2b27773a79d"
+      "gapHash": "8a70ab8b0bef15df"
     },
     {
-      "gapIdentity": "kibo:500064:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500064:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500064",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500064]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500064]"
       ],
       "details": {},
-      "gapHash": "8624dc30c1f659e0"
+      "gapHash": "820d1664a88eae03"
     },
     {
       "gapIdentity": "kibo:500064:kibo-headless-maturity-not-ready",
@@ -7140,28 +7155,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500065]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500065]"
       ],
       "details": {},
-      "gapHash": "97fc17a1ff5de3e1"
+      "gapHash": "e8af971a21c0762d"
     },
     {
-      "gapIdentity": "kibo:500065:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500065:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500065",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500065]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500065]"
       ],
       "details": {},
-      "gapHash": "feac2b1edd456b1e"
+      "gapHash": "8266a7b57416b9d7"
     },
     {
       "gapIdentity": "kibo:500065:kibo-headless-maturity-not-ready",
@@ -7200,28 +7215,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500082]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
       ],
       "details": {},
-      "gapHash": "9a031a7c5a88497d"
+      "gapHash": "f96dbe0fd118f8cf"
     },
     {
-      "gapIdentity": "kibo:500082:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500082:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500082",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500082]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
       ],
       "details": {},
-      "gapHash": "2c85921e75a9e774"
+      "gapHash": "01e375d07c0b01d3"
     },
     {
       "gapIdentity": "kibo:500082:kibo-headless-maturity-not-ready",
@@ -7277,28 +7292,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500120]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500120]"
       ],
       "details": {},
-      "gapHash": "0a5a891ce6bf0871"
+      "gapHash": "f931113f0d103f1d"
     },
     {
-      "gapIdentity": "kibo:500120:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500120:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500120",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500120]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500120]"
       ],
       "details": {},
-      "gapHash": "d0f9f1e0222d0b06"
+      "gapHash": "919de8fd39f1ab1f"
     },
     {
       "gapIdentity": "kibo:500120:kibo-headless-maturity-not-ready",
@@ -7337,28 +7352,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500123]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500123]"
       ],
       "details": {},
-      "gapHash": "38aae50cc4073b9d"
+      "gapHash": "1bc5d7038fefdec7"
     },
     {
-      "gapIdentity": "kibo:500123:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500123:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500123",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500123]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500123]"
       ],
       "details": {},
-      "gapHash": "5e0d12803f1aba90"
+      "gapHash": "fe7f887c3a56398f"
     },
     {
       "gapIdentity": "kibo:500123:kibo-headless-maturity-not-ready",
@@ -7397,28 +7412,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500124]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500124]"
       ],
       "details": {},
-      "gapHash": "acecf28d1b42e171"
+      "gapHash": "ddc47a7e677f1885"
     },
     {
-      "gapIdentity": "kibo:500124:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500124:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500124",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500124]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500124]"
       ],
       "details": {},
-      "gapHash": "c8165c5aa095c57e"
+      "gapHash": "ce5785ddd823c467"
     },
     {
       "gapIdentity": "kibo:500124:kibo-headless-maturity-not-ready",
@@ -7457,28 +7472,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500125]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500125]"
       ],
       "details": {},
-      "gapHash": "1fd40309ba2b124d"
+      "gapHash": "6fdb06586a885a3f"
     },
     {
-      "gapIdentity": "kibo:500125:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500125:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500125",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500125]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500125]"
       ],
       "details": {},
-      "gapHash": "e782d0ff5a132ca0"
+      "gapHash": "d21d29a401c904f3"
     },
     {
       "gapIdentity": "kibo:500125:kibo-headless-maturity-not-ready",
@@ -7517,28 +7532,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500126]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500126]"
       ],
       "details": {},
-      "gapHash": "3958983c36f31629"
+      "gapHash": "4ea2731e08b12b69"
     },
     {
-      "gapIdentity": "kibo:500126:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500126:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500126",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500126]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500126]"
       ],
       "details": {},
-      "gapHash": "9e7b09b2df15360a"
+      "gapHash": "1983cff6ae8931a3"
     },
     {
       "gapIdentity": "kibo:500126:kibo-headless-maturity-not-ready",
@@ -7577,28 +7592,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500127]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500127]"
       ],
       "details": {},
-      "gapHash": "dfa1b9a48f1dccc5"
+      "gapHash": "858e0599a6d28b37"
     },
     {
-      "gapIdentity": "kibo:500127:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500127:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500127",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500127]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500127]"
       ],
       "details": {},
-      "gapHash": "2afec712d9351c88"
+      "gapHash": "a35b56ab993d62e7"
     },
     {
       "gapIdentity": "kibo:500127:kibo-headless-maturity-not-ready",
@@ -7637,28 +7652,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500128]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500128]"
       ],
       "details": {},
-      "gapHash": "043b26c65aa89991"
+      "gapHash": "b61bbd55347ca02d"
     },
     {
-      "gapIdentity": "kibo:500128:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500128:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500128",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500128]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500128]"
       ],
       "details": {},
-      "gapHash": "69fd6192c5d5c216"
+      "gapHash": "1d3cf716eba6486f"
     },
     {
       "gapIdentity": "kibo:500128:kibo-headless-maturity-not-ready",
@@ -7697,28 +7712,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500129]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500129]"
       ],
       "details": {},
-      "gapHash": "f68395f5a4182675"
+      "gapHash": "a329bfb5f7f322bf"
     },
     {
-      "gapIdentity": "kibo:500129:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500129:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500129",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500129]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500129]"
       ],
       "details": {},
-      "gapHash": "7e3f9623bbbb98b8"
+      "gapHash": "a8dfb50ae1fe2d23"
     },
     {
       "gapIdentity": "kibo:500129:kibo-headless-maturity-not-ready",
@@ -7757,28 +7772,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500130]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500130]"
       ],
       "details": {},
-      "gapHash": "0b4066c234b30a01"
+      "gapHash": "a34febf528840a1f"
     },
     {
-      "gapIdentity": "kibo:500130:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500130:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500130",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500130]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500130]"
       ],
       "details": {},
-      "gapHash": "73847953163b943c"
+      "gapHash": "ecca378c369c141b"
     },
     {
       "gapIdentity": "kibo:500130:kibo-headless-maturity-not-ready",
@@ -7817,28 +7832,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500131]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500131]"
       ],
       "details": {},
-      "gapHash": "451598e4f8c3125d"
+      "gapHash": "4acd9c73698eef9d"
     },
     {
-      "gapIdentity": "kibo:500131:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500131:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500131",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500131]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500131]"
       ],
       "details": {},
-      "gapHash": "82fa70780471826a"
+      "gapHash": "4771729b91a834ff"
     },
     {
       "gapIdentity": "kibo:500131:kibo-headless-maturity-not-ready",
@@ -7877,28 +7892,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500164]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500164]"
       ],
       "details": {},
-      "gapHash": "8ffa37f8a9111349"
+      "gapHash": "b78834fc8368b405"
     },
     {
-      "gapIdentity": "kibo:500164:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500164:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500164",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500164]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500164]"
       ],
       "details": {},
-      "gapHash": "14569b637a6559ee"
+      "gapHash": "64cfa5aeac64c717"
     },
     {
       "gapIdentity": "kibo:500164:kibo-headless-maturity-not-ready",
@@ -7937,28 +7952,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500165]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500165]"
       ],
       "details": {},
-      "gapHash": "ed6f49faf39859e5"
+      "gapHash": "a24e0a8ace2a6fc7"
     },
     {
-      "gapIdentity": "kibo:500165:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500165:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500165",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500165]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500165]"
       ],
       "details": {},
-      "gapHash": "c5d16c88108330e0"
+      "gapHash": "fb8133f5e09d3673"
     },
     {
       "gapIdentity": "kibo:500165:kibo-headless-maturity-not-ready",
@@ -7997,28 +8012,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500166]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500166]"
       ],
       "details": {},
-      "gapHash": "f7eac3e58877fc91"
+      "gapHash": "c1994107b5d23441"
     },
     {
-      "gapIdentity": "kibo:500166:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500166:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500166",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500166]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500166]"
       ],
       "details": {},
-      "gapHash": "c2fc3a00730383b2"
+      "gapHash": "389e1bc712b7f5db"
     },
     {
       "gapIdentity": "kibo:500166:kibo-headless-maturity-not-ready",
@@ -8057,28 +8072,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500173]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500173]"
       ],
       "details": {},
-      "gapHash": "0b713215b87d8745"
+      "gapHash": "c01074ef67b9a459"
     },
     {
-      "gapIdentity": "kibo:500173:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500173:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500173",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500173]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500173]"
       ],
       "details": {},
-      "gapHash": "dfabc61b64550596"
+      "gapHash": "bac2511ef5ce0023"
     },
     {
       "gapIdentity": "kibo:500173:kibo-headless-maturity-not-ready",
@@ -8117,28 +8132,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500174]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500174]"
       ],
       "details": {},
-      "gapHash": "d72945d54ae58359"
+      "gapHash": "65096af9ecb9b577"
     },
     {
-      "gapIdentity": "kibo:500174:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500174:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500174",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500174]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500174]"
       ],
       "details": {},
-      "gapHash": "8c400fa754dc1bac"
+      "gapHash": "3f887c0495215723"
     },
     {
       "gapIdentity": "kibo:500174:kibo-headless-maturity-not-ready",
@@ -8177,28 +8192,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500175]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500175]"
       ],
       "details": {},
-      "gapHash": "28bb04a6b3f4cc4d"
+      "gapHash": "5bc1f4cf26ba80dd"
     },
     {
-      "gapIdentity": "kibo:500175:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500175:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500175",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500175]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500175]"
       ],
       "details": {},
-      "gapHash": "89b2bae5ef85e792"
+      "gapHash": "95bb1d52ab67bcef"
     },
     {
       "gapIdentity": "kibo:500175:kibo-headless-maturity-not-ready",
@@ -8237,28 +8252,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500185]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
       ],
       "details": {},
-      "gapHash": "90f6c63bd58622bd"
+      "gapHash": "48f7c1ca41dc7367"
     },
     {
-      "gapIdentity": "kibo:500185:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500185:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500185",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500185]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
       ],
       "details": {},
-      "gapHash": "1088185099aad794"
+      "gapHash": "86db23e80427e897"
     },
     {
       "gapIdentity": "kibo:500185:kibo-headless-maturity-not-ready",
@@ -8314,28 +8329,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500220]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500220]"
       ],
       "details": {},
-      "gapHash": "4e7bd2f189ae784d"
+      "gapHash": "11db25b789c808bf"
     },
     {
-      "gapIdentity": "kibo:500220:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500220:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500220",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500220]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500220]"
       ],
       "details": {},
-      "gapHash": "83863b8c726f34a8"
+      "gapHash": "93585615f1f7a067"
     },
     {
       "gapIdentity": "kibo:500220:kibo-headless-maturity-not-ready",
@@ -8374,28 +8389,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500231]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500231]"
       ],
       "details": {},
-      "gapHash": "56a7cf775c619469"
+      "gapHash": "abf21b69d915f477"
     },
     {
-      "gapIdentity": "kibo:500231:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500231:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500231",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500231]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500231]"
       ],
       "details": {},
-      "gapHash": "604894f5c65eae24"
+      "gapHash": "263aa7859ab386b7"
     },
     {
       "gapIdentity": "kibo:500231:kibo-headless-maturity-not-ready",
@@ -8451,28 +8466,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500296]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500296]"
       ],
       "details": {},
-      "gapHash": "a308735348c36eed"
+      "gapHash": "c3ce24e6d8f73f51"
     },
     {
-      "gapIdentity": "kibo:500296:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500296:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500296",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500296]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500296]"
       ],
       "details": {},
-      "gapHash": "45a45dc57f3b851a"
+      "gapHash": "dea18af90f41eecb"
     },
     {
       "gapIdentity": "kibo:500296:kibo-headless-maturity-not-ready",
@@ -8511,28 +8526,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500304]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
       ],
       "details": {},
-      "gapHash": "f29a14fa19c9e811"
+      "gapHash": "df675c0aef745915"
     },
     {
-      "gapIdentity": "kibo:500304:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500304:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500304",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500304]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
       ],
       "details": {},
-      "gapHash": "c6389ae6976ec96a"
+      "gapHash": "865dce8adf023b8f"
     },
     {
       "gapIdentity": "kibo:500304:kibo-headless-maturity-not-ready",
@@ -8571,28 +8586,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500305]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500305]"
       ],
       "details": {},
-      "gapHash": "b69369c3a5369835"
+      "gapHash": "eacdc7e90d3cddaf"
     },
     {
-      "gapIdentity": "kibo:500305:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500305:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500305",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500305]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500305]"
       ],
       "details": {},
-      "gapHash": "9bff893db29d9ffc"
+      "gapHash": "162436b393c9fd73"
     },
     {
       "gapIdentity": "kibo:500305:kibo-headless-maturity-not-ready",
@@ -8631,28 +8646,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500306]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500306]"
       ],
       "details": {},
-      "gapHash": "353c377288e81019"
+      "gapHash": "70fe41f702ead859"
     },
     {
-      "gapIdentity": "kibo:500306:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500306:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500306",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500306]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500306]"
       ],
       "details": {},
-      "gapHash": "ed56f2c91a202636"
+      "gapHash": "429bcf6b3cec09ab"
     },
     {
       "gapIdentity": "kibo:500306:kibo-headless-maturity-not-ready",
@@ -8691,28 +8706,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500322]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500322]"
       ],
       "details": {},
-      "gapHash": "bc8939ff3f94a5b1"
+      "gapHash": "6be33a9ac00cbf4d"
     },
     {
-      "gapIdentity": "kibo:500322:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500322:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500322",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500322]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500322]"
       ],
       "details": {},
-      "gapHash": "fd8a01f5e4b5408e"
+      "gapHash": "6c2d1f5f1958890f"
     },
     {
       "gapIdentity": "kibo:500322:kibo-headless-maturity-not-ready",
@@ -8751,28 +8766,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500323]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500323]"
       ],
       "details": {},
-      "gapHash": "380543f5e681bf35"
+      "gapHash": "5ed1d012a8f2c46f"
     },
     {
-      "gapIdentity": "kibo:500323:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500323:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500323",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500323]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500323]"
       ],
       "details": {},
-      "gapHash": "486b7560ccc8c000"
+      "gapHash": "1b15173d56186273"
     },
     {
       "gapIdentity": "kibo:500323:kibo-headless-maturity-not-ready",
@@ -8811,28 +8826,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500324]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500324]"
       ],
       "details": {},
-      "gapHash": "c6fd849679fc6089"
+      "gapHash": "4b48638049194c19"
     },
     {
-      "gapIdentity": "kibo:500324:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500324:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500324",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500324]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500324]"
       ],
       "details": {},
-      "gapHash": "326e95f1e03af3d2"
+      "gapHash": "af991ebaa2281133"
     },
     {
       "gapIdentity": "kibo:500324:kibo-headless-maturity-not-ready",
@@ -8871,28 +8886,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500357]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500357]"
       ],
       "details": {},
-      "gapHash": "a98bc85741fe2a5d"
+      "gapHash": "5e5de844ba05c2b9"
     },
     {
-      "gapIdentity": "kibo:500357:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500357:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500357",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500357]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500357]"
       ],
       "details": {},
-      "gapHash": "763cc337519f6e2a"
+      "gapHash": "64f79a31d1de558b"
     },
     {
       "gapIdentity": "kibo:500357:kibo-headless-maturity-not-ready",
@@ -8931,28 +8946,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500358]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500358]"
       ],
       "details": {},
-      "gapHash": "02a82f20f1f56491"
+      "gapHash": "a024f88f6f43932f"
     },
     {
-      "gapIdentity": "kibo:500358:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500358:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500358",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500358]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500358]"
       ],
       "details": {},
-      "gapHash": "437bc92dd82a5520"
+      "gapHash": "5d0eda01046e6983"
     },
     {
       "gapIdentity": "kibo:500358:kibo-headless-maturity-not-ready",
@@ -8991,28 +9006,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500360]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500360]"
       ],
       "details": {},
-      "gapHash": "6fd9dee7ff6589f1"
+      "gapHash": "6de4ce2038e246e1"
     },
     {
-      "gapIdentity": "kibo:500360:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500360:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500360",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500360]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500360]"
       ],
       "details": {},
-      "gapHash": "8d607884409dc952"
+      "gapHash": "69cca7b66c92fd8b"
     },
     {
       "gapIdentity": "kibo:500360:kibo-headless-maturity-not-ready",
@@ -9068,28 +9083,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500368]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500368]"
       ],
       "details": {},
-      "gapHash": "e0dbec5cfc807841"
+      "gapHash": "808005d0e0c8f781"
     },
     {
-      "gapIdentity": "kibo:500368:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500368:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500368",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500368]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500368]"
       ],
       "details": {},
-      "gapHash": "e56489fa9bbb0402"
+      "gapHash": "df6d21789e44ccbb"
     },
     {
       "gapIdentity": "kibo:500368:kibo-headless-maturity-not-ready",
@@ -9128,28 +9143,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500369]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
       ],
       "details": {},
-      "gapHash": "0b976cd61facd175"
+      "gapHash": "32c5f852a9b50c1f"
     },
     {
-      "gapIdentity": "kibo:500369:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500369:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500369",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500369]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
       ],
       "details": {},
-      "gapHash": "ee7c3f9c6fc70f70"
+      "gapHash": "f6737324fbd4d247"
     },
     {
       "gapIdentity": "kibo:500369:kibo-headless-maturity-not-ready",
@@ -9188,28 +9203,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500370]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500370]"
       ],
       "details": {},
-      "gapHash": "fe2df5a683f9f709"
+      "gapHash": "ec87e7c3156a23c7"
     },
     {
-      "gapIdentity": "kibo:500370:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500370:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500370",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500370]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500370]"
       ],
       "details": {},
-      "gapHash": "faf9195f99962784"
+      "gapHash": "6807beb0f2b69d4f"
     },
     {
       "gapIdentity": "kibo:500370:kibo-headless-maturity-not-ready",
@@ -9248,28 +9263,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500469]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500469]"
       ],
       "details": {},
-      "gapHash": "ecb9bcc241c7f161"
+      "gapHash": "b5a7e728d3c4238d"
     },
     {
-      "gapIdentity": "kibo:500469:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500469:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500469",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500469]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500469]"
       ],
       "details": {},
-      "gapHash": "1b120eddf6402a96"
+      "gapHash": "0b63f186abdba7d7"
     },
     {
       "gapIdentity": "kibo:500469:kibo-headless-maturity-not-ready",
@@ -9308,28 +9323,28 @@
       "code": "strict-kibo-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Kibo level, four talent values, and bond inheritance are applied; DNA factors remain unapplied.",
+      "message": "Kibo level, four talent values, bond inheritance, and DNA identity/rank are resolved; DNA Battle skills and link effects remain unapplied.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500470]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500470]"
       ],
       "details": {},
-      "gapHash": "5c1b1e8ff4b41405"
+      "gapHash": "160af92d3b07eab5"
     },
     {
-      "gapIdentity": "kibo:500470:kibo-dna-factor-catalog-unavailable",
+      "gapIdentity": "kibo:500470:kibo-dna-factor-runtime-unapplied",
       "objectKind": "kibo",
       "objectId": "500470",
-      "code": "kibo-dna-factor-catalog-unavailable",
-      "category": "evidence-insufficient",
+      "code": "kibo-dna-factor-runtime-unapplied",
+      "category": "not-implemented",
       "blocking": true,
-      "message": "The current generated source does not expose a complete DNA factor identity and interaction catalog.",
+      "message": "All current DNA factor and link identities are source-indexed, but their Battle skills and link effects are not applied by the canonical runtime.",
       "sourceIdentities": [
         "generated/kibos.json#items[id=500470]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500470]"
       ],
       "details": {},
-      "gapHash": "8a9f9001a1f7a91a"
+      "gapHash": "d6f7723ab87c4ab7"
     },
     {
       "gapIdentity": "kibo:500470:kibo-headless-maturity-not-ready",
@@ -9730,13 +9745,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10001]",
         "NewTable/soulessence.rows[id=10001]"
       ],
       "details": {},
-      "gapHash": "947a8e83e3287e26"
+      "gapHash": "cddb62b3fb18165f"
     },
     {
       "gapIdentity": "soul-essence:10001:soulessence-visual-acceptance-not-published",
@@ -9777,13 +9792,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10002]",
         "NewTable/soulessence.rows[id=10002]"
       ],
       "details": {},
-      "gapHash": "1d68e01a8a71b50e"
+      "gapHash": "dfe4876e44e834c7"
     },
     {
       "gapIdentity": "soul-essence:10002:soulessence-visual-acceptance-not-published",
@@ -9824,13 +9839,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10008]",
         "NewTable/soulessence.rows[id=10008]"
       ],
       "details": {},
-      "gapHash": "d8f31f74ba4a22b2"
+      "gapHash": "3ba6d8e807c7066b"
     },
     {
       "gapIdentity": "soul-essence:10008:soulessence-visual-acceptance-not-published",
@@ -9871,13 +9886,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10011]",
         "NewTable/soulessence.rows[id=10011]"
       ],
       "details": {},
-      "gapHash": "184b5bf163176ef6"
+      "gapHash": "ef3817d29fb4d0b3"
     },
     {
       "gapIdentity": "soul-essence:10011:soulessence-visual-acceptance-not-published",
@@ -9918,13 +9933,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10018]",
         "NewTable/soulessence.rows[id=10018]"
       ],
       "details": {},
-      "gapHash": "bebde07c36e5fbfa"
+      "gapHash": "550b555ec410b96f"
     },
     {
       "gapIdentity": "soul-essence:10018:soulessence-visual-acceptance-not-published",
@@ -9965,13 +9980,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10032]",
         "NewTable/soulessence.rows[id=10032]"
       ],
       "details": {},
-      "gapHash": "c6bb1f0060a089e6"
+      "gapHash": "55362d87e88d73ff"
     },
     {
       "gapIdentity": "soul-essence:10032:soulessence-visual-acceptance-not-published",
@@ -10012,13 +10027,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10033]",
         "NewTable/soulessence.rows[id=10033]"
       ],
       "details": {},
-      "gapHash": "d260ec620767d04a"
+      "gapHash": "fc0dbbb6912d4173"
     },
     {
       "gapIdentity": "soul-essence:10033:soulessence-visual-acceptance-not-published",
@@ -10059,13 +10074,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10034]",
         "NewTable/soulessence.rows[id=10034]"
       ],
       "details": {},
-      "gapHash": "c95efe4ade9e9dda"
+      "gapHash": "21820b00d24e8d6b"
     },
     {
       "gapIdentity": "soul-essence:10034:soulessence-visual-acceptance-not-published",
@@ -10106,13 +10121,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10037]",
         "NewTable/soulessence.rows[id=10037]"
       ],
       "details": {},
-      "gapHash": "03a2e32f66a154a2"
+      "gapHash": "54585bd013b23323"
     },
     {
       "gapIdentity": "soul-essence:10037:soulessence-visual-acceptance-not-published",
@@ -10153,13 +10168,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10043]",
         "NewTable/soulessence.rows[id=10043]"
       ],
       "details": {},
-      "gapHash": "52a04bd06dcbd8a2"
+      "gapHash": "aebae0df54c8d943"
     },
     {
       "gapIdentity": "soul-essence:10043:soulessence-visual-acceptance-not-published",
@@ -10200,13 +10215,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10044]",
         "NewTable/soulessence.rows[id=10044]"
       ],
       "details": {},
-      "gapHash": "21af603c3d024f82"
+      "gapHash": "a786a383172323c3"
     },
     {
       "gapIdentity": "soul-essence:10044:soulessence-visual-acceptance-not-published",
@@ -10247,13 +10262,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10047]",
         "NewTable/soulessence.rows[id=10047]"
       ],
       "details": {},
-      "gapHash": "af2bab8d51e9a0fa"
+      "gapHash": "695f61e388fedadb"
     },
     {
       "gapIdentity": "soul-essence:10047:soulessence-visual-acceptance-not-published",
@@ -10294,13 +10309,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10048]",
         "NewTable/soulessence.rows[id=10048]"
       ],
       "details": {},
-      "gapHash": "29379784bfe45dca"
+      "gapHash": "6aac2a3337cca76b"
     },
     {
       "gapIdentity": "soul-essence:10048:soulessence-visual-acceptance-not-published",
@@ -10341,13 +10356,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10050]",
         "NewTable/soulessence.rows[id=10050]"
       ],
       "details": {},
-      "gapHash": "eb1df671b50aad32"
+      "gapHash": "742794d0e5acace7"
     },
     {
       "gapIdentity": "soul-essence:10050:soulessence-visual-acceptance-not-published",
@@ -10388,13 +10403,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10052]",
         "NewTable/soulessence.rows[id=10052]"
       ],
       "details": {},
-      "gapHash": "552777e1ea63b8c6"
+      "gapHash": "4819bb63108fd92b"
     },
     {
       "gapIdentity": "soul-essence:10052:soulessence-visual-acceptance-not-published",
@@ -10435,13 +10450,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10055]",
         "NewTable/soulessence.rows[id=10055]"
       ],
       "details": {},
-      "gapHash": "57655f72fbee8a86"
+      "gapHash": "9f800526b3fd9963"
     },
     {
       "gapIdentity": "soul-essence:10055:soulessence-visual-acceptance-not-published",
@@ -10482,13 +10497,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10056]",
         "NewTable/soulessence.rows[id=10056]"
       ],
       "details": {},
-      "gapHash": "00bf5ad363a000ae"
+      "gapHash": "1f494e0b30d7704b"
     },
     {
       "gapIdentity": "soul-essence:10056:soulessence-visual-acceptance-not-published",
@@ -10529,13 +10544,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10057]",
         "NewTable/soulessence.rows[id=10057]"
       ],
       "details": {},
-      "gapHash": "347a3982e17fb472"
+      "gapHash": "ba969d7dd3244ce7"
     },
     {
       "gapIdentity": "soul-essence:10057:soulessence-visual-acceptance-not-published",
@@ -10576,13 +10591,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10058]",
         "NewTable/soulessence.rows[id=10058]"
       ],
       "details": {},
-      "gapHash": "378756d46f4a8fd2"
+      "gapHash": "ddd2e251604276a7"
     },
     {
       "gapIdentity": "soul-essence:10058:soulessence-visual-acceptance-not-published",
@@ -10623,13 +10638,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10059]",
         "NewTable/soulessence.rows[id=10059]"
       ],
       "details": {},
-      "gapHash": "d7ae30f795788d4e"
+      "gapHash": "2b1855424b11cf83"
     },
     {
       "gapIdentity": "soul-essence:10059:soulessence-visual-acceptance-not-published",
@@ -10670,13 +10685,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10060]",
         "NewTable/soulessence.rows[id=10060]"
       ],
       "details": {},
-      "gapHash": "af89ab5a4aea0222"
+      "gapHash": "917f6756a418f067"
     },
     {
       "gapIdentity": "soul-essence:10060:soulessence-visual-acceptance-not-published",
@@ -10717,13 +10732,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10061]",
         "NewTable/soulessence.rows[id=10061]"
       ],
       "details": {},
-      "gapHash": "eddde47f52c7e2fe"
+      "gapHash": "338a53793d813aeb"
     },
     {
       "gapIdentity": "soul-essence:10061:soulessence-visual-acceptance-not-published",
@@ -10764,13 +10779,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10062]",
         "NewTable/soulessence.rows[id=10062]"
       ],
       "details": {},
-      "gapHash": "7597b473448475ae"
+      "gapHash": "c11ad10028408053"
     },
     {
       "gapIdentity": "soul-essence:10062:soulessence-visual-acceptance-not-published",
@@ -10811,13 +10826,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10063]",
         "NewTable/soulessence.rows[id=10063]"
       ],
       "details": {},
-      "gapHash": "196d0ac8fc187dfa"
+      "gapHash": "43a98b141255afef"
     },
     {
       "gapIdentity": "soul-essence:10063:soulessence-visual-acceptance-not-published",
@@ -10858,13 +10873,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10071]",
         "NewTable/soulessence.rows[id=10071]"
       ],
       "details": {},
-      "gapHash": "5fc52fdc69d312ee"
+      "gapHash": "8f4f2131fce651af"
     },
     {
       "gapIdentity": "soul-essence:10071:soulessence-visual-acceptance-not-published",
@@ -10905,13 +10920,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10076]",
         "NewTable/soulessence.rows[id=10076]"
       ],
       "details": {},
-      "gapHash": "b66da43e073cb076"
+      "gapHash": "3823f3d928189c1f"
     },
     {
       "gapIdentity": "soul-essence:10076:soulessence-visual-acceptance-not-published",
@@ -10952,13 +10967,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10078]",
         "NewTable/soulessence.rows[id=10078]"
       ],
       "details": {},
-      "gapHash": "6bc02f9ca3ed406a"
+      "gapHash": "aa520a1fccbd807b"
     },
     {
       "gapIdentity": "soul-essence:10078:soulessence-visual-acceptance-not-published",
@@ -10999,13 +11014,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10084]",
         "NewTable/soulessence.rows[id=10084]"
       ],
       "details": {},
-      "gapHash": "fcfb44c9b865123a"
+      "gapHash": "dced118148b28243"
     },
     {
       "gapIdentity": "soul-essence:10084:soulessence-visual-acceptance-not-published",
@@ -11046,13 +11061,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10093]",
         "NewTable/soulessence.rows[id=10093]"
       ],
       "details": {},
-      "gapHash": "15964428da1b2c52"
+      "gapHash": "4c7b7edd42653637"
     },
     {
       "gapIdentity": "soul-essence:10093:soulessence-visual-acceptance-not-published",
@@ -11093,13 +11108,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10094]",
         "NewTable/soulessence.rows[id=10094]"
       ],
       "details": {},
-      "gapHash": "89747abf79b2079a"
+      "gapHash": "c741b75fd6b7e6e7"
     },
     {
       "gapIdentity": "soul-essence:10094:soulessence-visual-acceptance-not-published",
@@ -11140,13 +11155,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10095]",
         "NewTable/soulessence.rows[id=10095]"
       ],
       "details": {},
-      "gapHash": "b7028567443b6abe"
+      "gapHash": "0236c74d49787243"
     },
     {
       "gapIdentity": "soul-essence:10095:soulessence-visual-acceptance-not-published",
@@ -11187,13 +11202,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10097]",
         "NewTable/soulessence.rows[id=10097]"
       ],
       "details": {},
-      "gapHash": "4893b5a732882202"
+      "gapHash": "7b49acae0fcea24f"
     },
     {
       "gapIdentity": "soul-essence:10097:soulessence-visual-acceptance-not-published",
@@ -11234,13 +11249,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10098]",
         "NewTable/soulessence.rows[id=10098]"
       ],
       "details": {},
-      "gapHash": "336a36818ce6f5ba"
+      "gapHash": "722c928d79f689ff"
     },
     {
       "gapIdentity": "soul-essence:10098:soulessence-visual-acceptance-not-published",
@@ -11281,13 +11296,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10101]",
         "NewTable/soulessence.rows[id=10101]"
       ],
       "details": {},
-      "gapHash": "64faf706bc918f82"
+      "gapHash": "6a1c2cad6d3d25bb"
     },
     {
       "gapIdentity": "soul-essence:10101:soulessence-visual-acceptance-not-published",
@@ -11328,13 +11343,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10107]",
         "NewTable/soulessence.rows[id=10107]"
       ],
       "details": {},
-      "gapHash": "e3b003833b56f33e"
+      "gapHash": "f82a170646cf55a7"
     },
     {
       "gapIdentity": "soul-essence:10107:soulessence-visual-acceptance-not-published",
@@ -11375,13 +11390,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10121]",
         "NewTable/soulessence.rows[id=10121]"
       ],
       "details": {},
-      "gapHash": "05fdb514a11783da"
+      "gapHash": "4f23e5d6445636f7"
     },
     {
       "gapIdentity": "soul-essence:10121:soulessence-visual-acceptance-not-published",
@@ -11422,13 +11437,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10122]",
         "NewTable/soulessence.rows[id=10122]"
       ],
       "details": {},
-      "gapHash": "e3c35fd72fbf386a"
+      "gapHash": "56c65c0b89ea656f"
     },
     {
       "gapIdentity": "soul-essence:10122:soulessence-visual-acceptance-not-published",
@@ -11469,13 +11484,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10123]",
         "NewTable/soulessence.rows[id=10123]"
       ],
       "details": {},
-      "gapHash": "d5f64fb4453757de"
+      "gapHash": "620072014829d71b"
     },
     {
       "gapIdentity": "soul-essence:10123:soulessence-visual-acceptance-not-published",
@@ -11516,13 +11531,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10124]",
         "NewTable/soulessence.rows[id=10124]"
       ],
       "details": {},
-      "gapHash": "24bea489b7b9f8ee"
+      "gapHash": "36e6890bf68dc2db"
     },
     {
       "gapIdentity": "soul-essence:10124:soulessence-visual-acceptance-not-published",
@@ -11563,13 +11578,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10125]",
         "NewTable/soulessence.rows[id=10125]"
       ],
       "details": {},
-      "gapHash": "e08aa70eb9d21d7a"
+      "gapHash": "3a8890e91685b287"
     },
     {
       "gapIdentity": "soul-essence:10125:soulessence-visual-acceptance-not-published",
@@ -11610,13 +11625,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10130]",
         "NewTable/soulessence.rows[id=10130]"
       ],
       "details": {},
-      "gapHash": "45fc12adbe774e2e"
+      "gapHash": "37896c77b5ce163f"
     },
     {
       "gapIdentity": "soul-essence:10130:soulessence-visual-acceptance-not-published",
@@ -11657,13 +11672,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10131]",
         "NewTable/soulessence.rows[id=10131]"
       ],
       "details": {},
-      "gapHash": "43efeb6ac802668a"
+      "gapHash": "8116d388fbd09b73"
     },
     {
       "gapIdentity": "soul-essence:10131:soulessence-visual-acceptance-not-published",
@@ -11704,13 +11719,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10132]",
         "NewTable/soulessence.rows[id=10132]"
       ],
       "details": {},
-      "gapHash": "516f303116e25512"
+      "gapHash": "00e9ff6f1385a60b"
     },
     {
       "gapIdentity": "soul-essence:10132:soulessence-visual-acceptance-not-published",
@@ -11751,13 +11766,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10133]",
         "NewTable/soulessence.rows[id=10133]"
       ],
       "details": {},
-      "gapHash": "5017c39a3ef322de"
+      "gapHash": "45b1ad6d6f7fb0b7"
     },
     {
       "gapIdentity": "soul-essence:10133:soulessence-visual-acceptance-not-published",
@@ -11798,13 +11813,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10136]",
         "NewTable/soulessence.rows[id=10136]"
       ],
       "details": {},
-      "gapHash": "96edfb031f82a96a"
+      "gapHash": "655b61fe7d5e5cdb"
     },
     {
       "gapIdentity": "soul-essence:10136:soulessence-visual-acceptance-not-published",
@@ -11845,13 +11860,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10146]",
         "NewTable/soulessence.rows[id=10146]"
       ],
       "details": {},
-      "gapHash": "0f7fdcc6ee7c3d22"
+      "gapHash": "a35d9ec0278e8c33"
     },
     {
       "gapIdentity": "soul-essence:10146:soulessence-visual-acceptance-not-published",
@@ -11892,13 +11907,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10147]",
         "NewTable/soulessence.rows[id=10147]"
       ],
       "details": {},
-      "gapHash": "798b3748db8691e6"
+      "gapHash": "e769dc2990228247"
     },
     {
       "gapIdentity": "soul-essence:10147:soulessence-visual-acceptance-not-published",
@@ -11939,13 +11954,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10149]",
         "NewTable/soulessence.rows[id=10149]"
       ],
       "details": {},
-      "gapHash": "dce763071fbdeb42"
+      "gapHash": "a002a464ba8b7523"
     },
     {
       "gapIdentity": "soul-essence:10149:soulessence-visual-acceptance-not-published",
@@ -11986,13 +12001,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10150]",
         "NewTable/soulessence.rows[id=10150]"
       ],
       "details": {},
-      "gapHash": "b1d8c4eda450d1ce"
+      "gapHash": "b4f49276ec0da9cb"
     },
     {
       "gapIdentity": "soul-essence:10150:soulessence-visual-acceptance-not-published",
@@ -12033,13 +12048,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10151]",
         "NewTable/soulessence.rows[id=10151]"
       ],
       "details": {},
-      "gapHash": "6a23da49b53afaf2"
+      "gapHash": "7263fff004707eaf"
     },
     {
       "gapIdentity": "soul-essence:10151:soulessence-visual-acceptance-not-published",
@@ -12080,13 +12095,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10152]",
         "NewTable/soulessence.rows[id=10152]"
       ],
       "details": {},
-      "gapHash": "ac5d45c896e50b42"
+      "gapHash": "a3e7d432f971b617"
     },
     {
       "gapIdentity": "soul-essence:10152:soulessence-visual-acceptance-not-published",
@@ -12127,13 +12142,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10154]",
         "NewTable/soulessence.rows[id=10154]"
       ],
       "details": {},
-      "gapHash": "3d35f3651ab4eb06"
+      "gapHash": "d7cfa2bab4eb233b"
     },
     {
       "gapIdentity": "soul-essence:10154:soulessence-visual-acceptance-not-published",
@@ -12174,13 +12189,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10155]",
         "NewTable/soulessence.rows[id=10155]"
       ],
       "details": {},
-      "gapHash": "1326f8c4828fce42"
+      "gapHash": "86287c81d5cbbcd7"
     },
     {
       "gapIdentity": "soul-essence:10155:soulessence-visual-acceptance-not-published",
@@ -12221,13 +12236,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10156]",
         "NewTable/soulessence.rows[id=10156]"
       ],
       "details": {},
-      "gapHash": "fbde7c284e461e52"
+      "gapHash": "61da64722d5b500f"
     },
     {
       "gapIdentity": "soul-essence:10156:soulessence-visual-acceptance-not-published",
@@ -12268,13 +12283,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10169]",
         "NewTable/soulessence.rows[id=10169]"
       ],
       "details": {},
-      "gapHash": "1bb746cf373571da"
+      "gapHash": "1c742377b3279007"
     },
     {
       "gapIdentity": "soul-essence:10169:soulessence-visual-acceptance-not-published",
@@ -12315,13 +12330,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10170]",
         "NewTable/soulessence.rows[id=10170]"
       ],
       "details": {},
-      "gapHash": "136b561175e6612e"
+      "gapHash": "853217ca3caaef1f"
     },
     {
       "gapIdentity": "soul-essence:10170:soulessence-visual-acceptance-not-published",
@@ -12362,13 +12377,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10175]",
         "NewTable/soulessence.rows[id=10175]"
       ],
       "details": {},
-      "gapHash": "365adc6af9e138b2"
+      "gapHash": "886ac3251a23368b"
     },
     {
       "gapIdentity": "soul-essence:10175:soulessence-visual-acceptance-not-published",
@@ -12409,13 +12424,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10176]",
         "NewTable/soulessence.rows[id=10176]"
       ],
       "details": {},
-      "gapHash": "03f82cadfd5c24f2"
+      "gapHash": "0ae30169e01e3fe3"
     },
     {
       "gapIdentity": "soul-essence:10176:soulessence-visual-acceptance-not-published",
@@ -12456,13 +12471,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10196]",
         "NewTable/soulessence.rows[id=10196]"
       ],
       "details": {},
-      "gapHash": "bb8a7ed2ea79774a"
+      "gapHash": "ed97b68c5abf9ccf"
     },
     {
       "gapIdentity": "soul-essence:10196:soulessence-visual-acceptance-not-published",
@@ -12503,13 +12518,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10197]",
         "NewTable/soulessence.rows[id=10197]"
       ],
       "details": {},
-      "gapHash": "de5b84c86e2b4f66"
+      "gapHash": "970edb9f585a0ccb"
     },
     {
       "gapIdentity": "soul-essence:10197:soulessence-visual-acceptance-not-published",
@@ -12550,13 +12565,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10198]",
         "NewTable/soulessence.rows[id=10198]"
       ],
       "details": {},
-      "gapHash": "ff10ca048fae670e"
+      "gapHash": "524c22aa86b550f3"
     },
     {
       "gapIdentity": "soul-essence:10198:soulessence-visual-acceptance-not-published",
@@ -12597,13 +12612,13 @@
       "code": "strict-soulessence-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Soul essence level and rank are applied; star-driven dynamic skill levels remain unapplied.",
+      "message": "Soul essence level/rank legality and star-driven effect skill levels are resolved; effect skill mechanics remain dynamically unapplied.",
       "sourceIdentities": [
         "generated/soulessences.json#items[id=10216]",
         "NewTable/soulessence.rows[id=10216]"
       ],
       "details": {},
-      "gapHash": "2142c91bbb70c382"
+      "gapHash": "7d60e122601cfd5f"
     },
     {
       "gapIdentity": "soul-essence:10216:soulessence-visual-acceptance-not-published",
@@ -12624,8 +12639,8 @@
   "summary": {
     "blockingUniqueGapCount": 829,
     "byCategory": {
-      "evidence-insufficient": 184,
-      "not-implemented": 645
+      "evidence-insufficient": 141,
+      "not-implemented": 688
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -12633,7 +12648,7 @@
       "character-not-optimization-ready": 11,
       "equipment-instance-tier-source-evidence-missing": 137,
       "equipment-visual-acceptance-not-published": 137,
-      "kibo-dna-factor-catalog-unavailable": 43,
+      "kibo-dna-factor-runtime-unapplied": 43,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
@@ -12654,5 +12669,5 @@
       "soul-essence": 186
     }
   },
-  "ledgerHash": "d95dd2bdd11ecf54"
+  "ledgerHash": "087eecd723934d7c"
 }
