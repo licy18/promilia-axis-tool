@@ -1769,9 +1769,9 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 
 M12-B-R2 已用候选动作的真实资源条件和 canonical 资源轨迹生成最早可执行阈值等待，避免 SP/奇波能量逐整数事件消耗搜索深度；没有正增长来源的资源不会生成等待。多 seed 报告按稳定 actor/action/hit identity 聚合贡献，同时保留每个样本的 trace/hash，聚合贡献与目标指标守恒。独立验收确认提交 `e3777ecf6ae4564a4164e2fd567ff058aa80b9ac` 通过且无新增 P0-P3，M12-B 正式关闭。当前优先实施可持续循环 DPS；M12-C 继续锁定。
 
-### M12-B2-R2 可持续循环 DPS 整改完成，等待产品复验（2026-08-01）
+### M12-B2 可持续循环 DPS 已通过产品验收并正式关闭（2026-08-01）
 
-Machine Axis 的 `AzPrMachineAxisCycleDps` v1 与 CLI `cycle` 继续由唯一 canonical core 计算显式半开循环区间。R2 对 sampled 使用 cycle-local 共同随机数证明状态闭环，同时保留每个 seed 的独立伤害样本，并结构化输出样本数、均值、样本方差、分位数及 actor/action/hit 贡献守恒；自然暴击波动不再误判为循环泄漏。奇波触发次数由生成层统一分类：`-1` 与 `9999999` 为 unlimited，小正整数为 finite，未知语义保持 evidence-open；河狸仔 520082 与 520087 稳态刷新可闭环，驮驮龙 15 秒 ICD 和真实一次性触发仍拒绝。权威 expected 示例保持 `22.44996643`、4 hit、`cycleDps=4.48999329`。当前停在 M12-B2-R2 产品复验点，M12-B3/M12-C 未启动。
+Machine Axis 的 `AzPrMachineAxisCycleDps` v1 与 CLI `cycle` 继续由唯一 canonical core 计算显式半开循环区间。R2 对 sampled 使用 cycle-local 共同随机数证明状态闭环，同时保留每个 seed 的独立伤害样本，并结构化输出样本数、均值、样本方差、分位数及 actor/action/hit 贡献守恒；自然暴击波动不再误判为循环泄漏。奇波触发次数由生成层统一分类：`-1` 与 `9999999` 为 unlimited，小正整数为 finite，未知语义保持 evidence-open；河狸仔 520082 与 520087 稳态刷新可闭环，驮驮龙 15 秒 ICD 和真实一次性触发仍拒绝。权威 expected 示例保持 `22.44996643`、4 hit、`cycleDps=4.48999329`。提交 `76530074f6c2fb1d2b88b4eee1d2fd558d01ce2b` 已通过产品验收，M12-B2 正式关闭且不做 R3；下一阶段为 M12-B3，M12-C 继续锁定。
 
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 

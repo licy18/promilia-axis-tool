@@ -1,4 +1,4 @@
-# M12-B2-R2 Sustainable Cycle DPS
+# M12-B2 Sustainable Cycle DPS
 
 ## Goal
 
@@ -37,8 +37,8 @@ Implement a canonical, headless sustainable-cycle evaluator on top of Machine Ax
 ## Status
 
 - M12-B-R2 merged and accepted on master.
-- B2 worktree: `feature/m12-b2-cycle-dps`; R2 fixes are based on rejected commit `07284997f97e6f86c3ac17712937522d39bd37b0`.
-- `AzPrMachineAxisCycleDps` v1, canonical evaluator, CLI `cycle`, target policy, fixture, report, and R2 regressions are implemented; R2 is waiting for product recheck.
+- B2 worktree: `feature/m12-b2-cycle-dps`; accepted implementation commit: `76530074f6c2fb1d2b88b4eee1d2fd558d01ce2b`.
+- `AzPrMachineAxisCycleDps` v1, canonical evaluator, CLI `cycle`, target policy, fixture, report, and R2 regressions passed product acceptance. M12-B2 is formally closed and will not receive an R3.
 - Canonical example: `[60,360)`, 5s, two cycles at 22.44996643 HP damage / 4 hits, cycle DPS 4.48999329.
 - Tuning-mark closure uses non-worse stacks, shared decay semantics, and an independent held-ready countdown instead of exact row hashing.
 - Infinite-target HP=1 and baseline HP now have identical normal, stack-over-limit, real-damage, hit-contribution and cycle-DPS results.
@@ -48,4 +48,4 @@ Implement a canonical, headless sustainable-cycle evaluator on top of Machine Ax
 - Canonical expected hashes: input `06083e73632e9e4d`, data `7b865d8e1825995a`, trace `db903427dcd1ecac`, evaluation `412605349bbf2fe3`, cycle `3950fd090a8634e1`.
 - Three character numeric assertions and input/data hashes are unchanged; canonical trace hashes changed only because practical-unlimited passive state no longer exposes a false finite remainder.
 - Verification: focused blocker tests `3/57`, full Machine Axis tests `12/157`, canonical/critical/Kibo tests `9/82`, character golden/profile tests `7/58`, eight audits clean, and production build passed.
-- Remaining work: scoped diff review, R2 commit, then stop for product recheck.
+- Next stage: M12-B3 optimization qualification. M12-C remains locked until the qualification denominator and binding matrix pass.
