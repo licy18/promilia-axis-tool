@@ -1,4 +1,6 @@
 import path from 'node:path';
+import fs from 'node:fs/promises';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
@@ -270,8 +272,10 @@ describe('M12-B3 optimization qualification generation', () => {
         hashCanonicalValue(fixedOptimizationProfile)
       );
       expect(artifacts.catalog.cultivation.character.levelBreakthrough).toMatchObject({
-        status: 'source-indexed-static-runtime-applied',
-        levelTemplateIncludesBreakthroughAttributes: false,
+        status: 'source-indexed-legality-applied-runtime-evidence-required',
+        levelTemplateIncludesBreakthroughAttributes: null,
+        applicationMode: 'unresolved',
+        attributeApplicationStatus: 'runtime-evidence-required',
       });
       expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(12);
       for (const profile of artifacts.catalog.cultivation.character.profiles) {
@@ -280,10 +284,22 @@ describe('M12-B3 optimization qualification generation', () => {
           profile.levelBreakthroughRanks.every(
             row =>
               row.runtimeApplicationStatus ===
-              'source-indexed-static-runtime-applied'
+              'source-indexed-legality-applied-attributes-unapplied'
           )
         ).toBe(true);
       }
+      expect(
+        artifacts.manifests.records
+          .filter(record => record.objectKind === 'character')
+          .every(record =>
+            record.blockers.some(
+              blocker =>
+                blocker.code ===
+                  'strict-character-cultivation-runtime-partial' &&
+                blocker.category === 'evidence-insufficient'
+            )
+          )
+      ).toBe(true);
       const mismatchedUnlockProfile =
         artifacts.catalog.cultivation.character.profiles.find(
           profile => profile.characterId === 112001
@@ -295,12 +311,16 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toEqual([
         expect.objectContaining({
           skillId: 10300261,
+          declarationStatus: 'source-indexed-table-declaration',
           availabilityStatus: 'static-evidence-gap',
+          effectRuntimeStatus: 'static-evidence-gap',
           expectedPassiveSkillIds: expect.arrayContaining([11200161]),
         }),
         expect.objectContaining({
           skillId: 10300262,
+          declarationStatus: 'source-indexed-table-declaration',
           availabilityStatus: 'static-evidence-gap',
+          effectRuntimeStatus: 'static-evidence-gap',
           expectedPassiveSkillIds: expect.arrayContaining([11200162]),
         }),
       ]);
@@ -322,6 +342,46 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toMatchObject({
         sha256:
           '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
+      });
+      expect(
+        artifacts.roster.sourceSnapshot.files.heroRankRuntimeEvidence
+      ).toMatchObject({
+        value: {
+          reviewedBinary: {
+            sha256:
+              'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b',
+          },
+          methodBodyObservations: expect.arrayContaining([
+            expect.objectContaining({
+              identity:
+                'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+              rva: '0x2458520',
+              callEdges: expect.arrayContaining([
+                expect.objectContaining({
+                  target:
+                    'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+                  targetRva: '0x2458C00',
+                }),
+              ]),
+            }),
+            expect.objectContaining({
+              identity:
+                'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+              rva: '0x2458C00',
+              rankTableLookupObserved: false,
+            }),
+          ]),
+          adjacentRankCapture: {
+            status: 'not-captured',
+            captureIdentity: null,
+            comparisons: [],
+          },
+          conclusion: {
+            attributeApplicationStatus: 'runtime-evidence-required',
+            levelTemplateIncludesBreakthroughAttributes: 'unresolved',
+            applicationMode: 'unresolved',
+          },
+        },
       });
       expect(
         artifacts.roster.sourceSnapshot.files.equipmentInstanceTerms
@@ -351,12 +411,17 @@ describe('M12-B3 optimization qualification generation', () => {
       expect(
         artifacts.gaps.records.some(record =>
           [
-            'strict-character-cultivation-runtime-partial',
             'strict-equipment-cultivation-runtime-partial',
             'equipment-instance-tier-source-evidence-missing',
           ].includes(record.code)
         )
       ).toBe(false);
+      expect(
+        artifacts.gaps.records.filter(
+          record =>
+            record.code === 'strict-character-cultivation-runtime-partial'
+        )
+      ).toHaveLength(11);
       expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
         star: { minimum: 1, maximum: 4 },
         profiles: expect.arrayContaining([
@@ -385,7 +450,7 @@ describe('M12-B3 optimization qualification generation', () => {
             status: 'implemented',
           }),
           expect.objectContaining({
-            capabilityIdentity: 'b3-hero-rank-separate-static-runtime',
+            capabilityIdentity: 'b3-hero-rank-legality-and-evidence-boundary',
             status: 'implemented',
           }),
           expect.objectContaining({
@@ -413,6 +478,66 @@ describe('M12-B3 optimization qualification generation', () => {
       ]),
     });
   });
+
+  it(
+    'rejects hero-rank evidence records missing a critical call edge or capture boundary',
+    async () => {
+      const sourcePath = path.join(
+        projectRoot,
+        'scripts',
+        'optimization-qualification',
+        'evidence',
+        'hero-rank-runtime-evidence.json'
+      );
+      const source = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
+      const tempRoot = await fs.mkdtemp(
+        path.join(os.tmpdir(), 'azpr-hero-rank-evidence-')
+      );
+      try {
+        const missingCall = structuredClone(source);
+        missingCall.methodBodyObservations[0].callEdges =
+          missingCall.methodBodyObservations[0].callEdges.filter(
+            edge =>
+              edge.target !==
+              'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes'
+          );
+        const missingCallPath = path.join(tempRoot, 'missing-call.json');
+        await fs.writeFile(
+          missingCallPath,
+          `${JSON.stringify(missingCall, null, 2)}\n`,
+          'utf8'
+        );
+        await expect(
+          createOptimizationQualificationArtifacts({
+            projectRoot,
+            heroRankRuntimeEvidencePath: missingCallPath,
+          })
+        ).rejects.toThrow(
+          'optimization-qualification-hero-rank-evidence-call-edge-missing'
+        );
+
+        const missingCaptureBoundary = structuredClone(source);
+        delete missingCaptureBoundary.adjacentRankCapture;
+        const missingCapturePath = path.join(tempRoot, 'missing-capture.json');
+        await fs.writeFile(
+          missingCapturePath,
+          `${JSON.stringify(missingCaptureBoundary, null, 2)}\n`,
+          'utf8'
+        );
+        await expect(
+          createOptimizationQualificationArtifacts({
+            projectRoot,
+            heroRankRuntimeEvidencePath: missingCapturePath,
+          })
+        ).rejects.toThrow(
+          'optimization-qualification-hero-rank-evidence-capture-boundary-missing'
+        );
+      } finally {
+        await fs.rm(tempRoot, { recursive: true, force: true });
+      }
+    },
+    30_000
+  );
 });
 
 describe('M12-B3 strict cultivation profile', () => {
@@ -707,8 +832,6 @@ describe('M12-B3 strict cultivation profile', () => {
           'character.starGiftNodeAttributes',
           'character.completedStarGiftAttributes',
           'character.levelBreakthroughLegality',
-          'character.levelBreakthroughAttributes',
-          'character.levelBreakthroughSkillUnlocks',
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
@@ -723,6 +846,8 @@ describe('M12-B3 strict cultivation profile', () => {
         ]),
         unresolvedDimensions: expect.arrayContaining([
           'character.starGiftNodeSkillLevels',
+          'character.levelBreakthroughAttributes',
+          'character.levelBreakthroughSkillUnlocks',
         ]),
       },
     });
@@ -852,7 +977,7 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(full.hashes.input).not.toBe(base.hashes.input);
   });
 
-  it('keeps the naked panel stable and applies hero_rank breakthrough rows exactly once', () => {
+  it('keeps hero_rank attributes unapplied until a final-panel or adjacent-rank capture closes the evidence gap', () => {
     const profile = createCultivationProfile({
       actorLevel: 80,
       starGiftRank: 7,
@@ -906,42 +1031,29 @@ describe('M12-B3 strict cultivation profile', () => {
     const breakthroughSources = actor.verifiedStaticProperties.sources.filter(
       source => source.kind === 'actor-level-breakthrough-attribute'
     );
-    expect(breakthroughSources).toHaveLength(4);
-    expect(breakthroughSources.map(source => source.sourceId)).toEqual([
-      '101010:0',
-      '101010:1',
-      '101010:2',
-      '101010:3',
-    ]);
-    const breakthroughTotals = new Map();
-    for (const source of breakthroughSources) {
-      for (const attribute of source.attributes) {
-        breakthroughTotals.set(
-          Number(attribute.id),
-          Number(breakthroughTotals.get(Number(attribute.id)) ?? 0) +
-            Number(attribute.value)
-        );
-      }
-    }
-    expect(Object.fromEntries(breakthroughTotals)).toEqual({
-      1: 88,
-      3: 84,
-      4: 88,
-      5: 1416,
-      1001: 1620,
-    });
+    expect(breakthroughSources).toHaveLength(0);
     expect(
       actor.verifiedStaticProperties.unapplied.filter(
         source => source.kind === 'actor-level-breakthrough-attribute'
       )
-    ).toHaveLength(0);
+    ).toEqual([
+      expect.objectContaining({
+        sourceId: '101010:0',
+        reason: 'hero-rank-attribute-runtime-application-evidence-required',
+      }),
+      expect.objectContaining({ sourceId: '101010:1' }),
+      expect.objectContaining({ sourceId: '101010:2' }),
+      expect.objectContaining({ sourceId: '101010:3' }),
+    ]);
     expect(
       compilation.project.optimizationCultivationProfile.actors[0].character
-        .unlockedSkills
+        .levelBreakthroughSkillDeclarations
     ).toEqual([
       expect.objectContaining({
         skillId: 10101061,
-        availabilityStatus: 'unlocked',
+        declarationStatus: 'source-indexed-table-declaration',
+        availabilityStatus: 'runtime-evidence-required',
+        effectRuntimeStatus: 'runtime-applied',
       }),
       expect.objectContaining({
         skillId: 10101062,
@@ -1087,7 +1199,7 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(high.hashes.input).not.toBe(low.hashes.input);
   });
 
-  it('propagates a legal hero_rank change through actor, Kibo, damage, and canonical hashes', () => {
+  it('does not double-add hero_rank when the authoritative panel may already contain it', () => {
     const service = createMachineAxisService();
     const createDamageAxis = levelBreakthroughRank => {
       const axis = createAxis({
@@ -1122,11 +1234,11 @@ describe('M12-B3 strict cultivation profile', () => {
       entry => entry.characterId === 101010
     );
 
-    expect(rankFourActor.stats.attack).toBeGreaterThan(rankThreeActor.stats.attack);
-    expect(rankFourActor.verifiedStaticKiboProperties.stats.attack).toBeGreaterThan(
-      rankThreeActor.verifiedStaticKiboProperties.stats.attack
+    expect(rankFourActor.stats).toEqual(rankThreeActor.stats);
+    expect(rankFourActor.verifiedStaticKiboProperties.stats).toEqual(
+      rankThreeActor.verifiedStaticKiboProperties.stats
     );
-    expect(rankFour.evaluation.totals.hpDamage).toBeGreaterThan(
+    expect(rankFour.evaluation.totals.hpDamage).toBe(
       rankThree.evaluation.totals.hpDamage
     );
     expect(rankFour.hashes.input).not.toBe(rankThree.hashes.input);

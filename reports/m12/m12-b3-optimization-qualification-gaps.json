@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "c4c9b57031a11480",
+  "rosterHash": "a8f727dfd0288518",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "9a19ffc89723635d",
-        "c4c9b57031a11480"
+        "4c1259408e1d716c",
+        "a8f727dfd0288518"
       ]
     },
     {
@@ -40,16 +40,17 @@
       "status": "implemented",
       "evidence": [
         "NewTable/talent_rank|NewTable/talent_rune",
-        "NewTable/hero_rank.rankLevelLimit|attribute|skill|IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill",
+        "NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json",
         "src/simulation/mechanics/verifiedCombatStaticProperties.js"
       ]
     },
     {
-      "capabilityIdentity": "b3-hero-rank-separate-static-runtime",
+      "capabilityIdentity": "b3-hero-rank-legality-and-evidence-boundary",
       "status": "implemented",
       "evidence": [
-        "NewTable/hero_rank.rankLevelLimit|attribute|skill|IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill",
-        "IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill"
+        "NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json",
+        "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+        "scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json"
       ]
     },
     {
@@ -128,6 +129,20 @@
       "gapHash": "b25254be6b1fa6fb"
     },
     {
+      "gapIdentity": "character:101010:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "101010",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=101010]"
+      ],
+      "details": {},
+      "gapHash": "66db435b049806b3"
+    },
+    {
       "gapIdentity": "character:102001:character-acceptance-not-published",
       "objectKind": "character",
       "objectId": "102001",
@@ -156,6 +171,20 @@
       "gapHash": "07b024366cada0a8"
     },
     {
+      "gapIdentity": "character:102001:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "102001",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=102001]"
+      ],
+      "details": {},
+      "gapHash": "ae0fc4a1214911c8"
+    },
+    {
       "gapIdentity": "character:103002:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "103002",
@@ -168,6 +197,20 @@
       ],
       "details": {},
       "gapHash": "784a0ea144cf6df0"
+    },
+    {
+      "gapIdentity": "character:103002:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "103002",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=103002]"
+      ],
+      "details": {},
+      "gapHash": "6c9321c201dfba58"
     },
     {
       "gapIdentity": "character:107001:character-acceptance-not-published",
@@ -198,6 +241,20 @@
       "gapHash": "e15d2ad8e5405433"
     },
     {
+      "gapIdentity": "character:107001:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "107001",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=107001]"
+      ],
+      "details": {},
+      "gapHash": "98072617db6c784f"
+    },
+    {
       "gapIdentity": "character:107002:character-acceptance-not-published",
       "objectKind": "character",
       "objectId": "107002",
@@ -224,6 +281,20 @@
       ],
       "details": {},
       "gapHash": "c99a421e56f2b5e4"
+    },
+    {
+      "gapIdentity": "character:107002:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "107002",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=107002]"
+      ],
+      "details": {},
+      "gapHash": "0c84ca6ddd0aafbc"
     },
     {
       "gapIdentity": "character:108001:character-acceptance-not-published",
@@ -254,6 +325,20 @@
       "gapHash": "511beee7802afee2"
     },
     {
+      "gapIdentity": "character:108001:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "108001",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=108001]"
+      ],
+      "details": {},
+      "gapHash": "8aff2b72a59ea2f2"
+    },
+    {
       "gapIdentity": "character:108003:character-acceptance-not-published",
       "objectKind": "character",
       "objectId": "108003",
@@ -280,6 +365,20 @@
       ],
       "details": {},
       "gapHash": "f9a74417015fe730"
+    },
+    {
+      "gapIdentity": "character:108003:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "108003",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=108003]"
+      ],
+      "details": {},
+      "gapHash": "79ac78bc31c91614"
     },
     {
       "gapIdentity": "character:109001:character-acceptance-not-published",
@@ -310,6 +409,20 @@
       "gapHash": "8b52f0586fe42981"
     },
     {
+      "gapIdentity": "character:109001:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "109001",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=109001]"
+      ],
+      "details": {},
+      "gapHash": "5f6763212fec4625"
+    },
+    {
       "gapIdentity": "character:111001:character-acceptance-not-published",
       "objectKind": "character",
       "objectId": "111001",
@@ -336,6 +449,20 @@
       ],
       "details": {},
       "gapHash": "552b205bc92cd8f0"
+    },
+    {
+      "gapIdentity": "character:111001:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "111001",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=111001]"
+      ],
+      "details": {},
+      "gapHash": "250301a79f76ab5c"
     },
     {
       "gapIdentity": "character:112001:character-acceptance-not-published",
@@ -366,13 +493,27 @@
       "gapHash": "498f9a205680a929"
     },
     {
+      "gapIdentity": "character:112001:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "112001",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=112001]"
+      ],
+      "details": {},
+      "gapHash": "760442294a60f4f9"
+    },
+    {
       "gapIdentity": "character:112001:level-breakthrough-skill-unlock-source-mismatch",
       "objectKind": "character",
       "objectId": "112001",
       "code": "level-breakthrough-skill-unlock-source-mismatch",
       "category": "evidence-insufficient",
       "blocking": true,
-      "message": "hero_rank unlock skill does not match the character passive slots; attributes remain applicable but the skill identity is not inferred.",
+      "message": "hero_rank unlock skill does not match the character passive slots; neither availability nor runtime effect identity is inferred.",
       "sourceIdentities": [
         "generated/characters.json#items[id=112001]"
       ],
@@ -404,7 +545,7 @@
           }
         ]
       },
-      "gapHash": "73060bc41ed42f85"
+      "gapHash": "f4531c42180205c1"
     },
     {
       "gapIdentity": "character:STARBORN:actor-static-profile-missing",
@@ -450,6 +591,21 @@
       ],
       "details": {},
       "gapHash": "99917fe501cdc33c"
+    },
+    {
+      "gapIdentity": "character:STARBORN:strict-character-cultivation-runtime-partial",
+      "objectKind": "character",
+      "objectId": "STARBORN",
+      "code": "strict-character-cultivation-runtime-partial",
+      "category": "evidence-insufficient",
+      "blocking": true,
+      "message": "hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=199001]",
+        "generated/characters.json#items[id=199002]"
+      ],
+      "details": {},
+      "gapHash": "8036d9ba300dc3e4"
     },
     {
       "gapIdentity": "equipment:1010111:equipment-visual-acceptance-not-published",
@@ -7340,9 +7496,9 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 443,
+    "blockingUniqueGapCount": 454,
     "byCategory": {
-      "evidence-insufficient": 5,
+      "evidence-insufficient": 16,
       "not-implemented": 438
     },
     "byCode": {
@@ -7358,15 +7514,16 @@
       "set-skill-visual-acceptance-not-published": 12,
       "soulessence-effect-skill-dynamic-unapplied": 54,
       "soulessence-visual-acceptance-not-published": 62,
+      "strict-character-cultivation-runtime-partial": 11,
       "strict-soulessence-cultivation-runtime-partial": 54
     },
     "byObjectKind": {
-      "character": 22,
+      "character": 33,
       "equipment": 137,
       "kibo": 90,
       "set-skill": 24,
       "soul-essence": 170
     }
   },
-  "ledgerHash": "c145dc13ce831692"
+  "ledgerHash": "d6dcd25e48632b9e"
 }

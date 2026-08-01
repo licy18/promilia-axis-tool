@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrHeroRankRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "methodBodyObservations": [
+    {
+      "identity": "Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)",
+      "rva": "0x2458520",
+      "callEdges": [
+        {
+          "target": "Azur.Gameplay.PlayerModule.AttrModuleInfo..ctor/RefreshModules",
+          "targetRvas": ["0x244EE60", "0x244E9F0"],
+          "status": "observed"
+        },
+        {
+          "target": "Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes",
+          "targetRva": "0x2458C00",
+          "status": "observed"
+        },
+        {
+          "target": "Azur.Gameplay.PlayerModule.HeroData.RefreshHeroSkill",
+          "targetRva": "0x2458F50",
+          "status": "observed"
+        }
+      ],
+      "rankTableLookupObserved": false,
+      "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)@RVA=0x2458520"
+    },
+    {
+      "identity": "Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes",
+      "rva": "0x2458C00",
+      "callEdges": [
+        {
+          "target": "Lens.Gameplay.UI.Util.GameUtil.PackAttrInfoByFightAttr",
+          "targetRva": "0x39714F0",
+          "status": "observed"
+        }
+      ],
+      "rankTableLookupObserved": false,
+      "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes@RVA=0x2458C00"
+    },
+    {
+      "identity": "Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)",
+      "rva": "0x24577F0",
+      "storedFields": ["lv", "heroRank"],
+      "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)@RVA=0x24577F0"
+    }
+  ],
+  "adjacentRankCapture": {
+    "status": "not-captured",
+    "captureIdentity": null,
+    "comparisons": [],
+    "requiredComparison": {
+      "sameCharacter": true,
+      "sameLevel": true,
+      "sameStarGiftNodes": true,
+      "emptyLoadout": true,
+      "adjacentHeroRanks": true,
+      "expectedDeltaSource": "NewTable/hero_rank.attribute"
+    }
+  },
+  "conclusion": {
+    "attributeApplicationStatus": "runtime-evidence-required",
+    "levelTemplateIncludesBreakthroughAttributes": "unresolved",
+    "applicationMode": "unresolved",
+    "reason": "HeroAttrInfo supplies AttrModuleInfo to RefreshAttributes, and the reviewed client methods do not establish whether server-provided attributes already include hero_rank.attribute. No adjacent-rank final-panel capture is available."
+  }
+}

@@ -333,16 +333,28 @@ export function projectResolvedOptimizationCultivationActor(
   );
   const soulEssenceEffectRuntimeApplied =
     resolvedActor.soulEssence?.effectSkill?.runtimeStatus === 'runtime-applied';
-  const levelBreakthroughSkillUnlocksApplied = !resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
-    source => source.kind === 'actor-level-breakthrough-skill-unlock'
-  );
+  const levelBreakthroughAttributesApplied =
+    (resolvedActor.character?.staticSources
+      ?.levelBreakthroughAttributeSources?.length ?? 0) > 0 &&
+    !resolvedActor.character?.staticSources?.unappliedStaticSources?.some(
+      source => source.kind === 'actor-level-breakthrough-attribute'
+    );
+  const levelBreakthroughSkillUnlocksApplied =
+    (resolvedActor.character?.levelBreakthroughSkillDeclarations ?? []).some(
+      source => source.availabilityStatus === 'runtime-verified-available'
+    ) &&
+    !resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
+      source => source.kind === 'actor-level-breakthrough-skill-unlock'
+    );
   const appliedDimensions = [
     'character.level',
     'character.starGiftRank',
     'character.starGiftNodeAttributes',
     'character.completedStarGiftAttributes',
     'character.levelBreakthroughLegality',
-    'character.levelBreakthroughAttributes',
+    ...(levelBreakthroughAttributesApplied
+      ? ['character.levelBreakthroughAttributes']
+      : []),
     ...(levelBreakthroughSkillUnlocksApplied
       ? ['character.levelBreakthroughSkillUnlocks']
       : []),
@@ -366,6 +378,9 @@ export function projectResolvedOptimizationCultivationActor(
     )
       ? ['character.starGiftNodeSkillLevels']
       : []),
+    ...(!levelBreakthroughAttributesApplied
+      ? ['character.levelBreakthroughAttributes']
+      : []),
     ...(!levelBreakthroughSkillUnlocksApplied
       ? ['character.levelBreakthroughSkillUnlocks']
       : []),
@@ -379,8 +394,8 @@ export function projectResolvedOptimizationCultivationActor(
       level: Number(resolvedActor.character.level),
       cultivation: {
         starGiftRank: Number(resolvedActor.character.starGiftRank),
-        unlockedSkills: structuredClone(
-          resolvedActor.character.unlockedSkills ?? []
+        levelBreakthroughSkillDeclarations: structuredClone(
+          resolvedActor.character.levelBreakthroughSkillDeclarations ?? []
         ),
         optimizationStaticSources: structuredClone(
           resolvedActor.character.staticSources
@@ -1008,7 +1023,7 @@ function resolveCharacterCultivation(value, sourceProfile) {
       kind: 'actor-level-breakthrough',
       sourceId: `${sourceProfile.characterId}:${row.rank}`,
     }));
-  const levelBreakthroughAttributeSources = levelBreakthroughSources
+  const unappliedLevelBreakthroughAttributeSources = levelBreakthroughSources
     .filter(row => row.attributes.length > 0)
     .map(row => ({
       kind: 'actor-level-breakthrough-attribute',
@@ -1016,9 +1031,10 @@ function resolveCharacterCultivation(value, sourceProfile) {
       rank: row.rank,
       levelLimit: row.levelLimit,
       attributes: structuredClone(row.attributes),
+      reason: 'hero-rank-attribute-runtime-application-evidence-required',
       sourceIdentity: row.sourceIdentity,
     }));
-  const unlockedSkills = levelBreakthroughSources
+  const levelBreakthroughSkillDeclarations = levelBreakthroughSources
     .filter(row => row.skillUnlock?.skillId)
     .map(row => ({
       kind: 'actor-level-breakthrough-skill-unlock',
@@ -1040,12 +1056,17 @@ function resolveCharacterCultivation(value, sourceProfile) {
         reason: 'star-gift-node-skill-level-runtime-unapplied',
         sourceIdentity: node.sourceIdentity,
       })),
-    ...unlockedSkills
-      .filter(skill => skill.availabilityStatus === 'static-evidence-gap')
+    ...levelBreakthroughSkillDeclarations
+      .filter(
+        skill =>
+          skill.availabilityStatus !== 'runtime-verified-available' &&
+          skill.availabilityStatus !== 'not-applicable'
+      )
       .map(skill => ({
         ...structuredClone(skill),
         reason:
-          skill.reason ?? 'actor-level-breakthrough-skill-unlock-unresolved',
+          skill.reason ??
+          'actor-level-breakthrough-skill-availability-evidence-required',
       })),
   ];
   return {
@@ -1066,7 +1087,7 @@ function resolveCharacterCultivation(value, sourceProfile) {
         attributes: structuredClone(node.attributes),
         sourceIdentity: node.sourceIdentity,
       })),
-      levelBreakthroughAttributeSources,
+      levelBreakthroughAttributeSources: [],
       levelBreakthroughSelection: levelBreakthroughSources
         .filter(
           row => Number(row.rank) === Number(value.levelBreakthroughRank)
@@ -1091,10 +1112,10 @@ function resolveCharacterCultivation(value, sourceProfile) {
         skillUnlock: structuredClone(row.skillUnlock ?? null),
         sourceIdentity: row.sourceIdentity,
       })),
-      unappliedStaticSources: [],
+      unappliedStaticSources: unappliedLevelBreakthroughAttributeSources,
       unappliedSkillSources,
     },
-    unlockedSkills,
+    levelBreakthroughSkillDeclarations,
   };
 }
 

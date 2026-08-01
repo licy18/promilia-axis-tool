@@ -156,6 +156,98 @@
         "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
         "bytes": 97428254
       },
+      "heroRankRuntimeEvidence": {
+        "path": "scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json",
+        "sha256": "2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f",
+        "bytes": 2663,
+        "value": {
+          "schemaVersion": 1,
+          "contractName": "AzPrHeroRankRuntimeEvidence",
+          "reviewedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "methodBodyObservations": [
+            {
+              "identity": "Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)",
+              "rva": "0x2458520",
+              "callEdges": [
+                {
+                  "target": "Azur.Gameplay.PlayerModule.AttrModuleInfo..ctor/RefreshModules",
+                  "targetRvas": [
+                    "0x244EE60",
+                    "0x244E9F0"
+                  ],
+                  "status": "observed"
+                },
+                {
+                  "target": "Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes",
+                  "targetRva": "0x2458C00",
+                  "status": "observed"
+                },
+                {
+                  "target": "Azur.Gameplay.PlayerModule.HeroData.RefreshHeroSkill",
+                  "targetRva": "0x2458F50",
+                  "status": "observed"
+                }
+              ],
+              "rankTableLookupObserved": false,
+              "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)@RVA=0x2458520"
+            },
+            {
+              "identity": "Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes",
+              "rva": "0x2458C00",
+              "callEdges": [
+                {
+                  "target": "Lens.Gameplay.UI.Util.GameUtil.PackAttrInfoByFightAttr",
+                  "targetRva": "0x39714F0",
+                  "status": "observed"
+                }
+              ],
+              "rankTableLookupObserved": false,
+              "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes@RVA=0x2458C00"
+            },
+            {
+              "identity": "Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)",
+              "rva": "0x24577F0",
+              "storedFields": [
+                "lv",
+                "heroRank"
+              ],
+              "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)@RVA=0x24577F0"
+            }
+          ],
+          "adjacentRankCapture": {
+            "status": "not-captured",
+            "captureIdentity": null,
+            "comparisons": [],
+            "requiredComparison": {
+              "sameCharacter": true,
+              "sameLevel": true,
+              "sameStarGiftNodes": true,
+              "emptyLoadout": true,
+              "adjacentHeroRanks": true,
+              "expectedDeltaSource": "NewTable/hero_rank.attribute"
+            }
+          },
+          "conclusion": {
+            "attributeApplicationStatus": "runtime-evidence-required",
+            "levelTemplateIncludesBreakthroughAttributes": "unresolved",
+            "applicationMode": "unresolved",
+            "reason": "HeroAttrInfo supplies AttrModuleInfo to RefreshAttributes, and the reviewed client methods do not establish whether server-provided attributes already include hero_rank.attribute. No adjacent-rank final-panel capture is available."
+          },
+          "verifiedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "il2cppDeclarationSource": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          }
+        }
+      },
       "battleElementAssets": {
         "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
         "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
@@ -167,7 +259,7 @@
         "bytes": 458435
       }
     },
-    "sourceSnapshotHash": "9a19ffc89723635d"
+    "sourceSnapshotHash": "4c1259408e1d716c"
   },
   "filterContract": {
     "characterElements": [
@@ -10139,5 +10231,5 @@
       ]
     }
   },
-  "rosterHash": "c4c9b57031a11480"
+  "rosterHash": "a8f727dfd0288518"
 }

@@ -65,6 +65,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
   il2cppRuntimeContracts:
     '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
+  heroRankRuntimeEvidence:
+    '2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -125,6 +127,9 @@ export async function createOptimizationQualificationArtifacts({
     'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_words.json',
   il2cppRuntimeContractsPath =
     'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
+  heroRankRuntimeEvidencePath = null,
+  gameAssemblyPath =
+    'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
   const generatedRoot = path.join(projectRoot, 'src', 'data', 'generated');
@@ -168,6 +173,19 @@ export async function createOptimizationQualificationArtifacts({
   );
   sources.il2cppRuntimeContracts = await readIl2CppRuntimeContractsSource(
     il2cppRuntimeContractsPath,
+    projectRoot
+  );
+  sources.heroRankRuntimeEvidence = await readHeroRankRuntimeEvidenceSource(
+    heroRankRuntimeEvidencePath ??
+      path.join(
+        projectRoot,
+        'scripts',
+        'optimization-qualification',
+        'evidence',
+        'hero-rank-runtime-evidence.json'
+      ),
+    gameAssemblyPath,
+    sources.il2cppRuntimeContracts,
     projectRoot
   );
   const characters = sources.characters.value.items ?? [];
@@ -531,6 +549,18 @@ function createQualificationManifests({
         )
       );
     }
+    if (
+      cultivationCatalog.character.levelBreakthrough
+        .attributeApplicationStatus !== 'runtime-applied'
+    ) {
+      blockers.push(
+        blocker(
+          'strict-character-cultivation-runtime-partial',
+          'evidence-insufficient',
+          'hero_rank level legality is indexed, but attribute application and skill availability require a final-panel adjacent-rank capture or a proven upstream construction path.'
+        )
+      );
+    }
     const skillUnlockGaps = sourceIds.flatMap(characterId =>
       (
         cultivationCharacterById.get(characterId)?.levelBreakthroughRanks ?? []
@@ -552,7 +582,7 @@ function createQualificationManifests({
         blocker(
           'level-breakthrough-skill-unlock-source-mismatch',
           'evidence-insufficient',
-          'hero_rank unlock skill does not match the character passive slots; attributes remain applicable but the skill identity is not inferred.',
+          'hero_rank unlock skill does not match the character passive slots; neither availability nor runtime effect identity is inferred.',
           { records: skillUnlockGaps }
         )
       );
@@ -959,14 +989,16 @@ function createCultivationCatalog({
         sourceIdentity: 'NewTable/talent_rank|NewTable/talent_rune',
       },
       levelBreakthrough: {
-        status: 'source-indexed-static-runtime-applied',
-        levelTemplateIncludesBreakthroughAttributes: false,
-        applicationMode: 'separate-additive-source-per-rank',
-        skillUnlockMode: 'availability-separate-from-runtime-effect',
+        status: 'source-indexed-legality-applied-runtime-evidence-required',
+        levelTemplateIncludesBreakthroughAttributes: null,
+        applicationMode: 'unresolved',
+        attributeApplicationStatus: 'runtime-evidence-required',
+        skillUnlockMode:
+          'table-declaration-separate-from-availability-and-runtime-effect',
         sourceIdentity:
-          'NewTable/hero_rank.rankLevelLimit|attribute|skill|IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill',
+          'NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json',
         runtimeEvidence: structuredClone(
-          sources.il2cppRuntimeContracts.value.heroCultivation
+          sources.heroRankRuntimeEvidence.value
         ),
       },
       profiles: characterProfiles,
@@ -1283,8 +1315,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-B',
-    status: 'b3-b-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-B-R1',
+    status: 'b3-b-r1-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1326,12 +1358,13 @@ function createLevelBreakthroughRanks(
         ? {
             skillUnlock: {
               skillId: unlockedSkillId,
+              declarationStatus: 'source-indexed-table-declaration',
               availabilityStatus: !skillBelongsToCharacter
                 ? 'static-evidence-gap'
                 : productBoundary
                   ? 'not-applicable'
-                  : 'unlocked',
-              runtimeMechanicsStatus: !skillBelongsToCharacter
+                  : 'runtime-evidence-required',
+              effectRuntimeStatus: !skillBelongsToCharacter
                 ? 'static-evidence-gap'
                 : productBoundary
                   ? 'not-applicable'
@@ -1357,7 +1390,8 @@ function createLevelBreakthroughRanks(
             },
           }
         : {}),
-      runtimeApplicationStatus: 'source-indexed-static-runtime-applied',
+      runtimeApplicationStatus:
+        'source-indexed-legality-applied-attributes-unapplied',
       sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
     };
   });
@@ -1582,11 +1616,13 @@ function createImplementationCapabilities({
       ],
     },
     {
-      capabilityIdentity: 'b3-hero-rank-separate-static-runtime',
+      capabilityIdentity: 'b3-hero-rank-legality-and-evidence-boundary',
       status: 'implemented',
       evidence: [
         cultivationCatalog.character.levelBreakthrough.sourceIdentity,
-        'IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill',
+        cultivationCatalog.character.levelBreakthrough.runtimeEvidence
+          .reviewedBinary.sha256,
+        'scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json',
       ],
     },
     {
@@ -1693,14 +1729,17 @@ function summarizeGaps(records) {
 
 function createSourceSnapshot(sources) {
   const files = Object.fromEntries(
-    Object.entries(sources).map(([key, source]) => [
-      key,
-      {
+    Object.entries(sources).map(([key, source]) => {
+      const record = {
         path: source.path,
         sha256: source.sha256,
         bytes: source.bytes,
-      },
-    ])
+      };
+      if (key === 'heroRankRuntimeEvidence') {
+        record.value = structuredClone(source.value);
+      }
+      return [key, record];
+    })
   );
   return {
     files,
@@ -1711,7 +1750,7 @@ function createSourceSnapshot(sources) {
 function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
-  return `# M12-B3-B Fixed Cultivation And Static Loadout Closure\n\n` +
+  return `# M12-B3-B-R1 Fixed Cultivation Evidence Boundary\n\n` +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1719,7 +1758,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Denominators: characters ${summary.denominators.characterOptimizationObjects}, Kibo ${summary.denominators.kibos}, soul essence ${summary.denominators.soulEssences}, equipment ${summary.denominators.equipment}, set skills ${summary.denominators.setSkills}\n` +
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
-    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, separately applied hero_rank attributes and skill availability, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, and formal whole-stage rejection.\n` +
+    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, and formal whole-stage rejection.\n` +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     `- Duplicate Kibo species across different actor slots: allowed; runtime owner is \`actorSlotId+kiboId\`.\n` +
     `- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n`;
@@ -1760,22 +1799,83 @@ async function readEquipmentInstanceTermsSource(sourcePath, projectRoot) {
 async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
   const bytes = await fs.readFile(sourcePath);
   const text = bytes.toString('utf8');
-  const requiredFragments = [
-    'public class HeroData : IStoreData<HeroItemInfo>, IStoreData<HeroAttrInfo>, IStoreData<HeroBattleInfo>',
-    'public int lv;',
-    'public int heroRank;',
-    'private void RefreshAttributes(AttrModuleInfo info, Dictionary<int, AttrInfo> attrDict, bool isBattle = False)',
-    'private void RefreshHeroSkill(AttrModuleInfo info, bool isBattle = False)',
-    'public struct TDHeroRank',
-    'public int rankLevelLimit { get; }',
-    'public string attribute { get; }',
-    'public List<int> skill { get; }',
+  const heroDataBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Azur.Gameplay.PlayerModule',
+    declaration:
+      'public class HeroData : IStoreData<HeroItemInfo>, IStoreData<HeroAttrInfo>, IStoreData<HeroBattleInfo>, IStoreData<KiboDuelHeroAttrInfo>',
+  });
+  const attrModuleInfoBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Azur.Gameplay.PlayerModule',
+    declaration: 'public class AttrModuleInfo',
+  });
+  const gameUtilBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.UI.Util',
+    declaration: 'public static class GameUtil',
+  });
+  const heroRuntimeDeclarations = {
+    fields: ['public int lv;', 'public int heroRank;'].map(declaration => ({
+      declaration,
+      present: heroDataBlock.includes(declaration),
+    })),
+    methods: [
+      createIl2CppMethodRecord({
+        identity: 'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+        typeBlock: heroDataBlock,
+        declaration: 'public void Populate(HeroAttrInfo heroInfo) { }',
+      }),
+      createIl2CppMethodRecord({
+        identity: 'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)',
+        typeBlock: heroDataBlock,
+        declaration: 'public void Populate(HeroItemInfo heroInfo) { }',
+      }),
+      createIl2CppMethodRecord({
+        identity: 'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+        typeBlock: heroDataBlock,
+        declaration:
+          'private void RefreshAttributes(AttrModuleInfo info, Dictionary<int, AttrInfo> attrDict, bool isBattle = False) { }',
+      }),
+      createIl2CppMethodRecord({
+        identity: 'Azur.Gameplay.PlayerModule.HeroData.RefreshHeroSkill',
+        typeBlock: heroDataBlock,
+        declaration:
+          'private void RefreshHeroSkill(AttrModuleInfo info, bool isBattle = False) { }',
+      }),
+      createIl2CppMethodRecord({
+        identity: 'Azur.Gameplay.PlayerModule.AttrModuleInfo..ctor(HeroAttrInfo)',
+        typeBlock: attrModuleInfoBlock,
+        declaration: 'public void .ctor(HeroAttrInfo info) { }',
+      }),
+      createIl2CppMethodRecord({
+        identity:
+          'Azur.Gameplay.PlayerModule.AttrModuleInfo.RefreshModules(HeroAttrInfo)',
+        typeBlock: attrModuleInfoBlock,
+        declaration: 'public void RefreshModules(HeroAttrInfo info) { }',
+      }),
+      createIl2CppMethodRecord({
+        identity: 'Lens.Gameplay.UI.Util.GameUtil.PackAttrInfoByFightAttr',
+        typeBlock: gameUtilBlock,
+        declaration:
+          'public static void PackAttrInfoByFightAttr(FightAttr fa, Dictionary<int, AttrInfo> result) { }',
+      }),
+    ],
+  };
+  const missingHeroFields = heroRuntimeDeclarations.fields
+    .filter(field => !field.present)
+    .map(field => field.declaration);
+  if (missingHeroFields.length) {
+    throw new Error(
+      `optimization-qualification-il2cpp-hero-runtime-field-missing:${missingHeroFields.join('|')}`
+    );
+  }
+  const requiredEquipmentFragments = [
     'public class AccessoryData // TypeDefIndex: 16369',
     'public int score;',
     'public bool bGoldSide;',
     'public int maxValue;',
   ];
-  const missing = requiredFragments.filter(fragment => !text.includes(fragment));
+  const missing = requiredEquipmentFragments.filter(
+    fragment => !text.includes(fragment)
+  );
   if (missing.length) {
     throw new Error(
       `optimization-qualification-il2cpp-runtime-contract-missing:${missing.join('|')}`
@@ -1786,19 +1886,227 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     bytes: bytes.byteLength,
     sha256: createHash('sha256').update(bytes).digest('hex'),
     value: {
-      heroCultivation: {
-        storedFields: ['lv', 'heroRank'],
-        refreshMethods: ['RefreshAttributes', 'RefreshHeroSkill'],
-        rankTableFields: ['rankLevelLimit', 'attribute', 'skill'],
-        levelTemplateIncludesBreakthroughAttributes: false,
-        applicationMode: 'separate-additive-source-per-rank',
-      },
+      heroRuntimeDeclarations,
       equipmentInstance: {
         fields: ['score', 'bGoldSide', 'maxValue'],
         instanceOwned: true,
       },
     },
   };
+}
+
+const binaryHashCache = new Map();
+
+async function readHeroRankRuntimeEvidenceSource(
+  sourcePath,
+  gameAssemblyPath,
+  il2cppRuntimeContracts,
+  projectRoot
+) {
+  const bytes = await fs.readFile(sourcePath);
+  const value = JSON.parse(bytes.toString('utf8'));
+  if (
+    value?.contractName !== 'AzPrHeroRankRuntimeEvidence' ||
+    Number(value?.schemaVersion) !== 1
+  ) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-contract-invalid'
+    );
+  }
+  if (!value.adjacentRankCapture) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-capture-boundary-missing'
+    );
+  }
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  if (
+    Number(value.reviewedBinary?.bytes) !== binaryIdentity.bytes ||
+    value.reviewedBinary?.sha256 !== binaryIdentity.sha256
+  ) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-binary-mismatch'
+    );
+  }
+  assertHeroRankRuntimeMethodBindings(
+    value,
+    il2cppRuntimeContracts.value.heroRuntimeDeclarations
+  );
+  assertHeroRankRuntimeCallEdges(value);
+  if (
+    value.adjacentRankCapture.status === 'captured' &&
+    (!value.adjacentRankCapture.captureIdentity ||
+      !Array.isArray(value.adjacentRankCapture.comparisons) ||
+      value.adjacentRankCapture.comparisons.length === 0)
+  ) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-capture-incomplete'
+    );
+  }
+  if (
+    value.conclusion?.attributeApplicationStatus === 'runtime-applied' &&
+    value.adjacentRankCapture.status !== 'captured'
+  ) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-applied-without-capture'
+    );
+  }
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      ...value,
+      verifiedBinary: binaryIdentity,
+      il2cppDeclarationSource: {
+        path: il2cppRuntimeContracts.path,
+        sha256: il2cppRuntimeContracts.sha256,
+      },
+    },
+  };
+}
+
+function extractIl2CppTypeBlock(text, { namespace, declaration }) {
+  const namespaceMarker = `// Namespace: ${namespace}`;
+  let namespaceIndex = text.indexOf(namespaceMarker);
+  while (namespaceIndex >= 0) {
+    const nextNamespaceIndex = text.indexOf(
+      '// Namespace:',
+      namespaceIndex + namespaceMarker.length
+    );
+    const typeIndex = text.indexOf(declaration, namespaceIndex);
+    if (
+      typeIndex >= 0 &&
+      (nextNamespaceIndex < 0 || typeIndex < nextNamespaceIndex)
+    ) {
+      const end = nextNamespaceIndex < 0 ? text.length : nextNamespaceIndex;
+      return text.slice(namespaceIndex, end);
+    }
+    namespaceIndex = text.indexOf(
+      namespaceMarker,
+      namespaceIndex + namespaceMarker.length
+    );
+  }
+  throw new Error(
+    `optimization-qualification-il2cpp-type-missing:${namespace}.${declaration}`
+  );
+}
+
+function createIl2CppMethodRecord({ identity, typeBlock, declaration }) {
+  const declarationIndex = typeBlock.indexOf(declaration);
+  if (declarationIndex < 0) {
+    throw new Error(
+      `optimization-qualification-il2cpp-method-missing:${identity}`
+    );
+  }
+  const prefix = typeBlock.slice(
+    Math.max(0, declarationIndex - 300),
+    declarationIndex
+  );
+  const rvaMatches = [...prefix.matchAll(/\/\/ RVA: (0x[0-9A-F]+)/g)];
+  const rva = rvaMatches.at(-1)?.[1] ?? null;
+  if (!rva) {
+    throw new Error(
+      `optimization-qualification-il2cpp-method-rva-missing:${identity}`
+    );
+  }
+  return { identity, declaration, rva };
+}
+
+function assertHeroRankRuntimeMethodBindings(evidence, declarations) {
+  const declarationRvaByIdentity = new Map(
+    (declarations.methods ?? []).map(method => [method.identity, method.rva])
+  );
+  for (const observation of evidence.methodBodyObservations ?? []) {
+    const declarationRva = declarationRvaByIdentity.get(observation.identity);
+    if (
+      !declarationRva ||
+      declarationRva.toUpperCase() !== String(observation.rva).toUpperCase()
+    ) {
+      throw new Error(
+        `optimization-qualification-hero-rank-evidence-method-binding-mismatch:${observation.identity}`
+      );
+    }
+  }
+  const requiredIdentities = [
+    'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+    'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+    'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)',
+  ];
+  for (const identity of requiredIdentities) {
+    if (
+      !(evidence.methodBodyObservations ?? []).some(
+        observation => observation.identity === identity
+      )
+    ) {
+      throw new Error(
+        `optimization-qualification-hero-rank-evidence-method-missing:${identity}`
+      );
+    }
+  }
+}
+
+function assertHeroRankRuntimeCallEdges(evidence) {
+  const observationByIdentity = new Map(
+    (evidence.methodBodyObservations ?? []).map(observation => [
+      observation.identity,
+      observation,
+    ])
+  );
+  const requiredEdges = [
+    {
+      source: 'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+      target: 'Azur.Gameplay.PlayerModule.AttrModuleInfo..ctor/RefreshModules',
+      targetRvas: ['0x244EE60', '0x244E9F0'],
+    },
+    {
+      source: 'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+      target: 'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+      targetRva: '0x2458C00',
+    },
+    {
+      source: 'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+      target: 'Azur.Gameplay.PlayerModule.HeroData.RefreshHeroSkill',
+      targetRva: '0x2458F50',
+    },
+    {
+      source: 'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+      target: 'Lens.Gameplay.UI.Util.GameUtil.PackAttrInfoByFightAttr',
+      targetRva: '0x39714F0',
+    },
+  ];
+  for (const required of requiredEdges) {
+    const source = observationByIdentity.get(required.source);
+    const edge = (source?.callEdges ?? []).find(
+      candidate => candidate.target === required.target
+    );
+    const targetRvaMatches = required.targetRva
+      ? String(edge?.targetRva).toUpperCase() ===
+        required.targetRva.toUpperCase()
+      : (required.targetRvas ?? []).every(expected =>
+          (edge?.targetRvas ?? []).some(
+            actual => String(actual).toUpperCase() === expected.toUpperCase()
+          )
+        );
+    if (!edge || edge.status !== 'observed' || !targetRvaMatches) {
+      throw new Error(
+        `optimization-qualification-hero-rank-evidence-call-edge-missing:${required.source}->${required.target}`
+      );
+    }
+  }
+}
+
+async function readBinaryIdentity(sourcePath) {
+  const stats = await fs.stat(sourcePath);
+  const cacheKey = `${path.resolve(sourcePath)}:${stats.size}:${stats.mtimeMs}`;
+  if (!binaryHashCache.has(cacheKey)) {
+    const bytes = await fs.readFile(sourcePath);
+    binaryHashCache.set(cacheKey, {
+      path: sourcePath.replaceAll('\\', '/'),
+      bytes: bytes.byteLength,
+      sha256: createHash('sha256').update(bytes).digest('hex'),
+    });
+  }
+  return structuredClone(binaryHashCache.get(cacheKey));
 }
 
 function assertFrozenSourceHashes(sources) {

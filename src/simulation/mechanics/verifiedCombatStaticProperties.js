@@ -185,9 +185,11 @@ export function compileVerifiedStaticActorProperties({
     sources,
     unresolved,
     unapplied,
-    skillAvailability: (cultivation.unlockedSkills ?? []).map(entry => ({
+    skillAvailability: (
+      cultivation.levelBreakthroughSkillDeclarations ?? []
+    ).map(entry => ({
       ...structuredClone(entry),
-      applied: entry.availabilityStatus === 'unlocked',
+      applied: entry.availabilityStatus === 'runtime-verified-available',
     })),
     sourceIdentity: `verified-static-actor:${characterId}|${mechanicsPackage.packageHash}`,
     complete,
@@ -459,10 +461,6 @@ function applyOptimizationCharacterCultivationSources({
   const sourceGroups = [
     ['completedStarGiftAttributeSources', 'star-gift-completed-rank'],
     ['starGiftNodeSources', 'star-gift-node'],
-    [
-      'levelBreakthroughAttributeSources',
-      'actor-level-breakthrough-attribute',
-    ],
   ];
   for (const [field, expectedKind] of sourceGroups) {
     for (const row of contract[field] ?? []) {
