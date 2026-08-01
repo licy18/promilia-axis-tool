@@ -24,15 +24,16 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 ## Current Status
 
 - B2 product acceptance is closed.
-- B3-A source and denominator recomputation is complete: source `0e2fa93b88d82707`, roster `6b5961e83e5b1eb7`, manifests `c6cca68ae633e3b9`, ledger `d333c888b206d797`, catalog `917543097ed842b1`, binding matrix `3cf1c9cc678e4193`.
+- B3-A source and denominator recomputation is complete: source `0e2fa93b88d82707`, roster `6b5961e83e5b1eb7`, manifests `18f56af7088c1225`, ledger `d95dd2bdd11ecf54`, catalog `a97ba5f4ff6a397e`, binding matrix `3cf1c9cc678e4193`.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
 - Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. Kibo talent level 10 resolves to 120; bond level 1 resolves to 900 basis points and level 0 is rejected.
 - Formal qualification rejects all current unqualified objects before project creation. Research scenarios remain compatible.
-- Post-checkpoint static cultivation slice applies character level/star-gift rank, Kibo level/talents/bond, soul-essence level/rank, equipment enhancement, and source-backed tuning into the authoritative static compiler. Node/ascension, DNA, soul star dynamics, and equipment instance-tier legality remain explicit blockers; legacy Machine Axis hashes remain unchanged when no strict profile is supplied.
-- Post-checkpoint verification: qualification/static/Machine Axis `4 files / 34 tests` passed; optimization qualification, production imports, Workbench data, action status, and applied-source audits are clean; production build passed with pre-existing Sass/chunk warnings. One wider directory run exceeded its 180-second command budget without emitting an assertion failure and was not repeated as a performance gate.
+- Post-checkpoint static cultivation slices apply character level, source-selected star-gift rank/node attributes, six ascension attribute stages, Kibo level/talents/bond, soul-essence level/rank, equipment enhancement, and source-backed tuning into the authoritative static compiler. Star-gift skill-level changes and ascension skill unlocks remain explicit unapplied sources; DNA, soul star dynamics, and equipment instance-tier legality remain blockers. Legacy Machine Axis hashes remain unchanged when no strict profile is supplied.
+- The strict validator binds current-rank rune IDs to the selected character and rank. Previous completed ranks apply their full node sets; the current rank applies only the explicitly selected nodes. All 12 source character identities have 7 star-gift ranks, 6 ascension rows, and no missing rune source identity.
+- Post-checkpoint verification: qualification/static/Machine Axis `4 files / 36 tests` passed; optimization qualification, production imports, Workbench data, action status, and applied-source audits are clean; production build passed with pre-existing Sass/chunk warnings. One wider directory run exceeded its 180-second command budget without emitting an assertion failure and was not repeated as a performance gate.
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
 - Verified before checkpoint: B3-A focused `1 file / 8 tests`, shared Machine Axis/acceptance `18 files / 198 tests`, optimization qualification plus eight existing data/source audits clean, and production build passed with only pre-existing Sass/chunk warnings.
-- Next: create the B3-A checkpoint commit, then continue only evidence-backed qualification operators without running formal search.
+- Next: checkpoint the character static cultivation slice, then continue only evidence-backed qualification operators without running formal search.
 
 ## B3-A Blockers
 

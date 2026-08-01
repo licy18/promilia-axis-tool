@@ -18,26 +18,40 @@ const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '../../..'
 );
+const TEST_CHARACTER_IDS = Object.freeze([101010, 103002, 102001]);
 
 function createCultivationProfile({
   bondLevel = 1,
   actorLevel = 80,
   starGiftRank = 7,
+  ascensionRank = 6,
   enhancementLevel = 9,
   tuningScore = 110,
+  selectedStarGiftNodeIdsByCharacterId = {},
 } = {}) {
   return {
     schemaVersion: 1,
     contractName: 'AzPrOptimizationCultivationProfile',
     profileId: 'm12-b3-strict-profile-test',
-    actors: ['slot-1', 'slot-2', 'slot-3'].map(slotId => ({
-      slotId,
-      character: {
-        level: actorLevel,
-        starGiftRank,
-        starGiftNodeIds: [1, 2, 3, 4],
-        ascensionRank: 6,
-      },
+    actors: ['slot-1', 'slot-2', 'slot-3'].map((slotId, index) => {
+      const characterId = TEST_CHARACTER_IDS[index];
+      const sourceProfile = qualificationCatalog.cultivation.character.profiles.find(
+        entry => Number(entry.characterId) === characterId
+      );
+      const sourceRank = sourceProfile?.starGiftRanks.find(
+        entry => Number(entry.rank) === Number(starGiftRank)
+      );
+      const selectedNodeIds =
+        selectedStarGiftNodeIdsByCharacterId[characterId] ??
+        (sourceRank?.nodes ?? []).map(node => Number(node.runeId));
+      return {
+        slotId,
+        character: {
+          level: actorLevel,
+          starGiftRank,
+          starGiftNodeIds: selectedNodeIds,
+          ascensionRank,
+        },
       kibo: {
         level: 80,
         talents: [1, 3, 4, 5].map(attributeId => ({
@@ -59,7 +73,8 @@ function createCultivationProfile({
           },
         ])
       ),
-    })),
+      };
+    }),
   };
 }
 
@@ -88,7 +103,7 @@ function createAxis({ profile = createCultivationProfile(), mode = 'research' } 
       name: 'M12 B3 Qualification Test',
       fps: 60,
       durationFrames: 600,
-      team: [101010, 103002, 102001].map((characterId, index) => ({
+      team: TEST_CHARACTER_IDS.map((characterId, index) => ({
         slotId: `slot-${index + 1}`,
         characterId,
         level: 80,
@@ -264,6 +279,28 @@ describe('M12-B3 strict cultivation profile', () => {
     );
   });
 
+  it('rejects a star-gift node that does not belong to the selected character rank', () => {
+    const profile = createCultivationProfile();
+    profile.actors[0].character.starGiftNodeIds = [999999];
+    const result = validateOptimizationCultivationProfile(profile, {
+      team: createAxis({ profile: createCultivationProfile() }).scenario.team,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-star-gift-node-not-in-selected-rank',
+          path:
+            'scenario.cultivationProfile.actors.0.character.starGiftNodeIds.0',
+          characterId: 101010,
+          starGiftRank: 7,
+          runeId: 999999,
+        }),
+      ])
+    );
+  });
+
   it('puts raw and resolved cultivation into the canonical input hash', () => {
     const service = createMachineAxisService();
     const first = service.compile(createAxis({
@@ -319,6 +356,8 @@ describe('M12-B3 strict cultivation profile', () => {
         appliedDimensions: expect.arrayContaining([
           'character.level',
           'character.starGiftRank',
+          'character.starGiftNodeAttributes',
+          'character.ascensionAttributes',
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
@@ -328,8 +367,8 @@ describe('M12-B3 strict cultivation profile', () => {
           'equipment.tuningScore',
         ]),
         unresolvedDimensions: expect.arrayContaining([
-          'character.starGiftNodeIds',
-          'character.ascensionRank',
+          'character.starGiftNodeSkillLevels',
+          'character.ascensionSkillUnlocks',
           'kibo.dnaFactors',
           'soulEssence.star',
           'equipment.instanceTier',
@@ -339,6 +378,8 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(actor.verifiedStaticProperties.sources.map(source => source.kind)).toEqual(
       expect.arrayContaining([
         'star-gift-rank',
+        'star-gift-node',
+        'actor-ascension',
         'soulessence-level',
         'soulessence-rank',
         'equipment-main',
@@ -366,6 +407,58 @@ describe('M12-B3 strict cultivation profile', () => {
         5: 120,
       },
     });
+  });
+
+  it('applies selected current-rank nodes and ascension attributes without folding in unselected nodes', () => {
+    const service = createMachineAxisService();
+    const fullProfile = createCultivationProfile();
+    const currentNodes = fullProfile.actors[0].character.starGiftNodeIds;
+    const withoutOneNode = createCultivationProfile({
+      selectedStarGiftNodeIdsByCharacterId: {
+        101010: currentNodes.slice(0, -1),
+      },
+    });
+    const noAscension = createCultivationProfile({ ascensionRank: 0 });
+    const full = service.compile(createAxis({ profile: fullProfile }));
+    const partial = service.compile(createAxis({ profile: withoutOneNode }));
+    const base = service.compile(createAxis({ profile: noAscension }));
+    const fullActor = full.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+    const partialActor = partial.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+    const baseActor = base.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+
+    expect(
+      fullActor.verifiedStaticProperties.sources.filter(
+        source => source.kind === 'star-gift-node'
+      )
+    ).toHaveLength(35);
+    expect(
+      partialActor.verifiedStaticProperties.sources.filter(
+        source => source.kind === 'star-gift-node'
+      )
+    ).toHaveLength(34);
+    expect(
+      fullActor.verifiedStaticProperties.sources.filter(
+        source => source.kind === 'actor-ascension'
+      )
+    ).toHaveLength(6);
+    expect(
+      baseActor.verifiedStaticProperties.sources.filter(
+        source => source.kind === 'actor-ascension'
+      )
+    ).toHaveLength(0);
+    expect(fullActor.stats).not.toEqual(partialActor.stats);
+    expect(fullActor.stats).not.toEqual(baseActor.stats);
+    expect(fullActor.verifiedStaticKiboProperties.stats).not.toEqual(
+      partialActor.verifiedStaticKiboProperties.stats
+    );
+    expect(full.hashes.input).not.toBe(partial.hashes.input);
+    expect(full.hashes.input).not.toBe(base.hashes.input);
   });
 
   it('changes static actor and inherited Kibo values with a fixed tuning score', () => {

@@ -602,6 +602,13 @@ export function normalizeWorkbenchCultivation(cultivation = {}) {
   return {
     starGiftRank: clampNumber(cultivation?.starGiftRank, 0, 7, 0),
     favorabilityLevel: clampNumber(cultivation?.favorabilityLevel, 0, 10, 0),
+    ...(cultivation?.optimizationStaticSources == null
+      ? {}
+      : {
+          optimizationStaticSources: structuredClone(
+            cultivation.optimizationStaticSources
+          ),
+        }),
   };
 }
 

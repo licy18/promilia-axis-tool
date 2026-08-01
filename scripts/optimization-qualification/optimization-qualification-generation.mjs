@@ -404,7 +404,7 @@ function createQualificationManifests({
       blocker(
         'strict-character-cultivation-runtime-partial',
         'not-implemented',
-        'Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.'
+        'Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.'
       )
     );
     records.push(
@@ -630,6 +630,53 @@ function createCultivationCatalog({
       inheritanceBasisPoints: Number(row.levelEffect),
       sourceIdentity: `NewTable/pet_favorability.rows[level=${row.level}]`,
     }));
+  const runeById = new Map(
+    sources['newTable:talent_rune.json'].value.rows.map(row => [
+      Number(row.id),
+      {
+        runeId: Number(row.id),
+        attributes: parseAttributePairs(row.runeAttribute),
+        skillUpgrade: parseSkillPair(row.runeSkill),
+        sourceIdentity: `NewTable/talent_rune.rows[id=${row.id}]`,
+      },
+    ])
+  );
+  const sourceCharacterIds = characterObjects.flatMap(
+    item => item.sourceCharacterIds
+  );
+  const characterProfiles = sourceCharacterIds.map(characterId => ({
+    characterId: Number(characterId),
+    starGiftRanks: sources['newTable:talent_rank.json'].value.rows
+      .filter(row => Number(row.heroId) === Number(characterId))
+      .sort((left, right) => Number(left.rank) - Number(right.rank))
+      .map(row => ({
+        rank: Number(row.rank),
+        attributes: parseAttributePairs(row.attribute),
+        nodes: parseIntegerList(row.rankBreakthroughItem).map(
+          (runeId, nodeIndex) => ({
+            nodeIndex,
+            ...(runeById.get(runeId) ?? {
+              runeId,
+              attributes: [],
+              skillUpgrade: null,
+              sourceIdentity: null,
+            }),
+          })
+        ),
+        sourceIdentity: `NewTable/talent_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
+      })),
+    ascensionRanks: sources['newTable:hero_rank.json'].value.rows
+      .filter(row => Number(row.heroId) === Number(characterId))
+      .sort((left, right) => Number(left.rank) - Number(right.rank))
+      .map(row => ({
+        ordinal: Number(row.rank) + 1,
+        sourceRank: Number(row.rank),
+        levelLimit: Number(row.rankLevelLimit),
+        attributes: parseAttributePairs(row.attribute),
+        unlockedSkillId: positiveIntegerOrNull(row.skill),
+        sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
+      })),
+  }));
   const equipmentBySlot = Object.fromEntries(
     Object.values(EQUIPMENT_SLOT_BY_TYPE).map(slot => [
       slot,
@@ -659,9 +706,10 @@ function createCultivationCatalog({
       starGiftRank: { minimum: 0, maximum: 7 },
       ascensionRank: { minimum: 0, maximum: 6 },
       starGiftNodes: {
-        status: 'source-indexed-runtime-application-incomplete',
+        status: 'source-indexed-static-attributes-applied-skill-levels-unapplied',
         sourceIdentity: 'NewTable/talent_rank|NewTable/talent_rune',
       },
+      profiles: characterProfiles,
     },
     kibo: {
       kiboIds: targetKibos.map(item => item.kiboId),
@@ -1114,6 +1162,16 @@ function createImplementationCapabilities({
       ],
     },
     {
+      capabilityIdentity:
+        'b3-character-star-gift-node-and-ascension-static-projection',
+      status: 'implemented',
+      evidence: [
+        cultivationCatalog.character.starGiftNodes.sourceIdentity,
+        'NewTable/hero_rank',
+        'src/simulation/mechanics/verifiedCombatStaticProperties.js',
+      ],
+    },
+    {
       capabilityIdentity: 'b3-kibo-four-talent-source-mapping',
       status: 'implemented',
       evidence: [
@@ -1296,6 +1354,45 @@ function slotFromEquipmentType(typeName, slotType) {
 function parseRarity(value) {
   const match = String(value ?? '').match(/(\d+)/);
   return match ? Number(match[1]) : null;
+}
+
+function parseIntegerList(value) {
+  return String(value ?? '')
+    .split('|')
+    .map(Number)
+    .filter(number => Number.isInteger(number) && number > 0);
+}
+
+function parseAttributePairs(value) {
+  return String(value ?? '')
+    .split('|')
+    .filter(Boolean)
+    .map(entry => {
+      const [id, amount] = entry.split('#').map(Number);
+      return { id, value: amount };
+    })
+    .filter(
+      entry => Number.isInteger(entry.id) && Number.isFinite(entry.value)
+    );
+}
+
+function parseSkillPair(value) {
+  if (String(value ?? '').trim() === '') return null;
+  const [skillIndex, level] = String(value).split('#').map(Number);
+  if (
+    !Number.isInteger(skillIndex) ||
+    skillIndex < 0 ||
+    !Number.isInteger(level) ||
+    level <= 0
+  ) {
+    return null;
+  }
+  return { skillIndex, level };
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
 
 function countBy(records, selector) {

@@ -110,7 +110,15 @@ export function resolveOptimizationCultivationProfile(
       profileHash: null,
     };
   }
+  const teamBySlot = new Map(
+    team.map(slot => [String(slot.slotId), slot])
+  );
   const actorRows = profile.actors.map(actor => {
+    const teamSlot = teamBySlot.get(String(actor.slotId));
+    const characterSourceProfile = findCharacterCultivationSourceProfile(
+      catalog,
+      teamSlot?.characterId
+    );
     const talentRows = actor.kibo.talents.map(talent => {
       const source = catalog.cultivation.kibo.talentValues[
         String(talent.attributeId)
@@ -127,7 +135,10 @@ export function resolveOptimizationCultivationProfile(
     );
     return {
       slotId: actor.slotId,
-      character: structuredClone(actor.character),
+      character: resolveCharacterCultivation(
+        actor.character,
+        characterSourceProfile
+      ),
       kibo: {
         ...structuredClone(actor.kibo),
         talents: talentRows,
@@ -185,6 +196,8 @@ export function projectResolvedOptimizationCultivationActor(
   const appliedDimensions = [
     'character.level',
     'character.starGiftRank',
+    'character.starGiftNodeAttributes',
+    'character.ascensionAttributes',
     'kibo.level',
     'kibo.talents',
     'kibo.bondLevel',
@@ -194,8 +207,16 @@ export function projectResolvedOptimizationCultivationActor(
     'equipment.tuningScore',
   ];
   const unresolvedDimensions = [
-    'character.starGiftNodeIds',
-    'character.ascensionRank',
+    ...(resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
+      source => source.kind === 'star-gift-node-skill-level'
+    )
+      ? ['character.starGiftNodeSkillLevels']
+      : []),
+    ...(resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
+      source => source.kind === 'actor-ascension-skill-unlock'
+    )
+      ? ['character.ascensionSkillUnlocks']
+      : []),
     'kibo.dnaFactors',
     'soulEssence.star',
     'equipment.instanceTier',
@@ -205,6 +226,9 @@ export function projectResolvedOptimizationCultivationActor(
       level: Number(resolvedActor.character.level),
       cultivation: {
         starGiftRank: Number(resolvedActor.character.starGiftRank),
+        optimizationStaticSources: structuredClone(
+          resolvedActor.character.staticSources
+        ),
       },
       loadout: {
         soulessenceLevel: Number(resolvedActor.soulEssence.level),
@@ -280,10 +304,18 @@ export function validateOptimizationCultivationProfile(
     );
     return { valid: false, issues };
   }
-  const teamSlots = new Set(team.map(slot => String(slot.slotId)));
+  const teamBySlot = new Map(
+    team.map(slot => [String(slot.slotId), slot])
+  );
+  const teamSlots = new Set(teamBySlot.keys());
   const profileSlots = new Set();
   profile.actors.forEach((actor, actorIndex) => {
     const basePath = `scenario.cultivationProfile.actors.${actorIndex}`;
+    const teamSlot = teamBySlot.get(String(actor.slotId));
+    const characterSourceProfile = findCharacterCultivationSourceProfile(
+      catalog,
+      teamSlot?.characterId
+    );
     if (profileSlots.has(actor.slotId)) {
       issues.push(
         createIssue(
@@ -324,11 +356,59 @@ export function validateOptimizationCultivationProfile(
       'machine-axis-cultivation-ascension-rank-invalid',
       issues
     );
+    if (teamSlot && !characterSourceProfile) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-character-source-profile-missing',
+          `${basePath}.character`,
+          { characterId: Number(teamSlot.characterId) }
+        )
+      );
+    }
+    const selectedStarGiftRank = Number(actor.character?.starGiftRank);
+    const selectedStarGiftSource = characterSourceProfile?.starGiftRanks.find(
+      row => Number(row.rank) === selectedStarGiftRank
+    );
     if (
-      !Array.isArray(actor.character?.starGiftNodeIds) ||
-      actor.character.starGiftNodeIds.some(value => !isPositiveInteger(value)) ||
-      new Set(actor.character.starGiftNodeIds).size !==
-        actor.character.starGiftNodeIds.length
+      characterSourceProfile &&
+      selectedStarGiftRank > 0 &&
+      !selectedStarGiftSource
+    ) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-star-gift-rank-source-missing',
+          `${basePath}.character.starGiftRank`,
+          {
+            characterId: Number(teamSlot.characterId),
+            starGiftRank: selectedStarGiftRank,
+          }
+        )
+      );
+    }
+    if (
+      characterSourceProfile &&
+      Number(actor.character?.ascensionRank) >
+        characterSourceProfile.ascensionRanks.length
+    ) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-ascension-rank-source-missing',
+          `${basePath}.character.ascensionRank`,
+          {
+            characterId: Number(teamSlot.characterId),
+            maximum: characterSourceProfile.ascensionRanks.length,
+            actual: actor.character?.ascensionRank,
+          }
+        )
+      );
+    }
+    const starGiftNodeIdsValid =
+      Array.isArray(actor.character?.starGiftNodeIds) &&
+      actor.character.starGiftNodeIds.every(isPositiveInteger) &&
+      new Set(actor.character.starGiftNodeIds).size ===
+        actor.character.starGiftNodeIds.length;
+    if (
+      !starGiftNodeIdsValid
     ) {
       issues.push(
         createIssue(
@@ -336,6 +416,25 @@ export function validateOptimizationCultivationProfile(
           `${basePath}.character.starGiftNodeIds`
         )
       );
+    } else {
+      const allowedNodeIds = new Set(
+        (selectedStarGiftSource?.nodes ?? []).map(node => Number(node.runeId))
+      );
+      actor.character.starGiftNodeIds.forEach((runeId, nodeIndex) => {
+        if (!allowedNodeIds.has(Number(runeId))) {
+          issues.push(
+            createIssue(
+              'machine-axis-cultivation-star-gift-node-not-in-selected-rank',
+              `${basePath}.character.starGiftNodeIds.${nodeIndex}`,
+              {
+                characterId: Number(teamSlot?.characterId) || null,
+                starGiftRank: selectedStarGiftRank,
+                runeId: Number(runeId),
+              }
+            )
+          );
+        }
+      });
     }
     validateRange(
       actor.kibo?.level,
@@ -403,7 +502,7 @@ export function validateOptimizationCultivationProfile(
       basePath,
       catalog,
       issues,
-      team[actorIndex]?.loadout?.equipment
+      teamSlot?.loadout?.equipment
     );
   });
   if (
@@ -534,6 +633,107 @@ export function createOptimizationQualificationIssuesForContract(
     }
   });
   return issues;
+}
+
+function findCharacterCultivationSourceProfile(catalog, characterId) {
+  const normalizedCharacterId = Number(characterId);
+  if (!Number.isInteger(normalizedCharacterId)) return null;
+  return (
+    catalog?.cultivation?.character?.profiles?.find(
+      profile => Number(profile.characterId) === normalizedCharacterId
+    ) ?? null
+  );
+}
+
+function resolveCharacterCultivation(value, sourceProfile) {
+  const selectedRank = Number(value.starGiftRank);
+  const selectedNodeIds = new Set(value.starGiftNodeIds.map(Number));
+  const selectedRanks = sourceProfile.starGiftRanks.filter(
+    row => Number(row.rank) <= selectedRank
+  );
+  const starGiftRankSources = selectedRanks.map(row => ({
+    kind: 'star-gift-rank',
+    sourceId: `${sourceProfile.characterId}:${row.rank}`,
+    rank: Number(row.rank),
+    attributes: structuredClone(row.attributes),
+    sourceIdentity: row.sourceIdentity,
+  }));
+  const selectedNodes = selectedRanks.flatMap(row =>
+    row.nodes
+      .filter(
+        node =>
+          Number(row.rank) < selectedRank ||
+          selectedNodeIds.has(Number(node.runeId))
+      )
+      .map(node => ({
+        ...structuredClone(node),
+        rank: Number(row.rank),
+        kind: 'star-gift-node',
+        sourceId: `${sourceProfile.characterId}:${row.rank}:${node.runeId}`,
+        sourceIdentity: [row.sourceIdentity, node.sourceIdentity]
+          .filter(Boolean)
+          .join('|'),
+      }))
+  );
+  const ascensionSources = sourceProfile.ascensionRanks
+    .filter(row => Number(row.ordinal) <= Number(value.ascensionRank))
+    .map(row => ({
+      ...structuredClone(row),
+      kind: 'actor-ascension',
+      sourceId: `${sourceProfile.characterId}:${row.ordinal}`,
+    }));
+  const unappliedSkillSources = [
+    ...selectedNodes
+      .filter(node => node.skillUpgrade)
+      .map(node => ({
+        kind: 'star-gift-node-skill-level',
+        sourceId: node.sourceId,
+        rank: node.rank,
+        runeId: node.runeId,
+        skillIndex: node.skillUpgrade.skillIndex,
+        level: node.skillUpgrade.level,
+        reason: 'star-gift-node-skill-level-runtime-unapplied',
+        sourceIdentity: node.sourceIdentity,
+      })),
+    ...ascensionSources
+      .filter(row => row.unlockedSkillId)
+      .map(row => ({
+        kind: 'actor-ascension-skill-unlock',
+        sourceId: row.sourceId,
+        ordinal: row.ordinal,
+        skillId: row.unlockedSkillId,
+        reason: 'actor-ascension-skill-unlock-runtime-unapplied',
+        sourceIdentity: row.sourceIdentity,
+      })),
+  ];
+  return {
+    ...structuredClone(value),
+    sourceCharacterId: Number(sourceProfile.characterId),
+    staticSources: {
+      schemaVersion: 1,
+      contractName: 'AzPrOptimizationCharacterStaticSources',
+      characterId: Number(sourceProfile.characterId),
+      starGiftRankSources,
+      starGiftNodeSources: selectedNodes.map(node => ({
+        kind: node.kind,
+        sourceId: node.sourceId,
+        rank: node.rank,
+        runeId: node.runeId,
+        attributes: structuredClone(node.attributes),
+        sourceIdentity: node.sourceIdentity,
+      })),
+      ascensionSources: ascensionSources.map(row => ({
+        kind: row.kind,
+        sourceId: row.sourceId,
+        ordinal: row.ordinal,
+        sourceRank: row.sourceRank,
+        levelLimit: row.levelLimit,
+        attributes: structuredClone(row.attributes),
+        sourceIdentity: row.sourceIdentity,
+      })),
+      unappliedSkillSources,
+    },
+  };
 }
 
 function validateKiboTalents(value, basePath, catalog, issues) {

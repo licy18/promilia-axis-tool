@@ -36,6 +36,15 @@
       ]
     },
     {
+      "capabilityIdentity": "b3-character-star-gift-node-and-ascension-static-projection",
+      "status": "implemented",
+      "evidence": [
+        "NewTable/talent_rank|NewTable/talent_rune",
+        "NewTable/hero_rank",
+        "src/simulation/mechanics/verifiedCombatStaticProperties.js"
+      ]
+    },
+    {
       "capabilityIdentity": "b3-kibo-four-talent-source-mapping",
       "status": "implemented",
       "evidence": [
@@ -93,12 +102,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=101010]"
       ],
       "details": {},
-      "gapHash": "cf8d73619cccae26"
+      "gapHash": "3793f27d4dc6f22d"
     },
     {
       "gapIdentity": "character:102001:character-acceptance-not-published",
@@ -135,12 +144,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=102001]"
       ],
       "details": {},
-      "gapHash": "d7021246039c33a5"
+      "gapHash": "8b0cee09467fb342"
     },
     {
       "gapIdentity": "character:103002:character-not-optimization-ready",
@@ -163,12 +172,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=103002]"
       ],
       "details": {},
-      "gapHash": "7d2983f3dbca22ad"
+      "gapHash": "1881d6abddf7c7c6"
     },
     {
       "gapIdentity": "character:107001:character-acceptance-not-published",
@@ -205,12 +214,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=107001]"
       ],
       "details": {},
-      "gapHash": "6eb4634eae19fa7e"
+      "gapHash": "75353fb90effc539"
     },
     {
       "gapIdentity": "character:107002:character-acceptance-not-published",
@@ -247,12 +256,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=107002]"
       ],
       "details": {},
-      "gapHash": "414c9cb2ae00d8a9"
+      "gapHash": "8f54a1fd53b9ea5a"
     },
     {
       "gapIdentity": "character:108001:character-acceptance-not-published",
@@ -289,12 +298,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=108001]"
       ],
       "details": {},
-      "gapHash": "6ebb6b46216ab5f7"
+      "gapHash": "9bccf5eb7cb5401c"
     },
     {
       "gapIdentity": "character:108003:character-acceptance-not-published",
@@ -331,12 +340,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=108003]"
       ],
       "details": {},
-      "gapHash": "0d0df0b95c68eef5"
+      "gapHash": "4cc562964833621a"
     },
     {
       "gapIdentity": "character:109001:character-acceptance-not-published",
@@ -373,12 +382,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=109001]"
       ],
       "details": {},
-      "gapHash": "c8fe3632f023ad5c"
+      "gapHash": "25b1d36ba4ba514f"
     },
     {
       "gapIdentity": "character:111001:character-acceptance-not-published",
@@ -415,12 +424,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=111001]"
       ],
       "details": {},
-      "gapHash": "4dbd1a78df748dc5"
+      "gapHash": "f9493852b6f094ce"
     },
     {
       "gapIdentity": "character:112001:character-acceptance-not-published",
@@ -457,12 +466,12 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=112001]"
       ],
       "details": {},
-      "gapHash": "c840bbae3b89d644"
+      "gapHash": "750cbc1decb2bea3"
     },
     {
       "gapIdentity": "character:STARBORN:actor-static-profile-missing",
@@ -516,13 +525,13 @@
       "code": "strict-character-cultivation-runtime-partial",
       "category": "not-implemented",
       "blocking": true,
-      "message": "Level and star-gift rank are applied; selected star-gift nodes and ascension inputs remain unapplied.",
+      "message": "Level, star-gift rank/node static attributes, and ascension static attributes are applied; star-gift skill levels and ascension skill unlocks remain unapplied.",
       "sourceIdentities": [
         "generated/characters.json#items[id=199001]",
         "generated/characters.json#items[id=199002]"
       ],
       "details": {},
-      "gapHash": "15abd178c8580ad3"
+      "gapHash": "e0d594a9682b6a06"
     },
     {
       "gapIdentity": "equipment:1010111:strict-equipment-cultivation-runtime-partial",
@@ -12645,5 +12654,5 @@
       "soul-essence": 186
     }
   },
-  "ledgerHash": "d333c888b206d797"
+  "ledgerHash": "d95dd2bdd11ecf54"
 }

@@ -105,13 +105,23 @@ export function compileVerifiedStaticActorProperties({
   );
 
   const cultivation = actor?.cultivation ?? {};
-  applyStarGiftSources({
-    characterId,
-    cultivation,
-    indexes,
-    sources,
-    unresolved,
-  });
+  const strictCharacterCultivationApplied =
+    applyOptimizationCharacterCultivationSources({
+      characterId,
+      cultivation,
+      sources,
+      unresolved,
+      unapplied,
+    });
+  if (!strictCharacterCultivationApplied) {
+    applyStarGiftSources({
+      characterId,
+      cultivation,
+      indexes,
+      sources,
+      unresolved,
+    });
+  }
   applyFavorabilitySources({
     characterId,
     cultivation,
@@ -402,6 +412,73 @@ function applyStarGiftSources({
       })
     );
   }
+}
+
+function applyOptimizationCharacterCultivationSources({
+  characterId,
+  cultivation,
+  sources,
+  unresolved,
+  unapplied,
+}) {
+  const contract = cultivation?.optimizationStaticSources;
+  if (!contract) return false;
+  if (
+    contract.contractName !== 'AzPrOptimizationCharacterStaticSources' ||
+    Number(contract.characterId) !== Number(characterId)
+  ) {
+    unresolved.push({
+      kind: 'optimization-character-cultivation',
+      sourceId: characterId,
+      reason: 'optimization-character-static-source-contract-invalid',
+      sourceIdentity: null,
+    });
+    return true;
+  }
+  const sourceGroups = [
+    ['starGiftRankSources', 'star-gift-rank'],
+    ['starGiftNodeSources', 'star-gift-node'],
+    ['ascensionSources', 'actor-ascension'],
+  ];
+  for (const [field, expectedKind] of sourceGroups) {
+    for (const row of contract[field] ?? []) {
+      if (
+        row.kind !== expectedKind ||
+        !Array.isArray(row.attributes) ||
+        row.attributes.some(
+          attribute =>
+            !Number.isInteger(Number(attribute.id)) ||
+            !Number.isFinite(Number(attribute.value))
+        )
+      ) {
+        unresolved.push({
+          kind: expectedKind,
+          sourceId: row.sourceId ?? characterId,
+          reason: 'optimization-character-static-source-invalid',
+          sourceIdentity: row.sourceIdentity ?? null,
+        });
+        continue;
+      }
+      sources.push(
+        createAppliedSource({
+          kind: expectedKind,
+          sourceId: row.sourceId,
+          sourceIdentity: row.sourceIdentity,
+          attributes: row.attributes.map(attribute => ({
+            id: Number(attribute.id),
+            value: Number(attribute.value),
+          })),
+        })
+      );
+    }
+  }
+  for (const row of contract.unappliedSkillSources ?? []) {
+    unapplied.push({
+      ...structuredClone(row),
+      appliedToStaticPanel: false,
+    });
+  }
+  return true;
 }
 
 function applyFavorabilitySources({
