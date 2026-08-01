@@ -302,7 +302,10 @@ describe('Machine Axis CLI', () => {
       },
     };
     const harness = createHarness({ stdin: JSON.stringify(envelope) });
-    const exitCode = await runMachineAxisCli(['search', '-'], harness.io);
+    const exitCode = await runMachineAxisCli(
+      ['search', '-', '--seeds', 'search-seed-a,search-seed-b'],
+      harness.io
+    );
     expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
     const report = parseJson(harness.output.stdout);
     expect(report).toMatchObject({
@@ -313,6 +316,11 @@ describe('Machine Axis CLI', () => {
     expect(report.results.length).toBeGreaterThan(0);
     expect(report.results.length).toBeLessThanOrEqual(2);
     expect(report.results[0].axis.actions.length).toBeGreaterThan(0);
+    expect(report.results[0].sampling).toMatchObject({
+      mode: 'explicit-seed-set',
+      seeds: ['search-seed-a', 'search-seed-b'],
+      sampleCount: 2,
+    });
     expect(harness.output.stderr).toBe('');
   }, 120_000);
 

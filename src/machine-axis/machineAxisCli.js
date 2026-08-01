@@ -71,11 +71,7 @@ export async function runMachineAxisCli(
         'machine-axis-cli-usage',
         parsed.message
       );
-      await emitResult(
-        io,
-        parsed.options,
-        usageError
-      );
+      await emitResult(io, parsed.options, usageError);
       await io.writeStderr(
         `${usageError.error.code}: ${usageError.error.message}\n`
       );
@@ -196,7 +192,15 @@ export function parseCliArguments(argv = []) {
         };
       }
       options.seeds = seeds;
-    } else if (['--beam-width', '--top-n', '--max-depth', '--max-actions-per-owner', '--max-kibo-actions'].includes(flag)) {
+    } else if (
+      [
+        '--beam-width',
+        '--top-n',
+        '--max-depth',
+        '--max-actions-per-owner',
+        '--max-kibo-actions',
+      ].includes(flag)
+    ) {
       const number = Number(value);
       if (!Number.isInteger(number) || number < 1) {
         return {
@@ -242,10 +246,7 @@ export function parseCliArguments(argv = []) {
       message: `Unsupported format: ${options.format}`,
     };
   }
-  if (
-    ['batch', 'search'].includes(command) &&
-    options.format === 'jsonl'
-  ) {
+  if (['batch', 'search'].includes(command) && options.format === 'jsonl') {
     return {
       valid: false,
       command,
@@ -347,13 +348,13 @@ async function executeCommand(parsed, service, io) {
   }
   if (command === 'search') {
     const [envelope] = await readContracts(options.input, options, io);
-    const contract = applyCliOverrides(
-      envelope?.contract ?? envelope,
-      options
-    );
+    const contract = applyCliOverrides(envelope?.contract ?? envelope, options);
     const value = await service.search(
       {
         contract,
+        teamCandidates: envelope?.contract
+          ? envelope.teamCandidates
+          : undefined,
         options: envelope?.contract ? (envelope.options ?? {}) : {},
       },
       {
@@ -365,6 +366,10 @@ async function executeCommand(parsed, service, io) {
         maxKiboActions: options.maxKiboActions,
         burstWindowMs: options.burstWindowMs,
         jobs: options.jobs,
+        seeds:
+          options.seeds ??
+          (options.seed != null ? [String(options.seed)] : undefined),
+        criticalPolicy: options.criticalPolicy,
       }
     );
     return {

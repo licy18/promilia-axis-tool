@@ -448,6 +448,16 @@
       "resourceProof": "ruby-enhanced-e1-intent consumes actor:103002:element:103002047 from 6 to 5"
     }
   },
+  "teamCandidates": [
+    {
+      "id": "pangpang-first",
+      "slotOrder": ["slot-1", "slot-2", "slot-3"]
+    },
+    {
+      "id": "xiaoyu-first",
+      "slotOrder": ["slot-2", "slot-1", "slot-3"]
+    }
+  ],
   "options": {
     "beamWidth": 2,
     "topN": 3,

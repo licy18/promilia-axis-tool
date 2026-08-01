@@ -22,7 +22,11 @@ import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHead
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
 import { createMachineAxisBatchEvaluator } from './machineAxisBatchEvaluator';
-import { createMachineAxisSearchEngine } from './machineAxisSearchEngine';
+import {
+  createMachineAxisSearchEngine,
+  normalizeSearchOptions,
+  selectTopN,
+} from './machineAxisSearchEngine';
 import { createMachineAxisSearchReport } from './machineAxisSearchReport';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
@@ -168,9 +172,7 @@ export function createMachineAxisService({
         valid: false,
         issues,
         warnings: [],
-        classification: createFailedMachineAxisValidationClassification(
-          issues
-        ),
+        classification: createFailedMachineAxisValidationClassification(issues),
         hashes: { input: null, data: null, trace: null },
         actionResolutions: [],
       };
@@ -252,6 +254,10 @@ export function createMachineAxisService({
         ),
       ]);
     }
+    const contractValidation = validateMachineAxisContract(contract);
+    if (!contractValidation.valid) {
+      throw new MachineAxisValidationError(contractValidation.issues);
+    }
     const envelopeOptions = envelope?.options ?? {};
     const mergedOptions = {
       ...envelopeOptions,
@@ -267,18 +273,100 @@ export function createMachineAxisService({
         'includeKibo',
         'includeSwitch',
         'includeNormalAttacks',
+        'includeWait',
+        'maxWaitCandidates',
+        'criticalPolicy',
+        'seeds',
       ]),
     };
-    const engine = createMachineAxisSearchEngine({ service: api });
-    const searchResult = await engine.search({
-      contract,
-      options: mergedOptions,
-    });
+    const normalizedOptions = normalizeSearchOptions(mergedOptions);
+    if (mergedOptions.seeds != null && normalizedOptions.seeds == null) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-seeds-invalid',
+          'options.seeds',
+          'Search seeds must be a non-empty array of strings or numbers'
+        ),
+      ]);
+    }
+    if (
+      mergedOptions.criticalPolicy != null &&
+      normalizedOptions.criticalPolicy == null
+    ) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-critical-policy-invalid',
+          'options.criticalPolicy',
+          `Unsupported search critical policy: ${mergedOptions.criticalPolicy}`
+        ),
+      ]);
+    }
+    const teamCandidates = normalizeSearchTeamCandidates(
+      envelope?.teamCandidates,
+      contract
+    );
+    const startedAt = Date.now();
+    const teamResults = [];
+    const teamFailures = [];
+    const summaries = [];
+    for (const candidate of teamCandidates) {
+      const candidateContract = applySearchTeamCandidate(contract, candidate);
+      const engine = createMachineAxisSearchEngine({ service: api });
+      try {
+        const result = await engine.search({
+          contract: candidateContract,
+          options: normalizedOptions,
+        });
+        summaries.push(result.summary);
+        for (const entry of result.results) {
+          teamResults.push({
+            ...entry,
+            teamCandidateId: candidate.id,
+          });
+        }
+        if (result.results.length === 0) {
+          teamFailures.push({
+            teamCandidateId: candidate.id,
+            issues: result.issues,
+          });
+        }
+      } catch (error) {
+        teamFailures.push({
+          teamCandidateId: candidate.id,
+          issues: normalizeMachineAxisIssues(error),
+        });
+      }
+    }
+    const results = selectTopN(teamResults, normalizedOptions.topN);
+    if (results.length === 0) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-no-solution',
+          'actions',
+          'Search produced no legal action axis',
+          { teamFailures }
+        ),
+      ]);
+    }
+    const searchResult = {
+      schemaVersion: 1,
+      contractName: 'AzPrMachineAxisSearch',
+      kind: 'azpr-machine-axis-search',
+      options: normalizedOptions,
+      summary: aggregateSearchSummaries({
+        summaries,
+        options: normalizedOptions,
+        teamCandidates,
+        teamFailures,
+        wallTimeMs: Date.now() - startedAt,
+        horizonFrames: Number(contract.scenario?.durationFrames) || 1,
+      }),
+      results,
+    };
     return createMachineAxisSearchReport({
       searchResult,
       contract,
       service: api,
-      options: mergedOptions,
     });
   }
 
@@ -429,8 +517,7 @@ export function createMachineAxisService({
       actions: (project.actions ?? []).map((action, projectActionIndex) =>
         attachActionSourceSequence(
           action,
-          sourceSequenceByActionId.get(String(action.id)) ??
-            projectActionIndex,
+          sourceSequenceByActionId.get(String(action.id)) ?? projectActionIndex,
           'machine-axis-input-array-order'
         )
       ),
@@ -488,9 +575,8 @@ export function createMachineAxisService({
       contract,
       project,
       actionResolutions: templates.filter(Boolean).map(template => {
-        const variantSelection = actionVariantPreflight?.selectionByActionId.get(
-          template.actionId
-        );
+        const variantSelection =
+          actionVariantPreflight?.selectionByActionId.get(template.actionId);
         return {
           ...template.resolution,
           index: template.index,
@@ -535,7 +621,12 @@ export function createMachineAxisService({
   return api;
 }
 
-function stabilizeMachineAxisScheduling({ contract, project, templates, core }) {
+function stabilizeMachineAxisScheduling({
+  contract,
+  project,
+  templates,
+  core,
+}) {
   let workingProject = project;
   const maxPasses = Math.max(3, Math.min(12, templates.length + 1));
   for (let pass = 0; pass < maxPasses; pass += 1) {
@@ -547,12 +638,15 @@ function stabilizeMachineAxisScheduling({ contract, project, templates, core }) 
       scenario: canonicalCompilation.scenario,
       actionExecutionPlan: null,
     });
-    if (actionVariantPreflight?.status !== 'verified-action-variant-runtime-ready') {
+    if (
+      actionVariantPreflight?.status !== 'verified-action-variant-runtime-ready'
+    ) {
       return createSchedulingFailure(
         'machine-axis-schedule-variant-preflight-unavailable',
         'Verified action variant preflight is unavailable',
         {
-          reason: actionVariantPreflight?.reason ??
+          reason:
+            actionVariantPreflight?.reason ??
             actionVariantPreflight?.status ??
             'unknown',
         }
@@ -580,9 +674,12 @@ function stabilizeMachineAxisScheduling({ contract, project, templates, core }) 
     const durationIssues = [];
     for (const template of templates) {
       const projectAction = projectActionById.get(String(template.actionId));
-      const effectiveAction = effectiveActionById.get(String(template.actionId));
-      const runtimeResolution =
-        actionVariantPreflight.actionResolutionById.get(template.actionId);
+      const effectiveAction = effectiveActionById.get(
+        String(template.actionId)
+      );
+      const runtimeResolution = actionVariantPreflight.actionResolutionById.get(
+        template.actionId
+      );
       const durationFrames = resolvePreflightDurationFrames({
         template,
         effectiveAction,
@@ -684,9 +781,7 @@ function resolvePreflightDurationFrames({
   const sourcedDurationFrames =
     nonNegativeIntegerOrNull(binding?.effectiveOccupancyFrames) ??
     nonNegativeIntegerOrNull(binding?.actualDurationFrames) ??
-    nonNegativeIntegerOrNull(
-      binding?.actionTiming?.occupancy?.durationFrames
-    );
+    nonNegativeIntegerOrNull(binding?.actionTiming?.occupancy?.durationFrames);
   if (sourcedDurationFrames != null) return sourcedDurationFrames;
   if (runtimeResolution) return null;
   const projectedDurationFrames = msToFrame(effectiveAction.durationMs);
@@ -739,9 +834,7 @@ function machineAxisTimelineEqual(left, right, templates) {
 function createSchedulingFailure(code, message, details = {}) {
   return {
     valid: false,
-    issues: [
-      createMachineAxisDiagnostic(code, 'actions', message, details),
-    ],
+    issues: [createMachineAxisDiagnostic(code, 'actions', message, details)],
     project: null,
     scheduleResult: null,
     canonicalCompilation: null,
@@ -1699,9 +1792,8 @@ function collectExecutionWarnings({ compilation, run }) {
     seen.add(key);
     warnings.push({ ...warning, severity: 'warning' });
   };
-  for (const warning of
-    compilation.canonicalCompilation.scenario.diagnostics
-      ?.validationWarnings ?? []) {
+  for (const warning of compilation.canonicalCompilation.scenario.diagnostics
+    ?.validationWarnings ?? []) {
     if (warning && typeof warning === 'object') {
       add({
         code: warning.code ?? 'machine-axis-canonical-validation-warning',
@@ -1718,9 +1810,7 @@ function collectExecutionWarnings({ compilation, run }) {
     }
   }
   for (const resolution of compilation.actionResolutions ?? []) {
-    const sourceEvidenceStatus = String(
-      resolution.sourceEvidenceStatus ?? ''
-    );
+    const sourceEvidenceStatus = String(resolution.sourceEvidenceStatus ?? '');
     const scenarioRuntimeStatus = String(
       resolution.scenarioRuntimeStatus ?? ''
     );
@@ -1822,9 +1912,7 @@ function createMachineAxisValidationClassification({ issues, warnings }) {
 }
 
 function createFailedMachineAxisValidationClassification(issues) {
-  const schemaInvalid = issues.some(issue =>
-    isRawSchemaIssueCode(issue.code)
-  );
+  const schemaInvalid = issues.some(issue => isRawSchemaIssueCode(issue.code));
   return {
     schemaStatus: schemaInvalid ? 'schema-invalid' : 'schema-valid',
     runnabilityStatus: 'not-runnable',
@@ -1965,6 +2053,155 @@ function subtractNumericRecords(right = null, left = null) {
         (Number(right?.[key]) || 0) - (Number(left?.[key]) || 0),
       ])
   );
+}
+
+function normalizeSearchTeamCandidates(value, contract) {
+  if (value == null) {
+    return [
+      {
+        id: 'fixed-team',
+        team: contract.scenario.team,
+        initialRuntimeState: contract.scenario.initialRuntimeState,
+        fixed: true,
+      },
+    ];
+  }
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new MachineAxisValidationError([
+      createMachineAxisDiagnostic(
+        'machine-axis-search-team-candidates-invalid',
+        'teamCandidates',
+        'teamCandidates must be a non-empty array'
+      ),
+    ]);
+  }
+  const seen = new Set();
+  return value.map((entry, index) => {
+    const id = String(entry?.id ?? '').trim();
+    const projected = projectSearchTeamCandidate(entry, contract);
+    if (!id || seen.has(id) || projected == null) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-team-candidate-invalid',
+          `teamCandidates.${index}`,
+          'Each team candidate requires a unique id and either a complete team or a valid slotOrder',
+          { teamCandidateId: id || null }
+        ),
+      ]);
+    }
+    seen.add(id);
+    return {
+      id,
+      team: projected.team,
+      initialRuntimeState:
+        entry.initialRuntimeState == null
+          ? projected.initialRuntimeState
+          : structuredClone(entry.initialRuntimeState),
+      metadata: structuredClone(entry.metadata ?? {}),
+      fixed: false,
+    };
+  });
+}
+
+function projectSearchTeamCandidate(entry, contract) {
+  if (Array.isArray(entry?.team)) {
+    return {
+      team: structuredClone(entry.team),
+      initialRuntimeState: structuredClone(
+        contract.scenario.initialRuntimeState
+      ),
+    };
+  }
+  if (!Array.isArray(entry?.slotOrder)) return null;
+  const baseTeam = contract.scenario.team ?? [];
+  if (entry.slotOrder.length !== baseTeam.length) return null;
+  const sourceBySlot = new Map(
+    baseTeam.map(slot => [String(slot.slotId), slot])
+  );
+  const unique = new Set(entry.slotOrder.map(String));
+  if (unique.size !== baseTeam.length) return null;
+  const sourceToTargetSlot = new Map();
+  const team = entry.slotOrder.map((sourceSlotId, index) => {
+    const source = sourceBySlot.get(String(sourceSlotId));
+    if (!source) return null;
+    const targetSlotId = baseTeam[index].slotId;
+    sourceToTargetSlot.set(String(sourceSlotId), targetSlotId);
+    return { ...structuredClone(source), slotId: targetSlotId };
+  });
+  if (team.some(slot => slot == null)) return null;
+  const initialRuntimeState = structuredClone(
+    contract.scenario.initialRuntimeState ?? {}
+  );
+  if (Array.isArray(initialRuntimeState.kiboEnergyBySlot)) {
+    initialRuntimeState.kiboEnergyBySlot =
+      initialRuntimeState.kiboEnergyBySlot.map(resource => ({
+        ...resource,
+        slotId:
+          sourceToTargetSlot.get(String(resource.slotId)) ?? resource.slotId,
+      }));
+  }
+  return { team, initialRuntimeState };
+}
+
+function applySearchTeamCandidate(contract, candidate) {
+  if (candidate.fixed) return contract;
+  return {
+    ...contract,
+    scenario: {
+      ...(contract.scenario ?? {}),
+      id: `${contract.scenario?.id ?? 'search'}--team-${candidate.id}`,
+      name: `${contract.scenario?.name ?? 'Search'} [${candidate.id}]`,
+      team: candidate.team,
+      initialRuntimeState: candidate.initialRuntimeState,
+    },
+    metadata: {
+      ...(contract.metadata ?? {}),
+      searchTeamCandidate: {
+        id: candidate.id,
+        ...candidate.metadata,
+      },
+    },
+  };
+}
+
+function aggregateSearchSummaries({
+  summaries,
+  options,
+  teamCandidates,
+  teamFailures,
+  wallTimeMs,
+  horizonFrames,
+}) {
+  const sum = key =>
+    summaries.reduce(
+      (total, summary) => total + Number(summary?.[key] ?? 0),
+      0
+    );
+  return {
+    steps: summaries.reduce(
+      (maximum, summary) => Math.max(maximum, Number(summary?.steps ?? 0)),
+      0
+    ),
+    candidatesEvaluated: sum('candidatesEvaluated'),
+    invalidCandidates: sum('invalidCandidates'),
+    mergedCandidates: sum('mergedCandidates'),
+    prunedCandidates: sum('prunedCandidates'),
+    expandedCandidates: sum('expandedCandidates'),
+    completedCandidates: sum('completedCandidates'),
+    wallTimeMs,
+    beamWidth: options.beamWidth,
+    topN: options.topN,
+    objective: options.objective,
+    horizonFrames,
+    teamCandidatesEvaluated: teamCandidates.length,
+    teamCandidateSuccessCount: Math.max(
+      0,
+      teamCandidates.length - teamFailures.length
+    ),
+    teamCandidateFailureCount: teamFailures.length,
+    teamCandidateIds: teamCandidates.map(entry => entry.id),
+    teamCandidateFailures: teamFailures,
+  };
 }
 
 function normalizeMachineAxisIssues(error) {

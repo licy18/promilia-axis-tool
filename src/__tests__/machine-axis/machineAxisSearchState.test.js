@@ -4,6 +4,8 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import {
   createSearchEventBoundaryNodes,
+  createSearchLoopClosureProjection,
+  createSearchPendingEventProjection,
   createSearchStateSnapshot,
   deriveActiveActorId,
   hashSearchState,
@@ -58,8 +60,73 @@ describe('Machine Axis search state', () => {
       remainingFrames: Math.max(0, base.remainingFrames - 30),
       damage: { ...base.damage, hpDamage: base.damage.hpDamage + 100 },
     };
-    expect(hashSearchState(base)).toBe(hashSearchState(later));
-    expect(searchStatesEquivalent(base, later)).toBe(true);
+    expect(hashSearchState(base)).not.toBe(hashSearchState(later));
+    expect(searchStatesEquivalent(base, later)).toBe(false);
+    expect(createSearchLoopClosureProjection(later)).toEqual(
+      createSearchLoopClosureProjection(base)
+    );
+  });
+
+  it('keeps delayed settlements from already-started actions in the node state', () => {
+    const pending = createSearchPendingEventProjection({
+      currentFrame: 10,
+      run: {
+        actionResolutions: [
+          { actionId: 'delayed-action', startFrame: 0 },
+          { actionId: 'future-action', startFrame: 20 },
+        ],
+        trace: {
+          damage: [
+            {
+              actionId: 'delayed-action',
+              absoluteFrame: 10,
+              hitIdentity: 'already-settled',
+            },
+            {
+              actionId: 'delayed-action',
+              absoluteFrame: 14,
+              hitIdentity: 'pending-hit',
+              runtimeSequenceIndex: 2,
+            },
+            {
+              actionId: 'future-action',
+              absoluteFrame: 25,
+              hitIdentity: 'not-yet-started',
+            },
+          ],
+          effects: { events: [] },
+          resources: { tuningMarks: [], special: [] },
+          variants: { resourceEvents: [], stateEvents: [] },
+          state: { targetEvents: [] },
+        },
+      },
+    });
+    expect(pending).toEqual([
+      {
+        kind: 'hit',
+        frame: 14,
+        actionId: 'delayed-action',
+        identity: 'pending-hit',
+        phase: null,
+        sequence: 2,
+      },
+    ]);
+  });
+
+  it('infers the real execution node instead of coercing a null frame to zero', () => {
+    const snapshot = createSearchStateSnapshot({ run, contract: fixture });
+    const finalActionEndFrame = Math.max(
+      ...run.trace.executionPlan.actions
+        .filter(entry => entry.execute !== false)
+        .map(entry =>
+          Math.round(((entry.startMs + entry.durationMs) * 60) / 1000)
+        )
+    );
+    expect(snapshot.currentFrame).toBe(finalActionEndFrame);
+    expect(snapshot.currentFrame).toBeGreaterThan(0);
+    expect(snapshot.remainingFrames).toBe(
+      fixture.scenario.durationFrames - finalActionEndFrame
+    );
   });
 
   it('does not merge states that differ in legality-relevant state', () => {
@@ -129,6 +196,7 @@ describe('Machine Axis search state', () => {
     expect(kinds.has('action-end')).toBe(true);
     expect(kinds.has('cd-ready')).toBe(true);
     expect(kinds.has('state-change')).toBe(true);
+    expect(kinds.has('resource-change')).toBe(true);
     expect(kinds.has('window-boundary')).toBe(true);
     expect(kinds.has('horizon')).toBe(true);
     const frames = nodes.map(node => node.frame);

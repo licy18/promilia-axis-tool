@@ -1760,14 +1760,14 @@ R1 后主线不再直接按角色队列扩张，而是按以下顺序推进：
 2. `M11-B`：建立版本化 Machine Axis JSON Schema 和 `catalog/validate/simulate/compare/explain` CLI。
 3. `M11-C`：将 Workbench 收敛为同一 trace 的可视化验收台，保留动作、曲线、状态、Buff、hit 与因果检查。
 4. `M11-D`：建立角色场景矩阵及 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready` 四态门禁。
-5. `M12-A/B`：在已验收角色上实现批量评估与可解释搜索器。
-6. `M12-C`：以末音和少量候选队友做首个最佳配队/输出轴试点，Top-N 结果必须回灌 Workbench 人工复验。
+5. `M12-A/B`：在已验收角色上实现批量评估与可解释搜索器；搜索正确性收口后优先实现带机器闭环证明的 `cycle-dps`。
+6. `M12-C`：以末音和少量候选队友做首个最佳配队/输出轴试点，优先比较可持续循环 DPS，Top-N 结果必须回灌 Workbench 人工复验。
 
 机器接口与网页不得维护两套战斗逻辑。AI 不能替代运行时证据和产品验收，未达到 `optimization-ready` 的角色不得进入正式最优解。新的视觉特效、非必要响应式适配、拖拽手感细修、包体压缩和全角色盲目批量接入暂缓；包体继续记录，但只在对外发布时作为阻断门。详细阶段目标与验收条件见 `DEVELOPMENT_PLAN.md` 的 M11/M12 章节。
 
-### M12-B 事件边界搜索器已交付（2026-07-31）
+### M12-B-R2 收口完成，等待产品复验（2026-08-01）
 
-实现事件边界节点/等价状态 hash（`machineAxisSearchState.js`）、候选动作生成（`machineAxisSearchGenerator.js`）、beam + 等价合并 + 保守上界剪枝主循环（`machineAxisSearchEngine.js`）与 Top-N 报告契约（`machineAxisSearchReport.js`）；CLI `search`、schema `azpr-machine-axis-search-v1.schema.json`、示例 `m12-search-example.json`。候选全部经 `service.simulate` 评估，暴击安全门沿用 M12-A，无逐帧枚举、无自造派生动作；Top-N 轴可回灌 Workbench（重建 hash 一致）。全量回归 169 文件 / 1127 测试通过。M12-B 为功能验证（3 个 `runtime-integrated` 角色）；正式最优结论与 M12-C 末音试点仍锁定，等待用户解锁。
+M12-B-R2 已用候选动作的真实资源条件和 canonical 资源轨迹生成最早可执行阈值等待，避免 SP/奇波能量逐整数事件消耗搜索深度；没有正增长来源的资源不会生成等待。多 seed 报告按稳定 actor/action/hit identity 聚合贡献，同时保留每个样本的 trace/hash，聚合贡献与目标指标守恒。R2 当前等待产品复验；可持续循环 DPS 与 M12-C 均未启动。
 
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 

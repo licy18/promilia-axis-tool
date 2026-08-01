@@ -1,5 +1,4 @@
-import { createRunMetrics } from './machineAxisBatchEvaluator';
-import { createSearchStateSnapshot } from './machineAxisSearchState';
+import { createSearchLoopClosureProjection } from './machineAxisSearchState';
 
 export const MACHINE_AXIS_SEARCH_REPORT_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_REPORT_CONTRACT =
@@ -11,7 +10,6 @@ export function createMachineAxisSearchReport({
   searchResult,
   contract,
   service,
-  options = {},
 } = {}) {
   const rows = (searchResult?.results ?? []).map((entry, index) =>
     createResultRow({
@@ -20,7 +18,6 @@ export function createMachineAxisSearchReport({
       contract,
       service,
       searchOptions: searchResult?.options ?? {},
-      reportOptions: options,
       bestScore: searchResult?.results?.[0]?.score ?? entry.score,
     })
   );
@@ -51,14 +48,11 @@ function createResultRow({
   contract,
   service,
   searchOptions,
-  reportOptions,
   bestScore,
 }) {
   const axis = entry.axis;
   const validation = service.validate(axis);
-  const metrics = createRunMetrics(entry.run, axis, {
-    burstWindowMs: reportOptions.burstWindowMs,
-  });
+  const metrics = entry.metrics;
   const chain = entry.chain.map(item => ({
     actionId: item.action.id,
     label: item.label ?? item.action.intent?.actionKind ?? null,
@@ -70,15 +64,13 @@ function createResultRow({
     validation,
     warnings: entry.warnings,
   });
-  const state = createSearchStateSnapshot({
-    run: entry.run,
-    contract: axis,
-  });
+  const state = entry.state;
   return {
     rank,
+    teamCandidateId: entry.teamCandidateId ?? 'fixed-team',
     score: entry.score,
     deltaVsRank1: rank === 1 ? 0 : Number(entry.score) - Number(bestScore),
-    team: projectTeam(contract),
+    team: projectTeam(axis),
     axis,
     hashes: entry.run?.hashes ?? null,
     legality: {
@@ -98,6 +90,8 @@ function createResultRow({
         contract.scenario?.critical?.seed ??
         null,
     },
+    sampling: entry.sampling ?? null,
+    boundariesConsumed: entry.boundariesConsumed ?? [],
     coverageTrust: coverage,
     metrics: {
       hpDamage: metrics.hpDamage,
@@ -110,21 +104,23 @@ function createResultRow({
       nonExecutableActions: metrics.nonExecutableActions,
       unresolvedActionCount: metrics.unresolvedActionCount,
     },
-    contributions: entry.run?.evaluation
-      ? {
-          byActor: entry.run.evaluation.byActor,
-          byAction: entry.run.evaluation.byAction,
-        }
-      : null,
+    contributions: entry.contributions ?? null,
     causalExplanation: {
       actionSequence: chain,
       endState: {
         currentFrame: state.currentFrame,
+        remainingFrames: state.remainingFrames,
         activeActorId: state.activeActorId,
         actors: state.actors,
         kibos: state.kibos,
+        cooldowns: state.cooldowns,
+        effects: state.effects,
+        tuningMarks: state.tuningMarks,
+        specialResources: state.specialResources,
+        pendingEvents: state.pendingEvents,
         enemy: state.enemy,
       },
+      loopClosureState: createSearchLoopClosureProjection(state),
       note: `${searchOptions.objective ?? 'damage'} objective, ${axis.scenario?.name ?? 'axis'}`,
     },
   };

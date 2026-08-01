@@ -9,6 +9,14 @@ export const MACHINE_AXIS_SEARCH_GENERATOR_CONTRACT =
 const KIBO_ACTION_KINDS = new Set(['signature', 'active', 'break']);
 const CHARACTER_ACTION_KINDS = new Set([
   'normal-attack',
+  'charged-attack',
+  'dodge-attack',
+  'plunging-attack',
+  'star-skill',
+  'star-combo',
+  'star-carry',
+  'limit-counter',
+  'perfect-parry',
   'skill',
   'signature',
   'ultimate',
@@ -102,8 +110,22 @@ export function createMachineAxisSearchGenerator({
     );
     const candidates = [];
     let sequence = 0;
+    const actionOrdinalBase = (axis.actions ?? []).length;
+    const allocatedActionIds = new Set(
+      (axis.actions ?? []).map(action => String(action.id ?? ''))
+    );
+    let actionIdentityOrdinal = 1;
     const add = entry => {
       candidates.push({ ...entry, sequence: (sequence += 1) });
+    };
+    const nextActionId = () => {
+      let candidate;
+      do {
+        candidate = `search-action-${actionIdentityOrdinal}`;
+        actionIdentityOrdinal += 1;
+      } while (allocatedActionIds.has(candidate));
+      allocatedActionIds.add(candidate);
+      return candidate;
     };
 
     const activeCharacterId = characterIdByActorId.get(String(activeActorId));
@@ -128,14 +150,14 @@ export function createMachineAxisSearchGenerator({
           for (const segment of attackInputs) {
             add({
               action: createMachineAxisSearchAction({
-                id: `search-action-${sequence + 1}`,
+                id: nextActionId(),
                 ownerKind: 'actor',
                 slotId,
                 publicActionId: entry.publicActionId,
                 actionKind: entry.actionKind,
                 attackInput: {
                   sequenceIndex: segment.sequenceIndex,
-                  groupId: `search-${segment.sequenceIndex}`,
+                  groupId: `search-${actionOrdinalBase + 1}-${segment.sequenceIndex}`,
                 },
                 level: 1,
                 startFrame,
@@ -152,7 +174,7 @@ export function createMachineAxisSearchGenerator({
         } else {
           add({
             action: createMachineAxisSearchAction({
-              id: `search-action-${sequence + 1}`,
+              id: nextActionId(),
               ownerKind: 'actor',
               slotId,
               publicActionId: entry.publicActionId,
@@ -185,7 +207,7 @@ export function createMachineAxisSearchGenerator({
         for (const entry of limitedKibo) {
           add({
             action: createMachineAxisSearchAction({
-              id: `search-action-${sequence + 1}`,
+              id: nextActionId(),
               ownerKind: 'kibo',
               slotId,
               publicActionId: entry.publicActionId,
@@ -214,7 +236,7 @@ export function createMachineAxisSearchGenerator({
         if (String(targetActorId) === String(activeActorId)) continue;
         add({
           action: createMachineAxisSearchAction({
-            id: `search-action-${sequence + 1}`,
+            id: nextActionId(),
             ownerKind: 'actor',
             slotId: slotByActorId.get(String(activeActorId)) ?? slot.slotId,
             actionKind: 'switch',

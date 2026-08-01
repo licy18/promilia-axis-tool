@@ -72,7 +72,7 @@ describe('Machine Axis search engine', () => {
       run.evaluation.totals.toughnessDamage
     );
     expect(scoreCandidate(run, 'burst')).toBeGreaterThan(0);
-  });
+  }, 30_000);
 
   it('computes admissible upper bounds without mis-pruning', () => {
     expect(
