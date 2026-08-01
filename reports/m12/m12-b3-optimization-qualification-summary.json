@@ -1,0 +1,63 @@
+{
+  "phase": "M12-B3-A",
+  "status": "checkpoint-ready-qualification-blocked",
+  "denominators": {
+    "characterOptimizationObjects": 11,
+    "sourceCharacterAliases": 12,
+    "kibos": 43,
+    "soulEssences": 62,
+    "equipment": 137,
+    "setSkills": 12
+  },
+  "sourceSnapshotHash": "0e2fa93b88d82707",
+  "rosterHash": "6b5961e83e5b1eb7",
+  "manifestsHash": "4501e3e6c1c1083c",
+  "ledgerHash": "4f05116efea7fae1",
+  "bindingMatrixHash": "3cf1c9cc678e4193",
+  "catalogHash": "69e0cea8e25f33b4",
+  "maturityCounts": {
+    "extracted": 241,
+    "runtime-integrated": 24
+  },
+  "optimizationReadyCounts": {
+    "character": 0,
+    "kibo": 0,
+    "soul-essence": 0,
+    "equipment": 0,
+    "set-skill": 0
+  },
+  "gapCounts": {
+    "blockingUniqueGapCount": 829,
+    "byCategory": {
+      "evidence-insufficient": 184,
+      "not-implemented": 645
+    },
+    "byCode": {
+      "actor-static-profile-missing": 1,
+      "character-acceptance-not-published": 9,
+      "character-not-optimization-ready": 11,
+      "equipment-instance-tier-source-evidence-missing": 137,
+      "equipment-visual-acceptance-not-published": 137,
+      "kibo-dna-factor-catalog-unavailable": 43,
+      "kibo-headless-maturity-not-ready": 43,
+      "kibo-passive-static-evidence-gap": 4,
+      "kibo-visual-acceptance-not-published": 43,
+      "set-skill-dynamic-unapplied": 12,
+      "set-skill-visual-acceptance-not-published": 12,
+      "soulessence-effect-skill-dynamic-unapplied": 62,
+      "soulessence-visual-acceptance-not-published": 62,
+      "strict-character-cultivation-runtime-unapplied": 11,
+      "strict-equipment-cultivation-runtime-unapplied": 137,
+      "strict-kibo-cultivation-runtime-unapplied": 43,
+      "strict-soulessence-cultivation-runtime-unapplied": 62
+    },
+    "byObjectKind": {
+      "character": 32,
+      "equipment": 411,
+      "kibo": 176,
+      "set-skill": 24,
+      "soul-essence": 186
+    }
+  },
+  "m12cLocked": true
+}

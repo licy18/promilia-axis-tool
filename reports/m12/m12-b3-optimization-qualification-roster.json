@@ -1,0 +1,5226 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrOptimizationQualificationRoster",
+  "kind": "azpr-optimization-qualification-roster",
+  "generatedAt": "2026-08-01T00:00:00.000Z",
+  "phase": "M12-B3-A",
+  "sourceSnapshot": {
+    "files": {
+      "characters": {
+        "path": "src/data/generated/characters.json",
+        "sha256": "4a73f5e393f7410f5af80a811cac604d97ca6bf74ca8e0be66445ca932fb5052",
+        "bytes": 406703
+      },
+      "kibos": {
+        "path": "src/data/generated/kibos.json",
+        "sha256": "1cca2e3d0d1cb5a0a984164ab0c6b05ef0b6c5416b0e9872f0c8ab36394519c4",
+        "bytes": 855418
+      },
+      "equipment": {
+        "path": "src/data/generated/equipment.json",
+        "sha256": "d718604a7b28f84163c175f7f7d0b4d26f891606bb18acf22939e2ef16eaf593",
+        "bytes": 115457
+      },
+      "soulessences": {
+        "path": "src/data/generated/soulessences.json",
+        "sha256": "385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe",
+        "bytes": 73284
+      },
+      "verifiedMechanics": {
+        "path": "src/data/generated/verified-combat-mechanics-package.json",
+        "sha256": "f38a6c56ad1c7113bd87caa66be27118c0f3fe793e7f0c91e5a76ba80c3cca49",
+        "bytes": 82892649
+      },
+      "characterAcceptance": {
+        "path": "src/data/generated/character-acceptance-catalog.json",
+        "sha256": "9a2f90e522076467af35dcb5eace2da51926e274033d4998c023eb72bb34f862",
+        "bytes": 2872
+      },
+      "kiboPassives": {
+        "path": "src/data/generated/kibo-passive-mechanics.json",
+        "sha256": "5d1ab16d3172a0c810e7c646e7607cf857d582dc35d30d4708a75410ff3ad977",
+        "bytes": 302883
+      },
+      "kiboMaturity": {
+        "path": "reports/kibo-headless/kibo-maturity-matrix.json",
+        "sha256": "f80205a916a40d5c903113c799abd5f4e5169b54f68add95788cbd0ac724ce34",
+        "bytes": 865647
+      },
+      "newTable:accessory.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory.json",
+        "sha256": "449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39",
+        "bytes": 129892
+      },
+      "newTable:accessory_main.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory_main.json",
+        "sha256": "3a62df2b012a1b78a9f8596df2fa6b228eff32b437754359f3cab296074484b8",
+        "bytes": 423383
+      },
+      "newTable:accessory_customed.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory_customed.json",
+        "sha256": "531e9ada45156f0151d21f959495cd7fd12e8f55a6d7b51997a9f2ac1d9dbb30",
+        "bytes": 23606
+      },
+      "newTable:accessory_level.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory_level.json",
+        "sha256": "39c07d5436f4b4b505e6977c9d1ec7d85b440a446c529e4c44ef8964e1eecd93",
+        "bytes": 297385
+      },
+      "newTable:accessory_set.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory_set.json",
+        "sha256": "c1968106de40dd6648658841fce5d849fc89de9f2dbfde0709656c10e0d87b47",
+        "bytes": 940
+      },
+      "newTable:accessory_sub_parameter.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory_sub_parameter.json",
+        "sha256": "1f8fb9f09bd8132973cc4ddb1b517c96e5526bb5bedf982b0121e6916aac334b",
+        "bytes": 78240
+      },
+      "newTable:game.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/game.json",
+        "sha256": "0d4bd1fe373896eba7b8dc555b4fc3153c3021fbaf12402f8451a1a006d0f831",
+        "bytes": 90666
+      },
+      "newTable:hero_break.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero_break.json",
+        "sha256": "502f166017f7fbbdd4b55e5b73551faf41348986d149b2ff5165a026ba96db67",
+        "bytes": 7530
+      },
+      "newTable:hero_rank.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero_rank.json",
+        "sha256": "6baad7776ca8b4128c4c0c4ebf18300bf473b09dd26ca7576614e3f2deaf35c0",
+        "bytes": 41169
+      },
+      "newTable:pet_talent_upgrade.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/pet_talent_upgrade.json",
+        "sha256": "cc9dc34abee41cd5df75472c83af2e93e1f060e5764041be498dfdfffb6a6625",
+        "bytes": 20478
+      },
+      "newTable:pet_favorability.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/pet_favorability.json",
+        "sha256": "4c8c337cbd9a3c9d7f81907a21f947eac48bdf362765921f5adecf8496c1122e",
+        "bytes": 1531
+      },
+      "newTable:soulessence.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/soulessence.json",
+        "sha256": "a8b3222840e8c28a4bb770b55f4dd9d815720493717a2c9ed0ce7471d9bbed29",
+        "bytes": 50378
+      },
+      "newTable:soulessence_rank.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/soulessence_rank.json",
+        "sha256": "48f4c975f8da914f89fde42191e80d746e62b86dbcdad2b714b2f38f3f555986",
+        "bytes": 116816
+      },
+      "newTable:soulessence_value.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/soulessence_value.json",
+        "sha256": "bf21d3a7c1579ddd16c6abcb52d0a7e5dd90c007274a3fea6fc647f96a084a7b",
+        "bytes": 396381
+      },
+      "newTable:talent_rank.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/talent_rank.json",
+        "sha256": "10a718dcc0c9e5c989aae12c03087e2036054107748df3605cb7aae25af8c0c7",
+        "bytes": 53721
+      },
+      "newTable:talent_rune.json": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/talent_rune.json",
+        "sha256": "7c31b396c6418b48fbb8311771fb1c3a0c9bf460f6940fac38dcd62114cf9689",
+        "bytes": 33689
+      }
+    },
+    "sourceSnapshotHash": "0e2fa93b88d82707"
+  },
+  "filterContract": {
+    "characterElements": [
+      "风",
+      "雷"
+    ],
+    "characterElementField": "characters.items[].element.abbrName",
+    "kiboElements": [
+      "风",
+      "雷"
+    ],
+    "kiboElementField": "kibos.items[].element",
+    "discreteTagDelimiter": "、",
+    "kiboPublicDenominator": "reports/kibo-headless/kibo-maturity-matrix.json#rows",
+    "starbornOptimizationObject": "STARBORN",
+    "starbornSourceCharacterIds": [
+      199001,
+      199002
+    ]
+  },
+  "denominators": {
+    "characterOptimizationObjects": 11,
+    "sourceCharacterAliases": 12,
+    "kibos": 43,
+    "soulEssences": 62,
+    "equipment": 137,
+    "setSkills": 12
+  },
+  "characters": [
+    {
+      "optimizationObjectId": "101010",
+      "displayName": "涂山小玉",
+      "sourceCharacterIds": [
+        101010
+      ],
+      "sourceNames": [
+        "涂山小玉"
+      ],
+      "elements": [
+        "风",
+        "光"
+      ],
+      "position": "猛攻",
+      "weaponType": "双刀",
+      "mechanismHash": "54e16a3ddd7d9154",
+      "sourceIdentity": "generated/characters.json#items[id=101010]"
+    },
+    {
+      "optimizationObjectId": "102001",
+      "displayName": "莉莉",
+      "sourceCharacterIds": [
+        102001
+      ],
+      "sourceNames": [
+        "莉莉"
+      ],
+      "elements": [
+        "风"
+      ],
+      "position": "增幅",
+      "weaponType": "长柄武器",
+      "mechanismHash": "5b81beb6a20b273f",
+      "sourceIdentity": "generated/characters.json#items[id=102001]"
+    },
+    {
+      "optimizationObjectId": "103002",
+      "displayName": "红宝石",
+      "sourceCharacterIds": [
+        103002
+      ],
+      "sourceNames": [
+        "红宝石"
+      ],
+      "elements": [
+        "火",
+        "雷"
+      ],
+      "position": "猛攻",
+      "weaponType": "火枪",
+      "mechanismHash": "d2189ab88f3e6130",
+      "sourceIdentity": "generated/characters.json#items[id=103002]"
+    },
+    {
+      "optimizationObjectId": "107001",
+      "displayName": "西芙莉雅",
+      "sourceCharacterIds": [
+        107001
+      ],
+      "sourceNames": [
+        "西芙莉雅"
+      ],
+      "elements": [
+        "风",
+        "木"
+      ],
+      "position": "爆发",
+      "weaponType": "弓",
+      "mechanismHash": "d430860c91304d4d",
+      "sourceIdentity": "generated/characters.json#items[id=107001]"
+    },
+    {
+      "optimizationObjectId": "107002",
+      "displayName": "米砂",
+      "sourceCharacterIds": [
+        107002
+      ],
+      "sourceNames": [
+        "米砂"
+      ],
+      "elements": [
+        "木",
+        "风"
+      ],
+      "position": "赋予",
+      "weaponType": "镰刀",
+      "mechanismHash": "538073a51f10e5f1",
+      "sourceIdentity": "generated/characters.json#items[id=107002]"
+    },
+    {
+      "optimizationObjectId": "108001",
+      "displayName": "忒拉拉",
+      "sourceCharacterIds": [
+        108001
+      ],
+      "sourceNames": [
+        "忒拉拉"
+      ],
+      "elements": [
+        "火",
+        "风"
+      ],
+      "position": "猛攻",
+      "weaponType": "长柄武器",
+      "mechanismHash": "96daa11fff252daf",
+      "sourceIdentity": "generated/characters.json#items[id=108001]"
+    },
+    {
+      "optimizationObjectId": "108003",
+      "displayName": "米蒂",
+      "sourceCharacterIds": [
+        108003
+      ],
+      "sourceNames": [
+        "米蒂"
+      ],
+      "elements": [
+        "雷"
+      ],
+      "position": "增幅",
+      "weaponType": "弓",
+      "mechanismHash": "bddf60c09a08e7f7",
+      "sourceIdentity": "generated/characters.json#items[id=108003]"
+    },
+    {
+      "optimizationObjectId": "109001",
+      "displayName": "末音",
+      "sourceCharacterIds": [
+        109001
+      ],
+      "sourceNames": [
+        "末音"
+      ],
+      "elements": [
+        "雷",
+        "风"
+      ],
+      "position": "猛攻",
+      "weaponType": "双刀",
+      "mechanismHash": "fd47d5ed36224b04",
+      "sourceIdentity": "generated/characters.json#items[id=109001]"
+    },
+    {
+      "optimizationObjectId": "111001",
+      "displayName": "法兰塔",
+      "sourceCharacterIds": [
+        111001
+      ],
+      "sourceNames": [
+        "法兰塔"
+      ],
+      "elements": [
+        "风",
+        "雷"
+      ],
+      "position": "破坏",
+      "weaponType": "长柄武器",
+      "mechanismHash": "f7ea274127d727b3",
+      "sourceIdentity": "generated/characters.json#items[id=111001]"
+    },
+    {
+      "optimizationObjectId": "112001",
+      "displayName": "姬瑟贝露",
+      "sourceCharacterIds": [
+        112001
+      ],
+      "sourceNames": [
+        "姬瑟贝露"
+      ],
+      "elements": [
+        "雷",
+        "暗"
+      ],
+      "position": "破坏",
+      "weaponType": "火枪",
+      "mechanismHash": "23f9684b4aa8bc6f",
+      "sourceIdentity": "generated/characters.json#items[id=112001]"
+    },
+    {
+      "optimizationObjectId": "STARBORN",
+      "displayName": "星临者",
+      "sourceCharacterIds": [
+        199001,
+        199002
+      ],
+      "sourceNames": [
+        "女主角",
+        "男主角"
+      ],
+      "elements": [
+        "无"
+      ],
+      "position": "增幅",
+      "weaponType": "单手武器",
+      "mechanismHash": "320b1011f76b0f8f",
+      "aliasMechanismHashes": {
+        "199001": "320b1011f76b0f8f",
+        "199002": "320b1011f76b0f8f"
+      },
+      "sourceIdentity": "generated/characters.json#items[id=199001|199002]:normalized-mechanics"
+    }
+  ],
+  "kibos": [
+    {
+      "kiboId": 500001,
+      "name": "迅狼",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "异生类·兽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50000102,
+          "actionKind": "signature",
+          "name": "迅风刃"
+        },
+        {
+          "publicActionId": 504004,
+          "actionKind": "active",
+          "name": "狂风冲击"
+        },
+        {
+          "publicActionId": 50000112,
+          "actionKind": "break",
+          "name": "迅狼-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500001]"
+    },
+    {
+      "kiboId": 500025,
+      "name": "拉加野猪",
+      "elements": [
+        "雷",
+        "地"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·兽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50002504,
+          "actionKind": "signature",
+          "name": "拉加冲锋"
+        },
+        {
+          "publicActionId": 507003,
+          "actionKind": "active",
+          "name": "落雷"
+        },
+        {
+          "publicActionId": 50002515,
+          "actionKind": "break",
+          "name": "拉加野猪-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500025]"
+    },
+    {
+      "kiboId": 500043,
+      "name": "小浮蝶",
+      "elements": [
+        "风",
+        "光"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50004302,
+          "actionKind": "signature",
+          "name": "蝶磷粉"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50004305,
+          "actionKind": "break",
+          "name": "小浮蝶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500043]"
+    },
+    {
+      "kiboId": 500044,
+      "name": "浮蝶",
+      "elements": [
+        "风",
+        "光"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50004401,
+          "actionKind": "signature",
+          "name": "浮蝶磷粉"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50004404,
+          "actionKind": "break",
+          "name": "浮蝶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500044]"
+    },
+    {
+      "kiboId": 500045,
+      "name": "幻蝶",
+      "elements": [
+        "风",
+        "光"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50004501,
+          "actionKind": "signature",
+          "name": "幻蝶磷粉"
+        },
+        {
+          "publicActionId": 504020,
+          "actionKind": "active",
+          "name": "旋风回旋镖"
+        },
+        {
+          "publicActionId": 50004504,
+          "actionKind": "break",
+          "name": "幻蝶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500045]"
+    },
+    {
+      "kiboId": 500057,
+      "name": "猪古力",
+      "elements": [
+        "雷",
+        "地"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·兽形族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50005701,
+          "actionKind": "signature",
+          "name": "猪突猛进"
+        },
+        {
+          "publicActionId": 507001,
+          "actionKind": "active",
+          "name": "雷球"
+        },
+        {
+          "publicActionId": 50005704,
+          "actionKind": "break",
+          "name": "猪古力-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500057]"
+    },
+    {
+      "kiboId": 500064,
+      "name": "柔风鹰",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "异生类·羽形族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50006401,
+          "actionKind": "signature",
+          "name": "柔风飞刃"
+        },
+        {
+          "publicActionId": 504001,
+          "actionKind": "active",
+          "name": "风刃"
+        },
+        {
+          "publicActionId": 50006404,
+          "actionKind": "break",
+          "name": "柔风鹰-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500064]"
+    },
+    {
+      "kiboId": 500065,
+      "name": "风剪鹰",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "异生类·羽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50006501,
+          "actionKind": "signature",
+          "name": "风锐翼展"
+        },
+        {
+          "publicActionId": 504002,
+          "actionKind": "active",
+          "name": "凛风斩"
+        },
+        {
+          "publicActionId": 50006504,
+          "actionKind": "break",
+          "name": "风剪鹰-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500065]"
+    },
+    {
+      "kiboId": 500082,
+      "name": "雷冠牦",
+      "elements": [
+        "雷",
+        "地"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·兽形族",
+      "stage": "超限体",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50008201,
+          "actionKind": "signature",
+          "name": "雷冠之力"
+        },
+        {
+          "publicActionId": 507008,
+          "actionKind": "active",
+          "name": "滚滚落雷"
+        },
+        {
+          "publicActionId": 50008204,
+          "actionKind": "break",
+          "name": "雷冠牦-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500082]"
+    },
+    {
+      "kiboId": 500120,
+      "name": "哈加",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "普生类",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012002,
+          "actionKind": "signature",
+          "name": "哈加冲锋"
+        },
+        {
+          "publicActionId": 504001,
+          "actionKind": "active",
+          "name": "风刃"
+        },
+        {
+          "publicActionId": 50012004,
+          "actionKind": "break",
+          "name": "哈加-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500120]"
+    },
+    {
+      "kiboId": 500123,
+      "name": "风灵苞",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·精怪族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012302,
+          "actionKind": "signature",
+          "name": "飞绒风苞"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50012304,
+          "actionKind": "break",
+          "name": "风灵苞-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500123]"
+    },
+    {
+      "kiboId": 500124,
+      "name": "风灵朵",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·精怪族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012402,
+          "actionKind": "signature",
+          "name": "飞绒风域"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50012404,
+          "actionKind": "break",
+          "name": "风灵朵-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500124]"
+    },
+    {
+      "kiboId": 500125,
+      "name": "岚音花",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·精怪族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012502,
+          "actionKind": "signature",
+          "name": "飞绒漫舞"
+        },
+        {
+          "publicActionId": 504014,
+          "actionKind": "active",
+          "name": "风刃扩张"
+        },
+        {
+          "publicActionId": 50012504,
+          "actionKind": "break",
+          "name": "岚音花-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500125]"
+    },
+    {
+      "kiboId": 500126,
+      "name": "风灵仔",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·元素族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012602,
+          "actionKind": "signature",
+          "name": "烈风"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50012604,
+          "actionKind": "break",
+          "name": "风灵仔-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500126]"
+    },
+    {
+      "kiboId": 500127,
+      "name": "风灵偶",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·元素族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012702,
+          "actionKind": "signature",
+          "name": "灵偶烈风"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50012704,
+          "actionKind": "break",
+          "name": "风灵偶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500127]"
+    },
+    {
+      "kiboId": 500128,
+      "name": "岚灵偶",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·元素族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012802,
+          "actionKind": "signature",
+          "name": "激岚烈风"
+        },
+        {
+          "publicActionId": 504014,
+          "actionKind": "active",
+          "name": "风刃扩张"
+        },
+        {
+          "publicActionId": 50012804,
+          "actionKind": "break",
+          "name": "岚灵偶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500128]"
+    },
+    {
+      "kiboId": 500129,
+      "name": "呼姆猴",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "异生类·兽形族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50012901,
+          "actionKind": "signature",
+          "name": "稚猴抓"
+        },
+        {
+          "publicActionId": 507001,
+          "actionKind": "active",
+          "name": "雷球"
+        },
+        {
+          "publicActionId": 50012903,
+          "actionKind": "break",
+          "name": "呼姆猴-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500129]"
+    },
+    {
+      "kiboId": 500130,
+      "name": "环尾猴",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "异生类·兽形族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50013001,
+          "actionKind": "signature",
+          "name": "连抓带扫"
+        },
+        {
+          "publicActionId": 507003,
+          "actionKind": "active",
+          "name": "落雷"
+        },
+        {
+          "publicActionId": 50013003,
+          "actionKind": "break",
+          "name": "环尾猴-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500130]"
+    },
+    {
+      "kiboId": 500131,
+      "name": "环影猴",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "异生类·兽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50013101,
+          "actionKind": "signature",
+          "name": "环影连击"
+        },
+        {
+          "publicActionId": 507003,
+          "actionKind": "active",
+          "name": "落雷"
+        },
+        {
+          "publicActionId": 50013103,
+          "actionKind": "break",
+          "name": "环影猴-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500131]"
+    },
+    {
+      "kiboId": 500164,
+      "name": "雷灵苞",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·精怪族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50016402,
+          "actionKind": "signature",
+          "name": "雷灵旋律"
+        },
+        {
+          "publicActionId": 507012,
+          "actionKind": "active",
+          "name": "电能子弹"
+        },
+        {
+          "publicActionId": 50016404,
+          "actionKind": "break",
+          "name": "雷灵苞-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500164]"
+    },
+    {
+      "kiboId": 500165,
+      "name": "雷灵朵",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·精怪族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50016502,
+          "actionKind": "signature",
+          "name": "雷鸣协奏"
+        },
+        {
+          "publicActionId": 507020,
+          "actionKind": "active",
+          "name": "连锁雷暴"
+        },
+        {
+          "publicActionId": 50016504,
+          "actionKind": "break",
+          "name": "雷灵朵-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500165]"
+    },
+    {
+      "kiboId": 500166,
+      "name": "电音花",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·精怪族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50016602,
+          "actionKind": "signature",
+          "name": "雷音乐章"
+        },
+        {
+          "publicActionId": 507019,
+          "actionKind": "active",
+          "name": "雷电惩戒"
+        },
+        {
+          "publicActionId": 50016604,
+          "actionKind": "break",
+          "name": "电音花-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500166]"
+    },
+    {
+      "kiboId": 500173,
+      "name": "雷灵仔",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·元素族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50017302,
+          "actionKind": "signature",
+          "name": "雷环"
+        },
+        {
+          "publicActionId": 507012,
+          "actionKind": "active",
+          "name": "电能子弹"
+        },
+        {
+          "publicActionId": 50017304,
+          "actionKind": "break",
+          "name": "雷灵仔-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500173]"
+    },
+    {
+      "kiboId": 500174,
+      "name": "雷灵偶",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·元素族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50017402,
+          "actionKind": "signature",
+          "name": "灵偶雷环"
+        },
+        {
+          "publicActionId": 507020,
+          "actionKind": "active",
+          "name": "连锁雷暴"
+        },
+        {
+          "publicActionId": 50017404,
+          "actionKind": "break",
+          "name": "雷灵偶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500174]"
+    },
+    {
+      "kiboId": 500175,
+      "name": "电灵偶",
+      "elements": [
+        "雷"
+      ],
+      "elementClass": "single",
+      "race": "幻生类·元素族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50017502,
+          "actionKind": "signature",
+          "name": "惊骇雷环"
+        },
+        {
+          "publicActionId": 507013,
+          "actionKind": "active",
+          "name": "镭射"
+        },
+        {
+          "publicActionId": 50017504,
+          "actionKind": "break",
+          "name": "电灵偶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500175]"
+    },
+    {
+      "kiboId": 500185,
+      "name": "森彩灵蝶",
+      "elements": [
+        "风",
+        "光"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "超限体",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50018502,
+          "actionKind": "signature",
+          "name": "幻惑之风"
+        },
+        {
+          "publicActionId": 504009,
+          "actionKind": "active",
+          "name": "旋风涡流"
+        },
+        {
+          "publicActionId": 50018504,
+          "actionKind": "break",
+          "name": "森彩灵蝶-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500185]"
+    },
+    {
+      "kiboId": 500220,
+      "name": "星云伊欧",
+      "elements": [
+        "暗",
+        "雷"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·兽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50022001,
+          "actionKind": "signature",
+          "name": "星云连射"
+        },
+        {
+          "publicActionId": 509010,
+          "actionKind": "active",
+          "name": "暗影连袭"
+        },
+        {
+          "publicActionId": 50022004,
+          "actionKind": "break",
+          "name": "星云伊欧-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500220]"
+    },
+    {
+      "kiboId": 500231,
+      "name": "铁鬃霸主",
+      "elements": [
+        "雷",
+        "地"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·兽形族",
+      "stage": "超限体",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50023101,
+          "actionKind": "signature",
+          "name": "霸主奔袭"
+        },
+        {
+          "publicActionId": 507003,
+          "actionKind": "active",
+          "name": "落雷"
+        },
+        {
+          "publicActionId": 50023104,
+          "actionKind": "break",
+          "name": "铁鬃霸主-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500231]"
+    },
+    {
+      "kiboId": 500296,
+      "name": "帕莫拉",
+      "elements": [
+        "雷",
+        "风"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·羽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50029601,
+          "actionKind": "signature",
+          "name": "雷霆穿梭"
+        },
+        {
+          "publicActionId": 504002,
+          "actionKind": "active",
+          "name": "凛风斩"
+        },
+        {
+          "publicActionId": 50029604,
+          "actionKind": "break",
+          "name": "帕莫拉-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500296]"
+    },
+    {
+      "kiboId": 500304,
+      "name": "库库",
+      "elements": [
+        "风",
+        "水"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·羽形族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50030401,
+          "actionKind": "signature",
+          "name": "风旋"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50030404,
+          "actionKind": "break",
+          "name": "库库-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500304]"
+    },
+    {
+      "kiboId": 500305,
+      "name": "库库尔",
+      "elements": [
+        "风",
+        "水"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·羽形族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50030501,
+          "actionKind": "signature",
+          "name": "大风旋"
+        },
+        {
+          "publicActionId": 504020,
+          "actionKind": "active",
+          "name": "旋风回旋镖"
+        },
+        {
+          "publicActionId": 50030504,
+          "actionKind": "break",
+          "name": "库库尔-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500305]"
+    },
+    {
+      "kiboId": 500306,
+      "name": "库库尔克",
+      "elements": [
+        "风",
+        "水"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·羽形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50030601,
+          "actionKind": "signature",
+          "name": "与风共舞"
+        },
+        {
+          "publicActionId": 504006,
+          "actionKind": "active",
+          "name": "风龙卷"
+        },
+        {
+          "publicActionId": 50030604,
+          "actionKind": "break",
+          "name": "库库尔克-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500306]"
+    },
+    {
+      "kiboId": 500322,
+      "name": "赛可洛",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "异生类·鳞形族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50032201,
+          "actionKind": "signature",
+          "name": "卷风呼啸"
+        },
+        {
+          "publicActionId": 504001,
+          "actionKind": "active",
+          "name": "风刃"
+        },
+        {
+          "publicActionId": 50032204,
+          "actionKind": "break",
+          "name": "赛可洛-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500322]"
+    },
+    {
+      "kiboId": 500323,
+      "name": "托纳缇欧",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "异生类·鳞形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50032301,
+          "actionKind": "signature",
+          "name": "龙卷风暴"
+        },
+        {
+          "publicActionId": 504008,
+          "actionKind": "active",
+          "name": "召风凝场"
+        },
+        {
+          "publicActionId": 50032304,
+          "actionKind": "break",
+          "name": "托纳缇欧-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500323]"
+    },
+    {
+      "kiboId": 500324,
+      "name": "伊欧利安",
+      "elements": [
+        "风"
+      ],
+      "elementClass": "single",
+      "race": "异生类·鳞形族",
+      "stage": "超限体",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50032401,
+          "actionKind": "signature",
+          "name": "暴风旋引"
+        },
+        {
+          "publicActionId": 504006,
+          "actionKind": "active",
+          "name": "风龙卷"
+        },
+        {
+          "publicActionId": 50032404,
+          "actionKind": "break",
+          "name": "伊欧利安-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500324]"
+    },
+    {
+      "kiboId": 500357,
+      "name": "啵啵丁",
+      "elements": [
+        "风",
+        "木"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50035701,
+          "actionKind": "signature",
+          "name": "迅愈之风"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50035704,
+          "actionKind": "break",
+          "name": "啵啵丁-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500357]"
+    },
+    {
+      "kiboId": 500358,
+      "name": "绒绒云",
+      "elements": [
+        "风",
+        "木"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50035801,
+          "actionKind": "signature",
+          "name": "复苏季风"
+        },
+        {
+          "publicActionId": 505011,
+          "actionKind": "active",
+          "name": "森之守护"
+        },
+        {
+          "publicActionId": 50035804,
+          "actionKind": "break",
+          "name": "绒绒云-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500358]"
+    },
+    {
+      "kiboId": 500360,
+      "name": "怯影之翼",
+      "elements": [
+        "暗",
+        "风"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·精怪族",
+      "stage": "超限体",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50036001,
+          "actionKind": "signature",
+          "name": "血噬暗影"
+        },
+        {
+          "publicActionId": 509002,
+          "actionKind": "active",
+          "name": "暗魂影爆阵"
+        },
+        {
+          "publicActionId": 50036003,
+          "actionKind": "break",
+          "name": "怯影之翼-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500360]"
+    },
+    {
+      "kiboId": 500368,
+      "name": "小音浮",
+      "elements": [
+        "风",
+        "雷"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·蜕形族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50036801,
+          "actionKind": "signature",
+          "name": "符之乐声"
+        },
+        {
+          "publicActionId": 504012,
+          "actionKind": "active",
+          "name": "小风弹"
+        },
+        {
+          "publicActionId": 50036803,
+          "actionKind": "break",
+          "name": "小音浮-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500368]"
+    },
+    {
+      "kiboId": 500369,
+      "name": "乐乐蛙",
+      "elements": [
+        "风",
+        "雷"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·蜕形族",
+      "stage": "成长期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50036901,
+          "actionKind": "signature",
+          "name": "呱乐演奏"
+        },
+        {
+          "publicActionId": 507003,
+          "actionKind": "active",
+          "name": "落雷"
+        },
+        {
+          "publicActionId": 50036903,
+          "actionKind": "break",
+          "name": "乐乐蛙-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500369]"
+    },
+    {
+      "kiboId": 500370,
+      "name": "音霸蛙",
+      "elements": [
+        "风",
+        "雷"
+      ],
+      "elementClass": "dual",
+      "race": "异生类·蜕形族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50037001,
+          "actionKind": "signature",
+          "name": "风暴音域"
+        },
+        {
+          "publicActionId": 507003,
+          "actionKind": "active",
+          "name": "落雷"
+        },
+        {
+          "publicActionId": 50037003,
+          "actionKind": "break",
+          "name": "音霸蛙-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500370]"
+    },
+    {
+      "kiboId": 500469,
+      "name": "跳跳稻草人",
+      "elements": [
+        "风",
+        "地"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·机偶族",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50046903,
+          "actionKind": "signature",
+          "name": "旋转镰刃"
+        },
+        {
+          "publicActionId": 506002,
+          "actionKind": "active",
+          "name": "岩韧斩"
+        },
+        {
+          "publicActionId": 50046907,
+          "actionKind": "break",
+          "name": "跳跳稻草人-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500469]"
+    },
+    {
+      "kiboId": 500470,
+      "name": "秋日守望者",
+      "elements": [
+        "风",
+        "地"
+      ],
+      "elementClass": "dual",
+      "race": "幻生类·机偶族",
+      "stage": "成熟期",
+      "actionCount": 3,
+      "actions": [
+        {
+          "publicActionId": 50047001,
+          "actionKind": "signature",
+          "name": "镰舞风暴"
+        },
+        {
+          "publicActionId": 506002,
+          "actionKind": "active",
+          "name": "岩韧斩"
+        },
+        {
+          "publicActionId": 50047007,
+          "actionKind": "break",
+          "name": "秋日守望者-合击"
+        }
+      ],
+      "pvePassiveSkillIds": [],
+      "sourceIdentity": "generated/kibos.json#items[id=500470]"
+    }
+  ],
+  "soulEssences": [
+    {
+      "soulEssenceId": 10001,
+      "name": "汁石就是力量",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "诺诺-汁石就是力量",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900480,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10001]"
+    },
+    {
+      "soulEssenceId": 10002,
+      "name": "家书",
+      "rarity": "SR",
+      "profession": "爆发",
+      "effectSkillName": "西芙莉雅-家书",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900610,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10002]"
+    },
+    {
+      "soulEssenceId": 10008,
+      "name": "可以吃吗",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "阿比-可以吃吗",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900120,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10008]"
+    },
+    {
+      "soulEssenceId": 10011,
+      "name": "功夫是这样的！",
+      "rarity": "SR",
+      "profession": "爆发",
+      "effectSkillName": "芃芃-功夫是这样的！",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900530,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10011]"
+    },
+    {
+      "soulEssenceId": 10018,
+      "name": "飞行试验",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "米蒂-飞行试验",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900400,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10018]"
+    },
+    {
+      "soulEssenceId": 10032,
+      "name": "唤灵",
+      "rarity": "SSR",
+      "profession": "赋予",
+      "effectSkillName": "璐璐卡-唤灵",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900340,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10032]"
+    },
+    {
+      "soulEssenceId": 10033,
+      "name": "咕嘟咕嘟",
+      "rarity": "SR",
+      "profession": "赋予",
+      "effectSkillName": "璐璐卡-咕嘟咕嘟",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900360,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10033]"
+    },
+    {
+      "soulEssenceId": 10034,
+      "name": "五谷丰登",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "五谷丰登",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900890,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10034]"
+    },
+    {
+      "soulEssenceId": 10037,
+      "name": "厨房的秘密",
+      "rarity": "SSR",
+      "profession": "猛攻",
+      "effectSkillName": "末音-厨房的秘密",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900450,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10037]"
+    },
+    {
+      "soulEssenceId": 10043,
+      "name": "宣告黎明之花",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "莉莉-宣告黎明之花",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900330,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10043]"
+    },
+    {
+      "soulEssenceId": 10044,
+      "name": "狩猎姿态",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "忒拉拉-狩猎姿态",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900550,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10044]"
+    },
+    {
+      "soulEssenceId": 10047,
+      "name": "传承",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "传承",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900810,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10047]"
+    },
+    {
+      "soulEssenceId": 10048,
+      "name": "璇枢",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "璇枢",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900920,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10048]"
+    },
+    {
+      "soulEssenceId": 10050,
+      "name": "魂引",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "魂引",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900840,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10050]"
+    },
+    {
+      "soulEssenceId": 10052,
+      "name": "小小木雕",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "小小木雕",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900910,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10052]"
+    },
+    {
+      "soulEssenceId": 10055,
+      "name": "远古秘钥",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "远古秘钥",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900930,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10055]"
+    },
+    {
+      "soulEssenceId": 10056,
+      "name": "淳朴之音",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "淳朴之音",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900820,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10056]"
+    },
+    {
+      "soulEssenceId": 10057,
+      "name": "命土",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "命土",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900860,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10057]"
+    },
+    {
+      "soulEssenceId": 10058,
+      "name": "往事",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "往事",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900870,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10058]"
+    },
+    {
+      "soulEssenceId": 10059,
+      "name": "禁呪",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "禁呪",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900850,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10059]"
+    },
+    {
+      "soulEssenceId": 10060,
+      "name": "宵祝",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "宵祝",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900900,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10060]"
+    },
+    {
+      "soulEssenceId": 10061,
+      "name": "残局",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "残局",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900800,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10061]"
+    },
+    {
+      "soulEssenceId": 10062,
+      "name": "分道扬镳",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "分道扬镳",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900830,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10062]"
+    },
+    {
+      "soulEssenceId": 10063,
+      "name": "屋嘟娃娃",
+      "rarity": "R",
+      "profession": "",
+      "effectSkillName": "屋嘟娃娃",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900880,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10063]"
+    },
+    {
+      "soulEssenceId": 10071,
+      "name": "羽夜的思念",
+      "rarity": "SSR",
+      "profession": "爆发",
+      "effectSkillName": "夏儿-羽夜的思念",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900650,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10071]"
+    },
+    {
+      "soulEssenceId": 10076,
+      "name": "碧空之下",
+      "rarity": "SSR",
+      "profession": "破坏",
+      "effectSkillName": "法兰塔-碧空之下",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900190,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10076]"
+    },
+    {
+      "soulEssenceId": 10078,
+      "name": "星晚的追忆",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "末音-星晚的追忆",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900460,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10078]"
+    },
+    {
+      "soulEssenceId": 10084,
+      "name": "风语之愿",
+      "rarity": "SR",
+      "profession": "爆发",
+      "effectSkillName": "西芙莉雅-风语之愿",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900600,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10084]"
+    },
+    {
+      "soulEssenceId": 10093,
+      "name": "无法思考",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "寒悠悠-无法思考",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900230,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10093]"
+    },
+    {
+      "soulEssenceId": 10094,
+      "name": "陪伴",
+      "rarity": "SR",
+      "profession": "爆发",
+      "effectSkillName": "夏儿-陪伴",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900660,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10094]"
+    },
+    {
+      "soulEssenceId": 10095,
+      "name": "甜点时光",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "莉莉-甜点时光",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900320,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10095]"
+    },
+    {
+      "soulEssenceId": 10097,
+      "name": "玫瑰色午后",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "末音-玫瑰色午后",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900470,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10097]"
+    },
+    {
+      "soulEssenceId": 10098,
+      "name": "此身为枪",
+      "rarity": "SR",
+      "profession": "爆发",
+      "effectSkillName": "夏儿-此身为枪",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900670,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10098]"
+    },
+    {
+      "soulEssenceId": 10101,
+      "name": "归来",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "法兰塔-归来",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900200,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10101]"
+    },
+    {
+      "soulEssenceId": 10107,
+      "name": "药草大丰收",
+      "rarity": "SR",
+      "profession": "赋予",
+      "effectSkillName": "璐璐卡-药草大丰收",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900350,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10107]"
+    },
+    {
+      "soulEssenceId": 10121,
+      "name": "折纸寄情",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "涂山小玉-折纸寄情",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900580,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10121]"
+    },
+    {
+      "soulEssenceId": 10122,
+      "name": "花之舞",
+      "rarity": "SSR",
+      "profession": "猛攻",
+      "effectSkillName": "涂山小玉-花之舞",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900570,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10122]"
+    },
+    {
+      "soulEssenceId": 10123,
+      "name": "桃芳春笺",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "涂山小玉-桃芳春笺",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900590,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10123]"
+    },
+    {
+      "soulEssenceId": 10124,
+      "name": "夕阳下的约定",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "米蒂-夕阳下的约定",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900410,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10124]"
+    },
+    {
+      "soulEssenceId": 10125,
+      "name": "高手在此！",
+      "rarity": "SR",
+      "profession": "爆发",
+      "effectSkillName": "芃芃-高手在此！",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900540,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10125]"
+    },
+    {
+      "soulEssenceId": 10130,
+      "name": "女仆的疗养日",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "姬瑟贝露-女仆的疗养日",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900280,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10130]"
+    },
+    {
+      "soulEssenceId": 10131,
+      "name": "节日佳肴",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "姬瑟贝露-节日佳肴",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900270,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10131]"
+    },
+    {
+      "soulEssenceId": 10132,
+      "name": "暗中观察",
+      "rarity": "SR",
+      "profession": "赋予",
+      "effectSkillName": "米砂-暗中观察",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900430,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10132]"
+    },
+    {
+      "soulEssenceId": 10133,
+      "name": "「森林女神」来访",
+      "rarity": "SR",
+      "profession": "赋予",
+      "effectSkillName": "米砂-「森林女神」来访",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900440,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10133]"
+    },
+    {
+      "soulEssenceId": 10136,
+      "name": "林间野餐",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "法兰塔-林间野餐",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900210,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10136]"
+    },
+    {
+      "soulEssenceId": 10146,
+      "name": "新生",
+      "rarity": "SSR",
+      "profession": "赋予",
+      "effectSkillName": "米砂-新生",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900420,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10146]"
+    },
+    {
+      "soulEssenceId": 10147,
+      "name": "充能时间",
+      "rarity": "SSR",
+      "profession": "破坏",
+      "effectSkillName": "阿比-充能时间",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900110,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10147]"
+    },
+    {
+      "soulEssenceId": 10149,
+      "name": "失控飞行",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "寒悠悠-失控飞行",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900220,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10149]"
+    },
+    {
+      "soulEssenceId": 10150,
+      "name": "狼少女的心意",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "忒拉拉-狼少女的心意",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900560,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10150]"
+    },
+    {
+      "soulEssenceId": 10151,
+      "name": "非常规钓鱼",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "阿比-非常规钓鱼",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900130,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10151]"
+    },
+    {
+      "soulEssenceId": 10152,
+      "name": "真正的宝藏",
+      "rarity": "SR",
+      "profession": "破坏",
+      "effectSkillName": "诺诺-真正的大冒险",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900490,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10152]"
+    },
+    {
+      "soulEssenceId": 10154,
+      "name": "月下秘仪",
+      "rarity": "SSR",
+      "profession": "猛攻",
+      "effectSkillName": "红宝石-月下秘仪",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900240,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10154]"
+    },
+    {
+      "soulEssenceId": 10155,
+      "name": "恶作剧前奏",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "红宝石-恶作剧前奏",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900250,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10155]"
+    },
+    {
+      "soulEssenceId": 10156,
+      "name": "在勒布上空",
+      "rarity": "SR",
+      "profession": "猛攻",
+      "effectSkillName": "红宝石-在勒布上空",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900260,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10156]"
+    },
+    {
+      "soulEssenceId": 10169,
+      "name": "软软棉花肉",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "卡塔露-软软棉花肉",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900750,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10169]"
+    },
+    {
+      "soulEssenceId": 10170,
+      "name": "攀高的幼崽",
+      "rarity": "SR",
+      "profession": "增幅",
+      "effectSkillName": "卡塔露-攀高的幼崽",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900740,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10170]"
+    },
+    {
+      "soulEssenceId": 10175,
+      "name": "一点都不痛",
+      "rarity": "SR",
+      "profession": "赋予",
+      "effectSkillName": "艾妮丝-一点都不痛",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900140,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10175]"
+    },
+    {
+      "soulEssenceId": 10176,
+      "name": "温柔的照护",
+      "rarity": "SR",
+      "profession": "赋予",
+      "effectSkillName": "艾妮丝-温柔的照护",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900150,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10176]"
+    },
+    {
+      "soulEssenceId": 10196,
+      "name": "热火朝天",
+      "rarity": "SSR",
+      "profession": "",
+      "effectSkillName": "热火朝天",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900790,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10196]"
+    },
+    {
+      "soulEssenceId": 10197,
+      "name": "安睡吧，宝贝",
+      "rarity": "SR",
+      "profession": "",
+      "effectSkillName": "安睡吧，宝贝",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900770,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10197]"
+    },
+    {
+      "soulEssenceId": 10198,
+      "name": "星之种",
+      "rarity": "SR",
+      "profession": "",
+      "effectSkillName": "星之种",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900760,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10198]"
+    },
+    {
+      "soulEssenceId": 10216,
+      "name": "耕种之时",
+      "rarity": "SR",
+      "profession": "",
+      "effectSkillName": "耕种之时",
+      "maximumLevel": 100,
+      "maximumRank": 6,
+      "staticProfileApplied": true,
+      "effectSkillId": 1900780,
+      "effectStatus": "effect-skill-dynamic-unapplied",
+      "sourceIdentity": "NewTable/soulessence.rows[id=10216]"
+    }
+  ],
+  "equipment": [
+    {
+      "equipmentId": 1010111,
+      "name": "木制棍棒",
+      "slot": "weapon",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1010111]"
+    },
+    {
+      "equipmentId": 1010211,
+      "name": "木制小刀",
+      "slot": "weapon",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1010211]"
+    },
+    {
+      "equipmentId": 1010311,
+      "name": "木制短弓",
+      "slot": "weapon",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1010311]"
+    },
+    {
+      "equipmentId": 1010411,
+      "name": "狼灵法杖",
+      "slot": "weapon",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1010411]"
+    },
+    {
+      "equipmentId": 1010511,
+      "name": "兔灵祷杖",
+      "slot": "weapon",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1010511]"
+    },
+    {
+      "equipmentId": 1010611,
+      "name": "木制长弓",
+      "slot": "weapon",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1010611]"
+    },
+    {
+      "equipmentId": 1020111,
+      "name": "木制轻甲",
+      "slot": "top",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1020111]"
+    },
+    {
+      "equipmentId": 1020211,
+      "name": "新叶斗篷",
+      "slot": "top",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1020211]"
+    },
+    {
+      "equipmentId": 1020311,
+      "name": "陈旧上衣",
+      "slot": "top",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1020311]"
+    },
+    {
+      "equipmentId": 1030111,
+      "name": "木制下装",
+      "slot": "bottom",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1030111]"
+    },
+    {
+      "equipmentId": 1030211,
+      "name": "新叶短裤",
+      "slot": "bottom",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1030211]"
+    },
+    {
+      "equipmentId": 1030311,
+      "name": "陈旧下装",
+      "slot": "bottom",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1030311]"
+    },
+    {
+      "equipmentId": 1040111,
+      "name": "草编耳饰",
+      "slot": "earring",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1040111]"
+    },
+    {
+      "equipmentId": 1040211,
+      "name": "新叶耳饰",
+      "slot": "earring",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1040211]"
+    },
+    {
+      "equipmentId": 1040311,
+      "name": "陈旧耳饰",
+      "slot": "earring",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1040311]"
+    },
+    {
+      "equipmentId": 1050111,
+      "name": "草编戒指",
+      "slot": "ring",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1050111]"
+    },
+    {
+      "equipmentId": 1050211,
+      "name": "新叶戒指",
+      "slot": "ring",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1050211]"
+    },
+    {
+      "equipmentId": 1050311,
+      "name": "陈旧戒指",
+      "slot": "ring",
+      "rarity": 1,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 0,
+      "fixedSubAttributeCount": 1,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1050311]"
+    },
+    {
+      "equipmentId": 1110111,
+      "name": "风铜直剑",
+      "slot": "weapon",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1110111]"
+    },
+    {
+      "equipmentId": 1110211,
+      "name": "风铜短刃",
+      "slot": "weapon",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1110211]"
+    },
+    {
+      "equipmentId": 1110311,
+      "name": "风铜短弓",
+      "slot": "weapon",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1110311]"
+    },
+    {
+      "equipmentId": 1110411,
+      "name": "风铜法杖",
+      "slot": "weapon",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1110411]"
+    },
+    {
+      "equipmentId": 1110511,
+      "name": "风铜祷杖",
+      "slot": "weapon",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1110511]"
+    },
+    {
+      "equipmentId": 1110611,
+      "name": "铜制长弓",
+      "slot": "weapon",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1110611]"
+    },
+    {
+      "equipmentId": 1120111,
+      "name": "风铜皮甲",
+      "slot": "top",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1120111]"
+    },
+    {
+      "equipmentId": 1120211,
+      "name": "风叶斗篷",
+      "slot": "top",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1120211]"
+    },
+    {
+      "equipmentId": 1120311,
+      "name": "亚麻上衣",
+      "slot": "top",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1120311]"
+    },
+    {
+      "equipmentId": 1130111,
+      "name": "风铜腿甲",
+      "slot": "bottom",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1130111]"
+    },
+    {
+      "equipmentId": 1130211,
+      "name": "风叶短裤",
+      "slot": "bottom",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1130211]"
+    },
+    {
+      "equipmentId": 1130311,
+      "name": "亚麻下装",
+      "slot": "bottom",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1130311]"
+    },
+    {
+      "equipmentId": 1140111,
+      "name": "风铜耳坠",
+      "slot": "earring",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1140111]"
+    },
+    {
+      "equipmentId": 1140211,
+      "name": "风叶耳饰",
+      "slot": "earring",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1140211]"
+    },
+    {
+      "equipmentId": 1140311,
+      "name": "微澜耳饰",
+      "slot": "earring",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1140311]"
+    },
+    {
+      "equipmentId": 1150111,
+      "name": "风铜指环",
+      "slot": "ring",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1150111]"
+    },
+    {
+      "equipmentId": 1150211,
+      "name": "风叶指环",
+      "slot": "ring",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1150211]"
+    },
+    {
+      "equipmentId": 1150311,
+      "name": "微澜戒指",
+      "slot": "ring",
+      "rarity": 2,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 3,
+      "fixedSubAttributeCount": 2,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1150311]"
+    },
+    {
+      "equipmentId": 1210011,
+      "name": "青木之弓",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210011]"
+    },
+    {
+      "equipmentId": 1210111,
+      "name": "青铜直剑",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210111]"
+    },
+    {
+      "equipmentId": 1210121,
+      "name": "野鬃重剑",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210121]"
+    },
+    {
+      "equipmentId": 1210211,
+      "name": "青铜短刃",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210211]"
+    },
+    {
+      "equipmentId": 1210221,
+      "name": "蛮角刺剑",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210221]"
+    },
+    {
+      "equipmentId": 1210311,
+      "name": "青铜短弓",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210311]"
+    },
+    {
+      "equipmentId": 1210321,
+      "name": "冰翼刺弓",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210321]"
+    },
+    {
+      "equipmentId": 1210411,
+      "name": "青铜法杖",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210411]"
+    },
+    {
+      "equipmentId": 1210421,
+      "name": "蝶语法杖",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210421]"
+    },
+    {
+      "equipmentId": 1210511,
+      "name": "青铜牧杖",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210511]"
+    },
+    {
+      "equipmentId": 1210521,
+      "name": "雷息狂力",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210521]"
+    },
+    {
+      "equipmentId": 1210611,
+      "name": "柔影弓",
+      "slot": "weapon",
+      "rarity": 3,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1210611]"
+    },
+    {
+      "equipmentId": 1220011,
+      "name": "月雾外袍",
+      "slot": "top",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220011]"
+    },
+    {
+      "equipmentId": 1220111,
+      "name": "青铜护甲",
+      "slot": "top",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220111]"
+    },
+    {
+      "equipmentId": 1220121,
+      "name": "野鬃重甲",
+      "slot": "top",
+      "rarity": 3,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220121]"
+    },
+    {
+      "equipmentId": 1220131,
+      "name": "蛮角战甲",
+      "slot": "top",
+      "rarity": 3,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220131]"
+    },
+    {
+      "equipmentId": 1220211,
+      "name": "月麻斗篷",
+      "slot": "top",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220211]"
+    },
+    {
+      "equipmentId": 1220221,
+      "name": "蝶语斗篷",
+      "slot": "top",
+      "rarity": 3,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220221]"
+    },
+    {
+      "equipmentId": 1220231,
+      "name": "冰翼披风",
+      "slot": "top",
+      "rarity": 3,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220231]"
+    },
+    {
+      "equipmentId": 1220311,
+      "name": "雷息披甲",
+      "slot": "top",
+      "rarity": 3,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220311]"
+    },
+    {
+      "equipmentId": 1220321,
+      "name": "柔影之束",
+      "slot": "top",
+      "rarity": 3,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1220321]"
+    },
+    {
+      "equipmentId": 1230011,
+      "name": "漫步下装",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230011]"
+    },
+    {
+      "equipmentId": 1230111,
+      "name": "青铜裙甲",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230111]"
+    },
+    {
+      "equipmentId": 1230121,
+      "name": "野鬃护甲",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230121]"
+    },
+    {
+      "equipmentId": 1230131,
+      "name": "蛮角短甲",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230131]"
+    },
+    {
+      "equipmentId": 1230211,
+      "name": "月麻下衣",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230211]"
+    },
+    {
+      "equipmentId": 1230221,
+      "name": "蝶语护腿",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230221]"
+    },
+    {
+      "equipmentId": 1230231,
+      "name": "冰翼护腿",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230231]"
+    },
+    {
+      "equipmentId": 1230311,
+      "name": "雷息束甲",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230311]"
+    },
+    {
+      "equipmentId": 1230321,
+      "name": "柔影幽行",
+      "slot": "bottom",
+      "rarity": 3,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1230321]"
+    },
+    {
+      "equipmentId": 1240011,
+      "name": "轻扬耳坠",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240011]"
+    },
+    {
+      "equipmentId": 1240111,
+      "name": "青铜耳坠",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240111]"
+    },
+    {
+      "equipmentId": 1240121,
+      "name": "野鬃耳坠",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240121]"
+    },
+    {
+      "equipmentId": 1240131,
+      "name": "蛮角耳环",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240131]"
+    },
+    {
+      "equipmentId": 1240211,
+      "name": "蔓叶耳挂",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240211]"
+    },
+    {
+      "equipmentId": 1240221,
+      "name": "蝶语耳饰",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240221]"
+    },
+    {
+      "equipmentId": 1240231,
+      "name": "冰翼耳坠",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240231]"
+    },
+    {
+      "equipmentId": 1240311,
+      "name": "雷息降声",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240311]"
+    },
+    {
+      "equipmentId": 1240321,
+      "name": "柔影飞翼",
+      "slot": "earring",
+      "rarity": 3,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1240321]"
+    },
+    {
+      "equipmentId": 1250011,
+      "name": "风羽指环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250011]"
+    },
+    {
+      "equipmentId": 1250111,
+      "name": "青铜指环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250111]"
+    },
+    {
+      "equipmentId": 1250121,
+      "name": "野鬃指环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250121]"
+    },
+    {
+      "equipmentId": 1250131,
+      "name": "蛮角戒指",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250131]"
+    },
+    {
+      "equipmentId": 1250211,
+      "name": "蔓叶指环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250211]"
+    },
+    {
+      "equipmentId": 1250221,
+      "name": "蝶语指环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250221]"
+    },
+    {
+      "equipmentId": 1250231,
+      "name": "冰翼指环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250231]"
+    },
+    {
+      "equipmentId": 1250311,
+      "name": "雷息之环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250311]"
+    },
+    {
+      "equipmentId": 1250321,
+      "name": "柔影辉环",
+      "slot": "ring",
+      "rarity": 3,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 6,
+      "fixedSubAttributeCount": 3,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1250321]"
+    },
+    {
+      "equipmentId": 1310011,
+      "name": "明辉长剑",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310011]"
+    },
+    {
+      "equipmentId": 1310111,
+      "name": "镜铁长剑",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310111]"
+    },
+    {
+      "equipmentId": 1310112,
+      "name": "锻钢阔剑",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310112]"
+    },
+    {
+      "equipmentId": 1310121,
+      "name": "狂鬃重剑",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310121]"
+    },
+    {
+      "equipmentId": 1310211,
+      "name": "镜铁刺刃",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310211]"
+    },
+    {
+      "equipmentId": 1310212,
+      "name": "锻钢短刃",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310212]"
+    },
+    {
+      "equipmentId": 1310221,
+      "name": "荒角刺剑",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310221]"
+    },
+    {
+      "equipmentId": 1310311,
+      "name": "镜铁长弓",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310311]"
+    },
+    {
+      "equipmentId": 1310312,
+      "name": "锻钢长弓",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310312]"
+    },
+    {
+      "equipmentId": 1310321,
+      "name": "寒翼刺弓",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310321]"
+    },
+    {
+      "equipmentId": 1310411,
+      "name": "镜铁咒杖",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310411]"
+    },
+    {
+      "equipmentId": 1310412,
+      "name": "锻钢咒杖",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310412]"
+    },
+    {
+      "equipmentId": 1310421,
+      "name": "蝶影法杖",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310421]"
+    },
+    {
+      "equipmentId": 1310511,
+      "name": "镜铁祷杖",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310511]"
+    },
+    {
+      "equipmentId": 1310512,
+      "name": "锻钢祷杖",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310512]"
+    },
+    {
+      "equipmentId": 1310521,
+      "name": "雷闪狂力",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310521]"
+    },
+    {
+      "equipmentId": 1310611,
+      "name": "泣影弓",
+      "slot": "weapon",
+      "rarity": 4,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1310611]"
+    },
+    {
+      "equipmentId": 1320011,
+      "name": "尘间上装",
+      "slot": "top",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320011]"
+    },
+    {
+      "equipmentId": 1320111,
+      "name": "镜铁战铠",
+      "slot": "top",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320111]"
+    },
+    {
+      "equipmentId": 1320121,
+      "name": "狂鬃重甲",
+      "slot": "top",
+      "rarity": 4,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320121]"
+    },
+    {
+      "equipmentId": 1320131,
+      "name": "荒角战甲",
+      "slot": "top",
+      "rarity": 4,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320131]"
+    },
+    {
+      "equipmentId": 1320211,
+      "name": "云棉披风",
+      "slot": "top",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320211]"
+    },
+    {
+      "equipmentId": 1320221,
+      "name": "蝶影斗篷",
+      "slot": "top",
+      "rarity": 4,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320221]"
+    },
+    {
+      "equipmentId": 1320231,
+      "name": "寒翼披风",
+      "slot": "top",
+      "rarity": 4,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320231]"
+    },
+    {
+      "equipmentId": 1320311,
+      "name": "雷闪披甲",
+      "slot": "top",
+      "rarity": 4,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320311]"
+    },
+    {
+      "equipmentId": 1320321,
+      "name": "泣影之束",
+      "slot": "top",
+      "rarity": 4,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1320321]"
+    },
+    {
+      "equipmentId": 1330011,
+      "name": "暮时下装",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330011]"
+    },
+    {
+      "equipmentId": 1330111,
+      "name": "镜铁裤甲",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330111]"
+    },
+    {
+      "equipmentId": 1330121,
+      "name": "狂鬃护甲",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330121]"
+    },
+    {
+      "equipmentId": 1330131,
+      "name": "荒角短甲",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330131]"
+    },
+    {
+      "equipmentId": 1330211,
+      "name": "云棉下装",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330211]"
+    },
+    {
+      "equipmentId": 1330221,
+      "name": "蝶影护腿",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330221]"
+    },
+    {
+      "equipmentId": 1330231,
+      "name": "寒翼护腿",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330231]"
+    },
+    {
+      "equipmentId": 1330311,
+      "name": "雷闪束甲",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330311]"
+    },
+    {
+      "equipmentId": 1330321,
+      "name": "泣影幽行",
+      "slot": "bottom",
+      "rarity": 4,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1330321]"
+    },
+    {
+      "equipmentId": 1340011,
+      "name": "晶坠耳饰",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340011]"
+    },
+    {
+      "equipmentId": 1340111,
+      "name": "镜铁耳坠",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340111]"
+    },
+    {
+      "equipmentId": 1340121,
+      "name": "狂鬃耳坠",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340121]"
+    },
+    {
+      "equipmentId": 1340131,
+      "name": "荒角耳环",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340131]"
+    },
+    {
+      "equipmentId": 1340211,
+      "name": "蔓花耳挂",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340211]"
+    },
+    {
+      "equipmentId": 1340221,
+      "name": "蝶影耳饰",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340221]"
+    },
+    {
+      "equipmentId": 1340231,
+      "name": "寒翼耳坠",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340231]"
+    },
+    {
+      "equipmentId": 1340311,
+      "name": "雷闪降声",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340311]"
+    },
+    {
+      "equipmentId": 1340321,
+      "name": "泣影飞翼",
+      "slot": "earring",
+      "rarity": 4,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1340321]"
+    },
+    {
+      "equipmentId": 1350011,
+      "name": "霜影指环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350011]"
+    },
+    {
+      "equipmentId": 1350111,
+      "name": "镜铁指环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350111]"
+    },
+    {
+      "equipmentId": 1350121,
+      "name": "狂鬃指环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": "野鬃逐猎",
+      "setId": 3,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350121]"
+    },
+    {
+      "equipmentId": 1350131,
+      "name": "荒角戒指",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": "蛮角破空",
+      "setId": 4,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350131]"
+    },
+    {
+      "equipmentId": 1350211,
+      "name": "蔓花指环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": null,
+      "setId": null,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350211]"
+    },
+    {
+      "equipmentId": 1350221,
+      "name": "蝶影指环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": "蝶语迷梦",
+      "setId": 1,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350221]"
+    },
+    {
+      "equipmentId": 1350231,
+      "name": "寒翼指环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": "冰翼挽歌",
+      "setId": 2,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350231]"
+    },
+    {
+      "equipmentId": 1350311,
+      "name": "雷闪之环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": "雷冠牦",
+      "setId": 5,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350311]"
+    },
+    {
+      "equipmentId": 1350321,
+      "name": "泣影辉环",
+      "slot": "ring",
+      "rarity": 4,
+      "setName": "怯影之翼",
+      "setId": 6,
+      "maximumLevel": 9,
+      "fixedSubAttributeCount": 4,
+      "variableSubAttributeCount": 0,
+      "staticProfileApplied": true,
+      "sourceIdentity": "NewTable/accessory.rows[id=1350321]"
+    }
+  ],
+  "setSkills": [
+    {
+      "setId": 1,
+      "pieces": 2,
+      "skillId": 19998106,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType"
+    },
+    {
+      "setId": 1,
+      "pieces": 4,
+      "skillId": 19998006,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType"
+    },
+    {
+      "setId": 2,
+      "pieces": 2,
+      "skillId": 19998104,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType"
+    },
+    {
+      "setId": 2,
+      "pieces": 4,
+      "skillId": 19998004,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType"
+    },
+    {
+      "setId": 3,
+      "pieces": 2,
+      "skillId": 19998105,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType"
+    },
+    {
+      "setId": 3,
+      "pieces": 4,
+      "skillId": 19998005,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType"
+    },
+    {
+      "setId": 4,
+      "pieces": 2,
+      "skillId": 19998103,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType"
+    },
+    {
+      "setId": 4,
+      "pieces": 4,
+      "skillId": 19998003,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType"
+    },
+    {
+      "setId": 5,
+      "pieces": 2,
+      "skillId": 19998107,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType"
+    },
+    {
+      "setId": 5,
+      "pieces": 4,
+      "skillId": 19998007,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
+    },
+    {
+      "setId": 6,
+      "pieces": 2,
+      "skillId": 19998108,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType"
+    },
+    {
+      "setId": 6,
+      "pieces": 4,
+      "skillId": 19998008,
+      "status": "effect-set-skill-dynamic-unapplied",
+      "appliedToStaticPanel": false,
+      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
+    }
+  ],
+  "starborn": {
+    "optimizationObjectId": "STARBORN",
+    "sourceCharacterIds": [
+      199001,
+      199002
+    ],
+    "normalizedMechanismHash": "320b1011f76b0f8f",
+    "aliasHashesEqual": true,
+    "projection": {
+      "rarity": {
+        "id": 3,
+        "name": "SR"
+      },
+      "position": {
+        "name": "增幅",
+        "icon": "tex_common_icon_profession_s_04.png",
+        "description": "具备高效叠加调谐的能力，为队友制造更好的输出环境"
+      },
+      "element": {
+        "id": 0,
+        "name": "无属性",
+        "abbrName": "无",
+        "color": "#7da9bc",
+        "icon": null
+      },
+      "weaponType": {
+        "id": 1,
+        "name": "单手武器"
+      },
+      "battleTags": [
+        {
+          "id": 1004,
+          "title": "己方增益",
+          "description": "强化己方，为自身附加各种增益效果，提高战斗能力。",
+          "color": "#4599D9"
+        },
+        {
+          "id": 1009,
+          "title": "调谐添加",
+          "description": "快速为自身叠加调谐状态。",
+          "color": "#4599D9"
+        }
+      ],
+      "cost": 50,
+      "baseAttributes": [
+        {
+          "id": 999,
+          "key": "IMPACT_RESISTANCE",
+          "name": "抗冲击力",
+          "value": 0,
+          "isRatio": false
+        },
+        {
+          "id": 1,
+          "key": "ATK",
+          "name": "攻击",
+          "value": 8902,
+          "isRatio": false
+        },
+        {
+          "id": 5,
+          "key": "MAXHP",
+          "name": "生命",
+          "value": 10030,
+          "isRatio": false
+        },
+        {
+          "id": 201,
+          "key": "WEAKNESS_POINT_MAX",
+          "name": "弱点值上限",
+          "value": 9000,
+          "isRatio": false
+        },
+        {
+          "id": 3,
+          "key": "DEF",
+          "name": "物理防御",
+          "value": 10113,
+          "isRatio": false
+        },
+        {
+          "id": 6,
+          "key": "MAXSP",
+          "name": "能量上限",
+          "value": 1,
+          "isRatio": false
+        },
+        {
+          "id": 110,
+          "key": "SPR_SEC",
+          "name": "每秒能量回复",
+          "value": 2084,
+          "isRatio": false
+        },
+        {
+          "id": 4,
+          "key": "MDEF",
+          "name": "魔法防御",
+          "value": 9968,
+          "isRatio": false
+        },
+        {
+          "id": 35,
+          "key": "SPEED",
+          "name": "移动速度",
+          "value": 55000,
+          "isRatio": true
+        },
+        {
+          "id": 7,
+          "key": "CRI",
+          "name": "暴击率",
+          "value": 500,
+          "isRatio": true
+        },
+        {
+          "id": 8,
+          "key": "CRI_DMG",
+          "name": "暴击伤害",
+          "value": 15000,
+          "isRatio": true
+        },
+        {
+          "id": 36,
+          "key": "FASTRUN_SPEED_RATIO",
+          "name": "疾跑速度系数修正",
+          "value": 13000,
+          "isRatio": true
+        },
+        {
+          "id": 34,
+          "key": "MASS",
+          "name": "重量",
+          "value": 50,
+          "isRatio": false
+        },
+        {
+          "id": 998,
+          "key": "FLY_LEVEL",
+          "name": "击飞等级",
+          "value": 5,
+          "isRatio": false
+        },
+        {
+          "id": 104,
+          "key": "BLOCKTHROWS",
+          "name": "-",
+          "value": 0,
+          "isRatio": false
+        },
+        {
+          "id": 103,
+          "key": "STEERINGSPEED",
+          "name": "转向速度",
+          "value": 1350,
+          "isRatio": false
+        },
+        {
+          "id": 106,
+          "key": "SOLDIER_SUFFERAOEDMGDOWN",
+          "name": "-",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 112,
+          "key": "THREAT",
+          "name": "威胁值",
+          "value": 50,
+          "isRatio": false
+        },
+        {
+          "id": 113,
+          "key": "SKILLPRIORITY",
+          "name": "基础打断优先级",
+          "value": 1,
+          "isRatio": false
+        },
+        {
+          "id": 114,
+          "key": "ATTACK_TOKEN",
+          "name": "进攻token",
+          "value": 5,
+          "isRatio": false
+        },
+        {
+          "id": 121,
+          "key": "COUNTER_THRESHOLD",
+          "name": "反击阈值",
+          "value": 3,
+          "isRatio": false
+        },
+        {
+          "id": 52,
+          "key": "FIRE_SHOOTDMGUP",
+          "name": "火属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 53,
+          "key": "WIND_SHOOTDMGUP",
+          "name": "风属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 54,
+          "key": "EARTH_SHOOTDMGUP",
+          "name": "地属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 55,
+          "key": "WOOD_SHOOTDMGUP",
+          "name": "木属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 56,
+          "key": "ICE_SHOOTDMGUP",
+          "name": "冰属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 57,
+          "key": "WATER_SHOOTDMGUP",
+          "name": "水属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 58,
+          "key": "ELEC_SHOOTDMGUP",
+          "name": "雷属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 51,
+          "key": "NORMAL_SHOOTDMGUP",
+          "name": "无属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 59,
+          "key": "LIGHT_SHOOTDMGUP",
+          "name": "光属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 60,
+          "key": "DARK_SHOOTDMGUP",
+          "name": "暗属性伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 61,
+          "key": "NORMAL_DEFENSE",
+          "name": "无属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 62,
+          "key": "FIRE_DEFENSE",
+          "name": "火属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 63,
+          "key": "WIND_DEFENSE",
+          "name": "风属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 64,
+          "key": "EARTH_DEFENSE",
+          "name": "地属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 65,
+          "key": "WOOD_DEFENSE",
+          "name": "木属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 66,
+          "key": "ICE_DEFENSE",
+          "name": "冰属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 67,
+          "key": "WATER_DEFENSE",
+          "name": "水属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 68,
+          "key": "ELEC_DEFENSE",
+          "name": "雷属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 69,
+          "key": "LIGHT_DEFENSE",
+          "name": "光属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 70,
+          "key": "DARK_DEFENSE",
+          "name": "暗属性伤害减免",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 202,
+          "key": "WDM_PHYSICAL",
+          "name": "弱点伤害倍率_物理",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 203,
+          "key": "WDM_MAGIC",
+          "name": "弱点伤害倍率_魔法",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 204,
+          "key": "WDM_HEAL",
+          "name": "弱点伤害倍率_治疗",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 205,
+          "key": "WDM_NORMAL",
+          "name": "弱点伤害倍率_无属性",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 206,
+          "key": "WDM_FIRE",
+          "name": "弱点伤害倍率_火",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 207,
+          "key": "WDM_WIND",
+          "name": "弱点伤害倍率_风",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 208,
+          "key": "WDM_EARTH",
+          "name": "弱点伤害倍率_地",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 209,
+          "key": "WDM_WOOD",
+          "name": "弱点伤害倍率_木",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 210,
+          "key": "WDM_ICE",
+          "name": "弱点伤害倍率_冰",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 211,
+          "key": "WDM_WATER",
+          "name": "弱点伤害倍率_水",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 212,
+          "key": "WDM_ELEC",
+          "name": "弱点伤害倍率_雷",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 213,
+          "key": "WDM_LIGHT",
+          "name": "弱点伤害倍率_光",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 214,
+          "key": "WDM_DARK",
+          "name": "弱点伤害倍率_暗",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 215,
+          "key": "WDM_MIN",
+          "name": "弱点伤害_最小值",
+          "value": -1,
+          "isRatio": true
+        },
+        {
+          "id": 216,
+          "key": "WDM_MAX",
+          "name": "弱点伤害_最大值",
+          "value": -1,
+          "isRatio": true
+        },
+        {
+          "id": 217,
+          "key": "WP_RECOVERY_DELAY",
+          "name": "弱点复原延迟",
+          "value": 60000,
+          "isRatio": false
+        },
+        {
+          "id": 218,
+          "key": "WP_RECOVERY_RATE",
+          "name": "复原弱点的速率",
+          "value": 1000,
+          "isRatio": true
+        },
+        {
+          "id": 219,
+          "key": "WP_BREAK_TIME",
+          "name": "Break持续时间",
+          "value": 11000,
+          "isRatio": false
+        },
+        {
+          "id": 220,
+          "key": "WP_BREAK_END_TIME",
+          "name": "Braek_End持续时间",
+          "value": 1000,
+          "isRatio": false
+        },
+        {
+          "id": 221,
+          "key": "WP_BREAK_DMGUP",
+          "name": "Break受伤增幅",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 37,
+          "key": "WALK_SPEED",
+          "name": "走路速度",
+          "value": -1,
+          "isRatio": true
+        },
+        {
+          "id": 38,
+          "key": "ENGAGE_SPEED",
+          "name": "engage速度",
+          "value": -1,
+          "isRatio": true
+        },
+        {
+          "id": 223,
+          "key": "WP_BREAK_PERCENT",
+          "name": "Break击破万分比",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 224,
+          "key": "WP_BREAK_TOUGH",
+          "name": "Break韧性",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 225,
+          "key": "DODGE",
+          "name": "全闪避",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 304,
+          "key": "COST",
+          "name": "cost值",
+          "value": 0,
+          "isRatio": false
+        },
+        {
+          "id": 1039,
+          "key": "EXTRA_SPEED_RUN",
+          "name": "坐骑地面移动速度百分比",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 1040,
+          "key": "EXTRA_SPEED_FLY",
+          "name": "坐骑飞行移动速度百分比",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 1041,
+          "key": "EXTRA_SPEED_SWIM",
+          "name": "坐骑游泳移动速度百分比",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 1042,
+          "key": "EXTRA_SPEED_DIVE",
+          "name": "坐骑潜水移动速度百分比",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 39,
+          "key": "JUMP_HEIGHT",
+          "name": "坐骑跳跃高度",
+          "value": 25000,
+          "isRatio": true
+        },
+        {
+          "id": 40,
+          "key": "JUMP_DISTANCE",
+          "name": "坐骑跳跃距离",
+          "value": 80000,
+          "isRatio": true
+        },
+        {
+          "id": 43,
+          "key": "CAN_JUMP",
+          "name": "坐骑能否跳跃",
+          "value": 0,
+          "isRatio": false
+        },
+        {
+          "id": 44,
+          "key": "CAN_SPRINT",
+          "name": "坐骑能否冲刺",
+          "value": 0,
+          "isRatio": false
+        },
+        {
+          "id": 45,
+          "key": "SPEED_RATIO",
+          "name": "移动速度修正属性",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 226,
+          "key": "SPR_SEC_BACK",
+          "name": "能量自动回复值（后台）",
+          "value": 1042,
+          "isRatio": true
+        },
+        {
+          "id": 227,
+          "key": "SPGETUP_AUTO",
+          "name": "能量自动回复增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 228,
+          "key": "SPGETUP_ATK",
+          "name": "能量攻击回复增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 229,
+          "key": "MASTERY",
+          "name": "调谐强度",
+          "value": 10400,
+          "isRatio": false
+        },
+        {
+          "id": 222,
+          "key": "WDM_TAG_HEAVYATTACK",
+          "name": "架势条破坏效率",
+          "value": 10000,
+          "isRatio": true
+        },
+        {
+          "id": 21,
+          "key": "SHOOT_DMGUP",
+          "name": "伤害增幅",
+          "value": 0,
+          "isRatio": true
+        },
+        {
+          "id": 22,
+          "key": "SUFFER_DMGDOWN",
+          "name": "伤害减免",
+          "value": 0,
+          "isRatio": true
+        }
+      ],
+      "skillIds": [
+        {
+          "ownerSkillSuffix": 1
+        },
+        {
+          "ownerSkillSuffix": 12
+        },
+        {
+          "ownerSkillSuffix": 13
+        },
+        {
+          "ownerSkillSuffix": 22
+        },
+        {
+          "ownerSkillSuffix": 61
+        },
+        {
+          "ownerSkillSuffix": 62
+        }
+      ],
+      "skillSlots": [
+        {
+          "group": "ground",
+          "slot": 2,
+          "skillIdentity": {
+            "ownerSkillSuffix": 10
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 3,
+          "skillIdentity": {
+            "ownerSkillSuffix": 12
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 4,
+          "skillIdentity": {
+            "ownerSkillSuffix": 13
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 101,
+          "skillIdentity": {
+            "ownerSkillSuffix": 14
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 102,
+          "skillIdentity": {
+            "ownerSkillSuffix": 24
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 201,
+          "skillIdentity": {
+            "ownerSkillSuffix": 22
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 204,
+          "skillIdentity": {
+            "ownerSkillSuffix": 15
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 207,
+          "skillIdentity": {
+            "ownerSkillSuffix": 25
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 5,
+          "skillIdentity": {
+            "ownerSkillSuffix": 16
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 115,
+          "skillIdentity": {
+            "ownerSkillSuffix": 17
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 208,
+          "skillIdentity": {
+            "ownerSkillSuffix": 26
+          }
+        },
+        {
+          "group": "ground",
+          "slot": 209,
+          "skillIdentity": {
+            "ownerSkillSuffix": 27
+          }
+        },
+        {
+          "group": "aerial",
+          "slot": 301,
+          "skillIdentity": {
+            "ownerSkillSuffix": 11
+          }
+        },
+        {
+          "group": "passive",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 61
+          }
+        },
+        {
+          "group": "passive",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 62
+          }
+        },
+        {
+          "group": "passive",
+          "slot": null,
+          "skillIdentity": {
+            "sharedSkillId": 19996298
+          }
+        },
+        {
+          "group": "passive",
+          "slot": null,
+          "skillIdentity": {
+            "sharedSkillId": 19996798
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 2
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 3
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 4
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 5
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 41
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 42
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 43
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 44
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 45
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 46
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 47
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 48
+          }
+        },
+        {
+          "group": "backup",
+          "slot": null,
+          "skillIdentity": {
+            "ownerSkillSuffix": 49
+          }
+        }
+      ]
+    }
+  },
+  "rosterHash": "6b5961e83e5b1eb7"
+}

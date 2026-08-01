@@ -65,6 +65,18 @@ export function normalizeMachineAxisContract(value = {}) {
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
       projectile: normalizeProjectile(scenario.projectile),
       critical: normalizeCritical(scenario.critical),
+      ...(scenario.optimizationQualification == null
+        ? {}
+        : {
+            optimizationQualification: normalizeOptimizationQualification(
+              scenario.optimizationQualification
+            ),
+          }),
+      ...(scenario.cultivationProfile == null
+        ? {}
+        : {
+            cultivationProfile: structuredClone(scenario.cultivationProfile),
+          }),
       ...(scenario.target == null
         ? {}
         : { target: normalizeTargetPolicy(scenario.target) }),
@@ -440,6 +452,14 @@ function normalizeTargetPolicy(value) {
     toughnessMode: textOrNull(source.toughnessMode) ?? 'enabled',
     breakMode: textOrNull(source.breakMode) ?? 'enabled',
     deathTruncation: textOrNull(source.deathTruncation) ?? 'enabled',
+  };
+}
+
+function normalizeOptimizationQualification(value) {
+  const source = isRecord(value) ? value : {};
+  return {
+    mode: textOrNull(source.mode) ?? 'research',
+    catalogHash: textOrNull(source.catalogHash),
   };
 }
 

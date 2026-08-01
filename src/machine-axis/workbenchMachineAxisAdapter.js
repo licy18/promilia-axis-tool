@@ -270,6 +270,20 @@ function createContractFromProject(project, { service, metadata } = {}) {
         policy: project.combatScenario?.critical?.policy ?? 'non-critical',
         seed: project.combatScenario?.critical?.seed ?? null,
       },
+      ...(project.optimizationQualification == null
+        ? {}
+        : {
+            optimizationQualification: structuredClone(
+              project.optimizationQualification
+            ),
+          }),
+      ...(project.optimizationCultivationProfileInput == null
+        ? {}
+        : {
+            cultivationProfile: structuredClone(
+              project.optimizationCultivationProfileInput
+            ),
+          }),
     },
     actions,
     metadata: {

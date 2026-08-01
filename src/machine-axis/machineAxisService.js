@@ -17,6 +17,11 @@ import {
   getVerifiedCombatActionMapping,
 } from '../data/verifiedCombatMechanicsPackage';
 import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
+import {
+  createOptimizationQualificationIssuesForContract,
+  getOptimizationQualificationCatalog,
+  resolveOptimizationCultivationProfile,
+} from '../optimization-qualification/optimizationQualificationProtocol';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHeadlessCombatCore';
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
@@ -103,6 +108,7 @@ export function createMachineAxisService({
       publicActions,
       kibos,
       enemies: coreCatalog.enemies,
+      optimizationQualification: createOptimizationQualificationCatalogProjection(),
       summary: {
         characterCount: coreCatalog.summary.characterCount,
         publicActionCount: publicActions.length,
@@ -431,6 +437,7 @@ export function createMachineAxisService({
     }
     issues.push(...validateSourceDataIdentity(contract));
     issues.push(...validateScenarioCatalogReferences(contract, gameData));
+    issues.push(...createOptimizationQualificationIssuesForContract(contract));
     const teamBySlot = new Map(
       contract.scenario.team.map((slot, position) => [
         slot.slotId,
@@ -525,6 +532,40 @@ export function createMachineAxisService({
         },
       }
     );
+    const cultivationResolution = contract.scenario.cultivationProfile
+      ? resolveOptimizationCultivationProfile(
+          contract.scenario.cultivationProfile,
+          { team: contract.scenario.team }
+        )
+      : null;
+    if (cultivationResolution?.valid) {
+      const cultivationBySlot = new Map(
+        cultivationResolution.profile.actors.map(actor => [actor.slotId, actor])
+      );
+      project = {
+        ...project,
+        optimizationQualification:
+          contract.scenario.optimizationQualification ?? null,
+        optimizationCultivationProfileInput: structuredClone(
+          contract.scenario.cultivationProfile
+        ),
+        optimizationCultivationProfile: cultivationResolution.profile,
+        actorConfigs: (project.actorConfigs ?? []).map((actorConfig, index) => {
+          const machineSlot = contract.scenario.team[index];
+          const resolvedCultivation = cultivationBySlot.get(machineSlot?.slotId);
+          return resolvedCultivation
+            ? {
+                ...actorConfig,
+                level: resolvedCultivation.character.level,
+                cultivation: {
+                  ...(actorConfig.cultivation ?? {}),
+                  optimization: resolvedCultivation,
+                },
+              }
+            : actorConfig;
+        }),
+      };
+    }
     const sourceSequenceByActionId = new Map(
       templates
         .filter(Boolean)
@@ -1639,6 +1680,20 @@ function validateScenarioCatalogReferences(contract, gameData) {
     );
   }
   return issues;
+}
+
+function createOptimizationQualificationCatalogProjection() {
+  const catalog = getOptimizationQualificationCatalog();
+  return {
+    schemaVersion: catalog.schemaVersion,
+    contractName: catalog.contractName,
+    catalogHash: catalog.catalogHash,
+    sourceSnapshotHash: catalog.sourceSnapshotHash,
+    denominators: catalog.denominators,
+    admission: catalog.admission,
+    cultivation: catalog.cultivation,
+    summary: catalog.summary,
+  };
 }
 
 function collectSemanticVariants(ownerId, entry, mapping) {
