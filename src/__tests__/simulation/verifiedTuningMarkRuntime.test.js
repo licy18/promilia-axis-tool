@@ -177,6 +177,51 @@ describe('verified tuning mark runtime', () => {
     ).toBeGreaterThan(0);
   });
 
+  it('keeps stack-over-limit and real tuning damage independent from finite HP in infinite mode', () => {
+    const tuningMarks = mechanicsPackage.tuningMechanicsCatalog.profiles.map(
+      profile => createInheritedMark(profile, 20_000)
+    );
+    const targetPolicy = {
+      hpMode: 'infinite',
+      toughnessMode: 'disabled',
+      breakMode: 'disabled',
+      deathTruncation: 'disabled',
+    };
+    const baseline = simulateVerifiedProject({
+      durationMs: 2_000,
+      initialRuntimeState: { tuningMarks },
+      targetPolicy,
+      actions: [createPangpangAttack('pangpang-hit', 0)],
+    });
+    const lowHp = simulateVerifiedProject({
+      durationMs: 2_000,
+      initialRuntimeState: {
+        enemy: {
+          hp: { currentValue: 1, maxValue: 1 },
+          toughness: { currentValue: 1, maxValue: 1 },
+        },
+        tuningMarks,
+      },
+      targetPolicy,
+      actions: [createPangpangAttack('pangpang-hit', 0)],
+    });
+    const projectDamage = result =>
+      result.verifiedCombatRuntime.damageEvents
+        .filter(event => event.type === 'VERIFIED_TUNING_DAMAGE')
+        .map(event => ({
+          profileKey: event.payload.profileKey,
+          tuningKind: event.payload.tuningKind,
+          rawDamage: event.payload.rawDamage,
+          mode: event.payload.formulaBreakdown.verifiedResult.mode,
+        }));
+    const baselineDamage = projectDamage(baseline);
+
+    expect(new Set(baselineDamage.map(row => row.mode))).toEqual(
+      new Set(['stack_over_limit', 'real'])
+    );
+    expect(projectDamage(lowHp)).toEqual(baselineDamage);
+  });
+
   it('refreshes the shared timer at five layers and ignores stale same-time expiry tasks', () => {
     const fire = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
       profile => profile.key === 'fire'
@@ -591,6 +636,7 @@ function simulateVerifiedProject({
   actions,
   initialRuntimeState = null,
   initialSpByCharacterId = {},
+  targetPolicy = null,
 }) {
   const teamSlots = createDefaultWorkbenchTeamSlots();
   const actorConfigs = createDefaultWorkbenchActorConfigs(
@@ -606,6 +652,7 @@ function simulateVerifiedProject({
     actorConfigs,
     actions,
     initialRuntimeState,
+    ...(targetPolicy ? { combatScenario: { target: targetPolicy } } : {}),
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });

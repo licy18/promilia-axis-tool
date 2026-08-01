@@ -518,6 +518,7 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
   const stateDimensions = [
     ['cooldowns', normalizeCooldownState],
     ['effects', normalizeEffectState],
+    ['kiboPassiveRuntime', normalizeKiboPassiveRuntimeState],
     ['targetStates', normalizeTargetState],
     ['specialStates', normalizeSpecialState],
     ['shields', normalizeShieldState],
@@ -1514,6 +1515,41 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
       )
       .sort(compareCanonicalRows);
   }
+  const kiboPassiveRuntimeStates =
+    boundaryRun.simulation?.verifiedKiboPassiveGeneration?.runtimeStates;
+  if (Array.isArray(kiboPassiveRuntimeStates)) {
+    const projectedKiboPassiveRuntimeStates = kiboPassiveRuntimeStates
+      .map(row => {
+        const cooldownReadyAtMs = finiteNumberOrNull(row.cooldownReadyAtMs);
+        return {
+          stateIdentity: row.stateIdentity ?? null,
+          passiveKey: row.passiveKey ?? null,
+          actorId: row.actorId ?? null,
+          slotId: row.slotId ?? null,
+          kiboId: row.kiboId ?? null,
+          skillId: row.skillId ?? null,
+          internalCooldownRemainingFrames:
+            cooldownReadyAtMs == null
+              ? 0
+              : Math.max(0, msToFrame(cooldownReadyAtMs - boundaryTimeMs)),
+          triggerCount: Math.max(0, Number(row.triggerCount) || 0),
+          maxTriggerCount: integerOrNull(row.maxTriggerCount),
+          remainingTriggerCount: integerOrNull(row.remainingTriggerCount),
+          triggerLimitScope: row.triggerLimitScope ?? null,
+          sourceIdentityHash: hashCanonicalValue(row.sourceIdentity ?? null),
+        };
+      })
+      .filter(
+        row =>
+          row.stateIdentity &&
+          (row.internalCooldownRemainingFrames > 0 ||
+            row.remainingTriggerCount != null)
+      )
+      .sort(compareCanonicalRows);
+    if (projectedKiboPassiveRuntimeStates.length > 0) {
+      snapshot.kiboPassiveRuntime = projectedKiboPassiveRuntimeStates;
+    }
+  }
   const specialState = verifiedRuntime.specialResourceRuntime?.finalState;
   if (Array.isArray(specialState)) {
     snapshot.specialResources = specialState
@@ -1668,6 +1704,33 @@ function normalizeEffectState(snapshot) {
       sourceIdentityHash: row.sourceIdentityHash ?? null,
     }))
     .filter(row => row.remainingFrames > 0)
+    .sort(compareCanonicalRows);
+}
+
+function normalizeKiboPassiveRuntimeState(snapshot) {
+  return (snapshot.kiboPassiveRuntime ?? [])
+    .map(row => ({
+      stateIdentity: row.stateIdentity ?? null,
+      passiveKey: row.passiveKey ?? null,
+      actorId: row.actorId ?? null,
+      slotId: row.slotId ?? null,
+      kiboId: row.kiboId ?? null,
+      skillId: row.skillId ?? null,
+      internalCooldownRemainingFrames: Math.max(
+        0,
+        Number(row.internalCooldownRemainingFrames) || 0
+      ),
+      maxTriggerCount: integerOrNull(row.maxTriggerCount),
+      remainingTriggerCount: integerOrNull(row.remainingTriggerCount),
+      triggerLimitScope: row.triggerLimitScope ?? null,
+      sourceIdentityHash: row.sourceIdentityHash ?? null,
+    }))
+    .filter(
+      row =>
+        row.stateIdentity &&
+        (row.internalCooldownRemainingFrames > 0 ||
+          row.remainingTriggerCount != null)
+    )
     .sort(compareCanonicalRows);
 }
 

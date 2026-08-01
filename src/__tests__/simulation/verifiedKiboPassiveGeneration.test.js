@@ -429,7 +429,22 @@ describe('verified kibo passive generation', () => {
     expect(generation.summary).toMatchObject({
       effectCommandCount: 2,
       internalCooldownSuppressedTriggerCount: 1,
+      statefulPassiveRuntimeStateCount: 1,
     });
+    expect(generation.runtimeStates).toEqual([
+      expect.objectContaining({
+        stateIdentity: 'kibo-passive-runtime:actor-101007|500206|990008',
+        actorId: 'actor-101007',
+        kiboId: 500206,
+        skillId: 990008,
+        internalCooldownMs: 15000,
+        lastTriggerAtMs: 15100,
+        cooldownReadyAtMs: 30100,
+        triggerCount: 2,
+        maxTriggerCount: null,
+        remainingTriggerCount: null,
+      }),
+    ]);
     expect(
       resolveActiveEffectsAt(timeline, 9000, {
         targetKind: 'enemy',
@@ -892,6 +907,18 @@ describe('verified kibo passive generation', () => {
         }),
       ])
     );
+    expect(generation.runtimeStates).toEqual([
+      expect.objectContaining({
+        stateIdentity: 'kibo-passive-runtime:actor-101007|500042|520083',
+        actorId: 'actor-101007',
+        kiboId: 500042,
+        skillId: 520083,
+        triggerCount: 1,
+        maxTriggerCount: 1,
+        remainingTriggerCount: 0,
+        triggerLimitScope: 'passive-element-lifetime',
+      }),
+    ]);
     expect(
       runtime.damageEvents
         .filter(event => event.actionId === action.id)

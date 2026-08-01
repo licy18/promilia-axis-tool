@@ -29,7 +29,7 @@
         "canonicalHashes": {
           "input": "2fe4cbd1ab781ea4",
           "data": "c61cf000dddae67b",
-          "trace": "1a61d2cd42373b74",
+          "trace": "c6225e30af716e65",
           "evaluation": null
         },
         "assertionCount": 129
@@ -78,8 +78,8 @@
       "scenarioSetHash": null,
       "bindingStatus": "not-requested",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002::9aa2dfe87c716a7b",
-        "qualificationSubjectHash": "9aa2dfe87c716a7b",
+        "recordIdentity": "character-product-acceptance:103002::f3bf7880e505abbb",
+        "qualificationSubjectHash": "f3bf7880e505abbb",
         "scenarioSetHash": "3d597b49c32c4338",
         "scenarioIdentities": [
           "m11-d-103002-visual-acceptance"
@@ -19924,7 +19924,7 @@
         "runnerKind": "canonical-character-golden",
         "inputReference": {
           "reportPath": "reports/m10/103002/golden-trace.json",
-          "reportHash": "2bc8f77f68812687",
+          "reportHash": "f5663a8e3415e89e",
           "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 103002 --assert-clean"
         },
         "execution": {
@@ -19934,7 +19934,7 @@
           "canonicalHashes": {
             "input": "2fe4cbd1ab781ea4",
             "data": "c61cf000dddae67b",
-            "trace": "1a61d2cd42373b74",
+            "trace": "c6225e30af716e65",
             "evaluation": null
           }
         },
@@ -21277,7 +21277,7 @@
             "assertionHash": "4e0ca9761fbfa162"
           }
         ],
-        "scenarioCaseHash": "333d243097041bbc"
+        "scenarioCaseHash": "d8a726356d186a30"
       },
       {
         "schemaVersion": 1,
@@ -22459,7 +22459,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "98b3ef279902c103"
+    "scenarioSetHash": "f0d85e4dc84295ec"
   },
   "coverageContext": {
     "denominator": {
@@ -60676,9 +60676,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "9bee5bb99f242891"
+    "sourceOfTruthHash": "4d9c9ab1d18de2f5"
   },
-  "qualificationSubjectHash": "9aa2dfe87c716a7b",
+  "qualificationSubjectHash": "f3bf7880e505abbb",
   "maturity": {
     "currentState": "runtime-integrated",
     "earnedStates": [
@@ -60718,5 +60718,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "ee005858664920b6"
+  "manifestHash": "f87e424a518b8af6"
 }

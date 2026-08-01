@@ -105,6 +105,71 @@ function createOneTimeWarmupBuffEnvelope() {
   return envelope;
 }
 
+function createKiboInternalCooldownEnvelope() {
+  const envelope = createNormalAttackCycleEnvelope();
+  envelope.contract.scenario.id = 'm12-b2-kibo-internal-cooldown';
+  envelope.contract.scenario.durationFrames = 1500;
+  envelope.contract.scenario.team[0].loadout = { kiboId: 500206 };
+  envelope.contract.scenario.initialRuntimeState.kiboEnergyBySlot[0] = {
+    slotId: 'slot-1',
+    actorId: 'actor-103002',
+    characterId: 103002,
+    kiboId: 500206,
+    kiboName: '驮驮龙',
+    currentValue: 100,
+    maxValue: 100,
+  };
+  envelope.contract.actions = [
+    {
+      id: 'warmup-actor-combo',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300212,
+        actionKind: 'star-combo',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 0 },
+    },
+    {
+      id: 'warmup-kibo-break',
+      owner: { kind: 'kibo', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 50020604,
+        actionKind: 'break',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 0 },
+    },
+    {
+      id: 'cycle-actor-combo',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300212,
+        actionKind: 'star-combo',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 540 },
+    },
+    {
+      id: 'cycle-kibo-break',
+      owner: { kind: 'kibo', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 50020604,
+        actionKind: 'break',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 540 },
+    },
+  ];
+  envelope.loop = { startFrame: 540, endFrame: 840 };
+  envelope.options = { criticalPolicy: 'expected' };
+  return envelope;
+}
+
 function createTuningMarkBoundary({
   stacks,
   decayRemainingFrames = 0,
@@ -125,6 +190,40 @@ function createTuningMarkBoundary({
         stacks,
         decayRemainingFrames,
         heldReadyRemainingFrames,
+      },
+    ],
+  };
+}
+
+function createKiboPassiveBoundary({
+  internalCooldownRemainingFrames,
+  triggerCount = 1,
+  maxTriggerCount = null,
+  remainingTriggerCount = null,
+}) {
+  return {
+    activeActorId: 'actor-1',
+    actors: [],
+    kibos: [],
+    specialResources: [],
+    cooldowns: [],
+    effects: [],
+    pendingEvents: [],
+    tuningMarks: [],
+    kiboPassiveRuntime: [
+      {
+        stateIdentity: 'kibo-passive-runtime:actor-1|500206|520008',
+        passiveKey: 'actor-1|500206|520008',
+        actorId: 'actor-1',
+        slotId: 'slot-1',
+        kiboId: 500206,
+        skillId: 520008,
+        internalCooldownRemainingFrames,
+        triggerCount,
+        maxTriggerCount,
+        remainingTriggerCount,
+        triggerLimitScope: 'passive-element-lifetime',
+        sourceIdentityHash: 'kibo-passive-source',
       },
     ],
   };
@@ -335,6 +434,61 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
             remainingFrames: 60,
           }),
         ],
+      })
+    );
+  });
+
+  it('compares Kibo passive internal cooldowns by relative remaining time', () => {
+    const start = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 600,
+      triggerCount: 1,
+    });
+    const equalPhase = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 600,
+      triggerCount: 2,
+    });
+    const shiftedPhase = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 300,
+      triggerCount: 2,
+    });
+
+    expect(compareCycleBoundaryStates(start, equalPhase)).toMatchObject({
+      closed: true,
+      stateDiffs: expect.arrayContaining([
+        expect.objectContaining({
+          dimension: 'kiboPassiveRuntime',
+          equal: true,
+        }),
+      ]),
+    });
+    expect(
+      compareCycleBoundaryStates(start, shiftedPhase).issues
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        dimension: 'kiboPassiveRuntime',
+      })
+    );
+  });
+
+  it('requires finite Kibo passive trigger lifetime to close', () => {
+    const start = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 0,
+      triggerCount: 1,
+      maxTriggerCount: 4,
+      remainingTriggerCount: 3,
+    });
+    const depleted = createKiboPassiveBoundary({
+      internalCooldownRemainingFrames: 0,
+      triggerCount: 2,
+      maxTriggerCount: 4,
+      remainingTriggerCount: 2,
+    });
+
+    expect(compareCycleBoundaryStates(start, depleted).issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        dimension: 'kiboPassiveRuntime',
       })
     );
   });
@@ -688,18 +842,26 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
   }, 30_000);
 
-  it('uses infinite HP and disabled toughness instead of truncating cycle damage', () => {
-    const envelope = createNormalAttackCycleEnvelope();
-    envelope.contract.scenario.initialRuntimeState.enemy = {
+  it('keeps infinite-HP damage and contributions independent from finite initial HP', () => {
+    const baseline = createMachineAxisService().evaluateCycle(
+      createNormalAttackCycleEnvelope()
+    );
+    const lowHpEnvelope = createNormalAttackCycleEnvelope();
+    lowHpEnvelope.contract.scenario.initialRuntimeState.enemy = {
       hp: { currentValue: 1, maxValue: 1 },
       toughness: { currentValue: 1, maxValue: 1 },
     };
-    const report = createMachineAxisService().evaluateCycle(envelope);
+    const report = createMachineAxisService().evaluateCycle(lowHpEnvelope);
     const closure = report.stateClosure[0];
 
     expect(report.valid).toBe(true);
-    expect(report.metrics.loopHpDamage).toBeGreaterThan(
-      closure.start.enemy.maxHp
+    expect(report.metrics).toEqual(baseline.metrics);
+    expect(report.contributions).toEqual(baseline.contributions);
+    expect(report.samples[0].firstCycle).toEqual(
+      baseline.samples[0].firstCycle
+    );
+    expect(report.samples[0].secondCycle).toEqual(
+      baseline.samples[0].secondCycle
     );
     expect(closure.start.enemy.hp).toBe(closure.firstEnd.enemy.hp);
     expect(closure.firstEnd.enemy.hp).toBe(closure.secondEnd.enemy.hp);
@@ -707,6 +869,47 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       closure.secondEnd.enemy.toughness
     );
     expect(closure.secondEnd.enemy.inBreak).toBe(false);
+  }, 30_000);
+
+  it('rejects a loop whose Kibo passive internal cooldown phase does not close', () => {
+    const service = createMachineAxisService();
+    const envelope = createKiboInternalCooldownEnvelope();
+    const report = service.evaluateCycle(envelope);
+    const canonicalRun = service.simulate(envelope.contract);
+
+    expect(report.valid).toBe(false);
+    expect(report.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        dimension: 'kiboPassiveRuntime',
+      })
+    );
+    expect(
+      report.samples[0].replayProof.firstClosure.stateDiffs
+    ).toContainEqual(
+      expect.objectContaining({
+        dimension: 'kiboPassiveRuntime',
+        equal: false,
+      })
+    );
+    const passiveStateDiff =
+      report.samples[0].replayProof.firstClosure.stateDiffs.find(
+        row => row.dimension === 'kiboPassiveRuntime'
+      );
+    expect(
+      passiveStateDiff.start[0].internalCooldownRemainingFrames
+    ).toBeGreaterThan(passiveStateDiff.end[0].internalCooldownRemainingFrames);
+    expect(canonicalRun.trace.state.kiboPassives).toContainEqual(
+      expect.objectContaining({
+        actorId: 'actor-103002',
+        kiboId: 500206,
+        skillId: 520008,
+        internalCooldownMs: 15000,
+        triggerCount: 1,
+        maxTriggerCount: null,
+        remainingTriggerCount: null,
+      })
+    );
   }, 30_000);
 
   it('keeps toughness damage independent from the break toggle', () => {

@@ -354,6 +354,12 @@ export function createVerifiedKiboPassiveGeneration({
       provenance: schedule.sourceIdentity?.provenance ?? [],
     });
   }
+  const passiveRuntimeStates = createKiboPassiveRuntimeStates({
+    equippedKiboBindings,
+    definitionsByKiboId,
+    lastTriggerAtByPassiveKey,
+    triggerCountByPassiveKey,
+  });
   const uniqueUnresolved = deduplicateUnresolved(unresolved);
   return {
     schemaVersion: 1,
@@ -379,6 +385,7 @@ export function createVerifiedKiboPassiveGeneration({
     triggerLimitSuppressions,
     conditionSuppressions,
     derivedHitMissSuppressions,
+    runtimeStates: passiveRuntimeStates,
     unresolved: uniqueUnresolved,
     summary: {
       resolvedActionCount: new Set(resolvedActionIds).size,
@@ -389,6 +396,7 @@ export function createVerifiedKiboPassiveGeneration({
       internalCooldownSuppressedTriggerCount:
         internalCooldownSuppressions.length,
       triggerLimitSuppressedTriggerCount: triggerLimitSuppressions.length,
+      statefulPassiveRuntimeStateCount: passiveRuntimeStates.length,
       conditionSuppressedActionCount: conditionSuppressions.filter(
         row => row.actionId != null
       ).length,
@@ -1228,6 +1236,134 @@ function collectEquippedKiboBindings(scenario) {
   );
 }
 
+function createKiboPassiveRuntimeStates({
+  equippedKiboBindings,
+  definitionsByKiboId,
+  lastTriggerAtByPassiveKey,
+  triggerCountByPassiveKey,
+}) {
+  const states = new Map();
+  for (const binding of equippedKiboBindings ?? []) {
+    for (const definition of definitionsByKiboId.get(binding.kiboId) ?? []) {
+      const passiveKey = createKiboPassiveRuntimeKey({
+        actorId: binding.actorId,
+        kiboId: binding.kiboId,
+        skillId: definition.skillId,
+      });
+      const state = createKiboPassiveRuntimeState({
+        passiveKey,
+        actorId: binding.actorId,
+        slotId: binding.slotId,
+        kiboId: binding.kiboId,
+        definition,
+        lastTriggerAtByPassiveKey,
+        triggerCountByPassiveKey,
+      });
+      if (state) states.set(passiveKey, state);
+    }
+  }
+  const observedPassiveKeys = new Set([
+    ...lastTriggerAtByPassiveKey.keys(),
+    ...triggerCountByPassiveKey.keys(),
+  ]);
+  for (const passiveKey of observedPassiveKeys) {
+    if (states.has(passiveKey)) continue;
+    const identity = parseKiboPassiveRuntimeKey(passiveKey);
+    if (!identity) continue;
+    const definition = (definitionsByKiboId.get(identity.kiboId) ?? []).find(
+      candidate => Number(candidate.skillId) === identity.skillId
+    );
+    if (!definition) continue;
+    const binding = (equippedKiboBindings ?? []).find(
+      candidate =>
+        candidate.kiboId === identity.kiboId &&
+        String(candidate.actorId) === identity.actorId
+    );
+    const state = createKiboPassiveRuntimeState({
+      passiveKey,
+      actorId: identity.actorId,
+      slotId: binding?.slotId,
+      kiboId: identity.kiboId,
+      definition,
+      lastTriggerAtByPassiveKey,
+      triggerCountByPassiveKey,
+    });
+    if (state) states.set(passiveKey, state);
+  }
+  return [...states.values()].sort(
+    (left, right) =>
+      String(left.actorId).localeCompare(String(right.actorId), 'en') ||
+      left.kiboId - right.kiboId ||
+      left.skillId - right.skillId
+  );
+}
+
+function createKiboPassiveRuntimeState({
+  passiveKey,
+  actorId,
+  slotId,
+  kiboId,
+  definition,
+  lastTriggerAtByPassiveKey,
+  triggerCountByPassiveKey,
+}) {
+  const internalCooldownMs = nonNegativeNumber(
+    definition.trigger?.internalCooldownMs
+  );
+  const maxTriggerCount = positiveInteger(definition.trigger?.maxTriggerCount);
+  if (!(internalCooldownMs > 0) && maxTriggerCount == null) return null;
+  const lastTriggerAtMs = numberOrNull(
+    lastTriggerAtByPassiveKey.get(passiveKey)
+  );
+  const triggerCount = Math.max(
+    0,
+    Number(triggerCountByPassiveKey.get(passiveKey)) || 0
+  );
+  return {
+    stateIdentity: `kibo-passive-runtime:${passiveKey}`,
+    passiveKey,
+    actorId,
+    slotId: slotId ?? null,
+    kiboId,
+    skillId: Number(definition.skillId),
+    internalCooldownMs,
+    lastTriggerAtMs,
+    cooldownReadyAtMs:
+      lastTriggerAtMs == null || internalCooldownMs <= 0
+        ? null
+        : lastTriggerAtMs + internalCooldownMs,
+    triggerCount,
+    maxTriggerCount,
+    remainingTriggerCount:
+      maxTriggerCount == null
+        ? null
+        : Math.max(0, maxTriggerCount - triggerCount),
+    triggerLimitScope:
+      definition.trigger?.triggerLimitScope ?? 'passive-element-lifetime',
+    sourceIdentity: {
+      passiveSkillId: Number(definition.skillId),
+      mechanismFamily: definition.mechanismFamily ?? null,
+      triggerSourceElementId: definition.trigger?.sourceElementId ?? null,
+    },
+  };
+}
+
+function createKiboPassiveRuntimeKey({ actorId, kiboId, skillId }) {
+  return `${actorId ?? 'actor-unresolved'}|${Number(kiboId)}|${Number(skillId)}`;
+}
+
+function parseKiboPassiveRuntimeKey(passiveKey) {
+  const parts = String(passiveKey).split('|');
+  if (parts.length < 3) return null;
+  const skillId = Number(parts.pop());
+  const kiboId = Number(parts.pop());
+  const actorId = parts.join('|');
+  if (!actorId || !Number.isInteger(kiboId) || !Number.isInteger(skillId)) {
+    return null;
+  }
+  return { actorId, kiboId, skillId };
+}
+
 function createDamagePropertyStackCommands({
   scenario,
   action,
@@ -1325,7 +1461,11 @@ function createDamagePropertyStackCommands({
         continue;
       }
     }
-    const passiveKey = `${action.actorId ?? 'actor-unresolved'}|${kiboId}|${definition.skillId}`;
+    const passiveKey = createKiboPassiveRuntimeKey({
+      actorId: action.actorId,
+      kiboId,
+      skillId: definition.skillId,
+    });
     const triggerCount = triggerCountByPassiveKey.get(passiveKey) ?? 0;
     if (maxTriggerCount != null && triggerCount >= maxTriggerCount) {
       triggerLimitSuppressions.push({
@@ -1563,7 +1703,11 @@ function createDerivedDamageCommands({
     const hitIdentity =
       hit.hitIdentity ??
       `${hit.elementId ?? 'element'}:${hit.hitIndex ?? 'hit'}`;
-    const passiveKey = `${action.actorId ?? 'actor-unresolved'}|${kiboId}|${definition.skillId}`;
+    const passiveKey = createKiboPassiveRuntimeKey({
+      actorId: action.actorId,
+      kiboId,
+      skillId: definition.skillId,
+    });
     const triggerCount = triggerCountByPassiveKey.get(passiveKey) ?? 0;
     if (maxTriggerCount != null && triggerCount >= maxTriggerCount) {
       triggerLimitSuppressions.push({
@@ -1717,7 +1861,11 @@ function createBeforeSkillPropertyCommands({
   }
 
   const triggerTimeMs = Number(action.startMs);
-  const passiveKey = `${action.actorId ?? 'actor-unresolved'}|${kiboId}|${definition.skillId}`;
+  const passiveKey = createKiboPassiveRuntimeKey({
+    actorId: action.actorId,
+    kiboId,
+    skillId: definition.skillId,
+  });
   const triggerIdentity = `${action.id}:before-skill`;
   const triggerCount = triggerCountByPassiveKey.get(passiveKey) ?? 0;
   const maxTriggerCount = positiveInteger(definition.trigger?.maxTriggerCount);

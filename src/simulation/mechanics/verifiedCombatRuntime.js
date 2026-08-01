@@ -2842,8 +2842,7 @@ function applyTuningCombatDescriptor({
     breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
     outputType: template.damageType,
     outputElement: template.elementalType,
-    currentHp: enemy.hp,
-    minimumRemainingHp: 0,
+    ...createEnemyDamageHpProtectionInput(enemy),
     valueShields: enemy.valueShields,
     hitCountShields: enemy.hitCountShields,
   };
@@ -3160,8 +3159,7 @@ function applyHitDescriptor({
     breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
     outputType: hit.damage.damageType,
     outputElement: hit.damage.elementalType,
-    currentHp: enemy.hp,
-    minimumRemainingHp: 0,
+    ...createEnemyDamageHpProtectionInput(enemy),
     valueShields: enemy.valueShields,
     hitCountShields: enemy.hitCountShields,
   };
@@ -4761,6 +4759,19 @@ function resolveCombatTargetPolicy(scenario) {
     breakMode: source.breakMode === 'disabled' ? 'disabled' : 'enabled',
     deathTruncation:
       source.deathTruncation === 'disabled' ? 'disabled' : 'enabled',
+  };
+}
+
+function createEnemyDamageHpProtectionInput(enemy) {
+  if (enemy?.targetPolicy?.hpMode === 'infinite') {
+    return {
+      currentHp: null,
+      minimumRemainingHp: null,
+    };
+  }
+  return {
+    currentHp: enemy?.hp ?? null,
+    minimumRemainingHp: 0,
   };
 }
 

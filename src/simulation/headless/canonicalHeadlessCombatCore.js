@@ -210,6 +210,8 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
     verifiedRuntime.targetStateRuntime ??
     {};
   const effectTimeline = simulation.effectTimeline ?? {};
+  const kiboPassiveRuntimeStates =
+    simulation.verifiedKiboPassiveGeneration?.runtimeStates ?? [];
   const trace = {
     schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
     kind: 'azpr-canonical-combat-trace',
@@ -251,6 +253,13 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       conditionalHitGroups: (targetStateRuntime.groupResults ?? []).map(
         projectConditionalHitGroup
       ),
+      ...(kiboPassiveRuntimeStates.length > 0
+        ? {
+            kiboPassives: kiboPassiveRuntimeStates.map(
+              projectKiboPassiveRuntimeState
+            ),
+          }
+        : {}),
     },
     effects: {
       events: (effectTimeline.events ?? []).map(projectEffectEvent),
@@ -627,6 +636,25 @@ function projectTuningMarkEvent(event = {}) {
     after: event.after ?? null,
     maximum: event.maximum ?? null,
     sourceIdentity: projectSourceIdentity(event.sourceIdentity),
+  };
+}
+
+function projectKiboPassiveRuntimeState(state = {}) {
+  return {
+    stateIdentity: state.stateIdentity ?? null,
+    passiveKey: state.passiveKey ?? null,
+    actorId: state.actorId ?? null,
+    slotId: state.slotId ?? null,
+    kiboId: state.kiboId ?? null,
+    skillId: state.skillId ?? null,
+    internalCooldownMs: state.internalCooldownMs ?? 0,
+    lastTriggerAtMs: state.lastTriggerAtMs ?? null,
+    cooldownReadyAtMs: state.cooldownReadyAtMs ?? null,
+    triggerCount: state.triggerCount ?? 0,
+    maxTriggerCount: state.maxTriggerCount ?? null,
+    remainingTriggerCount: state.remainingTriggerCount ?? null,
+    triggerLimitScope: state.triggerLimitScope ?? null,
+    sourceIdentity: projectSourceIdentity(state.sourceIdentity),
   };
 }
 
