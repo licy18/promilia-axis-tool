@@ -17,6 +17,7 @@ function cloneFixture() {
 
 const RESULT_REQUIRED_FIELDS = [
   'rank',
+  'teamCandidateId',
   'score',
   'team',
   'axis',
@@ -93,7 +94,14 @@ describe('Machine Axis search report', () => {
       );
       expect(result.causalExplanation.endState).toMatchObject({
         currentFrame: expect.any(Number),
+        remainingFrames: expect.any(Number),
         activeActorId: expect.any(String),
+      });
+      expect(result.causalExplanation.loopClosureState).toMatchObject({
+        kind: 'azpr-machine-axis-search-loop-closure-state',
+        activeActorId: expect.any(String),
+        specialResources: expect.any(Array),
+        pendingEvents: expect.any(Array),
       });
     }
     expect(report.results[0].deltaVsRank1).toBe(0);

@@ -247,7 +247,7 @@ function createBatchIssue(path, code, message) {
   return { path, code, message };
 }
 
-function normalizeSeeds(value) {
+export function normalizeSeeds(value) {
   if (!Array.isArray(value) || value.length === 0) return null;
   const seeds = [];
   for (const entry of value) {
@@ -915,7 +915,7 @@ async function runWithConcurrency(items, jobs, worker) {
   return results;
 }
 
-function applyCriticalOverride(contract, critical) {
+export function applyCriticalOverride(contract, critical) {
   return {
     ...contract,
     scenario: {

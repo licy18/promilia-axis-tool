@@ -76,6 +76,39 @@ describe('Machine Axis search generator', () => {
     );
   });
 
+  it('allocates action identities after the existing axis instead of resetting each generation', () => {
+    const axis = cloneFixture();
+    axis.actions = [
+      {
+        id: 'search-action-1',
+        owner: { kind: 'system', slotId: null },
+        intent: { kind: 'wait', durationFrames: 1 },
+        schedule: { mode: 'absolute', frame: 0, offsetFrames: 0 },
+      },
+    ];
+    const candidates = generator.generateNextActions({
+      axis,
+      run: { trace: {} },
+      nextStartFrameByActor: {},
+    });
+    const ids = candidates.map(candidate => candidate.action.id);
+    expect(ids).not.toContain('search-action-1');
+    expect(
+      new Set([...axis.actions.map(action => action.id), ...ids]).size
+    ).toBe(axis.actions.length + ids.length);
+
+    const selectedAlternative = candidates[2].action;
+    const branchedAxis = { ...axis, actions: [selectedAlternative] };
+    const nextCandidates = generator.generateNextActions({
+      axis: branchedAxis,
+      run: { trace: {} },
+      nextStartFrameByActor: {},
+    });
+    expect(nextCandidates.map(candidate => candidate.action.id)).not.toContain(
+      selectedAlternative.id
+    );
+  });
+
   it('schedules candidates at the per-actor next available frame', () => {
     const axis = cloneFixture();
     const candidates = generator.generateNextActions({
