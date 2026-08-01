@@ -60,7 +60,8 @@
         "enemy": { "$ref": "#/$defs/enemy" },
         "initialRuntimeState": { "type": "object" },
         "projectile": { "$ref": "#/$defs/projectile" },
-        "critical": { "$ref": "#/$defs/critical" }
+        "critical": { "$ref": "#/$defs/critical" },
+        "target": { "$ref": "#/$defs/targetPolicy" }
       }
     },
     "actions": {
@@ -126,6 +127,17 @@
       "properties": {
         "targetDistance": { "type": "number", "minimum": 0 },
         "defaultWillHit": { "type": "boolean" }
+      }
+    },
+    "targetPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hpMode", "toughnessMode", "breakMode", "deathTruncation"],
+      "properties": {
+        "hpMode": { "enum": ["finite", "infinite"] },
+        "toughnessMode": { "enum": ["enabled", "disabled"] },
+        "breakMode": { "enum": ["enabled", "disabled"] },
+        "deathTruncation": { "enum": ["enabled", "disabled"] }
       }
     },
     "action": {

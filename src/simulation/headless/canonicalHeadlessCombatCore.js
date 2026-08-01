@@ -221,6 +221,9 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       frameRate: Number(effectiveScenario.time?.fps) || 60,
       enemyId: simulation.scenario?.enemyId ?? null,
       actorIds: (effectiveScenario.actors ?? []).map(actor => actor.id),
+      ...(effectiveScenario.combatScenario?.target == null
+        ? {}
+        : { targetPolicy: effectiveScenario.combatScenario.target }),
     },
     critical: effectiveScenario.combatScenario?.critical ?? null,
     actions: (effectiveScenario.actions ?? []).map(projectTraceAction),

@@ -39,6 +39,38 @@ function cloneFixture() {
   return structuredClone(fixture);
 }
 
+function createCycleEnvelope() {
+  const contract = cloneFixture();
+  const first = contract.scenario.team[0];
+  const third = contract.scenario.team[2];
+  contract.scenario.team[0] = { ...third, slotId: 'slot-1' };
+  contract.scenario.team[2] = { ...first, slotId: 'slot-3' };
+  contract.scenario.durationFrames = 900;
+  contract.scenario.critical = { policy: 'expected', seed: null };
+  contract.actions = [1, 2, 3].map(sequenceIndex => ({
+    id: `cycle-ruby-a${sequenceIndex}`,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: 10300201,
+      actionKind: 'normal-attack',
+      attackInput: { sequenceIndex, groupId: 'cycle-ruby' },
+      level: 1,
+    },
+    schedule:
+      sequenceIndex === 1
+        ? { mode: 'absolute', frame: 60 }
+        : { mode: 'after-previous-end', offsetFrames: 0 },
+  }));
+  return {
+    schemaVersion: 1,
+    contractName: 'AzPrMachineAxisCycleDps',
+    kind: 'azpr-machine-axis-cycle-dps',
+    contract,
+    loop: { startFrame: 60, endFrame: 360 },
+  };
+}
+
 describe('Machine Axis CLI', () => {
   beforeEach(() => {
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
@@ -339,6 +371,45 @@ describe('Machine Axis CLI', () => {
     });
   }, 30_000);
 
+  it('evaluates a sustainable cycle through the canonical service', async () => {
+    const harness = createHarness({
+      stdin: JSON.stringify(createCycleEnvelope()),
+    });
+    const exitCode = await runMachineAxisCli(['cycle', '-'], harness.io);
+    const report = parseJson(harness.output.stdout);
+
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
+    expect(report).toMatchObject({
+      kind: 'azpr-machine-axis-cycle-dps-evaluation',
+      valid: true,
+      status: 'closed',
+      loop: { startFrame: 60, endFrame: 360 },
+      metrics: {
+        loopHpDamage: expect.any(Number),
+        cycleDps: expect.any(Number),
+      },
+    });
+    expect(report.replayProof.stable).toBe(true);
+    expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
+    expect(harness.output.stderr).toBe('');
+  }, 30_000);
+
+  it('returns validation exit code for a non-closed cycle', async () => {
+    const envelope = createCycleEnvelope();
+    envelope.loop.endFrame = envelope.loop.startFrame;
+    const harness = createHarness({ stdin: JSON.stringify(envelope) });
+    const exitCode = await runMachineAxisCli(['cycle', '-'], harness.io);
+
+    expect(exitCode).toBe(MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION);
+    expect(parseJson(harness.output.stdout)).toMatchObject({
+      kind: 'azpr-machine-axis-cycle-dps-evaluation',
+      valid: false,
+      issues: [
+        expect.objectContaining({ code: 'machine-axis-cycle-loop-empty' }),
+      ],
+    });
+  }, 30_000);
+
   it.each([
     ['catalog', '--output'],
     ['catalog', '--output', '--format', 'json'],
@@ -359,6 +430,7 @@ describe('Machine Axis CLI', () => {
     ['search', '--max-depth', '-1'],
     ['search', '--objective', 'nope'],
     ['search', '-', '--format', 'jsonl'],
+    ['cycle', '-', '--format', 'jsonl'],
   ])(
     'rejects valued-option usage before reading input or calling the service',
     async (...args) => {

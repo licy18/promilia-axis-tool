@@ -9,6 +9,7 @@
     { "$ref": "#/$defs/run" },
     { "$ref": "#/$defs/explanation" },
     { "$ref": "#/$defs/comparison" },
+    { "$ref": "#/$defs/cycle" },
     { "$ref": "#/$defs/error" }
   ],
   "$defs": {
@@ -136,6 +137,43 @@
           "additionalProperties": true
         }
       ]
+    },
+    "cycle": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "contractName",
+        "kind",
+        "valid",
+        "status",
+        "issues",
+        "warnings",
+        "assumptions",
+        "loop",
+        "samples",
+        "hashes"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "contractName": { "const": "AzPrMachineAxisCycleDps" },
+        "kind": { "const": "azpr-machine-axis-cycle-dps-evaluation" },
+        "valid": { "type": "boolean" },
+        "status": { "enum": ["closed", "rejected"] },
+        "issues": { "type": "array" },
+        "warnings": { "type": "array" },
+        "assumptions": { "type": "object" },
+        "critical": { "type": ["object", "null"] },
+        "warmup": { "type": "object" },
+        "loop": { "type": ["object", "null"] },
+        "metrics": { "type": "object" },
+        "contributions": { "type": "object" },
+        "replayProof": { "type": "object" },
+        "stateClosure": { "type": "array" },
+        "evidence": { "type": "object" },
+        "samples": { "type": "array" },
+        "hashes": { "type": "object" }
+      },
+      "additionalProperties": true
     },
     "error": {
       "type": "object",

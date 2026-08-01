@@ -19,6 +19,7 @@ const COMMANDS = new Set([
   'explain',
   'batch',
   'search',
+  'cycle',
 ]);
 const VALUED_OPTIONS = new Set([
   '--input',
@@ -246,7 +247,10 @@ export function parseCliArguments(argv = []) {
       message: `Unsupported format: ${options.format}`,
     };
   }
-  if (['batch', 'search'].includes(command) && options.format === 'jsonl') {
+  if (
+    ['batch', 'search', 'cycle'].includes(command) &&
+    options.format === 'jsonl'
+  ) {
     return {
       valid: false,
       command,
@@ -374,6 +378,22 @@ async function executeCommand(parsed, service, io) {
     );
     return {
       exitCode: MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value,
+    };
+  }
+  if (command === 'cycle') {
+    const [envelope] = await readContracts(options.input, options, io);
+    const value = service.evaluateCycle(envelope, {
+      seeds:
+        options.seeds ??
+        (options.seed != null ? [String(options.seed)] : undefined),
+      criticalPolicy: options.criticalPolicy,
+    });
+    return {
+      exitCode:
+        value?.valid === false
+          ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+          : MACHINE_AXIS_CLI_EXIT_CODES.OK,
       value,
     };
   }

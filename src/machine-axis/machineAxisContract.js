@@ -65,6 +65,9 @@ export function normalizeMachineAxisContract(value = {}) {
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
       projectile: normalizeProjectile(scenario.projectile),
       critical: normalizeCritical(scenario.critical),
+      ...(scenario.target == null
+        ? {}
+        : { target: normalizeTargetPolicy(scenario.target) }),
     },
     actions: actions.map((action, index) =>
       normalizeMachineAxisAction(action, index)
@@ -427,6 +430,16 @@ function normalizeCritical(value) {
         : typeof source.seed === 'number'
           ? Math.trunc(source.seed)
           : String(source.seed),
+  };
+}
+
+function normalizeTargetPolicy(value) {
+  const source = isRecord(value) ? value : {};
+  return {
+    hpMode: textOrNull(source.hpMode) ?? 'finite',
+    toughnessMode: textOrNull(source.toughnessMode) ?? 'enabled',
+    breakMode: textOrNull(source.breakMode) ?? 'enabled',
+    deathTruncation: textOrNull(source.deathTruncation) ?? 'enabled',
   };
 }
 

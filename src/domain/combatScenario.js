@@ -24,6 +24,20 @@ export function normalizeCombatScenario(value = null) {
           : Boolean(projectile.defaultWillHit),
     },
     critical: normalizeCombatCriticalScenario(value?.critical),
+    ...(value?.target == null
+      ? {}
+      : { target: normalizeCombatTargetPolicy(value.target) }),
+  };
+}
+
+export function normalizeCombatTargetPolicy(value = null) {
+  const source = value && typeof value === 'object' ? value : {};
+  return {
+    hpMode: source.hpMode === 'infinite' ? 'infinite' : 'finite',
+    toughnessMode: source.toughnessMode === 'disabled' ? 'disabled' : 'enabled',
+    breakMode: source.breakMode === 'disabled' ? 'disabled' : 'enabled',
+    deathTruncation:
+      source.deathTruncation === 'disabled' ? 'disabled' : 'enabled',
   };
 }
 

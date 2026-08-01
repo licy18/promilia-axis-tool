@@ -1149,6 +1149,7 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
     });
   }
   const inheritedEnemy = scenario?.initialRuntimeState?.enemy ?? null;
+  const targetPolicy = resolveCombatTargetPolicy(scenario);
   const enemyId = Number(scenario?.enemy?.enemyId ?? scenario?.enemy?.id);
   const enemyProfile = (mechanicsPackage.ownerProfiles?.enemy ?? []).find(
     profile => Number(profile.enemyId) === enemyId
@@ -1182,12 +1183,18 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
           configuredEnemyToughness
       )
   );
-  const enemyToughness = clampNumber(
-    inheritedEnemy?.toughness?.currentValue ?? configuredEnemyToughness,
-    0,
-    enemyMaxToughness
-  );
-  const inBreak = inheritedEnemy?.inBreak === true;
+  const enemyToughness =
+    targetPolicy.toughnessMode === 'disabled'
+      ? enemyMaxToughness
+      : clampNumber(
+          inheritedEnemy?.toughness?.currentValue ?? configuredEnemyToughness,
+          0,
+          enemyMaxToughness
+        );
+  const inBreak =
+    targetPolicy.breakMode === 'enabled' &&
+    targetPolicy.toughnessMode === 'enabled' &&
+    inheritedEnemy?.inBreak === true;
   const breakElapsedMs = nonNegativeNumber(inheritedEnemy?.breakElapsedMs);
   const recoveryDelayRemainingMs = numberOrNull(
     inheritedEnemy?.recoveryDelayRemainingMs
@@ -1254,6 +1261,7 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
     vitalDiagnostics: [],
     nextRuntimeSequenceIndex: 0,
     enemy: {
+      targetPolicy,
       enemyId: Number.isInteger(enemyId) ? enemyId : null,
       profile: enemyProfile ?? null,
       hp: enemyHp,
@@ -1590,6 +1598,12 @@ function sumNumbers(values) {
 function applyWeaknessStateDescriptor({ descriptor, scenario, state }) {
   const enemy = state.enemy;
   const profile = enemy.profile;
+  if (
+    enemy.targetPolicy?.toughnessMode === 'disabled' ||
+    enemy.targetPolicy?.breakMode === 'disabled'
+  ) {
+    return null;
+  }
   if (!profile?.applied || enemy.maxToughness <= 0) return null;
 
   const before = createEnemyStateSnapshot(enemy);
@@ -2844,7 +2858,11 @@ function applyTuningCombatDescriptor({
       })
     : calculateStackOverLimitDamage(commonInput);
   updateShieldState(enemy, damageResult, commonInput);
-  const hpDamage = Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
+  const infiniteHp = enemy.targetPolicy?.hpMode === 'infinite';
+  const toughnessDisabled = enemy.targetPolicy?.toughnessMode === 'disabled';
+  const hpDamage = infiniteHp
+    ? Math.max(0, Number(damageResult.value))
+    : Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
   const toughnessBefore = enemy.toughness;
   const weaknessResult = calculateWeaknessDamage({
     pure: false,
@@ -2870,14 +2888,22 @@ function applyTuningCombatDescriptor({
     maximum: positiveNumberOrNull(enemyProfile.weaknessDamageMaximum),
     minimum: positiveNumberOrNull(enemyProfile.weaknessDamageMinimum),
   });
-  const toughnessDamage = Math.min(
-    enemy.toughness,
-    Math.max(0, Number(weaknessResult.deducted ?? 0))
-  );
-  enemy.hp = roundValue(enemy.hp - hpDamage);
-  enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  const toughnessDamage = toughnessDisabled
+    ? 0
+    : Math.min(
+        enemy.toughness,
+        Math.max(0, Number(weaknessResult.deducted ?? 0))
+      );
+  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
+  if (!toughnessDisabled) {
+    enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  }
   const breakTriggered =
-    !enemy.inBreak && toughnessBefore > 0 && enemy.toughness <= 0;
+    !toughnessDisabled &&
+    enemy.targetPolicy?.breakMode === 'enabled' &&
+    !enemy.inBreak &&
+    toughnessBefore > 0 &&
+    enemy.toughness <= 0;
   if (toughnessDamage > 0) {
     enemy.lastToughnessSourceActionId = action.id;
     enemy.lastToughnessSourceActorId = action.actorId;
@@ -2951,11 +2977,14 @@ function applyTuningCombatDescriptor({
         stateTransaction: {
           before: stateBefore,
           delta: {
-            enemyHp: roundValue(-hpDamage),
+            enemyHp: infiniteHp ? 0 : roundValue(-hpDamage),
             enemyToughness: roundValue(-toughnessDamage),
           },
           after: stateAfter,
         },
+        ...(enemy.targetPolicy.explicit
+          ? { targetPolicy: projectCombatTargetPolicy(enemy.targetPolicy) }
+          : {}),
         sourceIdentity: tuningEvent.sourceIdentity,
         appliedToCalculators: true,
       },
@@ -3154,7 +3183,11 @@ function applyHitDescriptor({
   }
   const damageResult = damageResolution.result;
   updateShieldState(enemy, damageResult, damageInput);
-  const hpDamage = Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
+  const infiniteHp = enemy.targetPolicy?.hpMode === 'infinite';
+  const toughnessDisabled = enemy.targetPolicy?.toughnessMode === 'disabled';
+  const hpDamage = infiniteHp
+    ? Math.max(0, Number(damageResult.value))
+    : Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
   const toughnessBefore = enemy.toughness;
   const preShieldHpDamageRaw = damageResult.preShieldRaw ?? damageResult.raw;
   const weaknessTypeMultiplier = resolveRuntimeWeaknessTypeMultiplier({
@@ -3189,14 +3222,22 @@ function applyHitDescriptor({
     maximum: weaknessMaximum,
     minimum: weaknessMinimum,
   });
-  const toughnessDamage = Math.min(
-    enemy.toughness,
-    Math.max(0, Number(weaknessResult.deducted ?? 0))
-  );
-  enemy.hp = roundValue(enemy.hp - hpDamage);
-  enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  const toughnessDamage = toughnessDisabled
+    ? 0
+    : Math.min(
+        enemy.toughness,
+        Math.max(0, Number(weaknessResult.deducted ?? 0))
+      );
+  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
+  if (!toughnessDisabled) {
+    enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  }
   const breakTriggered =
-    !enemy.inBreak && toughnessBefore > 0 && enemy.toughness <= 0;
+    !toughnessDisabled &&
+    enemy.targetPolicy?.breakMode === 'enabled' &&
+    !enemy.inBreak &&
+    toughnessBefore > 0 &&
+    enemy.toughness <= 0;
   if (toughnessDamage > 0) {
     enemy.lastToughnessSourceActionId = action.id;
     enemy.lastToughnessSourceActorId = action.actorId;
@@ -3341,11 +3382,14 @@ function applyHitDescriptor({
         stateTransaction: {
           before: stateBefore,
           delta: {
-            enemyHp: roundValue(-hpDamage),
+            enemyHp: infiniteHp ? 0 : roundValue(-hpDamage),
             enemyToughness: roundValue(-toughnessDamage),
           },
           after: stateAfter,
         },
+        ...(enemy.targetPolicy.explicit
+          ? { targetPolicy: projectCombatTargetPolicy(enemy.targetPolicy) }
+          : {}),
         appliedToCalculators: true,
       },
     },
@@ -4404,6 +4448,9 @@ function applyClampedResourceChange(state, requestedChange) {
 
 function createEnemyStateSnapshot(enemy) {
   return {
+    ...(enemy.targetPolicy?.explicit
+      ? { targetPolicy: projectCombatTargetPolicy(enemy.targetPolicy) }
+      : {}),
     hp: roundValue(enemy.hp),
     toughness: roundValue(enemy.toughness),
     inBreak: enemy.inBreak === true,
@@ -4444,6 +4491,11 @@ function createFinalState(state, timeMs = 0) {
   }
   return {
     enemy: {
+      ...(state.enemy.targetPolicy?.explicit
+        ? {
+            targetPolicy: projectCombatTargetPolicy(state.enemy.targetPolicy),
+          }
+        : {}),
       enemyId: state.enemy.enemyId,
       hp: roundValue(state.enemy.hp),
       maxHp: roundValue(state.enemy.maxHp),
@@ -4698,6 +4750,27 @@ function resolveEventAbsoluteFrame(event) {
 
 function timeToFrame(timeMs, frameRate = FRAME_RATE) {
   return Math.round((Number(timeMs) * Number(frameRate)) / 1000);
+}
+
+function resolveCombatTargetPolicy(scenario) {
+  const source = scenario?.combatScenario?.target ?? {};
+  return {
+    explicit: scenario?.combatScenario?.target != null,
+    hpMode: source.hpMode === 'infinite' ? 'infinite' : 'finite',
+    toughnessMode: source.toughnessMode === 'disabled' ? 'disabled' : 'enabled',
+    breakMode: source.breakMode === 'disabled' ? 'disabled' : 'enabled',
+    deathTruncation:
+      source.deathTruncation === 'disabled' ? 'disabled' : 'enabled',
+  };
+}
+
+function projectCombatTargetPolicy(value) {
+  return {
+    hpMode: value.hpMode,
+    toughnessMode: value.toughnessMode,
+    breakMode: value.breakMode,
+    deathTruncation: value.deathTruncation,
+  };
 }
 
 function roundValue(value) {

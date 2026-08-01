@@ -1,0 +1,734 @@
+import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
+import acceptanceReport from '../../../reports/m12/m12-b2-cycle-dps-example-20260801.json';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
+import {
+  collectCycleDamageContributions,
+  compareCycleBoundaryStates,
+  createCycleReplayStabilityProof,
+  validateMachineAxisCycleEnvelope,
+} from '../../machine-axis/machineAxisCycleEvaluator';
+import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+
+function createNormalAttackCycleEnvelope() {
+  return structuredClone(cycleFixture);
+}
+
+function createStarSkillCooldownEnvelope() {
+  const envelope = createNormalAttackCycleEnvelope();
+  const rubySlot = envelope.contract.scenario.team[0];
+  const pangpangSlot = envelope.contract.scenario.team[2];
+  envelope.contract.scenario.team[0] = { ...pangpangSlot, slotId: 'slot-1' };
+  envelope.contract.scenario.team[2] = { ...rubySlot, slotId: 'slot-3' };
+  envelope.contract.actions = [
+    {
+      id: 'cycle-pangpang-star-skill',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10100712,
+        actionKind: 'star-skill',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 60 },
+    },
+  ];
+  envelope.contract.scenario.durationFrames = 1500;
+  envelope.loop = { startFrame: 60, endFrame: 660 };
+  return envelope;
+}
+
+function createRubyAmmoDeficitEnvelope() {
+  const envelope = createNormalAttackCycleEnvelope();
+  envelope.contract.actions.push({
+    id: 'cycle-ruby-enhanced-e1',
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: 10300201,
+      actionKind: 'normal-attack',
+      attackInput: { sequenceIndex: 1, groupId: 'cycle-ruby-enhanced' },
+      level: 1,
+    },
+    schedule: { mode: 'after-previous-end', offsetFrames: 0 },
+  });
+  return envelope;
+}
+
+function createOneTimeWarmupBuffEnvelope() {
+  const envelope = createNormalAttackCycleEnvelope();
+  envelope.contract.scenario.team[0] = {
+    slotId: 'slot-1',
+    characterId: 101003,
+    level: 1,
+    initialSp: 100,
+    loadout: { kiboId: 500003 },
+    cultivation: {},
+  };
+  envelope.contract.scenario.initialRuntimeState.kiboEnergyBySlot[0] = {
+    slotId: 'slot-1',
+    actorId: 'actor-101003',
+    characterId: 101003,
+    kiboId: 500003,
+    kiboName: '水灵偶',
+    currentValue: 60,
+    maxValue: 100,
+  };
+  envelope.contract.scenario.initialRuntimeState.specialResourcesByActor = [];
+  envelope.contract.scenario.durationFrames = 3600;
+  envelope.contract.actions = [
+    {
+      id: 'warmup-han-ultimate',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10100313,
+        actionKind: 'ultimate',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 0 },
+    },
+    {
+      id: 'cycle-han-a1',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10100301,
+        actionKind: 'normal-attack',
+        attackInput: { sequenceIndex: 1, groupId: 'cycle-han' },
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 600 },
+    },
+  ];
+  envelope.loop = { startFrame: 600, endFrame: 1800 };
+  return envelope;
+}
+
+function createTuningMarkBoundary({
+  stacks,
+  decayRemainingFrames = 0,
+  heldReadyRemainingFrames = 0,
+}) {
+  return {
+    activeActorId: 'actor-1',
+    actors: [],
+    kibos: [],
+    specialResources: [],
+    cooldowns: [],
+    effects: [],
+    pendingEvents: [],
+    tuningMarks: [
+      {
+        profileKey: 'fire',
+        markId: 4,
+        stacks,
+        decayRemainingFrames,
+        heldReadyRemainingFrames,
+      },
+    ],
+  };
+}
+
+describe('Machine Axis sustainable cycle DPS evaluator', () => {
+  beforeEach(() => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  });
+
+  it('rejects missing and empty half-open loop intervals', () => {
+    const missing = createNormalAttackCycleEnvelope();
+    delete missing.loop;
+    expect(validateMachineAxisCycleEnvelope(missing)).toMatchObject({
+      valid: false,
+      issues: [
+        expect.objectContaining({ code: 'machine-axis-cycle-loop-required' }),
+      ],
+    });
+
+    const empty = createNormalAttackCycleEnvelope();
+    empty.loop.endFrame = empty.loop.startFrame;
+    expect(validateMachineAxisCycleEnvelope(empty)).toMatchObject({
+      valid: false,
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-cycle-loop-empty',
+          path: 'loop',
+        }),
+      ],
+    });
+  });
+
+  it('rejects coercible, additional, and schema-invalid cycle fields before normalization', () => {
+    const invalid = createNormalAttackCycleEnvelope();
+    invalid.loop.startFrame = '60';
+    invalid.loop.displayName = 'not-contract-data';
+    invalid.options = { criticalPolicy: 'expected', seeds: [1.5] };
+
+    const result = validateMachineAxisCycleEnvelope(invalid);
+    expect(result.valid).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cycle-loop-start-invalid',
+          path: 'loop.startFrame',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-cycle-additional-property',
+          path: 'loop.displayName',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-cycle-seeds-invalid',
+          path: 'options.seeds',
+        }),
+      ])
+    );
+
+    invalid.options.seeds = [];
+    expect(validateMachineAxisCycleEnvelope(invalid).issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cycle-seeds-invalid',
+          path: 'options.seeds',
+        }),
+      ])
+    );
+  });
+
+  it('accepts an exact zero-frame loop boundary without including later frames', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.contract.actions = envelope.contract.actions.filter(
+      action => action.id !== 'warmup-wait'
+    );
+    envelope.contract.actions[0].schedule.frame = 0;
+    envelope.loop = { startFrame: 0, endFrame: 300 };
+
+    const report = createMachineAxisService().evaluateCycle(envelope);
+    expect(report.valid).toBe(true);
+    expect(report.loop).toMatchObject({ startFrame: 0, endFrame: 300 });
+    expect(report.warmup).toMatchObject({ durationFrames: 0, actionIds: [] });
+    expect(
+      report.contributions.byHit.every(
+        row => row.firstFrame >= 0 && row.lastFrame < 300
+      )
+    ).toBe(true);
+  }, 30_000);
+
+  it('counts delayed hits by actual frame in a half-open interval exactly once', () => {
+    const events = [
+      {
+        actionId: 'warmup',
+        hitIdentity: 'h-before',
+        absoluteFrame: 59,
+        rawDamage: 2,
+      },
+      {
+        actionId: 'cycle',
+        hitIdentity: 'h-start',
+        absoluteFrame: 60,
+        rawDamage: 3,
+      },
+      {
+        actionId: 'cycle',
+        hitIdentity: 'h-last',
+        absoluteFrame: 119,
+        rawDamage: 5,
+      },
+      {
+        actionId: 'cycle',
+        hitIdentity: 'h-end',
+        absoluteFrame: 120,
+        rawDamage: 7,
+      },
+    ];
+    const first = collectCycleDamageContributions(events, {
+      startFrame: 60,
+      endFrame: 120,
+      fps: 60,
+    });
+    const second = collectCycleDamageContributions(events, {
+      startFrame: 120,
+      endFrame: 180,
+      fps: 60,
+    });
+
+    expect(first).toMatchObject({ hpDamage: 8, combatHitCount: 2 });
+    expect(first.byHit.map(row => row.hitIdentity)).toEqual([
+      'h-last',
+      'h-start',
+    ]);
+    expect(second).toMatchObject({ hpDamage: 7, combatHitCount: 1 });
+    expect(first.hpDamage + second.hpDamage).toBe(15);
+  });
+
+  it('rejects a consumable resource deficit even when values remain non-negative', () => {
+    const result = compareCycleBoundaryStates(
+      {
+        activeActorId: 'actor-1',
+        actors: [{ actorId: 'actor-1', sp: 100, max: 100 }],
+        kibos: [],
+        tuningMarks: [],
+        specialResources: [],
+        cooldowns: [],
+        effects: [],
+        pendingEvents: [],
+      },
+      {
+        activeActorId: 'actor-1',
+        actors: [{ actorId: 'actor-1', sp: 90, max: 100 }],
+        kibos: [],
+        tuningMarks: [],
+        specialResources: [],
+        cooldowns: [],
+        effects: [],
+        pendingEvents: [],
+      }
+    );
+
+    expect(result.closed).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-resource-deficit',
+        resourceIdentity: 'actor:1:sp',
+        startValue: 100,
+        endValue: 90,
+      })
+    );
+  });
+
+  it('keeps cooldown charge identity in the closure proof', () => {
+    const start = {
+      activeActorId: 'actor-1',
+      actors: [],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      cooldowns: [
+        {
+          runtimeOwnerIdentity: 'character-slot:slot-1',
+          ownerId: 'actor-1',
+          skillId: 1001,
+          chargeIndex: 0,
+          cooldownCount: 2,
+          endMs: 2000,
+          status: 'skill-cooldown-window-active',
+        },
+      ],
+      effects: [],
+      pendingEvents: [],
+      timeMs: 1000,
+    };
+    const end = structuredClone(start);
+    end.timeMs = 2000;
+    end.cooldowns[0].endMs = 3000;
+
+    const result = compareCycleBoundaryStates(start, end);
+    expect(result.closed).toBe(true);
+    expect(result.stateDiffs).toContainEqual(
+      expect.objectContaining({
+        dimension: 'cooldowns',
+        equal: true,
+        start: [
+          expect.objectContaining({
+            runtimeOwnerIdentity: 'character-slot:slot-1',
+            chargeIndex: 0,
+            cooldownCount: 2,
+            remainingFrames: 60,
+          }),
+        ],
+      })
+    );
+  });
+
+  it('rejects equal tuning-mark stacks with a shorter remaining lifecycle', () => {
+    const base = createTuningMarkBoundary({
+      stacks: 2,
+      decayRemainingFrames: 600,
+    });
+    const end = structuredClone(base);
+    end.tuningMarks[0].decayRemainingFrames = 300;
+
+    const result = compareCycleBoundaryStates(base, end);
+    expect(result.closed).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-tuning-mark-decay-regressed',
+        markIdentity: 'tuning-mark:fire:4',
+      })
+    );
+  });
+
+  it('accepts equal tuning-mark stacks with equal or longer decay time', () => {
+    const start = createTuningMarkBoundary({
+      stacks: 2,
+      decayRemainingFrames: 600,
+      heldReadyRemainingFrames: 120,
+    });
+    for (const endDecayRemainingFrames of [599, 600, 660]) {
+      const end = createTuningMarkBoundary({
+        stacks: 2,
+        decayRemainingFrames: endDecayRemainingFrames,
+        heldReadyRemainingFrames: 120,
+      });
+      expect(compareCycleBoundaryStates(start, end)).toMatchObject({
+        closed: true,
+        tuningMarkDiffs: [
+          expect.objectContaining({ decayClosed: true, heldReadyClosed: true }),
+        ],
+      });
+    }
+  });
+
+  it('ignores tuning-mark timers when both boundaries have zero stacks', () => {
+    const start = createTuningMarkBoundary({
+      stacks: 0,
+      decayRemainingFrames: 600,
+      heldReadyRemainingFrames: 120,
+    });
+    const end = createTuningMarkBoundary({
+      stacks: 0,
+      decayRemainingFrames: 60,
+      heldReadyRemainingFrames: 300,
+    });
+
+    expect(compareCycleBoundaryStates(start, end)).toMatchObject({
+      closed: true,
+      tuningMarkDiffs: [
+        expect.objectContaining({
+          startDecayRemainingFrames: 0,
+          endDecayRemainingFrames: 0,
+          startHeldReadyRemainingFrames: 0,
+          endHeldReadyRemainingFrames: 0,
+          decayClosed: true,
+          heldReadyClosed: true,
+        }),
+      ],
+    });
+  });
+
+  it('accepts more tuning-mark stacks despite shorter decay when held-ready is unchanged', () => {
+    const start = createTuningMarkBoundary({
+      stacks: 2,
+      decayRemainingFrames: 600,
+      heldReadyRemainingFrames: 120,
+    });
+    const end = createTuningMarkBoundary({
+      stacks: 3,
+      decayRemainingFrames: 60,
+      heldReadyRemainingFrames: 120,
+    });
+
+    expect(compareCycleBoundaryStates(start, end)).toMatchObject({
+      closed: true,
+      tuningMarkDiffs: [
+        expect.objectContaining({
+          stackDelta: 1,
+          decayClosed: true,
+          heldReadyClosed: true,
+        }),
+      ],
+    });
+  });
+
+  it('rejects fewer tuning-mark stacks as a resource deficit', () => {
+    const start = createTuningMarkBoundary({
+      stacks: 2,
+      decayRemainingFrames: 600,
+    });
+    const end = createTuningMarkBoundary({
+      stacks: 1,
+      decayRemainingFrames: 1200,
+    });
+
+    expect(compareCycleBoundaryStates(start, end).issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-resource-deficit',
+        resourceIdentity: 'tuning-mark:fire:4',
+        startValue: 2,
+        endValue: 1,
+      })
+    );
+  });
+
+  it('requires held-ready wait to stay equal or improve independently', () => {
+    const start = createTuningMarkBoundary({
+      stacks: 2,
+      decayRemainingFrames: 600,
+      heldReadyRemainingFrames: 120,
+    });
+    for (const endHeldReadyRemainingFrames of [120, 60]) {
+      const end = createTuningMarkBoundary({
+        stacks: 2,
+        decayRemainingFrames: 600,
+        heldReadyRemainingFrames: endHeldReadyRemainingFrames,
+      });
+      expect(compareCycleBoundaryStates(start, end).closed).toBe(true);
+    }
+
+    const regressed = createTuningMarkBoundary({
+      stacks: 3,
+      decayRemainingFrames: 1200,
+      heldReadyRemainingFrames: 180,
+    });
+    expect(compareCycleBoundaryStates(start, regressed).issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-tuning-mark-held-ready-regressed',
+        markIdentity: 'tuning-mark:fire:4',
+      })
+    );
+  });
+
+  it('rejects enemy target-state layers that do not close', () => {
+    const base = {
+      activeActorId: 'actor-1',
+      actors: [],
+      kibos: [],
+      specialResources: [],
+      cooldowns: [],
+      effects: [],
+      pendingEvents: [],
+      tuningMarks: [],
+      targetStates: [
+        {
+          stateIdentity: 'enemy:firework',
+          targetKind: 'enemy',
+          currentValue: 2,
+          maxValue: 15,
+          layers: [
+            { remainingFrames: 600, sourceIdentityHash: 'source-a' },
+            { remainingFrames: 900, sourceIdentityHash: 'source-b' },
+          ],
+        },
+      ],
+    };
+    const end = structuredClone(base);
+    end.targetStates[0].layers.shift();
+    end.targetStates[0].currentValue = 1;
+
+    const result = compareCycleBoundaryStates(base, end);
+    expect(result.closed).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        dimension: 'targetStates',
+      })
+    );
+  });
+
+  it('rejects a real Ruby enhanced input that consumes non-renewed ammunition', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createRubyAmmoDeficitEnvelope()
+    );
+
+    expect(report.valid).toBe(false);
+    expect(report.status).toBe('rejected');
+    expect(report.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-resource-deficit',
+        resourceIdentity: 'actor:103002:element:103002047',
+        startValue: 6,
+        endValue: 5,
+        delta: -1,
+      })
+    );
+  }, 30_000);
+
+  it('rejects a one-time warmup benefit when the second cycle damage falls', () => {
+    const proof = createCycleReplayStabilityProof({
+      firstCycle: { hpDamage: 120, combatHitCount: 2 },
+      secondCycle: { hpDamage: 100, combatHitCount: 2 },
+      firstClosure: { closed: true, issues: [] },
+      secondClosure: { closed: true, issues: [] },
+      secondExecution: { runnable: true, issues: [] },
+    });
+
+    expect(proof.stable).toBe(false);
+    expect(proof.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-damage-not-stable',
+        firstHpDamage: 120,
+        secondHpDamage: 100,
+      })
+    );
+  });
+
+  it('rejects a real one-time warmup Buff that expires before the next cycle', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createOneTimeWarmupBuffEnvelope()
+    );
+
+    expect(report.valid).toBe(false);
+    expect(report.status).toBe('rejected');
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: expect.stringMatching(
+            /^machine-axis-cycle-(?:state-not-closed|damage-not-stable)$/
+          ),
+        }),
+      ])
+    );
+  }, 30_000);
+
+  it('rejects a real second replay that is still on cooldown', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createStarSkillCooldownEnvelope()
+    );
+    expect(report.valid).toBe(false);
+    expect(report.status).toBe('rejected');
+    expect(report.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-second-replay-not-runnable',
+      })
+    );
+  }, 30_000);
+
+  it('accepts a real two-cycle normal-attack loop with stable damage and closure', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createNormalAttackCycleEnvelope()
+    );
+    expect(report.issues).toEqual([]);
+    expect(report).toMatchObject({
+      kind: 'azpr-machine-axis-cycle-dps-evaluation',
+      valid: true,
+      status: 'closed',
+      assumptions: {
+        enemyHp: 'infinite',
+        toughness: 'disabled',
+        break: 'disabled',
+        deathTruncation: 'disabled',
+      },
+      loop: {
+        interval: '[start,end)',
+        startFrame: 60,
+        endFrame: 360,
+        durationFrames: 300,
+        durationSeconds: 5,
+        actionIds: ['cycle-ruby-a1', 'cycle-ruby-a2', 'cycle-ruby-a3'],
+      },
+    });
+    expect(report.evidence.evidenceClosed).toBe(false);
+    expect(report.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'machine-axis-source-evidence-open' }),
+        expect.objectContaining({ code: 'machine-axis-scenario-assumption' }),
+      ])
+    );
+    expect(report.metrics.loopHpDamage).toBeGreaterThan(0);
+    expect(report.metrics.cycleDps).toBeCloseTo(
+      report.metrics.loopHpDamage / 5,
+      8
+    );
+    expect(report.replayProof.stable).toBe(true);
+    expect(report.replayProof.cycles).toHaveLength(2);
+    expect(report.replayProof.cycles[1].runnable).toBe(true);
+    expect(
+      report.replayProof.secondExecution.variantPairs.every(
+        pair => pair.equivalent
+      )
+    ).toBe(true);
+    expect(report.samples[0].secondCycle.hpDamage).toBe(
+      report.metrics.loopHpDamage
+    );
+    expect(report.samples[0].loopPlan.replayHorizonFrame).toBe(
+      cycleFixture.contract.scenario.durationFrames
+    );
+    expect(report.warmup.actionIds).toEqual(['warmup-wait']);
+    expect(
+      report.contributions.byHit.every(
+        row => row.firstFrame >= 60 && row.lastFrame < 360
+      )
+    ).toBe(true);
+    expect(report.stateClosure[0].start.enemy.toughness).toBe(
+      report.stateClosure[0].firstEnd.enemy.toughness
+    );
+    expect(report.stateClosure[0].firstEnd.enemy.inBreak).toBe(false);
+    expect(
+      report.contributions.byActor.reduce((sum, row) => sum + row.hpDamage, 0)
+    ).toBeCloseTo(report.metrics.loopHpDamage, 8);
+    expect(
+      report.contributions.byAction.reduce((sum, row) => sum + row.hpDamage, 0)
+    ).toBeCloseTo(report.metrics.loopHpDamage, 8);
+    expect(
+      report.contributions.byHit.reduce((sum, row) => sum + row.hpDamage, 0)
+    ).toBeCloseTo(report.metrics.loopHpDamage, 8);
+    expect(report.hashes.input).toMatch(/^[0-9a-f]{16}$/);
+    expect(report.hashes.trace).toMatch(/^[0-9a-f]{16}$/);
+    expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
+  }, 30_000);
+
+  it('aggregates explicit sampled seeds without losing contribution conservation', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.options = {
+      criticalPolicy: 'sampled',
+      seeds: ['cycle-seed-a', 'cycle-seed-b'],
+    };
+    const report = createMachineAxisService().evaluateCycle(envelope);
+
+    expect(report.valid).toBe(true);
+    expect(report.critical).toEqual({
+      policy: 'sampled',
+      seeds: ['cycle-seed-a', 'cycle-seed-b'],
+    });
+    expect(report.samples).toHaveLength(2);
+    expect(report.samples.map(sample => sample.seed)).toEqual([
+      'cycle-seed-a',
+      'cycle-seed-b',
+    ]);
+    for (const sample of report.samples) {
+      expect(sample.hashes.trace).toMatch(/^[0-9a-f]{16}$/);
+      expect(sample.replayProof.stable).toBe(true);
+    }
+    for (const rows of Object.values(report.contributions)) {
+      expect(rows.reduce((sum, row) => sum + row.hpDamage, 0)).toBeCloseTo(
+        report.metrics.loopHpDamage,
+        8
+      );
+    }
+    expect(report.hashes.input).toMatch(/^[0-9a-f]{16}$/);
+    expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
+  }, 30_000);
+
+  it('uses infinite HP and disabled toughness instead of truncating cycle damage', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.contract.scenario.initialRuntimeState.enemy = {
+      hp: { currentValue: 1, maxValue: 1 },
+      toughness: { currentValue: 1, maxValue: 1 },
+    };
+    const report = createMachineAxisService().evaluateCycle(envelope);
+    const closure = report.stateClosure[0];
+
+    expect(report.valid).toBe(true);
+    expect(report.metrics.loopHpDamage).toBeGreaterThan(
+      closure.start.enemy.maxHp
+    );
+    expect(closure.start.enemy.hp).toBe(closure.firstEnd.enemy.hp);
+    expect(closure.firstEnd.enemy.hp).toBe(closure.secondEnd.enemy.hp);
+    expect(closure.start.enemy.toughness).toBe(
+      closure.secondEnd.enemy.toughness
+    );
+    expect(closure.secondEnd.enemy.inBreak).toBe(false);
+  }, 30_000);
+
+  it('keeps toughness damage independent from the break toggle', () => {
+    const contract = structuredClone(cycleFixture.contract);
+    contract.scenario.target = {
+      hpMode: 'finite',
+      toughnessMode: 'enabled',
+      breakMode: 'disabled',
+      deathTruncation: 'enabled',
+    };
+    const run = createMachineAxisService().simulate(contract);
+
+    expect(run.trace.state.final.enemy.toughness).toBeLessThan(
+      run.trace.state.initial.enemy.toughness
+    );
+    expect(run.trace.state.final.enemy.inBreak).toBe(false);
+  }, 30_000);
+
+  it('keeps the committed cycle acceptance report synchronized', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createNormalAttackCycleEnvelope()
+    );
+    expect(report).toEqual(acceptanceReport);
+  }, 30_000);
+});

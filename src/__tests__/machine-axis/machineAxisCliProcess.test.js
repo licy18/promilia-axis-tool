@@ -9,6 +9,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
 
 const ROOT = process.cwd();
 const CLI = resolve(ROOT, 'scripts/run-machine-axis-cli.mjs');
@@ -145,6 +146,29 @@ describe('Machine Axis CLI real process I/O', () => {
         }),
       ])
     );
+  }, 30_000);
+
+  it('runs the sustainable cycle fixture through the real CLI process', () => {
+    const cyclePath = resolve(tempRoot, 'cycle-axis.json');
+    const reportPath = resolve(tempRoot, 'cycle-report.json');
+    writeFileSync(cyclePath, JSON.stringify(cycleFixture), 'utf8');
+
+    const result = runCli(['cycle', cyclePath, '--output', reportPath]);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toBe('');
+    expect(JSON.parse(readFileSync(reportPath, 'utf8'))).toMatchObject({
+      kind: 'azpr-machine-axis-cycle-dps-evaluation',
+      valid: true,
+      status: 'closed',
+      assumptions: {
+        enemyHp: 'infinite',
+        toughness: 'disabled',
+        break: 'disabled',
+        deathTruncation: 'disabled',
+      },
+      hashes: { cycle: expect.stringMatching(/^[0-9a-f]{16}$/) },
+    });
   }, 30_000);
 
   it.each([

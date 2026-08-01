@@ -113,6 +113,33 @@ describe('Machine Axis contract', () => {
     );
   });
 
+  it('preserves an explicit target evaluation policy without changing defaults', () => {
+    const baseline = normalizeMachineAxisContract(createContract());
+    expect(baseline.scenario).not.toHaveProperty('target');
+
+    const value = createContract();
+    value.scenario.target = {
+      hpMode: 'infinite',
+      toughnessMode: 'disabled',
+      breakMode: 'disabled',
+      deathTruncation: 'disabled',
+    };
+    const result = validateMachineAxisContract(value);
+    expect(result.valid).toBe(true);
+    expect(result.normalized.scenario.target).toEqual(value.scenario.target);
+
+    value.scenario.target.hpMode = 'bottomless';
+    expect(validateMachineAxisContract(value)).toMatchObject({
+      valid: false,
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-schema-enum',
+          path: 'scenario.target.hpMode',
+        }),
+      ],
+    });
+  });
+
   it('resolves absolute, previous-end, and named predecessor schedules', () => {
     const actions = normalizeMachineAxisContract(
       createContract({

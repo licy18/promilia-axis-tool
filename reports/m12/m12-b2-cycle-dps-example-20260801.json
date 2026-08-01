@@ -1,0 +1,2015 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisCycleDps",
+  "kind": "azpr-machine-axis-cycle-dps-evaluation",
+  "valid": true,
+  "status": "closed",
+  "issues": [],
+  "warnings": [
+    {
+      "code": "machine-axis-source-evidence-open",
+      "path": "actions.1",
+      "actionId": "cycle-ruby-a1",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "reason": "runtime-dependent",
+      "message": "Action cycle-ruby-a1 has open source evidence: runtime-dependent",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-scenario-assumption",
+      "path": "actions.1",
+      "actionId": "cycle-ruby-a1",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "reason": "scenario-assumed-zero-distance",
+      "message": "Action cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-source-evidence-open",
+      "path": "actions.2",
+      "actionId": "cycle-ruby-a2",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "reason": "runtime-dependent",
+      "message": "Action cycle-ruby-a2 has open source evidence: runtime-dependent",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-scenario-assumption",
+      "path": "actions.2",
+      "actionId": "cycle-ruby-a2",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "reason": "scenario-assumed-zero-distance",
+      "message": "Action cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-source-evidence-open",
+      "path": "actions.3",
+      "actionId": "cycle-ruby-a3",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "reason": "runtime-dependent",
+      "message": "Action cycle-ruby-a3 has open source evidence: runtime-dependent",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-scenario-assumption",
+      "path": "actions.3",
+      "actionId": "cycle-ruby-a3",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "reason": "scenario-assumed-zero-distance",
+      "message": "Action cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-source-evidence-open",
+      "path": "actions.4",
+      "actionId": "cycle-2:cycle-ruby-a1",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "reason": "runtime-dependent",
+      "message": "Action cycle-2:cycle-ruby-a1 has open source evidence: runtime-dependent",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-scenario-assumption",
+      "path": "actions.4",
+      "actionId": "cycle-2:cycle-ruby-a1",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "reason": "scenario-assumed-zero-distance",
+      "message": "Action cycle-2:cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-source-evidence-open",
+      "path": "actions.5",
+      "actionId": "cycle-2:cycle-ruby-a2",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "reason": "runtime-dependent",
+      "message": "Action cycle-2:cycle-ruby-a2 has open source evidence: runtime-dependent",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-scenario-assumption",
+      "path": "actions.5",
+      "actionId": "cycle-2:cycle-ruby-a2",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "reason": "scenario-assumed-zero-distance",
+      "message": "Action cycle-2:cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-source-evidence-open",
+      "path": "actions.6",
+      "actionId": "cycle-2:cycle-ruby-a3",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "reason": "runtime-dependent",
+      "message": "Action cycle-2:cycle-ruby-a3 has open source evidence: runtime-dependent",
+      "severity": "warning"
+    },
+    {
+      "code": "machine-axis-scenario-assumption",
+      "path": "actions.6",
+      "actionId": "cycle-2:cycle-ruby-a3",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "reason": "scenario-assumed-zero-distance",
+      "message": "Action cycle-2:cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+      "severity": "warning"
+    }
+  ],
+  "assumptions": {
+    "enemyHp": "infinite",
+    "toughness": "disabled",
+    "break": "disabled",
+    "deathTruncation": "disabled"
+  },
+  "critical": {
+    "policy": "expected",
+    "seeds": []
+  },
+  "warmup": {
+    "interval": "[start,end)",
+    "startFrame": 0,
+    "endFrame": 60,
+    "durationFrames": 60,
+    "actionIds": [
+      "warmup-wait"
+    ]
+  },
+  "loop": {
+    "interval": "[start,end)",
+    "startFrame": 60,
+    "endFrame": 360,
+    "durationFrames": 300,
+    "durationSeconds": 5,
+    "fps": 60,
+    "actionIds": [
+      "cycle-ruby-a1",
+      "cycle-ruby-a2",
+      "cycle-ruby-a3"
+    ]
+  },
+  "metrics": {
+    "loopHpDamage": 22.44996643,
+    "cycleDps": 4.48999329,
+    "combatHitCount": 4
+  },
+  "contributions": {
+    "byActor": [
+      {
+        "identity": "actor-103002",
+        "actorId": "actor-103002",
+        "hpDamage": 22.44996643,
+        "combatHitCount": 4,
+        "sampleCount": 1
+      }
+    ],
+    "byAction": [
+      {
+        "identity": "cycle-ruby-a1",
+        "actionId": "cycle-ruby-a1",
+        "actorId": "actor-103002",
+        "hpDamage": 4.09999084,
+        "combatHitCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "identity": "cycle-ruby-a2",
+        "actionId": "cycle-ruby-a2",
+        "actorId": "actor-103002",
+        "hpDamage": 6.1499939,
+        "combatHitCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "identity": "cycle-ruby-a3",
+        "actionId": "cycle-ruby-a3",
+        "actorId": "actor-103002",
+        "hpDamage": 12.19998169,
+        "combatHitCount": 2,
+        "sampleCount": 1
+      }
+    ],
+    "byHit": [
+      {
+        "identity": "cycle-ruby-a1|10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+        "actionId": "cycle-ruby-a1",
+        "actorId": "actor-103002",
+        "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+        "hpDamage": 4.09999084,
+        "combatHitCount": 1,
+        "firstFrame": 71,
+        "lastFrame": 71,
+        "sampleCount": 1
+      },
+      {
+        "identity": "cycle-ruby-a2|10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+        "actionId": "cycle-ruby-a2",
+        "actorId": "actor-103002",
+        "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+        "hpDamage": 6.1499939,
+        "combatHitCount": 1,
+        "firstFrame": 88,
+        "lastFrame": 88,
+        "sampleCount": 1
+      },
+      {
+        "identity": "cycle-ruby-a3|10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+        "actionId": "cycle-ruby-a3",
+        "actorId": "actor-103002",
+        "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+        "hpDamage": 6.09999084,
+        "combatHitCount": 1,
+        "firstFrame": 121,
+        "lastFrame": 121,
+        "sampleCount": 1
+      },
+      {
+        "identity": "cycle-ruby-a3|10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+        "actionId": "cycle-ruby-a3",
+        "actorId": "actor-103002",
+        "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+        "hpDamage": 6.09999085,
+        "combatHitCount": 1,
+        "firstFrame": 116,
+        "lastFrame": 116,
+        "sampleCount": 1
+      }
+    ]
+  },
+  "replayProof": {
+    "stable": true,
+    "issues": [],
+    "damageStable": true,
+    "firstClosure": {
+      "closed": true,
+      "issues": [],
+      "resourceDiffs": [
+        {
+          "resourceIdentity": "actor:101007:sp",
+          "startValue": 35.094,
+          "endValue": 36.564,
+          "delta": 1.47,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101010:sp",
+          "startValue": 50.094,
+          "endValue": 51.564,
+          "delta": 1.47,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:103002:sp",
+          "startValue": 80.187,
+          "endValue": 83.129,
+          "delta": 2.942,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:actor-101007:500001:sp",
+          "startValue": 100,
+          "endValue": 100,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:actor-101010:500002:sp",
+          "startValue": 20.187,
+          "endValue": 28.639,
+          "delta": 8.452,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:actor-103002:500003:sp",
+          "startValue": 60.187,
+          "endValue": 68.639,
+          "delta": 8.452,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101010:element:101010115",
+          "startValue": 0,
+          "endValue": 0,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:103002:element:103002047",
+          "startValue": 6,
+          "endValue": 6,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101007:hp",
+          "startValue": 1195,
+          "endValue": 1195,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101010:hp",
+          "startValue": 1250,
+          "endValue": 1250,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:103002:hp",
+          "startValue": 1003,
+          "endValue": 1003,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:team-slot-1:500003:hp",
+          "startValue": 6726,
+          "endValue": 6726,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:team-slot-2:500002:hp",
+          "startValue": 6241,
+          "endValue": 6241,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:team-slot-3:500001:hp",
+          "startValue": 6358,
+          "endValue": 6358,
+          "delta": 0,
+          "closed": true
+        }
+      ],
+      "tuningMarkDiffs": [],
+      "stateDiffs": [
+        {
+          "dimension": "cooldowns",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "effects",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "targetStates",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "specialStates",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "shields",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "pendingEvents",
+          "equal": true,
+          "start": [],
+          "end": []
+        }
+      ]
+    },
+    "secondClosure": {
+      "closed": true,
+      "issues": [],
+      "resourceDiffs": [
+        {
+          "resourceIdentity": "actor:101007:sp",
+          "startValue": 36.564,
+          "endValue": 37.084,
+          "delta": 0.52,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101010:sp",
+          "startValue": 51.564,
+          "endValue": 52.084,
+          "delta": 0.52,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:103002:sp",
+          "startValue": 83.129,
+          "endValue": 84.17,
+          "delta": 1.041,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:actor-101007:500001:sp",
+          "startValue": 100,
+          "endValue": 100,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:actor-101010:500002:sp",
+          "startValue": 28.639,
+          "endValue": 29.68,
+          "delta": 1.041,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:actor-103002:500003:sp",
+          "startValue": 68.639,
+          "endValue": 69.68,
+          "delta": 1.041,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101010:element:101010115",
+          "startValue": 0,
+          "endValue": 0,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:103002:element:103002047",
+          "startValue": 6,
+          "endValue": 6,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101007:hp",
+          "startValue": 1195,
+          "endValue": 1195,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:101010:hp",
+          "startValue": 1250,
+          "endValue": 1250,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "actor:103002:hp",
+          "startValue": 1003,
+          "endValue": 1003,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:team-slot-1:500003:hp",
+          "startValue": 6726,
+          "endValue": 6726,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:team-slot-2:500002:hp",
+          "startValue": 6241,
+          "endValue": 6241,
+          "delta": 0,
+          "closed": true
+        },
+        {
+          "resourceIdentity": "kibo:team-slot-3:500001:hp",
+          "startValue": 6358,
+          "endValue": 6358,
+          "delta": 0,
+          "closed": true
+        }
+      ],
+      "tuningMarkDiffs": [],
+      "stateDiffs": [
+        {
+          "dimension": "cooldowns",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "effects",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "targetStates",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "specialStates",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "shields",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "pendingEvents",
+          "equal": true,
+          "start": [],
+          "end": []
+        }
+      ]
+    },
+    "secondExecution": {
+      "runnable": true,
+      "issues": [],
+      "variantPairs": [
+        {
+          "sourceActionId": "cycle-ruby-a1",
+          "replayActionId": "cycle-2:cycle-ruby-a1",
+          "equivalent": true,
+          "sourceVariant": {
+            "publicActionId": 10300201,
+            "actionKind": "normal-attack",
+            "publicVariantIndex": 0,
+            "mappingIdentity": "actor|103002|10300201|0|10300203",
+            "resolvedControlSkillId": 10300201,
+            "resolvedSubSkillIndex": 0,
+            "durationFrames": 15,
+            "variantResolutionStatus": "verified-action-variant-selection-ready"
+          },
+          "replayVariant": {
+            "publicActionId": 10300201,
+            "actionKind": "normal-attack",
+            "publicVariantIndex": 0,
+            "mappingIdentity": "actor|103002|10300201|0|10300203",
+            "resolvedControlSkillId": 10300201,
+            "resolvedSubSkillIndex": 0,
+            "durationFrames": 15,
+            "variantResolutionStatus": "verified-action-variant-selection-ready"
+          }
+        },
+        {
+          "sourceActionId": "cycle-ruby-a2",
+          "replayActionId": "cycle-2:cycle-ruby-a2",
+          "equivalent": true,
+          "sourceVariant": {
+            "publicActionId": 10300201,
+            "actionKind": "normal-attack",
+            "publicVariantIndex": 0,
+            "mappingIdentity": "actor|103002|10300201|0|10300203",
+            "resolvedControlSkillId": 10300202,
+            "resolvedSubSkillIndex": 0,
+            "durationFrames": 23,
+            "variantResolutionStatus": "verified-action-variant-selection-ready"
+          },
+          "replayVariant": {
+            "publicActionId": 10300201,
+            "actionKind": "normal-attack",
+            "publicVariantIndex": 0,
+            "mappingIdentity": "actor|103002|10300201|0|10300203",
+            "resolvedControlSkillId": 10300202,
+            "resolvedSubSkillIndex": 0,
+            "durationFrames": 23,
+            "variantResolutionStatus": "verified-action-variant-selection-ready"
+          }
+        },
+        {
+          "sourceActionId": "cycle-ruby-a3",
+          "replayActionId": "cycle-2:cycle-ruby-a3",
+          "equivalent": true,
+          "sourceVariant": {
+            "publicActionId": 10300201,
+            "actionKind": "normal-attack",
+            "publicVariantIndex": 0,
+            "mappingIdentity": "actor|103002|10300201|0|10300203",
+            "resolvedControlSkillId": 10300203,
+            "resolvedSubSkillIndex": 0,
+            "durationFrames": 34,
+            "variantResolutionStatus": "verified-action-variant-selection-ready"
+          },
+          "replayVariant": {
+            "publicActionId": 10300201,
+            "actionKind": "normal-attack",
+            "publicVariantIndex": 0,
+            "mappingIdentity": "actor|103002|10300201|0|10300203",
+            "resolvedControlSkillId": 10300203,
+            "resolvedSubSkillIndex": 0,
+            "durationFrames": 34,
+            "variantResolutionStatus": "verified-action-variant-selection-ready"
+          }
+        }
+      ]
+    },
+    "cycles": [
+      {
+        "index": 1,
+        "hpDamage": 22.44996643,
+        "combatHitCount": 4,
+        "runnable": true
+      },
+      {
+        "index": 2,
+        "hpDamage": 22.44996643,
+        "combatHitCount": 4,
+        "runnable": true
+      }
+    ]
+  },
+  "stateClosure": [
+    {
+      "seed": null,
+      "start": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisSearchState",
+        "kind": "azpr-machine-axis-search-state",
+        "currentFrame": 60,
+        "timeMs": 1000,
+        "remainingFrames": 840,
+        "fps": 60,
+        "activeActorId": "actor-103002",
+        "actors": [
+          {
+            "actorId": "actor-101007",
+            "sp": 35.094,
+            "max": 100
+          },
+          {
+            "actorId": "actor-101010",
+            "sp": 50.094,
+            "max": 100
+          },
+          {
+            "actorId": "actor-103002",
+            "sp": 80.187,
+            "max": 100
+          }
+        ],
+        "kibos": [
+          {
+            "actorId": "actor-101007",
+            "kiboId": 500001,
+            "energy": 100,
+            "max": 100
+          },
+          {
+            "actorId": "actor-101010",
+            "kiboId": 500002,
+            "energy": 20.187,
+            "max": 100
+          },
+          {
+            "actorId": "actor-103002",
+            "kiboId": 500003,
+            "energy": 60.187,
+            "max": 100
+          }
+        ],
+        "cooldowns": [],
+        "effects": [],
+        "tuningMarks": [],
+        "specialResources": [
+          {
+            "actorId": "actor-101010",
+            "resourceIdentity": "actor:101010:element:101010115",
+            "currentValue": 0,
+            "maxValue": 100,
+            "activeStates": []
+          },
+          {
+            "actorId": "actor-103002",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "currentValue": 6,
+            "maxValue": 12,
+            "activeStates": []
+          }
+        ],
+        "pendingEvents": [],
+        "enemy": {
+          "hp": 8628,
+          "maxHp": 8628,
+          "toughness": 6667,
+          "maxToughness": 6667,
+          "inBreak": false,
+          "breakElapsedMs": 0,
+          "recoveryDelayRemainingMs": 0,
+          "defeated": false,
+          "valueShields": [],
+          "hitCountShields": []
+        },
+        "damage": {
+          "hpDamage": 0,
+          "toughnessDamage": 0,
+          "combatHitCount": 0,
+          "stateEventCount": 0
+        },
+        "targetStates": [],
+        "actorVitals": [
+          {
+            "actorId": "actor-101007",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1195,
+            "maximumHp": 1195,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-101010",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1250,
+            "maximumHp": 1250,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-103002",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1003,
+            "maximumHp": 1003,
+            "valueShields": [],
+            "hitCountShields": []
+          }
+        ],
+        "kiboVitals": [
+          {
+            "actorId": "actor-101007",
+            "slotId": "team-slot-3",
+            "kiboId": 500001,
+            "currentHp": 6358,
+            "maximumHp": 6358,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-101010",
+            "slotId": "team-slot-2",
+            "kiboId": 500002,
+            "currentHp": 6241,
+            "maximumHp": 6241,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-103002",
+            "slotId": "team-slot-1",
+            "kiboId": 500003,
+            "currentHp": 6726,
+            "maximumHp": 6726,
+            "valueShields": [],
+            "hitCountShields": []
+          }
+        ]
+      },
+      "firstEnd": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisSearchState",
+        "kind": "azpr-machine-axis-search-state",
+        "currentFrame": 360,
+        "timeMs": 6000,
+        "remainingFrames": 540,
+        "fps": 60,
+        "activeActorId": "actor-103002",
+        "actors": [
+          {
+            "actorId": "actor-101007",
+            "sp": 36.564,
+            "max": 100
+          },
+          {
+            "actorId": "actor-101010",
+            "sp": 51.564,
+            "max": 100
+          },
+          {
+            "actorId": "actor-103002",
+            "sp": 83.129,
+            "max": 100
+          }
+        ],
+        "kibos": [
+          {
+            "actorId": "actor-101007",
+            "kiboId": 500001,
+            "energy": 100,
+            "max": 100
+          },
+          {
+            "actorId": "actor-101010",
+            "kiboId": 500002,
+            "energy": 28.639,
+            "max": 100
+          },
+          {
+            "actorId": "actor-103002",
+            "kiboId": 500003,
+            "energy": 68.639,
+            "max": 100
+          }
+        ],
+        "cooldowns": [],
+        "effects": [],
+        "tuningMarks": [],
+        "specialResources": [
+          {
+            "actorId": "actor-101010",
+            "resourceIdentity": "actor:101010:element:101010115",
+            "currentValue": 0,
+            "maxValue": 100,
+            "activeStates": []
+          },
+          {
+            "actorId": "actor-103002",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "currentValue": 6,
+            "maxValue": 12,
+            "activeStates": []
+          }
+        ],
+        "pendingEvents": [],
+        "enemy": {
+          "hp": 8628,
+          "maxHp": 8628,
+          "toughness": 6667,
+          "maxToughness": 6667,
+          "inBreak": false,
+          "breakElapsedMs": 0,
+          "recoveryDelayRemainingMs": 0,
+          "defeated": false,
+          "valueShields": [],
+          "hitCountShields": []
+        },
+        "damage": {
+          "hpDamage": 22.449966430664062,
+          "toughnessDamage": 0,
+          "combatHitCount": 4,
+          "stateEventCount": 0
+        },
+        "targetStates": [],
+        "actorVitals": [
+          {
+            "actorId": "actor-101007",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1195,
+            "maximumHp": 1195,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-101010",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1250,
+            "maximumHp": 1250,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-103002",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1003,
+            "maximumHp": 1003,
+            "valueShields": [],
+            "hitCountShields": []
+          }
+        ],
+        "kiboVitals": [
+          {
+            "actorId": "actor-101007",
+            "slotId": "team-slot-3",
+            "kiboId": 500001,
+            "currentHp": 6358,
+            "maximumHp": 6358,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-101010",
+            "slotId": "team-slot-2",
+            "kiboId": 500002,
+            "currentHp": 6241,
+            "maximumHp": 6241,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-103002",
+            "slotId": "team-slot-1",
+            "kiboId": 500003,
+            "currentHp": 6726,
+            "maximumHp": 6726,
+            "valueShields": [],
+            "hitCountShields": []
+          }
+        ]
+      },
+      "secondEnd": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisSearchState",
+        "kind": "azpr-machine-axis-search-state",
+        "currentFrame": 660,
+        "timeMs": 11000,
+        "remainingFrames": 240,
+        "fps": 60,
+        "activeActorId": "actor-103002",
+        "actors": [
+          {
+            "actorId": "actor-101007",
+            "sp": 37.084,
+            "max": 100
+          },
+          {
+            "actorId": "actor-101010",
+            "sp": 52.084,
+            "max": 100
+          },
+          {
+            "actorId": "actor-103002",
+            "sp": 84.17,
+            "max": 100
+          }
+        ],
+        "kibos": [
+          {
+            "actorId": "actor-101007",
+            "kiboId": 500001,
+            "energy": 100,
+            "max": 100
+          },
+          {
+            "actorId": "actor-101010",
+            "kiboId": 500002,
+            "energy": 29.68,
+            "max": 100
+          },
+          {
+            "actorId": "actor-103002",
+            "kiboId": 500003,
+            "energy": 69.68,
+            "max": 100
+          }
+        ],
+        "cooldowns": [],
+        "effects": [],
+        "tuningMarks": [],
+        "specialResources": [
+          {
+            "actorId": "actor-101010",
+            "resourceIdentity": "actor:101010:element:101010115",
+            "currentValue": 0,
+            "maxValue": 100,
+            "activeStates": []
+          },
+          {
+            "actorId": "actor-103002",
+            "resourceIdentity": "actor:103002:element:103002047",
+            "currentValue": 6,
+            "maxValue": 12,
+            "activeStates": []
+          }
+        ],
+        "pendingEvents": [],
+        "enemy": {
+          "hp": 8628,
+          "maxHp": 8628,
+          "toughness": 6667,
+          "maxToughness": 6667,
+          "inBreak": false,
+          "breakElapsedMs": 0,
+          "recoveryDelayRemainingMs": 0,
+          "defeated": false,
+          "valueShields": [],
+          "hitCountShields": []
+        },
+        "damage": {
+          "hpDamage": 44.899932861328125,
+          "toughnessDamage": 0,
+          "combatHitCount": 8,
+          "stateEventCount": 0
+        },
+        "targetStates": [],
+        "actorVitals": [
+          {
+            "actorId": "actor-101007",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1195,
+            "maximumHp": 1195,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-101010",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1250,
+            "maximumHp": 1250,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-103002",
+            "slotId": null,
+            "kiboId": null,
+            "currentHp": 1003,
+            "maximumHp": 1003,
+            "valueShields": [],
+            "hitCountShields": []
+          }
+        ],
+        "kiboVitals": [
+          {
+            "actorId": "actor-101007",
+            "slotId": "team-slot-3",
+            "kiboId": 500001,
+            "currentHp": 6358,
+            "maximumHp": 6358,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-101010",
+            "slotId": "team-slot-2",
+            "kiboId": 500002,
+            "currentHp": 6241,
+            "maximumHp": 6241,
+            "valueShields": [],
+            "hitCountShields": []
+          },
+          {
+            "actorId": "actor-103002",
+            "slotId": "team-slot-1",
+            "kiboId": 500003,
+            "currentHp": 6726,
+            "maximumHp": 6726,
+            "valueShields": [],
+            "hitCountShields": []
+          }
+        ]
+      }
+    }
+  ],
+  "samples": [
+    {
+      "valid": true,
+      "status": "closed",
+      "seed": null,
+      "issues": [],
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "06083e73632e9e4d",
+        "data": "7b865d8e1825995a",
+        "trace": "db903427dcd1ecac",
+        "evaluation": "412605349bbf2fe3"
+      },
+      "firstCycle": {
+        "interval": "[start,end)",
+        "startFrame": 60,
+        "endFrame": 360,
+        "hpDamage": 22.44996643,
+        "combatHitCount": 4,
+        "byActor": [
+          {
+            "identity": "actor-103002",
+            "actorId": "actor-103002",
+            "hpDamage": 22.44996643,
+            "combatHitCount": 4
+          }
+        ],
+        "byAction": [
+          {
+            "identity": "cycle-ruby-a1",
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hpDamage": 4.09999084,
+            "combatHitCount": 1
+          },
+          {
+            "identity": "cycle-ruby-a2",
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hpDamage": 6.1499939,
+            "combatHitCount": 1
+          },
+          {
+            "identity": "cycle-ruby-a3",
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hpDamage": 12.19998169,
+            "combatHitCount": 2
+          }
+        ],
+        "byHit": [
+          {
+            "identity": "cycle-ruby-a1|10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "hpDamage": 4.09999084,
+            "combatHitCount": 1,
+            "firstFrame": 71,
+            "lastFrame": 71
+          },
+          {
+            "identity": "cycle-ruby-a2|10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "hpDamage": 6.1499939,
+            "combatHitCount": 1,
+            "firstFrame": 88,
+            "lastFrame": 88
+          },
+          {
+            "identity": "cycle-ruby-a3|10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "hpDamage": 6.09999084,
+            "combatHitCount": 1,
+            "firstFrame": 121,
+            "lastFrame": 121
+          },
+          {
+            "identity": "cycle-ruby-a3|10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "hpDamage": 6.09999084,
+            "combatHitCount": 1,
+            "firstFrame": 116,
+            "lastFrame": 116
+          }
+        ]
+      },
+      "secondCycle": {
+        "interval": "[start,end)",
+        "startFrame": 360,
+        "endFrame": 660,
+        "hpDamage": 22.44996643,
+        "combatHitCount": 4,
+        "byActor": [
+          {
+            "identity": "actor-103002",
+            "actorId": "actor-103002",
+            "hpDamage": 22.44996643,
+            "combatHitCount": 4
+          }
+        ],
+        "byAction": [
+          {
+            "identity": "cycle-ruby-a1",
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hpDamage": 4.09999084,
+            "combatHitCount": 1
+          },
+          {
+            "identity": "cycle-ruby-a2",
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hpDamage": 6.1499939,
+            "combatHitCount": 1
+          },
+          {
+            "identity": "cycle-ruby-a3",
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hpDamage": 12.19998169,
+            "combatHitCount": 2
+          }
+        ],
+        "byHit": [
+          {
+            "identity": "cycle-ruby-a1|10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "hpDamage": 4.09999084,
+            "combatHitCount": 1,
+            "firstFrame": 371,
+            "lastFrame": 371
+          },
+          {
+            "identity": "cycle-ruby-a2|10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "hpDamage": 6.1499939,
+            "combatHitCount": 1,
+            "firstFrame": 388,
+            "lastFrame": 388
+          },
+          {
+            "identity": "cycle-ruby-a3|10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "hpDamage": 6.09999084,
+            "combatHitCount": 1,
+            "firstFrame": 421,
+            "lastFrame": 421
+          },
+          {
+            "identity": "cycle-ruby-a3|10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "hpDamage": 6.09999084,
+            "combatHitCount": 1,
+            "firstFrame": 416,
+            "lastFrame": 416
+          }
+        ]
+      },
+      "replayProof": {
+        "stable": true,
+        "issues": [],
+        "damageStable": true,
+        "firstClosure": {
+          "closed": true,
+          "issues": [],
+          "resourceDiffs": [
+            {
+              "resourceIdentity": "actor:101007:sp",
+              "startValue": 35.094,
+              "endValue": 36.564,
+              "delta": 1.47,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101010:sp",
+              "startValue": 50.094,
+              "endValue": 51.564,
+              "delta": 1.47,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:103002:sp",
+              "startValue": 80.187,
+              "endValue": 83.129,
+              "delta": 2.942,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:actor-101007:500001:sp",
+              "startValue": 100,
+              "endValue": 100,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:actor-101010:500002:sp",
+              "startValue": 20.187,
+              "endValue": 28.639,
+              "delta": 8.452,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:actor-103002:500003:sp",
+              "startValue": 60.187,
+              "endValue": 68.639,
+              "delta": 8.452,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101010:element:101010115",
+              "startValue": 0,
+              "endValue": 0,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:103002:element:103002047",
+              "startValue": 6,
+              "endValue": 6,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101007:hp",
+              "startValue": 1195,
+              "endValue": 1195,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101010:hp",
+              "startValue": 1250,
+              "endValue": 1250,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:103002:hp",
+              "startValue": 1003,
+              "endValue": 1003,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:team-slot-1:500003:hp",
+              "startValue": 6726,
+              "endValue": 6726,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:team-slot-2:500002:hp",
+              "startValue": 6241,
+              "endValue": 6241,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:team-slot-3:500001:hp",
+              "startValue": 6358,
+              "endValue": 6358,
+              "delta": 0,
+              "closed": true
+            }
+          ],
+          "tuningMarkDiffs": [],
+          "stateDiffs": [
+            {
+              "dimension": "cooldowns",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "effects",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "targetStates",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "specialStates",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "shields",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "pendingEvents",
+              "equal": true,
+              "start": [],
+              "end": []
+            }
+          ]
+        },
+        "secondClosure": {
+          "closed": true,
+          "issues": [],
+          "resourceDiffs": [
+            {
+              "resourceIdentity": "actor:101007:sp",
+              "startValue": 36.564,
+              "endValue": 37.084,
+              "delta": 0.52,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101010:sp",
+              "startValue": 51.564,
+              "endValue": 52.084,
+              "delta": 0.52,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:103002:sp",
+              "startValue": 83.129,
+              "endValue": 84.17,
+              "delta": 1.041,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:actor-101007:500001:sp",
+              "startValue": 100,
+              "endValue": 100,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:actor-101010:500002:sp",
+              "startValue": 28.639,
+              "endValue": 29.68,
+              "delta": 1.041,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:actor-103002:500003:sp",
+              "startValue": 68.639,
+              "endValue": 69.68,
+              "delta": 1.041,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101010:element:101010115",
+              "startValue": 0,
+              "endValue": 0,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:103002:element:103002047",
+              "startValue": 6,
+              "endValue": 6,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101007:hp",
+              "startValue": 1195,
+              "endValue": 1195,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:101010:hp",
+              "startValue": 1250,
+              "endValue": 1250,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "actor:103002:hp",
+              "startValue": 1003,
+              "endValue": 1003,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:team-slot-1:500003:hp",
+              "startValue": 6726,
+              "endValue": 6726,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:team-slot-2:500002:hp",
+              "startValue": 6241,
+              "endValue": 6241,
+              "delta": 0,
+              "closed": true
+            },
+            {
+              "resourceIdentity": "kibo:team-slot-3:500001:hp",
+              "startValue": 6358,
+              "endValue": 6358,
+              "delta": 0,
+              "closed": true
+            }
+          ],
+          "tuningMarkDiffs": [],
+          "stateDiffs": [
+            {
+              "dimension": "cooldowns",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "effects",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "targetStates",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "specialStates",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "shields",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "pendingEvents",
+              "equal": true,
+              "start": [],
+              "end": []
+            }
+          ]
+        },
+        "secondExecution": {
+          "runnable": true,
+          "issues": [],
+          "variantPairs": [
+            {
+              "sourceActionId": "cycle-ruby-a1",
+              "replayActionId": "cycle-2:cycle-ruby-a1",
+              "equivalent": true,
+              "sourceVariant": {
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "publicVariantIndex": 0,
+                "mappingIdentity": "actor|103002|10300201|0|10300203",
+                "resolvedControlSkillId": 10300201,
+                "resolvedSubSkillIndex": 0,
+                "durationFrames": 15,
+                "variantResolutionStatus": "verified-action-variant-selection-ready"
+              },
+              "replayVariant": {
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "publicVariantIndex": 0,
+                "mappingIdentity": "actor|103002|10300201|0|10300203",
+                "resolvedControlSkillId": 10300201,
+                "resolvedSubSkillIndex": 0,
+                "durationFrames": 15,
+                "variantResolutionStatus": "verified-action-variant-selection-ready"
+              }
+            },
+            {
+              "sourceActionId": "cycle-ruby-a2",
+              "replayActionId": "cycle-2:cycle-ruby-a2",
+              "equivalent": true,
+              "sourceVariant": {
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "publicVariantIndex": 0,
+                "mappingIdentity": "actor|103002|10300201|0|10300203",
+                "resolvedControlSkillId": 10300202,
+                "resolvedSubSkillIndex": 0,
+                "durationFrames": 23,
+                "variantResolutionStatus": "verified-action-variant-selection-ready"
+              },
+              "replayVariant": {
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "publicVariantIndex": 0,
+                "mappingIdentity": "actor|103002|10300201|0|10300203",
+                "resolvedControlSkillId": 10300202,
+                "resolvedSubSkillIndex": 0,
+                "durationFrames": 23,
+                "variantResolutionStatus": "verified-action-variant-selection-ready"
+              }
+            },
+            {
+              "sourceActionId": "cycle-ruby-a3",
+              "replayActionId": "cycle-2:cycle-ruby-a3",
+              "equivalent": true,
+              "sourceVariant": {
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "publicVariantIndex": 0,
+                "mappingIdentity": "actor|103002|10300201|0|10300203",
+                "resolvedControlSkillId": 10300203,
+                "resolvedSubSkillIndex": 0,
+                "durationFrames": 34,
+                "variantResolutionStatus": "verified-action-variant-selection-ready"
+              },
+              "replayVariant": {
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "publicVariantIndex": 0,
+                "mappingIdentity": "actor|103002|10300201|0|10300203",
+                "resolvedControlSkillId": 10300203,
+                "resolvedSubSkillIndex": 0,
+                "durationFrames": 34,
+                "variantResolutionStatus": "verified-action-variant-selection-ready"
+              }
+            }
+          ]
+        },
+        "cycles": [
+          {
+            "index": 1,
+            "hpDamage": 22.44996643,
+            "combatHitCount": 4,
+            "runnable": true
+          },
+          {
+            "index": 2,
+            "hpDamage": 22.44996643,
+            "combatHitCount": 4,
+            "runnable": true
+          }
+        ]
+      },
+      "loopPlan": {
+        "sourceActionIds": [
+          "cycle-ruby-a1",
+          "cycle-ruby-a2",
+          "cycle-ruby-a3"
+        ],
+        "secondActionIds": [
+          "cycle-2:cycle-ruby-a1",
+          "cycle-2:cycle-ruby-a2",
+          "cycle-2:cycle-ruby-a3"
+        ],
+        "warmupActionIds": [
+          "warmup-wait"
+        ],
+        "replayHorizonFrame": 900
+      },
+      "evidence": {
+        "firstCycle": {
+          "classification": {
+            "schemaStatus": "schema-valid",
+            "runnabilityStatus": "runnable-with-assumptions",
+            "evidenceStatus": "evidence-open"
+          },
+          "warnings": [
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a1 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a2 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a3 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            }
+          ]
+        },
+        "replay": {
+          "classification": {
+            "schemaStatus": "schema-valid",
+            "runnabilityStatus": "runnable-with-assumptions",
+            "evidenceStatus": "evidence-open"
+          },
+          "warnings": [
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a1 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a2 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a3 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.4",
+              "actionId": "cycle-2:cycle-ruby-a1",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-2:cycle-ruby-a1 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.4",
+              "actionId": "cycle-2:cycle-ruby-a1",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-2:cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.5",
+              "actionId": "cycle-2:cycle-ruby-a2",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-2:cycle-ruby-a2 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.5",
+              "actionId": "cycle-2:cycle-ruby-a2",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-2:cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.6",
+              "actionId": "cycle-2:cycle-ruby-a3",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-2:cycle-ruby-a3 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.6",
+              "actionId": "cycle-2:cycle-ruby-a3",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-2:cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "evidence": {
+    "evidenceClosed": false,
+    "samples": [
+      {
+        "seed": null,
+        "firstCycle": {
+          "classification": {
+            "schemaStatus": "schema-valid",
+            "runnabilityStatus": "runnable-with-assumptions",
+            "evidenceStatus": "evidence-open"
+          },
+          "warnings": [
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a1 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a2 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a3 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            }
+          ]
+        },
+        "replay": {
+          "classification": {
+            "schemaStatus": "schema-valid",
+            "runnabilityStatus": "runnable-with-assumptions",
+            "evidenceStatus": "evidence-open"
+          },
+          "warnings": [
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a1 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.1",
+              "actionId": "cycle-ruby-a1",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a2 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.2",
+              "actionId": "cycle-ruby-a2",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-ruby-a3 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.3",
+              "actionId": "cycle-ruby-a3",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.4",
+              "actionId": "cycle-2:cycle-ruby-a1",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-2:cycle-ruby-a1 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.4",
+              "actionId": "cycle-2:cycle-ruby-a1",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-2:cycle-ruby-a1 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.5",
+              "actionId": "cycle-2:cycle-ruby-a2",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-2:cycle-ruby-a2 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.5",
+              "actionId": "cycle-2:cycle-ruby-a2",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-2:cycle-ruby-a2 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-source-evidence-open",
+              "path": "actions.6",
+              "actionId": "cycle-2:cycle-ruby-a3",
+              "sourceEvidenceStatus": "runtime-dependent",
+              "reason": "runtime-dependent",
+              "message": "Action cycle-2:cycle-ruby-a3 has open source evidence: runtime-dependent",
+              "severity": "warning"
+            },
+            {
+              "code": "machine-axis-scenario-assumption",
+              "path": "actions.6",
+              "actionId": "cycle-2:cycle-ruby-a3",
+              "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+              "reason": "scenario-assumed-zero-distance",
+              "message": "Action cycle-2:cycle-ruby-a3 is runnable under scenario assumption: scenario-assumed-zero-distance",
+              "severity": "warning"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "hashes": {
+    "input": "06083e73632e9e4d",
+    "data": "7b865d8e1825995a",
+    "trace": "db903427dcd1ecac",
+    "evaluation": "412605349bbf2fe3",
+    "cycle": "65c9b0958a65fd5f"
+  }
+}

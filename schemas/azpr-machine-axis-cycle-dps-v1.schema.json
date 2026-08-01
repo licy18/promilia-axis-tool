@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azpr.local/schemas/azpr-machine-axis-cycle-dps-v1.schema.json",
+  "title": "Azur Promilia Machine Axis Sustainable Cycle DPS",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contractName", "kind", "contract", "loop"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractName": { "const": "AzPrMachineAxisCycleDps" },
+    "kind": { "const": "azpr-machine-axis-cycle-dps" },
+    "contract": {
+      "$ref": "./azpr-machine-axis-v1.schema.json"
+    },
+    "loop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startFrame", "endFrame"],
+      "properties": {
+        "startFrame": { "type": "integer", "minimum": 0 },
+        "endFrame": { "type": "integer", "minimum": 1 }
+      },
+      "description": "Explicit non-empty half-open interval [startFrame,endFrame)."
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "criticalPolicy": {
+          "enum": ["sampled", "expected", "critical", "non-critical"]
+        },
+        "seeds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": ["string", "integer"] }
+        }
+      }
+    },
+    "metadata": { "type": "object" }
+  }
+}

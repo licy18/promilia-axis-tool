@@ -22,6 +22,7 @@ import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHead
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
 import { createMachineAxisBatchEvaluator } from './machineAxisBatchEvaluator';
+import { createMachineAxisCycleEvaluator } from './machineAxisCycleEvaluator';
 import {
   createMachineAxisSearchEngine,
   normalizeSearchOptions,
@@ -224,6 +225,20 @@ export function createMachineAxisService({
       envelope,
       options
     );
+  }
+
+  function evaluateCycle(envelope, options = {}) {
+    return createMachineAxisCycleEvaluator({
+      prepareRun: (contract, runOptions) =>
+        prepareValidated(contract, runOptions),
+      simulateBoundary: ({ project, boundaryFrame, options: runOptions }) =>
+        simulateProjectBeforeFrame({
+          project,
+          boundaryFrame,
+          options: runOptions,
+          core,
+        }),
+    }).evaluate(envelope, options);
   }
 
   async function search(envelope, options = {}) {
@@ -499,6 +514,9 @@ export function createMachineAxisService({
         combatScenario: {
           projectile: contract.scenario.projectile,
           critical: contract.scenario.critical,
+          ...(contract.scenario.target == null
+            ? {}
+            : { target: contract.scenario.target }),
         },
         mechanicsProfileSelection: {
           profileId: contract.dataIdentity.mechanicsProfileId,
@@ -614,11 +632,48 @@ export function createMachineAxisService({
     explain,
     compare,
     evaluateBatch,
+    evaluateCycle,
     search,
     prepare,
     prepareValidated,
   });
   return api;
+}
+
+function simulateProjectBeforeFrame({
+  project,
+  boundaryFrame,
+  options = {},
+  core,
+}) {
+  const frame = Number(boundaryFrame);
+  if (!Number.isInteger(frame) || frame < 0) {
+    throw new RangeError('Cycle boundary frame must be a non-negative integer');
+  }
+  const horizonFrame = frame - 1;
+  const boundaryMs = frameToMs(frame);
+  const horizonMs = frame === 0 ? 0 : frameToMs(horizonFrame);
+  const prefixProject = structuredClone(project);
+  prefixProject.time = {
+    ...(prefixProject.time ?? {}),
+    durationMs: Math.max(Number.EPSILON, horizonMs),
+  };
+  prefixProject.actions = (prefixProject.actions ?? []).filter(
+    action => Number(action.startMs) < boundaryMs
+  );
+  prefixProject.metadata = {
+    ...(prefixProject.metadata ?? {}),
+    cycleBoundaryProjection: {
+      interval: '[0,boundary)',
+      boundaryFrame: frame,
+      horizonFrame,
+    },
+  };
+  const compilation = core.compile(
+    { schemaVersion: 1, project: prefixProject },
+    options
+  );
+  return core.simulate(compilation, options);
 }
 
 function stabilizeMachineAxisScheduling({
